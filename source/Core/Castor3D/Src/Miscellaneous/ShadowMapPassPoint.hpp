@@ -76,20 +76,16 @@ namespace Castor3D
 
 	protected:
 		void DoRenderNodes( SceneRenderNodes & p_nodes );
-		void DoRenderInstancedSubmeshes( Scene & p_scene, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
-		void DoRenderStaticSubmeshes( Scene & p_scene, StaticGeometryRenderNodesByPipelineMap & p_nodes );
-		void DoRenderAnimatedSubmeshes( Scene & p_scene, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
-		void DoRenderBillboards( Scene & p_scene, BillboardRenderNodesByPipelineMap & p_nodes );
 
 	private:
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool DoInitialisePass( Castor::Size const & p_size )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
 		 */
-		void DoCleanup()override;
+		void DoCleanupPass()override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
 		 */

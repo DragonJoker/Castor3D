@@ -67,47 +67,6 @@ namespace Castor3D
 				l_shadowMatrices->SetValue( l_view, l_index++ );
 			}
 		}
-
-		template< typename MapType, typename FuncType >
-		void DoTraverseNodes( MapType & p_nodes
-			, FuncType p_function )
-		{
-			for ( auto l_itPipelines : p_nodes )
-			{
-				l_itPipelines.first->Apply();
-
-				for ( auto l_itPass : l_itPipelines.second )
-				{
-					for ( auto l_itSubmeshes : l_itPass.second )
-					{
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
-					}
-				}
-			}
-		}
-
-		template< typename MapType >
-		void DoRenderNonInstanced( Scene & p_scene
-			, MapType & p_nodes )
-		{
-			auto l_depthMaps = DepthMapArray{};
-
-			for ( auto l_itPipelines : p_nodes )
-			{
-				l_itPipelines.first->Apply();
-
-				for ( auto & l_renderNode : l_itPipelines.second )
-				{
-					if ( l_renderNode.m_data.IsInitialised() )
-					{
-						l_renderNode.Render( l_depthMaps );
-					}
-				}
-			}
-		}
 	}
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
@@ -127,51 +86,14 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
 	{
-		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_nodes.m_instancedGeometries.m_backCulled );
-		DoRenderStaticSubmeshes( p_nodes.m_scene, p_nodes.m_staticGeometries.m_backCulled );
-		DoRenderAnimatedSubmeshes( p_nodes.m_scene, p_nodes.m_animatedGeometries.m_backCulled );
-		DoRenderBillboards( p_nodes.m_scene, p_nodes.m_billboards.m_backCulled );
+		auto l_depthMaps = DepthMapArray{};
+		DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_backCulled, l_depthMaps );
+		DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_backCulled, l_depthMaps );
+		DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_backCulled, l_depthMaps );
+		DoRenderBillboards( p_nodes.m_billboards.m_backCulled, l_depthMaps );
 	}
 
-	void ShadowMapPassPoint::DoRenderInstancedSubmeshes( Scene & p_scene
-		, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
-	{
-		DoTraverseNodes( p_nodes
-			, [this]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
-				, StaticGeometryRenderNodeArray & p_renderNodes )
-		{
-			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
-			{
-				auto l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-				auto l_depthMaps = DepthMapArray{};
-				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
-				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( l_depthMaps );
-			}
-		} );
-	}
-
-	void ShadowMapPassPoint::DoRenderStaticSubmeshes( Scene & p_scene
-		, StaticGeometryRenderNodesByPipelineMap & p_nodes )
-	{
-		DoRenderNonInstanced( p_scene, p_nodes );
-	}
-
-	void ShadowMapPassPoint::DoRenderAnimatedSubmeshes( Scene & p_scene
-		, AnimatedGeometryRenderNodesByPipelineMap & p_nodes )
-	{
-		DoRenderNonInstanced( p_scene, p_nodes );
-	}
-
-	void ShadowMapPassPoint::DoRenderBillboards( Scene & p_scene
-		, BillboardRenderNodesByPipelineMap & p_nodes )
-	{
-		DoRenderNonInstanced( p_scene, p_nodes );
-	}
-
-	bool ShadowMapPassPoint::DoInitialise( Size const & p_size )
+	bool ShadowMapPassPoint::DoInitialisePass( Size const & p_size )
 	{
 		auto l_texture = m_shadowMap.GetTexture();
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
@@ -192,7 +114,7 @@ namespace Castor3D
 		return true;
 	}
 
-	void ShadowMapPassPoint::DoCleanup()
+	void ShadowMapPassPoint::DoCleanupPass()
 	{
 		auto l_node = m_light.GetParent();
 

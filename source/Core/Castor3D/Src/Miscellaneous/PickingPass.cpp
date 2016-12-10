@@ -224,88 +224,6 @@ namespace Castor3D
 	{
 	}
 
-	bool PickingPass::Initialise( Size const & p_size )
-	{
-		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGB32F, p_size );
-		m_colourTexture->GetImage().InitialiseSource();
-		auto l_size = m_colourTexture->GetDimensions();
-		bool l_return = m_colourTexture->Initialise();
-
-		if ( l_return )
-		{
-			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
-			l_return = m_depthBuffer->Create();
-		}
-
-		if ( l_return )
-		{
-			l_return = m_depthBuffer->Initialise( l_size );
-
-			if ( !l_return )
-			{
-				m_depthBuffer->Destroy();
-			}
-		}
-
-		if ( l_return )
-		{
-			m_colourAttach = m_frameBuffer->CreateAttachment( m_colourTexture );
-			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
-			l_return = m_frameBuffer->Create();
-		}
-
-		if ( l_return )
-		{
-			l_return = m_frameBuffer->Initialise( l_size );
-
-			if ( l_return )
-			{
-				m_frameBuffer->Bind( FrameBufferMode::eConfig );
-				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
-				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
-				l_return = m_frameBuffer->IsComplete();
-				m_frameBuffer->Unbind();
-			}
-			else
-			{
-				m_frameBuffer->Destroy();
-			}
-		}
-
-		return l_return;
-	}
-
-	void PickingPass::Cleanup()
-	{
-		if ( m_frameBuffer )
-		{
-			m_frameBuffer->Bind( FrameBufferMode::eConfig );
-			m_frameBuffer->DetachAll();
-			m_frameBuffer->Unbind();
-			m_frameBuffer->Cleanup();
-			m_colourTexture->Cleanup();
-			m_depthBuffer->Cleanup();
-
-			m_depthBuffer->Destroy();
-			m_frameBuffer->Destroy();
-
-			m_depthAttach.reset();
-			m_depthBuffer.reset();
-			m_colourAttach.reset();
-			m_colourTexture.reset();
-			m_frameBuffer.reset();
-		}
-
-		for ( auto l_buffer : m_geometryBuffers )
-		{
-			l_buffer->Cleanup();
-		}
-
-		m_geometryBuffers.clear();
-	}
-
 	void PickingPass::AddScene( Scene & p_scene, Camera & p_camera )
 	{
 		auto l_itScn = m_scenes.emplace( &p_scene, CameraQueueMap{} ).first;
@@ -337,81 +255,6 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	AnimatedGeometryRenderNode PickingPass::CreateAnimatedNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, Submesh & p_submesh
-		, Geometry & p_primitive
-		, AnimatedSkeletonSPtr p_skeleton
-		, AnimatedMeshSPtr p_mesh )
-	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
-		auto l_animationBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
-		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffer );
-
-		return AnimatedGeometryRenderNode
-		{
-			DoCreateSceneRenderNode( *p_primitive.GetScene(), p_pipeline ),
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*l_buffer,
-			*p_primitive.GetParent(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
-			p_submesh,
-			p_primitive,
-			p_skeleton.get(),
-			p_mesh.get(),
-			*l_animationBuffer
-		};
-	}
-
-	StaticGeometryRenderNode PickingPass::CreateStaticNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, Submesh & p_submesh
-		, Geometry & p_primitive )
-	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
-		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffer );
-
-		return StaticGeometryRenderNode
-		{
-			DoCreateSceneRenderNode( *p_primitive.GetScene(), p_pipeline ),
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*l_buffer,
-			*p_primitive.GetParent(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
-			p_submesh,
-			p_primitive,
-		};
-	}
-
-	BillboardRenderNode PickingPass::CreateBillboardNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, BillboardBase & p_billboard )
-	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
-		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
-		Point2iFrameVariableSPtr l_pt2i;
-		auto l_buffer = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffer );
-
-		return BillboardRenderNode
-		{
-			DoCreateSceneRenderNode( p_billboard.GetParentScene(), p_pipeline ),
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*l_buffer,
-			*p_billboard.GetNode(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
-			p_billboard,
-			*l_billboardBuffer,
-			*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i ),
-			*l_billboardBuffer->GetVariable( ShaderProgram::WindowSize, l_pt2i )
-		};
 	}
 
 	void PickingPass::DoRenderNodes( SceneRenderNodes & p_nodes
@@ -542,6 +385,85 @@ namespace Castor3D
 			, p_camera
 			, NodeType::eBillboard
 			, p_nodes );
+	}
+
+	bool PickingPass::DoInitialise( Size const & p_size )
+	{
+		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGB32F, p_size );
+		m_colourTexture->GetImage().InitialiseSource();
+		auto l_size = m_colourTexture->GetDimensions();
+		bool l_return = m_colourTexture->Initialise();
+
+		if ( l_return )
+		{
+			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
+			m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
+			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
+			l_return = m_depthBuffer->Create();
+		}
+
+		if ( l_return )
+		{
+			l_return = m_depthBuffer->Initialise( l_size );
+
+			if ( !l_return )
+			{
+				m_depthBuffer->Destroy();
+			}
+		}
+
+		if ( l_return )
+		{
+			m_colourAttach = m_frameBuffer->CreateAttachment( m_colourTexture );
+			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
+			l_return = m_frameBuffer->Create();
+		}
+
+		if ( l_return )
+		{
+			l_return = m_frameBuffer->Initialise( l_size );
+
+			if ( l_return )
+			{
+				m_frameBuffer->Bind( FrameBufferMode::eConfig );
+				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
+				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
+				l_return = m_frameBuffer->IsComplete();
+				m_frameBuffer->Unbind();
+			}
+			else
+			{
+				m_frameBuffer->Destroy();
+			}
+		}
+
+		return l_return;
+	}
+
+	void PickingPass::DoCleanup()
+	{
+		if ( m_frameBuffer )
+		{
+			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->DetachAll();
+			m_frameBuffer->Unbind();
+			m_frameBuffer->Cleanup();
+			m_colourTexture->Cleanup();
+			m_depthBuffer->Cleanup();
+
+			m_depthBuffer->Destroy();
+			m_frameBuffer->Destroy();
+
+			m_depthAttach.reset();
+			m_depthBuffer.reset();
+			m_colourAttach.reset();
+			m_colourTexture.reset();
+			m_frameBuffer.reset();
+		}
+	}
+
+	void PickingPass::DoUpdate()
+	{
 	}
 
 	String PickingPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags

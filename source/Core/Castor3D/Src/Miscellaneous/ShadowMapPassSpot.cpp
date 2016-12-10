@@ -34,7 +34,7 @@ namespace Castor3D
 		return std::make_shared< ShadowMapPassSpot >( p_engine, p_scene, p_light, p_shadowMap, p_index );
 	}
 
-	bool ShadowMapPassSpot::DoInitialise( Size const & p_size )
+	bool ShadowMapPassSpot::DoInitialisePass( Size const & p_size )
 	{
 		Viewport l_viewport{ *GetEngine() };
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
@@ -58,7 +58,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShadowMapPassSpot::DoCleanup()
+	void ShadowMapPassSpot::DoCleanupPass()
 	{
 		m_camera->Detach();
 		m_camera.reset();

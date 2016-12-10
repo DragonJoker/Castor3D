@@ -4,6 +4,7 @@
 
 #include "Material/Pass.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
@@ -20,6 +21,131 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	namespace
+	{
+		template< typename MapType, typename FuncType >
+		inline void DoTraverseNodes( RenderPass const & p_pass
+			, Camera const & p_camera
+			, MapType & p_nodes
+			, DepthMapArray & p_depthMaps
+			, FuncType p_function )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, p_depthMaps );
+				l_itPipelines.first->Apply();
+
+				for ( auto l_itPass : l_itPipelines.second )
+				{
+					for ( auto l_itSubmeshes : l_itPass.second )
+					{
+						p_function( *l_itPipelines.first
+							, *l_itPass.first
+							, *l_itSubmeshes.first
+							, l_itSubmeshes.second
+							, p_depthMaps );
+					}
+				}
+			}
+		}
+
+		template< typename MapType, typename FuncType >
+		inline void DoTraverseNodes( RenderPass const & p_pass
+			, MapType & p_nodes
+			, DepthMapArray & p_depthMaps
+			, FuncType p_function )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				l_itPipelines.first->Apply();
+
+				for ( auto l_itPass : l_itPipelines.second )
+				{
+					for ( auto l_itSubmeshes : l_itPass.second )
+					{
+						p_function( *l_itPipelines.first
+							, *l_itPass.first
+							, *l_itSubmeshes.first
+							, l_itSubmeshes.second
+							, p_depthMaps );
+					}
+				}
+			}
+		}
+
+		template< typename MapType >
+		inline void DoRenderNonInstanced( RenderPass const & p_pass
+			, Camera const & p_camera
+			, MapType & p_nodes
+			, DepthMapArray & p_depthMaps )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, p_depthMaps );
+				l_itPipelines.first->Apply();
+
+				for ( auto & l_renderNode : l_itPipelines.second )
+				{
+					l_renderNode.Render( p_depthMaps );
+				}
+			}
+		}
+
+		template< typename MapType >
+		inline void DoRenderNonInstanced( RenderPass const & p_pass
+			, MapType & p_nodes
+			, DepthMapArray & p_depthMaps )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				l_itPipelines.first->Apply();
+
+				for ( auto & l_renderNode : l_itPipelines.second )
+				{
+					l_renderNode.Render( p_depthMaps );
+				}
+			}
+		}
+
+		template< typename MapType >
+		inline void DoRenderNonInstanced( RenderPass const & p_pass
+			, Camera const & p_camera
+			, MapType & p_nodes
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, p_depthMaps );
+				l_itPipelines.first->Apply();
+
+				for ( auto & l_renderNode : l_itPipelines.second )
+				{
+					l_renderNode.Render( p_depthMaps );
+					++p_count;
+				}
+			}
+		}
+
+		template< typename MapType >
+		inline void DoRenderNonInstanced( RenderPass const & p_pass
+			, MapType & p_nodes
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				l_itPipelines.first->Apply();
+
+				for ( auto & l_renderNode : l_itPipelines.second )
+				{
+					l_renderNode.Render( p_depthMaps );
+					++p_count;
+				}
+			}
+		}
+	}
+
 	RenderPass::RenderPass( String const & p_name, Engine & p_engine, bool p_opaque, bool p_multisampling )
 		: OwnedBy< Engine >{ p_engine }
 		, Named{ p_name }
@@ -32,6 +158,28 @@ namespace Castor3D
 
 	RenderPass::~RenderPass()
 	{
+	}
+
+	bool RenderPass::Initialise( Size const & p_size )
+	{
+		return DoInitialise( p_size );
+	}
+
+	void RenderPass::Cleanup()
+	{
+		DoCleanup();
+
+		for ( auto & l_buffers : m_geometryBuffers )
+		{
+			l_buffers->Cleanup();
+		}
+
+		m_geometryBuffers.clear();
+	}
+
+	void RenderPass::Update()
+	{
+		DoUpdate();
 	}
 
 	String RenderPass::GetVertexShaderSource( TextureChannels const & p_textureFlags
@@ -149,11 +297,14 @@ namespace Castor3D
 		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
 		OneIntFrameVariableSPtr l_receiver;
 		auto l_animationBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
+		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
+		m_geometryBuffers.insert( l_buffer );
+
 		return AnimatedGeometryRenderNode
 		{
 			DoCreateSceneRenderNode( *p_primitive.GetScene(), p_pipeline ),
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() ),
+			*l_buffer,
 			*p_primitive.GetParent(),
 			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
 			p_submesh,
@@ -171,11 +322,14 @@ namespace Castor3D
 	{
 		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
 		OneIntFrameVariableSPtr l_receiver;
+		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
+		m_geometryBuffers.insert( l_buffer );
+
 		return StaticGeometryRenderNode
 		{
 			DoCreateSceneRenderNode( *p_primitive.GetScene(), p_pipeline ),
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() ),
+			*l_buffer,
 			*p_primitive.GetParent(),
 			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
 			p_submesh,
@@ -191,11 +345,14 @@ namespace Castor3D
 		OneIntFrameVariableSPtr l_receiver;
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		Point2iFrameVariableSPtr l_pt2i;
+		auto l_buffer = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
+		m_geometryBuffers.insert( l_buffer );
+
 		return BillboardRenderNode
 		{
 			DoCreateSceneRenderNode( p_billboard.GetParentScene(), p_pipeline ),
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() ),
+			*l_buffer,
 			*p_billboard.GetNode(),
 			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
 			p_billboard,
@@ -260,6 +417,264 @@ namespace Castor3D
 		, bool p_invertNormals )const
 	{
 		return GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *this, p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
+	}
+
+	uint32_t RenderPass::DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
+		, VertexBuffer & p_matrixBuffer )
+	{
+		constexpr uint32_t l_stride = 16 * sizeof( real );
+		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
+		auto l_buffer = p_matrixBuffer.data();
+		auto l_it = p_renderNodes.begin();
+		auto i = 0u;
+
+		while ( i < l_count )
+		{
+			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+			l_buffer += l_stride;
+			++i;
+			++l_it;
+		}
+
+		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
+		return l_count;
+	}
+
+	uint32_t RenderPass::DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
+		, VertexBuffer & p_matrixBuffer
+		, uint32_t & p_count )
+	{
+		constexpr uint32_t l_stride = 16 * sizeof( real );
+		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
+		auto l_buffer = p_matrixBuffer.data();
+		auto l_it = p_renderNodes.begin();
+		auto i = 0u;
+
+		while ( i < l_count )
+		{
+			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+			++p_count;
+			l_buffer += l_stride;
+			++i;
+			++l_it;
+		}
+
+		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
+		return l_count;
+	}
+
+	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps )
+	{
+		DoTraverseNodes( *this
+			, p_camera
+			, p_nodes
+			, p_depthMaps
+			, [this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, StaticGeometryRenderNodeArray & p_renderNodes
+				, DepthMapArray & p_depthMaps )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					p_renderNodes[0].UnbindPass( p_depthMaps );
+				}
+			} );
+	}
+
+	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps )
+	{
+		DoTraverseNodes( *this
+			, p_nodes
+			, p_depthMaps
+			, [this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, StaticGeometryRenderNodeArray & p_renderNodes
+				, DepthMapArray & p_depthMaps )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					p_renderNodes[0].UnbindPass( p_depthMaps );
+				}
+			} );
+	}
+
+	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		DoTraverseNodes( *this
+			, p_camera
+			, p_nodes
+			, p_depthMaps
+			, [&p_count, this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, StaticGeometryRenderNodeArray & p_renderNodes
+				, DepthMapArray & p_depthMaps )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_count );
+					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					p_renderNodes[0].UnbindPass( p_depthMaps );
+				}
+			} );
+	}
+
+	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		DoTraverseNodes( *this
+			, p_nodes
+			, p_depthMaps
+			, [&p_count, this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, StaticGeometryRenderNodeArray & p_renderNodes
+				, DepthMapArray & p_depthMaps )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_count );
+					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					p_renderNodes[0].UnbindPass( p_depthMaps );
+				}
+			} );
+	}
+
+	void RenderPass::DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps )
+	{
+		DoRenderNonInstanced( *this
+			, p_camera
+			, p_nodes
+			, p_depthMaps );
+	}
+
+	void RenderPass::DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps )
+	{
+		DoRenderNonInstanced( *this
+			, p_nodes
+			, p_depthMaps );
+	}
+
+	void RenderPass::DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		DoRenderNonInstanced( *this
+			, p_camera
+			, p_nodes
+			, p_depthMaps
+			, p_count );
+	}
+
+	void RenderPass::DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		DoRenderNonInstanced( *this
+			, p_nodes
+			, p_depthMaps
+			, p_count );
+	}
+
+	void RenderPass::DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps )
+	{
+		DoRenderNonInstanced( *this
+			, p_camera
+			, p_nodes
+			, p_depthMaps );
+	}
+
+	void RenderPass::DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps )
+	{
+		DoRenderNonInstanced( *this
+			, p_nodes
+			, p_depthMaps );
+	}
+
+	void RenderPass::DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		DoRenderNonInstanced( *this
+			, p_camera
+			, p_nodes
+			, p_depthMaps
+			, p_count );
+	}
+
+	void RenderPass::DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		DoRenderNonInstanced( *this
+			, p_nodes
+			, p_depthMaps
+			, p_count );
+	}
+
+	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps )
+	{
+		DoRenderNonInstanced( *this
+			, p_camera
+			, p_nodes
+			, p_depthMaps );
+	}
+
+	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps )
+	{
+		DoRenderNonInstanced( *this
+			, p_nodes
+			, p_depthMaps );
+	}
+
+	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		DoRenderNonInstanced( *this
+			, p_camera
+			, p_nodes
+			, p_depthMaps
+			, p_count );
+	}
+
+	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		DoRenderNonInstanced( *this
+			, p_nodes
+			, p_depthMaps
+			, p_count );
 	}
 
 	String RenderPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
@@ -362,49 +777,5 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
-	}
-
-	uint32_t RenderPass::DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
-		, VertexBuffer & p_matrixBuffer )
-	{
-		constexpr uint32_t l_stride = 16 * sizeof( real );
-		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-		auto l_buffer = p_matrixBuffer.data();
-		auto l_it = p_renderNodes.begin();
-		auto i = 0u;
-
-		while ( i < l_count )
-		{
-			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-			l_buffer += l_stride;
-			++i;
-			++l_it;
-		}
-
-		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
-		return l_count;
-	}
-
-	uint32_t RenderPass::DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
-		, VertexBuffer & p_matrixBuffer
-		, uint32_t & p_count )
-	{
-		constexpr uint32_t l_stride = 16 * sizeof( real );
-		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-		auto l_buffer = p_matrixBuffer.data();
-		auto l_it = p_renderNodes.begin();
-		auto i = 0u;
-
-		while ( i < l_count )
-		{
-			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-			++p_count;
-			l_buffer += l_stride;
-			++i;
-			++l_it;
-		}
-
-		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
-		return l_count;
 	}
 }

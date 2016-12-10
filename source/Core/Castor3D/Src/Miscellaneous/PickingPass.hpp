@@ -72,24 +72,6 @@ namespace Castor3D
 		C3D_API ~PickingPass();
 		/**
 		 *\~english
-		 *\brief		Initialises the pipeline, FBO and program.
-		 *\param		p_size	The FBO dimensions.
-		 *\return		\p true if ok.
-		 *\~french
-		 *\brief		Initialise le pipeline, le FBO et le programme.
-		 *\param		p_size	Les dimensions du FBO.
-		 *\return		\p true if ok.
-		 */
-		C3D_API bool Initialise( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void Cleanup();
-		/**
-		 *\~english
 		 *\brief		Adds a scene rendered through this technique.
 		 *\param[in]	p_scene		The scene.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
@@ -153,28 +135,6 @@ namespace Castor3D
 		{
 			return m_face;
 		}
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateAnimatedNode
-		 */
-		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, Submesh & p_submesh
-			, Geometry & p_primitive
-			, AnimatedSkeletonSPtr p_skeleton
-			, AnimatedMeshSPtr p_mesh )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateStaticNode
-		 */
-		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, Submesh & p_submesh
-			, Geometry & p_primitive )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateBillboardNode
-		 */
-		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, BillboardBase & p_billboard )override;
 
 	private:
 		void DoRenderNodes( SceneRenderNodes & p_nodes
@@ -237,6 +197,18 @@ namespace Castor3D
 			, Camera const & p_camera
 			, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoInitialise
+		 */
+		bool DoInitialise( Castor::Size const & p_size )override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoCleanup
+		 */
+		void DoCleanup()override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdate
+		 */
+		C3D_API void DoUpdate()override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
 		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
@@ -291,9 +263,6 @@ namespace Castor3D
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
 		RenderBufferAttachmentSPtr m_depthAttach;
-		//!\~english	The geometry buffer.
-		//!\~french		Les tampons de géométrie.
-		std::set< GeometryBuffersSPtr > m_geometryBuffers;
 		//!\~english	The scenes, and cameras used to render them.
 		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
 		std::map< Scene const *, CameraQueueMap > m_scenes;

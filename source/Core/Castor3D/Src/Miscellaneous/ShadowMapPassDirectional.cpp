@@ -42,7 +42,7 @@ namespace Castor3D
 		return std::make_shared< ShadowMapPassDirectional >( p_engine, p_scene, p_light, p_shadowMap, p_index );
 	}
 
-	bool ShadowMapPassDirectional::DoInitialise( Size const & p_size )
+	bool ShadowMapPassDirectional::DoInitialisePass( Size const & p_size )
 	{
 		Viewport l_viewport{ *GetEngine() };
 		real l_w = real( p_size.width() );
@@ -70,7 +70,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShadowMapPassDirectional::DoCleanup()
+	void ShadowMapPassDirectional::DoCleanupPass()
 	{
 		m_camera->Detach();
 		m_camera.reset();

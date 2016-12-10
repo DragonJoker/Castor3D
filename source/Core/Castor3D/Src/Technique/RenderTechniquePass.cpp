@@ -23,69 +23,6 @@ namespace Castor3D
 {
 	namespace
 	{
-		template< typename MapType, typename FuncType >
-		inline void DoTraverseNodes( RenderPass const & p_pass
-			, Camera const & p_camera
-			, MapType & p_nodes
-			, DepthMapArray & p_depthMaps
-			, FuncType p_function )
-		{
-			for ( auto l_itPipelines : p_nodes )
-			{
-				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, p_depthMaps );
-				l_itPipelines.first->Apply();
-
-				for ( auto l_itPass : l_itPipelines.second )
-				{
-					for ( auto l_itSubmeshes : l_itPass.second )
-					{
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
-					}
-				}
-			}
-		}
-
-		template< typename MapType >
-		inline void DoRenderNonInstanced( RenderPass const & p_pass
-			, Camera const & p_camera
-			, MapType & p_nodes
-			, DepthMapArray & p_depthMaps )
-		{
-			for ( auto l_itPipelines : p_nodes )
-			{
-				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, p_depthMaps );
-				l_itPipelines.first->Apply();
-
-				for ( auto & l_renderNode : l_itPipelines.second )
-				{
-					l_renderNode.Render( p_depthMaps );
-				}
-			}
-		}
-
-		template< typename MapType >
-		inline void DoRenderNonInstanced( RenderPass const & p_pass
-			, Camera const & p_camera
-			, MapType & p_nodes
-			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count )
-		{
-			for ( auto l_itPipelines : p_nodes )
-			{
-				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, p_depthMaps );
-				l_itPipelines.first->Apply();
-
-				for ( auto & l_renderNode : l_itPipelines.second )
-				{
-					l_renderNode.Render( p_depthMaps );
-					++p_count;
-				}
-			}
-		}
-
 		template< typename MapType >
 		void DoSortAlpha( MapType & p_input
 			, Camera const & p_camera
@@ -257,7 +194,105 @@ namespace Castor3D
 	{
 	}
 
-	void RenderTechniquePass::Initialise()
+	void RenderTechniquePass::Render( uint32_t p_frameTime, uint32_t & p_visible, bool p_shadows )
+	{
+		auto & l_nodes = m_renderQueue.GetRenderNodes();
+		auto & l_scene = *m_target.GetScene();
+		DepthMapArray l_depthMaps;
+
+		if ( p_shadows )
+		{
+			DoGetDepthMaps( l_depthMaps );
+		}
+
+		DoRenderNodes( l_nodes, *m_target.GetCamera(), l_depthMaps, p_visible );
+		p_visible += uint32_t( p_visible );
+	}
+
+	void RenderTechniquePass::DoRenderNodes( SceneRenderNodes & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		if ( !p_nodes.m_staticGeometries.m_backCulled.empty()
+			|| !p_nodes.m_instancedGeometries.m_backCulled.empty()
+			|| !p_nodes.m_animatedGeometries.m_backCulled.empty()
+			|| !p_nodes.m_billboards.m_backCulled.empty() )
+		{
+			if ( m_opaque || m_multisampling )
+			{
+				DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_frontCulled, p_camera, p_depthMaps );
+				DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_frontCulled, p_camera, p_depthMaps );
+				DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_frontCulled, p_camera, p_depthMaps );
+				DoRenderBillboards( p_nodes.m_billboards.m_frontCulled, p_camera, p_depthMaps );
+
+				DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderBillboards( p_nodes.m_billboards.m_backCulled, p_camera, p_depthMaps, p_count );
+			}
+			else
+			{
+				{
+					DistanceSortedNodeMap l_distanceSortedRenderNodes;
+					DoSortAlpha( p_nodes.m_staticGeometries.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_animatedGeometries.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_billboards.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
+
+					if ( !l_distanceSortedRenderNodes.empty() )
+					{
+						DoRenderByDistance( l_distanceSortedRenderNodes, p_camera, p_depthMaps );
+					}
+				}
+				{
+					DistanceSortedNodeMap l_distanceSortedRenderNodes;
+					DoSortAlpha( p_nodes.m_staticGeometries.m_backCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_animatedGeometries.m_backCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_billboards.m_backCulled, p_camera, l_distanceSortedRenderNodes );
+
+					if ( !l_distanceSortedRenderNodes.empty() )
+					{
+						DoRenderByDistance( l_distanceSortedRenderNodes, p_camera, p_depthMaps, p_count );
+					}
+				}
+			}
+		}
+	}
+
+	void RenderTechniquePass::DoRenderByDistance( DistanceSortedNodeMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps )
+	{
+		for ( auto & l_it : p_nodes )
+		{
+			l_it.second.get().m_pass.m_pipeline.Apply();
+			UpdatePipeline( p_camera, l_it.second.get().m_pass.m_pipeline, p_depthMaps );
+			l_it.second.get().Render( p_depthMaps );
+		}
+	}
+
+	void RenderTechniquePass::DoRenderByDistance( DistanceSortedNodeMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps
+		, uint32_t & p_count )
+	{
+		for ( auto & l_it : p_nodes )
+		{
+			l_it.second.get().m_pass.m_pipeline.Apply();
+			UpdatePipeline( p_camera, l_it.second.get().m_pass.m_pipeline, p_depthMaps );
+			l_it.second.get().Render( p_depthMaps );
+			++p_count;
+		}
+	}
+
+	void RenderTechniquePass::DoGetDepthMaps( DepthMapArray & p_depthMaps )
+	{
+		p_depthMaps.push_back( std::ref( m_technique.GetDirectionalShadowMap() ) );
+		p_depthMaps.push_back( std::ref( m_technique.GetSpotShadowMap() ) );
+		p_depthMaps.push_back( std::ref( m_technique.GetPointShadowMap() ) );
+	}
+
+	bool RenderTechniquePass::DoInitialise( Size const & CU_PARAM_UNUSED( p_size ) )
 	{
 		auto & l_scene = *m_target.GetScene();
 		auto l_camera = m_target.GetCamera();
@@ -270,212 +305,17 @@ namespace Castor3D
 		{
 			m_renderQueue.Initialise( l_scene );
 		}
+
+		return true;
 	}
 
-	void RenderTechniquePass::Cleanup()
+	void RenderTechniquePass::DoCleanup()
 	{
 	}
 
-	void RenderTechniquePass::Update()
+	void RenderTechniquePass::DoUpdate()
 	{
 		m_renderQueue.Update();
-	}
-
-	void RenderTechniquePass::Render( uint32_t p_frameTime, uint32_t & p_visible, bool p_shadows )
-	{
-		auto & l_nodes = m_renderQueue.GetRenderNodes();
-		auto & l_scene = *m_target.GetScene();
-		DepthMapArray l_depthMaps;
-
-		if ( p_shadows )
-		{
-			DoGetDepthMaps( l_depthMaps );
-		}
-
-		DoRenderNodes( l_nodes, l_depthMaps, p_visible );
-		p_visible += uint32_t( p_visible );
-	}
-
-	void RenderTechniquePass::DoRenderNodes( SceneRenderNodes & p_nodes
-		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
-	{
-		if ( !p_nodes.m_staticGeometries.m_backCulled.empty()
-			|| !p_nodes.m_instancedGeometries.m_backCulled.empty()
-			|| !p_nodes.m_animatedGeometries.m_backCulled.empty()
-			|| !p_nodes.m_billboards.m_backCulled.empty() )
-		{
-			if ( m_opaque || m_multisampling )
-			{
-				DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_frontCulled, p_depthMaps );
-				DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_frontCulled, p_depthMaps );
-				DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_frontCulled, p_depthMaps );
-				DoRenderBillboards( p_nodes.m_billboards.m_frontCulled, p_depthMaps );
-
-				DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_backCulled, p_depthMaps, p_count );
-				DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_backCulled, p_depthMaps, p_count );
-				DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_backCulled, p_depthMaps, p_count );
-				DoRenderBillboards( p_nodes.m_billboards.m_backCulled, p_depthMaps, p_count );
-			}
-			else
-			{
-				{
-					DistanceSortedNodeMap l_distanceSortedRenderNodes;
-					DoSortAlpha( p_nodes.m_staticGeometries.m_frontCulled, *m_target.GetCamera(), l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_animatedGeometries.m_frontCulled, *m_target.GetCamera(), l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_billboards.m_frontCulled, *m_target.GetCamera(), l_distanceSortedRenderNodes );
-
-					if ( !l_distanceSortedRenderNodes.empty() )
-					{
-						DoRenderByDistance( l_distanceSortedRenderNodes, p_depthMaps );
-					}
-				}
-				{
-					DistanceSortedNodeMap l_distanceSortedRenderNodes;
-					DoSortAlpha( p_nodes.m_staticGeometries.m_backCulled, *m_target.GetCamera(), l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_animatedGeometries.m_backCulled, *m_target.GetCamera(), l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_billboards.m_backCulled, *m_target.GetCamera(), l_distanceSortedRenderNodes );
-
-					if ( !l_distanceSortedRenderNodes.empty() )
-					{
-						DoRenderByDistance( l_distanceSortedRenderNodes, p_depthMaps, p_count );
-					}
-				}
-			}
-		}
-	}
-
-	void RenderTechniquePass::DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
-	{
-		DoRenderNonInstanced( *this
-			, *m_target.GetCamera()
-			, p_nodes
-			, p_depthMaps );
-	}
-
-	void RenderTechniquePass::DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
-	{
-		DoRenderNonInstanced( *this
-			, *m_target.GetCamera()
-			, p_nodes
-			, p_depthMaps
-			, p_count );
-	}
-
-	void RenderTechniquePass::DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
-	{
-		DoRenderNonInstanced( *this
-			, *m_target.GetCamera()
-			, p_nodes
-			, p_depthMaps );
-	}
-
-	void RenderTechniquePass::DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
-	{
-		DoRenderNonInstanced( *this
-			, *m_target.GetCamera()
-			, p_nodes
-			, p_depthMaps
-			, p_count );
-	}
-
-	void RenderTechniquePass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
-	{
-		DoTraverseNodes(
-			*this,
-			*m_target.GetCamera(),
-			p_nodes,
-			p_depthMaps,
-			[&p_depthMaps, this](
-				RenderPipeline & p_pipeline,
-				Pass & p_pass,
-				Submesh & p_submesh,
-				StaticGeometryRenderNodeArray & p_renderNodes )
-			{
-				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
-				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-					p_renderNodes[0].UnbindPass( p_depthMaps );
-				}
-			} );
-	}
-
-	void RenderTechniquePass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
-	{
-		DoTraverseNodes(
-			*this,
-			*m_target.GetCamera(),
-			p_nodes,
-			p_depthMaps,
-			[&p_depthMaps, &p_count, this](
-				RenderPipeline & p_pipeline,
-				Pass & p_pass,
-				Submesh & p_submesh,
-				StaticGeometryRenderNodeArray & p_renderNodes )
-			{
-				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
-				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_count );
-					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-					p_renderNodes[0].UnbindPass( p_depthMaps );
-				}
-			} );
-	}
-
-	void RenderTechniquePass::DoRenderByDistance( DistanceSortedNodeMap & p_nodes
-		, DepthMapArray & p_depthMaps )
-	{
-		for ( auto & l_it : p_nodes )
-		{
-			l_it.second.get().m_pass.m_pipeline.Apply();
-			UpdatePipeline( *m_target.GetCamera(), l_it.second.get().m_pass.m_pipeline, p_depthMaps );
-			l_it.second.get().Render( p_depthMaps );
-		}
-	}
-
-	void RenderTechniquePass::DoRenderByDistance( DistanceSortedNodeMap & p_nodes
-		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
-	{
-		for ( auto & l_it : p_nodes )
-		{
-			l_it.second.get().m_pass.m_pipeline.Apply();
-			UpdatePipeline( *m_target.GetCamera(), l_it.second.get().m_pass.m_pipeline, p_depthMaps );
-			l_it.second.get().Render( p_depthMaps );
-			++p_count;
-		}
-	}
-
-	void RenderTechniquePass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
-	{
-		DoRenderNonInstanced( *this
-			, *m_target.GetCamera()
-			, p_nodes
-			, p_depthMaps );
-	}
-
-	void RenderTechniquePass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
-	{
-		DoRenderNonInstanced( *this
-			, *m_target.GetCamera()
-			, p_nodes
-			, p_depthMaps
-			, p_count );
 	}
 
 	void RenderTechniquePass::DoUpdateFlags( TextureChannels & p_textureFlags
@@ -669,12 +509,5 @@ namespace Castor3D
 				, p_program
 				, p_flags ) );
 		}
-	}
-
-	void RenderTechniquePass::DoGetDepthMaps( DepthMapArray & p_depthMaps )
-	{
-		p_depthMaps.push_back( std::ref( m_technique.GetDirectionalShadowMap() ) );
-		p_depthMaps.push_back( std::ref( m_technique.GetSpotShadowMap() ) );
-		p_depthMaps.push_back( std::ref( m_technique.GetPointShadowMap() ) );
 	}
 }

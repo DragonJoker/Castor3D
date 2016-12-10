@@ -37,59 +37,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	namespace
-	{
-		static String const ShadowMap = cuT( "ShadowMap" );
-
-		template< typename MapType, typename FuncType >
-		void DoTraverseNodes(
-			Camera const & p_camera,
-			MapType & p_nodes,
-			FuncType p_function )
-		{
-			for ( auto l_itPipelines : p_nodes )
-			{
-				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
-				l_itPipelines.first->Apply();
-
-				for ( auto l_itPass : l_itPipelines.second )
-				{
-					for ( auto l_itSubmeshes : l_itPass.second )
-					{
-						p_function( *l_itPipelines.first, *l_itPass.first, *l_itSubmeshes.first, l_itSubmeshes.second );
-					}
-				}
-			}
-		}
-
-		template< typename MapType >
-		void DoRenderNonInstanced(
-			Scene & p_scene,
-			Camera const & p_camera,
-			MapType & p_nodes )
-		{
-			auto l_depthMaps = DepthMapArray{};
-
-			for ( auto l_itPipelines : p_nodes )
-			{
-				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
-				l_itPipelines.first->Apply();
-
-				for ( auto & l_renderNode : l_itPipelines.second )
-				{
-					if ( l_renderNode.m_data.IsInitialised() )
-					{
-						l_renderNode.Render( l_depthMaps );
-					}
-				}
-			}
-		}
-	}
-
 	ShadowMapPass::ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
-		: RenderPass{ ShadowMap, p_engine, true }
+		: RenderPass{ cuT( "ShadowMap" ), p_engine, true }
 		, m_light{ p_light }
 		, m_scene{ p_scene }
 		, m_shadowMap{ p_shadowMap }
@@ -101,10 +50,24 @@ namespace Castor3D
 	{
 	}
 
-	bool ShadowMapPass::Initialise()
+	void ShadowMapPass::Render()
+	{
+		DoRender();
+	}
+
+	void ShadowMapPass::DoRenderNodes( SceneRenderNodes & p_nodes
+		, Camera const & p_camera )
+	{
+		auto l_depthMaps = DepthMapArray{};
+		DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_backCulled, p_camera, l_depthMaps );
+		DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_backCulled, p_camera, l_depthMaps );
+		DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_backCulled, p_camera, l_depthMaps );
+		DoRenderBillboards( p_nodes.m_billboards.m_backCulled, p_camera, l_depthMaps );
+	}
+
+	bool ShadowMapPass::DoInitialise( Size const & p_size )
 	{
 		bool l_return = true;
-		auto l_size = m_shadowMap.GetTexture()->GetDimensions();
 
 		if ( !m_frameBuffer )
 		{
@@ -113,23 +76,23 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = m_frameBuffer->Initialise( l_size );
+				l_return = m_frameBuffer->Initialise( p_size );
 			}
 
 			if ( l_return )
 			{
-				l_return = DoInitialise( l_size );
+				l_return = DoInitialisePass( p_size );
 			}
 		}
 
 		return l_return;
 	}
 
-	void ShadowMapPass::Cleanup()
+	void ShadowMapPass::DoCleanup()
 	{
 		if ( m_frameBuffer )
 		{
-			DoCleanup();
+			DoCleanupPass();
 
 			m_frameBuffer->Cleanup();
 			m_frameBuffer->Destroy();
@@ -142,149 +105,6 @@ namespace Castor3D
 		}
 
 		m_geometryBuffers.clear();
-	}
-
-	void ShadowMapPass::Update()
-	{
-		DoUpdate();
-	}
-
-	void ShadowMapPass::Render()
-	{
-		DoRender();
-	}
-
-	AnimatedGeometryRenderNode ShadowMapPass::CreateAnimatedNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, Submesh & p_submesh
-		, Geometry & p_primitive
-		, AnimatedSkeletonSPtr p_skeleton
-		, AnimatedMeshSPtr p_mesh )
-	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
-		auto l_animationBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
-		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffer );
-
-		return AnimatedGeometryRenderNode
-		{
-			DoCreateSceneRenderNode( *p_primitive.GetScene(), p_pipeline ),
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*l_buffer,
-			*p_primitive.GetParent(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
-			p_submesh,
-			p_primitive,
-			p_skeleton.get(),
-			p_mesh.get(),
-			*l_animationBuffer
-		};
-	}
-
-	StaticGeometryRenderNode ShadowMapPass::CreateStaticNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, Submesh & p_submesh
-		, Geometry & p_primitive )
-	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
-		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffer );
-
-		return StaticGeometryRenderNode
-		{
-			DoCreateSceneRenderNode( *p_primitive.GetScene(), p_pipeline ),
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*l_buffer,
-			*p_primitive.GetParent(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
-			p_submesh,
-			p_primitive,
-		};
-	}
-
-	BillboardRenderNode ShadowMapPass::CreateBillboardNode( Pass & p_pass
-		, RenderPipeline & p_pipeline
-		, BillboardBase & p_billboard )
-	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
-		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
-		Point2iFrameVariableSPtr l_pt2i;
-		auto l_buffer = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffer );
-
-		return BillboardRenderNode
-		{
-			DoCreateSceneRenderNode( p_billboard.GetParentScene(), p_pipeline ),
-			DoCreatePassRenderNode( p_pass, p_pipeline ),
-			*l_buffer,
-			*p_billboard.GetNode(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
-			p_billboard,
-			*l_billboardBuffer,
-			*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i ),
-			*l_billboardBuffer->GetVariable( ShaderProgram::WindowSize, l_pt2i )
-		};
-	}
-
-	void ShadowMapPass::DoRenderNodes( SceneRenderNodes & p_nodes
-		, Camera const & p_camera )
-	{
-		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_backCulled );
-		DoRenderStaticSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_backCulled );
-		DoRenderAnimatedSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_backCulled );
-		DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_backCulled );
-	}
-
-	void ShadowMapPass::DoRenderInstancedSubmeshes( Scene & p_scene
-		, Camera const & p_camera
-		, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
-	{
-		DoTraverseNodes( p_camera
-			, p_nodes
-			, [this]( RenderPipeline & p_pipeline
-				, Pass & p_pass
-				, Submesh & p_submesh
-				, StaticGeometryRenderNodeArray & p_renderNodes )
-			{
-				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
-				{
-					auto l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					auto l_depthMaps = DepthMapArray{};
-					p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-					p_renderNodes[0].UnbindPass( l_depthMaps );
-				}
-			} );
-	}
-
-	void ShadowMapPass::DoRenderStaticSubmeshes( Scene & p_scene
-		, Camera const & p_camera
-		, StaticGeometryRenderNodesByPipelineMap & p_nodes )
-	{
-		DoRenderNonInstanced( p_scene
-			, p_camera
-			, p_nodes );
-	}
-
-	void ShadowMapPass::DoRenderAnimatedSubmeshes( Scene & p_scene
-		, Camera const & p_camera
-		, AnimatedGeometryRenderNodesByPipelineMap & p_nodes )
-	{
-		DoRenderNonInstanced( p_scene
-			, p_camera
-			, p_nodes );
-	}
-
-	void ShadowMapPass::DoRenderBillboards( Scene & p_scene
-		, Camera const & p_camera
-		, BillboardRenderNodesByPipelineMap & p_nodes )
-	{
-		DoRenderNonInstanced( p_scene
-			, p_camera
-			, p_nodes );
 	}
 
 	void ShadowMapPass::DoUpdatePipeline( RenderPipeline & p_pipeline

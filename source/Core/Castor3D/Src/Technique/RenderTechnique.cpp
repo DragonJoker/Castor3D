@@ -235,15 +235,15 @@ namespace Castor3D
 
 						auto l_pass = GetEngine()->GetShadowMapPassFactory().Create( p_light.GetLightType(), *GetEngine(), l_scene, p_light, *l_unit, 0u );
 						auto l_insit = m_shadowMaps.insert( { &p_light, l_pass } ).first;
-						l_pass->Initialise();
+						l_pass->Initialise( l_unit->GetTexture()->GetDimensions() );
 					}
 				} );
 			}
 
 			if ( m_initialised )
 			{
-				m_opaquePass->Initialise();
-				m_transparentPass->Initialise();
+				m_opaquePass->Initialise( m_size );
+				m_transparentPass->Initialise( m_size );
 			}
 		}
 

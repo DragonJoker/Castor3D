@@ -88,11 +88,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool DoInitialisePass( Castor::Size const & p_size )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
 		 */
-		void DoCleanup()override;
+		void DoCleanupPass()override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
 		 */

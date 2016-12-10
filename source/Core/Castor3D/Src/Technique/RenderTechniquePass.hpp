@@ -70,29 +70,6 @@ namespace Castor3D
 		C3D_API virtual ~RenderTechniquePass();
 		/**
 		 *\~english
-		 *\brief		Initialisation la file de rendu.
-		 *\~french
-		 *\brief		Initialise la file de rendu.
-		 */
-		C3D_API void Initialise();
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Update function.
-		 *\remarks		Updates the scenes render nodes, if needed.
-		 *\~french
-		 *\brief		Fonction de mise à jour.
-		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
-		 */
-		C3D_API void Update();
-		/**
-		 *\~english
 		 *\brief		Render function.
 		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\param[out]	p_visible	The visible objects count.
@@ -110,152 +87,74 @@ namespace Castor3D
 		 *\~english
 		 *\brief			Renders render nodes.
 		 *\param[in]		p_nodes		The scene render nodes.
+		 *\param			p_camera	The viewing camera.
 		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	p_count		Receives the rendered nodes count.
 		 *\~french
 		 *\brief			Dessine les noeuds de rendu.
 		 *\param[in]		p_nodes		Les noeuds de rendu de la scène.
+		 *\param			p_camera	La caméra regardant la scène.
 		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
 		 */
 		C3D_API void DoRenderNodes( SceneRenderNodes & p_nodes
-			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
-		/**
-		 *\~english
-		 *\brief			Renders non instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_count		Receives the rendered nodes count.
-		 *\~french
-		 *\brief			Dessine des sous maillages non instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
-		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
-		/**
-		 *\~english
-		 *\brief			Renders non instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_count		Receives the rendered nodes count.
-		 *\~french
-		 *\brief			Dessine des sous maillages non instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
-		 */
-		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
-		/**
-		 *\~english
-		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
-		/**
-		 *\~english
-		 *\brief			Renders instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_count		Receives the rendered nodes count.
-		 *\~french
-		 *\brief			Dessine des sous maillages instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
-		 */
-		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
 			, uint32_t & p_count );
 		/**
 		 *\~english
 		 *\brief		Renders objects sorted by distance to camera.
 		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
 		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine d'objets triés par distance à la caméra.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void DoRenderByDistance( DistanceSortedNodeMap & p_nodes
+			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps );
 		/**
 		 *\~english
 		 *\brief			Renders objects sorted by distance to camera.
 		 *\param[in]		p_nodes		The render nodes.
+		 *\param			p_camera	The viewing camera.
 		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	p_count		Receives the rendered nodes count.
 		 *\~french
 		 *\brief			Dessine d'objets triés par distance à la caméra.
 		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param			p_camera	La caméra regardant la scène.
 		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
 		 */
 		C3D_API void DoRenderByDistance( DistanceSortedNodeMap & p_nodes
+			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
 			, uint32_t & p_count );
 		/**
 		 *\~english
-		 *\brief		Renders billboards.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\brief		Retrieves the depth maps for opaque nodes.
+		 *\param[out]	p_depthMaps	Receives the depth maps.
 		 *\~french
-		 *\brief		Dessine des billboards.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\brief		Récupère les textures de profondeur pour les noeuds opaques.
+		 *\param[out]	p_depthMaps	Reçoit les textures.
 		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
+		C3D_API virtual void DoGetDepthMaps( DepthMapArray & p_depthMaps );
 		/**
-		 *\~english
-		 *\brief			Renders billboards.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_count		Receives the rendered nodes count.
-		 *\~french
-		 *\brief			Dessine des billboards.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 *\copydoc		Castor3D::RenderPass::DoInitialise
 		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
+		C3D_API bool DoInitialise( Castor::Size const & p_size )override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoCleanup
+		 */
+		C3D_API void DoCleanup()override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdate
+		 */
+		C3D_API void DoUpdate()override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
@@ -288,15 +187,6 @@ namespace Castor3D
 		 */
 		C3D_API void DoPrepareBackPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
-		/**
-		 *\~english
-		 *\brief		Retrieves the depth maps for opaque nodes.
-		 *\param[out]	p_depthMaps	Receives the depth maps.
-		 *\~french
-		 *\brief		Récupère les textures de profondeur pour les noeuds opaques.
-		 *\param[out]	p_depthMaps	Reçoit les textures.
-		 */
-		C3D_API virtual void DoGetDepthMaps( DepthMapArray & p_depthMaps );
 
 	protected:
 		//!\~english	The parent render target.

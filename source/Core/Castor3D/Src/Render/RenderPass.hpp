@@ -90,6 +90,31 @@ namespace Castor3D
 		C3D_API virtual ~RenderPass();
 		/**
 		 *\~english
+		 *\brief		Initialises the pass.
+		 *\param		p_size	The pass needed dimensions.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Initialise la passe.
+		 *\param		p_size	Les dimensions voulues pour la passe.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API bool Initialise( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Cleans up the pass.
+		 *\~french
+		 *\brief		Nettoie la passe.
+		 */
+		C3D_API void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Updates the scenes render nodes, if needed.
+		 *\~french
+		 *\brief		Met les noeuds de scènes à jour, si nécessaire.
+		 */
+		C3D_API void Update();
+		/**
+		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
@@ -226,7 +251,7 @@ namespace Castor3D
 		 *\param[in]	p_mesh		Le maillage animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API virtual AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
+		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
 			, RenderPipeline & p_pipeline
 			, Submesh & p_submesh
 			, Geometry & p_primitive
@@ -248,7 +273,7 @@ namespace Castor3D
 		 *\param[in]	p_primitive	La géométrie.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API virtual StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
+		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
 			, RenderPipeline & p_pipeline
 			, Submesh & p_submesh
 			, Geometry & p_primitive );
@@ -266,7 +291,7 @@ namespace Castor3D
 		 *\param[in]	p_billboard	Le billboard.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API virtual BillboardRenderNode CreateBillboardNode( Pass & p_pass
+		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
 			, RenderPipeline & p_pipeline
 			, BillboardBase & p_billboard );
 		/**
@@ -340,8 +365,6 @@ namespace Castor3D
 			, ProgramFlags const & p_programFlags
 			, uint8_t p_sceneFlags
 			, bool p_invertNormals )const;
-
-	protected:
 		/**
 		 *\~english
 		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
@@ -352,7 +375,7 @@ namespace Castor3D
 		 *\param[in]	p_renderNodes	Les noeuds instanciés.
 		 *\param[in]	p_matrixBuffer	Le tampon de matrices.
 		 */
-		uint32_t DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
+		C3D_API uint32_t DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
 			, VertexBuffer & p_matrixBuffer );
 		/**
 		 *\~english
@@ -368,9 +391,278 @@ namespace Castor3D
 		 *\param[in]		p_matrixBuffer	Le tampon de matrices.
 		 *\param[in,out]	p_count			Reçoit le nombre de noeuds dessinés.
 		 */
-		uint32_t DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
+		C3D_API uint32_t DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
 			, VertexBuffer & p_matrixBuffer
 			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief			Renders instanced submeshes.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\~french
+		 *\brief			Dessine des sous maillages instanciés.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 */
+		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief			Renders instanced submeshes.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param			p_camera	The viewing camera.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\~french
+		 *\brief			Dessine des sous maillages instanciés.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param			p_camera	La caméra regardant la scène.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 */
+		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief			Renders non instanced submeshes.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param			p_camera	The viewing camera.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\~french
+		 *\brief			Dessine des sous maillages non instanciés.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param			p_camera	La caméra regardant la scène.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 */
+		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief			Renders non instanced submeshes.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\~french
+		 *\brief			Dessine des sous maillages non instanciés.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 */
+		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief			Renders non instanced submeshes.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param			p_camera	The viewing camera.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\~french
+		 *\brief			Dessine des sous maillages non instanciés.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param			p_camera	La caméra regardant la scène.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 */
+		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief			Renders non instanced submeshes.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\~french
+		 *\brief			Dessine des sous maillages non instanciés.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 */
+		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief			Renders billboards.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param			p_camera	The viewing camera.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\~french
+		 *\brief			Dessine des billboards.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param			p_camera	La caméra regardant la scène.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 */
+		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief			Renders billboards.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\~french
+		 *\brief			Dessine des billboards.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 */
+		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps
+			, uint32_t & p_count );
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Initialises the pass.
+		 *\param		p_size	The pass needed dimensions.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Initialise la passe.
+		 *\param		p_size	Les dimensions voulues pour la passe.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API virtual bool DoInitialise( Castor::Size const & p_size ) = 0;
+		/**
+		 *\~english
+		 *\brief		Cleans up the pass.
+		 *\~french
+		 *\brief		Nettoie la passe.
+		 */
+		C3D_API virtual void DoCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Updates the specific data.
+		 *\~french
+		 *\brief		Met les données spécifiques.
+		 */
+		C3D_API virtual void DoUpdate() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -386,8 +678,6 @@ namespace Castor3D
 		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, uint8_t p_sceneFlags )const = 0;
-
-	private:
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -476,6 +766,9 @@ namespace Castor3D
 		//!\~english	The pipelines used to render nodes' front faces.
 		//!\~french		Les pipelines de rendu utilisés pour dessiner les faces avant noeuds.
 		std::map< PipelineFlags, RenderPipelineUPtr > m_backPipelines;
+		//!\~english	The geometries buffers.
+		//!\~french		Les tampons de géométries.
+		std::set< GeometryBuffersSPtr > m_geometryBuffers;
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };

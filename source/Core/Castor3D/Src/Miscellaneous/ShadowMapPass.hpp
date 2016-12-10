@@ -67,31 +67,6 @@ namespace Castor3D
 		C3D_API ~ShadowMapPass();
 		/**
 		 *\~english
-		 *\brief		Initialises the pipeline, FBO and program.
-		 *\return		\p true if ok.
-		 *\~french
-		 *\brief		Initialise le pipeline, le FBO et le programme.
-		 *\return		\p true if ok.
-		 */
-		C3D_API bool Initialise();
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Update function.
-		 *\remarks		Updates the scenes render nodes, if needed.
-		 *\~french
-		 *\brief		Fonction de mise à jour.
-		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
-		 */
-		C3D_API void Update();
-		/**
-		 *\~english
 		 *\brief		Render function
 		 *\param[in]	p_scene		The scene to render.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
@@ -101,28 +76,6 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
 		C3D_API void Render();
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateAnimatedNode
-		 */
-		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, Submesh & p_submesh
-			, Geometry & p_primitive
-			, AnimatedSkeletonSPtr p_skeleton
-			, AnimatedMeshSPtr p_mesh )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateStaticNode
-		 */
-		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, Submesh & p_submesh
-			, Geometry & p_primitive )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateBillboardNode
-		 */
-		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, BillboardBase & p_billboard )override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -136,15 +89,15 @@ namespace Castor3D
 
 	protected:
 		/**
-		*\~english
-		*\brief		Renders the given nodes.
-		*\param		p_nodes		The nodes to render.
-		*\param		p_camera	The viewing camera.
-		*\~french
-		*\brief		Dessine les noeuds donnés.
-		*\param		p_nodes		Les noeuds à dessiner.
-		*\param		p_camera	La caméra regardant la scène.
-		*/
+		 *\~english
+		 *\brief		Renders the given nodes.
+		 *\param		p_nodes		The nodes to render.
+		 *\param		p_camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine les noeuds donnés.
+		 *\param		p_nodes		Les noeuds à dessiner.
+		 *\param		p_camera	La caméra regardant la scène.
+		 */
 		void DoRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & p_camera );
 
@@ -159,23 +112,14 @@ namespace Castor3D
 		 *\param		p_size	Les dimensions du FBO.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool DoInitialise( Castor::Size const & p_size ) = 0;
+		C3D_API virtual bool DoInitialisePass( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void DoCleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Update function.
-		 *\remarks		Updates the scenes render nodes, if needed.
-		 *\~french
-		 *\brief		Fonction de mise à jour.
-		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
-		 */
-		C3D_API virtual void DoUpdate() = 0;
+		C3D_API virtual void DoCleanupPass() = 0;
 		/**
 		 *\~english
 		 *\brief		Render function
@@ -197,29 +141,13 @@ namespace Castor3D
 		 */
 		C3D_API virtual void DoUpdateProgram( ShaderProgram & p_program ) = 0;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderInstancedSubmeshes
+		 *\copydoc		Castor3D::RenderPass::DoInitialise
 		 */
-		void DoRenderInstancedSubmeshes( Scene & p_scene
-			, Camera const & p_camera
-			, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		bool DoInitialise( Castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshes
+		 *\copydoc		Castor3D::RenderPass::DoCleanup
 		 */
-		void DoRenderStaticSubmeshes( Scene & p_scene
-			, Camera const & p_camera
-			, StaticGeometryRenderNodesByPipelineMap & p_nodes );
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
-		 */
-		void DoRenderAnimatedSubmeshes( Scene & p_scene
-			, Camera const & p_camera
-			, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderBillboards
-		 */
-		void DoRenderBillboards( Scene & p_scene
-			, Camera const & p_camera
-			, BillboardRenderNodesByPipelineMap & p_nodes );
+		void DoCleanup();
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
