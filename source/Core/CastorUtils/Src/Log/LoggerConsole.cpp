@@ -400,6 +400,70 @@ namespace Castor
 		bool m_allocated{ false };
 	};
 
+	class ReleaseConsole
+		: public ConsoleImpl
+	{
+	public:
+		ReleaseConsole( bool p_showConsole )
+		{
+			if ( p_showConsole )
+			{
+				if ( ::AllocConsole() )
+				{
+					m_allocated = true;
+					DoInitialiseConsole( INVALID_HANDLE_VALUE );
+				}
+				else
+				{
+					DWORD lastError = ::GetLastError();
+
+					if ( lastError == ERROR_ACCESS_DENIED )
+					{
+						DoInitialiseConsole( ::GetStdHandle( STD_OUTPUT_HANDLE ) );
+					}
+					else
+					{
+						std::cerr << "Failed to create to a new console with error " << lastError << std::endl;
+					}
+				}
+			}
+		}
+
+		virtual ~ReleaseConsole()
+		{
+			if ( m_allocated )
+			{
+				::FreeConsole();
+			}
+		}
+
+		void BeginLog( LogType logLevel )
+		{
+		}
+
+		void Print( String const & p_toLog, bool p_newLine )
+		{
+			printf( "%s", p_toLog.c_str() );
+
+			if ( p_newLine )
+			{
+				printf( "\n" );
+			}
+		}
+
+	private:
+		void DoInitialiseConsole( HANDLE p_handle )
+		{
+			FILE * l_dump;
+			freopen_s( &l_dump, "conout$", "w", stdout );
+			freopen_s( &l_dump, "conout$", "w", stderr );
+		}
+
+	private:
+		ConsoleHandle m_handle;
+		bool m_allocated{ false };
+	};
+
 #else
 
 	class DebugConsole
@@ -446,14 +510,16 @@ namespace Castor
 		String m_header;
 	};
 
-#endif
-
 	//************************************************************************************************
 
 	class ReleaseConsole
 		: public ConsoleImpl
 	{
 	public:
+		ReleaseConsole( bool p_showConsole )
+		{
+		}
+
 		void BeginLog( LogType logLevel )
 		{
 		}
@@ -469,12 +535,14 @@ namespace Castor
 		}
 	};
 
+#endif
+
 	//************************************************************************************************
 
-	ProgramConsole::ProgramConsole()
+	ProgramConsole::ProgramConsole( bool p_showConsole )
 	{
 #if defined( NDEBUG )
-		m_console = std::make_unique< ReleaseConsole >();
+		m_console = std::make_unique< ReleaseConsole >( p_showConsole );
 #else
 		m_console = std::make_unique< DebugConsole >();
 #endif

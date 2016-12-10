@@ -227,7 +227,7 @@ namespace Castor3D
 					if ( l_pipeline )
 					{
 						auto l_node = p_renderPass.CreateStaticNode( p_pass, *l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( *l_pipeline, l_node, p_static.m_frontCulled );
+						DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_frontCulled );
 					}
 
 					l_pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
@@ -239,7 +239,7 @@ namespace Castor3D
 					if ( l_pipeline )
 					{
 						auto l_node = p_renderPass.CreateStaticNode( p_pass, *l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( *l_pipeline, l_node, p_static.m_backCulled );
+						DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_backCulled );
 					}
 				}
 			}

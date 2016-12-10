@@ -206,6 +206,15 @@ namespace Castor3D
 		C3D_API MaterialType GetType()const;
 		/**
 		 *\~english
+		 *\brief		Sets the global alpha value.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur alpha globale.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		C3D_API void SetOpacity( float p_value );
+		/**
+		 *\~english
 		 *\return		The texture channels flags combination.
 		 *\~french
 		 *\return		La combinaison d'indicateurs de canal de texture.
@@ -235,19 +244,6 @@ namespace Castor3D
 		inline void SetTwoSided( bool p_value )
 		{
 			m_twoSided = p_value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the global alpha value.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur alpha globale.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetOpacity( float p_value )
-		{
-			m_opacity = p_value;
-			DoSetOpacity( p_value );
 		}
 		/**
 		 *\~english

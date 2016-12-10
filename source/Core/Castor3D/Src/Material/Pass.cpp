@@ -286,6 +286,18 @@ namespace Castor3D
 		return GetOwner()->GetType();
 	}
 
+	void Pass::SetOpacity( float p_value )
+	{
+		m_opacity = p_value;
+
+		if ( m_opacity < 1.0f && m_alphaBlendMode == BlendMode::eNoBlend )
+		{
+			m_alphaBlendMode = BlendMode::eInterpolative;
+		}
+
+		DoSetOpacity( p_value );
+	}
+
 	bool Pass::DoPrepareTexture( TextureChannel p_channel, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, PxBufferBaseSPtr & p_opacity )
 	{
 		PxBufferBaseSPtr l_opacity = DoPrepareTexture( p_channel, p_index );
@@ -365,6 +377,11 @@ namespace Castor3D
 			l_opacityMap->SetIndex( p_index++ );
 			Logger::LogDebug( StringStream() << cuT( "	Opacity map at index " ) << l_opacityMap->GetIndex() );
 			AddFlag( m_textureFlags, TextureChannel::eOpacity );
+
+			if ( m_alphaBlendMode == BlendMode::eNoBlend )
+			{
+				m_alphaBlendMode = BlendMode::eInterpolative;
+			}
 		}
 		else
 		{

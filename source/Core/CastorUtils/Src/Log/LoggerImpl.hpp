@@ -36,92 +36,6 @@ namespace Castor
 	\date 		27/08/2012
 	\version	0.7.0.0
 	\~english
-	\brief		Base class for a message representation
-	\~french
-	\brief		Classe de base pour la représentation d'un message
-	*/
-	struct MessageBase
-	{
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_type		The message type.
-		 *\param[in]	p_message	The message text.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_type		Le type de message.
-		 *\param[in]	p_message	Le texte du message.
-		 */
-		inline MessageBase( LogType p_type, std::string const & p_message )
-			: m_type( p_type )
-			, m_message( p_message )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructor.
-		 */
-		virtual ~MessageBase()
-		{
-		}
-		/**
-		 *\~english
-		 *\return		The message content.
-		 *\~french
-		 *\return		Le contenu du message.
-		 */
-		inline std::string const & GetMessage()const
-		{
-			return m_message;
-		}
-
-		//! The message type.
-		LogType m_type;
-		//! The message text.
-		std::string m_message;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		27/08/2012
-	\version	0.7.0.0
-	\~english
-	\brief		Template class, holding character type dependant message text
-	\~french
-	\brief		Classe template contenant le texte du message en fonction du type de caractère
-	*/
-	template< typename Char >
-	struct BasicMessage
-		: public MessageBase
-	{
-		typedef std::basic_string< Char > string_type;
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_type		The message type.
-		 *\param[in]	p_message	The message text.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_type		Le type de message.
-		 *\param[in]	p_message	Le texte du message.
-		 */
-		inline BasicMessage( LogType p_type, string_type const & p_message )
-			: MessageBase( p_type, string::string_cast< char >( p_message ) )
-		{
-		}
-	};
-
-	//! A char message
-	typedef BasicMessage< char > Message;
-	//! A wchar_t message
-	typedef BasicMessage< wchar_t > WMessage;
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		27/08/2012
-	\version	0.7.0.0
-	\~english
 	\brief		Helper class for Logger, level dependant
 	\~french
 	\brief		Classe d'aide pour Logger, dépendante du niveau de log
@@ -138,7 +52,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		LoggerImpl();
+		LoggerImpl( LogType p_level );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -203,7 +117,7 @@ namespace Castor
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
 		 */
-		void PrintMessage( LogType p_logLevel, std::string const & p_message );
+		void PrintMessage( LogType p_logLevel, std::string const & p_message, bool p_newLine );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
@@ -214,7 +128,7 @@ namespace Castor
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
 		 */
-		void PrintMessage( LogType p_logLevel, std::wstring const & p_message );
+		void PrintMessage( LogType p_logLevel, std::wstring const & p_message, bool p_newLine );
 		/**
 		 *\~english
 		 *\brief		Logs a message queue
@@ -236,7 +150,7 @@ namespace Castor
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
 		 */
-		void DoPrintMessage( LogType p_logLevel, String const & p_message );
+		void DoPrintMessage( LogType p_logLevel, String const & p_message, bool p_newLine );
 		/**
 		 *\~english
 		 *\brief		Prints a line to the console
@@ -247,7 +161,7 @@ namespace Castor
 		 *\param[in]	p_line		La ligne de texte
 		 *\param[in]	p_logLevel	Le niveau de log
 		 */
-		void DoPrintLine( String const & p_line, LogType p_logLevel );
+		void DoPrintLine( String const & p_line, LogType p_logLevel, bool p_newLine );
 		/**
 		 *\~english
 		 *\brief		Logs a line in the given stream
@@ -262,7 +176,7 @@ namespace Castor
 		 *\param[in]	p_stream	Le flux
 		 *\param[in]	p_logLevel	Le niveau de log
 		 */
-		void DoLogLine( String const & p_timestamp, String const & p_line, StringStream & p_stream, LogType p_logLevel );
+		void DoLogLine( String const & p_timestamp, String const & p_line, StringStream & p_stream, LogType p_logLevel, bool p_newLine );
 
 	private:
 		//! The files paths, per log level

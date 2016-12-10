@@ -61,7 +61,7 @@ namespace Castor3D
 
 			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 			{
-				p_node.m_geometry.GetScene()->GetLightCache().UnbindLights();
+				p_node.m_instance.GetScene()->GetLightCache().UnbindLights();
 			}
 		}
 
@@ -144,10 +144,10 @@ namespace Castor3D
 	{
 		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			m_geometry.GetScene()->GetLightCache().BindLights();
+			m_instance.GetScene()->GetLightCache().BindLights();
 		}
 
-		m_shadowReceiver.SetValue( m_geometry.IsShadowReceiver() ? 1 : 0 );
+		m_shadowReceiver.SetValue( m_instance.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 		m_pass.m_pass.UpdateRenderNode( m_pass );
 		m_pass.m_pipeline.GetProgram().UpdateUbos();
@@ -159,10 +159,10 @@ namespace Castor3D
 	{
 		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			m_geometry.GetScene()->GetLightCache().BindLights();
+			m_instance.GetScene()->GetLightCache().BindLights();
 		}
 
-		m_shadowReceiver.SetValue( m_geometry.IsShadowReceiver() ? 1 : 0 );
+		m_shadowReceiver.SetValue( m_instance.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 
 		if ( m_skeleton )

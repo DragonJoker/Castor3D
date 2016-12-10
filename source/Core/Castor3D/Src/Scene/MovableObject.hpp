@@ -42,8 +42,7 @@ namespace Castor3D
 	\brief		Classe d'objet déplaçable
 	*/
 	class MovableObject
-		: public std::enable_shared_from_this< MovableObject >
-		, public Animable
+		: public Animable
 		, public Castor::Named
 	{
 	public:

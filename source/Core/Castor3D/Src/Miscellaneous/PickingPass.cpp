@@ -130,11 +130,11 @@ namespace Castor3D
 			}
 		}
 
-		template< typename MapType >
+		template< typename MapType, typename NodeType, typename SubNodeType >
 		inline void DoPickFromList( MapType const & p_map
 			, Point3f const & p_index
-			, GeometryWPtr & p_geometry
-			, SubmeshWPtr & p_submesh
+			, std::weak_ptr< NodeType > & p_node
+			, std::weak_ptr< SubNodeType > & p_subnode
 			, uint32_t & p_face )
 		{
 			uint32_t l_pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
@@ -153,13 +153,17 @@ namespace Castor3D
 			REQUIRE( l_itPipeline->second.size() > l_nodeIndex );
 			auto l_itNode = l_itPipeline->second.begin() + l_nodeIndex;
 
-			p_submesh = l_itNode->m_data.shared_from_this();
-			p_geometry = std::static_pointer_cast< Geometry >( l_itNode->m_geometry.shared_from_this() );
+			p_subnode = std::static_pointer_cast< SubNodeType >( l_itNode->m_data.shared_from_this() );
+			p_node = std::static_pointer_cast< NodeType >( l_itNode->m_instance.shared_from_this() );
 			p_face = l_faceIndex;
 		}
 
 		template<>
-		inline void DoPickFromList< SubmeshStaticRenderNodesByPipelineMap >( SubmeshStaticRenderNodesByPipelineMap const & p_map, Point3f const & p_index, GeometryWPtr & p_geometry, SubmeshWPtr & p_submesh, uint32_t & p_face )
+		inline void DoPickFromList< SubmeshStaticRenderNodesByPipelineMap, Geometry, Submesh >( SubmeshStaticRenderNodesByPipelineMap const & p_map
+			, Point3f const & p_index
+			, GeometryWPtr & p_node
+			, SubmeshWPtr & p_subnode
+			, uint32_t & p_face )
 		{
 			uint32_t l_pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
 			uint32_t l_nodeIndex{ uint32_t( p_index[1] ) };
@@ -204,8 +208,8 @@ namespace Castor3D
 				REQUIRE( !l_itMesh->second.empty() );
 				auto l_itNode = l_itMesh->second.begin() + l_instanceIndex;
 
-				p_submesh = l_itNode->m_data.shared_from_this();
-				p_geometry = std::static_pointer_cast< Geometry >( l_itNode->m_geometry.shared_from_this() );
+				p_subnode = l_itNode->m_data.shared_from_this();
+				p_node = std::static_pointer_cast< Geometry >( l_itNode->m_instance.shared_from_this() );
 				p_face = l_faceIndex;
 			}
 		}
@@ -374,7 +378,7 @@ namespace Castor3D
 						break;
 
 					case NodeType::eBillboard:
-						//DoPickFromList( l_nodes.m_billboards.m_backCulled, l_pixel, m_geometry, m_submesh, m_face );
+						DoPickFromList( l_nodes.m_billboards.m_backCulled, l_pixel, m_billboard, m_billboard, m_face );
 						break;
 
 					default:
