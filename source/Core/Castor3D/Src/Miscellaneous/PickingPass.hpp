@@ -104,51 +104,51 @@ namespace Castor3D
 		 *\brief		Picks a geometry at given mouse position.
 		 *\param[in]	p_position		The position in the pass.
 		 *\param[in]	p_camera		The viewing camera.
-		 *\return		\p true if something was picked.
+		 *\return		PickingPass::NodeType::eNone if nothing was picked.
 		 *\~french
 		 *\brief		Sélectionne la géométrie à la position de souris donnée.
 		 *\param[in]	p_position		La position dans la passe.
 		 *\param[in]	p_camera		La caméra regardant la scène.
-		 *\return		\p true si quelque chose a été sélectionné.
+		 *\return		PickingPass::NodeType si rien n'a été pické.
 		 */
 		C3D_API NodeType Pick( Castor::Position const & p_position
 			, Camera const & p_camera );
 		/**
-		*\~english
-		*\return		The picked geometry.
-		*\~french
-		*\return		La géométrie sélectionnée.
-		*/
+		 *\~english
+		 *\return		The picked geometry.
+		 *\~french
+		 *\return		La géométrie sélectionnée.
+		 */
 		inline GeometrySPtr GetPickedGeometry()const
 		{
 			return m_geometry.lock();
 		}
 		/**
-		*\~english
-		*\return		The picked billboard.
-		*\~french
-		*\return		Le billboard sélectionné.
-		*/
+		 *\~english
+		 *\return		The picked billboard.
+		 *\~french
+		 *\return		Le billboard sélectionné.
+		 */
 		inline BillboardBaseSPtr GetPickedBillboard()const
 		{
 			return m_billboard.lock();
 		}
 		/**
-		*\~english
-		*\return		The picked submesh.
-		*\~french
-		*\return		Le sous-maillage sélectionné.
-		*/
+		 *\~english
+		 *\return		The picked submesh.
+		 *\~french
+		 *\return		Le sous-maillage sélectionné.
+		 */
 		inline SubmeshSPtr GetPickedSubmesh()const
 		{
 			return m_submesh.lock();
 		}
 		/**
-		*\~english
-		*\return		The picked face index.
-		*\~french
-		*\return		L'indice de la face sélectionnée.
-		*/
+		 *\~english
+		 *\return		The picked face index.
+		 *\~french
+		 *\return		L'indice de la face sélectionnée.
+		 */
 		inline uint32_t GetPickedFace()const
 		{
 			return m_face;
@@ -181,6 +181,37 @@ namespace Castor3D
 			, Camera const & p_camera );
 
 	private:
+		/**
+		 *\~english
+		 *\brief		Executes the FBO picking.
+		 *\param[in]	p_position	The position in the pass.
+		 *\param[in]	p_camera	The viewing camera.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\return		The picking data.
+		 *\~french
+		 *\brief		Exécute le picking FBO.
+		 *\param[in]	p_position	La position dans la passe.
+		 *\param[in]	p_camera	La caméra regardant la scène.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\return		Les données de picking.
+		 */
+		Castor::Point3f DoFboPick( Castor::Position const & p_position
+			, Camera const & p_camera
+			, SceneRenderNodes & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Picks the node at given picking data.
+		 *\param[in]	p_pixel	The picking data.
+		 *\param[in]	p_nodes	The render nodes.
+		 *\return		PickingPass::NodeType::eNone if nothing was picked.
+		 *\~french
+		 *\brief		Picke le noeud aux données de picking fournies.
+		 *\param[in]	p_pixel	Les données de picking.
+		 *\param[in]	p_nodes	Les noeuds de rendu.
+		 *\return		PickingPass::NodeType si rien n'a été pické.
+		 */
+		PickingPass::NodeType DoPick( Castor::Point3f const & p_pixel
+			, SceneRenderNodes & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderInstancedSubmeshes
 		 */

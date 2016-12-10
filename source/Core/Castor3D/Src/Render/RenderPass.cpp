@@ -62,6 +62,8 @@ namespace Castor3D
 		, uint8_t p_sceneFlags
 		, bool p_twoSided )
 	{
+		DoUpdateFlags( p_textureFlags, p_programFlags );
+
 		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) != m_opaque )
 		{
 			if ( m_opaque )
@@ -69,7 +71,6 @@ namespace Castor3D
 				p_alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			DoUpdateFlags( p_textureFlags, p_programFlags );
 			auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
 
 			if ( !m_opaque )
@@ -91,10 +92,6 @@ namespace Castor3D
 
 				DoPrepareBackPipeline( *l_backProgram, l_flags );
 			}
-		}
-		else
-		{
-			DoUpdateFlags( p_textureFlags, p_programFlags );
 		}
 	}
 

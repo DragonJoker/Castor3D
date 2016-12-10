@@ -370,9 +370,9 @@ namespace Castor3D
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_DirectionalShadowMap" ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
 		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
@@ -397,9 +397,9 @@ namespace Castor3D
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_SpotShadowMap" ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
 		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
@@ -425,9 +425,9 @@ namespace Castor3D
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_PointShadowMap" ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
 		bool l_return{ true };
 
 		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(

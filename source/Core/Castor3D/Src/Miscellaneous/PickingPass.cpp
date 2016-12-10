@@ -313,7 +313,7 @@ namespace Castor3D
 		l_itCam->second.Initialise( p_scene, p_camera );
 	}
 
-	PickingPass::NodeType PickingPass::Pick( Castor::Position const & p_position
+	PickingPass::NodeType PickingPass::Pick( Position const & p_position
 		, Camera const & p_camera )
 	{
 		NodeType l_return{ NodeType::eNone };
@@ -330,63 +330,9 @@ namespace Castor3D
 			if ( l_itCam != l_itScn->second.end() )
 			{
 				l_itCam->second.Update();
-
-				m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-				m_frameBuffer->Clear();
-				p_camera.Apply();
 				auto & l_nodes = l_itCam->second.GetRenderNodes();
-				DoRenderNodes( l_nodes, p_camera );
-				m_frameBuffer->Unbind();
-
-				m_colourTexture->Bind( 0 );
-				Point3f l_pixel;
-				auto l_data = m_colourTexture->Lock( AccessType::eRead, 0u );
-
-				if ( l_data )
-				{
-					auto l_dimensions = m_colourTexture->GetDimensions();
-					auto l_format = m_colourTexture->GetPixelFormat();
-					Image l_image{ cuT( "tmp" ), l_dimensions, l_format, l_data, l_format };
-					l_image.GetPixel( p_position.x(), l_dimensions.height() - 1 - p_position.y(), reinterpret_cast< uint8_t * >( l_pixel.ptr() ), l_format );
-
-#if 0
-
-					Image::BinaryWriter()( l_image, Engine::GetEngineDirectory() / cuT( "\\ColourBuffer_Picking.hdr" ) );
-
-#endif
-					m_colourTexture->Unlock( false, 0u );
-				}
-
-				m_colourTexture->Unbind( 0 );
-
-				if ( Castor::point::distance_squared( l_pixel ) )
-				{
-					l_return = NodeType( uint32_t( l_pixel[0] ) & 0xFF );
-
-					switch ( l_return )
-					{
-					case NodeType::eInstantiated:
-						DoPickFromList( l_nodes.m_instancedGeometries.m_backCulled, l_pixel, m_geometry, m_submesh, m_face );
-						break;
-
-					case NodeType::eStatic:
-						DoPickFromList( l_nodes.m_staticGeometries.m_backCulled, l_pixel, m_geometry, m_submesh, m_face );
-						break;
-
-					case NodeType::eAnimated:
-						DoPickFromList( l_nodes.m_animatedGeometries.m_backCulled, l_pixel, m_geometry, m_submesh, m_face );
-						break;
-
-					case NodeType::eBillboard:
-						DoPickFromList( l_nodes.m_billboards.m_backCulled, l_pixel, m_billboard, m_billboard, m_face );
-						break;
-
-					default:
-						FAILURE( "Unsupported index" );
-						l_return = NodeType::eNone;
-						break;
-					}
-				}
+				auto l_pixel = DoFboPick( p_position, p_camera, l_nodes );
+				l_return = DoPick( l_pixel, l_nodes );
 			}
 		}
 
@@ -475,6 +421,70 @@ namespace Castor3D
 		DoRenderStaticSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_backCulled );
 		DoRenderAnimatedSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_backCulled );
 		DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_backCulled );
+	}
+
+	Point3f PickingPass::DoFboPick( Position const & p_position
+		, Camera const & p_camera
+		, SceneRenderNodes & p_nodes )
+	{
+		m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_frameBuffer->Clear();
+		p_camera.Apply();
+		DoRenderNodes( p_nodes, p_camera );
+		m_frameBuffer->Unbind();
+
+		m_colourTexture->Bind( 0 );
+		Point3f l_pixel;
+		auto l_data = m_colourTexture->Lock( AccessType::eRead, 0u );
+
+		if ( l_data )
+		{
+			auto l_dimensions = m_colourTexture->GetDimensions();
+			auto l_format = m_colourTexture->GetPixelFormat();
+			Image l_image{ cuT( "tmp" ), l_dimensions, l_format, l_data, l_format };
+			l_image.GetPixel( p_position.x(), l_dimensions.height() - 1 - p_position.y(), reinterpret_cast< uint8_t * >( l_pixel.ptr() ), l_format );
+			m_colourTexture->Unlock( false, 0u );
+		}
+
+		m_colourTexture->Unbind( 0 );
+		return l_pixel;
+	}
+
+	PickingPass::NodeType PickingPass::DoPick( Point3f const & p_pixel
+		, SceneRenderNodes & p_nodes )
+	{
+		NodeType l_return{ NodeType::eNone };
+
+		if ( Castor::point::distance_squared( p_pixel ) )
+		{
+			l_return = NodeType( uint32_t( p_pixel[0] ) & 0xFF );
+
+			switch ( l_return )
+			{
+			case NodeType::eInstantiated:
+				DoPickFromList( p_nodes.m_instancedGeometries.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				break;
+
+			case NodeType::eStatic:
+				DoPickFromList( p_nodes.m_staticGeometries.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				break;
+
+			case NodeType::eAnimated:
+				DoPickFromList( p_nodes.m_animatedGeometries.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				break;
+
+			case NodeType::eBillboard:
+				DoPickFromList( p_nodes.m_billboards.m_backCulled, p_pixel, m_billboard, m_billboard, m_face );
+				break;
+
+			default:
+				FAILURE( "Unsupported index" );
+				l_return = NodeType::eNone;
+				break;
+			}
+		}
+
+		return l_return;
 	}
 
 	void PickingPass::DoRenderInstancedSubmeshes( Scene & p_scene

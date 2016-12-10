@@ -138,9 +138,11 @@ namespace Castor3D
 
 			m_frameTimer.TimeMs();
 		}
-
-		std::cout << "\rTime: " << std::setw( 7 ) << std::setprecision( 4 ) << float( l_totalTime );
-		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << float( 1000.0f / ( l_totalTime ) );
+		else
+		{
+			std::cout << "\rTime: " << std::setw( 7 ) << std::setprecision( 4 ) << float( l_totalTime );
+			std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << float( 1000.0f / ( l_totalTime ) );
+		}
 	}
 
 	void DebugOverlays::EndGpuTask()

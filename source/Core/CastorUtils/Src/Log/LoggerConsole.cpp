@@ -139,36 +139,40 @@ namespace Castor
 				l_csbiInfo.dwCursorPosition.X = 0;
 				DWORD l_written = 0;
 				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &l_written, nullptr );
-				SHORT l_offsetY = SHORT( 1 + l_written / l_csbiInfo.dwSize.X );
 
-				if ( ( l_csbiInfo.dwSize.Y - l_offsetY ) <= l_csbiInfo.dwCursorPosition.Y )
+				if ( p_newLine )
 				{
-					// The cursor is on the last row
-					// The scroll rectangle is from second row to last displayed row
-					SMALL_RECT l_scrollRect;
-					l_scrollRect.Top = 1;
-					l_scrollRect.Bottom = l_csbiInfo.dwSize.Y - 1;
-					l_scrollRect.Left = 0;
-					l_scrollRect.Right = l_csbiInfo.dwSize.X - 1;
-					// The destination for the scroll rectangle is one row up.
-					COORD l_coordDest;
-					l_coordDest.X = 0;
-					l_coordDest.Y = 0;
-					// Set the fill character and attributes.
-					CHAR_INFO l_fill;
-					l_fill.Attributes = 0;
-					l_fill.Char.AsciiChar = ' ';
-					l_fill.Char.UnicodeChar = L' ';
-					// Scroll
-					::ScrollConsoleScreenBuffer( m_screenBuffer, &l_scrollRect, nullptr, l_coordDest, &l_fill );
-				}
-				else
-				{
-					// The cursor isn't on the last row
-					l_csbiInfo.dwCursorPosition.Y += l_offsetY;
-				}
+					SHORT l_offsetY = SHORT( 1 + l_written / l_csbiInfo.dwSize.X );
 
-				::SetConsoleCursorPosition( m_screenBuffer, l_csbiInfo.dwCursorPosition );
+					if ( ( l_csbiInfo.dwSize.Y - l_offsetY ) <= l_csbiInfo.dwCursorPosition.Y )
+					{
+						// The cursor is on the last row
+						// The scroll rectangle is from second row to last displayed row
+						SMALL_RECT l_scrollRect;
+						l_scrollRect.Top = 1;
+						l_scrollRect.Bottom = l_csbiInfo.dwSize.Y - 1;
+						l_scrollRect.Left = 0;
+						l_scrollRect.Right = l_csbiInfo.dwSize.X - 1;
+						// The destination for the scroll rectangle is one row up.
+						COORD l_coordDest;
+						l_coordDest.X = 0;
+						l_coordDest.Y = 0;
+						// Set the fill character and attributes.
+						CHAR_INFO l_fill;
+						l_fill.Attributes = 0;
+						l_fill.Char.AsciiChar = ' ';
+						l_fill.Char.UnicodeChar = L' ';
+						// Scroll
+						::ScrollConsoleScreenBuffer( m_screenBuffer, &l_scrollRect, nullptr, l_coordDest, &l_fill );
+					}
+					else
+					{
+						// The cursor isn't on the last row
+						l_csbiInfo.dwCursorPosition.Y += l_offsetY;
+					}
+
+					::SetConsoleCursorPosition( m_screenBuffer, l_csbiInfo.dwCursorPosition );
+				}
 			}
 			else
 			{
