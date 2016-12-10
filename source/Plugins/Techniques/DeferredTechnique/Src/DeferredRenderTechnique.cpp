@@ -51,7 +51,7 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace Deferred
+namespace deferred
 {
 	namespace
 	{
@@ -130,8 +130,11 @@ namespace Deferred
 		static constexpr uint32_t VertexCount = 6u;
 	}
 
+	String const RenderTechnique::Type = cuT( "deferred" );
+	String const RenderTechnique::Name = cuT( "Deferred Lighting Render Technique" );
+
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
-		: Castor3D::RenderTechnique( cuT( "deferred" )
+		: Castor3D::RenderTechnique( RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
 			, std::make_unique< OpaquePass >( p_renderTarget, *this )

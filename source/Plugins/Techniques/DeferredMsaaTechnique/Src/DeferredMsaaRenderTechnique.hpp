@@ -27,7 +27,7 @@ SOFTWARE.
 #include <Technique/RenderTechnique.hpp>
 #include <Render/Viewport.hpp>
 
-namespace DeferredMsaa
+namespace deferred_msaa
 {
 	using Castor3D::Point3rFrameVariable;
 
@@ -285,6 +285,10 @@ namespace DeferredMsaa
 			//!\~french		Le pipeline utilisé par la passe lumières.
 			Castor3D::RenderPipelineSPtr m_pipeline;
 		};
+
+	public:
+		static Castor::String const Type;
+		static Castor::String const Name;
 
 	protected:
 		//!\~english	The various textures.

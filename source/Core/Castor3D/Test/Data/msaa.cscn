@@ -70,7 +70,7 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
-			technique "msaa" -samples_count 8
+			technique "forward_msaa" -samples_count 8
 		}
 		fullscreen false
 		vsync false

@@ -20,14 +20,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
-#define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
+#ifndef ___C3D_DeferredRenderTechnique_H___
+#define ___C3D_DeferredRenderTechnique_H___
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Render/Viewport.hpp>
 
-namespace Deferred
+namespace deferred
 {
 	using Castor3D::Point3rFrameVariable;
 
@@ -221,6 +221,10 @@ namespace Deferred
 			//!\~french		Le pipeline utilisé par la passe lumières.
 			Castor3D::RenderPipelineSPtr m_pipeline;
 		};
+
+	public:
+		static Castor::String const Type;
+		static Castor::String const Name;
 
 	private:
 		//!\~english	The various textures.

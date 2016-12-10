@@ -12,7 +12,7 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace DeferredMsaa
+namespace deferred_msaa
 {
 	OpaquePass::OpaquePass( RenderTarget & p_renderTarget
 		, Castor3D::RenderTechnique & p_technique )

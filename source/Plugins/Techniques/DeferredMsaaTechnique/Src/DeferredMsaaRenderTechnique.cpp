@@ -50,7 +50,7 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace DeferredMsaa
+namespace deferred_msaa
 {
 	namespace
 	{
@@ -145,6 +145,9 @@ namespace DeferredMsaa
 
 		static constexpr uint32_t VertexCount = 6u;
 	}
+
+	String const RenderTechnique::Type = cuT( "deferred_msaa" );
+	String const RenderTechnique::Name = cuT( "Deferred Lighting MSAA Render Technique" );
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
 		: Castor3D::RenderTechnique( cuT( "deferred_msaa" )

@@ -1,5 +1,9 @@
 #include "DeferredRenderTechnique.hpp"
 
+#if defined( VLD_AVAILABLE )
+#	include <vld.h>
+#endif
+
 #include <Log/Logger.hpp>
 
 #include <Engine.hpp>
@@ -17,9 +21,6 @@
 #	endif
 #endif
 
-using namespace Deferred;
-static const Castor::String NAME = cuT( "deferred" );
-
 C3D_DeferredTechnique_API void GetRequiredVersion( Castor3D::Version & p_version )
 {
 	p_version = Castor3D::Version();
@@ -32,15 +33,15 @@ C3D_DeferredTechnique_API Castor3D::PluginType GetType()
 
 C3D_DeferredTechnique_API Castor::String GetName()
 {
-	return cuT( "Deferred Lighting Render Technique" );
+	return deferred::RenderTechnique::Name;
 }
 
 C3D_DeferredTechnique_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTechniqueFactory().Register( NAME, &RenderTechnique::CreateInstance );
+	p_engine->GetTechniqueFactory().Register( deferred::RenderTechnique::Type, &deferred::RenderTechnique::CreateInstance );
 }
 
 C3D_DeferredTechnique_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTechniqueFactory().Unregister( NAME );
+	p_engine->GetTechniqueFactory().Unregister( deferred::RenderTechnique::Type );
 }

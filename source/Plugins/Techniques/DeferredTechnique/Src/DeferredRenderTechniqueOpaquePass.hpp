@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include <Technique/RenderTechniquePass.hpp>
 
-namespace Deferred
+namespace deferred
 {
 	class RenderTechnique;
 	/*!

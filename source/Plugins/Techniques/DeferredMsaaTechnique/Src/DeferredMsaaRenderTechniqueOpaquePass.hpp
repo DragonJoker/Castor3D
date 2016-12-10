@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include <Technique/RenderTechniquePass.hpp>
 
-namespace DeferredMsaa
+namespace deferred_msaa
 {
 	class RenderTechnique;
 	/*!
