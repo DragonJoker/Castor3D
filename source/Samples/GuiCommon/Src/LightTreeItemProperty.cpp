@@ -28,8 +28,8 @@ namespace GuiCommon
 		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 	}
 
-	LightTreeItemProperty::LightTreeItemProperty( bool p_editable, LightSPtr p_light )
-		: TreeItemProperty( p_light->GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_LIGHT )
+	LightTreeItemProperty::LightTreeItemProperty( bool p_editable, Light & p_light )
+		: TreeItemProperty( p_light.GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_light( p_light )
 	{
 		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
@@ -50,37 +50,31 @@ namespace GuiCommon
 
 	void LightTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		LightSPtr l_light = GetLight();
+		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( m_light.GetName() ) ) );
+		p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( bgr_packed( Colour::from_rgb( m_light.GetColour() ) ) ) ) );
+		p_grid->Append( new Point3fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( m_light.GetIntensity() ) );
 
-		if ( l_light )
+		switch ( m_light.GetLightType() )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( l_light->GetName() ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( bgr_packed( Colour::from_rgb( l_light->GetColour() ) ) ) ) );
-			p_grid->Append( new Point3fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( l_light->GetIntensity() ) );
+		case LightType::eDirectional:
+			DoCreateDirectionalLightProperties( p_grid, m_light.GetDirectionalLight() );
+			break;
 
-			switch ( l_light->GetLightType() )
-			{
-			case LightType::eDirectional:
-				DoCreateDirectionalLightProperties( p_grid, l_light->GetDirectionalLight() );
-				break;
+		case LightType::ePoint:
+			DoCreatePointLightProperties( p_grid, m_light.GetPointLight() );
+			break;
 
-			case LightType::ePoint:
-				DoCreatePointLightProperties( p_grid, l_light->GetPointLight() );
-				break;
-
-			case LightType::eSpot:
-				DoCreateSpotLightProperties( p_grid, l_light->GetSpotLight() );
-				break;
-			}
+		case LightType::eSpot:
+			DoCreateSpotLightProperties( p_grid, m_light.GetSpotLight() );
+			break;
 		}
 	}
 
 	void LightTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		LightSPtr l_light = GetLight();
 		wxPGProperty * l_property = p_event.GetProperty();
 
-		if ( l_property && l_light )
+		if ( l_property )
 		{
 			wxColour l_colour;
 
@@ -93,13 +87,13 @@ namespace GuiCommon
 			{
 				OnIntensityChange( Point3fRefFromVariant( l_property->GetValue() ) );
 			}
-			else if ( l_light->GetLightType() != LightType::eDirectional )
+			else if ( m_light.GetLightType() != LightType::eDirectional )
 			{
 				if ( l_property->GetName() == PROPERTY_LIGHT_ATTENUATION )
 				{
 					OnAttenuationChange( Point3fRefFromVariant( l_property->GetValue() ) );
 				}
-				else if ( l_light->GetLightType() == LightType::eSpot )
+				else if ( m_light.GetLightType() == LightType::eSpot )
 				{
 					if ( l_property->GetName() == PROPERTY_LIGHT_CUT_OFF )
 					{
@@ -136,7 +130,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->SetColour( p_value );
+			m_light.SetColour( p_value );
 		} );
 	}
 
@@ -148,7 +142,7 @@ namespace GuiCommon
 
 		DoApplyChange( [a, d, s, this]()
 		{
-			GetLight()->SetIntensity( a, d, s );
+			m_light.SetIntensity( a, d, s );
 		} );
 	}
 
@@ -161,15 +155,14 @@ namespace GuiCommon
 		DoApplyChange( [x, y, z, this]()
 		{
 			Point3f l_value( x, y, z );
-			LightSPtr l_light = GetLight();
 
-			if ( l_light->GetLightType() == LightType::ePoint )
+			if ( m_light.GetLightType() == LightType::ePoint )
 			{
-				l_light->GetPointLight()->SetAttenuation( l_value );
+				m_light.GetPointLight()->SetAttenuation( l_value );
 			}
 			else
 			{
-				l_light->GetSpotLight()->SetAttenuation( l_value );
+				m_light.GetSpotLight()->SetAttenuation( l_value );
 			}
 		} );
 	}
@@ -178,7 +171,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->GetSpotLight()->SetCutOff( Angle::from_degrees( p_value ) );
+			m_light.GetSpotLight()->SetCutOff( Angle::from_degrees( p_value ) );
 		} );
 	}
 
@@ -186,7 +179,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->GetSpotLight()->SetExponent( float( p_value ) );
+			m_light.GetSpotLight()->SetExponent( float( p_value ) );
 		} );
 	}
 }

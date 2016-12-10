@@ -17,18 +17,40 @@ namespace Castor3D
 {
 	//*********************************************************************************************
 
-	std::map< TextureChannel, String > TEXTURE_CHANNEL_NAME =
+	namespace
 	{
-		{ TextureChannel::eColour, cuT( "Colour" ) },
-		{ TextureChannel::eDiffuse, cuT( "Diffuse" ) },
-		{ TextureChannel::eNormal, cuT( "Normal" ) },
-		{ TextureChannel::eOpacity, cuT( "Opacity" ) },
-		{ TextureChannel::eSpecular, cuT( "Specular" ) },
-		{ TextureChannel::eHeight, cuT( "Height" ) },
-		{ TextureChannel::eAmbient, cuT( "Ambient" ) },
-		{ TextureChannel::eGloss, cuT( "Gloss" ) },
-		{ TextureChannel::eEmissive, cuT( "Emissive" ) },
-	};
+		std::map< TextureChannel, String > TEXTURE_CHANNEL_NAME =
+		{
+			{ TextureChannel::eColour, cuT( "Colour" ) },
+			{ TextureChannel::eDiffuse, cuT( "Diffuse" ) },
+			{ TextureChannel::eNormal, cuT( "Normal" ) },
+			{ TextureChannel::eOpacity, cuT( "Opacity" ) },
+			{ TextureChannel::eSpecular, cuT( "Specular" ) },
+			{ TextureChannel::eHeight, cuT( "Height" ) },
+			{ TextureChannel::eAmbient, cuT( "Ambient" ) },
+			{ TextureChannel::eGloss, cuT( "Gloss" ) },
+			{ TextureChannel::eEmissive, cuT( "Emissive" ) },
+		};
+
+		void DoGetTexture( Pass const & p_pass
+			, RenderPipeline const & p_pipeline
+			, TextureChannel p_channel
+			, String const & p_name
+			, PassRenderNode & p_node )
+		{
+			TextureUnitSPtr l_unit = p_pass.GetTextureUnit( p_channel );
+
+			if ( l_unit )
+			{
+				auto l_variable = p_pipeline.GetProgram().FindFrameVariable< OneIntFrameVariable >( p_name, ShaderType::ePixel );
+
+				if ( l_variable )
+				{
+					p_node.m_textures.emplace( l_unit->GetIndex(), *l_variable );
+				}
+			}
+		}
+	}
 
 	//*********************************************************************************************
 	
@@ -122,15 +144,15 @@ namespace Castor3D
 
 	void Pass::FillRenderNode( PassRenderNode & p_node )
 	{
-		DoGetTexture( TextureChannel::eAmbient, ShaderProgram::MapAmbient, p_node );
-		DoGetTexture( TextureChannel::eColour, ShaderProgram::MapColour, p_node );
-		DoGetTexture( TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, p_node );
-		DoGetTexture( TextureChannel::eNormal, ShaderProgram::MapNormal, p_node );
-		DoGetTexture( TextureChannel::eSpecular, ShaderProgram::MapSpecular, p_node );
-		DoGetTexture( TextureChannel::eEmissive, ShaderProgram::MapEmissive, p_node );
-		DoGetTexture( TextureChannel::eOpacity, ShaderProgram::MapOpacity, p_node );
-		DoGetTexture( TextureChannel::eGloss, ShaderProgram::MapGloss, p_node );
-		DoGetTexture( TextureChannel::eHeight, ShaderProgram::MapHeight, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eAmbient, ShaderProgram::MapAmbient, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eColour, ShaderProgram::MapColour, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eNormal, ShaderProgram::MapNormal, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eSpecular, ShaderProgram::MapSpecular, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eEmissive, ShaderProgram::MapEmissive, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eOpacity, ShaderProgram::MapOpacity, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eGloss, ShaderProgram::MapGloss, p_node );
+		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eHeight, ShaderProgram::MapHeight, p_node );
 	}
 
 	void Pass::BindTextures()
@@ -156,7 +178,7 @@ namespace Castor3D
 		m_texturesReduced = false;
 	}
 
-	TextureUnitSPtr Pass::GetTextureUnit( TextureChannel p_channel )
+	TextureUnitSPtr Pass::GetTextureUnit( TextureChannel p_channel )const
 	{
 		TextureUnitSPtr l_return;
 		auto l_it = m_textureUnits.begin();
@@ -262,21 +284,6 @@ namespace Castor3D
 	MaterialType Pass::GetType()const
 	{
 		return GetOwner()->GetType();
-	}
-
-	void Pass::DoGetTexture( TextureChannel p_channel, String const & p_name, PassRenderNode & p_node )
-	{
-		TextureUnitSPtr l_unit = GetTextureUnit( p_channel );
-
-		if ( l_unit )
-		{
-			auto l_variable = p_node.m_pipeline.GetProgram().FindFrameVariable< OneIntFrameVariable >( p_name, ShaderType::ePixel );
-
-			if ( l_variable )
-			{
-				p_node.m_textures.insert( { l_unit->GetIndex(), *l_variable } );
-			}
-		}
 	}
 
 	bool Pass::DoPrepareTexture( TextureChannel p_channel, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, PxBufferBaseSPtr & p_opacity )

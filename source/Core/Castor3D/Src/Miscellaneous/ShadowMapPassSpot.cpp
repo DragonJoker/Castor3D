@@ -84,8 +84,7 @@ namespace Castor3D
 			m_frameBuffer->Clear();
 			auto & l_nodes = m_renderQueue.GetRenderNodes();
 			m_camera->Apply();
-			DoRenderOpaqueNodes( l_nodes, *m_camera );
-			DoRenderTransparentNodes( l_nodes, *m_camera );
+			DoRenderNodes( l_nodes, *m_camera );
 			m_frameBuffer->Unbind();
 		}
 	}
@@ -94,18 +93,16 @@ namespace Castor3D
 	{
 	}
 
-	String ShadowMapPassSpot::DoGetGeometryShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
+	String ShadowMapPassSpot::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, uint8_t p_sceneFlags )const
 	{
 		return String{};
 	}
 
-	String ShadowMapPassSpot::DoGetOpaquePixelShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
+	String ShadowMapPassSpot::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();

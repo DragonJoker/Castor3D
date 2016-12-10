@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Frame variable helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les variables de frame
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les variables de frame
 	*/
 	class FrameVariableTreeItemProperty
 		: public TreeItemProperty
@@ -48,7 +48,7 @@ namespace GuiCommon
 		 *\param[in]	p_buffer	The variables buffer holding the one given
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_variable	La variable cible
 		 *\param[in]	p_buffer	Le tampon de variables contenant celle donn�e
 		 */
@@ -61,7 +61,7 @@ namespace GuiCommon
 		 *\param[in]	p_type		The variables buffer holding the one given
 		 *\~french
 		 *\brief		Constructeur, ne permet la cr�ation que de variables de type sampler
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_variable	La variable cible
 		 *\param[in]	p_type		Le tampon de variables contenant celle donn�e
 		 */
@@ -78,7 +78,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the camera
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la cam�ra
+		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
 		inline Castor3D::FrameVariableSPtr GetVariable()
@@ -90,7 +90,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the camera
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la cam�ra
+		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
 		inline Castor3D::FrameVariableBufferSPtr GetBuffer()

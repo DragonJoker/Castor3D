@@ -43,6 +43,17 @@ namespace Castor3D
 		: public RenderPass
 	{
 	public:
+		enum class NodeType
+			: uint8_t
+		{
+			eNone,
+			eInstantiated,
+			eStatic,
+			eAnimated,
+			eBillboard
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -100,7 +111,8 @@ namespace Castor3D
 		 *\param[in]	p_camera		La caméra regardant la scène.
 		 *\return		\p true si quelque chose a été sélectionné.
 		 */
-		C3D_API bool Pick( Castor::Position const & p_position, Camera const & p_camera );
+		C3D_API NodeType Pick( Castor::Position const & p_position
+			, Camera const & p_camera );
 		/**
 		*\~english
 		*\return		The picked geometry.
@@ -110,6 +122,16 @@ namespace Castor3D
 		inline GeometrySPtr GetPickedGeometry()const
 		{
 			return m_geometry.lock();
+		}
+		/**
+		*\~english
+		*\return		The picked billboard.
+		*\~french
+		*\return		Le billboard sélectionné.
+		*/
+		inline BillboardBaseSPtr GetPickedBillboard()const
+		{
+			return m_billboard.lock();
 		}
 		/**
 		*\~english
@@ -134,116 +156,87 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateAnimatedNode
 		 */
-		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			Submesh & p_submesh,
-			Geometry & p_primitive,
-			AnimatedSkeletonSPtr p_skeleton,
-			AnimatedMeshSPtr p_mesh )override;
+		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
+			, RenderPipeline & p_pipeline
+			, Submesh & p_submesh
+			, Geometry & p_primitive
+			, AnimatedSkeletonSPtr p_skeleton
+			, AnimatedMeshSPtr p_mesh )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateStaticNode
 		 */
-		C3D_API StaticGeometryRenderNode CreateStaticNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			Submesh & p_submesh,
-			Geometry & p_primitive )override;
+		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
+			, RenderPipeline & p_pipeline
+			, Submesh & p_submesh
+			, Geometry & p_primitive )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateBillboardNode
 		 */
-		C3D_API BillboardRenderNode CreateBillboardNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			BillboardBase & p_billboard )override;
+		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
+			, RenderPipeline & p_pipeline
+			, BillboardBase & p_billboard )override;
 
 	private:
-		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
-		void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
+		void DoRenderNodes( SceneRenderNodes & p_nodes
+			, Camera const & p_camera );
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoRenderInstancedSubmeshes
 		 */
-		void DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		void DoRenderInstancedSubmeshes( Scene & p_scene
+			, Camera const & p_camera
+			, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshes
 		 */
-		void DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderStaticSubmeshes( Scene & p_scene
+			, Camera const & p_camera
+			, StaticGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
 		 */
-		void DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderAnimatedSubmeshes( Scene & p_scene
+			, Camera const & p_camera
+			, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderBillboards
 		 */
-		void DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, uint8_t p_index, BillboardRenderNodesByPipelineMap & p_nodes );
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
-		 */
-		void DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
-		 */
-		void DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, StaticGeometryRenderNodesByPipelineMap & p_nodes );
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
-		 */
-		void DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderBillboards
-		 */
-		void DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, uint8_t p_index, BillboardRenderNodesByPipelineMap & p_nodes );
+		void DoRenderBillboards( Scene & p_scene
+			, Camera const & p_camera
+			, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
-		Castor::String DoGetGeometryShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, uint8_t p_sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, uint8_t p_sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		Castor::String DoGetTransparentPixelShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		void DoUpdatePipeline( RenderPipeline & p_pipeline
+			, DepthMapArray & p_depthMaps )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
 		 */
-		void DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		void DoPrepareFrontPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
 		 */
-		void DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		void DoPrepareBackPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
+		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
-		void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
-		 */
-		void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
-		 */
-		void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
-		 */
-		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentFlags
-		 */
-		void DoUpdateTransparentFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
-			, Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
+		void DoUpdateFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
+			, ProgramFlags & p_programFlags )const override;
 
 	private:
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;
@@ -276,6 +269,9 @@ namespace Castor3D
 		//!\~english	The picked geometry.
 		//!\~french		La géométrie sélectionnée.
 		GeometryWPtr m_geometry;
+		//!\~english	The picked geometry.
+		//!\~french		La géométrie sélectionnée.
+		BillboardBaseWPtr m_billboard;
 		//!\~english	The picked submesh.
 		//!\~french		Le sous-maillage sélectionné.
 		SubmeshWPtr m_submesh;

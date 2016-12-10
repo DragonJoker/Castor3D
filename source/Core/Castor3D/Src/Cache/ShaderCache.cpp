@@ -21,8 +21,8 @@ namespace Castor3D
 	namespace
 	{
 		uint64_t MakeKey(
-			FlagCombination< TextureChannel > const & p_textureFlags,
-			FlagCombination< ProgramFlag > const & p_programFlags,
+			TextureChannels const & p_textureFlags,
+			ProgramFlags const & p_programFlags,
 			uint8_t p_sceneFlags,
 			bool p_invertNormals )
 		{
@@ -71,8 +71,8 @@ namespace Castor3D
 
 	ShaderProgramSPtr ShaderProgramCache::GetAutomaticProgram(
 		RenderPass const & p_renderPass,
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags,
 		bool p_invertNormals )
 	{
@@ -122,7 +122,7 @@ namespace Castor3D
 
 	FrameVariableBuffer & ShaderProgramCache::CreateMatrixBuffer(
 		ShaderProgram & p_shader,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		ProgramFlags const & p_programFlags,
 		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferMatrix, p_shaderMask );
@@ -141,7 +141,7 @@ namespace Castor3D
 
 	FrameVariableBuffer & ShaderProgramCache::CreateSceneBuffer(
 		ShaderProgram & p_shader,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		ProgramFlags const & p_programFlags,
 		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferScene, p_shaderMask );
@@ -157,7 +157,7 @@ namespace Castor3D
 
 	FrameVariableBuffer & ShaderProgramCache::CreatePassBuffer(
 		ShaderProgram & p_shader,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		ProgramFlags const & p_programFlags,
 		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferPass, p_shaderMask );
@@ -172,7 +172,7 @@ namespace Castor3D
 
 	FrameVariableBuffer & ShaderProgramCache::CreateModelBuffer(
 		ShaderProgram & p_shader,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		ProgramFlags const & p_programFlags,
 		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferModel, p_shaderMask );
@@ -182,7 +182,7 @@ namespace Castor3D
 
 	FrameVariableBuffer & ShaderProgramCache::CreateAnimationBuffer(
 		ShaderProgram & p_shader,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		ProgramFlags const & p_programFlags,
 		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
 	{
 		REQUIRE( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) || CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
@@ -203,8 +203,8 @@ namespace Castor3D
 
 	void ShaderProgramCache::CreateTextureVariables(
 		ShaderProgram & p_shader,
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags )const
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags )const
 	{
 		if ( CheckFlag( p_programFlags, ProgramFlag::eLighting ) )
 		{
@@ -276,8 +276,8 @@ namespace Castor3D
 
 	ShaderProgramSPtr ShaderProgramCache::DoCreateAutomaticProgram(
 		RenderPass const & p_renderPass,
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags,
 		bool p_invertNormals )const
 	{
@@ -318,8 +318,8 @@ namespace Castor3D
 
 	void ShaderProgramCache::DoAddAutomaticProgram(
 		ShaderProgramSPtr p_program,
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags,
 		bool p_invertNormals )
 	{
@@ -335,8 +335,8 @@ namespace Castor3D
 
 	ShaderProgramSPtr ShaderProgramCache::DoCreateBillboardProgram(
 		RenderPass const & p_renderPass,
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags )const
 	{
 		auto & l_engine = *GetEngine();
@@ -434,8 +434,8 @@ namespace Castor3D
 
 	void ShaderProgramCache::DoAddBillboardProgram(
 		ShaderProgramSPtr p_program,
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags )
 	{
 		uint64_t l_key = MakeKey( p_textureFlags, p_programFlags, p_sceneFlags, false );

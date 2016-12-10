@@ -295,6 +295,16 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le programme shader.
 		 */
+		inline ShaderProgram const & GetProgram()const
+		{
+			return m_program;
+		}
+		/**
+		 *\~english
+		 *\return		The shader program.
+		 *\~french
+		 *\return		Le programme shader.
+		 */
 		inline ShaderProgram & GetProgram()
 		{
 			return m_program;

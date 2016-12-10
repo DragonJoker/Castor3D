@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_channel	Le canal.
 		 *\return		\p nullptr si pas de TextureUnit au canal voulu.
 		 */
-		C3D_API TextureUnitSPtr GetTextureUnit( TextureChannel p_channel );
+		C3D_API TextureUnitSPtr GetTextureUnit( TextureChannel p_channel )const;
 		/**
 		 *\~english
 		 *\brief		Destroys a TextureUnit at the given index.
@@ -210,7 +210,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La combinaison d'indicateurs de canal de texture.
 		 */
-		inline Castor::FlagCombination< TextureChannel > const & GetTextureFlags()const
+		inline TextureChannels const & GetTextureFlags()const
 		{
 			return m_textureFlags;
 		}
@@ -368,19 +368,6 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Makes the link between an existing texture bound to a channel, and the matching shader variable in given render node.
-		 *\param[in]	p_channel	The texture channel.
-		 *\param[in]	p_name		The shader variable name.
-		 *\param[in,out]p_node		The render node.
-		 *\~french
-		 *\brief		Fait le lien entre une texture affectée à un canal, et la variable shader correspondante dans le noeud de rendu donné.
-		 *\param[in]	p_channel	Le canal de la texture.
-		 *\param[in]	p_name		Le nom de la variable shader.
-		 *\param[in,out]p_node		Le noeud de rendu.
-		 */
-		C3D_API void DoGetTexture( TextureChannel p_channel, Castor::String const & p_name, PassRenderNode & p_node );
-		/**
-		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
 		 *\remarks		Removes alpha channel if any, stores it in p_opacity if it is empty.
 		 *\param[in]	p_channel		The texture channel.
@@ -472,7 +459,7 @@ namespace Castor3D
 		TextureUnitPtrArray m_textureUnits;
 		//!\~english	Bitwise ORed TextureChannel.
 		//!\~french		Combinaison des TextureChannel affectés à une texture pour cette passe.
-		Castor::FlagCombination< TextureChannel > m_textureFlags;
+		TextureChannels m_textureFlags;
 		//!\~english	The opacity value.
 		//!\~french		La valeur d'opacité.
 		float m_opacity{ 1.0f };
@@ -484,7 +471,7 @@ namespace Castor3D
 		bool m_automaticShader{ true };
 		//!\~english	The alpha blend mode.
 		//!\~french		Le mode de mélange alpha.
-		BlendMode m_alphaBlendMode{ BlendMode::eInterpolative };
+		BlendMode m_alphaBlendMode{ BlendMode::eNoBlend };
 		//!\~english	The colour blend mode.
 		//!\~french		Le mode de mélange couleur.
 		BlendMode m_colourBlendMode{ BlendMode::eNoBlend };

@@ -24,9 +24,10 @@ SOFTWARE.
 #define ___C3D_RENDER_TECHNIQUE_H___
 
 #include "HDR/ToneMapping.hpp"
-#include "Render/RenderPass.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <Design/Named.hpp>
+#include <Design/OwnedBy.hpp>
 #include <Graphics/Rectangle.hpp>
 
 #if !defined( NDEBUG )
@@ -42,6 +43,7 @@ SOFTWARE.
 
 namespace Castor3D
 {
+	class RenderTechniquePass;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -54,10 +56,12 @@ namespace Castor3D
 	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
 	class RenderTechnique
-		: public RenderPass
+		: public Castor::OwnedBy< Engine >
+		, public Castor::Named
 	{
+		friend class RenderTechniquePass;
+
 	public:
-		using DistanceSortedNodeMap = std::multimap< double, std::reference_wrapper< ObjectRenderNodeBase > >;
 		using ShadowMapLightMap = std::map< LightRPtr, ShadowMapPassSPtr >;
 
 	protected:
@@ -101,20 +105,30 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name			The technique name.
-		 *\param[in]	p_renderTarget	The render target for this technique.
-		 *\param[in]	p_renderSystem	The render system.
-		 *\param[in]	p_params		The technique parameters.
-		 *\param[in]	p_multisampling	The multisampling status
+		 *\param[in]	p_name				The technique name.
+		 *\param[in]	p_renderTarget		The render target for this technique.
+		 *\param[in]	p_renderSystem		The render system.
+		 *\param[in]	p_opaquePass		The opaque nodes pass.
+		 *\param[in]	p_transparentPass	The transparent nodes pass.
+		 *\param[in]	p_params			The technique parameters.
+		 *\param[in]	p_multisampling		The multisampling status
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom de la technique.
-		 *\param[in]	p_renderTarget	La render target pour cette technique.
-		 *\param[in]	p_renderSystem	Le render system.
-		 *\param[in]	p_params		Les paramètres de la technique.
-		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
+		 *\param[in]	p_name				Le nom de la technique.
+		 *\param[in]	p_renderTarget		La render target pour cette technique.
+		 *\param[in]	p_renderSystem		Le render system.
+		 *\param[in]	p_opaquePass		La passe pour les noeuds opaques.
+		 *\param[in]	p_transparentPass	La passe pour les noeuds transparents.
+		 *\param[in]	p_params			Les paramètres de la technique.
+		 *\param[in]	p_multisampling		Le statut de multiéchantillonnage.
 		 */
-		C3D_API RenderTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params, bool p_multisampling = false );
+		C3D_API RenderTechnique( Castor::String const & p_name
+			, RenderTarget & p_renderTarget
+			, RenderSystem & p_renderSystem
+			, std::unique_ptr< RenderTechniquePass > && p_opaquePass
+			, std::unique_ptr< RenderTechniquePass > && p_transparentPass
+			, Parameters const & p_params
+			, bool p_multisampling = false );
 
 	public:
 		/**
@@ -217,190 +231,63 @@ namespace Castor3D
 		 */
 		inline TextureLayout const & GetResult()const
 		{
+			REQUIRE( m_frameBuffer.m_colourTexture );
 			return *m_frameBuffer.m_colourTexture;
 		}
+		/**
+		 *\~english
+		 *\return		The opaque nodes render pass.
+		 *\~french
+		 *\return		La passe de rendu des noeuds opaques.
+		 */
+		inline RenderTechniquePass const & GetOpaquePass()const
+		{
+			REQUIRE( m_opaquePass );
+			return *m_opaquePass;
+		}
+		/**
+		 *\~english
+		 *\return		The transparent nodes render pass.
+		 *\~french
+		 *\return		La passe de rendu des noeuds transparents.
+		 */
+		inline RenderTechniquePass const & GetTransparentPass()const
+		{
+			REQUIRE( m_transparentPass );
+			return *m_transparentPass;
+		}
 
-	protected:
+	private:
 		/**
 		 *\~english
-		 *\brief		Render function.
-		 *\param[in]	p_nodes					The scene render nodes.
-		 *\param[in]	p_opaqueDepthMaps		The depth (shadows and other) maps for opaque nodes.
-		 *\param[in]	p_transparentDepthMaps	The depth (shadows and other) maps for transparent nodes.
-		 *\param[in]	p_frameTime				The time elapsed since last frame was rendered.
+		 *\return		The directional light shadow map.
 		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[in]	p_nodes					Les noeuds de rendu de la scène.
-		 *\param[in]	p_opaqueDepthMaps		Les textures de profondeur (ombres et autres) pour les noeuds opaques.
-		 *\param[in]	p_transparentDepthMaps	Les textures de profondeur (ombres et autres) pour les noeuds transparents.
-		 *\param[in]	p_frameTime				Le temps écoulé depuis le rendu de la dernière frame.
+		 *\return		La map d'ombre de la lumière directionnelle.
 		 */
-		C3D_API void DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_opaqueDepthMaps, DepthMapArray & p_transparentDepthMaps, uint32_t p_frameTime );
+		inline TextureUnit & GetDirectionalShadowMap()
+		{
+			return m_directionalShadowMap;
+		}
 		/**
 		 *\~english
-		 *\brief		Renders opaque render nodes.
-		 *\param[in]	p_nodes		The scene render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\return		The spot lights shadow map.
 		 *\~french
-		 *\brief		Dessine les noeuds de rendu opaques.
-		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\return		La map d'ombre des lumières projecteur.
 		 */
-		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps );
+		inline TextureUnit & GetSpotShadowMap()
+		{
+			return m_spotShadowMap;
+		}
 		/**
 		 *\~english
-		 *\brief		Renders transparent render nodes.
-		 *\param[in]	p_nodes		The scene render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\return		The point lights shadow map.
 		 *\~french
-		 *\brief		Dessine les noeuds de rendu transparents.
-		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\return		La map d'ombre des lumières ponctuelles.
 		 */
-		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderOpaqueStaticSubmeshesNonInstanced( StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderOpaqueAnimatedSubmeshesNonInstanced( AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderOpaqueInstancedSubmeshesNonInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderOpaqueInstancedSubmeshesInstanced(  SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderTransparentStaticSubmeshesNonInstanced(  StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderTransparentAnimatedSubmeshesNonInstanced(  AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderTransparentInstancedSubmeshesNonInstanced(  SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderTransparentInstancedSubmeshesInstanced(  SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders objects sorted by distance to camera.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine d'objets triés par distance à la caméra.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderByDistance(  DistanceSortedNodeMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders billboards.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des billboards.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderOpaqueBillboards(  BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
-		/**
-		 *\~english
-		 *\brief		Renders billboards.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des billboards.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderTransparentBillboards(  BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		inline TextureUnit & GetPointShadowMap()
+		{
+			return m_pointShadowMap;
+		}
 
 	private:
 		/**
@@ -451,74 +338,6 @@ namespace Castor3D
 		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type point.
 		 */
 		void DoCleanupPointShadowMap();
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentFlags
-		 */
-		C3D_API void DoUpdateTransparentFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
-			, Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
-		 */
-		C3D_API Castor::String DoGetGeometryShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
-		 */
-		C3D_API Castor::String DoGetOpaquePixelShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
-		 */
-		C3D_API Castor::String DoGetTransparentPixelShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
-		 */
-		C3D_API void DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
-		 */
-		C3D_API void DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
-		 */
-		C3D_API void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
-		 */
-		C3D_API void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
-		 */
-		C3D_API void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
-		 */
-		C3D_API void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\~english
-		 *\brief		Retrieves the depth maps for opaque nodes.
-		 *\param[out]	p_depthMaps	Receives the depth maps.
-		 *\~french
-		 *\brief		Récupère les textures de profondeur pour les noeuds opaques.
-		 *\param[out]	p_depthMaps	Reçoit les textures.
-		 */
-		C3D_API virtual void DoGetOpaqueDepthMaps( DepthMapArray & p_depthMaps );
-		/**
-		 *\~english
-		 *\brief		Retrieves the depth maps for transparent nodes.
-		 *\param[out]	p_depthMaps	Receives the depth maps.
-		 *\~french
-		 *\brief		Récupère les textures de profondeur pour les noeuds transparents.
-		 *\param[out]	p_depthMaps	Reçoit les textures.
-		 */
-		C3D_API virtual void DoGetTransparentDepthMaps( DepthMapArray & p_depthMaps );
 		/**
 		 *\~english
 		 *\brief		Creation function
@@ -621,6 +440,9 @@ namespace Castor3D
 		//!\~english	The parent render target.
 		//!\~french		La render target parente.
 		RenderTarget & m_renderTarget;
+		//!\~english	The render system.
+		//!\~french		Le render system.
+		RenderSystem & m_renderSystem;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
 		Castor::Size m_size;
@@ -636,6 +458,12 @@ namespace Castor3D
 		//!\~english	The shadow map texture used for pont lights.
 		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type point.
 		TextureUnit m_pointShadowMap;
+		//!\~english	The pass used to render opaque nodes.
+		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
+		std::unique_ptr< RenderTechniquePass > m_opaquePass;
+		//!\~english	The pass used to render transparent nodes.
+		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
+		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 	};
 }
 

@@ -376,8 +376,10 @@ namespace castortd
 				{
 					Camera & l_camera = *l_window->GetCamera();
 					l_camera.Update();
+					auto l_type = l_window->GetPickingPass().Pick( Position{ int( l_x ), int( l_y ) }, l_camera );
 
-					if ( l_window->GetPickingPass().Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
+					if ( l_type != PickingPass::NodeType::eNone
+						&& l_type != PickingPass::NodeType::eBillboard )
 					{
 						DoUpdateSelectedGeometry( l_window->GetPickingPass().GetPickedGeometry() );
 					}

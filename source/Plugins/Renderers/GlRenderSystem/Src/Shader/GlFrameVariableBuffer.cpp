@@ -974,6 +974,7 @@ namespace GlRender
 
 	void GlFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
+		REQUIRE( m_uniformBlockIndex != int( GlInvalidIndex ) );
 		bool l_changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( FrameVariableSPtr p_variable )
 		{
 			return p_variable->IsChanged();
@@ -981,30 +982,18 @@ namespace GlRender
 
 		if ( l_changed )
 		{
-			if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
-			{
-				m_glBuffer.Upload( 0u, m_uniformBlockSize, m_buffer.data() );
+			m_glBuffer.Upload( 0u, m_uniformBlockSize, m_buffer.data() );
 
-				for ( auto & l_variable : m_listVariables )
-				{
-					l_variable->SetChanged( false );
-				}
-			}
-			else
+			for ( auto & l_variable : m_listVariables )
 			{
-				for ( auto l_variable : m_listInitialised )
-				{
-					l_variable->Bind();
-				}
+				l_variable->SetChanged( false );
 			}
 		}
 	}
 
 	void GlFrameVariableBuffer::DoUnbind( uint32_t p_index )
 	{
-		if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
-		{
-			m_glBuffer.Unbind();
-		}
+		REQUIRE( m_uniformBlockIndex != int( GlInvalidIndex ) );
+		m_glBuffer.Unbind();
 	}
 }

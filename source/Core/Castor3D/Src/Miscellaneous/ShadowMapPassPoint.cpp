@@ -70,7 +70,7 @@ namespace Castor3D
 
 		template< typename MapType, typename FuncType >
 		void DoTraverseNodes( MapType & p_nodes
-							  , FuncType p_function )
+			, FuncType p_function )
 		{
 			for ( auto l_itPipelines : p_nodes )
 			{
@@ -80,7 +80,10 @@ namespace Castor3D
 				{
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
-						p_function( *l_itPipelines.first, *l_itPass.first, *l_itSubmeshes.first, l_itSubmeshes.second );
+						p_function( *l_itPipelines.first
+							, *l_itPass.first
+							, *l_itSubmeshes.first
+							, l_itSubmeshes.second );
 					}
 				}
 			}
@@ -88,7 +91,7 @@ namespace Castor3D
 
 		template< typename MapType >
 		void DoRenderNonInstanced( Scene & p_scene
-								   , MapType & p_nodes )
+			, MapType & p_nodes )
 		{
 			auto l_depthMaps = DepthMapArray{};
 
@@ -122,25 +125,22 @@ namespace Castor3D
 		return std::make_shared< ShadowMapPassPoint >( p_engine, p_scene, p_light, p_shadowMap, p_index );
 	}
 
-	void ShadowMapPassPoint::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes )
+	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
 	{
-		DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack );
-		DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_nodes.m_staticGeometries.m_opaqueRenderNodesBack );
-		DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack );
-		DoRenderBillboards( p_nodes.m_scene, p_nodes.m_billboards.m_opaqueRenderNodesBack );
+		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_nodes.m_instancedGeometries.m_backCulled );
+		DoRenderStaticSubmeshes( p_nodes.m_scene, p_nodes.m_staticGeometries.m_backCulled );
+		DoRenderAnimatedSubmeshes( p_nodes.m_scene, p_nodes.m_animatedGeometries.m_backCulled );
+		DoRenderBillboards( p_nodes.m_scene, p_nodes.m_billboards.m_backCulled );
 	}
 
-	void ShadowMapPassPoint::DoRenderTransparentNodes( SceneRenderNodes & p_nodes )
+	void ShadowMapPassPoint::DoRenderInstancedSubmeshes( Scene & p_scene
+		, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
 	{
-		DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_nodes.m_instancedGeometries.m_transparentRenderNodesBack );
-		DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_nodes.m_staticGeometries.m_transparentRenderNodesBack );
-		DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_nodes.m_animatedGeometries.m_transparentRenderNodesBack );
-		DoRenderBillboards( p_nodes.m_scene, p_nodes.m_billboards.m_transparentRenderNodesBack );
-	}
-
-	void ShadowMapPassPoint::DoRenderInstancedSubmeshesInstanced( Scene & p_scene, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
-	{
-		DoTraverseNodes( p_nodes, [this]( RenderPipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes( p_nodes
+			, [this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
@@ -153,17 +153,20 @@ namespace Castor3D
 		} );
 	}
 
-	void ShadowMapPassPoint::DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, StaticGeometryRenderNodesByPipelineMap & p_nodes )
+	void ShadowMapPassPoint::DoRenderStaticSubmeshes( Scene & p_scene
+		, StaticGeometryRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced( p_scene, p_nodes );
 	}
 
-	void ShadowMapPassPoint::DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, AnimatedGeometryRenderNodesByPipelineMap & p_nodes )
+	void ShadowMapPassPoint::DoRenderAnimatedSubmeshes( Scene & p_scene
+		, AnimatedGeometryRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced( p_scene, p_nodes );
 	}
 
-	void ShadowMapPassPoint::DoRenderBillboards( Scene & p_scene, BillboardRenderNodesByPipelineMap & p_nodes )
+	void ShadowMapPassPoint::DoRenderBillboards( Scene & p_scene
+		, BillboardRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced( p_scene, p_nodes );
 	}
@@ -209,22 +212,12 @@ namespace Castor3D
 		m_light.Update( l_position );
 		m_renderQueue.Update();
 
-		for ( auto & l_it : m_frontOpaquePipelines )
+		for ( auto & l_it : m_frontPipelines )
 		{
 			DoUpdateShadowMatrices( m_projection, l_position, l_it.second->GetProgram() );
 		}
 
-		for ( auto & l_it : m_backOpaquePipelines )
-		{
-			DoUpdateShadowMatrices( m_projection, l_position, l_it.second->GetProgram() );
-		}
-
-		for ( auto & l_it : m_frontTransparentPipelines )
-		{
-			DoUpdateShadowMatrices( m_projection, l_position, l_it.second->GetProgram() );
-		}
-
-		for ( auto & l_it : m_backTransparentPipelines )
+		for ( auto & l_it : m_backPipelines )
 		{
 			DoUpdateShadowMatrices( m_projection, l_position, l_it.second->GetProgram() );
 		}
@@ -235,8 +228,7 @@ namespace Castor3D
 		m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear();
 		auto & l_nodes = m_renderQueue.GetRenderNodes();
-		DoRenderOpaqueNodes( l_nodes );
-		DoRenderTransparentNodes( l_nodes );
+		DoRenderNodes( l_nodes );
 		m_frameBuffer->Unbind();
 	}
 
@@ -255,11 +247,10 @@ namespace Castor3D
 		}
 	}
 
-	String ShadowMapPassPoint::DoGetVertexShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags,
-		bool p_invertNormals )const
+	String ShadowMapPassPoint::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, uint8_t p_sceneFlags
+		, bool p_invertNormals )const
 	{
 		using namespace GLSL;
 		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -322,10 +313,9 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String ShadowMapPassPoint::DoGetGeometryShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
+	String ShadowMapPassPoint::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -368,10 +358,9 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String ShadowMapPassPoint::DoGetOpaquePixelShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
+	String ShadowMapPassPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();

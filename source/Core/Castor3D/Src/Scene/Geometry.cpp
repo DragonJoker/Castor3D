@@ -68,7 +68,7 @@ namespace Castor3D
 
 				for ( auto l_submesh : *p_geometry.GetMesh() )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\t\tmaterial " ) + string::to_string( l_index++ ) + cuT( " \"" ) + p_geometry.GetMaterial( l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "\t\tmaterial " ) + string::to_string( l_index++ ) + cuT( " \"" ) + p_geometry.GetMaterial( *l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
 					Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry material" );
 				}
 			}
@@ -162,43 +162,46 @@ namespace Castor3D
 		}
 	}
 
-	void Geometry::SetMaterial( SubmeshSPtr p_submesh, MaterialSPtr p_material )
+	void Geometry::SetMaterial( Submesh & p_submesh, MaterialSPtr p_material )
 	{
 		MeshSPtr l_mesh = GetMesh();
 
 		if ( l_mesh )
 		{
-			auto l_it = std::find( l_mesh->begin(), l_mesh->end(), p_submesh );
+			auto l_it = std::find_if( l_mesh->begin(), l_mesh->end(), [&p_submesh]( SubmeshSPtr l_submesh )
+			{
+				return l_submesh.get() == &p_submesh;
+			} );
 
 			if ( l_it != l_mesh->end() )
 			{
-				auto l_pair = m_submeshesMaterials.insert( { p_submesh.get(), p_material } );
+				auto l_pair = m_submeshesMaterials.insert( { &p_submesh, p_material } );
 
-				if ( !l_pair.second && l_pair.first->second.lock() != p_submesh->GetDefaultMaterial() )
+				if ( !l_pair.second && l_pair.first->second.lock() != p_submesh.GetDefaultMaterial() )
 				{
-					p_submesh->UnRef( p_material );
+					p_submesh.UnRef( p_material );
 				}
 
 				l_pair.first->second = p_material;
-				auto l_count = p_submesh->Ref( p_material );
+				auto l_count = p_submesh.Ref( p_material );
 
 				if ( l_count >= 1 )
 				{
-					if ( !p_submesh->HasMatrixBuffer() && l_count == 1 )
+					if ( !p_submesh.HasMatrixBuffer() && l_count == 1 )
 					{
 						// We need to update the render nodes afterwards (since the submesh's geometry buffers are now invalid).
 						GetScene()->SetChanged();
-						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::eQueueRender, [this, p_submesh]()
+						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::eQueueRender, [this, &p_submesh]()
 						{
-							p_submesh->ResetGpuBuffers();
+							p_submesh.ResetGpuBuffers();
 						} ) );
 					}
-					else if ( p_submesh->HasMatrixBuffer() && l_count > 1 )
+					else if ( p_submesh.HasMatrixBuffer() && l_count > 1 )
 					{
 						// We need to update the matrix buffers only.
-						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_submesh]()
+						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, &p_submesh]()
 						{
-							p_submesh->ResetMatrixBuffers();
+							p_submesh.ResetMatrixBuffers();
 						} ) );
 					}
 				}
@@ -214,10 +217,10 @@ namespace Castor3D
 		}
 	}
 
-	MaterialSPtr Geometry::GetMaterial( SubmeshSPtr p_submesh )const
+	MaterialSPtr Geometry::GetMaterial( Submesh const & p_submesh )const
 	{
 		MaterialSPtr l_return;
-		auto l_it = m_submeshesMaterials.find( p_submesh.get() );
+		auto l_it = m_submeshesMaterials.find( &p_submesh );
 
 		if ( l_it != m_submeshesMaterials.end() )
 		{

@@ -153,7 +153,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Tells if the ray intersects the given Geometry.
-		 *\param[in]	p_pGeometry			The geometry to test.
+		 *\param[in]	p_geometry			The geometry to test.
 		 *\param[out]	p_nearestFace		Receives the intersected face.
 		 *\param[out]	p_nearestSubmesh	Receives the intersected submesh.
 		 *\param[out]	p_distance			Receives the distance.

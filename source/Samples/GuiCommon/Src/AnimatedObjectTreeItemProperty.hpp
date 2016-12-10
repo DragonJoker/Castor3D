@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		AnimatedObject helper class to communicate between Scene objects or Materials lists and PropertiesHolder.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les AnimatedObject.
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les AnimatedObject.
 	*/
 	class AnimatedObjectTreeItemProperty
 		: public TreeItemProperty
@@ -49,7 +49,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables.
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	p_light		L"AnimatedObject cible.
 		 */
 		AnimatedObjectTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectSPtr p_light );
@@ -65,7 +65,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the AnimatedObject.
 		 *\return		The value.
 		 *\~french
-		 *\brief		R�cup�re l'AnimatedObject.
+		 *\brief		Récupère l'AnimatedObject.
 		 *\return		La valeur.
 		 */
 		inline Castor3D::AnimatedObjectSPtr GetObject()

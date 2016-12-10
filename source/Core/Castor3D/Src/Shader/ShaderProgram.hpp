@@ -431,11 +431,11 @@ namespace Castor3D
 		C3D_API FrameVariablePtrList const & GetFrameVariables( ShaderType p_type )const;
 		/**
 		 *\~english
-		 *\brief		Activates the program's frame variable buffers.
+		 *\brief		Updates the program's frame variable buffers if needed.
 		 *\~french
-		 *\brief		Active les tampons de variables du programme.
+		 *\brief		Met à jour les tampons de variables du programme si besoin est.
 		 */
-		C3D_API void BindUbos()const;
+		C3D_API void UpdateUbos()const;
 		/**
 		 *\~english
 		 *\brief		Deactivates the program's frame variable buffers.

@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les g�om�tries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les g�om�tries
 	*/
 	class GeometryTreeItemProperty
 		: public TreeItemProperty
@@ -44,13 +44,13 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_pGeometry	The target geometry
+		 *\param[in]	p_geometry	The target geometry
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
-		 *\param[in]	p_pGeometry	La g�om�trie cible
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
+		 *\param[in]	p_geometry	La géométrie cible
 		 */
-		GeometryTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry );
+		GeometryTreeItemProperty( bool p_editable, Castor3D::Geometry & p_geometry );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,12 +63,12 @@ namespace GuiCommon
 		 *\brief		Retrieves the geometry
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la g�om�trie
+		 *\brief		Récupère la géométrie
 		 *\return		La valeur
 		 */
-		inline Castor3D::GeometrySPtr GetGeometry()
+		inline Castor3D::Geometry & GetGeometry()
 		{
-			return m_pGeometry.lock();
+			return m_geometry;
 		}
 
 	private:
@@ -82,7 +82,7 @@ namespace GuiCommon
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::GeometryWPtr m_pGeometry;
+		Castor3D::Geometry & m_geometry;
 	};
 }
 

@@ -89,7 +89,7 @@ namespace Castor3D
 	}
 
 	ShadowMapPass::ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
-		: RenderPass{ ShadowMap, p_engine }
+		: RenderPass{ ShadowMap, p_engine, true }
 		, m_light{ p_light }
 		, m_scene{ p_scene }
 		, m_shadowMap{ p_shadowMap }
@@ -229,106 +229,99 @@ namespace Castor3D
 		};
 	}
 
-	void ShadowMapPass::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera )
+	void ShadowMapPass::DoRenderNodes( SceneRenderNodes & p_nodes
+		, Camera const & p_camera )
 	{
-		DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack );
-		DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodesBack );
-		DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack );
-		DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_opaqueRenderNodesBack );
+		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_backCulled );
+		DoRenderStaticSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_backCulled );
+		DoRenderAnimatedSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_backCulled );
+		DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_backCulled );
 	}
 
-	void ShadowMapPass::DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera )
+	void ShadowMapPass::DoRenderInstancedSubmeshes( Scene & p_scene
+		, Camera const & p_camera
+		, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
 	{
-		DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_transparentRenderNodesBack );
-		DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_transparentRenderNodesBack );
-		DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_transparentRenderNodesBack );
-		DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_transparentRenderNodesBack );
-	}
-
-	void ShadowMapPass::DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
-	{
-		DoTraverseNodes( p_camera, p_nodes, [this]( RenderPipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
-		{
-			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+		DoTraverseNodes( p_camera
+			, p_nodes
+			, [this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, StaticGeometryRenderNodeArray & p_renderNodes )
 			{
-				auto l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-				auto l_depthMaps = DepthMapArray{};
-				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
-				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( l_depthMaps );
-			}
-		} );
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					auto l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					auto l_depthMaps = DepthMapArray{};
+					p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					p_renderNodes[0].UnbindPass( l_depthMaps );
+				}
+			} );
 	}
 
-	void ShadowMapPass::DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes )
+	void ShadowMapPass::DoRenderStaticSubmeshes( Scene & p_scene
+		, Camera const & p_camera
+		, StaticGeometryRenderNodesByPipelineMap & p_nodes )
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes );
+		DoRenderNonInstanced( p_scene
+			, p_camera
+			, p_nodes );
 	}
 
-	void ShadowMapPass::DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes )
+	void ShadowMapPass::DoRenderAnimatedSubmeshes( Scene & p_scene
+		, Camera const & p_camera
+		, AnimatedGeometryRenderNodesByPipelineMap & p_nodes )
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes );
+		DoRenderNonInstanced( p_scene
+			, p_camera
+			, p_nodes );
 	}
 
-	void ShadowMapPass::DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes )
+	void ShadowMapPass::DoRenderBillboards( Scene & p_scene
+		, Camera const & p_camera
+		, BillboardRenderNodesByPipelineMap & p_nodes )
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes );
+		DoRenderNonInstanced( p_scene
+			, p_camera
+			, p_nodes );
 	}
 
-	String ShadowMapPass::DoGetTransparentPixelShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
-	{
-		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
-	}
-
-	void ShadowMapPass::DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
-	{
-	}
-
-	void ShadowMapPass::DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
-	{
-	}
-
-	void ShadowMapPass::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void ShadowMapPass::DoUpdatePipeline( RenderPipeline & p_pipeline
+		, DepthMapArray & p_depthMaps )const
 	{
 	}
 
-	void ShadowMapPass::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void ShadowMapPass::DoPrepareFrontPipeline( ShaderProgram & p_program
+		, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_backOpaquePipelines.find( p_flags );
+	}
 
-		if ( l_it == m_backOpaquePipelines.end() )
+	void ShadowMapPass::DoPrepareBackPipeline( ShaderProgram & p_program
+		, PipelineFlags const & p_flags )
+	{
+		auto l_it = m_backPipelines.find( p_flags );
+
+		if ( l_it == m_backPipelines.end() )
 		{
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
-			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
+			l_it = m_backPipelines.emplace( p_flags
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
+					, std::move( l_rsState )
+					, BlendState{}
+					, MultisampleState{}
+					, p_program
+					, p_flags ) ).first;
 		}
 	}
 
-	void ShadowMapPass::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
-	{
-	}
-
-	void ShadowMapPass::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
-	{
-		auto l_it = m_backTransparentPipelines.find( p_flags );
-
-		if ( l_it == m_backTransparentPipelines.end() )
-		{
-			DoUpdateProgram( p_program );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eNone );
-			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
-		}
-	}
-
-	void ShadowMapPass::DoUpdateTransparentFlags( FlagCombination< TextureChannel > & p_textureFlags
-		, FlagCombination< ProgramFlag > & p_programFlags )const
+	void ShadowMapPass::DoUpdateFlags( TextureChannels & p_textureFlags
+		, ProgramFlags & p_programFlags )const
 	{
 		RemFlag( p_programFlags, ProgramFlag::eLighting );
+		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
 		RemFlag( p_textureFlags, TextureChannel::eAll );
 
 		AddFlag( p_programFlags, ProgramFlag::eShadowMap );

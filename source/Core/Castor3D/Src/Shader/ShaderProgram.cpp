@@ -560,7 +560,7 @@ namespace Castor3D
 		return m_shaders[size_t( p_type )]->GetFrameVariables();
 	}
 
-	void ShaderProgram::BindUbos()const
+	void ShaderProgram::UpdateUbos()const
 	{
 		m_ubosBound = true;
 		uint32_t l_index = 0;
@@ -650,7 +650,7 @@ namespace Castor3D
 
 			if ( m_ubosBound )
 			{
-				BindUbos();
+				UpdateUbos();
 			}
 		}
 	}

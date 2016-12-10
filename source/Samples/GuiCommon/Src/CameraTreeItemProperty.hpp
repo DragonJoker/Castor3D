@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Camera helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les cam�ras
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les cam�ras
 	*/
 	class CameraTreeItemProperty
 		: public TreeItemProperty
@@ -47,10 +47,10 @@ namespace GuiCommon
 		 *\param[in]	p_camera	The target camera
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
-		 *\param[in]	p_camera	La cam�ra cible
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
+		 *\param[in]	p_camera	La caméra cible
 		 */
-		CameraTreeItemProperty( bool p_editable, Castor3D::CameraSPtr p_camera );
+		CameraTreeItemProperty( bool p_editable, Castor3D::Camera & p_camera );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,12 +63,12 @@ namespace GuiCommon
 		 *\brief		Retrieves the camera
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la cam�ra
+		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::CameraSPtr GetCamera()
+		inline Castor3D::Camera & GetCamera()
 		{
-			return m_camera.lock();
+			return m_camera;
 		}
 
 	private:
@@ -85,7 +85,7 @@ namespace GuiCommon
 		void OnTopologyChange( Castor3D::Topology p_value );
 
 	private:
-		Castor3D::CameraWPtr m_camera;
+		Castor3D::Camera & m_camera;
 	};
 }
 

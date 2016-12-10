@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Overlay helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les incrustations
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les incrustations
 	*/
 	class OverlayTreeItemProperty
 		: public TreeItemProperty
@@ -47,7 +47,7 @@ namespace GuiCommon
 		 *\param[in]	p_overlay	The target overlay
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_overlay	L'incrustation cible
 		 */
 		OverlayTreeItemProperty( bool p_editable, Castor3D::OverlayCategorySPtr p_overlay );
@@ -63,7 +63,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re l'incrustation
+		 *\brief		Récupère l'incrustation
 		 *\return		La valeur
 		 */
 		inline Castor3D::OverlayCategorySPtr GetOverlay()

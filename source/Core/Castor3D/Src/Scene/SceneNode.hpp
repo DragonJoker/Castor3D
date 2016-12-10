@@ -91,13 +91,13 @@ namespace Castor3D
 
 	protected:
 		using SceneNodePtrStrMap = std::map< Castor::String, SceneNodeWPtr >;
-		using MovableObjectPtrArray = std::list< MovableObjectWPtr >;
+		using MovableObjectArray = std::list< std::reference_wrapper< MovableObject > >;
 
 	public:
 		typedef SceneNodePtrStrMap::iterator node_iterator;
 		typedef SceneNodePtrStrMap::const_iterator node_const_iterator;
-		typedef MovableObjectPtrArray::iterator object_iterator;
-		typedef MovableObjectPtrArray::const_iterator object_const_iterator;
+		typedef MovableObjectArray::iterator object_iterator;
+		typedef MovableObjectArray::const_iterator object_const_iterator;
 
 	public:
 		/**
@@ -133,7 +133,7 @@ namespace Castor3D
 		 *\brief		Attache un MovableObject au noeud
 		 *\param[in]	p_object	L'objet à attacher
 		 */
-		C3D_API void AttachObject( MovableObjectSPtr p_object );
+		C3D_API void AttachObject( MovableObject & p_object );
 		/**
 		 *\~english
 		 *\brief		Detaches a MovableObject from the node
@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\brief		Détache un MovableObject fu noeud
 		 *\param[in]	p_object	L'objet à détacher
 		 */
-		C3D_API void DetachObject( MovableObjectSPtr p_object );
+		C3D_API void DetachObject( MovableObject & p_object );
 		/**
 		 *\~english
 		 *\brief		Sets the parent node
@@ -283,25 +283,6 @@ namespace Castor3D
 		 *\param[in]	p_scale	La nouvelle valeur
 		 */
 		C3D_API void SetScale( Castor::Point3r const & p_scale );
-		/**
-		 *\~english
-		 *\brief		Gets the nearest geometry held by this node or it's children nodes, which is hit by the ray.
-		 *\param[in]	p_ray				The ray.
-		 *\param[in]	p_camera			The camera to check for the node visibility.
-		 *\param[out]	p_distance			Receives the distance of the met geometry.
-		 *\param[out]	p_nearestFace		Receives the face of the met geometry.
-		 *\param[out]	p_nearestSubmesh	Receives the submesh of the met geometry.
-		 *\return		The geometry, \p nullptr if none.
-		 *\~french
-		 *\brief		Récupère la géométrie la plus proche de ce noeud et de ses enfants, qui sera touchée par le rayon.
-		 *\param[in]	p_ray				Le rayon.
-		 *\param[in]	p_camera			La caméra, pour vérifier la visibilité du noeud.
-		 *\param[out]	p_distance			Reçoit la distance de la géométrie rencontrée.
-		 *\param[out]	p_nearestFace		Reçoit la face dans la géométrie rencontrée.
-		 *\param[out]	p_nearestSubmesh	Reçoit le submesh de la géométrie rencontrée.
-		 *\return		La géométrie, \p nullptr si aucune.
-		 */
-		C3D_API GeometrySPtr GetNearestGeometry( Ray const & p_ray, Camera const & p_camera, real & p_distance, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute position
@@ -501,7 +482,7 @@ namespace Castor3D
 		 *\brief		Récupère la map des objets
 		 *\return		La valeur
 		 */
-		inline MovableObjectPtrArray const & GetObjects()const
+		inline MovableObjectArray const & GetObjects()const
 		{
 			return m_objects;
 		}
@@ -652,7 +633,7 @@ namespace Castor3D
 		//!\~english  This node's childs	\~french Les enfants de ce noeud
 		SceneNodePtrStrMap m_children;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
-		MovableObjectPtrArray m_objects;
+		MovableObjectArray m_objects;
 		//!\~english  Signal used to notify attached objects that the node has changed.	\~french Signal utilisé pour notifier aux objets attachés que le noeud a changé.
 		Castor::Signal< NodeChangedNotifyFunction > m_signalChanged;
 	};
