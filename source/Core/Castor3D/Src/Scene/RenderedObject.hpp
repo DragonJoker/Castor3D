@@ -40,6 +40,7 @@ namespace Castor3D
 	\brief		Gère la visibilité de l'objet, ainsi que son comportement avec les ombres.
 	*/
 	class RenderedObject
+		: public std::enable_shared_from_this< RenderedObject >
 	{
 	public:
 		/*!

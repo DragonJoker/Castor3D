@@ -494,7 +494,7 @@ namespace Bloom
 		}
 
 		m_combinePipeline->Apply();
-		m_combinePipeline->GetProgram().BindUbos();
+		m_combinePipeline->GetProgram().UpdateUbos();
 
 		l_texture0.Bind();
 		l_texture1.Bind();

@@ -101,8 +101,8 @@ namespace Castor3D
 		 */
 		C3D_API ShaderProgramSPtr GetAutomaticProgram(
 			RenderPass const & p_renderPass,
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			TextureChannels const & p_textureFlags,
+			ProgramFlags const & p_programFlags,
 			uint8_t p_sceneFlags,
 			bool p_invertNormals );
 		/**
@@ -121,7 +121,7 @@ namespace Castor3D
 		 */
 		C3D_API FrameVariableBuffer & CreateMatrixBuffer(
 			ShaderProgram & p_program,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
 		/**
 		 *\~english
@@ -139,7 +139,7 @@ namespace Castor3D
 		 */
 		C3D_API FrameVariableBuffer & CreateSceneBuffer(
 			ShaderProgram & p_program,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
 		/**
 		 *\~english
@@ -157,7 +157,7 @@ namespace Castor3D
 		 */
 		C3D_API FrameVariableBuffer & CreatePassBuffer(
 			ShaderProgram & p_program,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
 		/**
 		 *\~english
@@ -175,7 +175,7 @@ namespace Castor3D
 		 */
 		C3D_API FrameVariableBuffer & CreateModelBuffer(
 			ShaderProgram & p_program,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
 		/**
 		 *\~english
@@ -193,7 +193,7 @@ namespace Castor3D
 		 */
 		C3D_API FrameVariableBuffer & CreateAnimationBuffer(
 			ShaderProgram & p_program,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
 		/**
 		 *\~english
@@ -207,8 +207,8 @@ namespace Castor3D
 		 */
 		C3D_API void CreateTextureVariables(
 			ShaderProgram & p_program,
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags )const;
+			TextureChannels const & p_textureFlags,
+			ProgramFlags const & p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Locks the collection mutex
@@ -311,8 +311,8 @@ namespace Castor3D
 		 */
 		C3D_API ShaderProgramSPtr DoCreateAutomaticProgram(
 			RenderPass const & p_renderPass,
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			TextureChannels const & p_textureFlags,
+			ProgramFlags const & p_programFlags,
 			uint8_t p_sceneFlags,
 			bool p_invertNormals )const;
 		/**
@@ -335,8 +335,8 @@ namespace Castor3D
 		 */
 		C3D_API void DoAddAutomaticProgram(
 			ShaderProgramSPtr p_program,
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			TextureChannels const & p_textureFlags,
+			ProgramFlags const & p_programFlags,
 			uint8_t p_sceneFlags,
 			bool p_invertNormals );
 		/**
@@ -357,8 +357,8 @@ namespace Castor3D
 		 */
 		C3D_API ShaderProgramSPtr DoCreateBillboardProgram(
 			RenderPass const & p_renderPass,
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			TextureChannels const & p_textureFlags,
+			ProgramFlags const & p_programFlags,
 			uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
@@ -376,8 +376,8 @@ namespace Castor3D
 		 */
 		C3D_API void DoAddBillboardProgram(
 			ShaderProgramSPtr p_program,
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			TextureChannels const & p_textureFlags,
+			ProgramFlags const & p_programFlags,
 			uint8_t p_sceneFlags );
 
 	private:

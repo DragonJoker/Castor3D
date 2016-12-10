@@ -194,78 +194,71 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsList::DoAddGeometry( wxTreeItemId p_id, MovableObjectSPtr p_geometry )
+	void SceneObjectsList::DoAddGeometry( wxTreeItemId p_id, Geometry & p_geometry )
 	{
-		GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( p_geometry );
-		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_geometry.GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), p_geometry ) );
 		int l_count = 0;
 
-		if ( l_geometry->GetMesh() )
+		if ( p_geometry.GetMesh() )
 		{
-			for ( auto l_submesh : *l_geometry->GetMesh() )
+			for ( auto l_submesh : *p_geometry.GetMesh() )
 			{
 				wxString l_name = _( "Submesh " );
 				l_name << l_count++;
-				wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry, l_submesh ) );
+				wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), p_geometry, *l_submesh ) );
 			}
 		}
 	}
 
-	void SceneObjectsList::DoAddCamera( wxTreeItemId p_id, MovableObjectSPtr p_camera )
+	void SceneObjectsList::DoAddCamera( wxTreeItemId p_id, Camera & p_camera )
 	{
-		CameraSPtr l_camera = std::static_pointer_cast< Camera >( p_camera );
-		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new CameraTreeItemProperty( m_propertiesHolder->IsEditable(), l_camera ) );
-		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), *l_camera->GetScene()->GetEngine(), l_camera->GetViewport() ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_camera.GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new CameraTreeItemProperty( m_propertiesHolder->IsEditable(), p_camera ) );
+		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), *p_camera.GetScene()->GetEngine(), p_camera.GetViewport() ) );
 	}
 
-	void SceneObjectsList::DoAddBillboard( wxTreeItemId p_id, MovableObjectSPtr p_object )
+	void SceneObjectsList::DoAddBillboard( wxTreeItemId p_id, BillboardList & p_billboard )
 	{
-		BillboardListSPtr l_billboard = std::static_pointer_cast< BillboardList >( p_object );
-		wxTreeItemId l_id = AppendItem( p_id, l_billboard->GetName(), eBMP_BILLBOARD, eBMP_BILLBOARD_SEL, new BillboardTreeItemProperty( m_propertiesHolder->IsEditable(), l_billboard ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_billboard.GetName(), eBMP_BILLBOARD, eBMP_BILLBOARD_SEL, new BillboardTreeItemProperty( m_propertiesHolder->IsEditable(), p_billboard ) );
 	}
 
-	void SceneObjectsList::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )
+	void SceneObjectsList::DoAddLight( wxTreeItemId p_id, Light & p_light )
 	{
-		LightSPtr l_light = std::static_pointer_cast< Light >( p_light );
-
-		switch ( l_light->GetLightType() )
+		switch ( p_light.GetLightType() )
 		{
 		case LightType::eDirectional:
-			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
+			AppendItem( p_id, p_light.GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), p_light ) );
 			break;
 
 		case LightType::ePoint:
-			AppendItem( p_id, l_light->GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
+			AppendItem( p_id, p_light.GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), p_light ) );
 			break;
 
 		case LightType::eSpot:
-			AppendItem( p_id, l_light->GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
+			AppendItem( p_id, p_light.GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), p_light ) );
 			break;
 		}
 	}
 
 	void SceneObjectsList::DoAddNode( wxTreeItemId p_id, SceneNodeSPtr p_node )
 	{
-		for ( auto l_pair : p_node->GetObjects() )
+		for ( auto & l_object : p_node->GetObjects() )
 		{
-			MovableObjectSPtr l_object = l_pair.lock();
-
-			switch ( l_object->GetType() )
+			switch ( l_object.get().GetType() )
 			{
 			case MovableType::eGeometry:
-				DoAddGeometry( p_id, l_object );
+				DoAddGeometry( p_id, static_cast< Geometry & >( l_object.get() ) );
 				break;
 
 			case MovableType::eCamera:
-				DoAddCamera( p_id, l_object );
+				DoAddCamera( p_id, static_cast< Camera & >( l_object.get() ) );
 				break;
 
 			case MovableType::eLight:
-				DoAddLight( p_id, l_object );
+				DoAddLight( p_id, static_cast< Light & >( l_object.get() ) );
 				break;
 
 			case MovableType::eBillboard:
-				DoAddBillboard( p_id, l_object );
+				DoAddBillboard( p_id, static_cast< BillboardList & >( l_object.get() ) );
 				break;
 			}
 		}

@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Texture helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les textures
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les textures
 	*/
 	class TextureTreeItemProperty
 		: public TreeItemProperty
@@ -47,7 +47,7 @@ namespace GuiCommon
 		 *\param[in]	p_texture	The target texture
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_texture	La texture cible
 		 */
 		TextureTreeItemProperty( bool p_editable, Castor3D::TextureUnitSPtr p_texture );
@@ -63,7 +63,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the texture
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la texture
+		 *\brief		Récupère la texture
 		 *\return		La valeur
 		 */
 		inline Castor3D::TextureUnitSPtr GetTexture()const

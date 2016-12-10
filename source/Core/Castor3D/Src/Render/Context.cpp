@@ -252,7 +252,7 @@ namespace Castor3D
 			p_pipeline.ApplyProjection( *l_matrices );
 		}
 
-		p_pipeline.GetProgram().BindUbos();
+		p_pipeline.GetProgram().UpdateUbos();
 
 		p_texture.Bind( 0u );
 		m_rtotPipelinePlane.m_sampler->Bind( 0u );
@@ -286,7 +286,7 @@ namespace Castor3D
 			p_pipeline.ApplyProjection( *l_matrices );
 		}
 
-		p_pipeline.GetProgram().BindUbos();
+		p_pipeline.GetProgram().UpdateUbos();
 
 		p_texture.Bind( 0u );
 		m_rtotPipelinePlane.m_sampler->Bind( 0u );
@@ -324,7 +324,7 @@ namespace Castor3D
 			p_pipeline.ApplyProjection( *l_matrices );
 		}
 
-		p_pipeline.GetProgram().BindUbos();
+		p_pipeline.GetProgram().UpdateUbos();
 
 		p_texture.Bind( 0u );
 		m_rtotPipelineCube.m_sampler->Bind( 0u );
@@ -370,7 +370,7 @@ namespace Castor3D
 			p_pipeline.ApplyProjection( *l_matrices );
 		}
 
-		p_pipeline.GetProgram().BindUbos();
+		p_pipeline.GetProgram().UpdateUbos();
 
 		p_texture.Bind( 0u );
 		m_rtotPipelineCube.m_sampler->Bind( 0u );

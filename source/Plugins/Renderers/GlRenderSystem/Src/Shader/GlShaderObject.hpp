@@ -84,7 +84,7 @@ namespace GlRender
 		 *\param[in]	p_name	The parameter name
 		 *\return		\p nullptr if not found or if shader isn't compiled
 		 *\~french
-		 *\brief		R�cup�re le param�tre � partir du shader compil�
+		 *\brief		Récupère le param�tre � partir du shader compil�
 		 *\param[in]	p_name	Le nom du param�tre
 		 *\return		\p nullptr si le param�tre n'a pas �t� trouv� ou si le shader n'est pas compil�
 		 */

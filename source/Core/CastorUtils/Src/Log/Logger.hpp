@@ -363,6 +363,226 @@ namespace Castor
 		CU_API static void LogError( std::wostream const & p_msg );
 		/**
 		 *\~english
+		 *\brief		Logs a trace message, from a std::string
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::string
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogTraceNoNL( std::string const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a trace message, from a std::ostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::ostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogTraceNoNL( std::ostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a unicode trace message, from a std::wstring
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::wstring
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogTraceNoNL( std::wstring const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a trace message, from a std::wostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::wostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogTraceNoNL( std::wostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::string
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::string
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogDebugNoNL( std::string const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::ostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::ostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogDebugNoNL( std::ostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a unicode debug message, from a std::wstring
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::wstring
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogDebugNoNL( std::wstring const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::wostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::wostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogDebugNoNL( std::wostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::string
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::string
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogInfoNoNL( std::string const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::ostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::ostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogInfoNoNL( std::ostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::wstring
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::wstring
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogInfoNoNL( std::wstring const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::wostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::wostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogInfoNoNL( std::wostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::string
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::string
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogWarningNoNL( std::string const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::ostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::ostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogWarningNoNL( std::ostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::wstring
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::wstring
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogWarningNoNL( std::wstring const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::wostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::wostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogWarningNoNL( std::wostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs an error, from a std::string
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg		The line to log
+		 *\~french
+		 *\brief		Log une erreur, à partir d'un std::string
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg		The line to log
+		 */
+		CU_API static void LogErrorNoNL( std::string const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs an error, from a std::ostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log une erreur, à partir d'un std::ostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogErrorNoNL( std::ostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs an error, from a std::wstring
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg		The line to log
+		 *\~french
+		 *\brief		Log une erreur, à partir d'un std::wstring
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg		The line to log
+		 */
+		CU_API static void LogErrorNoNL( std::wstring const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs an error, from a std::wostream
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log une erreur, à partir d'un std::wostream
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogErrorNoNL( std::wostream const & p_msg );
+		/**
+		 *\~english
 		 *\brief		Returns a reference over the instance
 		 *\return		The instance
 		 *\~french
@@ -384,8 +604,8 @@ namespace Castor
 		void DoRegisterCallback( LogCallback p_pfnCallback, void * p_pCaller );
 		void DoUnregisterCallback( void * p_pCaller );
 		void DoSetFileName( String const & p_logFilePath, LogType p_eLogType = LogType::eCount );
-		void DoPushMessage( LogType type, std::string const & message );
-		void DoPushMessage( LogType type, std::wstring const & message );
+		void DoPushMessage( LogType type, std::string const & message, bool p_newLine = true );
+		void DoPushMessage( LogType type, std::wstring const & message, bool p_newLine = true );
 		void DoInitialiseThread();
 		void DoCleanupThread();
 		void DoFlushQueue();

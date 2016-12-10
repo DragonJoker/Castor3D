@@ -206,7 +206,7 @@ namespace Castor3D
 			, Submesh & p_data
 			, Geometry & p_geometry )
 			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data }
-			, m_geometry{ p_geometry }
+			, m_instance{ p_geometry }
 		{
 		}
 		/**
@@ -226,7 +226,7 @@ namespace Castor3D
 
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
-		Geometry & m_geometry;
+		Geometry & m_instance;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -330,6 +330,7 @@ namespace Castor3D
 			, m_billboardUbo{ p_billboardUbo }
 			, m_dimensions{ p_dimensions }
 			, m_windowSize{ p_windowSize }
+			, m_instance{ p_data }
 		{
 		}
 		/**
@@ -351,6 +352,9 @@ namespace Castor3D
 		//!\~english	The window dimensions uniform variable.
 		//!\~french		La variable uniforme des dimensions de la fenêtre.
 		Point2iFrameVariable & m_windowSize;
+		//!\~english	The billboard.
+		//!\~french		Le billboard.
+		BillboardBase & m_instance;
 	};
 
 	//!\~english	StaticGeometryRenderNode array.

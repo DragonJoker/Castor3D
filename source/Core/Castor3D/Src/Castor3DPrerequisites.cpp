@@ -105,8 +105,8 @@ namespace Castor3D
 		GLSL::GlslWriter & p_writer,
 		GLSL::Vec3 & p_normal,
 		GLSL::Float & p_shininess,
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags )
 	{
 		using namespace GLSL;
@@ -138,8 +138,8 @@ namespace Castor3D
 		GLSL::Vec3 & p_diffuse,
 		GLSL::Vec3 & p_specular,
 		GLSL::Vec3 & p_emissive,
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags )
 	{
 		using namespace GLSL;

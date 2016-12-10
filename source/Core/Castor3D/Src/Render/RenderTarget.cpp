@@ -161,7 +161,7 @@ namespace Castor3D
 		, m_bMultisampling{ false }
 		, m_samplesCount{ 0 }
 		, m_index{ ++sm_uiCount }
-		, m_techniqueName{ cuT( "direct" ) }
+		, m_techniqueName{ cuT( "forward" ) }
 		, m_frameBuffer{ *this }
 	{
 		m_toneMapping = GetEngine()->GetRenderTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );

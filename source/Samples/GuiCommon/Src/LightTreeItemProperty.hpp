@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les g�om�tries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les g�om�tries
 	*/
 	class LightTreeItemProperty
 		: public TreeItemProperty
@@ -47,10 +47,10 @@ namespace GuiCommon
 		 *\param[in]	p_light		The target light
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_light		La lumi�re cible
 		 */
-		LightTreeItemProperty( bool p_editable, Castor3D::LightSPtr p_light );
+		LightTreeItemProperty( bool p_editable, Castor3D::Light & p_light );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -60,15 +60,15 @@ namespace GuiCommon
 		~LightTreeItemProperty();
 		/**
 		 *\~english
-		 *\brief		Retrieves the geometry
+		 *\brief		Retrieves the light source
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la g�om�trie
+		 *\brief		Récupère la source lumineuse
 		 *\return		La valeur
 		 */
-		inline Castor3D::LightSPtr GetLight()
+		inline Castor3D::Light & GetLight()
 		{
-			return m_light.lock();
+			return m_light;
 		}
 
 	private:
@@ -92,7 +92,7 @@ namespace GuiCommon
 		void OnExponentChange( double p_value );
 
 	private:
-		Castor3D::LightWPtr m_light;
+		Castor3D::Light & m_light;
 	};
 }
 

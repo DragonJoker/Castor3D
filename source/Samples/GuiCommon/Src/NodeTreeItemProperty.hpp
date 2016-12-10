@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les g�om�tries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les g�om�tries
 	*/
 	class NodeTreeItemProperty
 		: public TreeItemProperty
@@ -48,7 +48,7 @@ namespace GuiCommon
 		 *\param[in]	p_node		The target object
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_node		L'objet cible
 		 */
@@ -65,7 +65,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the object
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re l'objet
+		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
 		inline Castor3D::SceneNodeSPtr GetNode()

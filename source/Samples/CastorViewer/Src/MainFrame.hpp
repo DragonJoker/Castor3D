@@ -68,7 +68,7 @@ namespace CastorViewer
 		void DoPopulateStatusBar();
 		void DoPopulateToolBar();
 		void DoInitialisePerspectives();
-		void DoLogCallback( Castor::String const & p_strLog, Castor::LogType p_eLogType );
+		void DoLogCallback( Castor::String const & p_strLog, Castor::LogType p_eLogType, bool p_newLine );
 		void DoCleanupScene();
 		void DoSaveFrame();
 		bool DoStartRecord();
@@ -118,10 +118,10 @@ namespace CastorViewer
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
 		wxTimer * m_timerErr;
-		wxArrayString m_errLogList;
+		std::vector< std::pair< wxString, bool > > m_errLogList;
 		std::mutex m_errLogListMtx;
 		wxTimer * m_timerMsg;
-		wxArrayString m_msgLogList;
+		std::vector< std::pair< wxString, bool > > m_msgLogList;
 		std::mutex m_msgLogListMtx;
 		GuiCommon::Recorder m_recorder;
 		int m_recordFps;

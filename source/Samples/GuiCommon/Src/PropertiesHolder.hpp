@@ -42,7 +42,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the editable status
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re le statut de modifiabilit�
+		 *\brief		Récupère le statut de modifiabilit�
 		 *\return		La valeur
 		 */
 		inline bool IsEditable()const
@@ -54,7 +54,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the button editor
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re l'�diteur bouton
+		 *\brief		Récupère l'�diteur bouton
 		 *\return		La valeur
 		 */
 		static inline wxPGEditor * GetButtonEditor()

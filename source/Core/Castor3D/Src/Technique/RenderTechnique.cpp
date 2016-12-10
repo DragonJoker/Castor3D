@@ -49,6 +49,7 @@
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
+#include "Technique/RenderTechniquePass.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -60,252 +61,6 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	namespace
-	{
-		template< bool Opaque >
-		struct PipelineUpdater
-		{
-			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray & p_depthMaps, RenderPipeline & p_pipeline )
-			{
-				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline, p_depthMaps );
-			}
-		};
-
-		template<>
-		struct PipelineUpdater< false >
-		{
-			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray & p_depthMaps, RenderPipeline & p_pipeline )
-			{
-				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline, p_depthMaps );
-			}
-		};
-
-		template< bool Opaque, typename MapType, typename FuncType >
-		inline void DoTraverseNodes(
-			RenderPass const & p_pass,
-			Camera const & p_camera,
-			MapType & p_nodes,
-			DepthMapArray & p_depthMaps,
-			FuncType p_function )
-		{
-			for ( auto l_itPipelines : p_nodes )
-			{
-				PipelineUpdater< Opaque >::Update( p_pass, p_camera, p_depthMaps, *l_itPipelines.first );
-				l_itPipelines.first->Apply();
-
-				for ( auto l_itPass : l_itPipelines.second )
-				{
-					for ( auto l_itSubmeshes : l_itPass.second )
-					{
-						p_function( *l_itPipelines.first, *l_itPass.first, *l_itSubmeshes.first, l_itSubmeshes.second );
-					}
-				}
-			}
-		}
-
-		template< bool Opaque, typename MapType >
-		inline void DoRenderNonInstanced(
-			RenderPass const & p_pass,
-			Camera const & p_camera,
-			MapType & p_nodes,
-			DepthMapArray & p_depthMaps,
-			bool p_register,
-			std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > & p_renderedObjects )
-		{
-			for ( auto l_itPipelines : p_nodes )
-			{
-				PipelineUpdater< Opaque >::Update( p_pass, p_camera, p_depthMaps, *l_itPipelines.first );
-				l_itPipelines.first->Apply();
-
-				for ( auto & l_renderNode : l_itPipelines.second )
-				{
-					l_renderNode.Render( p_depthMaps );
-
-					if ( p_register )
-					{
-						p_renderedObjects.push_back( l_renderNode );
-					}
-				}
-			}
-		}
-
-		AnimatedObjectSPtr DoFindAnimatedObject( Scene const & p_scene, String const & p_name )
-		{
-			AnimatedObjectSPtr l_return;
-			auto & l_cache = p_scene.GetAnimatedObjectGroupCache();
-			auto l_lock = make_unique_lock( l_cache );
-
-			for ( auto l_group : l_cache )
-			{
-				if ( !l_return )
-				{
-					auto l_it = l_group.second->GetObjects().find( p_name );
-
-					if ( l_it != l_group.second->GetObjects().end() )
-					{
-						l_return = l_it->second;
-					}
-				}
-			}
-
-			return l_return;
-		}
-
-		template< typename MapType >
-		void DoSortAlpha(
-			MapType & p_input,
-			Camera const & p_camera,
-			RenderTechnique::DistanceSortedNodeMap & p_output )
-		{
-			for ( auto & l_itPipelines : p_input )
-			{
-				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
-
-				for ( auto & l_renderNode : l_itPipelines.second )
-				{
-					Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
-					Point3r l_position = p_camera.GetParent()->GetDerivedPosition();
-					Point3r l_ptCameraLocal = l_position * l_mtxMeshGlobal;
-					l_renderNode.m_data.SortByDistance( l_ptCameraLocal );
-					l_ptCameraLocal -= l_renderNode.m_sceneNode.GetPosition();
-					p_output.insert( { point::distance_squared( l_ptCameraLocal ), l_renderNode } );
-				}
-			}
-		}
-
-		inline void DoUpdateProgram(
-			ShaderProgram & p_program,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags )
-		{
-			if ( CheckFlag( p_programFlags, ProgramFlag::eShadows )
-				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
-			{
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
-			}
-		}
-
-		void DoFillShaderDepthMaps( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )
-		{
-			if ( !p_depthMaps.empty() )
-			{
-				auto l_index = p_pipeline.GetTexturesCount() + 1;
-
-				if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eShadows ) )
-				{
-					auto & l_directional = p_pipeline.GetDirectionalShadowMapsVariable();
-					auto & l_spot = p_pipeline.GetSpotShadowMapsVariable();
-					auto & l_point = p_pipeline.GetPointShadowMapsVariable();
-
-					for ( auto & l_depthMap : p_depthMaps )
-					{
-						if ( l_depthMap.get().GetType() == TextureType::eTwoDimensions )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							l_directional.SetValue( l_index++ );
-						}
-						else if ( l_depthMap.get().GetType() == TextureType::eTwoDimensionsArray )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							l_spot.SetValue( l_index++ );
-						}
-						else if ( l_depthMap.get().GetType() == TextureType::eCube )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							l_point.SetValue( l_index++ );
-						}
-						else if ( l_depthMap.get().GetType() == TextureType::eCubeArray )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							l_point.SetValue( l_index++ );
-						}
-					}
-				}
-			}
-		}
-
-		inline BlendState DoCreateBlendState( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
-		{
-			BlendState l_state;
-			bool l_blend = false;
-
-			switch ( p_colourBlendMode )
-			{
-			case BlendMode::eNoBlend:
-				l_state.SetRgbSrcBlend( BlendOperand::eOne );
-				l_state.SetRgbDstBlend( BlendOperand::eZero );
-				break;
-
-			case BlendMode::eAdditive:
-				l_blend = true;
-				l_state.SetRgbSrcBlend( BlendOperand::eOne );
-				l_state.SetRgbDstBlend( BlendOperand::eOne );
-				break;
-
-			case BlendMode::eMultiplicative:
-				l_blend = true;
-				l_state.SetRgbSrcBlend( BlendOperand::eZero );
-				l_state.SetRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-
-			case BlendMode::eInterpolative:
-				l_blend = true;
-				l_state.SetRgbSrcBlend( BlendOperand::eSrcColour );
-				l_state.SetRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-
-			default:
-				l_blend = true;
-				l_state.SetRgbSrcBlend( BlendOperand::eSrcColour );
-				l_state.SetRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-			}
-
-			switch ( p_alphaBlendMode )
-			{
-			case BlendMode::eNoBlend:
-				l_state.SetAlphaSrcBlend( BlendOperand::eOne );
-				l_state.SetAlphaDstBlend( BlendOperand::eZero );
-				break;
-
-			case BlendMode::eAdditive:
-				l_blend = true;
-				l_state.SetAlphaSrcBlend( BlendOperand::eOne );
-				l_state.SetAlphaDstBlend( BlendOperand::eOne );
-				break;
-
-			case BlendMode::eMultiplicative:
-				l_blend = true;
-				l_state.SetAlphaSrcBlend( BlendOperand::eZero );
-				l_state.SetAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				l_state.SetRgbSrcBlend( BlendOperand::eZero );
-				l_state.SetRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-
-			case BlendMode::eInterpolative:
-				l_blend = true;
-				l_state.SetAlphaSrcBlend( BlendOperand::eSrcAlpha );
-				l_state.SetAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				l_state.SetRgbSrcBlend( BlendOperand::eSrcAlpha );
-				l_state.SetRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-
-			default:
-				l_blend = true;
-				l_state.SetAlphaSrcBlend( BlendOperand::eSrcAlpha );
-				l_state.SetAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				l_state.SetRgbSrcBlend( BlendOperand::eSrcAlpha );
-				l_state.SetRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-			}
-
-			l_state.EnableBlend( l_blend );
-			return l_state;
-		}
-	}
-
 	//*************************************************************************************************
 
 	RenderTechnique::stFRAME_BUFFER::stFRAME_BUFFER( RenderTechnique & p_technique )
@@ -390,9 +145,20 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	RenderTechnique::RenderTechnique( String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ), bool p_multisampling )
-		: RenderPass{ p_name, *p_renderSystem.GetEngine(), p_multisampling }
+	RenderTechnique::RenderTechnique( String const & p_name
+		, RenderTarget & p_renderTarget
+		, RenderSystem & p_renderSystem
+		, std::unique_ptr< RenderTechniquePass > && p_opaquePass
+		, std::unique_ptr< RenderTechniquePass > && p_transparentPass
+		, Parameters const & CU_PARAM_UNUSED( p_params )
+		, bool p_multisampling )
+
+		: OwnedBy< Engine >{ *p_renderSystem.GetEngine() }
+		, Named{ p_name }
 		, m_renderTarget{ p_renderTarget }
+		, m_renderSystem{ p_renderSystem }
+		, m_opaquePass{ std::move( p_opaquePass ) }
+		, m_transparentPass{ std::move( p_transparentPass ) }
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
 		, m_directionalShadowMap{ *p_renderTarget.GetEngine() }
@@ -444,7 +210,7 @@ namespace Castor3D
 
 			auto & l_scene = *m_renderTarget.GetScene();
 
-			if (m_initialised)
+			if ( m_initialised )
 			{
 				l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
 				{
@@ -476,16 +242,8 @@ namespace Castor3D
 
 			if ( m_initialised )
 			{
-				auto l_camera = m_renderTarget.GetCamera();
-
-				if ( l_camera )
-				{
-					m_renderQueue.Initialise( l_scene, *m_renderTarget.GetCamera() );
-				}
-				else
-				{
-					m_renderQueue.Initialise( l_scene );
-				}
+				m_opaquePass->Initialise();
+				m_transparentPass->Initialise();
 			}
 		}
 
@@ -494,6 +252,8 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
+		m_transparentPass->Cleanup();
+		m_opaquePass->Cleanup();
 		DoCleanupPointShadowMap();
 		DoCleanupSpotShadowMap();
 		DoCleanupDirectionalShadowMap();
@@ -509,7 +269,8 @@ namespace Castor3D
 
 	void RenderTechnique::Update()
 	{
-		m_renderQueue.Update();
+		m_opaquePass->Update();
+		m_transparentPass->Update();
 
 		for ( auto & l_it: m_shadowMaps )
 		{
@@ -519,19 +280,13 @@ namespace Castor3D
 
 	void RenderTechnique::Render( uint32_t p_frameTime, uint32_t & p_visible, uint32_t & p_particles )
 	{
-		auto & l_nodes = m_renderQueue.GetRenderNodes();
 		auto & l_scene = *m_renderTarget.GetScene();
 		l_scene.GetLightCache().UpdateLights();
-
 		m_renderSystem.PushScene( &l_scene );
-		DepthMapArray l_opaqueDepthMaps;
-		DepthMapArray l_transparentDepthMaps;
+		bool l_shadows = l_scene.HasShadows();
 
-		if ( l_scene.HasShadows() )
+		if ( l_shadows )
 		{
-			DoGetOpaqueDepthMaps( l_opaqueDepthMaps );
-			DoGetTransparentDepthMaps( l_transparentDepthMaps );
-
 			for ( auto & l_shadowMap : m_shadowMaps )
 			{
 				l_shadowMap.second->Render();
@@ -540,11 +295,31 @@ namespace Castor3D
 
 		DoBeginRender();
 		l_scene.RenderBackground( GetSize() );
-		DoRender( l_nodes, l_opaqueDepthMaps, l_transparentDepthMaps, p_frameTime );
-		p_visible = uint32_t( m_renderedObjects.size() );
-		p_particles = m_particlesCount;
+		auto & l_camera = *m_renderTarget.GetCamera();
+		l_camera.Resize( m_size );
+		l_camera.Update();
+		l_camera.Apply();
 
-#if 0 && !defined( NDEBUG )
+		DoBeginOpaqueRendering();
+		m_opaquePass->Render( p_frameTime, p_visible, l_shadows );
+		DoEndOpaqueRendering();
+
+		if ( l_scene.GetFog().GetType() == FogType::eDisabled )
+		{
+			l_scene.RenderForeground( GetSize(), l_camera );
+		}
+
+		l_scene.GetParticleSystemCache().ForEach( [this, &p_particles]( ParticleSystem & p_particleSystem )
+		{
+			p_particleSystem.Update();
+			p_particles += p_particleSystem.GetParticlesCount();
+		} );
+
+		DoBeginTransparentRendering();
+		m_transparentPass->Render( p_frameTime, p_visible, l_shadows );
+		DoEndTransparentRendering();
+
+#if !defined( NDEBUG )
 
 		if ( !m_shadowMaps.empty() )
 		{
@@ -590,595 +365,14 @@ namespace Castor3D
 		return DoWriteInto( p_file );
 	}
 
-	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_opaqueDepthMaps, DepthMapArray & p_transparentDepthMaps, uint32_t p_frameTime )
-	{
-		m_renderedObjects.clear();
-		m_particlesCount = 0;
-		auto & l_camera = *m_renderTarget.GetCamera();
-		l_camera.Resize( m_size );
-		l_camera.Update();
-		l_camera.Apply();
-
-		DoRenderOpaqueNodes( p_nodes, p_opaqueDepthMaps );
-
-		if ( p_nodes.m_scene.GetFog().GetType() == FogType::eDisabled )
-		{
-			p_nodes.m_scene.RenderForeground( GetSize(), l_camera );
-		}
-
-		p_nodes.m_scene.GetParticleSystemCache().ForEach( [this]( ParticleSystem & p_particleSystem )
-		{
-			p_particleSystem.Update();
-			m_particlesCount += p_particleSystem.GetParticlesCount();
-		} );
-
-		DoRenderTransparentNodes( p_nodes, p_transparentDepthMaps );
-	}
-
-	void RenderTechnique::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps )
-	{
-		DoBeginOpaqueRendering();
-
-		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodesBack.empty()
-			 || !p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack.empty()
-			 || !p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack.empty()
-			 || !p_nodes.m_billboards.m_opaqueRenderNodesBack.empty() )
-		{
-			DoRenderOpaqueInstancedSubmeshesInstanced( p_nodes.m_instancedGeometries.m_opaqueRenderNodesFront, p_depthMaps );
-			DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_staticGeometries.m_opaqueRenderNodesFront, p_depthMaps );
-			DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_animatedGeometries.m_opaqueRenderNodesFront, p_depthMaps );
-			DoRenderOpaqueBillboards( p_nodes.m_billboards.m_opaqueRenderNodesFront, p_depthMaps );
-
-			DoRenderOpaqueInstancedSubmeshesInstanced( p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack, p_depthMaps );
-			DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_staticGeometries.m_opaqueRenderNodesBack, p_depthMaps );
-			DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack, p_depthMaps );
-			DoRenderOpaqueBillboards( p_nodes.m_billboards.m_opaqueRenderNodesBack, p_depthMaps );
-		}
-
-		DoEndOpaqueRendering();
-	}
-
-	void RenderTechnique::DoRenderTransparentNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps )
-	{
-		DoBeginTransparentRendering();
-
-		if ( !p_nodes.m_staticGeometries.m_transparentRenderNodesFront.empty()
-			|| !p_nodes.m_animatedGeometries.m_transparentRenderNodesFront.empty()
-			|| !p_nodes.m_billboards.m_transparentRenderNodesFront.empty() )
-		{
-			if ( m_multisampling )
-			{
-				DoRenderTransparentInstancedSubmeshesInstanced( p_nodes.m_instancedGeometries.m_transparentRenderNodesFront, p_depthMaps, false );
-				DoRenderTransparentStaticSubmeshesNonInstanced( p_nodes.m_staticGeometries.m_transparentRenderNodesFront, p_depthMaps, false );
-				DoRenderTransparentAnimatedSubmeshesNonInstanced( p_nodes.m_animatedGeometries.m_transparentRenderNodesFront, p_depthMaps, false );
-				DoRenderTransparentBillboards( p_nodes.m_billboards.m_transparentRenderNodesFront, p_depthMaps, false );
-
-				DoRenderTransparentInstancedSubmeshesInstanced( p_nodes.m_instancedGeometries.m_transparentRenderNodesBack, p_depthMaps, true );
-				DoRenderTransparentStaticSubmeshesNonInstanced( p_nodes.m_staticGeometries.m_transparentRenderNodesBack, p_depthMaps, true );
-				DoRenderTransparentAnimatedSubmeshesNonInstanced( p_nodes.m_animatedGeometries.m_transparentRenderNodesBack, p_depthMaps, true );
-				DoRenderTransparentBillboards( p_nodes.m_billboards.m_transparentRenderNodesBack, p_depthMaps, true );
-			}
-			else
-			{
-				{
-					DistanceSortedNodeMap l_distanceSortedRenderNodes;
-					DoSortAlpha( p_nodes.m_staticGeometries.m_transparentRenderNodesFront, *m_renderTarget.GetCamera(), l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_animatedGeometries.m_transparentRenderNodesFront, *m_renderTarget.GetCamera(), l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_billboards.m_transparentRenderNodesFront, *m_renderTarget.GetCamera(), l_distanceSortedRenderNodes );
-
-					if ( !l_distanceSortedRenderNodes.empty() )
-					{
-						DoRenderByDistance( l_distanceSortedRenderNodes, p_depthMaps, false );
-					}
-				}
-				{
-					DistanceSortedNodeMap l_distanceSortedRenderNodes;
-					DoSortAlpha( p_nodes.m_staticGeometries.m_transparentRenderNodesBack, *m_renderTarget.GetCamera(), l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_animatedGeometries.m_transparentRenderNodesBack, *m_renderTarget.GetCamera(), l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_billboards.m_transparentRenderNodesBack, *m_renderTarget.GetCamera(), l_distanceSortedRenderNodes );
-
-					if ( !l_distanceSortedRenderNodes.empty() )
-					{
-						DoRenderByDistance( l_distanceSortedRenderNodes, p_depthMaps, false );
-					}
-				}
-			}
-		}
-
-		DoEndTransparentRendering();
-	}
-
-	void RenderTechnique::DoRenderOpaqueStaticSubmeshesNonInstanced( StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoRenderNonInstanced< true >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
-	}
-
-	void RenderTechnique::DoRenderOpaqueAnimatedSubmeshesNonInstanced( AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoRenderNonInstanced< true >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
-	}
-
-	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesNonInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoTraverseNodes< true >(
-			*this,
-			*m_renderTarget.GetCamera(),
-			p_nodes,
-			p_depthMaps,
-			[&p_depthMaps, &p_register, this](
-				RenderPipeline & p_pipeline,
-				Pass & p_pass,
-				Submesh & p_submesh,
-				StaticGeometryRenderNodeArray & p_renderNodes )
-		{
-			for ( auto & l_renderNode : p_renderNodes )
-			{
-				l_renderNode.Render( p_depthMaps );
-
-				if ( p_register )
-				{
-					m_renderedObjects.push_back( l_renderNode );
-				}
-			}
-		} );
-	}
-
-	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoTraverseNodes< true >(
-			*this,
-			*m_renderTarget.GetCamera(),
-			p_nodes,
-			p_depthMaps,
-			[&p_depthMaps, &p_register, this](
-				RenderPipeline & p_pipeline,
-				Pass & p_pass,
-				Submesh & p_submesh,
-				StaticGeometryRenderNodeArray & p_renderNodes )
-		{
-			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
-			{
-				uint32_t l_count = 0u;
-
-				if ( p_register )
-				{
-					l_count = DoRegisterCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-				}
-				else
-				{
-					l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-				}
-
-				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( p_depthMaps );
-			}
-		} );
-	}
-
-	void RenderTechnique::DoRenderTransparentStaticSubmeshesNonInstanced( StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
-	}
-
-	void RenderTechnique::DoRenderTransparentAnimatedSubmeshesNonInstanced( AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
-	}
-
-	void RenderTechnique::DoRenderTransparentInstancedSubmeshesNonInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoTraverseNodes< false >(
-			*this,
-			*m_renderTarget.GetCamera(),
-			p_nodes,
-			p_depthMaps,
-			[&p_depthMaps, &p_register, this](
-				RenderPipeline & p_pipeline,
-				Pass & p_pass,
-				Submesh & p_submesh,
-				StaticGeometryRenderNodeArray & p_renderNodes )
-		{
-			for ( auto & l_renderNode : p_renderNodes )
-			{
-				l_renderNode.Render( p_depthMaps );
-
-				if ( p_register )
-				{
-					m_renderedObjects.push_back( l_renderNode );
-				}
-			}
-		} );
-	}
-
-	void RenderTechnique::DoRenderTransparentInstancedSubmeshesInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoTraverseNodes< false >(
-			*this,
-			*m_renderTarget.GetCamera(),
-			p_nodes,
-			p_depthMaps,
-			[&p_depthMaps, &p_register, this](
-				RenderPipeline & p_pipeline,
-				Pass & p_pass,
-				Submesh & p_submesh,
-				StaticGeometryRenderNodeArray & p_renderNodes )
-		{
-			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
-			{
-				uint32_t l_count = 0u;
-
-				if ( p_register )
-				{
-					l_count = DoRegisterCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-				}
-				else
-				{
-					l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-				}
-
-				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( p_depthMaps );
-			}
-		} );
-	}
-
-	void RenderTechnique::DoRenderByDistance( DistanceSortedNodeMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		for ( auto & l_it : p_nodes )
-		{
-			l_it.second.get().m_pass.m_pipeline.Apply();
-			UpdateTransparentPipeline( *m_renderTarget.GetCamera(), l_it.second.get().m_pass.m_pipeline, p_depthMaps );
-			l_it.second.get().Render( p_depthMaps );
-
-			if ( p_register )
-			{
-				m_renderedObjects.push_back( l_it.second.get() );
-			}
-		}
-	}
-
-	void RenderTechnique::DoRenderOpaqueBillboards( BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoRenderNonInstanced< true >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
-	}
-
-	void RenderTechnique::DoRenderTransparentBillboards( BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
-	{
-		DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
-	}
-
-	void RenderTechnique::DoUpdateTransparentFlags( FlagCombination< TextureChannel > & p_textureFlags
-		, FlagCombination< ProgramFlag > & p_programFlags )const
-	{
-		AddFlag( p_programFlags, ProgramFlag::eLighting );
-	}
-
-	String RenderTechnique::DoGetGeometryShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
-	{
-		return String{};
-	}
-
-	String RenderTechnique::DoGetOpaquePixelShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
-
-		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
-		UBO_MODEL( l_writer );
-
-		// Fragment Intputs
-		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
-
-		if ( l_writer.HasTextureBuffers() )
-		{
-			auto c3d_sLights = l_writer.GetUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
-		}
-		else
-		{
-			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
-		}
-
-		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::eColour ) ) );
-		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::eAmbient ) ) );
-		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
-
-		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
-
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
-		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
-
-		// Fragment Outtputs
-		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 0.0f );
-
-			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
-
-			OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-			l_lighting->ComputeCombinedLighting( l_worldEye
-				, l_fMatShininess
-				, c3d_iShadowReceiver
-				, FragmentInput { vtx_worldSpacePosition, l_v3Normal }
-				, l_output );
-
-			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
-
-			pxl_v4FragColor = vec4(
-				l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
-				l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
-				l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
-				l_v3Emissive,
-				1.0 );
-
-			if ( p_sceneFlags != 0 )
-			{
-				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
-				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
-			}
-		} );
-
-		return l_writer.Finalise();
-	}
-
-	String RenderTechnique::DoGetTransparentPixelShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
-
-		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
-		UBO_MODEL( l_writer );
-
-		// Fragment Intputs
-		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
-
-		if ( l_writer.HasTextureBuffers() )
-		{
-			auto c3d_sLights = l_writer.GetUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
-		}
-		else
-		{
-			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
-		}
-
-		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::eColour ) ) );
-		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::eAmbient ) ) );
-		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
-		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
-
-		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
-
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
-		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
-
-		// Fragment Outputs
-		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), c3d_fMatOpacity );
-			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 0.0f );
-			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
-
-			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
-
-			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-			l_lighting->ComputeCombinedLighting( l_worldEye
-				, l_fMatShininess
-				, c3d_iShadowReceiver
-				, FragmentInput( vtx_worldSpacePosition, l_v3Normal )
-				, l_output );
-
-			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
-			{
-				l_fAlpha = texture( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
-			}
-
-			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren(
-				l_writer.Paren(
-					l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
-					l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
-					l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
-					l_v3Emissive ),
-				l_fAlpha );
-
-			if ( p_sceneFlags != 0 )
-			{
-				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
-				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
-			}
-		} );
-
-		return l_writer.Finalise();
-	}
-
-	void RenderTechnique::DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
-	{
-		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
-		auto & l_camera = *m_renderTarget.GetCamera();
-		l_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
-		l_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
-		l_camera.GetScene()->FillShader( l_sceneUbo );
-		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
-	}
-
-	void RenderTechnique::DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
-	{
-		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
-		auto & l_camera = *m_renderTarget.GetCamera();
-		l_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
-		l_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
-		l_camera.GetScene()->FillShader( l_sceneUbo );
-		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
-
-	}
-
-	void RenderTechnique::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
-	{
-		auto l_it = m_frontOpaquePipelines.find( p_flags );
-
-		if ( l_it == m_frontOpaquePipelines.end() )
-		{
-			DoUpdateProgram( p_program, p_flags.m_programFlags );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eFront );
-			MultisampleState l_msState;
-			l_msState.SetMultisample( m_multisampling );
-			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline(
-				DepthStencilState(),
-				std::move( l_rsState ),
-				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
-				std::move( l_msState ),
-				p_program,
-				p_flags ) ).first;
-		}
-	}
-
-	void RenderTechnique::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
-	{
-		auto l_it = m_backOpaquePipelines.find( p_flags );
-
-		if ( l_it == m_backOpaquePipelines.end() )
-		{
-			DoUpdateProgram( p_program, p_flags.m_programFlags );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eBack );
-			MultisampleState l_msState;
-			l_msState.SetMultisample( m_multisampling );
-			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline(
-				DepthStencilState(),
-				std::move( l_rsState ),
-				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
-				std::move( l_msState ),
-				p_program,
-				p_flags ) ).first;
-		}
-	}
-
-	void RenderTechnique::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
-	{
-		auto l_it = m_frontTransparentPipelines.find( p_flags );
-
-		if ( l_it == m_frontTransparentPipelines.end() )
-		{
-			DoUpdateProgram( p_program, p_flags.m_programFlags );
-			DepthStencilState l_dsState;
-			l_dsState.SetDepthMask( m_multisampling ? WritingMask::eAll : WritingMask::eZero );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eFront );
-			MultisampleState l_msState;
-			l_msState.SetMultisample( m_multisampling );
-			l_msState.EnableAlphaToCoverage( m_multisampling );
-			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline(
-				std::move( l_dsState ),
-				std::move( l_rsState ),
-				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
-				std::move( l_msState ),
-				p_program,
-				p_flags ) ).first;
-		}
-	}
-
-	void RenderTechnique::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
-	{
-		auto l_it = m_backTransparentPipelines.find( p_flags );
-
-		if ( l_it == m_backTransparentPipelines.end() )
-		{
-			DoUpdateProgram( p_program, p_flags.m_programFlags );
-			DepthStencilState l_dsState;
-			l_dsState.SetDepthMask( m_multisampling ? WritingMask::eAll : WritingMask::eZero );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eBack );
-			MultisampleState l_msState;
-			l_msState.SetMultisample( m_multisampling );
-			l_msState.EnableAlphaToCoverage( m_multisampling );
-			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline(
-				std::move( l_dsState ),
-				std::move( l_rsState ),
-				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
-				std::move( l_msState ),
-				p_program,
-				p_flags ) ).first;
-		}
-	}
-
-	void RenderTechnique::DoGetOpaqueDepthMaps( DepthMapArray & p_depthMaps )
-	{
-		p_depthMaps.push_back( std::ref( m_directionalShadowMap ) );
-		p_depthMaps.push_back( std::ref( m_spotShadowMap ) );
-		p_depthMaps.push_back( std::ref( m_pointShadowMap ) );
-	}
-
-	void RenderTechnique::DoGetTransparentDepthMaps( DepthMapArray & p_depthMaps )
-	{
-		p_depthMaps.push_back( std::ref( m_directionalShadowMap ) );
-		p_depthMaps.push_back( std::ref( m_spotShadowMap ) );
-		p_depthMaps.push_back( std::ref( m_pointShadowMap ) );
-	}
-
 	bool RenderTechnique::DoInitialiseDirectionalShadowMap( Size const & p_size )
 	{
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_DirectionalShadowMap" ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
 		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
@@ -1203,9 +397,9 @@ namespace Castor3D
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_SpotShadowMap" ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
 		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
@@ -1231,9 +425,9 @@ namespace Castor3D
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_PointShadowMap" ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
 		bool l_return{ true };
 
 		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(

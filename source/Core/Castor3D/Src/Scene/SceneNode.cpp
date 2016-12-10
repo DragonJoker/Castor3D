@@ -148,30 +148,24 @@ namespace Castor3D
 		}
 	}
 
-	void SceneNode::AttachObject( MovableObjectSPtr p_object )
+	void SceneNode::AttachObject( MovableObject & p_object )
 	{
-		if ( p_object )
-		{
-			p_object->Detach();
-			m_objects.push_back( p_object );
-			p_object->AttachTo( shared_from_this() );
-		}
+		p_object.Detach();
+		m_objects.push_back( p_object );
+		p_object.AttachTo( shared_from_this() );
 	}
 
-	void SceneNode::DetachObject( MovableObjectSPtr p_object )
+	void SceneNode::DetachObject( MovableObject & p_object )
 	{
-		if ( p_object )
+		auto l_it = std::find_if( m_objects.begin(), m_objects.end(), [&p_object]( std::reference_wrapper< MovableObject > l_obj )
 		{
-			auto l_it = std::find_if( m_objects.begin(), m_objects.end(), [&p_object]( MovableObjectWPtr l_obj )
-			{
-				return l_obj.lock()->GetName() == p_object->GetName();
-			} );
+			return l_obj.get().GetName() == p_object.GetName();
+		} );
 
-			if ( l_it != m_objects.end() )
-			{
-				m_objects.erase( l_it );
-				p_object->AttachTo( nullptr );
-			}
+		if ( l_it != m_objects.end() )
+		{
+			m_objects.erase( l_it );
+			p_object.AttachTo( nullptr );
 		}
 	}
 
@@ -341,51 +335,6 @@ namespace Castor3D
 		m_scale = p_scale;
 		DoUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
-	}
-
-	GeometrySPtr SceneNode::GetNearestGeometry( Ray const & p_ray, Camera const & p_camera, real & p_distance, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh )const
-	{
-		GeometrySPtr l_return = nullptr;
-
-		for ( auto l_it : m_objects )
-		{
-			MovableObjectSPtr l_current = l_it.lock();
-
-			if ( l_current && l_current->GetType() == MovableType::eGeometry )
-			{
-				GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( l_current );
-
-				if ( p_camera.IsVisible( l_geometry->GetMesh()->GetCollisionSphere(), l_geometry->GetParent()->GetDerivedTransformationMatrix() ) )
-				{
-					real l_distance = std::numeric_limits< real >::max();
-
-					if ( p_ray.Intersects( l_geometry, p_nearestFace, p_nearestSubmesh, l_distance ) != Intersection::eOut && l_distance < p_distance )
-					{
-						p_distance = l_distance;
-						l_return = l_geometry;
-					}
-				}
-			}
-		}
-
-		for ( auto l_it : m_children )
-		{
-			auto l_child = l_it.second.lock();
-
-			if ( l_child )
-			{
-				real l_distance = std::numeric_limits< real >::max();
-				auto l_geometry = l_child->GetNearestGeometry( p_ray, p_camera, l_distance, p_nearestFace, p_nearestSubmesh );
-
-				if ( l_geometry && l_distance < p_distance )
-				{
-					p_distance = l_distance;
-					l_return = l_geometry;
-				}
-			}
-		}
-
-		return l_return;
 	}
 
 	Point3r SceneNode::GetDerivedPosition()const

@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Render target helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les cibles de rendu
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les cibles de rendu
 	*/
 	class RenderTargetTreeItemProperty
 		: public TreeItemProperty
@@ -47,7 +47,7 @@ namespace GuiCommon
 		 *\param[in]	p_target	The target object
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_target	L'objet cible
 		 */
 		RenderTargetTreeItemProperty( bool p_editable, Castor3D::RenderTargetSPtr p_target );
@@ -63,7 +63,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the object
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re l'objet
+		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
 		inline Castor3D::RenderTargetSPtr GetRenderTarget()

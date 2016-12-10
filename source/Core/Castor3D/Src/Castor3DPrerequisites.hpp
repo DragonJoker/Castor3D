@@ -739,8 +739,8 @@ namespace Castor3D
 		GLSL::GlslWriter & p_writer,
 		GLSL::Vec3 & p_normal,
 		GLSL::Float & p_shininess,
-		Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-		Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags );
 
 	C3D_API void ComputePostLightingMapContributions(
@@ -749,8 +749,8 @@ namespace Castor3D
 		GLSL::Vec3 & p_diffuse,
 		GLSL::Vec3 & p_specular,
 		GLSL::Vec3 & p_emissive,
-		Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-		Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+		TextureChannels const & p_textureFlags,
+		ProgramFlags const & p_programFlags,
 		uint8_t p_sceneFlags );
 }
 

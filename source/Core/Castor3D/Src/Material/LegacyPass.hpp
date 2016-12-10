@@ -247,33 +247,19 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~english
-		 *\brief		Initialises the pass and all it's dependencies.
-		 *\~french
-		 *\brief		Initialise la passe et toutes ses dépendances.
+		 *\copydoc		Castor3D::Pass::DoInitialise
 		 */
 		void DoInitialise()override;
 		/**
-		 *\~english
-		 *\brief		Cleans up the pass and all it's dependencies.
-		 *\~french
-		 *\brief		Nettoie la passe et toutes ses dépendances.
+		 *\copydoc		Castor3D::Pass::DoCleanup
 		 */
 		void DoCleanup()override;
 		/**
-		 *\~english
-		 *\brief		Fills shader variables.
-		 *\~french
-		 *\brief		Remplit les variables de shader.
+		 *\copydoc		Castor3D::Pass::DoUpdateRenderNode
 		 */
 		void DoUpdateRenderNode( PassRenderNode & p_node )const override;
 		/**
-		 *\~english
-		 *\brief		Sets the global alpha value
-		 *\param[in]	p_fAlpha	The new value
-		 *\~french
-		 *\brief		Définit la valeur alpha globale
-		 *\param[in]	p_fAlpha	La nouvelle valeur
+		 *\copydoc		Castor3D::Pass::DoSetOpacity
 		 */
 		void DoSetOpacity( float p_value )override;
 

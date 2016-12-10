@@ -13,6 +13,7 @@
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
+#include "Render/RenderNode.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
@@ -402,7 +403,7 @@ namespace Castor3D
 		return l_it->second;
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetPanelPipeline( FlagCombination< TextureChannel > p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetPanelPipeline( TextureChannels p_textureFlags )
 	{
 		// Remove unwanted flags
 		RemFlag( p_textureFlags, TextureChannel::eAmbient );
@@ -417,7 +418,7 @@ namespace Castor3D
 		return DoGetPipeline( p_textureFlags );
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetTextPipeline( FlagCombination< TextureChannel > p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetTextPipeline( TextureChannels p_textureFlags )
 	{
 		// Remove unwanted flags
 		RemFlag( p_textureFlags, TextureChannel::eAmbient );
@@ -433,7 +434,7 @@ namespace Castor3D
 		return DoGetPipeline( p_textureFlags );
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetPipeline( FlagCombination< TextureChannel > const & p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetPipeline( TextureChannels const & p_textureFlags )
 	{
 		auto l_it = m_pipelines.find( p_textureFlags );
 
@@ -503,7 +504,7 @@ namespace Castor3D
 		p_pass.UpdateRenderNode( l_node );
 		l_node.m_pipeline.Apply();
 		p_pass.BindTextures();
-		l_node.m_pipeline.GetProgram().BindUbos();
+		l_node.m_pipeline.GetProgram().UpdateUbos();
 		p_geometryBuffers.Draw( p_count, 0 );
 		l_node.m_pipeline.GetProgram().UnbindUbos();
 		p_pass.UnbindTextures();
@@ -523,7 +524,7 @@ namespace Castor3D
 
 		p_pass.UpdateRenderNode( l_node );
 		l_node.m_pipeline.Apply();
-		l_node.m_pipeline.GetProgram().BindUbos();
+		l_node.m_pipeline.GetProgram().UpdateUbos();
 		p_pass.BindTextures();
 		p_texture.Bind( 0 );
 		p_sampler.Bind( 0 );
@@ -576,7 +577,7 @@ namespace Castor3D
 		return l_geometryBuffers;
 	}
 
-	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( FlagCombination< TextureChannel > const & p_textureFlags )
+	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( TextureChannels const & p_textureFlags )
 	{
 		using namespace GLSL;
 

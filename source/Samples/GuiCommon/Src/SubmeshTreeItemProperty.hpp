@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Submesh helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les maillages
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les maillages
 	*/
 	class SubmeshTreeItemProperty
 		: public TreeItemProperty
@@ -44,15 +44,15 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_pGeometry	The parent geometry
+		 *\param[in]	p_geometry	The parent geometry
 		 *\param[in]	p_submesh	The target submesh
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
-		 *\param[in]	p_pGeometry	La g�om�trie parente
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
+		 *\param[in]	p_geometry	La géométrie parente
 		 *\param[in]	p_submesh	Le maillage cible
 		 */
-		SubmeshTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry, Castor3D::SubmeshSPtr p_submesh );
+		SubmeshTreeItemProperty( bool p_editable, Castor3D::Geometry & p_geometry, Castor3D::Submesh & p_submesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -65,24 +65,24 @@ namespace GuiCommon
 		 *\brief		Retrieves the submesh
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re le maillage
+		 *\brief		Récupère le maillage
 		 *\return		La valeur
 		 */
-		inline Castor3D::SubmeshSPtr GetSubmesh()
+		inline Castor3D::Submesh & GetSubmesh()
 		{
-			return m_pSubmesh.lock();
+			return m_submesh;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la g�om�trie
+		 *\brief		Récupère la géométrie
 		 *\return		La valeur
 		 */
-		inline Castor3D::GeometrySPtr GetGeometry()
+		inline Castor3D::Geometry & GetGeometry()
 		{
-			return m_pGeometry.lock();
+			return m_geometry;
 		}
 
 	private:
@@ -100,8 +100,8 @@ namespace GuiCommon
 		void OnTopologyChange( Castor3D::Topology p_value );
 
 	private:
-		Castor3D::GeometryWPtr m_pGeometry;
-		Castor3D::SubmeshWPtr m_pSubmesh;
+		Castor3D::Geometry & m_geometry;
+		Castor3D::Submesh & m_submesh;
 	};
 }
 

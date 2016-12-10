@@ -102,18 +102,20 @@ namespace Castor3D
 			m_gpuTime = 0;
 			m_cpuTime = 0;
 			m_taskTimer.TimeMs();
-			m_externalTime = m_frameTimer.TimeMs();
 		}
+
+		m_externalTime = m_frameTimer.TimeMs();
 	}
 
 	void DebugOverlays::EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible, uint32_t p_particles )
 	{
+		double l_totalTime = m_frameTimer.TimeMs() + m_externalTime;
+
 		if ( m_valid && m_visible )
 		{
-			double l_time = m_frameTimer.TimeMs() + m_externalTime;
 			m_debugTimer.TimeMs();
-			m_framesTimes[m_frameIndex] = l_time;
-			m_debugTotalTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( l_time ) << cuT( " ms" ) );
+			m_framesTimes[m_frameIndex] = l_totalTime;
+			m_debugTotalTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( l_totalTime ) << cuT( " ms" ) );
 			m_debugCpuTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_cpuTime << cuT( " ms" ) );
 			m_externTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_externalTime << cuT( " ms" ) );
 			m_debugVertexCount->SetCaption( string::to_string( p_vertices ) );
@@ -126,7 +128,7 @@ namespace Castor3D
 			m_debugGpuServerTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0 ) << cuT( " ms" ) );
 			GetEngine()->GetRenderSystem()->ResetGpuTime();
 
-			l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
+			auto l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
 			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 3 ) << 1000.0 / l_time << cuT( " frames/s" ) );
 			m_debugAverageTime->SetCaption( StringStream() << std::setprecision( 3 ) << l_time << cuT( " ms" ) );
 
@@ -135,6 +137,11 @@ namespace Castor3D
 			m_debugTime->SetCaption( StringStream() << std::setprecision( 3 ) << l_time << cuT( " ms" ) );
 
 			m_frameTimer.TimeMs();
+		}
+		else
+		{
+			std::cout << "\rTime: " << std::setw( 7 ) << std::setprecision( 4 ) << float( l_totalTime );
+			std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << float( 1000.0f / ( l_totalTime ) );
 		}
 	}
 

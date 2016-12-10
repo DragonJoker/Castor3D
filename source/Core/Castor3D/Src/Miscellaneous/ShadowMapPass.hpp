@@ -104,28 +104,25 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateAnimatedNode
 		 */
-		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			Submesh & p_submesh,
-			Geometry & p_primitive,
-			AnimatedSkeletonSPtr p_skeleton,
-			AnimatedMeshSPtr p_mesh )override;
+		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
+			, RenderPipeline & p_pipeline
+			, Submesh & p_submesh
+			, Geometry & p_primitive
+			, AnimatedSkeletonSPtr p_skeleton
+			, AnimatedMeshSPtr p_mesh )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateStaticNode
 		 */
-		C3D_API StaticGeometryRenderNode CreateStaticNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			Submesh & p_submesh,
-			Geometry & p_primitive )override;
+		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
+			, RenderPipeline & p_pipeline
+			, Submesh & p_submesh
+			, Geometry & p_primitive )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateBillboardNode
 		 */
-		C3D_API BillboardRenderNode CreateBillboardNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			BillboardBase & p_billboard )override;
+		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
+			, RenderPipeline & p_pipeline
+			, BillboardBase & p_billboard )override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -138,8 +135,18 @@ namespace Castor3D
 		}
 
 	protected:
-		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
-		void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
+		/**
+		*\~english
+		*\brief		Renders the given nodes.
+		*\param		p_nodes		The nodes to render.
+		*\param		p_camera	The viewing camera.
+		*\~french
+		*\brief		Dessine les noeuds donnés.
+		*\param		p_nodes		Les noeuds à dessiner.
+		*\param		p_camera	La caméra regardant la scène.
+		*/
+		void DoRenderNodes( SceneRenderNodes & p_nodes
+			, Camera const & p_camera );
 
 	private:
 		/**
@@ -190,57 +197,49 @@ namespace Castor3D
 		 */
 		C3D_API virtual void DoUpdateProgram( ShaderProgram & p_program ) = 0;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoRenderInstancedSubmeshes
 		 */
-		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		void DoRenderInstancedSubmeshes( Scene & p_scene
+			, Camera const & p_camera
+			, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshes
 		 */
-		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderStaticSubmeshes( Scene & p_scene
+			, Camera const & p_camera
+			, StaticGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
 		 */
-		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderAnimatedSubmeshes( Scene & p_scene
+			, Camera const & p_camera
+			, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderBillboards
 		 */
-		void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes );
+		void DoRenderBillboards( Scene & p_scene
+			, Camera const & p_camera
+			, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		Castor::String DoGetTransparentPixelShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		void DoUpdatePipeline( RenderPipeline & p_pipeline
+			, DepthMapArray & p_depthMaps )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
 		 */
-		void DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		void DoPrepareFrontPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
 		 */
-		void DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		void DoPrepareBackPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
+		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
-		void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
-		 */
-		void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
-		 */
-		void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
-		 */
-		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentFlags
-		 */
-		void DoUpdateTransparentFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
-			, Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
+		void DoUpdateFlags( TextureChannels & p_textureFlags
+			, ProgramFlags & p_programFlags )const override;
 
 	protected:
 		//!\~english	The scene.

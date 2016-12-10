@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Viewport helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les viewports
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les viewports
 	*/
 	class ViewportTreeItemProperty
 		: public TreeItemProperty
@@ -48,7 +48,7 @@ namespace GuiCommon
 		 *\param[in]	p_viewport	The target viewport
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_viewport	Le viewport cible
 		 */
@@ -65,7 +65,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the viewport
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re le viewport
+		 *\brief		Récupère le viewport
 		 *\return		La valeur
 		 */
 		inline Castor3D::Viewport & GetViewport()
@@ -77,7 +77,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the viewport
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re le viewport
+		 *\brief		Récupère le viewport
 		 *\return		La valeur
 		 */
 		inline Castor3D::Viewport const & GetViewport()const

@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Scene helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les sc�nes
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les sc�nes
 	*/
 	class SceneTreeItemProperty
 		: public TreeItemProperty
@@ -47,7 +47,7 @@ namespace GuiCommon
 		 *\param[in]	p_scene		The target object
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_scene		L'objet cible
 		 */
 		SceneTreeItemProperty( bool p_editable, Castor3D::SceneSPtr p_scene );
@@ -63,7 +63,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the object
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re l'objet
+		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
 		inline Castor3D::SceneSPtr GetScene()

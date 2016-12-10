@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les indicateurs de programme.
 		 */
-		C3D_API Castor::FlagCombination< ProgramFlag > GetProgramFlags()const;
+		C3D_API ProgramFlags GetProgramFlags()const;
 		/**
 		 *\~english
 		 *\brief		Sets the material

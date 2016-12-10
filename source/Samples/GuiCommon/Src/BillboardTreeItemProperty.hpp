@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Billboard helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les billboards
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les billboards
 	*/
 	class BillboardTreeItemProperty
 		: public TreeItemProperty
@@ -47,10 +47,10 @@ namespace GuiCommon
 		 *\param[in]	p_billboard	The target billboard
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_billboard	Le billboard cible
 		 */
-		BillboardTreeItemProperty( bool p_editable, Castor3D::BillboardListSPtr p_billboard );
+		BillboardTreeItemProperty( bool p_editable, Castor3D::BillboardList & p_billboard );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -60,15 +60,15 @@ namespace GuiCommon
 		~BillboardTreeItemProperty();
 		/**
 		 *\~english
-		 *\brief		Retrieves the camera
+		 *\brief		Retrieves the billboard
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la cam�ra
+		 *\brief		Récupère le billboard
 		 *\return		La valeur
 		 */
-		inline Castor3D::BillboardListSPtr GetBillboard()
+		inline Castor3D::BillboardList & GetBillboard()
 		{
-			return m_billboard.lock();
+			return m_billboard;
 		}
 
 	private:
@@ -86,7 +86,7 @@ namespace GuiCommon
 		void OnSizeChange( Castor::Size const & p_size );
 
 	private:
-		Castor3D::BillboardListWPtr m_billboard;
+		Castor3D::BillboardList & m_billboard;
 	};
 }
 

@@ -20,30 +20,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_MSAA_RENDER_TECHNIQUE_H___
-#define ___C3D_MSAA_RENDER_TECHNIQUE_H___
+#ifndef ___C3D_ForwardRenderTechnique_H___
+#define ___C3D_ForwardRenderTechnique_H___
 
 #include <Technique/RenderTechnique.hpp>
 
-namespace Msaa
+namespace forward
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
 	\date		12/11/2012
 	\~english
-	\brief		MSAA Render technique class
-	\remarks	It creates a multisampled frame buffer and needed attachments,
-				<br />it renders to the singlesampled frame buffer
-				<br />then it blits this singlesampled frame buffer to the main one with appropriate resize
+	\brief		Basic render technique class
 	\~french
-	\brief		Classe de technique de rendu implémentant le MSAA
-	\remarks	On crée un tampon d'image supportant le multisampling avec les attaches nécessaires
-				<br />on fait le rendu dans le tampon d'image singlesamplé
-				<br />puis on blitte ce tampon d'image singlesamplé dans le principal avec le redimensionnement approprié
+	\brief		Classe de technique de rendu basique
 	*/
 	class RenderTechnique
-		:	public Castor3D::RenderTechnique
+		: public Castor3D::RenderTechnique
 	{
 	protected:
 		/**
@@ -73,7 +67,7 @@ namespace Msaa
 		 *\brief		Instantiation function, used by the factory to create objects of a wanted type
 		 *\param[in]	p_renderTarget	The technique render target
 		 *\param[in]	p_renderSystem	The render system
-		 *\param[in]	p_iSamplesCount	The wanted samples count
+		 *\param[in]	p_params		The technique parameters
 		 *\return		A clone of this object
 		 *\~french
 		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné
@@ -130,21 +124,9 @@ namespace Msaa
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
 
-	protected:
-		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplé
-		Castor3D::FrameBufferSPtr m_msFrameBuffer;
-		//!\~english The buffer receiving the multisampled color render	\~french Le tampon recevant le rendu couleur multisamplé
-		Castor3D::ColourRenderBufferSPtr m_pMsColorBuffer;
-		//!\~english The buffer receiving the multisampled depth render	\~french Le tampon recevant le rendu profondeur multisamplé
-		Castor3D::DepthStencilRenderBufferSPtr m_pMsDepthBuffer;
-		//!\~english The attach between multisampled colour buffer and multisampled frame buffer	\~french L'attache entre le tampon couleur multisamplé et le tampon multisamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pMsColorAttach;
-		//!\~english The attach between multisampled depth buffer and multisampled frame buffer	\~french L'attache entre le tampon profondeur multisamplé et le tampon multisamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pMsDepthAttach;
-		//!\~english The samples count	\~french Le nombre de samples
-		int m_samplesCount;
-		//!\~english The technique blit rectangle	\~french Le rectangle de blit de la technique
-		Castor::Rectangle m_rect;
+	public:
+		static Castor::String const Type;
+		static Castor::String const Name;
 	};
 }
 

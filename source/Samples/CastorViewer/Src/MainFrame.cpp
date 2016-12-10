@@ -91,6 +91,30 @@ namespace CastorViewer
 				rect->y++;
 			}
 		}
+
+		void DooUpdateLog( std::vector< std::pair< wxString, bool > > & p_queue, std::mutex & p_mutex, wxListBox & p_log )
+		{
+			std::vector< std::pair< wxString, bool > > l_flush;
+			{
+				std::lock_guard< std::mutex > l_lock( p_mutex );
+				std::swap( l_flush, p_queue );
+			}
+
+			if ( !l_flush.empty() )
+			{
+				for ( auto & l_message : l_flush )
+				{
+					if ( l_message.second )
+					{
+						p_log.Insert( l_message.first, 0 );
+					}
+					else
+					{
+						p_log.SetString( 0, l_message.first );
+					}
+				}
+			}
+		}
 	}
 
 	MainFrame::MainFrame( SplashScreen * p_splashScreen, wxString const & p_strTitle )
@@ -122,7 +146,7 @@ namespace CastorViewer
 
 	bool MainFrame::Initialise()
 	{
-		Logger::RegisterCallback( std::bind( &MainFrame::DoLogCallback, this, std::placeholders::_1, std::placeholders::_2 ), this );
+		Logger::RegisterCallback( std::bind( &MainFrame::DoLogCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ), this );
 		bool l_return = DoInitialiseImages();
 
 		if ( l_return )
@@ -448,7 +472,7 @@ namespace CastorViewer
 		m_auiManager.LoadPerspective( m_currentPerspective );
 	}
 
-	void MainFrame::DoLogCallback( String const & p_strLog, LogType p_eLogType )
+	void MainFrame::DoLogCallback( String const & p_strLog, LogType p_eLogType, bool p_newLine )
 	{
 		switch ( p_eLogType )
 		{
@@ -456,7 +480,7 @@ namespace CastorViewer
 		case Castor::LogType::eInfo:
 		{
 			std::lock_guard< std::mutex > l_lock( m_msgLogListMtx );
-			m_msgLogList.push_back( p_strLog );
+			m_msgLogList.emplace_back( p_strLog, p_newLine );
 		}
 		break;
 
@@ -464,7 +488,7 @@ namespace CastorViewer
 		case Castor::LogType::eError:
 		{
 			std::lock_guard< std::mutex > l_lock( m_errLogListMtx );
-			m_errLogList.push_back( p_strLog );
+			m_errLogList.emplace_back( p_strLog, p_newLine );
 		}
 		break;
 
@@ -651,29 +675,11 @@ namespace CastorViewer
 	{
 		if ( p_event.GetId() == eID_MSGLOG_TIMER && m_messageLog )
 		{
-			wxArrayString l_flush;
-			{
-				std::lock_guard< std::mutex > l_lock( m_msgLogListMtx );
-				std::swap( l_flush, m_msgLogList );
-			}
-
-			if ( !l_flush.empty() )
-			{
-				m_messageLog->Insert( l_flush, 0 );
-			}
+			DooUpdateLog( m_msgLogList, m_msgLogListMtx, *m_messageLog );
 		}
 		else if ( p_event.GetId() == eID_ERRLOG_TIMER && m_errorLog )
 		{
-			wxArrayString l_flush;
-			{
-				std::lock_guard< std::mutex > l_lock( m_errLogListMtx );
-				std::swap( l_flush, m_errLogList );
-			}
-
-			if ( !l_flush.empty() )
-			{
-				m_errorLog->Insert( l_flush, 0 );
-			}
+			DooUpdateLog( m_errLogList, m_errLogListMtx, *m_errorLog );
 		}
 
 		p_event.Skip();

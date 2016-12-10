@@ -290,9 +290,9 @@ namespace Castor3D
 		m_vertexBuffer->Unbind();
 	}
 
-	FlagCombination< ProgramFlag > BillboardBase::GetProgramFlags()const
+	ProgramFlags BillboardBase::GetProgramFlags()const
 	{
-		FlagCombination< ProgramFlag > l_return = uint32_t( ProgramFlag::eBillboards );
+		ProgramFlags l_return = uint32_t( ProgramFlag::eBillboards );
 
 		if ( m_billboardType == BillboardType::eSpherical )
 		{

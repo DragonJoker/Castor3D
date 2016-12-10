@@ -292,7 +292,7 @@ namespace castortd
 
 			for ( auto l_submesh : *l_geometry->GetMesh() )
 			{
-				l_geometry->SetMaterial( l_submesh, m_bulletMaterial );
+				l_geometry->SetMaterial( *l_submesh, m_bulletMaterial );
 			}
 
 			m_bullets.emplace_back( p_speed, p_damage, *l_node, p_target );
@@ -518,7 +518,7 @@ namespace castortd
 
 		for ( auto l_submesh : *l_geometry->GetMesh() )
 		{
-			l_geometry->SetMaterial( l_submesh, m_mapCubeMaterial );
+			l_geometry->SetMaterial( *l_submesh, m_mapCubeMaterial );
 		}
 
 		p_cell.m_state = Cell::State::Empty;
@@ -545,7 +545,7 @@ namespace castortd
 
 		for ( auto l_submesh : *l_geometry->GetMesh() )
 		{
-			l_geometry->SetMaterial( l_submesh, l_material );
+			l_geometry->SetMaterial( *l_submesh, l_material );
 		}
 
 		auto l_light = m_scene.GetLightCache().Add( l_name, l_node, LightType::ePoint );
