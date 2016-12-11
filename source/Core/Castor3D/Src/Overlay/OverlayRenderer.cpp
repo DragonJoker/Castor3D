@@ -506,7 +506,6 @@ namespace Castor3D
 		p_pass.BindTextures();
 		l_node.m_pipeline.GetProgram().UpdateUbos();
 		p_geometryBuffers.Draw( p_count, 0 );
-		l_node.m_pipeline.GetProgram().UnbindUbos();
 		p_pass.UnbindTextures();
 	}
 
@@ -533,7 +532,6 @@ namespace Castor3D
 		p_texture.Unbind( 0 );
 
 		p_pass.UnbindTextures();
-		l_node.m_pipeline.GetProgram().UnbindUbos();
 	}
 
 	void OverlayRenderer::DoDrawItem( Material & p_material, OverlayRenderer::OverlayGeometryBuffers const & p_geometryBuffers, uint32_t p_count )

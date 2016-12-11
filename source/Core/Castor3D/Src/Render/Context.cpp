@@ -259,8 +259,6 @@ namespace Castor3D
 		p_geometryBuffers.Draw( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() ), 0 );
 		m_rtotPipelinePlane.m_sampler->Unbind( 0u );
 		p_texture.Unbind( 0u );
-
-		p_pipeline.GetProgram().UnbindUbos();
 	}
 
 	void Context::DoRenderTexture( Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
@@ -293,8 +291,6 @@ namespace Castor3D
 		p_geometryBuffers.Draw( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() ), 0 );
 		m_rtotPipelinePlane.m_sampler->Unbind( 0u );
 		p_texture.Unbind( 0u );
-
-		p_pipeline.GetProgram().UnbindUbos();
 	}
 
 	void Context::DoRenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
@@ -331,8 +327,6 @@ namespace Castor3D
 		p_geometryBuffers.Draw( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() ), 0 );
 		m_rtotPipelineCube.m_sampler->Unbind( 0u );
 		p_texture.Unbind( 0u );
-
-		p_pipeline.GetProgram().UnbindUbos();
 	}
 
 	void Context::DoRenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
@@ -377,8 +371,6 @@ namespace Castor3D
 		p_geometryBuffers.Draw( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() ), 0 );
 		m_rtotPipelineCube.m_sampler->Unbind( 0u );
 		p_texture.Unbind( 0u );
-
-		p_pipeline.GetProgram().UnbindUbos();
 	}
 
 	ShaderProgramSPtr Context::DoCreateProgram2D( bool p_depth, bool p_array )

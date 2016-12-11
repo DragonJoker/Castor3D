@@ -462,7 +462,7 @@ namespace Castor3D
 		}
 	}
 
-	void PickingPass::DoUpdate()
+	void PickingPass::DoUpdate( RenderQueueArray & CU_PARAM_UNUSED( p_queues ) )
 	{
 	}
 

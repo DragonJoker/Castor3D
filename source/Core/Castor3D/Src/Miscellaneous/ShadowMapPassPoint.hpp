@@ -89,7 +89,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
 		 */
-		void DoUpdate()override;
+		void DoUpdate( RenderQueueArray & p_queues )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoRender
 		 */

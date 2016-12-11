@@ -69,11 +69,11 @@ namespace Castor3D
 		m_depthAttach.reset();
 	}
 
-	void ShadowMapPassSpot::DoUpdate()
+	void ShadowMapPassSpot::DoUpdate( RenderQueueArray & p_queues )
 	{
 		m_light.Update( m_camera->GetParent()->GetDerivedPosition() );
 		m_camera->Update();
-		m_renderQueue.Update();
+		p_queues.push_back( m_renderQueue );
 	}
 
 	void ShadowMapPassSpot::DoRender()

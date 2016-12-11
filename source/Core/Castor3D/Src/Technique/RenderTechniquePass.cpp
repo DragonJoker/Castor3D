@@ -194,7 +194,7 @@ namespace Castor3D
 	{
 	}
 
-	void RenderTechniquePass::Render( uint32_t p_frameTime, uint32_t & p_visible, bool p_shadows )
+	void RenderTechniquePass::Render( uint32_t & p_visible, bool p_shadows )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes();
 		auto & l_scene = *m_target.GetScene();
@@ -313,9 +313,9 @@ namespace Castor3D
 	{
 	}
 
-	void RenderTechniquePass::DoUpdate()
+	void RenderTechniquePass::DoUpdate( RenderQueueArray & p_queues )
 	{
-		m_renderQueue.Update();
+		p_queues.push_back( m_renderQueue );
 	}
 
 	void RenderTechniquePass::DoUpdateFlags( TextureChannels & p_textureFlags

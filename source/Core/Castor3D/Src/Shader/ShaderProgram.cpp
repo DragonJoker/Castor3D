@@ -562,22 +562,11 @@ namespace Castor3D
 
 	void ShaderProgram::UpdateUbos()const
 	{
-		m_ubosBound = true;
 		uint32_t l_index = 0;
 
 		for ( auto l_variableBuffer : m_listFrameVariableBuffers )
 		{
 			l_variableBuffer->Bind( l_index++ );
-		}
-	}
-
-	void ShaderProgram::UnbindUbos()const
-	{
-		uint32_t l_index = 0;
-
-		for ( auto l_variableBuffer : m_listFrameVariableBuffers )
-		{
-			l_variableBuffer->Unbind( l_index++ );
 		}
 	}
 
@@ -646,9 +635,7 @@ namespace Castor3D
 				l_shader->Bind();
 			}
 
-			m_ubosBound = p_bindUbo;
-
-			if ( m_ubosBound )
+			if ( p_bindUbo )
 			{
 				UpdateUbos();
 			}
@@ -659,11 +646,6 @@ namespace Castor3D
 	{
 		if ( m_status == ProgramStatus::eLinked )
 		{
-			if ( m_ubosBound )
-			{
-				UnbindUbos();
-			}
-
 			for ( auto l_shader : m_activeShaders )
 			{
 				l_shader->Unbind();

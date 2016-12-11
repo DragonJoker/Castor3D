@@ -139,13 +139,11 @@ namespace Castor3D
 		C3D_API ~RenderTarget();
 		/**
 		 *\~english
-		 *\brief		Renders one frame
-		 *\param[in]	p_dFrameTime		The time elapsed since the last frame was rendered
+		 *\brief		Renders one frame.
 		 *\~english
-		 *\brief		Rend une image
-		 *\param[in]	p_dFrameTime		Le temps écoulé depuis le rendu de la dernière frame
+		 *\brief		Dessine une frame.
 		 */
-		C3D_API void Render( uint32_t p_dFrameTime );
+		C3D_API void Render();
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -470,7 +468,7 @@ namespace Castor3D
 		}
 
 	private:
-		C3D_API void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, uint32_t p_frameTime );
+		C3D_API void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu

@@ -512,8 +512,6 @@ namespace Bloom
 		p_origin.Unbind( 4 );
 		m_linearSampler->Unbind( 4 );
 
-		m_combinePipeline->GetProgram().UnbindUbos();
-
 		m_blurSurfaces[0].m_fbo->Unbind();
 
 		m_blurSurfaces[0].m_colourTexture.Bind();

@@ -18,7 +18,7 @@ namespace Castor3D
 	static const char * RLA_UNKNOWN_EXCEPTION = "Unknown exception";
 
 	RenderLoopAsync::RenderLoopAsync( Engine & p_engine, uint32_t p_wantedFPS )
-		: RenderLoop( p_engine, p_wantedFPS )
+		: RenderLoop( p_engine, p_wantedFPS, true )
 		, m_mainLoopThread( nullptr )
 		, m_paused( false )
 		, m_ended( false )
@@ -65,24 +65,27 @@ namespace Castor3D
 
 	void RenderLoopAsync::UpdateVSync( bool p_enable )
 	{
-		if ( p_enable && m_savedTime )
+		using type = decltype( m_savedTime );
+		static auto l_zero = type::zero();
+
+		if ( p_enable && m_savedTime != l_zero )
 		{
 			m_frameTime = m_savedTime;
-			m_savedTime = 0;
+			m_savedTime = l_zero;
 		}
-		else if ( !m_savedTime )
+		else if ( m_savedTime == l_zero )
 		{
 			m_savedTime = m_frameTime;
-			m_frameTime = 1;
+			m_frameTime = type{ 1 };
 		}
 	}
 
-	void RenderLoopAsync::DoStartRendering()
+	void RenderLoopAsync::StartRendering()
 	{
 		m_rendering = true;
 	}
 
-	void RenderLoopAsync::DoRenderSyncFrame()
+	void RenderLoopAsync::RenderSyncFrame()
 	{
 		if ( !m_paused )
 		{
@@ -104,7 +107,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderLoopAsync::DoPause()
+	void RenderLoopAsync::Pause()
 	{
 		if ( m_paused )
 		{
@@ -119,7 +122,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderLoopAsync::DoResume()
+	void RenderLoopAsync::Resume()
 	{
 		if ( !m_paused )
 		{
@@ -129,7 +132,7 @@ namespace Castor3D
 		m_paused = false;
 	}
 
-	void RenderLoopAsync::DoEndRendering()
+	void RenderLoopAsync::EndRendering()
 	{
 		m_rendering = false;
 
@@ -208,16 +211,12 @@ namespace Castor3D
 				while ( !IsInterrupted() && IsRendering() && !IsPaused() )
 				{
 					m_frameEnded = false;
-					uint32_t l_frameTime = GetFrameTime();
+					int32_t l_beginTime = int32_t( GetFrameTime().count() );
 					l_timer.TimeS();
 					DoRenderFrame();
-					uint32_t l_timeDiff = uint32_t( l_timer.TimeMs() );
+					auto l_endTime = int32_t( l_timer.TimeMs() );
 					m_frameEnded = true;
-
-					if ( l_timeDiff < l_frameTime )
-					{
-						System::Sleep( l_frameTime - l_timeDiff );
-					}
+					System::Sleep( std::max( 0, l_beginTime - l_endTime ) );
 				}
 
 				m_ended = true;

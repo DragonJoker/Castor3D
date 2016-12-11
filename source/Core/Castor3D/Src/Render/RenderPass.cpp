@@ -177,9 +177,9 @@ namespace Castor3D
 		m_geometryBuffers.clear();
 	}
 
-	void RenderPass::Update()
+	void RenderPass::Update( RenderQueueArray & p_queues )
 	{
-		DoUpdate();
+		DoUpdate( p_queues );
 	}
 
 	String RenderPass::GetVertexShaderSource( TextureChannels const & p_textureFlags

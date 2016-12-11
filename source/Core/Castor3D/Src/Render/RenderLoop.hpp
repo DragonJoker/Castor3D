@@ -24,6 +24,9 @@ SOFTWARE.
 #define ___C3D_RENDER_LOOP_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Multithreading/ThreadPool.hpp"
+
+#include <chrono>
 
 namespace Castor3D
 {
@@ -45,12 +48,14 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_engine		The engine.
 		 *\param[in]	p_wantedFPS		The wanted FPS count.
+		 *\param[in]	p_isAsync		Tells if the render loop is asynchronous.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine		Le moteur.
 		 *\param[in]	p_wantedFPS		Le nombre voulu du FPS.
+		 *\param[in]	p_isAsync		Dit si la boucle de rendu est asynchrone.
 		 */
-		C3D_API RenderLoop( Engine & p_engine, uint32_t p_wantedFPS );
+		C3D_API RenderLoop( Engine & p_engine, uint32_t p_wantedFPS, bool p_isAsync );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -65,67 +70,6 @@ namespace Castor3D
 		 *\brief		Nettoie la boucle de rendu.
 		 */
 		C3D_API void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Starts render loop.
-		 *\remarks		Use only with an asynchronous render loop.
-		 *\~french
-		 *\brief		Commence le rendu.
-		 *\remarks		A utiliser uniquement avec une boucle de rendu asynchrone.
-		 */
-		C3D_API void StartRendering();
-		/**
-		 *\~english
-		 *\brief		Renders one frame.
-		 *\remarks		Use only with a synchronous render loop, or when the render loop is paused.
-		 *\~french
-		 *\brief		Dessine une image.
-		 *\remarks		A utiliser uniquement avec une boucle de rendu synchrone, ou quand la boucle de rendu est en pause.
-		 */
-		C3D_API void RenderSyncFrame();
-		/**
-		 *\~english
-		 *\brief		Pauses the render loop.
-		 *\remarks		Use only with an asynchronous render loop.
-		 *\~french
-		 *\brief		Met la boucle de rendu en pause.
-		 *\remarks		A utiliser uniquement avec une boucle de rendu asynchrone.
-		 */
-		C3D_API void Pause();
-		/**
-		 *\~english
-		 *\brief		Resumes the render loop.
-		 *\remarks		Use only with an asynchronous render loop.
-		 *\~french
-		 *\brief		Relance la boucle de rendu.
-		 *\remarks		A utiliser uniquement avec une boucle de rendu asynchrone.
-		 */
-		C3D_API void Resume();
-		/**
-		 *\~english
-		 *\brief		Ends the render.
-		 *\remarks		Use only with an asynchronous render loop.
-		 *\~french
-		 *\brief		Termine le rendu.
-		 *\remarks		A utiliser uniquement avec une boucle de rendu asynchrone.
-		 */
-		C3D_API void EndRendering();
-		/**
-		 *\~english
-		 *\brief		Retrieves the wanted frame time.
-		 *\return		The time, in milliseconds.
-		 *\~french
-		 *\brief		Récupère le temps voulu pour une frame.
-		 *\return		Le temps, en millisecondes.
-		 */
-		C3D_API uint32_t GetFrameTime();
-		/**
-		 *\~english
-		 *\return		The wanted refresh rate.
-		 *\~french
-		 *\return		La vitesse de rafraichissement.
-		 */
-		C3D_API uint32_t GetWantedFps();
 		/**
 		 *\~english
 		 *\brief		Creates a render context.
@@ -159,11 +103,68 @@ namespace Castor3D
 		C3D_API virtual void UpdateVSync( bool p_enable );
 		/**
 		 *\~english
+		 *\brief		Starts threaded render loop.
+		 *\~french
+		 *\brief		Commence le rendu threadé.
+		 */
+		C3D_API virtual void StartRendering() = 0;
+		/**
+		 *\~english
+		 *\brief		Renders one frame, only if not in render loop.
+		 *\~french
+		 *\brief		Rend une image, uniquement hors de la boucle de rendu.
+		 */
+		C3D_API virtual void RenderSyncFrame() = 0;
+		/**
+		 *\~english
+		 *\brief		Pauses the render loop.
+		 *\~french
+		 *\brief		Met la boucle de rendu en pause.
+		 */
+		C3D_API virtual void Pause() = 0;
+		/**
+		 *\~english
+		 *\brief		Resumes the render loop.
+		 *\~french
+		 *\brief		Redémarre la boucle de rendu.
+		 */
+		C3D_API virtual void Resume() = 0;
+		/**
+		 *\~english
+		 *\brief		Ends the render, cleans up engine.
+		 *\remarks		Ends the threaded render loop, if any.
+		 *\~french
+		 *\brief		Termine le rendu, nettoie le moteur.
+		 *\remarks		Arrête la boucle de rendu threadé, si elle existe.
+		 */
+		C3D_API virtual void EndRendering() = 0;
+		/**
+		 *\~english
+		 *\return		The wanted frame time, in milliseconds.
+		 *\~french
+		 *\return		Le temps voulu pour une frame, en millisecondes.
+		 */
+		inline std::chrono::milliseconds GetFrameTime()
+		{
+			return m_frameTime;
+		}
+		/**
+		 *\~english
+		 *\return		The wanted refresh rate.
+		 *\~french
+		 *\return		La vitesse de rafraichissement.
+		 */
+		inline uint32_t GetWantedFps()
+		{
+			return m_wantedFPS;
+		}
+		/**
+		 *\~english
 		 *\return		The debug overlays shown status.
 		 *\~french
 		 *\return		Le statut d'affichage des incrustations de débogage.
 		 */
-		inline bool GetShowDebugOverlays()const
+		inline bool HasDebugOverlays()const
 		{
 			return m_debugOverlays != nullptr;
 		}
@@ -189,43 +190,6 @@ namespace Castor3D
 		C3D_API void DoRenderFrame();
 		/**
 		 *\~english
-		 *\brief		Starts threaded render loop.
-		 *\~french
-		 *\brief		Commence le rendu threadé.
-		 */
-		C3D_API virtual void DoStartRendering() = 0;
-		/**
-		 *\~english
-		 *\brief		Renders one frame, only if not in render loop.
-		 *\~french
-		 *\brief		Rend une image, uniquement hors de la boucle de rendu.
-		 */
-		C3D_API virtual void DoRenderSyncFrame() = 0;
-		/**
-		 *\~english
-		 *\brief		Pauses the render loop.
-		 *\~french
-		 *\brief		Met la boucle de rendu en pause.
-		 */
-		C3D_API virtual void DoPause() = 0;
-		/**
-		 *\~english
-		 *\brief		Resumes the render loop.
-		 *\~french
-		 *\brief		Redémarre la boucle de rendu.
-		 */
-		C3D_API virtual void DoResume() = 0;
-		/**
-		 *\~english
-		 *\brief		Ends the render, cleans up engine.
-		 *\remarks		Ends the threaded render loop, if any.
-		 *\~french
-		 *\brief		Termine le rendu, nettoie le moteur.
-		 *\remarks		Arrête la boucle de rendu threadé, si elle existe.
-		 */
-		C3D_API virtual void DoEndRendering() = 0;
-		/**
-		 *\~english
 		 *\brief		Asks for main render context creation.
 		 *\param[in]	p_window	The render window used to initialise the render context, receives the context.
 		 *\~french
@@ -235,9 +199,10 @@ namespace Castor3D
 		C3D_API virtual ContextSPtr DoCreateMainContext( RenderWindow & p_window ) = 0;
 
 	private:
-		void DoCpuUpdate();
+		void DoProcessEvents( EventType p_eventType );
 		void DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible, uint32_t & p_particles );
 		void DoCpuStep();
+		void DoUpdateQueues( RenderQueueArray & p_queues );
 
 	protected:
 		//!\~english	The current RenderSystem.
@@ -248,10 +213,13 @@ namespace Castor3D
 		uint32_t m_wantedFPS;
 		//!\~english	The wanted time for a frame.
 		//!\~french		Le temps voulu pour une frame.
-		uint32_t m_frameTime;
+		std::chrono::milliseconds m_frameTime;
 		//!\~english	The debug overlays.
 		//!\~french		Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
+		//!\~english	The pool used to update the render queues.
+		//!\~french		Le pool de mise à jour des files de rendu.
+		Castor::ThreadPool m_queueUpdater;
 	};
 }
 

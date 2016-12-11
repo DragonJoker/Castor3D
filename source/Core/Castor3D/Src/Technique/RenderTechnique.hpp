@@ -175,25 +175,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Update function.
-		 *\remarks		Updates the scenes render nodes, if needed.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Fonction de mise à jour.
-		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update();
+		C3D_API void Update( RenderQueueArray & p_queues );
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\param[out]	p_visible	The visible objects count.
 		 *\param[out]	p_particles	The particles count.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 *\param[out]	p_visible	Le nombre d'objets visibles.
 		 *\param[out]	p_particles	Le nombre de particules.
 		 */
-		C3D_API void Render( uint32_t p_frameTime, uint32_t & p_visible, uint32_t & p_particles );
+		C3D_API void Render( uint32_t & p_visible, uint32_t & p_particles );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.

@@ -97,7 +97,7 @@ namespace Castor3D
 
 		bool l_return = true;
 
-		if ( p_scene.GetEngine()->GetRenderLoop().GetShowDebugOverlays() )
+		if ( p_scene.GetEngine()->GetRenderLoop().HasDebugOverlays() )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
 			Castor::TextWriter< Scene >::CheckError( l_return, "Scene debug overlays" );

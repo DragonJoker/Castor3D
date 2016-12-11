@@ -108,11 +108,15 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Updates the scenes render nodes, if needed.
+		 *\brief		Updates the render pass.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
-		 *\brief		Met les noeuds de scènes à jour, si nécessaire.
+		 *\brief		Met à jour la passe de rendu.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update();
+		C3D_API void Update( RenderQueueArray & p_queues );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -659,10 +663,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the specific data.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Met les données spécifiques.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API virtual void DoUpdate() = 0;
+		C3D_API virtual void DoUpdate( RenderQueueArray & p_queues ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.

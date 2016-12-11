@@ -222,7 +222,6 @@ namespace Castor3D
 			m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 			l_sampler->Unbind( 0 );
 			m_texture->Unbind( 0 );
-			m_pipeline->GetProgram().UnbindUbos();
 		}
 	}
 

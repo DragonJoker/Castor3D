@@ -71,16 +71,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\param[out]	p_visible	The visible objects count.
 		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 *\param[out]	p_visible	Le nombre d'objets visibles.
 		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		C3D_API void Render( uint32_t p_frameTime, uint32_t & p_visible, bool p_shadows );
+		C3D_API void Render( uint32_t & p_visible, bool p_shadows );
 
 	private:
 		/**
@@ -154,7 +152,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdate
 		 */
-		C3D_API void DoUpdate()override;
+		C3D_API void DoUpdate( RenderQueueArray & p_queues )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */

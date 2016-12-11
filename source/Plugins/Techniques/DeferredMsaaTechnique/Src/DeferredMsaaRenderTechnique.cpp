@@ -261,7 +261,6 @@ namespace deferred_msaa
 
 			l_program.m_program->UpdateUbos();
 			l_program.m_geometryBuffers->Draw( VertexCount, 0 );
-			l_program.m_program->UnbindUbos();
 
 			DoUnbindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
 			m_lightPassTextures[size_t( DsTexture::eInfos )]->Unbind();

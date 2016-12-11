@@ -654,6 +654,7 @@ namespace Castor3D
 	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
 	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
+	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
 
 	//@}
 }

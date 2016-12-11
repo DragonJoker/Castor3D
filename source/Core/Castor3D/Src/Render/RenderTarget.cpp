@@ -233,7 +233,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTarget::Render( uint32_t p_frameTime )
+	void RenderTarget::Render()
 	{
 		SceneSPtr l_scene = GetScene();
 
@@ -245,7 +245,7 @@ namespace Castor3D
 
 				if ( l_pCamera )
 				{
-					DoRender( m_frameBuffer, GetCamera(), p_frameTime );
+					DoRender( m_frameBuffer, GetCamera() );
 				}
 			}
 		}
@@ -297,7 +297,7 @@ namespace Castor3D
 		m_bMultisampling = p_name == cuT( "msaa" );
 	}
 
-	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, uint32_t p_frameTime )
+	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera )
 	{
 		m_visibleObjectsCount = 0u;
 		m_particlesCount = 0u;
@@ -307,7 +307,7 @@ namespace Castor3D
 		if ( l_scene )
 		{
 			// Render the scene through the RenderTechnique.
-			m_renderTechnique->Render( p_frameTime, m_visibleObjectsCount, m_particlesCount );
+			m_renderTechnique->Render( m_visibleObjectsCount, m_particlesCount );
 
 			// Then draw the render's result to the RenderTarget's frame buffer.
 			p_fb.m_frameBuffer->Bind();

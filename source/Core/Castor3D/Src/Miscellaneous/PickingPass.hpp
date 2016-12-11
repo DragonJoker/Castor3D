@@ -207,7 +207,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdate
 		 */
-		C3D_API void DoUpdate()override;
+		C3D_API void DoUpdate( RenderQueueArray & p_queues )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */

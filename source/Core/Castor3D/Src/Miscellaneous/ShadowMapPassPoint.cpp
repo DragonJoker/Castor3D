@@ -128,11 +128,11 @@ namespace Castor3D
 		m_shadowMap.Cleanup();
 	}
 
-	void ShadowMapPassPoint::DoUpdate()
+	void ShadowMapPassPoint::DoUpdate( RenderQueueArray & p_queues )
 	{
 		auto l_position = m_light.GetParent()->GetDerivedPosition();
 		m_light.Update( l_position );
-		m_renderQueue.Update();
+		p_queues.push_back( m_renderQueue );
 
 		for ( auto & l_it : m_frontPipelines )
 		{

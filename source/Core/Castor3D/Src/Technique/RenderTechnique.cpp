@@ -267,18 +267,18 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechnique::Update()
+	void RenderTechnique::Update( RenderQueueArray & p_queues )
 	{
-		m_opaquePass->Update();
-		m_transparentPass->Update();
+		m_opaquePass->Update( p_queues );
+		m_transparentPass->Update( p_queues );
 
 		for ( auto & l_it: m_shadowMaps )
 		{
-			l_it.second->Update();
+			l_it.second->Update( p_queues );
 		}
 	}
 
-	void RenderTechnique::Render( uint32_t p_frameTime, uint32_t & p_visible, uint32_t & p_particles )
+	void RenderTechnique::Render( uint32_t & p_visible, uint32_t & p_particles )
 	{
 		auto & l_scene = *m_renderTarget.GetScene();
 		l_scene.GetLightCache().UpdateLights();
@@ -301,7 +301,7 @@ namespace Castor3D
 		l_camera.Apply();
 
 		DoBeginOpaqueRendering();
-		m_opaquePass->Render( p_frameTime, p_visible, l_shadows );
+		m_opaquePass->Render( p_visible, l_shadows );
 		DoEndOpaqueRendering();
 
 		if ( l_scene.GetFog().GetType() == FogType::eDisabled )
@@ -316,7 +316,7 @@ namespace Castor3D
 		} );
 
 		DoBeginTransparentRendering();
-		m_transparentPass->Render( p_frameTime, p_visible, l_shadows );
+		m_transparentPass->Render( p_visible, l_shadows );
 		DoEndTransparentRendering();
 
 #if !defined( NDEBUG )

@@ -58,32 +58,32 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~RenderLoopSync();
+		/**
+		 *\copydoc		Castor3D::RenderLoop::StartRendering
+		 */
+		C3D_API void StartRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::RenderSyncFrame
+		 */
+		C3D_API void RenderSyncFrame()override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::Pause
+		 */
+		C3D_API void Pause()override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::Resume
+		 */
+		C3D_API void Resume()override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::EndRendering
+		 */
+		C3D_API void EndRendering()override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderLoop::DoStartRendering
-		 */
-		C3D_API virtual void DoStartRendering();
-		/**
-		 *\copydoc		Castor3D::RenderLoop::DoRenderSyncFrame
-		 */
-		C3D_API virtual void DoRenderSyncFrame();
-		/**
-		 *\copydoc		Castor3D::RenderLoop::DoPause
-		 */
-		C3D_API virtual void DoPause();
-		/**
-		 *\copydoc		Castor3D::RenderLoop::DoResume
-		 */
-		C3D_API virtual void DoResume();
-		/**
-		 *\copydoc		Castor3D::RenderLoop::DoEndRendering
-		 */
-		C3D_API virtual void DoEndRendering();
-		/**
 		 *\copydoc		Castor3D::RenderLoop::DoCreateMainContext
 		 */
-		C3D_API virtual ContextSPtr DoCreateMainContext( RenderWindow & p_window );
+		C3D_API ContextSPtr DoCreateMainContext( RenderWindow & p_window )override;
 
 	private:
 		//!\~english Tells if the render loop is active.	\~french Dit si la boucle de rendu est active.
