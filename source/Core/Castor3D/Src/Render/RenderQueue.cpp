@@ -400,7 +400,8 @@ namespace Castor3D
 			, Scene & p_scene
 			, RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & p_nodes )
 		{
-			auto l_addNode = [&p_opaque, &p_renderPass, &p_scene, &p_nodes]( Pass & p_pass
+			bool l_shadows{ p_scene.HasShadows() };
+			auto l_addNode = [&p_opaque, &p_renderPass, &p_scene, &p_nodes, &l_shadows]( Pass & p_pass
 				, BillboardBase & p_billboard )
 			{
 				p_pass.PrepareTextures();
@@ -412,6 +413,12 @@ namespace Castor3D
 					AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
 				}
 
+				if ( l_shadows
+					&& p_billboard.IsShadowReceiver() )
+				{
+					AddFlag( l_programFlags, ProgramFlag::eShadows );
+				}
+
 				auto l_textureFlags = p_pass.GetTextureFlags();
 				p_renderPass.PreparePipeline( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
@@ -420,7 +427,8 @@ namespace Castor3D
 					, p_scene.GetFlags()
 					, p_pass.IsTwoSided() );
 
-				if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
+				if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque
+					&& !CheckFlag( l_programFlags, ProgramFlag::eShadowMap ) )
 				{
 					DoAddBillboardNode( p_renderPass
 						, l_textureFlags

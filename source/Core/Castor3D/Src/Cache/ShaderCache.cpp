@@ -398,7 +398,7 @@ namespace Castor3D
 						l_height = c3d_v2iDimensions.y() / c3d_v2iWindowSize.y();
 					}
 
-					vtx_worldSpacePosition = center
+					vtx_worldSpacePosition = l_center
 						+ l_right * position.x() * l_width
 						+ l_up * position.y() * l_height;
 

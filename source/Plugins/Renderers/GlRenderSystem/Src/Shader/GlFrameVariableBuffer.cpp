@@ -663,12 +663,11 @@ namespace GlRender
 		}
 	}
 
-	GlFrameVariableBuffer::GlFrameVariableBuffer(
-		OpenGl & p_gl,
-		String const & p_name,
-		GlShaderProgram & p_program,
-		FlagCombination< ShaderTypeFlag > const & p_flags,
-		RenderSystem & p_renderSystem )
+	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl
+		, String const & p_name
+		, GlShaderProgram & p_program
+		, FlagCombination< ShaderTypeFlag > const & p_flags
+		, RenderSystem & p_renderSystem )
 		: FrameVariableBuffer( p_name, p_program, p_flags, p_renderSystem )
 		, Holder( p_gl )
 		, m_glBuffer( p_gl, GlBufferTarget::eUniform )
@@ -885,12 +884,12 @@ namespace GlRender
 		GlShaderProgram & l_program = static_cast< GlShaderProgram & >( m_program );
 		int l_max = 0;
 		GetOpenGl().GetIntegerv( GlMax::eUniformBufferBindings, &l_max );
+		GetOpenGl().UseProgram( l_program.GetGlName() );
 
 		if ( int( m_index ) < l_max )
 		{
 			if ( GetOpenGl().HasUbo() && l_index == GlInvalidIndex )
 			{
-				GetOpenGl().UseProgram( l_program.GetGlName() );
 				m_uniformBlockIndex = GetOpenGl().GetUniformBlockIndex( l_program.GetGlName(), string::string_cast< char >( m_name ).c_str() );
 
 				if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
@@ -972,7 +971,18 @@ namespace GlRender
 		m_glBuffer.Destroy();
 	}
 
-	void GlFrameVariableBuffer::DoBind( uint32_t p_index )
+	void GlFrameVariableBuffer::DoBindTo( uint32_t p_index )
+	{
+		if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
+		{
+			m_glBuffer.Bind();
+			GetOpenGl().BindBufferBase( GlBufferTarget::eUniform, p_index, m_glBuffer.GetGlName() );
+			//GetOpenGl().UniformBlockBinding( l_program.GetGlName(), m_uniformBlockIndex, m_index );
+			m_glBuffer.Unbind();
+		}
+	}
+
+	void GlFrameVariableBuffer::DoUpdate()
 	{
 		if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 		{
@@ -991,11 +1001,5 @@ namespace GlRender
 				}
 			}
 		}
-	}
-
-	void GlFrameVariableBuffer::DoUnbind( uint32_t p_index )
-	{
-		REQUIRE( m_uniformBlockIndex != int( GlInvalidIndex ) );
-		m_glBuffer.Unbind();
 	}
 }
