@@ -31,42 +31,53 @@ namespace GLSL
 		}
 
 		DoDeclare_GetRandom();
+		DoDeclare_GetShadowOffset();
 		DoDeclare_ComputeDirectionalShadow( p_type );
 		DoDeclare_ComputeSpotShadow( p_type );
 		DoDeclare_ComputePointShadow( p_type );
 	}
 
-	Float Shadow::ComputeDirectionalShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDir, Vec3 const & p_normal )
+	Float Shadow::ComputeDirectionalShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal )
 	{
-		return WriteFunctionCall< Float >( &m_writer, cuT( "ComputeDirectionalShadow" ), p_lightSpacePosition, p_lightDir, p_normal );
+		return WriteFunctionCall< Float >( &m_writer, cuT( "ComputeDirectionalShadow" ), p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal );
 	}
 
-	Float Shadow::ComputeSpotShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDir, Vec3 const & p_normal, Int const & p_index )
+	Float Shadow::ComputeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index )
 	{
-		return WriteFunctionCall< Float >( &m_writer, cuT( "ComputeSpotShadow" ), p_lightSpacePosition, p_lightDir, p_normal, p_index );
+		return WriteFunctionCall< Float >( &m_writer, cuT( "ComputeSpotShadow" ), p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal, p_index );
 	}
 
-	Float Shadow::ComputePointShadow( Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index )
+	Float Shadow::ComputePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index )
 	{
-		return WriteFunctionCall< Float >( &m_writer, cuT( "ComputePointShadow" ), p_lightDirection, p_normal, p_index );
+		return WriteFunctionCall< Float >( &m_writer, cuT( "ComputePointShadow" ), p_worldSpacePosition, p_lightDirection, p_normal, p_index );
+	}
+
+	Float Shadow::GetRandom( Vec4 const & p_seed )
+	{
+		return WriteFunctionCall< Float >( &m_writer, cuT( "GetRandom" ), p_seed );
+	}
+
+	Vec2 Shadow::GetShadowOffset( Vec3 const & p_normal, Vec3 const & p_lightDirection )
+	{
+		return WriteFunctionCall< Vec2 >( &m_writer, cuT( "GetShadowOffset" ), p_normal, p_lightDirection );
 	}
 
 	void Shadow::DoDeclare_ComputeDirectionalShadow( ShadowType p_type )
 	{
-		auto l_compute = [this, &p_type]( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal )
+		auto l_compute = [this, &p_type]( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal )
 		{
 			auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
 			auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
+
+			auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), GetShadowOffset( p_normal, p_lightDirection ) * 2.0_f );
+			// Offset the vertex position along its normal.
+			auto l_worldSpace = m_writer.GetLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
+			auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), p_lightMatrix * vec4( l_worldSpace, 1.0_f ) );
 			// Perspective divide (result in range [-1,1]).
-			auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), p_lightSpacePosition.xyz() / p_lightSpacePosition.w() );
+			l_lightSpacePosition.xyz() = l_lightSpacePosition.xyz() / l_lightSpacePosition.w();
 			// Now put the position in range [0,1].
-			l_lightSpacePosition = m_writer.Paren( l_lightSpacePosition * Float( 0.5 ) ) + Float( 0.5 );
-			// Take care of shadow acne by subtracting a bias based on the surface's slope.
+			l_lightSpacePosition.xyz() = m_writer.Paren( l_lightSpacePosition.xyz() * Float( 0.5 ) ) + Float( 0.5 );
 			auto l_z = m_writer.GetLocale( cuT( "l_z" ), l_lightSpacePosition.z() );
-			auto l_cosTheta = m_writer.GetLocale( cuT( "l_cosTheta" ), clamp( dot( p_normal, p_lightDirection ), 0, 1 ) );
-			auto l_bias = m_writer.GetLocale( cuT( "l_bias" ), Float( 0.0048 ) * tan( acos( l_cosTheta ) ) );
-			l_bias = clamp( l_bias, 0.0, 0.012 );
-			l_z -= l_bias;
 
 			auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
 
@@ -93,7 +104,7 @@ namespace GLSL
 
 				for ( int i = 0; i < 4; i++ )
 				{
-					l_pindex = m_writer.Cast< Int >( 16.0 * WriteFunctionCall< Float >( &m_writer, cuT( "GetRandom" ), vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+					l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
 					l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( l_lightSpacePosition.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, l_z ) ) );
 				}
 			}
@@ -102,30 +113,30 @@ namespace GLSL
 		};
 		m_writer.ImplementFunction< Float >( cuT( "ComputeDirectionalShadow" )
 			, l_compute
-			, InParam< Vec4 >( &m_writer, cuT( "p_lightSpacePosition" ) )
+			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_lightDirection" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) ) );
 	}
 
 	void Shadow::DoDeclare_ComputeSpotShadow( ShadowType p_type )
 	{
-		auto l_compute = [this, &p_type]( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index )
+		auto l_compute = [this, &p_type]( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index )
 		{
 			auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
 			auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-			auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) / SpotShadowMapCount );
+
+			auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), GetShadowOffset( p_normal, p_lightDirection ) );
+			// Offset the vertex position along its normal.
+			auto l_worldSpace = m_writer.GetLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
+			auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), p_lightMatrix * vec4( l_worldSpace, 1.0_f ) );
 			// Perspective divide (result in range [-1,1]).
-			auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), p_lightSpacePosition.xyz() / p_lightSpacePosition.w() );
+			l_lightSpacePosition.xyz() = l_lightSpacePosition.xyz() / l_lightSpacePosition.w();
 			// Now put the position in range [0,1].
-			l_lightSpacePosition = m_writer.Paren( l_lightSpacePosition * 0.5_f ) + 0.5_f;
-			// Take care of shadow acne by subtracting a bias based on the surface's slope.
+			l_lightSpacePosition.xyz() = m_writer.Paren( l_lightSpacePosition.xyz() * 0.5_f ) + 0.5_f;
 			auto l_z = m_writer.GetLocale( cuT( "l_z" ), l_lightSpacePosition.z() );
-			auto l_cosTheta = m_writer.GetLocale( cuT( "l_cosTheta" ), clamp( dot( p_normal, p_lightDirection ), 0, 1 ) );
-			auto l_bias = m_writer.GetLocale( cuT( "l_bias" ), Float( 0.00008 ) * tan( acos( l_cosTheta ) ) );
-			l_bias = clamp( l_bias, 0.0, 0.0002 );
-			//auto l_bias = m_writer.GetLocale( cuT( "l_bias" ), 0.001_f * tan( acos( l_cosTheta ) ) );
-			//l_bias = clamp( l_bias, 0.0001, 0.001 );
-			l_z -= l_bias;
+
+			auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) / SpotShadowMapCount );
 
 			auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );
 
@@ -152,7 +163,7 @@ namespace GLSL
 
 				for ( int i = 0; i < 4; i++ )
 				{
-					l_pindex = m_writer.Cast< Int >( 16.0 * WriteFunctionCall< Float >( &m_writer, cuT( "GetRandom" ), vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+					l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
 					l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( l_lightSpacePosition.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, l_index, l_z ) ) );
 				}
 			}
@@ -161,7 +172,8 @@ namespace GLSL
 		};
 		m_writer.ImplementFunction< Float >( cuT( "ComputeSpotShadow" )
 			, l_compute
-			, InParam< Vec4 >( &m_writer, cuT( "p_lightSpacePosition" ) )
+			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_lightDirection" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) )
 			, InParam< Int >( &m_writer, cuT( "p_index" ) ) );
@@ -169,7 +181,7 @@ namespace GLSL
 
 	void Shadow::DoDeclare_ComputePointShadow( ShadowType p_type )
 	{
-		auto l_compute = [this, &p_type]( Vec3 const & p_vertexPosition, Vec3 const & p_lightPosition, Int const & p_index )
+		auto l_compute = [this, &p_type]( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightPosition, Vec3 const & p_normal, Int const & p_index )
 		{
 			auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCube >( Shadow::MapShadowPoint );
 			auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
@@ -178,7 +190,7 @@ namespace GLSL
 
 			//if ( p_type == ShadowType::eRaw )
 			//{
-				auto l_vertexToLight = m_writer.GetLocale( cuT( "l_vertexToLight" ), p_vertexPosition - p_lightPosition );
+				auto l_vertexToLight = m_writer.GetLocale( cuT( "l_vertexToLight" ), p_worldSpacePosition - p_lightPosition );
 				auto l_closest = m_writer.GetLocale( cuT( "l_closest" ), texture( c3d_mapShadowPoint, l_vertexToLight ).r() );
 				l_closest *= 2000.0_f;
 				auto l_current = m_writer.GetLocale( cuT( "l_current" ), length( l_vertexToLight ) );
@@ -208,7 +220,7 @@ namespace GLSL
 
 			//	for ( int i = 0; i < 4; i++ )
 			//	{
-			//		l_index = m_writer.Cast< Int >( 16.0 * WriteFunctionCall< Float >( &m_writer, cuT( "GetRandom" ), vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+			//		l_index = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
 			//		l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_lightDirection.xy() + c3d_poissonDisk[l_index] / 700.0, p_lightDirection.z(), length( p_lightDirection ) ) ) );
 			//	}
 			//}
@@ -217,8 +229,9 @@ namespace GLSL
 		};
 		m_writer.ImplementFunction< Float >( cuT( "ComputePointShadow" )
 			, l_compute
-			, InParam< Vec3 >( &m_writer, cuT( "p_vertexPosition" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_lightPosition" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) )
 			, InParam< Int >( &m_writer, cuT( "p_index" ) ) );
 	}
 
@@ -232,5 +245,20 @@ namespace GLSL
 		m_writer.ImplementFunction< Float >( cuT( "GetRandom" )
 			, l_random
 			, InParam< Vec4 >( &m_writer, cuT( "p_seed" ) ) );
+	}
+
+	void Shadow::DoDeclare_GetShadowOffset()
+	{
+		auto l_compute = [this]( Vec3 const & p_normal, Vec3 const & p_lightDirection )
+		{
+			auto l_cosAlpha = m_writer.GetLocale( cuT( "l_cosAlpha" ), clamp( dot( p_normal, p_lightDirection ), 0.0_f, 1.0_f ) );
+			auto l_offsetScaleN = m_writer.GetLocale( cuT( "l_offsetScaleN" ), sqrt( 1.0_f - l_cosAlpha * l_cosAlpha ) ); // sin( acos( l_cosAlpha ) )
+			auto l_offsetScaleL = m_writer.GetLocale( cuT( "l_offsetScaleL" ), l_offsetScaleN / l_cosAlpha ); // tan( acos( l_cosAlpha ) )
+			m_writer.Return( vec2( l_offsetScaleN, min( 2.0_f, l_offsetScaleL ) ) );
+		};
+		m_writer.ImplementFunction< Vec2 >( cuT( "GetShadowOffset" )
+			, l_compute
+			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_lightDirection" ) ) );
 	}
 }

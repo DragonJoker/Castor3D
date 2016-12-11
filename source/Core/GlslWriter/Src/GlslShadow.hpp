@@ -37,16 +37,18 @@ namespace GLSL
 	public:
 		GlslWriter_API Shadow( GlslWriter & p_writer );
 		GlslWriter_API void Declare( ShadowType p_type );
-		GlslWriter_API Float ComputeDirectionalShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
-		GlslWriter_API Float ComputeSpotShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
-		GlslWriter_API Float ComputePointShadow( Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
+		GlslWriter_API Float ComputeDirectionalShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
+		GlslWriter_API Float ComputeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
+		GlslWriter_API Float ComputePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
 		GlslWriter_API Float GetRandom( Vec4 const & p_seed );
+		GlslWriter_API Vec2 GetShadowOffset( Vec3 const & p_normal, Vec3 const & p_lightDirection );
 
 	private:
 		void DoDeclare_ComputeDirectionalShadow( ShadowType p_type );
 		void DoDeclare_ComputeSpotShadow( ShadowType p_type );
 		void DoDeclare_ComputePointShadow( ShadowType p_type );
 		void DoDeclare_GetRandom();
+		void DoDeclare_GetShadowOffset();
 
 	private:
 		GlslWriter & m_writer;

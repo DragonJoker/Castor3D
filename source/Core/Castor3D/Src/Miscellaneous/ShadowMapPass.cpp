@@ -127,6 +127,8 @@ namespace Castor3D
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
+			//l_rsState.SetDepthBiasFactor( 4.0f );
+			//l_rsState.SetDepthBiasUnits( 20.0f );
 			l_it = m_backPipelines.emplace( p_flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
 					, std::move( l_rsState )

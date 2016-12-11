@@ -974,19 +974,21 @@ namespace GlRender
 
 	void GlFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
-		REQUIRE( m_uniformBlockIndex != int( GlInvalidIndex ) );
-		bool l_changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( FrameVariableSPtr p_variable )
+		if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 		{
-			return p_variable->IsChanged();
-		} );
-
-		if ( l_changed )
-		{
-			m_glBuffer.Upload( 0u, m_uniformBlockSize, m_buffer.data() );
-
-			for ( auto & l_variable : m_listVariables )
+			bool l_changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( FrameVariableSPtr p_variable )
 			{
-				l_variable->SetChanged( false );
+				return p_variable->IsChanged();
+			} );
+
+			if ( l_changed )
+			{
+				m_glBuffer.Upload( 0u, m_uniformBlockSize, m_buffer.data() );
+
+				for ( auto & l_variable : m_listVariables )
+				{
+					l_variable->SetChanged( false );
+				}
 			}
 		}
 	}
