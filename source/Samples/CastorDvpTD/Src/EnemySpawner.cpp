@@ -68,7 +68,7 @@ namespace castortd
 
 			for ( auto l_submesh : *l_geometry->GetMesh() )
 			{
-				l_geometry->SetMaterial( l_submesh, p_game.GetEnemyMaterial() );
+				l_geometry->SetMaterial( *l_submesh, p_game.GetEnemyMaterial() );
 			}
 
 			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, LightType::ePoint );

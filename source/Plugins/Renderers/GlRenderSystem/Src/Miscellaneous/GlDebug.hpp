@@ -28,6 +28,7 @@ SOFTWARE.
 #include <Miscellaneous/Debug.hpp>
 
 #include <unordered_set>
+#include <unordered_map>
 
 #if !defined( CALLBACK )
 #	if defined( _WIN32 )

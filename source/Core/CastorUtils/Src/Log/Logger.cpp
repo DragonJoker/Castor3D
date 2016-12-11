@@ -75,6 +75,11 @@ namespace Castor
 			{
 				do_sync();
 			}
+			else if ( c == '\r' )
+			{
+				m_buffer += '\r';
+				do_sync_no_nl();
+			}
 			else
 			{
 				m_buffer += traits_type::to_char_type( c );
@@ -94,6 +99,17 @@ namespace Castor
 			return 0;
 		}
 
+		virtual int do_sync_no_nl()
+		{
+			if ( !m_buffer.empty() )
+			{
+				LogStreambufTraits::LogNoNL( m_buffer );
+				m_buffer.clear();
+			}
+
+			return 0;
+		}
+
 	private:
 		string_type m_buffer;
 		ostream_type & m_stream;
@@ -107,6 +123,10 @@ namespace Castor
 		{
 			Logger::LogDebug( p_text );
 		}
+		static void LogNoNL( std::basic_string< CharType > const & p_text )
+		{
+			Logger::LogDebugNoNL( p_text );
+		}
 	};
 
 	template< typename CharType >
@@ -115,6 +135,10 @@ namespace Castor
 		static void Log( std::basic_string< CharType > const & p_text )
 		{
 			Logger::LogInfo( p_text );
+		}
+		static void LogNoNL( std::basic_string< CharType > const & p_text )
+		{
+			Logger::LogInfoNoNL( p_text );
 		}
 	};
 
@@ -125,6 +149,10 @@ namespace Castor
 		{
 			Logger::LogWarning( p_text );
 		}
+		static void LogNoNL( std::basic_string< CharType > const & p_text )
+		{
+			Logger::LogWarningNoNL( p_text );
+		}
 	};
 
 	template< typename CharType >
@@ -133,6 +161,10 @@ namespace Castor
 		static void Log( std::basic_string< CharType > const & p_text )
 		{
 			Logger::LogError( p_text );
+		}
+		static void LogNoNL( std::basic_string< CharType > const & p_text )
+		{
+			Logger::LogErrorNoNL( p_text );
 		}
 	};
 
@@ -187,7 +219,7 @@ namespace Castor
 			{
 				auto l_lock = make_unique_lock( l_logger.m_mutex );
 				delete l_logger.m_impl;
-				l_logger.m_impl = new LoggerImpl;
+				l_logger.m_impl = new LoggerImpl{ p_eLogLevel };
 				l_logger.m_impl->Initialise( l_logger );
 			}
 			l_logger.m_logLevel = p_eLogLevel;
@@ -345,6 +377,128 @@ namespace Castor
 		LogError( l_ss.str() );
 	}
 
+	void Logger::LogTraceNoNL( std::string const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eTrace, p_msg, false );
+	}
+
+	void Logger::LogTraceNoNL( std::ostream const & p_msg )
+	{
+		auto l_sbuf = p_msg.rdbuf();
+		std::stringstream l_ss;
+		l_ss << l_sbuf;
+		LogTraceNoNL( l_ss.str() );
+	}
+
+	void Logger::LogTraceNoNL( std::wstring const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eTrace, p_msg, false );
+	}
+
+	void Logger::LogTraceNoNL( std::wostream const & p_msg )
+	{
+		std::wstringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogTraceNoNL( l_ss.str() );
+	}
+
+	void Logger::LogDebugNoNL( std::string const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eDebug, p_msg, false );
+	}
+
+	void Logger::LogDebugNoNL( std::ostream const & p_msg )
+	{
+		auto l_sbuf = p_msg.rdbuf();
+		std::stringstream l_ss;
+		l_ss << l_sbuf;
+		LogDebugNoNL( l_ss.str() );
+	}
+
+	void Logger::LogDebugNoNL( std::wstring const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eDebug, p_msg, false );
+	}
+
+	void Logger::LogDebugNoNL( std::wostream const & p_msg )
+	{
+		std::wstringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogDebugNoNL( l_ss.str() );
+	}
+
+	void Logger::LogInfoNoNL( std::string const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eInfo, p_msg, false );
+	}
+
+	void Logger::LogInfoNoNL( std::ostream const & p_msg )
+	{
+		std::stringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogInfoNoNL( l_ss.str() );
+	}
+
+	void Logger::LogInfoNoNL( std::wstring const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eInfo, p_msg, false );
+	}
+
+	void Logger::LogInfoNoNL( std::wostream const & p_msg )
+	{
+		std::wstringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogInfoNoNL( l_ss.str() );
+	}
+
+	void Logger::LogWarningNoNL( std::string const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eWarning, p_msg, false );
+	}
+
+	void Logger::LogWarningNoNL( std::ostream const & p_msg )
+	{
+		std::stringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogWarningNoNL( l_ss.str() );
+	}
+
+	void Logger::LogWarningNoNL( std::wstring const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eWarning, p_msg, false );
+	}
+
+	void Logger::LogWarningNoNL( std::wostream const & p_msg )
+	{
+		std::wstringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogWarningNoNL( l_ss.str() );
+	}
+
+	void Logger::LogErrorNoNL( std::string const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eError, p_msg, false );
+	}
+
+	void Logger::LogErrorNoNL( std::ostream const & p_msg )
+	{
+		std::stringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogErrorNoNL( l_ss.str() );
+	}
+
+	void Logger::LogErrorNoNL( std::wstring const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eError, p_msg, false );
+	}
+
+	void Logger::LogErrorNoNL( std::wostream const & p_msg )
+	{
+		std::wstringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogError( l_ss.str() );
+	}
+
 	Logger & Logger::GetSingleton()
 	{
 		if ( !m_singleton )
@@ -381,33 +535,33 @@ namespace Castor
 		}
 	}
 
-	void Logger::DoPushMessage( LogType logLevel, std::string const & message )
+	void Logger::DoPushMessage( LogType logLevel, std::string const & message, bool p_newLine )
 	{
 		if ( logLevel >= m_logLevel )
 		{
 #if !defined( NDEBUG )
 			{
 				auto l_lock = make_unique_lock( m_mutex );
-				m_impl->PrintMessage( logLevel, message );
+				m_impl->PrintMessage( logLevel, message, p_newLine );
 			}
 #endif
 			auto l_lock = make_unique_lock( m_mutexQueue );
-			m_queue.push_back( std::make_unique< Message >( logLevel, message ) );
+			m_queue.push_back( { logLevel, message, p_newLine } );
 		}
 	}
 
-	void Logger::DoPushMessage( LogType logLevel, std::wstring const & message )
+	void Logger::DoPushMessage( LogType logLevel, std::wstring const & message, bool p_newLine )
 	{
 		if ( logLevel >= m_logLevel )
 		{
 #if !defined( NDEBUG )
 			{
 				auto l_lock = make_unique_lock( m_mutex );
-				m_impl->PrintMessage( logLevel, message );
+				m_impl->PrintMessage( logLevel, message, p_newLine );
 			}
 #endif
 			auto l_lock = make_unique_lock( m_mutexQueue );
-			m_queue.push_back( std::make_unique< WMessage >( logLevel, message ) );
+			m_queue.push_back( { logLevel, string::string_cast< char >( message ), p_newLine } );
 		}
 	}
 

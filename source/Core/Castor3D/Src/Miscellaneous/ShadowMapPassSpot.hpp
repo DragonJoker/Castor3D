@@ -88,15 +88,15 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool DoInitialisePass( Castor::Size const & p_size )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
 		 */
-		void DoCleanup()override;
+		void DoCleanupPass()override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
 		 */
-		void DoUpdate()override;
+		void DoUpdate( RenderQueueArray & p_queues )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoRender
 		 */
@@ -108,17 +108,15 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
-		Castor::String DoGetGeometryShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, uint8_t p_sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, uint8_t p_sceneFlags )const override;
 
 	private:
 		//!\~english	The attach between depth buffer and main frame buffer.

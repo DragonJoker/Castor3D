@@ -69,7 +69,7 @@ namespace GuiCommon
 	\~english
 	\brief		The supported object types, for display, and properties
 	\~french
-	\brief		Les type d'objets support�s, dans les propri�t�s, et � l'affichage
+	\brief		Les type d'objets support�s, dans les propriétés, et � l'affichage
 	*/
 	typedef enum ePROPERTY_DATA_TYPE
 	{
@@ -98,7 +98,7 @@ namespace GuiCommon
 	\~english
 	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder
 	*/
 	class TreeItemProperty
 		: public wxTreeItemData
@@ -113,7 +113,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements.
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_type		Le type d'objet
 		 */
 		TreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, ePROPERTY_DATA_TYPE p_type );
@@ -141,8 +141,8 @@ namespace GuiCommon
 		 *\param[in]	p_editor	The button editor, for properties that need it
 		 *\param[in]	p_grid		The target wxPropertyGrid
 		 *\~french
-		 *\brief		Construit et remplit les propri�t�s de l'objet, dans la wxPropertyGrid donn�e
-		 *\param[in]	p_editor	L'�diteur bouton, pour les propri�t�s en ayant besoin
+		 *\brief		Construit et remplit les propriétés de l'objet, dans la wxPropertyGrid donn�e
+		 *\param[in]	p_editor	L'�diteur bouton, pour les propriétés en ayant besoin
 		 *\param[in]	p_grid		La wxPropertyGrid cible
 		 */
 		void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
@@ -160,7 +160,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the object type
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re le type d'objet
+		 *\brief		Récupère le type d'objet
 		 *\return		La valeur
 		 */
 		inline ePROPERTY_DATA_TYPE GetType()const
@@ -172,7 +172,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the editable status
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re le statut de modifiabilit�
+		 *\brief		Récupère le statut de modifiabilit�
 		 *\return		La valeur
 		 */
 		inline bool IsEditable()const
@@ -190,7 +190,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Cr�e une propri�t� de s�lection de mat�riau
 		 *\param[in]	p_name		Le nom de la propri�t�
-		 *\param[in]	p_engine	Le moteur, pour r�cup�rer les mat�riaux
+		 *\param[in]	p_engine	Le moteur, pour r�cup�rer les matériaux
 		 *\return		La propri�t� cr��e.
 		 */
 		wxEnumProperty * DoCreateMaterialProperty( wxString const & p_name );
@@ -201,7 +201,7 @@ namespace GuiCommon
 		 *\param[in]	p_functor	The function to execute
 		 *\~french
 		 *\brief		Poste un évènement functeur au moteur
-		 *\param[in]	p_engine	Le moteur, pour r�cup�rer les mat�riaux
+		 *\param[in]	p_engine	Le moteur, pour r�cup�rer les matériaux
 		 *\param[in]	p_functor	La fonction � ex�cuter
 		 */
 		void DoApplyChange( std::function< void() > p_functor );
@@ -225,7 +225,7 @@ namespace GuiCommon
 		 *\param[in]	p_editor	The button editor, for properties that need it
 		 *\param[in]	p_grid		The target wxPropertyGrid
 		 *\~french
-		 *\brief		Construit et remplit les propri�t�s de l'incrustation, dans la wxPropertyGrid donn�e
+		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donn�e
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
 		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid ) = 0;

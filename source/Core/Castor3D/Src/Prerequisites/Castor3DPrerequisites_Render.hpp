@@ -583,8 +583,8 @@ namespace Castor3D
 	{
 		BlendMode m_colourBlendMode;
 		BlendMode m_alphaBlendMode;
-		Castor::FlagCombination< TextureChannel > m_textureFlags;
-		Castor::FlagCombination< ProgramFlag > m_programFlags;
+		TextureChannels m_textureFlags;
+		ProgramFlags m_programFlags;
 		uint8_t m_sceneFlags;
 	};
 
@@ -654,6 +654,7 @@ namespace Castor3D
 	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
 	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
+	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
 
 	//@}
 }

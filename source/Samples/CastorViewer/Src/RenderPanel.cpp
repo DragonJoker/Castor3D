@@ -414,14 +414,14 @@ namespace CastorViewer
 				auto l_material = m_selectedSubmeshMaterialOrig;
 				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, l_geometry, l_submesh, l_material]()
 				{
-					l_geometry->SetMaterial( l_submesh, l_material );
+					l_geometry->SetMaterial( *l_submesh, l_material );
 					l_geometry->GetScene()->SetChanged();
 				} ) );
 			}
 
 			if ( p_submesh && p_geometry )
 			{
-				m_selectedSubmeshMaterialOrig = p_geometry->GetMaterial( p_submesh );
+				m_selectedSubmeshMaterialOrig = p_geometry->GetMaterial( *p_submesh );
 				m_selectedSubmeshMaterialClone = DoCloneMaterial( *m_selectedSubmeshMaterialOrig );
 
 				if (m_selectedSubmeshMaterialClone->GetType() == MaterialType::eLegacy )
@@ -434,7 +434,7 @@ namespace CastorViewer
 
 				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry, p_submesh]()
 				{
-					p_geometry->SetMaterial( p_submesh, m_selectedSubmeshMaterialClone );
+					p_geometry->SetMaterial( *p_submesh, m_selectedSubmeshMaterialClone );
 					p_geometry->GetScene()->SetChanged();
 				} ) );
 
@@ -795,8 +795,10 @@ namespace CastorViewer
 				{
 					Camera & l_camera = *l_window->GetCamera();
 					l_camera.Update();
+					auto l_type = l_window->GetPickingPass().Pick( Position{ int( l_x ), int( l_y ) }, l_camera );
 
-					if ( l_window->GetPickingPass().Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
+					if ( l_type != PickingPass::NodeType::eNone
+						&& l_type != PickingPass::NodeType::eBillboard )
 					{
 						DoUpdateSelectedGeometry( l_window->GetPickingPass().GetPickedGeometry(), l_window->GetPickingPass().GetPickedSubmesh() );
 					}
@@ -899,7 +901,7 @@ namespace CastorViewer
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_listener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaX, l_deltaY, 0.0_r ) );
+					m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, l_deltaX, l_deltaY, 0.0_r ) );
 				}
 
 				if ( m_mouseLeftDown || m_mouseRightDown )

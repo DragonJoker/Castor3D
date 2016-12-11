@@ -1,4 +1,4 @@
-project( DirectTechnique )
+project( ForwardTechnique )
 
 set( CastorBinsDependencies 
 	${CastorBinsDependencies}
@@ -6,7 +6,7 @@ set( CastorBinsDependencies
 	PARENT_SCOPE
 )
 
-set( ${PROJECT_NAME}_DESCRIPTION "Direct RenderTechnique" )
+set( ${PROJECT_NAME}_DESCRIPTION "Forward RenderTechnique" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )

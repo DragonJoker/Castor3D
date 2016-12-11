@@ -42,10 +42,10 @@ namespace GuiCommon
 
 	protected:
 		void DoAddRenderWindow( wxTreeItemId p_id, Castor3D::RenderWindowSPtr p_window );
-		void DoAddGeometry( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_geometry );
-		void DoAddCamera( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_camera );
-		void DoAddLight( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_light );
-		void DoAddBillboard( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_light );
+		void DoAddGeometry( wxTreeItemId p_id, Castor3D::Geometry & p_geometry );
+		void DoAddCamera( wxTreeItemId p_id, Castor3D::Camera & p_camera );
+		void DoAddLight( wxTreeItemId p_id, Castor3D::Light & p_light );
+		void DoAddBillboard( wxTreeItemId p_id, Castor3D::BillboardList & p_billboard );
 		void DoAddNode( wxTreeItemId p_id, Castor3D::SceneNodeSPtr p_node );
 		void DoAddAnimatedObjectGroup( wxTreeItemId p_id, Castor3D::AnimatedObjectGroupSPtr p_group );
 		void DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlayCategorySPtr p_overlay );

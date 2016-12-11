@@ -1,4 +1,4 @@
-#include "MsaaRenderTechnique.hpp"
+#include "ForwardMsaaRenderTechnique.hpp"
 
 #include <Cache/CameraCache.hpp>
 #include <Cache/LightCache.hpp>
@@ -20,6 +20,7 @@
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
+#include <Technique/RenderTechniquePass.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <Graphics/FontCache.hpp>
@@ -28,7 +29,7 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace Msaa
+namespace forward_msaa
 {
 	int & GetSamplesCountParam( Parameters const & p_params, int & p_count )
 	{
@@ -47,8 +48,17 @@ namespace Msaa
 		return p_count;
 	}
 
+	String const RenderTechnique::Type = cuT( "forward_msaa" );
+	String const RenderTechnique::Name = cuT( "MSAA Render Technique" );
+
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
-		: Castor3D::RenderTechnique( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+		: Castor3D::RenderTechnique( RenderTechnique::Type
+			, p_renderTarget
+			, p_renderSystem
+			, std::make_unique< RenderTechniquePass >( cuT( "forward_msaa_opaque" ), p_renderTarget, *this, true, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+			, std::make_unique< RenderTechniquePass >( cuT( "forward_msaa_transparent" ), p_renderTarget, *this, false, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+			, p_params
+			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 	{
 		m_msFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );

@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Frame variable buffer helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc�ne, ou la liste de mat�riaux, et PropertiesHolder, pour les tampons de variables de frame
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les tampons de variables de frame
 	*/
 	class FrameVariableBufferTreeItemProperty
 		: public TreeItemProperty
@@ -49,7 +49,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements
-		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_buffer	Le tampon cible
 		 */
 		FrameVariableBufferTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::FrameVariableBufferSPtr p_buffer );
@@ -65,7 +65,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the camera
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re la cam�ra
+		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
 		inline Castor3D::FrameVariableBufferSPtr GetBuffer()

@@ -13,7 +13,7 @@ namespace Castor3D
 	static const char * RLS_UNKNOWN_EXCEPTION = "Unknown exception";
 
 	RenderLoopSync::RenderLoopSync( Engine & p_engine, uint32_t p_wantedFPS )
-		: RenderLoop( p_engine, p_wantedFPS )
+		: RenderLoop( p_engine, p_wantedFPS, true )
 		, m_active( true )
 	{
 	}
@@ -24,12 +24,12 @@ namespace Castor3D
 		m_renderSystem.Cleanup();
 	}
 
-	void RenderLoopSync::DoStartRendering()
+	void RenderLoopSync::StartRendering()
 	{
 		CASTOR_EXCEPTION( CALL_START_RENDERING );
 	}
 
-	void RenderLoopSync::DoRenderSyncFrame()
+	void RenderLoopSync::RenderSyncFrame()
 	{
 		if ( m_active )
 		{
@@ -55,17 +55,17 @@ namespace Castor3D
 		}
 	}
 
-	void RenderLoopSync::DoPause()
+	void RenderLoopSync::Pause()
 	{
 		CASTOR_EXCEPTION( CALL_PAUSE_RENDERING );
 	}
 
-	void RenderLoopSync::DoResume()
+	void RenderLoopSync::Resume()
 	{
 		CASTOR_EXCEPTION( CALL_RESUME_RENDERING );
 	}
 
-	void RenderLoopSync::DoEndRendering()
+	void RenderLoopSync::EndRendering()
 	{
 		CASTOR_EXCEPTION( CALL_END_RENDERING );
 	}

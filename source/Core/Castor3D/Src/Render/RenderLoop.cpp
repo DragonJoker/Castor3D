@@ -17,6 +17,10 @@
 #include "Overlay/DebugOverlays.hpp"
 #include "Scene/Scene.hpp"
 
+#include <Design/BlockGuard.hpp>
+
+#include <future>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -24,12 +28,13 @@ namespace Castor3D
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 	static const char * C3D_UNKNOWN_EXCEPTION = "Unknown exception";
 
-	RenderLoop::RenderLoop( Engine & p_engine, uint32_t p_wantedFPS )
+	RenderLoop::RenderLoop( Engine & p_engine, uint32_t p_wantedFPS, bool p_isAsync )
 		: OwnedBy< Engine >( p_engine )
-		, m_wantedFPS( p_wantedFPS )
-		, m_frameTime( 1000 / p_wantedFPS )
-		, m_renderSystem( *p_engine.GetRenderSystem() )
-		, m_debugOverlays( std::make_unique< DebugOverlays >( p_engine ) )
+		, m_wantedFPS{ p_wantedFPS }
+		, m_frameTime{ 1000 / p_wantedFPS }
+		, m_renderSystem{ *p_engine.GetRenderSystem() }
+		, m_debugOverlays{ std::make_unique< DebugOverlays >( p_engine ) }
+		, m_queueUpdater{ std::max( 2u, p_engine.GetCpuInformations().CoreCount() - ( p_isAsync ? 2u : 1u ) ) }
 	{
 		m_debugOverlays->Initialise( GetEngine()->GetOverlayCache() );
 	}
@@ -65,41 +70,6 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderLoop::StartRendering()
-	{
-		DoStartRendering();
-	}
-
-	void RenderLoop::Pause()
-	{
-		DoPause();
-	}
-
-	void RenderLoop::Resume()
-	{
-		DoResume();
-	}
-
-	void RenderLoop::RenderSyncFrame()
-	{
-		DoRenderSyncFrame();
-	}
-
-	void RenderLoop::EndRendering()
-	{
-		DoEndRendering();
-	}
-
-	uint32_t RenderLoop::GetFrameTime()
-	{
-		return m_frameTime;
-	}
-
-	uint32_t RenderLoop::GetWantedFps()
-	{
-		return m_wantedFPS;
-	}
-
 	void RenderLoop::CreateContext( RenderWindow & p_window )
 	{
 		if ( !m_renderSystem.GetMainContext() )
@@ -119,85 +89,6 @@ namespace Castor3D
 
 	void RenderLoop::UpdateVSync( bool p_enable )
 	{
-	}
-
-	void RenderLoop::DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible, uint32_t & p_particles )
-	{
-		m_renderSystem.GetMainContext()->SetCurrent();
-
-		try
-		{
-			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
-			{
-				p_listener.FireEvents( EventType::ePreRender );
-			} );
-
-			GetEngine()->GetOverlayCache().UpdateRenderer();
-			GetEngine()->GetRenderTargetCache().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount, p_visible, p_particles );
-		}
-		catch ( Exception & p_exc )
-		{
-			Logger::LogError( p_exc.GetFullDescription() );
-		}
-		catch ( std::exception & p_exc )
-		{
-			Logger::LogError( p_exc.what() );
-		}
-		catch ( ... )
-		{
-			Logger::LogError( C3D_UNKNOWN_EXCEPTION );
-		}
-
-		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
-		{
-			p_listener.FireEvents( EventType::eQueueRender );
-		} );
-
-		m_renderSystem.GetMainContext()->EndCurrent();
-		{
-			GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
-			{
-				p_scene.GetRenderWindowCache().ForEach( []( RenderWindow & p_window )
-				{
-					p_window.Render( true );
-				} );
-			} );
-		}
-		m_debugOverlays->EndGpuTask();
-	}
-
-	void RenderLoop::DoCpuStep()
-	{
-		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
-		{
-			p_listener.FireEvents( EventType::ePostRender );
-		} );
-		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
-		{
-			p_scene.Update();
-		} );
-		GetEngine()->GetRenderTechniqueCache().ForEach( []( RenderTechnique & p_technique )
-		{
-			p_technique.Update();
-		} );
-		GetEngine()->GetOverlayCache().Update();
-		m_debugOverlays->EndCpuTask();
-	}
-
-	void RenderLoop::DoRenderFrame()
-	{
-		if ( m_renderSystem.GetMainContext() )
-		{
-			uint32_t l_vertices = 0;
-			uint32_t l_faces = 0;
-			uint32_t l_objects = 0;
-			uint32_t l_visible = 0;
-			uint32_t l_particles = 0;
-			m_debugOverlays->StartFrame();
-			DoGpuStep( l_vertices, l_faces, l_objects, l_visible, l_particles );
-			DoCpuStep();
-			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects, l_visible, l_particles );
-		}
 	}
 
 	ContextSPtr RenderLoop::DoCreateContext( RenderWindow & p_window )
@@ -229,5 +120,98 @@ namespace Castor3D
 		}
 
 		return l_context;
+	}
+
+	void RenderLoop::DoRenderFrame()
+	{
+		if ( m_renderSystem.GetMainContext() )
+		{
+			uint32_t l_vertices = 0;
+			uint32_t l_faces = 0;
+			uint32_t l_objects = 0;
+			uint32_t l_visible = 0;
+			uint32_t l_particles = 0;
+			m_debugOverlays->StartFrame();
+			DoGpuStep( l_vertices, l_faces, l_objects, l_visible, l_particles );
+			DoCpuStep();
+			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects, l_visible, l_particles );
+		}
+	}
+
+	void RenderLoop::DoProcessEvents( EventType p_eventType )
+	{
+		GetEngine()->GetFrameListenerCache().ForEach( [p_eventType]( FrameListener & p_listener )
+		{
+			p_listener.FireEvents( p_eventType );
+		} );
+	}
+
+	void RenderLoop::DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible, uint32_t & p_particles )
+	{
+		{
+			auto l_guard = make_block_guard(
+				[this]()
+			{
+				m_renderSystem.GetMainContext()->SetCurrent();
+			},
+				[this]()
+			{
+				m_renderSystem.GetMainContext()->EndCurrent();
+			} );
+			DoProcessEvents( EventType::ePreRender );
+			GetEngine()->GetOverlayCache().UpdateRenderer();
+			GetEngine()->GetRenderTargetCache().Render( p_vtxCount, p_fceCount, p_objCount, p_visible, p_particles );
+			DoProcessEvents( EventType::eQueueRender );
+		}
+
+		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
+		{
+			p_scene.GetRenderWindowCache().ForEach( []( RenderWindow & p_window )
+			{
+				p_window.Render( true );
+			} );
+		} );
+
+		m_debugOverlays->EndGpuTask();
+	}
+
+	void RenderLoop::DoCpuStep()
+	{
+		DoProcessEvents( EventType::ePostRender );
+		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
+		{
+			p_scene.Update();
+		} );
+		RenderQueueArray l_queues;
+		GetEngine()->GetRenderTechniqueCache().ForEach( [&l_queues]( RenderTechnique & p_technique )
+		{
+			p_technique.Update( l_queues );
+		} );
+		DoUpdateQueues( l_queues );
+		GetEngine()->GetOverlayCache().Update();
+		m_debugOverlays->EndCpuTask();
+	}
+
+	void RenderLoop::DoUpdateQueues( RenderQueueArray & p_queues )
+	{
+		if ( p_queues.size() > m_queueUpdater.GetCount() )
+		{
+			for ( auto & l_queue : p_queues )
+			{
+				m_queueUpdater.PushJob( [&l_queue]()
+				{
+					l_queue.get().Update();
+				} );
+			}
+
+			m_queueUpdater.WaitAll( std::chrono::milliseconds::max() );
+		}
+		else
+		{
+			for ( auto & l_queue : p_queues )
+			{
+				l_queue.get().Update();
+			}
+		}
 	}
 }

@@ -92,7 +92,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		ProgramConsole();
+		ProgramConsole( bool p_showConsole );
 		/**
 		 *\~english
 		 *\brief		Destructor.

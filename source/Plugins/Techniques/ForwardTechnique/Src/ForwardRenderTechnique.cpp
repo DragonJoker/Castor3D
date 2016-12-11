@@ -1,4 +1,4 @@
-#include "DirectRenderTechnique.hpp"
+#include "ForwardRenderTechnique.hpp"
 
 #include <Cache/CameraCache.hpp>
 #include <Cache/LightCache.hpp>
@@ -20,6 +20,7 @@
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
+#include <Technique/RenderTechniquePass.hpp>
 
 #include <Graphics/FontCache.hpp>
 #include <Graphics/Image.hpp>
@@ -28,12 +29,20 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace Direct
+namespace forward
 {
+	String const RenderTechnique::Type = cuT( "forward" );
+	String const RenderTechnique::Name = cuT( "Forward Render Technique" );
+
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
-		: Castor3D::RenderTechnique( cuT( "direct" ), p_renderTarget, p_renderSystem, p_params )
+		: Castor3D::RenderTechnique{ RenderTechnique::Type
+			, p_renderTarget
+			, p_renderSystem
+		, std::make_unique< RenderTechniquePass >( cuT( "forward_opaque" ), p_renderTarget, *this, true, false )
+		, std::make_unique< RenderTechniquePass >( cuT( "forward_transparent" ), p_renderTarget, *this, false, false )
+			, p_params }
 	{
-		Logger::LogInfo( "Using Direct rendering" );
+		Logger::LogInfo( "Using Forward rendering" );
 	}
 
 	RenderTechnique::~RenderTechnique()

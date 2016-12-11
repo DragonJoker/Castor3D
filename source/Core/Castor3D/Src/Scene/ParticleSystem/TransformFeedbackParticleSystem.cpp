@@ -110,7 +110,7 @@ namespace Castor3D
 		auto & l_transform = *m_transformFeedbacks[m_tfb];
 
 		m_updatePipeline->Apply();
-		m_updateProgram->BindUbos();
+		m_updateProgram->UpdateUbos();
 		m_randomTexture.Bind();
 		l_transform.Bind();
 

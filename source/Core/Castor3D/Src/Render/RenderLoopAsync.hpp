@@ -123,33 +123,33 @@ namespace Castor3D
 		 *\brief		Met à jour le statut de synchronisation verticale.
 		 *\param[in]	p_enable	Le statut.
 		 */
-		C3D_API virtual void UpdateVSync( bool p_enable );
+		C3D_API void UpdateVSync( bool p_enable )override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::StartRendering
+		 */
+		C3D_API void StartRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::RenderSyncFrame
+		 */
+		C3D_API void RenderSyncFrame()override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::Pause
+		 */
+		C3D_API void Pause()override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::Resume
+		 */
+		C3D_API void Resume()override;
+		/**
+		 *\copydoc		Castor3D::RenderLoop::EndRendering
+		 */
+		C3D_API void EndRendering()override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderLoop::DoStartRendering
-		 */
-		C3D_API virtual void DoStartRendering();
-		/**
-		 *\copydoc		Castor3D::RenderLoop::DoRenderSyncFrame
-		 */
-		C3D_API virtual void DoRenderSyncFrame();
-		/**
-		 *\copydoc		Castor3D::RenderLoop::DoPause
-		 */
-		C3D_API virtual void DoPause();
-		/**
-		 *\copydoc		Castor3D::RenderLoop::DoResume
-		 */
-		C3D_API virtual void DoResume();
-		/**
-		 *\copydoc		Castor3D::RenderLoop::DoEndRendering
-		 */
-		C3D_API virtual void DoEndRendering();
-		/**
 		 *\copydoc		Castor3D::RenderLoop::DoCreateMainContext
 		 */
-		C3D_API virtual ContextSPtr DoCreateMainContext( RenderWindow & p_window );
+		C3D_API ContextSPtr DoCreateMainContext( RenderWindow & p_window )override;
 		/**
 		 *\~english
 		 *\brief		The threaded render loop.
@@ -184,7 +184,7 @@ namespace Castor3D
 		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
 		RenderWindowRPtr m_window;
 		//!\~english The saved frame time, if V-Sync is disabled.	\~french Le temps par frame sauvegardé, si la synchronisation verticale est désactivée.
-		uint32_t m_savedTime{ 0 };
+		std::chrono::milliseconds m_savedTime{ 0 };
 	};
 }
 

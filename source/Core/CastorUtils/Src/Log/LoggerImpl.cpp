@@ -10,9 +10,9 @@ namespace Castor
 {
 	class LoggerImpl;
 
-	LoggerImpl::LoggerImpl()
+	LoggerImpl::LoggerImpl( LogType p_level )
 	{
-		m_console = std::make_unique< ProgramConsole >();
+		m_console = std::make_unique< ProgramConsole >( p_level < LogType::eInfo );
 	}
 
 	LoggerImpl::~LoggerImpl()
@@ -72,14 +72,14 @@ namespace Castor
 		}
 	}
 
-	void LoggerImpl::PrintMessage( LogType logLevel, std::string const & message )
+	void LoggerImpl::PrintMessage( LogType logLevel, std::string const & message, bool p_newLine )
 	{
-		DoPrintMessage( logLevel, string::string_cast< xchar >( message ) );
+		DoPrintMessage( logLevel, string::string_cast< xchar >( message ), p_newLine );
 	}
 
-	void LoggerImpl::PrintMessage( LogType logLevel, std::wstring const & message )
+	void LoggerImpl::PrintMessage( LogType logLevel, std::wstring const & message, bool p_newLine )
 	{
-		DoPrintMessage( logLevel, string::string_cast< xchar >( message ) );
+		DoPrintMessage( logLevel, string::string_cast< xchar >( message ), p_newLine );
 	}
 
 	void LoggerImpl::LogMessageQueue( MessageQueue const & p_queue )
@@ -95,23 +95,27 @@ namespace Castor
 
 		try
 		{
-			for ( auto const & message : p_queue )
+			for ( auto & message : p_queue )
 			{
-				StringStream & l_stream = l_logs[size_t( message->m_type )];
-				String l_toLog = message->GetMessage();
+				StringStream & l_stream = l_logs[size_t( message.m_type )];
+				String l_toLog = message.m_message;
 
 				if ( l_toLog.find( cuT( '\n' ) ) != String::npos )
 				{
 					StringArray l_array = string::split( l_toLog, cuT( "\n" ), uint32_t( std::count( l_toLog.begin(), l_toLog.end(), cuT( '\n' ) ) + 1 ) );
+					auto l_it = l_array.begin();
 
-					for ( auto l_line : l_array )
+					for ( size_t i = 0; i < l_array.size() - 1; ++i )
 					{
-						DoLogLine( l_timeStamp, l_line, l_stream, message->m_type );
+						DoLogLine( l_timeStamp, *l_it, l_stream, message.m_type, true );
+						++l_it;
 					}
+
+					DoLogLine( l_timeStamp, *l_it, l_stream, message.m_type, message.m_newLine );
 				}
 				else
 				{
-					DoLogLine( l_timeStamp, l_toLog, l_stream, message->m_type );
+					DoLogLine( l_timeStamp, l_toLog, l_stream, message.m_type, message.m_newLine );
 				}
 			}
 
@@ -140,33 +144,37 @@ namespace Castor
 		}
 	}
 
-	void LoggerImpl::DoPrintMessage( LogType logLevel, String const & message )
+	void LoggerImpl::DoPrintMessage( LogType logLevel, String const & message, bool p_newLine )
 	{
 		if ( message.find( cuT( '\n' ) ) != String::npos )
 		{
-			StringArray array = string::split( message, cuT( "\n" ), uint32_t( std::count( message.begin(), message.end(), cuT( '\n' ) ) + 1 ) );
+			StringArray l_array = string::split( message, cuT( "\n" ), uint32_t( std::count( message.begin(), message.end(), cuT( '\n' ) ) + 1 ) );
+			auto l_it = l_array.begin();
 
-			for ( auto line : array )
+			for ( size_t i = 0; i < l_array.size() - 1; ++i )
 			{
-				DoPrintLine( line, logLevel );
+				DoPrintLine( *l_it, logLevel, true );
+				++l_it;
 			}
+
+			DoPrintLine( *l_it, logLevel, p_newLine );
 		}
 		else
 		{
-			DoPrintLine( message, logLevel );
+			DoPrintLine( message, logLevel, p_newLine );
 		}
 	}
 
-	void LoggerImpl::DoPrintLine( String const & line, LogType logLevel )
+	void LoggerImpl::DoPrintLine( String const & line, LogType logLevel, bool p_newLine )
 	{
 		m_console->BeginLog( logLevel );
-		m_console->Print( line, true );
+		m_console->Print( line, p_newLine );
 	}
 
-	void LoggerImpl::DoLogLine( String const & timestamp, String const & line, StringStream & stream, LogType logLevel )
+	void LoggerImpl::DoLogLine( String const & timestamp, String const & line, StringStream & stream, LogType logLevel, bool p_newLine )
 	{
 #if defined( NDEBUG )
-		DoPrintLine( line, logLevel );
+		DoPrintLine( line, logLevel, p_newLine );
 #endif
 
 		{
@@ -176,11 +184,11 @@ namespace Castor
 			{
 				for ( auto l_it : m_mapCallbacks )
 				{
-					l_it.second( line, logLevel );
+					l_it.second( line, logLevel, p_newLine );
 				}
 			}
 		}
 
-		stream << timestamp << cuT( " - " ) << m_headers[size_t( logLevel )] << line << std::endl;
+		stream << timestamp << cuT( " - " ) << m_headers[size_t( logLevel )] << line << ( p_newLine ? "\n" : "" );
 	}
 }

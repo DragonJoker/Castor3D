@@ -42,7 +42,7 @@ namespace Castor3D
 		return std::make_shared< ShadowMapPassDirectional >( p_engine, p_scene, p_light, p_shadowMap, p_index );
 	}
 
-	bool ShadowMapPassDirectional::DoInitialise( Size const & p_size )
+	bool ShadowMapPassDirectional::DoInitialisePass( Size const & p_size )
 	{
 		Viewport l_viewport{ *GetEngine() };
 		real l_w = real( p_size.width() );
@@ -70,7 +70,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShadowMapPassDirectional::DoCleanup()
+	void ShadowMapPassDirectional::DoCleanupPass()
 	{
 		m_camera->Detach();
 		m_camera.reset();
@@ -81,11 +81,11 @@ namespace Castor3D
 		m_depthAttach.reset();
 	}
 
-	void ShadowMapPassDirectional::DoUpdate()
+	void ShadowMapPassDirectional::DoUpdate( RenderQueueArray & p_queues )
 	{
 		m_light.Update( m_camera->GetParent()->GetDerivedPosition() );
 		m_camera->Update();
-		m_renderQueue.Update();
+		p_queues.push_back( m_renderQueue );
 	}
 
 	void ShadowMapPassDirectional::DoRender()
@@ -96,8 +96,7 @@ namespace Castor3D
 			m_frameBuffer->Clear();
 			auto & l_nodes = m_renderQueue.GetRenderNodes();
 			m_camera->Apply();
-			DoRenderOpaqueNodes( l_nodes, *m_camera );
-			DoRenderTransparentNodes( l_nodes, *m_camera );
+			DoRenderNodes( l_nodes, *m_camera );
 			m_frameBuffer->Unbind();
 		}
 	}
@@ -106,18 +105,16 @@ namespace Castor3D
 	{
 	}
 
-	String ShadowMapPassDirectional::DoGetGeometryShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
+	String ShadowMapPassDirectional::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, uint8_t p_sceneFlags )const
 	{
 		return String{};
 	}
 
-	String ShadowMapPassDirectional::DoGetOpaquePixelShaderSource(
-		FlagCombination< TextureChannel > const & p_textureFlags,
-		FlagCombination< ProgramFlag > const & p_programFlags,
-		uint8_t p_sceneFlags )const
+	String ShadowMapPassDirectional::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();

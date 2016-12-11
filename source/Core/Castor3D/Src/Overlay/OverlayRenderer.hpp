@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderPipeline & DoGetPanelPipeline( Castor::FlagCombination< TextureChannel > p_textureFlags );
+		C3D_API RenderPipeline & DoGetPanelPipeline( TextureChannels p_textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given texture flags.
@@ -191,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderPipeline & DoGetTextPipeline( Castor::FlagCombination< TextureChannel > p_textureFlags );
+		C3D_API RenderPipeline & DoGetTextPipeline( TextureChannels p_textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a program compiled using given flags.
@@ -202,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme
 		 */
-		C3D_API RenderPipeline & DoGetPipeline( Castor::FlagCombination< TextureChannel > const & p_textureFlags );
+		C3D_API RenderPipeline & DoGetPipeline( TextureChannels const & p_textureFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
@@ -282,7 +282,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( Castor::FlagCombination< TextureChannel > const & p_textureFlags );
+		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( TextureChannels const & p_textureFlags );
 
 	protected:
 		//!\~english	Vertex buffers for panels.

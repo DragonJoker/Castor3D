@@ -47,7 +47,7 @@ namespace Castor3D
 				m_notifyIndex = 0;
 			}
 
-			l_node->DetachObject( shared_from_this() );
+			l_node->DetachObject( *this );
 			m_sceneNode.reset();
 		}
 	}

@@ -1475,7 +1475,7 @@ namespace Castor3D
 			if ( l_parsingContext->pLight )
 			{
 				l_parsingContext->pLight->Detach();
-				l_parsingContext->pSceneNode->AttachObject( l_parsingContext->pLight );
+				l_parsingContext->pSceneNode->AttachObject( *l_parsingContext->pLight );
 			}
 		}
 	}
@@ -1758,7 +1758,7 @@ namespace Castor3D
 
 			if ( l_parent )
 			{
-				l_parent->AttachObject( l_parsingContext->pGeometry );
+				l_parent->AttachObject( *l_parsingContext->pGeometry );
 			}
 			else
 			{
@@ -1819,7 +1819,7 @@ namespace Castor3D
 					for ( auto l_submesh : *l_parsingContext->pGeometry->GetMesh() )
 					{
 						MaterialSPtr l_material = l_cache.Find( l_name );
-						l_parsingContext->pGeometry->SetMaterial( l_submesh, l_material );
+						l_parsingContext->pGeometry->SetMaterial( *l_submesh, l_material );
 					}
 				}
 				else
@@ -1903,7 +1903,7 @@ namespace Castor3D
 				{
 					SubmeshSPtr l_submesh = l_parsingContext->pGeometry->GetMesh()->GetSubmesh( l_index );
 					MaterialSPtr l_material = l_cache.Find( l_name );
-					l_parsingContext->pGeometry->SetMaterial( l_submesh, l_material );
+					l_parsingContext->pGeometry->SetMaterial( *l_submesh, l_material );
 				}
 				else
 				{
@@ -4092,7 +4092,7 @@ namespace Castor3D
 
 			if ( l_pParent )
 			{
-				l_pParent->AttachObject( l_parsingContext->pBillboards );
+				l_pParent->AttachObject( *l_parsingContext->pBillboards );
 			}
 			else
 			{

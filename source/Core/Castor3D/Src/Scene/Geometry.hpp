@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_submesh	Le sous-maillage
 		 *\return		Le matériau
 		 */
-		C3D_API MaterialSPtr GetMaterial( SubmeshSPtr p_submesh )const;
+		C3D_API MaterialSPtr GetMaterial( Submesh const & p_submesh )const;
 		/**
 		 *\~english
 		 *\brief		Defines a submesh material
@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\param[in]	p_submesh	Le sous-maillage
 		 *\param[in]	p_material	Le matériau
 		 */
-		C3D_API void SetMaterial( SubmeshSPtr p_submesh, MaterialSPtr p_material );
+		C3D_API void SetMaterial( Submesh & p_submesh, MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the mesh
@@ -193,7 +193,7 @@ namespace Castor3D
 		bool m_listCreated{ false };
 		//!\~english	The submeshes materials.
 		//!\~french		Les matériaux des sous maillages.
-		std::map< Submesh *, MaterialWPtr > m_submeshesMaterials;
+		std::map< Submesh const *, MaterialWPtr > m_submeshesMaterials;
 	};
 }
 

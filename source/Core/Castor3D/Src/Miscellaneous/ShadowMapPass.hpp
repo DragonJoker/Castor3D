@@ -67,31 +67,6 @@ namespace Castor3D
 		C3D_API ~ShadowMapPass();
 		/**
 		 *\~english
-		 *\brief		Initialises the pipeline, FBO and program.
-		 *\return		\p true if ok.
-		 *\~french
-		 *\brief		Initialise le pipeline, le FBO et le programme.
-		 *\return		\p true if ok.
-		 */
-		C3D_API bool Initialise();
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Update function.
-		 *\remarks		Updates the scenes render nodes, if needed.
-		 *\~french
-		 *\brief		Fonction de mise à jour.
-		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
-		 */
-		C3D_API void Update();
-		/**
-		 *\~english
 		 *\brief		Render function
 		 *\param[in]	p_scene		The scene to render.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
@@ -101,31 +76,6 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
 		C3D_API void Render();
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateAnimatedNode
-		 */
-		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			Submesh & p_submesh,
-			Geometry & p_primitive,
-			AnimatedSkeletonSPtr p_skeleton,
-			AnimatedMeshSPtr p_mesh )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateStaticNode
-		 */
-		C3D_API StaticGeometryRenderNode CreateStaticNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			Submesh & p_submesh,
-			Geometry & p_primitive )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::CreateBillboardNode
-		 */
-		C3D_API BillboardRenderNode CreateBillboardNode(
-			Pass & p_pass,
-			RenderPipeline & p_pipeline,
-			BillboardBase & p_billboard )override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -138,8 +88,18 @@ namespace Castor3D
 		}
 
 	protected:
-		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
-		void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
+		/**
+		 *\~english
+		 *\brief		Renders the given nodes.
+		 *\param		p_nodes		The nodes to render.
+		 *\param		p_camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine les noeuds donnés.
+		 *\param		p_nodes		Les noeuds à dessiner.
+		 *\param		p_camera	La caméra regardant la scène.
+		 */
+		void DoRenderNodes( SceneRenderNodes & p_nodes
+			, Camera const & p_camera );
 
 	private:
 		/**
@@ -152,23 +112,14 @@ namespace Castor3D
 		 *\param		p_size	Les dimensions du FBO.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool DoInitialise( Castor::Size const & p_size ) = 0;
+		C3D_API virtual bool DoInitialisePass( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void DoCleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Update function.
-		 *\remarks		Updates the scenes render nodes, if needed.
-		 *\~french
-		 *\brief		Fonction de mise à jour.
-		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
-		 */
-		C3D_API virtual void DoUpdate() = 0;
+		C3D_API virtual void DoCleanupPass() = 0;
 		/**
 		 *\~english
 		 *\brief		Render function
@@ -190,57 +141,33 @@ namespace Castor3D
 		 */
 		C3D_API virtual void DoUpdateProgram( ShaderProgram & p_program ) = 0;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoInitialise
 		 */
-		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		bool DoInitialise( Castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoCleanup
 		 */
-		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoCleanup();
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoUpdatePipeline( RenderPipeline & p_pipeline
+			, DepthMapArray & p_depthMaps )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderBillboards
+		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
 		 */
-		void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes );
+		void DoPrepareFrontPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
 		 */
-		Castor::String DoGetTransparentPixelShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		void DoPrepareBackPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
+		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
-		void DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
-		 */
-		void DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
-		 */
-		void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
-		 */
-		void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
-		 */
-		void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
-		 */
-		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentFlags
-		 */
-		void DoUpdateTransparentFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
-			, Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
+		void DoUpdateFlags( TextureChannels & p_textureFlags
+			, ProgramFlags & p_programFlags )const override;
 
 	protected:
 		//!\~english	The scene.

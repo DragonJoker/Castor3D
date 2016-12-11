@@ -97,7 +97,7 @@ namespace Castor3D
 
 		bool l_return = true;
 
-		if ( p_scene.GetEngine()->GetRenderLoop().GetShowDebugOverlays() )
+		if ( p_scene.GetEngine()->GetRenderLoop().HasDebugOverlays() )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
 			Castor::TextWriter< Scene >::CheckError( l_return, "Scene debug overlays" );
@@ -377,11 +377,11 @@ namespace Castor3D
 		{
 			if ( p_parent )
 			{
-				p_parent->AttachObject( p_element );
+				p_parent->AttachObject( *p_element );
 			}
 			else
 			{
-				p_rootObjectNode->AttachObject( p_element );
+				p_rootObjectNode->AttachObject( *p_element );
 			}
 		};
 		auto l_attachCamera = []( auto p_element
@@ -392,11 +392,11 @@ namespace Castor3D
 		{
 			if ( p_parent )
 			{
-				p_parent->AttachObject( p_element );
+				p_parent->AttachObject( *p_element );
 			}
 			else
 			{
-				p_rootCameraNode->AttachObject( p_element );
+				p_rootCameraNode->AttachObject( *p_element );
 			}
 		};
 		auto l_attachNode = []( auto p_element

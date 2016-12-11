@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_RENDER_QUEUE_H___
-#define ___C3D_RENDER_QUEUE_H___
+#ifndef ___C3D_RenderQueue_H___
+#define ___C3D_RenderQueue_H___
 
 #include "Render/RenderNode.hpp"
 
@@ -46,18 +46,12 @@ namespace Castor3D
 	template< typename NodeType, typename MapType >
 	struct RenderNodesT
 	{
-		//!\~english	The geometries without alpha blending, sorted by shader program.
-		//!\~french		Les géométries sans alpha blending, triées par programme shader.
-		MapType m_opaqueRenderNodesFront;
-		//!\~english	The geometries without alpha blending, sorted by shader program.
-		//!\~french		Les géométries sans alpha blending, triées par programme shader.
-		MapType m_opaqueRenderNodesBack;
-		//!\~english	The geometries with alpha blending, sorted by shader program.
-		//!\~french		Les géométries avec de l'alpha blend, triées par programme shader.
-		MapType m_transparentRenderNodesFront;
-		//!\~english	The geometries with alpha blending, sorted by shader program.
-		//!\~french		Les géométries avec de l'alpha blend, triées par programme shader.
-		MapType m_transparentRenderNodesBack;
+		//!\~english	The geometries, sorted by shader program.
+		//!\~french		Les géométries, triées par programme shader.
+		MapType m_frontCulled;
+		//!\~english	The geometries, sorted by shader program.
+		//!\~french		Les géométries, triées par programme shader.
+		MapType m_backCulled;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -126,11 +120,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_renderPass	The parent render pass.
+		 *\param[in]	p_opaque		Tells if this render queue is for opaque nodes.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_renderPass	La passe de rendu parente.
+		 *\param[in]	p_opaque		Dit si cette file de rendu est pour les noeuds opaques.
 		 */
-		C3D_API RenderQueue( RenderPass & p_renderPass );
+		C3D_API RenderQueue( RenderPass & p_renderPass, bool p_opaque );
 		/**
 		 *\~english
 		 *\brief		Plugs the render queue to given scene and camera.
@@ -211,6 +207,9 @@ namespace Castor3D
 		void OnCameraChanged( Camera const & p_camera );
 
 	protected:
+		//!\~english	Tells if this queue is for opaque nodes.
+		//!\~french		Dit si cette file est pour les noeuds opaques.
+		bool m_opaque;
 		//!\~english	The render nodes.
 		//!\~french		Les noeuds de rendu.
 		std::unique_ptr< SceneRenderNodes > m_renderNodes;

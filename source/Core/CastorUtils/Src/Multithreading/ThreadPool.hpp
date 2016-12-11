@@ -34,7 +34,7 @@ namespace Castor
 	\~english
 	\brief		Thread pool implementation, using WorkerThreads.
 	\~french
-	\brief		Impl�mentation de pool de thread, utilisant des WorkerThread.
+	\brief		Implémentation de pool de thread, utilisant des WorkerThread.
 	*/
 	class ThreadPool
 	{
@@ -47,7 +47,7 @@ namespace Castor
 		 *\brief		Constructor, initialises the pool with given threads count.
 		 *\param[in]	p_count	The threads count.
 		 *\~french
-		 *\brief		Constructeur, initialise le pool au nombre de threads donn�.
+		 *\brief		Constructeur, initialise le pool au nombre de threads donné.
 		 *\param[in]	p_count	Le nombre de threads du pool.
 		 */
 		CU_API ThreadPool( size_t p_count );
@@ -62,14 +62,14 @@ namespace Castor
 		 *\~english
 		 *\return		\p true if all the threads are busy.
 		 *\~french
-		 *\return		\p true si tous les threads sont occup�s.
+		 *\return		\p true si tous les threads sont occupés.
 		 */
 		CU_API bool IsEmpty()const;
 		/**
 		 *\~english
 		 *\return		\p true if all the threads are idle.
 		 *\~french
-		 *\return		\p true si tous les threads sont inoccup�s.
+		 *\return		\p true si tous les threads sont inoccupés.
 		 */
 		CU_API bool IsFull()const;
 		/**
@@ -78,9 +78,9 @@ namespace Castor
 		 *\param[in]	p_timeout	The maximum time to wait.
 		 *\return		\p true if all threads have finished.
 		 *\~french
-		 *\brief		Attend que tous les threads aient termin� leur t�che.
+		 *\brief		Attend que tous les threads aient terminé leur tâche.
 		 *\param[in]	p_timeout	Le temps d'attente maximum.
-		 *\return		\p true Si tous les threads on termin�.
+		 *\return		\p true Si tous les threads on terminé.
 		 */
 		CU_API bool WaitAll( std::chrono::milliseconds const & p_timeout )const;
 		/**
@@ -89,18 +89,28 @@ namespace Castor
 		 *\remarks		If no thread is available, waits for one to finish its job.
 		 *\param[in]	p_job	The job.
 		 *\~french
-		 *\brief		Donne � un thread de travail la t�che donn�e.
-		 *\remarks		Si aucun thread n'est disponible, attend que l'un d'eux finisse sa t�che.
-		 *\param[in]	p_job	La t�che.
+		 *\brief		Donne à un thread de travail la tâche donnée.
+		 *\remarks		Si aucun thread n'est disponible, attend que l'un d'eux finisse sa tâche.
+		 *\param[in]	p_job	La tâche.
 		 */
 		CU_API void PushJob( WorkerThread::Job p_job );
+		/**
+		 *\~english
+		 *\return		The threads count.
+		 *\~french
+		 *\return		Le nombre de threads.
+		 */
+		inline size_t GetCount()const
+		{
+			return m_count;
+		}
 
 	private:
 		WorkerThread & DoReserveWorker();
 		void DoFreeWorker( WorkerThread & p_worker );
 
 	private:
-		size_t m_count;
+		size_t const m_count;
 		WorkerArray m_available;
 		WorkerArray m_busy;
 		mutable std::mutex m_mutex;

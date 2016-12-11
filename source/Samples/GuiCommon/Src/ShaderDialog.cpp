@@ -16,6 +16,7 @@
 #include <Render/RenderWindow.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Technique/RenderTechniquePass.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -82,7 +83,7 @@ namespace GuiCommon
 
 				if ( l_technique )
 				{
-					m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0u, 0u, false );
+					m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( l_technique->GetOpaquePass(), l_pass->GetTextureFlags(), 0u, 0u, false );
 					m_bOwnShader = true;
 				}
 			}

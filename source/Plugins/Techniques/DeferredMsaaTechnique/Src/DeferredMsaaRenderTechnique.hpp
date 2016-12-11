@@ -27,7 +27,7 @@ SOFTWARE.
 #include <Technique/RenderTechnique.hpp>
 #include <Render/Viewport.hpp>
 
-namespace DeferredMsaa
+namespace deferred_msaa
 {
 	using Castor3D::Point3rFrameVariable;
 
@@ -105,10 +105,6 @@ namespace DeferredMsaa
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaqueDepthMaps
-		 */
-		void DoGetOpaqueDepthMaps( Castor3D::DepthMapArray & p_depthMaps )override;
-		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
 		bool DoCreate()override;
@@ -153,22 +149,6 @@ namespace DeferredMsaa
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaqueFlags
-		 */
-		void DoUpdateOpaqueFlags( Castor::FlagCombination< Castor3D::TextureChannel > & p_textureFlags
-			, Castor::FlagCombination< Castor3D::ProgramFlag > & p_programFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
-		 */
-		Castor::String DoGetOpaquePixelShaderSource(
-			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
-		 */
-		void DoUpdateOpaquePipeline( Castor3D::RenderPipeline & p_pipeline, Castor3D::DepthMapArray & p_depthMaps )const override;
-		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag
@@ -177,8 +157,8 @@ namespace DeferredMsaa
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
 		 */
 		Castor::String DoGetLightPassVertexShaderSource(
-			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
+			Castor3D::TextureChannels const & p_textureFlags,
+			Castor3D::ProgramFlags const & p_programFlags,
 			uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
@@ -189,8 +169,8 @@ namespace DeferredMsaa
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
 		 */
 		Castor::String DoGetLightPassPixelShaderSource(
-			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
+			Castor3D::TextureChannels const & p_textureFlags,
+			Castor3D::ProgramFlags const & p_programFlags,
 			uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
@@ -305,6 +285,10 @@ namespace DeferredMsaa
 			//!\~french		Le pipeline utilisé par la passe lumières.
 			Castor3D::RenderPipelineSPtr m_pipeline;
 		};
+
+	public:
+		static Castor::String const Type;
+		static Castor::String const Name;
 
 	protected:
 		//!\~english	The various textures.

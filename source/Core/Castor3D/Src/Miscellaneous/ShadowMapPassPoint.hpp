@@ -75,26 +75,21 @@ namespace Castor3D
 		C3D_API static ShadowMapPassSPtr Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
 
 	protected:
-		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes );
-		void DoRenderTransparentNodes( SceneRenderNodes & p_nodes );
-		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
-		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, StaticGeometryRenderNodesByPipelineMap & p_nodes );
-		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
-		void DoRenderBillboards( Scene & p_scene, BillboardRenderNodesByPipelineMap & p_nodes );
+		void DoRenderNodes( SceneRenderNodes & p_nodes );
 
 	private:
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool DoInitialisePass( Castor::Size const & p_size )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
 		 */
-		void DoCleanup()override;
+		void DoCleanupPass()override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
 		 */
-		void DoUpdate()override;
+		void DoUpdate( RenderQueueArray & p_queues )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoRender
 		 */
@@ -106,25 +101,22 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
 		 */
-		Castor::String DoGetVertexShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags,
-			bool p_invertNormals )const override;
+		Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, uint8_t p_sceneFlags
+			, bool p_invertNormals )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
-		Castor::String DoGetGeometryShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, uint8_t p_sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource(
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const override;
+		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, uint8_t p_sceneFlags )const override;
 
 	private:
 		//!\~english	The connection to light's node changed signal.
