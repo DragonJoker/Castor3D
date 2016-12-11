@@ -204,14 +204,14 @@ namespace Castor3D
 		m_listVariables.clear();
 	}
 
-	void FrameVariableBuffer::Bind( uint32_t p_index )
+	void FrameVariableBuffer::BindTo( uint32_t p_index )
 	{
-		DoBind( p_index );
+		DoBindTo( p_index );
 	}
 
-	void FrameVariableBuffer::Unbind( uint32_t p_index )
+	void FrameVariableBuffer::Update()
 	{
-		DoUnbind( p_index );
+		DoUpdate();
 	}
 
 	//*************************************************************************************************

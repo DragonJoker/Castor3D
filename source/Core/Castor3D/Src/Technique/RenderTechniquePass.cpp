@@ -449,6 +449,7 @@ namespace Castor3D
 		l_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
 		l_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
 		l_camera.GetScene()->FillShader( l_sceneUbo );
+		l_camera.FillShader( l_sceneUbo );
 		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 	}
 

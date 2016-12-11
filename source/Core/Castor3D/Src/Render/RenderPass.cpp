@@ -212,7 +212,9 @@ namespace Castor3D
 	{
 		DoUpdateFlags( p_textureFlags, p_programFlags );
 
-		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) != m_opaque )
+		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) != m_opaque
+			&& ( !CheckFlag( p_programFlags, ProgramFlag::eBillboards )
+				|| !CheckFlag( p_programFlags, ProgramFlag::eShadowMap ) ) )
 		{
 			if ( m_opaque )
 			{
@@ -369,8 +371,6 @@ namespace Castor3D
 		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 		p_pipeline.SetViewMatrix( p_camera.GetView() );
 		DoUpdatePipeline( p_pipeline, p_depthMaps );
-		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
-		p_camera.FillShader( l_sceneUbo );
 	}
 
 	PassRenderNode RenderPass::DoCreatePassRenderNode( Pass & p_pass

@@ -518,7 +518,7 @@ namespace GLSL
 
 				IF ( m_writer, p_receivesShadows != 0_i )
 				{
-					l_shadowFactor = l_shadows.ComputeDirectionalShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightDirection, p_fragmentIn.m_v3Normal );
+					l_shadowFactor = l_shadows.ComputeDirectionalShadow( p_light.m_mtxLightSpace(), p_fragmentIn.m_v3Vertex, l_lightDirection, p_fragmentIn.m_v3Normal );
 				}
 				FI;
 			}
@@ -571,7 +571,7 @@ namespace GLSL
 
 				IF ( m_writer, p_receivesShadows != 0_i )
 				{
-					l_shadowFactor = l_shadows.ComputePointShadow( l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
+					l_shadowFactor = l_shadows.ComputePointShadow( p_fragmentIn.m_v3Vertex, l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
 				}
 				FI;
 			}
@@ -629,7 +629,7 @@ namespace GLSL
 
 					IF ( m_writer, p_receivesShadows != 0_i )
 					{
-						l_shadowFactor = l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) );
+						l_shadowFactor = l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace(), p_fragmentIn.m_v3Vertex, l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) );
 					}
 					FI;
 				}

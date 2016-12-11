@@ -7,6 +7,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -47,7 +48,7 @@ namespace Castor3D
 		Viewport l_viewport{ *GetEngine() };
 		real l_w = real( p_size.width() );
 		real l_h = real( p_size.height() );
-		l_viewport.SetOrtho( -l_w / 2, l_w / 2, l_h / 2, -l_h / 2, -512.0_r, 512.0_r );
+		l_viewport.SetOrtho( -l_w / 4, l_w / 4, l_h / 4, -l_h / 4, -512.0_r, 512.0_r );
 		l_viewport.Update();
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
 			, m_scene
@@ -120,6 +121,8 @@ namespace Castor3D
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
 
 		// Fragment Intputs
+		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
@@ -127,7 +130,22 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			pxl_fFragDepth = gl_FragCoord.z();
+			Float l_fAlpha;
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+			{
+				l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+
+				IF( l_writer, l_fAlpha < 1.0_f )
+				{
+					l_writer.Discard();
+				}
+				FI;
+			}
+			else
+			{
+				pxl_fFragDepth = gl_FragCoord.z();
+			}
 		} );
 
 		return l_writer.Finalise();

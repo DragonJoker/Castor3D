@@ -142,7 +142,7 @@ namespace Castor3D
 	{
 		RemFlag( p_programFlags, ProgramFlag::eLighting );
 		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
-		RemFlag( p_textureFlags, TextureChannel::eAll );
+		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll ) & ~uint16_t( TextureChannel::eOpacity ) ) );
 
 		AddFlag( p_programFlags, ProgramFlag::eShadowMap );
 	}

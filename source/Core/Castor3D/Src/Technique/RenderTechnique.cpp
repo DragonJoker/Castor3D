@@ -325,25 +325,25 @@ namespace Castor3D
 		{
 			auto l_it = m_shadowMaps.begin();
 			auto & l_depthMap = l_it->second->GetShadowMap();
-			auto l_size = l_depthMap.GetTexture()->GetDimensions();
 			auto l_lightNode = l_it->first->GetParent();
+			Size l_size{ 512u, 512u };
 
 			switch ( l_depthMap.GetType() )
 			{
 			case TextureType::eTwoDimensions:
-				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture() );
+				m_renderSystem.GetCurrentContext()->RenderDepth( l_size, *l_depthMap.GetTexture() );
 				break;
 
 			case TextureType::eTwoDimensionsArray:
-				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture(), 0u );
+				m_renderSystem.GetCurrentContext()->RenderDepth( l_size, *l_depthMap.GetTexture(), 0u );
 				break;
 
 			case TextureType::eCube:
-				m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture() );
+				m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), l_size, *l_depthMap.GetTexture() );
 				break;
 
 			case TextureType::eCubeArray:
-				m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture(), 0u );
+				m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), l_size, *l_depthMap.GetTexture(), 0u );
 				break;
 			}
 		}

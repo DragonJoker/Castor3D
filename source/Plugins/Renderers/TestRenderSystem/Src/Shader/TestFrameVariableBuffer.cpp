@@ -157,11 +157,10 @@ namespace TestRender
 		}
 	}
 
-	TestFrameVariableBuffer::TestFrameVariableBuffer(
-		String const & p_name,
-		ShaderProgram & p_program,
-		FlagCombination< ShaderTypeFlag > const & p_flags,
-		RenderSystem & p_renderSystem )
+	TestFrameVariableBuffer::TestFrameVariableBuffer( String const & p_name
+		, ShaderProgram & p_program
+		, FlagCombination< ShaderTypeFlag > const & p_flags
+		, RenderSystem & p_renderSystem )
 		: FrameVariableBuffer( p_name, p_program, p_flags, p_renderSystem )
 	{
 	}
@@ -335,11 +334,11 @@ namespace TestRender
 	{
 	}
 
-	void TestFrameVariableBuffer::DoBind( uint32_t p_index )
+	void TestFrameVariableBuffer::DoBindTo( uint32_t p_index )
 	{
 	}
 
-	void TestFrameVariableBuffer::DoUnbind( uint32_t p_index )
+	void TestFrameVariableBuffer::DoUpdate()
 	{
 	}
 }

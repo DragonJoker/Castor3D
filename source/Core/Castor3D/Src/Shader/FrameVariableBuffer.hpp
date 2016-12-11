@@ -132,22 +132,20 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers).
+		 *\brief		Binds the buffer to given index.
 		 *\param[in]	p_index	The buffer index.
 		 *\~french
-		 *\brief		Active toutes les variables, au travers du tampon GPU si supporté (OpenGL UBO, Direct3D Constants buffers).
+		 *\brief		Lie le tampon à l'indice donné.
 		 *\param[in]	p_index	L'index du tampon GPU.
 		 */
-		C3D_API void Bind( uint32_t p_index );
+		C3D_API void BindTo( uint32_t p_index );
 		/**
 		 *\~english
-		 *\brief		Unbinds all variables.
-		 *\param[in]	p_index	The buffer index.
+		 *\brief		Updates the GPU storage.
 		 *\~french
-		 *\brief		Désactive toutes les variables.
-		 *\param[in]	p_index	L'index du tampon GPU.
+		 *\brief		Met à jour le stockage GPU.
 		 */
-		C3D_API void Unbind( uint32_t p_index );
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type.
@@ -319,24 +317,20 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers).
+		 *\brief		Binds the buffer to given index.
 		 *\param[in]	p_index	The buffer index.
-		 *\return		\p false if any problem occured.
 		 *\~french
-		 *\brief		Active toutes les variables, au traves du tampon GPU si supporté (OpenGL UBO, Direct3D Constants buffers).
+		 *\brief		Lie le tampon à l'indice donné.
 		 *\param[in]	p_index	L'index du tampon GPU.
-		 *\return		\p false if any problem occured.
 		 */
-		C3D_API virtual void DoBind( uint32_t p_index ) = 0;
+		C3D_API virtual void DoBindTo( uint32_t p_index ) = 0;
 		/**
 		 *\~english
-		 *\brief		Unbinds all variables.
-		 *\param[in]	p_index	The buffer index.
+		 *\brief		Updates the GPU storage.
 		 *\~french
-		 *\brief		Désactive toutes les variables.
-		 *\param[in]	p_index	L'index du tampon GPU.
+		 *\brief		Met à jour le stockage GPU.
 		 */
-		C3D_API virtual void DoUnbind( uint32_t p_index ) = 0;
+		C3D_API virtual void DoUpdate() = 0;
 
 	protected:
 		//!\~english	The buffers count.

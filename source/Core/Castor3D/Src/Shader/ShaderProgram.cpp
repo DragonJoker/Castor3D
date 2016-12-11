@@ -566,7 +566,7 @@ namespace Castor3D
 
 		for ( auto l_variableBuffer : m_listFrameVariableBuffers )
 		{
-			l_variableBuffer->Bind( l_index++ );
+			l_variableBuffer->Update();
 		}
 	}
 
