@@ -4,6 +4,7 @@
 #include "Shader/AtomicCounterBuffer.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/OneUniform.hpp"
+#include "Shader/PushUniform.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
 
@@ -403,15 +404,15 @@ namespace Castor3D
 		return l_return;
 	}
 
-	UniformSPtr ShaderProgram::CreateUniform( UniformType p_type, String const & p_name, ShaderType p_shader, int p_iNbOcc )
+	PushUniformSPtr ShaderProgram::CreateUniform( UniformType p_type, String const & p_name, ShaderType p_shader, int p_iNbOcc )
 	{
 		REQUIRE( m_shaders[size_t( p_shader )] );
-		UniformSPtr l_return = FindUniform( p_type, p_name, p_shader );
+		PushUniformSPtr l_return = FindUniform( p_type, p_name, p_shader );
 
 		if ( !l_return )
 		{
-			l_return = DoCreateVariable( p_type, p_iNbOcc );
-			l_return->SetName( p_name );
+			l_return = DoCreateUniform( p_type, p_iNbOcc );
+			l_return->GetBaseUniform().SetName( p_name );
 
 			if ( m_shaders[size_t( p_shader )] )
 			{
@@ -422,16 +423,16 @@ namespace Castor3D
 		return l_return;
 	}
 
-	UniformSPtr ShaderProgram::FindUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader )const
+	PushUniformSPtr ShaderProgram::FindUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader )const
 	{
 		REQUIRE( m_shaders[size_t( p_shader )] );
-		UniformSPtr l_return;
+		PushUniformSPtr l_return;
 
 		if ( m_shaders[size_t( p_shader )] )
 		{
 			l_return = m_shaders[size_t( p_shader )]->FindUniform( p_name );
 
-			if ( l_return && l_return->GetFullType() != p_type )
+			if ( l_return && l_return->GetBaseUniform().GetFullType() != p_type )
 			{
 				Logger::LogError( cuT( "Frame variable named " ) + p_name + cuT( " exists but with a different type" ) );
 				l_return.reset();
@@ -548,13 +549,14 @@ namespace Castor3D
 
 		return l_buffer;
 	}
-	UniformPtrList & ShaderProgram::GetUniforms( ShaderType p_type )
+
+	PushUniformList & ShaderProgram::GetUniforms( ShaderType p_type )
 	{
 		REQUIRE( m_shaders[size_t( p_type )] );
 		return m_shaders[size_t( p_type )]->GetUniforms();
 	}
 
-	UniformPtrList const & ShaderProgram::GetUniforms( ShaderType p_type )const
+	PushUniformList const & ShaderProgram::GetUniforms( ShaderType p_type )const
 	{
 		REQUIRE( m_shaders[size_t( p_type )] );
 		return m_shaders[size_t( p_type )]->GetUniforms();

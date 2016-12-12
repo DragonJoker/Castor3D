@@ -84,7 +84,7 @@ namespace Castor3D
 		{
 			for ( auto l_it : p_shaderObject.GetUniforms() )
 			{
-				l_return = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( *l_it, p_file );
+				l_return = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( l_it->GetBaseUniform(), p_file );
 			}
 		}
 
@@ -127,16 +127,12 @@ namespace Castor3D
 	{
 		for ( auto l_variable : m_listUniforms )
 		{
-			l_variable->Bind();
+			l_variable->Update();
 		}
 	}
 
 	void ShaderObject::Unbind()
 	{
-		for ( auto l_variable : m_listUniforms )
-		{
-			l_variable->Unbind();
-		}
 	}
 
 	void ShaderObject::SetFile( ShaderModel p_eModel, Path const & p_filename )
@@ -190,18 +186,18 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObject::AddUniform( UniformSPtr p_variable )
+	void ShaderObject::AddUniform( PushUniformSPtr p_variable )
 	{
 		if ( p_variable )
 		{
 			m_listUniforms.push_back( p_variable );
-			m_mapUniforms.insert( std::make_pair( p_variable->GetName(), p_variable ) );
+			m_mapUniforms.insert( std::make_pair( p_variable->GetBaseUniform().GetName(), p_variable ) );
 		}
 	}
 
-	UniformSPtr ShaderObject::FindUniform( Castor::String const & p_name )const
+	PushUniformSPtr ShaderObject::FindUniform( Castor::String const & p_name )const
 	{
-		UniformSPtr l_return;
+		PushUniformSPtr l_return;
 		auto l_it = m_mapUniforms.find( p_name );
 
 		if ( l_it != m_mapUniforms.end() )

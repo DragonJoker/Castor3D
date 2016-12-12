@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API UniformSPtr CreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
+		C3D_API UniformSPtr CreateUniform( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
 		/**
 		 *\~english
 		 *\brief		Creates a variable.
@@ -174,10 +174,10 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		template< typename T >
-		inline std::shared_ptr< T > CreateVariable( Castor::String const & p_name, int p_occurences = 1 )
+		template< UniformType Type >
+		inline std::shared_ptr< typename UniformTyper< Type >::type > CreateUniform( Castor::String const & p_name, int p_occurences = 1 )
 		{
-			return std::static_pointer_cast< T >( CreateVariable( UniformTyper< T >::value, p_name, p_occurences ) );
+			return std::static_pointer_cast< typename UniformTyper< Type >::type >( CreateUniform( Type, p_name, p_occurences ) );
 		}
 		/**
 		 *\~english
@@ -200,36 +200,8 @@ namespace Castor3D
 		 *\param[out]	p_variable	Reçoit la variable récupérée, nullptr en cas d'échec.
 		 *\return		\p false en cas d'échec.
 		 */
-		template< typename T >
-		std::shared_ptr< OneUniform< T > > GetVariable( Castor::String const & p_name, std::shared_ptr< OneUniform< T > > & p_variable )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves a variable by name.
-		 *\param[in]	p_name		The variable name.
-		 *\param[out]	p_variable	Receives the found variable, nullptr if failed.
-		 *\return		\p false if failed.
-		 *\~french
-		 *\brief		Récupère une variable par son nom.
-		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[out]	p_variable	Reçoit la variable récupérée, nullptr en cas d'échec.
-		 *\return		\p false en cas d'échec.
-		 */
-		template< typename T, uint32_t Count >
-		std::shared_ptr< PointUniform< T, Count > > GetVariable( Castor::String const & p_name, std::shared_ptr< PointUniform< T, Count > > & p_variable )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves a variable by name.
-		 *\param[in]	p_name		The variable name.
-		 *\param[out]	p_variable	Receives the found variable, nullptr if failed.
-		 *\return		\p false if failed.
-		 *\~french
-		 *\brief		Récupère une variable par son nom.
-		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[out]	p_variable	Reçoit la variable récupérée, nullptr en cas d'échec.
-		 *\return		\p false en cas d'échec.
-		 */
-		template< typename T, uint32_t Rows, uint32_t Columns >
-		std::shared_ptr< MatrixUniform< T, Rows, Columns > > GetVariable( Castor::String const & p_name, std::shared_ptr< MatrixUniform< T, Rows, Columns > > & p_variable )const;
+		template< UniformType Type >
+		std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\return		The variables buffer name.
@@ -246,7 +218,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'itérateur sur le début de la liste de variables.
 		 */
-		inline UniformPtrList::iterator begin()
+		inline UniformList::iterator begin()
 		{
 			return m_listVariables.begin();
 		}
@@ -256,7 +228,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'itérateur sur le début de la liste de variables.
 		 */
-		inline UniformPtrList::const_iterator begin()const
+		inline UniformList::const_iterator begin()const
 		{
 			return m_listVariables.begin();
 		}
@@ -266,7 +238,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'itérateur sur la fin de la liste de variables.
 		 */
-		inline UniformPtrList::iterator end()
+		inline UniformList::iterator end()
 		{
 			return m_listVariables.end();
 		}
@@ -276,7 +248,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'itérateur sur la fin de la liste de variables.
 		 */
-		inline UniformPtrList::const_iterator end()const
+		inline UniformList::const_iterator end()const
 		{
 			return m_listVariables.end();
 		}
@@ -296,7 +268,7 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API virtual UniformSPtr DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 ) = 0;
+		UniformSPtr DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated.
@@ -344,13 +316,13 @@ namespace Castor3D
 		uint32_t m_index;
 		//!\~english	The variables list.
 		//!\~french		La liste de variables.
-		UniformPtrList m_listVariables;
+		UniformList m_listVariables;
 		//!\~english	The initialised variables list.
 		//!\~french		La liste de variables initialisées.
-		UniformPtrList m_listInitialised;
+		UniformList m_listInitialised;
 		//!\~english	The variables ordered by name.
 		//!\~french		Les variables, triées par nom.
-		UniformPtrStrMap m_mapVariables;
+		UniformMap m_mapVariables;
 		//!\~english	The buffer name.
 		//!\~french		Le nom du tampon.
 		Castor::String m_name;

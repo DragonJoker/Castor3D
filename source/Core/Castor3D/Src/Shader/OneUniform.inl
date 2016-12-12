@@ -44,14 +44,14 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template< typename T >
-	OneUniform< T >::OneUniform( ShaderProgram & p_program )
-		: OneUniform< T >( p_program, 1u )
+	OneUniform< T >::OneUniform()
+		: OneUniform< T >( 1u )
 	{
 	}
 
 	template< typename T >
-	OneUniform< T >::OneUniform( ShaderProgram & p_program, uint32_t p_occurences )
-		: TUniform< T >( p_program, p_occurences )
+	OneUniform< T >::OneUniform( uint32_t p_occurences )
+		: TUniform< T >( p_occurences )
 	{
 		this->m_values = new T[p_occurences];
 		memset( this->m_values, 0, size() );

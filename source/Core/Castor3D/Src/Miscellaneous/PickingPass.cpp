@@ -118,8 +118,8 @@ namespace Castor3D
 			if ( !p_program.FindUniformBuffer( Picking ) )
 			{
 				auto & l_picking = p_program.CreateUniformBuffer( Picking, ShaderTypeFlag::ePixel );
-				l_picking.CreateVariable< Uniform1ui >( DrawIndex );
-				l_picking.CreateVariable< Uniform1ui >( NodeIndex );
+				l_picking.CreateUniform( UniformType::eUInt, DrawIndex );
+				l_picking.CreateUniform( UniformType::eUInt, NodeIndex );
 
 				if ( p_program.GetRenderSystem()->GetCurrentContext() )
 				{

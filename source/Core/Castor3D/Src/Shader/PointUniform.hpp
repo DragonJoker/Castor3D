@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_POINT_FRAME_VARIABLE_H___
-#define ___C3D_POINT_FRAME_VARIABLE_H___
+#ifndef ___C3D_PointUniform_H___
+#define ___C3D_PointUniform_H___
 
 #include "Uniform.hpp"
 
@@ -56,24 +56,20 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_program	The program
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_program	Le programme
+		 *\brief		Constructeur.
 		 */
-		explicit PointUniform( ShaderProgram & p_program );
+		PointUniform();
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_program		The program
-		 *\param[in]	p_occurences	The array dimension
+		 *\brief		Constructor.
+		 *\param[in]	p_occurences	The array dimensions.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_program		Le programme
-		 *\param[in]	p_occurences	Les dimensions du tableau
+		 *\brief		Constructeur.
+		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 */
-		PointUniform( ShaderProgram & p_program, uint32_t p_occurences );
+		explicit PointUniform( uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Destructor

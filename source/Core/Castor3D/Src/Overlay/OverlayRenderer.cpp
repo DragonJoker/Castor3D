@@ -514,7 +514,7 @@ namespace Castor3D
 		auto & l_node = DoGetTextNode( p_pass );
 		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );
 
-		Uniform1iSPtr l_textureVariable = l_node.m_pipeline.GetProgram().FindUniform< Uniform1i >( ShaderProgram::MapText, ShaderType::ePixel );
+		auto l_textureVariable = l_node.m_pipeline.GetProgram().FindUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel );
 
 		if ( l_textureVariable )
 		{
@@ -667,17 +667,17 @@ namespace Castor3D
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eText ) )
 		{
-			l_program->CreateUniform< Uniform1i >( ShaderProgram::MapText, ShaderType::ePixel );
+			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapText, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eColour ) )
 		{
-			l_program->CreateUniform< Uniform1i >( ShaderProgram::MapColour, ShaderType::ePixel );
+			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapColour, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 		{
-			l_program->CreateUniform< Uniform1i >( ShaderProgram::MapOpacity, ShaderType::ePixel );
+			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapOpacity, ShaderType::ePixel );
 		}
 
 		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();

@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Texture/TextureLayout.hpp"
+#include <cstdint>
 
 namespace Castor3D
 {
@@ -34,1116 +34,1595 @@ namespace Castor3D
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
 	*/
-	template< typename T >
+	template< UniformType T >
 	struct UniformTyper;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for OneUniform< bool >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eSampler.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour OneUniform< bool >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eSampler.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< OneUniform< bool > >
+	struct UniformTyper< UniformType::eSampler >
 	{
-		static UniformType const value = UniformType::eBool;
+		using type = Uniform1s;
+		using value_type = int;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 1u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eOne;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< bool, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eBool.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< bool, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eBool.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< bool, 2 > >
+	struct UniformTyper< UniformType::eBool >
 	{
-		static UniformType const value = UniformType::eVec2b;
+		using type = Uniform1b;
+		using value_type = bool;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 1u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eOne;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< bool, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec2b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< bool, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec2b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< bool, 3 > >
+	struct UniformTyper< UniformType::eVec2b >
 	{
-		static UniformType const value = UniformType::eVec3b;
+		using type = Uniform2b;
+		using value_type = Castor::Point2b;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 2u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< bool, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec3b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< bool, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec3b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< bool, 4 > >
+	struct UniformTyper< UniformType::eVec3b >
 	{
-		static UniformType const value = UniformType::eVec4b;
+		using type = Uniform3b;
+		using value_type = Castor::Point3b;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 3u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 2, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec4b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 2, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec4b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 2, 2 > >
+	struct UniformTyper< UniformType::eVec4b >
 	{
-		static UniformType const value = UniformType::eMat2x2b;
+		using type = Uniform4b;
+		using value_type = Castor::Point4b;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 2, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x2b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 2, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x2b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 2, 3 > >
+	struct UniformTyper< UniformType::eMat2x2b >
 	{
-		static UniformType const value = UniformType::eMat2x3b;
+		using type = Uniform2x2b;
+		using value_type = Castor::SquareMatrix< bool, 2 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 2, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x3b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 2, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x3b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 2, 4 > >
+	struct UniformTyper< UniformType::eMat2x3b >
 	{
-		static UniformType const value = UniformType::eMat2x4b;
+		using type = Uniform2x3b;
+		using value_type = Castor::Matrix< bool, 2, 3 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 3, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x4b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 3, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x4b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 3, 2 > >
+	struct UniformTyper< UniformType::eMat2x4b >
 	{
-		static UniformType const value = UniformType::eMat3x2b;
+		using type = Uniform2x4b;
+		using value_type = Castor::Matrix< bool, 2, 4 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 3, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x2b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 3, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x2b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 3, 3 > >
+	struct UniformTyper< UniformType::eMat3x2b >
 	{
-		static UniformType const value = UniformType::eMat3x3b;
+		using type = Uniform3x2b;
+		using value_type = Castor::Matrix< bool, 3, 2 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 3, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x3b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 3, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x3b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 3, 4 > >
+	struct UniformTyper< UniformType::eMat3x3b >
 	{
-		static UniformType const value = UniformType::eMat3x4b;
+		using type = Uniform3x3b;
+		using value_type = Castor::SquareMatrix< bool, 3 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 9u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 4, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x4b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 4, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x4b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 4, 2 > >
+	struct UniformTyper< UniformType::eMat3x4b >
 	{
-		static UniformType const value = UniformType::eMat4x2b;
+		using type = Uniform3x4b;
+		using value_type = Castor::Matrix< bool, 3, 4 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 4, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x2b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 4, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x2b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 4, 3 > >
+	struct UniformTyper< UniformType::eMat4x2b >
 	{
-		static UniformType const value = UniformType::eMat4x3b;
+		using type = Uniform4x2b;
+		using value_type = Castor::Matrix< bool, 4, 2 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< bool, 4, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x3b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< bool, 4, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x3b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< bool, 4, 4 > >
+	struct UniformTyper< UniformType::eMat4x3b >
 	{
-		static UniformType const value = UniformType::eMat4x4b;
+		using type = Uniform4x3b;
+		using value_type = Castor::Matrix< bool, 4, 3 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for Uniform1i.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x4b.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour Uniform1i.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x4b.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< Uniform1i >
+	struct UniformTyper< UniformType::eMat4x4b >
 	{
-		static UniformType const value = UniformType::eInt;
+		using type = Uniform4x4b;
+		using value_type = Castor::SquareMatrix< bool, 4 >;
+		using value_sub_type = bool;
+		static constexpr uint32_t value_sub_type_count = 16u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< int, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eInt.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< int, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eInt.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< int, 2 > >
+	struct UniformTyper< UniformType::eInt >
 	{
-		static UniformType const value = UniformType::eVec2i;
+		using type = Uniform1i;
+		using value_type = int;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 1u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eOne;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< int, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec2i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< int, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec2i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< int, 3 > >
+	struct UniformTyper< UniformType::eVec2i >
 	{
-		static UniformType const value = UniformType::eVec3i;
+		using type = Uniform2i;
+		using value_type = Castor::Point2i;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 2u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< int, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec3i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< int, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec3i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< int, 4 > >
+	struct UniformTyper< UniformType::eVec3i >
 	{
-		static UniformType const value = UniformType::eVec4i;
+		using type = Uniform3i;
+		using value_type = Castor::Point3i;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 3u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 2, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec4i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 2, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec4i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 2, 2 > >
+	struct UniformTyper< UniformType::eVec4i >
 	{
-		static UniformType const value = UniformType::eMat2x2i;
+		using type = Uniform4i;
+		using value_type = Castor::Point4i;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 2, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x2i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 2, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x2i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 2, 3 > >
+	struct UniformTyper< UniformType::eMat2x2i >
 	{
-		static UniformType const value = UniformType::eMat2x3i;
+		using type = Uniform2x2i;
+		using value_type = Castor::SquareMatrix< int, 2 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 2, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x3i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 2, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x3i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 2, 4 > >
+	struct UniformTyper< UniformType::eMat2x3i >
 	{
-		static UniformType const value = UniformType::eMat2x4i;
+		using type = Uniform2x3i;
+		using value_type = Castor::Matrix< int, 2, 3 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 3, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x4i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 3, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x4i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 3, 2 > >
+	struct UniformTyper< UniformType::eMat2x4i >
 	{
-		static UniformType const value = UniformType::eMat3x2i;
+		using type = Uniform2x4i;
+		using value_type = Castor::Matrix< int, 2, 4 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 3, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x2i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 3, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x2i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 3, 3 > >
+	struct UniformTyper< UniformType::eMat3x2i >
 	{
-		static UniformType const value = UniformType::eMat3x3i;
+		using type = Uniform3x2i;
+		using value_type = Castor::Matrix< int, 3, 2 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 3, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x3i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 3, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x3i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 3, 4 > >
+	struct UniformTyper< UniformType::eMat3x3i >
 	{
-		static UniformType const value = UniformType::eMat3x4i;
+		using type = Uniform3x3i;
+		using value_type = Castor::SquareMatrix< int, 3 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 9u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 4, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x4i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 4, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x4i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 4, 2 > >
+	struct UniformTyper< UniformType::eMat3x4i >
 	{
-		static UniformType const value = UniformType::eMat4x2i;
+		using type = Uniform3x4i;
+		using value_type = Castor::Matrix< int, 3, 4 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 4, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x2i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 4, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x2i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 4, 3 > >
+	struct UniformTyper< UniformType::eMat4x2i >
 	{
-		static UniformType const value = UniformType::eMat4x3i;
+		using type = Uniform4x2i;
+		using value_type = Castor::Matrix< int, 4, 2 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< int, 4, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x3i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< int, 4, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x3i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< int, 4, 4 > >
+	struct UniformTyper< UniformType::eMat4x3i >
 	{
-		static UniformType const value = UniformType::eMat4x4i;
+		using type = Uniform4x3i;
+		using value_type = Castor::Matrix< int, 4, 3 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for OneUniform< unsigned int >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x4i.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour OneUniform< unsigned int >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x4i.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< OneUniform< unsigned int > >
+	struct UniformTyper< UniformType::eMat4x4i >
 	{
-		static UniformType const value = UniformType::eUInt;
+		using type = Uniform4x4i;
+		using value_type = Castor::SquareMatrix< int, 4 >;
+		using value_sub_type = int;
+		static constexpr uint32_t value_sub_type_count = 16u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< unsigned int, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eUInt.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< unsigned int, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eUInt.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< unsigned int, 2 > >
+	struct UniformTyper< UniformType::eUInt >
 	{
-		static UniformType const value = UniformType::eVec2ui;
+		using type = Uniform1ui;
+		using value_type = uint32_t;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 1u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eOne;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< unsigned int, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec2ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< unsigned int, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec2ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< unsigned int, 3 > >
+	struct UniformTyper< UniformType::eVec2ui >
 	{
-		static UniformType const value = UniformType::eVec3ui;
+		using type = Uniform2ui;
+		using value_type = Castor::Point2ui;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 2u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< unsigned int, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec3ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< unsigned int, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec3ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< unsigned int, 4 > >
+	struct UniformTyper< UniformType::eVec3ui >
 	{
-		static UniformType const value = UniformType::eVec4ui;
+		using type = Uniform3ui;
+		using value_type = Castor::Point3ui;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 3u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 2, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec4ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 2, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec4ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 2, 2 > >
+	struct UniformTyper< UniformType::eVec4ui >
 	{
-		static UniformType const value = UniformType::eMat2x2ui;
+		using type = Uniform4ui;
+		using value_type = Castor::Point4ui;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 2, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x2ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 2, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x2ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 2, 3 > >
+	struct UniformTyper< UniformType::eMat2x2ui >
 	{
-		static UniformType const value = UniformType::eMat2x3ui;
+		using type = Uniform2x2ui;
+		using value_type = Castor::SquareMatrix< uint32_t, 2 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 2, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x3ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 2, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x3ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 2, 4 > >
+	struct UniformTyper< UniformType::eMat2x3ui >
 	{
-		static UniformType const value = UniformType::eMat2x4ui;
+		using type = Uniform2x3ui;
+		using value_type = Castor::Matrix< uint32_t, 2, 3 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 3, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x4ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 3, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x4ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 3, 2 > >
+	struct UniformTyper< UniformType::eMat2x4ui >
 	{
-		static UniformType const value = UniformType::eMat3x2ui;
+		using type = Uniform2x4ui;
+		using value_type = Castor::Matrix< uint32_t, 2, 4 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 3, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x2ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 3, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x2ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 3, 3 > >
+	struct UniformTyper< UniformType::eMat3x2ui >
 	{
-		static UniformType const value = UniformType::eMat3x3ui;
+		using type = Uniform3x2ui;
+		using value_type = Castor::Matrix< uint32_t, 3, 2 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 3, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x3ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 3, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x3ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 3, 4 > >
+	struct UniformTyper< UniformType::eMat3x3ui >
 	{
-		static UniformType const value = UniformType::eMat3x4ui;
+		using type = Uniform3x3ui;
+		using value_type = Castor::SquareMatrix< uint32_t, 3 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 9u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 4, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x4ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 4, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x4ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 4, 2 > >
+	struct UniformTyper< UniformType::eMat3x4ui >
 	{
-		static UniformType const value = UniformType::eMat4x2ui;
+		using type = Uniform3x4ui;
+		using value_type = Castor::Matrix< uint32_t, 3, 4 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 4, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x2ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 4, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x2ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 4, 3 > >
+	struct UniformTyper< UniformType::eMat4x2ui >
 	{
-		static UniformType const value = UniformType::eMat4x3ui;
+		using type = Uniform4x2ui;
+		using value_type = Castor::Matrix< uint32_t, 4, 2 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< unsigned int, 4, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x3ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< unsigned int, 4, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x3ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< unsigned int, 4, 4 > >
+	struct UniformTyper< UniformType::eMat4x3ui >
 	{
-		static UniformType const value = UniformType::eMat4x4ui;
+		using type = Uniform4x3ui;
+		using value_type = Castor::Matrix< uint32_t, 4, 3 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for OneUniform< float >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x4ui.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour OneUniform< float >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x4ui.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< OneUniform< float > >
+	struct UniformTyper< UniformType::eMat4x4ui >
 	{
-		static UniformType const value = UniformType::eFloat;
+		using type = Uniform4x4ui;
+		using value_type = Castor::SquareMatrix< uint32_t, 4 >;
+		using value_sub_type = uint32_t;
+		static constexpr uint32_t value_sub_type_count = 16u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< float, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eFloat.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< float, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eFloat.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< float, 2 > >
+	struct UniformTyper< UniformType::eFloat >
 	{
-		static UniformType const value = UniformType::eVec2f;
+		using type = Uniform1f;
+		using value_type = float;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 1u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eOne;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< float, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec2f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< float, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec2f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< float, 3 > >
+	struct UniformTyper< UniformType::eVec2f >
 	{
-		static UniformType const value = UniformType::eVec3f;
+		using type = Uniform2f;
+		using value_type = Castor::Point2f;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 2u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< float, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec3f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< float, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec3f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< float, 4 > >
+	struct UniformTyper< UniformType::eVec3f >
 	{
-		static UniformType const value = UniformType::eVec4f;
+		using type = Uniform3f;
+		using value_type = Castor::Point3f;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 3u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 2, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec4f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 2, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec4f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 2, 2 > >
+	struct UniformTyper< UniformType::eVec4f >
 	{
-		static UniformType const value = UniformType::eMat2x2f;
+		using type = Uniform4f;
+		using value_type = Castor::Point4f;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 2, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x2f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 2, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x2f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 2, 3 > >
+	struct UniformTyper< UniformType::eMat2x2f >
 	{
-		static UniformType const value = UniformType::eMat2x3f;
+		using type = Uniform2x2f;
+		using value_type = Castor::SquareMatrix< float, 2 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 2, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x3f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 2, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x3f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 2, 4 > >
+	struct UniformTyper< UniformType::eMat2x3f >
 	{
-		static UniformType const value = UniformType::eMat2x4f;
+		using type = Uniform2x3f;
+		using value_type = Castor::Matrix< float, 2, 3 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 3, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x4f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 3, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x4f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 3, 2 > >
+	struct UniformTyper< UniformType::eMat2x4f >
 	{
-		static UniformType const value = UniformType::eMat3x2f;
+		using type = Uniform2x4f;
+		using value_type = Castor::Matrix< float, 2, 4 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 3, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x2f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 3, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x2f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 3, 3 > >
+	struct UniformTyper< UniformType::eMat3x2f >
 	{
-		static UniformType const value = UniformType::eMat3x3f;
+		using type = Uniform3x2f;
+		using value_type = Castor::Matrix< float, 3, 2 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 3, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x3f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 3, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x3f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 3, 4 > >
+	struct UniformTyper< UniformType::eMat3x3f >
 	{
-		static UniformType const value = UniformType::eMat3x4f;
+		using type = Uniform3x3f;
+		using value_type = Castor::SquareMatrix< float, 3 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 9u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 4, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x4f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 4, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x4f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 4, 2 > >
+	struct UniformTyper< UniformType::eMat3x4f >
 	{
-		static UniformType const value = UniformType::eMat4x2f;
+		using type = Uniform3x4f;
+		using value_type = Castor::Matrix< float, 3, 4 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 4, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x2f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 4, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x2f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 4, 3 > >
+	struct UniformTyper< UniformType::eMat4x2f >
 	{
-		static UniformType const value = UniformType::eMat4x3f;
+		using type = Uniform4x2f;
+		using value_type = Castor::Matrix< float, 4, 2 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< float, 4, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x3f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< float, 4, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x3f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< float, 4, 4 > >
+	struct UniformTyper< UniformType::eMat4x3f >
 	{
-		static UniformType const value = UniformType::eMat4x4f;
+		using type = Uniform4x3f;
+		using value_type = Castor::Matrix< float, 4, 3 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for OneUniform< double >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x4f.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour OneUniform< double >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x4f.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< OneUniform< double > >
+	struct UniformTyper< UniformType::eMat4x4f >
 	{
-		static UniformType const value = UniformType::eDouble;
+		using type = Uniform4x4f;
+		using value_type = Castor::SquareMatrix< float, 4 >;
+		using value_sub_type = float;
+		static constexpr uint32_t value_sub_type_count = 16u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< double, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eDouble.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< double, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eDouble.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< double, 2 > >
+	struct UniformTyper< UniformType::eDouble >
 	{
-		static UniformType const value = UniformType::eVec2d;
+		using type = Uniform1d;
+		using value_type = double;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 1u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eOne;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< double, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec2d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< double, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec2d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< double, 3 > >
+	struct UniformTyper< UniformType::eVec2d >
 	{
-		static UniformType const value = UniformType::eVec3d;
+		using type = Uniform2d;
+		using value_type = Castor::Point2d;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 2u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for PointUniform< double, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec3d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour PointUniform< double, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec3d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< PointUniform< double, 4 > >
+	struct UniformTyper< UniformType::eVec3d >
 	{
-		static UniformType const value = UniformType::eVec4d;
+		using type = Uniform3d;
+		using value_type = Castor::Point3d;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 3u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 2, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eVec4d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 2, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eVec4d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 2, 2 > >
+	struct UniformTyper< UniformType::eVec4d >
 	{
-		static UniformType const value = UniformType::eMat2x2d;
+		using type = Uniform4d;
+		using value_type = Castor::Point4d;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eVec4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 2, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x2d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 2, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x2d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 2, 3 > >
+	struct UniformTyper< UniformType::eMat2x2d >
 	{
-		static UniformType const value = UniformType::eMat2x3d;
+		using type = Uniform2x2d;
+		using value_type = Castor::SquareMatrix< double, 2 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 4u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 2, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x3d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 2, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x3d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 2, 4 > >
+	struct UniformTyper< UniformType::eMat2x3d >
 	{
-		static UniformType const value = UniformType::eMat2x4d;
+		using type = Uniform2x3d;
+		using value_type = Castor::Matrix< double, 2, 3 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 3, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat2x4d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 3, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat2x4d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 3, 2 > >
+	struct UniformTyper< UniformType::eMat2x4d >
 	{
-		static UniformType const value = UniformType::eMat3x2d;
+		using type = Uniform2x4d;
+		using value_type = Castor::Matrix< double, 2, 4 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat2x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 3, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x2d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 3, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x2d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 3, 3 > >
+	struct UniformTyper< UniformType::eMat3x2d >
 	{
-		static UniformType const value = UniformType::eMat3x3d;
+		using type = Uniform3x2d;
+		using value_type = Castor::Matrix< double, 3, 2 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 6u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 3, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x3d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 3, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x3d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 3, 4 > >
+	struct UniformTyper< UniformType::eMat3x3d >
 	{
-		static UniformType const value = UniformType::eMat3x4d;
+		using type = Uniform3x3d;
+		using value_type = Castor::SquareMatrix< double, 3 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 9u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 4, 2 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat3x4d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 4, 2 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat3x4d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 4, 2 > >
+	struct UniformTyper< UniformType::eMat3x4d >
 	{
-		static UniformType const value = UniformType::eMat4x2d;
+		using type = Uniform3x4d;
+		using value_type = Castor::Matrix< double, 3, 4 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat3x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 4, 3 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x2d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 4, 3 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x2d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 4, 3 > >
+	struct UniformTyper< UniformType::eMat4x2d >
 	{
-		static UniformType const value = UniformType::eMat4x3d;
+		using type = Uniform4x2d;
+		using value_type = Castor::Matrix< double, 4, 2 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 8u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x2;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/06/2016
 	\~english
-	\brief		Helper structure to retrieve a UniformType from a frame variable type.
-	\remarks	Specialisation for MatrixUniform< double, 4, 4 >.
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x3d.
 	\~french
-	\brief		Structure d'aide permettant de récupérer un UniformType depuis un type de frame variable.
-	\remarks	Spécialisation pour MatrixUniform< double, 4, 4 >.
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x3d.
 	\remarks
 	*/
 	template<>
-	struct UniformTyper< MatrixUniform< double, 4, 4 > >
+	struct UniformTyper< UniformType::eMat4x3d >
 	{
-		static UniformType const value = UniformType::eMat4x4d;
+		using type = Uniform4x3d;
+		using value_type = Castor::Matrix< double, 4, 3 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 12u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x3;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		21/06/2016
+	\~english
+	\brief		Helper structure to retrieve a frame variable type from a UniformType.
+	\remarks	Specialisation for UniformType::eMat4x4d.
+	\~french
+	\brief		Structure d'aide permettant de récupérer un type de frame variable depuis un UniformType.
+	\remarks	Spécialisation pour UniformType::eMat4x4d.
+	\remarks
+	*/
+	template<>
+	struct UniformTyper< UniformType::eMat4x4d >
+	{
+		using type = Uniform4x4d;
+		using value_type = Castor::SquareMatrix< double, 4 >;
+		using value_sub_type = double;
+		static constexpr uint32_t value_sub_type_count = 16u;
+		static constexpr uint32_t size = uint32_t( sizeof( value_sub_type ) * value_sub_type_count );
+		static constexpr VariableType variable_type = VariableType::eMat4x4;
+		C3D_API static const Castor::String full_type_name;
+		C3D_API static const Castor::String data_type_name;
 	};
 }
 

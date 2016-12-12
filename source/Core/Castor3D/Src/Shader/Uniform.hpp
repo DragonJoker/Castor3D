@@ -20,12 +20,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_FRAME_VARIABLE_H___
-#define ___C3D_FRAME_VARIABLE_H___
+#ifndef ___C3D_Uniform_H___
+#define ___C3D_Uniform_H___
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Texture/TextureLayout.hpp"
+#include "UniformTyper.hpp"
 
 namespace Castor3D
 {
@@ -80,15 +80,13 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_program		The program
-		 *\param[in]	p_occurences	The array dimension
+		 *\brief		Constructor.
+		 *\param[in]	p_occurences	The array dimensions.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_program		Le programme
-		 *\param[in]	p_occurences	Les dimensions du tableau
+		 *\brief		Constructeur.
+		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 */
-		C3D_API Uniform( ShaderProgram & p_program, uint32_t p_occurences );
+		C3D_API Uniform( uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -136,36 +134,6 @@ namespace Castor3D
 		 *\return		La valeur chaîne de la variable.
 		 */
 		C3D_API Castor::String GetStrValue( uint32_t p_index = 0 )const;
-		/**
-		 *\~english
-		 *\brief		Initialises the variable
-		 *\return		\p false if any problem occured
-		 *\~french
-		 *\brief		Initialise la variable
-		 *\return		\p false if any problem occured
-		 */
-		C3D_API virtual bool Initialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans up the variable
-		 *\~french
-		 *\brief		Nettoie la variable
-		 */
-		C3D_API virtual void Cleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Binds this variable to the shader
-		 *\~french
-		 *\brief		Lie cette variable au shader
-		 */
-		C3D_API virtual void Bind()const = 0;
-		/**
-		 *\~english
-		 *\brief		Unbinds this variable from the shader
-		 *\~french
-		 *\brief		Délie cette variable du shader
-		 */
-		C3D_API virtual void Unbind()const = 0;
 		/**
 		 *\~english
 		 *\return		The variable's type.
@@ -255,26 +223,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The parent program.
-		 *\~french
-		 *\return		La programme parent.
-		 */
-		inline ShaderProgram & GetProgram()
-		{
-			return m_program;
-		}
-		/**
-		 *\~english
-		 *\return		The parent program.
-		 *\~french
-		 *\return		La programme parent.
-		 */
-		inline ShaderProgram const & GetProgram()const
-		{
-			return m_program;
-		}
-		/**
-		 *\~english
 		 *\return		The changed status.
 		 *\~french
 		 *\return		Le statut de changement.
@@ -330,9 +278,6 @@ namespace Castor3D
 		//!\~english	The array dimension if the variable represents an array.
 		//!\~french		Les dimensions du tableau si la variable représente un tableau.
 		uint32_t m_occurences;
-		//!\~english	The parent shader program.
-		//!\~french		Le programme parent.
-		ShaderProgram & m_program;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -353,10 +298,14 @@ namespace Castor3D
 	\~french
 	\brief		Représentation d'une variable de shader à type variable
 	*/
-	template< typename T >
+	template< UniformType Type >
 	class TUniform
 		: public Uniform
 	{
+		using type = typename UniformTyper< Type >::type;
+		using value_type = typename UniformTyper< Type >::value_type;
+		using value_sub_type = typename UniformTyper< Type >::value_sub_type;
+
 	public:
 		/**
 		 *\~english
@@ -368,7 +317,7 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau
 		 *\param[in]	p_program		Le programme
 		 */
-		TUniform( ShaderProgram & p_program, uint32_t p_occurences );
+		TUniform( uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -376,6 +325,159 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		virtual ~TUniform();
+		/**
+		 *\~english
+		 *\brief		Retrieves the value
+		 *\return		A reference to the value
+		 *\~french
+		 *\brief		Récupère la valeur
+		 *\return		Une référence sur la valeur
+		 */
+		inline value_type & GetValue();
+		/**
+		 *\~english
+		 *\brief		Retrieves the value
+		 *\return		A constant reference to the value
+		 *\~french
+		 *\brief		Récupère la valeur
+		 *\return		Une référence constante sur la valeur
+		 */
+		inline value_type const & GetValue()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the value at given index
+		 *\remarks		Check the index bounds
+		 *\param[in]	p_index	The index
+		 *\return		A reference to the value at given index
+		 *\~french
+		 *\brief		Récupère la valeur à l'index donné
+		 *\remarks		Vérifie que l'index est dans les bornes
+		 *\param[in]	p_index	L'indice
+		 *\return		Une référence sur la valeur à l'index donné
+		 */
+		inline value_type & GetValue( uint32_t p_index );
+		/**
+		 *\~english
+		 *\brief		Retrieves the value at given index
+		 *\remarks		Check the index bounds
+		 *\param[in]	p_index	The index
+		 *\return		A constant reference to the value at given index
+		 *\~french
+		 *\brief		Récupère la valeur à l'index donné
+		 *\remarks		Vérifie que l'index est dans les bornes
+		 *\param[in]	p_index	L'indice
+		 *\return		Une référence constante sur la valeur à l'index donné
+		 */
+		inline value_type const & GetValue( uint32_t p_index )const;
+		/**
+		 *\~english
+		 *\brief		Defines the value of the variable
+		 *\param[in]	p_value	The new value
+		 *\~french
+		 *\brief		Définit la valeur de la variable
+		 *\param[in]	p_value	La valeur
+		 */
+		inline void SetValue( value_type const & p_value );
+		/**
+		 *\~english
+		 *\brief		Defines the value of the variable
+		 *\param[in]	p_value	The new value
+		 *\param[in]	p_index	The index of the value
+		 *\~french
+		 *\brief		Définit la valeur de la variable
+		 *\param[in]	p_value	La valeur
+		 *\param[in]	p_index	L'index de la valeur à modifier
+		 */
+		inline void SetValue( value_type const & p_value, uint32_t p_index );
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\param[in]	p_size		The values count.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 *\param[in]	p_size		Le nombre de valeurs.
+		 */
+		inline void SetValues( value_type const * p_values, size_t p_size );
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		template< size_t N >
+		inline void SetValues( value_type const( & p_values )[N] );
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		template< size_t N >
+		inline void SetValues( std::array< value_type, N > const & p_values );
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		inline void SetValues( std::vector< value_type > const & p_values );
+		/**
+		 *\~english
+		 *\brief		Array subscript operator
+		 *\remarks		Doesn't check the index bounds
+		 *\param[in]	p_index	The index
+		 *\return		A reference to the value at given index
+		 *\~french
+		 *\brief		Opérateur d'accès de type tableau
+		 *\remarks		Ne vérifie pas que l'index est dans les bornes
+		 *\param[in]	p_index	L'indice
+		 *\return		Une référence sur la valeur à l'index donné
+		 */
+		inline value_type & operator[]( uint32_t p_index );
+		/**
+		 *\~english
+		 *\brief		Array subscript operator
+		 *\remarks		Doesn't check the index bounds
+		 *\param[in]	p_index	The index
+		 *\return		A constant reference to the value at given index
+		 *\~french
+		 *\brief		Opérateur d'accès de type tableau
+		 *\remarks		Ne vérifie pas que l'index est dans les bornes
+		 *\param[in]	p_index	L'indice
+		 *\return		Une référence constante sur la valeur à l'index donné
+		 */
+		inline value_type const & operator[]( uint32_t p_index )const;
+		/**
+		 *\~english
+		 *\brief		Gives the full type of the variable
+		 *\return		The type of the variable
+		 *\~french
+		 *\brief		Donne le type complet de la variable
+		 *\return		Le type complet
+		 */
+		static inline constexpr VariableType GetVariableType();
+		/**
+		 *\~english
+		 *\return		The variable's full type.
+		 *\~english
+		 *\return		Le type complet de la variable.
+		 */
+		static inline constexpr UniformType GetUniformType();
+		/**
+		 *\~english
+		 *\return		The variable's full type name.
+		 *\~english
+		 *\return		Le nom du type complet de la variable.
+		 */
+		static inline Castor::String const & GetUniformTypeName();
 		/**
 		 *\~english
 		 *\return		The data type name.
@@ -390,18 +492,54 @@ namespace Castor3D
 		 *\return		Le pointeur sur les données de la variable.
 		 */
 		virtual uint8_t const * const const_ptr()const override;
+		/**
+		 *\copydoc		Castor3D::Uniform::GetType
+		 */
+		inline VariableType GetType()const override;
+		/**
+		 *\copydoc		Castor3D::Uniform::GetFullType
+		 */
+		inline UniformType GetFullType()const override;
+		/**
+		 *\copydoc		Castor3D::Uniform::GetFullTypeName
+		 */
+		inline Castor::String const & GetFullTypeName()const override;
+		/**
+		 *\copydoc		Castor3D::Uniform::size
+		 */
+		uint32_t size()const override;
+		/**
+		 *\copydoc		Castor3D::Uniform::link
+		 */
+		void link( uint8_t * p_buffer, uint32_t p_stride )override;
 
-	protected:
+	private:
+		/**
+		 *\copydoc		Castor3D::Uniform::DoSetStrValue
+		 */
+		inline void DoSetStrValue( Castor::String const & p_value, uint32_t p_index = 0 )override;
+		/**
+		 *\copydoc		Castor3D::Uniform::DoGetStrValue
+		 */
+		inline Castor::String DoGetStrValue( uint32_t p_index = 0 )const override;
+		/**
+		 *\~english
+		 *\return		Cleans up the internal buffer of values.
+		 *\~english
+		 *\return		Nettoie le tampon interne de valeurs.
+		 */
 		inline void DoCleanupBuffer();
 
 	protected:
-		typedef Castor::Policy< T > policy;
 		//!\~english	Tells the variable owns it's buffer.
 		//!\~french		Dit si la variable est responsable de son tampon.
-		bool m_bOwnBuffer;
+		bool m_ownBuffer{ true };
 		//!\~english	The buffer containing all values.
 		//!\~french		Le tampon contenant toutes les valeurs.
-		T * m_values;
+		value_sub_type * m_values{ nullptr };
+		//!\~english	The buffer containing typed values.
+		//!\~french		Le tampon contenant toutes les valeurs. typées
+		std::vector< value_type > m_typeValues;
 		//!\~english	The stride between each value in the buffer.
 		//!\~french		La distance binaire entrechaque valeur dans le tampon.
 		uint32_t m_stride{ 0u };

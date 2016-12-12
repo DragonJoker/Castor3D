@@ -201,7 +201,7 @@ namespace Castor3D
 		 *\brief		Crée une variable uniform à donner aux ShaderObjects
 		 *\param[in]	p_variable	La variable à donner
 		 */
-		C3D_API virtual void AddUniform( UniformSPtr p_variable );
+		C3D_API virtual void AddUniform( PushUniformSPtr p_variable );
 		/**
 		 *\~english
 		 *\brief		Finds a variable
@@ -210,7 +210,7 @@ namespace Castor3D
 		 *\brief		Trouve une variable
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		C3D_API UniformSPtr FindUniform( Castor::String const & p_name )const;
+		C3D_API PushUniformSPtr FindUniform( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes all frame variables
@@ -226,7 +226,7 @@ namespace Castor3D
 		 *\brief		Récupère les variables de frame liées à ce shader
 		 *\return		La liste
 		 */
-		inline UniformPtrList & GetUniforms()
+		inline PushUniformList & GetUniforms()
 		{
 			return m_listUniforms;
 		}
@@ -238,7 +238,7 @@ namespace Castor3D
 		 *\brief		Récupère les variables de frame liées à ce shader
 		 *\return		La liste
 		 */
-		inline UniformPtrList const & GetUniforms()const
+		inline PushUniformList const & GetUniforms()const
 		{
 			return m_listUniforms;
 		}
@@ -434,32 +434,45 @@ namespace Castor3D
 		virtual Castor::String DoRetrieveCompilerLog() = 0;
 
 	protected:
-		//!<\~english The shader type	\~french Le type de shader
+		//!<\~english	The shader type.
+		//!\~french		Le type de shader.
 		ShaderType m_type;
-		//!\~english The parent shader program	\~french Le programme parent
+		//!\~english	The parent shader program.
+		//!\~french		Le programme parent.
 		ShaderProgram * m_parent{ nullptr };
-		//!<\~english The shader compile status	\~french Le statut de compilation du shader
+		//!<\~english	The shader compile status.
+		//!\~french		Le statut de compilation du shader.
 		ShaderStatus m_status{ ShaderStatus::eNotCompiled };
-		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
+		//!\~english	The input primitive type (for geometry shaders).
+		//!\~french		Le type de primitives en entrée (pour les geometry shaders).
 		Topology m_eInputType{ Topology::eTriangles };
-		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
+		//!\~english	The output primitive type (for geometry shaders).
+		//!\~french		Le type de primitives en sortie (pour les geometry shaders).
 		Topology m_eOutputType{ Topology::eTriangles };
-		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
+		//!\~english	The output vertex count (for geometry shaders)..
+		//!\~french		Le nombre de vertex générés (pour les geometry shaders).
 		uint8_t m_uiOutputVtxCount{ 3 };
-		//!\~english The current shader model	\~french Le modèle de shader actuel
+		//!\~english	The current shader model.
+		//!\~french		Le modèle de shader actuel.
 		ShaderModel m_eShaderModel{ ShaderModel::eModel1 };
-		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
+		//!\~english	Array of files path, sorted by shader model..
+		//!\~french		Tableau des chemins de fichiers, triés par modèle de shader.
 		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
-		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader
+		//!\~english	Array of source codes, sorted by shader model..
+		//!\~french		Tableau des codes sources, triés par modèle de shader.
 		std::array< Castor::String, size_t( ShaderModel::eCount ) > m_arraySources;
-		//!<\~english Actually loaded ASCII Source-Code	\~french Le texte ASCII du shader chargé
+		//!<\~english	Actually loaded ASCII source code.
+		//!\~french		Le texte ASCII du shader chargé.
 		Castor::String m_loadedSource;
-		//!<\~english Actually loaded file path	\~french Le chemin d'accès au fichier contenant le source du shader
+		//!<\~english	Actually loaded file path.
+		//!\~french		Le chemin d'accès au fichier contenant le source du shader.
 		Castor::Path m_pathLoadedFile;
-		//!\~english The frame variables map, ordered by name	\~french La liste des variables de frame
-		UniformPtrStrMap m_mapUniforms;
-		//!\~english The frame variables map	\~french La liste des variables de frame
-		UniformPtrList m_listUniforms;
+		//!\~english	The frame variables map, ordered by name.
+		//!\~french		La liste des variables de frame.
+		PushUniformMap m_mapUniforms;
+		//!\~english	The frame variables map.
+		//!\~french		La liste des variables de frame.
+		PushUniformList m_listUniforms;
 	};
 }
 

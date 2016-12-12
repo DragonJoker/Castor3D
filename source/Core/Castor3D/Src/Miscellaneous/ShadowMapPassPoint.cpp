@@ -161,11 +161,11 @@ namespace Castor3D
 		if ( !l_ubo )
 		{
 			auto & l_shadowMapUbo = p_program.CreateUniformBuffer( ShadowMapUbo, ShaderTypeFlag::ePixel );
-			l_shadowMapUbo.CreateVariable< Uniform3f >( WorldLightPosition );
-			l_shadowMapUbo.CreateVariable< Uniform1f >( FarPlane );
+			l_shadowMapUbo.CreateUniform( UniformType::eVec3f, WorldLightPosition );
+			l_shadowMapUbo.CreateUniform( UniformType::eFloat, FarPlane );
 
 			auto & l_shadowMatricesUbo = p_program.CreateUniformBuffer( ShadowMatricesUbo, ShaderTypeFlag::eGeometry );
-			l_shadowMatricesUbo.CreateVariable< Uniform4x4f >( ShadowMatrices, 6 );
+			l_shadowMatricesUbo.CreateUniform( UniformType::eMat4x4f, ShadowMatrices, 6 );
 		}
 	}
 

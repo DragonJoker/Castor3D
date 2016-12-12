@@ -124,14 +124,14 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	PointUniform< T, Count >::PointUniform( ShaderProgram & p_program )
-		: PointUniform< T, Count >( p_program, 1u )
+	PointUniform< T, Count >::PointUniform()
+		: PointUniform< T, Count >( 1u )
 	{
 	}
 
 	template< typename T, uint32_t Count >
-	PointUniform< T, Count >::PointUniform( ShaderProgram & p_program, uint32_t p_occurences )
-		: TUniform< T >( p_program, p_occurences )
+	PointUniform< T, Count >::PointUniform( uint32_t p_occurences )
+		: TUniform< T >( p_occurences )
 	{
 		this->m_values = new T[p_occurences * Count];
 		memset( this->m_values, 0, size() );

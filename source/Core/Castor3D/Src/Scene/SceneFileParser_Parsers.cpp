@@ -3268,7 +3268,7 @@ namespace Castor3D
 
 			if ( l_parsingContext->eShaderObject != ShaderType::eCount )
 			{
-				l_parsingContext->pSamplerUniform = l_parsingContext->pShaderProgram->CreateUniform< Uniform1i >( l_name, l_parsingContext->eShaderObject );
+				l_parsingContext->pSamplerUniform = l_parsingContext->pShaderProgram->CreateUniform< UniformType::eSampler >( l_name, l_parsingContext->eShaderObject );
 			}
 			else
 			{
@@ -3439,7 +3439,7 @@ namespace Castor3D
 		{
 			if ( !l_parsingContext->pUniform )
 			{
-				l_parsingContext->pUniform = l_parsingContext->pUniformBuffer->CreateVariable( UniformType( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
+				l_parsingContext->pUniform = l_parsingContext->pUniformBuffer->CreateUniform( UniformType( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
 			}
 			else
 			{

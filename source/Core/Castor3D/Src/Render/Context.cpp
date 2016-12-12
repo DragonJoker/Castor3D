@@ -269,7 +269,7 @@ namespace Castor3D
 		m_rtotPipelinePlane.m_viewport.Apply();
 		p_pipeline.SetProjectionMatrix( m_rtotPipelinePlane.m_viewport.GetProjection() );
 
-		auto l_variable = p_pipeline.GetProgram().FindUniform< Uniform1f >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+		auto l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 
 		if ( l_variable )
 		{
@@ -349,7 +349,7 @@ namespace Castor3D
 		matrix::look_at( l_mtx, p_position, p_position + l_front, l_up );
 		p_pipeline.SetViewMatrix( l_mtx );
 
-		Uniform1fSPtr l_variable = p_pipeline.GetProgram().FindUniform< Uniform1f >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+		Uniform1fSPtr l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 
 		if ( l_variable )
 		{
@@ -490,11 +490,11 @@ namespace Castor3D
 		l_program->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		l_program->CreateUniform< Uniform1i >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
 		{
-			l_program->CreateUniform< Uniform1f >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+			l_program->CreateUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 		}
 
 		l_program->Initialise();
@@ -625,11 +625,11 @@ namespace Castor3D
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		l_program->CreateUniform< Uniform1i >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
 		{
-			l_program->CreateUniform< Uniform1f >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+			l_program->CreateUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 		}
 
 		l_program->Initialise();

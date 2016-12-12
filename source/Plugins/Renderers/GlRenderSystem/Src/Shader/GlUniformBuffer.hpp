@@ -51,7 +51,6 @@ namespace GlRender
 		void SetBindingUniform( uint32_t p_point )const;
 
 	private:
-		Castor3D::UniformSPtr DoCreateVariable( Castor3D::UniformType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 )override;
 		bool DoInitialise()override;
 		void DoCleanup()override;
 		void DoBindTo( uint32_t p_index )override;

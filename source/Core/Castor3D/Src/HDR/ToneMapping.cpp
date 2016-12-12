@@ -72,7 +72,7 @@ namespace Castor3D
 			l_program->CreateObject( ShaderType::ePixel );
 			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 			auto & l_configBuffer = l_program->CreateUniformBuffer( ToneMapping::HdrConfig, ShaderTypeFlag::ePixel );
-			l_configBuffer.CreateVariable( UniformType::eFloat, ToneMapping::Exposure );
+			l_configBuffer.CreateUniform( UniformType::eFloat, ToneMapping::Exposure );
 			l_configBuffer.GetVariable( Exposure, m_exposureVar );
 			auto l_pxl = DoCreate( l_configBuffer );
 			auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();

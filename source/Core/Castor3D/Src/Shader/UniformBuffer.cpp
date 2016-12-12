@@ -124,10 +124,10 @@ namespace Castor3D
 	{
 	}
 
-	UniformSPtr UniformBuffer::CreateVariable( UniformType p_type, String const & p_name, uint32_t p_occurences )
+	UniformSPtr UniformBuffer::CreateUniform( UniformType p_type, String const & p_name, uint32_t p_occurences )
 	{
 		UniformSPtr l_return;
-		UniformPtrStrMapConstIt l_it = m_mapVariables.find( p_name );
+		auto l_it = m_mapVariables.find( p_name );
 
 		if ( l_it == m_mapVariables.end() )
 		{
@@ -149,7 +149,7 @@ namespace Castor3D
 
 	void UniformBuffer::RemoveVariable( String const & p_name )
 	{
-		UniformPtrStrMapConstIt l_itMap = m_mapVariables.find( p_name );
+		auto l_itMap = m_mapVariables.find( p_name );
 
 		if ( l_itMap != m_mapVariables.end() )
 		{
@@ -169,32 +169,7 @@ namespace Castor3D
 
 	bool UniformBuffer::Initialise()
 	{
-		bool l_return = true;
-
-		if ( !DoInitialise() )
-		{
-			uint32_t l_totalSize = 0;
-
-			for ( auto l_variable : m_listVariables )
-			{
-				if ( l_variable->Initialise() )
-				{
-					l_totalSize += l_variable->size();
-					m_listInitialised.push_back( l_variable );
-				}
-			}
-
-			m_buffer.resize( l_totalSize );
-			uint8_t * l_buffer = m_buffer.data();
-
-			for ( auto l_variable : m_listInitialised )
-			{
-				l_variable->link( l_buffer );
-				l_buffer += l_variable->size();
-			}
-		}
-
-		return l_return;
+		return DoInitialise();
 	}
 
 	void UniformBuffer::Cleanup()
@@ -212,6 +187,161 @@ namespace Castor3D
 	void UniformBuffer::Update()
 	{
 		DoUpdate();
+	}
+
+	UniformSPtr UniformBuffer::DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences )
+	{
+		UniformSPtr l_return;
+
+		switch ( p_type )
+		{
+		case UniformType::eInt:
+			l_return = std::make_shared< Uniform1i >( p_occurences );
+			break;
+
+		case UniformType::eUInt:
+			l_return = std::make_shared< Uniform1ui >( p_occurences );
+			break;
+
+		case UniformType::eFloat:
+			l_return = std::make_shared< Uniform1f >( p_occurences );
+			break;
+
+		case UniformType::eDouble:
+			l_return = std::make_shared< Uniform1d >( p_occurences );
+			break;
+
+		case UniformType::eSampler:
+			l_return = std::make_shared< Uniform1i >( p_occurences );
+			break;
+
+		case UniformType::eVec2i:
+			l_return = std::make_shared< Uniform2i >( p_occurences );
+			break;
+
+		case UniformType::eVec3i:
+			l_return = std::make_shared< Uniform3i >( p_occurences );
+			break;
+
+		case UniformType::eVec4i:
+			l_return = std::make_shared< Uniform4i >( p_occurences );
+			break;
+
+		case UniformType::eVec2ui:
+			l_return = std::make_shared< Uniform2ui >( p_occurences );
+			break;
+
+		case UniformType::eVec3ui:
+			l_return = std::make_shared< Uniform3ui >( p_occurences );
+			break;
+
+		case UniformType::eVec4ui:
+			l_return = std::make_shared< Uniform4ui >( p_occurences );
+			break;
+
+		case UniformType::eVec2f:
+			l_return = std::make_shared< Uniform2f >( p_occurences );
+			break;
+
+		case UniformType::eVec3f:
+			l_return = std::make_shared< Uniform3f >( p_occurences );
+			break;
+
+		case UniformType::eVec4f:
+			l_return = std::make_shared< Uniform4f >( p_occurences );
+			break;
+
+		case UniformType::eVec2d:
+			l_return = std::make_shared< Uniform2d >( p_occurences );
+			break;
+
+		case UniformType::eVec3d:
+			l_return = std::make_shared< Uniform3d >( p_occurences );
+			break;
+
+		case UniformType::eVec4d:
+			l_return = std::make_shared< Uniform4d >( p_occurences );
+			break;
+
+		case UniformType::eMat2x2f:
+			l_return = std::make_shared< Uniform2x2f >( p_occurences );
+			break;
+
+		case UniformType::eMat2x3f:
+			l_return = std::make_shared< Uniform2x3f >( p_occurences );
+			break;
+
+		case UniformType::eMat2x4f:
+			l_return = std::make_shared< Uniform2x4f >( p_occurences );
+			break;
+
+		case UniformType::eMat3x2f:
+			l_return = std::make_shared< Uniform3x2f >( p_occurences );
+			break;
+
+		case UniformType::eMat3x3f:
+			l_return = std::make_shared< Uniform3x3f >( p_occurences );
+			break;
+
+		case UniformType::eMat3x4f:
+			l_return = std::make_shared< Uniform3x4f >( p_occurences );
+			break;
+
+		case UniformType::eMat4x2f:
+			l_return = std::make_shared< Uniform4x2f >( p_occurences );
+			break;
+
+		case UniformType::eMat4x3f:
+			l_return = std::make_shared< Uniform4x3f >( p_occurences );
+			break;
+
+		case UniformType::eMat4x4f:
+			l_return = std::make_shared< Uniform4x4f >( p_occurences );
+			break;
+
+		case UniformType::eMat2x2d:
+			l_return = std::make_shared< Uniform2x2d >( p_occurences );
+			break;
+
+		case UniformType::eMat2x3d:
+			l_return = std::make_shared< Uniform2x3d >( p_occurences );
+			break;
+
+		case UniformType::eMat2x4d:
+			l_return = std::make_shared< Uniform2x4d >( p_occurences );
+			break;
+
+		case UniformType::eMat3x2d:
+			l_return = std::make_shared< Uniform3x2d >( p_occurences );
+			break;
+
+		case UniformType::eMat3x3d:
+			l_return = std::make_shared< Uniform3x3d >( p_occurences );
+			break;
+
+		case UniformType::eMat3x4d:
+			l_return = std::make_shared< Uniform3x4d >( p_occurences );
+			break;
+
+		case UniformType::eMat4x2d:
+			l_return = std::make_shared< Uniform4x2d >( p_occurences );
+			break;
+
+		case UniformType::eMat4x3d:
+			l_return = std::make_shared< Uniform4x3d >( p_occurences );
+			break;
+
+		case UniformType::eMat4x4d:
+			l_return = std::make_shared< Uniform4x4d >( p_occurences );
+			break;
+		}
+
+		if ( l_return )
+		{
+			l_return->SetName( p_name );
+		}
+
+		return l_return;
 	}
 
 	//*************************************************************************************************

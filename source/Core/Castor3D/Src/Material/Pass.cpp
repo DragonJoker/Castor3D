@@ -42,7 +42,7 @@ namespace Castor3D
 
 			if ( l_unit )
 			{
-				auto l_variable = p_pipeline.GetProgram().FindUniform< Uniform1i >( p_name, ShaderType::ePixel );
+				auto l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
 
 				if ( l_variable )
 				{

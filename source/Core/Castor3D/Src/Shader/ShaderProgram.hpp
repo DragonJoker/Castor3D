@@ -25,8 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Uniform.hpp"
-#include "UniformTyper.hpp"
+#include "PushUniform.hpp"
 #include "ProgramInputLayout.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
@@ -355,7 +354,7 @@ namespace Castor3D
 		 *\param[in]	p_nbOcc		Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API UniformSPtr CreateUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 );
+		C3D_API PushUniformSPtr CreateUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 );
 		/**
 		 *\~english
 		 *\brief		Creates a variable.
@@ -370,10 +369,10 @@ namespace Castor3D
 		 *\param[in]	p_nbOcc		Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		template< typename T >
-		inline std::shared_ptr< T > CreateUniform( Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 )
+		template< UniformType Type >
+		inline std::shared_ptr< TPushUniform< Type > > CreateUniform( Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 )
 		{
-			return std::static_pointer_cast< T >( CreateUniform( UniformTyper< T >::value, p_name, p_shader, p_nbOcc ) );
+			return std::static_pointer_cast< TPushUniform< Type > >( CreateUniform( Type, p_name, p_shader, p_nbOcc ) );
 		}
 		/**
 		 *\~english
@@ -389,7 +388,7 @@ namespace Castor3D
 		 *\param[in]	p_shader	Le type du shader.
 		 *\return		La variable trouvée, nullptr en cas d'échec.
 		 */
-		C3D_API UniformSPtr FindUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader )const;
+		C3D_API PushUniformSPtr FindUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader )const;
 		/**
 		 *\~english
 		 *\brief		Looks for a variable.
@@ -402,10 +401,10 @@ namespace Castor3D
 		 *\param[in]	p_shader	Le type du shader.
 		 *\return		La variable trouvé, nullptr en cas d'échec.
 		 */
-		template< typename T >
-		inline std::shared_ptr< T > FindUniform( Castor::String const & p_name, ShaderType p_shader )const
+		template< UniformType Type >
+		inline std::shared_ptr< typename UniformTyper< Type >::type > FindUniform( Castor::String const & p_name, ShaderType p_shader )const
 		{
-			return std::static_pointer_cast< T >( FindUniform( UniformTyper< T >::value, p_name, p_shader ) );
+			return std::static_pointer_cast< typename UniformTyper< Type >::type >( FindUniform( Type, p_name, p_shader ) );
 		}
 		/**
 		 *\~english
@@ -417,7 +416,7 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type.
 		 *\return		La liste.
 		 */
-		C3D_API UniformPtrList & GetUniforms( ShaderType p_type );
+		C3D_API PushUniformList & GetUniforms( ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame variables bound to one shader type.
@@ -428,7 +427,7 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type.
 		 *\return		La liste.
 		 */
-		C3D_API UniformPtrList const & GetUniforms( ShaderType p_type )const;
+		C3D_API PushUniformList const & GetUniforms( ShaderType p_type )const;
 		/**
 		 *\~english
 		 *\brief		Updates the program's frame variable buffers if needed.
@@ -728,7 +727,7 @@ namespace Castor3D
 		 *\param[in]	p_iNbOcc	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		virtual UniformSPtr DoCreateVariable( UniformType p_type, int p_iNbOcc ) = 0;
+		virtual PushUniformSPtr DoCreateUniform( UniformType p_type, int p_iNbOcc ) = 0;
 
 	public:
 		/**@name Attributes */

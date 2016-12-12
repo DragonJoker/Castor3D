@@ -49,11 +49,11 @@ namespace Castor3D
 			, ProgramFlags const & p_programFlags )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::eShadows )
-				&& !p_program.FindUniform< Uniform1i >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+				&& !p_program.FindUniform< UniformType::eInt >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-				p_program.CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-				p_program.CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eInt >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eInt >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eInt >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
 			}
 		}
 
