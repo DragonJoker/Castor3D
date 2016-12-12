@@ -93,15 +93,15 @@ namespace GlRender
 		 */
 		Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::ShaderType p_type )override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::DoCreateFrameVariableBuffer
+		 *\copydoc		Castor3D::ShaderProgram::DoCreateUniformBuffer
 		 */
-		Castor3D::FrameVariableBufferSPtr DoCreateFrameVariableBuffer(
+		Castor3D::UniformBufferSPtr DoCreateUniformBuffer(
 			Castor::String const & p_name,
 			Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags )override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateVariable
 		 */
-		std::shared_ptr< Castor3D::FrameVariable > DoCreateVariable( Castor3D::FrameVariableType p_type, int p_occurences )override;
+		std::shared_ptr< Castor3D::Uniform > DoCreateVariable( Castor3D::UniformType p_type, int p_occurences )override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoGetVertexShaderSource
 		 */

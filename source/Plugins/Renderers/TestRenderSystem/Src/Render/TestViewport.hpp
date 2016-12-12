@@ -36,7 +36,7 @@ namespace TestRender
 	\~english
 	\brief		Render API specific viewport implementation.
 	\~french
-	\brief		Impl�mentation de viewport sp�cifique � l'API de rendu.
+	\brief		Implàmentation de viewport spàcifique à l'API de rendu.
 	*/
 	class TestViewport
 		: public Castor3D::IViewportImpl

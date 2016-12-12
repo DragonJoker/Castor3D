@@ -12,7 +12,7 @@
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
@@ -296,9 +296,9 @@ namespace Castor3D
 		, AnimatedSkeletonSPtr p_skeleton
 		, AnimatedMeshSPtr p_mesh )
 	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
-		auto l_animationBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
+		auto l_modelBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferModel );
+		Uniform1iSPtr l_receiver;
+		auto l_animationBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferAnimation );
 		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
 
@@ -322,8 +322,8 @@ namespace Castor3D
 		, Submesh & p_submesh
 		, Geometry & p_primitive )
 	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
+		auto l_modelBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferModel );
+		Uniform1iSPtr l_receiver;
 		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
 
@@ -343,10 +343,10 @@ namespace Castor3D
 		, RenderPipeline & p_pipeline
 		, BillboardBase & p_billboard )
 	{
-		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
-		OneIntFrameVariableSPtr l_receiver;
-		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
-		Point2iFrameVariableSPtr l_pt2i;
+		auto l_modelBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferModel );
+		Uniform1iSPtr l_receiver;
+		auto l_billboardBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferBillboards );
+		Uniform2iSPtr l_pt2i;
 		auto l_buffer = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
 
@@ -376,11 +376,11 @@ namespace Castor3D
 	PassRenderNode RenderPass::DoCreatePassRenderNode( Pass & p_pass
 		, RenderPipeline & p_pipeline )
 	{
-		FrameVariableBufferSPtr l_passBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferPass );
-		FrameVariableBufferSPtr l_matrixBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
-		FrameVariableBufferSPtr l_animationBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
-		Point4rFrameVariableSPtr l_pt4r;
-		OneFloatFrameVariableSPtr l_1f;
+		auto l_passBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferPass );
+		auto l_matrixBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
+		auto l_animationBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferAnimation );
+		Uniform4rSPtr l_pt4r;
+		Uniform1fSPtr l_1f;
 
 		auto l_node = PassRenderNode
 		{
@@ -401,8 +401,8 @@ namespace Castor3D
 	SceneRenderNode RenderPass::DoCreateSceneRenderNode( Scene & p_scene
 		, RenderPipeline & p_pipeline )
 	{
-		FrameVariableBufferSPtr l_sceneBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferScene );
-		Point3rFrameVariableSPtr l_pt3r;
+		UniformBufferSPtr l_sceneBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferScene );
+		Uniform3rSPtr l_pt3r;
 
 		return SceneRenderNode
 		{

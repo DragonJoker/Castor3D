@@ -6,7 +6,7 @@
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
-#include "Shader/MatrixFrameVariable.hpp"
+#include "Shader/MatrixUniform.hpp"
 
 using namespace Castor;
 
@@ -30,7 +30,7 @@ namespace Castor3D
 		}
 	}
 
-	void AnimatedSkeleton::FillShader( Matrix4x4rFrameVariable & p_variable )
+	void AnimatedSkeleton::FillShader( Uniform4x4r & p_variable )
 	{
 		Skeleton & l_skeleton = m_skeleton;
 

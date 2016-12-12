@@ -13,8 +13,8 @@
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/PointFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/PointUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <Design/ArrayView.hpp>

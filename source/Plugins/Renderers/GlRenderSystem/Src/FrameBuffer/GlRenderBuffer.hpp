@@ -74,9 +74,9 @@ namespace GlRender
 		 *\param[in]	p_size	The size.
 		 *\return		\p true on Ok.
 		 *\~french
-		 *\brief		Initialise le tampon de rendu � la taille donn�e.
+		 *\brief		Initialise le tampon de rendu à la taille donnàe.
 		 *\param[in]	p_size	Les dimensions.
-		 *\return		\p true si tout s'est bien pass�.
+		 *\return		\p true si tout s'est bien passà.
 		 */
 		bool Initialise( Castor::Size const & p_size );
 		/**
@@ -92,9 +92,9 @@ namespace GlRender
 		 *\param[in]	p_size	The size.
 		 *\return		\p true on Ok.
 		 *\~french
-		 *\brief		Redimensionne le tampon de rendu � la taille donn�e.
+		 *\brief		Redimensionne le tampon de rendu à la taille donnàe.
 		 *\param[in]	p_size	Les dimensions.
-		 *\return		\p true si tout s'est bien pass�.
+		 *\return		\p true si tout s'est bien passà.
 		 */
 		bool Resize( Castor::Size const & p_size );
 		/**

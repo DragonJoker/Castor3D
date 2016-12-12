@@ -5,7 +5,7 @@
 #include "MeshAnimationInstance.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/OneUniform.hpp"
 
 using namespace Castor;
 
@@ -60,7 +60,7 @@ namespace Castor3D
 	{
 	}
 
-	void MeshAnimationInstanceSubmesh::FillShader( OneFloatFrameVariable & p_variable )const
+	void MeshAnimationInstanceSubmesh::FillShader( Uniform1f & p_variable )const
 	{
 		p_variable.SetValue( m_currentFactor );
 	}

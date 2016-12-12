@@ -6,8 +6,8 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
-#include <Shader/OneFrameVariable.hpp>
+#include <Shader/UniformBuffer.hpp>
+#include <Shader/OneUniform.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -35,7 +35,7 @@ namespace HejlBurgessDawson
 		return std::make_shared< ToneMapping >( p_engine, p_parameters );
 	}
 
-	String ToneMapping::DoCreate( FrameVariableBuffer & p_ubo )
+	String ToneMapping::DoCreate( UniformBuffer & p_ubo )
 	{
 		String l_pxl;
 		{

@@ -119,7 +119,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreateMatrixBuffer(
+		C3D_API UniformBuffer & CreateMatrixBuffer(
 			ShaderProgram & p_program,
 			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
@@ -137,7 +137,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreateSceneBuffer(
+		C3D_API UniformBuffer & CreateSceneBuffer(
 			ShaderProgram & p_program,
 			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
@@ -155,7 +155,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreatePassBuffer(
+		C3D_API UniformBuffer & CreatePassBuffer(
 			ShaderProgram & p_program,
 			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
@@ -173,7 +173,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreateModelBuffer(
+		C3D_API UniformBuffer & CreateModelBuffer(
 			ShaderProgram & p_program,
 			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
@@ -191,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreateAnimationBuffer(
+		C3D_API UniformBuffer & CreateAnimationBuffer(
 			ShaderProgram & p_program,
 			ProgramFlags const & p_programFlags,
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;

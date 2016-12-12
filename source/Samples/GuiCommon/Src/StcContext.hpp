@@ -36,7 +36,7 @@ namespace GuiCommon
 	\~english
 	\brief Holds the general context used by Scintilla
 	\~french
-	\brief Contient le contexte g�n�ral utilis� par Scintilla
+	\brief Contient le contexte gànàral utilisà par Scintilla
 	*/
 	class StcContext
 	{

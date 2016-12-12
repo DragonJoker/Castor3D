@@ -1,22 +1,6 @@
 #include "RenderSystem.hpp"
 
-#include "Engine.hpp"
-#include "Cache/ShaderCache.hpp"
-
-#include "RenderPipeline.hpp"
-#include "Viewport.hpp"
-
-#include "Event/Frame/CleanupEvent.hpp"
-#include "Overlay/Overlay.hpp"
-#include "Overlay/OverlayRenderer.hpp"
-#include "Plugin/Plugin.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/PointFrameVariable.hpp"
-#include "Shader/ShaderObject.hpp"
-#include "Shader/FrameVariable.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Texture/Sampler.hpp"
+#include "Render/Context.hpp"
 
 #include <GlslSource.hpp>
 

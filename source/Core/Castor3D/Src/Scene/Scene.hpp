@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\brief		Remplit le tampon de variables shader avec les paramètres de scène.
 		 *\param[in]	p_camera	La caméra de la scène.
 		 */
-		C3D_API void FillShader( FrameVariableBuffer const & p_buffer )const;
+		C3D_API void FillShader( UniformBuffer const & p_buffer )const;
 		/**
 		 *\~english
 		 *\brief		Renders the scene background.

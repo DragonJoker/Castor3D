@@ -67,50 +67,6 @@ namespace GlRender
 		 *\copydoc		Castor3D::ShaderObject::AttachTo
 		 */
 		virtual void AttachTo( Castor3D::ShaderProgram & p_program );
-		/**
-		 *\~english
-		 *\brief		Tells if the compiled shader has the given parameter
-		 *\param[in]	p_name	The parameter name
-		 *\return		\p true if the parameter was found
-		 *\~french
-		 *\brief		Dit si le shader compil� a le param�tre donn�
-		 *\param[in]	p_name	Le nom du param�tre
-		 *\return		\p true si le param�tre a �t� trouv�
-		 */
-		virtual bool HasParameter( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Gives the wanted parameter from compiled shader
-		 *\param[in]	p_name	The parameter name
-		 *\return		\p nullptr if not found or if shader isn't compiled
-		 *\~french
-		 *\brief		Récupère le param�tre � partir du shader compil�
-		 *\param[in]	p_name	Le nom du param�tre
-		 *\return		\p nullptr si le param�tre n'a pas �t� trouv� ou si le shader n'est pas compil�
-		 */
-		uint32_t GetParameter( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Defines the given parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
-		 *\~french
-		 *\brief		D�finit la valeur du param�tre
-		 *\param[in]	p_name	Le nom du param�tre
-		 *\param[in]	p_value	La valeur du param�tre
-		 */
-		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value );
-		/**
-		 *\~english
-		 *\brief		Defines the given parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
-		 *\~french
-		 *\brief		D�finit la valeur du param�tre
-		 *\param[in]	p_name	Le nom du param�tre
-		 *\param[in]	p_value	La valeur du param�tre
-		 */
-		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value );
 
 	private:
 		/**

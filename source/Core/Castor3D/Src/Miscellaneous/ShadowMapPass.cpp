@@ -22,7 +22,7 @@
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"

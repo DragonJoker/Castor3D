@@ -40,9 +40,9 @@ namespace GuiCommon
 		void UnloadVariables();
 
 	private:
-		void DoAddBuffer( wxTreeItemId p_id, Castor3D::FrameVariableBufferSPtr p_buffer );
-		void DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::FrameVariableBufferSPtr p_buffer );
-		void DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::ShaderType p_type );
+		void DoAddBuffer( wxTreeItemId p_id, Castor3D::UniformBufferSPtr p_buffer );
+		void DoAddVariable( wxTreeItemId p_id, Castor3D::UniformSPtr p_variable, Castor3D::UniformBufferSPtr p_buffer );
+		void DoAddVariable( wxTreeItemId p_id, Castor3D::UniformSPtr p_variable, Castor3D::ShaderType p_type );
 
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );

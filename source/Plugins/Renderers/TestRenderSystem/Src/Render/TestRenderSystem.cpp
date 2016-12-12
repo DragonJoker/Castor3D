@@ -12,7 +12,7 @@
 #include "Render/TestRenderPipeline.hpp"
 #include "Render/TestViewport.hpp"
 #include "Shader/TestAtomicCounterBuffer.hpp"
-#include "Shader/TestFrameVariableBuffer.hpp"
+#include "Shader/TestUniformBuffer.hpp"
 #include "Shader/TestShaderObject.hpp"
 #include "Shader/TestShaderProgram.hpp"
 #include "Shader/TestShaderStorageBuffer.hpp"

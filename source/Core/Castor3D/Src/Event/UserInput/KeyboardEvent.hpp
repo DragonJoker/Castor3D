@@ -34,15 +34,15 @@ namespace Castor3D
 	*\~english
 	*\brief		Structure holding mouse state.
 	*\~french
-	*\brief		Structure contenant l'�tat du clavier.
+	*\brief		Structure contenant l'àtat du clavier.
 	*/
 	struct KeyboardState
 	{
-		//!\~english The control key state.	\~french L'�tat de la touche Ctrl.
+		//!\~english The control key state.	\~french L'àtat de la touche Ctrl.
 		bool m_ctrl;
-		//!\~english The alt key state.	\~french L'�tat de la touche Alt.
+		//!\~english The alt key state.	\~french L'àtat de la touche Alt.
 		bool m_alt;
-		//!\~english The shift key state.	\~french L'�tat de la touche Shift.
+		//!\~english The shift key state.	\~french L'àtat de la touche Shift.
 		bool m_shift;
 	};
 	/*!
@@ -70,9 +70,9 @@ namespace Castor3D
 		*\~brief		Constructeur.
 		 *\param[in]	p_type	Le type d'évènement clavier.
 		 *\param[in]	p_key	Le code de la touche.
-		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfonc�e.
-		 *\param[in]	p_alt	Dit si la touche Alt est enfonc�e.
-		 *\param[in]	p_shift	Dit si la touche Shift est enfonc�e.
+		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfoncàe.
+		 *\param[in]	p_alt	Dit si la touche Alt est enfoncàe.
+		 *\param[in]	p_shift	Dit si la touche Shift est enfoncàe.
 		 */
 		KeyboardEvent( KeyboardEventType p_type, KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
 			: UserInputEvent{ UserInputEventType::eKeyboard }
@@ -97,10 +97,10 @@ namespace Castor3D
 		*\~brief		Constructeur.
 		 *\param[in]	p_type	Le type d'évènement clavier.
 		 *\param[in]	p_key	Le code de la touche.
-		 *\param[in]	p_char	Le caract�re correspondant qu code de la touche.
-		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfonc�e.
-		 *\param[in]	p_alt	Dit si la touche Alt est enfonc�e.
-		 *\param[in]	p_shift	Dit si la touche Shift est enfonc�e.
+		 *\param[in]	p_char	Le caractàre correspondant qu code de la touche.
+		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfoncàe.
+		 *\param[in]	p_alt	Dit si la touche Alt est enfoncàe.
+		 *\param[in]	p_shift	Dit si la touche Shift est enfoncàe.
 		 */
 		KeyboardEvent( KeyboardEventType p_type, KeyboardKey p_key, Castor::String const & p_char, bool p_ctrl, bool p_alt, bool p_shift )
 			: UserInputEvent{ UserInputEventType::eKeyboard }
@@ -145,7 +145,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The character corresponding to the key code.
 		*\~french
-		*\~return		Le caract�re correspondant � la touche.
+		*\~return		Le caractàre correspondant à la touche.
 		 */
 		inline Castor::String const & GetChar()const
 		{
@@ -155,7 +155,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The Ctrl key down status.
 		*\~french
-		*\~return		L'�tat de la touche Ctrl.
+		*\~return		L'àtat de la touche Ctrl.
 		 */
 		inline bool IsCtrlDown()const
 		{
@@ -165,7 +165,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The Alt key down status.
 		*\~french
-		*\~return		L'�tat de la touche Alt.
+		*\~return		L'àtat de la touche Alt.
 		 */
 		inline bool IsAltDown()const
 		{
@@ -175,7 +175,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The Shift key down status.
 		*\~french
-		*\~return		L'�tat de la touche Shift.
+		*\~return		L'àtat de la touche Shift.
 		 */
 		inline bool IsShiftDown()const
 		{
@@ -187,13 +187,13 @@ namespace Castor3D
 		KeyboardEventType const m_keyboardEventType;
 		//!\~english The key code.	\~french Le code de la touche.
 		KeyboardKey const m_key;
-		//!\~english The character.	\~french Le caract�re repr�sent� par la touche.
+		//!\~english The character.	\~french Le caractàre repràsentà par la touche.
 		Castor::String const m_char;
-		//!\~english Tells if the Ctrl key is down.	\~french Dit si la touche Ctrl est enfonc�e.
+		//!\~english Tells if the Ctrl key is down.	\~french Dit si la touche Ctrl est enfoncàe.
 		bool const m_ctrl;
-		//!\~english Tells if the Alt key is down.	\~french Dit si la touche Alt est enfonc�e.
+		//!\~english Tells if the Alt key is down.	\~french Dit si la touche Alt est enfoncàe.
 		bool const m_alt;
-		//!\~english Tells if the Shift key is down.	\~french Dit si la touche Shift est enfonc�e.
+		//!\~english Tells if the Shift key is down.	\~french Dit si la touche Shift est enfoncàe.
 		bool const m_shift;
 	};
 }

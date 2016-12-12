@@ -27,7 +27,7 @@
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Shader/FrameVariable.hpp"
+#include "Shader/Uniform.hpp"
 
 #include <Log/Logger.hpp>
 

@@ -63,7 +63,7 @@ SOFTWARE.
 #	include <Scene/Light/Light.hpp>
 #	include <Scene/Light/PointLight.hpp>
 #	include <Scene/Light/SpotLight.hpp>
-#	include <Shader/FrameVariable.hpp>
+#	include <Shader/Uniform.hpp>
 #	include <Shader/ShaderObject.hpp>
 #	include <Shader/ShaderProgram.hpp>
 #	include <State/BlendState.hpp>

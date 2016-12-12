@@ -6,7 +6,7 @@
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -116,9 +116,9 @@ namespace Castor3D
 		MyObjectCache::Cleanup();
 	}
 
-	void LightCache::FillShader( FrameVariableBuffer const & p_sceneBuffer )const
+	void LightCache::FillShader( UniformBuffer const & p_sceneBuffer )const
 	{
-		Point4fFrameVariableSPtr l_ambientLight;
+		Uniform4fSPtr l_ambientLight;
 		p_sceneBuffer.GetVariable( ShaderProgram::AmbientLight, l_ambientLight );
 
 		if ( l_ambientLight )
@@ -126,7 +126,7 @@ namespace Castor3D
 			l_ambientLight->SetValue( rgba_float( GetScene()->GetAmbientLight() ) );
 		}
 
-		Point4iFrameVariableSPtr l_lightsCount;
+		Uniform4iSPtr l_lightsCount;
 		p_sceneBuffer.GetVariable( ShaderProgram::LightsCount, l_lightsCount );
 
 		if ( l_lightsCount )

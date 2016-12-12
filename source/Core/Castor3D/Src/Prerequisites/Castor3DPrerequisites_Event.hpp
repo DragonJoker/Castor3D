@@ -34,7 +34,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Supported events types enumeration.
 	*\~french
-	*\brief		Enumération des types évènements support�s.
+	*\brief		Enumération des types évènements supportàs.
 	*/
 	enum class UserInputEventType
 	{
@@ -56,7 +56,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Enumeration of supported mouse events.
 	*\~english
-	*\brief		Enumération des évènement de souris support�s.
+	*\brief		Enumération des évènement de souris supportàs.
 	*/
 	enum class MouseEventType
 		: uint8_t
@@ -91,7 +91,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Enumeration of supported keyboard events.
 	*\~english
-	*\brief		Enumération des évènement clavier support�s.
+	*\brief		Enumération des évènement clavier supportàs.
 	*/
 	enum class KeyboardEventType
 		: uint8_t

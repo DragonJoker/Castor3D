@@ -28,9 +28,9 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
-#include <Shader/OneFrameVariable.hpp>
-#include <Shader/PointFrameVariable.hpp>
+#include <Shader/UniformBuffer.hpp>
+#include <Shader/OneUniform.hpp>
+#include <Shader/PointUniform.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/DepthStencilState.hpp>
@@ -478,27 +478,27 @@ namespace deferred
 			l_program.m_program->SetSource( ShaderType::ePixel, l_model, DoGetLightPassPixelShaderSource( 0u, l_programFlags, l_sceneFlags ) );
 
 			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program.m_program, 0u, ShaderTypeFlag::ePixel | ShaderTypeFlag::eVertex );
-			l_program.m_matrixUbo = l_program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+			l_program.m_matrixUbo = l_program.m_program->FindUniformBuffer( ShaderProgram::BufferMatrix );
 			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *l_program.m_program, 0u, ShaderTypeFlag::ePixel );
-			l_program.m_sceneUbo = l_program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
+			l_program.m_sceneUbo = l_program.m_program->FindUniformBuffer( ShaderProgram::BufferScene );
 			l_program.m_sceneUbo->GetVariable( ShaderProgram::CameraPos, l_program.m_camera );
-			l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::ePixel );
+			l_program.m_program->CreateUniform< Uniform1i >( ShaderProgram::Lights, ShaderType::ePixel );
 
 			for ( int i = 0; i < int( DsTexture::eInfos ); i++ )
 			{
-				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GetTextureName( DsTexture( i ) ), ShaderType::ePixel )->SetValue( i + 1 );
+				l_program.m_program->CreateUniform< Uniform1i >( GetTextureName( DsTexture( i ) ), ShaderType::ePixel )->SetValue( i + 1 );
 			}
 
 			if ( CheckFlag( l_programFlags, ProgramFlag::eShadows ) )
 			{
-				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GetTextureName( DsTexture::eInfos ), ShaderType::ePixel )->SetValue( int( DsTexture::eInfos ) + 1 );
+				l_program.m_program->CreateUniform< Uniform1i >( GetTextureName( DsTexture::eInfos ), ShaderType::ePixel )->SetValue( int( DsTexture::eInfos ) + 1 );
 			}
 
 			if ( l_scene.HasShadows() )
 			{
-				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 2u );
-				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 3u );
-				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 4u );
+				l_program.m_program->CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 2u );
+				l_program.m_program->CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 3u );
+				l_program.m_program->CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 4u );
 			}
 
 			DepthStencilState l_dsstate;

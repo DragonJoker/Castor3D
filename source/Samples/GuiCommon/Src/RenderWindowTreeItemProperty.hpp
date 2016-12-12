@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Render window helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les fen�tres de rendu
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les fenàtres de rendu
 	*/
 	class RenderWindowTreeItemProperty
 		: public TreeItemProperty

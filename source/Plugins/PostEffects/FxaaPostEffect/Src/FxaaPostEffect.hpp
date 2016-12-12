@@ -61,15 +61,15 @@ namespace Fxaa
 		static Castor::String Name;
 
 	private:
-		Castor3D::OneIntFrameVariableSPtr m_mapDiffuse;
+		Castor3D::Uniform1iSPtr m_mapDiffuse;
 		Castor3D::SamplerSPtr m_sampler;
 		Castor3D::RenderPipelineSPtr m_pipeline;
 		PostEffectSurface m_surface;
-		Castor3D::OneFloatFrameVariableSPtr m_uniformSubpixShift;
-		Castor3D::OneFloatFrameVariableSPtr m_uniformSpanMax;
-		Castor3D::OneFloatFrameVariableSPtr m_uniformReduceMul;
-		Castor3D::OneFloatFrameVariableSPtr m_uniformRenderTargetWidth;
-		Castor3D::OneFloatFrameVariableSPtr m_uniformRenderTargetHeight;
+		Castor3D::Uniform1fSPtr m_uniformSubpixShift;
+		Castor3D::Uniform1fSPtr m_uniformSpanMax;
+		Castor3D::Uniform1fSPtr m_uniformReduceMul;
+		Castor3D::Uniform1fSPtr m_uniformRenderTargetWidth;
+		Castor3D::Uniform1fSPtr m_uniformRenderTargetHeight;
 		float m_subpixShift{ 1.0f / 4.0f };
 		float m_spanMax{ 8.0f };
 		float m_reduceMul{ 1.0f / 8.0f };

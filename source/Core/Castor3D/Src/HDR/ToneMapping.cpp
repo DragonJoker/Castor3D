@@ -7,8 +7,8 @@
 #include "Render/Context.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/OneUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
@@ -71,8 +71,8 @@ namespace Castor3D
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
 			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-			auto & l_configBuffer = l_program->CreateFrameVariableBuffer( ToneMapping::HdrConfig, ShaderTypeFlag::ePixel );
-			l_configBuffer.CreateVariable( FrameVariableType::eFloat, ToneMapping::Exposure );
+			auto & l_configBuffer = l_program->CreateUniformBuffer( ToneMapping::HdrConfig, ShaderTypeFlag::ePixel );
+			l_configBuffer.CreateVariable( UniformType::eFloat, ToneMapping::Exposure );
 			l_configBuffer.GetVariable( Exposure, m_exposureVar );
 			auto l_pxl = DoCreate( l_configBuffer );
 			auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();

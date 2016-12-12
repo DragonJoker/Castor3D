@@ -110,7 +110,7 @@ namespace Castor3D
 		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
 		 *\return			Le source du pixel shader.
 		 */
-		C3D_API virtual Castor::String DoCreate( FrameVariableBuffer & p_ubo ) = 0;
+		C3D_API virtual Castor::String DoCreate( UniformBuffer & p_ubo ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the tone mapping shader variables.
@@ -141,7 +141,7 @@ namespace Castor3D
 		//!\~english The exposure value.	\~french La valeur d'exposition.
 		float m_exposure;
 		//!\~english The exposure shader variable.	\~french La variable shader pour l'exposition.
-		OneFloatFrameVariableSPtr m_exposureVar;
+		Uniform1fSPtr m_exposureVar;
 		//!\~english The configuration constants buffer name.	\~french Le nom du tampon de constantes de configuration.
 		C3D_API static Castor::String const HdrConfig;
 		//!\~english The exposure constant name.	\~french Le nom de la constante d'exposition.

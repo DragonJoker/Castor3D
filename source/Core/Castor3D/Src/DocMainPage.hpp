@@ -132,9 +132,9 @@
  *<li>Introducing SamplerState class to group calls to SetSamplerState and all relative stuff.</li>
  *<li>Reviewed sizes a bit : Viewport holds the internal size, RenderTarget and RenderWindow hold external size. Modified  SceneFileParser, added &lt;size&gt; directive for viewport.</li>
  *<li>Splitted eBUFFER_MODE in BufferAccessType and BufferAccessNature.</li>
- *<li>Modified a bit FrameVariable in order to take care of eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.</li>
- *<li>Modified Submesh::AddPoints so it takes a stVERTEX_GROUP structure as a parameter.</li>
- *<li>Introducing FrameVariableBuffer to manage frame variables with OpenGl UBO or DirectX 11 Constants buffer.</li>
+ *<li>Modified a bit Uniform in order to take care of eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.</li>
+ *<li>Modified Submesh::AddUniforms so it takes a stVERTEX_GROUP structure as a parameter.</li>
+ *<li>Introducing Buffer to manage frame variables with OpenGl UBO or DirectX 11 Constants buffer.</li>
  *<li>Implemented initialisation and cleanup of GPU side objects in two events : InitialiseEvent and CleanupEvent.</li>
  *<li>Merged GpuBuffer::Initialise and GpuBuffer::SetShaderProgram functions to ease their use.</li>
  *<li>Removed auto mipmap generation, now if user wants it, he does it with TextureLayout::GenerateMipmaps function.</li>
@@ -338,10 +338,10 @@
  *\subsection mods_0_6_1_0 Modifications
  *<ul>
  *<li>Modified MemoryManager, added a template class MemoryTraced which overload new, delete new [] et delete [] operators in order to have better trace of allocations and deallocations. Each Castor class derive from this one and 3 files are created in root folder to log allocations, deallocations : memoryleaks.log, memoryalloc.log and memorydealloc.log</li>
- *<li>TransformationMatrix no longer exists, it is now a collection of functions which computes 4x4 matrix operations</li>
+ *<li>TransformationUniform no longer exists, it is now a collection of functions which computes 4x4 matrix operations</li>
  *<li>Modification SceneNode management : base class NodeBase holds the informations that were in SceneNode, 3 derived classes (GeometryMaterial, CameraMaterial et LightMaterial) take care of each category specificities.</li>
  *<li>MovableObject class now has less features (name and NodeBase), Light and Camera now derive from it</li>
- *<li>Renamed UniformVariable to FrameVariable.</li>
+ *<li>Renamed UniformVariable to .</li>
  *<li>OpenGL 3.x/4.x now fully supported.</li>
  *<li>Modified Vertex class in order to make them include texture coordinates and normals in order to have only 1 vertex buffer instead of 3 in a mesh.</li>
  *</ul>
@@ -552,7 +552,7 @@
  *<li>Modifications de Castor::Line3D :
  *<ul>
  *<li>Implémentation de la méthode de calcul d'intersection</li>
- *<li>Cette classe a maintenant deux constructeurs nommés : FromPointAndSlope et FromPoints, pour éviter les confusions.</li>
+ *<li>Cette classe a maintenant deux constructeurs nommés : FromPointAndSlope et FromUniforms, pour éviter les confusions.</li>
  *</ul>
  *</li>
  *<li>Création de deux nouvelles classes : Size et Positionau lieu d'un typedef pour chacune.</li>
@@ -564,7 +564,7 @@
  *<li>Ajout des méthodes HasParameter et SetParameter dans la classe ShaderObject, pour appliquer les matrices de la classe RenderPipeline.</li>
  *<li>Ajout de fonctions Begin et End dans la classe Mesh afin de pouvoir itérer sur les submeshes sans passer par les fonctions GetSubmesh et GetSubmeshCount.</li>
  *<li>Ajout de fonctions Begin et End dans la classe Material functions Begin and End.</li>
- *<li>Ajout de la classe FrameVariableBuffer pour gérer les variables uniformes avec les UBO OpenGL ou les Constant buffer de Direct3D 11.</li>
+ *<li>Ajout de la classe Buffer pour gérer les variables uniformes avec les UBO OpenGL ou les Constant buffer de Direct3D 11.</li>
  *<li>Ajout de la classe DepthStencilState pour gérer ces états à la mode Direct3D 11 (qui fait ça bien).</li>
  *<li>De même, ajout des classes BlendState et RasteriserState.</li>
  *<li>Création des classes Texture, StaticTexture et TextureLayout pour faciliter l'implémentation des cibles de rendu.</li>
@@ -591,7 +591,7 @@
  *<ul>
  *<li>Les classes Submesh et SmoothingGroup ont été fusionnées.</li>
  *<li>Modification de la méthode ComputeTangents pour prendre en compte les normales des sommets.</li>
- *<li>Ajout d'un overload pour la méthode AddPoints afin de pouvoir lui donner un stVERTEX_GROUP en paramètre.</li>
+ *<li>Ajout d'un overload pour la méthode AddUniforms afin de pouvoir lui donner un stVERTEX_GROUP en paramètre.</li>
  *<li>Modification de la génération des normales.</li>
  *<li>Déplacement des matériaux, de Submesh à Geometry.</li>
  *<li>Modification du compte des instances, pour le rendre spécifique aux matériaux utilisés par les instances du Submesh.</li>
@@ -628,7 +628,7 @@
  *<li>Suppression des appels à ShaderObject afin d'en faire une classe interne à Castor3D.</li>
  *<li>Modification des shaders, ils prennent maintenant en compte le modèle de shader, contiennent tous les fichiers et sources définis par modèle. Le choix du modèle est fait à la compilation, en choisissant le modèle le plus haut supporté.</li>
  *<li>Modification des sources par défaut pour les shaders. Elles sont maitenant générées automatiquement et plus aucun fichier externe n'est nécessaire.</li>
- *<li>Modification de FrameVariable afin de prendre en compte eFRAME_VARIABLE_TYPE.</li>
+ *<li>Modification de  afin de prendre en compte eFRAME_VARIABLE_TYPE.</li>
  *</ul>
  *</li>
  *<li>Modifications de Castor3D::Context
@@ -782,10 +782,10 @@
  *\subsection mods_0_6_1_0 Modifications
  *<ul>
  *<li>Le MemoryManager (activé uniquement en debug) a été modifié, ajout d'une classe template MemoryTraced qui surcharge les operateurs new, delete new [] et delete [], ce afin d'avoir une meilleure trace des objets créés et détruits. Chaque classe des projets du Castor dérivent maintenant de celle-ci, et 3 fichiers sont donc créés dans le répertoire racine (C:\ sous Windows) : memoryleaks.log, memoryalloc.log et memorydealloc.log</li>
- *<li>La classe TransformationMatrix n'existe plus, il ne s'agit plus que d'une collection de fonctions sur matrices carrées 4x4.</li>
+ *<li>La classe TransformationUniform n'existe plus, il ne s'agit plus que d'une collection de fonctions sur matrices carrées 4x4.</li>
  *<li>Modification de la gestion des SceneNode : Une classe de base NodeBase qui contient les informations qui se trouvaient dans SceneNode, 3 classes dérivées (GeometryMaterial, CameraMaterial et LightMaterial) qui s'occupent des fonctionnalités spécifiques au rendu de chacun des types liés (respectivement Geometry, Camera et Light).</li>
  *<li>La classe MovableObject a maintenant moins de fonctionnalités (en fait elle n'a plus qu'un nom et un NodeBase) et les classes Light et Camera dérivent maintenant de cette classe (pour plus d'uniformité dans les déplacements de ces objets par rapport aux géométries)</li>
- *<li>Renommage des classes UniformVariable en FrameVariable, pour refléter plus ce que c'est et moins lier ce genre de choses à OpenGL.</li>
+ *<li>Renommage des classes UniformVariable en , pour refléter plus ce que c'est et moins lier ce genre de choses à OpenGL.</li>
  *<li>Le module OpenGL 3.x/4.x est achevé.</li>
  *<li>Modifier la structure des vertex de façon à ce qu'ils incluent les coordonnées de texture et les normales directement, de façon à n'avoir qu'1 buffer de vertex par mesh au lieu de 3 actuellement.</li>
  *</ul>

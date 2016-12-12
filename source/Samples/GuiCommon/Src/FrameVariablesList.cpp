@@ -7,8 +7,8 @@
 
 #include <Engine.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/FrameVariable.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/Uniform.hpp>
+#include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <wx/imaglist.h>
@@ -84,12 +84,12 @@ namespace GuiCommon
 
 		if ( p_program->GetObjectStatus( p_type ) != ShaderStatus::eDontExist )
 		{
-			for ( auto l_buffer : p_program->GetFrameVariableBuffers( p_type ) )
+			for ( auto l_buffer : p_program->GetUniformBuffers( p_type ) )
 			{
 				DoAddBuffer( l_root, l_buffer );
 			}
 
-			for ( auto l_variable : p_program->GetFrameVariables( p_type ) )
+			for ( auto l_variable : p_program->GetUniforms( p_type ) )
 			{
 				DoAddVariable( l_root, l_variable, p_type );
 			}
@@ -101,7 +101,7 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id, FrameVariableBufferSPtr p_buffer )
+	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id, UniformBufferSPtr p_buffer )
 	{
 		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine(), m_propertiesHolder->IsEditable(), p_buffer ) );
 		uint32_t l_index = 0;
@@ -112,7 +112,7 @@ namespace GuiCommon
 		}
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, FrameVariableSPtr p_variable, FrameVariableBufferSPtr p_buffer )
+	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, UniformSPtr p_variable, UniformBufferSPtr p_buffer )
 	{
 		wxString l_displayName = p_variable->GetName();
 
@@ -124,7 +124,7 @@ namespace GuiCommon
 		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_buffer ) );
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::ShaderType p_type )
+	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, Castor3D::UniformSPtr p_variable, Castor3D::ShaderType p_type )
 	{
 		wxString l_displayName = p_variable->GetName();
 

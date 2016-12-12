@@ -5,8 +5,8 @@
 
 #include "Scene/Camera.hpp"
 #include "Scene/SceneNode.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/MatrixFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/MatrixUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <Math/TransformationMatrix.hpp>
@@ -67,13 +67,13 @@ namespace Castor3D
 			l_textures >>= 1;
 		}
 
-		m_sceneUbo = m_program.FindFrameVariableBuffer( ShaderProgram::BufferScene );
+		m_sceneUbo = m_program.FindUniformBuffer( ShaderProgram::BufferScene );
 
 		if ( m_program.HasObject( ShaderType::ePixel ) )
 		{
-			m_directionalShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-			m_spotShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-			m_pointShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+			m_directionalShadowMaps = m_program.FindUniform< Uniform1i >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
+			m_spotShadowMaps = m_program.FindUniform< Uniform1i >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
+			m_pointShadowMaps = m_program.FindUniform< Uniform1i >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
 		}
 	}
 
@@ -117,34 +117,34 @@ namespace Castor3D
 		return true;
 	}
 
-	void RenderPipeline::ApplyProjection( FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::ApplyProjection( UniformBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxProjection, MtxProjection, p_matrixBuffer );
 	}
 
-	void RenderPipeline::ApplyModel( FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::ApplyModel( UniformBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxModel, MtxModel, p_matrixBuffer );
 	}
 
-	void RenderPipeline::ApplyView( FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::ApplyView( UniformBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxView, MtxView, p_matrixBuffer );
 	}
 
-	void RenderPipeline::ApplyNormal( FrameVariableBuffer const & p_matrixBuffer )
+	void RenderPipeline::ApplyNormal( UniformBuffer const & p_matrixBuffer )
 	{
 		m_mtxNormal = Matrix4x4r{ ( m_mtxModel * m_mtxView ).get_minor( 3, 3 ).invert().transpose() };
 		DoApplyMatrix( m_mtxNormal, MtxNormal, p_matrixBuffer );
 	}
 
-	void RenderPipeline::ApplyTexture( uint32_t p_index, FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::ApplyTexture( uint32_t p_index, UniformBuffer const & p_matrixBuffer )const
 	{
 		REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
 		DoApplyMatrix( m_mtxTexture[p_index], MtxTexture[p_index], p_matrixBuffer );
 	}
 
-	void RenderPipeline::ApplyMatrices( FrameVariableBuffer const & p_matrixBuffer, uint64_t p_matrices )
+	void RenderPipeline::ApplyMatrices( UniformBuffer const & p_matrixBuffer, uint64_t p_matrices )
 	{
 		if ( p_matrices & MASK_MTXMODE_PROJECTION )
 		{
@@ -175,9 +175,9 @@ namespace Castor3D
 		}
 	}
 
-	void RenderPipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, UniformBuffer const & p_matrixBuffer )const
 	{
-		Matrix4x4rFrameVariableSPtr l_variable;
+		Uniform4x4rSPtr l_variable;
 		p_matrixBuffer.GetVariable( p_name, l_variable );
 
 		if ( l_variable )

@@ -11,7 +11,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/OneUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
@@ -49,11 +49,11 @@ namespace Castor3D
 			, ProgramFlags const & p_programFlags )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::eShadows )
-				&& !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+				&& !p_program.FindUniform< Uniform1i >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+				p_program.CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
+				p_program.CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
+				p_program.CreateUniform< Uniform1i >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
 			}
 		}
 

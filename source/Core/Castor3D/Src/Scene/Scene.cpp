@@ -20,8 +20,8 @@
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderWindow.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/PointFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/PointUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -637,9 +637,9 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::FillShader( FrameVariableBuffer const & p_buffer )const
+	void Scene::FillShader( UniformBuffer const & p_buffer )const
 	{
-		Point4fFrameVariableSPtr l_bgColour;
+		Uniform4fSPtr l_bgColour;
 		p_buffer.GetVariable( ShaderProgram::BackgroundColour, l_bgColour );
 
 		if ( l_bgColour )

@@ -65,18 +65,6 @@ namespace TestRender
 		 *\copydoc		Castor3D::ShaderObject::AttachTo
 		 */
 		virtual void AttachTo( Castor3D::ShaderProgram & p_program );
-		/**
-		 *\copydoc		Castor3D::ShaderObject::HasParameter
-		 */
-		virtual bool HasParameter( Castor::String const & p_name );
-		/**
-		 *\copydoc		Castor3D::ShaderObject::SetParameter
-		 */
-		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value );
-		/**
-		 *\copydoc		Castor3D::ShaderObject::SetParameter
-		 */
-		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value );
 
 	private:
 		/**

@@ -36,7 +36,7 @@ namespace GlRender
 	\~english
 	\brief		Render API specific viewport implementation.
 	\~french
-	\brief		Implémentation de viewport sp�cifique � l'API de rendu.
+	\brief		Implémentation de viewport spàcifique à l'API de rendu.
 	*/
 	class GlViewport
 		: public Castor3D::IViewportImpl

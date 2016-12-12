@@ -63,9 +63,9 @@
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
-#include "Shader/FrameVariable.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/Uniform.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/OneUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/BlendState.hpp"
 #include "Texture/Sampler.hpp"
@@ -1389,7 +1389,7 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleType )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pFrameVariable.reset();
+		l_parsingContext->pUniform.reset();
 
 		if ( !l_parsingContext->particleSystem )
 		{
@@ -1420,7 +1420,7 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleVariable )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pFrameVariable.reset();
+		l_parsingContext->pUniform.reset();
 		p_params[0]->Get( l_parsingContext->strName2 );
 
 		if ( !l_parsingContext->particleSystem )
@@ -3268,7 +3268,7 @@ namespace Castor3D
 
 			if ( l_parsingContext->eShaderObject != ShaderType::eCount )
 			{
-				l_parsingContext->pSamplerFrameVariable = l_parsingContext->pShaderProgram->CreateFrameVariable< OneIntFrameVariable >( l_name, l_parsingContext->eShaderObject );
+				l_parsingContext->pSamplerUniform = l_parsingContext->pShaderProgram->CreateUniform< Uniform1i >( l_name, l_parsingContext->eShaderObject );
 			}
 			else
 			{
@@ -3293,7 +3293,7 @@ namespace Castor3D
 
 			if ( l_value )
 			{
-				l_parsingContext->pFrameVariableBuffer = &l_parsingContext->pShaderProgram->CreateFrameVariableBuffer( l_parsingContext->strName, uint8_t( l_value ) );
+				l_parsingContext->pUniformBuffer = &l_parsingContext->pShaderProgram->CreateUniformBuffer( l_parsingContext->strName, uint8_t( l_value ) );
 			}
 			else
 			{
@@ -3394,10 +3394,10 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderUboVariable )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pFrameVariable.reset();
+		l_parsingContext->pUniform.reset();
 		p_params[0]->Get( l_parsingContext->strName2 );
 
-		if ( !l_parsingContext->pFrameVariableBuffer )
+		if ( !l_parsingContext->pUniformBuffer )
 		{
 			PARSING_ERROR( cuT( "Shader constants buffer not initialised" ) );
 		}
@@ -3418,7 +3418,7 @@ namespace Castor3D
 		uint32_t l_param;
 		p_params[0]->Get( l_param );
 
-		if ( l_parsingContext->pFrameVariableBuffer )
+		if ( l_parsingContext->pUniformBuffer )
 		{
 			l_parsingContext->uiUInt32 = l_param;
 		}
@@ -3435,11 +3435,11 @@ namespace Castor3D
 		uint32_t l_uiType;
 		p_params[0]->Get( l_uiType );
 
-		if ( l_parsingContext->pFrameVariableBuffer )
+		if ( l_parsingContext->pUniformBuffer )
 		{
-			if ( !l_parsingContext->pFrameVariable )
+			if ( !l_parsingContext->pUniform )
 			{
-				l_parsingContext->pFrameVariable = l_parsingContext->pFrameVariableBuffer->CreateVariable( FrameVariableType( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
+				l_parsingContext->pUniform = l_parsingContext->pUniformBuffer->CreateVariable( UniformType( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
 			}
 			else
 			{
@@ -3459,9 +3459,9 @@ namespace Castor3D
 		String l_strParams;
 		p_params[0]->Get( l_strParams );
 
-		if ( l_parsingContext->pFrameVariable )
+		if ( l_parsingContext->pUniform )
 		{
-			l_parsingContext->pFrameVariable->SetStrValue( l_strParams );
+			l_parsingContext->pUniform->SetStrValue( l_strParams );
 		}
 		else
 		{

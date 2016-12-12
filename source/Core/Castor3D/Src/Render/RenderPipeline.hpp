@@ -143,7 +143,7 @@ namespace Castor3D
 		 *\brief		Met la matrice de projection dans le buffer de variables donné.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyProjection( FrameVariableBuffer const & p_matrixBuffer )const;
+		C3D_API void ApplyProjection( UniformBuffer const & p_matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Puts the current model matrix into the given frame variables buffer.
@@ -152,7 +152,7 @@ namespace Castor3D
 		 *\brief		Met la matrice de modèle dans le buffer de variables donné.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyModel( FrameVariableBuffer const & p_matrixBuffer )const;
+		C3D_API void ApplyModel( UniformBuffer const & p_matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Puts the current vieww matrix into the given frame variables buffer.
@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\brief		Met la matrice de vue dans le buffer de variables donné.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyView( FrameVariableBuffer const & p_matrixBuffer )const;
+		C3D_API void ApplyView( UniformBuffer const & p_matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Puts the current normals matrix into the given frame variables buffer.
@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\brief		Met la matrice de normales dans le buffer de variables donné.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyNormal( FrameVariableBuffer const & p_matrixBuffer );
+		C3D_API void ApplyNormal( UniformBuffer const & p_matrixBuffer );
 		/**
 		 *\~english
 		 *\brief		Puts the current texture 0 matrix into the given frame variables buffer.
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\param[in]	p_index			L'indice de la texture.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyTexture( uint32_t p_index, FrameVariableBuffer const & p_matrixBuffer )const;
+		C3D_API void ApplyTexture( uint32_t p_index, UniformBuffer const & p_matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Puts all the matrices in the given frame variables buffer.
@@ -192,7 +192,7 @@ namespace Castor3D
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 *\param[in]	p_matricesMask	Une combinaison en OU binaire de MASK_MTXMODE, pour filtrer les matrices à appliquer.
 		 */
-		C3D_API void ApplyMatrices( FrameVariableBuffer const & p_matrixBuffer, uint64_t p_matricesMask );
+		C3D_API void ApplyMatrices( UniformBuffer const & p_matrixBuffer, uint64_t p_matricesMask );
 		/**
 		 *\~english
 		 *\brief		Sets the model matrix.
@@ -325,7 +325,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le programme shader.
 		 */
-		inline FrameVariableBuffer & GetSceneUbo()
+		inline UniformBuffer & GetSceneUbo()
 		{
 			REQUIRE( m_sceneUbo );
 			return *m_sceneUbo;
@@ -346,7 +346,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières directionnelles.
 		 */
-		inline OneIntFrameVariable & GetDirectionalShadowMapsVariable()
+		inline Uniform1i & GetDirectionalShadowMapsVariable()
 		{
 			REQUIRE( m_directionalShadowMaps );
 			return *m_directionalShadowMaps;
@@ -357,7 +357,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières spots.
 		 */
-		inline OneIntFrameVariable & GetSpotShadowMapsVariable()
+		inline Uniform1i & GetSpotShadowMapsVariable()
 		{
 			REQUIRE( m_spotShadowMaps );
 			return *m_spotShadowMaps;
@@ -368,14 +368,14 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières ponctuelles.
 		 */
-		inline OneIntFrameVariable & GetPointShadowMapsVariable()
+		inline Uniform1i & GetPointShadowMapsVariable()
 		{
 			REQUIRE( m_pointShadowMaps );
 			return *m_pointShadowMaps;
 		}
 
 	private:
-		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer const & p_matrixBuffer )const;
+		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, UniformBuffer const & p_matrixBuffer )const;
 
 	public:
 		C3D_API static const Castor::String MtxProjection;
@@ -417,16 +417,16 @@ namespace Castor3D
 		ShaderProgram & m_program;
 		//!\~english	The scene frame variable buffer.
 		//!\~french		Le tampon de variables shader pour la scène.
-		FrameVariableBufferSPtr m_sceneUbo;
+		UniformBufferSPtr m_sceneUbo;
 		//!\~english	The directional lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières directionnelles.
-		OneIntFrameVariableSPtr m_directionalShadowMaps;
+		Uniform1iSPtr m_directionalShadowMaps;
 		//!\~english	The spot lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières spot.
-		OneIntFrameVariableSPtr m_spotShadowMaps;
+		Uniform1iSPtr m_spotShadowMaps;
 		//!\~english	The point lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières ponctuelles.
-		OneIntFrameVariableSPtr m_pointShadowMaps;
+		Uniform1iSPtr m_pointShadowMaps;
 		//!\~english	The creation flags.
 		//!\~french		Les indicateurs de création.
 		PipelineFlags m_flags;

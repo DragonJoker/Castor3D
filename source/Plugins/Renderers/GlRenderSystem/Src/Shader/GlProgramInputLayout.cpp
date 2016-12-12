@@ -2,7 +2,7 @@
 
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
-#include "Shader/GlFrameVariableBuffer.hpp"
+#include "Shader/GlUniformBuffer.hpp"
 #include "Shader/GlShaderProgram.hpp"
 #include "Buffer/GlBuffer.hpp"
 

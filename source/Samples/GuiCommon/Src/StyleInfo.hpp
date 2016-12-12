@@ -50,7 +50,7 @@ namespace GuiCommon
 	\~english Folded types enumeration
 	\brief
 	\~french
-	\brief Enumération des types de dblocks pouvant �tre r�duits
+	\brief Enumération des types de dblocks pouvant àtre ràduits
 	*/
 	typedef enum eSTC_FOLD
 	{
@@ -82,7 +82,7 @@ namespace GuiCommon
 	\~english
 	\brief Defines style informations for a given type of words
 	\~french
-	\brief D�finit les informations de style pour un type de mots
+	\brief Dàfinit les informations de style pour un type de mots
 	*/
 	class StyleInfo
 	{

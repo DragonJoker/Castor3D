@@ -35,7 +35,7 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/TextureLayout.hpp"

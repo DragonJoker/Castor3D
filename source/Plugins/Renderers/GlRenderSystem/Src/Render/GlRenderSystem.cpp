@@ -11,7 +11,7 @@
 #include "Render/GlContext.hpp"
 #include "Render/GlRenderPipeline.hpp"
 #include "Render/GlViewport.hpp"
-#include "Shader/GlFrameVariableBuffer.hpp"
+#include "Shader/GlUniformBuffer.hpp"
 #include "Shader/GlShaderObject.hpp"
 #include "Shader/GlShaderProgram.hpp"
 #include "Texture/GlDirectTextureStorage.hpp"

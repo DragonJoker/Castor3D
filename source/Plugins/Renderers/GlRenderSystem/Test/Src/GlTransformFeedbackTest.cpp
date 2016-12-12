@@ -6,8 +6,8 @@
 #include <Miscellaneous/TransformFeedback.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
-#include <Shader/OneFrameVariable.hpp>
+#include <Shader/UniformBuffer.hpp>
+#include <Shader/OneUniform.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/RasteriserState.hpp>
 
@@ -525,11 +525,11 @@ namespace Testing
 
 		// Shader program
 		auto l_program = DoCreateParticleSystemShaderProgram( m_engine );
-		auto l_deltaTime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
-		auto l_total = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gTime" ), ShaderType::eGeometry );
-		auto l_launcherLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
-		auto l_shellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
-		auto l_secondaryShellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
+		auto l_deltaTime = l_program->CreateUniform< Uniform1f >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
+		auto l_total = l_program->CreateUniform< Uniform1f >( cuT( "gTime" ), ShaderType::eGeometry );
+		auto l_launcherLifetime = l_program->CreateUniform< Uniform1f >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
+		auto l_shellLifetime = l_program->CreateUniform< Uniform1f >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
+		auto l_secondaryShellLifetime = l_program->CreateUniform< Uniform1f >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
 		l_launcherLifetime->SetValue( 100.0f );
 		l_shellLifetime->SetValue( 10000.0f );
 		l_secondaryShellLifetime->SetValue( 2500.0f );
@@ -650,11 +650,11 @@ namespace Testing
 
 		// Shader program
 		auto l_program = DoCreateParticleSystemShaderProgram( m_engine );
-		auto l_deltaTime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
-		auto l_total = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gTime" ), ShaderType::eGeometry );
-		auto l_launcherLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
-		auto l_shellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
-		auto l_secondaryShellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
+		auto l_deltaTime = l_program->CreateUniform< Uniform1f >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
+		auto l_total = l_program->CreateUniform< Uniform1f >( cuT( "gTime" ), ShaderType::eGeometry );
+		auto l_launcherLifetime = l_program->CreateUniform< Uniform1f >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
+		auto l_shellLifetime = l_program->CreateUniform< Uniform1f >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
+		auto l_secondaryShellLifetime = l_program->CreateUniform< Uniform1f >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
 		l_launcherLifetime->SetValue( 100.0f );
 		l_shellLifetime->SetValue( 10000.0f );
 		l_secondaryShellLifetime->SetValue( 2500.0f );

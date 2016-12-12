@@ -36,7 +36,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Structure holding mouse state.
 	*\~french
-	*\brief		Structure contenant l'�tat de la souris.
+	*\brief		Structure contenant l'àtat de la souris.
 	*/
 	struct MouseState
 	{
@@ -44,9 +44,9 @@ namespace Castor3D
 		Castor::Position m_position;
 		//!\~english The wheel position.	\~french La position de la molette.
 		Castor::Position m_wheel;
-		//!\~english The buttons state (true = down).	\~french L'�tat des boutons (true = enfonc�).
+		//!\~english The buttons state (true = down).	\~french L'àtat des boutons (true = enfoncà).
 		std::array< bool, size_t( MouseButton::eCount ) > m_buttons;
-		//!\~english The button which had the last change.	\~french Le bouton ayant re�u le dernier changement.
+		//!\~english The button which had the last change.	\~french Le bouton ayant reàu le dernier changement.
 		MouseButton m_changed;
 	};
 	/*!

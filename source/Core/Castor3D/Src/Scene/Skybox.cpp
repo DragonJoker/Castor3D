@@ -277,7 +277,7 @@ namespace Castor3D
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		m_matricesBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		m_matricesBuffer = l_program->FindUniformBuffer( ShaderProgram::BufferMatrix );
 		l_program->Initialise();
 		return *l_program;
 	}

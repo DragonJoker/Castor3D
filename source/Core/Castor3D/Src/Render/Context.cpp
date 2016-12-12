@@ -12,9 +12,9 @@
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/MatrixFrameVariable.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/MatrixUniform.hpp"
+#include "Shader/OneUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/DepthStencilState.hpp"
 #include "Texture/Sampler.hpp"
@@ -245,7 +245,7 @@ namespace Castor3D
 		p_pipeline.SetProjectionMatrix( m_rtotPipelinePlane.m_viewport.GetProjection() );
 
 		p_pipeline.Apply();
-		FrameVariableBufferSPtr l_matrices = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		auto l_matrices = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
 
 		if ( l_matrices )
 		{
@@ -269,7 +269,7 @@ namespace Castor3D
 		m_rtotPipelinePlane.m_viewport.Apply();
 		p_pipeline.SetProjectionMatrix( m_rtotPipelinePlane.m_viewport.GetProjection() );
 
-		OneFloatFrameVariableSPtr l_variable = p_pipeline.GetProgram().FindFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+		auto l_variable = p_pipeline.GetProgram().FindUniform< Uniform1f >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 
 		if ( l_variable )
 		{
@@ -277,7 +277,7 @@ namespace Castor3D
 		}
 
 		p_pipeline.Apply();
-		FrameVariableBufferSPtr l_matrices = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		auto l_matrices = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
 
 		if ( l_matrices )
 		{
@@ -313,7 +313,7 @@ namespace Castor3D
 		p_pipeline.SetViewMatrix( l_mtx );
 
 		p_pipeline.Apply();
-		FrameVariableBufferSPtr l_matrices = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		auto l_matrices = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
 
 		if ( l_matrices )
 		{
@@ -349,7 +349,7 @@ namespace Castor3D
 		matrix::look_at( l_mtx, p_position, p_position + l_front, l_up );
 		p_pipeline.SetViewMatrix( l_mtx );
 
-		OneFloatFrameVariableSPtr l_variable = p_pipeline.GetProgram().FindFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+		Uniform1fSPtr l_variable = p_pipeline.GetProgram().FindUniform< Uniform1f >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 
 		if ( l_variable )
 		{
@@ -357,7 +357,7 @@ namespace Castor3D
 		}
 
 		p_pipeline.Apply();
-		FrameVariableBufferSPtr l_matrices = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		UniformBufferSPtr l_matrices = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
 
 		if ( l_matrices )
 		{
@@ -490,11 +490,11 @@ namespace Castor3D
 		l_program->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_program->CreateUniform< Uniform1i >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
 		{
-			l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+			l_program->CreateUniform< Uniform1f >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 		}
 
 		l_program->Initialise();
@@ -625,11 +625,11 @@ namespace Castor3D
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_program->CreateUniform< Uniform1i >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
 		{
-			l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+			l_program->CreateUniform< Uniform1f >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 		}
 
 		l_program->Initialise();

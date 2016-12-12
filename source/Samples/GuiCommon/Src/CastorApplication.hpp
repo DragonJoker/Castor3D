@@ -110,7 +110,7 @@ namespace GuiCommon
 		 *\~english
 		 *\return		The file name given in command line with -f option
 		 *\~french
-		 *\return		Le nom du fichier donnà en ligne de commande via l'option -f
+		 *\return		Le nom du fichier donné en ligne de commande via l'option -f
 		 */
 		inline Castor::String const & GetFileName()const
 		{
@@ -120,7 +120,7 @@ namespace GuiCommon
 		 *\~english
 		 *\return		The renderer type given in command line, Castor3D::RENDERER_TYPE_UNDEFINED if none was given
 		 *\~french
-		 *\return		Le type d'API de rendu donnà en ligne de commande, Castor3D::RENDERER_TYPE_UNDEFINED si aucun n'a àtà donnà
+		 *\return		Le type d'API de rendu donné en ligne de commande, Castor3D::RENDERER_TYPE_UNDEFINED si aucun n'a àtà donné
 		 */
 		inline Castor::String const & GetRendererType()const
 		{

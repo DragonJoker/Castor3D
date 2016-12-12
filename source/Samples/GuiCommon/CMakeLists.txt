@@ -64,8 +64,8 @@ file( GLOB ${PROJECT_NAME}_SHADER_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stc*.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameVariable*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameVariable*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Uniform*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Uniform*.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.inl
 )
@@ -74,7 +74,7 @@ file( GLOB ${PROJECT_NAME}_SHADER_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Lexer*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stc*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameVariable*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Uniform*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.cpp
 )
 source_group( "Header Files\\Shader" FILES ${${PROJECT_NAME}_SHADER_HEADER_FILES} )

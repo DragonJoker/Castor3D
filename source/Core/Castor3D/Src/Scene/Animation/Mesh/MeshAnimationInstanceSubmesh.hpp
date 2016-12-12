@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
 		 *\param[out]	p_variable	Reçoit les transformations.
 		 */
-		C3D_API void FillShader( OneFloatFrameVariable & p_variable )const;
+		C3D_API void FillShader( Uniform1f & p_variable )const;
 
 	protected:
 		//!\~english	The animation object.
