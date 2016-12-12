@@ -18,9 +18,6 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/MatrixUniform.hpp"
-#include "Shader/OneUniform.hpp"
-#include "Shader/PointUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
@@ -349,20 +346,18 @@ namespace Castor3D
 
 			auto l_sceneBuffer = l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferScene );
 			auto l_passBuffer = l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferPass );
-			Uniform4rSPtr l_pt4r;
-			Uniform1fSPtr l_1f;
 
 			l_it = m_mapPanelNodes.insert( { &p_pass, PassRenderNode
 				{
 					p_pass,
 					l_pipeline,
 					*l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatAmbient ),
+					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ),
+					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ),
+					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ),
+					*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ),
+					*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ),
 				}
 			} ).first;
 			p_pass.FillRenderNode( l_it->second );
@@ -381,20 +376,18 @@ namespace Castor3D
 
 			auto l_sceneBuffer = l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferScene );
 			auto l_passBuffer = l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferPass );
-			Uniform4rSPtr l_pt4r;
-			Uniform1fSPtr l_1f;
 
 			l_it = m_mapTextNodes.insert( { &p_pass, PassRenderNode
 				{
 					p_pass,
 					l_pipeline,
 					*l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatAmbient ),
+					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ),
+					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ),
+					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ),
+					*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ),
+					*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ),
 				}
 			} ).first;
 			p_pass.FillRenderNode( l_it->second );

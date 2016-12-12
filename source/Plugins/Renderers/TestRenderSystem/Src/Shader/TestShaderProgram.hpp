@@ -85,11 +85,11 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateUniformBuffer
 		 */
-		Castor3D::UniformBufferSPtr DoCreateUniformBuffer( Castor::String const & p_name, Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags )override;
+		Castor3D::UniformBufferSPtr DoCreateUniformBuffer( Castor::String const & p_name, Castor3D::ShaderTypeFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::DoCreateTextureVariable
+		 *\copydoc		Castor3D::ShaderProgram::DoCreateUniform
 		 */
-		std::shared_ptr< Castor3D::Uniform > DoCreateVariable( Castor3D::UniformType p_type, int p_occurences )override;
+		std::shared_ptr< Castor3D::PushUniform > DoCreateUniform( Castor3D::UniformType p_type, int p_occurences )override;
 
 	private:
 		TestProgramInputLayout m_layout;

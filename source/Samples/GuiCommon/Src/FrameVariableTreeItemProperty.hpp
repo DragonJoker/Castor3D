@@ -65,7 +65,7 @@ namespace GuiCommon
 		 *\param[in]	p_variable	La variable cible
 		 *\param[in]	p_type		Le tampon de variables contenant celle donnàe
 		 */
-		FrameVariableTreeItemProperty( bool p_editable, Castor3D::UniformSPtr p_variable, Castor3D::ShaderType p_type );
+		FrameVariableTreeItemProperty( bool p_editable, Castor3D::PushUniformSPtr p_variable, Castor3D::ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -115,6 +115,7 @@ namespace GuiCommon
 
 	private:
 		Castor3D::UniformWPtr m_variable;
+		Castor3D::PushUniformWPtr m_pushVariable;
 		Castor3D::UniformBufferWPtr m_buffer;
 		Castor3D::ShaderType m_type;
 	};

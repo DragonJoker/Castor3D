@@ -7,7 +7,6 @@
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Shader/OneUniform.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/TextureLayout.hpp>
 

@@ -35,12 +35,11 @@ namespace TestRender
 	public:
 		TestUniformBuffer( Castor::String const & p_name
 			, Castor3D::ShaderProgram & p_program
-			, Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags
+			, Castor3D::ShaderTypeFlags const & p_flags
 			, Castor3D::RenderSystem & p_renderSystem );
 		virtual ~TestUniformBuffer();
 
 	private:
-		Castor3D::UniformSPtr DoCreateVariable( Castor3D::UniformType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 )override;
 		bool DoInitialise()override;
 		void DoCleanup()override;
 		void DoBindTo( uint32_t p_index )override;

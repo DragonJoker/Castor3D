@@ -1202,26 +1202,16 @@ namespace GlRender
 	class GlShaderObject;
 	class GlShaderProgram;
 	class GlProgramInputLayout;
-	template< typename Type > struct OneVariableBinder;
-	template< typename Type, uint32_t Count > struct PointVariableBinder;
-	template< typename Type, uint32_t Rows, uint32_t Columns > struct MatrixVariableBinder;
 	class GlUniformBase;
-	struct GlVariableApplyerBase;
-	class UboVariableInfos;
 	class GlUniformBuffer;
-	template< typename T > class GlOneUniform;
-	template< typename T, uint32_t Count > class GlPointUniform;
-	template< typename T, uint32_t Rows, uint32_t Columns > class GlMatrixUniform;
-	DECLARE_SMART_PTR( UboVariableInfos );
-	DECLARE_SMART_PTR( GlVariableApplyerBase );
+	template< Castor3D::UniformType Type >
+	class GlPushUniform;
 	DECLARE_SMART_PTR( GlUniformBase );
 	DECLARE_SMART_PTR( GlShaderObject );
 	DECLARE_SMART_PTR( GlShaderProgram );
 	DECLARE_VECTOR( GlShaderProgramSPtr, GlShaderProgramPtr );
 	DECLARE_VECTOR( GlShaderObjectSPtr, GlShaderObjectPtr );
 	DECLARE_MAP( Castor::String, GlUniformBaseSPtr, GlUniformPtrStr );
-	DECLARE_MAP( Castor3D::UniformSPtr, UboVariableInfosSPtr, UboVariableInfos );
-	DECLARE_MAP( Castor3D::UniformSPtr, GlVariableApplyerBaseSPtr, VariableApplyer );
 
 	class GlRenderBuffer;
 	class GlColourRenderBuffer;

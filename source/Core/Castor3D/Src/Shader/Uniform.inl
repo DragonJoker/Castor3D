@@ -1,120 +1,277 @@
 namespace Castor3D
 {
-	template< UniformType Type, typename Enable = void >
-	struct Linker;
-	template< VariableType Type, typename Enable = void >
-	struct Unlinker;
-	template< UniformType Type, typename Enable = void >
-	struct StringValueSetter;
-	template< UniformType Type, typename Enable = void >
-	struct StringValueGetter;
-
-	template< VariableType Type >
-	struct Unlinker< Type, typename std::enable_if< Type == VariableType::eMat2x2 || Type == VariableType::eMat3x3 || Type == VariableType::eMat4x4 >::type >
+	namespace details
 	{
-		static void UnLink( typename UniformTyper< Type >::value_type * p_dst, uint32_t p_occurences, uint8_t * p_src, uint32_t & p_srcStride )
+		template< UniformType Type, typename Enable = void >
+		struct Helper;
+
+		template< UniformType Type >
+		struct Helper< Type, typename std::enable_if< is_matrix_type< Type >::value >::type >
 		{
-			uint8_t * l_buffer = p_src;
-			constexpr uint32_t l_size = UniformTyper< Type >::size;
+			using typed_type = typename uniform_typed_value< Type >::type;
+			using sub_type = typename uniform_type< Type >::value_sub_type;
+			using param_type = typename uniform_param_type< Type >::type;
+			using return_type = typename uniform_return_type< Type >::type;
+			using const_return_type = typename uniform_return_type< Type >::const_type;
+			static constexpr auto count = variable_type< Type >::count;
+			static constexpr auto rows = variable_type< Type >::rows;
+			static constexpr auto cols = variable_type< Type >::cols;
 
-			if ( !p_srcStride )
+			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
 			{
-				p_srcStride = l_size;
-			}
+				uint8_t * l_buffer = p_src;
+				constexpr uint32_t l_size = sizeof( sub_type ) * count;
 
-			REQUIRE( p_stride >= l_size );
-
-			for ( uint32_t i = 0; i < p_occurences; i++ )
-			{
-				std::memcpy( l_buffer, p_dst[i].const_ptr(), l_size );
-				l_buffer += p_stride;
-			}
-		}
-	};
-	
-	template< VariableType Type >
-	struct Linker< Type, typename std::enable_if< Type == VariableType::eMat2x2 || Type == VariableType::eMat3x3 || Type == VariableType::eMat4x4 >::type >
-	{
-		static void Link( typename UniformTyper< Type >::value_type * p_dst, uint32_t p_occurences, uint8_t * p_src, uint32_t p_stride )
-		{
-			uint8_t * l_buffer = p_src;
-
-			for ( uint32_t i = 0; i < p_occurences; i++ )
-			{
-				p_dst[i].link( reinterpret_cast< typename UniformTyper< Type >::value_sub_type * >( l_buffer ) );
-				l_buffer += p_stride;
-			}
-		}
-	};
-
-	template< VariableType Type >
-	struct StringValueSetter< Type, typename std::enable_if< Type == VariableType::eMat2x2 || Type == VariableType::eMat3x3 || Type == VariableType::eMat4x4 >::type >
-	{
-		static inline void SetStrValue( typename UniformTyper< Type >::value_type * p_dst, Castor::String const & p_value, uint32_t p_index )
-		{
-			Castor::StringArray l_arrayLines = Castor::string::split( p_value, cuT( ";" ) );
-
-			if ( l_arrayLines.size() == Rows )
-			{
-				bool l_continue = true;
-
-				for ( uint32_t i = 0; i < Rows && l_continue; i++ )
+				if ( !p_stride )
 				{
-					l_continue = false;
-					Castor::StringArray l_arraySplitted = Castor::string::split( l_arrayLines[i], cuT( ", \t" ) );
+					p_stride = l_size;
+				}
 
-					if ( l_arraySplitted.size() == Columns )
+				REQUIRE( p_stride >= l_size );
+
+				for ( auto & l_dst : p_dst )
+				{
+					std::memcpy( l_buffer, l_dst.const_ptr(), l_size );
+					l_buffer += p_stride;
+				}
+			}
+
+			static void Link( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t p_stride )
+			{
+				uint8_t * l_buffer = p_src;
+
+				for ( auto & l_dst : p_dst )
+				{
+					l_dst.link( reinterpret_cast< sub_type * >( l_buffer ) );
+					l_buffer += p_stride;
+				}
+			}
+
+			static inline void SetValue( std::vector< typed_type > & p_dst, uint32_t p_index, param_type const & p_value )
+			{
+				p_dst[p_index] = p_value;
+			}
+
+			static inline return_type & GetValue( std::vector< typed_type > & p_src, uint32_t p_index )
+			{
+				return p_src[p_index];
+			}
+
+			static inline const_return_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
+			{
+				return p_src[p_index];
+			}
+
+			static inline void SetStrValue( std::vector< typed_type > & p_dst, Castor::String const & p_value, uint32_t p_index )
+			{
+				Castor::StringArray l_arrayLines = Castor::string::split( p_value, cuT( ";" ) );
+
+				if ( l_arrayLines.size() == rows )
+				{
+					bool l_continue = true;
+
+					for ( uint32_t i = 0; i < rows && l_continue; i++ )
 					{
-						l_continue = true;
+						l_continue = false;
+						Castor::StringArray l_arraySplitted = Castor::string::split( l_arrayLines[i], cuT( ", \t" ) );
 
-						for ( uint32_t j = 0; j < Columns; j++ )
+						if ( l_arraySplitted.size() == cols )
 						{
-							Castor::string::parse( l_arraySplitted[j], p_dst[0][j][i] );
+							l_continue = true;
+
+							for ( uint32_t j = 0; j < cols; j++ )
+							{
+								Castor::string::parse( l_arraySplitted[j], p_dst[0][j][i] );
+							}
 						}
 					}
 				}
 			}
-		}
-	};
 
-	template< VariableType Type >
-	struct StringValueGetter< Type, typename std::enable_if< Type == VariableType::eMat2x2 || Type == VariableType::eMat3x3 || Type == VariableType::eMat4x4 >::type >
-	{
-		static inline Castor::String GetStrValue( typename UniformTyper< Type >::value_type const * p_src, uint32_t p_index )
-		{
-			Castor::StringStream l_stream;
-
-			for ( uint32_t j = 0; j < Columns; j++ )
+			static inline Castor::String GetStrValue( std::vector< typed_type > const & p_src, uint32_t p_index )
 			{
+				Castor::StringStream l_stream;
+
+				for ( uint32_t j = 0; j < cols; j++ )
+				{
+					Castor::String l_sep;
+
+					for ( uint32_t i = 0; i < rows; i++ )
+					{
+						l_stream << l_sep << p_src[p_index][j][i];
+						l_sep = ", ";
+					}
+
+					l_stream << ";";
+				}
+
+				return l_stream.str();
+			}
+		};
+
+		template< UniformType Type >
+		struct Helper< Type, typename std::enable_if< is_point_type< Type >::value >::type >
+		{
+			using typed_type = typename uniform_typed_value< Type >::type;
+			using sub_type = typename uniform_type< Type >::value_sub_type;
+			using param_type = typename uniform_param_type< Type >::type;
+			using return_type = typename uniform_return_type< Type >::type;
+			using const_return_type = typename uniform_return_type< Type >::const_type;
+			static constexpr auto count = variable_type< Type >::count;
+
+			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
+			{
+				uint8_t * l_buffer = p_src;
+				constexpr uint32_t l_size = sizeof( sub_type ) * count;
+
+				if ( !p_stride )
+				{
+					p_stride = l_size;
+				}
+
+				REQUIRE( p_stride >= l_size );
+
+				for ( auto & l_dst : p_dst )
+				{
+					std::memcpy( l_buffer, l_dst.const_ptr(), l_size );
+					l_buffer += p_stride;
+				}
+			}
+
+			static void Link( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t p_stride )
+			{
+				uint8_t * l_buffer = p_src;
+
+				for ( auto & l_dst : p_dst )
+				{
+					l_dst = Castor::Coords< sub_type, count >( reinterpret_cast< sub_type * >( l_buffer ) );
+					l_buffer += p_stride;
+				}
+			}
+
+			static inline void SetValue( std::vector< typed_type > & p_dst, uint32_t p_index, param_type const & p_value )
+			{
+				auto & l_value = p_dst[p_index];
+				std::memcpy( l_value.ptr(), p_value.const_ptr(), l_value.size() );
+			}
+
+			static inline return_type & GetValue( std::vector< typed_type > & p_src, uint32_t p_index )
+			{
+				return p_src[p_index];
+			}
+
+			static inline const_return_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
+			{
+				return const_return_type{ p_src[p_index] };
+			}
+
+			static inline void SetStrValue( std::vector< typed_type > & p_dst, Castor::String const & p_value, uint32_t p_index )
+			{
+				Castor::StringArray l_arraySplitted = Castor::string::split( p_value, cuT( ", \t" ) );
+
+				if ( l_arraySplitted.size() == count )
+				{
+					for ( uint32_t i = 0; i < count; i++ )
+					{
+						Castor::string::parse( l_arraySplitted[i], p_dst[p_index][i] );
+					}
+				}
+			}
+
+			static inline Castor::String GetStrValue( std::vector< typed_type > const & p_src, uint32_t p_index )
+			{
+				Castor::StringStream l_stream;
 				Castor::String l_sep;
 
-				for ( uint32_t i = 0; i < Rows; i++ )
+				for ( uint32_t i = 0; i < count; i++ )
 				{
-					l_stream << l_sep << p_src[0][j][i];
+					l_stream << l_sep << p_src[p_index][i];
 					l_sep = ", ";
 				}
 
-				l_stream << ";";
+				return l_stream.str();
+			}
+		};
+
+		template< UniformType Type >
+		struct Helper< Type, typename std::enable_if< is_one_type< Type >::value >::type >
+		{
+			using typed_type = typename uniform_typed_value< Type >::type;
+			using sub_type = typename uniform_type< Type >::value_sub_type;
+			using param_type = typename uniform_param_type< Type >::type;
+			using return_type = typename uniform_return_type< Type >::type;
+			using const_return_type = typename uniform_return_type< Type >::const_type;
+
+			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
+			{
+				uint8_t * l_buffer = p_src;
+				constexpr uint32_t l_size = sizeof( sub_type );
+
+				if ( !p_stride )
+				{
+					p_stride = l_size;
+				}
+
+				REQUIRE( p_stride >= l_size );
+
+				for ( auto & l_dst : p_dst )
+				{
+					std::memcpy( l_buffer, l_dst, l_size );
+					l_buffer += p_stride;
+				}
 			}
 
-			return l_stream.str();
-		}
-	};
+			static void Link( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t p_stride )
+			{
+				uint8_t * l_buffer = p_src;
+				constexpr uint32_t l_size = sizeof( sub_type );
+
+				for ( auto & l_dst : p_dst )
+				{
+					l_dst = reinterpret_cast< sub_type * >( l_buffer );
+					l_buffer += p_stride;
+				}
+			}
+
+			static inline void SetValue( std::vector< typed_type > & p_dst, uint32_t p_index, param_type const & p_value )
+			{
+				*p_dst[p_index] = p_value;
+			}
+
+			static inline return_type & GetValue( std::vector< typed_type > & p_src, uint32_t p_index )
+			{
+				return *p_src[p_index];
+			}
+
+			static inline const_return_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
+			{
+				return *p_src[p_index];
+			}
+
+			static inline void SetStrValue( std::vector< typed_type > & p_dst, Castor::String const & p_value, uint32_t p_index )
+			{
+				Castor::string::parse( p_value, *p_dst[p_index] );
+			}
+
+			static inline Castor::String GetStrValue( std::vector< typed_type > const & p_src, uint32_t p_index )
+			{
+				Castor::StringStream l_stream;
+				l_stream << *p_src[p_index];
+				return l_stream.str();
+			}
+		};
+	}
 
 	//*************************************************************************************************
 
 	template< UniformType Type >
 	TUniform< Type >::TUniform( uint32_t p_occurences )
 		: Uniform{ p_occurences }
+		, m_typedValues( p_occurences, typed_value{} )
+		, m_values{ new value_sub_type[p_occurences * stride] }
 	{
-		m_values = new value_sub_type[p_occurences * UniformTyper< Type >::size];
-		memset( m_values, 0, p_occurences * UniformTyper< Type >::size );
-		m_typedValues.resize( p_occurences );
-
-		for ( uint32_t i = 0; i < p_occurences; i++ )
-		{
-			m_typedValues[i].link( &m_values[i * UniformTyper< Type >::count] );
-		}
+		memset( m_values, 0, p_occurences * stride );
+		details::Helper< Type >::Link( m_typedValues, reinterpret_cast< uint8_t * >( m_values ), stride );
 	}
 
 	template< UniformType Type >
@@ -124,92 +281,107 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	inline void TUniform< Type >::SetValue( value_type const & p_value )
+	inline typename TUniform< Type >::value_sub_type const * TUniform< Type >::GetValues()const
+	{
+		return m_values;
+	}
+
+	template< UniformType Type >
+	inline typename TUniform< Type >::return_type & TUniform< Type >::GetValue()
+	{
+		return GetValue( 0u );
+	}
+
+	template< UniformType Type >
+	inline typename TUniform< Type >::const_return_type const & TUniform< Type >::GetValue()const
+	{
+		return GetValue( 0u );
+	}
+
+	template< UniformType Type >
+	inline typename TUniform< Type >::return_type & TUniform< Type >::GetValue( uint32_t p_index )
+	{
+		if ( p_index < m_occurences )
+		{
+			return details::Helper< Type >::GetValue( m_typedValues, p_index );
+		}
+		else
+		{
+			throw ( std::out_of_range )( "MatrixUniform< T, Rows, Columns > array subscript out of range" );
+		}
+	}
+
+	template< UniformType Type >
+	inline typename TUniform< Type >::const_return_type const & TUniform< Type >::GetValue( uint32_t p_index )const
+	{
+		if ( p_index < m_occurences )
+		{
+			return details::Helper< Type >::GetValue( m_typedValues, p_index );
+		}
+		else
+		{
+			throw ( std::out_of_range )( "MatrixUniform< T, Rows, Columns > array subscript out of range" );
+		}
+	}
+
+	template< UniformType Type >
+	inline void TUniform< Type >::SetValue( param_type const & p_value )
 	{
 		SetValue( p_value, 0u );
 	}
 
 	template< UniformType Type >
-	inline void TUniform< Type >::SetValue( value_type const & p_value, uint32_t p_index )
+	inline void TUniform< Type >::SetValue( param_type const & p_value, uint32_t p_index )
 	{
-		m_typedValues[p_index] = p_value;
+		details::Helper< Type >::SetValue( m_typedValues, p_index, p_value );
 		this->m_changed = true;
 	}
 
 	template< UniformType Type >
-	inline typename TUniform< Type >::value_type & TUniform< Type >::GetValue()
-	{
-		return GetValue( 0u );
-	}
-
-	template< UniformType Type >
-	inline typename TUniform< Type >::value_type const & TUniform< Type >::GetValue()const
-	{
-		return GetValue( 0u );
-	}
-
-	template< UniformType Type >
-	inline typename TUniform< Type >::value_type & TUniform< Type >::GetValue( uint32_t p_index )
-	{
-		if ( p_index < m_occurences )
-		{
-			return m_typedValues[p_index];
-		}
-		else
-		{
-			throw ( std::out_of_range )( "MatrixUniform< T, Rows, Columns > array subscript out of range" );
-		}
-	}
-
-	template< UniformType Type >
-	inline typename TUniform< Type >::value_type const & TUniform< Type >::GetValue( uint32_t p_index )const
-	{
-		if ( p_index < m_occurences )
-		{
-			return m_typedValues[p_index];
-		}
-		else
-		{
-			throw ( std::out_of_range )( "MatrixUniform< T, Rows, Columns > array subscript out of range" );
-		}
-	}
-
-	template< UniformType Type >
 	template< size_t N >
-	inline void TUniform< Type >::SetValues( value_type const( & p_values )[N] )
+	inline void TUniform< Type >::SetValues( param_type const( & p_values )[N] )
 	{
 		SetValues( p_values, N );
 	}
 
 	template< UniformType Type >
 	template< size_t N >
-	inline void TUniform< Type >::SetValues( std::array< value_type, N > const & p_values )
+	inline void TUniform< Type >::SetValues( std::array< param_type, N > const & p_values )
 	{
 		SetValues( p_values.data(), N );
 	}
 
 	template< UniformType Type >
-	inline void TUniform< Type >::SetValues( std::vector< value_type > const & p_values )
+	inline void TUniform< Type >::SetValues( std::vector< param_type > const & p_values )
 	{
 		SetValues( p_values.data(), uint32_t( p_values.size() ) );
 	}
 
 	template< UniformType Type >
-	inline typename TUniform< Type >::value_type & TUniform< Type >::operator[]( uint32_t p_index )
+	inline void TUniform< Type >::SetValues( param_type const * p_values, size_t p_count )
 	{
-		return this->m_typedValues[p_index];
+		for ( auto i = 0u; i < std::min( uint32_t( p_count ), m_occurences ); ++i )
+		{
+			SetValue( p_values[i], i );
+		}
 	}
 
 	template< UniformType Type >
-	inline typename TUniform< Type >::value_type const & TUniform< Type >::operator[]( uint32_t p_index )const
+	inline typename TUniform< Type >::return_type & TUniform< Type >::operator[]( uint32_t p_index )
 	{
-		return this->m_typedValues[p_index];
+		return details::Helper< Type >::GetValue( m_typedValues, p_index );
+	}
+
+	template< UniformType Type >
+	inline typename TUniform< Type >::const_return_type const & TUniform< Type >::operator[]( uint32_t p_index )const
+	{
+		return details::Helper< Type >::GetValue( m_typedValues, p_index );
 	}
 
 	template< UniformType Type >
 	inline constexpr VariableType TUniform< Type >::GetVariableType()
 	{
-		return UniformTyper< Type >::variable_type;
+		return variable_type< Type >::value;
 	}
 
 	template< UniformType Type >
@@ -221,19 +393,36 @@ namespace Castor3D
 	template< UniformType Type >
 	inline Castor::String const & TUniform< Type >::GetUniformTypeName()
 	{
-		return UniformTyper< Type >::full_type_name;
+		return uniform_type_name< Type >::full_type_name;
 	}
 
 	template< UniformType Type >
-	Castor::String const & TUniform< Type >::GetDataTypeName()const
+	uint32_t TUniform< Type >::size()const
 	{
-		return UniformTyper< Type >::data_type_name;
+		return uint32_t( m_occurences * stride );
 	}
 
 	template< UniformType Type >
 	uint8_t const * const TUniform< Type >::const_ptr()const
 	{
-		return reinterpret_cast< uint8_t * >( m_values );
+		return reinterpret_cast< uint8_t const * >( m_values );
+	}
+
+	template< UniformType Type >
+	void TUniform< Type >::link( uint8_t * p_buffer, uint32_t p_stride )
+	{
+		details::Helper< Type >::Unlink( m_typedValues, p_buffer, p_stride );
+		DoCleanupBuffer();
+		details::Helper< Type >::Link( m_typedValues, p_buffer, p_stride );
+		m_stride = p_stride;
+		m_values = reinterpret_cast< value_sub_type * >( p_buffer );
+		m_ownBuffer = false;
+	}
+
+	template< UniformType Type >
+	Castor::String const & TUniform< Type >::GetDataTypeName()const
+	{
+		return uniform_type_name< Type >::data_type_name;
 	}
 
 	template< UniformType Type >
@@ -255,23 +444,6 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	uint32_t TUniform< Type >::size()const
-	{
-		return UniformTyper< Type >::size * this->m_occurences;
-	}
-
-	template< UniformType Type >
-	void TUniform< Type >::link( uint8_t * p_buffer, uint32_t p_stride )
-	{
-		Unlinker< UniformTyper< Type >::variable_type >::Unlink( m_typedValues, m_occurences, p_buffer, p_stride );
-		DoCleanupBuffer();
-		Linker< UniformTyper< Type >::variable_type >::Link( m_typedValues, m_occurences, p_buffer, p_stride );
-		m_stride = p_stride;
-		m_values = reinterpret_cast< value_sub_type * >( p_buffer );
-		m_ownBuffer = false;
-	}
-
-	template< UniformType Type >
 	inline void TUniform< Type >::DoCleanupBuffer()
 	{
 		if ( m_ownBuffer )
@@ -284,12 +456,12 @@ namespace Castor3D
 	template< UniformType Type >
 	inline void TUniform< Type >::DoSetStrValue( Castor::String const & p_value, uint32_t p_index )
 	{
-		StringValueSetter< UniformTyper< Type >::variable_type >::SetStrValue( m_typedValues, p_values, p_index );
+		details::Helper< Type >::SetStrValue( m_typedValues, p_value, p_index );
 	}
 
 	template< UniformType Type >
 	inline Castor::String TUniform< Type >::DoGetStrValue( uint32_t p_index )const
 	{
-		return StringValueGetter< UniformTyper< Type >::variable_type >::GetStrValue( m_typedValues, p_index );
+		return details::Helper< Type >::GetStrValue( m_typedValues, p_index );
 	}
 }

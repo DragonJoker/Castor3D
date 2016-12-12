@@ -20,14 +20,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_FRAME_VARIABLE_BUFFER_H___
-#define ___C3D_FRAME_VARIABLE_BUFFER_H___
+#ifndef ___C3D_UniformBuffer_H___
+#define ___C3D_UniformBuffer_H___
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "UniformTyper.hpp"
-
-#include "Texture/TextureLayout.hpp"
+#include "Uniform.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -105,7 +103,7 @@ namespace Castor3D
 		C3D_API UniformBuffer(
 			Castor::String const & p_name,
 			ShaderProgram & p_program,
-			Castor::FlagCombination< ShaderTypeFlag > const & p_flags,
+			ShaderTypeFlags const & p_flags,
 			RenderSystem & p_renderSystem );
 		/**
 		 *\~english
@@ -175,9 +173,9 @@ namespace Castor3D
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
 		template< UniformType Type >
-		inline std::shared_ptr< typename UniformTyper< Type >::type > CreateUniform( Castor::String const & p_name, int p_occurences = 1 )
+		inline std::shared_ptr< typename uniform_type< Type >::type > CreateUniform( Castor::String const & p_name, int p_occurences = 1 )
 		{
-			return std::static_pointer_cast< typename UniformTyper< Type >::type >( CreateUniform( Type, p_name, p_occurences ) );
+			return std::static_pointer_cast< typename uniform_type< Type >::type >( CreateUniform( Type, p_name, p_occurences ) );
 		}
 		/**
 		 *\~english
@@ -310,7 +308,7 @@ namespace Castor3D
 		static uint32_t sm_uiCount;
 		//!\~english	The shader types assigned to this frame variable buffer.
 		//!\~french		Les types de shader affectés à ce tampon de variables de frame.
-		Castor::FlagCombination< ShaderTypeFlag > m_flags;
+		ShaderTypeFlags m_flags;
 		//!\~english	The buffer's index.
 		//!\~french		L'index du tampon.
 		uint32_t m_index;

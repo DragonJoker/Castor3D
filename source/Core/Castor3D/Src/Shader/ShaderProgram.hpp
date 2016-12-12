@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le tampon de variables créé ou récupéré.
 		 */
-		C3D_API UniformBuffer & CreateUniformBuffer( Castor::String const & p_name, Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask );
+		C3D_API UniformBuffer & CreateUniformBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Finds a variable buffer.
@@ -166,7 +166,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le tampon de stockage créé ou récupéré.
 		 */
-		C3D_API ShaderStorageBuffer & CreateStorageBuffer( Castor::String const & p_name, Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask );
+		C3D_API ShaderStorageBuffer & CreateStorageBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Finds a storage buffer.
@@ -190,7 +190,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le tampon de stockage créé ou récupéré.
 		 */
-		C3D_API AtomicCounterBuffer & CreateAtomicCounterBuffer( Castor::String const & p_name, Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask );
+		C3D_API AtomicCounterBuffer & CreateAtomicCounterBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Finds an atomic counter buffer.
@@ -402,9 +402,9 @@ namespace Castor3D
 		 *\return		La variable trouvé, nullptr en cas d'échec.
 		 */
 		template< UniformType Type >
-		inline std::shared_ptr< typename UniformTyper< Type >::type > FindUniform( Castor::String const & p_name, ShaderType p_shader )const
+		inline std::shared_ptr< TPushUniform< Type > > FindUniform( Castor::String const & p_name, ShaderType p_shader )const
 		{
-			return std::static_pointer_cast< typename UniformTyper< Type >::type >( FindUniform( Type, p_name, p_shader ) );
+			return std::static_pointer_cast< TPushUniform< Type > >( FindUniform( Type, p_name, p_shader ) );
 		}
 		/**
 		 *\~english
@@ -716,7 +716,7 @@ namespace Castor3D
 		 */
 		virtual UniformBufferSPtr DoCreateUniformBuffer(
 			Castor::String const & p_name,
-			Castor::FlagCombination< ShaderTypeFlag > const & p_flags ) = 0;
+			ShaderTypeFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture frame variable.

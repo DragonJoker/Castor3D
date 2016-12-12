@@ -5,7 +5,7 @@
 #include "MeshAnimationInstance.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Shader/OneUniform.hpp"
+#include "Shader/Uniform.hpp"
 
 using namespace Castor;
 

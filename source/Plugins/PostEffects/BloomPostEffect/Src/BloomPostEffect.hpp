@@ -102,13 +102,13 @@ namespace Bloom
 
 		Castor3D::RenderPipelineUPtr m_blurXPipeline;
 		Castor3D::PushUniform1sSPtr m_blurXMapDiffuse;
-		Castor3D::PushUniform1uiSPtr m_blurXCoeffCount;
-		Castor3D::PushUniform1fSPtr m_blurXCoeffs;
+		Castor3D::Uniform1uiSPtr m_blurXCoeffCount;
+		Castor3D::Uniform1fSPtr m_blurXCoeffs;
 
 		Castor3D::RenderPipelineUPtr m_blurYPipeline;
 		Castor3D::PushUniform1sSPtr m_blurYMapDiffuse;
-		Castor3D::PushUniform1uiSPtr m_blurYCoeffCount;
-		Castor3D::PushUniform1fSPtr m_blurYCoeffs;
+		Castor3D::Uniform1uiSPtr m_blurYCoeffCount;
+		Castor3D::Uniform1fSPtr m_blurYCoeffs;
 
 		Castor3D::RenderPipelineUPtr m_combinePipeline;
 

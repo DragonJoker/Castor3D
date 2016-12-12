@@ -13,8 +13,6 @@
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/MatrixUniform.hpp"
-#include "Shader/OneUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/DepthStencilState.hpp"
 #include "Texture/Sampler.hpp"
@@ -349,7 +347,7 @@ namespace Castor3D
 		matrix::look_at( l_mtx, p_position, p_position + l_front, l_up );
 		p_pipeline.SetViewMatrix( l_mtx );
 
-		Uniform1fSPtr l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+		auto l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 
 		if ( l_variable )
 		{

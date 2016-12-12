@@ -6,7 +6,6 @@
 #include "Scene/Camera.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/MatrixUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <Math/TransformationMatrix.hpp>
@@ -71,9 +70,9 @@ namespace Castor3D
 
 		if ( m_program.HasObject( ShaderType::ePixel ) )
 		{
-			m_directionalShadowMaps = m_program.FindUniform< UniformType::eInt >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-			m_spotShadowMaps = m_program.FindUniform< UniformType::eInt >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-			m_pointShadowMaps = m_program.FindUniform< UniformType::eInt >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+			m_directionalShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
+			m_spotShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
+			m_pointShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
 		}
 	}
 
@@ -177,8 +176,7 @@ namespace Castor3D
 
 	void RenderPipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, UniformBuffer const & p_matrixBuffer )const
 	{
-		Uniform4x4rSPtr l_variable;
-		p_matrixBuffer.GetVariable( p_name, l_variable );
+		auto l_variable = p_matrixBuffer.GetUniform< UniformType::eMat4x4f >( p_name );
 
 		if ( l_variable )
 		{

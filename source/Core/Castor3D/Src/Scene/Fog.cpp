@@ -1,7 +1,6 @@
 #include "Fog.hpp"
 
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/OneUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 using namespace Castor;
@@ -19,8 +18,7 @@ namespace Castor3D
 
 	void Fog::FillShader( UniformBuffer const & p_buffer )const
 	{
-		Uniform1iSPtr l_type;
-		p_buffer.GetVariable( ShaderProgram::FogType, l_type );
+		auto l_type = p_buffer.GetUniform< UniformType::eInt >( ShaderProgram::FogType );
 
 		if ( l_type )
 		{
@@ -28,8 +26,7 @@ namespace Castor3D
 
 			if ( m_type != FogType::eDisabled )
 			{
-				Uniform1fSPtr l_density;
-				p_buffer.GetVariable( ShaderProgram::FogDensity, l_density );
+				auto l_density = p_buffer.GetUniform< UniformType::eFloat >( ShaderProgram::FogDensity );
 
 				if ( l_density )
 				{

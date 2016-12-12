@@ -69,7 +69,7 @@ namespace Castor3D
 		Uniform1f & m_opacity;
 		//!\~english	The pass textures.
 		//!\~french		Les textures de la passe.
-		std::map< uint32_t, std::reference_wrapper< Uniform1i > > m_textures;
+		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

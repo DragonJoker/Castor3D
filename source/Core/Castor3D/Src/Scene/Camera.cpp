@@ -10,7 +10,6 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/PointUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <Graphics/CubeBox.hpp>
@@ -197,8 +196,7 @@ namespace Castor3D
 	void Camera::FillShader( UniformBuffer const & p_sceneBuffer )const
 	{
 		auto l_position = GetParent()->GetDerivedPosition();
-		Uniform3rSPtr l_cameraPos;
-		p_sceneBuffer.GetVariable( ShaderProgram::CameraPos, l_cameraPos );
+		auto l_cameraPos = p_sceneBuffer.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
 
 		if ( l_cameraPos )
 		{

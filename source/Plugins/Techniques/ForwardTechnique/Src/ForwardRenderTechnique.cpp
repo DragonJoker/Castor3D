@@ -18,8 +18,6 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Shader/OneUniform.hpp>
-#include <Shader/PointUniform.hpp>
 #include <Technique/RenderTechniquePass.hpp>
 
 #include <Graphics/FontCache.hpp>

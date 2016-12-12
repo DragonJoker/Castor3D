@@ -14,7 +14,6 @@
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/PointUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <Design/ArrayView.hpp>

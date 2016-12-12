@@ -54,10 +54,8 @@ namespace Castor3D
 				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, l_depthMaps );
 				l_itPipelines.first->Apply();
 				UniformBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindUniformBuffer( Picking );
-				Uniform1uiSPtr l_drawIndex;
-				Uniform1uiSPtr l_nodeIndex;
-				l_ubo->GetVariable( DrawIndex, l_drawIndex );
-				l_ubo->GetVariable( NodeIndex, l_nodeIndex );
+				auto l_drawIndex = l_ubo->GetUniform< UniformType::eUInt >( DrawIndex );
+				auto l_nodeIndex = l_ubo->GetUniform< UniformType::eUInt >( NodeIndex );
 				l_drawIndex->SetValue( uint8_t( p_type ) + ( ( l_count & 0x00FFFFFF ) << 8 ) );
 				uint32_t l_index{ 0u };
 
@@ -92,10 +90,8 @@ namespace Castor3D
 				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, l_depthMaps );
 				l_itPipelines.first->Apply();
 				UniformBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindUniformBuffer( Picking );
-				Uniform1uiSPtr l_drawIndex;
-				Uniform1uiSPtr l_nodeIndex;
-				l_ubo->GetVariable( DrawIndex, l_drawIndex );
-				l_ubo->GetVariable( NodeIndex, l_nodeIndex );
+				auto l_drawIndex = l_ubo->GetUniform< UniformType::eUInt >( DrawIndex );
+				auto l_nodeIndex = l_ubo->GetUniform< UniformType::eUInt >( NodeIndex );
 				l_drawIndex->SetValue( uint8_t( p_type ) + ( ( l_count & 0x00FFFFFF ) << 8 ) );
 				uint32_t l_index{ 0u };
 

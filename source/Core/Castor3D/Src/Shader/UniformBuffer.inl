@@ -1,8 +1,4 @@
-﻿#include "MatrixUniform.hpp"
-#include "OneUniform.hpp"
-#include "PointUniform.hpp"
-
-namespace Castor3D
+﻿namespace Castor3D
 {
 	template< UniformType Type >
 	std::shared_ptr< TUniform< Type > > UniformBuffer::GetUniform( Castor::String const & p_name )const

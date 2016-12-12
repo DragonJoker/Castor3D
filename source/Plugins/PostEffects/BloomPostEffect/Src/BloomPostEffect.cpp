@@ -20,7 +20,6 @@
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Shader/OneUniform.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>

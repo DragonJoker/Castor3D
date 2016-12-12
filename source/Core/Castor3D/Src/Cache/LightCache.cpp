@@ -118,16 +118,14 @@ namespace Castor3D
 
 	void LightCache::FillShader( UniformBuffer const & p_sceneBuffer )const
 	{
-		Uniform4fSPtr l_ambientLight;
-		p_sceneBuffer.GetVariable( ShaderProgram::AmbientLight, l_ambientLight );
+		auto l_ambientLight = p_sceneBuffer.GetUniform< UniformType::eVec4f >( ShaderProgram::AmbientLight );
 
 		if ( l_ambientLight )
 		{
 			l_ambientLight->SetValue( rgba_float( GetScene()->GetAmbientLight() ) );
 		}
 
-		Uniform4iSPtr l_lightsCount;
-		p_sceneBuffer.GetVariable( ShaderProgram::LightsCount, l_lightsCount );
+		auto l_lightsCount = p_sceneBuffer.GetUniform< UniformType::eVec4i >( ShaderProgram::LightsCount );
 
 		if ( l_lightsCount )
 		{

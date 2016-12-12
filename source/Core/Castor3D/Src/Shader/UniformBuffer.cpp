@@ -9,7 +9,7 @@ namespace Castor3D
 
 	namespace
 	{
-		String WriteFlags( FlagCombination< ShaderTypeFlag > const & p_flags )
+		String WriteFlags( ShaderTypeFlags const & p_flags )
 		{
 			static std::map< ShaderTypeFlag, String > const Names
 			{
@@ -110,7 +110,7 @@ namespace Castor3D
 	UniformBuffer::UniformBuffer(
 		String const & p_name,
 		ShaderProgram & p_program,
-		FlagCombination< ShaderTypeFlag > const & p_flags,
+		ShaderTypeFlags const & p_flags,
 		RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, m_name{ p_name }

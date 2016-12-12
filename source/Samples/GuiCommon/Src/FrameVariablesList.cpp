@@ -124,13 +124,13 @@ namespace GuiCommon
 		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_buffer ) );
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, Castor3D::UniformSPtr p_variable, Castor3D::ShaderType p_type )
+	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, PushUniformSPtr p_variable, ShaderType p_type )
 	{
-		wxString l_displayName = p_variable->GetName();
+		wxString l_displayName = p_variable->GetBaseUniform().GetName();
 
-		if ( p_variable->GetOccCount() > 1 )
+		if ( p_variable->GetBaseUniform().GetOccCount() > 1 )
 		{
-			l_displayName << wxT( "[" ) << p_variable->GetOccCount() << wxT( "]" );
+			l_displayName << wxT( "[" ) << p_variable->GetBaseUniform().GetOccCount() << wxT( "]" );
 		}
 
 		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_type ) );

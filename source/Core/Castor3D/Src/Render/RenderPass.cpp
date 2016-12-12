@@ -297,7 +297,6 @@ namespace Castor3D
 		, AnimatedMeshSPtr p_mesh )
 	{
 		auto l_modelBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferModel );
-		Uniform1iSPtr l_receiver;
 		auto l_animationBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferAnimation );
 		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
@@ -308,7 +307,7 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*l_buffer,
 			*p_primitive.GetParent(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
+			*l_modelBuffer->GetUniform< UniformType::eInt >( ShaderProgram::ShadowReceiver ),
 			p_submesh,
 			p_primitive,
 			p_skeleton.get(),
@@ -323,7 +322,6 @@ namespace Castor3D
 		, Geometry & p_primitive )
 	{
 		auto l_modelBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferModel );
-		Uniform1iSPtr l_receiver;
 		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
 
@@ -333,7 +331,7 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*l_buffer,
 			*p_primitive.GetParent(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
+			*l_modelBuffer->GetUniform< UniformType::eInt >( ShaderProgram::ShadowReceiver ),
 			p_submesh,
 			p_primitive,
 		};
@@ -344,9 +342,7 @@ namespace Castor3D
 		, BillboardBase & p_billboard )
 	{
 		auto l_modelBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferModel );
-		Uniform1iSPtr l_receiver;
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferBillboards );
-		Uniform2iSPtr l_pt2i;
 		auto l_buffer = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
 
@@ -356,11 +352,11 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*l_buffer,
 			*p_billboard.GetNode(),
-			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
+			*l_modelBuffer->GetUniform< UniformType::eInt >( ShaderProgram::ShadowReceiver ),
 			p_billboard,
 			*l_billboardBuffer,
-			*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i ),
-			*l_billboardBuffer->GetVariable( ShaderProgram::WindowSize, l_pt2i )
+			*l_billboardBuffer->GetUniform< UniformType::eVec2i >( ShaderProgram::Dimensions ),
+			*l_billboardBuffer->GetUniform< UniformType::eVec2i >( ShaderProgram::WindowSize )
 		};
 	}
 
@@ -387,12 +383,12 @@ namespace Castor3D
 			p_pass,
 			p_pipeline,
 			*l_matrixBuffer,
-			*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
-			*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
-			*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
-			*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
-			*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
-			*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+			*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatAmbient ),
+			*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ),
+			*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ),
+			*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ),
+			*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ),
+			*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ),
 		};
 		p_pass.FillRenderNode( l_node );
 		return l_node;
@@ -402,12 +398,11 @@ namespace Castor3D
 		, RenderPipeline & p_pipeline )
 	{
 		UniformBufferSPtr l_sceneBuffer = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferScene );
-		Uniform3rSPtr l_pt3r;
 
 		return SceneRenderNode
 		{
 			*l_sceneBuffer,
-			*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r )
+			*l_sceneBuffer->GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos )
 		};
 	}
 

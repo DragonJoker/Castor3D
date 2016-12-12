@@ -44,7 +44,6 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/OneUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"

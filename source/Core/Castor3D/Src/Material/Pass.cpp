@@ -5,8 +5,9 @@
 #include "Render/RenderNode.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Shader/OneUniform.hpp"
+#include "Shader/Uniform.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Log/Logger.hpp>

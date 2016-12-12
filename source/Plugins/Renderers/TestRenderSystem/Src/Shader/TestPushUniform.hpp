@@ -20,31 +20,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___TRS_ONE_FRAME_VARIABLE_H___
-#define ___TRS_ONE_FRAME_VARIABLE_H___
+#ifndef ___TRS_POINT_FRAME_VARIABLE_H___
+#define ___TRS_POINT_FRAME_VARIABLE_H___
 
 #include "TestRenderSystemPrerequisites.hpp"
 
-#include <Shader/OneUniform.hpp>
+#include <Shader/PushUniform.hpp>
 
 namespace TestRender
 {
-	template< typename T >
-	class TestOneUniform
-		: public Castor3D::OneUniform< T >
+	template< Castor3D::UniformType Type >
+	class TestPushUniform
+		: public Castor3D::TPushUniform< Type >
 	{
 	public:
-		TestOneUniform( uint32_t p_occurences, TestShaderProgram & p_program );
-		TestOneUniform( Castor3D::OneUniform< T > & p_variable );
-		virtual ~TestOneUniform();
+		TestPushUniform( TestShaderProgram & p_program, uint32_t p_occurences );
+		TestPushUniform(  );
+		virtual ~TestPushUniform();
 
-		virtual bool Initialise();
-		virtual void Cleanup();
-		virtual void Bind()const;
-		virtual void Unbind()const {}
+	private:
+		virtual bool DoInitialise();
+		virtual void DoUpdate()const;
 	};
 }
 
-#include "TestOneUniform.inl"
+#include "TestPushUniform.inl"
 
 #endif

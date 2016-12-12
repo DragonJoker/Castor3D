@@ -14,8 +14,6 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/MatrixUniform.hpp"
-#include "Shader/PointUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
@@ -52,14 +50,11 @@ namespace Castor3D
 			};
 
 			auto l_shadowMapUbo = p_program.FindUniformBuffer( ShadowMapUbo );
-			Uniform3fSPtr l_worldLightPosition;
-			Uniform1fSPtr l_farPlane;
-			l_shadowMapUbo->GetVariable( WorldLightPosition, l_worldLightPosition )->SetValue( p_position );
-			l_shadowMapUbo->GetVariable( FarPlane, l_farPlane )->SetValue( 2000.0_r );
+			l_shadowMapUbo->GetUniform< UniformType::eVec3f >( WorldLightPosition )->SetValue( p_position );
+			l_shadowMapUbo->GetUniform< UniformType::eFloat >( FarPlane )->SetValue( 2000.0_r );
 
 			auto l_shadowMatricesUbo = p_program.FindUniformBuffer( ShadowMatricesUbo );
-			Uniform4x4fSPtr l_shadowMatrices;
-			l_shadowMatricesUbo->GetVariable( ShadowMatrices, l_shadowMatrices );
+			auto l_shadowMatrices = l_shadowMatricesUbo->GetUniform< UniformType::eMat4x4f >( ShadowMatrices );
 			uint32_t l_index{ 0 };
 
 			for ( auto & l_view : l_views )

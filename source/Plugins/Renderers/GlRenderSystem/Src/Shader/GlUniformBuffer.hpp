@@ -30,13 +30,6 @@ SOFTWARE.
 
 namespace GlRender
 {
-	struct GlVariableApplyerBase
-	{
-		virtual void operator()( OpenGl & p_gl, uint32_t p_index, Castor3D::UniformSPtr p_variable ) = 0;
-	};
-
-	DECLARE_MAP( Castor3D::UniformSPtr, GlVariableApplyerBaseSPtr, VariableApplyer );
-
 	class GlUniformBuffer
 		: public Castor3D::UniformBuffer
 		, public Holder
@@ -45,7 +38,7 @@ namespace GlRender
 		GlUniformBuffer( OpenGl & p_gl
 			, Castor::String const & p_name
 			, GlShaderProgram & p_program
-			, Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags
+			, Castor3D::ShaderTypeFlags const & p_flags
 			, Castor3D::RenderSystem & p_renderSystem );
 		virtual ~GlUniformBuffer();
 		void SetBindingUniform( uint32_t p_point )const;

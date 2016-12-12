@@ -1,7 +1,6 @@
 #include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
 #include "Uniform.hpp"
-#include "OneUniform.hpp"
 #include "UniformBuffer.hpp"
 
 #if defined( _WIN32 )

@@ -10,8 +10,6 @@
 #include "Render/RenderSystem.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/OneUniform.hpp"
-#include "Shader/PointUniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/BlendState.hpp"
 #include "Texture/TextureLayout.hpp"

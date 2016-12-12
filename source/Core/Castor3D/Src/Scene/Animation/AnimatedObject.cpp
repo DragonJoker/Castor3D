@@ -9,7 +9,6 @@
 #include "Scene/Geometry.hpp"
 #include "Scene/MovableObject.hpp"
 #include "Scene/Animation/AnimationInstance.hpp"
-#include "Shader/MatrixUniform.hpp"
 
 using namespace Castor;
 

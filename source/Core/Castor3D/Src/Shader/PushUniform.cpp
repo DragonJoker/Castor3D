@@ -12,4 +12,18 @@ namespace Castor3D
 	PushUniform::~PushUniform()
 	{
 	}
+
+	bool PushUniform::Initialise()
+	{
+		return DoInitialise();
+	}
+
+	void PushUniform::Update()
+	{
+		if ( GetBaseUniform().IsChanged() )
+		{
+			DoUpdate();
+			GetBaseUniform().SetChanged( false );
+		}
+	}
 }

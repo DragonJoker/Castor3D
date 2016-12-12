@@ -346,7 +346,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières directionnelles.
 		 */
-		inline Uniform1i & GetDirectionalShadowMapsVariable()
+		inline PushUniform1s & GetDirectionalShadowMapsVariable()
 		{
 			REQUIRE( m_directionalShadowMaps );
 			return *m_directionalShadowMaps;
@@ -357,7 +357,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières spots.
 		 */
-		inline Uniform1i & GetSpotShadowMapsVariable()
+		inline PushUniform1s & GetSpotShadowMapsVariable()
 		{
 			REQUIRE( m_spotShadowMaps );
 			return *m_spotShadowMaps;
@@ -368,7 +368,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières ponctuelles.
 		 */
-		inline Uniform1i & GetPointShadowMapsVariable()
+		inline PushUniform1s & GetPointShadowMapsVariable()
 		{
 			REQUIRE( m_pointShadowMaps );
 			return *m_pointShadowMaps;
@@ -420,13 +420,13 @@ namespace Castor3D
 		UniformBufferSPtr m_sceneUbo;
 		//!\~english	The directional lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières directionnelles.
-		Uniform1iSPtr m_directionalShadowMaps;
+		PushUniform1sSPtr m_directionalShadowMaps;
 		//!\~english	The spot lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières spot.
-		Uniform1iSPtr m_spotShadowMaps;
+		PushUniform1sSPtr m_spotShadowMaps;
 		//!\~english	The point lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières ponctuelles.
-		Uniform1iSPtr m_pointShadowMaps;
+		PushUniform1sSPtr m_pointShadowMaps;
 		//!\~english	The creation flags.
 		//!\~french		Les indicateurs de création.
 		PipelineFlags m_flags;

@@ -101,7 +101,7 @@ namespace Castor3D
 		ShaderType eShaderObject;
 		UniformBufferRPtr pUniformBuffer;
 		UniformSPtr pUniform;
-		Uniform1iSPtr pSamplerUniform;
+		PushUniform1sSPtr pSamplerUniform;
 		OverlaySPtr pOverlay;
 		BillboardListSPtr pBillboards;
 		int iFace1;

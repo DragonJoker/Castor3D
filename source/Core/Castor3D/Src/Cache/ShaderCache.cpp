@@ -8,7 +8,6 @@
 #include "Render/RenderSystem.hpp"
 #include "Technique/RenderTechnique.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/OneUniform.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderProgram.hpp"
 
@@ -123,7 +122,7 @@ namespace Castor3D
 	UniformBuffer & ShaderProgramCache::CreateMatrixBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferMatrix, p_shaderMask );
 		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection, 1 );
@@ -142,7 +141,7 @@ namespace Castor3D
 	UniformBuffer & ShaderProgramCache::CreateSceneBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferScene, p_shaderMask );
 		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::AmbientLight, 1 );
@@ -158,7 +157,7 @@ namespace Castor3D
 	UniformBuffer & ShaderProgramCache::CreatePassBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferPass, p_shaderMask );
 		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatAmbient, 1 );
@@ -173,7 +172,7 @@ namespace Castor3D
 	UniformBuffer & ShaderProgramCache::CreateModelBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferModel, p_shaderMask );
 		l_buffer.CreateUniform( UniformType::eInt, ShaderProgram::ShadowReceiver, 1 );
@@ -183,7 +182,7 @@ namespace Castor3D
 	UniformBuffer & ShaderProgramCache::CreateAnimationBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
 		REQUIRE( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) || CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
 		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferAnimation, p_shaderMask );
@@ -285,7 +284,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			FlagCombination< ShaderTypeFlag > l_matrixUboShaderMask = ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel;
+			ShaderTypeFlags l_matrixUboShaderMask = ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel;
 			ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_return->CreateObject( ShaderType::eVertex );
 			l_return->CreateObject( ShaderType::ePixel );

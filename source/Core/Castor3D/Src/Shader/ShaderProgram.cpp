@@ -3,7 +3,6 @@
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
 #include "Shader/UniformBuffer.hpp"
-#include "Shader/OneUniform.hpp"
 #include "Shader/PushUniform.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
@@ -442,7 +441,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	UniformBuffer & ShaderProgram::CreateUniformBuffer( Castor::String const & p_name, FlagCombination< ShaderTypeFlag > const & p_shaderMask )
+	UniformBuffer & ShaderProgram::CreateUniformBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
 		auto l_it = m_frameVariableBuffersByName.find( p_name );
 
@@ -478,7 +477,7 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	ShaderStorageBuffer & ShaderProgram::CreateStorageBuffer( Castor::String const & p_name, FlagCombination< ShaderTypeFlag > const & p_shaderMask )
+	ShaderStorageBuffer & ShaderProgram::CreateStorageBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
 		auto l_it = m_storageBuffersByName.find( p_name );
 
@@ -514,7 +513,7 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	AtomicCounterBuffer & ShaderProgram::CreateAtomicCounterBuffer( String const & p_name, FlagCombination< ShaderTypeFlag > const & p_shaderMask )
+	AtomicCounterBuffer & ShaderProgram::CreateAtomicCounterBuffer( String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
 		auto l_it = m_atomicCounterBuffersByName.find( p_name );
 

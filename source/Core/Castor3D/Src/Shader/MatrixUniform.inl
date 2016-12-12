@@ -1,3 +1,0 @@
-namespace Castor3D
-{
-}

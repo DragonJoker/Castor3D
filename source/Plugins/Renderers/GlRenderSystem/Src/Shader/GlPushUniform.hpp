@@ -20,31 +20,45 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___TRS_POINT_FRAME_VARIABLE_H___
-#define ___TRS_POINT_FRAME_VARIABLE_H___
+#ifndef ___C3DGL_GlPushUniform_H___
+#define ___C3DGL_GlPushUniform_H___
 
-#include "TestRenderSystemPrerequisites.hpp"
+#include <Shader/PushUniform.hpp>
 
-#include <Shader/PointUniform.hpp>
+#include "Shader/GlUniformBase.hpp"
 
-namespace TestRender
+namespace GlRender
 {
-	template <typename T, uint32_t Count>
-	class TestPointUniform
-		: public Castor3D::PointUniform< T, Count >
+	template< Castor3D::UniformType Type >
+	class GlPushUniform
+		: public Castor3D::TPushUniform< Type >
+		, public Holder
 	{
 	public:
-		TestPointUniform( uint32_t p_occurences, TestShaderProgram & p_program );
-		TestPointUniform( Castor3D::PointUniform< T, Count > & p_variable );
-		virtual ~TestPointUniform();
+		GlPushUniform( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences );
+		virtual ~GlPushUniform();
 
-		virtual bool Initialise();
-		virtual void Cleanup();
-		virtual void Bind()const;
-		virtual void Unbind()const {}
+		inline uint32_t GetGlName() const
+		{
+			return m_glName;
+		}
+
+	private:
+		/**
+		 *\copydoc		Castor3D::Uniform::DoInitialise
+		 */
+		bool DoInitialise()override;
+		/**
+		 *\copydoc		Castor3D::Uniform::DoUpdate
+		 */
+		void DoUpdate()const override;
+
+	private:
+		uint32_t m_glName{ GlInvalidIndex };
+		bool m_presentInProgram{ true };
 	};
 }
 
-#include "TestPointUniform.inl"
+#include "GlPushUniform.inl"
 
 #endif

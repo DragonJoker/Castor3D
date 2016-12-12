@@ -23,8 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PushUniform_H___
 #define ___C3D_PushUniform_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "UniformTyper.hpp"
+#include "Uniform.hpp"
 
 namespace Castor3D
 {
@@ -66,14 +65,14 @@ namespace Castor3D
 		 *\brief		Initialise la variable.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API virtual bool Initialise() = 0;
+		C3D_API bool Initialise();
 		/**
 		 *\~english
 		 *\brief		Updates this variable's value, in the shader.
 		 *\~french
 		 *\brief		Met à la jour la valeur de cette variable, dans le shader.
 		 */
-		C3D_API virtual void Update()const = 0;
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\return		The parent program.
@@ -109,6 +108,24 @@ namespace Castor3D
 		 */
 		virtual Uniform & GetBaseUniform() = 0;
 
+	private:
+		/**
+		 *\~english
+		 *\brief		Initialises the variable.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Initialise la variable.
+		 *\return		\p false if any problem occured.
+		 */
+		C3D_API virtual bool DoInitialise() = 0;
+		/**
+		 *\~english
+		 *\brief		Updates this variable's value, in the shader.
+		 *\~french
+		 *\brief		Met à la jour la valeur de cette variable, dans le shader.
+		 */
+		C3D_API virtual void DoUpdate()const = 0;
+
 	protected:
 		//!\~english	The parent shader program.
 		//!\~french		Le programme parent.
@@ -127,21 +144,28 @@ namespace Castor3D
 	class TPushUniform
 		: public PushUniform
 	{
-		using type = typename UniformTyper< Type >::type;
-		using value_type = typename UniformTyper< Type >::value_type;
+	public:
+		using type = typename TUniform< Type >;
+		using value_type = typename type::value_type;
+		using value_sub_type = typename type::value_sub_type;
+		using param_type = typename type::param_type;
+		using return_type = typename type::return_type;
+		using const_return_type = typename type::const_return_type;
+		using typed_value = typename type::typed_value;
+		static constexpr auto stride = type::stride;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_program		The program.
-		 *\param[in]	p_occurences	The array dimension.
+		 *\param[in]	p_occurences	The array dimensions.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 *\param[in]	p_program		Le programme.
+		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 */
-		TPushUniform( ShaderProgram & p_program, typename UniformTyper< Type >::type & p_uniform, uint32_t p_occurences );
+		TPushUniform( ShaderProgram & p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -157,7 +181,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Une référence sur la valeur
 		 */
-		inline value_type & GetValue();
+		inline return_type & GetValue();
 		/**
 		 *\~english
 		 *\brief		Retrieves the value
@@ -166,7 +190,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Une référence constante sur la valeur
 		 */
-		inline value_type const & GetValue()const;
+		inline const_return_type const & GetValue()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -179,7 +203,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
-		inline value_type & GetValue( uint32_t p_index );
+		inline return_type & GetValue( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -192,7 +216,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline value_type const & GetValue( uint32_t p_index )const;
+		inline const_return_type const & GetValue( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
@@ -201,7 +225,7 @@ namespace Castor3D
 		 *\brief		Définit la valeur de la variable
 		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetValue( value_type const & p_value );
+		inline void SetValue( param_type const & p_value );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
@@ -212,7 +236,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur
 		 *\param[in]	p_index	L'index de la valeur à modifier
 		 */
-		inline void SetValue( value_type const & p_value, uint32_t p_index );
+		inline void SetValue( param_type const & p_value, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -223,7 +247,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 *\param[in]	p_size		Le nombre de valeurs.
 		 */
-		inline void SetValues( value_type const * p_values, size_t p_size );
+		inline void SetValues( param_type const * p_values, size_t p_size );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -233,10 +257,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 */
 		template< size_t N >
-		inline void SetValues( value_type const( & p_values )[N] )
-		{
-			SetValues( p_values, N );
-		}
+		inline void SetValues( param_type const( &p_values )[N] );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -246,10 +267,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 */
 		template< size_t N >
-		inline void SetValues( std::array< value_type, N > const & p_values )
-		{
-			SetValues( p_values.data(), N );
-		}
+		inline void SetValues( std::array< param_type, N > const & p_values );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -258,10 +276,7 @@ namespace Castor3D
 		 *\brief		Définit les valeurs de la variable.
 		 *\param[in]	p_values	Les valeurs.
 		 */
-		inline void SetValues( std::vector< value_type > const & p_values )
-		{
-			SetValues( p_values.data(), p_values.size() );
-		}
+		inline void SetValues( std::vector< param_type > const & p_values );
 		/**
 		 *\~english
 		 *\brief		Array subscript operator
@@ -274,7 +289,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
-		inline value_type & operator[]( uint32_t p_index );
+		inline return_type & operator[]( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Array subscript operator
@@ -287,14 +302,14 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline value_type const & operator[]( uint32_t p_index )const;
+		inline const_return_type const & operator[]( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The parent program.
 		 *\~french
 		 *\return		La programme parent.
 		 */
-		virtual type & GetUniform()
+		inline type & GetUniform()
 		{
 			return m_uniform;
 		}
@@ -304,7 +319,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La programme parent.
 		 */
-		virtual type const & GetUniform()const
+		inline type const & GetUniform()const
 		{
 			return m_uniform;
 		}
@@ -314,7 +329,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable uniforme.
 		 */
-		Uniform & GetBaseUniform()override
+		inline Uniform & GetBaseUniform()override
 		{
 			return m_uniform;
 		}
@@ -324,15 +339,15 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable uniforme.
 		 */
-		Uniform const & GetBaseUniform()const override
+		inline Uniform const & GetBaseUniform()const override
 		{
 			return m_uniform;
 		}
 
-	public:
+	protected:
 		//!\~english	The parent shader program.
 		//!\~french		Le programme parent.
-		type & m_uniform;
+		type m_uniform;
 	};
 }
 

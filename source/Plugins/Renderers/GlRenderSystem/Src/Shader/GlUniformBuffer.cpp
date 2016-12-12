@@ -2,164 +2,17 @@
 
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
-#include "Shader/GlOneUniform.hpp"
-#include "Shader/GlPointUniform.hpp"
-#include "Shader/GlMatrixUniform.hpp"
+#include "Shader/GlShaderProgram.hpp"
 
 using namespace Castor3D;
 using namespace Castor;
 
 namespace GlRender
 {
-	namespace
-	{
-		template< UniformType Type > UniformSPtr GlUniformCreator( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences );
-		template<> UniformSPtr GlUniformCreator< UniformType::eInt >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlOneUniform< int > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eUInt >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlOneUniform< uint32_t > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eFloat >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlOneUniform< float > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eDouble >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlOneUniform< double > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eSampler >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlOneUniform< int > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec2i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< int, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec3i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< int, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec4i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< int, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec2ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< uint32_t, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec3ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< uint32_t, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec4ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< uint32_t, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< float, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< float, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< float, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< double, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< double, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eVec4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlPointUniform< double, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat2x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 2, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat2x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 2, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat2x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 2, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat3x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 3, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat3x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 3, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat3x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 3, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat4x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 4, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat4x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 4, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat4x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< float, 4, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat2x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 2, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat2x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 2, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat2x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 2, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat3x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 3, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat3x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 3, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat3x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 3, 4 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat4x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 4, 2 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat4x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 4, 3 > >( p_gl, p_occurences, p_program );
-		}
-		template<> UniformSPtr GlUniformCreator< UniformType::eMat4x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
-		{
-			return std::make_shared< GlMatrixUniform< double, 4, 4 > >( p_gl, p_occurences, p_program );
-		}
-	}
-
 	GlUniformBuffer::GlUniformBuffer( OpenGl & p_gl
 		, String const & p_name
 		, GlShaderProgram & p_program
-		, FlagCombination< ShaderTypeFlag > const & p_flags
+		, ShaderTypeFlags const & p_flags
 		, RenderSystem & p_renderSystem )
 		: UniformBuffer( p_name, p_program, p_flags, p_renderSystem )
 		, Holder( p_gl )
@@ -276,10 +129,13 @@ namespace GlRender
 	{
 		if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 		{
+			GlShaderProgram & l_program = static_cast< GlShaderProgram & >( m_program );
+			GetOpenGl().UseProgram( l_program.GetGlName() );
 			m_glBuffer.Bind();
 			GetOpenGl().BindBufferBase( GlBufferTarget::eUniform, p_index, m_glBuffer.GetGlName() );
-			//GetOpenGl().UniformBlockBinding( l_program.GetGlName(), m_uniformBlockIndex, m_index );
+			GetOpenGl().UniformBlockBinding( l_program.GetGlName(), m_uniformBlockIndex, m_index );
 			m_glBuffer.Unbind();
+			GetOpenGl().UseProgram( 0 );
 		}
 	}
 

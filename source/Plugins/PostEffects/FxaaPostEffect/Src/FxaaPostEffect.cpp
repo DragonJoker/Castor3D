@@ -20,7 +20,6 @@
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Shader/OneUniform.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/RasteriserState.hpp>
@@ -224,14 +223,14 @@ namespace Fxaa
 			ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
-			m_mapDiffuse = l_program->CreateUniform< Uniform1i >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+			m_mapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 			l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 			auto & l_uboFxaa = l_program->CreateUniformBuffer( FxaaUbo, ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel );
-			m_uniformSubpixShift = l_uboFxaa.CreateVariable< Uniform1f >( SubpixShift );
-			m_uniformSpanMax = l_uboFxaa.CreateVariable< Uniform1f >( SpanMax );
-			m_uniformReduceMul = l_uboFxaa.CreateVariable< Uniform1f >( ReduceMul );
-			m_uniformRenderTargetWidth = l_uboFxaa.CreateVariable< Uniform1f >( RenderTargetWidth );
-			m_uniformRenderTargetHeight = l_uboFxaa.CreateVariable< Uniform1f >( RenderTargetHeight );
+			m_uniformSubpixShift = l_uboFxaa.CreateUniform< UniformType::eFloat >( SubpixShift );
+			m_uniformSpanMax = l_uboFxaa.CreateUniform< UniformType::eFloat >( SpanMax );
+			m_uniformReduceMul = l_uboFxaa.CreateUniform< UniformType::eFloat >( ReduceMul );
+			m_uniformRenderTargetWidth = l_uboFxaa.CreateUniform< UniformType::eFloat >( RenderTargetWidth );
+			m_uniformRenderTargetHeight = l_uboFxaa.CreateUniform< UniformType::eFloat >( RenderTargetHeight );
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_fragment );
 			l_program->Initialise();
