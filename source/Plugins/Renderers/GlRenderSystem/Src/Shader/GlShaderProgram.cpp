@@ -133,11 +133,9 @@ namespace GlRender
 		return l_return;
 	}
 
-	UniformBufferSPtr GlShaderProgram::DoCreateUniformBuffer(
-		String const & p_name,
-		ShaderTypeFlags const & p_flags )
+	UniformBufferSPtr GlShaderProgram::DoCreateUniformBuffer( String const & p_name, uint32_t p_index )
 	{
-		return std::make_shared< GlUniformBuffer >( GetOpenGl(), p_name, *this, p_flags, *GetRenderSystem() );
+		return std::make_shared< GlUniformBuffer >( GetOpenGl(), p_name, *GetRenderSystem(), p_index );
 	}
 
 	std::shared_ptr< PushUniform > GlShaderProgram::DoCreateUniform( UniformType p_type, int p_occurences )

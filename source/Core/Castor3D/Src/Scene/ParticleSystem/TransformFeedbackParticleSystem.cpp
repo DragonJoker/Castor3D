@@ -164,7 +164,7 @@ namespace Castor3D
 		m_updateProgram = p_program;
 		m_updateProgram->CreateUniform( UniformType::eSampler, cuT( "c3d_mapRandom" ), ShaderType::eGeometry );
 
-		auto & l_ubo = m_updateProgram->CreateUniformBuffer( cuT( "ParticleSystem" ), ShaderTypeFlag::eVertex | ShaderTypeFlag::eGeometry );
+		auto & l_ubo = m_updateProgram->CreateUniformBuffer( cuT( "ParticleSystem" ), uint32_t( m_updateProgram->GetUniformBuffers().size() ) );
 		m_deltaTime = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
 		m_time = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
 		m_emitterPosition = l_ubo.CreateUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );

@@ -592,7 +592,7 @@ namespace Bloom
 		l_program->CreateObject( ShaderType::ePixel );
 		m_blurXMapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		auto & l_filterConfig = l_program->CreateUniformBuffer( BloomPostEffect::FilterConfig, ShaderTypeFlag::ePixel );
+		auto & l_filterConfig = l_program->CreateUniformBuffer( BloomPostEffect::FilterConfig, 1u );
 		m_blurXCoeffs = l_filterConfig.CreateUniform< UniformType::eFloat >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
 		m_blurXCoeffCount = l_filterConfig.CreateUniform< UniformType::eUInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 		m_blurXCoeffCount->SetValue( m_size );
@@ -625,7 +625,7 @@ namespace Bloom
 		l_program->CreateObject( ShaderType::ePixel );
 		m_blurYMapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		auto & l_filterConfig = l_program->CreateUniformBuffer( FilterConfig, ShaderTypeFlag::ePixel );
+		auto & l_filterConfig = l_program->CreateUniformBuffer( FilterConfig, 1u );
 		m_blurYCoeffs = l_filterConfig.CreateUniform< UniformType::eFloat >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
 		m_blurYCoeffCount = l_filterConfig.CreateUniform< UniformType::eUInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 		m_blurYCoeffCount->SetValue( m_size );

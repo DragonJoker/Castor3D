@@ -68,7 +68,7 @@ namespace GlRender
 	{
 	}
 
-	uint8_t * GlDirectTextureStorageTraits::Lock( TextureStorage & p_storage, FlagCombination< AccessType > const & p_lock, uint32_t p_index )
+	uint8_t * GlDirectTextureStorageTraits::Lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
 	{
 		uint8_t * l_return = nullptr;
 		auto l_buffer = p_storage.GetOwner()->GetImage( p_index ).GetBuffer();

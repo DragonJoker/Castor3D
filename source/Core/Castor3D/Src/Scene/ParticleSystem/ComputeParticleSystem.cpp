@@ -130,7 +130,7 @@ namespace Castor3D
 	void ComputeParticleSystem::SetUpdateProgram( ShaderProgramSPtr p_program )
 	{
 		m_updateProgram = p_program;
-		auto & l_ubo = m_updateProgram->CreateUniformBuffer( cuT( "ParticleSystem" ), ShaderTypeFlag::eCompute );
+		auto & l_ubo = m_updateProgram->CreateUniformBuffer( cuT( "ParticleSystem" ), uint32_t( m_updateProgram->GetUniformBuffers().size() ) );
 		m_deltaTime = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
 		m_time = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
 		m_maxParticleCount = l_ubo.CreateUniform< UniformType::eUInt >( cuT( "c3d_uiMaxParticlesCount" ) );

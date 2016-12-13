@@ -85,7 +85,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Lock
 		 */
-		T * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const override;
+		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Unlock
 		 */

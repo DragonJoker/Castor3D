@@ -68,7 +68,7 @@ namespace GlRender
 	{
 	}
 
-	uint8_t * GlGpuOnlyTextureStorageTraits::Lock( TextureStorage & p_storage, FlagCombination< AccessType > const & p_lock, uint32_t p_index )
+	uint8_t * GlGpuOnlyTextureStorageTraits::Lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
 	{
 		FAILURE( "GPU only, you can't lock this storage" );
 		return nullptr;

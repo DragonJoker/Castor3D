@@ -1,6 +1,8 @@
 ﻿#include "UniformBuffer.hpp"
 #include "Uniform.hpp"
 
+#include "Render/RenderSystem.hpp"
+
 using namespace Castor;
 
 namespace Castor3D
@@ -53,12 +55,6 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_tabs + cuT( "shaders " ) + WriteFlags( p_object.m_flags ) + cuT( "\n" ) ) > 0;
-			CheckError( l_return, "Frame variable buffer shaders" );
-		}
-
-		if ( l_return )
-		{
 			for ( auto & l_variable : p_object )
 			{
 				if ( l_return )
@@ -105,18 +101,10 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	uint32_t UniformBuffer::sm_uiCount = 0;
-
-	UniformBuffer::UniformBuffer(
-		String const & p_name,
-		ShaderProgram & p_program,
-		ShaderTypeFlags const & p_flags,
-		RenderSystem & p_renderSystem )
+	UniformBuffer::UniformBuffer( String const & p_name, RenderSystem & p_renderSystem, uint32_t p_index )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
-		, m_name{ p_name }
-		, m_index{ sm_uiCount++ }
-		, m_program{ p_program }
-		, m_flags{ p_flags }
+		, Named{ p_name }
+		, m_index{ p_index }
 	{
 	}
 
@@ -147,7 +135,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void UniformBuffer::RemoveVariable( String const & p_name )
+	void UniformBuffer::RemoveUniform( String const & p_name )
 	{
 		auto l_itMap = m_mapVariables.find( p_name );
 
@@ -167,9 +155,9 @@ namespace Castor3D
 		}
 	}
 
-	bool UniformBuffer::Initialise()
+	bool UniformBuffer::Initialise( ShaderProgram & p_program )
 	{
-		auto l_return = DoInitialise();
+		auto l_return = DoInitialise( p_program );
 
 		if ( !l_return )
 		{
@@ -186,9 +174,9 @@ namespace Castor3D
 		m_listVariables.clear();
 	}
 
-	void UniformBuffer::BindTo( uint32_t p_index )
+	void UniformBuffer::BindTo( ShaderProgram & p_program )
 	{
-		DoBindTo( p_index );
+		DoBindTo( p_program );
 	}
 
 	void UniformBuffer::Update()

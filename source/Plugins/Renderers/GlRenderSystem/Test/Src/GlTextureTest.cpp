@@ -28,8 +28,8 @@ namespace Testing
 		void DoTestStorage( GlTextureTest & p_case
 			, Engine & p_engine
 			, TextureType p_type
-			, FlagCombination< AccessType > const & p_cpuAccess
-			, FlagCombination< AccessType > const & p_gpuAccess )
+			, AccessTypes const & p_cpuAccess
+			, AccessTypes const & p_gpuAccess )
 		{
 			auto & l_renderSystem = static_cast< GlRenderSystem & >( *p_engine.GetRenderSystem() );
 			l_renderSystem.GetMainContext()->SetCurrent();

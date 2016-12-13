@@ -72,7 +72,7 @@ namespace GlRender
 	}
 
 	template< typename T >
-	T * GlBuffer< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const
+	T * GlBuffer< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const
 	{
 		return m_glBuffer.Lock( p_offset, p_count, p_flags );
 	}

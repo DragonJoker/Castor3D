@@ -8,11 +8,8 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestUniformBuffer::TestUniformBuffer( String const & p_name
-		, ShaderProgram & p_program
-		, ShaderTypeFlags const & p_flags
-		, RenderSystem & p_renderSystem )
-		: UniformBuffer( p_name, p_program, p_flags, p_renderSystem )
+	TestUniformBuffer::TestUniformBuffer( String const & p_name, RenderSystem & p_renderSystem, uint32_t p_index )
+		: UniformBuffer( p_name, p_renderSystem, p_index )
 	{
 	}
 
@@ -20,7 +17,7 @@ namespace TestRender
 	{
 	}
 
-	bool TestUniformBuffer::DoInitialise()
+	bool TestUniformBuffer::DoInitialise( ShaderProgram & p_program )
 	{
 		return true;
 	}
@@ -29,7 +26,7 @@ namespace TestRender
 	{
 	}
 
-	void TestUniformBuffer::DoBindTo( uint32_t p_index )
+	void TestUniformBuffer::DoBindTo( ShaderProgram & p_program )
 	{
 	}
 

@@ -85,7 +85,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateUniformBuffer
 		 */
-		Castor3D::UniformBufferSPtr DoCreateUniformBuffer( Castor::String const & p_name, Castor3D::ShaderTypeFlags const & p_flags )override;
+		Castor3D::UniformBufferSPtr DoCreateUniformBuffer( Castor::String const & p_name, uint32_t p_index )override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateUniform
 		 */

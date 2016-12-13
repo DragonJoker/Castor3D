@@ -326,8 +326,8 @@ namespace Castor3D
 		 */
 		C3D_API virtual TextureLayoutSPtr CreateTexture(
 			TextureType p_type,
-			Castor::FlagCombination< AccessType > const & p_cpuAccess,
-			Castor::FlagCombination< AccessType > const & p_gpuAccess ) = 0;
+			AccessTypes const & p_cpuAccess,
+			AccessTypes const & p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
@@ -348,8 +348,8 @@ namespace Castor3D
 		 */
 		C3D_API virtual TextureLayoutSPtr CreateTexture(
 			TextureType p_type,
-			Castor::FlagCombination< AccessType > const & p_cpuAccess,
-			Castor::FlagCombination< AccessType > const & p_gpuAccess,
+			AccessTypes const & p_cpuAccess,
+			AccessTypes const & p_gpuAccess,
 			Castor::PixelFormat p_format,
 			Castor::Size const & p_size ) = 0;
 		/**
@@ -372,8 +372,8 @@ namespace Castor3D
 		 */
 		C3D_API virtual TextureLayoutSPtr CreateTexture(
 			TextureType p_type,
-			Castor::FlagCombination< AccessType > const & p_cpuAccess,
-			Castor::FlagCombination< AccessType > const & p_gpuAccess,
+			AccessTypes const & p_cpuAccess,
+			AccessTypes const & p_gpuAccess,
 			Castor::PixelFormat p_format,
 			Castor::Point3ui const & p_size ) = 0;
 		/**
@@ -395,52 +395,52 @@ namespace Castor3D
 		C3D_API virtual TextureStorageUPtr CreateTextureStorage(
 			TextureStorageType p_type,
 			TextureLayout & p_layout,
-			Castor::FlagCombination< AccessType > const & p_cpuAccess,
-			Castor::FlagCombination< AccessType > const & p_gpuAccess ) = 0;
+			AccessTypes const & p_cpuAccess,
+			AccessTypes const & p_gpuAccess ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a vertex buffer.
-		 *\remarks		Only the render system can do that.
+		 *\brief		Creates a uint8_t buffer.
+		 *\param[in]	p_type	The buffer type.
 		 *\return		The created buffer, depending on current API.
 		 *\~french
-		 *\brief		Crée un tampon de sommets.
-		 *\remarks		Seul le render system peut faire ça.
+		 *\brief		Crée un tampon d'uint8_t.
+		 *\param[in]	p_type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual std::unique_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer() = 0;
+		C3D_API virtual std::unique_ptr< GpuBuffer< uint8_t > > CreateUInt8Buffer( BufferType p_type ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates an index buffer.
-		 *\remarks		Only the render system can do that.
+		 *\brief		Creates a uint16_t buffer.
+		 *\param[in]	p_type	The buffer type.
 		 *\return		The created buffer, depending on current API.
 		 *\~french
-		 *\brief		Crée un tampon d'indices.
-		 *\remarks		Seul le render system peut faire ça.
+		 *\brief		Crée un tampon d'uint16_t.
+		 *\param[in]	p_type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual std::unique_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer() = 0;
+		C3D_API virtual std::unique_ptr< GpuBuffer< uint16_t > > CreateUInt16Buffer( BufferType p_type ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a shader storage buffer.
-		 *\remarks		Only the render system can do that.
+		 *\brief		Creates a uint32_t buffer.
+		 *\param[in]	p_type	The buffer type.
 		 *\return		The created buffer, depending on current API.
 		 *\~french
-		 *\brief		Crée un tampon de stockage shader.
-		 *\remarks		Seul le render system peut faire ça.
+		 *\brief		Crée un tampon d'uint32_t.
+		 *\param[in]	p_type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual std::unique_ptr< GpuBuffer< uint8_t > > CreateStorageBuffer() = 0;
+		C3D_API virtual std::unique_ptr< GpuBuffer< uint32_t > > CreateUInt32Buffer( BufferType p_type ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates an atomic counter buffer.
-		 *\remarks		Only the render system can do that.
+		 *\brief		Creates a float buffer.
+		 *\param[in]	p_type	The buffer type.
 		 *\return		The created buffer, depending on current API.
 		 *\~french
-		 *\brief		Crée un tampon de compteur atomique.
-		 *\remarks		Seul le render system peut faire ça.
+		 *\brief		Crée un tampon de float.
+		 *\param[in]	p_type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual std::unique_ptr< GpuBuffer< uint32_t > > CreateAtomicCounterBuffer() = 0;
+		C3D_API virtual std::unique_ptr< GpuBuffer< float > > CreateFloatBuffer( BufferType p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a transform feedback instance.

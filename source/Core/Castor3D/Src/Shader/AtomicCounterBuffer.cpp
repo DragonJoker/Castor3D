@@ -21,7 +21,7 @@ namespace Castor3D
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetOwner()->GetRenderSystem()->CreateAtomicCounterBuffer();
+			m_gpuBuffer = GetOwner()->GetRenderSystem()->CreateUInt32Buffer( BufferType::eAtomicCounter );
 		}
 
 		bool l_return = m_gpuBuffer != nullptr;
@@ -49,7 +49,7 @@ namespace Castor3D
 		}
 	}
 
-	uint32_t * AtomicCounterBuffer::Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< AccessType > const & p_flags )
+	uint32_t * AtomicCounterBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )
 	{
 		REQUIRE( m_gpuBuffer );
 		return m_gpuBuffer->Lock( p_offset, p_count, p_flags );

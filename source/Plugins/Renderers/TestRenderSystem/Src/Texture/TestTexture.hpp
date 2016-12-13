@@ -50,8 +50,8 @@ namespace TestRender
 		TestTexture(
 			TestRenderSystem & p_renderSystem,
 			Castor3D::TextureType p_type,
-			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
-			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess );
+			Castor3D::AccessTypes const & p_cpuAccess,
+			Castor3D::AccessTypes const & p_gpuAccess );
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
@@ -65,8 +65,8 @@ namespace TestRender
 		TestTexture(
 			TestRenderSystem & p_renderSystem,
 			Castor3D::TextureType p_type,
-			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
-			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess,
+			Castor3D::AccessTypes const & p_cpuAccess,
+			Castor3D::AccessTypes const & p_gpuAccess,
 			Castor::PixelFormat p_format,
 			Castor::Size const & p_size );
 		/**
@@ -82,8 +82,8 @@ namespace TestRender
 		TestTexture(
 			TestRenderSystem & p_renderSystem,
 			Castor3D::TextureType p_type,
-			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
-			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess,
+			Castor3D::AccessTypes const & p_cpuAccess,
+			Castor3D::AccessTypes const & p_gpuAccess,
 			Castor::PixelFormat p_format,
 			Castor::Point3ui const & p_size );
 		/**

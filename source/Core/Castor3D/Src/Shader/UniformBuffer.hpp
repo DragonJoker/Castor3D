@@ -26,8 +26,10 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 #include "Uniform.hpp"
+#include "Mesh/Buffer/GpuBuffer.hpp"
 
 #include <Design/OwnedBy.hpp>
+#include <Design/Named.hpp>
 
 namespace Castor3D
 {
@@ -48,6 +50,7 @@ namespace Castor3D
 	*/
 	class UniformBuffer
 		: public Castor::OwnedBy< RenderSystem >
+		, public Castor::Named
 	{
 		friend class Castor::TextWriter< Castor3D::UniformBuffer >;
 
@@ -90,21 +93,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_name			The buffer name.
-		 *\param[in]	p_program		The parent program.
-		 *\param[in]	p_flags			The shader types assigned to this frame variable buffer.
 		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_index			The binding index for the buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			Le nom du tampon.
-		 *\param[in]	p_program		Le programme parent.
-		 *\param[in]	p_flags			Les types de shader affectés à ce tampon de variables de frame.
 		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_index			L'indice de binding du tampon.
 		 */
-		C3D_API UniformBuffer(
-			Castor::String const & p_name,
-			ShaderProgram & p_program,
-			ShaderTypeFlags const & p_flags,
-			RenderSystem & p_renderSystem );
+		C3D_API UniformBuffer( Castor::String const & p_name, RenderSystem & p_renderSystem, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -115,12 +112,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated.
+		 *\param[in]	p_program	The program.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Initialise toutes les variables et le tampon GPU associé.
+		 *\param[in]	p_program	Le programme.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool Initialise( ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated.
@@ -130,13 +129,13 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Binds the buffer to given index.
-		 *\param[in]	p_index	The buffer index.
+		 *\brief		Binds the buffer to a program.
+		 *\param[in]	p_program	The program.
 		 *\~french
-		 *\brief		Lie le tampon à l'indice donné.
-		 *\param[in]	p_index	L'index du tampon GPU.
+		 *\brief		Lie le tampon à un programme.
+		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API void BindTo( uint32_t p_index );
+		C3D_API void BindTo( ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Updates the GPU storage.
@@ -185,7 +184,7 @@ namespace Castor3D
 		 *\brief		Supprime une variable de ce tampon.
 		 *\param[in]	p_name	Le nom de la variable.
 		 */
-		C3D_API void RemoveVariable( Castor::String const & p_name );
+		C3D_API void RemoveUniform( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name.
@@ -200,16 +199,6 @@ namespace Castor3D
 		 */
 		template< UniformType Type >
 		std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;
-		/**
-		 *\~english
-		 *\return		The variables buffer name.
-		 *\~french
-		 *\return		Le nom du tampon de variables.
-		 */
-		inline Castor::String const & GetName()const
-		{
-			return m_name;
-		}
 		/**
 		 *\~english
 		 *\return		The iterator to the beginnning of the variables list.
@@ -277,7 +266,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API virtual bool DoInitialise() = 0;
+		C3D_API virtual bool DoInitialise( ShaderProgram & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated.
@@ -287,13 +276,13 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Binds the buffer to given index.
-		 *\param[in]	p_index	The buffer index.
+		 *\brief		Binds the buffer to a program.
+		 *\param[in]	p_program	The program.
 		 *\~french
-		 *\brief		Lie le tampon à l'indice donné.
-		 *\param[in]	p_index	L'index du tampon GPU.
+		 *\brief		Lie le tampon à un programme.
+		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API virtual void DoBindTo( uint32_t p_index ) = 0;
+		C3D_API virtual void DoBindTo( ShaderProgram & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the GPU storage.
@@ -303,33 +292,18 @@ namespace Castor3D
 		C3D_API virtual void DoUpdate() = 0;
 
 	protected:
-		//!\~english	The buffers count.
-		//!\~french		Le compte des tampons.
-		static uint32_t sm_uiCount;
-		//!\~english	The shader types assigned to this frame variable buffer.
-		//!\~french		Les types de shader affectés à ce tampon de variables de frame.
-		ShaderTypeFlags m_flags;
 		//!\~english	The buffer's index.
 		//!\~french		L'index du tampon.
-		uint32_t m_index;
+		uint32_t m_index{ 0u };
 		//!\~english	The variables list.
 		//!\~french		La liste de variables.
 		UniformList m_listVariables;
-		//!\~english	The initialised variables list.
-		//!\~french		La liste de variables initialisées.
-		UniformList m_listInitialised;
 		//!\~english	The variables ordered by name.
 		//!\~french		Les variables, triées par nom.
 		UniformMap m_mapVariables;
-		//!\~english	The buffer name.
-		//!\~french		Le nom du tampon.
-		Castor::String m_name;
 		//!\~english	The data buffer.
 		//!\~french		Le tampon de données.
 		Castor::ByteArray m_buffer;
-		//!\~english	The parent program.
-		//!\~french		Le programme parent.
-		ShaderProgram & m_program;
 	};
 }
 

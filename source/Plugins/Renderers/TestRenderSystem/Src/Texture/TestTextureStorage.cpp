@@ -13,8 +13,8 @@ namespace TestRender
 		TestRenderSystem & p_renderSystem,
 		TextureStorageType p_type,
 		TextureLayout & p_layout,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess )
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess )
 		: TextureStorage{ p_type, p_layout, p_cpuAccess, p_gpuAccess }
 	{
 	}
@@ -31,7 +31,7 @@ namespace TestRender
 	{
 	}
 
-	uint8_t * TestTextureStorage::Lock( FlagCombination< AccessType > const & p_lock )
+	uint8_t * TestTextureStorage::Lock( AccessTypes const & p_lock )
 	{
 		ENSURE( CheckFlag( m_cpuAccess, p_lock ) );
 		return nullptr;
@@ -41,7 +41,7 @@ namespace TestRender
 	{
 	}
 
-	uint8_t * TestTextureStorage::Lock( FlagCombination< AccessType > const & p_lock, uint32_t p_index )
+	uint8_t * TestTextureStorage::Lock( AccessTypes const & p_lock, uint32_t p_index )
 	{
 		ENSURE( CheckFlag( m_cpuAccess, p_lock ) );
 		return nullptr;

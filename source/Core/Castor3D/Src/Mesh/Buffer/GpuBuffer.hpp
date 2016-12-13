@@ -119,7 +119,7 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		virtual T * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< AccessType > const & p_flags )const = 0;
+		virtual T * Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.

@@ -71,6 +71,43 @@ namespace GlRender
 		}
 
 #endif
+
+		template< typename T >
+		std::unique_ptr< GpuBuffer< T > > DoCreateBuffer( GlRenderSystem & p_renderSystem, BufferType p_type )
+		{
+			std::unique_ptr< GpuBuffer< T > > l_return;
+
+			switch ( p_type )
+			{
+			case BufferType::eArray:
+				l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eArray );
+				break;
+
+			case BufferType::eElementArray:
+				l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eElementArray );
+				break;
+
+			case BufferType::eUniform:
+				l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eUniform );
+				break;
+
+			case BufferType::eAtomicCounter:
+				if ( p_renderSystem.GetOpenGl().HasSsbo() )
+				{
+					l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eAtomicCounter );
+				}
+				break;
+
+			case BufferType::eShaderStorage:
+				if ( p_renderSystem.GetOpenGl().HasSsbo() )
+				{
+					l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eShaderStorage );
+				}
+				break;
+			}
+
+			return l_return;
+		}
 	}
 
 	String GlRenderSystem::Name = cuT( "opengl" );
@@ -448,31 +485,24 @@ namespace GlRender
 		return std::make_shared< GlShaderProgram >( GetOpenGl(), *this );
 	}
 
-	std::unique_ptr< Castor3D::GpuBuffer< uint32_t > > GlRenderSystem::CreateIndexBuffer()
+	std::unique_ptr< GpuBuffer< uint8_t > > GlRenderSystem::CreateUInt8Buffer( BufferType p_type )
 	{
-		return std::make_unique< GlBuffer< uint32_t > >( *this, GetOpenGl(), GlBufferTarget::eElementArray );
+		return DoCreateBuffer< uint8_t >( *this, p_type );
 	}
 
-	std::unique_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateVertexBuffer()
+	std::unique_ptr< GpuBuffer< uint16_t > > GlRenderSystem::CreateUInt16Buffer( BufferType p_type )
 	{
-		return std::make_unique< GlBuffer< uint8_t > >( *this, GetOpenGl(), GlBufferTarget::eArray );
+		return DoCreateBuffer< uint16_t >( *this, p_type );
 	}
 
-	std::unique_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateStorageBuffer()
+	std::unique_ptr< GpuBuffer< uint32_t > > GlRenderSystem::CreateUInt32Buffer( BufferType p_type )
 	{
-		std::unique_ptr< Castor3D::GpuBuffer< uint8_t > > l_return;
-
-		if ( m_openGl.HasSsbo() )
-		{
-			l_return = std::make_unique< GlBuffer< uint8_t > >( *this, GetOpenGl(), GlBufferTarget::eShaderStorage );
-		}
-
-		return l_return;
+		return DoCreateBuffer< uint32_t >( *this, p_type );
 	}
 
-	std::unique_ptr< Castor3D::GpuBuffer< uint32_t > > GlRenderSystem::CreateAtomicCounterBuffer()
+	std::unique_ptr< GpuBuffer< float > > GlRenderSystem::CreateFloatBuffer( BufferType p_type )
 	{
-		return std::make_unique< GlBuffer< uint32_t > >( *this, GetOpenGl(), GlBufferTarget::eAtomicCounter );
+		return DoCreateBuffer< float >( *this, p_type );
 	}
 
 	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
@@ -482,16 +512,16 @@ namespace GlRender
 
 	TextureLayoutSPtr GlRenderSystem::CreateTexture(
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess )
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess )
 	{
 		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
 	TextureLayoutSPtr GlRenderSystem::CreateTexture(
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess,
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess,
 		PixelFormat p_format,
 		Size const & p_size )
 	{
@@ -500,8 +530,8 @@ namespace GlRender
 
 	TextureLayoutSPtr GlRenderSystem::CreateTexture(
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess,
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess,
 		PixelFormat p_format,
 		Point3ui const & p_size )
 	{
@@ -511,8 +541,8 @@ namespace GlRender
 	TextureStorageUPtr GlRenderSystem::CreateTextureStorage(
 		TextureStorageType p_type,
 		TextureLayout & p_image,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess )
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess )
 	{
 		TextureStorageUPtr l_return;
 

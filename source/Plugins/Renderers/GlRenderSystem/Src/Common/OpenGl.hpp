@@ -836,8 +836,8 @@ namespace GlRender
 		/**@name Other functions */
 		//@{
 
-		inline GlAccessType GetLockFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const;
-		inline Castor::FlagCombination< GlBufferMappingBit > GetBitfieldFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const;
+		inline GlAccessType GetLockFlags( Castor3D::AccessTypes const & p_flags )const;
+		inline Castor::FlagCombination< GlBufferMappingBit > GetBitfieldFlags( Castor3D::AccessTypes const & p_flags )const;
 		inline Castor3D::ElementType Get( GlslAttributeType p_type )const;
 
 #if C3D_TRACE_OBJECTS

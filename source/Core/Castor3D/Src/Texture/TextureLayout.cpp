@@ -79,8 +79,8 @@ namespace Castor3D
 	TextureLayout::TextureLayout(
 		RenderSystem & p_renderSystem,
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess )
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, m_type{ p_type }
 		, m_images{ GetImagesCount( p_type, 1 ) }
@@ -99,8 +99,8 @@ namespace Castor3D
 	TextureLayout::TextureLayout(
 		RenderSystem & p_renderSystem,
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess,
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess,
 		PixelFormat p_format,
 		Size const & p_size )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
@@ -128,8 +128,8 @@ namespace Castor3D
 	TextureLayout::TextureLayout(
 		RenderSystem & p_renderSystem,
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess,
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess,
 		PixelFormat p_format,
 		Point3ui const & p_size )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
@@ -236,7 +236,7 @@ namespace Castor3D
 		}
 	}
 
-	uint8_t * TextureLayout::Lock( FlagCombination< AccessType > const & p_lock )
+	uint8_t * TextureLayout::Lock( AccessTypes const & p_lock )
 	{
 		DoBind( 0u );
 		REQUIRE( m_storage );
@@ -250,7 +250,7 @@ namespace Castor3D
 		DoUnbind( 0u );
 	}
 
-	uint8_t * TextureLayout::Lock( FlagCombination< AccessType > const & p_lock, uint32_t p_index )
+	uint8_t * TextureLayout::Lock( AccessTypes const & p_lock, uint32_t p_index )
 	{
 		REQUIRE( m_storage );
 		return m_storage->Lock( p_lock, p_index );

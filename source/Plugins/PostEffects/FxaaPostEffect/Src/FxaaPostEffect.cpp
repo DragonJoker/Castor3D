@@ -225,7 +225,7 @@ namespace Fxaa
 			l_program->CreateObject( ShaderType::ePixel );
 			m_mapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 			l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-			auto & l_uboFxaa = l_program->CreateUniformBuffer( FxaaUbo, ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel );
+			auto & l_uboFxaa = l_program->CreateUniformBuffer( FxaaUbo, 1u );
 			m_uniformSubpixShift = l_uboFxaa.CreateUniform< UniformType::eFloat >( SubpixShift );
 			m_uniformSpanMax = l_uboFxaa.CreateUniform< UniformType::eFloat >( SpanMax );
 			m_uniformReduceMul = l_uboFxaa.CreateUniform< UniformType::eFloat >( ReduceMul );

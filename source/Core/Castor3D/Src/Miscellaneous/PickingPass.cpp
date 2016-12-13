@@ -113,14 +113,14 @@ namespace Castor3D
 		{
 			if ( !p_program.FindUniformBuffer( Picking ) )
 			{
-				auto & l_picking = p_program.CreateUniformBuffer( Picking, ShaderTypeFlag::ePixel );
+				auto & l_picking = p_program.CreateUniformBuffer( Picking, uint32_t( p_program.GetUniformBuffers().size() ) );
 				l_picking.CreateUniform( UniformType::eUInt, DrawIndex );
 				l_picking.CreateUniform( UniformType::eUInt, NodeIndex );
 
 				if ( p_program.GetRenderSystem()->GetCurrentContext() )
 				{
 					p_program.Bind( false );
-					l_picking.Initialise();
+					l_picking.Initialise( p_program );
 					p_program.Unbind();
 				}
 			}

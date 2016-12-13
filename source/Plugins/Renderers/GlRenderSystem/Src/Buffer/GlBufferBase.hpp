@@ -57,7 +57,7 @@ namespace GlRender
 		void InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const;
 		void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const;
 		void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const;
-		T * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const;
+		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const;
 		T * Lock( GlAccessType p_access )const;
 		void Unlock()const;
 		void SetBindingPoint( uint32_t p_point )const;

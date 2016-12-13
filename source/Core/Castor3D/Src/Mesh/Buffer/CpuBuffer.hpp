@@ -89,7 +89,7 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		inline T * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< AccessType > const & p_flags )
+		inline T * Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )
 		{
 			REQUIRE( m_gpuBuffer );
 			return m_gpuBuffer->Lock( p_offset, p_count, p_flags );

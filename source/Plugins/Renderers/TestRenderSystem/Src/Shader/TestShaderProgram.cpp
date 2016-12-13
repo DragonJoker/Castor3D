@@ -61,9 +61,9 @@ namespace TestRender
 		return std::make_shared< TestShaderObject >( this, p_type );
 	}
 
-	UniformBufferSPtr TestShaderProgram::DoCreateUniformBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_flags )
+	UniformBufferSPtr TestShaderProgram::DoCreateUniformBuffer( Castor::String const & p_name, uint32_t p_index )
 	{
-		return std::make_shared< TestUniformBuffer >( p_name, *this, p_flags, *GetRenderSystem() );
+		return std::make_shared< TestUniformBuffer >( p_name, *GetRenderSystem(), p_index );
 	}
 
 	std::shared_ptr< PushUniform > TestShaderProgram::DoCreateUniform( UniformType p_type, int p_occurences )

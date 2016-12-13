@@ -37,16 +37,15 @@ namespace GlRender
 	public:
 		GlUniformBuffer( OpenGl & p_gl
 			, Castor::String const & p_name
-			, GlShaderProgram & p_program
-			, Castor3D::ShaderTypeFlags const & p_flags
-			, Castor3D::RenderSystem & p_renderSystem );
+			, Castor3D::RenderSystem & p_renderSystem
+			, uint32_t p_index );
 		virtual ~GlUniformBuffer();
 		void SetBindingUniform( uint32_t p_point )const;
 
 	private:
-		bool DoInitialise()override;
+		bool DoInitialise( Castor3D::ShaderProgram & p_program )override;
 		void DoCleanup()override;
-		void DoBindTo( uint32_t p_index )override;
+		void DoBindTo( Castor3D::ShaderProgram & p_program )override;
 		void DoUpdate()override;
 
 	private:
