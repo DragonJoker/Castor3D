@@ -19,8 +19,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
-#include <Shader/OneFrameVariable.hpp>
+#include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/RasteriserState.hpp>
@@ -133,7 +132,7 @@ namespace GrayScale
 			ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
-			m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+			m_mapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 			l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_fragment );

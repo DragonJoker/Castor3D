@@ -698,24 +698,24 @@ namespace GlRender
 		inline void SetUniform2v( int location, int count, double const * params )const;
 		inline void SetUniform3v( int location, int count, double const * params )const;
 		inline void SetUniform4v( int location, int count, double const * params )const;
-		inline void SetUniformMatrix2x2v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix2x3v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix2x4v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix3x3v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix3x2v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix3x4v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix4x4v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix4x2v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix4x3v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniformMatrix2x2v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniformMatrix2x3v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniformMatrix2x4v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniformMatrix3x3v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniformMatrix3x2v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniformMatrix3x4v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniformMatrix4x4v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniformMatrix4x2v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniformMatrix4x3v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform2x2v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform2x3v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform2x4v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform3x3v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform3x2v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform3x4v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform4x4v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform4x2v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform4x3v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniform2x2v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform2x3v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform2x4v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform3x3v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform3x2v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform3x4v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform4x4v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform4x2v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform4x3v( int location, int count, bool transpose, double const * value )const;
 
 		//@}
 		/**@name Uniform Buffer Objects Functions */

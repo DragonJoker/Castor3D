@@ -132,52 +132,6 @@ namespace GlRender
 		}
 	}
 
-	bool GlShaderObject::HasParameter( Castor::String const & p_name )
-	{
-		return GetParameter( p_name ) != GlInvalidIndex;
-	}
-
-	uint32_t GlShaderObject::GetParameter( Castor::String const & p_name )
-	{
-		uint32_t l_uiReturn = uint32_t( GlInvalidIndex );
-
-		if ( m_status == ShaderStatus::eCompiled )
-		{
-			UIntStrMap::iterator l_it = m_mapParamsByName.find( p_name );
-
-			if ( l_it == m_mapParamsByName.end() )
-			{
-				uint32_t l_program = m_shaderProgram->GetGlName();
-				m_mapParamsByName.insert( std::make_pair( p_name, GetOpenGl().GetUniformLocation( l_program, string::string_cast< char >( p_name ).c_str() ) ) );
-				l_it = m_mapParamsByName.find( p_name );
-			}
-
-			l_uiReturn = l_it->second;
-		}
-
-		return l_uiReturn;
-	}
-
-	void GlShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value )
-	{
-		uint32_t l_param = GetParameter( p_name );
-
-		if ( l_param != GlInvalidIndex )
-		{
-			GetOpenGl().SetUniformMatrix4x4v( l_param, 1, false, p_value.const_ptr() );
-		}
-	}
-
-	void GlShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value )
-	{
-		uint32_t l_param = GetParameter( p_name );
-
-		if ( l_param != GlInvalidIndex )
-		{
-			GetOpenGl().SetUniformMatrix3x3v( l_param, 1, false, p_value.const_ptr() );
-		}
-	}
-
 	String GlShaderObject::DoRetrieveCompilerLog()
 	{
 		String l_log;

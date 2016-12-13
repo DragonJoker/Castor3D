@@ -11,7 +11,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/Uniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
@@ -49,11 +49,11 @@ namespace Castor3D
 			, ProgramFlags const & p_programFlags )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::eShadows )
-				&& !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+				&& !p_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
 			}
 		}
 
@@ -66,31 +66,27 @@ namespace Castor3D
 
 				if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eShadows ) )
 				{
-					auto & l_directional = p_pipeline.GetDirectionalShadowMapsVariable();
-					auto & l_spot = p_pipeline.GetSpotShadowMapsVariable();
-					auto & l_point = p_pipeline.GetPointShadowMapsVariable();
-
 					for ( auto & l_depthMap : p_depthMaps )
 					{
 						if ( l_depthMap.get().GetType() == TextureType::eTwoDimensions )
 						{
 							l_depthMap.get().SetIndex( l_index );
-							l_directional.SetValue( l_index++ );
+							p_pipeline.GetDirectionalShadowMapsVariable().SetValue( l_index++ );
 						}
 						else if ( l_depthMap.get().GetType() == TextureType::eTwoDimensionsArray )
 						{
 							l_depthMap.get().SetIndex( l_index );
-							l_spot.SetValue( l_index++ );
+							p_pipeline.GetSpotShadowMapsVariable().SetValue( l_index++ );
 						}
 						else if ( l_depthMap.get().GetType() == TextureType::eCube )
 						{
 							l_depthMap.get().SetIndex( l_index );
-							l_point.SetValue( l_index++ );
+							p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++ );
 						}
 						else if ( l_depthMap.get().GetType() == TextureType::eCubeArray )
 						{
 							l_depthMap.get().SetIndex( l_index );
-							l_point.SetValue( l_index++ );
+							p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++ );
 						}
 					}
 				}

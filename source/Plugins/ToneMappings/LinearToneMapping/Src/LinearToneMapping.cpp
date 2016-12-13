@@ -6,8 +6,7 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
-#include <Shader/OneFrameVariable.hpp>
+#include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -47,10 +46,9 @@ namespace Linear
 		return std::make_shared< ToneMapping >( p_engine, p_parameters );
 	}
 
-	String ToneMapping::DoCreate( FrameVariableBuffer & p_ubo )
+	String ToneMapping::DoCreate( UniformBuffer & p_ubo )
 	{
-		p_ubo.CreateVariable( FrameVariableType::eFloat, Gamma );
-		p_ubo.GetVariable( Gamma, m_gammaVar );
+		m_gammaVar = p_ubo.CreateUniform< UniformType::eFloat >( Gamma );
 
 		String l_pxl;
 		{

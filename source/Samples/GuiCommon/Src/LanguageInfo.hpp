@@ -146,7 +146,7 @@ namespace GuiCommon
 	\~english
 	\brief Defines language informations (name, file patterns, Scintilla lexer, ...)
 	\~french
-	\brief D�finit les informations d'un langage (nom, extension de fichier, lexer Scintilla, ...)
+	\brief Dàfinit les informations d'un langage (nom, extension de fichier, lexer Scintilla, ...)
 	*/
 	class LanguageInfo
 	{

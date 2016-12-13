@@ -1173,7 +1173,7 @@ namespace GlRender
 	class GlIndexArray;
 	class GlVertexArray;
 	class GlIndexBufferObject;
-	class GlMatrixBufferObject;
+	class GlUniformBufferObject;
 	class GlTextureBufferObject;
 	typedef GlMatAttribute< real, 4, 4 > GlAttributeMat4;
 	typedef GlMatAttribute< real, 3, 3 > GlAttributeMat3;
@@ -1202,26 +1202,16 @@ namespace GlRender
 	class GlShaderObject;
 	class GlShaderProgram;
 	class GlProgramInputLayout;
-	template< typename Type > struct OneVariableBinder;
-	template< typename Type, uint32_t Count > struct PointVariableBinder;
-	template< typename Type, uint32_t Rows, uint32_t Columns > struct MatrixVariableBinder;
-	class GlFrameVariableBase;
-	struct GlVariableApplyerBase;
-	class UboVariableInfos;
-	class GlFrameVariableBuffer;
-	template< typename T > class GlOneFrameVariable;
-	template< typename T, uint32_t Count > class GlPointFrameVariable;
-	template< typename T, uint32_t Rows, uint32_t Columns > class GlMatrixFrameVariable;
-	DECLARE_SMART_PTR( UboVariableInfos );
-	DECLARE_SMART_PTR( GlVariableApplyerBase );
-	DECLARE_SMART_PTR( GlFrameVariableBase );
+	class GlUniformBase;
+	class GlUniformBuffer;
+	template< Castor3D::UniformType Type >
+	class GlPushUniform;
+	DECLARE_SMART_PTR( GlUniformBase );
 	DECLARE_SMART_PTR( GlShaderObject );
 	DECLARE_SMART_PTR( GlShaderProgram );
 	DECLARE_VECTOR( GlShaderProgramSPtr, GlShaderProgramPtr );
 	DECLARE_VECTOR( GlShaderObjectSPtr, GlShaderObjectPtr );
-	DECLARE_MAP( Castor::String, GlFrameVariableBaseSPtr, GlFrameVariablePtrStr );
-	DECLARE_MAP( Castor3D::FrameVariableSPtr, UboVariableInfosSPtr, UboVariableInfos );
-	DECLARE_MAP( Castor3D::FrameVariableSPtr, GlVariableApplyerBaseSPtr, VariableApplyer );
+	DECLARE_MAP( Castor::String, GlUniformBaseSPtr, GlUniformPtrStr );
 
 	class GlRenderBuffer;
 	class GlColourRenderBuffer;

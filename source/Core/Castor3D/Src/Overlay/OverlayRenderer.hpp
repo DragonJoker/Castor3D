@@ -323,7 +323,7 @@ namespace Castor3D
 		std::map< uint32_t, RenderPipelineUPtr > m_pipelines;
 		//!\~english	Text texture sampler.
 		//!\~french		Echantillonneur de la texture de texte.
-		OneIntFrameVariableSPtr m_mapText;
+		Uniform1iSPtr m_mapText;
 		//!\~english	The previously rendered BorderPanelOverlay z-index.
 		//!\~french		Le z-index du précedent BorderPanelOverlay rendu.
 		int m_previousBorderZIndex{ 0 };

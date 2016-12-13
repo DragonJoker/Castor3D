@@ -20,32 +20,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___TRS_FRAME_VARIABLE_BUFFER_H___
-#define ___TRS_FRAME_VARIABLE_BUFFER_H___
+#ifndef ___GL_FRAME_VARIABLE_BASE_H___
+#define ___GL_FRAME_VARIABLE_BASE_H___
 
-#include "TestRenderSystemPrerequisites.hpp"
+#include "GlRenderSystemPrerequisites.hpp"
 
-#include <Shader/FrameVariableBuffer.hpp>
+#include "Shader/GlShaderProgram.hpp"
 
-namespace TestRender
+namespace GlRender
 {
-	class TestFrameVariableBuffer
-		: public Castor3D::FrameVariableBuffer
-	{
-	public:
-		TestFrameVariableBuffer( Castor::String const & p_name
-			, Castor3D::ShaderProgram & p_program
-			, Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags
-			, Castor3D::RenderSystem & p_renderSystem );
-		virtual ~TestFrameVariableBuffer();
-
-	private:
-		Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 )override;
-		bool DoInitialise()override;
-		void DoCleanup()override;
-		void DoBindTo( uint32_t p_index )override;
-		void DoUpdate()override;
-	};
 }
+
+#include "GlUniformBase.inl"
 
 #endif

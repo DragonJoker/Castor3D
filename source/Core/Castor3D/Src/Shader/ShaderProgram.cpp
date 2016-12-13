@@ -2,8 +2,8 @@
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
+#include "Shader/PushUniform.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
 
@@ -79,11 +79,11 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				if ( !p_shaderProgram.GetFrameVariableBuffers().empty() )
+				if ( !p_shaderProgram.GetUniformBuffers().empty() )
 				{
-					for ( auto & l_fbo : p_shaderProgram.GetFrameVariableBuffers() )
+					for ( auto & l_fbo : p_shaderProgram.GetUniformBuffers() )
 					{
-						l_return = FrameVariableBuffer::TextWriter( l_tabs )( *l_fbo, p_file );
+						l_return = UniformBuffer::TextWriter( l_tabs )( *l_fbo, p_file );
 					}
 				}
 			}
@@ -210,7 +210,7 @@ namespace Castor3D
 			if ( l_shader )
 			{
 				l_shader->Detach();
-				l_shader->FlushFrameVariables();
+				l_shader->FlushUniforms();
 				l_shader->Destroy();
 			}
 		}
@@ -225,7 +225,7 @@ namespace Castor3D
 			l_list.clear();
 		}
 
-		for ( auto l_buffer : m_listFrameVariableBuffers )
+		for ( auto l_buffer : m_listUniformBuffers )
 		{
 			l_buffer->Cleanup();
 		}
@@ -403,35 +403,35 @@ namespace Castor3D
 		return l_return;
 	}
 
-	FrameVariableSPtr ShaderProgram::CreateFrameVariable( FrameVariableType p_type, String const & p_name, ShaderType p_shader, int p_iNbOcc )
+	PushUniformSPtr ShaderProgram::CreateUniform( UniformType p_type, String const & p_name, ShaderType p_shader, int p_iNbOcc )
 	{
 		REQUIRE( m_shaders[size_t( p_shader )] );
-		FrameVariableSPtr l_return = FindFrameVariable( p_type, p_name, p_shader );
+		PushUniformSPtr l_return = FindUniform( p_type, p_name, p_shader );
 
 		if ( !l_return )
 		{
-			l_return = DoCreateVariable( p_type, p_iNbOcc );
-			l_return->SetName( p_name );
+			l_return = DoCreateUniform( p_type, p_iNbOcc );
+			l_return->GetBaseUniform().SetName( p_name );
 
 			if ( m_shaders[size_t( p_shader )] )
 			{
-				m_shaders[size_t( p_shader )]->AddFrameVariable( l_return );
+				m_shaders[size_t( p_shader )]->AddUniform( l_return );
 			}
 		}
 
 		return l_return;
 	}
 
-	FrameVariableSPtr ShaderProgram::FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, ShaderType p_shader )const
+	PushUniformSPtr ShaderProgram::FindUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader )const
 	{
 		REQUIRE( m_shaders[size_t( p_shader )] );
-		FrameVariableSPtr l_return;
+		PushUniformSPtr l_return;
 
 		if ( m_shaders[size_t( p_shader )] )
 		{
-			l_return = m_shaders[size_t( p_shader )]->FindFrameVariable( p_name );
+			l_return = m_shaders[size_t( p_shader )]->FindUniform( p_name );
 
-			if ( l_return && l_return->GetFullType() != p_type )
+			if ( l_return && l_return->GetBaseUniform().GetFullType() != p_type )
 			{
 				Logger::LogError( cuT( "Frame variable named " ) + p_name + cuT( " exists but with a different type" ) );
 				l_return.reset();
@@ -441,14 +441,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	FrameVariableBuffer & ShaderProgram::CreateFrameVariableBuffer( Castor::String const & p_name, FlagCombination< ShaderTypeFlag > const & p_shaderMask )
+	UniformBuffer & ShaderProgram::CreateUniformBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
 		auto l_it = m_frameVariableBuffersByName.find( p_name );
 
 		if ( l_it == m_frameVariableBuffersByName.end() )
 		{
-			auto l_ubo = DoCreateFrameVariableBuffer( p_name, p_shaderMask );
-			m_listFrameVariableBuffers.push_back( l_ubo );
+			auto l_ubo = DoCreateUniformBuffer( p_name, p_shaderMask );
+			m_listUniformBuffers.push_back( l_ubo );
 			l_it = m_frameVariableBuffersByName.insert( { p_name, l_ubo } ).first;
 
 			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); ++i )
@@ -464,9 +464,9 @@ namespace Castor3D
 		return *l_it->second.lock();
 	}
 
-	FrameVariableBufferSPtr ShaderProgram::FindFrameVariableBuffer( Castor::String const & p_name )const
+	UniformBufferSPtr ShaderProgram::FindUniformBuffer( Castor::String const & p_name )const
 	{
-		FrameVariableBufferSPtr l_buffer;
+		UniformBufferSPtr l_buffer;
 		auto l_it = m_frameVariableBuffersByName.find( p_name );
 
 		if ( l_it != m_frameVariableBuffersByName.end() )
@@ -477,7 +477,7 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	ShaderStorageBuffer & ShaderProgram::CreateStorageBuffer( Castor::String const & p_name, FlagCombination< ShaderTypeFlag > const & p_shaderMask )
+	ShaderStorageBuffer & ShaderProgram::CreateStorageBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
 		auto l_it = m_storageBuffersByName.find( p_name );
 
@@ -513,7 +513,7 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	AtomicCounterBuffer & ShaderProgram::CreateAtomicCounterBuffer( String const & p_name, FlagCombination< ShaderTypeFlag > const & p_shaderMask )
+	AtomicCounterBuffer & ShaderProgram::CreateAtomicCounterBuffer( String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
 		auto l_it = m_atomicCounterBuffersByName.find( p_name );
 
@@ -548,23 +548,24 @@ namespace Castor3D
 
 		return l_buffer;
 	}
-	FrameVariablePtrList & ShaderProgram::GetFrameVariables( ShaderType p_type )
+
+	PushUniformList & ShaderProgram::GetUniforms( ShaderType p_type )
 	{
 		REQUIRE( m_shaders[size_t( p_type )] );
-		return m_shaders[size_t( p_type )]->GetFrameVariables();
+		return m_shaders[size_t( p_type )]->GetUniforms();
 	}
 
-	FrameVariablePtrList const & ShaderProgram::GetFrameVariables( ShaderType p_type )const
+	PushUniformList const & ShaderProgram::GetUniforms( ShaderType p_type )const
 	{
 		REQUIRE( m_shaders[size_t( p_type )] );
-		return m_shaders[size_t( p_type )]->GetFrameVariables();
+		return m_shaders[size_t( p_type )]->GetUniforms();
 	}
 
 	void ShaderProgram::UpdateUbos()const
 	{
 		uint32_t l_index = 0;
 
-		for ( auto l_variableBuffer : m_listFrameVariableBuffers )
+		for ( auto l_variableBuffer : m_listUniformBuffers )
 		{
 			l_variableBuffer->Update();
 		}
@@ -614,7 +615,7 @@ namespace Castor3D
 			}
 			else
 			{
-				for ( auto l_buffer : m_listFrameVariableBuffers )
+				for ( auto l_buffer : m_listUniformBuffers )
 				{
 					l_buffer->Initialise();
 				}
@@ -661,7 +662,7 @@ namespace Castor3D
 			{
 				for ( auto l_shader : m_activeShaders )
 				{
-					for ( auto l_it : l_shader->GetFrameVariables() )
+					for ( auto l_it : l_shader->GetUniforms() )
 					{
 						l_it->Initialise();
 					}

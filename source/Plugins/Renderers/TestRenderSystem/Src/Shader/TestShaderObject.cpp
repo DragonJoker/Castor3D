@@ -43,19 +43,6 @@ namespace TestRender
 		Detach();
 	}
 
-	bool TestShaderObject::HasParameter( Castor::String const & p_name )
-	{
-		return true;
-	}
-
-	void TestShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value )
-	{
-	}
-
-	void TestShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value )
-	{
-	}
-
 	String TestShaderObject::DoRetrieveCompilerLog()
 	{
 		return String{};

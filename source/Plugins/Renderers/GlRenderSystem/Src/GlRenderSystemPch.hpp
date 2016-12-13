@@ -68,10 +68,7 @@ SOFTWARE.
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/AtomicCounterBuffer.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
-#include <Shader/MatrixFrameVariable.hpp>
-#include <Shader/OneFrameVariable.hpp>
-#include <Shader/PointFrameVariable.hpp>
+#include <Shader/UniformBuffer.hpp>
 #include <Shader/ProgramInputLayout.hpp>
 #include <Shader/ShaderObject.hpp>
 #include <Shader/ShaderProgram.hpp>

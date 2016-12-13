@@ -165,7 +165,7 @@ namespace GuiCommon
 	DECLARE_MAP( uint32_t, wxImage *, ImageId );
 	DECLARE_VECTOR( thread_sptr, ThreadPtr );
 	DECLARE_VECTOR( LanguageInfoPtr, LanguageInfoPtr );
-	DECLARE_MAP( int, Castor3D::FrameVariableWPtr, FrameVariable );
+	DECLARE_MAP( int, Castor3D::UniformWPtr, Uniform );
 	DECLARE_ARRAY( StyleInfoPtr, eSTC_TYPE_COUNT, StyleInfoPtr );
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );

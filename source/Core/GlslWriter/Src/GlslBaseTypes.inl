@@ -234,22 +234,26 @@ namespace GLSL
 	Float::Float( float p_value )
 		: Type( cuT( "float " ) )
 	{
-		m_value << p_value;
-
-		if ( p_value - int( p_value ) <= std::numeric_limits< float >::epsilon() )
+		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< float >::epsilon() )
 		{
-			m_value << cuT( ".0" );
+			m_value << int( p_value ) << cuT( ".0" );
+		}
+		else
+		{
+			m_value << p_value;
 		}
 	}
 
 	Float::Float( double p_value )
 		: Type( cuT( "float " ) )
 	{
-		m_value << p_value;
-
 		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< double >::epsilon() )
 		{
-			m_value << cuT( ".0" );
+			m_value << int( p_value ) << cuT( ".0" );
+		}
+		else
+		{
+			m_value << p_value;
 		}
 	}
 
@@ -262,22 +266,27 @@ namespace GLSL
 	Float::Float( GlslWriter * p_writer, float p_value )
 		: Type( cuT( "float " ), p_writer, Castor::String() )
 	{
-		m_value << p_value;
-
 		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< float >::epsilon() )
 		{
-			m_value << cuT( ".0" );
+			m_value << int( p_value ) << cuT( ".0" );
+		}
+		else
+		{
+			m_value << p_value;
 		}
 	}
 
 	Float::Float( GlslWriter * p_writer, double p_value )
 		: Type( cuT( "float " ), p_writer, Castor::String() )
 	{
-		m_value << p_value;
 
 		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< double >::epsilon() )
 		{
-			m_value << cuT( ".0" );
+			m_value << int( p_value ) << cuT( ".0" );
+		}
+		else
+		{
+			m_value << p_value;
 		}
 	}
 

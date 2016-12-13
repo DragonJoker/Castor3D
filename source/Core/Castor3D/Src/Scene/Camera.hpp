@@ -259,7 +259,7 @@ namespace Castor3D
 		 *\brief		Met les valeurs de la caméra dans le tampon de constantes donné.
 		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
 		 */
-		C3D_API void FillShader( FrameVariableBuffer const & p_sceneBuffer )const;
+		C3D_API void FillShader( UniformBuffer const & p_sceneBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Viewport

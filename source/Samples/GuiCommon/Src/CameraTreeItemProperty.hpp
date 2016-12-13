@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Camera helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les cam�ras
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les camàras
 	*/
 	class CameraTreeItemProperty
 		: public TreeItemProperty

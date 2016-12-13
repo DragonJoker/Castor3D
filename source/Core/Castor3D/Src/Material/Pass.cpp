@@ -5,8 +5,9 @@
 #include "Render/RenderNode.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/Uniform.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Log/Logger.hpp>
@@ -42,7 +43,7 @@ namespace Castor3D
 
 			if ( l_unit )
 			{
-				auto l_variable = p_pipeline.GetProgram().FindFrameVariable< OneIntFrameVariable >( p_name, ShaderType::ePixel );
+				auto l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
 
 				if ( l_variable )
 				{

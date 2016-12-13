@@ -150,25 +150,25 @@ namespace Castor3D
 		std::array< TransformFeedbackUPtr, 2 > m_transformFeedbacks;
 		//!\~english	The frame variable buffer holding particle system related variables.
 		//!\~french		Le tampon de variables contenant les variables relatives au système de particules.
-		FrameVariableBufferSPtr m_ubo;
+		UniformBufferSPtr m_ubo;
 		//!\~english	The frame variable holding time since last update.
 		//!\~french		La variable de frame contenant le temps écoulé depuis la dernière mise à jour.
-		OneFloatFrameVariableSPtr m_deltaTime;
+		Uniform1fSPtr m_deltaTime;
 		//!\~english	The frame variable holding total elapsed time.
 		//!\~french		La variable de frame contenant le temps total écoulé.
-		OneFloatFrameVariableSPtr m_time;
+		Uniform1fSPtr m_time;
 		//!\~english	The frame variable holding the particles emitter position.
 		//!\~french		La variable de frame contenant la position de l'émetteur de particules.
-		Point3fFrameVariableSPtr m_emitterPosition;
+		Uniform3fSPtr m_emitterPosition;
 		//!\~english	The frame variable holding the launches lifetime.
 		//!\~french		La variable de frame contenant la durée de vie des lanceurs.
-		OneFloatFrameVariableSPtr m_launcherLifetime;
+		Uniform1fSPtr m_launcherLifetime;
 		//!\~english	The frame variable holding the shells lifetime.
 		//!\~french		La variable de frame contenant la durée de vie des particules.
-		OneFloatFrameVariableSPtr m_shellLifetime;
+		Uniform1fSPtr m_shellLifetime;
 		//!\~english	The frame variable holding the secondary shells lifetime.
 		//!\~french		La variable de frame contenant la durée de vie des particules secondaires.
-		OneFloatFrameVariableSPtr m_secondaryShellLifetime;
+		Uniform1fSPtr m_secondaryShellLifetime;
 		//!\~english	The texture containing random directions.
 		//!\~french		La texture contenant des directions aléatoires.
 		TextureUnit m_randomTexture;

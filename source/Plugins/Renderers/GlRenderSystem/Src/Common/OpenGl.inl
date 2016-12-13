@@ -1936,92 +1936,92 @@ namespace GlRender
 		EXEC_FUNCTION( Uniform4dv, location, count, params );
 	}
 
-	void OpenGl::SetUniformMatrix2x2v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform2x2v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix2fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix2x3v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform2x3v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix2x3fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix2x4v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform2x4v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix2x4fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix3x2v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform3x2v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix3x2fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix3x3v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform3x3v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix3fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix3x4v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform3x4v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix3x4fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix4x2v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform4x2v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix4x2fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix4x3v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform4x3v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix4x3fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix4x4v( int location, int count, bool transpose, float const * value )const
+	void OpenGl::SetUniform4x4v( int location, int count, bool transpose, float const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix4fv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix2x2v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform2x2v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix2dv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix2x3v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform2x3v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix2x3dv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix2x4v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform2x4v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix2x4dv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix3x2v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform3x2v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix3x2dv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix3x3v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform3x3v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix3dv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix3x4v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform3x4v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix3x4dv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix4x2v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform4x2v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix4x2dv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix4x3v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform4x3v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix4x3dv, location, count, uint8_t( transpose ), value );
 	}
 
-	void OpenGl::SetUniformMatrix4x4v( int location, int count, bool transpose, double const * value )const
+	void OpenGl::SetUniform4x4v( int location, int count, bool transpose, double const * value )const
 	{
 		EXEC_FUNCTION( UniformMatrix4dv, location, count, uint8_t( transpose ), value );
 	}

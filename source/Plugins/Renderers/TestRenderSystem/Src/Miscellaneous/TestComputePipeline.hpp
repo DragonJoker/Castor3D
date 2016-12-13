@@ -36,7 +36,7 @@ namespace TestRender
 	\~english
 	\brief		Implementation of the rendering pipeline.
 	\~french
-	\brief		Impl�mentation du pipeline de rendu.
+	\brief		Implàmentation du pipeline de rendu.
 	*/
 	class TestComputePipeline
 		: public Castor3D::ComputePipeline

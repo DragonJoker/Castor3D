@@ -74,7 +74,7 @@ namespace Linear
 		/**
 		 *\copydoc		Castor3D::ToneMapping::DoCreate
 		 */
-		Castor::String DoCreate( Castor3D::FrameVariableBuffer & p_ubo )override;
+		Castor::String DoCreate( Castor3D::UniformBuffer & p_ubo )override;
 		/**
 		 *\copydoc		Castor3D::ToneMapping::DoDestroy
 		 */
@@ -97,7 +97,7 @@ namespace Linear
 		float m_gamma;
 		//!\~english	The gamma correction shader variable.
 		//!\~french		La variable shader pour la correction gamma.
-		Castor3D::OneFloatFrameVariableSPtr m_gammaVar;
+		Castor3D::Uniform1fSPtr m_gammaVar;
 	};
 }
 

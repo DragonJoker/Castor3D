@@ -36,7 +36,7 @@ namespace GuiCommon
 	 *\param[in]	p_values	The array.
 	 *\return		The wxArrayString.
 	 *\~french
-	 *\brief		Construit un wxArrayString � partir d'un array de wxString.
+	 *\brief		Construit un wxArrayString à partir d'un array de wxString.
 	*\param[in]		p_values	L'array.
 	 *\return		Le wxArrayString.
 	 */
@@ -51,7 +51,7 @@ namespace GuiCommon
 	 *\param[in]	p_values	The array.
 	 *\return		The make_wxArrayInt.
 	 *\~french
-	 *\brief		Construit un make_wxArrayInt � partir d'un array d'int.
+	 *\brief		Construit un make_wxArrayInt à partir d'un array d'int.
 	*\param[in]		p_values	L'array.
 	 *\return		Le make_wxArrayInt.
 	 */
@@ -69,7 +69,7 @@ namespace GuiCommon
 	\~english
 	\brief		The supported object types, for display, and properties
 	\~french
-	\brief		Les type d'objets support�s, dans les propriétés, et � l'affichage
+	\brief		Les type d'objets supportàs, dans les propriétés, et à l'affichage
 	*/
 	typedef enum ePROPERTY_DATA_TYPE
 	{
@@ -130,9 +130,9 @@ namespace GuiCommon
 		 *\param[in]	p_window	The wxWindow that displays the menu
 		 *\param[in]	x, y		The coordinates
 		 *\~french
-		 *\brief		Affiche le menu de l'objet du wxTree, aux coordonn�es donn�es
+		 *\brief		Affiche le menu de l'objet du wxTree, aux coordonnàes donnàes
 		*\param[in]		p_window	Le wxWindow qui affiche le menu
-		 *\param[in]	x, y		Les coordonn�es
+		 *\param[in]	x, y		Les coordonnàes
 		 */
 		void DisplayTreeItemMenu( wxWindow * p_window, wxCoord x, wxCoord y );
 		/**
@@ -141,8 +141,8 @@ namespace GuiCommon
 		 *\param[in]	p_editor	The button editor, for properties that need it
 		 *\param[in]	p_grid		The target wxPropertyGrid
 		 *\~french
-		 *\brief		Construit et remplit les propriétés de l'objet, dans la wxPropertyGrid donn�e
-		 *\param[in]	p_editor	L'�diteur bouton, pour les propriétés en ayant besoin
+		 *\brief		Construit et remplit les propriétés de l'objet, dans la wxPropertyGrid donnàe
+		 *\param[in]	p_editor	L'àditeur bouton, pour les propriétés en ayant besoin
 		 *\param[in]	p_grid		La wxPropertyGrid cible
 		 */
 		void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
@@ -151,7 +151,7 @@ namespace GuiCommon
 		 *\brief		Call when a property grid property is changed
 		 *\param[in]	p_event	The event
 		 *\~french
-		 *\brief		Appel�e lorsqu'une propri�t� est chang�e
+		 *\brief		Appelàe lorsqu'une propriété est changàe
 		 *\param[in]	p_event	L'évènement
 		 */
 		void OnPropertyChange( wxPropertyGridEvent & p_event );
@@ -172,7 +172,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the editable status
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le statut de modifiabilit�
+		 *\brief		Récupère le statut de modifiabilità
 		 *\return		La valeur
 		 */
 		inline bool IsEditable()const
@@ -188,10 +188,10 @@ namespace GuiCommon
 		 *\param[in]	p_engine	The engine, to retrieve the materials
 		 *\return		The created property
 		 *\~french
-		 *\brief		Cr�e une propri�t� de s�lection de mat�riau
-		 *\param[in]	p_name		Le nom de la propri�t�
-		 *\param[in]	p_engine	Le moteur, pour r�cup�rer les matériaux
-		 *\return		La propri�t� cr��e.
+		 *\brief		Cràe une propriété de sàlection de matàriau
+		 *\param[in]	p_name		Le nom de la propriété
+		 *\param[in]	p_engine	Le moteur, pour ràcupàrer les matériaux
+		 *\return		La propriété crààe.
 		 */
 		wxEnumProperty * DoCreateMaterialProperty( wxString const & p_name );
 		/**
@@ -201,22 +201,22 @@ namespace GuiCommon
 		 *\param[in]	p_functor	The function to execute
 		 *\~french
 		 *\brief		Poste un évènement functeur au moteur
-		 *\param[in]	p_engine	Le moteur, pour r�cup�rer les matériaux
-		 *\param[in]	p_functor	La fonction � ex�cuter
+		 *\param[in]	p_engine	Le moteur, pour ràcupàrer les matériaux
+		 *\param[in]	p_functor	La fonction à exàcuter
 		 */
 		void DoApplyChange( std::function< void() > p_functor );
 		/**
 		 *\~english
 		 *\brief		Creates the menu displayed for the wxTree item, available if m_editable is true
 		 *\~french
-		 *\brief		Cr�e le menu affich� pour l'objet du wxTree, disponible si m_editable est � true
+		 *\brief		Cràe le menu affichà pour l'objet du wxTree, disponible si m_editable est à true
 		 */
 		void CreateTreeItemMenu();
 		/**
 		 *\~english
 		 *\brief		Creates the menu displayed for the wxTree item, available if m_editable is true
 		 *\~french
-		 *\brief		Cr�e le menu affich� pour l'objet du wxTree, disponible si m_editable est � true
+		 *\brief		Cràe le menu affichà pour l'objet du wxTree, disponible si m_editable est à true
 		 */
 		virtual void DoCreateTreeItemMenu();
 		/**
@@ -225,7 +225,7 @@ namespace GuiCommon
 		 *\param[in]	p_editor	The button editor, for properties that need it
 		 *\param[in]	p_grid		The target wxPropertyGrid
 		 *\~french
-		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donn�e
+		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnàe
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
 		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid ) = 0;
@@ -234,7 +234,7 @@ namespace GuiCommon
 		 *\brief		Call when a property grid property is changed
 		 *\param[in]	p_event	The event
 		 *\~french
-		 *\brief		Appel�e lorsqu'une propri�t� est chang�e
+		 *\brief		Appelàe lorsqu'une propriété est changàe
 		 *\param[in]	p_event	L'évènement
 		 */
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event ) = 0;

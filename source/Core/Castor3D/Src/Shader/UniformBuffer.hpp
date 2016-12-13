@@ -20,14 +20,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_FRAME_VARIABLE_BUFFER_H___
-#define ___C3D_FRAME_VARIABLE_BUFFER_H___
+#ifndef ___C3D_UniformBuffer_H___
+#define ___C3D_UniformBuffer_H___
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "FrameVariableTyper.hpp"
-
-#include "Texture/TextureLayout.hpp"
+#include "Uniform.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -48,10 +46,10 @@ namespace Castor3D
 				<br />Il est aussi responsable de la création des variables
 				<br />Utilise les GPU buffers si supportés (OpenGL Uniform Buffer Objects, Direct3D Constants buffers)
 	*/
-	class FrameVariableBuffer
+	class UniformBuffer
 		: public Castor::OwnedBy< RenderSystem >
 	{
-		friend class Castor::TextWriter< Castor3D::FrameVariableBuffer >;
+		friend class Castor::TextWriter< Castor3D::UniformBuffer >;
 
 	public:
 		/*!
@@ -59,12 +57,12 @@ namespace Castor3D
 		\version	0.6.1.0
 		\date		19/10/2011
 		\~english
-		\brief		FrameVariableBuffer loader.
+		\brief		UniformBuffer loader.
 		\~french
-		\brief		Loader de FrameVariableBuffer.
+		\brief		Loader de UniformBuffer.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< FrameVariableBuffer >
+			: public Castor::TextWriter< UniformBuffer >
 		{
 		public:
 			/**
@@ -76,15 +74,15 @@ namespace Castor3D
 			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
-			 *\brief			Writes a FrameVariableBuffer into a text file.
-			 *\param[in]		p_object	The FrameVariableBuffer.
+			 *\brief			Writes a UniformBuffer into a text file.
+			 *\param[in]		p_object	The UniformBuffer.
 			 *\param[in,out]	p_file		The file.
 			 *\~french
-			 *\brief			Ecrit FrameVariableBuffer dans un fichier texte.
-			 *\param[in]		p_object	Le FrameVariableBuffer.
+			 *\brief			Ecrit UniformBuffer dans un fichier texte.
+			 *\param[in]		p_object	Le UniformBuffer.
 			 *\param[in,out]	p_file		Le fichier.
 			 */
-			C3D_API bool operator()( FrameVariableBuffer const & p_object, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( UniformBuffer const & p_object, Castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -102,10 +100,10 @@ namespace Castor3D
 		 *\param[in]	p_flags			Les types de shader affectés à ce tampon de variables de frame.
 		 *\param[in]	p_renderSystem	Le render system.
 		 */
-		C3D_API FrameVariableBuffer(
+		C3D_API UniformBuffer(
 			Castor::String const & p_name,
 			ShaderProgram & p_program,
-			Castor::FlagCombination< ShaderTypeFlag > const & p_flags,
+			ShaderTypeFlags const & p_flags,
 			RenderSystem & p_renderSystem );
 		/**
 		 *\~english
@@ -113,7 +111,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~FrameVariableBuffer();
+		C3D_API virtual ~UniformBuffer();
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated.
@@ -161,7 +159,7 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API FrameVariableSPtr CreateVariable( FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
+		C3D_API UniformSPtr CreateUniform( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
 		/**
 		 *\~english
 		 *\brief		Creates a variable.
@@ -174,10 +172,10 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		template< typename T >
-		inline std::shared_ptr< T > CreateVariable( Castor::String const & p_name, int p_occurences = 1 )
+		template< UniformType Type >
+		inline std::shared_ptr< typename uniform_type< Type >::type > CreateUniform( Castor::String const & p_name, int p_occurences = 1 )
 		{
-			return std::static_pointer_cast< T >( CreateVariable( FrameVariableTyper< T >::value, p_name, p_occurences ) );
+			return std::static_pointer_cast< typename uniform_type< Type >::type >( CreateUniform( Type, p_name, p_occurences ) );
 		}
 		/**
 		 *\~english
@@ -200,36 +198,8 @@ namespace Castor3D
 		 *\param[out]	p_variable	Reçoit la variable récupérée, nullptr en cas d'échec.
 		 *\return		\p false en cas d'échec.
 		 */
-		template< typename T >
-		std::shared_ptr< OneFrameVariable< T > > GetVariable( Castor::String const & p_name, std::shared_ptr< OneFrameVariable< T > > & p_variable )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves a variable by name.
-		 *\param[in]	p_name		The variable name.
-		 *\param[out]	p_variable	Receives the found variable, nullptr if failed.
-		 *\return		\p false if failed.
-		 *\~french
-		 *\brief		Récupère une variable par son nom.
-		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[out]	p_variable	Reçoit la variable récupérée, nullptr en cas d'échec.
-		 *\return		\p false en cas d'échec.
-		 */
-		template< typename T, uint32_t Count >
-		std::shared_ptr< PointFrameVariable< T, Count > > GetVariable( Castor::String const & p_name, std::shared_ptr< PointFrameVariable< T, Count > > & p_variable )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves a variable by name.
-		 *\param[in]	p_name		The variable name.
-		 *\param[out]	p_variable	Receives the found variable, nullptr if failed.
-		 *\return		\p false if failed.
-		 *\~french
-		 *\brief		Récupère une variable par son nom.
-		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[out]	p_variable	Reçoit la variable récupérée, nullptr en cas d'échec.
-		 *\return		\p false en cas d'échec.
-		 */
-		template< typename T, uint32_t Rows, uint32_t Columns >
-		std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > GetVariable( Castor::String const & p_name, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_variable )const;
+		template< UniformType Type >
+		std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\return		The variables buffer name.
@@ -246,7 +216,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'itérateur sur le début de la liste de variables.
 		 */
-		inline FrameVariablePtrList::iterator begin()
+		inline UniformList::iterator begin()
 		{
 			return m_listVariables.begin();
 		}
@@ -256,7 +226,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'itérateur sur le début de la liste de variables.
 		 */
-		inline FrameVariablePtrList::const_iterator begin()const
+		inline UniformList::const_iterator begin()const
 		{
 			return m_listVariables.begin();
 		}
@@ -266,7 +236,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'itérateur sur la fin de la liste de variables.
 		 */
-		inline FrameVariablePtrList::iterator end()
+		inline UniformList::iterator end()
 		{
 			return m_listVariables.end();
 		}
@@ -276,7 +246,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'itérateur sur la fin de la liste de variables.
 		 */
-		inline FrameVariablePtrList::const_iterator end()const
+		inline UniformList::const_iterator end()const
 		{
 			return m_listVariables.end();
 		}
@@ -296,7 +266,7 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API virtual FrameVariableSPtr DoCreateVariable( FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 ) = 0;
+		UniformSPtr DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated.
@@ -338,19 +308,19 @@ namespace Castor3D
 		static uint32_t sm_uiCount;
 		//!\~english	The shader types assigned to this frame variable buffer.
 		//!\~french		Les types de shader affectés à ce tampon de variables de frame.
-		Castor::FlagCombination< ShaderTypeFlag > m_flags;
+		ShaderTypeFlags m_flags;
 		//!\~english	The buffer's index.
 		//!\~french		L'index du tampon.
 		uint32_t m_index;
 		//!\~english	The variables list.
 		//!\~french		La liste de variables.
-		FrameVariablePtrList m_listVariables;
+		UniformList m_listVariables;
 		//!\~english	The initialised variables list.
 		//!\~french		La liste de variables initialisées.
-		FrameVariablePtrList m_listInitialised;
+		UniformList m_listInitialised;
 		//!\~english	The variables ordered by name.
 		//!\~french		Les variables, triées par nom.
-		FrameVariablePtrStrMap m_mapVariables;
+		UniformMap m_mapVariables;
 		//!\~english	The buffer name.
 		//!\~french		Le nom du tampon.
 		Castor::String m_name;
@@ -363,6 +333,6 @@ namespace Castor3D
 	};
 }
 
-#include "FrameVariableBuffer.inl"
+#include "UniformBuffer.inl"
 
 #endif

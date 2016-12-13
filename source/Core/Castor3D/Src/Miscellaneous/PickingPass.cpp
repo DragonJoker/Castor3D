@@ -19,7 +19,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
@@ -53,11 +53,9 @@ namespace Castor3D
 			{
 				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, l_depthMaps );
 				l_itPipelines.first->Apply();
-				FrameVariableBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindFrameVariableBuffer( Picking );
-				OneUIntFrameVariableSPtr l_drawIndex;
-				OneUIntFrameVariableSPtr l_nodeIndex;
-				l_ubo->GetVariable( DrawIndex, l_drawIndex );
-				l_ubo->GetVariable( NodeIndex, l_nodeIndex );
+				UniformBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindUniformBuffer( Picking );
+				auto l_drawIndex = l_ubo->GetUniform< UniformType::eUInt >( DrawIndex );
+				auto l_nodeIndex = l_ubo->GetUniform< UniformType::eUInt >( NodeIndex );
 				l_drawIndex->SetValue( uint8_t( p_type ) + ( ( l_count & 0x00FFFFFF ) << 8 ) );
 				uint32_t l_index{ 0u };
 
@@ -91,11 +89,9 @@ namespace Castor3D
 			{
 				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, l_depthMaps );
 				l_itPipelines.first->Apply();
-				FrameVariableBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindFrameVariableBuffer( Picking );
-				OneUIntFrameVariableSPtr l_drawIndex;
-				OneUIntFrameVariableSPtr l_nodeIndex;
-				l_ubo->GetVariable( DrawIndex, l_drawIndex );
-				l_ubo->GetVariable( NodeIndex, l_nodeIndex );
+				UniformBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindUniformBuffer( Picking );
+				auto l_drawIndex = l_ubo->GetUniform< UniformType::eUInt >( DrawIndex );
+				auto l_nodeIndex = l_ubo->GetUniform< UniformType::eUInt >( NodeIndex );
 				l_drawIndex->SetValue( uint8_t( p_type ) + ( ( l_count & 0x00FFFFFF ) << 8 ) );
 				uint32_t l_index{ 0u };
 
@@ -115,11 +111,11 @@ namespace Castor3D
 
 		inline void DoUpdateProgram( ShaderProgram & p_program )
 		{
-			if ( !p_program.FindFrameVariableBuffer( Picking ) )
+			if ( !p_program.FindUniformBuffer( Picking ) )
 			{
-				auto & l_picking = p_program.CreateFrameVariableBuffer( Picking, ShaderTypeFlag::ePixel );
-				l_picking.CreateVariable< OneUIntFrameVariable >( DrawIndex );
-				l_picking.CreateVariable< OneUIntFrameVariable >( NodeIndex );
+				auto & l_picking = p_program.CreateUniformBuffer( Picking, ShaderTypeFlag::ePixel );
+				l_picking.CreateUniform( UniformType::eUInt, DrawIndex );
+				l_picking.CreateUniform( UniformType::eUInt, NodeIndex );
 
 				if ( p_program.GetRenderSystem()->GetCurrentContext() )
 				{

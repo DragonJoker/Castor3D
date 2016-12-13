@@ -9,8 +9,7 @@
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/PointFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <Graphics/CubeBox.hpp>
@@ -194,11 +193,10 @@ namespace Castor3D
 		return m_frustum.IsVisible( p_point );
 	}
 
-	void Camera::FillShader( FrameVariableBuffer const & p_sceneBuffer )const
+	void Camera::FillShader( UniformBuffer const & p_sceneBuffer )const
 	{
-		Point3r l_position = GetParent()->GetDerivedPosition();
-		Point3rFrameVariableSPtr l_cameraPos;
-		p_sceneBuffer.GetVariable( ShaderProgram::CameraPos, l_cameraPos );
+		auto l_position = GetParent()->GetDerivedPosition();
+		auto l_cameraPos = p_sceneBuffer.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
 
 		if ( l_cameraPos )
 		{

@@ -48,28 +48,28 @@ namespace Castor3D
 		RenderPipeline & m_pipeline;
 		//!\~english	The matrix UBO.
 		//!\~french		L'UBO de matrices.
-		FrameVariableBuffer & m_matrixUbo;
+		UniformBuffer & m_matrixUbo;
 		//!\~english	The pass ambient colour.
 		//!\~french		La couleur ambiante de passe.
-		Point4rFrameVariable & m_ambient;
+		Uniform4r & m_ambient;
 		//!\~english	The pass diffuse colour.
 		//!\~french		La couleur diffuse de passe.
-		Point4rFrameVariable & m_diffuse;
+		Uniform4r & m_diffuse;
 		//!\~english	The pass specular colour.
 		//!\~french		La couleur spéculaire de passe.
-		Point4rFrameVariable & m_specular;
+		Uniform4r & m_specular;
 		//!\~english	The pass emissive colour.
 		//!\~french		La couleur émissive de passe.
-		Point4rFrameVariable & m_emissive;
+		Uniform4r & m_emissive;
 		//!\~english	The pass shininess.
 		//!\~french		L'exposante de passe.
-		OneFloatFrameVariable & m_shininess;
+		Uniform1f & m_shininess;
 		//!\~english	The pass opacity.
 		//!\~french		L'opacité de passe.
-		OneFloatFrameVariable & m_opacity;
+		Uniform1f & m_opacity;
 		//!\~english	The pass textures.
 		//!\~french		Les textures de la passe.
-		std::map< uint32_t, std::reference_wrapper< OneIntFrameVariable > > m_textures;
+		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -81,13 +81,13 @@ namespace Castor3D
 	*/
 	struct SceneRenderNode
 	{
-		SceneRenderNode( FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos );
+		SceneRenderNode( UniformBuffer & p_sceneUbo, Uniform3r & p_cameraPos );
 		//!\~english	The scene UBO.
 		//!\~french		L'UBO de scène.
-		FrameVariableBuffer & m_sceneUbo;
+		UniformBuffer & m_sceneUbo;
 		//!\~english	The pass opacity.
 		//!\~french		L'opacité de passe.
-		Point3rFrameVariable & m_cameraPos;
+		Uniform3r & m_cameraPos;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -103,7 +103,7 @@ namespace Castor3D
 			, PassRenderNode const & p_pass
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
-			, OneIntFrameVariable & p_shadowReceiver );
+			, Uniform1i & p_shadowReceiver );
 		/**
 		 *\~english
 		 *\brief		Render function.
@@ -136,7 +136,7 @@ namespace Castor3D
 		PassRenderNode m_pass;
 		//!\~english	The model shadow receiver status frame variable.
 		//!\~french		La variable de frame contenant le statut de réception d'ombres du modèle.
-		OneIntFrameVariable & m_shadowReceiver;
+		Uniform1i & m_shadowReceiver;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers & m_buffers;
@@ -160,7 +160,7 @@ namespace Castor3D
 			, PassRenderNode && p_pass
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
-			, OneIntFrameVariable & p_shadowReceiver
+			, Uniform1i & p_shadowReceiver
 			, DataType & p_data )
 			: ObjectRenderNodeBase{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver }
 			, m_data{ p_data }
@@ -202,7 +202,7 @@ namespace Castor3D
 			, PassRenderNode && p_pass
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
-			, OneIntFrameVariable & p_shadowReceiver
+			, Uniform1i & p_shadowReceiver
 			, Submesh & p_data
 			, Geometry & p_geometry )
 			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data }
@@ -243,7 +243,7 @@ namespace Castor3D
 			, PassRenderNode && p_pass
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
-			, OneIntFrameVariable & p_shadowReceiver
+			, Uniform1i & p_shadowReceiver
 			, Submesh & p_data
 			, Geometry & p_geometry )
 			: GeometryRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data, p_geometry }
@@ -274,12 +274,12 @@ namespace Castor3D
 			, PassRenderNode && p_pass
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
-			, OneIntFrameVariable & p_shadowReceiver
+			, Uniform1i & p_shadowReceiver
 			, Submesh & p_data
 			, Geometry & p_geometry
 			, AnimatedSkeleton * p_skeleton
 			, AnimatedMesh * p_mesh
-			, FrameVariableBuffer & p_animationUbo )
+			, UniformBuffer & p_animationUbo )
 			: GeometryRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data, p_geometry }
 			, m_skeleton{ p_skeleton }
 			, m_mesh{ p_mesh }
@@ -304,7 +304,7 @@ namespace Castor3D
 		AnimatedMesh * m_mesh;
 		//!\~english	The animation UBO.
 		//!\~french		L'UBO d'animation.
-		FrameVariableBuffer & m_animationUbo;
+		UniformBuffer & m_animationUbo;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -321,11 +321,11 @@ namespace Castor3D
 			, PassRenderNode && p_pass
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
-			, OneIntFrameVariable & p_shadowReceiver
+			, Uniform1i & p_shadowReceiver
 			, BillboardBase & p_data
-			, FrameVariableBuffer & p_billboardUbo
-			, Point2iFrameVariable & p_dimensions
-			, Point2iFrameVariable & p_windowSize )
+			, UniformBuffer & p_billboardUbo
+			, Uniform2i & p_dimensions
+			, Uniform2i & p_windowSize )
 			: BillboardListRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data }
 			, m_billboardUbo{ p_billboardUbo }
 			, m_dimensions{ p_dimensions }
@@ -345,13 +345,13 @@ namespace Castor3D
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
-		FrameVariableBuffer & m_billboardUbo;
+		UniformBuffer & m_billboardUbo;
 		//!\~english	The dimensions uniform variable.
 		//!\~french		La variable uniforme des dimensions.
-		Point2iFrameVariable & m_dimensions;
+		Uniform2i & m_dimensions;
 		//!\~english	The window dimensions uniform variable.
 		//!\~french		La variable uniforme des dimensions de la fenêtre.
-		Point2iFrameVariable & m_windowSize;
+		Uniform2i & m_windowSize;
 		//!\~english	The billboard.
 		//!\~french		Le billboard.
 		BillboardBase & m_instance;

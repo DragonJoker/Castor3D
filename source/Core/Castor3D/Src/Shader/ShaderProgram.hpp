@@ -25,8 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "FrameVariable.hpp"
-#include "FrameVariableTyper.hpp"
+#include "PushUniform.hpp"
 #include "ProgramInputLayout.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
@@ -143,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le tampon de variables créé ou récupéré.
 		 */
-		C3D_API FrameVariableBuffer & CreateFrameVariableBuffer( Castor::String const & p_name, Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask );
+		C3D_API UniformBuffer & CreateUniformBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Finds a variable buffer.
@@ -154,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du tampon.
 		 *\return		Le tampon trouvé, nullptr en cas d'échec.
 		 */
-		C3D_API FrameVariableBufferSPtr FindFrameVariableBuffer( Castor::String const & p_name )const;
+		C3D_API UniformBufferSPtr FindUniformBuffer( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Creates a shader storage buffer.
@@ -167,7 +166,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le tampon de stockage créé ou récupéré.
 		 */
-		C3D_API ShaderStorageBuffer & CreateStorageBuffer( Castor::String const & p_name, Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask );
+		C3D_API ShaderStorageBuffer & CreateStorageBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Finds a storage buffer.
@@ -191,7 +190,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le tampon de stockage créé ou récupéré.
 		 */
-		C3D_API AtomicCounterBuffer & CreateAtomicCounterBuffer( Castor::String const & p_name, Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask );
+		C3D_API AtomicCounterBuffer & CreateAtomicCounterBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Finds an atomic counter buffer.
@@ -355,7 +354,7 @@ namespace Castor3D
 		 *\param[in]	p_nbOcc		Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API FrameVariableSPtr CreateFrameVariable( FrameVariableType p_type, Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 );
+		C3D_API PushUniformSPtr CreateUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 );
 		/**
 		 *\~english
 		 *\brief		Creates a variable.
@@ -370,10 +369,10 @@ namespace Castor3D
 		 *\param[in]	p_nbOcc		Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		template< typename T >
-		inline std::shared_ptr< T > CreateFrameVariable( Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 )
+		template< UniformType Type >
+		inline std::shared_ptr< TPushUniform< Type > > CreateUniform( Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 )
 		{
-			return std::static_pointer_cast< T >( CreateFrameVariable( FrameVariableTyper< T >::value, p_name, p_shader, p_nbOcc ) );
+			return std::static_pointer_cast< TPushUniform< Type > >( CreateUniform( Type, p_name, p_shader, p_nbOcc ) );
 		}
 		/**
 		 *\~english
@@ -389,7 +388,7 @@ namespace Castor3D
 		 *\param[in]	p_shader	Le type du shader.
 		 *\return		La variable trouvée, nullptr en cas d'échec.
 		 */
-		C3D_API FrameVariableSPtr FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, ShaderType p_shader )const;
+		C3D_API PushUniformSPtr FindUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader )const;
 		/**
 		 *\~english
 		 *\brief		Looks for a variable.
@@ -402,10 +401,10 @@ namespace Castor3D
 		 *\param[in]	p_shader	Le type du shader.
 		 *\return		La variable trouvé, nullptr en cas d'échec.
 		 */
-		template< typename T >
-		inline std::shared_ptr< T > FindFrameVariable( Castor::String const & p_name, ShaderType p_shader )const
+		template< UniformType Type >
+		inline std::shared_ptr< TPushUniform< Type > > FindUniform( Castor::String const & p_name, ShaderType p_shader )const
 		{
-			return std::static_pointer_cast< T >( FindFrameVariable( FrameVariableTyper< T >::value, p_name, p_shader ) );
+			return std::static_pointer_cast< TPushUniform< Type > >( FindUniform( Type, p_name, p_shader ) );
 		}
 		/**
 		 *\~english
@@ -417,7 +416,7 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type.
 		 *\return		La liste.
 		 */
-		C3D_API FrameVariablePtrList & GetFrameVariables( ShaderType p_type );
+		C3D_API PushUniformList & GetUniforms( ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame variables bound to one shader type.
@@ -428,7 +427,7 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type.
 		 *\return		La liste.
 		 */
-		C3D_API FrameVariablePtrList const & GetFrameVariables( ShaderType p_type )const;
+		C3D_API PushUniformList const & GetUniforms( ShaderType p_type )const;
 		/**
 		 *\~english
 		 *\brief		Updates the program's frame variable buffers if needed.
@@ -509,7 +508,7 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type.
 		 *\return		La liste.
 		 */
-		inline FrameVariableBufferPtrList & GetFrameVariableBuffers( ShaderType p_type )
+		inline UniformBufferPtrList & GetUniformBuffers( ShaderType p_type )
 		{
 			return m_frameVariableBuffers[size_t( p_type )];
 		}
@@ -523,7 +522,7 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type.
 		 *\return		La liste.
 		 */
-		inline FrameVariableBufferPtrList const & GetFrameVariableBuffers( ShaderType p_type )const
+		inline UniformBufferPtrList const & GetUniformBuffers( ShaderType p_type )const
 		{
 			return m_frameVariableBuffers[size_t( p_type )];
 		}
@@ -533,9 +532,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La liste des tampons de variables de frames.
 		 */
-		inline FrameVariableBufferPtrList & GetFrameVariableBuffers()
+		inline UniformBufferPtrList & GetUniformBuffers()
 		{
-			return m_listFrameVariableBuffers;
+			return m_listUniformBuffers;
 		}
 		/**
 		 *\~english
@@ -543,9 +542,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La liste des tampons de variables de frames.
 		 */
-		inline FrameVariableBufferPtrList const & GetFrameVariableBuffers()const
+		inline UniformBufferPtrList const & GetUniformBuffers()const
 		{
-			return m_listFrameVariableBuffers;
+			return m_listUniformBuffers;
 		}
 		/**
 		 *\~english
@@ -707,17 +706,17 @@ namespace Castor3D
 		virtual ShaderObjectSPtr DoCreateObject( ShaderType p_type ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a FrameVariableBuffer.
+		 *\brief		Creates a UniformBuffer.
 		 *\param[in]	p_name	The buffer name.
-		 *\return		The created FrameVariableBuffer.
+		 *\return		The created UniformBuffer.
 		 *\~french
-		 *\brief		Crée un FrameVariableBuffer.
+		 *\brief		Crée un UniformBuffer.
 		 *\param[in]	p_name	Le nom du tampon.
-		 *\return		Le FrameVariableBuffer créé.
+		 *\return		Le UniformBuffer créé.
 		 */
-		virtual FrameVariableBufferSPtr DoCreateFrameVariableBuffer(
+		virtual UniformBufferSPtr DoCreateUniformBuffer(
 			Castor::String const & p_name,
-			Castor::FlagCombination< ShaderTypeFlag > const & p_flags ) = 0;
+			ShaderTypeFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture frame variable.
@@ -728,7 +727,7 @@ namespace Castor3D
 		 *\param[in]	p_iNbOcc	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		virtual FrameVariableSPtr DoCreateVariable( FrameVariableType p_type, int p_iNbOcc ) = 0;
+		virtual PushUniformSPtr DoCreateUniform( UniformType p_type, int p_iNbOcc ) = 0;
 
 	public:
 		/**@name Attributes */
@@ -947,13 +946,13 @@ namespace Castor3D
 		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
 		//!\~english	The frame variable buffers map, ordered by name.
 		//!\~french		La liste des tampons de variable de frame, triés par nom.
-		FrameVariableBufferPtrStrMap m_frameVariableBuffersByName;
+		UniformBufferPtrStrMap m_frameVariableBuffersByName;
 		//!\~english	The frame variable buffers map, ordered by shader type.
 		//!\~french		La liste des tampons de variable de frame, triés par type de shader.
-		std::array< FrameVariableBufferPtrList, size_t( ShaderType::eCount ) > m_frameVariableBuffers;
+		std::array< UniformBufferPtrList, size_t( ShaderType::eCount ) > m_frameVariableBuffers;
 		//!\~english	The frame variable buffers map.
 		//!\~french		La liste des tampons de variables de frame.
-		FrameVariableBufferPtrList m_listFrameVariableBuffers;
+		UniformBufferPtrList m_listUniformBuffers;
 		//!\~english	The storage buffers map, ordered by name.
 		//!\~french		La liste des tampons de stockage, triés par nom.
 		ShaderStorageBufferPtrStrMap m_storageBuffersByName;

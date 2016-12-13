@@ -19,8 +19,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
-#include <Shader/OneFrameVariable.hpp>
+#include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
@@ -486,7 +485,7 @@ namespace Bloom
 		auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
 		auto const & l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
 		auto const & l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
-		FrameVariableBufferSPtr l_matrices = m_combinePipeline->GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		auto l_matrices = m_combinePipeline->GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
 
 		if ( l_matrices )
 		{
@@ -564,7 +563,7 @@ namespace Bloom
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		l_program->CreateObject( ShaderType::eVertex );
 		l_program->CreateObject( ShaderType::ePixel );
-		m_hiPassMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		m_hiPassMapDiffuse = l_program->CreateUniform < UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_hipass );
@@ -591,11 +590,11 @@ namespace Bloom
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		l_program->CreateObject( ShaderType::eVertex );
 		l_program->CreateObject( ShaderType::ePixel );
-		m_blurXMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		m_blurXMapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		auto & l_filterConfig = l_program->CreateFrameVariableBuffer( BloomPostEffect::FilterConfig, ShaderTypeFlag::ePixel );
-		m_blurXCoeffs = l_filterConfig.CreateVariable< OneFloatFrameVariable >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
-		m_blurXCoeffCount = l_filterConfig.CreateVariable< OneUIntFrameVariable >( BloomPostEffect::FilterConfigCoefficientsCount );
+		auto & l_filterConfig = l_program->CreateUniformBuffer( BloomPostEffect::FilterConfig, ShaderTypeFlag::ePixel );
+		m_blurXCoeffs = l_filterConfig.CreateUniform< UniformType::eFloat >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
+		m_blurXCoeffCount = l_filterConfig.CreateUniform< UniformType::eUInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 		m_blurXCoeffCount->SetValue( m_size );
 		m_blurXCoeffs->SetValues( m_kernel );
 
@@ -624,11 +623,11 @@ namespace Bloom
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		l_program->CreateObject( ShaderType::eVertex );
 		l_program->CreateObject( ShaderType::ePixel );
-		m_blurYMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		m_blurYMapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		auto & l_filterConfig = l_program->CreateFrameVariableBuffer( FilterConfig, ShaderTypeFlag::ePixel );
-		m_blurYCoeffs = l_filterConfig.CreateVariable< OneFloatFrameVariable >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
-		m_blurYCoeffCount = l_filterConfig.CreateVariable< OneUIntFrameVariable >( BloomPostEffect::FilterConfigCoefficientsCount );
+		auto & l_filterConfig = l_program->CreateUniformBuffer( FilterConfig, ShaderTypeFlag::ePixel );
+		m_blurYCoeffs = l_filterConfig.CreateUniform< UniformType::eFloat >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
+		m_blurYCoeffCount = l_filterConfig.CreateUniform< UniformType::eUInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 		m_blurYCoeffCount->SetValue( m_size );
 		m_blurYCoeffs->SetValues( m_kernel );
 
@@ -657,11 +656,11 @@ namespace Bloom
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		l_program->CreateObject( ShaderType::eVertex );
 		l_program->CreateObject( ShaderType::ePixel );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass0, ShaderType::ePixel )->SetValue( 0 );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass1, ShaderType::ePixel )->SetValue( 1 );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass2, ShaderType::ePixel )->SetValue( 2 );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass3, ShaderType::ePixel )->SetValue( 3 );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapScene, ShaderType::ePixel )->SetValue( 4 );
+		l_program->CreateUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass0, ShaderType::ePixel )->SetValue( 0 );
+		l_program->CreateUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass1, ShaderType::ePixel )->SetValue( 1 );
+		l_program->CreateUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass2, ShaderType::ePixel )->SetValue( 2 );
+		l_program->CreateUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass3, ShaderType::ePixel )->SetValue( 3 );
+		l_program->CreateUniform< UniformType::eSampler >( BloomPostEffect::CombineMapScene, ShaderType::ePixel )->SetValue( 4 );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );

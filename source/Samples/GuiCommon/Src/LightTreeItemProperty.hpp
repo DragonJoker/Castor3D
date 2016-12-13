@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les g�om�tries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les gàomàtries
 	*/
 	class LightTreeItemProperty
 		: public TreeItemProperty
@@ -48,7 +48,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_light		La lumi�re cible
+		 *\param[in]	p_light		La lumiàre cible
 		 */
 		LightTreeItemProperty( bool p_editable, Castor3D::Light & p_light );
 		/**

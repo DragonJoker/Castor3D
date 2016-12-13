@@ -13,9 +13,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Light/Light.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/MatrixFrameVariable.hpp"
-#include "Shader/PointFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
@@ -51,15 +49,12 @@ namespace Castor3D
 				}
 			};
 
-			auto l_shadowMapUbo = p_program.FindFrameVariableBuffer( ShadowMapUbo );
-			Point3fFrameVariableSPtr l_worldLightPosition;
-			OneFloatFrameVariableSPtr l_farPlane;
-			l_shadowMapUbo->GetVariable( WorldLightPosition, l_worldLightPosition )->SetValue( p_position );
-			l_shadowMapUbo->GetVariable( FarPlane, l_farPlane )->SetValue( 2000.0_r );
+			auto l_shadowMapUbo = p_program.FindUniformBuffer( ShadowMapUbo );
+			l_shadowMapUbo->GetUniform< UniformType::eVec3f >( WorldLightPosition )->SetValue( p_position );
+			l_shadowMapUbo->GetUniform< UniformType::eFloat >( FarPlane )->SetValue( 2000.0_r );
 
-			auto l_shadowMatricesUbo = p_program.FindFrameVariableBuffer( ShadowMatricesUbo );
-			Matrix4x4fFrameVariableSPtr l_shadowMatrices;
-			l_shadowMatricesUbo->GetVariable( ShadowMatrices, l_shadowMatrices );
+			auto l_shadowMatricesUbo = p_program.FindUniformBuffer( ShadowMatricesUbo );
+			auto l_shadowMatrices = l_shadowMatricesUbo->GetUniform< UniformType::eMat4x4f >( ShadowMatrices );
 			uint32_t l_index{ 0 };
 
 			for ( auto & l_view : l_views )
@@ -156,16 +151,16 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoUpdateProgram( ShaderProgram & p_program )
 	{
-		auto l_ubo = p_program.FindFrameVariableBuffer( ShadowMapUbo );
+		auto l_ubo = p_program.FindUniformBuffer( ShadowMapUbo );
 
 		if ( !l_ubo )
 		{
-			auto & l_shadowMapUbo = p_program.CreateFrameVariableBuffer( ShadowMapUbo, ShaderTypeFlag::ePixel );
-			l_shadowMapUbo.CreateVariable< Point3fFrameVariable >( WorldLightPosition );
-			l_shadowMapUbo.CreateVariable< OneFloatFrameVariable >( FarPlane );
+			auto & l_shadowMapUbo = p_program.CreateUniformBuffer( ShadowMapUbo, ShaderTypeFlag::ePixel );
+			l_shadowMapUbo.CreateUniform( UniformType::eVec3f, WorldLightPosition );
+			l_shadowMapUbo.CreateUniform( UniformType::eFloat, FarPlane );
 
-			auto & l_shadowMatricesUbo = p_program.CreateFrameVariableBuffer( ShadowMatricesUbo, ShaderTypeFlag::eGeometry );
-			l_shadowMatricesUbo.CreateVariable< Matrix4x4fFrameVariable >( ShadowMatrices, 6 );
+			auto & l_shadowMatricesUbo = p_program.CreateUniformBuffer( ShadowMatricesUbo, ShaderTypeFlag::eGeometry );
+			l_shadowMatricesUbo.CreateUniform( UniformType::eMat4x4f, ShadowMatrices, 6 );
 		}
 	}
 

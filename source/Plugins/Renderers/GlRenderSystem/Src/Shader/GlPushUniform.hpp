@@ -20,43 +20,45 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_ONE_FRAME_VARIABLE_H___
-#define ___GL_ONE_FRAME_VARIABLE_H___
+#ifndef ___C3DGL_GlPushUniform_H___
+#define ___C3DGL_GlPushUniform_H___
 
-#include <Shader/OneFrameVariable.hpp>
+#include <Shader/PushUniform.hpp>
 
-#include "Shader/GlFrameVariableBase.hpp"
+#include "Shader/GlUniformBase.hpp"
 
 namespace GlRender
 {
-	template< typename T >
-	class GlOneFrameVariable
-		: public Castor3D::OneFrameVariable< T >
-		, public GlFrameVariableBase
+	template< Castor3D::UniformType Type >
+	class GlPushUniform
+		: public Castor3D::TPushUniform< Type >
+		, public Holder
 	{
 	public:
-		GlOneFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram & p_program );
-		GlOneFrameVariable( OpenGl & p_gl, Castor3D::OneFrameVariable< T > & p_variable );
-		virtual ~GlOneFrameVariable();
+		GlPushUniform( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences );
+		virtual ~GlPushUniform();
+
+		inline uint32_t GetGlName() const
+		{
+			return m_glName;
+		}
+
+	private:
 		/**
-		 *\copydoc		Castor3D::FrameVariable::Initialise
+		 *\copydoc		Castor3D::Uniform::DoInitialise
 		 */
-		bool Initialise()override;
+		bool DoInitialise()override;
 		/**
-		 *\copydoc		Castor3D::FrameVariable::Cleanup
+		 *\copydoc		Castor3D::Uniform::DoUpdate
 		 */
-		void Cleanup()override;
-		/**
-		 *\copydoc		Castor3D::FrameVariable::Bind
-		 */
-		void Bind()const override;
-		/**
-		 *\copydoc		Castor3D::FrameVariable::Unbind
-		 */
-		void Unbind()const override {}
+		void DoUpdate()const override;
+
+	private:
+		uint32_t m_glName{ GlInvalidIndex };
+		bool m_presentInProgram{ true };
 	};
 }
 
-#include "GlOneFrameVariable.inl"
+#include "GlPushUniform.inl"
 
 #endif

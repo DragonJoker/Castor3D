@@ -17,9 +17,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/Viewport.hpp>
 #include <Scene/Scene.hpp>
-#include <Shader/FrameVariableBuffer.hpp>
-#include <Shader/OneFrameVariable.hpp>
-#include <Shader/PointFrameVariable.hpp>
+#include <Shader/UniformBuffer.hpp>
 #include <Technique/RenderTechniquePass.hpp>
 
 #include <Graphics/FontCache.hpp>

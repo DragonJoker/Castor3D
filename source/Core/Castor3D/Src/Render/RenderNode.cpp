@@ -15,8 +15,7 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -76,7 +75,7 @@ namespace Castor3D
 		}
 	}
 
-	SceneRenderNode::SceneRenderNode( FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos )
+	SceneRenderNode::SceneRenderNode( UniformBuffer & p_sceneUbo, Uniform3r & p_cameraPos )
 		: m_sceneUbo{ p_sceneUbo }
 		, m_cameraPos{ p_cameraPos }
 	{
@@ -86,7 +85,7 @@ namespace Castor3D
 		, PassRenderNode const & p_pass
 		, GeometryBuffers & p_buffers
 		, SceneNode & p_sceneNode
-		, OneIntFrameVariable & p_shadowReceiver )
+		, Uniform1i & p_shadowReceiver )
 		: m_scene{ p_scene }
 		, m_pass{ p_pass.m_pass
 				  , p_pass.m_pipeline
@@ -165,8 +164,7 @@ namespace Castor3D
 
 		if ( m_skeleton )
 		{
-			Matrix4x4rFrameVariableSPtr l_variable;
-			m_animationUbo.GetVariable( ShaderProgram::Bones, l_variable );
+			auto l_variable = m_animationUbo.GetUniform< UniformType::eMat4x4f >( ShaderProgram::Bones );
 
 			if ( l_variable )
 			{
@@ -176,8 +174,7 @@ namespace Castor3D
 
 		if ( m_mesh )
 		{
-			OneFloatFrameVariableSPtr l_variable;
-			m_animationUbo.GetVariable( ShaderProgram::Time, l_variable );
+			auto l_variable = m_animationUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Time );
 
 			if ( l_variable )
 			{

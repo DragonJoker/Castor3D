@@ -99,9 +99,9 @@ namespace Castor3D
 		TextureUnitSPtr pTextureUnit;
 		ShaderProgramSPtr pShaderProgram;
 		ShaderType eShaderObject;
-		FrameVariableBufferRPtr pFrameVariableBuffer;
-		FrameVariableSPtr pFrameVariable;
-		OneIntFrameVariableSPtr pSamplerFrameVariable;
+		UniformBufferRPtr pUniformBuffer;
+		UniformSPtr pUniform;
+		PushUniform1sSPtr pSamplerUniform;
 		OverlaySPtr pOverlay;
 		BillboardListSPtr pBillboards;
 		int iFace1;

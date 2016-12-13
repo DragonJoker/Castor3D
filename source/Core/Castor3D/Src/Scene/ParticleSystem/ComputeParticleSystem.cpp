@@ -11,7 +11,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
@@ -130,13 +130,13 @@ namespace Castor3D
 	void ComputeParticleSystem::SetUpdateProgram( ShaderProgramSPtr p_program )
 	{
 		m_updateProgram = p_program;
-		auto & l_ubo = m_updateProgram->CreateFrameVariableBuffer( cuT( "ParticleSystem" ), ShaderTypeFlag::eCompute );
-		m_deltaTime = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fDeltaTime" ) );
-		m_time = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fTotalTime" ) );
-		m_maxParticleCount = l_ubo.CreateVariable< OneUIntFrameVariable >( cuT( "c3d_uiMaxParticlesCount" ) );
-		m_currentParticleCount = l_ubo.CreateVariable< OneUIntFrameVariable >( cuT( "c3d_uiCurrentParticlesCount" ) );
-		m_emitterPosition = l_ubo.CreateVariable< Point3fFrameVariable >( cuT( "c3d_v3EmitterPosition" ) );
-		m_ubo = m_updateProgram->FindFrameVariableBuffer( cuT( "ParticleSystem" ) );
+		auto & l_ubo = m_updateProgram->CreateUniformBuffer( cuT( "ParticleSystem" ), ShaderTypeFlag::eCompute );
+		m_deltaTime = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
+		m_time = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
+		m_maxParticleCount = l_ubo.CreateUniform< UniformType::eUInt >( cuT( "c3d_uiMaxParticlesCount" ) );
+		m_currentParticleCount = l_ubo.CreateUniform< UniformType::eUInt >( cuT( "c3d_uiCurrentParticlesCount" ) );
+		m_emitterPosition = l_ubo.CreateUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );
+		m_ubo = m_updateProgram->FindUniformBuffer( cuT( "ParticleSystem" ) );
 
 		auto & l_atomic = m_updateProgram->CreateAtomicCounterBuffer( cuT( "Counters" ), ShaderTypeFlag::eCompute );
 		m_generatedCountBuffer = m_updateProgram->FindAtomicCounterBuffer( cuT( "Counters" ) );

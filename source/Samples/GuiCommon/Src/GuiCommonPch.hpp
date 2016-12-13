@@ -120,7 +120,7 @@ SOFTWARE.
 #	include <Scene/Light/DirectionalLight.hpp>
 #	include <Scene/Light/SpotLight.hpp>
 #	include <Shader/ShaderProgram.hpp>
-#	include <Shader/FrameVariable.hpp>
+#	include <Shader/Uniform.hpp>
 #	include <Texture/TextureUnit.hpp>
 #	include <Texture/TextureLayout.hpp>
 

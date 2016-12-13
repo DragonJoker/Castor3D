@@ -201,7 +201,7 @@ namespace Castor3D
 		 *\brief		Crée une variable uniform à donner aux ShaderObjects
 		 *\param[in]	p_variable	La variable à donner
 		 */
-		C3D_API virtual void AddFrameVariable( FrameVariableSPtr p_variable );
+		C3D_API virtual void AddUniform( PushUniformSPtr p_variable );
 		/**
 		 *\~english
 		 *\brief		Finds a variable
@@ -210,14 +210,14 @@ namespace Castor3D
 		 *\brief		Trouve une variable
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		C3D_API FrameVariableSPtr FindFrameVariable( Castor::String const & p_name )const;
+		C3D_API PushUniformSPtr FindUniform( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes all frame variables
 		 *\~french
 		 *\brief		Vide la liste de frame variables
 		 */
-		C3D_API virtual void FlushFrameVariables();
+		C3D_API virtual void FlushUniforms();
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame variables bound to this shader
@@ -226,9 +226,9 @@ namespace Castor3D
 		 *\brief		Récupère les variables de frame liées à ce shader
 		 *\return		La liste
 		 */
-		inline FrameVariablePtrList & GetFrameVariables()
+		inline PushUniformList & GetUniforms()
 		{
-			return m_listFrameVariables;
+			return m_listUniforms;
 		}
 		/**
 		 *\~english
@@ -238,23 +238,9 @@ namespace Castor3D
 		 *\brief		Récupère les variables de frame liées à ce shader
 		 *\return		La liste
 		 */
-		inline FrameVariablePtrList const & GetFrameVariables()const
+		inline PushUniformList const & GetUniforms()const
 		{
-			return m_listFrameVariables;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells if the compiled shader has the given parameter
-		 *\param[in]	p_name	The parameter name
-		 *\return		\p true if the parameter was found
-		 *\~french
-		 *\brief		Dit si le shader compilé a le paramètre donné
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\return		\p true si le paramètre a été trouvé
-		 */
-		virtual bool HasParameter( Castor::String const & p_name )
-		{
-			return false;
+			return m_listUniforms;
 		}
 		/**
 		 *\~english
@@ -428,28 +414,6 @@ namespace Castor3D
 		{
 			return m_parent;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the given parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
-		 *\~french
-		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
-		 */
-		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value ) {}
-		/**
-		 *\~english
-		 *\brief		Defines the given parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
-		 *\~french
-		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
-		 */
-		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value ) {}
 
 	protected:
 		/**
@@ -470,32 +434,45 @@ namespace Castor3D
 		virtual Castor::String DoRetrieveCompilerLog() = 0;
 
 	protected:
-		//!<\~english The shader type	\~french Le type de shader
+		//!<\~english	The shader type.
+		//!\~french		Le type de shader.
 		ShaderType m_type;
-		//!\~english The parent shader program	\~french Le programme parent
+		//!\~english	The parent shader program.
+		//!\~french		Le programme parent.
 		ShaderProgram * m_parent{ nullptr };
-		//!<\~english The shader compile status	\~french Le statut de compilation du shader
+		//!<\~english	The shader compile status.
+		//!\~french		Le statut de compilation du shader.
 		ShaderStatus m_status{ ShaderStatus::eNotCompiled };
-		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
+		//!\~english	The input primitive type (for geometry shaders).
+		//!\~french		Le type de primitives en entrée (pour les geometry shaders).
 		Topology m_eInputType{ Topology::eTriangles };
-		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
+		//!\~english	The output primitive type (for geometry shaders).
+		//!\~french		Le type de primitives en sortie (pour les geometry shaders).
 		Topology m_eOutputType{ Topology::eTriangles };
-		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
+		//!\~english	The output vertex count (for geometry shaders)..
+		//!\~french		Le nombre de vertex générés (pour les geometry shaders).
 		uint8_t m_uiOutputVtxCount{ 3 };
-		//!\~english The current shader model	\~french Le modèle de shader actuel
+		//!\~english	The current shader model.
+		//!\~french		Le modèle de shader actuel.
 		ShaderModel m_eShaderModel{ ShaderModel::eModel1 };
-		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
+		//!\~english	Array of files path, sorted by shader model..
+		//!\~french		Tableau des chemins de fichiers, triés par modèle de shader.
 		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
-		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader
+		//!\~english	Array of source codes, sorted by shader model..
+		//!\~french		Tableau des codes sources, triés par modèle de shader.
 		std::array< Castor::String, size_t( ShaderModel::eCount ) > m_arraySources;
-		//!<\~english Actually loaded ASCII Source-Code	\~french Le texte ASCII du shader chargé
+		//!<\~english	Actually loaded ASCII source code.
+		//!\~french		Le texte ASCII du shader chargé.
 		Castor::String m_loadedSource;
-		//!<\~english Actually loaded file path	\~french Le chemin d'accès au fichier contenant le source du shader
+		//!<\~english	Actually loaded file path.
+		//!\~french		Le chemin d'accès au fichier contenant le source du shader.
 		Castor::Path m_pathLoadedFile;
-		//!\~english The frame variables map, ordered by name	\~french La liste des variables de frame
-		FrameVariablePtrStrMap m_mapFrameVariables;
-		//!\~english The frame variables map	\~french La liste des variables de frame
-		FrameVariablePtrList m_listFrameVariables;
+		//!\~english	The frame variables map, ordered by name.
+		//!\~french		La liste des variables de frame.
+		PushUniformMap m_mapUniforms;
+		//!\~english	The frame variables map.
+		//!\~french		La liste des variables de frame.
+		PushUniformList m_listUniforms;
 	};
 }
 

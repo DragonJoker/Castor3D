@@ -29,7 +29,7 @@ SOFTWARE.
 
 namespace deferred
 {
-	using Castor3D::Point3rFrameVariable;
+	using Castor3D::Uniform3r;
 
 	enum class DsTexture
 		: uint8_t
@@ -62,7 +62,7 @@ namespace deferred
 		: public Castor3D::RenderTechnique
 	{
 	protected:
-		DECLARE_SMART_PTR( Point3rFrameVariable );
+		DECLARE_SMART_PTR( Uniform3r );
 
 	protected:
 		/**
@@ -207,13 +207,13 @@ namespace deferred
 			Castor3D::ShaderProgramSPtr m_program;
 			//!\~english	The framve variable buffer used to apply matrices.
 			//!\~french		Le tampon de variables shader utilisé pour appliquer les matrices.
-			Castor3D::FrameVariableBufferSPtr m_matrixUbo;
+			Castor3D::UniformBufferSPtr m_matrixUbo;
 			//!\~english	The framve variable buffer used to transmit scene values.
 			//!\~french		Le tampon de variables shader utilisé pour transmettre les variables de scène.
-			Castor3D::FrameVariableBufferSPtr m_sceneUbo;
+			Castor3D::UniformBufferSPtr m_sceneUbo;
 			//!\~english	The shader variable containing the camera position.
 			//!\~french		La variable de shader contenant la position de la caméra.
-			Castor3D::Point3rFrameVariableSPtr m_camera;
+			Castor3D::Uniform3rSPtr m_camera;
 			//!\~english	Geometry buffers holder.
 			//!\~french		Conteneur de buffers de géométries.
 			Castor3D::GeometryBuffersSPtr m_geometryBuffers;

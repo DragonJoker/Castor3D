@@ -20,47 +20,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_FRAME_VARIABLE_BUFFER_H___
-#define ___GL_FRAME_VARIABLE_BUFFER_H___
+#ifndef ___TRS_FRAME_VARIABLE_BUFFER_H___
+#define ___TRS_FRAME_VARIABLE_BUFFER_H___
 
-#include <Shader/FrameVariableBuffer.hpp>
+#include "TestRenderSystemPrerequisites.hpp"
 
-#include "GlRenderSystemPrerequisites.hpp"
-#include "Buffer/GlBufferBase.hpp"
+#include <Shader/UniformBuffer.hpp>
 
-namespace GlRender
+namespace TestRender
 {
-	struct GlVariableApplyerBase
-	{
-		virtual void operator()( OpenGl & p_gl, uint32_t p_index, Castor3D::FrameVariableSPtr p_variable ) = 0;
-	};
-
-	DECLARE_MAP( Castor3D::FrameVariableSPtr, GlVariableApplyerBaseSPtr, VariableApplyer );
-
-	class GlFrameVariableBuffer
-		: public Castor3D::FrameVariableBuffer
-		, public Holder
+	class TestUniformBuffer
+		: public Castor3D::UniformBuffer
 	{
 	public:
-		GlFrameVariableBuffer( OpenGl & p_gl
-			, Castor::String const & p_name
-			, GlShaderProgram & p_program
-			, Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags
+		TestUniformBuffer( Castor::String const & p_name
+			, Castor3D::ShaderProgram & p_program
+			, Castor3D::ShaderTypeFlags const & p_flags
 			, Castor3D::RenderSystem & p_renderSystem );
-		virtual ~GlFrameVariableBuffer();
-		void SetBindingPoint( uint32_t p_point )const;
+		virtual ~TestUniformBuffer();
 
 	private:
-		Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 )override;
 		bool DoInitialise()override;
 		void DoCleanup()override;
 		void DoBindTo( uint32_t p_index )override;
 		void DoUpdate()override;
-
-	private:
-		GlBufferBase< uint8_t > m_glBuffer;
-		int m_uniformBlockIndex;
-		int m_uniformBlockSize;
 	};
 }
 

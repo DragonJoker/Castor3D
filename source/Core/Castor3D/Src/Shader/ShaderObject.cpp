@@ -1,8 +1,7 @@
 #include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
-#include "FrameVariable.hpp"
-#include "OneFrameVariable.hpp"
-#include "FrameVariableBuffer.hpp"
+#include "Uniform.hpp"
+#include "UniformBuffer.hpp"
 
 #if defined( _WIN32 )
 #	include <direct.h>
@@ -82,9 +81,9 @@ namespace Castor3D
 
 		if ( l_hasFile )
 		{
-			for ( auto l_it : p_shaderObject.GetFrameVariables() )
+			for ( auto l_it : p_shaderObject.GetUniforms() )
 			{
-				l_return = FrameVariable::TextWriter( m_tabs + cuT( "\t" ) )( *l_it, p_file );
+				l_return = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( l_it->GetBaseUniform(), p_file );
 			}
 		}
 
@@ -125,18 +124,14 @@ namespace Castor3D
 
 	void ShaderObject::Bind()
 	{
-		for ( auto l_variable : m_listFrameVariables )
+		for ( auto l_variable : m_listUniforms )
 		{
-			l_variable->Bind();
+			l_variable->Update();
 		}
 	}
 
 	void ShaderObject::Unbind()
 	{
-		for ( auto l_variable : m_listFrameVariables )
-		{
-			l_variable->Unbind();
-		}
 	}
 
 	void ShaderObject::SetFile( ShaderModel p_eModel, Path const & p_filename )
@@ -190,21 +185,21 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObject::AddFrameVariable( FrameVariableSPtr p_variable )
+	void ShaderObject::AddUniform( PushUniformSPtr p_variable )
 	{
 		if ( p_variable )
 		{
-			m_listFrameVariables.push_back( p_variable );
-			m_mapFrameVariables.insert( std::make_pair( p_variable->GetName(), p_variable ) );
+			m_listUniforms.push_back( p_variable );
+			m_mapUniforms.insert( std::make_pair( p_variable->GetBaseUniform().GetName(), p_variable ) );
 		}
 	}
 
-	FrameVariableSPtr ShaderObject::FindFrameVariable( Castor::String const & p_name )const
+	PushUniformSPtr ShaderObject::FindUniform( Castor::String const & p_name )const
 	{
-		FrameVariableSPtr l_return;
-		auto l_it = m_mapFrameVariables.find( p_name );
+		PushUniformSPtr l_return;
+		auto l_it = m_mapUniforms.find( p_name );
 
-		if ( l_it != m_mapFrameVariables.end() )
+		if ( l_it != m_mapUniforms.end() )
 		{
 			l_return = l_it->second.lock();
 		}
@@ -212,10 +207,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObject::FlushFrameVariables()
+	void ShaderObject::FlushUniforms()
 	{
-		clear_container( m_mapFrameVariables );
-		clear_container( m_listFrameVariables );
+		clear_container( m_mapUniforms );
+		clear_container( m_listUniforms );
 	}
 
 	bool ShaderObject::DoCheckErrors()

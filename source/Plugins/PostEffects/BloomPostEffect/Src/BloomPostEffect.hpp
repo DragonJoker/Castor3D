@@ -98,17 +98,17 @@ namespace Bloom
 		Castor3D::SamplerSPtr m_nearestSampler;
 
 		Castor3D::RenderPipelineUPtr m_hiPassPipeline;
-		Castor3D::OneIntFrameVariableSPtr m_hiPassMapDiffuse;
+		Castor3D::PushUniform1sSPtr m_hiPassMapDiffuse;
 
 		Castor3D::RenderPipelineUPtr m_blurXPipeline;
-		Castor3D::OneIntFrameVariableSPtr m_blurXMapDiffuse;
-		Castor3D::OneUIntFrameVariableSPtr m_blurXCoeffCount;
-		Castor3D::OneFloatFrameVariableSPtr m_blurXCoeffs;
+		Castor3D::PushUniform1sSPtr m_blurXMapDiffuse;
+		Castor3D::Uniform1uiSPtr m_blurXCoeffCount;
+		Castor3D::Uniform1fSPtr m_blurXCoeffs;
 
 		Castor3D::RenderPipelineUPtr m_blurYPipeline;
-		Castor3D::OneIntFrameVariableSPtr m_blurYMapDiffuse;
-		Castor3D::OneUIntFrameVariableSPtr m_blurYCoeffCount;
-		Castor3D::OneFloatFrameVariableSPtr m_blurYCoeffs;
+		Castor3D::PushUniform1sSPtr m_blurYMapDiffuse;
+		Castor3D::Uniform1uiSPtr m_blurYCoeffCount;
+		Castor3D::Uniform1fSPtr m_blurYCoeffs;
 
 		Castor3D::RenderPipelineUPtr m_combinePipeline;
 

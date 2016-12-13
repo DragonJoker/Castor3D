@@ -38,9 +38,9 @@ namespace Castor
 				<br />and an action on destruction.
 	\remarks	Useful to force execution of code when an exception is thrown.
 	\~english
-	\brief		Permet de d�clarer une variable de scope, avec un action � la construction
-				<br />et une action � la destruction.
-	\remarks	Utile pour forcer l'ex�cution de code, si une exception est lanc�e.
+	\brief		Permet de dàclarer une variable de scope, avec un action à la construction
+				<br />et une action à la destruction.
+	\remarks	Utile pour forcer l'exàcution de code, si une exception est lancàe.
 	\b Example
 	@code
 		char * l_buffer = nullptr;
@@ -70,8 +70,8 @@ namespace Castor
 		 *\param[in]	p_clean	The action executed on destruction.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\remarks		Ex�cute l'action d'initialisation.
-		 *\param[in]	p_init	L'action effectu�e � la construction.
+		 *\remarks		Exàcute l'action d'initialisation.
+		 *\param[in]	p_init	L'action effectuàe à la construction.
 		 *\param[in]	p_clean	L'action effectue lors de la destruction.
 		*/
 		template< typename InitFunc >
@@ -79,14 +79,14 @@ namespace Castor
 			: m_clean( p_clean )
 		{
 			p_init();
-		};
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\remarks		Executes the clean action.
 		 *\~french
 		 *\brief		Destructeur.
-		 *\remarks		Ex�cute l'action de nettoyage.
+		 *\remarks		Exàcute l'action de nettoyage.
 		 */
 		~BlockGuard()
 		{
@@ -105,8 +105,8 @@ namespace Castor
 	 *\param[in]	p_clean	The action executed on destruction.
 	 *\return		The block guard.
 	 *\~french
-	 *\brief		fonction d'aide � la construction d'un BlockGuard.
-	 *\param[in]	p_init	L'action effectu�e � la construction.
+	 *\brief		fonction d'aide à la construction d'un BlockGuard.
+	 *\param[in]	p_init	L'action effectuàe à la construction.
 	 *\param[in]	p_clean	L'action effectue lors de la destruction.
 	 *\return		La guarde.
 	*/

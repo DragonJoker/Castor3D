@@ -7,8 +7,7 @@
 #include "Render/RenderPass.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Technique/RenderTechnique.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/OneFrameVariable.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderProgram.hpp"
 
@@ -120,82 +119,82 @@ namespace Castor3D
 		return l_return;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateMatrixBuffer(
+	UniformBuffer & ShaderProgramCache::CreateMatrixBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
-		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferMatrix, p_shaderMask );
-		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxProjection, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxModel, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxView, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxNormal, 1 );
+		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferMatrix, p_shaderMask );
+		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection, 1 );
+		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel, 1 );
+		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView, 1 );
+		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal, 1 );
 
 		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
 		{
-			l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxTexture[i], 1 );
+			l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i], 1 );
 		}
 
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateSceneBuffer(
+	UniformBuffer & ShaderProgramCache::CreateSceneBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
-		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferScene, p_shaderMask );
-		l_buffer.CreateVariable( FrameVariableType::eVec4f, ShaderProgram::AmbientLight, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eVec4f, ShaderProgram::BackgroundColour, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eVec4i, ShaderProgram::LightsCount, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eVec3r, ShaderProgram::CameraPos, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eInt, ShaderProgram::FogType, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eFloat, ShaderProgram::FogDensity, 1 );
+		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferScene, p_shaderMask );
+		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::AmbientLight, 1 );
+		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::BackgroundColour, 1 );
+		l_buffer.CreateUniform( UniformType::eVec4i, ShaderProgram::LightsCount, 1 );
+		l_buffer.CreateUniform( UniformType::eVec3r, ShaderProgram::CameraPos, 1 );
+		l_buffer.CreateUniform( UniformType::eInt, ShaderProgram::FogType, 1 );
+		l_buffer.CreateUniform( UniformType::eFloat, ShaderProgram::FogDensity, 1 );
 
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreatePassBuffer(
+	UniformBuffer & ShaderProgramCache::CreatePassBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
-		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferPass, p_shaderMask );
-		l_buffer.CreateVariable( FrameVariableType::eVec4f, ShaderProgram::MatAmbient, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eVec4f, ShaderProgram::MatDiffuse, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eVec4f, ShaderProgram::MatEmissive, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eVec4f, ShaderProgram::MatSpecular, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eFloat, ShaderProgram::MatShininess, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eFloat, ShaderProgram::MatOpacity, 1 );
+		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferPass, p_shaderMask );
+		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatAmbient, 1 );
+		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatDiffuse, 1 );
+		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatEmissive, 1 );
+		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular, 1 );
+		l_buffer.CreateUniform( UniformType::eFloat, ShaderProgram::MatShininess, 1 );
+		l_buffer.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity, 1 );
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateModelBuffer(
+	UniformBuffer & ShaderProgramCache::CreateModelBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
-		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferModel, p_shaderMask );
-		l_buffer.CreateVariable( FrameVariableType::eInt, ShaderProgram::ShadowReceiver, 1 );
+		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferModel, p_shaderMask );
+		l_buffer.CreateUniform( UniformType::eInt, ShaderProgram::ShadowReceiver, 1 );
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateAnimationBuffer(
+	UniformBuffer & ShaderProgramCache::CreateAnimationBuffer(
 		ShaderProgram & p_shader,
 		ProgramFlags const & p_programFlags,
-		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+		ShaderTypeFlags const & p_shaderMask )const
 	{
 		REQUIRE( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) || CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferAnimation, p_shaderMask );
+		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferAnimation, p_shaderMask );
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 		{
-			l_buffer.CreateVariable( FrameVariableType::eMat4x4r, ShaderProgram::Bones, 400 );
+			l_buffer.CreateUniform( UniformType::eMat4x4r, ShaderProgram::Bones, 400 );
 		}
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 		{
-			l_buffer.CreateVariable( FrameVariableType::eFloat, ShaderProgram::Time );
+			l_buffer.CreateUniform( UniformType::eFloat, ShaderProgram::Time );
 		}
 
 		return l_buffer;
@@ -208,52 +207,52 @@ namespace Castor3D
 	{
 		if ( CheckFlag( p_programFlags, ProgramFlag::eLighting ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eAmbient ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapAmbient, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapAmbient, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eColour ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapColour, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapColour, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapNormal, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapNormal, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eSpecular ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapSpecular, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapSpecular, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapEmissive, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapEmissive, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapOpacity, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eGloss ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapGloss, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapGloss, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eHeight ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapHeight, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapHeight, ShaderType::ePixel );
 		}
 	}
 
@@ -285,7 +284,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			FlagCombination< ShaderTypeFlag > l_matrixUboShaderMask = ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel;
+			ShaderTypeFlags l_matrixUboShaderMask = ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel;
 			ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_return->CreateObject( ShaderType::eVertex );
 			l_return->CreateObject( ShaderType::ePixel );
@@ -424,9 +423,9 @@ namespace Castor3D
 			CreatePassBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreateModelBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreateTextureVariables( *l_return, p_textureFlags, p_programFlags );
-			auto & l_billboardUbo = l_return->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards, ShaderTypeFlag::eVertex );
-			l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::Dimensions );
-			l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::WindowSize );
+			auto & l_billboardUbo = l_return->CreateUniformBuffer( ShaderProgram::BufferBillboards, ShaderTypeFlag::eVertex );
+			l_billboardUbo.CreateUniform( UniformType::eUInt, ShaderProgram::Dimensions );
+			l_billboardUbo.CreateUniform( UniformType::eUInt, ShaderProgram::WindowSize );
 		}
 
 		return l_return;

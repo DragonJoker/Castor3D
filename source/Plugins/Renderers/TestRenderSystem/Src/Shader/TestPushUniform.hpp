@@ -20,31 +20,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___TRS_MATRIX_FRAME_VARIABLE_H___
-#define ___TRS_MATRIX_FRAME_VARIABLE_H___
+#ifndef ___TRS_POINT_FRAME_VARIABLE_H___
+#define ___TRS_POINT_FRAME_VARIABLE_H___
 
 #include "TestRenderSystemPrerequisites.hpp"
 
-#include <Shader/MatrixFrameVariable.hpp>
+#include <Shader/PushUniform.hpp>
 
 namespace TestRender
 {
-	template< typename T, uint32_t Rows, uint32_t Columns >
-	class TestMatrixFrameVariable
-		: public Castor3D::MatrixFrameVariable< T, Rows, Columns >
+	template< Castor3D::UniformType Type >
+	class TestPushUniform
+		: public Castor3D::TPushUniform< Type >
 	{
 	public:
-		TestMatrixFrameVariable( uint32_t p_occurences, TestShaderProgram & p_program );
-		TestMatrixFrameVariable( Castor3D::MatrixFrameVariable< T, Rows, Columns > & p_variable );
-		virtual ~TestMatrixFrameVariable();
+		TestPushUniform( TestShaderProgram & p_program, uint32_t p_occurences );
+		TestPushUniform(  );
+		virtual ~TestPushUniform();
 
-		virtual bool Initialise();
-		virtual void Cleanup();
-		virtual void Bind()const;
-		virtual void Unbind()const {}
+	private:
+		virtual bool DoInitialise();
+		virtual void DoUpdate()const;
 	};
 }
 
-#include "TestMatrixFrameVariable.inl"
+#include "TestPushUniform.inl"
 
 #endif

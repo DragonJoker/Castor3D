@@ -153,7 +153,7 @@ namespace Castor3D
 		SamplerWPtr m_sampler;
 		//!\~english	The shader matrices constants buffer.
 		//!\~french		Le tampon de constantes de shader contenant les matrices.
-		FrameVariableBufferSPtr m_matricesBuffer;
+		UniformBufferSPtr m_matricesBuffer;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer{ nullptr };

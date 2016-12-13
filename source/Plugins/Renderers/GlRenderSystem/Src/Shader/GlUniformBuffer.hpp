@@ -20,40 +20,40 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_FRAME_VARIABLE_BASE_H___
-#define ___GL_FRAME_VARIABLE_BASE_H___
+#ifndef ___GL_FRAME_VARIABLE_BUFFER_H___
+#define ___GL_FRAME_VARIABLE_BUFFER_H___
+
+#include <Shader/UniformBuffer.hpp>
 
 #include "GlRenderSystemPrerequisites.hpp"
-
-#include "Shader/GlShaderProgram.hpp"
+#include "Buffer/GlBufferBase.hpp"
 
 namespace GlRender
 {
-	class GlFrameVariableBase
-		: public Holder
+	class GlUniformBuffer
+		: public Castor3D::UniformBuffer
+		, public Holder
 	{
 	public:
-		GlFrameVariableBase( OpenGl & p_gl, GlShaderProgram const & p_program );
-		virtual ~GlFrameVariableBase();
+		GlUniformBuffer( OpenGl & p_gl
+			, Castor::String const & p_name
+			, GlShaderProgram & p_program
+			, Castor3D::ShaderTypeFlags const & p_flags
+			, Castor3D::RenderSystem & p_renderSystem );
+		virtual ~GlUniformBuffer();
+		void SetBindingUniform( uint32_t p_point )const;
 
-		inline uint32_t GetGlName() const
-		{
-			return m_glName;
-		}
+	private:
+		bool DoInitialise()override;
+		void DoCleanup()override;
+		void DoBindTo( uint32_t p_index )override;
+		void DoUpdate()override;
 
-	protected:
-		void GetVariableLocation( char const * p_varName );
-		template< typename Type > void DoBind( Type const * p_value, uint32_t p_occurences )const;
-		template< typename Type, int Count > void DoBind( Type const * p_value, uint32_t p_occurences )const;
-		template< typename Type, int Rows, int Columns > void DoBind( Type const * p_value, uint32_t p_occurences )const;
-
-	protected:
-		uint32_t m_glName;
-		GlShaderProgram const & m_program;
-		bool m_presentInProgram;
+	private:
+		GlBufferBase< uint8_t > m_glBuffer;
+		int m_uniformBlockIndex;
+		int m_uniformBlockSize;
 	};
 }
-
-#include "GlFrameVariableBase.inl"
 
 #endif

@@ -50,9 +50,9 @@ namespace GuiCommon
 		 *\brief		Constructeur
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_variable	La variable cible
-		 *\param[in]	p_buffer	Le tampon de variables contenant celle donn�e
+		 *\param[in]	p_buffer	Le tampon de variables contenant celle donnàe
 		 */
-		FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, Castor3D::FrameVariableBufferSPtr p_buffer );
+		FrameVariableTreeItemProperty( bool p_editable, Castor3D::UniformSPtr p_variable, Castor3D::UniformBufferSPtr p_buffer );
 		/**
 		 *\~english
 		 *\brief		Constructor, allows creation of sampler frame variables only
@@ -60,12 +60,12 @@ namespace GuiCommon
 		 *\param[in]	p_variable	The target variable
 		 *\param[in]	p_type		The variables buffer holding the one given
 		 *\~french
-		 *\brief		Constructeur, ne permet la cr�ation que de variables de type sampler
+		 *\brief		Constructeur, ne permet la cràation que de variables de type sampler
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_variable	La variable cible
-		 *\param[in]	p_type		Le tampon de variables contenant celle donn�e
+		 *\param[in]	p_type		Le tampon de variables contenant celle donnàe
 		 */
-		FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, Castor3D::ShaderType p_type );
+		FrameVariableTreeItemProperty( bool p_editable, Castor3D::PushUniformSPtr p_variable, Castor3D::ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -81,7 +81,7 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::FrameVariableSPtr GetVariable()
+		inline Castor3D::UniformSPtr GetVariable()
 		{
 			return m_variable.lock();
 		}
@@ -93,7 +93,7 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::FrameVariableBufferSPtr GetBuffer()
+		inline Castor3D::UniformBufferSPtr GetBuffer()
 		{
 			return m_buffer.lock();
 		}
@@ -109,13 +109,14 @@ namespace GuiCommon
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnTypeChange( Castor3D::FrameVariableType p_value );
+		void OnTypeChange( Castor3D::UniformType p_value );
 		void OnNameChange( Castor::String const & p_value );
 		void OnValueChange( wxVariant const & p_value );
 
 	private:
-		Castor3D::FrameVariableWPtr m_variable;
-		Castor3D::FrameVariableBufferWPtr m_buffer;
+		Castor3D::UniformWPtr m_variable;
+		Castor3D::PushUniformWPtr m_pushVariable;
+		Castor3D::UniformBufferWPtr m_buffer;
 		Castor3D::ShaderType m_type;
 	};
 }
