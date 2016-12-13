@@ -395,7 +395,7 @@ namespace Castor3D
 	*/
 	template< UniformType Type >
 	struct is_matrix_type
-		: std::bool_constant< variable_type< Type >::is_matrix >
+		: std::integral_constant< bool, variable_type< Type >::is_matrix >
 	{
 	};
 	/*!
@@ -409,7 +409,7 @@ namespace Castor3D
 	*/
 	template< UniformType Type >
 	struct is_point_type
-		: std::bool_constant< variable_type< Type >::is_point >
+		: std::integral_constant< bool, variable_type< Type >::is_point >
 	{
 	};
 	/*!
@@ -423,7 +423,7 @@ namespace Castor3D
 	*/
 	template< UniformType Type >
 	struct is_one_type
-		: std::bool_constant< variable_type< Type >::is_one >
+		: std::integral_constant< bool, variable_type< Type >::is_one >
 	{
 	};
 	/*!

@@ -79,7 +79,7 @@ namespace Castor
 			: m_clean( p_clean )
 		{
 			p_init();
-		};
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor.

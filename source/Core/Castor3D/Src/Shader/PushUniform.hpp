@@ -145,7 +145,7 @@ namespace Castor3D
 		: public PushUniform
 	{
 	public:
-		using type = typename TUniform< Type >;
+		using type = TUniform< Type >;
 		using value_type = typename type::value_type;
 		using value_sub_type = typename type::value_sub_type;
 		using param_type = typename type::param_type;

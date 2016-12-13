@@ -169,7 +169,14 @@ namespace Castor3D
 
 	bool UniformBuffer::Initialise()
 	{
-		return DoInitialise();
+		auto l_return = DoInitialise();
+
+		if ( !l_return )
+		{
+			Logger::LogError( StringStream{} << cuT( "Uniform buffer [" ) << GetName() << cuT( "] initialisation failed" ) );
+		}
+
+		return l_return;
 	}
 
 	void UniformBuffer::Cleanup()

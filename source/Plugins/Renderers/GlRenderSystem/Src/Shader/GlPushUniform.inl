@@ -311,13 +311,14 @@ namespace GlRender
 	template< Castor3D::UniformType Type >
 	bool GlPushUniform< Type >::DoInitialise()
 	{
-		m_glName = GetOpenGl().GetUniformLocation( reinterpret_cast< GlShaderProgram & >( m_program ).GetGlName(), Castor::string::string_cast< char >( GetUniform().GetName() ).c_str() );
+		m_glName = GetOpenGl().GetUniformLocation( reinterpret_cast< GlShaderProgram & >( this->m_program ).GetGlName()
+			, Castor::string::string_cast< char >( this->GetUniform().GetName() ).c_str() );
 		return m_glName != GlInvalidIndex;
 	}
 
 	template< Castor3D::UniformType Type >
 	void GlPushUniform< Type >::DoUpdate()const
 	{
-		details::VariableBinder< Type >::Update( GetOpenGl(), m_glName, GetUniform().GetValues(), GetUniform().GetOccCount() );
+		details::VariableBinder< Type >::Update( GetOpenGl(), m_glName, this->GetUniform().GetValues(), this->GetUniform().GetOccCount() );
 	}
 }
