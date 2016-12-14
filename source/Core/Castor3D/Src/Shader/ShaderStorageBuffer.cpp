@@ -35,7 +35,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_gpuBuffer->InitialiseStorage( p_size, p_type, p_nature );
-			m_gpuBuffer->InitialiseBindingPoint( p_index );
+			m_gpuBuffer->SetBindingPoint( p_index );
 		}
 
 		return l_return;
@@ -83,7 +83,7 @@ namespace Castor3D
 	void ShaderStorageBuffer::BindTo( uint32_t p_point )
 	{
 		REQUIRE( m_gpuBuffer );
-		m_gpuBuffer->InitialiseBindingPoint( p_point );
+		m_gpuBuffer->SetBindingPoint( p_point );
 	}
 
 	void ShaderStorageBuffer::Unbind()

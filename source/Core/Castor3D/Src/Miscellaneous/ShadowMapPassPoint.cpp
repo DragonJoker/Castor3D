@@ -35,7 +35,10 @@ namespace Castor3D
 		static String const ShadowMatricesUbo = cuT( "ShadowMatrices" );
 		static String const ShadowMatrices = cuT( "c3d_mtxShadowMatrices" );
 
-		void DoUpdateShadowMatrices( Matrix4x4r const & p_projection, Point3r const & p_position, ShaderProgram & p_program )
+		void DoUpdateShadowMatrices( Matrix4x4r const & p_projection
+			, Point3r const & p_position
+			, UniformBuffer & p_shadowConfig
+			, UniformBuffer & p_shadowMatrices )
 		{
 			std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > const l_views
 			{
@@ -49,12 +52,9 @@ namespace Castor3D
 				}
 			};
 
-			auto l_shadowMapUbo = p_program.FindUniformBuffer( ShadowMapUbo );
-			l_shadowMapUbo->GetUniform< UniformType::eVec3f >( WorldLightPosition )->SetValue( p_position );
-			l_shadowMapUbo->GetUniform< UniformType::eFloat >( FarPlane )->SetValue( 2000.0_r );
-
-			auto l_shadowMatricesUbo = p_program.FindUniformBuffer( ShadowMatricesUbo );
-			auto l_shadowMatrices = l_shadowMatricesUbo->GetUniform< UniformType::eMat4x4f >( ShadowMatrices );
+			p_shadowConfig.GetUniform< UniformType::eVec3f >( WorldLightPosition )->SetValue( p_position );
+			p_shadowConfig.GetUniform< UniformType::eFloat >( FarPlane )->SetValue( 2000.0f );
+			auto l_shadowMatrices = p_shadowMatrices.GetUniform< UniformType::eMat4x4f >( ShadowMatrices );
 			uint32_t l_index{ 0 };
 
 			for ( auto & l_view : l_views )
@@ -66,7 +66,14 @@ namespace Castor3D
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
 		: ShadowMapPass{ p_engine, p_scene, p_light, p_shadowMap, p_index }
+		, m_shadowMatrices{ ShadowMatrices, *p_engine.GetRenderSystem() }
+		, m_shadowConfig{ ShadowMapUbo, *p_engine.GetRenderSystem() }
 	{
+		m_shadowConfig.CreateUniform< UniformType::eVec3f >( WorldLightPosition );
+		m_shadowConfig.CreateUniform< UniformType::eFloat >( FarPlane );
+
+		m_shadowMatrices.CreateUniform< UniformType::eMat4x4f >( ShadowMatrices );
+
 		m_renderQueue.Initialise( m_scene );
 	}
 
@@ -128,16 +135,7 @@ namespace Castor3D
 		auto l_position = m_light.GetParent()->GetDerivedPosition();
 		m_light.Update( l_position );
 		p_queues.push_back( m_renderQueue );
-
-		for ( auto & l_it : m_frontPipelines )
-		{
-			DoUpdateShadowMatrices( m_projection, l_position, l_it.second->GetProgram() );
-		}
-
-		for ( auto & l_it : m_backPipelines )
-		{
-			DoUpdateShadowMatrices( m_projection, l_position, l_it.second->GetProgram() );
-		}
+		DoUpdateShadowMatrices( m_projection, l_position, m_shadowConfig, m_shadowMatrices );
 	}
 
 	void ShadowMapPassPoint::DoRender()
@@ -151,17 +149,6 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoUpdateProgram( ShaderProgram & p_program )
 	{
-		auto l_ubo = p_program.FindUniformBuffer( ShadowMapUbo );
-
-		if ( !l_ubo )
-		{
-			auto & l_shadowMapUbo = p_program.CreateUniformBuffer( ShadowMapUbo, uint32_t( p_program.GetUniformBuffers().size() ) );
-			l_shadowMapUbo.CreateUniform( UniformType::eVec3f, WorldLightPosition );
-			l_shadowMapUbo.CreateUniform( UniformType::eFloat, FarPlane );
-
-			auto & l_shadowMatricesUbo = p_program.CreateUniformBuffer( ShadowMatricesUbo, uint32_t( p_program.GetUniformBuffers().size() ) );
-			l_shadowMatricesUbo.CreateUniform( UniformType::eMat4x4f, ShadowMatrices, 6 );
-		}
 	}
 
 	String ShadowMapPassPoint::DoGetVertexShaderSource( TextureChannels const & p_textureFlags

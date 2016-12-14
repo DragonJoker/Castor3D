@@ -41,6 +41,7 @@ namespace Castor3D
 
 		template< bool Opaque, typename MapType, typename FuncType >
 		inline void DoTraverseNodes( RenderPass const & p_pass
+			, UniformBuffer & p_ubo
 			, Camera const & p_camera
 			, MapType & p_nodes
 			, PickingPass::NodeType p_type
@@ -53,9 +54,8 @@ namespace Castor3D
 			{
 				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, l_depthMaps );
 				l_itPipelines.first->Apply();
-				UniformBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindUniformBuffer( Picking );
-				auto l_drawIndex = l_ubo->GetUniform< UniformType::eUInt >( DrawIndex );
-				auto l_nodeIndex = l_ubo->GetUniform< UniformType::eUInt >( NodeIndex );
+				auto l_drawIndex = p_ubo.GetUniform< UniformType::eUInt >( DrawIndex );
+				auto l_nodeIndex = p_ubo.GetUniform< UniformType::eUInt >( NodeIndex );
 				l_drawIndex->SetValue( uint8_t( p_type ) + ( ( l_count & 0x00FFFFFF ) << 8 ) );
 				uint32_t l_index{ 0u };
 
@@ -64,6 +64,7 @@ namespace Castor3D
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
 						l_nodeIndex->SetValue( l_index++ );
+						p_ubo.Update();
 						p_function( *l_itPipelines.first
 							, *l_itPass.first
 							, *l_itSubmeshes.first
@@ -77,6 +78,7 @@ namespace Castor3D
 
 		template< bool Opaque, typename MapType >
 		inline void DoRenderNonInstanced( RenderPass const & p_pass
+			, UniformBuffer & p_ubo
 			, Scene & p_scene
 			, Camera const & p_camera
 			, PickingPass::NodeType p_type
@@ -89,15 +91,15 @@ namespace Castor3D
 			{
 				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, l_depthMaps );
 				l_itPipelines.first->Apply();
-				UniformBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindUniformBuffer( Picking );
-				auto l_drawIndex = l_ubo->GetUniform< UniformType::eUInt >( DrawIndex );
-				auto l_nodeIndex = l_ubo->GetUniform< UniformType::eUInt >( NodeIndex );
+				auto l_drawIndex = p_ubo.GetUniform< UniformType::eUInt >( DrawIndex );
+				auto l_nodeIndex = p_ubo.GetUniform< UniformType::eUInt >( NodeIndex );
 				l_drawIndex->SetValue( uint8_t( p_type ) + ( ( l_count & 0x00FFFFFF ) << 8 ) );
 				uint32_t l_index{ 0u };
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
 					l_nodeIndex->SetValue( l_index++ );
+					p_ubo.Update();
 
 					if ( l_renderNode.m_data.IsInitialised() )
 					{
@@ -106,23 +108,6 @@ namespace Castor3D
 				}
 
 				l_count++;
-			}
-		}
-
-		inline void DoUpdateProgram( ShaderProgram & p_program )
-		{
-			if ( !p_program.FindUniformBuffer( Picking ) )
-			{
-				auto & l_picking = p_program.CreateUniformBuffer( Picking, uint32_t( p_program.GetUniformBuffers().size() ) );
-				l_picking.CreateUniform( UniformType::eUInt, DrawIndex );
-				l_picking.CreateUniform( UniformType::eUInt, NodeIndex );
-
-				if ( p_program.GetRenderSystem()->GetCurrentContext() )
-				{
-					p_program.Bind( false );
-					l_picking.Initialise( p_program );
-					p_program.Unbind();
-				}
 			}
 		}
 
@@ -213,7 +198,10 @@ namespace Castor3D
 
 	PickingPass::PickingPass( Engine & p_engine )
 		: RenderPass{ cuT( "Picking" ), p_engine, true }
+		, m_pickingUbo{ Picking, *p_engine.GetRenderSystem() }
 	{
+		m_pickingUbo.CreateUniform( UniformType::eUInt, DrawIndex );
+		m_pickingUbo.CreateUniform( UniformType::eUInt, NodeIndex );
 	}
 
 	PickingPass::~PickingPass()
@@ -331,6 +319,7 @@ namespace Castor3D
 		, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
 	{
 		DoTraverseNodes< true >( *this
+			, m_pickingUbo
 			, p_camera
 			, p_nodes
 			, NodeType::eInstantiated
@@ -355,6 +344,7 @@ namespace Castor3D
 		, StaticGeometryRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
+			, m_pickingUbo
 			, p_scene
 			, p_camera
 			, NodeType::eStatic
@@ -366,6 +356,7 @@ namespace Castor3D
 		, AnimatedGeometryRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
+			, m_pickingUbo
 			, p_scene
 			, p_camera
 			, NodeType::eAnimated
@@ -377,6 +368,7 @@ namespace Castor3D
 		, BillboardRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
+			, m_pickingUbo
 			, p_scene
 			, p_camera
 			, NodeType::eBillboard
@@ -525,20 +517,33 @@ namespace Castor3D
 	void PickingPass::DoPrepareBackPipeline( ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_backPipelines.find( p_flags );
-
-		if ( l_it == m_backPipelines.end() )
+		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
 		{
-			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eBack );
-			l_it = m_backPipelines.emplace( p_flags
+			auto & l_pipeline = *m_backPipelines.emplace( p_flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
 					, std::move( l_rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
-					, p_flags ) ).first;
+					, p_flags ) ).first->second;
+			l_pipeline.AddUniformBuffer( m_matrixUbo );
+			l_pipeline.AddUniformBuffer( m_sceneUbo );
+			l_pipeline.AddUniformBuffer( m_modelUbo );
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+			{
+				l_pipeline.AddUniformBuffer( m_billboardUbo );
+			}
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+				|| CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+			{
+				l_pipeline.AddUniformBuffer( m_animationUbo );
+			}
+
+			l_pipeline.AddUniformBuffer( m_pickingUbo );
 		}
 	}
 }

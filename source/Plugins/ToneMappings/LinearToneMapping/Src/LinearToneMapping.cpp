@@ -46,9 +46,9 @@ namespace Linear
 		return std::make_shared< ToneMapping >( p_engine, p_parameters );
 	}
 
-	String ToneMapping::DoCreate( UniformBuffer & p_ubo )
+	String ToneMapping::DoCreate()
 	{
-		m_gammaVar = p_ubo.CreateUniform< UniformType::eFloat >( Gamma );
+		m_gammaVar = m_configUbo.CreateUniform< UniformType::eFloat >( Gamma );
 
 		String l_pxl;
 		{

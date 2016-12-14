@@ -11,7 +11,7 @@
 #include "Render/GlContext.hpp"
 #include "Render/GlRenderPipeline.hpp"
 #include "Render/GlViewport.hpp"
-#include "Shader/GlUniformBuffer.hpp"
+#include "Shader/GlUniformBufferBinding.hpp"
 #include "Shader/GlShaderObject.hpp"
 #include "Shader/GlShaderProgram.hpp"
 #include "Texture/GlDirectTextureStorage.hpp"
@@ -454,18 +454,18 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
+	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( Topology p_topology
+		, ShaderProgram const & p_program )
 	{
 		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
 	}
 
-	RenderPipelineUPtr GlRenderSystem::CreateRenderPipeline(
-		DepthStencilState && p_dsState,
-		RasteriserState && p_rsState,
-		BlendState && p_bdState,
-		MultisampleState && p_msState,
-		ShaderProgram & p_program,
-		PipelineFlags const & p_flags )
+	RenderPipelineUPtr GlRenderSystem::CreateRenderPipeline( DepthStencilState && p_dsState
+		, RasteriserState && p_rsState
+		, BlendState && p_bdState
+		, MultisampleState && p_msState
+		, ShaderProgram & p_program
+		, PipelineFlags const & p_flags )
 	{
 		return std::make_unique< GlRenderPipeline >( GetOpenGl(), *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags );
 	}
@@ -483,6 +483,14 @@ namespace GlRender
 	ShaderProgramSPtr GlRenderSystem::CreateShaderProgram()
 	{
 		return std::make_shared< GlShaderProgram >( GetOpenGl(), *this );
+	}
+
+	UniformBufferBindingUPtr GlRenderSystem::CreateUniformBufferBinding( UniformBuffer & p_ubo
+		, ShaderProgram const & p_program )
+	{
+		return std::make_unique< GlUniformBufferBinding >( GetOpenGl()
+			, p_ubo
+			, static_cast< GlShaderProgram const & >( p_program ) );
 	}
 
 	std::unique_ptr< GpuBuffer< uint8_t > > GlRenderSystem::CreateUInt8Buffer( BufferType p_type )
@@ -505,44 +513,42 @@ namespace GlRender
 		return DoCreateBuffer< float >( *this, p_type );
 	}
 
-	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
+	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed
+		, Topology p_topology
+		, ShaderProgram & p_program )
 	{
 		return std::make_unique< GlTransformFeedback >( GetOpenGl(), *this, p_computed, p_topology, p_program );
 	}
 
-	TextureLayoutSPtr GlRenderSystem::CreateTexture(
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess )
+	TextureLayoutSPtr GlRenderSystem::CreateTexture( TextureType p_type
+		, AccessTypes const & p_cpuAccess
+		, AccessTypes const & p_gpuAccess )
 	{
 		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
-	TextureLayoutSPtr GlRenderSystem::CreateTexture(
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
-		PixelFormat p_format,
-		Size const & p_size )
+	TextureLayoutSPtr GlRenderSystem::CreateTexture( TextureType p_type
+		, AccessTypes const & p_cpuAccess
+		, AccessTypes const & p_gpuAccess
+		, PixelFormat p_format
+		, Size const & p_size )
 	{
 		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
 	}
 
-	TextureLayoutSPtr GlRenderSystem::CreateTexture(
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
-		PixelFormat p_format,
-		Point3ui const & p_size )
+	TextureLayoutSPtr GlRenderSystem::CreateTexture( TextureType p_type
+		, AccessTypes const & p_cpuAccess
+		, AccessTypes const & p_gpuAccess
+		, PixelFormat p_format
+		, Point3ui const & p_size )
 	{
 		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
 	}
 
-	TextureStorageUPtr GlRenderSystem::CreateTextureStorage(
-		TextureStorageType p_type,
-		TextureLayout & p_image,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess )
+	TextureStorageUPtr GlRenderSystem::CreateTextureStorage( TextureStorageType p_type
+		, TextureLayout & p_image
+		, AccessTypes const & p_cpuAccess
+		, AccessTypes const & p_gpuAccess )
 	{
 		TextureStorageUPtr l_return;
 

@@ -119,87 +119,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	UniformBuffer & ShaderProgramCache::CreateMatrixBuffer(
-		ShaderProgram & p_shader,
-		ProgramFlags const & p_programFlags,
-		ShaderTypeFlags const & p_shaderMask )const
-	{
-		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferMatrix, 0u );
-		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection, 1 );
-		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel, 1 );
-		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView, 1 );
-		l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal, 1 );
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			l_buffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i], 1 );
-		}
-
-		return l_buffer;
-	}
-
-	UniformBuffer & ShaderProgramCache::CreateSceneBuffer(
-		ShaderProgram & p_shader,
-		ProgramFlags const & p_programFlags,
-		ShaderTypeFlags const & p_shaderMask )const
-	{
-		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferScene, 1u );
-		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::AmbientLight, 1 );
-		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::BackgroundColour, 1 );
-		l_buffer.CreateUniform( UniformType::eVec4i, ShaderProgram::LightsCount, 1 );
-		l_buffer.CreateUniform( UniformType::eVec3r, ShaderProgram::CameraPos, 1 );
-		l_buffer.CreateUniform( UniformType::eInt, ShaderProgram::FogType, 1 );
-		l_buffer.CreateUniform( UniformType::eFloat, ShaderProgram::FogDensity, 1 );
-
-		return l_buffer;
-	}
-
-	UniformBuffer & ShaderProgramCache::CreatePassBuffer(
-		ShaderProgram & p_shader,
-		ProgramFlags const & p_programFlags,
-		ShaderTypeFlags const & p_shaderMask )const
-	{
-		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferPass, 2u );
-		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatAmbient, 1 );
-		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatDiffuse, 1 );
-		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatEmissive, 1 );
-		l_buffer.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular, 1 );
-		l_buffer.CreateUniform( UniformType::eFloat, ShaderProgram::MatShininess, 1 );
-		l_buffer.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity, 1 );
-		return l_buffer;
-	}
-
-	UniformBuffer & ShaderProgramCache::CreateModelBuffer(
-		ShaderProgram & p_shader,
-		ProgramFlags const & p_programFlags,
-		ShaderTypeFlags const & p_shaderMask )const
-	{
-		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferModel, 3u );
-		l_buffer.CreateUniform( UniformType::eInt, ShaderProgram::ShadowReceiver, 1 );
-		return l_buffer;
-	}
-
-	UniformBuffer & ShaderProgramCache::CreateAnimationBuffer(
-		ShaderProgram & p_shader,
-		ProgramFlags const & p_programFlags,
-		ShaderTypeFlags const & p_shaderMask )const
-	{
-		REQUIRE( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) || CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto & l_buffer = p_shader.CreateUniformBuffer( ShaderProgram::BufferAnimation, 4u );
-
-		if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
-		{
-			l_buffer.CreateUniform( UniformType::eMat4x4r, ShaderProgram::Bones, 400 );
-		}
-
-		if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
-		{
-			l_buffer.CreateUniform( UniformType::eFloat, ShaderProgram::Time );
-		}
-
-		return l_buffer;
-	}
-
 	void ShaderProgramCache::CreateTextureVariables(
 		ShaderProgram & p_shader,
 		TextureChannels const & p_textureFlags,
@@ -299,17 +218,7 @@ namespace Castor3D
 				l_return->SetSource( ShaderType::eGeometry, l_model, l_geometry );
 			}
 
-			CreateMatrixBuffer( *l_return, p_programFlags, l_matrixUboShaderMask );
-			CreateSceneBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
-			CreatePassBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
-			CreateModelBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreateTextureVariables( *l_return, p_textureFlags, p_programFlags );
-
-			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning )
-				 || CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
-			{
-				CreateAnimationBuffer( *l_return, p_programFlags, ShaderTypeFlag::eVertex );
-			}
 		}
 
 		return l_return;
@@ -418,14 +327,7 @@ namespace Castor3D
 			l_return->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
 			l_return->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
 
-			CreateMatrixBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
-			CreateSceneBuffer( *l_return, p_programFlags, ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel );
-			CreatePassBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
-			CreateModelBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreateTextureVariables( *l_return, p_textureFlags, p_programFlags );
-			auto & l_billboardUbo = l_return->CreateUniformBuffer( ShaderProgram::BufferBillboards, 4u );
-			l_billboardUbo.CreateUniform( UniformType::eUInt, ShaderProgram::Dimensions );
-			l_billboardUbo.CreateUniform( UniformType::eUInt, ShaderProgram::WindowSize );
 		}
 
 		return l_return;

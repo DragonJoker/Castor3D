@@ -29,7 +29,7 @@ namespace TestRender
 	{
 	}
 
-	void TestShaderStorageBuffer::InitialiseBindingPoint( uint32_t p_point )const
+	void TestShaderStorageBuffer::SetBindingPoint( uint32_t p_point )const
 	{
 	}
 

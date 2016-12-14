@@ -120,20 +120,32 @@ namespace Castor3D
 	void ShadowMapPass::DoPrepareBackPipeline( ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_backPipelines.find( p_flags );
-
-		if ( l_it == m_backPipelines.end() )
+		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
 		{
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
-			l_it = m_backPipelines.emplace( p_flags
+			auto & l_pipeline = *m_backPipelines.emplace( p_flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
 					, std::move( l_rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
-					, p_flags ) ).first;
+					, p_flags ) ).first->second;
+			l_pipeline.AddUniformBuffer( m_matrixUbo );
+			l_pipeline.AddUniformBuffer( m_sceneUbo );
+			l_pipeline.AddUniformBuffer( m_modelUbo );
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+			{
+				l_pipeline.AddUniformBuffer( m_billboardUbo );
+			}
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+				|| CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+			{
+				l_pipeline.AddUniformBuffer( m_animationUbo );
+			}
 		}
 	}
 

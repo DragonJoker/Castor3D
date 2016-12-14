@@ -440,12 +440,11 @@ namespace Castor3D
 
 	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
-		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		auto & l_camera = *m_target.GetCamera();
-		l_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
-		l_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
-		l_camera.GetScene()->FillShader( l_sceneUbo );
-		l_camera.FillShader( l_sceneUbo );
+		l_camera.GetScene()->GetLightCache().FillShader( m_sceneUbo );
+		l_camera.GetScene()->GetFog().FillShader( m_sceneUbo );
+		l_camera.GetScene()->FillShader( m_sceneUbo );
+		l_camera.FillShader( m_sceneUbo );
 		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 	}
 
@@ -469,13 +468,28 @@ namespace Castor3D
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling && !m_opaque );
-			m_frontPipelines.emplace( p_flags
+			auto & l_pipeline = *m_frontPipelines.emplace( p_flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
 					, std::move( l_rsState )
 					, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
 					, std::move( l_msState )
 					, p_program
-					, p_flags ) );
+					, p_flags ) ).first->second;
+			l_pipeline.AddUniformBuffer( m_matrixUbo );
+			l_pipeline.AddUniformBuffer( m_sceneUbo );
+			l_pipeline.AddUniformBuffer( m_passUbo );
+			l_pipeline.AddUniformBuffer( m_modelUbo );
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+			{
+				l_pipeline.AddUniformBuffer( m_billboardUbo );
+			}
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+				|| CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+			{
+				l_pipeline.AddUniformBuffer( m_animationUbo );
+			}
 		}
 	}
 
@@ -498,13 +512,28 @@ namespace Castor3D
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling && !m_opaque );
-			m_backPipelines.emplace( p_flags
+			auto & l_pipeline = *m_backPipelines.emplace( p_flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
 				, std::move( l_rsState )
 				, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
 				, std::move( l_msState )
 				, p_program
-				, p_flags ) );
+				, p_flags ) ).first->second;
+			l_pipeline.AddUniformBuffer( m_matrixUbo );
+			l_pipeline.AddUniformBuffer( m_sceneUbo );
+			l_pipeline.AddUniformBuffer( m_passUbo );
+			l_pipeline.AddUniformBuffer( m_modelUbo );
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+			{
+				l_pipeline.AddUniformBuffer( m_billboardUbo );
+			}
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+				|| CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+			{
+				l_pipeline.AddUniformBuffer( m_animationUbo );
+			}
 		}
 	}
 }

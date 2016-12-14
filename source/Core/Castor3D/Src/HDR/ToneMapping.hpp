@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_TONE_MAPPING_H___
 #define ___C3D_TONE_MAPPING_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
@@ -110,7 +110,7 @@ namespace Castor3D
 		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
 		 *\return			Le source du pixel shader.
 		 */
-		C3D_API virtual Castor::String DoCreate( UniformBuffer & p_ubo ) = 0;
+		C3D_API virtual Castor::String DoCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the tone mapping shader variables.
@@ -136,15 +136,26 @@ namespace Castor3D
 		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
-		//!\~english The Reinhard tone mapping shader program.	\~french Le shader de mappage de ton de Reinhard
+		//!\~english	The tone mapping shader program.
+		//!\~french		Le shader de mappage de ton.
 		RenderPipelineUPtr m_pipeline;
-		//!\~english The exposure value.	\~french La valeur d'exposition.
+		//!\~english	The exposure value.
+		//!\~french		La valeur d'exposition.
 		float m_exposure;
-		//!\~english The exposure shader variable.	\~french La variable shader pour l'exposition.
+		//!\~english	The exposure shader variable.
+		//!\~french		La variable shader pour l'exposition.
 		Uniform1fSPtr m_exposureVar;
-		//!\~english The configuration constants buffer name.	\~french Le nom du tampon de constantes de configuration.
+		//!\~english	The matrix data UBO.
+		//!\~french		L'UBO de données de matrices.
+		UniformBuffer m_matrixUbo;
+		//!\~english	The configuration data UBO.
+		//!\~french		L'UBO de données de configuration.
+		UniformBuffer m_configUbo;
+		//!\~english	The configuration constants buffer name.
+		//!\~french		Le nom du tampon de constantes de configuration.
 		C3D_API static Castor::String const HdrConfig;
-		//!\~english The exposure constant name.	\~french Le nom de la constante d'exposition.
+		//!\~english	The exposure constant name.
+		//!\~french		Le nom de la constante d'exposition.
 		C3D_API static Castor::String const Exposure;
 	};
 }

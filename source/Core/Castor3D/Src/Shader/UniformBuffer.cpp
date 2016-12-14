@@ -1,5 +1,7 @@
-﻿#include "UniformBuffer.hpp"
+#include "UniformBuffer.hpp"
+
 #include "Uniform.hpp"
+#include "UniformBufferBinding.hpp"
 
 #include "Render/RenderSystem.hpp"
 
@@ -101,10 +103,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	UniformBuffer::UniformBuffer( String const & p_name, RenderSystem & p_renderSystem, uint32_t p_index )
+	UniformBuffer::UniformBuffer( String const & p_name, RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, Named{ p_name }
-		, m_index{ p_index }
 	{
 	}
 
@@ -155,33 +156,88 @@ namespace Castor3D
 		}
 	}
 
-	bool UniformBuffer::Initialise( ShaderProgram & p_program )
-	{
-		auto l_return = DoInitialise( p_program );
-
-		if ( !l_return )
-		{
-			Logger::LogError( StringStream{} << cuT( "Uniform buffer [" ) << GetName() << cuT( "] initialisation failed" ) );
-		}
-
-		return l_return;
-	}
-
 	void UniformBuffer::Cleanup()
 	{
-		DoCleanup();
+		if ( m_storage )
+		{
+			m_storage->Destroy();
+			m_storage.reset();
+		}
+
+		m_bindings.clear();
 		m_mapVariables.clear();
 		m_listVariables.clear();
 	}
 
-	void UniformBuffer::BindTo( ShaderProgram & p_program )
+	UniformBufferBinding & UniformBuffer::CreateBinding( ShaderProgram & p_program )
 	{
-		DoBindTo( p_program );
+		auto l_it = m_bindings.find( &p_program );
+
+		if ( l_it == m_bindings.end() )
+		{
+			auto l_binding = GetRenderSystem()->CreateUniformBufferBinding( *this, p_program );
+
+			if ( m_bindings.empty() )
+			{
+				DoInitialise( *l_binding );
+			}
+
+			l_it = m_bindings.emplace( &p_program, std::move( l_binding ) ).first;
+		}
+
+		return *l_it->second;
+	}
+
+	UniformBufferBinding & UniformBuffer::GetBinding( ShaderProgram & p_program )const
+	{
+		REQUIRE( m_bindings.find( &p_program ) != m_bindings.end() );
+		return *m_bindings.find( &p_program )->second;
 	}
 
 	void UniformBuffer::Update()
 	{
-		DoUpdate();
+		REQUIRE( m_storage );
+		bool l_changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( UniformSPtr p_variable )
+		{
+			return p_variable->IsChanged();
+		} );
+
+		if ( l_changed )
+		{
+			m_storage->Upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
+
+			for ( auto & l_variable : m_listVariables )
+			{
+				l_variable->SetChanged( false );
+			}
+		}
+	}
+
+	void UniformBuffer::DoInitialise( UniformBufferBinding const & p_binding )
+	{
+		m_buffer.resize( p_binding.GetSize() );
+		auto l_it = p_binding.begin();
+
+		for ( auto & l_variable : *this )
+		{
+			REQUIRE( l_variable->size() <= m_buffer.size() - ( l_it->m_offset ) );
+			l_variable->link( &m_buffer[l_it->m_offset], l_it->m_stride < 0 ? 0u : uint32_t( l_it->m_stride ) );
+			++l_it;
+		}
+
+		if ( !m_storage )
+		{
+			m_storage = GetRenderSystem()->CreateUInt8Buffer( BufferType::eUniform );
+			m_storage->Create();
+		}
+
+		m_storage->InitialiseStorage( uint32_t( m_buffer.size() ), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+		m_storage->Upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
+
+		for ( auto & l_variable : *this )
+		{
+			l_variable->SetChanged( false );
+		}
 	}
 
 	UniformSPtr UniformBuffer::DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences )

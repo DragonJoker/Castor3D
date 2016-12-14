@@ -278,6 +278,9 @@ namespace Castor3D
 		//!\~english	The picked face index.
 		//!\~french		L'indice de la face sélectionnée.
 		uint32_t m_face;
+		//!\~english	The picking data UBO.
+		//!\~french		L'UBO de données de picking.
+		UniformBuffer m_pickingUbo;
 	};
 }
 

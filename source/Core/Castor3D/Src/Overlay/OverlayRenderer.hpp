@@ -23,8 +23,8 @@ SOFTWARE.
 #ifndef ___C3D_OVERLAY_RENDERER_H___
 #define ___C3D_OVERLAY_RENDERER_H___
 
-#include "Castor3DPrerequisites.hpp"
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "TextOverlay.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -345,6 +345,12 @@ namespace Castor3D
 		//!\~english	Tells if the render size has changed.
 		//!\~french		Dit si les dimension du rendu ont changé.
 		bool m_sizeChanged{ true };
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		UniformBuffer m_matrixUbo;
+		//!\~english	The uniform buffer containing pass data.
+		//!\~french		Le tampon d'uniformes contenant les données de passe.
+		UniformBuffer m_passUbo;
 	};
 }
 

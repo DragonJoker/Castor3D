@@ -20,38 +20,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_FRAME_VARIABLE_BUFFER_H___
-#define ___GL_FRAME_VARIABLE_BUFFER_H___
+#ifndef ___C3DGL_GlUniformBufferBinding_H___
+#define ___C3DGL_GlUniformBufferBinding_H___
 
-#include <Shader/UniformBuffer.hpp>
+#include <Shader/UniformBufferBinding.hpp>
 
 #include "GlRenderSystemPrerequisites.hpp"
-#include "Buffer/GlBufferBase.hpp"
+#include "Common/GlHolder.hpp"
 
 namespace GlRender
 {
-	class GlUniformBuffer
-		: public Castor3D::UniformBuffer
+	class GlUniformBufferBinding
+		: public Castor3D::UniformBufferBinding
 		, public Holder
 	{
 	public:
-		GlUniformBuffer( OpenGl & p_gl
-			, Castor::String const & p_name
-			, Castor3D::RenderSystem & p_renderSystem
-			, uint32_t p_index );
-		virtual ~GlUniformBuffer();
-		void SetBindingUniform( uint32_t p_point )const;
+		GlUniformBufferBinding( OpenGl & p_gl
+			, Castor3D::UniformBuffer & p_ubo
+			, GlShaderProgram const & p_program );
+		virtual ~GlUniformBufferBinding();
 
 	private:
-		bool DoInitialise( Castor3D::ShaderProgram & p_program )override;
-		void DoCleanup()override;
-		void DoBindTo( Castor3D::ShaderProgram & p_program )override;
-		void DoUpdate()override;
+		void DoBind( uint32_t p_index )const override;
 
 	private:
-		GlBufferBase< uint8_t > m_glBuffer;
-		int m_uniformBlockIndex;
-		int m_uniformBlockSize;
+		int m_blockIndex;
 	};
 }
 

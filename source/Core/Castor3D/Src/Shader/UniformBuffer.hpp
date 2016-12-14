@@ -89,19 +89,21 @@ namespace Castor3D
 		};
 
 	public:
+		UniformBuffer( UniformBuffer const & ) = delete;
+		UniformBuffer( UniformBuffer && ) = default;
+		UniformBuffer & operator=( UniformBuffer const & ) = delete;
+		UniformBuffer & operator=( UniformBuffer && ) = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_name			The buffer name.
 		 *\param[in]	p_renderSystem	The render system.
-		 *\param[in]	p_index			The binding index for the buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			Le nom du tampon.
 		 *\param[in]	p_renderSystem	Le render system.
-		 *\param[in]	p_index			L'indice de binding du tampon.
 		 */
-		C3D_API UniformBuffer( Castor::String const & p_name, RenderSystem & p_renderSystem, uint32_t p_index );
+		C3D_API UniformBuffer( Castor::String const & p_name, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -111,17 +113,6 @@ namespace Castor3D
 		C3D_API virtual ~UniformBuffer();
 		/**
 		 *\~english
-		 *\brief		Initialises all the variables and the GPU buffer associated.
-		 *\param[in]	p_program	The program.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Initialise toutes les variables et le tampon GPU associé.
-		 *\param[in]	p_program	Le programme.
-		 *\return		\p false if any problem occured.
-		 */
-		C3D_API bool Initialise( ShaderProgram & p_program );
-		/**
-		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated.
 		 *\~french
 		 *\brief		Nettoie toutes les variables et le tampon GPU associé.
@@ -129,20 +120,35 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Binds the buffer to a program.
-		 *\param[in]	p_program	The program.
-		 *\~french
-		 *\brief		Lie le tampon à un programme.
-		 *\param[in]	p_program	Le programme.
-		 */
-		C3D_API void BindTo( ShaderProgram & p_program );
-		/**
-		 *\~english
 		 *\brief		Updates the GPU storage.
 		 *\~french
 		 *\brief		Met à jour le stockage GPU.
 		 */
 		C3D_API void Update();
+		/**
+		 *\~english
+		 *\brief		Creates a binding of this unifor buffer to given program.
+		 *\remarks		If this is the first binding created, the GPU storage and variables will be initialised.
+		 *\param[in]	p_program	The program.
+		 *\return		The created binding.
+		 *\~french
+		 *\brief		Crée un binding entre ce tampon d'uniformes et le porgramme donné.
+		 *\remarks		Si c'est le premier binding créé, le stokage GPU et les variables seront initialisées.
+		 *\param[in]	p_program	Le programme.
+		 *\return		Le binding créé.
+		 */
+		C3D_API UniformBufferBinding & CreateBinding( ShaderProgram & p_program );
+		/**
+		 *\~english
+		 *\brief		Retrieves the binding for given program.
+		 *\param[in]	p_program	The program.
+		 *\return		The retrieved binding.
+		 *\~french
+		 *\brief		Récupère le binding pour le programme donné.
+		 *\param[in]	p_program	Le programme.
+		 *\return		Le binding récupéré.
+		 */
+		C3D_API UniformBufferBinding & GetBinding( ShaderProgram & p_program )const;
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type.
@@ -198,7 +204,18 @@ namespace Castor3D
 		 *\return		\p false en cas d'échec.
 		 */
 		template< UniformType Type >
-		std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;
+		inline std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;
+		/**
+		 *\~english
+		 *\return		The GPU storage.
+		 *\~french
+		 *\return		Le stockage GPU.
+		 */
+		inline GpuBuffer< uint8_t > & GetStorage()const
+		{
+			REQUIRE( m_storage );
+			return *m_storage;
+		}
 		/**
 		 *\~english
 		 *\return		The iterator to the beginnning of the variables list.
@@ -240,7 +257,16 @@ namespace Castor3D
 			return m_listVariables.end();
 		}
 
-	protected:
+	private:
+		/**
+		 *\~english
+		 *\brief		Initialises all the variables and the GPU buffer associated.
+		 *\param[in]	p_binding	The binding from which the layout is retrieved.
+		 *\~french
+		 *\brief		Initialise toutes les variables et le tampon GPU associé.
+		 *\param[in]	p_binding	Le binding depuis lequel le layout est récupéré.
+		 */
+		void DoInitialise( UniformBufferBinding const & p_binding );
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type.
@@ -256,45 +282,8 @@ namespace Castor3D
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
 		UniformSPtr DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences );
-		/**
-		 *\~english
-		 *\brief		Initialises all the variables and the GPU buffer associated.
-		 *\param[in]	p_program	The program.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Initialise toutes les variables et le tampon GPU associé.
-		 *\param[in]	p_program	Le programme.
-		 *\return		\p false if any problem occured.
-		 */
-		C3D_API virtual bool DoInitialise( ShaderProgram & p_program ) = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans all the variables up and the GPU buffer associated.
-		 *\~french
-		 *\brief		Nettoie toutes les variables et le tampon GPU associé.
-		 */
-		C3D_API virtual void DoCleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Binds the buffer to a program.
-		 *\param[in]	p_program	The program.
-		 *\~french
-		 *\brief		Lie le tampon à un programme.
-		 *\param[in]	p_program	Le programme.
-		 */
-		C3D_API virtual void DoBindTo( ShaderProgram & p_program ) = 0;
-		/**
-		 *\~english
-		 *\brief		Updates the GPU storage.
-		 *\~french
-		 *\brief		Met à jour le stockage GPU.
-		 */
-		C3D_API virtual void DoUpdate() = 0;
 
 	protected:
-		//!\~english	The buffer's index.
-		//!\~french		L'index du tampon.
-		uint32_t m_index{ 0u };
 		//!\~english	The variables list.
 		//!\~french		La liste de variables.
 		UniformList m_listVariables;
@@ -304,6 +293,12 @@ namespace Castor3D
 		//!\~english	The data buffer.
 		//!\~french		Le tampon de données.
 		Castor::ByteArray m_buffer;
+		//!\~english	The GPU buffer.
+		//!\~french		Le tampon GPU.
+		std::unique_ptr< GpuBuffer< uint8_t > > m_storage;
+		//!\~english	The bindings per program.
+		//!\~french		Les bindings par programme.
+		UniformBufferBindingMap m_bindings;
 	};
 }
 

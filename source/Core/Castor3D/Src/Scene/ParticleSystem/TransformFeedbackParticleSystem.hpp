@@ -26,6 +26,7 @@ SOFTWARE.
 #include "ParticleSystemImpl.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "Texture/TextureUnit.hpp"
 
 namespace Castor3D
@@ -150,7 +151,7 @@ namespace Castor3D
 		std::array< TransformFeedbackUPtr, 2 > m_transformFeedbacks;
 		//!\~english	The frame variable buffer holding particle system related variables.
 		//!\~french		Le tampon de variables contenant les variables relatives au système de particules.
-		UniformBufferSPtr m_ubo;
+		UniformBuffer m_ubo;
 		//!\~english	The frame variable holding time since last update.
 		//!\~french		La variable de frame contenant le temps écoulé depuis la dernière mise à jour.
 		Uniform1fSPtr m_deltaTime;

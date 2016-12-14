@@ -34,7 +34,7 @@ namespace HejlBurgessDawson
 		return std::make_shared< ToneMapping >( p_engine, p_parameters );
 	}
 
-	String ToneMapping::DoCreate( UniformBuffer & p_ubo )
+	String ToneMapping::DoCreate()
 	{
 		String l_pxl;
 		{

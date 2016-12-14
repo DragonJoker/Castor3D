@@ -12,6 +12,7 @@
 #include "Scene/Scene.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
 #include "Shader/UniformBuffer.hpp"
+#include "Shader/UniformBufferBinding.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
@@ -28,7 +29,13 @@ namespace Castor3D
 {
 	ComputeParticleSystem::ComputeParticleSystem( ParticleSystem & p_parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eComputeShader, p_parent }
+		, m_ubo{ cuT( "ParticleSystem" ), *p_parent.GetScene()->GetEngine()->GetRenderSystem() }
 	{
+		m_deltaTime = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
+		m_time = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
+		m_maxParticleCount = m_ubo.CreateUniform< UniformType::eUInt >( cuT( "c3d_uiMaxParticlesCount" ) );
+		m_currentParticleCount = m_ubo.CreateUniform< UniformType::eUInt >( cuT( "c3d_uiCurrentParticlesCount" ) );
+		m_emitterPosition = m_ubo.CreateUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );
 	}
 
 	ComputeParticleSystem::~ComputeParticleSystem()
@@ -101,6 +108,8 @@ namespace Castor3D
 		auto l_particlesCount = std::max( 1u, m_particlesCount );
 		m_currentParticleCount->SetValue( l_particlesCount );
 		m_emitterPosition->SetValue( m_parent.GetParent()->GetDerivedPosition() );
+		m_ubo.Update();
+		m_binding->Bind( 1u );
 
 		uint32_t l_counts[]{ 0u, 0u };
 		m_generatedCountBuffer->Upload( 0u, 2u, l_counts );
@@ -130,13 +139,6 @@ namespace Castor3D
 	void ComputeParticleSystem::SetUpdateProgram( ShaderProgramSPtr p_program )
 	{
 		m_updateProgram = p_program;
-		auto & l_ubo = m_updateProgram->CreateUniformBuffer( cuT( "ParticleSystem" ), uint32_t( m_updateProgram->GetUniformBuffers().size() ) );
-		m_deltaTime = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
-		m_time = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
-		m_maxParticleCount = l_ubo.CreateUniform< UniformType::eUInt >( cuT( "c3d_uiMaxParticlesCount" ) );
-		m_currentParticleCount = l_ubo.CreateUniform< UniformType::eUInt >( cuT( "c3d_uiCurrentParticlesCount" ) );
-		m_emitterPosition = l_ubo.CreateUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );
-		m_ubo = m_updateProgram->FindUniformBuffer( cuT( "ParticleSystem" ) );
 
 		auto & l_atomic = m_updateProgram->CreateAtomicCounterBuffer( cuT( "Counters" ), ShaderTypeFlag::eCompute );
 		m_generatedCountBuffer = m_updateProgram->FindAtomicCounterBuffer( cuT( "Counters" ) );
@@ -149,6 +151,8 @@ namespace Castor3D
 
 		auto & l_particlesOut = m_updateProgram->CreateStorageBuffer( cuT( "ParticlesOut" ), ShaderTypeFlag::eCompute );
 		m_particlesStorages[m_out] = m_updateProgram->FindStorageBuffer( cuT( "ParticlesOut" ) );
+
+		m_binding = &m_ubo.CreateBinding( *p_program );
 	}
 
 	bool ComputeParticleSystem::DoInitialiseParticleStorage()

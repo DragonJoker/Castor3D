@@ -48,9 +48,9 @@ namespace TestRender
 		 */
 		void InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< uint8_t >::InitialiseBindingPoint
+		 *\copydoc		Castor3D::GpuBuffer< uint8_t >::SetBindingPoint
 		 */
-		void InitialiseBindingPoint( uint32_t p_point )const override;
+		void SetBindingPoint( uint32_t p_point )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< uint8_t >::Lock
 		 */

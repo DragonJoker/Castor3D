@@ -181,7 +181,25 @@ namespace Fxaa
 	FxaaPostEffect::FxaaPostEffect( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
 		: PostEffect{ FxaaPostEffect::Type, p_renderTarget, p_renderSystem, p_param }
 		, m_surface{ *p_renderSystem.GetEngine() }
+		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
+		, m_fxaaUbo{ FxaaUbo, p_renderSystem }
 	{
+		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
+		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
+		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
+		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
+
+		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
+		{
+			m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
+		}
+
+		m_uniformSubpixShift = m_fxaaUbo.CreateUniform< UniformType::eFloat >( SubpixShift );
+		m_uniformSpanMax = m_fxaaUbo.CreateUniform< UniformType::eFloat >( SpanMax );
+		m_uniformReduceMul = m_fxaaUbo.CreateUniform< UniformType::eFloat >( ReduceMul );
+		m_uniformRenderTargetWidth = m_fxaaUbo.CreateUniform< UniformType::eFloat >( RenderTargetWidth );
+		m_uniformRenderTargetHeight = m_fxaaUbo.CreateUniform< UniformType::eFloat >( RenderTargetHeight );
+
 		String l_name = cuT( "FXAA" );
 
 		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( l_name ) )
@@ -224,13 +242,6 @@ namespace Fxaa
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
 			m_mapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-			l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-			auto & l_uboFxaa = l_program->CreateUniformBuffer( FxaaUbo, 1u );
-			m_uniformSubpixShift = l_uboFxaa.CreateUniform< UniformType::eFloat >( SubpixShift );
-			m_uniformSpanMax = l_uboFxaa.CreateUniform< UniformType::eFloat >( SpanMax );
-			m_uniformReduceMul = l_uboFxaa.CreateUniform< UniformType::eFloat >( ReduceMul );
-			m_uniformRenderTargetWidth = l_uboFxaa.CreateUniform< UniformType::eFloat >( RenderTargetWidth );
-			m_uniformRenderTargetHeight = l_uboFxaa.CreateUniform< UniformType::eFloat >( RenderTargetHeight );
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_fragment );
 			l_program->Initialise();
@@ -247,6 +258,8 @@ namespace Fxaa
 			RasteriserState l_rsstate;
 			l_rsstate.SetCulledFaces( Culling::eBack );
 			m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+			m_pipeline->AddUniformBuffer( m_matrixUbo );
+			m_pipeline->AddUniformBuffer( m_fxaaUbo );
 		}
 
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );
@@ -269,7 +282,10 @@ namespace Fxaa
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 			m_surface.m_fbo->Clear();
 			m_mapDiffuse->SetValue( 0 );
-			GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size, *l_texture, *m_pipeline );
+			GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size
+				, *l_texture
+				, *m_pipeline
+				, m_matrixUbo );
 			m_surface.m_fbo->Unbind();
 
 			p_framebuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );

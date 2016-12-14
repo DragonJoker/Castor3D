@@ -346,6 +346,7 @@ namespace Castor3D
 	class Uniform;
 	class PushUniform;
 	class UniformBuffer;
+	class UniformBufferBinding;
 	class ShaderStorageBuffer;
 	class AtomicCounterBuffer;
 	template< UniformType Type >
@@ -674,6 +675,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( PushUniform4x4r );
 
 	DECLARE_SMART_PTR( UniformBuffer );
+	DECLARE_SMART_PTR( UniformBufferBinding );
 	DECLARE_SMART_PTR( Uniform );
 	DECLARE_SMART_PTR( PushUniform );
 	DECLARE_SMART_PTR( ShaderObject );
@@ -690,6 +692,7 @@ namespace Castor3D
 	DECLARE_LIST( AtomicCounterBufferSPtr, AtomicCounterBufferPtr );
 	DECLARE_MAP( Castor::String, PushUniformWPtr, PushUniform );
 	DECLARE_MAP( Castor::String, UniformWPtr, Uniform );
+	DECLARE_MAP( ShaderProgramRPtr, UniformBufferBindingUPtr, UniformBufferBinding );
 	DECLARE_MAP( Castor::String, UniformBufferWPtr, UniformBufferPtrStr );
 	DECLARE_MAP( Castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
 	DECLARE_MAP( Castor::String, AtomicCounterBufferWPtr, AtomicCounterBufferPtrStr );

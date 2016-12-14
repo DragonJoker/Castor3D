@@ -27,6 +27,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 
 #include "Render/RenderQueue.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 #include <unordered_map>
 
@@ -780,6 +781,24 @@ namespace Castor3D
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };
+		//!\~english	The uniform buffer containing the scene data.
+		//!\~french		Le tampon d'uniformes contenant les données de scène.
+		UniformBuffer m_sceneUbo;
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		UniformBuffer m_matrixUbo;
+		//!\~english	The uniform buffer containing pass data.
+		//!\~french		Le tampon d'uniformes contenant les données de passe.
+		UniformBuffer m_passUbo;
+		//!\~english	The uniform buffer containing model data.
+		//!\~french		Le tampon d'uniformes contenant les données du modèle.
+		UniformBuffer m_modelUbo;
+		//!\~english	The uniform buffer containing billboard data.
+		//!\~french		Le tampon d'uniformes contenant les données de billboard.
+		UniformBuffer m_billboardUbo;
+		//!\~english	The uniform buffer containing animated model data.
+		//!\~french		Le tampon d'uniformes contenant les données de modèle animé.
+		UniformBuffer m_animationUbo;
 	};
 }
 

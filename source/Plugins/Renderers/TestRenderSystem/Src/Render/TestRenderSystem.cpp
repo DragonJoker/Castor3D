@@ -11,7 +11,7 @@
 #include "Render/TestRenderPipeline.hpp"
 #include "Render/TestViewport.hpp"
 #include "Shader/TestAtomicCounterBuffer.hpp"
-#include "Shader/TestUniformBuffer.hpp"
+#include "Shader/TestUniformBufferBinding.hpp"
 #include "Shader/TestShaderObject.hpp"
 #include "Shader/TestShaderProgram.hpp"
 #include "Shader/TestShaderStorageBuffer.hpp"
@@ -77,6 +77,12 @@ namespace TestRender
 	ShaderProgramSPtr TestRenderSystem::CreateShaderProgram()
 	{
 		return std::make_shared< TestShaderProgram >( *this );
+	}
+
+	UniformBufferBindingUPtr TestRenderSystem::CreateUniformBufferBinding( UniformBuffer & p_ubo
+		, Castor3D::ShaderProgram const & p_program )
+	{
+		return std::make_unique< TestUniformBufferBinding >( p_ubo, p_program );
 	}
 
 	TransformFeedbackUPtr TestRenderSystem::CreateTransformFeedback( Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program )

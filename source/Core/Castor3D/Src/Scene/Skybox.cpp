@@ -14,6 +14,7 @@
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/UniformBufferBinding.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
@@ -95,6 +96,7 @@ namespace Castor3D
 	Skybox::Skybox( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
 		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eRead ) }
+		, m_matricesBuffer{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 		, m_declaration
 		{
 			{
@@ -102,6 +104,16 @@ namespace Castor3D
 			}
 		}
 	{
+		m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
+		m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
+		m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
+		m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
+
+		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
+		{
+			m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
+		}
+
 		String const l_skybox = cuT( "Skybox" );
 
 		if ( GetEngine()->GetSamplerCache().Has( l_skybox ) )
@@ -214,9 +226,9 @@ namespace Castor3D
 			m_pipeline->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 			m_pipeline->SetModelMatrix( m_mtxModel );
 			m_pipeline->SetViewMatrix( p_camera.GetView() );
-			m_pipeline->ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
+			m_pipeline->ApplyMatrices( m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
+			m_matricesBuffer.Update();
 			m_pipeline->Apply();
-			m_pipeline->GetProgram().UpdateUbos();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
 			m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
@@ -276,8 +288,6 @@ namespace Castor3D
 		l_program->CreateObject( ShaderType::ePixel );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
-		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		m_matricesBuffer = l_program->FindUniformBuffer( ShaderProgram::BufferMatrix );
 		l_program->Initialise();
 		return *l_program;
 	}

@@ -34,7 +34,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_gpuBuffer->InitialiseStorage( p_size, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-			m_gpuBuffer->InitialiseBindingPoint( p_index );
+			m_gpuBuffer->SetBindingPoint( p_index );
 		}
 
 		return l_return;

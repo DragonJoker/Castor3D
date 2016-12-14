@@ -20,27 +20,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___TRS_FRAME_VARIABLE_BUFFER_H___
-#define ___TRS_FRAME_VARIABLE_BUFFER_H___
+#ifndef ___C3DTRS_TestUniformBufferBinding_H___
+#define ___C3DTRS_TestUniformBufferBinding_H___
 
 #include "TestRenderSystemPrerequisites.hpp"
 
-#include <Shader/UniformBuffer.hpp>
+#include <Shader/UniformBufferBinding.hpp>
 
 namespace TestRender
 {
-	class TestUniformBuffer
-		: public Castor3D::UniformBuffer
+	class TestUniformBufferBinding
+		: public Castor3D::UniformBufferBinding
 	{
 	public:
-		TestUniformBuffer( Castor::String const & p_name, Castor3D::RenderSystem & p_renderSystem, uint32_t p_index );
-		virtual ~TestUniformBuffer();
+		TestUniformBufferBinding( Castor3D::UniformBuffer & p_ubo, Castor3D::ShaderProgram const & p_program );
+		virtual ~TestUniformBufferBinding();
 
 	private:
-		bool DoInitialise( Castor3D::ShaderProgram & p_program )override;
-		void DoCleanup()override;
-		void DoBindTo( Castor3D::ShaderProgram & p_program )override;
-		void DoUpdate()override;
+		void DoBind( uint32_t p_index )const override;
 	};
 }
 

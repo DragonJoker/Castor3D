@@ -1,7 +1,6 @@
 #include "Shader/TestShaderProgram.hpp"
 
 #include "Render/TestRenderSystem.hpp"
-#include "Shader/TestUniformBuffer.hpp"
 #include "Shader/TestPushUniform.hpp"
 #include "Shader/TestShaderObject.hpp"
 
@@ -48,7 +47,7 @@ namespace TestRender
 		return true;
 	}
 
-	void TestShaderProgram::Bind( bool p_bindUbo )const
+	void TestShaderProgram::Bind()const
 	{
 	}
 
@@ -59,11 +58,6 @@ namespace TestRender
 	ShaderObjectSPtr TestShaderProgram::DoCreateObject( ShaderType p_type )
 	{
 		return std::make_shared< TestShaderObject >( this, p_type );
-	}
-
-	UniformBufferSPtr TestShaderProgram::DoCreateUniformBuffer( Castor::String const & p_name, uint32_t p_index )
-	{
-		return std::make_shared< TestUniformBuffer >( p_name, *GetRenderSystem(), p_index );
 	}
 
 	std::shared_ptr< PushUniform > TestShaderProgram::DoCreateUniform( UniformType p_type, int p_occurences )

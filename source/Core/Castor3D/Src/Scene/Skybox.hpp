@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_SKYBOX_H___
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 namespace Castor3D
 {
@@ -153,7 +154,7 @@ namespace Castor3D
 		SamplerWPtr m_sampler;
 		//!\~english	The shader matrices constants buffer.
 		//!\~french		Le tampon de constantes de shader contenant les matrices.
-		UniformBufferSPtr m_matricesBuffer;
+		UniformBuffer m_matricesBuffer;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer{ nullptr };

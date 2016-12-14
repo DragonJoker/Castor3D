@@ -29,7 +29,7 @@ namespace TestRender
 	{
 	}
 
-	void TestAtomicCounterBuffer::InitialiseBindingPoint( uint32_t p_point )const
+	void TestAtomicCounterBuffer::SetBindingPoint( uint32_t p_point )const
 	{
 	}
 

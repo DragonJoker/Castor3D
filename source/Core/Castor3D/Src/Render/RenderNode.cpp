@@ -147,7 +147,6 @@ namespace Castor3D
 		m_shadowReceiver.SetValue( m_instance.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 		m_pass.m_pass.UpdateRenderNode( m_pass );
-		m_pass.m_pipeline.GetProgram().UpdateUbos();
 		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
 	}
@@ -195,7 +194,6 @@ namespace Castor3D
 		}
 
 		m_pass.m_pass.UpdateRenderNode( m_pass );
-		m_pass.m_pipeline.GetProgram().UpdateUbos();
 		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
 	}
@@ -212,7 +210,6 @@ namespace Castor3D
 		auto const & l_dimensions = m_data.GetDimensions();
 		m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
 		m_pass.m_pass.UpdateRenderNode( m_pass );
-		m_pass.m_pipeline.GetProgram().UpdateUbos();
 		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
 	}

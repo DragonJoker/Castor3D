@@ -96,7 +96,25 @@ namespace Castor3D
 					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2, 1 )
 				}
 			} }
+		, m_passUbo{ ShaderProgram::BufferPass, p_renderSystem }
+		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
 	{
+		m_passUbo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatAmbient );
+		m_passUbo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatDiffuse );
+		m_passUbo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatEmissive );
+		m_passUbo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular );
+		m_passUbo.CreateUniform( UniformType::eFloat, ShaderProgram::MatShininess );
+		m_passUbo.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity );
+
+		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
+		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
+		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
+		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
+
+		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
+		{
+			m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
+		}
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -191,6 +209,8 @@ namespace Castor3D
 			l_pair.second->Cleanup();
 		}
 
+		m_passUbo.Cleanup();
+		m_matrixUbo.Cleanup();
 		m_pipelines.clear();
 		m_mapPanelNodes.clear();
 		m_mapTextNodes.clear();
@@ -343,21 +363,17 @@ namespace Castor3D
 		if ( l_it == m_mapPanelNodes.end() )
 		{
 			auto & l_pipeline = DoGetPanelPipeline( p_pass.GetTextureFlags() );
-
-			auto l_sceneBuffer = l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferScene );
-			auto l_passBuffer = l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferPass );
-
 			l_it = m_mapPanelNodes.insert( { &p_pass, PassRenderNode
 				{
 					p_pass,
 					l_pipeline,
-					*l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix ),
-					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatAmbient ),
-					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ),
-					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ),
-					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ),
-					*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ),
-					*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ),
+					m_matrixUbo,
+					*m_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatAmbient ),
+					*m_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ),
+					*m_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ),
+					*m_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ),
+					*m_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ),
+					*m_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ),
 				}
 			} ).first;
 			p_pass.FillRenderNode( l_it->second );
@@ -373,21 +389,17 @@ namespace Castor3D
 		if ( l_it == m_mapTextNodes.end() )
 		{
 			auto & l_pipeline = DoGetTextPipeline( p_pass.GetTextureFlags() );
-
-			auto l_sceneBuffer = l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferScene );
-			auto l_passBuffer = l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferPass );
-
 			l_it = m_mapTextNodes.insert( { &p_pass, PassRenderNode
 				{
 					p_pass,
 					l_pipeline,
-					*l_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix ),
-					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatAmbient ),
-					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ),
-					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ),
-					*l_passBuffer->GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ),
-					*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ),
-					*l_passBuffer->GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ),
+					m_matrixUbo,
+					*m_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatAmbient ),
+					*m_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ),
+					*m_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ),
+					*m_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ),
+					*m_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ),
+					*m_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ),
 				}
 			} ).first;
 			p_pass.FillRenderNode( l_it->second );
@@ -456,6 +468,8 @@ namespace Castor3D
 				l_rsState.SetCulledFaces( Culling::eBack );
 
 				auto l_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ), *l_program, PipelineFlags{} );
+				l_pipeline->AddUniformBuffer( m_passUbo );
+				l_pipeline->AddUniformBuffer( m_matrixUbo );
 				l_it = m_pipelines.emplace( p_textureFlags, std::move( l_pipeline ) ).first;
 			}
 			else
@@ -494,10 +508,11 @@ namespace Castor3D
 	{
 		auto & l_node = DoGetPanelNode( p_pass );
 		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );
+		m_matrixUbo.Update();
 		p_pass.UpdateRenderNode( l_node );
+		m_passUbo.Update();
 		l_node.m_pipeline.Apply();
 		p_pass.BindTextures();
-		l_node.m_pipeline.GetProgram().UpdateUbos();
 		p_geometryBuffers.Draw( p_count, 0 );
 		p_pass.UnbindTextures();
 	}
@@ -505,7 +520,8 @@ namespace Castor3D
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler, uint32_t p_count )
 	{
 		auto & l_node = DoGetTextNode( p_pass );
-		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );
+		l_node.m_pipeline.ApplyProjection( m_matrixUbo );
+		m_matrixUbo.Update();
 
 		auto l_textureVariable = l_node.m_pipeline.GetProgram().FindUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel );
 
@@ -515,8 +531,8 @@ namespace Castor3D
 		}
 
 		p_pass.UpdateRenderNode( l_node );
+		m_passUbo.Update();
 		l_node.m_pipeline.Apply();
-		l_node.m_pipeline.GetProgram().UpdateUbos();
 		p_pass.BindTextures();
 		p_texture.Bind( 0 );
 		p_sampler.Bind( 0 );
@@ -577,8 +593,6 @@ namespace Castor3D
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		l_program->CreateObject( ShaderType::eVertex );
 		l_program->CreateObject( ShaderType::ePixel );
-		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		l_cache.CreatePassBuffer( *l_program, 0u, ShaderTypeFlag::ePixel );
 
 		// Vertex shader
 		String l_strVs;

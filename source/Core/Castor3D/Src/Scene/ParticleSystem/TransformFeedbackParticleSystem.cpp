@@ -29,7 +29,11 @@ namespace Castor3D
 	TransformFeedbackParticleSystem::TransformFeedbackParticleSystem( ParticleSystem & p_parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eTransformFeedback, p_parent }
 		, m_randomTexture{ *p_parent.GetScene()->GetEngine() }
+		, m_ubo{ cuT( "ParticleSystem" ), *p_parent.GetScene()->GetEngine()->GetRenderSystem() }
 	{
+		m_deltaTime = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
+		m_time = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
+		m_emitterPosition = m_ubo.CreateUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );
 	}
 
 	TransformFeedbackParticleSystem::~TransformFeedbackParticleSystem()
@@ -106,11 +110,11 @@ namespace Castor3D
 		m_deltaTime->SetValue( p_time );
 		m_time->SetValue( p_totalTime );
 		m_emitterPosition->SetValue( m_parent.GetParent()->GetDerivedPosition() );
+		m_ubo.Update();
 		auto & l_gbuffers = *m_updateGeometryBuffers[m_vtx];
 		auto & l_transform = *m_transformFeedbacks[m_tfb];
 
 		m_updatePipeline->Apply();
-		m_updateProgram->UpdateUbos();
 		m_randomTexture.Bind();
 		l_transform.Bind();
 
@@ -164,12 +168,6 @@ namespace Castor3D
 		m_updateProgram = p_program;
 		m_updateProgram->CreateUniform( UniformType::eSampler, cuT( "c3d_mapRandom" ), ShaderType::eGeometry );
 
-		auto & l_ubo = m_updateProgram->CreateUniformBuffer( cuT( "ParticleSystem" ), uint32_t( m_updateProgram->GetUniformBuffers().size() ) );
-		m_deltaTime = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
-		m_time = l_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
-		m_emitterPosition = l_ubo.CreateUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );
-		m_ubo = m_updateProgram->FindUniformBuffer( cuT( "ParticleSystem" ) );
-
 		m_updateProgram->SetTransformLayout( m_computed );
 	}
 
@@ -217,6 +215,7 @@ namespace Castor3D
 			RasteriserState l_rs;
 			l_rs.SetDiscardPrimitives( true );
 			m_updatePipeline = l_renderSystem.CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
+			m_updatePipeline->AddUniformBuffer( m_ubo );
 		}
 
 		return l_return;

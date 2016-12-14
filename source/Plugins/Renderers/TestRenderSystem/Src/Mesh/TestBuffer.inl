@@ -31,7 +31,7 @@ namespace TestRender
 	}
 
 	template< typename T >
-	void TestBuffer< T >::InitialiseBindingPoint( uint32_t p_point )const
+	void TestBuffer< T >::SetBindingPoint( uint32_t p_point )const
 	{
 	}
 

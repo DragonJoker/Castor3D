@@ -6,6 +6,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/UniformBuffer.hpp"
+#include "Shader/UniformBufferBinding.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <Math/TransformationMatrix.hpp>
@@ -34,12 +35,12 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	RenderPipeline::RenderPipeline( RenderSystem & p_renderSystem
-						, DepthStencilState && p_dsState
-						, RasteriserState && p_rsState
-						, BlendState && p_blState
-						, MultisampleState && p_msState
-						, ShaderProgram & p_program
-						, PipelineFlags const & p_flags )
+		, DepthStencilState && p_dsState
+		, RasteriserState && p_rsState
+		, BlendState && p_blState
+		, MultisampleState && p_msState
+		, ShaderProgram & p_program
+		, PipelineFlags const & p_flags )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, m_mtxView{ 1 }
 		, m_mtxModel{ 1 }
@@ -66,8 +67,6 @@ namespace Castor3D
 			l_textures >>= 1;
 		}
 
-		m_sceneUbo = m_program.FindUniformBuffer( ShaderProgram::BufferScene );
-
 		if ( m_program.HasObject( ShaderType::ePixel ) )
 		{
 			m_directionalShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
@@ -83,6 +82,11 @@ namespace Castor3D
 	void RenderPipeline::Cleanup()
 	{
 		m_program.Cleanup();
+	}
+
+	void RenderPipeline::AddUniformBuffer( UniformBuffer & p_ubo )
+	{
+		m_bindings.push_back( std::ref( p_ubo.CreateBinding( m_program ) ) );
 	}
 
 	bool RenderPipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_result )
