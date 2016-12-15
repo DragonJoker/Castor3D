@@ -105,8 +105,7 @@ namespace deferred_msaa
 		return l_writer.Finalise();
 	}
 
-	void OpaquePass::DoUpdatePipeline( RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps )const
+	void OpaquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 	}
 }

@@ -337,9 +337,18 @@ namespace deferred_msaa
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		Castor3D::UniformBuffer m_sceneUbo;
+		//!\~english	The scene render node.
+		//!\~french		Le noeud de rendu de la scène.
+		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		Castor3D::UniformBuffer m_matrixUbo;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_projectionUniform{ nullptr };
+		//!\~english	The uniform variable containing view matrix.
+		//!\~french		La variable uniforme contenant la matrice vue.
+		Castor3D::Uniform4x4fSPtr m_viewUniform{ nullptr };
 	};
 }
 

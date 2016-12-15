@@ -19,7 +19,10 @@ namespace Castor3D
 
 	void UniformBufferBinding::Bind( uint32_t p_index )const
 	{
-		GetOwner()->GetStorage().SetBindingPoint( p_index );
-		DoBind( p_index );
+		if ( m_size )
+		{
+			GetOwner()->GetStorage().SetBindingPoint( p_index );
+			DoBind( p_index );
+		}
 	}
 }

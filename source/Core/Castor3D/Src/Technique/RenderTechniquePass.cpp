@@ -1,5 +1,6 @@
 #include "RenderTechniquePass.hpp"
 
+#include "Event/Frame/FunctorEvent.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "Mesh/Submesh.hpp"
@@ -8,6 +9,7 @@
 #include "Miscellaneous/ShadowMapPassSpot.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderTarget.hpp"
+#include "Render/RenderNode/RenderNode_Render.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
@@ -23,6 +25,12 @@ namespace Castor3D
 {
 	namespace
 	{
+		template< typename NodeType >
+		std::unique_ptr< DistanceRenderNodeBase > MakeDistanceNode( NodeType & p_node )
+		{
+			return std::make_unique< DistanceRenderNode< NodeType > >( p_node );
+		}
+
 		template< typename MapType >
 		void DoSortAlpha( MapType & p_input
 			, Camera const & p_camera
@@ -40,7 +48,7 @@ namespace Castor3D
 					Point3r l_ptCameraLocal = l_position * l_mtxMeshGlobal;
 					l_renderNode.m_data.SortByDistance( l_ptCameraLocal );
 					l_ptCameraLocal -= l_renderNode.m_sceneNode.GetPosition();
-					p_output.insert( { point::distance_squared( l_ptCameraLocal ), l_renderNode } );
+					p_output.insert( { point::distance_squared( l_ptCameraLocal ), MakeDistanceNode( l_renderNode ) } );
 				}
 			}
 		}
@@ -54,42 +62,6 @@ namespace Castor3D
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
-			}
-		}
-
-		void DoFillShaderDepthMaps( RenderPipeline & p_pipeline
-			, DepthMapArray & p_depthMaps )
-		{
-			if ( !p_depthMaps.empty() )
-			{
-				auto l_index = p_pipeline.GetTexturesCount() + 1;
-
-				if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eShadows ) )
-				{
-					for ( auto & l_depthMap : p_depthMaps )
-					{
-						if ( l_depthMap.get().GetType() == TextureType::eTwoDimensions )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							p_pipeline.GetDirectionalShadowMapsVariable().SetValue( l_index++ );
-						}
-						else if ( l_depthMap.get().GetType() == TextureType::eTwoDimensionsArray )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							p_pipeline.GetSpotShadowMapsVariable().SetValue( l_index++ );
-						}
-						else if ( l_depthMap.get().GetType() == TextureType::eCube )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++ );
-						}
-						else if ( l_depthMap.get().GetType() == TextureType::eCubeArray )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++ );
-						}
-					}
-				}
 			}
 		}
 
@@ -183,6 +155,7 @@ namespace Castor3D
 		: RenderPass{ p_name, *p_renderTarget.GetEngine(), p_opaque, p_multisampling }
 		, m_target{ p_renderTarget }
 		, m_technique{ p_technique }
+		, m_sceneNode{ m_sceneUbo }
 	{
 	}
 
@@ -210,30 +183,34 @@ namespace Castor3D
 		, DepthMapArray & p_depthMaps
 		, uint32_t & p_count )
 	{
-		if ( !p_nodes.m_staticGeometries.m_backCulled.empty()
-			|| !p_nodes.m_instancedGeometries.m_backCulled.empty()
-			|| !p_nodes.m_animatedGeometries.m_backCulled.empty()
-			|| !p_nodes.m_billboards.m_backCulled.empty() )
+		if ( !p_nodes.m_staticNodes.m_backCulled.empty()
+			|| !p_nodes.m_instancedNodes.m_backCulled.empty()
+			|| !p_nodes.m_skinningNodes.m_backCulled.empty()
+			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
+			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
 			if ( m_opaque || m_multisampling )
 			{
-				DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_frontCulled, p_camera, p_depthMaps );
-				DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_frontCulled, p_camera, p_depthMaps );
-				DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_frontCulled, p_camera, p_depthMaps );
-				DoRenderBillboards( p_nodes.m_billboards.m_frontCulled, p_camera, p_depthMaps );
+				DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_frontCulled, p_camera, p_depthMaps );
+				DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_frontCulled, p_camera, p_depthMaps );
+				DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_frontCulled, p_camera, p_depthMaps );
+				DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_frontCulled, p_camera, p_depthMaps );
+				DoRenderBillboards( p_nodes.m_billboardNodes.m_frontCulled, p_camera, p_depthMaps );
 
-				DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_backCulled, p_camera, p_depthMaps, p_count );
-				DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_backCulled, p_camera, p_depthMaps, p_count );
-				DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_backCulled, p_camera, p_depthMaps, p_count );
-				DoRenderBillboards( p_nodes.m_billboards.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_count );
 			}
 			else
 			{
 				{
 					DistanceSortedNodeMap l_distanceSortedRenderNodes;
-					DoSortAlpha( p_nodes.m_staticGeometries.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_animatedGeometries.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_billboards.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_staticNodes.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_skinningNodes.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_morphingNodes.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_billboardNodes.m_frontCulled, p_camera, l_distanceSortedRenderNodes );
 
 					if ( !l_distanceSortedRenderNodes.empty() )
 					{
@@ -242,9 +219,10 @@ namespace Castor3D
 				}
 				{
 					DistanceSortedNodeMap l_distanceSortedRenderNodes;
-					DoSortAlpha( p_nodes.m_staticGeometries.m_backCulled, p_camera, l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_animatedGeometries.m_backCulled, p_camera, l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_billboards.m_backCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_staticNodes.m_backCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_skinningNodes.m_backCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_morphingNodes.m_backCulled, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_billboardNodes.m_backCulled, p_camera, l_distanceSortedRenderNodes );
 
 					if ( !l_distanceSortedRenderNodes.empty() )
 					{
@@ -261,9 +239,10 @@ namespace Castor3D
 	{
 		for ( auto & l_it : p_nodes )
 		{
-			l_it.second.get().m_pass.m_pipeline.Apply();
-			UpdatePipeline( p_camera, l_it.second.get().m_pass.m_pipeline, p_depthMaps );
-			l_it.second.get().Render( p_depthMaps );
+			l_it.second->GetPipeline().Apply();
+			UpdatePipeline( l_it.second->GetPipeline() );
+			DoFillShaderDepthMaps( l_it.second->GetPipeline(), p_depthMaps );
+			l_it.second->Render();
 		}
 	}
 
@@ -274,9 +253,10 @@ namespace Castor3D
 	{
 		for ( auto & l_it : p_nodes )
 		{
-			l_it.second.get().m_pass.m_pipeline.Apply();
-			UpdatePipeline( p_camera, l_it.second.get().m_pass.m_pipeline, p_depthMaps );
-			l_it.second.get().Render( p_depthMaps );
+			l_it.second->GetPipeline().Apply();
+			UpdatePipeline( l_it.second->GetPipeline() );
+			DoFillShaderDepthMaps( l_it.second->GetPipeline(), p_depthMaps );
+			l_it.second->Render();
 			++p_count;
 		}
 	}
@@ -438,14 +418,26 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 		auto & l_camera = *m_target.GetCamera();
-		l_camera.GetScene()->GetLightCache().FillShader( m_sceneUbo );
-		l_camera.GetScene()->GetFog().FillShader( m_sceneUbo );
-		l_camera.GetScene()->FillShader( m_sceneUbo );
-		l_camera.FillShader( m_sceneUbo );
-		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
+		auto & l_fog = l_camera.GetScene()->GetFog();
+		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
+
+		if ( l_fog.GetType() != FogType::eDisabled )
+		{
+			m_sceneNode.m_fogDensity.SetValue( l_fog.GetDensity() );
+		}
+
+		auto & l_cache = l_camera.GetScene()->GetLightCache();
+		m_sceneNode.m_ambientLight.SetValue( rgba_float( l_camera.GetScene()->GetAmbientLight() ) );
+
+		for ( auto l_light : l_cache )
+		{
+			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( l_light.second->GetType() )]++;
+		}
+
+		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_camera.GetScene()->GetBackgroundColour() ) );
 	}
 
 	void RenderTechniquePass::DoPrepareFrontPipeline( ShaderProgram & p_program
@@ -475,21 +467,30 @@ namespace Castor3D
 					, std::move( l_msState )
 					, p_program
 					, p_flags ) ).first->second;
-			l_pipeline.AddUniformBuffer( m_matrixUbo );
-			l_pipeline.AddUniformBuffer( m_sceneUbo );
-			l_pipeline.AddUniformBuffer( m_passUbo );
-			l_pipeline.AddUniformBuffer( m_modelUbo );
 
-			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
-			{
-				l_pipeline.AddUniformBuffer( m_billboardUbo );
-			}
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+				, [this, &l_pipeline, p_flags]()
+				{
+					l_pipeline.AddUniformBuffer( m_matrixUbo );
+					l_pipeline.AddUniformBuffer( m_sceneUbo );
+					l_pipeline.AddUniformBuffer( m_passUbo );
+					l_pipeline.AddUniformBuffer( m_modelUbo );
 
-			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-				|| CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
-			{
-				l_pipeline.AddUniformBuffer( m_animationUbo );
-			}
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+					{
+						l_pipeline.AddUniformBuffer( m_billboardUbo );
+					}
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+					{
+						l_pipeline.AddUniformBuffer( m_skinningUbo );
+					}
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+					{
+						l_pipeline.AddUniformBuffer( m_morphingUbo );
+					}
+				} ) );
 		}
 	}
 
@@ -519,21 +520,30 @@ namespace Castor3D
 				, std::move( l_msState )
 				, p_program
 				, p_flags ) ).first->second;
-			l_pipeline.AddUniformBuffer( m_matrixUbo );
-			l_pipeline.AddUniformBuffer( m_sceneUbo );
-			l_pipeline.AddUniformBuffer( m_passUbo );
-			l_pipeline.AddUniformBuffer( m_modelUbo );
 
-			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
-			{
-				l_pipeline.AddUniformBuffer( m_billboardUbo );
-			}
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+				, [this, &l_pipeline, p_flags]()
+				{
+					l_pipeline.AddUniformBuffer( m_matrixUbo );
+					l_pipeline.AddUniformBuffer( m_sceneUbo );
+					l_pipeline.AddUniformBuffer( m_passUbo );
+					l_pipeline.AddUniformBuffer( m_modelUbo );
 
-			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-				|| CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
-			{
-				l_pipeline.AddUniformBuffer( m_animationUbo );
-			}
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+					{
+						l_pipeline.AddUniformBuffer( m_billboardUbo );
+					}
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+					{
+						l_pipeline.AddUniformBuffer( m_skinningUbo );
+					}
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+					{
+						l_pipeline.AddUniformBuffer( m_morphingUbo );
+					}
+				} ) );
 		}
 	}
 }

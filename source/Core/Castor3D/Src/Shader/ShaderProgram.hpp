@@ -816,6 +816,9 @@ namespace Castor3D
 		//!\~english	Name of the matrix frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les matrices.
 		C3D_API static const Castor::String BufferMatrix;
+		//!\~english	Name of the model matrix frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les matrices modèle.
+		C3D_API static const Castor::String BufferModelMatrix;
 		//!\~english	Name of the scene frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de scène.
 		C3D_API static const Castor::String BufferScene;
@@ -828,9 +831,12 @@ namespace Castor3D
 		//!\~english	Name of the billboards frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de billboards.
 		C3D_API static const Castor::String BufferBillboards;
-		//!\~english	Name of the animation frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données d'animation.
-		C3D_API static const Castor::String BufferAnimation;
+		//!\~english	Name of the skinning animation frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
+		C3D_API static const Castor::String BufferSkinning;
+		//!\~english	Name of the morphing animation frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données d'animation de morphing.
+		C3D_API static const Castor::String BufferMorphing;
 
 		//@}
 

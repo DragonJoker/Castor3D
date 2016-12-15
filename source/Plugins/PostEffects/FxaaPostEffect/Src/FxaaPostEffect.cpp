@@ -184,16 +184,7 @@ namespace Fxaa
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
 		, m_fxaaUbo{ FxaaUbo, p_renderSystem }
 	{
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
-		}
-
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		m_uniformSubpixShift = m_fxaaUbo.CreateUniform< UniformType::eFloat >( SubpixShift );
 		m_uniformSpanMax = m_fxaaUbo.CreateUniform< UniformType::eFloat >( SpanMax );
 		m_uniformReduceMul = m_fxaaUbo.CreateUniform< UniformType::eFloat >( ReduceMul );

@@ -242,15 +242,7 @@ namespace Bloom
 			}
 		} )
 	{
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
-		}
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 
 		m_blurXCoeffs = m_blurXUbo.CreateUniform< UniformType::eFloat >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
 		m_blurXCoeffCount = m_blurXUbo.CreateUniform< UniformType::eUInt >( BloomPostEffect::FilterConfigCoefficientsCount );

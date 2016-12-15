@@ -265,6 +265,7 @@ namespace Castor3D
 				auto gl_InstanceID( l_writer.GetBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 				auto gl_VertexID( l_writer.GetBuiltin< Int >( cuT( "gl_VertexID" ) ) );
 				UBO_MATRIX( l_writer );
+				UBO_MODEL_MATRIX( l_writer );
 				UBO_SCENE( l_writer );
 				UBO_MODEL( l_writer );
 				UBO_BILLBOARD( l_writer );

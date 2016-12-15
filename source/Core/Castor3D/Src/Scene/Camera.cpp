@@ -9,6 +9,7 @@
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
+#include "Render/RenderNode/SceneRenderNode.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 
@@ -191,17 +192,6 @@ namespace Castor3D
 	bool Camera::IsVisible( Point3r const & p_point )const
 	{
 		return m_frustum.IsVisible( p_point );
-	}
-
-	void Camera::FillShader( UniformBuffer const & p_sceneBuffer )const
-	{
-		auto l_position = GetParent()->GetDerivedPosition();
-		auto l_cameraPos = p_sceneBuffer.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
-
-		if ( l_cameraPos )
-		{
-			l_cameraPos->SetValue( l_position );
-		}
 	}
 
 	void Camera::OnNodeChanged( SceneNode const & p_node )

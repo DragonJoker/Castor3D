@@ -142,15 +142,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Fills the lights frame variables.
-		 *\param[in]	p_sceneBuffer	The constants buffer.
-		 *\~french
-		 *\brief		Remplit les variables shader relatives aux sources lumineuses.
-		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
-		 */
-		C3D_API void FillShader( UniformBuffer const & p_sceneBuffer )const;
-		/**
-		 *\~english
 		 *\brief		Updates the lights texture.
 		 *\~french
 		 *\brief		Met à jour la texture de sources lumineuses.

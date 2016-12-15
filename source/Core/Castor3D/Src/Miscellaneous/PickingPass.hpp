@@ -49,7 +49,8 @@ namespace Castor3D
 			eNone,
 			eInstantiated,
 			eStatic,
-			eAnimated,
+			eSkinning,
+			eMorphing,
 			eBillboard
 		};
 
@@ -176,25 +177,26 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderPass::DoRenderInstancedSubmeshes
 		 */
 		void DoRenderInstancedSubmeshes( Scene & p_scene
-			, Camera const & p_camera
 			, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshes
 		 */
 		void DoRenderStaticSubmeshes( Scene & p_scene
-			, Camera const & p_camera
-			, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+			, StaticRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
 		 */
-		void DoRenderAnimatedSubmeshes( Scene & p_scene
-			, Camera const & p_camera
-			, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderSkinningSubmeshes( Scene & p_scene
+			, SkinningRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
+		 */
+		void DoRenderMorphingSubmeshes( Scene & p_scene
+			, MorphingRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderBillboards
 		 */
 		void DoRenderBillboards( Scene & p_scene
-			, Camera const & p_camera
 			, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoInitialise
@@ -223,8 +225,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		void DoUpdatePipeline( RenderPipeline & p_pipeline
-			, DepthMapArray & p_depthMaps )const override;
+		void DoUpdatePipeline( RenderPipeline & p_pipeline )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
 		 */

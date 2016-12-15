@@ -1,7 +1,9 @@
 #include "UniformBuffer.hpp"
 
-#include "Uniform.hpp"
-#include "UniformBufferBinding.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Shader/Uniform.hpp"
+#include "Shader/UniformBufferBinding.hpp"
 
 #include "Render/RenderSystem.hpp"
 
@@ -177,7 +179,7 @@ namespace Castor3D
 		{
 			auto l_binding = GetRenderSystem()->CreateUniformBufferBinding( *this, p_program );
 
-			if ( m_bindings.empty() )
+			if ( !m_storage && l_binding->GetSize() > 0 )
 			{
 				DoInitialise( *l_binding );
 			}
@@ -211,6 +213,64 @@ namespace Castor3D
 				l_variable->SetChanged( false );
 			}
 		}
+	}
+
+	void UniformBuffer::FillMatrixBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
+		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
+	}
+
+	void UniformBuffer::FillModelMatrixBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
+		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
+	}
+
+	void UniformBuffer::FillSceneBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::AmbientLight );
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::BackgroundColour );
+		p_ubo.CreateUniform( UniformType::eVec4i, ShaderProgram::LightsCount );
+		p_ubo.CreateUniform( UniformType::eVec3r, ShaderProgram::CameraPos );
+		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::FogType );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::FogDensity );
+	}
+
+	void UniformBuffer::FillPassBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatAmbient );
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatDiffuse );
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatEmissive );
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatShininess );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity );
+
+		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
+		{
+			p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
+		}
+	}
+
+	void UniformBuffer::FillModelBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::ShadowReceiver );
+	}
+
+	void UniformBuffer::FillSkinningBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eMat4x4r, ShaderProgram::Bones, 400 );
+	}
+
+	void UniformBuffer::FillMorphingBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Time );
+	}
+
+	void UniformBuffer::FillBillboardBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eUInt, ShaderProgram::Dimensions );
+		p_ubo.CreateUniform( UniformType::eUInt, ShaderProgram::WindowSize );
 	}
 
 	void UniformBuffer::DoInitialise( UniformBufferBinding const & p_binding )

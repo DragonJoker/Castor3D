@@ -89,10 +89,11 @@ namespace Castor3D
 	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
 	{
 		auto l_depthMaps = DepthMapArray{};
-		DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_backCulled, l_depthMaps );
-		DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_backCulled, l_depthMaps );
-		DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_backCulled, l_depthMaps );
-		DoRenderBillboards( p_nodes.m_billboards.m_backCulled, l_depthMaps );
+		DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled );
+		DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled );
+		DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled );
+		DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled );
+		DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled );
 	}
 
 	bool ShadowMapPassPoint::DoInitialisePass( Size const & p_size )
@@ -169,7 +170,9 @@ namespace Castor3D
 		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
 
 		UBO_MATRIX( l_writer );
-		UBO_ANIMATION( l_writer, p_programFlags );
+		UBO_MODEL_MATRIX( l_writer );
+		UBO_SKINNING( l_writer, p_programFlags );
+		UBO_MORPHING( l_writer, p_programFlags );
 
 		// Outputs
 		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );

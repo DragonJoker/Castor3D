@@ -630,11 +630,14 @@ namespace Castor3D
 	class ToneMapping;
 	class PostEffect;
 	class ShadowMapPass;
+	struct PassRenderNodeUniforms;
 	struct PassRenderNode;
 	struct SceneRenderNode;
-	struct StaticGeometryRenderNode;
-	struct AnimatedGeometryRenderNode;
+	struct StaticRenderNode;
+	struct SkinningRenderNode;
+	struct MorphingRenderNode;
 	struct BillboardRenderNode;
+	struct DistanceRenderNodeBase;
 	class RenderTechnique;
 	class RenderWindow;
 	class RenderTarget;
@@ -678,9 +681,6 @@ namespace Castor3D
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
-	DECLARE_MULTIMAP( double, StaticGeometryRenderNode, StaticGeometryRenderNodeByDistance );
-	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
-	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
 	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
 

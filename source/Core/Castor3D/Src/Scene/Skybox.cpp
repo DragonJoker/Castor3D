@@ -104,16 +104,7 @@ namespace Castor3D
 			}
 		}
 	{
-		m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
-		m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
-		m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
-		m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			m_matricesBuffer.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
-		}
-
+		UniformBuffer::FillMatrixBuffer( m_matricesBuffer );
 		String const l_skybox = cuT( "Skybox" );
 
 		if ( GetEngine()->GetSamplerCache().Has( l_skybox ) )
@@ -248,6 +239,7 @@ namespace Castor3D
 			// Inputs
 			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
 			UBO_MATRIX( l_writer );
+			UBO_MODEL_MATRIX( l_writer );
 
 			// Outputs
 			auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );

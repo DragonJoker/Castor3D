@@ -133,15 +133,6 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Fills the frame variable buffer with the scene's parameters.
-		 *\param[in]	p_camera	The scene's camera.
-		 *\~french
-		 *\brief		Remplit le tampon de variables shader avec les paramètres de scène.
-		 *\param[in]	p_camera	La caméra de la scène.
-		 */
-		C3D_API void FillShader( UniformBuffer const & p_buffer )const;
-		/**
-		 *\~english
 		 *\brief		Renders the scene background.
 		 *\param[in]	p_size		The target dimensions.
 		 *\~french

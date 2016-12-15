@@ -152,11 +152,13 @@ namespace Castor3D
 	const String ShaderProgram::ShadowReceiver = cuT( "c3d_iShadowReceiver" );
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
+	const String ShaderProgram::BufferModelMatrix = cuT( "ModelMatrices" );
 	const String ShaderProgram::BufferScene = cuT( "Scene" );
 	const String ShaderProgram::BufferPass = cuT( "Pass" );
 	const String ShaderProgram::BufferModel = cuT( "Model" );
 	const String ShaderProgram::BufferBillboards = cuT( "Billboards" );
-	const String ShaderProgram::BufferAnimation = cuT( "Animation" );
+	const String ShaderProgram::BufferSkinning = cuT( "Skinning" );
+	const String ShaderProgram::BufferMorphing = cuT( "Morphing" );
 
 	//*************************************************************************************************
 

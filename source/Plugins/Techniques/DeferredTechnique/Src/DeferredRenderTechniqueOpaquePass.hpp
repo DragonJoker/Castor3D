@@ -80,8 +80,7 @@ namespace deferred
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		void DoUpdatePipeline( Castor3D::RenderPipeline & p_pipeline
-			, Castor3D::DepthMapArray & p_depthMaps )const override;
+		void DoUpdatePipeline( Castor3D::RenderPipeline & p_pipeline )const override;
 	};
 }
 

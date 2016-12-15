@@ -116,26 +116,6 @@ namespace Castor3D
 		MyObjectCache::Cleanup();
 	}
 
-	void LightCache::FillShader( UniformBuffer const & p_sceneBuffer )const
-	{
-		auto l_ambientLight = p_sceneBuffer.GetUniform< UniformType::eVec4f >( ShaderProgram::AmbientLight );
-
-		if ( l_ambientLight )
-		{
-			l_ambientLight->SetValue( rgba_float( GetScene()->GetAmbientLight() ) );
-		}
-
-		auto l_lightsCount = p_sceneBuffer.GetUniform< UniformType::eVec4i >( ShaderProgram::LightsCount );
-
-		if ( l_lightsCount )
-		{
-			for ( auto l_it : m_typeSortedLights )
-			{
-				l_lightsCount->GetValue( 0 )[size_t( l_it.first )] = uint32_t( l_it.second.size() );
-			}
-		}
-	}
-
 	void LightCache::UpdateLights()const
 	{
 		auto l_layout = m_lightsTexture->GetTexture();

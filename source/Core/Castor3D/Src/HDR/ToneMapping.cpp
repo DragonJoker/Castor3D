@@ -26,17 +26,7 @@ namespace Castor3D
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 		, m_configUbo{ ToneMapping::HdrConfig, *p_engine.GetRenderSystem() }
 	{
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
-
-		m_exposureVar = m_configUbo.CreateUniform< UniformType::eFloat >( ToneMapping::Exposure );
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
-		}
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		
 		String l_param;
 

@@ -61,16 +61,7 @@ namespace Castor3D
 			}
 		}
 	{
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
-		}
-
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		uint32_t i = 0;
 
 		for ( auto & l_vertex : m_rtotPipelinePlane.m_arrayVertex )
@@ -589,6 +580,7 @@ namespace Castor3D
 			// Inputs
 			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
 			UBO_MATRIX( l_writer );
+			UBO_MODEL_MATRIX( l_writer );
 
 			// Outputs
 			auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );

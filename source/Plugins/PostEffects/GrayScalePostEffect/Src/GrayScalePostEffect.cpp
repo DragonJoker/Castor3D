@@ -92,16 +92,7 @@ namespace GrayScale
 		, m_surface{ *p_renderSystem.GetEngine() }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
 	{
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
-		}
-
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		String l_name = cuT( "GrayScale" );
 
 		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( l_name ) )

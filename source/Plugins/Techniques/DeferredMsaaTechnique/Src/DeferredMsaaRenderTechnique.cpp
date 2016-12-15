@@ -159,23 +159,8 @@ namespace deferred_msaa
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
 	{
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
-		m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
-
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			m_matrixUbo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
-		}
-		
-		m_sceneUbo.CreateUniform( UniformType::eVec4f, ShaderProgram::AmbientLight );
-		m_sceneUbo.CreateUniform( UniformType::eVec4f, ShaderProgram::BackgroundColour );
-		m_sceneUbo.CreateUniform( UniformType::eVec4i, ShaderProgram::LightsCount );
-		m_sceneUbo.CreateUniform( UniformType::eVec3r, ShaderProgram::CameraPos );
-		m_sceneUbo.CreateUniform( UniformType::eInt, ShaderProgram::FogType );
-		m_sceneUbo.CreateUniform( UniformType::eFloat, ShaderProgram::FogDensity );
-
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		UniformBuffer::FillSceneBuffer( m_sceneUbo );
 		Logger::LogInfo( StringStream() << cuT( "Using Deferred MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 	}
 
@@ -254,16 +239,29 @@ namespace deferred_msaa
 
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
-		l_program.m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_projectionUniform->SetValue( m_viewport.GetProjection() );
 
 		if ( l_program.m_camera )
 		{
 			l_program.m_pipeline->ApplyMatrices( m_matrixUbo, 0xFFFFFFFFFFFFFFFF );
-			l_scene.GetLightCache().FillShader( m_sceneUbo );
+			auto & l_fog = l_scene.GetFog();
+			m_sceneNode->m_fogType.SetValue( int( l_fog.GetType() ) );
+
+			if ( l_fog.GetType() != FogType::eDisabled )
+			{
+				m_sceneNode->m_fogDensity.SetValue( l_fog.GetDensity() );
+			}
+
+			auto & l_cache = l_camera.GetScene()->GetLightCache();
+			m_sceneNode->m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
+
+			for ( auto l_light : l_cache )
+			{
+				m_sceneNode->m_lightsCount.GetValue( 0 )[size_t( l_light.second->GetType() )]++;
+			}
+
+			m_sceneNode->m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
 			l_scene.GetLightCache().BindLights();
-			l_scene.GetFog().FillShader( m_sceneUbo );
-			l_scene.FillShader( m_sceneUbo );
-			l_camera.FillShader( m_sceneUbo );
 			m_matrixUbo.Update();
 			m_sceneUbo.Update();
 
