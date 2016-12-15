@@ -534,8 +534,8 @@ namespace Castor3D
 					, p_program
 					, p_flags ) ).first->second;
 			l_pipeline.AddUniformBuffer( m_matrixUbo );
+			l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
 			l_pipeline.AddUniformBuffer( m_sceneUbo );
-			l_pipeline.AddUniformBuffer( m_modelUbo );
 
 			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 			{

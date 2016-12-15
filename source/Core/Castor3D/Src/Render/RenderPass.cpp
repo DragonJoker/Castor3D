@@ -165,6 +165,7 @@ namespace Castor3D
 		inline void DoRenderNonInstanced( RenderPass const & p_pass
 			, MapType & p_nodes
 			, Scene & p_scene
+			, PassRenderNodeUniforms & p_passNode
 			, DepthMapArray & p_depthMaps )
 		{
 			for ( auto l_itPipelines : p_nodes )
@@ -173,7 +174,7 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
-					DoBindPass( l_renderNode.m_passNode
+					DoBindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -181,7 +182,7 @@ namespace Castor3D
 
 					l_renderNode.Render();
 
-					DoUnbindPass( l_renderNode.m_passNode
+					DoUnbindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -212,6 +213,7 @@ namespace Castor3D
 			, Camera const & p_camera
 			, MapType & p_nodes
 			, Scene & p_scene
+			, PassRenderNodeUniforms & p_passNode
 			, DepthMapArray & p_depthMaps )
 		{
 			for ( auto l_itPipelines : p_nodes )
@@ -221,7 +223,7 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
-					DoBindPass( l_renderNode.m_passNode
+					DoBindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -229,7 +231,7 @@ namespace Castor3D
 
 					l_renderNode.Render();
 
-					DoUnbindPass( l_renderNode.m_passNode
+					DoUnbindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -243,6 +245,7 @@ namespace Castor3D
 			, Camera const & p_camera
 			, MapType & p_nodes
 			, Scene & p_scene
+			, PassRenderNodeUniforms & p_passNode
 			, DepthMapArray & p_depthMaps
 			, uint32_t & p_count )
 		{
@@ -253,7 +256,7 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
-					DoBindPass( l_renderNode.m_passNode
+					DoBindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -261,7 +264,7 @@ namespace Castor3D
 
 					l_renderNode.Render();
 
-					DoUnbindPass( l_renderNode.m_passNode
+					DoUnbindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -295,7 +298,7 @@ namespace Castor3D
 		UniformBuffer::FillPassBuffer( m_passUbo );
 		UniformBuffer::FillModelBuffer( m_modelUbo );
 		UniformBuffer::FillBillboardBuffer( m_billboardUbo );
-		//UniformBuffer::FillSkinningBuffer( m_skinningUbo );
+		UniformBuffer::FillSkinningBuffer( m_skinningUbo );
 		UniformBuffer::FillMorphingBuffer( m_morphingUbo );
 
 		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
@@ -546,7 +549,7 @@ namespace Castor3D
 		{
 			p_pass,
 			p_pipeline.GetProgram(),
-			m_matrixUbo,
+			m_passUbo,
 		};
 	}
 
@@ -727,6 +730,7 @@ namespace Castor3D
 		DoRenderNonInstanced( *this
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps );
 	}
 
@@ -746,6 +750,7 @@ namespace Castor3D
 			, p_camera
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps );
 	}
 
@@ -758,6 +763,7 @@ namespace Castor3D
 			, p_camera
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps
 			, p_count );
 	}
@@ -774,6 +780,7 @@ namespace Castor3D
 		DoRenderNonInstanced( *this
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps );
 	}
 
@@ -793,6 +800,7 @@ namespace Castor3D
 			, p_camera
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps );
 	}
 
@@ -805,6 +813,7 @@ namespace Castor3D
 			, p_camera
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps
 			, p_count );
 	}
@@ -821,6 +830,7 @@ namespace Castor3D
 		DoRenderNonInstanced( *this
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps );
 	}
 
@@ -840,6 +850,7 @@ namespace Castor3D
 			, p_camera
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps );
 	}
 
@@ -852,6 +863,7 @@ namespace Castor3D
 			, p_camera
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps
 			, p_count );
 	}
@@ -868,6 +880,7 @@ namespace Castor3D
 		DoRenderNonInstanced( *this
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps );
 	}
 
@@ -887,6 +900,7 @@ namespace Castor3D
 			, p_camera
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps );
 	}
 
@@ -899,6 +913,7 @@ namespace Castor3D
 			, p_camera
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, *m_passNode
 			, p_depthMaps
 			, p_count );
 	}

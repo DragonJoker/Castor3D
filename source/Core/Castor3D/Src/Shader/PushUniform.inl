@@ -19,7 +19,7 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	inline typename TPushUniform< Type >::const_return_type const & TPushUniform< Type >::GetValue()const
+	inline typename TPushUniform< Type >::return_const_type const & TPushUniform< Type >::GetValue()const
 	{
 		return m_uniform.GetValue();
 	}
@@ -31,7 +31,7 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	inline typename TPushUniform< Type >::const_return_type const & TPushUniform< Type >::GetValue( uint32_t p_index )const
+	inline typename TPushUniform< Type >::return_const_type const & TPushUniform< Type >::GetValue( uint32_t p_index )const
 	{
 		return m_uniform.GetValue( p_index );
 	}
@@ -81,7 +81,7 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	inline typename TPushUniform< Type >::const_return_type const & TPushUniform< Type >::operator[]( uint32_t p_index )const
+	inline typename TPushUniform< Type >::return_const_type const & TPushUniform< Type >::operator[]( uint32_t p_index )const
 	{
 		return m_uniform[p_index];
 	}

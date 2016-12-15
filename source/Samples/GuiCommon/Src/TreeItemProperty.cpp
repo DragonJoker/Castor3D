@@ -25,6 +25,7 @@ namespace GuiCommon
 
 	TreeItemProperty::~TreeItemProperty()
 	{
+		delete m_menu;
 	}
 
 	void TreeItemProperty::DisplayTreeItemMenu( wxWindow * p_window, wxCoord x, wxCoord y )

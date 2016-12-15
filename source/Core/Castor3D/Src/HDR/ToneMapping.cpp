@@ -27,6 +27,7 @@ namespace Castor3D
 		, m_configUbo{ ToneMapping::HdrConfig, *p_engine.GetRenderSystem() }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		m_exposureVar = m_configUbo.CreateUniform < UniformType::eFloat > (ToneMapping::Exposure);
 		
 		String l_param;
 

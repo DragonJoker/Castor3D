@@ -161,6 +161,20 @@ namespace Castor3D
 		 *\brief		Désactive la texture de sources lumineuses.
 		 */
 		C3D_API void UnbindLights()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the count of the lights of given type.
+		 *\param[in]	p_type	The light type.
+		 *\return		The count.
+		 *\~french
+		 *\brief		Récupère le nombre de lumières du type donné.
+		 *\param[in]	p_type	Le type de lumière.
+		 *\return		Le compte.
+		 */
+		inline uint32_t GetLightsCount( LightType p_type )const
+		{
+			return uint32_t( m_typeSortedLights.find( p_type )->second.size() );
+		}
 
 	private:
 		//!\~english The lights sorted byt light type	\~french Les lumières, triées par type de lumière.

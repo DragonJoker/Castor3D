@@ -6,21 +6,55 @@ namespace Castor3D
 		struct Helper;
 
 		template< UniformType Type >
+		struct UniformDataAllocator
+		{
+			using value_type = typename uniform_type< Type >::value_sub_type;
+			static constexpr auto count = variable_type< Type >::count;
+
+			static value_type * Alloc( uint32_t p_count )
+			{
+				return new value_type[count * p_count];
+			}
+
+			static void Free( value_type * p_data )
+			{
+				delete[] p_data;
+			}
+		};
+
+		template<>
+		struct UniformDataAllocator< UniformType::eMat4x4f >
+		{
+			using value_type = typename uniform_type< UniformType::eMat4x4f >::value_sub_type;
+			static constexpr auto count = variable_type< UniformType::eMat4x4f >::count;
+
+			static value_type * Alloc( uint32_t p_count )
+			{
+				return Castor::MatrixDataAllocator< float, 4, 4 >::Alloc( p_count );
+			}
+
+			static void Free( value_type * p_data )
+			{
+				Castor::MatrixDataAllocator< float, 4, 4 >::Free( p_data );
+			}
+		};
+
+		template< UniformType Type >
 		struct Helper< Type, typename std::enable_if< is_matrix_type< Type >::value >::type >
 		{
-			using typed_type = typename uniform_typed_value< Type >::type;
+			using typed_type = typename uniform_type< Type >::typed_value_type;
 			using sub_type = typename uniform_type< Type >::value_sub_type;
-			using param_type = typename uniform_param_type< Type >::type;
-			using return_type = typename uniform_return_type< Type >::type;
-			using const_return_type = typename uniform_return_type< Type >::const_type;
+			using param_type = typename uniform_type< Type >::param_type;
+			using return_type = typename uniform_type< Type >::return_type;
+			using return_const_type = typename uniform_type< Type >::return_const_type;
 			static constexpr auto count = variable_type< Type >::count;
 			static constexpr auto rows = variable_type< Type >::rows;
 			static constexpr auto cols = variable_type< Type >::cols;
 
 			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
 			{
-				uint8_t * l_buffer = p_src;
 				constexpr uint32_t l_size = sizeof( sub_type ) * count;
+				uint8_t * l_buffer = p_src;
 
 				if ( !p_stride )
 				{
@@ -57,7 +91,7 @@ namespace Castor3D
 				return p_src[p_index];
 			}
 
-			static inline const_return_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
+			static inline return_const_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
 			{
 				return p_src[p_index];
 			}
@@ -112,11 +146,11 @@ namespace Castor3D
 		template< UniformType Type >
 		struct Helper< Type, typename std::enable_if< is_point_type< Type >::value >::type >
 		{
-			using typed_type = typename uniform_typed_value< Type >::type;
+			using typed_type = typename uniform_type< Type >::typed_value_type;
 			using sub_type = typename uniform_type< Type >::value_sub_type;
-			using param_type = typename uniform_param_type< Type >::type;
-			using return_type = typename uniform_return_type< Type >::type;
-			using const_return_type = typename uniform_return_type< Type >::const_type;
+			using param_type = typename uniform_type< Type >::param_type;
+			using return_type = typename uniform_type< Type >::return_type;
+			using return_const_type = typename uniform_type< Type >::return_const_type;
 			static constexpr auto count = variable_type< Type >::count;
 
 			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
@@ -160,9 +194,9 @@ namespace Castor3D
 				return p_src[p_index];
 			}
 
-			static inline const_return_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
+			static inline return_const_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
 			{
-				return const_return_type{ p_src[p_index] };
+				return return_const_type{ p_src[p_index] };
 			}
 
 			static inline void SetStrValue( std::vector< typed_type > & p_dst, Castor::String const & p_value, uint32_t p_index )
@@ -196,11 +230,11 @@ namespace Castor3D
 		template< UniformType Type >
 		struct Helper< Type, typename std::enable_if< is_one_type< Type >::value >::type >
 		{
-			using typed_type = typename uniform_typed_value< Type >::type;
+			using typed_type = typename uniform_type< Type >::typed_value_type;
 			using sub_type = typename uniform_type< Type >::value_sub_type;
-			using param_type = typename uniform_param_type< Type >::type;
-			using return_type = typename uniform_return_type< Type >::type;
-			using const_return_type = typename uniform_return_type< Type >::const_type;
+			using param_type = typename uniform_type< Type >::param_type;
+			using return_type = typename uniform_type< Type >::return_type;
+			using return_const_type = typename uniform_type< Type >::return_const_type;
 
 			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
 			{
@@ -243,7 +277,7 @@ namespace Castor3D
 				return *p_src[p_index];
 			}
 
-			static inline const_return_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
+			static inline return_const_type const & GetValue( std::vector< typed_type > const & p_src, uint32_t p_index )
 			{
 				return *p_src[p_index];
 			}
@@ -268,7 +302,7 @@ namespace Castor3D
 	TUniform< Type >::TUniform( uint32_t p_occurences )
 		: Uniform{ p_occurences }
 		, m_typedValues( p_occurences, typed_value{} )
-		, m_values{ new value_sub_type[p_occurences * stride] }
+		, m_values{ details::UniformDataAllocator< Type >::Alloc( p_occurences * stride ) }
 	{
 		memset( m_values, 0, p_occurences * stride );
 		details::Helper< Type >::Link( m_typedValues, reinterpret_cast< uint8_t * >( m_values ), stride );
@@ -293,7 +327,7 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	inline typename TUniform< Type >::const_return_type const & TUniform< Type >::GetValue()const
+	inline typename TUniform< Type >::return_const_type const & TUniform< Type >::GetValue()const
 	{
 		return GetValue( 0u );
 	}
@@ -312,7 +346,7 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	inline typename TUniform< Type >::const_return_type const & TUniform< Type >::GetValue( uint32_t p_index )const
+	inline typename TUniform< Type >::return_const_type const & TUniform< Type >::GetValue( uint32_t p_index )const
 	{
 		if ( p_index < m_occurences )
 		{
@@ -373,7 +407,7 @@ namespace Castor3D
 	}
 
 	template< UniformType Type >
-	inline typename TUniform< Type >::const_return_type const & TUniform< Type >::operator[]( uint32_t p_index )const
+	inline typename TUniform< Type >::return_const_type const & TUniform< Type >::operator[]( uint32_t p_index )const
 	{
 		return details::Helper< Type >::GetValue( m_typedValues, p_index );
 	}
@@ -448,7 +482,7 @@ namespace Castor3D
 	{
 		if ( m_ownBuffer )
 		{
-			delete [] m_values;
+			details::UniformDataAllocator< Type >::Free( m_values );
 			m_stride = 0u;
 		}
 	}

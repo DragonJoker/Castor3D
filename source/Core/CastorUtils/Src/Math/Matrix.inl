@@ -8,6 +8,8 @@ namespace Castor
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( NoInit const & )
+		: m_data( MatrixDataAllocator< T, Columns, Rows >::Alloc() )
+		, m_ownCoords( true )
 	{
 		do_update_columns();
 	}
@@ -26,7 +28,8 @@ namespace Castor
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( T * p_matrix )
-		: MatrixDataHolder< T, Columns, Rows >( p_matrix )
+		: m_data( p_data )
+		, m_ownCoords( false )
 	{
 		do_update_columns();
 	}
@@ -50,8 +53,11 @@ namespace Castor
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix< T, Columns, Rows >::Matrix( Matrix< T, Columns, Rows > && p_matrix )
-		: MatrixDataHolder< T, Columns, Rows >( std::move( p_matrix ) )
+		: m_data( p_matrix.m_data )
+		, m_ownCoords( p_matrix.m_ownCoords )
 	{
+		p_matrix.m_data = nullptr;
+		p_matrix.m_ownCoords = true;
 		do_update_columns();
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -69,6 +75,10 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::~Matrix()
 	{
+		if ( m_ownCoords )
+		{
+			MatrixDataAllocator< T, Columns, Rows >::Free( m_data );
+		}
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::initialise( T const & p_value )
@@ -262,7 +272,15 @@ namespace Castor
 	{
 		if ( this != &p_matrix )
 		{
-			MatrixDataHolder< T, Columns, Rows >::operator=( std::move( p_matrix ) );
+			if ( m_ownCoords )
+			{
+				MatrixDataAllocator< T, Columns, Rows >::Free( m_data );
+			}
+
+			m_data = p_matrix.m_data;
+			m_ownCoords = p_matrix.m_ownCoords;
+			p_matrix.m_data = nullptr;
+			p_matrix.m_ownCoords = true;
 			do_update_columns();
 		}
 
@@ -406,7 +424,14 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::link( T * p_coords )
 	{
-		MatrixDataHolder< T, Columns, Rows >::link( p_coords );
+		if ( m_ownCoords )
+		{
+			MatrixDataAllocator< T, Columns, Rows >::Free( m_data );
+			m_data = nullptr;
+		}
+
+		m_data = p_coords;
+		m_ownCoords = false;
 		do_update_columns();
 	}
 

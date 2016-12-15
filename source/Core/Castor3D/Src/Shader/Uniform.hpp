@@ -294,10 +294,10 @@ namespace Castor3D
 		using type = typename uniform_type< Type >::type;
 		using value_type = typename uniform_type< Type >::value_type;
 		using value_sub_type = typename uniform_type< Type >::value_sub_type;
-		using param_type = typename uniform_param_type< Type >::type;
-		using return_type = typename uniform_return_type< Type >::type;
-		using const_return_type = typename uniform_return_type< Type >::const_type;
-		using typed_value = typename uniform_typed_value< Type >::type;
+		using param_type = typename uniform_type< Type >::param_type;
+		using return_type = typename uniform_type< Type >::return_type;
+		using return_const_type = typename uniform_type< Type >::return_const_type;
+		using typed_value = typename uniform_type< Type >::typed_value_type;
 		static constexpr auto stride = variable_type< Type >::count * sizeof( value_sub_type );
 
 	public:
@@ -339,7 +339,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Une référence constante sur la valeur.
 		 */
-		inline const_return_type const & GetValue()const;
+		inline return_const_type const & GetValue()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index.
@@ -365,7 +365,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice.
 		 *\return		Une référence constante sur la valeur à l'index donné.
 		 */
-		inline const_return_type const & GetValue( uint32_t p_index )const;
+		inline return_const_type const & GetValue( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable.
@@ -451,7 +451,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice.
 		 *\return		Une référence constante sur la valeur à l'index donné.
 		 */
-		inline const_return_type const & operator[]( uint32_t p_index )const;
+		inline return_const_type const & operator[]( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The type of the variable.

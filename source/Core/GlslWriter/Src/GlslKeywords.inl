@@ -17,10 +17,10 @@ namespace GLSL
 		{
 			l_return = m_strUboLayout + cuT( "( " ) + LayoutName[p_layout];
 
-			if ( !m_strUboBinding.empty() )
-			{
-				l_return += cuT( ", " ) + m_strUboBinding + cuT( " = " ) + Castor::string::to_string( p_index );
-			}
+			//if ( !m_strUboBinding.empty() )
+			//{
+			//	l_return += cuT( ", " ) + m_strUboBinding + cuT( " = " ) + Castor::string::to_string( p_index );
+			//}
 
 			l_return += cuT( " ) " );
 		}

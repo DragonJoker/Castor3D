@@ -189,6 +189,10 @@ namespace Castor3D
 			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
 			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
+			m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
+			m_viewUniform->SetValue( p_camera.GetView() );
+			m_matrixUbo.Update();
+
 			if ( m_opaque || m_multisampling )
 			{
 				DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_frontCulled, p_camera, p_depthMaps );
@@ -431,13 +435,14 @@ namespace Castor3D
 
 		auto & l_cache = l_camera.GetScene()->GetLightCache();
 		m_sceneNode.m_ambientLight.SetValue( rgba_float( l_camera.GetScene()->GetAmbientLight() ) );
-
-		for ( auto l_light : l_cache )
 		{
-			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( l_light.second->GetType() )]++;
+			auto l_lock = make_unique_lock( l_cache );
+			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = l_cache.GetLightsCount( LightType::eSpot );
+			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = l_cache.GetLightsCount( LightType::ePoint );
+			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
 		}
-
 		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_camera.GetScene()->GetBackgroundColour() ) );
+		m_sceneNode.m_sceneUbo.Update();
 	}
 
 	void RenderTechniquePass::DoPrepareFrontPipeline( ShaderProgram & p_program
@@ -472,6 +477,7 @@ namespace Castor3D
 				, [this, &l_pipeline, p_flags]()
 				{
 					l_pipeline.AddUniformBuffer( m_matrixUbo );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
 					l_pipeline.AddUniformBuffer( m_sceneUbo );
 					l_pipeline.AddUniformBuffer( m_passUbo );
 					l_pipeline.AddUniformBuffer( m_modelUbo );
@@ -525,6 +531,7 @@ namespace Castor3D
 				, [this, &l_pipeline, p_flags]()
 				{
 					l_pipeline.AddUniformBuffer( m_matrixUbo );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
 					l_pipeline.AddUniformBuffer( m_sceneUbo );
 					l_pipeline.AddUniformBuffer( m_passUbo );
 					l_pipeline.AddUniformBuffer( m_modelUbo );
