@@ -349,6 +349,10 @@ namespace Bloom
 
 	void BloomPostEffect::Cleanup()
 	{
+		m_matrixUbo.Cleanup();
+		m_blurXUbo.Cleanup();
+		m_blurYUbo.Cleanup();
+
 		m_hiPassMapDiffuse.reset();
 		m_blurXCoeffCount.reset();
 		m_blurXCoeffs.reset();
@@ -487,7 +491,7 @@ namespace Bloom
 			l_context->RenderTexture( l_source->m_size
 				, *l_source->m_colourTexture.GetTexture()
 				, p_pipeline
-				, p_ubo );
+				, m_matrixUbo );
 			l_destination->m_fbo->Unbind();
 		}
 	}
@@ -620,7 +624,7 @@ namespace Bloom
 			l_dsstate.SetDepthMask( WritingMask::eZero );
 			m_blurXPipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 			m_blurXPipeline->AddUniformBuffer( m_matrixUbo );
-			m_blurXPipeline->AddUniformBuffer( m_blurYUbo );
+			m_blurXPipeline->AddUniformBuffer( m_blurXUbo );
 		}
 
 		return l_return;

@@ -245,8 +245,20 @@ namespace Castor3D
 		{
 			l_it.second->GetPipeline().Apply();
 			UpdatePipeline( l_it.second->GetPipeline() );
-			DoFillShaderDepthMaps( l_it.second->GetPipeline(), p_depthMaps );
+
+			DoBindPass( l_it.second->GetPassNode()
+				, l_it.second->GetPassNode().m_pass
+				, *p_camera.GetScene()
+				, l_it.second->GetPipeline()
+				, p_depthMaps );
+
 			l_it.second->Render();
+
+			DoUnbindPass( l_it.second->GetPassNode()
+				, l_it.second->GetPassNode().m_pass
+				, *p_camera.GetScene()
+				, l_it.second->GetPipeline()
+				, p_depthMaps );
 		}
 	}
 
@@ -255,14 +267,8 @@ namespace Castor3D
 		, DepthMapArray & p_depthMaps
 		, uint32_t & p_count )
 	{
-		for ( auto & l_it : p_nodes )
-		{
-			l_it.second->GetPipeline().Apply();
-			UpdatePipeline( l_it.second->GetPipeline() );
-			DoFillShaderDepthMaps( l_it.second->GetPipeline(), p_depthMaps );
-			l_it.second->Render();
-			++p_count;
-		}
+		DoRenderByDistance( p_nodes, p_camera, p_depthMaps );
+		p_count += uint32_t( p_nodes.size() );
 	}
 
 	void RenderTechniquePass::DoGetDepthMaps( DepthMapArray & p_depthMaps )
@@ -425,7 +431,8 @@ namespace Castor3D
 	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 		auto & l_camera = *m_target.GetCamera();
-		auto & l_fog = l_camera.GetScene()->GetFog();
+		auto & l_scene = *l_camera.GetScene();
+		auto & l_fog = l_scene.GetFog();
 		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
 
 		if ( l_fog.GetType() != FogType::eDisabled )
@@ -433,15 +440,16 @@ namespace Castor3D
 			m_sceneNode.m_fogDensity.SetValue( l_fog.GetDensity() );
 		}
 
-		auto & l_cache = l_camera.GetScene()->GetLightCache();
-		m_sceneNode.m_ambientLight.SetValue( rgba_float( l_camera.GetScene()->GetAmbientLight() ) );
+		m_sceneNode.m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
 		{
+			auto & l_cache = l_scene.GetLightCache();
 			auto l_lock = make_unique_lock( l_cache );
 			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = l_cache.GetLightsCount( LightType::eSpot );
 			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = l_cache.GetLightsCount( LightType::ePoint );
 			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
 		}
-		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_camera.GetScene()->GetBackgroundColour() ) );
+		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
+		m_sceneNode.m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
 		m_sceneNode.m_sceneUbo.Update();
 	}
 

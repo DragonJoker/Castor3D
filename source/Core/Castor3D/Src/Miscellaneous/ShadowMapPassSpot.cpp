@@ -22,7 +22,6 @@ namespace Castor3D
 	ShadowMapPassSpot::ShadowMapPassSpot( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
 		: ShadowMapPass{ p_engine, p_scene, p_light, p_shadowMap, p_index }
 	{
-
 	}
 
 	ShadowMapPassSpot::~ShadowMapPassSpot()
@@ -78,12 +77,15 @@ namespace Castor3D
 
 	void ShadowMapPassSpot::DoRender()
 	{
-		if ( m_camera )
+		if ( m_camera && m_initialised )
 		{
 			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 			m_frameBuffer->Clear();
 			auto & l_nodes = m_renderQueue.GetRenderNodes();
 			m_camera->Apply();
+			m_projectionUniform->SetValue( m_camera->GetViewport().GetProjection() );
+			m_viewUniform->SetValue( m_camera->GetView() );
+			m_matrixUbo.Update();
 			DoRenderNodes( l_nodes, *m_camera );
 			m_frameBuffer->Unbind();
 		}

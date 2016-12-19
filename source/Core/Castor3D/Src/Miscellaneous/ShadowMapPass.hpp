@@ -187,6 +187,9 @@ namespace Castor3D
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	Tells if the pass is initialised.
+		//!\~french		Dit si la passe est initialisée.
+		bool m_initialised{ false };
 	};
 }
 

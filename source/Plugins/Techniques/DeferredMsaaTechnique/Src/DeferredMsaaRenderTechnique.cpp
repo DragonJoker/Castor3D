@@ -255,7 +255,7 @@ namespace deferred_msaa
 				m_sceneNode->m_fogDensity.SetValue( l_fog.GetDensity() );
 			}
 
-			auto & l_cache = l_camera.GetScene()->GetLightCache();
+			auto & l_cache = l_scene.GetLightCache();
 			m_sceneNode->m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
 
 			{
@@ -266,6 +266,7 @@ namespace deferred_msaa
 			}
 
 			m_sceneNode->m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
+			m_sceneNode->m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
 			l_scene.GetLightCache().BindLights();
 			m_matrixUbo.Update();
 			m_sceneUbo.Update();
@@ -672,6 +673,8 @@ namespace deferred_msaa
 	void RenderTechnique::DoDestroyLightPass()
 	{
 		m_vertexBuffer.reset();
+		m_matrixUbo.Cleanup();
+		m_sceneUbo.Cleanup();
 
 		for ( auto & program : m_lightPassShaderPrograms )
 		{

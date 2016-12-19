@@ -141,11 +141,14 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoRender()
 	{
-		m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
-		m_frameBuffer->Clear();
-		auto & l_nodes = m_renderQueue.GetRenderNodes();
-		DoRenderNodes( l_nodes );
-		m_frameBuffer->Unbind();
+		if ( m_initialised )
+		{
+			m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+			m_frameBuffer->Clear();
+			auto & l_nodes = m_renderQueue.GetRenderNodes();
+			DoRenderNodes( l_nodes );
+			m_frameBuffer->Unbind();
+		}
 	}
 
 	void ShadowMapPassPoint::DoUpdateProgram( ShaderProgram & p_program )

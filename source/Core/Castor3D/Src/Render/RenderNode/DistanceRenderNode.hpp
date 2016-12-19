@@ -41,16 +41,23 @@ namespace Castor3D
 		virtual ~DistanceRenderNodeBase() = default;
 		/**
 		 *\~english
-		 *\brief		Render function.
+		 *\return		The render pipeline.
 		 *\~french
-		 *\brief		Fonction de rendu.
+		 *\return		Le pipeline de rendu.
 		 */
 		C3D_API virtual RenderPipeline & GetPipeline() = 0;
 		/**
 		 *\~english
-		 *\brief		Render function.
+		 *\return		The pass render node.
 		 *\~french
-		 *\brief		Fonction de rendu.
+		 *\return		Le noeud de rendu de passe.
+		 */
+		C3D_API virtual PassRenderNode & GetPassNode() = 0;
+		/**
+		 *\~english
+		 *\brief		Renders the node.
+		 *\~french
+		 *\brief		Dessine le noeud.
 		 */
 		C3D_API virtual void Render() = 0;
 	};
@@ -76,6 +83,13 @@ namespace Castor3D
 		inline RenderPipeline & GetPipeline()override
 		{
 			return m_node.m_pipeline;
+		};
+		/**
+		 *\copydoc		DistanceRenderNodeBase::GetPassNode
+		 */
+		inline PassRenderNode & GetPassNode()override
+		{
+			return m_node.m_passNode;
 		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::Render

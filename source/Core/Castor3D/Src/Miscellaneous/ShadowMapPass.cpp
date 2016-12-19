@@ -154,6 +154,8 @@ namespace Castor3D
 					{
 						l_pipeline.AddUniformBuffer( m_morphingUbo );
 					}
+
+					m_initialised = true;
 				} ) );
 		}
 	}

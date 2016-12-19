@@ -400,7 +400,7 @@ namespace Castor3D
 										, *l_skeleton
 										, p_skinning );
 								}
-								if ( CheckFlag( l_programFlags, ProgramFlag::eMorphing ) )
+								else if ( CheckFlag( l_programFlags, ProgramFlag::eMorphing ) )
 								{
 									DoAddMorphingNode( p_renderPass
 										, l_textureFlags
