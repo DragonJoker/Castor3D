@@ -262,9 +262,6 @@ namespace deferred
 		//!\~english	The uniform variable containing projection matrix.
 		//!\~french		La variable uniforme contenant la matrice projection.
 		Castor3D::Uniform4x4fSPtr m_projectionUniform{ nullptr };
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Castor3D::Uniform4x4fSPtr m_viewUniform{ nullptr };
 	};
 }
 

@@ -102,7 +102,7 @@ namespace Castor3D
 
 					if ( l_renderNode.m_data.IsInitialised() )
 					{
-						l_renderNode.Render();
+						DoRenderNodeNoPass( l_renderNode );
 					}
 				}
 

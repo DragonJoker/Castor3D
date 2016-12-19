@@ -46,13 +46,6 @@ namespace Castor3D
 			, SceneNode & p_sceneNode
 			, Submesh & p_data
 			, Geometry & p_instance );
-		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 */
-		C3D_API void Render();
 	};
 }
 

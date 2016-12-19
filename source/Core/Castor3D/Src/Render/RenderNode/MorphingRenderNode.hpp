@@ -48,13 +48,6 @@ namespace Castor3D
 			, InstanceType & p_instance
 			, AnimatedMesh & p_mesh
 			, UniformBuffer & p_morphingUbo );
-		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 */
-		C3D_API void Render();
 
 		//!\~english	The animated mesh.
 		//!\~french		Le maillage animé.

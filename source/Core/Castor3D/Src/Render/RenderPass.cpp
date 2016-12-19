@@ -156,7 +156,7 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
-					l_renderNode.Render();
+					DoRenderNodeNoPass( l_renderNode );
 				}
 			}
 		}
@@ -180,7 +180,7 @@ namespace Castor3D
 						, *l_itPipelines.first
 						, p_depthMaps );
 
-					l_renderNode.Render();
+					DoRenderNode( l_renderNode );
 
 					DoUnbindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass
@@ -203,7 +203,7 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
-					l_renderNode.Render();
+					DoRenderNodeNoPass( l_renderNode );
 				}
 			}
 		}
@@ -229,7 +229,7 @@ namespace Castor3D
 						, *l_itPipelines.first
 						, p_depthMaps );
 
-					l_renderNode.Render();
+					DoRenderNode( l_renderNode );
 
 					DoUnbindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass
@@ -262,7 +262,7 @@ namespace Castor3D
 						, *l_itPipelines.first
 						, p_depthMaps );
 
-					l_renderNode.Render();
+					DoRenderNode( l_renderNode );
 
 					DoUnbindPass( p_passNode
 						, l_renderNode.m_passNode.m_pass

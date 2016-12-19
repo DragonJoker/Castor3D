@@ -726,16 +726,16 @@ namespace Castor3D
 
 #define UBO_PASS( Writer )\
 	GLSL::Ubo l_pass{ l_writer, ShaderProgram::BufferPass };\
+	auto c3d_mtxTexture0 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[0] );\
+	auto c3d_mtxTexture1 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
+	auto c3d_mtxTexture2 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
+	auto c3d_mtxTexture3 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
 	auto c3d_v4MatAmbient = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatAmbient );\
 	auto c3d_v4MatDiffuse = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatDiffuse );\
 	auto c3d_v4MatEmissive = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatEmissive );\
 	auto c3d_v4MatSpecular = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatSpecular );\
 	auto c3d_fMatShininess = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatShininess );\
 	auto c3d_fMatOpacity = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatOpacity );\
-	auto c3d_mtxTexture0 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[0] );\
-	auto c3d_mtxTexture1 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
-	auto c3d_mtxTexture2 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
-	auto c3d_mtxTexture3 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
 	l_pass.End()
 
 #define UBO_MODEL( Writer )\

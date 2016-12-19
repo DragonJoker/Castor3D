@@ -82,7 +82,7 @@ namespace Castor3D
 		 */
 		inline void Render()override
 		{
-			m_node.Render();
+			DoRenderNode( m_node );
 		}
 
 		//!\~english	The object node.

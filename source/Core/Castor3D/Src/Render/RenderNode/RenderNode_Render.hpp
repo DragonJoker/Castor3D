@@ -6,6 +6,11 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Animation/AnimatedMesh.hpp"
+#include "Scene/Animation/AnimatedSkeleton.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
+#include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Shader/PushUniform.hpp"
 #include "Shader/UniformBuffer.hpp"
 
@@ -88,5 +93,64 @@ namespace Castor3D
 		{
 			p_scene.GetLightCache().UnbindLights();
 		}
+	}
+
+	template< typename DataType, typename InstanceType >
+	inline void DoRenderObjectNode( ObjectRenderNode< DataType, InstanceType > & p_node )
+	{
+		auto & l_model = p_node.m_sceneNode.GetDerivedTransformationMatrix();
+		auto & l_view = p_node.m_pipeline.GetViewMatrix();
+		p_node.m_modelMatrix.SetValue( l_model );
+		p_node.m_normalMatrix.SetValue( Matrix4x4r{ ( l_model * l_view ).get_minor( 3, 3 ).invert().get_transposed() } );
+		p_node.m_modelMatrixUbo.Update();
+		p_node.m_data.Draw( p_node.m_buffers );
+	}
+
+	inline void DoRenderNodeNoPass( StaticRenderNode & p_node )
+	{
+		DoRenderObjectNode( p_node );
+	}
+
+	inline void DoRenderNodeNoPass( BillboardRenderNode & p_node )
+	{
+		auto const & l_dimensions = p_node.m_data.GetDimensions();
+		p_node.m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
+		p_node.m_billboardUbo.Update();
+		DoRenderObjectNode( p_node );
+	}
+
+	inline void DoRenderNodeNoPass( MorphingRenderNode & p_node )
+	{
+		if ( p_node.m_mesh.IsPlayingAnimation() )
+		{
+			auto l_submesh = p_node.m_mesh.GetPlayingAnimation().GetAnimationSubmesh( p_node.m_data.GetId() );
+
+			if ( l_submesh )
+			{
+				l_submesh->FillShader( p_node.m_time );
+			}
+		}
+		else
+		{
+			p_node.m_time.SetValue( 1.0f );
+		}
+
+		p_node.m_morphingUbo.Update();
+		DoRenderObjectNode( p_node );
+	}
+
+	inline void DoRenderNodeNoPass( SkinningRenderNode & p_node )
+	{
+		p_node.m_skeleton.FillShader( p_node.m_bonesMatrix );
+		p_node.m_skinningUbo.Update();
+		DoRenderObjectNode( p_node );
+	}
+
+	template< typename NodeType >
+	inline void DoRenderNode( NodeType & p_node )
+	{
+		p_node.m_shadowReceiver.SetValue( p_node.m_instance.IsShadowReceiver() ? 1 : 0 );
+		p_node.m_modelUbo.Update();
+		DoRenderNodeNoPass( p_node );
 	}
 }

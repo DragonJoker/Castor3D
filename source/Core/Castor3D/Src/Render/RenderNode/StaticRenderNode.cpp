@@ -29,16 +29,4 @@ namespace Castor3D
 			, p_instance }
 	{
 	}
-
-	void StaticRenderNode::Render()
-	{
-		auto & l_model = m_sceneNode.GetDerivedTransformationMatrix();
-		auto & l_view = m_pipeline.GetViewMatrix();
-		m_shadowReceiver.SetValue( m_instance.IsShadowReceiver() ? 1 : 0 );
-		m_modelMatrix.SetValue( l_model );
-		m_normalMatrix.SetValue( Matrix4x4r{ ( l_model * l_view ).get_minor( 3, 3 ).invert().get_transposed() } );
-		m_modelUbo.Update();
-		m_modelMatrixUbo.Update();
-		m_data.Draw( m_buffers );
-	}
 }

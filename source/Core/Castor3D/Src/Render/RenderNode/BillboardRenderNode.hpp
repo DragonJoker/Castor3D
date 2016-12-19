@@ -46,13 +46,6 @@ namespace Castor3D
 			, SceneNode & p_sceneNode
 			, BillboardBase & p_data
 			, UniformBuffer & p_billboardUbo );
-		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 */
-		C3D_API void Render();
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.

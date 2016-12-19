@@ -173,7 +173,15 @@ namespace Castor3D
 		 */
 		inline uint32_t GetLightsCount( LightType p_type )const
 		{
-			return uint32_t( m_typeSortedLights.find( p_type )->second.size() );
+			uint32_t l_return = 0u;
+			auto l_it = m_typeSortedLights.find( p_type );
+
+			if ( l_it != m_typeSortedLights.end() )
+			{
+				l_return = uint32_t( l_it->second.size() );
+			}
+
+			return l_return;
 		}
 
 	private:

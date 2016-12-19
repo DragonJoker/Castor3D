@@ -48,13 +48,6 @@ namespace Castor3D
 			, InstanceType & p_instance
 			, AnimatedSkeleton & p_skeleton
 			, UniformBuffer & p_skinningUbo );
-		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 */
-		C3D_API void Render();
 
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.

@@ -144,6 +144,9 @@ namespace deferred
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		UniformBuffer::FillSceneBuffer( m_sceneUbo );
+
+		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
+
 		m_sceneNode = std::make_unique< SceneRenderNode >( m_sceneUbo );
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 	}
@@ -241,7 +244,6 @@ namespace deferred
 
 		if ( l_program.m_camera )
 		{
-			l_program.m_pipeline->ApplyMatrices( m_matrixUbo, 0xFFFFFFFFFFFFFFFF );
 			auto & l_fog = l_scene.GetFog();
 			m_sceneNode->m_fogType.SetValue( int( l_fog.GetType() ) );
 
@@ -253,9 +255,11 @@ namespace deferred
 			auto & l_cache = l_camera.GetScene()->GetLightCache();
 			m_sceneNode->m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
 
-			for ( auto l_light : l_cache )
 			{
-				m_sceneNode->m_lightsCount.GetValue( 0 )[size_t( l_light.second->GetType() )]++;
+				auto l_lock = make_unique_lock( l_cache );
+				m_sceneNode->m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
+				m_sceneNode->m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = l_cache.GetLightsCount( LightType::ePoint );
+				m_sceneNode->m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = l_cache.GetLightsCount( LightType::eSpot );
 			}
 
 			m_sceneNode->m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
@@ -517,8 +521,6 @@ namespace deferred
 			l_dsstate.SetDepthTest( false );
 			l_dsstate.SetDepthMask( WritingMask::eZero );
 			l_program.m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program.m_program, PipelineFlags{} );
-			l_program.m_pipeline->AddUniformBuffer( m_matrixUbo );
-			l_program.m_pipeline->AddUniformBuffer( m_sceneUbo );
 
 			++l_sceneFlags;
 		}
@@ -599,6 +601,8 @@ namespace deferred
 			program.m_program->Initialise();
 			program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::eTriangles, *program.m_program );
 			program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
+			program.m_pipeline->AddUniformBuffer( m_matrixUbo );
+			program.m_pipeline->AddUniformBuffer( m_sceneUbo );
 		}
 
 		return l_return;
