@@ -37,10 +37,16 @@ namespace Castor3D
 				{
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
+						DoBindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
+							, l_itSubmeshes.second[0].m_passNode.m_pass );
+
 						p_function( *l_itPipelines.first
 							, *l_itPass.first
 							, *l_itSubmeshes.first
 							, l_itSubmeshes.second );
+
+						DoUnbindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
+							, l_itSubmeshes.second[0].m_passNode.m_pass );
 					}
 				}
 			}
@@ -98,10 +104,16 @@ namespace Castor3D
 				{
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
+						DoBindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
+							, l_itSubmeshes.second[0].m_passNode.m_pass );
+
 						p_function( *l_itPipelines.first
 							, *l_itPass.first
 							, *l_itSubmeshes.first
 							, l_itSubmeshes.second );
+
+						DoUnbindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
+							, l_itSubmeshes.second[0].m_passNode.m_pass );
 					}
 				}
 			}
@@ -156,7 +168,13 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
+					DoBindPassOpacityMap( l_renderNode.m_passNode
+						, l_renderNode.m_passNode.m_pass );
+
 					DoRenderNodeNoPass( l_renderNode );
+
+					DoUnbindPassOpacityMap( l_renderNode.m_passNode
+						, l_renderNode.m_passNode.m_pass );
 				}
 			}
 		}
@@ -203,7 +221,13 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
+					DoBindPassOpacityMap( l_renderNode.m_passNode
+						, l_renderNode.m_passNode.m_pass );
+
 					DoRenderNodeNoPass( l_renderNode );
+
+					DoUnbindPassOpacityMap( l_renderNode.m_passNode
+						, l_renderNode.m_passNode.m_pass );
 				}
 			}
 		}
@@ -393,7 +417,7 @@ namespace Castor3D
 			{
 				auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
 
-				if ( p_twoSided )
+				if ( p_twoSided || CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 				{
 					auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
 					DoPrepareFrontPipeline( *l_frontProgram, l_flags );

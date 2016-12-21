@@ -15,7 +15,7 @@ scene "Scene"
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.628281 0.628281 0.628281 1.0
 			shininess 51.2
-			two_sided true
+			alpha 0.5
 		}
 	}
 

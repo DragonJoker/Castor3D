@@ -13,6 +13,9 @@
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Shader/PushUniform.hpp"
 #include "Shader/UniformBuffer.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
 
 using namespace Castor;
 
@@ -92,6 +95,31 @@ namespace Castor3D
 		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
 			p_scene.GetLightCache().UnbindLights();
+		}
+	}
+
+	inline void DoBindPassOpacityMap( PassRenderNodeUniforms & p_node
+		, Pass & p_pass )
+	{
+		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
+
+		if ( l_unit )
+		{
+			p_node.m_textures.find( l_unit->GetIndex() )->second.get().SetValue( 0 );
+			l_unit->GetTexture()->Bind( 0u );
+			l_unit->GetSampler()->Bind( 0u );
+		}
+	}
+
+	inline void DoUnbindPassOpacityMap( PassRenderNodeUniforms & p_node
+		, Pass & p_pass )
+	{
+		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
+
+		if ( l_unit )
+		{
+			l_unit->GetSampler()->Unbind( 0u );
+			l_unit->GetTexture()->Unbind( 0u );
 		}
 	}
 

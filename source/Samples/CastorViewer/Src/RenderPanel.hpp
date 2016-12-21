@@ -124,9 +124,10 @@ namespace CastorViewer
 		Castor::real m_oldY{ 0.0_r };
 		Castor::Point3r m_ptOriginalPosition;
 		Castor::Quaternion m_qOriginalOrientation;
-		bool m_mouseLeftDown{ false };	//!< The left mouse button status
-		bool m_mouseRightDown{ false };	//!< The right mouse button status
-		bool m_mouseMiddleDown{ false };	//!< The middle mouse button status
+		bool m_altDown{ false };
+		bool m_mouseLeftDown{ false };
+		bool m_mouseRightDown{ false };
+		bool m_mouseMiddleDown{ false };
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::CameraWPtr m_camera;
