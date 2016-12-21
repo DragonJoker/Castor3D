@@ -539,7 +539,7 @@ namespace GuiCommon
 		{
 			DoApplyChange( [&p_value, l_variable, &l_buffer, this]()
 			{
-				l_buffer->RemoveVariable( l_variable->GetName() );
+				l_buffer->RemoveUniform( l_variable->GetName() );
 				m_variable = l_buffer->CreateUniform( p_value, l_variable->GetName(), l_variable->GetOccCount() );
 			} );
 		}
@@ -554,7 +554,7 @@ namespace GuiCommon
 		{
 			DoApplyChange( [&p_value, l_variable, &l_buffer, this]()
 			{
-				l_buffer->RemoveVariable( l_variable->GetName() );
+				l_buffer->RemoveUniform( l_variable->GetName() );
 				m_variable = l_buffer->CreateUniform( l_variable->GetFullType(), p_value, l_variable->GetOccCount() );
 			} );
 		}

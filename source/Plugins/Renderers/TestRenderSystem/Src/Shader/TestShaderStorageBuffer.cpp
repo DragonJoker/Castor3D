@@ -29,7 +29,7 @@ namespace TestRender
 	{
 	}
 
-	void TestShaderStorageBuffer::InitialiseBindingPoint( uint32_t p_point )const
+	void TestShaderStorageBuffer::SetBindingPoint( uint32_t p_point )const
 	{
 	}
 
@@ -41,7 +41,7 @@ namespace TestRender
 	{
 	}
 
-	uint8_t * TestShaderStorageBuffer::Lock( uint32_t p_offset, uint32_t p_count, FlagCombination< AccessType > const & p_flags )const
+	uint8_t * TestShaderStorageBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )const
 	{
 		return nullptr;
 	}

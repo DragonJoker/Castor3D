@@ -27,6 +27,7 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 
 #include "Render/RenderQueue.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 #include <unordered_map>
 
@@ -58,7 +59,7 @@ namespace Castor3D
 		, public Castor::Named
 	{
 	public:
-		using DistanceSortedNodeMap = std::multimap< double, std::reference_wrapper< ObjectRenderNodeBase > >;
+		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
 
 	protected:
 		/**
@@ -243,7 +244,6 @@ namespace Castor3D
 		 *\param[in]	p_submesh	The submesh.
 		 *\param[in]	p_primitive	The geometry.
 		 *\param[in]	p_skeleton	The animated skeleton.
-		 *\param[in]	p_mesh		The animated mesh.
 		 *\return		The render node.
 		 *\~french
 		 *\brief		Crée un noeud de rendu animé.
@@ -252,15 +252,36 @@ namespace Castor3D
 		 *\param[in]	p_submesh	Le sous-maillage.
 		 *\param[in]	p_primitive	La géométrie.
 		 *\param[in]	p_skeleton	Le squelette animé.
-		 *\param[in]	p_mesh		Le maillage animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
+		C3D_API SkinningRenderNode CreateSkinningNode( Pass & p_pass
 			, RenderPipeline & p_pipeline
 			, Submesh & p_submesh
 			, Geometry & p_primitive
-			, AnimatedSkeletonSPtr p_skeleton
-			, AnimatedMeshSPtr p_mesh );
+			, AnimatedSkeleton & p_skeleton );
+		/**
+		 *\~english
+		 *\brief		Creates an animated render node.
+		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_pipeline	The pipeline.
+		 *\param[in]	p_submesh	The submesh.
+		 *\param[in]	p_primitive	The geometry.
+		 *\param[in]	p_mesh		The animated mesh.
+		 *\return		The render node.
+		 *\~french
+		 *\brief		Crée un noeud de rendu animé.
+		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_pipeline	Le pipeline.
+		 *\param[in]	p_submesh	Le sous-maillage.
+		 *\param[in]	p_primitive	La géométrie.
+		 *\param[in]	p_mesh		Le maillage animé.
+		 *\return		Le noeud de rendu.
+		 */
+		C3D_API MorphingRenderNode CreateMorphingNode( Pass & p_pass
+			, RenderPipeline & p_pipeline
+			, Submesh & p_submesh
+			, Geometry & p_primitive
+			, AnimatedMesh & p_mesh );
 		/**
 		 *\~english
 		 *\brief		Creates a static render node.
@@ -277,7 +298,7 @@ namespace Castor3D
 		 *\param[in]	p_primitive	La géométrie.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
+		C3D_API StaticRenderNode CreateStaticNode( Pass & p_pass
 			, RenderPipeline & p_pipeline
 			, Submesh & p_submesh
 			, Geometry & p_primitive );
@@ -301,16 +322,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.
-		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Met à jour lee pipeline opaque.
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdatePipeline( Camera const & p_camera
-			, RenderPipeline & p_pipeline
-			, DepthMapArray & p_depthMaps )const;
+		C3D_API void UpdatePipeline( RenderPipeline & p_pipeline )const;
 		/**
 		 *\~english
 		 *\return		The multsampling status.
@@ -379,7 +396,7 @@ namespace Castor3D
 		 *\param[in]	p_renderNodes	Les noeuds instanciés.
 		 *\param[in]	p_matrixBuffer	Le tampon de matrices.
 		 */
-		C3D_API uint32_t DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
+		C3D_API uint32_t DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
 			, VertexBuffer & p_matrixBuffer );
 		/**
 		 *\~english
@@ -395,7 +412,7 @@ namespace Castor3D
 		 *\param[in]		p_matrixBuffer	Le tampon de matrices.
 		 *\param[in,out]	p_count			Reçoit le nombre de noeuds dessinés.
 		 */
-		C3D_API uint32_t DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes
+		C3D_API uint32_t DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
 			, VertexBuffer & p_matrixBuffer
 			, uint32_t & p_count );
 		/**
@@ -403,15 +420,36 @@ namespace Castor3D
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	p_nodes		The render nodes.
 		 *\param		p_camera	The viewing camera.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param		p_camera	La caméra regardant la scène.
+		 */
+		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
 		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
 			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 */
+		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -431,21 +469,6 @@ namespace Castor3D
 		 *\~english
 		 *\brief			Renders instanced submeshes.
 		 *\param[in]		p_nodes		The render nodes.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_count		Receives the rendered nodes count.
-		 *\~french
-		 *\brief			Dessine des sous maillages instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
-		 */
-		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
-		/**
-		 *\~english
-		 *\brief			Renders instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
 		 *\param			p_camera	The viewing camera.
 		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	p_count		Receives the rendered nodes count.
@@ -464,17 +487,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps );
+		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -485,7 +502,34 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 */
+		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps );
 		/**
 		 *\~english
@@ -501,25 +545,43 @@ namespace Castor3D
 		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
+		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
 			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
 			, uint32_t & p_count );
 		/**
 		 *\~english
-		 *\brief			Renders non instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_count		Receives the rendered nodes count.
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
-		 *\brief			Dessine des sous maillages non instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticGeometryRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
+		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 */
+		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -532,20 +594,8 @@ namespace Castor3D
 		 *\param		p_camera	La caméra regardant la scène.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
 			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
 			, DepthMapArray & p_depthMaps );
 		/**
 		 *\~english
@@ -561,25 +611,109 @@ namespace Castor3D
 		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
 		 */
-		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
 			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
 			, uint32_t & p_count );
 		/**
 		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 */
+		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
 		 *\brief			Renders non instanced submeshes.
 		 *\param[in]		p_nodes		The render nodes.
+		 *\param			p_camera	The viewing camera.
 		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
 		 *\param[in, out]	p_count		Receives the rendered nodes count.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
 		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param			p_camera	La caméra regardant la scène.
 		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
 		 */
-		C3D_API void DoRenderAnimatedSubmeshes( AnimatedGeometryRenderNodesByPipelineMap & p_nodes
+		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
 			, uint32_t & p_count );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 */
+		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
@@ -597,18 +731,6 @@ namespace Castor3D
 			, DepthMapArray & p_depthMaps );
 		/**
 		 *\~english
-		 *\brief		Renders billboards.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine des billboards.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
-		/**
-		 *\~english
 		 *\brief			Renders billboards.
 		 *\param[in]		p_nodes		The render nodes.
 		 *\param			p_camera	The viewing camera.
@@ -623,21 +745,6 @@ namespace Castor3D
 		 */
 		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
 			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
-		/**
-		 *\~english
-		 *\brief			Renders billboards.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_count		Receives the rendered nodes count.
-		 *\~french
-		 *\brief			Dessine des billboards.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
-		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
 			, DepthMapArray & p_depthMaps
 			, uint32_t & p_count );
 
@@ -739,8 +846,7 @@ namespace Castor3D
 		 *\brief		Met à jour lee pipeline.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdatePipeline( RenderPipeline & p_pipeline
-			, DepthMapArray & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdatePipeline( RenderPipeline & p_pipeline  )const = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline, culling front faces.
@@ -780,6 +886,39 @@ namespace Castor3D
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };
+		//!\~english	The uniform buffer containing the scene data.
+		//!\~french		Le tampon d'uniformes contenant les données de scène.
+		UniformBuffer m_sceneUbo;
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		UniformBuffer m_matrixUbo;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Uniform4x4fSPtr m_projectionUniform{ nullptr };
+		//!\~english	The uniform variable containing view matrix.
+		//!\~french		La variable uniforme contenant la matrice vue.
+		Uniform4x4fSPtr m_viewUniform{ nullptr };
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		UniformBuffer m_modelMatrixUbo;
+		//!\~english	The uniform buffer containing pass data.
+		//!\~french		Le tampon d'uniformes contenant les données de passe.
+		UniformBuffer m_passUbo;
+		//!\~english	The pass render node.
+		//!\~french		Le noeud de rendu de passe.
+		std::unique_ptr< PassRenderNodeUniforms > m_passNode;
+		//!\~english	The uniform buffer containing model data.
+		//!\~french		Le tampon d'uniformes contenant les données du modèle.
+		UniformBuffer m_modelUbo;
+		//!\~english	The uniform buffer containing billboard data.
+		//!\~french		Le tampon d'uniformes contenant les données de billboard.
+		UniformBuffer m_billboardUbo;
+		//!\~english	The uniform buffer containing skinning animation data.
+		//!\~french		Le tampon d'uniformes contenant les données d'animation de skinning.
+		UniformBuffer m_skinningUbo;
+		//!\~english	The uniform buffer containing morphing animation data.
+		//!\~french		Le tampon d'uniformes contenant les données d'animation de morphing.
+		UniformBuffer m_morphingUbo;
 	};
 }
 

@@ -27,6 +27,7 @@ SOFTWARE.
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
+#include <Shader/UniformBuffer.hpp>
 
 #ifndef _WIN32
 #	define C3D_Bloom_API
@@ -86,7 +87,11 @@ namespace Bloom
 	private:
 		void DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
 		void DoDownSample( Castor3D::TextureLayout const & p_origin );
-		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::RenderPipeline & p_pipeline );
+		void DoBlur( Castor3D::TextureLayout const & p_origin
+			, SurfaceArray & p_sources
+			, SurfaceArray & p_destinations
+			, Castor3D::RenderPipeline & p_pipeline
+			, Castor3D::UniformBuffer & p_ubo );
 		void DoCombine( Castor3D::TextureLayout const & p_origin );
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
 		bool DoInitialiseHiPassProgram();
@@ -102,14 +107,17 @@ namespace Bloom
 
 		Castor3D::RenderPipelineUPtr m_blurXPipeline;
 		Castor3D::PushUniform1sSPtr m_blurXMapDiffuse;
+		Castor3D::UniformBuffer m_blurXUbo;
 		Castor3D::Uniform1uiSPtr m_blurXCoeffCount;
 		Castor3D::Uniform1fSPtr m_blurXCoeffs;
 
 		Castor3D::RenderPipelineUPtr m_blurYPipeline;
 		Castor3D::PushUniform1sSPtr m_blurYMapDiffuse;
+		Castor3D::UniformBuffer m_blurYUbo;
 		Castor3D::Uniform1uiSPtr m_blurYCoeffCount;
 		Castor3D::Uniform1fSPtr m_blurYCoeffs;
 
+		Castor3D::UniformBuffer m_matrixUbo;
 		Castor3D::RenderPipelineUPtr m_combinePipeline;
 
 		Castor3D::Viewport m_viewport;

@@ -20,7 +20,7 @@ namespace Castor3D
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateIndexBuffer();
+			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateUInt32Buffer( BufferType::eElementArray );
 		}
 
 		bool l_return = m_gpuBuffer != nullptr;

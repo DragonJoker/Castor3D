@@ -20,39 +20,46 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_FRAME_VARIABLE_BUFFER_H___
-#define ___GL_FRAME_VARIABLE_BUFFER_H___
+#ifndef ___C3D_SceneRenderNode_H___
+#define ___C3D_SceneRenderNode_H___
 
-#include <Shader/UniformBuffer.hpp>
+#include "Castor3DPrerequisites.hpp"
 
-#include "GlRenderSystemPrerequisites.hpp"
-#include "Buffer/GlBufferBase.hpp"
-
-namespace GlRender
+namespace Castor3D
 {
-	class GlUniformBuffer
-		: public Castor3D::UniformBuffer
-		, public Holder
+	/*!
+	\author 	Sylvain DOREMUS
+	\date
+	\~english
+	\brief		Helper structure used to render submeshes.
+	\~french
+	\brief		Structure d'aide utilisée pour le dessin des sous-maillages.
+	*/
+	struct SceneRenderNode
 	{
-	public:
-		GlUniformBuffer( OpenGl & p_gl
-			, Castor::String const & p_name
-			, GlShaderProgram & p_program
-			, Castor3D::ShaderTypeFlags const & p_flags
-			, Castor3D::RenderSystem & p_renderSystem );
-		virtual ~GlUniformBuffer();
-		void SetBindingUniform( uint32_t p_point )const;
+		C3D_API SceneRenderNode( UniformBuffer & p_sceneUbo );
 
-	private:
-		bool DoInitialise()override;
-		void DoCleanup()override;
-		void DoBindTo( uint32_t p_index )override;
-		void DoUpdate()override;
-
-	private:
-		GlBufferBase< uint8_t > m_glBuffer;
-		int m_uniformBlockIndex;
-		int m_uniformBlockSize;
+		//!\~english	The scene UBO.
+		//!\~french		L'UBO de scène.
+		UniformBuffer & m_sceneUbo;
+		//!\~english	The ambient light.
+		//!\~french		La luminosité ambiante.
+		Uniform4f & m_ambientLight;
+		//!\~english	The background colour.
+		//!\~french		La couleur de fond.
+		Uniform4f & m_backgroundColour;
+		//!\~english	The lights counts.
+		//!\~french		Les comptes des lumières.
+		Uniform4i & m_lightsCount;
+		//!\~english	The camera position.
+		//!\~french		La position de la caméra.
+		Uniform3f & m_cameraPos;
+		//!\~english	The fog type.
+		//!\~french		Le type de brouillard.
+		Uniform1i & m_fogType;
+		//!\~english	The fog density.
+		//!\~french		La densité du brouillard.
+		Uniform1f & m_fogDensity;
 	};
 }
 

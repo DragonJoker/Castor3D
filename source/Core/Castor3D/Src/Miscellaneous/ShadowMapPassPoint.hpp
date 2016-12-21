@@ -128,6 +128,12 @@ namespace Castor3D
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
 		Castor::Matrix4x4r m_projection;
+		//!\~english	The shadow map matrices data UBO.
+		//!\~french		L'UBO de données des matrices de shadow map.
+		UniformBuffer m_shadowMatrices;
+		//!\~english	The shadow map coniguration data UBO.
+		//!\~french		L'UBO de données de configuration de shadow map.
+		UniformBuffer m_shadowConfig;
 	};
 }
 

@@ -173,8 +173,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		C3D_API void DoUpdatePipeline( RenderPipeline & p_pipeline
-			, DepthMapArray & p_depthMaps )const override;
+		C3D_API void DoUpdatePipeline( RenderPipeline & p_pipeline)const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
 		 */
@@ -193,6 +192,9 @@ namespace Castor3D
 		//!\~english	The parent render technique.
 		//!\~french		La technique de rendu parente.
 		RenderTechnique & m_technique;
+		//!\~english	The scene render node.
+		//!\~french		Le noeud de rendu de la scène.
+		SceneRenderNode m_sceneNode;
 	};
 }
 

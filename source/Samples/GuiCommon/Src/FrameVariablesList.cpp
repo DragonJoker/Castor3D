@@ -84,11 +84,6 @@ namespace GuiCommon
 
 		if ( p_program->GetObjectStatus( p_type ) != ShaderStatus::eDontExist )
 		{
-			for ( auto l_buffer : p_program->GetUniformBuffers( p_type ) )
-			{
-				DoAddBuffer( l_root, l_buffer );
-			}
-
 			for ( auto l_variable : p_program->GetUniforms( p_type ) )
 			{
 				DoAddVariable( l_root, l_variable, p_type );

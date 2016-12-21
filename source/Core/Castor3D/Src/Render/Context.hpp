@@ -27,6 +27,7 @@ SOFTWARE.
 #include "Viewport.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/UniformBuffer.hpp"
 
 #include <Graphics/Colour.hpp>
 #include <Design/OwnedBy.hpp>
@@ -107,13 +108,18 @@ namespace Castor3D
 		 *\param[in]	p_size		The render viewport size.
 		 *\param[in]	p_texture	The texture.
 		 *\param[in]	p_pipeline	The pipleline used to render the texture.
+		 *\param[in]	p_matrixUbo	The uniform buffer receiving matrices.
 		 *\~french
 		 *\brief		Dessine la texture 2D donnée.
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_pipeline	Le pipeline utilisé pour dessiner la texture.
+		 *\param[in]	p_matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline );
+		C3D_API void RenderTexture( Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, RenderPipeline & p_pipeline
+			, UniformBuffer & p_matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture to the currently draw-bound frame buffer.
@@ -124,7 +130,8 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture );
+		C3D_API void RenderTexture( Castor::Size const & p_size
+			, TextureLayout const & p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given 2D texture array to the currently draw-bound frame buffer.
@@ -137,7 +144,9 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_index		L'index de la couche.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index );
+		C3D_API void RenderTexture( Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Renders the given depth 2D texture to the currently draw-bound frame buffer.
@@ -148,7 +157,8 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API void RenderDepth( Castor::Size const & p_size, TextureLayout const & p_texture );
+		C3D_API void RenderDepth( Castor::Size const & p_size
+			, TextureLayout const & p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth 2D texture array to the currently draw-bound frame buffer.
@@ -161,7 +171,9 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_index		L'index de la couche.
 		 */
-		C3D_API void RenderDepth( Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index );
+		C3D_API void RenderDepth( Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
@@ -176,7 +188,10 @@ namespace Castor3D
 		 *\param[in]	p_size			La taille du viewport de rendu.
 		 *\param[in]	p_texture		La texture.
 		 */
-		C3D_API void RenderTexture( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture );
+		C3D_API void RenderTexture( Castor::Point3r const & p_position
+			, Castor::Quaternion const & p_orientation
+			, Castor::Size const & p_size
+			, TextureLayout const & p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given cube texture array to the currently draw-bound frame buffer.
@@ -193,7 +208,11 @@ namespace Castor3D
 		 *\param[in]	p_texture		La texture.
 		 *\param[in]	p_index			L'index de la couche.
 		 */
-		C3D_API void RenderTexture( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index );
+		C3D_API void RenderTexture( Castor::Point3r const & p_position
+			, Castor::Quaternion const & p_orientation
+			, Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Renders the given depth cube texture to the currently draw-bound frame buffer.
@@ -208,7 +227,10 @@ namespace Castor3D
 		 *\param[in]	p_size			La taille du viewport de rendu.
 		 *\param[in]	p_texture		La texture.
 		 */
-		C3D_API void RenderDepth( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture );
+		C3D_API void RenderDepth( Castor::Point3r const & p_position
+			, Castor::Quaternion const & p_orientation
+			, Castor::Size const & p_size
+			, TextureLayout const & p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
@@ -225,7 +247,11 @@ namespace Castor3D
 		 *\param[in]	p_texture		La texture.
 		 *\param[in]	p_index			L'index de la couche.
 		 */
-		C3D_API void RenderDepth( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index );
+		C3D_API void RenderDepth( Castor::Point3r const & p_position
+			, Castor::Quaternion const & p_orientation
+			, Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Tells the context is initialised
@@ -286,17 +312,21 @@ namespace Castor3D
 		 *\param[in]	p_size				The render viewport size.
 		 *\param[in]	p_texture			The texture.
 		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\param[in]	p_program			The program used to render the texture.
 		 *\~french
 		 *\brief		Dessine la texture donnée.
 		 *\param[in]	p_size				La taille du viewport de rendu.
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, RenderPipeline & p_pipeline
+			, UniformBuffer & p_matrixUbo
+			, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given texture array.
@@ -304,18 +334,23 @@ namespace Castor3D
 		 *\param[in]	p_texture			The texture.
 		 *\param[in]	p_index				The layer index.
 		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\param[in]	p_program			The program used to render the texture.
 		 *\~french
 		 *\brief		Dessine la couche voulue du tableau de textures donné.
 		 *\param[in]	p_size				La taille du viewport de rendu.
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_index				L'index de la couche.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, uint32_t p_index
+			, RenderPipeline & p_pipeline
+			, UniformBuffer & p_matrixUbo
+			, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture.
@@ -324,8 +359,8 @@ namespace Castor3D
 		 *\param[in]	p_size				The render viewport size.
 		 *\param[in]	p_texture			The texture.
 		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\param[in]	p_program			The program used to render the texture.
 		 *\~french
 		 *\brief		Dessine la texture cube donnée.
 		 *\param[in]	p_position			La position de l'observateur.
@@ -333,10 +368,16 @@ namespace Castor3D
 		 *\param[in]	p_size				La taille du viewport de rendu.
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Point3r const & p_position
+			, Castor::Quaternion const & p_orientation
+			, Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, RenderPipeline & p_pipeline
+			, UniformBuffer & p_matrixUbo
+			, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given cube texture array.
@@ -346,8 +387,8 @@ namespace Castor3D
 		 *\param[in]	p_texture			The texture.
 		 *\param[in]	p_index				The layer index.
 		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\param[in]	p_program			The program used to render the texture.
 		 *\~french
 		 *\brief		Dessine la couche voulue du tableau de textures cube donné.
 		 *\param[in]	p_position			La position de l'observateur.
@@ -356,10 +397,17 @@ namespace Castor3D
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_index				L'index de la couche.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Point3r const & p_position
+			, Castor::Quaternion const & p_orientation
+			, Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, uint32_t p_index
+			, RenderPipeline & p_pipeline
+			, UniformBuffer & p_matrixUbo
+			, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Creates the render a 2D texture shader program.
@@ -493,6 +541,9 @@ namespace Castor3D
 		//!\~english	The pipeline used to render a cube texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube dans le tampon d'image actuellement activé en dessin.
 		RTOTPipelineGroup< 36, 3 > m_rtotPipelineCube;
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		UniformBuffer m_matrixUbo;
 	};
 }
 

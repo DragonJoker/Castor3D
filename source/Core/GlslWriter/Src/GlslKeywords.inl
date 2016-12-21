@@ -2,7 +2,7 @@
 
 namespace GLSL
 {
-	inline Castor::String KeywordsBase::GetUboLayout( UboLayout p_layout )const
+	inline Castor::String KeywordsBase::GetUboLayout( UboLayout p_layout, uint32_t p_index )const
 	{
 		static std::map< UboLayout, Castor::String > LayoutName
 		{
@@ -15,7 +15,14 @@ namespace GLSL
 
 		if ( !m_strUboLayout.empty() )
 		{
-			l_return =  m_strUboLayout + cuT( "( " ) + LayoutName[p_layout] + cuT( " ) " );
+			l_return = m_strUboLayout + cuT( "( " ) + LayoutName[p_layout];
+
+			//if ( !m_strUboBinding.empty() )
+			//{
+			//	l_return += cuT( ", " ) + m_strUboBinding + cuT( " = " ) + Castor::string::to_string( p_index );
+			//}
+
+			l_return += cuT( " ) " );
 		}
 
 		return l_return;
@@ -659,13 +666,117 @@ namespace GLSL
 	};
 
 	template< int Version >
-	class Keywords< Version, typename std::enable_if< ( Version >= 330 ) >::type >
+	class Keywords< Version, typename std::enable_if< ( Version >= 330 ) && ( Version < 420 ) >::type >
 		: public KeywordsBase
 	{
 	public:
 		Keywords()
 		{
 			m_strUboLayout = cuT( "layout" );
+			m_version = cuT( "#version " ) + Castor::string::to_string( Version );
+			m_strAttribute = cuT( "in" );
+			m_strIn = cuT( "in" );
+			m_strOut = cuT( "out" );
+			m_strTexture1D = cuT( "texture" );
+			m_strTexture1DLod = cuT( "texture" );
+			m_strTexture1DOffset = cuT( "textureOffset" );
+			m_strTexture1DOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2D = cuT( "texture" );
+			m_strTexture2DLod = cuT( "texture" );
+			m_strTexture2DOffset = cuT( "textureOffset" );
+			m_strTexture2DOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DLodOffset = cuT( "textureLodOffset" );
+			m_strTexture3D = cuT( "texture" );
+			m_strTexture3DLod = cuT( "texture" );
+			m_strTexture3DOffset = cuT( "textureOffset" );
+			m_strTexture3DOffsetLod = cuT( "textureOffset" );
+			m_strTexture3DLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCube = cuT( "texture" );
+			m_strTextureCubeLod = cuT( "texture" );
+			m_strTexture1DArray = cuT( "texture" );
+			m_strTexture1DArrayLod = cuT( "texture" );
+			m_strTexture1DArrayOffset = cuT( "textureOffset" );
+			m_strTexture1DArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DArray = cuT( "texture" );
+			m_strTexture2DArrayLod = cuT( "texture" );
+			m_strTexture2DArrayOffset = cuT( "textureOffset" );
+			m_strTexture2DArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeArray = cuT( "texture" );
+			m_strTextureCubeArrayLod = cuT( "texture" );
+			m_strTexture1DShadow = cuT( "texture" );
+			m_strTexture1DShadowLod = cuT( "texture" );
+			m_strTexture1DShadowOffset = cuT( "textureOffset" );
+			m_strTexture1DShadowOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DShadowLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DShadow = cuT( "texture" );
+			m_strTexture2DShadowLod = cuT( "texture" );
+			m_strTexture2DShadowOffset = cuT( "textureOffset" );
+			m_strTexture2DShadowOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DShadowLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeShadow = cuT( "texture" );
+			m_strTextureCubeShadowLod = cuT( "texture" );
+			m_strTexture1DArrayShadow = cuT( "texture" );
+			m_strTexture1DArrayShadowLod = cuT( "texture" );
+			m_strTexture1DArrayShadowOffset = cuT( "textureOffset" );
+			m_strTexture1DArrayShadowOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DArrayShadowLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DArrayShadow = cuT( "texture" );
+			m_strTexture2DArrayShadowLod = cuT( "texture" );
+			m_strTexture2DArrayShadowOffset = cuT( "textureOffset" );
+			m_strTexture2DArrayShadowOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DArrayShadowLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeArrayShadow = cuT( "texture" );
+			m_strTextureCubeArrayShadowLod = cuT( "texture" );
+			m_strTexelFetchBuffer = cuT( "texelFetch" );
+			m_strTexelFetch1D = cuT( "texelFetch" );
+			m_strTexelFetch2D = cuT( "texelFetch" );
+			m_strTexelFetch3D = cuT( "texelFetch" );
+			m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;" );
+			m_strPixelOutputName = cuT( "pxl_v4FragColor" );
+			m_strGSOutPositionName = cuT( "out_c3dPosition" );
+			m_strGSOutNormalName = cuT( "out_c3dNormals" );
+			m_strGSOutTangentName = cuT( "out_c3dTangent" );
+			m_strGSOutBitangentName = cuT( "out_c3dBitangent" );
+			m_strGSOutDiffuseName = cuT( "out_c3dDiffuse" );
+			m_strGSOutSpecularName = cuT( "out_c3dSpecular" );
+			m_strGSOutEmissiveName = cuT( "out_c3dEmissive" );
+			m_strGSOutPositionDecl = GetLayout( 0 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutPositionName + cuT( ";" );
+			m_strGSOutDiffuseDecl = GetLayout( 1 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutDiffuseName + cuT( ";" );
+			m_strGSOutNormalDecl = GetLayout( 2 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutNormalName + cuT( ";" );
+			m_strGSOutTangentDecl = GetLayout( 3 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutTangentName + cuT( ";" );
+			m_strGSOutBitangentDecl = GetLayout( 4 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutBitangentName + cuT( ";" );
+			m_strGSOutSpecularDecl = GetLayout( 5 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutSpecularName + cuT( ";" );
+			m_strGSOutEmissiveDecl = GetLayout( 6 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutEmissiveName + cuT( ";" );
+		}
+
+		virtual Castor::String GetLayout( uint32_t p_index )const
+		{
+			return cuT( "layout( location=" ) + Castor::string::to_string( p_index ) + cuT( " ) " );
+		}
+
+		virtual Castor::String GetFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
+		{
+			return cuT( "" );
+		}
+
+		virtual bool HasNamedFragData()const
+		{
+			return true;
+		}
+	};
+
+	template< int Version >
+	class Keywords< Version, typename std::enable_if< ( Version >= 420 ) >::type >
+		: public KeywordsBase
+	{
+	public:
+		Keywords()
+		{
+			m_strUboLayout = cuT( "layout" );
+			m_strUboBinding = cuT( "binding" );
 			m_version = cuT( "#version " ) + Castor::string::to_string( Version );
 			m_strAttribute = cuT( "in" );
 			m_strIn = cuT( "in" );

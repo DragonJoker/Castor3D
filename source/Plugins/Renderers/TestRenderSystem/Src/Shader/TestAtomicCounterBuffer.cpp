@@ -29,7 +29,7 @@ namespace TestRender
 	{
 	}
 
-	void TestAtomicCounterBuffer::InitialiseBindingPoint( uint32_t p_point )const
+	void TestAtomicCounterBuffer::SetBindingPoint( uint32_t p_point )const
 	{
 	}
 
@@ -41,7 +41,7 @@ namespace TestRender
 	{
 	}
 
-	uint32_t * TestAtomicCounterBuffer::Lock( uint32_t p_offset, uint32_t p_count, FlagCombination< AccessType > const & p_flags )const
+	uint32_t * TestAtomicCounterBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )const
 	{
 		return nullptr;
 	}

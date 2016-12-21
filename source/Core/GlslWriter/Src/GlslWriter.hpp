@@ -309,8 +309,9 @@ namespace GLSL
 		Castor::String m_uniform;
 		std::unique_ptr< KeywordsBase > m_keywords;
 		Castor::StringStream m_stream;
-		int m_attributeIndex;
-		int m_layoutIndex;
+		uint32_t m_uniformIndex{ 0u };
+		uint32_t m_attributeIndex{ 0u };
+		uint32_t m_layoutIndex{ 0u };
 		LightingModelFactory m_lightingFactory;
 	};
 

@@ -27,6 +27,7 @@ SOFTWARE.
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
+#include <Shader/UniformBuffer.hpp>
 
 namespace Fxaa
 {
@@ -65,6 +66,8 @@ namespace Fxaa
 		Castor3D::SamplerSPtr m_sampler;
 		Castor3D::RenderPipelineSPtr m_pipeline;
 		PostEffectSurface m_surface;
+		Castor3D::UniformBuffer m_matrixUbo;
+		Castor3D::UniformBuffer m_fxaaUbo;
 		Castor3D::Uniform1fSPtr m_uniformSubpixShift;
 		Castor3D::Uniform1fSPtr m_uniformSpanMax;
 		Castor3D::Uniform1fSPtr m_uniformReduceMul;

@@ -27,6 +27,7 @@ SOFTWARE.
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
+#include <Shader/UniformBuffer.hpp>
 
 namespace GrayScale
 {
@@ -67,6 +68,7 @@ namespace GrayScale
 		Castor3D::PushUniform1sSPtr m_mapDiffuse;
 		Castor3D::SamplerSPtr m_sampler;
 		Castor3D::RenderPipelineSPtr m_pipeline;
+		Castor3D::UniformBuffer m_matrixUbo;
 		PostEffectSurface m_surface;
 	};
 }

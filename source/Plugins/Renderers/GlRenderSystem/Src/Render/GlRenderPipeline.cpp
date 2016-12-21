@@ -5,6 +5,7 @@
 
 #include <Log/Logger.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Shader/UniformBufferBinding.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -218,6 +219,12 @@ namespace GlRender
 		DoApply( m_dsState, GetOpenGl() );
 		DoApply( m_blState, GetOpenGl() );
 		DoApply( m_msState, GetOpenGl() );
-		m_program.Bind( false );
+		m_program.Bind();
+		auto l_count{ 0u };
+
+		for ( auto & l_binding : m_bindings )
+		{
+			l_binding.get().Bind( l_count++ );
+		}
 	}
 }

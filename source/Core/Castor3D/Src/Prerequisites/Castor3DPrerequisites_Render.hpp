@@ -559,6 +559,34 @@ namespace Castor3D
 
 		return 0;
 	}
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		12/12/2016
+	\~english
+	\brief		GPU buffers types enumeration.
+	\~french
+	\brief		Enumération des types de tampons.
+	*/
+	enum class BufferType
+		: uint32_t
+	{
+		//!\~english	Data array => Vertex buffers.
+		//!\~french		Tableau de données => Tampons de sommets.
+		eArray,
+		//!\~english	Element array => Index buffers.
+		//!\~french		Tableau d'éléments => Tampons d'indices.
+		eElementArray,
+		//!\~english	Uniform buffer.
+		//!\~french		Tampn de variables uniformes.
+		eUniform,
+		//!\~english	Atomic counters buffer.
+		//!\~french		Tampon de compteurs atomiques.
+		eAtomicCounter,
+		//!\~english	Shader storage buffer.
+		//!\~french		Tampon stockage pour shader.
+		eShaderStorage,
+	};
 	/**
 	 *\~english
 	 *\brief		Gets the name of the given element type.
@@ -602,11 +630,14 @@ namespace Castor3D
 	class ToneMapping;
 	class PostEffect;
 	class ShadowMapPass;
+	struct PassRenderNodeUniforms;
 	struct PassRenderNode;
 	struct SceneRenderNode;
-	struct StaticGeometryRenderNode;
-	struct AnimatedGeometryRenderNode;
+	struct StaticRenderNode;
+	struct SkinningRenderNode;
+	struct MorphingRenderNode;
 	struct BillboardRenderNode;
+	struct DistanceRenderNodeBase;
 	class RenderTechnique;
 	class RenderWindow;
 	class RenderTarget;
@@ -650,9 +681,6 @@ namespace Castor3D
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
-	DECLARE_MULTIMAP( double, StaticGeometryRenderNode, StaticGeometryRenderNodeByDistance );
-	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
-	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
 	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
 

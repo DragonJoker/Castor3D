@@ -814,7 +814,7 @@ namespace GlRender
 		return m_gpu;
 	}
 
-	GlAccessType OpenGl::GetLockFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const
+	GlAccessType OpenGl::GetLockFlags( Castor3D::AccessTypes const & p_flags )const
 	{
 		GlAccessType l_eLockFlags = GlAccessType::eReadWrite;
 
@@ -837,7 +837,7 @@ namespace GlRender
 		return l_eLockFlags;
 	}
 
-	Castor::FlagCombination< GlBufferMappingBit > OpenGl::GetBitfieldFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const
+	Castor::FlagCombination< GlBufferMappingBit > OpenGl::GetBitfieldFlags( Castor3D::AccessTypes const & p_flags )const
 	{
 		Castor::FlagCombination< GlBufferMappingBit > l_uiFlags = 0;
 

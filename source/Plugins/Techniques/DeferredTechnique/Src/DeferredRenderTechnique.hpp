@@ -26,6 +26,8 @@ SOFTWARE.
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Render/Viewport.hpp>
+#include <Render/RenderNode/SceneRenderNode.hpp>
+#include <Shader/UniformBuffer.hpp>
 
 namespace deferred
 {
@@ -205,12 +207,6 @@ namespace deferred
 			//!\~english	The shader program used to render lights.
 			//!\~french		Le shader utilisé pour rendre les lumières.
 			Castor3D::ShaderProgramSPtr m_program;
-			//!\~english	The framve variable buffer used to apply matrices.
-			//!\~french		Le tampon de variables shader utilisé pour appliquer les matrices.
-			Castor3D::UniformBufferSPtr m_matrixUbo;
-			//!\~english	The framve variable buffer used to transmit scene values.
-			//!\~french		Le tampon de variables shader utilisé pour transmettre les variables de scène.
-			Castor3D::UniformBufferSPtr m_sceneUbo;
 			//!\~english	The shader variable containing the camera position.
 			//!\~french		La variable de shader contenant la position de la caméra.
 			Castor3D::Uniform3rSPtr m_camera;
@@ -254,6 +250,18 @@ namespace deferred
 		//!\~english	The viewport used when rendering is done.
 		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Castor3D::Viewport m_viewport;
+		//!\~english	The uniform buffer containing the scene data.
+		//!\~french		Le tampon d'uniformes contenant les données de scène.
+		Castor3D::UniformBuffer m_sceneUbo;
+		//!\~english	The scene render node.
+		//!\~french		Le noeud de rendu de la scène.
+		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		Castor3D::UniformBuffer m_matrixUbo;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_projectionUniform{ nullptr };
 	};
 }
 

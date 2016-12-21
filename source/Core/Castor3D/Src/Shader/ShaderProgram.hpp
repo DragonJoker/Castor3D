@@ -132,30 +132,6 @@ namespace Castor3D
 		C3D_API void SetFile( ShaderModel p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
-		 *\brief		Creates a frame variable buffer.
-		 *\param[in]	p_name			The buffer name.
-		 *\param[in]	p_shaderMask	ShaderTypeFlag combination, to set at what shaders it is to be bound.
-		 *\return		The created or retrieved Frame variable buffer.
-		 *\~french
-		 *\brief		Crée un tampon de variables uniformes.
-		 *\param[in]	p_name			Le nom du tampon.
-		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
-		 *\return		Le tampon de variables créé ou récupéré.
-		 */
-		C3D_API UniformBuffer & CreateUniformBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask );
-		/**
-		 *\~english
-		 *\brief		Finds a variable buffer.
-		 *\param[in]	p_name	The buffer name.
-		 *\return		The found buffer, nullptr if failed.
-		 *\~french
-		 *\brief		Trouve un tampon de variables.
-		 *\param[in]	p_name	Le nom du tampon.
-		 *\return		Le tampon trouvé, nullptr en cas d'échec.
-		 */
-		C3D_API UniformBufferSPtr FindUniformBuffer( Castor::String const & p_name )const;
-		/**
-		 *\~english
 		 *\brief		Creates a shader storage buffer.
 		 *\param[in]	p_name			The buffer name.
 		 *\param[in]	p_shaderMask	ShaderTypeFlag combination, to set at what shaders it is to be bound.
@@ -430,13 +406,6 @@ namespace Castor3D
 		C3D_API PushUniformList const & GetUniforms( ShaderType p_type )const;
 		/**
 		 *\~english
-		 *\brief		Updates the program's frame variable buffers if needed.
-		 *\~french
-		 *\brief		Met à jour les tampons de variables du programme si besoin est.
-		 */
-		C3D_API void UpdateUbos()const;
-		/**
-		 *\~english
 		 *\brief		Cleans the program up.
 		 *\~french
 		 *\brief		Nettoie le programme.
@@ -452,12 +421,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activates the program.
-		 *\param[in]	p_bindUbo	Tells if the frame variable buffers muts be bound.
 		 *\~french
 		 *\brief		Active le programme.
-		 *\param[in]	p_bindUbo	Dit si les tampons de variables de frames doivent être liés.
 		 */
-		C3D_API virtual void Bind( bool p_bindUbo = true )const = 0;
+		C3D_API virtual void Bind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivates the program.
@@ -497,54 +464,6 @@ namespace Castor3D
 		inline void SetTransformLayout( BufferDeclaration const & p_declaration )
 		{
 			m_declaration = p_declaration;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the frame variable buffers bound to the given shader type.
-		 *\param[in]	p_type	The shader type.
-		 *\return		The list.
-		 *\~french
-		 *\brief		Récupère les tampons de variable de frames liés au type de shader donné.
-		 *\param[in]	p_type	The shader type.
-		 *\return		La liste.
-		 */
-		inline UniformBufferPtrList & GetUniformBuffers( ShaderType p_type )
-		{
-			return m_frameVariableBuffers[size_t( p_type )];
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the frame variable buffers bound to the given shader type.
-		 *\param[in]	p_type	The shader type.
-		 *\return		The list.
-		 *\~french
-		 *\brief		Récupère les tampons de variable de frames liés au type de shader donné.
-		 *\param[in]	p_type	The shader type.
-		 *\return		La liste.
-		 */
-		inline UniformBufferPtrList const & GetUniformBuffers( ShaderType p_type )const
-		{
-			return m_frameVariableBuffers[size_t( p_type )];
-		}
-		/**
-		 *\~english
-		 *\return		The frame variable buffers list.
-		 *\~french
-		 *\return		La liste des tampons de variables de frames.
-		 */
-		inline UniformBufferPtrList & GetUniformBuffers()
-		{
-			return m_listUniformBuffers;
-		}
-		/**
-		 *\~english
-		 *\return		The frame variable buffers list.
-		 *\~french
-		 *\return		La liste des tampons de variables de frames.
-		 */
-		inline UniformBufferPtrList const & GetUniformBuffers()const
-		{
-			return m_listUniformBuffers;
 		}
 		/**
 		 *\~english
@@ -673,12 +592,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activates the program.
-		 *\param[in]	p_bindUbo	Tells if the frame variable buffers muts be bound.
 		 *\~french
 		 *\brief		Active le programme.
-		 *\param[in]	p_bindUbo	Dit si les tampons de variables de frames doivent être liés.
 		 */
-		C3D_API void DoBind( bool p_bindUbo )const;
+		C3D_API void DoBind()const;
 		/**
 		 *\~english
 		 *\brief		Deactivates the program.
@@ -704,19 +621,6 @@ namespace Castor3D
 		 *\param[in]	p_type	Le shader object concerné.
 		 */
 		virtual ShaderObjectSPtr DoCreateObject( ShaderType p_type ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a UniformBuffer.
-		 *\param[in]	p_name	The buffer name.
-		 *\return		The created UniformBuffer.
-		 *\~french
-		 *\brief		Crée un UniformBuffer.
-		 *\param[in]	p_name	Le nom du tampon.
-		 *\return		Le UniformBuffer créé.
-		 */
-		virtual UniformBufferSPtr DoCreateUniformBuffer(
-			Castor::String const & p_name,
-			ShaderTypeFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture frame variable.
@@ -912,6 +816,9 @@ namespace Castor3D
 		//!\~english	Name of the matrix frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les matrices.
 		C3D_API static const Castor::String BufferMatrix;
+		//!\~english	Name of the model matrix frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les matrices modèle.
+		C3D_API static const Castor::String BufferModelMatrix;
 		//!\~english	Name of the scene frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de scène.
 		C3D_API static const Castor::String BufferScene;
@@ -924,9 +831,12 @@ namespace Castor3D
 		//!\~english	Name of the billboards frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de billboards.
 		C3D_API static const Castor::String BufferBillboards;
-		//!\~english	Name of the animation frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données d'animation.
-		C3D_API static const Castor::String BufferAnimation;
+		//!\~english	Name of the skinning animation frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
+		C3D_API static const Castor::String BufferSkinning;
+		//!\~english	Name of the morphing animation frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données d'animation de morphing.
+		C3D_API static const Castor::String BufferMorphing;
 
 		//@}
 
@@ -944,15 +854,6 @@ namespace Castor3D
 		//!\~english	Array of files path, sorted by shader model.
 		//!\~french		Tableau des chemins de fichiers, triés par modèle de shader.
 		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
-		//!\~english	The frame variable buffers map, ordered by name.
-		//!\~french		La liste des tampons de variable de frame, triés par nom.
-		UniformBufferPtrStrMap m_frameVariableBuffersByName;
-		//!\~english	The frame variable buffers map, ordered by shader type.
-		//!\~french		La liste des tampons de variable de frame, triés par type de shader.
-		std::array< UniformBufferPtrList, size_t( ShaderType::eCount ) > m_frameVariableBuffers;
-		//!\~english	The frame variable buffers map.
-		//!\~french		La liste des tampons de variables de frame.
-		UniformBufferPtrList m_listUniformBuffers;
 		//!\~english	The storage buffers map, ordered by name.
 		//!\~french		La liste des tampons de stockage, triés par nom.
 		ShaderStorageBufferPtrStrMap m_storageBuffersByName;

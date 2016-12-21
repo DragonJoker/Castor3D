@@ -79,17 +79,6 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				if ( !p_shaderProgram.GetUniformBuffers().empty() )
-				{
-					for ( auto & l_fbo : p_shaderProgram.GetUniformBuffers() )
-					{
-						l_return = UniformBuffer::TextWriter( l_tabs )( *l_fbo, p_file );
-					}
-				}
-			}
-
-			if ( l_return )
-			{
 				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
@@ -163,11 +152,13 @@ namespace Castor3D
 	const String ShaderProgram::ShadowReceiver = cuT( "c3d_iShadowReceiver" );
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
+	const String ShaderProgram::BufferModelMatrix = cuT( "ModelMatrices" );
 	const String ShaderProgram::BufferScene = cuT( "Scene" );
 	const String ShaderProgram::BufferPass = cuT( "Pass" );
 	const String ShaderProgram::BufferModel = cuT( "Model" );
 	const String ShaderProgram::BufferBillboards = cuT( "Billboards" );
-	const String ShaderProgram::BufferAnimation = cuT( "Animation" );
+	const String ShaderProgram::BufferSkinning = cuT( "Skinning" );
+	const String ShaderProgram::BufferMorphing = cuT( "Morphing" );
 
 	//*************************************************************************************************
 
@@ -217,18 +208,6 @@ namespace Castor3D
 
 		m_activeShaders.clear();
 		clear_container( m_arrayFiles );
-
-		m_frameVariableBuffersByName.clear();
-
-		for ( auto & l_list : m_frameVariableBuffers )
-		{
-			l_list.clear();
-		}
-
-		for ( auto l_buffer : m_listUniformBuffers )
-		{
-			l_buffer->Cleanup();
-		}
 	}
 
 	void ShaderProgram::SetFile( ShaderModel p_eModel, Path const & p_path )
@@ -441,42 +420,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	UniformBuffer & ShaderProgram::CreateUniformBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask )
-	{
-		auto l_it = m_frameVariableBuffersByName.find( p_name );
-
-		if ( l_it == m_frameVariableBuffersByName.end() )
-		{
-			auto l_ubo = DoCreateUniformBuffer( p_name, p_shaderMask );
-			m_listUniformBuffers.push_back( l_ubo );
-			l_it = m_frameVariableBuffersByName.insert( { p_name, l_ubo } ).first;
-
-			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); ++i )
-			{
-				if ( CheckFlag( p_shaderMask, uint8_t( 0x01 << i ) ) )
-				{
-					REQUIRE( m_shaders[i] );
-					m_frameVariableBuffers[i].push_back( l_ubo );
-				}
-			}
-		}
-
-		return *l_it->second.lock();
-	}
-
-	UniformBufferSPtr ShaderProgram::FindUniformBuffer( Castor::String const & p_name )const
-	{
-		UniformBufferSPtr l_buffer;
-		auto l_it = m_frameVariableBuffersByName.find( p_name );
-
-		if ( l_it != m_frameVariableBuffersByName.end() )
-		{
-			l_buffer = l_it->second.lock();
-		}
-
-		return l_buffer;
-	}
-
 	ShaderStorageBuffer & ShaderProgram::CreateStorageBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
 		auto l_it = m_storageBuffersByName.find( p_name );
@@ -561,16 +504,6 @@ namespace Castor3D
 		return m_shaders[size_t( p_type )]->GetUniforms();
 	}
 
-	void ShaderProgram::UpdateUbos()const
-	{
-		uint32_t l_index = 0;
-
-		for ( auto l_variableBuffer : m_listUniformBuffers )
-		{
-			l_variableBuffer->Update();
-		}
-	}
-
 	bool ShaderProgram::DoInitialise()
 	{
 		if ( m_status == ProgramStatus::eNotLinked )
@@ -615,30 +548,20 @@ namespace Castor3D
 			}
 			else
 			{
-				for ( auto l_buffer : m_listUniformBuffers )
-				{
-					l_buffer->Initialise();
-				}
-
-				Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
+				Logger::LogDebug( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
 			}
 		}
 
 		return m_status == ProgramStatus::eLinked;
 	}
 
-	void ShaderProgram::DoBind( bool p_bindUbo )const
+	void ShaderProgram::DoBind()const
 	{
 		if ( m_status == ProgramStatus::eLinked )
 		{
 			for ( auto l_shader : m_activeShaders )
 			{
 				l_shader->Bind();
-			}
-
-			if ( p_bindUbo )
-			{
-				UpdateUbos();
 			}
 		}
 	}

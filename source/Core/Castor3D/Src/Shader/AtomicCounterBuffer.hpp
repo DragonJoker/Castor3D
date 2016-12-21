@@ -101,7 +101,7 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API uint32_t * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< AccessType > const & p_flags );
+		C3D_API uint32_t * Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.

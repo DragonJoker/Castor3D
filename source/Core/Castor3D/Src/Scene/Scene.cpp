@@ -636,16 +636,6 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::FillShader( UniformBuffer const & p_buffer )const
-	{
-		auto l_bgColour = p_buffer.GetUniform< UniformType::eVec4f >( ShaderProgram::BackgroundColour );
-
-		if ( l_bgColour )
-		{
-			l_bgColour->SetValue( rgba_float( m_backgroundColour ) );
-		}
-	}
-
 	void Scene::RenderBackground( Size const & p_size )
 	{
 		if ( m_backgroundImage )

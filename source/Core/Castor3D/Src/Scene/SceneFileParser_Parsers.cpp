@@ -3291,7 +3291,7 @@ namespace Castor3D
 
 			if ( l_value )
 			{
-				l_parsingContext->pUniformBuffer = &l_parsingContext->pShaderProgram->CreateUniformBuffer( l_parsingContext->strName, uint8_t( l_value ) );
+				l_parsingContext->pUniformBuffer = std::make_unique< UniformBuffer >( l_parsingContext->strName, *l_parsingContext->pShaderProgram->GetRenderSystem() );
 			}
 			else
 			{

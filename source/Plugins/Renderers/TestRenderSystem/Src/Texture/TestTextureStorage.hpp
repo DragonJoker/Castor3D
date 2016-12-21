@@ -53,8 +53,8 @@ namespace TestRender
 			TestRenderSystem & p_renderSystem,
 			Castor3D::TextureStorageType p_type,
 			Castor3D::TextureLayout & p_layout,
-			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
-			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess );
+			Castor3D::AccessTypes const & p_cpuAccess,
+			Castor3D::AccessTypes const & p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -70,7 +70,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor::FlagCombination< Castor3D::AccessType > const & p_lock )override;
+		uint8_t * Lock( Castor3D::AccessTypes const & p_lock )override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
@@ -78,7 +78,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor::FlagCombination< Castor3D::AccessType > const & p_lock, uint32_t p_index )override;
+		uint8_t * Lock( Castor3D::AccessTypes const & p_lock, uint32_t p_index )override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */

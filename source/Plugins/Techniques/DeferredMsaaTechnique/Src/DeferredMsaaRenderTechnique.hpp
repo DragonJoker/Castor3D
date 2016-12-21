@@ -26,6 +26,7 @@ SOFTWARE.
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Render/Viewport.hpp>
+#include <Shader/UniformBuffer.hpp>
 
 namespace deferred_msaa
 {
@@ -269,12 +270,6 @@ namespace deferred_msaa
 			//!\~english	The shader program used to render lights.
 			//!\~french		Le shader utilisé pour rendre les lumières.
 			Castor3D::ShaderProgramSPtr m_program;
-			//!\~english	The framve variable buffer used to apply matrices.
-			//!\~french		Le tampon de variables shader utilisé pour appliquer les matrices.
-			Castor3D::UniformBufferSPtr m_matrixUbo;
-			//!\~english	The framve variable buffer used to transmit scene values.
-			//!\~french		Le tampon de variables shader utilisé pour transmettre les variables de scène.
-			Castor3D::UniformBufferSPtr m_sceneUbo;
 			//!\~english	The shader variable containing the camera position.
 			//!\~french		La variable de shader contenant la position de la caméra.
 			Castor3D::Uniform3rSPtr m_camera;
@@ -318,20 +313,39 @@ namespace deferred_msaa
 		//!\~english	The viewport used when rendering is done.
 		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Castor3D::Viewport m_viewport;
-		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplé
+		//!\~english	The multisampled frame buffer.
+		//!\~french		Le tampon d'image multisamplé
 		Castor3D::FrameBufferSPtr m_msaaFrameBuffer;
-		//!\~english The buffer receiving the multisampled color render	\~french Le tampon recevant le rendu couleur multisamplé
+		//!\~english	The buffer receiving the multisampled color render.
+		//!\~french		Le tampon recevant le rendu couleur multisamplé.
 		Castor3D::ColourRenderBufferSPtr m_msaaColorBuffer;
-		//!\~english The buffer receiving the multisampled depth render	\~french Le tampon recevant le rendu profondeur multisamplé
+		//!\~english	The buffer receiving the multisampled depth render.
+		//!\~french		Le tampon recevant le rendu profondeur multisamplé.
 		Castor3D::DepthStencilRenderBufferSPtr m_msaaDepthBuffer;
-		//!\~english The attach between multisampled colour buffer and multisampled frame buffer	\~french L'attache entre le tampon couleur multisamplé et le tampon multisamplé
+		//!\~english	The attach between multisampled colour buffer and multisampled frame buffer.
+		//!\~french		L'attache entre le tampon couleur multisamplé et le tampon multisamplé.
 		Castor3D::RenderBufferAttachmentSPtr m_msaaColorAttach;
-		//!\~english The attach between multisampled depth buffer and multisampled frame buffer	\~french L'attache entre le tampon profondeur multisamplé et le tampon multisamplé
+		//!\~english	The attach between multisampled depth buffer and multisampled frame buffer.
+		//!\~french		L'attache entre le tampon profondeur multisamplé et le tampon multisamplé.
 		Castor3D::RenderBufferAttachmentSPtr m_msaaDepthAttach;
-		//!\~english The samples count	\~french Le nombre de samples
+		//!\~english	The samples count.
+		//!\~french		Le nombre de samples.
 		int m_samplesCount;
-		//!\~english The technique blit rectangle	\~french Le rectangle de blit de la technique
+		//!\~english	The technique blit rectangle.
+		//!\~french		Le rectangle de blit de la technique.
 		Castor::Rectangle m_rect;
+		//!\~english	The uniform buffer containing the scene data.
+		//!\~french		Le tampon d'uniformes contenant les données de scène.
+		Castor3D::UniformBuffer m_sceneUbo;
+		//!\~english	The scene render node.
+		//!\~french		Le noeud de rendu de la scène.
+		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		Castor3D::UniformBuffer m_matrixUbo;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_projectionUniform{ nullptr };
 	};
 }
 

@@ -53,7 +53,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Bind
 		 */
-		void Bind( bool p_bindUbo )const override;
+		void Bind()const override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Unbind
 		 */
@@ -82,10 +82,6 @@ namespace TestRender
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateObject
 		 */
 		Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::ShaderType p_type )override;
-		/**
-		 *\copydoc		Castor3D::ShaderProgram::DoCreateUniformBuffer
-		 */
-		Castor3D::UniformBufferSPtr DoCreateUniformBuffer( Castor::String const & p_name, Castor3D::ShaderTypeFlags const & p_flags )override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateUniform
 		 */

@@ -29,6 +29,7 @@ namespace Castor3D
 		, m_window{ nullptr }
 		, m_initialised{ false }
 		, m_bMultiSampling{ false }
+		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
 		, m_rtotPipelinePlane
 		{
 			Viewport{ *GetRenderSystem()->GetEngine() },
@@ -60,6 +61,7 @@ namespace Castor3D
 			}
 		}
 	{
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		uint32_t i = 0;
 
 		for ( auto & l_vertex : m_rtotPipelinePlane.m_arrayVertex )
@@ -165,6 +167,7 @@ namespace Castor3D
 		m_window = nullptr;
 		m_rtotPipelinePlane.m_viewport.Cleanup();
 		m_rtotPipelineCube.m_viewport.Cleanup();
+		m_matrixUbo.Cleanup();
 	}
 
 	void Context::SetCurrent()
@@ -190,67 +193,136 @@ namespace Castor3D
 		DoSwapBuffers();
 	}
 
-	void Context::RenderTexture( Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline )
+	void Context::RenderTexture( Size const & p_size
+		, TextureLayout const & p_texture
+		, RenderPipeline & p_pipeline
+		, UniformBuffer & p_matrixUbo )
 	{
-		DoRenderTexture( p_size, p_texture, p_pipeline, *m_rtotPipelinePlane.m_texture.m_geometryBuffers );
+		DoRenderTexture( p_size
+			, p_texture
+			, p_pipeline
+			, p_matrixUbo
+			, *m_rtotPipelinePlane.m_texture.m_geometryBuffers );
 	}
 
-	void Context::RenderTexture( Size const & p_size, TextureLayout const & p_texture )
+	void Context::RenderTexture( Size const & p_size
+		, TextureLayout const & p_texture )
 	{
-		DoRenderTexture( p_size, p_texture, *m_rtotPipelinePlane.m_texture.m_pipeline, *m_rtotPipelinePlane.m_texture.m_geometryBuffers );
+		DoRenderTexture( p_size
+			, p_texture
+			, *m_rtotPipelinePlane.m_texture.m_pipeline
+			, m_matrixUbo
+			, *m_rtotPipelinePlane.m_texture.m_geometryBuffers );
 	}
 
-	void Context::RenderTexture( Size const & p_size, TextureLayout const & p_texture, uint32_t p_index )
+	void Context::RenderTexture( Size const & p_size
+		, TextureLayout const & p_texture
+		, uint32_t p_index )
 	{
-		DoRenderTexture( p_size, p_texture, p_index, *m_rtotPipelinePlane.m_textureArray.m_pipeline, *m_rtotPipelinePlane.m_textureArray.m_geometryBuffers );
+		DoRenderTexture( p_size
+			, p_texture
+			, p_index
+			, *m_rtotPipelinePlane.m_textureArray.m_pipeline
+			, m_matrixUbo
+			, *m_rtotPipelinePlane.m_textureArray.m_geometryBuffers );
 	}
 
-	void Context::RenderDepth( Size const & p_size, TextureLayout const & p_texture )
+	void Context::RenderDepth( Size const & p_size
+		, TextureLayout const & p_texture )
 	{
-		DoRenderTexture( p_size, p_texture, *m_rtotPipelinePlane.m_depth.m_pipeline, *m_rtotPipelinePlane.m_depth.m_geometryBuffers );
+		DoRenderTexture( p_size
+			, p_texture
+			, *m_rtotPipelinePlane.m_depth.m_pipeline
+			, m_matrixUbo
+			, *m_rtotPipelinePlane.m_depth.m_geometryBuffers );
 	}
 
-	void Context::RenderDepth( Size const & p_size, TextureLayout const & p_texture, uint32_t p_index )
+	void Context::RenderDepth( Size const & p_size
+		, TextureLayout const & p_texture
+		, uint32_t p_index )
 	{
-		DoRenderTexture( p_size, p_texture, p_index, *m_rtotPipelinePlane.m_depthArray.m_pipeline, *m_rtotPipelinePlane.m_depthArray.m_geometryBuffers );
+		DoRenderTexture( p_size
+			, p_texture
+			, p_index
+			, *m_rtotPipelinePlane.m_depthArray.m_pipeline
+			, m_matrixUbo
+			, *m_rtotPipelinePlane.m_depthArray.m_geometryBuffers );
 	}
 
-	void Context::RenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture )
+	void Context::RenderTexture( Point3r const & p_position
+		, Quaternion const & p_orientation
+		, Size const & p_size
+		, TextureLayout const & p_texture )
 	{
-		DoRenderTexture( p_position, p_orientation, p_size, p_texture, *m_rtotPipelineCube.m_texture.m_pipeline, *m_rtotPipelineCube.m_texture.m_geometryBuffers );
+		DoRenderTexture( p_position
+			, p_orientation
+			, p_size
+			, p_texture
+			, *m_rtotPipelineCube.m_texture.m_pipeline
+			, m_matrixUbo
+			, *m_rtotPipelineCube.m_texture.m_geometryBuffers );
 	}
 
-	void Context::RenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, uint32_t p_index )
+	void Context::RenderTexture( Point3r const & p_position
+		, Quaternion const & p_orientation
+		, Size const & p_size
+		, TextureLayout const & p_texture
+		, uint32_t p_index )
 	{
-		DoRenderTexture( p_position, p_orientation, p_size, p_texture, p_index, *m_rtotPipelineCube.m_textureArray.m_pipeline, *m_rtotPipelineCube.m_textureArray.m_geometryBuffers );
+		DoRenderTexture( p_position
+			, p_orientation
+			, p_size
+			, p_texture
+			, p_index
+			, *m_rtotPipelineCube.m_textureArray.m_pipeline
+			, m_matrixUbo
+			, *m_rtotPipelineCube.m_textureArray.m_geometryBuffers );
 	}
 
-	void Context::RenderDepth( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture )
+	void Context::RenderDepth( Point3r const & p_position
+		, Quaternion const & p_orientation
+		, Size const & p_size
+		, TextureLayout const & p_texture )
 	{
-		DoRenderTexture( p_position, p_orientation, p_size, p_texture, *m_rtotPipelineCube.m_depth.m_pipeline, *m_rtotPipelineCube.m_depth.m_geometryBuffers );
+		DoRenderTexture( p_position
+			, p_orientation
+			, p_size
+			, p_texture
+			, *m_rtotPipelineCube.m_depth.m_pipeline
+			, m_matrixUbo
+			, *m_rtotPipelineCube.m_depth.m_geometryBuffers );
 	}
 
-	void Context::RenderDepth( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, uint32_t p_index )
+	void Context::RenderDepth( Point3r const & p_position
+		, Quaternion const & p_orientation
+		, Size const & p_size
+		, TextureLayout const & p_texture
+		, uint32_t p_index )
 	{
-		DoRenderTexture( p_position, p_orientation, p_size, p_texture, p_index, *m_rtotPipelineCube.m_depthArray.m_pipeline, *m_rtotPipelineCube.m_depthArray.m_geometryBuffers );
+		DoRenderTexture( p_position
+			, p_orientation
+			, p_size
+			, p_texture
+			, p_index
+			, *m_rtotPipelineCube.m_depthArray.m_pipeline
+			, m_matrixUbo
+			, *m_rtotPipelineCube.m_depthArray.m_geometryBuffers );
 	}
 
-	void Context::DoRenderTexture( Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
+	void Context::DoRenderTexture( Size const & p_size
+		, TextureLayout const & p_texture
+		, RenderPipeline & p_pipeline
+		, UniformBuffer & p_matrixUbo
+		, GeometryBuffers const & p_geometryBuffers )
 	{
 		m_rtotPipelinePlane.m_viewport.Resize( p_size );
 		m_rtotPipelinePlane.m_viewport.Update();
 		m_rtotPipelinePlane.m_viewport.Apply();
 		p_pipeline.SetProjectionMatrix( m_rtotPipelinePlane.m_viewport.GetProjection() );
-
+		
+		p_pipeline.ApplyProjection( p_matrixUbo );
+		p_matrixUbo.Update();
 		p_pipeline.Apply();
-		auto l_matrices = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
-
-		if ( l_matrices )
-		{
-			p_pipeline.ApplyProjection( *l_matrices );
-		}
-
-		p_pipeline.GetProgram().UpdateUbos();
 
 		p_texture.Bind( 0u );
 		m_rtotPipelinePlane.m_sampler->Bind( 0u );
@@ -259,7 +331,12 @@ namespace Castor3D
 		p_texture.Unbind( 0u );
 	}
 
-	void Context::DoRenderTexture( Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
+	void Context::DoRenderTexture( Size const & p_size
+		, TextureLayout const & p_texture
+		, uint32_t p_index
+		, RenderPipeline & p_pipeline
+		, UniformBuffer & p_matrixUbo
+		, GeometryBuffers const & p_geometryBuffers )
 	{
 		REQUIRE( p_texture.GetLayersCount() > p_index );
 		m_rtotPipelinePlane.m_viewport.Resize( p_size );
@@ -274,15 +351,9 @@ namespace Castor3D
 			l_variable->SetValue( p_index / float( p_texture.GetLayersCount() ) );
 		}
 
+		p_pipeline.ApplyProjection( p_matrixUbo );
+		p_matrixUbo.Update();
 		p_pipeline.Apply();
-		auto l_matrices = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
-
-		if ( l_matrices )
-		{
-			p_pipeline.ApplyProjection( *l_matrices );
-		}
-
-		p_pipeline.GetProgram().UpdateUbos();
 
 		p_texture.Bind( 0u );
 		m_rtotPipelinePlane.m_sampler->Bind( 0u );
@@ -291,7 +362,13 @@ namespace Castor3D
 		p_texture.Unbind( 0u );
 	}
 
-	void Context::DoRenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
+	void Context::DoRenderTexture( Point3r const & p_position
+		, Quaternion const & p_orientation
+		, Size const & p_size
+		, TextureLayout const & p_texture
+		, RenderPipeline & p_pipeline
+		, UniformBuffer & p_matrixUbo
+		, GeometryBuffers const & p_geometryBuffers )
 	{
 		m_rtotPipelineCube.m_viewport.SetPerspective( Angle::from_degrees( 90 ), real( p_size.width() ) / p_size.height(), 0.5, 2.0 );
 		m_rtotPipelineCube.m_viewport.Resize( p_size );
@@ -309,16 +386,10 @@ namespace Castor3D
 		p_orientation.transform( l_up, l_up );
 		matrix::look_at( l_mtx, p_position, p_position + l_front, l_up );
 		p_pipeline.SetViewMatrix( l_mtx );
-
+		
+		p_pipeline.ApplyMatrices( p_matrixUbo, ~0u );
+		p_matrixUbo.Update();
 		p_pipeline.Apply();
-		auto l_matrices = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
-
-		if ( l_matrices )
-		{
-			p_pipeline.ApplyProjection( *l_matrices );
-		}
-
-		p_pipeline.GetProgram().UpdateUbos();
 
 		p_texture.Bind( 0u );
 		m_rtotPipelineCube.m_sampler->Bind( 0u );
@@ -327,7 +398,14 @@ namespace Castor3D
 		p_texture.Unbind( 0u );
 	}
 
-	void Context::DoRenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
+	void Context::DoRenderTexture( Point3r const & p_position
+		, Quaternion const & p_orientation
+		, Size const & p_size
+		, TextureLayout const & p_texture
+		, uint32_t p_index
+		, RenderPipeline & p_pipeline
+		, UniformBuffer & p_matrixUbo
+		, GeometryBuffers const & p_geometryBuffers )
 	{
 		REQUIRE( p_texture.GetLayersCount() > p_index );
 		m_rtotPipelineCube.m_viewport.SetPerspective( Angle::from_degrees( 90 ), real( p_size.width() ) / p_size.height(), 0.5, 2.0 );
@@ -353,16 +431,10 @@ namespace Castor3D
 		{
 			l_variable->SetValue( p_index / float( p_texture.GetLayersCount() ) );
 		}
-
+		
+		p_pipeline.ApplyMatrices( p_matrixUbo, ~0u );
+		p_matrixUbo.Update();
 		p_pipeline.Apply();
-		UniformBufferSPtr l_matrices = p_pipeline.GetProgram().FindUniformBuffer( ShaderProgram::BufferMatrix );
-
-		if ( l_matrices )
-		{
-			p_pipeline.ApplyProjection( *l_matrices );
-		}
-
-		p_pipeline.GetProgram().UpdateUbos();
 
 		p_texture.Bind( 0u );
 		m_rtotPipelineCube.m_sampler->Bind( 0u );
@@ -487,7 +559,6 @@ namespace Castor3D
 		l_program->CreateObject( ShaderType::ePixel );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
-		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
@@ -509,6 +580,7 @@ namespace Castor3D
 			// Inputs
 			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
 			UBO_MATRIX( l_writer );
+			UBO_MODEL_MATRIX( l_writer );
 
 			// Outputs
 			auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
@@ -622,7 +694,6 @@ namespace Castor3D
 		l_program->CreateObject( ShaderType::ePixel );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
-		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
@@ -650,12 +721,14 @@ namespace Castor3D
 			l_dsState.SetDepthTest( true );
 			l_dsState.SetDepthMask( WritingMask::eAll );
 			p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+			p_pipeline.m_pipeline->AddUniformBuffer( m_matrixUbo );
 		}
 		else
 		{
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
 			p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+			p_pipeline.m_pipeline->AddUniformBuffer( m_matrixUbo );
 		}
 	}
 
@@ -690,6 +763,7 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::eFront );
 
 			p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+			p_pipeline.m_pipeline->AddUniformBuffer( m_matrixUbo );
 		}
 		else
 		{
@@ -701,6 +775,7 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::eFront );
 
 			p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+			p_pipeline.m_pipeline->AddUniformBuffer( m_matrixUbo );
 		}
 	}
 

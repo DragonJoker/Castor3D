@@ -15,6 +15,7 @@
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
+#include "Render/RenderNode/RenderNode_Render.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
@@ -41,7 +42,7 @@ namespace Castor3D
 
 		template< bool Opaque, typename MapType, typename FuncType >
 		inline void DoTraverseNodes( RenderPass const & p_pass
-			, Camera const & p_camera
+			, UniformBuffer & p_ubo
 			, MapType & p_nodes
 			, PickingPass::NodeType p_type
 			, FuncType p_function )
@@ -51,11 +52,10 @@ namespace Castor3D
 
 			for ( auto l_itPipelines : p_nodes )
 			{
-				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, l_depthMaps );
+				p_pass.UpdatePipeline( *l_itPipelines.first );
 				l_itPipelines.first->Apply();
-				UniformBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindUniformBuffer( Picking );
-				auto l_drawIndex = l_ubo->GetUniform< UniformType::eUInt >( DrawIndex );
-				auto l_nodeIndex = l_ubo->GetUniform< UniformType::eUInt >( NodeIndex );
+				auto l_drawIndex = p_ubo.GetUniform< UniformType::eUInt >( DrawIndex );
+				auto l_nodeIndex = p_ubo.GetUniform< UniformType::eUInt >( NodeIndex );
 				l_drawIndex->SetValue( uint8_t( p_type ) + ( ( l_count & 0x00FFFFFF ) << 8 ) );
 				uint32_t l_index{ 0u };
 
@@ -64,6 +64,7 @@ namespace Castor3D
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
 						l_nodeIndex->SetValue( l_index++ );
+						p_ubo.Update();
 						p_function( *l_itPipelines.first
 							, *l_itPass.first
 							, *l_itSubmeshes.first
@@ -77,8 +78,8 @@ namespace Castor3D
 
 		template< bool Opaque, typename MapType >
 		inline void DoRenderNonInstanced( RenderPass const & p_pass
+			, UniformBuffer & p_ubo
 			, Scene & p_scene
-			, Camera const & p_camera
 			, PickingPass::NodeType p_type
 			, MapType & p_nodes )
 		{
@@ -87,42 +88,25 @@ namespace Castor3D
 
 			for ( auto l_itPipelines : p_nodes )
 			{
-				p_pass.UpdatePipeline( p_camera, *l_itPipelines.first, l_depthMaps );
+				p_pass.UpdatePipeline( *l_itPipelines.first );
 				l_itPipelines.first->Apply();
-				UniformBufferSPtr l_ubo = l_itPipelines.first->GetProgram().FindUniformBuffer( Picking );
-				auto l_drawIndex = l_ubo->GetUniform< UniformType::eUInt >( DrawIndex );
-				auto l_nodeIndex = l_ubo->GetUniform< UniformType::eUInt >( NodeIndex );
+				auto l_drawIndex = p_ubo.GetUniform< UniformType::eUInt >( DrawIndex );
+				auto l_nodeIndex = p_ubo.GetUniform< UniformType::eUInt >( NodeIndex );
 				l_drawIndex->SetValue( uint8_t( p_type ) + ( ( l_count & 0x00FFFFFF ) << 8 ) );
 				uint32_t l_index{ 0u };
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
 					l_nodeIndex->SetValue( l_index++ );
+					p_ubo.Update();
 
 					if ( l_renderNode.m_data.IsInitialised() )
 					{
-						l_renderNode.Render( l_depthMaps );
+						DoRenderNodeNoPass( l_renderNode );
 					}
 				}
 
 				l_count++;
-			}
-		}
-
-		inline void DoUpdateProgram( ShaderProgram & p_program )
-		{
-			if ( !p_program.FindUniformBuffer( Picking ) )
-			{
-				auto & l_picking = p_program.CreateUniformBuffer( Picking, ShaderTypeFlag::ePixel );
-				l_picking.CreateUniform( UniformType::eUInt, DrawIndex );
-				l_picking.CreateUniform( UniformType::eUInt, NodeIndex );
-
-				if ( p_program.GetRenderSystem()->GetCurrentContext() )
-				{
-					p_program.Bind( false );
-					l_picking.Initialise();
-					p_program.Unbind();
-				}
 			}
 		}
 
@@ -213,7 +197,10 @@ namespace Castor3D
 
 	PickingPass::PickingPass( Engine & p_engine )
 		: RenderPass{ cuT( "Picking" ), p_engine, true }
+		, m_pickingUbo{ Picking, *p_engine.GetRenderSystem() }
 	{
+		m_pickingUbo.CreateUniform( UniformType::eUInt, DrawIndex );
+		m_pickingUbo.CreateUniform( UniformType::eUInt, NodeIndex );
 	}
 
 	PickingPass::~PickingPass()
@@ -256,10 +243,14 @@ namespace Castor3D
 	void PickingPass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera )
 	{
-		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_backCulled );
-		DoRenderStaticSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_backCulled );
-		DoRenderAnimatedSubmeshes( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_backCulled );
-		DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_backCulled );
+		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
+		m_viewUniform->SetValue( p_camera.GetView() );
+		m_matrixUbo.Update();
+		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_nodes.m_instancedNodes.m_backCulled );
+		DoRenderStaticSubmeshes( p_nodes.m_scene, p_nodes.m_staticNodes.m_backCulled );
+		DoRenderSkinningSubmeshes( p_nodes.m_scene, p_nodes.m_skinningNodes.m_backCulled );
+		DoRenderMorphingSubmeshes( p_nodes.m_scene, p_nodes.m_morphingNodes.m_backCulled );
+		DoRenderBillboards( p_nodes.m_scene, p_nodes.m_billboardNodes.m_backCulled );
 	}
 
 	Point3f PickingPass::DoFboPick( Position const & p_position
@@ -301,19 +292,23 @@ namespace Castor3D
 			switch ( l_return )
 			{
 			case NodeType::eInstantiated:
-				DoPickFromList( p_nodes.m_instancedGeometries.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				DoPickFromList( p_nodes.m_instancedNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eStatic:
-				DoPickFromList( p_nodes.m_staticGeometries.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				DoPickFromList( p_nodes.m_staticNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
 				break;
 
-			case NodeType::eAnimated:
-				DoPickFromList( p_nodes.m_animatedGeometries.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+			case NodeType::eSkinning:
+				DoPickFromList( p_nodes.m_skinningNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				break;
+
+			case NodeType::eMorphing:
+				DoPickFromList( p_nodes.m_morphingNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eBillboard:
-				DoPickFromList( p_nodes.m_billboards.m_backCulled, p_pixel, m_billboard, m_billboard, m_face );
+				DoPickFromList( p_nodes.m_billboardNodes.m_backCulled, p_pixel, m_billboard, m_billboard, m_face );
 				break;
 
 			default:
@@ -327,58 +322,61 @@ namespace Castor3D
 	}
 
 	void PickingPass::DoRenderInstancedSubmeshes( Scene & p_scene
-		, Camera const & p_camera
 		, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
 	{
 		DoTraverseNodes< true >( *this
-			, p_camera
+			, m_pickingUbo
 			, p_nodes
 			, NodeType::eInstantiated
-			, [&p_scene, &p_camera, this]( RenderPipeline & p_pipeline
+			, [&p_scene, this]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh
-				, StaticGeometryRenderNodeArray & p_renderNodes )
+				, StaticRenderNodeArray & p_renderNodes )
 			{
 				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 				{
 					auto l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					auto l_depthMaps = DepthMapArray{};
-					p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-					p_renderNodes[0].UnbindPass( l_depthMaps );
 				}
 			} );
 	}
 
 	void PickingPass::DoRenderStaticSubmeshes( Scene & p_scene
-		, Camera const & p_camera
-		, StaticGeometryRenderNodesByPipelineMap & p_nodes )
+		, StaticRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
+			, m_pickingUbo
 			, p_scene
-			, p_camera
 			, NodeType::eStatic
 			, p_nodes );
 	}
 
-	void PickingPass::DoRenderAnimatedSubmeshes( Scene & p_scene
-		, Camera const & p_camera
-		, AnimatedGeometryRenderNodesByPipelineMap & p_nodes )
+	void PickingPass::DoRenderSkinningSubmeshes( Scene & p_scene
+		, SkinningRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
+			, m_pickingUbo
 			, p_scene
-			, p_camera
-			, NodeType::eAnimated
+			, NodeType::eSkinning
+			, p_nodes );
+	}
+
+	void PickingPass::DoRenderMorphingSubmeshes( Scene & p_scene
+		, MorphingRenderNodesByPipelineMap & p_nodes )
+	{
+		DoRenderNonInstanced< true >( *this
+			, m_pickingUbo
+			, p_scene
+			, NodeType::eMorphing
 			, p_nodes );
 	}
 
 	void PickingPass::DoRenderBillboards( Scene & p_scene
-		, Camera const & p_camera
 		, BillboardRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
+			, m_pickingUbo
 			, p_scene
-			, p_camera
 			, NodeType::eBillboard
 			, p_nodes );
 	}
@@ -512,8 +510,7 @@ namespace Castor3D
 		AddFlag( p_programFlags, ProgramFlag::ePicking );
 	}
 
-	void PickingPass::DoUpdatePipeline( RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps )const
+	void PickingPass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 	}
 
@@ -525,20 +522,37 @@ namespace Castor3D
 	void PickingPass::DoPrepareBackPipeline( ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_backPipelines.find( p_flags );
-
-		if ( l_it == m_backPipelines.end() )
+		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
 		{
-			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eBack );
-			l_it = m_backPipelines.emplace( p_flags
+			auto & l_pipeline = *m_backPipelines.emplace( p_flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
 					, std::move( l_rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
-					, p_flags ) ).first;
+					, p_flags ) ).first->second;
+			l_pipeline.AddUniformBuffer( m_matrixUbo );
+			l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
+			l_pipeline.AddUniformBuffer( m_sceneUbo );
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+			{
+				l_pipeline.AddUniformBuffer( m_billboardUbo );
+			}
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+			{
+				l_pipeline.AddUniformBuffer( m_skinningUbo );
+			}
+
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+			{
+				l_pipeline.AddUniformBuffer( m_morphingUbo );
+			}
+
+			l_pipeline.AddUniformBuffer( m_pickingUbo );
 		}
 	}
 }

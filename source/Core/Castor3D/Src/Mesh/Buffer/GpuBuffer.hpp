@@ -96,13 +96,13 @@ namespace Castor3D
 		virtual void InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const = 0;
 		/**
 		 *\~english
-		 *\brief		Initialises the buffer's binding point.
+		 *\brief		Sets the buffer's binding point.
 		 *\param[in]	p_index	The binding point.
 		 *\~french
-		 *\brief		Initialise le point d'attache du tampon.
+		 *\brief		Définit le point d'attache du tampon.
 		 *\param[in]	p_index	Le point d'attache.
 		 */
-		virtual void InitialiseBindingPoint( uint32_t p_index )const = 0;
+		virtual void SetBindingPoint( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
@@ -119,7 +119,7 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		virtual T * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< AccessType > const & p_flags )const = 0;
+		virtual T * Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.

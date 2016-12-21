@@ -2,7 +2,6 @@
 
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
-#include "Shader/GlUniformBuffer.hpp"
 #include "Shader/GlPushUniform.hpp"
 #include "Shader/GlShaderObject.hpp"
 
@@ -97,22 +96,18 @@ namespace GlRender
 		return l_return;
 	}
 
-	void GlShaderProgram::Bind( bool p_bindUbo )const
+	void GlShaderProgram::Bind()const
 	{
-		if ( GetGlName() != GlInvalidIndex && m_status == ProgramStatus::eLinked )
-		{
-			GetOpenGl().UseProgram( GetGlName() );
-			DoBind( p_bindUbo );
-		}
+		REQUIRE( GetGlName() != GlInvalidIndex && m_status == ProgramStatus::eLinked );
+		GetOpenGl().UseProgram( GetGlName() );
+		DoBind();
 	}
 
 	void GlShaderProgram::Unbind()const
 	{
-		if ( GetGlName() != GlInvalidIndex && m_status == ProgramStatus::eLinked )
-		{
-			DoUnbind();
-			GetOpenGl().UseProgram( 0 );
-		}
+		REQUIRE( GetGlName() != GlInvalidIndex && m_status == ProgramStatus::eLinked );
+		DoUnbind();
+		GetOpenGl().UseProgram( 0 );
 	}
 
 	int GlShaderProgram::GetAttributeLocation( String const & p_name )const
@@ -131,13 +126,6 @@ namespace GlRender
 	{
 		ShaderObjectSPtr l_return = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
 		return l_return;
-	}
-
-	UniformBufferSPtr GlShaderProgram::DoCreateUniformBuffer(
-		String const & p_name,
-		ShaderTypeFlags const & p_flags )
-	{
-		return std::make_shared< GlUniformBuffer >( GetOpenGl(), p_name, *this, p_flags, *GetRenderSystem() );
 	}
 
 	std::shared_ptr< PushUniform > GlShaderProgram::DoCreateUniform( UniformType p_type, int p_occurences )

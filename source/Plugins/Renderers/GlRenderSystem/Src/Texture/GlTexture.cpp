@@ -20,8 +20,8 @@ namespace GlRender
 		OpenGl & p_gl,
 		GlRenderSystem & p_renderSystem,
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess )
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess )
 		: ObjectType{ p_gl,
 					  "GlTexture",
 					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -38,8 +38,8 @@ namespace GlRender
 		OpenGl & p_gl,
 		GlRenderSystem & p_renderSystem,
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess,
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess,
 		PixelFormat p_format,
 		Size const & p_size )
 		: ObjectType{ p_gl,
@@ -58,8 +58,8 @@ namespace GlRender
 		OpenGl & p_gl,
 		GlRenderSystem & p_renderSystem,
 		TextureType p_type,
-		FlagCombination< AccessType > const & p_cpuAccess,
-		FlagCombination< AccessType > const & p_gpuAccess,
+		AccessTypes const & p_cpuAccess,
+		AccessTypes const & p_gpuAccess,
 		PixelFormat p_format,
 		Point3ui const & p_size )
 		: ObjectType{ p_gl,

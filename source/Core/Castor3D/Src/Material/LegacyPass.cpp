@@ -6,7 +6,7 @@
 #include "Cache/ShaderCache.hpp"
 
 #include "Render/RenderPipeline.hpp"
-#include "Render/RenderNode.hpp"
+#include "Render/RenderNode/RenderNode.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/UniformBuffer.hpp"
@@ -109,7 +109,7 @@ namespace Castor3D
 	{
 	}
 
-	void LegacyPass::DoUpdateRenderNode( PassRenderNode & p_node )const
+	void LegacyPass::DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const
 	{
 		p_node.m_ambient.SetValue( rgba_float( GetAmbient() ) );
 		p_node.m_diffuse.SetValue( rgba_float( GetDiffuse() ) );

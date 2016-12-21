@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
 
+#include "Event/Frame/FunctorEvent.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -58,11 +59,11 @@ namespace Castor3D
 	void ShadowMapPass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera )
 	{
-		auto l_depthMaps = DepthMapArray{};
-		DoRenderInstancedSubmeshes( p_nodes.m_instancedGeometries.m_backCulled, p_camera, l_depthMaps );
-		DoRenderStaticSubmeshes( p_nodes.m_staticGeometries.m_backCulled, p_camera, l_depthMaps );
-		DoRenderAnimatedSubmeshes( p_nodes.m_animatedGeometries.m_backCulled, p_camera, l_depthMaps );
-		DoRenderBillboards( p_nodes.m_billboards.m_backCulled, p_camera, l_depthMaps );
+		DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera );
+		DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera );
+		DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera );
+		DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera );
+		DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera );
 	}
 
 	bool ShadowMapPass::DoInitialise( Size const & p_size )
@@ -107,8 +108,7 @@ namespace Castor3D
 		m_geometryBuffers.clear();
 	}
 
-	void ShadowMapPass::DoUpdatePipeline( RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps )const
+	void ShadowMapPass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 	}
 
@@ -120,20 +120,43 @@ namespace Castor3D
 	void ShadowMapPass::DoPrepareBackPipeline( ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_backPipelines.find( p_flags );
-
-		if ( l_it == m_backPipelines.end() )
+		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
 		{
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
-			l_it = m_backPipelines.emplace( p_flags
+			auto & l_pipeline = *m_backPipelines.emplace( p_flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
 					, std::move( l_rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
-					, p_flags ) ).first;
+					, p_flags ) ).first->second;
+
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+				, [this, &l_pipeline, p_flags]()
+				{
+					l_pipeline.AddUniformBuffer( m_matrixUbo );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
+					l_pipeline.AddUniformBuffer( m_sceneUbo );
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+					{
+						l_pipeline.AddUniformBuffer( m_billboardUbo );
+					}
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+					{
+						l_pipeline.AddUniformBuffer( m_skinningUbo );
+					}
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+					{
+						l_pipeline.AddUniformBuffer( m_morphingUbo );
+					}
+
+					m_initialised = true;
+				} ) );
 		}
 	}
 

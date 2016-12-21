@@ -47,7 +47,7 @@ namespace GLSL
 		if ( m_writer.HasConstantsBuffers() )
 		{
 			m_stream << std::endl;
-			m_stream << m_writer.m_keywords->GetUboLayout( m_layout ) << m_writer.m_uniform << p_name << std::endl;
+			m_stream << m_writer.m_keywords->GetUboLayout( m_layout, m_writer.m_uniformIndex++ ) << m_writer.m_uniform << p_name << std::endl;
 			m_writer.m_uniform.clear();
 			m_block = new IndentBlock( m_stream );
 		}
@@ -95,8 +95,6 @@ namespace GLSL
 
 	GlslWriter::GlslWriter( GlslWriterConfig const & p_config )
 		: m_keywords( GLSL::KeywordsBase::Get( p_config ) )
-		, m_attributeIndex( 0 )
-		, m_layoutIndex( 0 )
 		, m_uniform( cuT( "uniform " ) )
 		, m_config( p_config )
 	{
@@ -106,6 +104,7 @@ namespace GLSL
 
 	GlslWriter::GlslWriter( GlslWriter const & p_rhs )
 		: m_keywords( GLSL::KeywordsBase::Get( p_rhs.m_config ) )
+		, m_uniformIndex( p_rhs.m_uniformIndex )
 		, m_attributeIndex( p_rhs.m_attributeIndex )
 		, m_layoutIndex( p_rhs.m_layoutIndex )
 		, m_uniform( p_rhs.m_uniform )
@@ -116,6 +115,7 @@ namespace GLSL
 
 	GlslWriter & GlslWriter::operator=( GlslWriter const & p_rhs )
 	{
+		m_uniformIndex = p_rhs.m_uniformIndex;
 		m_attributeIndex = p_rhs.m_attributeIndex;
 		m_layoutIndex = p_rhs.m_layoutIndex;
 		m_uniform = p_rhs.m_uniform;

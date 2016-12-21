@@ -14,6 +14,7 @@
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/UniformBufferBinding.hpp"
 #include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
@@ -95,6 +96,8 @@ namespace Castor3D
 	Skybox::Skybox( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
 		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eRead ) }
+		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
+		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
 		, m_declaration
 		{
 			{
@@ -102,6 +105,12 @@ namespace Castor3D
 			}
 		}
 	{
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
+
+		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
+		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
+		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
 		String const l_skybox = cuT( "Skybox" );
 
 		if ( GetEngine()->GetSamplerCache().Has( l_skybox ) )
@@ -198,6 +207,8 @@ namespace Castor3D
 		m_geometryBuffers.reset();
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer.reset();
+		m_matrixUbo.Cleanup();
+		m_modelMatrixUbo.Cleanup();
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
 	}
@@ -211,12 +222,12 @@ namespace Castor3D
 		{
 			auto l_node = p_camera.GetParent();
 			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
-			m_pipeline->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-			m_pipeline->SetModelMatrix( m_mtxModel );
-			m_pipeline->SetViewMatrix( p_camera.GetView() );
-			m_pipeline->ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
+			m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
+			m_viewUniform->SetValue( p_camera.GetView() );
+			m_matrixUbo.Update();
+			m_modelUniform->SetValue( m_mtxModel );
+			m_modelMatrixUbo.Update();
 			m_pipeline->Apply();
-			m_pipeline->GetProgram().UpdateUbos();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
 			m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
@@ -236,6 +247,7 @@ namespace Castor3D
 			// Inputs
 			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
 			UBO_MATRIX( l_writer );
+			UBO_MODEL_MATRIX( l_writer );
 
 			// Outputs
 			auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
@@ -276,8 +288,6 @@ namespace Castor3D
 		l_program->CreateObject( ShaderType::ePixel );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
-		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-		m_matricesBuffer = l_program->FindUniformBuffer( ShaderProgram::BufferMatrix );
 		l_program->Initialise();
 		return *l_program;
 	}
@@ -304,6 +314,8 @@ namespace Castor3D
 		l_rsState.SetCulledFaces( Culling::eFront );
 
 		m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+		m_pipeline->AddUniformBuffer( m_matrixUbo );
+		m_pipeline->AddUniformBuffer( m_modelMatrixUbo );
 		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, m_pipeline->GetProgram() );
 		return m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 	}

@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_RenderQueue_H___
 #define ___C3D_RenderQueue_H___
 
-#include "Render/RenderNode.hpp"
+#include "Render/RenderNode/RenderNode.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -66,38 +66,50 @@ namespace Castor3D
 	{
 		SceneRenderNodes & operator=( SceneRenderNodes const & p_rhs )
 		{
-			m_staticGeometries = p_rhs.m_staticGeometries;
-			m_instancedGeometries = p_rhs.m_instancedGeometries;
-			m_animatedGeometries = p_rhs.m_animatedGeometries;
-			m_billboards = p_rhs.m_billboards;
+			m_staticNodes = p_rhs.m_staticNodes;
+			m_instancedNodes = p_rhs.m_instancedNodes;
+			m_skinningNodes = p_rhs.m_skinningNodes;
+			m_morphingNodes = p_rhs.m_morphingNodes;
+			m_billboardNodes = p_rhs.m_billboardNodes;
 			return *this;
 		}
+
+		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesByPipelineMap >;
+		using InstancedNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap >;
+		using SkinningNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodesByPipelineMap >;
+		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodesByPipelineMap >;
+		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap >;
 
 		//!\~english	The scene.	\~french La scène.
 		Scene & m_scene;
 		//!\~english	The static render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
-		RenderNodesT< StaticGeometryRenderNode, StaticGeometryRenderNodesByPipelineMap > m_staticGeometries;
+		StaticNodesMap m_staticNodes;
 		//!\~english	The instanced render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
-		RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap > m_instancedGeometries;
+		InstancedNodesMap m_instancedNodes;
 		//!\~english	The animated render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByPipelineMap > m_animatedGeometries;
+		SkinningNodesMap m_skinningNodes;
+		//!\~english	The animated render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu animés, triés par programme shader.
+		MorphingNodesMap m_morphingNodes;
 		//!\~english	The billboards render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
-		RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > m_billboards;
+		BillboardNodesMap m_billboardNodes;
 
 		SceneRenderNodes( Scene & p_scene
-						 , RenderNodesT< StaticGeometryRenderNode, StaticGeometryRenderNodesByPipelineMap > const & p_staticGeometries = RenderNodesT< StaticGeometryRenderNode, StaticGeometryRenderNodesByPipelineMap >()
-						  , RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap > const & p_instancedGeometries = RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap >()
-						  , RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByPipelineMap > const & p_animatedGeometries = RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByPipelineMap >()
-						  , RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > const & p_billboards = RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap >() )
+			, StaticNodesMap const & p_staticGeometries = StaticNodesMap()
+			, InstancedNodesMap const & p_instancedGeometries = InstancedNodesMap()
+			, SkinningNodesMap const & p_skinningGeometries = SkinningNodesMap()
+			, MorphingNodesMap const & p_morphingGeometries = MorphingNodesMap()
+			, BillboardNodesMap const & p_billboards = BillboardNodesMap() )
 			: m_scene{ p_scene }
-			, m_staticGeometries( p_staticGeometries )
-			, m_instancedGeometries( p_instancedGeometries )
-			, m_animatedGeometries( p_animatedGeometries )
-			, m_billboards( p_billboards )
+			, m_staticNodes( p_staticGeometries )
+			, m_instancedNodes( p_instancedGeometries )
+			, m_skinningNodes( p_skinningGeometries )
+			, m_morphingNodes( p_morphingGeometries )
+			, m_billboardNodes( p_billboards )
 		{
 		}
 	};

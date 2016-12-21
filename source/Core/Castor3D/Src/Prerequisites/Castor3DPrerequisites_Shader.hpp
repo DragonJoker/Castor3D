@@ -346,6 +346,7 @@ namespace Castor3D
 	class Uniform;
 	class PushUniform;
 	class UniformBuffer;
+	class UniformBufferBinding;
 	class ShaderStorageBuffer;
 	class AtomicCounterBuffer;
 	template< UniformType Type >
@@ -674,6 +675,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( PushUniform4x4r );
 
 	DECLARE_SMART_PTR( UniformBuffer );
+	DECLARE_SMART_PTR( UniformBufferBinding );
 	DECLARE_SMART_PTR( Uniform );
 	DECLARE_SMART_PTR( PushUniform );
 	DECLARE_SMART_PTR( ShaderObject );
@@ -690,6 +692,7 @@ namespace Castor3D
 	DECLARE_LIST( AtomicCounterBufferSPtr, AtomicCounterBufferPtr );
 	DECLARE_MAP( Castor::String, PushUniformWPtr, PushUniform );
 	DECLARE_MAP( Castor::String, UniformWPtr, Uniform );
+	DECLARE_MAP( ShaderProgramRPtr, UniformBufferBindingUPtr, UniformBufferBinding );
 	DECLARE_MAP( Castor::String, UniformBufferWPtr, UniformBufferPtrStr );
 	DECLARE_MAP( Castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
 	DECLARE_MAP( Castor::String, AtomicCounterBufferWPtr, AtomicCounterBufferPtrStr );
@@ -702,14 +705,14 @@ namespace Castor3D
 #define UBO_MATRIX( Writer )\
 	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix };\
 	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxProjection );\
-	auto c3d_mtxModel = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxModel );\
 	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxView );\
-	auto c3d_mtxNormal = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
-	auto c3d_mtxTexture0 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[0] );\
-	auto c3d_mtxTexture1 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
-	auto c3d_mtxTexture2 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
-	auto c3d_mtxTexture3 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
 	l_matrices.End()
+
+#define UBO_MODEL_MATRIX( Writer )\
+	GLSL::Ubo l_modelMatrices{ l_writer, ShaderProgram::BufferModelMatrix };\
+	auto c3d_mtxModel = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxModel );\
+	auto c3d_mtxNormal = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
+	l_modelMatrices.End()
 
 #define UBO_SCENE( Writer )\
 	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
@@ -723,6 +726,10 @@ namespace Castor3D
 
 #define UBO_PASS( Writer )\
 	GLSL::Ubo l_pass{ l_writer, ShaderProgram::BufferPass };\
+	auto c3d_mtxTexture0 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[0] );\
+	auto c3d_mtxTexture1 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
+	auto c3d_mtxTexture2 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
+	auto c3d_mtxTexture3 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
 	auto c3d_v4MatAmbient = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatAmbient );\
 	auto c3d_v4MatDiffuse = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatDiffuse );\
 	auto c3d_v4MatEmissive = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatEmissive );\
@@ -742,11 +749,15 @@ namespace Castor3D
 	auto c3d_v2iWindowSize = l_billboard.GetUniform< IVec2 >( ShaderProgram::WindowSize );\
 	l_billboard.End()
 
-#define UBO_ANIMATION( Writer, Flags )\
-	GLSL::Ubo l_animation{ l_writer, ShaderProgram::BufferAnimation };\
-	auto c3d_mtxBones = l_animation.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
-	auto c3d_fTime = l_animation.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
-	l_animation.End()
+#define UBO_SKINNING( Writer, Flags )\
+	GLSL::Ubo l_skinning{ l_writer, ShaderProgram::BufferSkinning };\
+	auto c3d_mtxBones = l_skinning.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
+	l_skinning.End()
+
+#define UBO_MORPHING( Writer, Flags )\
+	GLSL::Ubo l_morphing{ l_writer, ShaderProgram::BufferMorphing };\
+	auto c3d_fTime = l_morphing.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
+	l_morphing.End()
 
 #define STRUCT_VTX_OUTPUT( Writer )\
 	GLSL::Struct VtxOutput{ l_writer, cuT( "VtxOutput" ) };\

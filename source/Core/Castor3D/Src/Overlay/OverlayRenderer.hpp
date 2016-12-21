@@ -23,8 +23,9 @@ SOFTWARE.
 #ifndef ___C3D_OVERLAY_RENDERER_H___
 #define ___C3D_OVERLAY_RENDERER_H___
 
-#include "Castor3DPrerequisites.hpp"
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Render/RenderNode/PassRenderNode.hpp"
+#include "Shader/UniformBuffer.hpp"
 #include "TextOverlay.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -136,6 +137,20 @@ namespace Castor3D
 	protected:
 		/*!
 		\author 	Sylvain DOREMUS
+		\date 		14/12/2016
+		\version	0.9.0
+		\~english
+		\brief		Holds the needed data to render an overlay.
+		\~french
+		\brief		Contient les données nécessaires au dessin d'une incrustation.
+		*/
+		struct OverlayRenderNode
+		{
+			RenderPipeline & m_pipeline;
+			PassRenderNode m_passNode;
+		};
+		/*!
+		\author 	Sylvain DOREMUS
 		\date 		26/03/2016
 		\version	0.8.0
 		\~english
@@ -158,7 +173,7 @@ namespace Castor3D
 		 *\param[in]	p_pass	La passe.
 		 *\return		Le programme.
 		 */
-		C3D_API PassRenderNode & DoGetPanelNode( Pass & p_pass );
+		C3D_API OverlayRenderNode & DoGetPanelNode( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given pass.
@@ -169,7 +184,7 @@ namespace Castor3D
 		 *\param[in]	p_pass	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API PassRenderNode & DoGetTextNode( Pass & p_pass );
+		C3D_API OverlayRenderNode & DoGetTextNode( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
@@ -314,10 +329,10 @@ namespace Castor3D
 		Castor::Size m_size;
 		//!\~english	The shader programs used to render a panel (used for borders too).
 		//!\~french		Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi).
-		std::map< Pass *, PassRenderNode > m_mapPanelNodes;
+		std::map< Pass *, OverlayRenderNode > m_mapPanelNodes;
 		//!\~english	The shader programs used to render texts.
 		//!\~french		Les programmes de shader utilisés pour rendre les textes.
-		std::map< Pass *, PassRenderNode > m_mapTextNodes;
+		std::map< Pass *, OverlayRenderNode > m_mapTextNodes;
 		//!\~english	The shader programs.
 		//!\~french		Les programmes de shader.
 		std::map< uint32_t, RenderPipelineUPtr > m_pipelines;
@@ -345,6 +360,18 @@ namespace Castor3D
 		//!\~english	Tells if the render size has changed.
 		//!\~french		Dit si les dimension du rendu ont changé.
 		bool m_sizeChanged{ true };
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		UniformBuffer m_matrixUbo;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Uniform4x4fSPtr m_projectionUniform{ nullptr };
+		//!\~english	The uniform variable containing view matrix.
+		//!\~french		La variable uniforme contenant la matrice vue.
+		Uniform4x4fSPtr m_viewUniform{ nullptr };
+		//!\~english	The uniform buffer containing pass data.
+		//!\~french		Le tampon d'uniformes contenant les données de passe.
+		UniformBuffer m_passUbo;
 	};
 }
 

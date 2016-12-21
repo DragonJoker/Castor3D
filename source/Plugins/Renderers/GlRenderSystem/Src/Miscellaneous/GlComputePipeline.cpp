@@ -26,7 +26,7 @@ namespace GlRender
 		Point3ui const & p_workgroupSize,
 		FlagCombination< MemoryBarrier > const & p_barriers )const
 	{
-		m_program.Bind( true );
+		m_program.Bind();
 
 		if ( GetOpenGl().HasComputeVariableGroupSize() )
 		{

@@ -7,7 +7,6 @@
 #include "Render/Context.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
@@ -24,7 +23,12 @@ namespace Castor3D
 		: OwnedBy< Engine >{ p_engine }
 		, Named{ p_name }
 		, m_exposure{ 1.0f }
+		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
+		, m_configUbo{ ToneMapping::HdrConfig, *p_engine.GetRenderSystem() }
 	{
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		m_exposureVar = m_configUbo.CreateUniform < UniformType::eFloat > (ToneMapping::Exposure);
+		
 		String l_param;
 
 		if ( p_parameters.Get( cuT( "Exposure" ), l_param ) )
@@ -69,10 +73,7 @@ namespace Castor3D
 
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
-			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
-			auto & l_configBuffer = l_program->CreateUniformBuffer( ToneMapping::HdrConfig, ShaderTypeFlag::ePixel );
-			m_exposureVar = l_configBuffer.CreateUniform< UniformType::eFloat >( ToneMapping::Exposure );
-			auto l_pxl = DoCreate( l_configBuffer );
+			auto l_pxl = DoCreate();
 			auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
@@ -84,6 +85,8 @@ namespace Castor3D
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
 			m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+			m_pipeline->AddUniformBuffer( m_matrixUbo );
+			m_pipeline->AddUniformBuffer( m_configUbo );
 		}
 
 		return l_return;
@@ -93,6 +96,8 @@ namespace Castor3D
 	{
 		DoDestroy();
 		m_exposureVar.reset();
+		m_configUbo.Cleanup();
+		m_matrixUbo.Cleanup();
 
 		if ( m_pipeline )
 		{
@@ -105,7 +110,11 @@ namespace Castor3D
 	{
 		m_exposureVar->SetValue( m_exposure );
 		DoUpdate();
-		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, p_texture, *m_pipeline );
+		m_configUbo.Update();
+		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size
+			, p_texture
+			, *m_pipeline
+			, m_matrixUbo );
 	}
 
 	bool ToneMapping::WriteInto( Castor::TextFile & p_file )

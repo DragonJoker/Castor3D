@@ -98,7 +98,7 @@ namespace GlRender
 	}
 
 	template< typename T >
-	T * GlBufferBase< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const
+	T * GlBufferBase< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const
 	{
 		REQUIRE( this->GetGlName() != GlInvalidIndex );
 		uint32_t l_size = p_count * sizeof( T );

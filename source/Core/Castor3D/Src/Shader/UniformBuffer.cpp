@@ -1,5 +1,11 @@
-﻿#include "UniformBuffer.hpp"
-#include "Uniform.hpp"
+#include "UniformBuffer.hpp"
+
+#include "Render/RenderPipeline.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Shader/Uniform.hpp"
+#include "Shader/UniformBufferBinding.hpp"
+
+#include "Render/RenderSystem.hpp"
 
 using namespace Castor;
 
@@ -53,12 +59,6 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_tabs + cuT( "shaders " ) + WriteFlags( p_object.m_flags ) + cuT( "\n" ) ) > 0;
-			CheckError( l_return, "Frame variable buffer shaders" );
-		}
-
-		if ( l_return )
-		{
 			for ( auto & l_variable : p_object )
 			{
 				if ( l_return )
@@ -105,18 +105,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	uint32_t UniformBuffer::sm_uiCount = 0;
-
-	UniformBuffer::UniformBuffer(
-		String const & p_name,
-		ShaderProgram & p_program,
-		ShaderTypeFlags const & p_flags,
-		RenderSystem & p_renderSystem )
+	UniformBuffer::UniformBuffer( String const & p_name, RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
-		, m_name{ p_name }
-		, m_index{ sm_uiCount++ }
-		, m_program{ p_program }
-		, m_flags{ p_flags }
+		, Named{ p_name }
 	{
 	}
 
@@ -147,7 +138,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void UniformBuffer::RemoveVariable( String const & p_name )
+	void UniformBuffer::RemoveUniform( String const & p_name )
 	{
 		auto l_itMap = m_mapVariables.find( p_name );
 
@@ -167,33 +158,146 @@ namespace Castor3D
 		}
 	}
 
-	bool UniformBuffer::Initialise()
-	{
-		auto l_return = DoInitialise();
-
-		if ( !l_return )
-		{
-			Logger::LogError( StringStream{} << cuT( "Uniform buffer [" ) << GetName() << cuT( "] initialisation failed" ) );
-		}
-
-		return l_return;
-	}
-
 	void UniformBuffer::Cleanup()
 	{
-		DoCleanup();
+		if ( m_storage )
+		{
+			m_storage->Destroy();
+			m_storage.reset();
+		}
+
+		m_bindings.clear();
 		m_mapVariables.clear();
 		m_listVariables.clear();
 	}
 
-	void UniformBuffer::BindTo( uint32_t p_index )
+	UniformBufferBinding & UniformBuffer::CreateBinding( ShaderProgram & p_program )
 	{
-		DoBindTo( p_index );
+		auto l_it = m_bindings.find( &p_program );
+
+		if ( l_it == m_bindings.end() )
+		{
+			auto l_binding = GetRenderSystem()->CreateUniformBufferBinding( *this, p_program );
+
+			if ( !m_storage && l_binding->GetSize() > 0 )
+			{
+				DoInitialise( *l_binding );
+			}
+
+			l_it = m_bindings.emplace( &p_program, std::move( l_binding ) ).first;
+		}
+
+		return *l_it->second;
+	}
+
+	UniformBufferBinding & UniformBuffer::GetBinding( ShaderProgram & p_program )const
+	{
+		REQUIRE( m_bindings.find( &p_program ) != m_bindings.end() );
+		return *m_bindings.find( &p_program )->second;
 	}
 
 	void UniformBuffer::Update()
 	{
-		DoUpdate();
+		REQUIRE( m_storage );
+		bool l_changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( UniformSPtr p_variable )
+		{
+			return p_variable->IsChanged();
+		} );
+
+		if ( l_changed )
+		{
+			m_storage->Upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
+
+			for ( auto & l_variable : m_listVariables )
+			{
+				l_variable->SetChanged( false );
+			}
+		}
+	}
+
+	void UniformBuffer::FillMatrixBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
+		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
+	}
+
+	void UniformBuffer::FillModelMatrixBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
+		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
+	}
+
+	void UniformBuffer::FillSceneBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::AmbientLight );
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::BackgroundColour );
+		p_ubo.CreateUniform( UniformType::eVec4i, ShaderProgram::LightsCount );
+		p_ubo.CreateUniform( UniformType::eVec3r, ShaderProgram::CameraPos );
+		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::FogType );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::FogDensity );
+	}
+
+	void UniformBuffer::FillPassBuffer( UniformBuffer & p_ubo )
+	{
+		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
+		{
+			p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
+		}
+
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatAmbient );
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatDiffuse );
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatEmissive );
+		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatShininess );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity );
+	}
+
+	void UniformBuffer::FillModelBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::ShadowReceiver );
+	}
+
+	void UniformBuffer::FillSkinningBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eMat4x4r, ShaderProgram::Bones, 400 );
+	}
+
+	void UniformBuffer::FillMorphingBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Time );
+	}
+
+	void UniformBuffer::FillBillboardBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eVec2i, ShaderProgram::Dimensions );
+		p_ubo.CreateUniform( UniformType::eVec2i, ShaderProgram::WindowSize );
+	}
+
+	void UniformBuffer::DoInitialise( UniformBufferBinding const & p_binding )
+	{
+		m_buffer.resize( p_binding.GetSize() );
+		auto l_it = p_binding.begin();
+
+		for ( auto & l_variable : *this )
+		{
+			REQUIRE( l_variable->size() <= m_buffer.size() - ( l_it->m_offset ) );
+			l_variable->link( &m_buffer[l_it->m_offset], l_it->m_stride < 0 ? 0u : uint32_t( l_it->m_stride ) );
+			++l_it;
+		}
+
+		if ( !m_storage )
+		{
+			m_storage = GetRenderSystem()->CreateUInt8Buffer( BufferType::eUniform );
+			m_storage->Create();
+		}
+
+		m_storage->InitialiseStorage( uint32_t( m_buffer.size() ), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+		m_storage->Upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
+
+		for ( auto & l_variable : *this )
+		{
+			l_variable->SetChanged( false );
+		}
 	}
 
 	UniformSPtr UniformBuffer::DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences )

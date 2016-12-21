@@ -34,11 +34,9 @@ namespace GlRender
 		m_glBuffer.InitialiseStorage( p_count, p_type, p_nature );
 	}
 	template< typename T >
-	void GlBuffer< T >::InitialiseBindingPoint( uint32_t p_index )const
+	void GlBuffer< T >::SetBindingPoint( uint32_t p_index )const
 	{
-		m_glBuffer.Bind();
 		m_glBuffer.SetBindingPoint( p_index );
-		m_glBuffer.Unbind();
 	}
 
 	template< typename T >
@@ -72,7 +70,7 @@ namespace GlRender
 	}
 
 	template< typename T >
-	T * GlBuffer< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const
+	T * GlBuffer< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const
 	{
 		return m_glBuffer.Lock( p_offset, p_count, p_flags );
 	}

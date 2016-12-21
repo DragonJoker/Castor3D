@@ -57,7 +57,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::TextureStorage & p_storage, Castor::FlagCombination< Castor3D::AccessType > const & p_lock, uint32_t p_index );
+		uint8_t * Lock( Castor3D::TextureStorage & p_storage, Castor3D::AccessTypes const & p_lock, uint32_t p_index );
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */

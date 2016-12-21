@@ -257,7 +257,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::Pass::DoUpdateRenderNode
 		 */
-		void DoUpdateRenderNode( PassRenderNode & p_node )const override;
+		void DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const override;
 		/**
 		 *\copydoc		Castor3D::Pass::DoSetOpacity
 		 */

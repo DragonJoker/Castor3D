@@ -138,8 +138,16 @@ namespace deferred
 			, std::make_unique< OpaquePass >( p_renderTarget, *this )
 			, std::make_unique< RenderTechniquePass >( cuT( "deferred_transparent" ), p_renderTarget, *this, false, false )
 			, p_params )
-		, m_viewport( *p_renderSystem.GetEngine() )
+		, m_viewport{ *p_renderSystem.GetEngine() }
+		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
+		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
 	{
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		UniformBuffer::FillSceneBuffer( m_sceneUbo );
+
+		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
+
+		m_sceneNode = std::make_unique< SceneRenderNode >( m_sceneUbo );
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 	}
 
@@ -229,21 +237,36 @@ namespace deferred
 		m_frameBuffer.m_frameBuffer->Clear();
 
 		auto & l_program = m_lightPassShaderPrograms[l_scene.GetFlags()];
-		l_program.m_pipeline->Apply();
 
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
-		l_program.m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_projectionUniform->SetValue( m_viewport.GetProjection() );
 
 		if ( l_program.m_camera )
 		{
-			l_program.m_pipeline->ApplyMatrices( *l_program.m_matrixUbo, 0xFFFFFFFFFFFFFFFF );
-			auto & l_sceneBuffer = *l_program.m_sceneUbo;
-			l_scene.GetLightCache().FillShader( l_sceneBuffer );
+			auto & l_fog = l_scene.GetFog();
+			m_sceneNode->m_fogType.SetValue( int( l_fog.GetType() ) );
+
+			if ( l_fog.GetType() != FogType::eDisabled )
+			{
+				m_sceneNode->m_fogDensity.SetValue( l_fog.GetDensity() );
+			}
+
+			auto & l_cache = l_scene.GetLightCache();
+			m_sceneNode->m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
+
+			{
+				auto l_lock = make_unique_lock( l_cache );
+				m_sceneNode->m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
+				m_sceneNode->m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = l_cache.GetLightsCount( LightType::ePoint );
+				m_sceneNode->m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = l_cache.GetLightsCount( LightType::eSpot );
+			}
+
+			m_sceneNode->m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
+			m_sceneNode->m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
 			l_scene.GetLightCache().BindLights();
-			l_scene.GetFog().FillShader( l_sceneBuffer );
-			l_scene.FillShader( l_sceneBuffer );
-			l_camera.FillShader( l_sceneBuffer );
+			m_matrixUbo.Update();
+			m_sceneUbo.Update();
 
 			m_lightPassTextures[size_t( DsTexture::ePosition )]->Bind();
 			m_lightPassTextures[size_t( DsTexture::eDiffuse )]->Bind();
@@ -253,8 +276,8 @@ namespace deferred
 			m_lightPassTextures[size_t( DsTexture::eEmissive )]->Bind();
 			m_lightPassTextures[size_t( DsTexture::eInfos )]->Bind();
 			DoBindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
-
-			l_program.m_program->UpdateUbos();
+			
+			l_program.m_pipeline->Apply();
 			l_program.m_geometryBuffers->Draw( VertexCount, 0 );
 
 			DoUnbindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
@@ -475,11 +498,7 @@ namespace deferred
 			l_program.m_program->SetSource( ShaderType::eVertex, l_model, DoGetLightPassVertexShaderSource( 0u, l_programFlags, l_sceneFlags ) );
 			l_program.m_program->SetSource( ShaderType::ePixel, l_model, DoGetLightPassPixelShaderSource( 0u, l_programFlags, l_sceneFlags ) );
 
-			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program.m_program, 0u, ShaderTypeFlag::ePixel | ShaderTypeFlag::eVertex );
-			l_program.m_matrixUbo = l_program.m_program->FindUniformBuffer( ShaderProgram::BufferMatrix );
-			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *l_program.m_program, 0u, ShaderTypeFlag::ePixel );
-			l_program.m_sceneUbo = l_program.m_program->FindUniformBuffer( ShaderProgram::BufferScene );
-			l_program.m_camera = l_program.m_sceneUbo->GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
+			l_program.m_camera = m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
 			l_program.m_program->CreateUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel );
 
 			for ( int i = 0; i < int( DsTexture::eInfos ); i++ )
@@ -544,14 +563,14 @@ namespace deferred
 	void RenderTechnique::DoDestroyLightPass()
 	{
 		m_vertexBuffer.reset();
+		m_matrixUbo.Cleanup();
+		m_sceneUbo.Cleanup();
 
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_pipeline->Cleanup();
 			program.m_pipeline.reset();
 			program.m_geometryBuffers.reset();
-			program.m_matrixUbo.reset();
-			program.m_sceneUbo.reset();
 			program.m_program.reset();
 		}
 	}
@@ -585,6 +604,8 @@ namespace deferred
 			program.m_program->Initialise();
 			program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::eTriangles, *program.m_program );
 			program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
+			program.m_pipeline->AddUniformBuffer( m_matrixUbo );
+			program.m_pipeline->AddUniformBuffer( m_sceneUbo );
 		}
 
 		return l_return;

@@ -78,12 +78,12 @@ namespace Castor3D
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
 		C3D_API explicit RenderPipeline( RenderSystem & p_renderSystem
-								   , DepthStencilState && p_dsState
-								   , RasteriserState && p_rsState
-								   , BlendState && p_blState
-								   , MultisampleState && p_msState
-								   , ShaderProgram & p_program
-								   , PipelineFlags const & p_flags );
+			, DepthStencilState && p_dsState
+			, RasteriserState && p_rsState
+			, BlendState && p_blState
+			, MultisampleState && p_msState
+			, ShaderProgram & p_program
+			, PipelineFlags const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Denstructor.
@@ -105,6 +105,15 @@ namespace Castor3D
 		 *\brief		Applique le pipeline.
 		 */
 		C3D_API virtual void Apply()const = 0;
+		/**
+		 *\~english
+		 *\brief		Adds a uniform buffer to the pipeline.
+		 *\remarks		Creates the binding for this uniform buffer, using the pipeline's program.
+		 *\~french
+		 *\brief		Ajoute un tampon d'uniformes à ce pipeline.
+		 *\remarks		Crée le binding pour ce tampon, en utilisant le programme de ce pipeline.
+		 */
+		C3D_API void AddUniformBuffer( UniformBuffer & p_ubo );
 		/**
 		 *\~english
 		 *\brief		Projects the given screen point to 3D scene point.
@@ -321,17 +330,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The shader program.
-		 *\~french
-		 *\return		Le programme shader.
-		 */
-		inline UniformBuffer & GetSceneUbo()
-		{
-			REQUIRE( m_sceneUbo );
-			return *m_sceneUbo;
-		}
-		/**
-		 *\~english
 		 *\return		The count of textures used by the program.
 		 *\~french
 		 *\return		Le nombre de textures utilisées par le programme.
@@ -433,6 +431,9 @@ namespace Castor3D
 		//!\~english	The count of textures used by the program.
 		//!\~french		Le nombre de textures utilisées par le programme.
 		uint32_t m_textureCount{ 0u };
+		//!\~english	The uniform buffer bindings.
+		//!\~french		Les bindings de tampons d'uniformes.
+		std::vector< std::reference_wrapper< UniformBufferBinding > > m_bindings;
 	};
 }
 

@@ -150,7 +150,7 @@ namespace Castor3D
 		using value_sub_type = typename type::value_sub_type;
 		using param_type = typename type::param_type;
 		using return_type = typename type::return_type;
-		using const_return_type = typename type::const_return_type;
+		using return_const_type = typename type::return_const_type;
 		using typed_value = typename type::typed_value;
 		static constexpr auto stride = type::stride;
 
@@ -190,7 +190,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Une référence constante sur la valeur
 		 */
-		inline const_return_type const & GetValue()const;
+		inline return_const_type const & GetValue()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -216,7 +216,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline const_return_type const & GetValue( uint32_t p_index )const;
+		inline return_const_type const & GetValue( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
@@ -302,7 +302,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline const_return_type const & operator[]( uint32_t p_index )const;
+		inline return_const_type const & operator[]( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The parent program.

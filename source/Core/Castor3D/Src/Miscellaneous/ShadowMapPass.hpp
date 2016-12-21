@@ -151,8 +151,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		void DoUpdatePipeline( RenderPipeline & p_pipeline
-			, DepthMapArray & p_depthMaps )const override;
+		void DoUpdatePipeline( RenderPipeline & p_pipeline )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
 		 */
@@ -188,6 +187,9 @@ namespace Castor3D
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	Tells if the pass is initialised.
+		//!\~french		Dit si la passe est initialisée.
+		bool m_initialised{ false };
 	};
 }
 

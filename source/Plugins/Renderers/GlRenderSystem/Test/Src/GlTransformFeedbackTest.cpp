@@ -313,7 +313,6 @@ namespace Testing
 			}
 
 			l_pipeline->Apply();
-			l_program->UpdateUbos();
 			l_transformFeedback->Bind();
 			CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
 			l_transformFeedback->Unbind();

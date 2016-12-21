@@ -99,7 +99,7 @@ namespace Castor3D
 		TextureUnitSPtr pTextureUnit;
 		ShaderProgramSPtr pShaderProgram;
 		ShaderType eShaderObject;
-		UniformBufferRPtr pUniformBuffer;
+		UniformBufferUPtr pUniformBuffer;
 		UniformSPtr pUniform;
 		PushUniform1sSPtr pSamplerUniform;
 		OverlaySPtr pOverlay;

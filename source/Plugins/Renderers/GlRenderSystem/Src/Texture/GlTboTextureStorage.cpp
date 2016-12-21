@@ -44,7 +44,7 @@ namespace GlRender
 		l_storage.GetOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, 0 );
 	}
 
-	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, FlagCombination< AccessType > const & p_lock, uint32_t p_index )
+	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
 	{
 		auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
 		m_glBuffer.Bind();

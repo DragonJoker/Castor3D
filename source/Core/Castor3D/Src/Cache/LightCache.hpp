@@ -142,15 +142,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Fills the lights frame variables.
-		 *\param[in]	p_sceneBuffer	The constants buffer.
-		 *\~french
-		 *\brief		Remplit les variables shader relatives aux sources lumineuses.
-		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
-		 */
-		C3D_API void FillShader( UniformBuffer const & p_sceneBuffer )const;
-		/**
-		 *\~english
 		 *\brief		Updates the lights texture.
 		 *\~french
 		 *\brief		Met à jour la texture de sources lumineuses.
@@ -170,6 +161,28 @@ namespace Castor3D
 		 *\brief		Désactive la texture de sources lumineuses.
 		 */
 		C3D_API void UnbindLights()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the count of the lights of given type.
+		 *\param[in]	p_type	The light type.
+		 *\return		The count.
+		 *\~french
+		 *\brief		Récupère le nombre de lumières du type donné.
+		 *\param[in]	p_type	Le type de lumière.
+		 *\return		Le compte.
+		 */
+		inline uint32_t GetLightsCount( LightType p_type )const
+		{
+			uint32_t l_return = 0u;
+			auto l_it = m_typeSortedLights.find( p_type );
+
+			if ( l_it != m_typeSortedLights.end() )
+			{
+				l_return = uint32_t( l_it->second.size() );
+			}
+
+			return l_return;
+		}
 
 	private:
 		//!\~english The lights sorted byt light type	\~french Les lumières, triées par type de lumière.

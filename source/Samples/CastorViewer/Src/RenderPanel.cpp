@@ -627,6 +627,10 @@ namespace CastorViewer
 				DoStartTimer( eTIMER_ID_DOWN );
 				break;
 
+			case WXK_ALT:
+				m_altDown = true;
+				break;
+
 			case 'L':
 				m_currentNode = m_lightsNode;
 				break;
@@ -692,6 +696,10 @@ namespace CastorViewer
 				DoStopTimer( eTIMER_ID_DOWN );
 				break;
 
+			case WXK_ALT:
+				m_altDown = false;
+				break;
+
 			case 'L':
 				m_currentNode = m_camera.lock()->GetParent();
 				break;
@@ -749,7 +757,36 @@ namespace CastorViewer
 
 		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( MouseButton::eLeft ) )
 		{
-			SetCursor( *m_pCursorNone );
+			if ( m_altDown )
+			{
+				auto l_window = GetRenderWindow();
+
+				if ( l_window )
+				{
+					auto l_x = m_oldX;
+					auto l_y = m_oldY;
+					m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_window, l_x, l_y]()
+					{
+						Camera & l_camera = *l_window->GetCamera();
+						l_camera.Update();
+						auto l_type = l_window->GetPickingPass().Pick( Position{ int( l_x ), int( l_y ) }, l_camera );
+
+						if ( l_type != PickingPass::NodeType::eNone
+							&& l_type != PickingPass::NodeType::eBillboard )
+						{
+							DoUpdateSelectedGeometry( l_window->GetPickingPass().GetPickedGeometry(), l_window->GetPickingPass().GetPickedSubmesh() );
+						}
+						else
+						{
+							DoUpdateSelectedGeometry( nullptr, nullptr );
+						}
+					} ) );
+				}
+			}
+			else
+			{
+				SetCursor( *m_pCursorNone );
+			}
 		}
 
 		p_event.Skip();

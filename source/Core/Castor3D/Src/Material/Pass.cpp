@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
-#include "Render/RenderNode.hpp"
+#include "Render/RenderNode/PassRenderNode.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/Uniform.hpp"
@@ -32,25 +32,6 @@ namespace Castor3D
 			{ TextureChannel::eGloss, cuT( "Gloss" ) },
 			{ TextureChannel::eEmissive, cuT( "Emissive" ) },
 		};
-
-		void DoGetTexture( Pass const & p_pass
-			, RenderPipeline const & p_pipeline
-			, TextureChannel p_channel
-			, String const & p_name
-			, PassRenderNode & p_node )
-		{
-			TextureUnitSPtr l_unit = p_pass.GetTextureUnit( p_channel );
-
-			if ( l_unit )
-			{
-				auto l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
-
-				if ( l_variable )
-				{
-					p_node.m_textures.emplace( l_unit->GetIndex(), *l_variable );
-				}
-			}
-		}
 	}
 
 	//*********************************************************************************************
@@ -143,19 +124,6 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::FillRenderNode( PassRenderNode & p_node )
-	{
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eAmbient, ShaderProgram::MapAmbient, p_node );
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eColour, ShaderProgram::MapColour, p_node );
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, p_node );
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eNormal, ShaderProgram::MapNormal, p_node );
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eSpecular, ShaderProgram::MapSpecular, p_node );
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eEmissive, ShaderProgram::MapEmissive, p_node );
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eOpacity, ShaderProgram::MapOpacity, p_node );
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eGloss, ShaderProgram::MapGloss, p_node );
-		DoGetTexture( *this, p_node.m_pipeline, TextureChannel::eHeight, ShaderProgram::MapHeight, p_node );
-	}
-
 	void Pass::BindTextures()
 	{
 		for ( auto l_it : m_textureUnits )
@@ -227,7 +195,7 @@ namespace Castor3D
 		return CheckFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f;
 	}
 
-	void Pass::UpdateRenderNode( PassRenderNode & p_node )const
+	void Pass::UpdateRenderNode( PassRenderNodeUniforms & p_node )const
 	{
 		for ( auto l_pair : p_node.m_textures )
 		{

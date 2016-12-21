@@ -110,16 +110,6 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Fills a render node's values from this pass.
-		 *\param[in]	p_node		The render node.
-		 *\~french
-		 *\brief		Remplit un noeud de rendu avec les informations de cette passe.
-		 *\param[in]	p_node		Le noeud de rendu.
-		 *\return
-		 */
-		C3D_API void FillRenderNode( PassRenderNode & p_node );
-		/**
-		 *\~english
 		 *\brief		Binds the pass' textures.
 		 *\~french
 		 *\brief		Active les textures de la passe.
@@ -189,7 +179,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader du noeud de rendu donné.
 		 */
-		C3D_API void UpdateRenderNode( PassRenderNode & p_node )const;
+		C3D_API void UpdateRenderNode( PassRenderNodeUniforms & p_node )const;
 		/**
 		 *\~english
 		 *\brief		Reduces the textures.
@@ -438,7 +428,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader du noeud de rendu donné.
 		 */
-		virtual void DoUpdateRenderNode( PassRenderNode & p_node )const = 0;
+		virtual void DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the global alpha value.
