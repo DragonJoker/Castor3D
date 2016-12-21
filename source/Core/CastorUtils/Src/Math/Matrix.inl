@@ -28,7 +28,7 @@ namespace Castor
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( T * p_matrix )
-		: m_data( p_data )
+		: m_data( p_matrix )
 		, m_ownCoords( false )
 	{
 		do_update_columns();
