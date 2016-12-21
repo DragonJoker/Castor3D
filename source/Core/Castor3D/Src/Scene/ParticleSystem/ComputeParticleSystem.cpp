@@ -64,6 +64,12 @@ namespace Castor3D
 
 		if ( l_return )
 		{
+			m_binding = &m_ubo.CreateBinding( *m_updateProgram );
+			l_return = m_binding != nullptr;
+		}
+
+		if ( l_return )
+		{
 			l_return = DoInitialisePipeline();
 		}
 
@@ -79,7 +85,11 @@ namespace Castor3D
 		m_launcherLifetime.reset();
 		m_shellLifetime.reset();
 		m_secondaryShellLifetime.reset();
-		m_randomStorage->Cleanup();
+
+		if ( m_randomStorage )
+		{
+			m_randomStorage->Cleanup();
+		}
 
 		for ( auto & l_storage : m_particlesStorages )
 		{
@@ -93,6 +103,8 @@ namespace Castor3D
 		{
 			m_generatedCountBuffer->Cleanup();
 		}
+
+		m_ubo.Cleanup();
 
 		if ( m_updateProgram )
 		{
@@ -116,6 +128,7 @@ namespace Castor3D
 
 		m_particlesStorages[m_in]->BindTo( 2u );
 		m_particlesStorages[m_out]->BindTo( 3u );
+		m_binding->Bind( 5u );
 
 		m_computePipeline->Run(
 			Point3ui{ std::max( 1u, uint32_t( std::ceil( float( l_particlesCount ) / m_worgGroupSize ) ) ), 1u, 1u },
@@ -151,8 +164,6 @@ namespace Castor3D
 
 		auto & l_particlesOut = m_updateProgram->CreateStorageBuffer( cuT( "ParticlesOut" ), ShaderTypeFlag::eCompute );
 		m_particlesStorages[m_out] = m_updateProgram->FindStorageBuffer( cuT( "ParticlesOut" ) );
-
-		m_binding = &m_ubo.CreateBinding( *p_program );
 	}
 
 	bool ComputeParticleSystem::DoInitialiseParticleStorage()

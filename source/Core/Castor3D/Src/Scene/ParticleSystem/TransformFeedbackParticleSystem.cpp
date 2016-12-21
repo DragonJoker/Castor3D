@@ -98,6 +98,8 @@ namespace Castor3D
 			}
 		}
 
+		m_ubo.Cleanup();
+
 		if ( m_updateProgram )
 		{
 			m_updateProgram->Cleanup();
