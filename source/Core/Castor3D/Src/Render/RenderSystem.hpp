@@ -208,7 +208,7 @@ namespace Castor3D
 		template< class Rep, class Period >
 		inline void IncGpuTime( std::chrono::duration< Rep, Period > const & p_time )
 		{
-			m_gpuTime += std::chrono::duration_cast< std::chrono::milliseconds >( p_time );
+			m_gpuTime += std::chrono::duration_cast< std::chrono::nanoseconds >( p_time );
 		}
 		/**
 		 *\~english
@@ -218,7 +218,7 @@ namespace Castor3D
 		 */
 		inline void ResetGpuTime()
 		{
-			m_gpuTime = std::chrono::milliseconds( 0 );
+			m_gpuTime = std::chrono::nanoseconds( 0 );
 		}
 		/**
 		 *\~english
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Récupère le temps CPU.
 		 *\return		La valeur.
 		 */
-		inline std::chrono::milliseconds GetGpuTime()const
+		inline std::chrono::nanoseconds const & GetGpuTime()const
 		{
 			return m_gpuTime;
 		}
@@ -526,24 +526,33 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 
 	protected:
-		//!\~english Mutex used to make this class thread safe	\~french Mutex pour rendre cette classe thread safe
+		//!\~english	Mutex used to make this class thread safe.
+		//!\~french		Mutex pour rendre cette classe thread safe.
 		std::recursive_mutex m_mutex;
-		//!\~english Tells whether or not it is initialised	\~french Dit si le render system est initialisé
+		//!\~english	Tells whether or not it is initialised.
+		//!\~french		Dit si le render system est initialisé.
 		bool m_initialised;
-		//!\~english The GPU informations.	\~french Les informations sur le GPU.
+		//!\~english	The GPU informations.
+		//!\~french		Les informations sur le GPU.
 		GpuInformations m_gpuInformations;
-		//!\~english The overlay renderer	\~french Le renderer d'overlays
+		//!\~english	The overlay renderer.
+		//!\~french		Le renderer d'overlays.
 		OverlayRendererSPtr m_overlayRenderer;
-		//!\~english The main render context	\~french Le contexte de rendu principal
+		//!\~english	The main render context.
+		//!\~french		Le contexte de rendu principal.
 		ContextSPtr m_mainContext;
-		//!\~english The currently active render context	\~french Le contexte de rendu actuellement actif
+		//!\~english	The currently active render context.
+		//!\~french		Le contexte de rendu actuellement actif.
 		std::map< std::thread::id, ContextRPtr > m_currentContexts;
-		//!\~english Scene stack	\~french Pile des scènes
+		//!\~english	Scene stack.
+		//!\~french		Pile des scènes.
 		std::stack< SceneRPtr > m_stackScenes;
-		//!\~english The current loaded renderer api type	\~french Le type de l'api de rendu actuellement chargée
+		//!\~english	The current loaded renderer api type.
+		//!\~french		Le type de l'api de rendu actuellement chargée.
 		Castor::String m_name;
-		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.
-		std::chrono::milliseconds m_gpuTime;
+		//!\~english	The time spent on GPU for current frame.
+		//!\~french		Le temps passé sur le GPU pour l'image courante.
+		std::chrono::nanoseconds m_gpuTime;
 
 #if C3D_TRACE_OBJECTS
 

@@ -124,8 +124,9 @@ namespace Castor3D
 			m_debugVisibleObjectCount->SetCaption( string::to_string( p_visible ) );
 			m_debugParticlesCount->SetCaption( string::to_string( p_particles ) );
 
-			m_debugGpuClientTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_gpuTime << cuT( " ms" ) );
-			m_debugGpuServerTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0 ) << cuT( " ms" ) );
+			auto l_serverTime = ( std::chrono::duration_cast< std::chrono::microseconds >( GetEngine()->GetRenderSystem()->GetGpuTime() ).count () / 1000.0 );
+			m_debugGpuClientTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( m_gpuTime - l_serverTime ) << cuT( " ms" ) );
+			m_debugGpuServerTime->SetCaption( StringStream() << std::setprecision( 3 ) << l_serverTime << cuT( " ms" ) );
 			GetEngine()->GetRenderSystem()->ResetGpuTime();
 
 			auto l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
