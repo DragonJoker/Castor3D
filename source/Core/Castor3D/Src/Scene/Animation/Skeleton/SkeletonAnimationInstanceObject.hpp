@@ -59,7 +59,9 @@ namespace Castor3D
 		 *\param[in]	p_animationObject	L'animation d'objet.
 		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
 		 */
-		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationObject & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects );
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance
+			, SkeletonAnimationObject & p_animationObject
+			, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
@@ -97,7 +99,8 @@ namespace Castor3D
 		 *\param[in]	p_time				Index de temps courant.
 		 *\param[in]	p_transformations	La matrice de transformation courante.
 		 */
-		C3D_API void Update( real p_time, Castor::Matrix4x4r const & p_transformations );
+		C3D_API void Update( std::chrono::milliseconds const & p_time
+			, Castor::Matrix4x4r const & p_transformations );
 		/**
 		 *\~english
 		 *\brief		The final object's animations transformation.

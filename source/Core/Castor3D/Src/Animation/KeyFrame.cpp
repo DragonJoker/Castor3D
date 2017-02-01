@@ -44,7 +44,10 @@ namespace Castor3D
 		}
 	}
 
-	KeyFrame::KeyFrame( real p_timeIndex, Point3r const & p_translate, Quaternion const & p_rotate, Point3r const & p_scale )
+	KeyFrame::KeyFrame( std::chrono::milliseconds const & p_timeIndex
+		, Point3r const & p_translate
+		, Quaternion const & p_rotate
+		, Point3r const & p_scale )
 		: m_timeIndex{ p_timeIndex }
 		, m_transform{ 1.0_r }
 	{
@@ -53,7 +56,8 @@ namespace Castor3D
 		matrix::scale( m_transform, p_scale );
 	}
 
-	KeyFrame::KeyFrame( real p_timeIndex, Castor::Matrix4x4r const & p_transform )
+	KeyFrame::KeyFrame( std::chrono::milliseconds const & p_timeIndex
+		, Castor::Matrix4x4r const & p_transform )
 		: m_timeIndex{ p_timeIndex }
 		, m_transform{ p_transform }
 	{

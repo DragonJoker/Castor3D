@@ -14,7 +14,10 @@ namespace Castor
 	BlockTimer::~BlockTimer()
 	{
 #if CASTOR_USE_TRACK
-		Logger::LogInfo( StringStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine << cuT( " - time: " ) << m_timer.TimeMs() << cuT( " ms" ) );
+		Logger::LogInfo( StringStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction
+			<< cuT( " in " ) << m_strFile
+			<< cuT( ", line " ) << m_uiLine
+			<< cuT( " - time: " ) << std::chrono::duration_cast< std::chrono::milliseconds >( m_timer.Time() ) << cuT( " ms" ) );
 #endif
 	}
 }

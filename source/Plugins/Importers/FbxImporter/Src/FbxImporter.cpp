@@ -513,8 +513,8 @@ namespace C3dFbx
 
 				if ( l_object )
 				{
-					double l_inc = 1000.0 / 24.0;
-					double l_from = 0.0;
+					auto l_inc = std::chrono::milliseconds{ 1000 / 24 };
+					auto l_from = 0_ms;
 
 					for ( uint64_t i = l_start; i <= l_finish; ++i )
 					{
@@ -529,7 +529,7 @@ namespace C3dFbx
 						Point3r l_scale = l_geoScale
 										  * Point3r{ ( p_fbxNode->EvaluateLocalScaling( l_time ) ).Buffer() }
 										  * Point3r{ ( l_link->EvaluateLocalScaling( l_time ) ).Buffer() };
-						l_object->AddKeyFrame( real( l_from ), l_translate, l_rotate, l_scale );
+						l_object->AddKeyFrame( l_from, l_translate, l_rotate, l_scale );
 						l_from += l_inc;
 					}
 				}

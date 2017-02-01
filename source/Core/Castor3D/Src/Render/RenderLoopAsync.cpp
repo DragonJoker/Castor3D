@@ -211,12 +211,11 @@ namespace Castor3D
 				while ( !IsInterrupted() && IsRendering() && !IsPaused() )
 				{
 					m_frameEnded = false;
-					int32_t l_beginTime = int32_t( GetFrameTime().count() );
-					l_timer.TimeS();
+					l_timer.Time();
 					DoRenderFrame();
-					auto l_endTime = int32_t( l_timer.TimeMs() );
+					auto l_endTime = std::chrono::duration_cast< std::chrono::milliseconds >( l_timer.Time() );
 					m_frameEnded = true;
-					System::Sleep( std::max( 0, l_beginTime - l_endTime ) );
+					std::this_thread::sleep_for( std::max( 0_ms, GetFrameTime() - l_endTime ) );
 				}
 
 				m_ended = true;

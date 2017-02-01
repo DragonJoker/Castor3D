@@ -157,7 +157,7 @@ namespace Castor3D
 			}
 		}
 
-		m_timer.TimeMs();
+		m_timer.Time();
 		return l_return;
 	}
 
@@ -174,11 +174,11 @@ namespace Castor3D
 	void ParticleSystem::Update()
 	{
 		REQUIRE( m_impl );
-		auto l_time = float( m_timer.TimeMs() );
+		auto l_time = std::chrono::duration_cast< std::chrono::milliseconds >( m_timer.Time() );
 
 		if ( m_firstUpdate )
 		{
-			l_time = 0.0f;
+			l_time = 0_ms;
 		}
 
 		m_totalTime += l_time;

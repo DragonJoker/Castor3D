@@ -107,7 +107,9 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de la variable.
 		 *\param[in]	p_type	Le type de la variable.
 		 */
-		C3D_API virtual void AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue ) = 0;
+		C3D_API virtual void AddParticleVariable( Castor::String const & p_name
+			, ElementType p_type
+			, Castor::String const & p_defaultValue ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the particles.
@@ -120,7 +122,8 @@ namespace Castor3D
 		 *\param[in]	p_total	Le temps total écoulé.
 		 *\return		Le nombre de particules.
 		 */
-		C3D_API virtual uint32_t Update( float p_time, float p_total ) = 0;
+		C3D_API virtual uint32_t Update( std::chrono::milliseconds const & p_time
+			, std::chrono::milliseconds const & p_total ) = 0;
 		/**
 		 *\~english
 		 *\return		The implementation type.

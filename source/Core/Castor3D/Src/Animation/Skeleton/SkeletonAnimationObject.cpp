@@ -25,7 +25,7 @@ namespace Castor3D
 				auto & l_out = *l_it;
 				size_t l_index{ 0u };
 				auto const & l_transform = l_in.GetTransform();
-				l_out[l_index++] = l_in.GetTimeIndex();
+				l_out[l_index++] = double( l_in.GetTimeIndex().count() / 1000.0 );
 				l_out[l_index++] = l_transform[0][0];
 				l_out[l_index++] = l_transform[0][1];
 				l_out[l_index++] = l_transform[0][2];
@@ -54,7 +54,7 @@ namespace Castor3D
 			for ( auto & l_in : p_in )
 			{
 				size_t l_index{ 0u };
-				real l_timeIndex{ real( l_in[l_index++] ) };
+				std::chrono::milliseconds l_timeIndex{ int64_t( l_in[l_index++] * 1000.0 ) };
 				Matrix4x4r l_transform{ &l_in[l_index] };
 				( *l_it ) = KeyFrame{ l_timeIndex, l_transform };
 				++l_it;
@@ -75,7 +75,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.m_length, ChunkType::eAnimLength, m_chunk );
+			l_return = DoWriteChunk( real( p_obj.m_length.count() ) * 1000.0_r, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( !p_obj.m_keyframes.empty() )
@@ -122,6 +122,7 @@ namespace Castor3D
 		SkeletonAnimationBoneSPtr l_bone;
 		BinaryChunk l_chunk;
 		uint32_t l_count{ 0 };
+		real l_length{ 0.0_r };
 
 		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
@@ -152,7 +153,8 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eAnimLength:
-				l_return = DoParseChunk( p_obj.m_length, l_chunk );
+				l_return = DoParseChunk( l_length, l_chunk );
+				p_obj.m_length = std::chrono::milliseconds{ int64_t( l_length * 1000 ) };
 				break;
 
 			case ChunkType::eSkeletonAnimationBone:
@@ -202,7 +204,10 @@ namespace Castor3D
 		m_children.push_back( p_object );
 	}
 
-	KeyFrame & SkeletonAnimationObject::AddKeyFrame( real p_from, Point3r const & p_translate, Quaternion const & p_rotate, Point3r const & p_scale )
+	KeyFrame & SkeletonAnimationObject::AddKeyFrame( std::chrono::milliseconds const & p_from
+		, Point3r const & p_translate
+		, Quaternion const & p_rotate
+		, Point3r const & p_scale )
 	{
 		auto l_it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_from]( KeyFrame & p_keyframe )
 		{
@@ -227,7 +232,7 @@ namespace Castor3D
 		return *l_it;
 	}
 
-	void SkeletonAnimationObject::RemoveKeyFrame( real p_time )
+	void SkeletonAnimationObject::RemoveKeyFrame( std::chrono::milliseconds const & p_time )
 	{
 		auto l_it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_time]( KeyFrame const & p_keyframe )
 		{

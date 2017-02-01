@@ -16,7 +16,7 @@ namespace Castor3D
 
 	namespace
 	{
-		inline void DoFind( real p_time,
+		inline void DoFind( std::chrono::milliseconds const & p_time,
 							typename KeyFrameArray::const_iterator const & p_first,
 							typename KeyFrameArray::const_iterator const & p_last,
 							typename KeyFrameArray::const_iterator & p_prv,
@@ -53,7 +53,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationInstanceObject::SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationObject & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
+	SkeletonAnimationInstanceObject::SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance
+		, SkeletonAnimationObject & p_animationObject
+		, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
 		: OwnedBy< SkeletonAnimationInstance >{ p_animationInstance }
 		, m_animationObject{ p_animationObject }
 		, m_prev{ p_animationObject.GetKeyFrames().empty() ? p_animationObject.GetKeyFrames().end() : p_animationObject.GetKeyFrames().begin() }
@@ -85,7 +87,8 @@ namespace Castor3D
 		m_children.push_back( p_object );
 	}
 
-	void SkeletonAnimationInstanceObject::Update( real p_time, Matrix4x4r const & p_transformations )
+	void SkeletonAnimationInstanceObject::Update( std::chrono::milliseconds const & p_time
+		, Matrix4x4r const & p_transformations )
 	{
 		if ( m_animationObject.HasKeyFrames() )
 		{

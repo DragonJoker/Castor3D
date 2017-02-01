@@ -136,10 +136,10 @@ namespace C3dAssimp
 		}
 
 		template< typename T >
-		void DoFind( real p_time,
-					 typename std::map< real, T > const & p_map,
-					 typename std::map< real, T >::const_iterator & p_prv,
-					 typename std::map< real, T >::const_iterator & p_cur )
+		void DoFind( std::chrono::milliseconds p_time,
+					 typename std::map< std::chrono::milliseconds, T > const & p_map,
+					 typename std::map< std::chrono::milliseconds, T >::const_iterator & p_prv,
+					 typename std::map< std::chrono::milliseconds, T >::const_iterator & p_cur )
 		{
 			if ( p_map.empty() )
 			{
@@ -147,7 +147,7 @@ namespace C3dAssimp
 			}
 			else
 			{
-				p_cur = std::find_if( p_map.begin(), p_map.end(), [&p_time]( std::pair< real, T > const & p_pair )
+				p_cur = std::find_if( p_map.begin(), p_map.end(), [&p_time]( std::pair< std::chrono::milliseconds, T > const & p_pair )
 				{
 					return p_pair.first > p_time;
 				} );
@@ -169,7 +169,9 @@ namespace C3dAssimp
 		}
 
 		template< typename T >
-		T DoCompute( real p_from, Interpolator< T > const & p_interpolator, std::map< real, T > const & p_values )
+		T DoCompute( std::chrono::milliseconds const & p_from
+			, Interpolator< T > const & p_interpolator
+			, std::map< std::chrono::milliseconds, T > const & p_values )
 		{
 			T l_return;
 
@@ -182,8 +184,8 @@ namespace C3dAssimp
 				auto l_prv = p_values.begin();
 				auto l_cur = p_values.begin();
 				DoFind( p_from, p_values, l_prv, l_cur );
-				real l_dt = l_cur->first - l_prv->first;
-				real l_factor = ( p_from - l_prv->first ) / l_dt;
+				auto l_dt = l_cur->first - l_prv->first;
+				real l_factor = ( p_from - l_prv->first ).count() / real( l_dt.count() );
 				l_return = p_interpolator.Interpolate( l_prv->second, l_cur->second, l_factor );
 			}
 
@@ -524,7 +526,8 @@ namespace C3dAssimp
 
 			std::for_each( p_aiMeshAnim.mKeys, p_aiMeshAnim.mKeys + p_aiMeshAnim.mNumKeys, [&l_animSubmesh, &p_aiMesh]( aiMeshKey const & p_aiKey )
 			{
-				l_animSubmesh.AddBuffer( real( p_aiKey.mTime ), DoCreateVertexBuffer( *p_aiMesh.mAnimMeshes[p_aiKey.mValue] ) );
+				l_animSubmesh.AddBuffer( std::chrono::milliseconds{ int64_t( p_aiKey.mTime * 1000 ) }
+					, DoCreateVertexBuffer( *p_aiMesh.mAnimMeshes[p_aiKey.mValue] ) );
 			} );
 
 			l_animation.AddChild( std::move( l_animSubmesh ) );
@@ -606,12 +609,12 @@ namespace C3dAssimp
 		}
 
 		auto & l_animation = p_skeleton.CreateAnimation( l_name );
-		real l_ticksPerSecond = real( p_aiAnimation.mTicksPerSecond ? p_aiAnimation.mTicksPerSecond : 25.0_r );
-		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_skeleton, p_aiNode, p_aiAnimation, nullptr );
+		int64_t l_ticksPerMilliSecond = int64_t( p_aiAnimation.mTicksPerSecond ? p_aiAnimation.mTicksPerSecond : 25 );
+		DoProcessAnimationNodes( l_animation, l_ticksPerMilliSecond, p_skeleton, p_aiNode, p_aiAnimation, nullptr );
 		l_animation.UpdateLength();
 	}
 
-	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimation & p_animation, real p_ticksPerSecond, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, SkeletonAnimationObjectSPtr p_object )
+	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimation & p_animation, int64_t p_ticksPerMilliSecond, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, SkeletonAnimationObjectSPtr p_object )
 	{
 		String l_name = string::string_cast< xchar >( p_aiNode.mName.data );
 		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
@@ -636,32 +639,35 @@ namespace C3dAssimp
 				l_object = p_animation.AddObject( p_aiNode.mName.C_Str(), p_object );
 			}
 
-			std::map< real, Point3r > l_translates;
-			std::map< real, Point3r > l_scales;
-			std::map< real, Quaternion > l_rotates;
-			std::set< real > l_times;
+			std::map< std::chrono::milliseconds, Point3r > l_translates;
+			std::map< std::chrono::milliseconds, Point3r > l_scales;
+			std::map< std::chrono::milliseconds, Quaternion > l_rotates;
+			std::set< std::chrono::milliseconds > l_times;
 
 			// We process translations
 			for ( auto const & l_translate : ArrayView< aiVectorKey >( l_aiNodeAnim->mPositionKeys, l_aiNodeAnim->mNumPositionKeys ) )
 			{
-				l_times.insert( real( l_translate.mTime / p_ticksPerSecond ) );
-				l_translates[real( l_translate.mTime / p_ticksPerSecond )] = Point3r{ l_translate.mValue.x, l_translate.mValue.y, l_translate.mValue.z };
+				auto l_time = std::chrono::milliseconds{ int64_t( l_translate.mTime * 1000 ) } / p_ticksPerMilliSecond;
+				l_times.insert( l_time );
+				l_translates[l_time] = Point3r{ l_translate.mValue.x, l_translate.mValue.y, l_translate.mValue.z };
 			}
 
 			// Then we process scalings
 			for ( auto const & l_scale : ArrayView< aiVectorKey >( l_aiNodeAnim->mScalingKeys, l_aiNodeAnim->mNumScalingKeys ) )
 			{
-				l_times.insert( real( l_scale.mTime / p_ticksPerSecond ) );
-				l_scales[real( l_scale.mTime / p_ticksPerSecond )] = Point3r{ l_scale.mValue.x, l_scale.mValue.y, l_scale.mValue.z };
+				auto l_time = std::chrono::milliseconds{ int64_t( l_scale.mTime * 1000 ) } / p_ticksPerMilliSecond;
+				l_times.insert( l_time );
+				l_scales[l_time] = Point3r{ l_scale.mValue.x, l_scale.mValue.y, l_scale.mValue.z };
 			}
 
 			// And eventually the rotations
 			for ( auto const & l_rot : ArrayView< aiQuatKey >( l_aiNodeAnim->mRotationKeys, l_aiNodeAnim->mNumRotationKeys ) )
 			{
-				l_times.insert( real( l_rot.mTime / p_ticksPerSecond ) );
+				auto l_time = std::chrono::milliseconds{ int64_t( l_rot.mTime * 1000 ) } / p_ticksPerMilliSecond;
+				l_times.insert( l_time );
 				Quaternion l_rotate;
 				l_rotate.from_matrix( Matrix4x4r{ Matrix3x3r{ &l_rot.mValue.GetMatrix().Transpose().a1 } } );
-				l_rotates[real( l_rot.mTime / p_ticksPerSecond )] = l_rotate;
+				l_rotates[l_time] = l_rotate;
 			}
 
 			// We synchronise the three arrays
@@ -669,7 +675,7 @@ namespace C3dAssimp
 			InterpolatorT< Point3r, InterpolatorType::eLinear > l_pointInterpolator;
 			InterpolatorT< Quaternion, InterpolatorType::eLinear > l_quatInterpolator;
 
-			if ( p_ticksPerSecond >= GetEngine()->GetRenderLoop().GetWantedFps() )
+			if ( p_ticksPerMilliSecond / 1000 >= GetEngine()->GetRenderLoop().GetWantedFps() )
 			{
 				for ( auto l_time : l_times )
 				{
@@ -682,10 +688,10 @@ namespace C3dAssimp
 			else
 			{
 				// Limit the key frames per second to 60, to spare RAM...
-				real l_step{ 1.0_r / std::min( 60.0_r, real( GetEngine()->GetRenderLoop().GetWantedFps() ) ) };
-				real l_maxTime{ *l_times.rbegin() + l_step };
+				std::chrono::milliseconds l_step{ 1000 / std::min< int64_t >( 60, int64_t( GetEngine()->GetRenderLoop().GetWantedFps() ) ) };
+				std::chrono::milliseconds l_maxTime{ *l_times.rbegin() + l_step };
 
-				for ( real l_time{ 0.0_r }; l_time < l_maxTime; l_time += l_step )
+				for ( std::chrono::milliseconds l_time{ 0 }; l_time < l_maxTime; l_time += l_step )
 				{
 					Point3r l_translate = DoCompute( l_time, l_pointInterpolator, l_translates );
 					Point3r l_scale = DoCompute( l_time, l_pointInterpolator, l_scales );
@@ -715,7 +721,7 @@ namespace C3dAssimp
 
 		for ( uint32_t i = 0; i < p_aiNode.mNumChildren; i++ )
 		{
-			DoProcessAnimationNodes( p_animation, p_ticksPerSecond, p_skeleton, *p_aiNode.mChildren[i], p_aiAnimation, l_object );
+			DoProcessAnimationNodes( p_animation, p_ticksPerMilliSecond, p_skeleton, *p_aiNode.mChildren[i], p_aiAnimation, l_object );
 		}
 	}
 

@@ -65,7 +65,7 @@ namespace Castor3D
 		p_variable.SetValue( m_currentFactor );
 	}
 
-	void MeshAnimationInstanceSubmesh::Update( real p_time )
+	void MeshAnimationInstanceSubmesh::Update( std::chrono::milliseconds const & p_time )
 	{
 		m_currentFactor = 0.0f;
 
@@ -74,8 +74,9 @@ namespace Castor3D
 			 && m_animationObject.GetSubmesh().HasAnimationBuffer() )
 		{
 			auto l_curr = m_curr;
-			DoFind( p_time, m_first, m_last, m_prev, m_curr );
-			m_currentFactor = float( ( p_time - m_prev->m_timeIndex ) / ( m_curr->m_timeIndex - m_prev->m_timeIndex ) );
+			real l_time = real( p_time.count() );
+			DoFind( l_time, m_first, m_last, m_prev, m_curr );
+			m_currentFactor = float( ( l_time - m_prev->m_timeIndex ) / ( m_curr->m_timeIndex - m_prev->m_timeIndex ) );
 
 			if ( l_curr != m_curr )
 			{

@@ -89,7 +89,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::Update
 		 */
-		C3D_API void Update( real p_tslf )override;
+		C3D_API void Update( std::chrono::milliseconds const & p_tslf )override;
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::IsPlayingAnimation
 		 */

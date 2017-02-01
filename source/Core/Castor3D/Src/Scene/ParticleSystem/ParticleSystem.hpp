@@ -295,7 +295,7 @@ namespace Castor3D
 		bool m_firstUpdate{ true };
 		//!\~english	The total elapsed time.
 		//!\~french		Le temps total écoulé.
-		float m_totalTime{ 0.0f };
+		std::chrono::milliseconds m_totalTime{ 0 };
 		//!\~english	The CPU implementation.
 		//!\~french		L'implémentation CPU.
 		CpuParticleSystemUPtr m_cpuImpl;

@@ -20,7 +20,7 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedMesh::Update( real p_tslf )
+	void AnimatedMesh::Update( std::chrono::milliseconds const & p_tslf )
 	{
 		if ( m_playingAnimation )
 		{

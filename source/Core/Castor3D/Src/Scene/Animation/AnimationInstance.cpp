@@ -16,17 +16,17 @@ namespace Castor3D
 	{
 	}
 
-	void AnimationInstance::Update( real p_tslf )
+	void AnimationInstance::Update( std::chrono::milliseconds const & p_tslf )
 	{
 		auto l_length = m_animation.GetLength();
 		auto l_scale = m_scale;
 		auto l_looped = m_looped;
 
-		if ( m_state != AnimationState::eStopped && l_length > 0 )
+		if ( m_state != AnimationState::eStopped && l_length > 0_ms )
 		{
 			if ( m_state == AnimationState::ePlaying )
 			{
-				m_currentTime += ( p_tslf * l_scale );
+				m_currentTime += std::chrono::milliseconds( int64_t( p_tslf.count() * l_scale ) );
 
 				if ( m_currentTime >= l_length )
 				{
@@ -44,12 +44,12 @@ namespace Castor3D
 						while ( m_currentTime >= l_length );
 					}
 				}
-				else if ( m_currentTime < 0.0_r )
+				else if ( m_currentTime < 0_ms )
 				{
 					if ( !l_looped )
 					{
 						m_state = AnimationState::ePaused;
-						m_currentTime = 0.0_r;
+						m_currentTime = 0_ms;
 					}
 					else
 					{
@@ -57,7 +57,7 @@ namespace Castor3D
 						{
 							m_currentTime += m_animation.GetLength();
 						}
-						while ( m_currentTime < 0.0_r );
+						while ( m_currentTime < 0_ms );
 					}
 				}
 			}
@@ -84,7 +84,7 @@ namespace Castor3D
 		if ( m_state != AnimationState::eStopped )
 		{
 			m_state = AnimationState::eStopped;
-			m_currentTime = 0.0;
+			m_currentTime = 0_ms;
 		}
 	}
 
