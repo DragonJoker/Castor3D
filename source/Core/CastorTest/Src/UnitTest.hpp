@@ -36,6 +36,30 @@ namespace Testing
 	}
 
 	template<>
+	inline std::string to_string< std::chrono::milliseconds >( std::chrono::milliseconds const & p_value )
+	{
+		std::stringstream l_stream;
+		l_stream << p_value.count() << "ms";
+		return l_stream.str();
+	}
+
+	template<>
+	inline std::string to_string< std::chrono::microseconds >( std::chrono::microseconds const & p_value )
+	{
+		std::stringstream l_stream;
+		l_stream << p_value.count() << "us";
+		return l_stream.str();
+	}
+
+	template<>
+	inline std::string to_string< std::chrono::nanoseconds >( std::chrono::nanoseconds const & p_value )
+	{
+		std::stringstream l_stream;
+		l_stream << p_value.count() << "ns";
+		return l_stream.str();
+	}
+
+	template<>
 	inline std::string to_string< std::wstring >( std::wstring const & p_value )
 	{
 		std::stringstream l_stream;

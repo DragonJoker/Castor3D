@@ -14,16 +14,33 @@ namespace libffmpeg
 {
 	extern "C"
 	{
+#	include <libavutil/avutil.h>
+#	include <libavutil/error.h>
 #	include <libavutil/opt.h>
-#	include <libavcodec/avcodec.h>
-#	include <libavformat/avformat.h>
 #	include <libavutil/common.h>
 #	include <libavutil/imgutils.h>
 #	include <libavutil/mathematics.h>
 #	include <libavutil/samplefmt.h>
+#	include <libavcodec/avcodec.h>
+#	include <libavformat/avformat.h>
 #	include <libswscale/swscale.h>
 //#	include <libswresample/swresample.h>
+#	if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 6, 0)
+#	include <libavutil/imgutils.h>
+#	endif
 	}
+
+#ifndef AV_ERROR_MAX_STRING_SIZE
+	static constexpr size_t AV_ERROR_MAX_STRING_SIZE = 64;
+
+	static inline char * av_make_error_string( char * errbuf, size_t errbuf_size, int errnum )
+	{
+		av_strerror( errnum, errbuf, errbuf_size );
+		return errbuf;
+	}
+
+#	undef PixelFormat
+#endif
 
 	void CheckError( int p_error, char const * const p_action )
 	{
@@ -424,7 +441,11 @@ namespace GuiCommon
 						std::vector< uint8_t > l_outbuf( l_packet.size );
 						l_packet.pts = m_recordedCount;
 						l_packet.dts = m_recordedCount;
+#	if LIBAVUTIL_VERSION_INT > AV_VERSION_INT(54, 6, 0)
 						l_packet.size = libffmpeg::av_image_get_buffer_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height, 1 );
+#	else
+						l_packet.size = libffmpeg::avpicture_get_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height );
+#	endif
 						l_packet.data = l_outbuf.data();
 						FillPacket( l_packet );
 						m_frame->pts = m_recordedCount++;
