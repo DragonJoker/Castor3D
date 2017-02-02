@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\param[in]	p_time				Index de temps courant.
 		 *\param[in]	p_transformations	La matrice de transformation courante.
 		 */
-		C3D_API void Update( real p_time );
+		C3D_API void Update( std::chrono::milliseconds const & p_time );
 		/**
 		 *\~english
 		 *\brief		Fills a shader variable with this object's skeleton transforms.

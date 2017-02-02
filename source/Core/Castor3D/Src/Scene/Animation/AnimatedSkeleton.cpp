@@ -22,7 +22,7 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedSkeleton::Update( real p_tslf )
+	void AnimatedSkeleton::Update( std::chrono::milliseconds const & p_tslf )
 	{
 		for ( auto l_animation : m_playingAnimations )
 		{

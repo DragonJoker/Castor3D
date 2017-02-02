@@ -71,7 +71,8 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ParticleSystemImpl::Update
 		 */
-		C3D_API uint32_t Update( float p_time, float p_total )override;
+		C3D_API uint32_t Update( std::chrono::milliseconds const & p_time
+			, std::chrono::milliseconds const & p_total )override;
 		/**
 		 *\copydoc		Castor3D::ParticleSystemImpl::AddParticleVariable
 		 */

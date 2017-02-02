@@ -55,7 +55,10 @@ namespace Castor3D
 		 *\param[in]	p_rotate	La rotation au temps de début.
 		 *\param[in]	p_scale		L'échelle au temps de début.
 		 */
-		KeyFrame( real p_timeIndex = 0, Castor::Point3r const & p_translate = {}, Castor::Quaternion const & p_rotate = {}, Castor::Point3r const & p_scale = {} );
+		KeyFrame( std::chrono::milliseconds const & p_timeIndex = 0_ms
+			, Castor::Point3r const & p_translate = {}
+			, Castor::Quaternion const & p_rotate = {}
+			, Castor::Point3r const & p_scale = {} );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -66,7 +69,8 @@ namespace Castor3D
 		 *\param[in]	p_timeIndex	Quand la key frame commence.
 		 *\param[in]	p_transform	La transformation au temps de début.
 		 */
-		KeyFrame( real p_timeIndex, Castor::Matrix4x4r const & p_transform );
+		KeyFrame( std::chrono::milliseconds const & p_timeIndex
+			, Castor::Matrix4x4r const & p_transform );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -94,7 +98,7 @@ namespace Castor3D
 		 *\brief		Récupère le temps de départ
 		 *\return		Le temps
 		 */
-		inline real GetTimeIndex()const
+		inline std::chrono::milliseconds const & GetTimeIndex()const
 		{
 			return m_timeIndex;
 		}
@@ -102,7 +106,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The start time index.
 		//!\~french		L'index de temps de début.
-		real m_timeIndex;
+		std::chrono::milliseconds m_timeIndex;
 		//!\~english	The transformation matrix at start time.
 		//!\~french		La matrice de transformation à l'index de temps de début.
 		Castor::Matrix4x4r m_transform{ 1.0_r };

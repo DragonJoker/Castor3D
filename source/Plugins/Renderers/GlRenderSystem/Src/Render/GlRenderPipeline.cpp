@@ -220,7 +220,7 @@ namespace GlRender
 		DoApply( m_blState, GetOpenGl() );
 		DoApply( m_msState, GetOpenGl() );
 		m_program.Bind();
-		auto l_count{ 0u };
+		uint32_t l_count{ 0u };
 
 		for ( auto & l_binding : m_bindings )
 		{

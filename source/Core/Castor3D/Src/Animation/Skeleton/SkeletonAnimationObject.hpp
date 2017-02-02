@@ -111,7 +111,10 @@ namespace Castor3D
 		 *\param[in]	p_rotate	La rotation au temps de début.
 		 *\param[in]	p_scale		L'échelle au temps de début.
 		 */
-		C3D_API KeyFrame & AddKeyFrame( real p_from, Castor::Point3r const & p_translate = Castor::Point3r{}, Castor::Quaternion const & p_rotate = Castor::Quaternion{}, Castor::Point3r const & p_scale = Castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
+		C3D_API KeyFrame & AddKeyFrame( std::chrono::milliseconds const & p_from
+			, Castor::Point3r const & p_translate = Castor::Point3r{}
+		, Castor::Quaternion const & p_rotate = Castor::Quaternion{}
+		, Castor::Point3r const & p_scale = Castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
 		/**
 		 *\~english
 		 *\brief		Deletes the scaling key frame at time index p_time.
@@ -120,7 +123,7 @@ namespace Castor3D
 		 *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
 		 *\param[in]	p_time	L'index de temps.
 		 */
-		C3D_API void RemoveKeyFrame( real p_time );
+		C3D_API void RemoveKeyFrame( std::chrono::milliseconds const & p_time );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
@@ -147,7 +150,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La durée de l'animation.
 		 */
-		inline real GetLength()const
+		inline std::chrono::milliseconds const & GetLength()const
 		{
 			return m_length;
 		}
@@ -169,7 +172,7 @@ namespace Castor3D
 		 *\brief		Définit la durée de l'animation.
 		 *\param[in]	p_length	La nouvelle valeur.
 		 */
-		inline void	SetLength( real p_length )
+		inline void	SetLength( std::chrono::milliseconds const & p_length )
 		{
 			m_length = p_length;
 		}
@@ -236,7 +239,7 @@ namespace Castor3D
 		InterpolatorType m_mode{ InterpolatorType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
-		real m_length{ 0.0_r };
+		std::chrono::milliseconds m_length{ 0 };
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
 		SkeletonAnimationObjectType m_type;

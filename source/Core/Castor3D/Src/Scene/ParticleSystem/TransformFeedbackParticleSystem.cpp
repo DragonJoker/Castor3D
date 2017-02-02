@@ -107,10 +107,11 @@ namespace Castor3D
 		}
 	}
 
-	uint32_t TransformFeedbackParticleSystem::Update( float p_time, float p_totalTime )
+	uint32_t TransformFeedbackParticleSystem::Update( std::chrono::milliseconds const & p_time
+		, std::chrono::milliseconds const & p_totalTime )
 	{
-		m_deltaTime->SetValue( p_time );
-		m_time->SetValue( p_totalTime );
+		m_deltaTime->SetValue( float( p_time.count() ) );
+		m_time->SetValue( float( p_totalTime.count() ) );
 		m_emitterPosition->SetValue( m_parent.GetParent()->GetDerivedPosition() );
 		m_ubo.Update();
 		auto & l_gbuffers = *m_updateGeometryBuffers[m_vtx];

@@ -69,7 +69,7 @@ namespace Castor3D
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
 		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
 		 */
-		C3D_API void Update( real p_tslf );
+		C3D_API void Update( std::chrono::milliseconds const & p_tslf );
 		/**
 		 *\~english
 		 *\brief		Plays the animation.
@@ -177,7 +177,7 @@ namespace Castor3D
 		bool m_looped{ false };
 		//!\~english	The current playing time.
 		//!\~french		L'index de temps courant.
-		real m_currentTime{ 0.0_r };
+		std::chrono::milliseconds m_currentTime{ 0 };
 		//!\~english	The current state of the animation.
 		//!\~french		L'état actuel de l'animation.
 		AnimationState m_state{ AnimationState::eStopped };

@@ -106,7 +106,7 @@ namespace Castor3D
 		: Named( p_name )
 		, OwnedBy< Scene >( p_scene )
 	{
-		m_timer.TimeS();
+		m_timer.Time();
 	}
 
 	AnimatedObjectGroup::~AnimatedObjectGroup()
@@ -219,11 +219,11 @@ namespace Castor3D
 	{
 #if defined( NDEBUG )
 
-		real l_tslf = real( m_timer.TimeS() );
+		auto l_tslf = std::chrono::duration_cast< std::chrono::milliseconds >( m_timer.Time() );
 
 #else
 
-		real l_tslf = 40 / 1000.0_r;
+		auto l_tslf = 25_ms;
 
 #endif
 

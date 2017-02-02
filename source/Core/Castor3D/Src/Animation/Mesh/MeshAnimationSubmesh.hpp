@@ -117,7 +117,8 @@ namespace Castor3D
 		 *\param[in]	p_timeIndex		L'index de temps.
 		 *\param[in]	p_buffer		Le tampon du sous-maillage.
 		 */
-		C3D_API bool AddBuffer( real p_timeIndex, InterleavedVertexArray && p_buffer );
+		C3D_API bool AddBuffer( std::chrono::milliseconds const & p_timeIndex
+			, InterleavedVertexArray && p_buffer );
 		/**
 		 *\~english
 		 *\return		The vertex buffers.
@@ -154,7 +155,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La durée de l'animation.
 		 */
-		inline real GetLength()const
+		inline std::chrono::milliseconds GetLength()const
 		{
 			return m_length;
 		}
@@ -166,7 +167,7 @@ namespace Castor3D
 		 *\brief		Définit la durée de l'animation.
 		 *\param[in]	p_length	La nouvelle valeur.
 		 */
-		inline void	SetLength( real p_length )
+		inline void	SetLength( std::chrono::milliseconds const & p_length )
 		{
 			m_length = p_length;
 		}
@@ -186,7 +187,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
-		real m_length{ 0.0_r };
+		std::chrono::milliseconds m_length{ 0 };
 		//!\~english	The buffers.
 		//!\~french		Les tampons.
 		SubmeshAnimationBufferArray m_buffers;

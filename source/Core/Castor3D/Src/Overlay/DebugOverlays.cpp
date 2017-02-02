@@ -10,6 +10,15 @@
 #include <algorithm>
 #include <iomanip>
 
+namespace std
+{
+	std::ostream & operator<<( std::ostream & p_stream, std::chrono::nanoseconds const & p_duration )
+	{
+		p_stream << std::setprecision( 3 ) << ( p_duration.count() / 1000000.0_r ) << cuT( " ms" );
+		return p_stream;
+	}
+}
+
 using namespace Castor;
 
 namespace Castor3D
@@ -99,49 +108,50 @@ namespace Castor3D
 	{
 		if ( m_valid && m_visible )
 		{
-			m_gpuTime = 0;
-			m_cpuTime = 0;
-			m_taskTimer.TimeMs();
+			m_gpuTime = 0_ms;
+			m_cpuTime = 0_ms;
+			m_taskTimer.Time();
 		}
 
-		m_externalTime = m_frameTimer.TimeMs();
+		m_externalTime = m_frameTimer.Time();
 	}
 
 	void DebugOverlays::EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible, uint32_t p_particles )
 	{
-		double l_totalTime = m_frameTimer.TimeMs() + m_externalTime;
+		auto l_totalTime = m_frameTimer.Time() + m_externalTime;
 
 		if ( m_valid && m_visible )
 		{
-			m_debugTimer.TimeMs();
+			m_debugTimer.Time();
 			m_framesTimes[m_frameIndex] = l_totalTime;
-			m_debugTotalTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( l_totalTime ) << cuT( " ms" ) );
-			m_debugCpuTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_cpuTime << cuT( " ms" ) );
-			m_externTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_externalTime << cuT( " ms" ) );
+			m_debugTotalTime->SetCaption( StringStream() << l_totalTime );
+			m_debugCpuTime->SetCaption( StringStream() << m_cpuTime );
+			m_externTime->SetCaption( StringStream() << m_externalTime );
 			m_debugVertexCount->SetCaption( string::to_string( p_vertices ) );
 			m_debugFaceCount->SetCaption( string::to_string( p_faces ) );
 			m_debugObjectCount->SetCaption( string::to_string( p_objects ) );
 			m_debugVisibleObjectCount->SetCaption( string::to_string( p_visible ) );
 			m_debugParticlesCount->SetCaption( string::to_string( p_particles ) );
 
-			m_debugGpuClientTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_gpuTime << cuT( " ms" ) );
-			m_debugGpuServerTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0 ) << cuT( " ms" ) );
+			auto l_serverTime = GetEngine()->GetRenderSystem()->GetGpuTime();
+			m_debugGpuClientTime->SetCaption( StringStream() << ( m_gpuTime - l_serverTime ) );
+			m_debugGpuServerTime->SetCaption( StringStream() << l_serverTime );
 			GetEngine()->GetRenderSystem()->ResetGpuTime();
 
-			auto l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
-			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 3 ) << 1000.0 / l_time << cuT( " frames/s" ) );
-			m_debugAverageTime->SetCaption( StringStream() << std::setprecision( 3 ) << l_time << cuT( " ms" ) );
+			auto l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
+			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 4 ) << 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( l_time ).count() << cuT( " fps" ) );
+			m_debugAverageTime->SetCaption( StringStream() << l_time );
 
 			m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
-			l_time = m_debugTimer.TimeMs();
-			m_debugTime->SetCaption( StringStream() << std::setprecision( 3 ) << l_time << cuT( " ms" ) );
+			l_time = m_debugTimer.Time();
+			m_debugTime->SetCaption( StringStream() << l_time );
 
-			m_frameTimer.TimeMs();
+			m_frameTimer.Time();
 		}
 		else
 		{
-			std::cout << "\rTime: " << std::setw( 7 ) << std::setprecision( 4 ) << float( l_totalTime );
-			std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << float( 1000.0f / ( l_totalTime ) );
+			std::cout << "\rTime: " << std::setw( 7 ) << l_totalTime;
+			std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( l_totalTime ).count() );
 		}
 	}
 
@@ -149,7 +159,7 @@ namespace Castor3D
 	{
 		if ( m_valid && m_visible )
 		{
-			m_gpuTime += m_taskTimer.TimeMs();
+			m_gpuTime += m_taskTimer.Time();
 		}
 	}
 
@@ -157,7 +167,7 @@ namespace Castor3D
 	{
 		if ( m_valid && m_visible )
 		{
-			m_cpuTime += m_taskTimer.TimeMs();
+			m_cpuTime += m_taskTimer.Time();
 		}
 	}
 

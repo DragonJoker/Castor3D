@@ -19,9 +19,9 @@ namespace Fireworks
 		constexpr float g_shell = 1.0f;
 		constexpr float g_secondaryShell = 2.0f;
 
-		constexpr float g_launcherCooldown = 100;
-		constexpr float g_shellLifetime = 10000;
-		constexpr float g_secondaryShellLifetime = 2500;
+		constexpr std::chrono::milliseconds g_launcherCooldown = 100_ms;
+		constexpr std::chrono::milliseconds g_shellLifetime = 10000_ms;
+		constexpr std::chrono::milliseconds g_secondaryShellLifetime = 2500_ms;
 
 		inline float GetRandomFloat()
 		{
@@ -35,9 +35,14 @@ namespace Fireworks
 			return Point3f{ GetRandomFloat(), GetRandomFloat(), GetRandomFloat() };
 		}
 
-		inline void DoUpdateLauncher( ParticleSystem & p_system, float p_time, float & p_type, Coords3f & p_position, Coords3f & p_velocity, float & p_age )
+		inline void DoUpdateLauncher( ParticleSystem & p_system
+			, std::chrono::milliseconds const & p_time
+			, float & p_type
+			, Coords3f & p_position
+			, Coords3f & p_velocity
+			, float & p_age )
 		{
-			if ( p_age >= g_launcherCooldown )
+			if ( p_age >= g_launcherCooldown.count() )
 			{
 				Point3f l_velocity{ DoGetRandomDirection() * 5.0f };
 				l_velocity[1] = std::max( l_velocity[1] * 7.0f, 10.0f );
@@ -51,13 +56,18 @@ namespace Fireworks
 			p_position[2] = float( l_position[2] );
 		}
 
-		inline void DoUpdateShell( ParticleSystem & p_system, float p_time, float & p_type, Coords3f & p_position, Coords3f & p_velocity, float & p_age )
+		inline void DoUpdateShell( ParticleSystem & p_system
+			, std::chrono::milliseconds const & p_time
+			, float & p_type
+			, Coords3f & p_position
+			, Coords3f & p_velocity
+			, float & p_age )
 		{
-			Point3f l_delta{ p_time / 1000.0, p_time / 1000.0, p_time / 1000.0 };
+			Point3f l_delta{ p_time.count() / 1000.0, p_time.count() / 1000.0, p_time.count() / 1000.0 };
 			Point3f l_deltaP = l_delta * p_velocity;
 			Point3f l_deltaV = l_delta * Point3f{ 0.0f, -0.981f, 0.0f };
 
-			if ( p_age < g_shellLifetime )
+			if ( p_age < g_shellLifetime.count() )
 			{
 				p_position += l_deltaP;
 				p_velocity += l_deltaV;
@@ -76,11 +86,16 @@ namespace Fireworks
 			}
 		}
 
-		inline void DoUpdateSecondaryShell( ParticleSystem & p_system, float p_time, float & p_type, Coords3f & p_position, Coords3f & p_velocity, float & p_age )
+		inline void DoUpdateSecondaryShell( ParticleSystem & p_system
+			, std::chrono::milliseconds const & p_time
+			, float & p_type
+			, Coords3f & p_position
+			, Coords3f & p_velocity
+			, float & p_age )
 		{
-			if ( p_age < g_secondaryShellLifetime )
+			if ( p_age < g_secondaryShellLifetime.count() )
 			{
-				Point3f l_delta{ p_time / 1000.0, p_time / 1000.0, p_time / 1000.0 };
+				Point3f l_delta{ p_time.count() / 1000.0, p_time.count() / 1000.0, p_time.count() / 1000.0 };
 				Point3f l_deltaP = l_delta * p_velocity;
 				Point3f l_deltaV = l_delta * Point3f{ 0.0f, -0.981f, 0.0f };
 				p_position += l_deltaP;
@@ -92,9 +107,14 @@ namespace Fireworks
 			}
 		}
 
-		inline void DoUpdateParticle( ParticleSystem & p_system, float p_time, float & p_type, Coords3f & p_position, Coords3f & p_velocity, float & p_age )
+		inline void DoUpdateParticle( ParticleSystem & p_system
+			, std::chrono::milliseconds const & p_time
+			, float & p_type
+			, Coords3f & p_position
+			, Coords3f & p_velocity
+			, float & p_age )
 		{
-			p_age += p_time;
+			p_age += p_time.count();
 
 			if ( p_type == g_launcher )
 			{
@@ -152,7 +172,8 @@ namespace Fireworks
 		m_particles[m_firstUnused++] = l_particle;
 	}
 
-	uint32_t ParticleSystem::Update( float p_time, float p_total )
+	uint32_t ParticleSystem::Update( std::chrono::milliseconds const & p_time
+		, std::chrono::milliseconds const & p_total )
 	{
 		auto const l_type = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
 		{

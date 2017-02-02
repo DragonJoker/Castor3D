@@ -113,10 +113,11 @@ namespace Castor3D
 		}
 	}
 
-	uint32_t ComputeParticleSystem::Update( float p_time, float p_totalTime )
+	uint32_t ComputeParticleSystem::Update( std::chrono::milliseconds const & p_time
+		, std::chrono::milliseconds const & p_totalTime )
 	{
-		m_deltaTime->SetValue( p_time );
-		m_time->SetValue( p_totalTime );
+		m_deltaTime->SetValue( float( p_time.count() ) );
+		m_time->SetValue( float( p_totalTime.count() ) );
 		auto l_particlesCount = std::max( 1u, m_particlesCount );
 		m_currentParticleCount->SetValue( l_particlesCount );
 		m_emitterPosition->SetValue( m_parent.GetParent()->GetDerivedPosition() );

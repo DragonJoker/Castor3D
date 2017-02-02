@@ -186,7 +186,7 @@ namespace Castor3D
 		TextOverlaySPtr m_debugParticlesCount;
 		//!\~english	The times of the 100 last frames.
 		//!\~french		Les temps des 100 dernières frames.
-		std::array< double, FRAME_SAMPLES_COUNT > m_framesTimes;
+		std::array< std::chrono::nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes;
 		//!\~english	The current frame index in m_framesTimes.
 		//!\~french		L'index de la frame courante, dans m_framesTimes.
 		uint32_t m_frameIndex{ 0 };
@@ -198,13 +198,13 @@ namespace Castor3D
 		bool m_visible{ false };
 		//!\~english	The CPU time.
 		//!\~french		Le temps CPU.
-		double m_cpuTime{ 0.0 };
+		std::chrono::nanoseconds m_cpuTime{ 0 };
 		//!\~english	The GPU time.
 		//!\~french		Le temps GPU.
-		double m_gpuTime{ 0.0 };
+		std::chrono::nanoseconds m_gpuTime{ 0 };
 		//!\~english	The time spent out of the render loop.
 		//!\~french		Le temps passé hors de la boucle de rendu.
-		double m_externalTime{ 0.0 };
+		std::chrono::nanoseconds m_externalTime{ 0 };
 		//!\~english	The locale used to display times.
 		//!\~french		La locale utilisée pour afficher les temps.
 		std::locale m_timesLocale;
