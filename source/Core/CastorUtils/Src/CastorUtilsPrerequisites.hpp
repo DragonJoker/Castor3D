@@ -546,22 +546,22 @@ constexpr Castor::real operator "" _r( long double p_value )
 	return Castor::real( p_value );
 }
 
-constexpr std::chrono::seconds operator "" _s( uint64_t p_value )
+constexpr std::chrono::seconds operator "" _s( unsigned long long p_value )
 {
 	return std::chrono::seconds( int64_t( p_value ) );
 }
 
-constexpr std::chrono::milliseconds operator "" _ms( uint64_t p_value )
+constexpr std::chrono::milliseconds operator "" _ms( unsigned long long p_value )
 {
 	return std::chrono::milliseconds( int64_t( p_value ) );
 }
 
-constexpr std::chrono::microseconds operator "" _us( uint64_t p_value )
+constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value )
 {
 	return std::chrono::microseconds( int64_t( p_value ) );
 }
 
-constexpr std::chrono::nanoseconds operator "" _ns( uint64_t p_value )
+constexpr std::chrono::nanoseconds operator "" _ns( unsigned long long p_value )
 {
 	return std::chrono::nanoseconds( int64_t( p_value ) );
 }
