@@ -44,38 +44,36 @@ typedef wchar_t ychar;
 
 #define CASTOR_COUCOU Castor::Logger::LogDebug( cuT( "Coucou % 4d : %s @ line %d" ), __COUNTER__, __FUNCTION__, __LINE__ );
 
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 #	include <tchar.h>
 #	define cvsnprintf _vsntprintf_s
-#	if _MSC_VER < 1900
+#	if CASTOR_COMPILER_VERSION < 1900
 #		define sscanf sscanf_s
 #	endif
-#elif defined( __clang__)
-#	if !defined( _WIN32 )
+#elif defined( CASTOR_COMPILER_CLANG )
+#	if !defined( CASTOR_PLATFORM_WINDOWS )
 #		define _FILE_OFFSET_BITS 64
 #		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
 #		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
-#elif defined( __GNUG__)
-#	if !defined( _WIN32 )
+#elif defined( CASTOR_COMPILER_GNUC )
+#	if !defined( CASTOR_PLATFORM_WINDOWS )
 #		define _FILE_OFFSET_BITS 64
 #		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
 #		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
-#elif defined( __BORLANDC__ )
-#	if !defined( _WIN32 )
+#elif defined( CASTOR_COMPILER_BORLAND )
+#	if !defined( CASTOR_PLATFORM_WINDOWS )
 #		define _FILE_OFFSET_BITS 64
 #		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
 #		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
-#else
-#	error "Yet unsupported compiler"
 #endif
 
 #define DECLARE_SMART_PTR( class_name )\

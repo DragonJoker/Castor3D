@@ -12,7 +12,7 @@
 
 namespace Castor
 {
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 	int Vsnprintf( char * p_text, size_t p_count, const char * p_format, va_list p_valist )
 	{
 		return vsnprintf_s( p_text, p_count, p_count, p_format, p_valist );
@@ -28,7 +28,7 @@ namespace Castor
 		return vsnprintf( p_text, p_count, p_format, p_valist );
 	}
 
-#	if defined( _WIN32 )
+#	if defined( CASTOR_PLATFORM_WINDOWS )
 	int Vswprintf( wchar_t * p_text, size_t p_count, const wchar_t * p_format, va_list p_valist )
 	{
 		return vswprintf( p_text, p_format, p_valist );

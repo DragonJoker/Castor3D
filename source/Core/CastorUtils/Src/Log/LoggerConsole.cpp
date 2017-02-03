@@ -1,6 +1,6 @@
 #include "CastorUtilsPch.hpp"
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <Windows.h>
 #	include <tchar.h>
 #	include <codecvt>
@@ -16,8 +16,8 @@
 
 namespace Castor
 {
-#if defined( _WIN32 )
-#	if defined( _MSC_VER )
+#if defined( CASTOR_PLATFORM_WINDOWS )
+#	if defined( CASTOR_COMPILER_MSVC )
 
 	class ConsoleHandle
 	{

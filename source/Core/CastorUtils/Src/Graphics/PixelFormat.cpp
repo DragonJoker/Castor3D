@@ -3,7 +3,7 @@
 
 namespace Castor
 {
-#if defined( _X64 )
+#if defined( _X64 ) && CASTOR_USE_SSE2
 
 	namespace detail
 	{

@@ -3,14 +3,26 @@ option( CASTOR_USE_SSE2 "Use SSE2 instructions for Point4f and Matrix4x4f operat
 project( CastorUtils )
 
 include( Doxygen )
+include( AndroidNdkModules )
 
-find_package( Freetype )
+if ( ANDROID )
+	set( FREETYPE_FOUND TRUE )
+	set( FREETYPE_LIBRARIES FreeType )
+else ()
+	find_package( Freetype )
+endif ()
+
 if ( MSW )
 	find_package( ZLIB 1.2.7 )
 else ()
 	find_package( ZLIB )
 endif ()
-find_package( FreeImage )
+
+if ( ANDROID )
+	set( FREEIMAGE_FOUND TRUE )
+else ()
+	find_package( FreeImage )
+endif ()
 
 if( NOT WIN32 )
 	find_package( X11 )
@@ -29,8 +41,22 @@ if( FREEIMAGE_FOUND )
 endif()
 
 if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
-	include_directories( ${FREETYPE_INCLUDE_DIRS} )
-	include_directories( ${FreeImage_INCLUDE_DIR} )
+	if ( ANDROID )
+		include_directories(
+			${CMAKE_SOURCE_DIR}/Core/FreeType/include
+			${CMAKE_SOURCE_DIR}/Core/FreeType/include/freetype
+			${ANDROID_NDK}/sources
+		)
+		android_ndk_import_module_cpufeatures()
+		set( CastorMinLibraries
+			${CastorMinLibraries}
+			cpufeatures
+		)
+	else ()
+		include_directories( ${FREETYPE_INCLUDE_DIRS} )
+		include_directories( ${FreeImage_INCLUDE_DIR} )
+	endif ()
+
 	include_directories( ${ZLIB_INCLUDE_DIRS} )
   
 	set( CASTOR_HAS_XINERAMA 0 )
@@ -166,6 +192,9 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 	parse_subdir_files( Multithreading "Multithreading" )
 	parse_subdir_files( Pool "Pool" )
 	parse_subdir_files( Stream "Stream" )
+	parse_subdir_files( Platform/Win32 "Platform\\\\Win32" )
+	parse_subdir_files( Platform/Android "Platform\\\\Android" )
+	parse_subdir_files( Platform/Linux "Platform\\\\Linux" )
 
 	file( GLOB CASTOR_Config_HEADER_FILES
 		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.hpp

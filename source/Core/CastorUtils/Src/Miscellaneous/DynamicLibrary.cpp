@@ -3,9 +3,9 @@
 #include "Log/Logger.hpp"
 #include "Utils.hpp"
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_ANDROID ) || defined( CASTOR_PLATFORM_LINUX )
 #	include <dlfcn.h>
 #endif
 
@@ -80,7 +80,7 @@ namespace Castor
 		if ( !m_pLibrary )
 		{
 			std::string l_name( string::string_cast< char >( p_name ) );
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 			//UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 
 			try
@@ -129,7 +129,7 @@ namespace Castor
 		{
 			std::string l_name( string::string_cast< char >( p_name ) );
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 			l_return = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), l_name.c_str() ) );
@@ -173,7 +173,7 @@ namespace Castor
 	{
 		if ( m_pLibrary )
 		{
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 			::FreeLibrary( static_cast< HMODULE >( m_pLibrary ) );

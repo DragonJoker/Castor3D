@@ -116,7 +116,7 @@ namespace Castor
 			ParserParameterArray m_params;
 		};
 
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 
 		/*!
 		\author		Sylvain DOREMUS

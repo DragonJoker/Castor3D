@@ -23,12 +23,6 @@ SOFTWARE.
 #ifndef ___CASTOR_PATH_H___
 #define ___CASTOR_PATH_H___
 
-#ifdef _WIN32
-#	define d_path_slash	cuT( '\\')
-#else
-#	define d_path_slash cuT( '/')
-#endif
-
 #include "Miscellaneous/StringUtils.hpp"
 
 namespace Castor

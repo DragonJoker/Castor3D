@@ -36,7 +36,7 @@ namespace Castor
 		std::string GetError( int p_error )
 		{
 			//std::string l_error( zError( p_error ) );
-			return "(code " + std::to_string( p_error ) + ")";
+			return "(code " + string::to_string( p_error ) + ")";
 		}
 
 		struct ZipImpl

@@ -72,33 +72,35 @@ FT_BEGIN_HEADER
 #	include FT_TYPES_H
 FT_END_HEADER
 
-#	if defined _WIN32
-#		if defined( _MSC_VER )
+#	if defined( CASTOR_PLATFORM_WINDOWS )
+#		if defined( CASTOR_COMPILER_MSVC )
 #			include <tchar.h>
 #		endif
 #		include <windows.h>
 #		include <direct.h>
 #	else
 #		include <sys/time.h>
-#		if defined( __linux__ )
+#		if defined( CASTOR_PLATFORM_ANDROID ) || defined( CASTOR_PLATFORM_LINUX )
 #			include <dlfcn.h>
 #		endif
 #	endif
 
-#	if defined( __GNUG__ )
+#	if defined( CASTOR_COMPILER_GNUC )
 #		include <sys/time.h>
 #		include <errno.h>
 #		include <iostream>
 #		include <unistd.h>
 #		include <cerrno>
-#		if !defined( _WIN32 )
+#		if defined( CASTOR_PLATFORM_LINUX )
 #			include <X11/Xlib.h>
 #		endif
 #	endif
 
 extern "C"
 {
-#	include <FreeImage.h>
+#	if !defined( CASTOR_PLATFORM_ANDROID )
+#		include <FreeImage.h>
+#	endif
 }
 
 #endif
