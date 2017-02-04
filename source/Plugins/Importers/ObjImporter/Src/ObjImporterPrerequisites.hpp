@@ -26,7 +26,7 @@ SOFTWARE.
 #include <Mesh/Importer.hpp>
 #include <Mesh/FaceIndices.hpp>
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_Obj_API
 #else
 #	ifdef ObjImporter_EXPORTS

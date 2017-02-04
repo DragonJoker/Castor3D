@@ -1,4 +1,4 @@
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 #include "Render/GlMswContext.hpp"
 

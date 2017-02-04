@@ -31,7 +31,7 @@ SOFTWARE.
 #include <unordered_map>
 
 #if !defined( CALLBACK )
-#	if defined( _WIN32 )
+#	if defined( CASTOR_PLATFORM_WINDOWS )
 #		define CALLBACK __stdcall
 #	else
 #		define CALLBACK

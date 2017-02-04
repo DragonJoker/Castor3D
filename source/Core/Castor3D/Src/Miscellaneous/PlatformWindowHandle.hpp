@@ -31,9 +31,9 @@ SOFTWARE.
 //
 //*************************************************************************************************
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 #	include <GL/glx.h>
 #else
 #	error "Yet unsupported OS"
@@ -42,7 +42,7 @@ SOFTWARE.
 namespace Castor3D
 {
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 	class IMswWindowHandle
 		: public IWindowHandle
@@ -71,7 +71,7 @@ namespace Castor3D
 		}
 	};
 
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 
 	class IXWindowHandle
 		: public IWindowHandle

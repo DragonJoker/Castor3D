@@ -39,7 +39,7 @@ SOFTWARE.
 
 #pragma warning( pop )
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_Loop_API
 #else
 #	ifdef LoopDivider_EXPORTS

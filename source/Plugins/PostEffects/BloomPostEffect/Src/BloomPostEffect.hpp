@@ -29,7 +29,7 @@ SOFTWARE.
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_Bloom_API
 #else
 #	ifdef BloomPostEffect_EXPORTS

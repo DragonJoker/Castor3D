@@ -101,7 +101,7 @@ namespace GuiCommon
 
 	bool CastorApplication::OnInit()
 	{
-#if defined( _MSC_VER ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
+#if defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 
 		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
@@ -224,18 +224,6 @@ namespace GuiCommon
 			m_locale = std::make_unique< wxLocale >( l_lLanguage, wxLOCALE_LOAD_DEFAULT );
 			// add locale search paths
 			m_locale->AddCatalogLookupPathPrefix( l_pathCurrent / cuT( "share" ) / m_internalName );
-
-#if defined( _MSC_VER )
-#	if defined( NDEBUG )
-
-			m_locale->AddCatalogLookupPathPrefix( l_pathCurrent.GetPath() / cuT( "share" ) / cuT( "Release" ) / m_internalName );
-
-#	else
-
-			m_locale->AddCatalogLookupPathPrefix( l_pathCurrent.GetPath() / cuT( "share" ) / cuT( "Debug" ) / m_internalName );
-
-#	endif
-#endif
 			m_locale->AddCatalog( m_internalName );
 
 			if ( !m_locale->IsOk() )

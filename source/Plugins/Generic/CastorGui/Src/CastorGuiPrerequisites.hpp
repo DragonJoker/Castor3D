@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <Graphics/Colour.hpp>
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_CGui_API
 #else
 #	ifdef CastorGui_EXPORTS

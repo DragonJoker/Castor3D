@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include <CastorUtils.hpp>
 
-#ifdef _WIN32
+#ifdef CASTOR_PLATFORM_WINDOWS
 #	ifdef GlslWriter_EXPORTS
 #		define GlslWriter_API __declspec( dllexport )
 #	else

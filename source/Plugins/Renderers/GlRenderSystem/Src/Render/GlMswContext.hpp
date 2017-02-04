@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___GL_MSW_CONTEXT_H___
 #define ___GL_MSW_CONTEXT_H___
 
-#ifdef _WIN32
+#ifdef CASTOR_PLATFORM_WINDOWS
 #include "Common/GlHolder.hpp"
 #include "Common/OpenGl.hpp"
 

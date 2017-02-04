@@ -11,7 +11,7 @@
 
 #include <assimp/version.h>
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_Assimp_API
 #else
 #	ifdef AssimpImporter_EXPORTS

@@ -428,14 +428,14 @@ namespace GlRender
 
 		Cleanup();
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 		m_pfnMakeCurrent = &wglMakeCurrent;
 		m_pfnSwapBuffers = &::SwapBuffers;
 		m_pfnCreateContext = &wglCreateContext;
 		m_pfnDeleteContext = &wglDeleteContext;
 
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 
 		m_pfnMakeCurrent = &glXMakeCurrent;
 		m_pfnSwapBuffers = &glXSwapBuffers;
@@ -516,14 +516,14 @@ namespace GlRender
 			m_iGlslVersion = 110;
 		}
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 		if ( HasExtension( ARB_create_context ) )
 		{
 			gl_api::GetFunction( cuT( "wglCreateContextAttribsARB" ), m_pfnCreateContextAttribs );
 		}
 
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 
 		if ( HasExtension( ARB_create_context ) )
 		{
@@ -588,7 +588,7 @@ namespace GlRender
 		gl_api::GetFunction( m_pfnActiveTexture, cuT( "glActiveTexture" ), cuT( "ARB" ) );
 		gl_api::GetFunction( m_pfnClientActiveTexture, cuT( "glClientActiveTexture" ), cuT( "ARB" ) );
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 		if ( HasExtension( ARB_create_context ) )
 		{
@@ -600,7 +600,7 @@ namespace GlRender
 			gl_api::GetFunction( cuT( "wglSwapIntervalEXT" ), m_pfnSwapInterval );
 		}
 
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 
 		if ( HasExtension( ARB_create_context ) )
 		{

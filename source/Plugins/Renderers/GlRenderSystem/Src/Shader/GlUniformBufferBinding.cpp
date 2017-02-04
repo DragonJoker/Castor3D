@@ -18,7 +18,7 @@ namespace GlRender
 			{
 				char * l_szChar = new char[l_variable->GetName().size() + 1];
 				l_szChar[l_variable->GetName().size()] = 0;
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 				strncpy_s( l_szChar, l_variable->GetName().size() + 1, string::string_cast< char >( l_variable->GetName() ).c_str(), l_variable->GetName().size() );
 #else
 				strncpy( l_szChar, string::string_cast< char >( l_variable->GetName() ).c_str(), l_variable->GetName().size() );

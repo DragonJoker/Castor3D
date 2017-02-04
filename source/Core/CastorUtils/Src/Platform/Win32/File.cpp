@@ -282,6 +282,41 @@ namespace Castor
 			return TraverseDirectory( p_folderPath, DirectoryFunction(), FileFunction( p_files ) );
 		}
 	}
+
+	bool File::DirectoryDelete( Path const & p_path )
+	{
+		struct FileFunction
+		{
+			void operator()( Path const & p_path )
+			{
+				File::DeleteFile( p_path );
+			}
+		};
+
+		struct DirectoryFunction
+		{
+			bool operator()( Path const & p_path )
+			{
+				bool l_return = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+
+				if ( l_return )
+				{
+					l_return = DeleteEmptyDirectory( p_path );
+				}
+
+				return l_return;
+			}
+		};
+
+		bool l_return = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+
+		if ( l_return )
+		{
+			l_return = DeleteEmptyDirectory( p_path );
+		}
+
+		return l_return;
+	}
 }
 
 #endif

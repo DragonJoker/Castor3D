@@ -1,8 +1,8 @@
 #include "Render/GlContext.hpp"
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include "Render/GlMswContext.hpp"
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 #	include "Render/GlX11Context.hpp"
 #endif
 

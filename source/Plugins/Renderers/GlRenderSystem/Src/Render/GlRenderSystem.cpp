@@ -39,7 +39,7 @@ namespace GlRender
 {
 	namespace
 	{
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 		uint32_t GetVideoMemorySizeBytes()
 		{

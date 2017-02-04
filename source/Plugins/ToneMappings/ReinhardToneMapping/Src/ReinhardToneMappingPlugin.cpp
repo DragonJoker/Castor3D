@@ -9,7 +9,7 @@
 
 using namespace Reinhard;
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_ReinhardToneMapping_API
 #else
 #	ifdef ReinhardToneMapping_EXPORTS

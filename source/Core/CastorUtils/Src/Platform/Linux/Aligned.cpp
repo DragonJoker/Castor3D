@@ -2,12 +2,12 @@
 
 #if defined( CASTOR_PLATFORM_LINUX )
 
-#include "Aligned.hpp"
+#include "Align/Aligned.hpp"
 
 #include "Log/Logger.hpp"
 #include "Exception/Assertion.hpp"
 
-#	if GCC_VERSION >= 50000
+#	if CASTOR_COMPILER_VERSION >= 50000
 #		ifndef _ISOC11_SOURCE
 #			define _ISOC11_SOURCE
 #		endif

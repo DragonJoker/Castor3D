@@ -4,7 +4,7 @@
 
 #include "Miscellaneous/Debug.hpp"
 
-#include "StringUtils.hpp"
+#include "Miscellaneous/StringUtils.hpp"
 #include "Config/MultiThreadConfig.hpp"
 
 #if !defined( NDEBUG )

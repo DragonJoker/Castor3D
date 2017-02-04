@@ -958,7 +958,7 @@ namespace GlRender
 		EXEC_FUNCTION( GetIntegerui64v, pname, params );
 	}
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 	void OpenGl::MakeCurrent( HDC hdc, HGLRC hglrc )const
 	{
@@ -995,7 +995,7 @@ namespace GlRender
 		return EXEC_FUNCTION( DeleteContext, hContext ) == GL_TRUE;
 	}
 
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 
 	void OpenGl::MakeCurrent( Display * pDisplay, GLXDrawable drawable, GLXContext context )const
 	{

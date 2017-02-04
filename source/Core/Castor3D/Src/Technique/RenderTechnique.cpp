@@ -1,4 +1,4 @@
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 

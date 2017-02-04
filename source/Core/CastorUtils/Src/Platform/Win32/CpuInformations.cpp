@@ -34,7 +34,7 @@ void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
 
 #endif
 
-	inline uint32_t get_core_count()
+	uint32_t get_core_count()
 	{
 		SYSTEM_INFO sysinfo = { 0 };
 		::GetSystemInfo( &sysinfo );

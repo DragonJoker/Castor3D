@@ -17,7 +17,7 @@
 #	include "MiniZip/iowin32.h"
 #endif
 
-#if defined( MSDOS ) || defined( OS2 ) || defined( _WIN32 ) || defined( __CYGWIN__ )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <fcntl.h>
 #	include <io.h>
 #	define SET_BINARY_MODE( file ) setmode( fileno( file ), O_BINARY )

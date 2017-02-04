@@ -9,7 +9,7 @@
 
 #include "FxaaPostEffect.hpp"
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_Fxaa_API
 #else
 #	ifdef FxaaPostEffect_EXPORTS

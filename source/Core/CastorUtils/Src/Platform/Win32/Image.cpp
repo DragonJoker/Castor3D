@@ -2,9 +2,9 @@
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
-#include "Graphiics/Image.hpp"
+#include "Graphics/Image.hpp"
 #include "Data/Path.hpp"
-#include "Graphiics/Rectangle.hpp"
+#include "Graphics/Rectangle.hpp"
 #include "Log/Logger.hpp"
 
 extern "C"

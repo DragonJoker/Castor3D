@@ -24,9 +24,10 @@ SOFTWARE.
 #define ___GUICOMMON_PCH_H___
 
 #include <config.hpp>
+#include <Castor3DPrerequisites.hpp>
 
 #if CASTOR_USE_PCH
-#	ifdef _WIN32
+#	ifdef CASTOR_PLATFORM_WINDOWS
 #		if CASTOR_GTK
 #			ifdef __WXGTK__
 #				undef __WXMSW__
@@ -94,7 +95,6 @@ SOFTWARE.
 #	include <Graphics/Colour.hpp>
 #	include <Math/Angle.hpp>
 
-#	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>
 #	include <Cache/ShaderCache.hpp>
 #	include <Animation/Animation.hpp>

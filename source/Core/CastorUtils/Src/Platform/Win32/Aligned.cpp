@@ -2,7 +2,7 @@
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
-#include "Aligned.hpp"
+#include "Align/Aligned.hpp"
 
 #include "Log/Logger.hpp"
 #include "Exception/Assertion.hpp"

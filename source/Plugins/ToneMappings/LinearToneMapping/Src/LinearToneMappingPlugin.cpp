@@ -9,7 +9,7 @@
 
 using namespace Linear;
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_LinearToneMapping_API
 #else
 #	ifdef LinearToneMapping_EXPORTS

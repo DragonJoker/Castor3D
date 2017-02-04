@@ -3,7 +3,7 @@
 #include "Uniform.hpp"
 #include "UniformBuffer.hpp"
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <direct.h>
 #else
 #	include <sys/stat.h>
