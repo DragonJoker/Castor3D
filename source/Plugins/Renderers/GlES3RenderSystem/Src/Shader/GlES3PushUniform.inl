@@ -123,7 +123,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform1v( p_glName, p_occurences, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -131,7 +131,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform2v( p_glName, p_occurences, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -139,7 +139,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform3v( p_glName, p_occurences, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -147,7 +147,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform4v( p_glName, p_occurences, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -227,7 +227,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform2x2v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -235,7 +235,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform2x3v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -243,7 +243,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform2x4v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -251,7 +251,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform3x2v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -259,7 +259,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform3x3v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -267,7 +267,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform3x4v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -275,7 +275,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform4x2v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -283,7 +283,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform4x3v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 
@@ -291,7 +291,7 @@ namespace GlES3Render
 		{
 			static inline void Update( OpenGlES3 const & p_gl, int p_glName, double const * p_value, uint32_t p_occurences )
 			{
-				p_gl.SetUniform4x4v( p_glName, p_occurences, false, p_value );
+				FAILURE( "OpenGL ES 3.X doesn't support double uniforms" );
 			}
 		};
 	}

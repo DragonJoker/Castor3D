@@ -179,27 +179,12 @@ namespace GlES3Render
 
 	void GlES3PboTextureStorageTraits::DoDownloadAsync( TextureStorage & p_storage, TextureImage & p_image )
 	{
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead ) )
-		{
-			auto & l_storage = static_cast< GlES3TextureStorage< GlES3PboTextureStorageTraits > & >( p_storage );
-			auto l_buffer = p_image.GetBuffer();
-			OpenGlES3::PixelFmt l_glPixelFmt = l_storage.GetOpenGlES3().Get( l_buffer->format() );
-
-			m_downloadBuffer->Bind();
-			l_storage.GetOpenGlES3().GetTexImage( l_storage.GetGlES3Type(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, nullptr );
-			m_downloadBuffer->Download( 0u, l_buffer->size(), l_buffer->ptr() );
-		}
+		FAILURE( "OpenGL ES 3.X doesn't support texture read." );
 	}
 
 	void GlES3PboTextureStorageTraits::DoDownloadSync( TextureStorage & p_storage, TextureImage & p_image )
 	{
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead ) )
-		{
-			auto & l_storage = static_cast< GlES3TextureStorage< GlES3PboTextureStorageTraits > & >( p_storage );
-			auto l_buffer = p_image.GetBuffer();
-			OpenGlES3::PixelFmt l_glPixelFmt = l_storage.GetOpenGlES3().Get( l_buffer->format() );
-			l_storage.GetOpenGlES3().GetTexImage( l_storage.GetGlES3Type(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
-		}
+		FAILURE( "OpenGL ES 3.X doesn't support texture read." );
 	}
 
 	void GlES3PboTextureStorageTraits::DoUploadImage( TextureStorage & p_storage, TextureImage const & p_image, uint8_t const * p_buffer )

@@ -8,13 +8,16 @@
 
 namespace Castor
 {
-	void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+	namespace Platform
 	{
-	}
+		void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+		{
+		}
 
-	inline uint32_t get_core_count()
-	{
-		android_getCpuCount();
+		uint32_t get_core_count()
+		{
+			android_getCpuCount();
+		}
 	}
 }
 

@@ -26,16 +26,6 @@ SOFTWARE.
 #include <Mesh/Importer.hpp>
 #include <Mesh/FaceIndices.hpp>
 
-#ifndef CASTOR_PLATFORM_WINDOWS
-#	define C3D_Obj_API
-#else
-#	ifdef ObjImporter_EXPORTS
-#		define C3D_Obj_API __declspec(dllexport)
-#	else
-#		define C3D_Obj_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace Obj
 {
 	struct stNORMAL;

@@ -54,52 +54,13 @@ namespace GlES3Render
 		switch ( GetTarget() )
 		{
 		case TextureType::eOneDimension:
-
-			if ( l_pTexture->GetType() == TextureType::eOneDimension )
-			{
-				GetOpenGlES3().FramebufferTexture1D( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGlES3().Get( l_pTexture->GetType() ), l_pTexture->GetGlES3Name(), 0 );
-			}
-			else
-			{
-				GetOpenGlES3().FramebufferTexture( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlES3Name(), 0 );
-			}
-
-			break;
-
 		case TextureType::eTwoDimensions:
-
-			if ( l_pTexture->GetType() == TextureType::eTwoDimensions )
-			{
-				GetOpenGlES3().FramebufferTexture2D( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGlES3().Get( l_pTexture->GetType() ), l_pTexture->GetGlES3Name(), 0 );
-			}
-			else
-			{
-				GetOpenGlES3().FramebufferTexture( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlES3Name(), 0 );
-			}
-
+			GetOpenGlES3().FramebufferTexture2D( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGlES3().Get( TextureType::eTwoDimensions ), l_pTexture->GetGlES3Name(), 0 );
 			break;
 
 		case TextureType::eThreeDimensions:
-
-			if ( l_pTexture->GetType() == TextureType::eThreeDimensions )
-			{
-				GetOpenGlES3().FramebufferTexture3D( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGlES3().Get( l_pTexture->GetType() ), l_pTexture->GetGlES3Name(), 0, GetLayer() );
-			}
-			else
-			{
-				GetOpenGlES3().FramebufferTexture( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlES3Name(), 0 );
-			}
-
-			break;
-
 		case TextureType::eTwoDimensionsArray:
-			GetOpenGlES3().FramebufferTextureLayer( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlES3Name(), 0, GetLayer() );
-			break;
-
 		case TextureType::eCube:
-			GetOpenGlES3().FramebufferTexture( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlES3Name(), 0 );
-			break;
-
 		case TextureType::eCubeArray:
 			GetOpenGlES3().FramebufferTextureLayer( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlES3Name(), 0, GetLayer() );
 			break;
@@ -128,17 +89,11 @@ namespace GlES3Render
 				switch ( GetTarget() )
 				{
 				case TextureType::eOneDimension:
-					GetOpenGlES3().FramebufferTexture1D( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGlES3().Get( l_pTexture->GetType() ), 0, 0 );
-					break;
-
 				case TextureType::eTwoDimensions:
-					GetOpenGlES3().FramebufferTexture2D( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGlES3().Get( l_pTexture->GetType() ), 0, 0 );
+					GetOpenGlES3().FramebufferTexture2D( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGlES3().Get( TextureType::eTwoDimensions ), 0, 0 );
 					break;
 
 				case TextureType::eThreeDimensions:
-					GetOpenGlES3().FramebufferTexture3D( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGlES3().Get( l_pTexture->GetType() ), 0, 0, GetLayer() );
-					break;
-
 				case TextureType::eTwoDimensionsArray:
 					GetOpenGlES3().FramebufferTextureLayer( GlES3FrameBufferMode::eDefault, m_glAttachmentPoint, 0, 0, GetLayer() );
 					break;

@@ -33,11 +33,7 @@ namespace GlES3Render
 		REQUIRE( GetOpenGlES3().HasFbo() );
 		GetOpenGlES3().BindFramebuffer( GetOpenGlES3().Get( p_target ), 0 );
 
-		if ( p_target == FrameBufferTarget::eDraw )
-		{
-			GetOpenGlES3().DrawBuffer( GetOpenGlES3().Get( p_buffer ) );
-		}
-		else if ( p_target == FrameBufferTarget::eRead )
+		if ( p_target == FrameBufferTarget::eRead )
 		{
 			GetOpenGlES3().ReadBuffer( GetOpenGlES3().Get( p_buffer ) );
 		}

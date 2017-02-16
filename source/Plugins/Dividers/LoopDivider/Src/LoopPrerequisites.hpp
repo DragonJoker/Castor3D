@@ -39,16 +39,6 @@ SOFTWARE.
 
 #pragma warning( pop )
 
-#ifndef CASTOR_PLATFORM_WINDOWS
-#	define C3D_Loop_API
-#else
-#	ifdef LoopDivider_EXPORTS
-#		define C3D_Loop_API __declspec(dllexport)
-#	else
-#		define C3D_Loop_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace Loop
 {
 	class Subdivider;

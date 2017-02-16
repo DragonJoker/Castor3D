@@ -4,8 +4,11 @@
 
 namespace Castor
 {
-	void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data );
-	uint32_t get_core_count();
+	namespace Platform
+	{
+		void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data );
+		uint32_t get_core_count();
+	}
 
 	CpuInformations::CpuInformationsInternal::CpuInformationsInternal()
 	{
@@ -21,12 +24,12 @@ namespace Castor
 
 		std::vector< std::array< int, 4 > > l_datas{};
 		std::array< int32_t, 4 > l_data;
-		call_cpuid( 0u, l_data );
+		Platform::call_cpuid( 0u, l_data );
 		auto l_ids = l_data[0];
 
 		for ( int32_t i = 0; i < l_ids; ++i )
 		{
-			call_cpuid( i, l_data );
+			Platform::call_cpuid( i, l_data );
 			l_datas.push_back( l_data );
 		}
 
@@ -57,7 +60,7 @@ namespace Castor
 			m_f_7_ECX = l_datas[7][2];
 		}
 
-		m_coreCount = get_core_count();
+		m_coreCount = Platform::get_core_count();
 	}
 
 	CpuInformations::CpuInformationsInternal const CpuInformations::m_internal;

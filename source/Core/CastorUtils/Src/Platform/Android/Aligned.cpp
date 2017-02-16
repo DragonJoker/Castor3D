@@ -3,10 +3,7 @@
 #if defined( CASTOR_PLATFORM_ANDROID )
 
 #	include "Align/Aligned.hpp"
-
-#	include "Log/Logger.hpp"
 #	include "Exception/Assertion.hpp"
-
 #	include <cstdlib>
 
 namespace Castor

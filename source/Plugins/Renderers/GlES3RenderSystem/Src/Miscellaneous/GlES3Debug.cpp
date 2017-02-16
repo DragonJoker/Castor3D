@@ -29,35 +29,6 @@ namespace GlES3Render
 	void GlES3Debug::Initialise()
 	{
 		auto & l_gl = GetOpenGlES3();
-
-		if ( l_gl.HasExtension( KHR_debug ) )
-		{
-			gl_api::GetFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "KHR" ) );
-		}
-		else if ( l_gl.HasExtension( ARB_debug_output ) )
-		{
-			gl_api::GetFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "ARB" ) );
-		}
-		else if ( l_gl.HasExtension( AMDX_debug_output ) )
-		{
-			gl_api::GetFunction( m_pfnDebugMessageCallbackAMD, cuT( "glDebugMessageCallbackAMD" ), cuT( "" ) );
-		}
-
-		if ( m_pfnDebugMessageCallback )
-		{
-			m_pfnDebugMessageCallback( PFNGLDEBUGPROC( &GlES3Debug::StDebugLog ), this );
-		}
-
-		if ( m_pfnDebugMessageCallbackAMD )
-		{
-			m_pfnDebugMessageCallbackAMD( PFNGLDEBUGAMDPROC( &GlES3Debug::StDebugLogAMD ), this );
-		}
-		
-		if ( m_pfnDebugMessageCallback || m_pfnDebugMessageCallbackAMD )
-		{
-			GetOpenGlES3().Enable( GlES3Tweak::eDebugOutputSynchronous );
-		}
-
 		FilterMessage( 0x00020072 );
 		// TODO: Investigate on why I get this noisy message
 		FilterMessage( 0x00020096 );
@@ -217,8 +188,6 @@ namespace GlES3Render
 			{ GL_INVALID_ENUM, cuT( "Invalid Enum" ) },
 			{ GL_INVALID_VALUE, cuT( "Invalid Value" ) },
 			{ GL_INVALID_OPERATION, cuT( "Invalid Operation" ) },
-			{ GL_STACK_OVERFLOW, cuT( "Stack Overflow" ) },
-			{ GL_STACK_UNDERFLOW, cuT( "Stack Underflow" ) },
 			{ GL_OUT_OF_MEMORY, cuT( "Out of memory" ) },
 			{ GL_INVALID_FRAMEBUFFER_OPERATION, cuT( "Invalid frame buffer operation" ) },
 		};

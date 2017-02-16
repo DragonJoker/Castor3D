@@ -56,11 +56,11 @@ namespace GlES3Render
 
 	void GlES3Query::DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const
 	{
-		GetOpenGlES3().GetQueryObjectInfos( GetGlES3Name(), GetOpenGlES3().Get( p_infos ), &p_param );
+		//GetOpenGlES3().GetQueryObjectInfos( GetGlES3Name(), GetOpenGlES3().Get( p_infos ), &p_param );
 	}
 
 	void GlES3Query::DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const
 	{
-		GetOpenGlES3().GetQueryObjectInfos( GetGlES3Name(), GetOpenGlES3().Get( p_infos ), &p_param );
+		//GetOpenGlES3().GetQueryObjectInfos( GetGlES3Name(), GetOpenGlES3().Get( p_infos ), &p_param );
 	}
 }

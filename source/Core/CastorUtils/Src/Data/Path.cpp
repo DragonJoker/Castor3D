@@ -9,6 +9,7 @@ namespace Castor
 #else
 	const xchar Path::Separator = cuT( '/' );
 #endif
+
 	Path::Path()
 	{
 	}

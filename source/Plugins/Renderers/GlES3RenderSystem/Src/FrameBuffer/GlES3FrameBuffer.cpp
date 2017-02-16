@@ -64,14 +64,6 @@ namespace GlES3Render
 			{
 				GetOpenGlES3().DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
 			}
-			else
-			{
-				GetOpenGlES3().DrawBuffer( GlES3BufferBinding::eNone );
-			}
-		}
-		else
-		{
-			GetOpenGlES3().DrawBuffer( GlES3BufferBinding::eNone );
 		}
 	}
 

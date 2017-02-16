@@ -291,7 +291,7 @@ namespace Obj
 
 					size_t l_index1 = l_face.find( '/' );
 					std::string l_component = l_face.substr( 0, l_index1 );
-					uint32_t l_iv = std::stoi( l_component ) - 1;
+					uint32_t l_iv = string::to_int( l_component ) - 1;
 					l_vit->m_pos[0] = l_allvtx[l_iv][0];
 					l_vit->m_pos[1] = l_allvtx[l_iv][1];
 					l_vit->m_pos[2] = l_allvtx[l_iv][2];
@@ -302,7 +302,7 @@ namespace Obj
 
 					if ( !l_component.empty() )
 					{
-						uint32_t l_ivt = std::stoi( l_component ) - 1;
+						uint32_t l_ivt = string::to_int( l_component ) - 1;
 						l_vit->m_tex[0] = l_alltex[l_ivt][0];
 						l_vit->m_tex[1] = l_alltex[l_ivt][1];
 					}
@@ -312,7 +312,7 @@ namespace Obj
 
 					if ( !l_component.empty() )
 					{
-						uint32_t l_ivn = std::stoi( l_component ) - 1;
+						uint32_t l_ivn = string::to_int( l_component ) - 1;
 						l_vit->m_nml[0] = l_allnml[l_ivn][0];
 						l_vit->m_nml[1] = l_allnml[l_ivn][1];
 						l_vit->m_nml[2] = l_allnml[l_ivn][2];

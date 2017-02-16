@@ -20,10 +20,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3DGLES3_X11_CONTEXT_H___
-#define ___C3DGLES3_X11_CONTEXT_H___
+#ifndef ___C3DGLES3_EGL_CONTEXT_H___
+#define ___C3DGLES3_EGL_CONTEXT_H___
 
-#if defined( __linux__ )
+#include <Config/PlatformConfig.hpp>
+
+#if defined( CASTOR_PLATFORM_ANDROID )
 #include "Common/GlES3Holder.hpp"
 #include "Common/OpenGlES3.hpp"
 
@@ -47,9 +49,9 @@ namespace GlES3Render
 		void SwapBuffers();
 		void UpdateVSync( bool p_enable );
 
-		inline GLXContext GetContext()
+		inline EGLContext GetContext()
 		{
-			return m_glxContext;
+			return m_eglContext;
 		}
 
 		inline Castor3D::GpuInformations && GetGpuInformations()
@@ -57,19 +59,15 @@ namespace GlES3Render
 			return std::move( m_gpuInformations );
 		}
 
-	private:
-		XVisualInfo * DoCreateVisualInfoWithFBConfig( Castor3D::RenderWindow * p_window, Castor::IntArray p_arrayAttribs, int p_screen );
-		XVisualInfo * DoCreateVisualInfoWithoutFBConfig( Castor::IntArray p_arrayAttribs, int p_screen );
-		bool DoCreateGlES33Context( Castor3D::RenderWindow * p_window );
-
 	protected:
-		GLXContext m_glxContext;
-		int m_glxVersion;
-		Display * m_display;
-		GLXDrawable m_drawable;
-		GLXFBConfig * m_fbConfig;
-		GlES3Context * m_context;
-		bool m_initialised;
+		GlES3Context * m_context{ nullptr };
+		int m_eglVersion{ 10 };
+		EGLDisplay m_display{ 0 };
+		EGLNativeWindowType m_window{ 0 };
+		EGLContext m_eglContext{ 0 };
+		EGLSurface m_eglSurface{ 0 };
+		EGLConfig m_eglConfig{ 0 };
+		bool m_initialised{ false };
 		Castor3D::GpuInformations m_gpuInformations;
 	};
 }

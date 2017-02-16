@@ -50,6 +50,8 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		android_ndk_import_module_cpufeatures()
 		set( CastorMinLibraries
 			${CastorMinLibraries}
+			m
+			EGL
 			cpufeatures
 		)
 	else ()

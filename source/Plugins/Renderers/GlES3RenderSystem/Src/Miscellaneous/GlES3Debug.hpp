@@ -100,11 +100,11 @@ namespace GlES3Render
 
 #if !defined( NDEBUG )
 
-		C3D_GlES3_API bool Track( void * p_object
+		bool Track( void * p_object
 			, std::string const & p_name
 			, std::string const & p_file
 			, int line )const;
-		C3D_GlES3_API bool UnTrack( void * p_object )const;
+		bool UnTrack( void * p_object )const;
 
 		template< typename CreationFunction, typename DestructionFunction >
 		inline bool Track( Object< CreationFunction, DestructionFunction > * p_object

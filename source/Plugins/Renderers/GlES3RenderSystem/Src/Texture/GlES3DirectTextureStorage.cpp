@@ -72,17 +72,9 @@ namespace GlES3Render
 	{
 		uint8_t * l_return = nullptr;
 		auto l_buffer = p_storage.GetOwner()->GetImage( p_index ).GetBuffer();
+		CASTOR_ASSERT( !CheckFlag( p_lock, AccessType::eRead ), "OpenGL ES 3.x doesn't support read from textures." );
 
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
-			 && CheckFlag( p_lock, AccessType::eRead ) )
-		{
-			auto & l_storage = static_cast< GlES3TextureStorage< GlES3DirectTextureStorageTraits > & >( p_storage );
-			OpenGlES3::PixelFmt l_glPixelFmt = l_storage.GetOpenGlES3().Get( l_buffer->format() );
-			l_storage.GetOpenGlES3().GetTexImage( l_storage.GetGlES3Type(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
-		}
-
-		if ( CheckFlag( p_lock, AccessType::eRead )
-			 || CheckFlag( p_lock, AccessType::eWrite ) )
+		if ( CheckFlag( p_lock, AccessType::eWrite ) )
 		{
 			l_return = l_buffer->ptr();
 		}

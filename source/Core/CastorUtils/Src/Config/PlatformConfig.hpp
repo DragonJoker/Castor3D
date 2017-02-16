@@ -25,10 +25,8 @@ SOFTWARE.
 
 #if defined( ANDROID )
 #	define CASTOR_PLATFORM_ANDROID
-#	define CU_API
 #elif defined( __linux__ )
 #	define CASTOR_PLATFORM_LINUX
-#	define CU_API
 #elif defined( _WIN32 )
 #	define CASTOR_PLATFORM_WINDOWS
 #endif
@@ -39,10 +37,11 @@ SOFTWARE.
 #	else
 #		define CU_API __declspec(dllimport)
 #	endif
-#	define CASTOR_DLL_EXT			cuT( "dll")
-#	define dlerror()				::GetLastError()
+#	define CASTOR_DLL_EXT cuT( "dll")
+#	define dlerror() ::GetLastError()
 #else
-#	define CASTOR_DLL_EXT			cuT( "so")
+#	define CASTOR_DLL_EXT cuT( "so")
+#	define CU_API
 #endif
 
 #if !defined( CASTOR_PLATFORM_ANDROID ) && !defined( CASTOR_PLATFORM_LINUX ) && !defined( CASTOR_PLATFORM_WINDOWS )

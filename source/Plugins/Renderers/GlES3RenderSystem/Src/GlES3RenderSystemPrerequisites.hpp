@@ -45,16 +45,6 @@ SOFTWARE.
 #		endif
 #	endif
 
-#ifdef _WIN32
-#	ifdef GlES3RenderSystem_EXPORTS
-#		define C3D_GlES3_API __declspec( dllexport )
-#	else
-#		define C3D_GlES3_API __declspec( dllimport )
-#	endif
-#else
-#	define C3D_GlES3_API
-#endif
-
 #define BUFFER_OFFSET( n ) ( ( uint8_t * )nullptr + ( n ) )
 
 using Castor::real;

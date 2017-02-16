@@ -182,7 +182,7 @@ namespace GlES3Render
 		void DoCleanup()override;
 
 	public:
-		C3D_GlES3_API static Castor::String Name;
+		static Castor::String Name;
 
 	protected:
 		bool m_useVertexBufferObjects;

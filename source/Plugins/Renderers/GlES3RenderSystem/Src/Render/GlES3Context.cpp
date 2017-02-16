@@ -1,9 +1,7 @@
 #include "Render/GlES3Context.hpp"
 
-#if defined( _WIN32 )
-#	include "Render/GlES3MswContext.hpp"
-#elif defined( __linux__ )
-#	include "Render/GlES3X11Context.hpp"
+#if defined( CASTOR_PLATFORM_ANDROID )
+#	include "Render/GlES3EGLContext.hpp"
 #endif
 
 #include "Render/GlES3RenderPipeline.hpp"
@@ -26,7 +24,6 @@ namespace GlES3Render
 	GlES3Context::GlES3Context( GlES3RenderSystem & p_renderSystem, OpenGlES3 & p_gl )
 		: Context{ p_renderSystem }
 		, Holder{ p_gl }
-		, m_glRenderSystem{ &p_renderSystem }
 		, m_implementation{ std::make_unique< GlES3ContextImpl >( GetOpenGlES3(), this ) }
 	{
 	}
@@ -76,11 +73,6 @@ namespace GlES3Render
 
 			GetImpl().UpdateVSync( m_window->GetVSync() );
 			l_engine->GetRenderLoop().UpdateVSync( m_window->GetVSync() );
-
-			if ( m_glRenderSystem->GetOpenGlES3Major() < 3 )
-			{
-				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D" ) );
-			}
 		}
 		else if ( !l_mainContext )
 		{

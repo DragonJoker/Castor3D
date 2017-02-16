@@ -23,15 +23,8 @@ SOFTWARE.
 #ifndef ___C3DGLES3_GlES3Objects___
 #define ___C3DGLES3_GlES3Objects___
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#elif defined( __linux__ )
-#	include <X11/Xlib.h>
-#	include <GL/glx.h>
-#	define GLX_GLXEXT_PROTOTYPES
-#	include <GL/glxext.h>
-#endif
-#include <GL/gl.h>
+#include <egl/egl.h>
+#include <GLES3/gl3.h>
 
 #include "Common/GlES3Object.hpp"
 #include "Miscellaneous/GlES3Debug.hpp"
@@ -50,216 +43,6 @@ SOFTWARE.
 
 namespace GlES3Render
 {
-	class TexFunctionsBase
-		: public Holder
-	{
-	public:
-		TexFunctionsBase( OpenGlES3 & p_gl );
-		virtual void GenerateMipmap( GlES3TexDim p_target )const = 0;
-		virtual void BindTexture( GlES3TexDim p_target, uint32_t texture )const = 0;
-		virtual void TexSubImage1D( GlES3TextureStorageType p_target, int level, int xoffset, int width, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void TexSubImage2D( GlES3TextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void TexSubImage2D( GlES3TextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void TexSubImage2D( GlES3TextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void TexSubImage3D( GlES3TextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void TexImage1D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int border, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void TexImage2D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int height, int border, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void TexImage2D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, Castor::Size const & p_size, int border, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void TexImage3D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int height, int depth, int border, GlES3Format format, GlES3Type type, void const * data )const = 0;
-		virtual void GetTexImage( GlES3TextureStorageType p_target, int level, GlES3Format format, GlES3Type type, void * img )const = 0;
-	};
-
-	class TexFunctions
-		: public TexFunctionsBase
-	{
-	public:
-		TexFunctions( OpenGlES3 & p_gl );
-		inline void BindTexture( GlES3TexDim p_target, uint32_t texture )const override;
-		inline void GenerateMipmap( GlES3TexDim p_target )const override;
-		inline void TexSubImage1D( GlES3TextureStorageType p_target, int level, int xoffset, int width, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexSubImage2D( GlES3TextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexSubImage2D( GlES3TextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexSubImage2D( GlES3TextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexSubImage3D( GlES3TextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexImage1D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int border, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexImage2D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int height, int border, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexImage2D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, Castor::Size const & p_size, int border, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexImage3D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int height, int depth, int border, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void GetTexImage( GlES3TextureStorageType p_target, int level, GlES3Format format, GlES3Type type, void * img )const override;
-
-		std::function< void( uint32_t mode, uint32_t texture ) > m_pfnBindTexture;
-		std::function< void( uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage1D;
-		std::function< void( uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage2D;
-		std::function< void( uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage3D;
-		std::function< void( uint32_t target, int level, int internalFormat, int width, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage1D;
-		std::function< void( uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage2D;
-		std::function< void( uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage3D;
-		std::function< void( uint32_t target, int level, uint32_t format, uint32_t type, void * pixels ) > m_pfnGetTexImage;
-		std::function< void( uint32_t target ) > m_pfnGenerateMipmap;
-	};
-
-	class TexFunctionsDSA
-		: public TexFunctionsBase
-	{
-	public:
-		TexFunctionsDSA( OpenGlES3 & p_gl );
-		inline void BindTexture( GlES3TexDim /*p_target*/, uint32_t texture )const override
-		{
-			m_uiTexture = texture;
-		}
-		inline void GenerateMipmap( GlES3TexDim p_target )const override;
-		inline void TexSubImage1D( GlES3TextureStorageType p_target, int level, int xoffset, int width, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexSubImage2D( GlES3TextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexSubImage2D( GlES3TextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexSubImage2D( GlES3TextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexSubImage3D( GlES3TextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexImage1D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int border, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexImage2D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int height, int border, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexImage2D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, Castor::Size const & p_size, int border, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void TexImage3D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int height, int depth, int border, GlES3Format format, GlES3Type type, void const * data )const override;
-		inline void GetTexImage( GlES3TextureStorageType p_target, int level, GlES3Format format, GlES3Type type, void * img )const override;
-
-		mutable uint32_t m_uiTexture;
-		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage1D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage2D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage3D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage1D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage2D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage3D;
-		std::function< void( uint32_t texture, uint32_t target, int level, uint32_t format, uint32_t type, void * pixels ) > m_pfnGetTextureImage;
-		std::function< void( uint32_t texture, uint32_t target ) > m_pfnGenerateMipmap;
-	};
-
-	class BufFunctionsBase
-		: public Holder
-	{
-	public:
-		BufFunctionsBase( OpenGlES3 & p_gl );
-		virtual void BindBuffer( GlES3BufferTarget target, uint32_t buffer )const = 0;
-		virtual void BufferData( GlES3BufferTarget target, ptrdiff_t size, void const * data, GlES3BufferMode usage )const = 0;
-		virtual void BufferSubData( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const = 0;
-		virtual void CopyBufferSubData( GlES3BufferTarget readtarget, GlES3BufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const = 0;
-		virtual void * MapBuffer( GlES3BufferTarget target, GlES3AccessType access )const = 0;
-		virtual void UnmapBuffer( GlES3BufferTarget target )const = 0;
-		virtual void * MapBufferRange( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const = 0;
-		virtual void GetBufferParameter( GlES3BufferTarget target, GlES3BufferParameter pname, int * params )const = 0;
-		virtual void FlushMappedBufferRange( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t length )const = 0;
-
-		/*@name NV_vertex_buffer_unified_memory extension */
-		//@{
-
-		inline void BufferAddressRange( GlES3Address pname, uint32_t index, uint64_t address, size_t length )const;
-		inline void VertexFormat( int size, GlES3Type type, int stride )const;
-		inline void NormalFormat( GlES3Type type, int stride )const;
-		inline void ColorFormat( int size, GlES3Type type, int stride )const;
-		inline void IndexFormat( GlES3Type type, int stride )const;
-		inline void TexCoordFormat( int size, GlES3Type type, int stride )const;
-		inline void EdgeFlagFormat( int stride )const;
-		inline void SecondaryColorFormat( int size, GlES3Type type, int stride )const;
-		inline void FogCoordFormat( uint32_t type, int stride )const;
-		inline void VertexAttribFormat( uint32_t index, int size, GlES3Type type, bool normalized, int stride )const;
-		inline void VertexAttribIFormat( uint32_t index, int size, GlES3Type type, int stride )const;
-
-		//@}
-		/*@name NV_shader_buffer_load extension */
-		//@{
-
-		inline void MakeBufferResident( GlES3BufferTarget target, GlES3AccessType access )const;
-		inline void MakeBufferNonResident( GlES3BufferTarget target )const;
-		inline bool IsBufferResident( GlES3BufferTarget target )const;
-		inline void MakeNamedBufferResident( uint32_t buffer, GlES3AccessType access )const;
-		inline void MakeNamedBufferNonResident( uint32_t buffer )const;
-		inline bool IsNamedBufferResident( uint32_t buffer )const;
-		inline void GetBufferParameter( GlES3BufferTarget target, GlES3BufferParameter pname, uint64_t * params )const;
-		inline void GetNamedBufferParameter( uint32_t buffer, GlES3BufferParameter pname,  uint64_t * params )const;
-
-		//@}
-		/*@name NV_vertex_buffer_unified_memory extension */
-		//@{
-
-		std::function< void( uint32_t pname, uint32_t index, uint64_t address, size_t length ) > m_pfnBufferAddressRange;
-		std::function< void( int size, uint32_t type, int stride ) > m_pfnVertexFormat;
-		std::function< void( uint32_t type, int stride ) > m_pfnNormalFormat;
-		std::function< void( int size, uint32_t type, int stride ) > m_pfnColorFormat;
-		std::function< void( uint32_t type, int stride ) > m_pfnIndexFormat;
-		std::function< void( int size, uint32_t type, int stride ) > m_pfnTexCoordFormat;
-		std::function< void( int stride ) > m_pfnEdgeFlagFormat;
-		std::function< void( int size, uint32_t type, int stride ) > m_pfnSecondaryColorFormat;
-		std::function< void( uint32_t type, int stride ) > m_pfnFogCoordFormat;
-		std::function< void( uint32_t index, int size, uint32_t type, bool normalized, int stride ) > m_pfnVertexAttribFormat;
-		std::function< void( uint32_t index, int size, uint32_t type, int stride ) > m_pfnVertexAttribIFormat;
-
-		//@}
-		/*@name NV_vertex_buffer_unified_memory extension */
-		//@{
-
-		std::function< void( uint32_t target, uint32_t access ) > m_pfnMakeBufferResident;
-		std::function< void( uint32_t target ) > m_pfnMakeBufferNonResident;
-		std::function< bool( uint32_t target ) > m_pfnIsBufferResident;
-		std::function< void( uint32_t buffer, uint32_t access ) > m_pfnMakeNamedBufferResident;
-		std::function< void( uint32_t buffer ) > m_pfnMakeNamedBufferNonResident;
-		std::function< bool( uint32_t buffer ) > m_pfnIsNamedBufferResident;
-		std::function< void( uint32_t target, uint32_t pname, uint64_t * params ) > m_pfnGetBufferParameterui64v;
-		std::function< void( uint32_t buffer, uint32_t pname,  uint64_t * params ) > m_pfnGetNamedBufferParameterui64v;
-
-		//@}
-	};
-
-	class BufFunctions
-		: public BufFunctionsBase
-	{
-	public:
-		BufFunctions( OpenGlES3 & p_gl );
-		inline void BindBuffer( GlES3BufferTarget target, uint32_t buffer )const override;
-		inline void BufferData( GlES3BufferTarget target, ptrdiff_t size, void const * data, GlES3BufferMode usage )const override;
-		inline void BufferSubData( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
-		inline void CopyBufferSubData( GlES3BufferTarget readtarget, GlES3BufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const override;
-		inline void * MapBuffer( GlES3BufferTarget target, GlES3AccessType access )const override;
-		inline void UnmapBuffer( GlES3BufferTarget target )const override;
-		inline void * MapBufferRange( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const override;
-		inline void GetBufferParameter( GlES3BufferTarget target, GlES3BufferParameter pname, int * params )const override;
-		inline void FlushMappedBufferRange( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
-
-		std::function< void( uint32_t target, uint32_t buffer ) > m_pfnBindBuffer;
-		std::function< void( uint32_t target, ptrdiff_t size, void const * data, uint32_t usage ) > m_pfnBufferData;
-		std::function< void( uint32_t target, ptrdiff_t offset, ptrdiff_t size, void const * data ) > m_pfnBufferSubData;
-		std::function< void( uint32_t readtarget, uint32_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyBufferSubData;
-		std::function< void * ( uint32_t target, uint32_t access ) > m_pfnMapBuffer;
-		std::function< uint8_t( uint32_t target ) > m_pfnUnmapBuffer;
-		std::function< void * ( uint32_t target, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) > m_pfnMapBufferRange;
-		std::function< void( uint32_t target, ptrdiff_t offset, ptrdiff_t length ) > m_pfnFlushMappedBufferRange;
-		std::function< void( uint32_t target, uint32_t pname, int * params ) > m_pfnGetBufferParameteriv;
-	};
-
-	class BufFunctionsDSA
-		: public BufFunctionsBase
-	{
-	public:
-		BufFunctionsDSA( OpenGlES3 & p_gl );
-		inline void BindBuffer( GlES3BufferTarget /*target*/, uint32_t buffer )const override
-		{
-			m_uiBuffer = buffer;
-		}
-		inline void BufferData( GlES3BufferTarget target, ptrdiff_t size, void const * data, GlES3BufferMode usage )const override;
-		inline void BufferSubData( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
-		inline void CopyBufferSubData( GlES3BufferTarget readtarget, GlES3BufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const override;
-		inline void * MapBuffer( GlES3BufferTarget target, GlES3AccessType access )const override;
-		inline void UnmapBuffer( GlES3BufferTarget target )const override;
-		inline void * MapBufferRange( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const override;
-		inline void GetBufferParameter( GlES3BufferTarget target, GlES3BufferParameter pname, int * params )const override;
-		inline void FlushMappedBufferRange( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
-
-		mutable uint32_t m_uiBuffer;
-		std::function< void( uint32_t buffer, ptrdiff_t size, void const * data, uint32_t usage ) > m_pfnNamedBufferData;
-		std::function< void( uint32_t buffer, ptrdiff_t offset, ptrdiff_t size, void const * data ) > m_pfnNamedBufferSubData;
-		std::function< void( uint32_t readtarget, uint32_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyNamedBufferSubData;
-		std::function< void * ( uint32_t buffer, uint32_t access ) > m_pfnMapNamedBuffer;
-		std::function< uint8_t ( uint32_t buffer ) > m_pfnUnmapNamedBuffer;
-		std::function< void * ( uint32_t buffer, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) > m_pfnMapNamedBufferRange;
-		std::function< void( uint32_t buffer, ptrdiff_t offset, ptrdiff_t length ) > m_pfnFlushMappedNamedBufferRange;
-		std::function< void( uint32_t buffer, uint32_t pname, int * params ) > m_pfnGetNamedBufferParameteriv;
-	};
-
 	class OpenGlES3
 		: public Castor::NonCopyable
 	{
@@ -281,15 +64,15 @@ namespace GlES3Render
 		};
 
 	public:
-		C3D_GlES3_API OpenGlES3( GlES3RenderSystem & p_renderSystem );
-		C3D_GlES3_API ~OpenGlES3();
-		C3D_GlES3_API bool PreInitialise( Castor::String const & p_strExtensions );
-		C3D_GlES3_API bool Initialise();
-		C3D_GlES3_API void InitialiseDebug();
-		C3D_GlES3_API void Cleanup();
-		C3D_GlES3_API bool GlES3CheckError( std::string const & p_strText )const;
-		C3D_GlES3_API bool GlES3CheckError( std::wstring const & p_strText )const;
-		C3D_GlES3_API void DisplayExtensions()const;
+		OpenGlES3( GlES3RenderSystem & p_renderSystem );
+		~OpenGlES3();
+		bool PreInitialise( Castor::String const & p_strExtensions );
+		bool Initialise();
+		void InitialiseDebug();
+		void Cleanup();
+		bool GlES3CheckError( std::string const & p_strText )const;
+		bool GlES3CheckError( std::wstring const & p_strText )const;
+		void DisplayExtensions()const;
 
 		inline OpenGlES3 const & GetOpenGlES3()const
 		{
@@ -352,7 +135,6 @@ namespace GlES3Render
 		inline int GetGlslVersion()const;
 		inline GlES3RenderSystem & GetRenderSystem();
 		inline GlES3RenderSystem const & GetRenderSystem()const;
-		inline bool HasExtension( Castor::String const & p_strExtName, bool p_log = true )const;
 		inline GlES3BufferMode GetBufferFlags( uint32_t p_flags )const;
 		inline GlES3Provider GetProvider()const;
 
@@ -367,7 +149,6 @@ namespace GlES3Render
 		inline void Disable( GlES3Tweak mode )const;
 		inline void Enable( GlES3TexDim texture )const;
 		inline void Disable( GlES3TexDim texture )const;
-		inline void SelectBuffer( int size, uint32_t * buffer )const;
 		inline void GetIntegerv( uint32_t pname, int * params )const;
 		inline void GetIntegerv( GlES3Max pname, int * params )const;
 		inline void GetIntegerv( GlES3Min pname, int * params )const;
@@ -376,7 +157,6 @@ namespace GlES3Render
 		inline void DepthFunc( GlES3Comparator p_func )const;
 		inline void DepthMask( bool p_bFlag )const;
 		inline void ColorMask( bool p_r, bool p_g, bool p_b, bool p_a )const;
-		inline void PolygonMode( GlES3Face p_eFacing, GlES3FillMode p_mode )const;
 		inline void StencilOp( GlES3StencilOp p_eStencilFail, GlES3StencilOp p_eDepthFail, GlES3StencilOp p_eStencilPass )const;
 		inline void StencilFunc( GlES3Comparator p_func, int p_iRef, uint32_t p_uiMask )const;
 		inline void StencilMask( uint32_t p_uiMask )const;
@@ -408,31 +188,11 @@ namespace GlES3Render
 		/**@name Context functions */
 		//@{
 
-#if defined( _WIN32 )
-
-		inline void MakeCurrent( HDC hdc, HGLRC hglrc )const;
-		inline void SwapBuffers( HDC hdc )const;
-		inline void SwapInterval( int interval )const;
-		inline HGLRC CreateContext( HDC hdc )const;
-		inline HGLRC CreateContextAttribs( HDC hDC, HGLRC hShareContext, int const * attribList )const;
-		inline bool DeleteContext( HGLRC hContext )const;
-		inline bool HasCreateContextAttribs()const;
-
-#elif defined( __linux__ )
-
-		inline void MakeCurrent( Display * pDisplay, GLXDrawable drawable, GLXContext context )const;
-		inline void SwapBuffers( Display * pDisplay, GLXDrawable drawable )const;
-		inline void SwapInterval( Display * pDisplay, GLXDrawable drawable, int interval )const;
-		inline GLXContext CreateContext( Display * pDisplay, XVisualInfo * pVisualInfo, GLXContext shareList, Bool direct )const;
-		inline GLXContext CreateContextAttribs( Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList )const;
-		inline bool DeleteContext( Display * pDisplay, GLXContext context )const;
-		inline bool HasCreateContextAttribs()const;
-
-#else
-
-#	error "Yet unsupported OS"
-
-#endif
+		inline void MakeCurrent( EGLDisplay display, EGLSurface surfaceDraw, EGLSurface surfaceRead, EGLContext context )const;
+		inline void SwapBuffers( EGLDisplay display, EGLSurface surface )const;
+		inline void SwapInterval( EGLDisplay display, int interval )const;
+		inline EGLContext CreateContext( EGLDisplay display, EGLConfig config, EGLContext share, int * attribs )const;
+		inline bool DeleteContext( EGLDisplay display, EGLContext context )const;
 
 		//@}
 		/**@name Material functions */
@@ -442,10 +202,7 @@ namespace GlES3Render
 		inline void FrontFace( GlES3FrontFaceDirection face )const;
 		inline void BlendFunc( GlES3BlendFactor sfactor, GlES3BlendFactor dfactor )const;
 		inline void BlendFunc( GlES3BlendFactor p_eRgbSrc, GlES3BlendFactor p_eRgbDst, GlES3BlendFactor p_eAlphaSrc, GlES3BlendFactor p_eAlphaDst )const;
-		inline void BlendFunc( uint32_t p_index, GlES3BlendFactor p_eRgbSrc, GlES3BlendFactor p_eRgbDst, GlES3BlendFactor p_eAlphaSrc, GlES3BlendFactor p_eAlphaDst )const;
 		inline void BlendEquation( GlES3BlendOp p_eOp )const;
-		inline void BlendEquation( uint32_t p_uiBuffer, GlES3BlendOp p_eOp )const;
-		inline void ComparisonFunc( GlES3Comparator func, float ref )const;
 
 		//@}
 		/**@name Texture functions */
@@ -456,7 +213,6 @@ namespace GlES3Render
 		inline bool IsTexture( uint32_t texture )const;
 		inline void BindTexture( GlES3TexDim p_target, uint32_t texture )const;
 		inline void ActiveTexture( GlES3TextureIndex target )const;
-		inline void ClientActiveTexture( GlES3TextureIndex target )const;
 		inline void GenerateMipmap( GlES3TexDim p_target )const;
 		inline void TexSubImage1D( GlES3TextureStorageType p_target, int level, int xoffset, int width, GlES3Format format, GlES3Type type, void const * data )const;
 		inline void TexSubImage2D( GlES3TextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlES3Format format, GlES3Type type, void const * data )const;
@@ -469,15 +225,11 @@ namespace GlES3Render
 		inline void TexImage3D( GlES3TextureStorageType p_target, int level, GlES3Internal internalFormat, int width, int height, int depth, int border, GlES3Format format, GlES3Type type, void const * data )const;
 		inline void TexImage2DMultisample( GlES3TextureStorageType p_target, int p_samples, GlES3Internal p_internalFormat, int p_width, int p_height, bool p_fixedSampleLocations )const;
 		inline void TexImage2DMultisample( GlES3TextureStorageType p_target, int p_samples, GlES3Internal p_internalFormat, Castor::Size const & p_size, bool p_fixedSampleLocations )const;
-		inline void GetTexImage( GlES3TextureStorageType p_target, int level, GlES3Format format, GlES3Type type, void * img )const;
 		inline void ReadBuffer( GlES3BufferBinding p_buffer )const;
 		inline void ReadPixels( int x, int y, int width, int height, GlES3Format format, GlES3Type type, void * pixels )const;
 		inline void ReadPixels( Castor::Position const & p_position, Castor::Size const & p_size, GlES3Format format, GlES3Type type, void * pixels )const;
 		inline void ReadPixels( Castor::Rectangle const & p_rect, GlES3Format format, GlES3Type type, void * pixels )const;
-		inline void DrawBuffer( GlES3BufferBinding p_buffer )const;
-		inline void DrawPixels( int width, int height, GlES3Format format, GlES3Type type, void const * data )const;
 		inline void PixelStore( GlES3StorageMode p_mode, int p_iParam )const;
-		inline void PixelStore( GlES3StorageMode p_mode, float p_fParam )const;
 		inline void TexStorage1D( GlES3TextureStorageType target, GLint levels, GlES3Internal internalformat, GLsizei width )const;
 		inline void TexStorage2D( GlES3TextureStorageType target, GLint levels, GlES3Internal internalformat, GLsizei width, GLsizei height )const;
 		inline void TexStorage3D( GlES3TextureStorageType target, GLint levels, GlES3Internal internalformat, GLsizei width, GLsizei height, GLsizei depth )const;
@@ -492,14 +244,12 @@ namespace GlES3Render
 		inline void DeleteSamplers( int count, const uint32_t * samplers )const;
 		inline bool IsSampler( uint32_t sampler )const;
 		inline void BindSampler( uint32_t unit, uint32_t sampler )const;
-		inline void GetSamplerParameter( uint32_t sampler, GlES3SamplerParameter pname, uint32_t * params )const;
 		inline void GetSamplerParameter( uint32_t sampler, GlES3SamplerParameter pname, float * params )const;
 		inline void GetSamplerParameter( uint32_t sampler, GlES3SamplerParameter pname, int * params )const;
 		inline void SetSamplerParameter( uint32_t sampler, GlES3SamplerParameter pname, float param )const;
 		inline void SetSamplerParameter( uint32_t sampler, GlES3SamplerParameter pname, const float * params )const;
 		inline void SetSamplerParameter( uint32_t sampler, GlES3SamplerParameter pname, int param )const;
 		inline void SetSamplerParameter( uint32_t sampler, GlES3SamplerParameter pname, const int * params )const;
-		inline void SetSamplerParameter( uint32_t sampler, GlES3SamplerParameter pname, const uint32_t * params )const;
 
 		//@}
 		/**@name Texture Buffer objects functions */
@@ -518,7 +268,6 @@ namespace GlES3Render
 		inline void BufferData( GlES3BufferTarget target, ptrdiff_t size, void const * data, GlES3BufferMode usage )const;
 		inline void BufferSubData( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const;
 		inline void CopyBufferSubData( GlES3BufferTarget readtarget, GlES3BufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const;
-		inline void * MapBuffer( GlES3BufferTarget target, GlES3AccessType access )const;
 		inline void UnmapBuffer( GlES3BufferTarget target )const;
 		inline void * MapBufferRange( GlES3BufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const;
 		inline void GetBufferParameter( GlES3BufferTarget target, GlES3BufferParameter pname, int * params )const;
@@ -581,11 +330,7 @@ namespace GlES3Render
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glTransformFeedbackVaryings.xhtml
 		*/
-		inline void TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, GlES3AttributeLayout bufferMode )const;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glDrawTransformFeedback.xhtml
-		*/
-		inline void DrawTransformFeedback( GlES3Topology mode, uint32_t p_id )const;
+		inline void TransformFeedbackVaryings( uint32_t program, int count, char const * const * varyings, GlES3AttributeLayout bufferMode )const;
 
 		//@}
 		/**@name FBO functions */
@@ -609,19 +354,7 @@ namespace GlES3Render
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTexture.xml
 		*/
-		inline void FramebufferTexture( GlES3FrameBufferMode p_eBindingMode, GlES3AttachmentPoint p_eAttachment, uint32_t texture, int level )const;
-
-		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTexture.xml
-		*/
-		inline void FramebufferTexture1D( GlES3FrameBufferMode p_eBindingMode, GlES3AttachmentPoint p_eAttachment, GlES3TexDim textarget, uint32_t texture, int level )const;
-
-		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTexture.xml
-		*/
 		inline void FramebufferTexture2D( GlES3FrameBufferMode p_eBindingMode, GlES3AttachmentPoint p_eAttachment, GlES3TexDim textarget, uint32_t texture, int level )const;
-
-		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTexture.xml
-		*/
-		inline void FramebufferTexture3D( GlES3FrameBufferMode p_eBindingMode, GlES3AttachmentPoint p_eAttachment, GlES3TexDim textarget, uint32_t texture, int level, int layer )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTextureLayer.xml
 		*/
@@ -669,7 +402,6 @@ namespace GlES3Render
 		inline void SetUniform( int location, int v0 )const;
 		inline void SetUniform( int location, uint32_t v0 )const;
 		inline void SetUniform( int location, float v0 )const;
-		inline void SetUniform( int location, double v0 )const;
 		inline void SetUniform( int location, int v0, int v1 )const;
 		inline void SetUniform( int location, int v0, int v1, int v2 )const;
 		inline void SetUniform( int location, int v0, int v1, int v2, int v3 )const;
@@ -679,9 +411,6 @@ namespace GlES3Render
 		inline void SetUniform( int location, float v0, float v1 )const;
 		inline void SetUniform( int location, float v0, float v1, float v2 )const;
 		inline void SetUniform( int location, float v0, float v1, float v2, float v3 )const;
-		inline void SetUniform( int location, double v0, double v1 )const;
-		inline void SetUniform( int location, double v0, double v1, double v2 )const;
-		inline void SetUniform( int location, double v0, double v1, double v2, double v3 )const;
 		inline void SetUniform1v( int location, int count, int const * params )const;
 		inline void SetUniform2v( int location, int count, int const * params )const;
 		inline void SetUniform3v( int location, int count, int const * params )const;
@@ -694,10 +423,6 @@ namespace GlES3Render
 		inline void SetUniform2v( int location, int count, float const * params )const;
 		inline void SetUniform3v( int location, int count, float const * params )const;
 		inline void SetUniform4v( int location, int count, float const * params )const;
-		inline void SetUniform1v( int location, int count, double const * params )const;
-		inline void SetUniform2v( int location, int count, double const * params )const;
-		inline void SetUniform3v( int location, int count, double const * params )const;
-		inline void SetUniform4v( int location, int count, double const * params )const;
 		inline void SetUniform2x2v( int location, int count, bool transpose, float const * value )const;
 		inline void SetUniform2x3v( int location, int count, bool transpose, float const * value )const;
 		inline void SetUniform2x4v( int location, int count, bool transpose, float const * value )const;
@@ -707,15 +432,6 @@ namespace GlES3Render
 		inline void SetUniform4x4v( int location, int count, bool transpose, float const * value )const;
 		inline void SetUniform4x2v( int location, int count, bool transpose, float const * value )const;
 		inline void SetUniform4x3v( int location, int count, bool transpose, float const * value )const;
-		inline void SetUniform2x2v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniform2x3v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniform2x4v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniform3x3v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniform3x2v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniform3x4v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniform4x4v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniform4x2v( int location, int count, bool transpose, double const * value )const;
-		inline void SetUniform4x3v( int location, int count, bool transpose, double const * value )const;
 
 		//@}
 		/**@name Uniform Buffer Objects Functions */
@@ -724,7 +440,7 @@ namespace GlES3Render
 		inline uint32_t GetUniformBlockIndex( uint32_t shader, char const * uniformBlockName )const;
 		inline void BindBufferBase( GlES3BufferTarget target, uint32_t index, uint32_t buffer )const;
 		inline void UniformBlockBinding( uint32_t shader, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding )const;
-		inline void GetUniformIndices( uint32_t shader, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices )const;
+		inline void GetUniformIndices( uint32_t shader, int uniformCount, char const * const * uniformNames, uint32_t * uniformIndices )const;
 		inline void GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, GlES3UniformValue pname, int * params )const;
 		inline void GetActiveUniformBlockiv( uint32_t shader, uint32_t uniformBlockIndex, GlES3UniformBlockValue pname, int * params )const;
 
@@ -740,7 +456,7 @@ namespace GlES3Render
 		inline void CompileShader( uint32_t program )const;
 		inline void GetShaderiv( uint32_t program, GlES3ShaderStatus pname, int * param )const;
 		inline void GetShaderInfoLog( uint32_t program, int bufSize, int * length, char * infoLog )const;
-		inline void ShaderSource( uint32_t program, int count, char const ** strings, int const * lengths )const;
+		inline void ShaderSource( uint32_t program, int count, char const * const * strings, int const * lengths )const;
 		inline void GetActiveAttrib( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
 		inline void GetActiveUniform( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
 
@@ -757,18 +473,6 @@ namespace GlES3Render
 		inline int GetAttribLocation( uint32_t program, char const * name )const;
 		inline bool IsProgram( uint32_t program )const;
 		inline void ProgramParameteri( uint32_t program, uint32_t pname, int value )const;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glDispatchCompute.xhtml
-		*/
-		inline void DispatchCompute( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z )const;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glDispatchComputeGroupSize.xhtml
-		*/
-		inline void DispatchComputeGroupSize( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z, uint32_t work_group_size_x, uint32_t work_group_size_y, uint32_t work_group_size_z )const;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glShaderStorageBlockBinding.xhtml
-		*/
-		inline void ShaderStorageBlockBinding( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding )const;
 
 		//@}
 		/**@name Vertex Attribute Pointer functions */
@@ -789,12 +493,6 @@ namespace GlES3Render
 		inline void DeleteVertexArrays( int n, uint32_t const * arrays )const;
 
 		//@}
-		/**@name Tesselation functions */
-		//@{
-
-		inline void PatchParameter( GlES3PatchParameter p_param, int p_iValue )const;
-
-		//@}
 		/**@name Query functions */
 		//@{
 
@@ -803,34 +501,8 @@ namespace GlES3Render
 		inline bool IsQuery( uint32_t p_query )const;
 		inline void BeginQuery( GlES3QueryType p_target, uint32_t p_query )const;
 		inline void EndQuery( GlES3QueryType p_target )const;
-		inline void QueryCounter( uint32_t p_id, GlES3QueryType p_target )const;
 		inline void GetQueryObjectInfos( uint32_t p_id, GlES3QueryInfo p_name, int32_t * p_params )const;
 		inline void GetQueryObjectInfos( uint32_t p_id, GlES3QueryInfo p_name, uint32_t * p_params )const;
-		inline void GetQueryObjectInfos( uint32_t p_id, GlES3QueryInfo p_name, int64_t * p_params )const;
-		inline void GetQueryObjectInfos( uint32_t p_id, GlES3QueryInfo p_name, uint64_t * p_params )const;
-
-		//@}
-		/**@name GL_ARB_program_interface_query */
-		//@{
-
-		inline void GetProgramInterfaceInfos( uint32_t program, GlslInterface programInterface, GlslDataName name, int * params );
-		inline int GetProgramResourceIndex( uint32_t program, GlslInterface programInterface, char const * const name );
-		inline int GetProgramResourceLocation( uint32_t program, GlslInterface programInterface, char const * const name );
-		inline int GetProgramResourceLocationIndex( uint32_t program, GlslInterface programInterface, char const * const name );
-		inline void GetProgramResourceName( uint32_t program, GlslInterface programInterface, uint32_t index, int bufSize, int * length, char * name );
-		inline void GetProgramResourceInfos( uint32_t program, GlslInterface programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params );
-
-		//@}
-		/**@name Memory transactions functions */
-		//@{
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
-		*/
-		inline void MemoryBarrier( Castor::FlagCombination< GlES3BarrierBit > const & barriers )const;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
-		*/
-		inline void MemoryBarrierByRegion( Castor::FlagCombination< GlES3BarrierBit > const & barriers )const;
 
 		//@}
 		/**@name Other functions */
@@ -935,523 +607,11 @@ namespace GlES3Render
 		bool m_bHasInstancedArrays{ false };
 		bool m_bHasDirectStateAccess{ false };
 		bool m_bHasNonPowerOfTwoTextures{ false };
-		TexFunctionsBase * m_pTexFunctions{ nullptr };
-		BufFunctionsBase * m_pBufFunctions{ nullptr };
 		GlES3RenderSystem & m_renderSystem;
 		GlES3Provider m_gpu{ GlES3Provider::eUnknown };
 
 		GlES3Debug m_debug;
-
-		/**@name General */
-		//@{
-
-		std::function< void( float red, float green, float blue, float alpha ) > m_pfnClearColor;
-		std::function< void( double value ) > m_pfnClearDepth;
-		std::function< void( uint32_t mask ) > m_pfnClear;
-		std::function< void( uint32_t mode ) > m_pfnEnable;
-		std::function< void( uint32_t mode ) > m_pfnDisable;
-		std::function< void( int size, uint32_t * buffer ) > m_pfnSelectBuffer;
-		std::function< void( uint32_t pname, int * params ) > m_pfnGetIntegerv;
-
-		//@}
-		/**@name Depth stencil state */
-		//@{
-
-		std::function< void( uint32_t func ) >m_pfnDepthFunc;
-		std::function< void( uint8_t flag ) > m_pfnDepthMask;
-		std::function< void( uint8_t r, uint8_t g, uint8_t b, uint8_t a ) > m_pfnColorMask;
-		std::function< void( uint32_t sfail, uint32_t dpfail, uint32_t dppass ) > m_pfnStencilOp;
-		std::function< void( uint32_t func, int ref, uint32_t mask ) > m_pfnStencilFunc;
-		std::function< void( uint32_t mask ) > m_pfnStencilMask;
-		std::function< void( uint32_t face, uint32_t sfail, uint32_t dpfail, uint32_t dppass ) > m_pfnStencilOpSeparate;
-		std::function< void( uint32_t frontFunc, uint32_t backFunc, int ref, uint32_t mask ) > m_pfnStencilFuncSeparate;
-		std::function< void( uint32_t face, uint32_t mask ) > m_pfnStencilMaskSeparate;
-
-		//@}
-		/**@name Rasterizer state */
-		//@{
-
-		std::function< void( uint32_t face, uint32_t mode ) > m_pfnPolygonMode;
-		std::function< void( uint32_t face ) > m_pfnCullFace;
-		std::function< void( uint32_t face ) > m_pfnFrontFace;
-		std::function< void( uint32_t target, uint32_t mode ) > m_pfnHint;
-		std::function< void( float factor, float units ) >m_pfnPolygonOffset;
-
-		//@}
-		/**@name Blend state */
-		//@{
-
-		std::function< void( float red, float green, float blue, float alpha ) > m_pfnBlendColor;
-		std::function< void( uint32_t srcRGB, uint32_t dstRGB, uint32_t srcAlpha, uint32_t dstAlpha ) > m_pfnBlendFuncSeparate;
-		std::function< void( uint32_t buf, uint32_t srcRGB, uint32_t dstRGB, uint32_t srcAlpha, uint32_t dstAlpha ) > m_pfnBlendFuncSeparatei;
-		std::function< void( uint32_t mode ) > m_pfnBlendEquation;
-		std::function< void( uint32_t buf, uint32_t mode ) > m_pfnBlendEquationi;
-		std::function< void( float value, uint8_t invert ) > m_pfnSampleCoverage;
-
-		//@}
-		/**@name Buffer rendering */
-		//@{
-
-		std::function< void( uint32_t mode, int first, int count ) > m_pfnDrawArrays;
-		std::function< void( uint32_t mode, int count, uint32_t type, void const * indices ) > m_pfnDrawElements;
-		std::function< void( uint32_t mode, int first, int count, int primcount ) > m_pfnDrawArraysInstanced;
-		std::function< void( uint32_t mode, int count, uint32_t type, const void * indices, int primcount ) > m_pfnDrawElementsInstanced;
-		std::function< void( uint32_t index, uint32_t divisor ) > m_pfnVertexAttribDivisor;
-
-		//@}
-		/**@name Context */
-		//@{
-
-#if defined( _WIN32 )
-		std::function< BOOL( HDC hdc, HGLRC hglrc ) > m_pfnMakeCurrent;
-		std::function< BOOL( HDC hdc ) > m_pfnSwapBuffers;
-		std::function< HGLRC( HDC hdc ) > m_pfnCreateContext;
-		std::function< BOOL( HGLRC hContext ) > m_pfnDeleteContext;
-		std::function< HGLRC( HDC hDC, HGLRC hShareContext, int const * attribList ) > m_pfnCreateContextAttribs;
-		std::function< BOOL( int interval ) > m_pfnSwapInterval;
-#elif defined ( __linux__ )
-		std::function< int( Display * pDisplay, GLXDrawable drawable, GLXContext context ) > m_pfnMakeCurrent;
-		std::function< void( Display * pDisplay, GLXDrawable drawable ) > m_pfnSwapBuffers;
-		std::function< GLXContext( Display * pDisplay, XVisualInfo * pVisualInfo, GLXContext shareList, Bool direct ) > m_pfnCreateContext;
-		std::function< void( Display * pDisplay, GLXContext context ) > m_pfnDeleteContext;
-		std::function< GLXContext( Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList ) > m_pfnCreateContextAttribs;
-		std::function< void( Display * pDisplay, GLXDrawable drawable, int interval ) > m_pfnSwapInterval;
-#else
-#	error "Yet unsupported OS"
-#endif
-
-		//@}
-		/**@name Matrix */
-		//@{
-
-		std::function< void( int x, int y, int width, int height ) > m_pfnViewport;
-
-		//@}
-		/**@name Material */
-		//@{
-
-		std::function< void( uint32_t sfactor, uint32_t dfactor ) > m_pfnBlendFunc;
-		std::function< void( uint32_t func, float ref ) > m_pfnAlphaFunc;
-		std::function< void( uint32_t face, uint32_t pname, float param ) > m_pfnMaterialf;
-		std::function< void( uint32_t face, uint32_t pname, float const * params ) > m_pfnMaterialfv;
-
-		//@}
-		/**@name Texture */
-		//@{
-
-		std::function< void( int n, uint32_t * textures ) > m_pfnGenTextures;
-		std::function< void( int n, uint32_t const * textures ) > m_pfnDeleteTextures;
-		std::function< uint8_t( uint32_t texture ) > m_pfnIsTexture;
-		std::function< void( uint32_t texture ) > m_pfnActiveTexture;
-		std::function< void( uint32_t texture ) > m_pfnClientActiveTexture;
-		std::function< void( uint32_t mode ) > m_pfnReadBuffer;
-		std::function< void( int x, int y, int width, int height, uint32_t format, uint32_t type, void * pixels ) > m_pfnReadPixels;
-		std::function< void( uint32_t mode ) > m_pfnDrawBuffer;
-		std::function< void( int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnDrawPixels;
-		std::function< void( uint32_t pname, int param ) > m_pfnPixelStorei;
-		std::function< void( uint32_t pname, float param ) > m_pfnPixelStoref;
-		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width ) > m_pfnTexStorage1D;
-		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height ) > m_pfnTexStorage2D;
-		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth ) > m_pfnTexStorage3D;
-		std::function< void( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations ) > m_pfnTexStorage2DMultisample;
-		std::function< void( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations ) > m_pfnTexStorage3DMultisample;
-
-		//@}
-		/**@name Sampler */
-		//@{
-
-		std::function< void( int count, const uint32_t * samplers ) > m_pfnDeleteSamplers;
-		std::function< void( int count, uint32_t * samplers ) > m_pfnGenSamplers;
-		std::function< uint8_t( uint32_t sampler ) > m_pfnIsSampler;
-		std::function< void( uint32_t unit, uint32_t sampler ) > m_pfnBindSampler;
-		std::function< void( uint32_t sampler, uint32_t pname, uint32_t * params ) > m_pfnGetSamplerParameteruiv;
-		std::function< void( uint32_t sampler, uint32_t pname, float * params ) > m_pfnGetSamplerParameterfv;
-		std::function< void( uint32_t sampler, uint32_t pname, int * params ) > m_pfnGetSamplerParameteriv;
-		std::function< void( uint32_t sampler, uint32_t pname, const uint32_t * params ) > m_pfnSamplerParameteruiv;
-		std::function< void( uint32_t sampler, uint32_t pname, float param ) > m_pfnSamplerParameterf;
-		std::function< void( uint32_t sampler, uint32_t pname, const float * params ) > m_pfnSamplerParameterfv;
-		std::function< void( uint32_t sampler, uint32_t pname, int param ) > m_pfnSamplerParameteri;
-		std::function< void( uint32_t sampler, uint32_t pname, const int * params ) > m_pfnSamplerParameteriv;
-
-		//@}
-		/**@name Texture Buffer Objects */
-		//@{
-
-		std::function< void( uint32_t target, uint32_t internalFormat, uint32_t buffer ) > m_pfnTexBuffer;
-
-		//@}
-		/**@name Buffer Objects */
-		//@{
-
-		std::function< void( int n, uint32_t * buffers ) > m_pfnGenBuffers;
-		std::function< void( int n, uint32_t const * buffers ) > m_pfnDeleteBuffers;
-		std::function< uint8_t( uint32_t buffer ) > m_pfnIsBuffer;
-
-		//@}
-		/**@name Transform Feedback */
-		//@{
-
-		std::function< void( int n, uint32_t * buffers ) > m_pfnGenTransformFeedbacks;
-		std::function< void( int n, uint32_t const * buffers ) > m_pfnDeleteTransformFeedbacks;
-		std::function< void( GlES3BufferTarget target, uint32_t buffer ) > m_pfnBindTransformFeedback;
-		std::function< uint8_t( uint32_t buffer ) > m_pfnIsTransformFeedback;
-		std::function< void( uint32_t primitive ) > m_pfnBeginTransformFeedback;
-		std::function< void() > m_pfnPauseTransformFeedback;
-		std::function< void() > m_pfnResumeTransformFeedback;
-		std::function< void() > m_pfnEndTransformFeedback;
-		std::function< void( uint32_t program, int count, char const ** varyings, GlES3AttributeLayout bufferMode ) > m_pfnTransformFeedbackVaryings;
-		std::function< void( uint32_t mode, uint32_t p_id ) > m_pfnDrawTransformFeedback;
-
-		//@}
-		/**@name FBO */
-		//@{
-
-		std::function< void( int n, uint32_t * framebuffers ) > m_pfnGenFramebuffers;
-		std::function< void( int n, uint32_t const * framebuffers ) > m_pfnDeleteFramebuffers;
-		std::function< uint8_t( uint32_t framebuffer ) > m_pfnIsFramebuffer;
-		std::function< void( uint32_t target, uint32_t framebuffer ) > m_pfnBindFramebuffer;
-		std::function< uint32_t( uint32_t target ) > m_pfnCheckFramebufferStatus;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t texture, int level ) > m_pfnFramebufferTexture;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level ) > m_pfnFramebufferTexture1D;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level ) > m_pfnFramebufferTexture2D;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t texture, int level, int layer ) > m_pfnFramebufferTextureLayer;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level, int layer ) > m_pfnFramebufferTexture3D;
-		std::function< void( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, uint32_t filter ) > m_pfnBlitFramebuffer;
-		std::function< void( int n, uint32_t const * bufs ) > m_pfnDrawBuffers;
-
-		//@}
-		/**@name RBO */
-		//@{
-
-		std::function< void( uint32_t target, uint32_t attachmentPoint, uint32_t renderbufferTarget, uint32_t renderbufferId ) > m_pfnFramebufferRenderbuffer;
-		std::function< void( int n, uint32_t * renderbuffers ) > m_pfnGenRenderbuffers;
-		std::function< void( int n, uint32_t const * renderbuffers ) > m_pfnDeleteRenderbuffers;
-		std::function< uint8_t( uint32_t renderbuffer ) > m_pfnIsRenderbuffer;
-		std::function< void( uint32_t target, uint32_t renderbuffer ) > m_pfnBindRenderbuffer;
-		std::function< void( uint32_t target, uint32_t internalFormat, int width, int height ) > m_pfnRenderbufferStorage;
-		std::function< void( uint32_t target, int isamples, uint32_t internalFormat, int width, int height ) > m_pfnRenderbufferStorageMultisample;
-		std::function< void( uint32_t target, int samples, int internalformat, int width, int height, uint8_t fixedsamplelocations ) > m_pfnTexImage2DMultisample;
-		std::function< void( uint32_t target, uint32_t param, int * value ) > m_pfnGetRenderbufferParameteriv;
-
-		//@}
-		/**@name Uniform variables */
-		//@{
-
-		std::function< int( uint32_t program, char const * name ) > m_pfnGetUniformLocation;
-		std::function< void( uint32_t program, uint32_t index, int maxLength, int * length, int * size, uint32_t * type, char * name ) > m_pfnGetActiveUniform;
-		std::function< void( int location, int v0 ) > m_pfnUniform1i;
-		std::function< void( int location, int v0, int v1 ) > m_pfnUniform2i;
-		std::function< void( int location, int v0, int v1, int v2 ) > m_pfnUniform3i;
-		std::function< void( int location, int v0, int v1, int v2, int v3 ) > m_pfnUniform4i;
-		std::function< void( int location, int count, int const * value ) > m_pfnUniform1iv;
-		std::function< void( int location, int count, int const * value ) > m_pfnUniform2iv;
-		std::function< void( int location, int count, int const * value ) > m_pfnUniform3iv;
-		std::function< void( int location, int count, int const * value ) > m_pfnUniform4iv;
-		std::function< void( int, uint32_t ) > m_pfnUniform1ui;
-		std::function< void( int, uint32_t, uint32_t ) > m_pfnUniform2ui;
-		std::function< void( int, uint32_t, uint32_t, uint32_t ) > m_pfnUniform3ui;
-		std::function< void( int, uint32_t, uint32_t, uint32_t, uint32_t ) > m_pfnUniform4ui;
-		std::function< void( int, int, uint32_t const * ) > m_pfnUniform1uiv;
-		std::function< void( int, int, uint32_t const * ) > m_pfnUniform2uiv;
-		std::function< void( int, int, uint32_t const * ) > m_pfnUniform3uiv;
-		std::function< void( int, int, uint32_t const * ) > m_pfnUniform4uiv;
-		std::function< void( int location, float v0 ) > m_pfnUniform1f;
-		std::function< void( int location, float v0, float v1 ) > m_pfnUniform2f;
-		std::function< void( int location, float v0, float v1, float v2 ) > m_pfnUniform3f;
-		std::function< void( int location, float v0, float v1, float v2, float v3 ) > m_pfnUniform4f;
-		std::function< void( int location, int count, float const * value ) > m_pfnUniform1fv;
-		std::function< void( int location, int count, float const * value ) > m_pfnUniform2fv;
-		std::function< void( int location, int count, float const * value ) > m_pfnUniform3fv;
-		std::function< void( int location, int count, float const * value ) > m_pfnUniform4fv;
-		std::function< void( int location, double x ) > m_pfnUniform1d;
-		std::function< void( int location, double x, double y ) > m_pfnUniform2d;
-		std::function< void( int location, double x, double y, double z ) > m_pfnUniform3d;
-		std::function< void( int location, double x, double y, double z, double w ) > m_pfnUniform4d;
-		std::function< void( int location, int count, double const * value ) > m_pfnUniform1dv;
-		std::function< void( int location, int count, double const * value ) > m_pfnUniform2dv;
-		std::function< void( int location, int count, double const * value ) > m_pfnUniform3dv;
-		std::function< void( int location, int count, double const * value ) > m_pfnUniform4dv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix2fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix2x3fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix2x4fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix3fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix3x2fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix3x4fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix4fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix4x2fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix4x3fv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix2dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix2x3dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix2x4dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix3dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix3x2dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix3x4dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix4dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix4x2dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix4x3dv;
-
-		//@}
-		/**@name Uniform buffer object */
-		//@{
-
-		std::function< uint32_t( uint32_t program, char const * uniformBlockName ) > m_pfnGetUniformBlockIndex;
-		std::function< void( uint32_t target, uint32_t index, uint32_t buffer ) > m_pfnBindBufferBase;
-		std::function< void( uint32_t program, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding ) > m_pfnUniformBlockBinding;
-		std::function< void( uint32_t program, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices ) > m_pfnGetUniformIndices;
-		std::function< void( uint32_t program, int uniformCount, uint32_t const * uniformIndices, uint32_t pname, int * params ) > m_pfnGetActiveUniformsiv;
-		std::function< void( uint32_t program, uint32_t uniformBlockIndex, uint32_t pname, int * params ) > m_pfnGetActiveUniformBlockiv;
-
-		//@}
-		/**@name Shader object */
-		//@{
-
-		std::function< uint32_t( uint32_t type ) > m_pfnCreateShader;
-		std::function< void( uint32_t shader ) > m_pfnDeleteShader;
-		std::function< uint8_t( uint32_t shader ) > m_pfnIsShader;
-		std::function< void( uint32_t program, uint32_t shader ) > m_pfnAttachShader;
-		std::function< void( uint32_t program, uint32_t shader ) > m_pfnDetachShader;
-		std::function< void( uint32_t shader ) > m_pfnCompileShader;
-		std::function< void( uint32_t shader, uint32_t pname, int * param ) > m_pfnGetShaderiv;
-		std::function< void( uint32_t shader, int bufSize, int * length, char * infoLog ) > m_pfnGetShaderInfoLog;
-		std::function< void( uint32_t shader, int count, const char ** string, const int * length ) > m_pfnShaderSource;
-
-		//@}
-		/**@name Shader program */
-		//@{
-
-		std::function< uint32_t() > m_pfnCreateProgram;
-		std::function< void( uint32_t program ) > m_pfnDeleteProgram;
-		std::function< uint8_t( uint32_t program ) > m_pfnIsProgram;
-		std::function< void( uint32_t program ) > m_pfnLinkProgram;
-		std::function< void( uint32_t program ) > m_pfnValidateProgram;
-		std::function< void( uint32_t program ) > m_pfnUseProgram;
-		std::function< void( uint32_t program, uint32_t pname, int * param ) > m_pfnGetProgramiv;
-		std::function< void( uint32_t program, int bufSize, int * length, char * infoLog ) > m_pfnGetProgramInfoLog;
-		std::function< int( uint32_t program, char const * name ) > m_pfnGetAttribLocation;
-		std::function< void( uint32_t program, uint32_t pname, int value ) > m_pfnProgramParameteri;
-		std::function< void( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name ) > m_pfnGetActiveAttrib;
-		std::function< void( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z ) > m_pfnDispatchCompute;
-		std::function< void( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z, uint32_t work_group_size_x, uint32_t work_group_size_y, uint32_t work_group_size_z ) > m_pfnDispatchComputeGroupSize;
-		std::function< void( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding ) > m_pfnShaderStorageBlockBinding;
-
-		//@}
-		/**@name Vertex Attribute Pointer */
-		//@{
-
-		std::function< void( uint32_t ) > m_pfnEnableVertexAttribArray;
-		std::function< void( uint32_t index, int size, uint32_t type, uint8_t normalized, int stride, void const * pointer ) > m_pfnVertexAttribPointer;
-		std::function< void( uint32_t index, int size, uint32_t type, int stride, void const * pointer ) > m_pfnVertexAttribIPointer;
-		std::function< void( uint32_t ) > m_pfnDisableVertexAttribArray;
-
-		//@}
-		/**@name Vertex Array Object */
-		//@{
-
-		std::function< void( int n, uint32_t * arrays ) > m_pfnGenVertexArrays;
-		std::function< void( int n, uint32_t const * arrays ) > m_pfnDeleteVertexArrays;
-		std::function< uint8_t( uint32_t array ) > m_pfnIsVertexArray;
-		std::function< void( uint32_t array ) > m_pfnBindVertexArray;
-
-		//@}
-		/*@name NV_vertex_buffer_unified_memory extension */
-		//@{
-
-		std::function< void( uint32_t value, uint64_t * result ) > m_pfnGetIntegerui64v;
-
-		//@}
-		/*@name Queries */
-		//@{
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGenQueries.xhtml
-		*/
-		std::function< void( int n, uint32_t * queries ) > m_pfnGenQueries;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glDeleteQueries.xhtml
-		*/
-		std::function< void( int n, uint32_t const * queries ) > m_pfnDeleteQueries;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glIsQuery.xhtml
-		*/
-		std::function< uint8_t( uint32_t query ) > m_pfnIsQuery;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glBeginQuery.xhtml
-		*/
-		std::function< void( uint32_t target, uint32_t query ) > m_pfnBeginQuery;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glEndQuery.xhtml
-		*/
-		std::function< void( uint32_t target ) > m_pfnEndQuery;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glQueryCounter.xhtml
-		*/
-		std::function< void( uint32_t id, uint32_t target ) > m_pfnQueryCounter;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
-		*/
-		std::function< void( uint32_t id, uint32_t pname, int32_t * params ) > m_pfnGetQueryObjectiv;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
-		*/
-		std::function< void( uint32_t id, uint32_t pname, uint32_t * params ) > m_pfnGetQueryObjectuiv;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
-		*/
-		std::function< void( uint32_t id, uint32_t pname, int64_t * params ) > m_pfnGetQueryObjecti64v;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
-		*/
-		std::function< void( uint32_t id, uint32_t pname, uint64_t * params ) > m_pfnGetQueryObjectui64v;
-
-		//@}
-		/*@name GL_ARB_program_interface_query */
-		//@{
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramInterface.xhtml
-		*/
-		std::function< void( uint32_t program, uint32_t programInterface, uint32_t name, int * params ) > m_pfnGetProgramInterfaceiv;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceIndex.xhtml
-		*/
-		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceIndex;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceLocation.xhtml
-		*/
-		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocation;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceLocationIndex.xhtml
-		*/
-		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocationIndex;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceName.xhtml
-		*/
-		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int bufSize, int * length, char * name ) > m_pfnGetProgramResourceName;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResource.xhtml
-		*/
-		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params ) > m_pfnGetProgramResourceiv;
-
-		//@}
-		/**@name Memory transactions */
-		//@{
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
-		*/
-		std::function< void( uint32_t barriers ) > m_pfnMemoryBarrier;
-
-		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
-		*/
-		std::function< void( uint32_t barriers ) > m_pfnMemoryBarrierByRegion;
-
-		//@}
-
-		std::function< void( uint32_t p_param, int p_value ) > m_pfnPatchParameteri;
 	};
-
-	namespace gl_api
-	{
-		template< typename Func >
-		bool GetFunction( Castor::String const & p_name, Func & p_func )
-		{
-#if defined( _WIN32 )
-			p_func = reinterpret_cast< Func >( wglGetProcAddress( Castor::string::string_cast< char >( p_name ).c_str() ) );
-#else
-			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( reinterpret_cast< GLubyte const * >( Castor::string::string_cast< char >( p_name ).c_str() ) ) );
-#endif
-			return p_func != nullptr;
-		}
-
-		template< typename Ret, typename ... Arguments >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( Arguments... ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( Arguments... );
-			PFNType l_pfnResult = nullptr;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != nullptr;
-		}
-
-		template< typename T >
-		inline void GetFunction( T & p_function, Castor::String const & p_name, Castor::String const & p_extension )
-		{
-			if ( !gl_api::GetFunction( p_name, p_function ) )
-			{
-				if ( !gl_api::GetFunction( p_name + p_extension, p_function ) )
-				{
-					Castor::Logger::LogWarning( cuT( "Unable to retrieve function " ) + p_name );
-				}
-			}
-		}
-	}
-
-#	define MAKE_GL_EXTENSION( x )	static const Castor::String x = cuT( "GL_" ) cuT( #x )
-
-	MAKE_GL_EXTENSION( AMD_draw_buffers_blend );
-	MAKE_GL_EXTENSION( AMDX_debug_output );
-	MAKE_GL_EXTENSION( ARB_compute_shader );
-	MAKE_GL_EXTENSION( ARB_compute_variable_group_size );
-	MAKE_GL_EXTENSION( ARB_debug_output );
-	MAKE_GL_EXTENSION( ARB_draw_buffers_blend );
-	MAKE_GL_EXTENSION( ARB_draw_instanced );
-	MAKE_GL_EXTENSION( ARB_explicit_uniform_location );
-	MAKE_GL_EXTENSION( ARB_fragment_program );
-	MAKE_GL_EXTENSION( ARB_framebuffer_object );
-	MAKE_GL_EXTENSION( ARB_geometry_shader4 );
-	MAKE_GL_EXTENSION( ARB_imaging );
-	MAKE_GL_EXTENSION( ARB_instanced_arrays );
-	MAKE_GL_EXTENSION( ARB_pixel_buffer_object );
-	MAKE_GL_EXTENSION( ARB_program_interface_query );
-	MAKE_GL_EXTENSION( ARB_sampler_objects );
-	MAKE_GL_EXTENSION( ARB_shader_atomic_counters );
-	MAKE_GL_EXTENSION( ARB_shader_image_load_store );
-	MAKE_GL_EXTENSION( ARB_shader_storage_buffer_object );
-	MAKE_GL_EXTENSION( ARB_tessellation_shader );
-	MAKE_GL_EXTENSION( ARB_texture_buffer_object );
-	MAKE_GL_EXTENSION( ARB_texture_multisample );
-	MAKE_GL_EXTENSION( ARB_texture_non_power_of_two );
-	MAKE_GL_EXTENSION( ARB_texture_storage );
-	MAKE_GL_EXTENSION( ARB_texture_storage_multisample );
-	MAKE_GL_EXTENSION( ARB_timer_query );
-	MAKE_GL_EXTENSION( ARB_uniform_buffer_object );
-	MAKE_GL_EXTENSION( ARB_vertex_array_object );
-	MAKE_GL_EXTENSION( ARB_vertex_buffer_object );
-	MAKE_GL_EXTENSION( ARB_vertex_program );
-	MAKE_GL_EXTENSION( ARB_transform_feedback2 );
-	MAKE_GL_EXTENSION( ATI_meminfo );
-	MAKE_GL_EXTENSION( EXT_direct_state_access );
-	MAKE_GL_EXTENSION( EXT_draw_instanced );
-	MAKE_GL_EXTENSION( EXT_framebuffer_object );
-	MAKE_GL_EXTENSION( EXT_geometry_shader4 );
-	MAKE_GL_EXTENSION( EXT_instanced_arrays );
-	MAKE_GL_EXTENSION( EXT_sampler_objects );
-	MAKE_GL_EXTENSION( EXT_texture_filter_anisotropic );
-	MAKE_GL_EXTENSION( EXT_uniform_buffer_object );
-	MAKE_GL_EXTENSION( KHR_debug );
-	MAKE_GL_EXTENSION( NV_shader_buffer_load );
-	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory );
-	MAKE_GL_EXTENSION( NVX_gpu_memory_info );
-
-#	if defined( _WIN32 )
-
-#	define MAKE_WGL_EXTENSION( x )	static const Castor::String x = cuT( "WGL_" ) cuT( #x );
-	MAKE_WGL_EXTENSION( ARB_create_context )
-	MAKE_WGL_EXTENSION( ARB_pixel_format )
-	MAKE_WGL_EXTENSION( EXT_swap_control )
-
-#	elif defined( __linux__ )
-
-#	define MAKE_GLX_EXTENSION( x )	static const Castor::String x = cuT( "GLX_" ) cuT( #x );
-	MAKE_GLX_EXTENSION( ARB_create_context )
-	MAKE_GLX_EXTENSION( EXT_swap_control )
-
-#	else
-
-#		error "Yet unsupported OS"
-
-#	endif
 }
 
 #include "OpenGlES3.inl"

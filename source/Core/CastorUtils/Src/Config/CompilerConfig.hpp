@@ -42,11 +42,7 @@ SOFTWARE.
 
 #	define CASTOR_COMPILER_CLANG
 #	define CASTOR_COMPILER_GNUC
-#	if ( ! __has_feature(cxx_alignas)
-		|| !__has_feature( cxx_nullptr )
-		|| !__has_feature( cxx_defaulted_functions )
-		|| !__has_feature( cxx_deleted_functions )
-		|| !__has_feature( cxx_variadic_templates ) )
+#	if ( ! __has_feature( cxx_alignas ) || !__has_feature( cxx_nullptr ) || !__has_feature( cxx_defaulted_functions ) || !__has_feature( cxx_deleted_functions ) || !__has_feature( cxx_variadic_templates ) )
 #		error "Your compiler is too old, consider an upgrade."
 #	endif
 

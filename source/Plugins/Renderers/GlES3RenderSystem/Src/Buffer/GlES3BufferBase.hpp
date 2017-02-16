@@ -58,7 +58,7 @@ namespace GlES3Render
 		void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const;
 		void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const;
 		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const;
-		T * Lock( GlES3AccessType p_access )const;
+		T * Lock( Castor3D::AccessTypes const & p_flags )const;
 		void Unlock()const;
 		void SetBindingPoint( uint32_t p_point )const;
 

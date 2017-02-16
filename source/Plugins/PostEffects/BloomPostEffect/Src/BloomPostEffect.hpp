@@ -29,16 +29,6 @@ SOFTWARE.
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
 
-#ifndef CASTOR_PLATFORM_WINDOWS
-#	define C3D_Bloom_API
-#else
-#	ifdef BloomPostEffect_EXPORTS
-#		define C3D_Bloom_API __declspec( dllexport )
-#	else
-#		define C3D_Bloom_API __declspec( dllimport )
-#	endif
-#endif
-
 namespace Bloom
 {
 	static const uint32_t FILTER_COUNT = 4;

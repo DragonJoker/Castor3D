@@ -6,6 +6,16 @@
 using namespace Castor;
 using namespace Loop;
 
+#ifndef CASTOR_PLATFORM_WINDOWS
+#	define C3D_Loop_API
+#else
+#	ifdef LoopDivider_EXPORTS
+#		define C3D_Loop_API __declspec(dllexport)
+#	else
+#		define C3D_Loop_API __declspec(dllimport)
+#	endif
+#endif
+
 C3D_Loop_API void GetRequiredVersion( Castor3D::Version & p_version )
 {
 	p_version = Castor3D::Version();

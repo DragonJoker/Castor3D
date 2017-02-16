@@ -26,19 +26,6 @@ namespace GlES3Render
 		Point3ui const & p_workgroupSize,
 		FlagCombination< MemoryBarrier > const & p_barriers )const
 	{
-		m_program.Bind();
-
-		if ( GetOpenGlES3().HasComputeVariableGroupSize() )
-		{
-			GetOpenGlES3().DispatchComputeGroupSize(
-				p_workgroups[0], p_workgroups[1], p_workgroups[2],
-				p_workgroupSize[0], p_workgroupSize[1], p_workgroupSize[2] );
-		}
-		else
-		{
-			GetOpenGlES3().DispatchCompute( p_workgroups[0], p_workgroups[1], p_workgroups[2] );
-		}
-
-		GetOpenGlES3().MemoryBarrier( GetOpenGlES3().Get( p_barriers ) );
+		FAILURE( "Compute shaders are not supported on OpenGL ES 3.x" );
 	}
 }

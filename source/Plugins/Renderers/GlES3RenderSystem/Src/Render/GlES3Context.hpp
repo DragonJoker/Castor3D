@@ -35,7 +35,7 @@ namespace GlES3Render
 	{
 	public:
 		GlES3Context( GlES3RenderSystem & p_renderSystem, OpenGlES3 & p_gl );
-		virtual ~GlES3Context();
+		~GlES3Context();
 
 		GlES3ContextImpl & GetImpl();
 
@@ -43,31 +43,31 @@ namespace GlES3Render
 		/**
 		 *\copydoc		Castor3D::Context::DoInitialise
 		 */
-		virtual bool DoInitialise();
+		bool DoInitialise()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoCleanup
 		 */
-		virtual void DoCleanup();
+		void DoCleanup()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoDestroy
 		 */
-		virtual void DoDestroy();
+		void DoDestroy()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoSetCurrent
 		 */
-		virtual void DoSetCurrent();
+		void DoSetCurrent()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoEndCurrent
 		 */
-		virtual void DoEndCurrent();
+		void DoEndCurrent()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoSwapBuffers
 		 */
-		virtual void DoSwapBuffers();
+		void DoSwapBuffers()override;
 
 	private:
 		std::unique_ptr< GlES3ContextImpl > m_implementation;
-		GlES3RenderSystem * m_glRenderSystem;
+		Castor3D::GpuInformations m_gpuInformations;
 	};
 }
 

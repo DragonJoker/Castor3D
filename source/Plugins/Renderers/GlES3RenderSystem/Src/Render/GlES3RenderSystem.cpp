@@ -30,7 +30,7 @@
 #include <Cache/ShaderCache.hpp>
 #include <Technique/RenderTechnique.hpp>
 
-#include <GL/gl.h>
+#include <GLES3/gl3.h>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -151,10 +151,10 @@ namespace GlES3Render
 				m_gpuInformations.UpdateFeature( GpuFeature::eInstancing, GetOpenGlES3().HasInstancing() );
 				m_gpuInformations.UpdateFeature( GpuFeature::eAccumulationBuffer, true );
 				m_gpuInformations.UpdateFeature( GpuFeature::eNonPowerOfTwoTextures, GetOpenGlES3().HasNonPowerOfTwoTextures() );
-				m_gpuInformations.UpdateFeature( GpuFeature::eAtomicCounterBuffers, GetOpenGlES3().HasExtension( ARB_shader_atomic_counters, false ) );
-				m_gpuInformations.UpdateFeature( GpuFeature::eImmutableTextureStorage, GetOpenGlES3().HasExtension( ARB_texture_storage, false ) );
+				m_gpuInformations.UpdateFeature( GpuFeature::eAtomicCounterBuffers, false );
+				m_gpuInformations.UpdateFeature( GpuFeature::eImmutableTextureStorage, false );
 				m_gpuInformations.UpdateFeature( GpuFeature::eShaderStorageBuffers, GetOpenGlES3().HasSsbo() );
-				m_gpuInformations.UpdateFeature( GpuFeature::eTransformFeedback, GetOpenGlES3().HasExtension( ARB_transform_feedback2 ) );
+				m_gpuInformations.UpdateFeature( GpuFeature::eTransformFeedback, true );
 
 				m_openGlES3Major = GetOpenGlES3().GetVersion() / 10;
 				m_openGlES3Minor = GetOpenGlES3().GetVersion() % 10;
@@ -202,64 +202,6 @@ namespace GlES3Render
 					//m_gpuInformations.SetMaxValue( GpuMax::eComputeWorkGroupCount, l_value[0] );l_value = { 0, 0, 0 };
 					//GetOpenGlES3().GetIntegerv( GlES3Max::eComputeWorkGroupSize, l_value.data() );
 					//m_gpuInformations.SetMaxValue( GpuMax::eComputeWorkGroupSize, l_value[0] );l_value = { 0, 0, 0 };
-				}
-
-				if ( GetOpenGlES3().HasExtension( ARB_shader_storage_buffer_object ) )
-				{
-					if ( m_gpuInformations.HasShaderType( ShaderType::eCompute ) )
-					{
-						GetOpenGlES3().GetIntegerv( GlES3Max::eComputeShaderStorageBlocks, l_value.data() );
-						m_gpuInformations.SetMaxValue( GpuMax::eComputeShaderStorageBlocks, l_value[0] );
-						l_value = { 0, 0, 0 };
-						GetOpenGlES3().GetIntegerv( GlES3Max::eCombinedShaderStorageBlocks, l_value.data() );
-						m_gpuInformations.SetMaxValue( GpuMax::eCombinedShaderStorageBlocks, l_value[0] );
-						l_value = { 0, 0, 0 };
-					}
-
-					GetOpenGlES3().GetIntegerv( GlES3Max::eFragmentShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eFragmentShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGlES3().GetIntegerv( GlES3Max::eGeometryShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eGeometryShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGlES3().GetIntegerv( GlES3Max::eTessControlShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eTessControlShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGlES3().GetIntegerv( GlES3Max::eTessEvaluationShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eTessEvaluationShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGlES3().GetIntegerv( GlES3Max::eVertexShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eVertexShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGlES3().GetIntegerv( GlES3Max::eShaderStorageBufferBindings, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eShaderStorageBufferBindings, l_value[0] );
-					l_value = { 0, 0, 0 };
-				}
-
-				if ( GetOpenGlES3().HasExtension( ARB_explicit_uniform_location ) )
-				{
-					GetOpenGlES3().GetIntegerv( GlES3Max::eUniformLocations, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eUniformLocations, l_value[0] );
-					l_value = { 0, 0, 0 };
-				}
-
-				if ( GetOpenGlES3().HasExtension( ATI_meminfo ) )
-				{
-					GetOpenGlES3().GetIntegerv( GlES3GpuInfo::eVBOFreeMemoryATI, &l_value[0] );
-					GetOpenGlES3().GetIntegerv( GlES3GpuInfo::eTextureFreeMemoryATI, &l_value[1] );
-					GetOpenGlES3().GetIntegerv( GlES3GpuInfo::eRenderbufferFreeMemoryATI, &l_value[2] );
-					m_gpuInformations.SetTotalMemorySize( l_value[0] + l_value[1] + l_value[2] );
-					l_value = { 0, 0, 0 };
-				}
-				else if ( GetOpenGlES3().HasExtension( NVX_gpu_memory_info ) )
-				{
-					GetOpenGlES3().GetIntegerv( GlES3GpuInfo::eTotalAvailableMemNVX, l_value.data() );
-					m_gpuInformations.SetTotalMemorySize( l_value[0] );
-					l_value = { 0, 0, 0 };
-				}
-				else
-				{
-					m_gpuInformations.SetTotalMemorySize( GetVideoMemorySizeBytes() );
 				}
 
 				GetOpenGlES3().GetIntegerv( GlES3Max::eDebugGroupStackDepth, l_value.data() );
@@ -561,15 +503,7 @@ namespace GlES3Render
 		{
 			if ( !CheckFlag( p_gpuAccess, AccessType::eWrite ) )
 			{
-				if ( GetOpenGlES3().HasExtension( ARB_texture_storage, false )
-					 && p_cpuAccess == AccessType::eNone )
-				{
-					l_return = std::make_unique< GlES3TextureStorage< GlES3ImmutableTextureStorageTraits > >( GetOpenGlES3(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
-				}
-				else
-				{
-					l_return = std::make_unique< GlES3TextureStorage< GlES3DirectTextureStorageTraits > >( GetOpenGlES3(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
-				}
+				l_return = std::make_unique< GlES3TextureStorage< GlES3DirectTextureStorageTraits > >( GetOpenGlES3(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 			}
 			else if ( p_cpuAccess != AccessType::eNone )
 			{

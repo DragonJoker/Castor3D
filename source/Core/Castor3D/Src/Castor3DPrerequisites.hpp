@@ -26,14 +26,12 @@ SOFTWARE.
 #undef RGB
 #include <CastorUtilsPrerequisites.hpp>
 
-#if defined( CASTOR_PLATFORM_LINUX )
-#	define CASTOR_X11
+#if !defined( CASTOR_PLATFORM_WINDOWS )
 #	define C3D_API
-#elif defined( CASTOR_PLATFORM_WINDOWS )
+#else
 #	ifdef MemoryBarrier
 #		undef MemoryBarrier
 #	endif
-#	define CASTOR_MSW
 #	if defined( Castor3D_EXPORTS )
 #		define C3D_API __declspec( dllexport )
 #	else

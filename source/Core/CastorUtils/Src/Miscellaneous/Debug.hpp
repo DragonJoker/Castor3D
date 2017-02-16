@@ -98,6 +98,8 @@ namespace Castor
 			p_stream << p_traced.m_callStack;
 
 #endif
+
+			return p_stream;
 		}
 	}
 }

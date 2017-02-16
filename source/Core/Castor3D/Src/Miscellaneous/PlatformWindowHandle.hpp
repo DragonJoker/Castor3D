@@ -35,6 +35,8 @@ SOFTWARE.
 #	include <windows.h>
 #elif defined( CASTOR_PLATFORM_LINUX )
 #	include <GL/glx.h>
+#elif defined( CASTOR_PLATFORM_ANDROID )
+#	include <EGL/egl.h>
 #else
 #	error "Yet unsupported OS"
 #endif
@@ -47,12 +49,9 @@ namespace Castor3D
 	class IMswWindowHandle
 		: public IWindowHandle
 	{
-	private:
-		HWND m_hWnd;
-
 	public:
 		IMswWindowHandle( HWND p_hWnd )
-			: m_hWnd( p_hWnd )
+			: m_hWnd{ p_hWnd }
 		{
 		}
 
@@ -69,6 +68,9 @@ namespace Castor3D
 		{
 			return m_hWnd;
 		}
+
+	private:
+		HWND m_hWnd;
 	};
 
 #elif defined( CASTOR_PLATFORM_LINUX )
@@ -76,14 +78,10 @@ namespace Castor3D
 	class IXWindowHandle
 		: public IWindowHandle
 	{
-	private:
-		GLXDrawable m_drawable;
-		Display * m_display;
-
 	public:
 		IXWindowHandle( GLXDrawable p_drawable, Display * p_pDisplay )
-			: m_drawable( p_drawable )
-			, m_display( p_pDisplay )
+			: m_drawable{ p_drawable }
+			, m_display{ p_pDisplay }
 		{
 		}
 
@@ -104,10 +102,49 @@ namespace Castor3D
 		{
 			return m_display;
 		}
+
+	private:
+		GLXDrawable m_drawable;
+		Display * m_display;
+	};
+
+#elif defined( CASTOR_PLATFORM_ANDROID )
+
+	class IEglWindowHandle
+		: public IWindowHandle
+	{
+	public:
+		IEglWindowHandle( EGLNativeWindowType p_window, EGLDisplay p_display )
+			: m_window{ p_window }
+			, m_display{ p_display }
+		{
+		}
+
+		virtual ~IEglWindowHandle()
+		{
+		}
+
+		virtual operator bool()
+		{
+			return m_window != 0 && m_display != 0;
+		}
+
+		inline EGLNativeWindowType GetWindow()const
+		{
+			return m_window;
+		}
+
+		inline EGLDisplay GetDisplay()const
+		{
+			return m_display;
+		}
+
+	private:
+		EGLNativeWindowType m_window;
+		EGLDisplay m_display;
 	};
 
 #endif
-
 }
 
 #endif

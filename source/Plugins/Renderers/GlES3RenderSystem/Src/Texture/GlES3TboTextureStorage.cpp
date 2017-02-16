@@ -48,7 +48,7 @@ namespace GlES3Render
 	{
 		auto & l_storage = static_cast< GlES3TextureStorage< GlES3TboTextureStorageTraits > & >( p_storage );
 		m_glBuffer.Bind();
-		return m_glBuffer.Lock( l_storage.GetOpenGlES3().GetLockFlags( p_lock ) );
+		return m_glBuffer.Lock( p_lock );
 	}
 
 	void GlES3TboTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )

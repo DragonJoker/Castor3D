@@ -109,10 +109,10 @@ namespace GlES3Render
 	}
 
 	template< typename T >
-	T * GlES3BufferBase< T >::Lock( GlES3AccessType p_access )const
+	T * GlES3BufferBase< T >::Lock( Castor3D::AccessTypes const & p_flags )const
 	{
 		REQUIRE( this->GetGlES3Name() != GlES3InvalidIndex );
-		return reinterpret_cast< T * >( BindableType::GetOpenGlES3().MapBuffer( m_target, p_access ) );
+		return reinterpret_cast< T * >( BindableType::GetOpenGlES3().MapBufferRange( m_target, 0u, m_allocatedSize, BindableType::GetOpenGlES3().GetBitfieldFlags( p_flags ) ) );
 	}
 
 	template< typename T >

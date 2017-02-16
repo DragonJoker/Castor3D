@@ -23,43 +23,19 @@ namespace GlES3Render
 							, p_gl.Get( p_state.GetColourMaskB() )
 							, p_gl.Get( p_state.GetColourMaskA() ) );
 
-			if ( p_state.IsIndependantBlendEnabled() )
+			if ( p_state.IsBlendEnabled( 0 ) )
 			{
-				for ( int i = 0; i < 8; i++ )
-				{
-					if ( p_state.IsBlendEnabled( i ) )
-					{
-						l_enabled = true;
-						p_gl.BlendFunc( i
-							, p_gl.Get( p_state.GetRgbSrcBlend( i ) )
-							, p_gl.Get( p_state.GetRgbDstBlend( i ) )
-							, p_gl.Get( p_state.GetAlphaSrcBlend( i ) )
-							, p_gl.Get( p_state.GetAlphaDstBlend( i ) ) );
-						p_gl.BlendEquation( i, p_gl.Get( p_state.GetRgbBlendOp( i ) ) );
-					}
-					else
-					{
-						p_gl.BlendFunc( i, GlES3BlendFactor::eOne, GlES3BlendFactor::eZero, GlES3BlendFactor::eOne, GlES3BlendFactor::eZero );
-						p_gl.BlendEquation( i, GlES3BlendOp::eAdd );
-					}
-				}
+				l_enabled = true;
+				p_gl.BlendFunc( p_gl.Get( p_state.GetRgbSrcBlend() )
+					, p_gl.Get( p_state.GetRgbDstBlend() )
+					, p_gl.Get( p_state.GetAlphaSrcBlend() )
+					, p_gl.Get( p_state.GetAlphaDstBlend() ) );
+				p_gl.BlendEquation( p_gl.Get( p_state.GetRgbBlendOp() ) );
 			}
 			else
 			{
-				if ( p_state.IsBlendEnabled( 0 ) )
-				{
-					l_enabled = true;
-					p_gl.BlendFunc( p_gl.Get( p_state.GetRgbSrcBlend() )
-						, p_gl.Get( p_state.GetRgbDstBlend() )
-						, p_gl.Get( p_state.GetAlphaSrcBlend() )
-						, p_gl.Get( p_state.GetAlphaDstBlend() ) );
-					p_gl.BlendEquation( p_gl.Get( p_state.GetRgbBlendOp() ) );
-				}
-				else
-				{
-					p_gl.BlendFunc( GlES3BlendFactor::eOne, GlES3BlendFactor::eZero, GlES3BlendFactor::eOne, GlES3BlendFactor::eZero );
-					p_gl.BlendEquation( GlES3BlendOp::eAdd );
-				}
+				p_gl.BlendFunc( GlES3BlendFactor::eOne, GlES3BlendFactor::eZero, GlES3BlendFactor::eOne, GlES3BlendFactor::eZero );
+				p_gl.BlendEquation( GlES3BlendOp::eAdd );
 			}
 
 			if ( l_enabled )
@@ -125,8 +101,6 @@ namespace GlES3Render
 
 		void DoApply( RasteriserState const & p_state, OpenGlES3 const & p_gl )
 		{
-			p_gl.PolygonMode( GlES3Face::eBoth, p_gl.Get( p_state.GetFillMode() ) );
-
 			if ( p_state.GetCulledFaces() != Culling::eNone )
 			{
 				p_gl.Enable( GlES3Tweak::eCullFace );
@@ -220,7 +194,7 @@ namespace GlES3Render
 		DoApply( m_blState, GetOpenGlES3() );
 		DoApply( m_msState, GetOpenGlES3() );
 		m_program.Bind();
-		auto l_count{ 0u };
+		uint32_t l_count{ 0u };
 
 		for ( auto & l_binding : m_bindings )
 		{
