@@ -279,6 +279,15 @@ namespace Castor3D
 		C3D_API static void FillBillboardBuffer( UniformBuffer & p_ubo );
 		/**
 		 *\~english
+		 *\brief		Fills a UBO with overlay related variables.
+		 *\param[in]	p_ubo	The UBO to fill.
+		 *\~french
+		 *\brief		Remplit un UBO avec les variable relatives aux incrustations.
+		 *\param[in]	p_ubo	L'UBO à remplir.
+		 */
+		C3D_API static void FillOverlayBuffer( UniformBuffer & p_ubo );
+		/**
+		 *\~english
 		 *\return		The GPU storage.
 		 *\~french
 		 *\return		Le stockage GPU.

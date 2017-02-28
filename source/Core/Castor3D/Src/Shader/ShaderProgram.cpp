@@ -138,6 +138,7 @@ namespace Castor3D
 	const String ShaderProgram::Bones = cuT( "c3d_mtxBones" );
 	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
 	const String ShaderProgram::WindowSize = cuT( "c3d_v2iWindowSize" );
+	const String ShaderProgram::OvPosition = cuT( "c3d_v2iPosition" );
 	const String ShaderProgram::MapColour = cuT( "c3d_mapColour" );
 	const String ShaderProgram::MapAmbient = cuT( "c3d_mapAmbient" );
 	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
@@ -159,6 +160,7 @@ namespace Castor3D
 	const String ShaderProgram::BufferBillboards = cuT( "Billboards" );
 	const String ShaderProgram::BufferSkinning = cuT( "Skinning" );
 	const String ShaderProgram::BufferMorphing = cuT( "Morphing" );
+	const String ShaderProgram::BufferOverlay = cuT( "Overlay" );
 
 	//*************************************************************************************************
 

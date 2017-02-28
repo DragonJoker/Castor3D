@@ -759,6 +759,11 @@ namespace Castor3D
 	auto c3d_fTime = l_morphing.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
 	l_morphing.End()
 
+#define UBO_OVERLAY( Writer )\
+	GLSL::Ubo l_overlay{ l_writer, ShaderProgram::BufferOverlay };\
+	auto c3d_v2iPosition = l_overlay.GetUniform< GLSL::IVec2 >( ShaderProgram::OvPosition );\
+	l_overlay.End()
+
 #define STRUCT_VTX_OUTPUT( Writer )\
 	GLSL::Struct VtxOutput{ l_writer, cuT( "VtxOutput" ) };\
 	auto vtx_worldSpacePosition = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_worldSpacePosition" ) );\

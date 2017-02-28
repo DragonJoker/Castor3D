@@ -98,12 +98,15 @@ namespace Castor3D
 			} }
 		, m_passUbo{ ShaderProgram::BufferPass, p_renderSystem }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
+		, m_overlayUbo{ ShaderProgram::BufferOverlay, p_renderSystem }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		UniformBuffer::FillPassBuffer( m_passUbo );
+		UniformBuffer::FillOverlayBuffer( m_overlayUbo );
 
 		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
 		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
+		m_overlayPosition = m_overlayUbo.GetUniform< UniformType::eVec2i >( ShaderProgram::OvPosition );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -198,6 +201,7 @@ namespace Castor3D
 			l_pair.second->Cleanup();
 		}
 
+		m_overlayUbo.Cleanup();
 		m_passUbo.Cleanup();
 		m_matrixUbo.Cleanup();
 		m_pipelines.clear();
@@ -246,6 +250,7 @@ namespace Castor3D
 
 		if ( l_material )
 		{
+			m_overlayPosition->SetValue( Point2i{ p_overlay.GetAbsolutePosition( m_size ) } );
 			DoDrawItem( *l_material, m_panelGeometryBuffers, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
 		}
 	}
@@ -257,6 +262,7 @@ namespace Castor3D
 
 			if ( l_material )
 			{
+				m_overlayPosition->SetValue( Point2i{ p_overlay.GetAbsolutePosition( m_size ) } );
 				DoDrawItem( *l_material, m_panelGeometryBuffers, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
 			}
 		}
@@ -265,6 +271,7 @@ namespace Castor3D
 
 			if ( l_material )
 			{
+				m_overlayPosition->SetValue( Point2i{ p_overlay.GetAbsolutePosition( m_size ) } );
 				DoDrawItem( *l_material, m_borderGeometryBuffers, FillBuffers( p_overlay.GetBorderVertex().begin(), uint32_t( p_overlay.GetBorderVertex().size() ), *m_borderVertexBuffer ) );
 			}
 		}
@@ -300,6 +307,7 @@ namespace Castor3D
 				auto l_texture = p_overlay.GetFontTexture()->GetTexture();
 				auto l_sampler = p_overlay.GetFontTexture()->GetSampler();
 				l_count = uint32_t( l_arrayVtx.size() );
+				m_overlayPosition->SetValue( Point2i{ p_overlay.GetAbsolutePosition( m_size ) } );
 
 				for ( auto l_pass : *l_material )
 				{
@@ -357,7 +365,8 @@ namespace Castor3D
 						p_pass,
 						l_pipeline.GetProgram(),
 						m_passUbo,
-					}
+					},
+					m_overlayUbo,
 				}
 			} ).first;
 		}
@@ -379,7 +388,8 @@ namespace Castor3D
 						p_pass,
 						l_pipeline.GetProgram(),
 						m_passUbo,
-					}
+					},
+					m_overlayUbo,
 				}
 			} ).first;
 		}
@@ -449,6 +459,7 @@ namespace Castor3D
 				auto l_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ), *l_program, PipelineFlags{} );
 				l_pipeline->AddUniformBuffer( m_passUbo );
 				l_pipeline->AddUniformBuffer( m_matrixUbo );
+				l_pipeline->AddUniformBuffer( m_overlayUbo );
 				l_it = m_pipelines.emplace( p_textureFlags, std::move( l_pipeline ) ).first;
 			}
 			else
@@ -488,6 +499,7 @@ namespace Castor3D
 		auto & l_node = DoGetPanelNode( p_pass );
 		p_pass.UpdateRenderNode( l_node.m_passNode );
 		m_passUbo.Update();
+		m_overlayUbo.Update();
 		l_node.m_pipeline.Apply();
 		p_pass.BindTextures();
 		p_geometryBuffers.Draw( p_count, 0 );
@@ -507,6 +519,7 @@ namespace Castor3D
 
 		p_pass.UpdateRenderNode( l_node.m_passNode );
 		m_passUbo.Update();
+		m_overlayUbo.Update();
 		l_node.m_pipeline.Apply();
 		p_pass.BindTextures();
 		p_texture.Bind( 0 );
@@ -575,6 +588,7 @@ namespace Castor3D
 			auto l_writer = GetRenderSystem()->CreateGlslWriter();
 
 			UBO_MATRIX( l_writer );
+			UBO_OVERLAY( l_writer );
 
 			// Shader inputs
 			auto position = l_writer.GetAttribute< IVec2 >( ShaderProgram::Position );
@@ -598,7 +612,7 @@ namespace Castor3D
 					vtx_texture = texture;
 				}
 
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( c3d_v2iPosition.x() + position.x(), c3d_v2iPosition.y() + position.y(), 0.0, 1.0 );
 			} );
 
 			l_strVs = l_writer.Finalise();

@@ -148,6 +148,7 @@ namespace Castor3D
 		{
 			RenderPipeline & m_pipeline;
 			PassRenderNode m_passNode;
+			UniformBuffer & m_overlayUbo;
 		};
 		/*!
 		\author 	Sylvain DOREMUS
@@ -369,6 +370,12 @@ namespace Castor3D
 		//!\~english	The uniform variable containing view matrix.
 		//!\~french		La variable uniforme contenant la matrice vue.
 		Uniform4x4fSPtr m_viewUniform{ nullptr };
+		//!\~english	The uniform buffer containing overlay data.
+		//!\~french		Le tampon d'uniformes contenant les données d'incrustation.
+		UniformBuffer m_overlayUbo;
+		//!\~english	The uniform variable containing overlay position.
+		//!\~french		La variable uniforme contenant la position de l'incrustation.
+		Uniform2iSPtr m_overlayPosition{ nullptr };
 		//!\~english	The uniform buffer containing pass data.
 		//!\~french		Le tampon d'uniformes contenant les données de passe.
 		UniformBuffer m_passUbo;

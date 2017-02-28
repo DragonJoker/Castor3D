@@ -778,6 +778,14 @@ namespace Castor3D
 		C3D_API static const Castor::String WindowSize;
 
 		//@}
+		/**@name Overlay */
+		//@{
+
+		//!\~english	Name of the overlay position frame variable.
+		//!\~french		Nom de la frame variable contenant la position de l'incrustation.
+		C3D_API static const Castor::String OvPosition;
+
+		//@}
 		/**@name Textures */
 		//@{
 
@@ -837,6 +845,9 @@ namespace Castor3D
 		//!\~english	Name of the morphing animation frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données d'animation de morphing.
 		C3D_API static const Castor::String BufferMorphing;
+		//!\~english	Name of the overlay information frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les informations de l'incrustation.
+		C3D_API static const Castor::String BufferOverlay;
 
 		//@}
 

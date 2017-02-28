@@ -273,6 +273,11 @@ namespace Castor3D
 		p_ubo.CreateUniform( UniformType::eVec2i, ShaderProgram::WindowSize );
 	}
 
+	void UniformBuffer::FillOverlayBuffer( UniformBuffer & p_ubo )
+	{
+		p_ubo.CreateUniform( UniformType::eVec2i, ShaderProgram::OvPosition );
+	}
+
 	void UniformBuffer::DoInitialise( UniformBufferBinding const & p_binding )
 	{
 		m_buffer.resize( p_binding.GetSize() );

@@ -246,7 +246,6 @@ namespace Castor3D
 					m_previousCaption = m_currentCaption;
 					m_arrayVtx.clear();
 					m_arrayVtx.reserve( m_previousCaption.size() * 6 );
-					Position const l_ovPosition = GetAbsolutePosition( p_size );
 
 					DisplayableLineArray l_lines = DoPrepareText( p_size, l_size );
 					Size const & l_texDim = l_fontTexture->GetTexture()->GetDimensions();
@@ -274,10 +273,10 @@ namespace Castor3D
 									// Compute Letter's Position.
 									//
 									double const l_topUncropped = l_line.m_position[1] + l_height - l_char.m_position[1];
-									int32_t const l_left = l_ovPosition.x() + std::max( 0, int32_t( l_leftUncropped + l_leftCrop ) );
-									int32_t const l_top = l_ovPosition.y() + std::max( 0, int32_t( l_topUncropped + l_topCrop ) );
-									int32_t const l_right = l_ovPosition.x() + int32_t( std::min( l_leftUncropped + l_char.m_size[0] - l_rightCrop, l_size[0] ) );
-									int32_t const l_bottom = l_ovPosition.y() + int32_t( std::min( l_topUncropped + l_char.m_size[1] - l_bottomCrop, l_size[1] ) );
+									int32_t const l_left = std::max( 0, int32_t( l_leftUncropped + l_leftCrop ) );
+									int32_t const l_top = std::max( 0, int32_t( l_topUncropped + l_topCrop ) );
+									int32_t const l_right = int32_t( std::min( l_leftUncropped + l_char.m_size[0] - l_rightCrop, l_size[0] ) );
+									int32_t const l_bottom = int32_t( std::min( l_topUncropped + l_char.m_size[1] - l_bottomCrop, l_size[1] ) );
 
 									//
 									// Compute Letter's Font UV.

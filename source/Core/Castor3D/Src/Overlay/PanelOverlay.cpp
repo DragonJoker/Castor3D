@@ -64,10 +64,10 @@ namespace Castor3D
 		Position l_pos = GetAbsolutePosition( p_size );
 		Size l_size = GetAbsoluteSize( p_size );
 
-		int32_t l_centerL = l_pos.x();
-		int32_t l_centerT = l_pos.y();
-		int32_t l_centerR = l_pos.x() + l_size.width();
-		int32_t l_centerB = l_pos.y() + l_size.height();
+		int32_t l_centerL = 0;
+		int32_t l_centerT = 0;
+		int32_t l_centerR = l_size.width();
+		int32_t l_centerB = l_size.height();
 
 		OverlayCategory::Vertex l_vertex0 = { { l_centerL, l_centerT }, { real( m_uv[0] ), real( m_uv[3] ) } };
 		OverlayCategory::Vertex l_vertex1 = { { l_centerL, l_centerB }, { real( m_uv[0] ), real( m_uv[1] ) } };

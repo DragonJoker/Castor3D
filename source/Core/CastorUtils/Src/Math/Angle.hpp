@@ -71,7 +71,7 @@ namespace Castor
 		 *\remarks		Privé afin que la construction spécifiée ne soit accessible qu'à partir des constructeurs nommés
 		 */
 		template< typename T >
-		explicit AngleT( T p_radians )
+		explicit AngleT( T p_radians )noexcept
 			: m_radians( Type( p_radians ) )
 		{
 		}
@@ -88,7 +88,7 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > from_degrees( T p_degrees )
+		static AngleT< Type > from_degrees( T p_degrees )noexcept
 		{
 			return AngleT< Type >( p_degrees * DegreeToRadian );
 		}
@@ -103,9 +103,9 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > from_radians( T p_radians )
+		static AngleT< Type > from_radians( T p_radians )noexcept
 		{
-			return AngleT< Type >( p_radians * 1.0 );
+			return AngleT< Type >( p_radians );
 		}
 		/**
 		 *\~english
@@ -118,9 +118,9 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > from_grads( T p_grads )
+		static AngleT< Type > from_grads( T p_grads )noexcept
 		{
-			return AngleT< Type > ( p_grads * GradToRadian );
+			return AngleT< Type >( p_grads * GradToRadian );
 		}
 		/**
 		 *\~english
@@ -128,54 +128,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		inline AngleT();
+		inline AngleT()noexcept;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		inline ~AngleT();
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_rhs	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_rhs	L'objet à copier
-		 */
-		inline AngleT( AngleT< Type > const & p_rhs );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_rhs	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_rhs	L'objet à déplacer
-		 */
-		inline AngleT( AngleT< Type > && p_rhs );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_rhs	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_rhs	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		inline AngleT & operator=( AngleT< Type > const & p_rhs );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_rhs	The object to move
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_rhs	L'objet à déplacer
-		 *\return		Une référence sur cet objet
-		 */
-		inline AngleT & operator=( AngleT< Type > && p_rhs );
+		inline ~AngleT()noexcept;
 		/**
 		 *\~english
 		 *\brief		Conversion to degrees
@@ -184,7 +144,7 @@ namespace Castor
 		 *\brief		Conversion en degrés
 		 *\return		La valeur de l'angle, en degrés
 		 */
-		inline Type degrees()const;
+		inline Type degrees()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Conversion to radians
@@ -193,7 +153,7 @@ namespace Castor
 		 *\brief		Conversion en radians
 		 *\return		La valeur de l'angle, en radians
 		 */
-		inline Type radians()const;
+		inline Type radians()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Conversion to gradients
@@ -202,7 +162,7 @@ namespace Castor
 		 *\brief		Conversion en gradients
 		 *\return		La valeur de l'angle, en gradients
 		 */
-		inline Type grads()const;
+		inline Type grads()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from degrees
@@ -211,7 +171,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de degrés
 		 *\param[in]	p_rAngle	L'angle exprimé en degrés
 		 */
-		inline void degrees( double p_rAngle );
+		inline void degrees( double p_rAngle )noexcept;
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from radians
@@ -220,7 +180,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de radians
 		 *\param[in]	p_rAngle	L'angle exprimé en radians
 		 */
-		inline void radians( double p_rAngle );
+		inline void radians( double p_rAngle )noexcept;
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from gradients
@@ -229,7 +189,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de gradients
 		 *\param[in]	p_rAngle	L'angle exprimé en gradients
 		 */
-		inline void grads( double p_rAngle );
+		inline void grads( double p_rAngle )noexcept;
 		/**
 		 *\~english
 		 *\brief		Trigonometric cosine
@@ -313,6 +273,15 @@ namespace Castor
 		inline void atan( double p_rValue );
 		/**
 		 *\~english
+		 *\brief		Negation operator.
+		 *\return		A reference to this angle.
+		 *\~french
+		 *\brief		Opérateur de négation.
+		 *\return		Une référence sur cet angle.
+		 */
+		inline AngleT< Type > & operator-()noexcept;
+		/**
+		 *\~english
 		 *\brief		Addition assignment operator
 		 *\param[in]	p_rhs	Angle to add to this one
 		 *\return		A reference to this angle
@@ -321,7 +290,7 @@ namespace Castor
 		 *\param[in]	p_rhs	L'angle à ajouter à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator+=( AngleT< Type > const & p_rhs );
+		inline AngleT< Type > & operator+=( AngleT< Type > const & p_rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -332,7 +301,7 @@ namespace Castor
 		 *\param[in]	p_rhs	L'angle à soustraire de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator-=( AngleT< Type > const & p_rhs );
+		inline AngleT< Type > & operator-=( AngleT< Type > const & p_rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -343,7 +312,7 @@ namespace Castor
 		 *\param[in]	p_rhs	L'angle à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator*=( AngleT< Type > const & p_rhs );
+		inline AngleT< Type > & operator*=( AngleT< Type > const & p_rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -354,7 +323,7 @@ namespace Castor
 		 *\param[in]	p_rhs	L'angle diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator/=( AngleT< Type > const & p_rhs );
+		inline AngleT< Type > & operator/=( AngleT< Type > const & p_rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -365,7 +334,7 @@ namespace Castor
 		 *\param[in]	p_rhs	Le scalaire à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator*=( double p_rhs );
+		inline AngleT< Type > & operator*=( double p_rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -376,14 +345,18 @@ namespace Castor
 		 *\param[in]	p_rhs	Le scalaire diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator/=( double p_rhs );
+		inline AngleT< Type > & operator/=( double p_rhs )noexcept;
 
 	private:
 		//!\~english The angle value	\~french La valeur de l'angle
 		Type m_radians;
 
 		template< typename T >
-		friend bool operator==( AngleT< T > const & p_lhs, AngleT< T > const & p_rhs );
+		friend bool operator==( AngleT< T > const & p_lhs, AngleT< T > const & p_rhs )noexcept;
+		template< typename T >
+		friend bool operator<( AngleT< T > const & p_lhs, AngleT< T > const & p_rhs )noexcept;
+		template< typename T >
+		friend bool operator>( AngleT< T > const & p_lhs, AngleT< T > const & p_rhs )noexcept;
 	};
 	/**
 	 *\~english
@@ -398,7 +371,7 @@ namespace Castor
 	 *\return		\p true si p_lhs est égal à p_rhs
 	 */
 	template< typename Type >
-	inline bool operator==( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs );
+	inline bool operator==( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -412,7 +385,63 @@ namespace Castor
 	 *\return		\p true si p_lhs est différent de p_rhs
 	 */
 	template< typename Type >
-	inline bool operator!=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs );
+	inline bool operator!=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	/**
+	 *\~english
+	 *\brief		"Less than" operator
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
+	 *\return		\p true if p_lhs is less than p_rhs.
+	 *\~french
+	 *\brief		Opérateur "inférieur à"
+	 *\param[in]	p_lhs	Premier opérande.
+	 *\param[in]	p_rhs	Second opérande.
+	 *\return		\p true si p_lhs est inférieur à p_rhs.
+	 */
+	template< typename Type >
+	inline bool operator<( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	/**
+	 *\~english
+	 *\brief		"Greater than or equal to" operator
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
+	 *\return		\p true if p_lhs is greater than or equal to p_rhs.
+	 *\~french
+	 *\brief		Opérateur "supérieur ou égal à"
+	 *\param[in]	p_lhs	Premier opérande.
+	 *\param[in]	p_rhs	Second opérande.
+	 *\return		\p true si p_lhs est supérieur ou égal à p_rhs.
+	 */
+	template< typename Type >
+	inline bool operator>=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	/**
+	 *\~english
+	 *\brief		"Greater than" operator
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
+	 *\return		\p true if p_lhs is greater than p_rhs.
+	 *\~french
+	 *\brief		Opérateur "supérieur à"
+	 *\param[in]	p_lhs	Premier opérande.
+	 *\param[in]	p_rhs	Second opérande.
+	 *\return		\p true si p_lhs est supérieur à p_rhs.
+	 */
+	template< typename Type >
+	inline bool operator>( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	/**
+	 *\~english
+	 *\brief		"Less than or equal to" operator
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
+	 *\return		\p true if p_lhs is less than or equal to p_rhs.
+	 *\~french
+	 *\brief		Opérateur "inférieur ou égal à"
+	 *\param[in]	p_lhs	Premier opérande.
+	 *\param[in]	p_rhs	Second opérande.
+	 *\return		\p true si p_lhs est inférieur ou égal à p_rhs.
+	 */
+	template< typename Type >
+	inline bool operator<=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -426,7 +455,7 @@ namespace Castor
 	 *\return		Le résultat de l'addition
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator+( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs );
+	inline AngleT< Type > operator+( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -440,7 +469,7 @@ namespace Castor
 	 *\return		Le résultat de la soustraction
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator-( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs );
+	inline AngleT< Type > operator-( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -454,7 +483,7 @@ namespace Castor
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator*( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs );
+	inline AngleT< Type > operator*( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -468,7 +497,7 @@ namespace Castor
 	 *\return		Le résultat de la division
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator/( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs );
+	inline AngleT< Type > operator/( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -482,7 +511,7 @@ namespace Castor
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator*( AngleT< Type > const & p_lhs, double p_rhs );
+	inline AngleT< Type > operator*( AngleT< Type > const & p_lhs, double p_rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -496,7 +525,7 @@ namespace Castor
 	 *\return		Le résultat de la division
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator/( AngleT< Type > const & p_lhs, double p_rhs );
+	inline AngleT< Type > operator/( AngleT< Type > const & p_lhs, double p_rhs )noexcept;
 
 	using Angle = AngleT< float >;
 }

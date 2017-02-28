@@ -188,10 +188,10 @@ namespace Castor3D
 		Size l_size = GetAbsoluteSize( p_size );
 		Rectangle l_sizes = GetAbsoluteBorderSize( p_size );
 
-		int32_t l_centerL = l_pos.x();
-		int32_t l_centerT = l_pos.y();
-		int32_t l_centerR = l_pos.x() + l_size.width();
-		int32_t l_centerB = l_pos.y() + l_size.height();
+		int32_t l_centerL = 0;
+		int32_t l_centerT = 0;
+		int32_t l_centerR = l_size.width();
+		int32_t l_centerB = l_size.height();
 
 		if ( m_borderPosition == BorderPosition::eInternal )
 		{
