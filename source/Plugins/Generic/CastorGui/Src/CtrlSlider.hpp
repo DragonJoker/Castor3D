@@ -25,9 +25,10 @@ SOFTWARE.
 
 #include "CtrlControl.hpp"
 
+#include <Math/RangedValue.hpp>
+
 namespace CastorGui
 {
-	typedef std::pair< int, int > Range;
 	/*!
 	 *\author		Sylvain DOREMU
 	 *\date		16/02/201
@@ -48,15 +49,21 @@ namespace CastorGui
 		/** Constructor
 		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
-		 *\param[in]	p_range		The slider min and max value
-		 *\param[in]	p_value		The slider initial value
+		 *\param[in]	p_value		The slider initial value, and its range
 		 *\param[in]	p_id		The control ID
 		 *\param[in]	p_position	The position
 		 *\param[in]	p_size		The size
 		 *\param[in]	p_style		The style
 		 *\param[in]	p_visible	Initial visibility status
 		 */
-		SliderCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		SliderCtrl( Castor3D::Engine * p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id
+			, Castor::RangedValue< int32_t > const & p_value
+			, Castor::Position const & p_position
+			, Castor::Size const & p_size
+			, uint32_t p_style = 0
+			, bool p_visible = true );
 
 		/** Destructor
 		*/
@@ -65,7 +72,7 @@ namespace CastorGui
 		/** Sets the range
 		*\param[in]	p_value		The new value
 		*/
-		void SetRange( Range const & p_value );
+		void SetRange( Castor::Range< int32_t > const & p_value );
 
 		/** Sets the caption
 		*\param[in]	p_value		The new value
@@ -75,9 +82,9 @@ namespace CastorGui
 		/** Retrieves the range
 		 *\return		The value
 		*/
-		inline Range const & GetRange()const
+		inline Castor::Range< int32_t > const & GetRange()const
 		{
-			return m_range;
+			return m_value.range();
 		}
 
 		/** Retrieves the caption
@@ -85,7 +92,7 @@ namespace CastorGui
 		*/
 		inline int32_t GetValue()const
 		{
-			return m_value;
+			return m_value.value();
 		}
 
 		/** Connects a function to a slider event
@@ -201,9 +208,7 @@ namespace CastorGui
 
 	private:
 		//! The slider range
-		Range m_range;
-		//! The slider current value
-		int32_t m_value;
+		Castor::RangedValue< int32_t > m_value;
 		//! Tells the tick is moving
 		bool m_scrolling;
 		//! The previous mouse position

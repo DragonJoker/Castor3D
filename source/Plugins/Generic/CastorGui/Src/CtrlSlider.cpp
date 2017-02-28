@@ -14,14 +14,36 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	SliderCtrl::SliderCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
-		: SliderCtrl( p_engine, p_parent, p_id, Range( 0, 100 ), 0, Position(), Size(), 0, true )
+	SliderCtrl::SliderCtrl( Engine * p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id )
+		: SliderCtrl{ p_engine
+			, p_parent
+			, p_id
+			, makeRangedValue( 0, 0, 100 )
+			, Position()
+			, Size()
+			, 0
+			, true }
 	{
 	}
 
-	SliderCtrl::SliderCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( ControlType::eSlider, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
-		, m_range( p_range )
+	SliderCtrl::SliderCtrl( Engine * p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id
+		, RangedValue< int32_t > const & p_value
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
+		: Control{ ControlType::eSlider
+			, p_engine
+			, p_parent
+			, p_id
+			, p_position
+			, p_size
+			, p_style
+			, p_visible }
 		, m_value( p_value )
 		, m_scrolling( false )
 	{
@@ -80,9 +102,9 @@ namespace CastorGui
 	{
 	}
 
-	void SliderCtrl::SetRange( Range const & p_value )
+	void SliderCtrl::SetRange( Range< int32_t > const & p_value )
 	{
-		m_range =  p_value;
+		m_value.update_range( p_value );
 		DoUpdateLineAndTick();
 	}
 
@@ -108,7 +130,7 @@ namespace CastorGui
 			l_tickSize.width() = ( GetSize().width() / 2 ) + ( GetSize().width() % 2 );
 			l_tickSize.height() = 5;
 			l_tickPosition.x() = l_tickSize.width() / 2;
-			l_tickPosition.y() = int32_t( l_lineSize.height() * double( GetValue() ) / std::abs( GetRange().second - GetRange().first ) );
+			l_tickPosition.y() = int32_t( l_lineSize.height() * m_value.percent() );
 		}
 		else
 		{
@@ -118,7 +140,7 @@ namespace CastorGui
 			l_linePosition.y() = ( GetSize().height() - 3 ) / 2;
 			l_tickSize.width() = 5;
 			l_tickSize.height() = ( GetSize().height() / 2 ) + ( GetSize().height() % 2 );
-			l_tickPosition.x() = int32_t( l_lineSize.width() * double( GetValue() ) / std::abs( GetRange().second - GetRange().first ) );
+			l_tickPosition.x() = int32_t( l_lineSize.width() * m_value.percent() );
 			l_tickPosition.y() = l_tickSize.height() / 2;
 		}
 
@@ -231,7 +253,7 @@ namespace CastorGui
 		if ( m_scrolling )
 		{
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[size_t( SliderEvent::eThumbTrack )]( m_value );
+			m_signals[size_t( SliderEvent::eThumbTrack )]( m_value.value() );
 		}
 	}
 
@@ -244,7 +266,7 @@ namespace CastorGui
 		   )
 		{
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
+			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 			m_scrolling = false;
 		}
 	}
@@ -259,7 +281,7 @@ namespace CastorGui
 			}
 
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
+			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 			m_scrolling = false;
 		}
 	}
@@ -293,12 +315,12 @@ namespace CastorGui
 				if ( p_event.GetKey() == KeyboardKey::eUp )
 				{
 					DoUpdateTick( Position( 0, -1 ) );
-					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
 				else if ( p_event.GetKey() == KeyboardKey::eDown )
 				{
 					DoUpdateTick( Position( 0, 1 ) );
-					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
 			}
 			else
@@ -306,12 +328,12 @@ namespace CastorGui
 				if ( p_event.GetKey() == KeyboardKey::eLeft )
 				{
 					DoUpdateTick( Position( -1, 0 ) );
-					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
 				else if ( p_event.GetKey() == KeyboardKey::eRight )
 				{
 					DoUpdateTick( Position( 1, 0 ) );
-					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
 			}
 		}
@@ -362,7 +384,7 @@ namespace CastorGui
 
 			l_tickValue = std::max( 0.0, std::min( 1.0, l_tickValue ) );
 			l_tick->SetPosition( Position( l_position[0], l_position[1] ) );
-			m_value = m_range.first + int32_t( ( m_range.second - m_range.first ) * l_tickValue );
+			m_value = m_value.range().value( float( l_tickValue ) );
 		}
 	}
 
