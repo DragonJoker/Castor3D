@@ -5,52 +5,19 @@
 #include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
-#include "Cache/AnimatedObjectGroupCache.hpp"
-#include "Cache/BillboardCache.hpp"
-#include "Cache/CameraCache.hpp"
-#include "Cache/GeometryCache.hpp"
-#include "Cache/LightCache.hpp"
-#include "Cache/OverlayCache.hpp"
-#include "Cache/SamplerCache.hpp"
-#include "Cache/ShaderCache.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
-#include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Mesh/Skeleton/Skeleton.hpp"
 #include "Miscellaneous/ShadowMapPass.hpp"
-#include "PostEffect/PostEffect.hpp"
-#include "Render/Context.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
-#include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
-#include "Scene/Geometry.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/Skybox.hpp"
-#include "Scene/Animation/AnimatedMesh.hpp"
-#include "Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Scene/Animation/AnimatedSkeleton.hpp"
-#include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
-#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
 #include "Technique/RenderTechniquePass.hpp"
 #include "Texture/Sampler.hpp"
-#include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
@@ -330,19 +297,24 @@ namespace Castor3D
 			switch ( l_depthMap.GetType() )
 			{
 			case TextureType::eTwoDimensions:
-				m_renderSystem.GetCurrentContext()->RenderDepth( l_size, *l_depthMap.GetTexture() );
+				m_renderSystem.GetCurrentContext()->RenderDepth( l_size
+					, *l_depthMap.GetTexture() );
 				break;
 
 			case TextureType::eTwoDimensionsArray:
-				m_renderSystem.GetCurrentContext()->RenderDepth( l_size, *l_depthMap.GetTexture(), 0u );
+				m_renderSystem.GetCurrentContext()->RenderDepth( l_size
+					, *l_depthMap.GetTexture(), 0u );
 				break;
 
 			case TextureType::eCube:
-				m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), l_size, *l_depthMap.GetTexture() );
+				m_renderSystem.GetCurrentContext()->RenderDepthCube( Size{ l_size.width() / 4, l_size.height() / 4 }
+					, *l_depthMap.GetTexture() );
 				break;
 
 			case TextureType::eCubeArray:
-				m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), l_size, *l_depthMap.GetTexture(), 0u );
+				m_renderSystem.GetCurrentContext()->RenderDepthCube( Size{ l_size.width() / 4, l_size.height() / 4 }
+					, *l_depthMap.GetTexture()
+					, 0u );
 				break;
 			}
 		}
@@ -424,9 +396,9 @@ namespace Castor3D
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_PointShadowMap" ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 		bool l_return{ true };
 
 		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(
@@ -435,6 +407,7 @@ namespace Castor3D
 			AccessType::eRead | AccessType::eWrite,
 			PixelFormat::eD32F,
 			p_size );
+
 		m_pointShadowMap.SetTexture( l_texture );
 		m_pointShadowMap.SetSampler( l_sampler );
 

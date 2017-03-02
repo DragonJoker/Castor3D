@@ -24,6 +24,8 @@ SOFTWARE.
 #define ___C3D_RenderQueue_H___
 
 #include "Render/RenderNode/RenderNode.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -233,10 +235,10 @@ namespace Castor3D
 		bool m_changed{ true };
 		//!\~english	The connection to the scene change notification.
 		//!\~french		Les conenction à la notification de scène changée.
-		uint32_t m_sceneChanged{ false };
+		Scene::OnChanged::Connection m_sceneChanged;
 		//!\~english	The connection to the camera change notification.
 		//!\~french		Les conenction à la notification de caméra changée.
-		uint32_t m_cameraChanged{ false };
+		Camera::OnChanged::Connection m_cameraChanged;
 		//!\~english	The optional camera.
 		//!\~french		La camera optionnelle.
 		Camera const * m_camera{ nullptr };

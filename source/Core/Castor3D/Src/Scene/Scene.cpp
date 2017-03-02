@@ -541,18 +541,18 @@ namespace Castor3D
 		m_sceneNodeCache->Add( cuT( "ObjectRootNode" ), m_rootObjectNode );
 		m_sceneNodeCache->Add( cuT( "CameraRootNode" ), m_rootCameraNode );
 
-		m_onParticleSystemChanged = m_particleSystemCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
-		m_onBillboardListChanged = m_billboardCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
-		m_onGeometryChanged = m_geometryCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
-		m_onSceneNodeChanged = m_sceneNodeCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
+		m_onParticleSystemChanged = m_particleSystemCache->onChanged.connect( std::bind( &Scene::SetChanged, this ) );
+		m_onBillboardListChanged = m_billboardCache->onChanged.connect( std::bind( &Scene::SetChanged, this ) );
+		m_onGeometryChanged = m_geometryCache->onChanged.connect( std::bind( &Scene::SetChanged, this ) );
+		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( std::bind( &Scene::SetChanged, this ) );
 	}
 
 	Scene::~Scene()
 	{
-		m_sceneNodeCache->m_onChanged.disconnect( m_onSceneNodeChanged );
-		m_geometryCache->m_onChanged.disconnect( m_onGeometryChanged );
-		m_billboardCache->m_onChanged.disconnect( m_onBillboardListChanged );
-		m_particleSystemCache->m_onChanged.disconnect( m_onParticleSystemChanged );
+		m_onSceneNodeChanged.disconnect();
+		m_onGeometryChanged.disconnect();
+		m_onBillboardListChanged.disconnect();
+		m_onParticleSystemChanged.disconnect();
 
 		m_meshCache->Clear();
 		m_windowCache->Clear();

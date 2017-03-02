@@ -41,12 +41,7 @@ namespace Castor3D
 
 		if ( l_node )
 		{
-			if ( m_notifyIndex )
-			{
-				l_node->UnregisterObject( m_notifyIndex );
-				m_notifyIndex = 0;
-			}
-
+			m_notifyIndex.disconnect();
 			l_node->DetachObject( *this );
 			m_sceneNode.reset();
 		}

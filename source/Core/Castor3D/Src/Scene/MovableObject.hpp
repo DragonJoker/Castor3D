@@ -141,14 +141,18 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english Movable object type	\~french Le type d'objet déplaçable
+		//!\~english	Movable object type.
+		//!\~french		Le type d'objet déplaçable.
 		MovableType m_type;
-		//!\~english The parent node name	\~french Le nom du noeud parent
+		//!\~english	The parent node name.
+		//!\~french		Le nom du noeud parent.
 		Castor::String m_strNodeName;
-		//!\~english The parent scene node	\~french Le noeud parent
+		//!\~english	The parent scene node.
+		//!\~french		Le noeud parent.
 		SceneNodeWPtr m_sceneNode;
-		//!\~english The node change notification index.	\~french L'indice de notifcation des changements du noeud.
-		uint32_t m_notifyIndex = 0;
+		//!\~english	The node change notification index.
+		//!\~french		L'indice de notifcation des changements du noeud.
+		SceneNode::OnChanged::Connection m_notifyIndex;
 	};
 }
 

@@ -39,6 +39,10 @@ namespace CastorGui
 		: public Control
 	{
 	public:
+		using OnEventFunction = std::function< void( int ) >;
+		using OnEvent = Castor::Signal< OnEventFunction >;
+
+	public:
 		/** Constructor
 		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
@@ -100,18 +104,9 @@ namespace CastorGui
 		*\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		*/
-		inline uint32_t Connect( SliderEvent p_event, std::function< void( int ) > p_function )
+		inline OnEvent::Connection Connect( SliderEvent p_event, OnEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
-		}
-
-		/** Disconnects a function from a slider event
-		*\param[in]	p_event		The event type
-		*\param[in]	p_index		The function index
-		*/
-		inline void Disconnect( SliderEvent p_event, uint32_t p_index )
-		{
-			m_signals[size_t( p_event )].disconnect( p_index );
 		}
 
 	private:
@@ -218,7 +213,7 @@ namespace CastorGui
 		//! The static used to display the line
 		StaticCtrlWPtr m_tick;
 		//! The slider events signals
-		Castor::Signal< std::function< void( int ) > > m_signals[size_t( SliderEvent::eCount )];
+		OnEvent m_signals[size_t( SliderEvent::eCount )];
 	};
 }
 

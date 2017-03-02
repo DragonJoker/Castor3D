@@ -44,7 +44,7 @@ namespace Castor3D
 		m_texture->Bind( 0 );
 		m_texture->GenerateMipmaps();
 		m_texture->Unbind( 0 );
-		m_signal( *this );
+		onChanged( *this );
 	}
 
 	void FontTexture::Update()

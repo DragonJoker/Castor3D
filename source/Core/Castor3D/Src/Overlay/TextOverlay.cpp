@@ -163,16 +163,9 @@ namespace Castor3D
 				l_fontTexture->Update();
 			}
 
-			auto l_texture = m_fontTexture.lock();
-
-			if ( m_connection && l_texture )
-			{
-				l_texture->Disconnect( m_connection );
-			}
-
+			m_connection.disconnect();
 			m_fontTexture = l_fontTexture;
-
-			m_connection = l_fontTexture->Connect( [this]( FontTexture const & p_texture )
+			m_connection = l_fontTexture->onChanged.connect( [this]( FontTexture const & p_texture )
 			{
 				m_textChanged = true;
 			} );

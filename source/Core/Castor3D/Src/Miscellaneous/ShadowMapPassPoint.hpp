@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "ShadowMapPass.hpp"
 
+#define USE_GS_POINT_SHADOW_MAPS 1
+
 namespace Castor3D
 {
 	/*!
@@ -99,6 +101,11 @@ namespace Castor3D
 		 */
 		void DoUpdateProgram( ShaderProgram & p_program )override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 */
+		void DoPrepareBackPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
 		 */
 		Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
@@ -121,10 +128,7 @@ namespace Castor3D
 	private:
 		//!\~english	The connection to light's node changed signal.
 		//!\~french		La connexion au signal de changement du noeud de la source lumineuse.
-		uint32_t m_onNodeChanged{ 0 };
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
+		SceneNode::OnChanged::Connection m_onNodeChanged;
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
 		Castor::Matrix4x4r m_projection;
@@ -134,6 +138,20 @@ namespace Castor3D
 		//!\~english	The shadow map coniguration data UBO.
 		//!\~french		L'UBO de données de configuration de shadow map.
 		UniformBuffer m_shadowConfig;
+
+#if USE_GS_POINT_SHADOW_MAPS
+
+		//!\~english	The attach between depth buffer and main frame buffer.
+		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
+		TextureAttachmentSPtr m_depthAttach;
+
+#else
+
+		//!\~english	The attaches between depth buffer and main frame buffer.
+		//!\~french		Les attaches entre le tampon profondeur et le tampon principal.
+		std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) > m_depthAttachs;
+
+#endif
 	};
 }
 

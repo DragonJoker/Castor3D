@@ -571,7 +571,7 @@ namespace Castor3D
 	void RenderQueue::Initialise( Scene & p_scene, Camera & p_camera )
 	{
 		Initialise( p_scene );
-		m_cameraChanged = p_camera.Connect( std::bind( &RenderQueue::OnCameraChanged, this, std::placeholders::_1 ) );
+		m_cameraChanged = p_camera.onChanged.connect( std::bind( &RenderQueue::OnCameraChanged, this, std::placeholders::_1 ) );
 		OnCameraChanged( p_camera );
 		m_camera = &p_camera;
 		m_preparedRenderNodes = std::make_unique< SceneRenderNodes >( p_scene );
@@ -579,7 +579,7 @@ namespace Castor3D
 
 	void RenderQueue::Initialise( Scene & p_scene )
 	{
-		m_sceneChanged = p_scene.Connect( std::bind( &RenderQueue::OnSceneChanged, this, std::placeholders::_1 ) );
+		m_sceneChanged = p_scene.onChanged.connect( std::bind( &RenderQueue::OnSceneChanged, this, std::placeholders::_1 ) );
 		OnSceneChanged( p_scene );
 		m_renderNodes = std::make_unique< SceneRenderNodes >( p_scene );
 	}

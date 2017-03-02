@@ -43,12 +43,12 @@ namespace Castor3D
 			std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > const l_views
 			{
 				{
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +1, 0, 0 }, Point3r{ 0, -1, 0 } ),
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ -1, 0, 0 }, Point3r{ 0, -1, 0 } ),
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ 0, +1, 0 }, Point3r{ 0, 0, +1 } ),
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ 0, -1, 0 }, Point3r{ 0, 0, -1 } ),
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ 0, 0, +1 }, Point3r{ 0, -1, 0 } ),
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ 0, 0, -1 }, Point3r{ 0, -1, 0 } ),
+					p_projection * matrix::look_at( p_position, p_position + Point3r{ +1, 0, 0 }, Point3r{ 0, -1, 0 } ),// Positive X
+					p_projection * matrix::look_at( p_position, p_position + Point3r{ -1, 0, 0 }, Point3r{ 0, -1, 0 } ),// Negative X
+					p_projection * matrix::look_at( p_position, p_position + Point3r{ 0, +1, 0 }, Point3r{ 0, 0, +1 } ),// Positive Y
+					p_projection * matrix::look_at( p_position, p_position + Point3r{ 0, -1, 0 }, Point3r{ 0, 0, -1 } ),// Negative Y
+					p_projection * matrix::look_at( p_position, p_position + Point3r{ 0, 0, +1 }, Point3r{ 0, -1, 0 } ),// Positive Z
+					p_projection * matrix::look_at( p_position, p_position + Point3r{ 0, 0, -1 }, Point3r{ 0, -1, 0 } ),// Negative Z
 				}
 			};
 
@@ -66,13 +66,13 @@ namespace Castor3D
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
 		: ShadowMapPass{ p_engine, p_scene, p_light, p_shadowMap, p_index }
-		, m_shadowMatrices{ ShadowMatrices, *p_engine.GetRenderSystem() }
+		, m_shadowMatrices{ ShadowMatricesUbo, *p_engine.GetRenderSystem() }
 		, m_shadowConfig{ ShadowMapUbo, *p_engine.GetRenderSystem() }
 	{
 		m_shadowConfig.CreateUniform< UniformType::eVec3f >( WorldLightPosition );
 		m_shadowConfig.CreateUniform< UniformType::eFloat >( FarPlane );
 
-		m_shadowMatrices.CreateUniform< UniformType::eMat4x4f >( ShadowMatrices );
+		m_shadowMatrices.CreateUniform< UniformType::eMat4x4f >( ShadowMatrices, 6u );
 
 		m_renderQueue.Initialise( m_scene );
 	}
@@ -98,14 +98,33 @@ namespace Castor3D
 
 	bool ShadowMapPassPoint::DoInitialisePass( Size const & p_size )
 	{
-		auto l_texture = m_shadowMap.GetTexture();
-		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
 		bool l_return{ false };
+		auto l_texture = m_shadowMap.GetTexture();
 
+#if USE_GS_POINT_SHADOW_MAPS
+
+		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
 		m_frameBuffer->Bind( FrameBufferMode::eConfig );
 		m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType(), m_index );
+		m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
 		l_return = m_frameBuffer->IsComplete();
 		m_frameBuffer->Unbind();
+
+#else
+
+		m_depthAttachs[0] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace::ePositiveX );
+		m_depthAttachs[1] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace::eNegativeX );
+		m_depthAttachs[2] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace::ePositiveY );
+		m_depthAttachs[3] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace::eNegativeY );
+		m_depthAttachs[4] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace::ePositiveZ );
+		m_depthAttachs[5] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace::eNegativeZ );
+
+		m_frameBuffer->Bind( FrameBufferMode::eConfig );
+		m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
+		l_return = m_frameBuffer->IsComplete();
+		m_frameBuffer->Unbind();
+
+#endif
 
 		real const l_aspect = real( p_size.width() ) / p_size.height();
 		real const l_near = 1.0_r;
@@ -119,15 +138,24 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoCleanupPass()
 	{
-		auto l_node = m_light.GetParent();
+		m_shadowConfig.Cleanup();
+		m_shadowMatrices.Cleanup();
 
-		if ( l_node )
+#if USE_GS_POINT_SHADOW_MAPS
+
+		m_depthAttach.reset();
+
+#else
+
+		for ( auto & attach : m_depthAttachs )
 		{
-			l_node->UnregisterObject( m_onNodeChanged );
+			attach.reset();
 		}
 
-		m_onNodeChanged = 0;
-		m_depthAttach.reset();
+#endif
+
+		auto l_node = m_light.GetParent();
+		m_onNodeChanged.disconnect();
 		m_shadowMap.Cleanup();
 	}
 
@@ -143,16 +171,80 @@ namespace Castor3D
 	{
 		if ( m_initialised )
 		{
+			m_shadowConfig.Update();
+			m_shadowMatrices.Update();
+
+#if USE_GS_POINT_SHADOW_MAPS
+
 			m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
 			m_frameBuffer->Clear();
 			auto & l_nodes = m_renderQueue.GetRenderNodes();
 			DoRenderNodes( l_nodes );
 			m_frameBuffer->Unbind();
+
+#else
+
+			for ( auto & attach : m_depthAttachs )
+			{
+				m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+				m_frameBuffer->Attach( AttachmentPoint::eDepth, attach, TextureType::eCube );
+				m_frameBuffer->Clear();
+				auto & l_nodes = m_renderQueue.GetRenderNodes();
+				DoRenderNodes( l_nodes );
+				m_frameBuffer->Unbind();
+			}
+
+#endif
 		}
 	}
 
 	void ShadowMapPassPoint::DoUpdateProgram( ShaderProgram & p_program )
 	{
+	}
+
+	void ShadowMapPassPoint::DoPrepareBackPipeline( ShaderProgram & p_program
+		, PipelineFlags const & p_flags )
+	{
+		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
+		{
+			DoUpdateProgram( p_program );
+			RasteriserState l_rsState;
+			l_rsState.SetCulledFaces( Culling::eNone );
+			auto & l_pipeline = *m_backPipelines.emplace( p_flags
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
+					, std::move( l_rsState )
+					, BlendState{}
+					, MultisampleState{}
+					, p_program
+					, p_flags ) ).first->second;
+
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+				, [this, &l_pipeline, p_flags]()
+			{
+				l_pipeline.AddUniformBuffer( m_matrixUbo );
+				l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
+				l_pipeline.AddUniformBuffer( m_sceneUbo );
+				l_pipeline.AddUniformBuffer( m_shadowConfig );
+				l_pipeline.AddUniformBuffer( m_shadowMatrices );
+
+				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+				{
+					l_pipeline.AddUniformBuffer( m_billboardUbo );
+				}
+
+				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+				{
+					l_pipeline.AddUniformBuffer( m_skinningUbo );
+				}
+
+				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+				{
+					l_pipeline.AddUniformBuffer( m_morphingUbo );
+				}
+
+				m_initialised = true;
+			} ) );
+		}
 	}
 
 	String ShadowMapPassPoint::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
@@ -216,6 +308,7 @@ namespace Castor3D
 
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
 			vtx_worldSpacePosition = l_v4Vertex.xyz();
+
 			gl_Position = l_v4Vertex;
 		};
 
@@ -231,8 +324,8 @@ namespace Castor3D
 		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Geometry layout
-		l_writer.InputGeometryLayout( cuT( "triangles" ) );
-		l_writer.OutputGeometryLayout( cuT( "triangle_strip" ), 18 );
+		l_writer << InputLayout{ InputLayout::eTriangles };
+		l_writer << OutputLayout{ OutputLayout::eTriangleStrip, 18 };
 
 		// Geometry inputs
 		Ubo l_shadowMatricesUbo{ l_writer, ShadowMatricesUbo };
@@ -248,20 +341,22 @@ namespace Castor3D
 
 		std::function< void() > l_main = [&]()
 		{
-			for ( int face = 0; face < 6; ++face )
+			FOR( l_writer, Int, face, 1, cuT( "face < 6" ), cuT( "++face" ) )
 			{
 				gl_Layer = face; // built-in variable that specifies to which face we render.
 
-				for ( int i = 0; i < 3; ++i )
+				FOR( l_writer, Int, i, 0, cuT( "i < 3" ), cuT(  "++i" ) )
 				{
 					geo_position = gl_in[i].gl_Position();
 					gl_Position = c3d_mtxShadowMatrices[face] * geo_position;
 					l_writer.EmitVertex();
 					l_writer << Endl();
 				}
+				ROF;
 
 				l_writer.EndPrimitive();
 			}
+			ROF;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

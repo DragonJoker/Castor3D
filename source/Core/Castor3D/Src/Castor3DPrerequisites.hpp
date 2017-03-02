@@ -694,7 +694,7 @@ namespace Castor3D
 			return *m_##memberName##Cache;\
 		}\
 	private:\
-		uint32_t m_on##className##Changed;\
+		Castor::Connection< MAKE_OBJECT_CACHE_NAME( className )::OnChanged > m_on##className##Changed;\
 		std::unique_ptr< MAKE_OBJECT_CACHE_NAME( className ) > m_##memberName##Cache
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\

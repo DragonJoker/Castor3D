@@ -44,6 +44,8 @@ namespace Castor3D
 	{
 	public:
 		DECLARE_MAP( char32_t, Castor::Position, GlyphPosition );
+		using OnChangedFunction = std::function< void( FontTexture const & ) >;
+		using OnChanged = Castor::Signal< OnChangedFunction >;
 
 	public:
 		/**
@@ -141,44 +143,25 @@ namespace Castor3D
 		{
 			return m_sampler.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Connects a client to the changed notification signal.
-		 *\param[in]	p_function	The client function.
-		 *\return		The connection.
-		 *\~french
-		 *\brief		Connecte un client au signal de notification de changement.
-		 *\param[in]	p_function	La fonction du client.
-		 *\return		La connexion.
-		 */
-		inline uint32_t Connect( std::function< void( FontTexture const & ) > p_function )
-		{
-			return m_signal.connect( p_function );
-		}
-		/**
-		 *\~english
-		 *\brief		Disconnects a client from the changed notification signal.
-		 *\return		The connection.
-		 *\~french
-		 *\brief		Déconnecte un client du signal de notification de changement.
-		 *\return		La connexion.
-		 */
-		inline void Disconnect( uint32_t p_connection )
-		{
-			m_signal.disconnect( p_connection );
-		}
+
+	public:
+		//!\~english	The signal used to notify clients that this texture has changed.
+		//!\~french		Signal utilisé pour notifier les clients que cette texture a changé.
+		OnChanged onChanged;
 
 	private:
-		//!\~english The font.	\~french La police.
+		//!\~english	The font.
+		//!\~french		La police.
 		Castor::FontWPtr m_font;
-		//!\~english The texture sampler.	\~french L'échantillonneur de la texture.
+		//!\~english	The texture sampler.
+		//!\~french		L'échantillonneur de la texture.
 		SamplerWPtr m_sampler;
-		//!\~english The texture that will receive the glyphs.	\~french La texture qui recevra les glyphes.
+		//!\~english	The texture that will receive the glyphs.
+		//!\~french		La texture qui recevra les glyphes.
 		TextureLayoutSPtr m_texture;
-		//!\~english Glyphs positions in the texture.	\~french Position des glyphes.
+		//!\~english	Glyphs positions in the texture.
+		//!\~french		Position des glyphes.
 		GlyphPositionMap m_glyphsPositions;
-		//!\~english The signal used to notify clients that this texture has changed.	\~french Signal utilisé pour notifier les clients que cette texture a changé.
-		Castor::Signal< std::function< void( FontTexture const & ) > > m_signal;
 	};
 }
 

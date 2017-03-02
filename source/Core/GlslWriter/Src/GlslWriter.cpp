@@ -850,6 +850,34 @@ namespace GLSL
 		return *this;
 	}
 
+	GlslWriter & GlslWriter::operator<<( InputLayout const & p_rhs )
+	{
+		static std::map< InputLayout::Layout, Castor::String > const Names
+		{
+			{ InputLayout::ePoints, cuT( "points" ) },
+			{ InputLayout::eLines, cuT( "lines" ) },
+			{ InputLayout::eLinesAdjacency, cuT( "lines_adjacency" ) },
+			{ InputLayout::eTriangles, cuT( "triangles" ) },
+			{ InputLayout::eTrianglesAdjacency, cuT( "triangles_adjacency" ) },
+		};
+		REQUIRE( p_rhs.m_layout >= InputLayout::ePoints && p_rhs.m_layout <= InputLayout::eTrianglesAdjacency );
+		m_stream << cuT( "layout( " ) << Names.at( p_rhs.m_layout ) << cuT( " ) in;" ) << std::endl;
+		return *this;
+	}
+
+	GlslWriter & GlslWriter::operator<<( OutputLayout const & p_rhs )
+	{
+		static std::map< OutputLayout::Layout, Castor::String > const Names
+		{
+			{ OutputLayout::ePoints, cuT( "points" ) },
+			{ OutputLayout::eLineStrip, cuT( "line_strip" ) },
+			{ OutputLayout::eTriangleStrip, cuT( "triangle_strip" ) },
+		};
+		REQUIRE( p_rhs.m_layout >= OutputLayout::ePoints && p_rhs.m_layout <= OutputLayout::eTriangleStrip );
+		m_stream << cuT( "layout( " ) << Names.at( p_rhs.m_layout ) << cuT( ", max_vertices = " ) << p_rhs.m_count << cuT( " ) out;" ) << std::endl;
+		return *this;
+	}
+
 	GlslWriter & GlslWriter::operator<<( Endl const & p_rhs )
 	{
 		m_stream << std::endl;
