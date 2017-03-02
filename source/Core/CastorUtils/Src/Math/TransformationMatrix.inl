@@ -239,7 +239,7 @@ namespace Castor
 		SquareMatrix< T, 4 > perspective( Angle const & p_fovy, T p_aspect, T p_near, T p_far )
 		{
 			SquareMatrix< T, 4 > l_return;
-			perspective( l_return, p_fovy, p_near, p_far );
+			perspective( l_return, p_fovy, p_aspect, p_near, p_far );
 			return l_return;
 		}
 

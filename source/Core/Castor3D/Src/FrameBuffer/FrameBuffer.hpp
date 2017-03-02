@@ -468,16 +468,16 @@ namespace Castor3D
 		AttachArray m_attaches;
 		//!\~english	The clear colour red component.
 		//!\~french		La composante rouge de la couleur de vidage.
-		float m_redClear;
+		float m_redClear{ 0.0f };
 		//!\~english	The clear colour green component.
 		//!\~french		La composante verte de la couleur de vidage.
-		float m_greenClear;
+		float m_greenClear{ 0.0f };
 		//!\~english	The clear colour blue component.
 		//!\~french		La composante bleue de la couleur de vidage.
-		float m_blueClear;
+		float m_blueClear{ 0.0f };
 		//!\~english	The clear colour alpha component.
 		//!\~french		La composante alpha de la couleur de vidage.
-		float m_alphaClear;
+		float m_alphaClear{ 1.0f };
 	};
 }
 

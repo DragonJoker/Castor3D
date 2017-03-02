@@ -9,9 +9,14 @@
 #include "Viewport.hpp"
 
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
+#include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
+#include "Scene/Skybox.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/DepthStencilState.hpp"
@@ -60,6 +65,23 @@ namespace Castor3D
 				}
 			}
 		}
+		, m_rtoCubePipeline
+		{
+			Viewport{ *GetRenderSystem()->GetEngine() },
+			{
+				-1, 1, -1, 1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, 1, 1, -1,
+				-1, -1, 1, -1, 1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, 1, 1,
+				1, -1, -1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, -1,
+				-1, -1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1,
+				-1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, -1, 1, -1, -1, 1, 1,
+				-1, -1, -1, 1, -1, -1, -1, -1, 1, 1, -1, -1, 1, -1, 1, -1, -1, 1,
+			},
+			BufferDeclaration{
+				{
+					BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
+				}
+			}
+		}
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		uint32_t i = 0;
@@ -74,6 +96,13 @@ namespace Castor3D
 		for ( auto & l_vertex : m_rtotPipelineCube.m_arrayVertex )
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_rtotPipelineCube.m_bufferVertex.data() )[i++ * m_rtotPipelineCube.m_declaration.stride()] );
+		}
+
+		i = 0;
+
+		for ( auto & l_vertex : m_rtoCubePipeline.m_arrayVertex )
+		{
+			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_rtoCubePipeline.m_bufferVertex.data() )[i++ * m_rtoCubePipeline.m_declaration.stride()] );
 		}
 	}
 
@@ -118,6 +147,8 @@ namespace Castor3D
 			DoInitialiseRTOTPipelineCube( m_rtotPipelineCube.m_depth, *DoCreateProgramCube( true, false ), true );
 			DoInitialiseRTOTPipelineCube( m_rtotPipelineCube.m_depthArray, *DoCreateProgramCube( true, true ), true );
 
+			DoInitialiseRTOCubeMapPipeline( m_rtoCubePipeline, *DoCreateProgramToCube() );
+
 			auto l_sampler = GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "ContextCube" ) );
 			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
@@ -145,6 +176,8 @@ namespace Castor3D
 		m_initialised = false;
 		DoSetCurrent();
 		DoCleanup();
+
+		DoCleanupRTOCubeMapPipeline( m_rtoCubePipeline );
 
 		DoCleanupRTOTPipelinePlane( m_rtotPipelinePlane.m_texture );
 		DoCleanupRTOTPipelinePlane( m_rtotPipelinePlane.m_textureArray );
@@ -191,6 +224,71 @@ namespace Castor3D
 	void Context::SwapBuffers()
 	{
 		DoSwapBuffers();
+	}
+
+	void Context::PrepareSkybox( TextureLayout const & p_texture
+		, Skybox & p_skybox )
+	{
+		Size l_size{ 512, 512 };
+		// Create the cube texture.
+		auto l_texture = GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGB32F, l_size );
+		l_texture->GetImage( uint32_t( CubeMapFace::ePositiveX ) ).InitialiseSource();
+		l_texture->GetImage( uint32_t( CubeMapFace::eNegativeX ) ).InitialiseSource();
+		l_texture->GetImage( uint32_t( CubeMapFace::ePositiveY ) ).InitialiseSource();
+		l_texture->GetImage( uint32_t( CubeMapFace::eNegativeY ) ).InitialiseSource();
+		l_texture->GetImage( uint32_t( CubeMapFace::ePositiveZ ) ).InitialiseSource();
+		l_texture->GetImage( uint32_t( CubeMapFace::eNegativeZ ) ).InitialiseSource();
+		l_texture->Initialise();
+
+		// Create the one shot FBO and attaches
+		auto l_fbo = GetRenderSystem()->CreateFrameBuffer();
+		std::array< FrameBufferAttachmentSPtr, 6 > l_attachs
+		{
+			{
+				l_fbo->CreateAttachment( l_texture, CubeMapFace::ePositiveX ),
+				l_fbo->CreateAttachment( l_texture, CubeMapFace::eNegativeX ),
+				l_fbo->CreateAttachment( l_texture, CubeMapFace::ePositiveY ),
+				l_fbo->CreateAttachment( l_texture, CubeMapFace::eNegativeY ),
+				l_fbo->CreateAttachment( l_texture, CubeMapFace::ePositiveZ ),
+				l_fbo->CreateAttachment( l_texture, CubeMapFace::eNegativeZ ),
+			}
+		};
+		// Create The depth RBO.
+		auto l_depthRbo = l_fbo->CreateDepthStencilRenderBuffer( PixelFormat::eD24 );
+		l_depthRbo->Create();
+		l_depthRbo->Initialise( l_size );
+		auto l_depthAttach = l_fbo->CreateAttachment( l_depthRbo );
+
+		// Fill the FBO
+		l_fbo->Create();
+		l_fbo->Initialise( l_size );
+		l_fbo->Bind( FrameBufferMode::eConfig );
+		l_fbo->Attach( AttachmentPoint::eDepth, l_depthAttach );
+		REQUIRE( l_fbo->IsComplete() );
+		l_fbo->Unbind();
+		
+		// Render the equirectangular texture to the cube faces.
+		DoRenderToCubeMap( l_size, p_texture, l_texture, l_fbo, l_attachs );
+
+		// Cleanup the one shot FBO and attaches
+		l_fbo->Bind();
+		l_fbo->DetachAll();
+		l_fbo->Unbind();
+
+		l_depthRbo->Cleanup();
+		l_depthRbo->Destroy();
+
+		for ( auto & l_attach : l_attachs )
+		{
+			l_attach.reset();
+		}
+
+		l_depthAttach.reset();
+		l_fbo->Cleanup();
+		l_fbo->Destroy();
+
+		// Set the cube texture to the skybox.
+		p_skybox.SetTexture( l_texture );
 	}
 
 	void Context::RenderTexture( Size const & p_size
@@ -441,6 +539,46 @@ namespace Castor3D
 		p_geometryBuffers.Draw( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() ), 0 );
 		m_rtotPipelineCube.m_sampler->Unbind( 0u );
 		p_texture.Unbind( 0u );
+	}
+
+	void Context::DoRenderToCubeMap( Castor::Size const & p_size
+		, TextureLayout const & p_2dTexture
+		, TextureLayoutSPtr p_cubeTexture
+		, FrameBufferSPtr p_fbo
+		, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs )
+	{
+		m_rtoCubePipeline.m_sampler->Initialise();
+		static Matrix4x4r const l_projection = matrix::perspective( Angle::from_degrees( 90.0_r ), 1.0_r, 0.1_r, 10.0_r );
+		static Matrix4x4r const l_views[] =
+		{
+			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{  1.0f,  0.0f,  0.0f }, Point3r{ 0.0f, -1.0f,  0.0f } ),
+			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ -1.0f,  0.0f,  0.0f }, Point3r{ 0.0f, -1.0f,  0.0f } ),
+			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{  0.0f,  1.0f,  0.0f }, Point3r{ 0.0f,  0.0f,  1.0f } ),
+			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{  0.0f, -1.0f,  0.0f }, Point3r{ 0.0f,  0.0f, -1.0f } ),
+			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{  0.0f,  0.0f,  1.0f }, Point3r{ 0.0f, -1.0f,  0.0f } ),
+			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{  0.0f,  0.0f, -1.0f }, Point3r{ 0.0f, -1.0f,  0.0f } )
+		};
+
+		m_rtoCubePipeline.m_pipeline->SetProjectionMatrix( l_projection );
+		p_fbo->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		p_fbo->Clear();
+		p_2dTexture.Bind( 0u );
+
+		for ( uint32_t i = 0; i < 6; ++i )
+		{
+			m_rtoCubePipeline.m_pipeline->SetViewMatrix( l_views[i] );
+			p_attachs[i]->Attach( AttachmentPoint::eColour, 0u, p_fbo );
+			m_rtoCubePipeline.m_pipeline->ApplyMatrices( m_matrixUbo, ~0u );
+			m_matrixUbo.Update();
+			m_rtoCubePipeline.m_pipeline->Apply();
+
+			m_rtoCubePipeline.m_sampler->Bind( 0u );
+			m_rtoCubePipeline.m_geometryBuffers->Draw( uint32_t( m_rtoCubePipeline.m_arrayVertex.size() ), 0u );
+			m_rtoCubePipeline.m_sampler->Unbind( 0u );
+		}
+
+		p_2dTexture.Unbind( 0u );
+		p_fbo->Unbind();
 	}
 
 	ShaderProgramSPtr Context::DoCreateProgram2D( bool p_depth, bool p_array )
@@ -705,6 +843,72 @@ namespace Castor3D
 		return l_program;
 	}
 
+	ShaderProgramSPtr Context::DoCreateProgramToCube()
+	{
+		String l_vtx;
+		{
+			using namespace GLSL;
+			GlslWriter l_writer{ GetRenderSystem()->CreateGlslWriter() };
+
+			// Inputs
+			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
+			UBO_MATRIX( l_writer );
+
+			// Outputs
+			auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
+			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			{
+				vtx_position = position;
+				gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * vec4( vtx_position, 1.0 ) );
+			} );
+
+			l_vtx = l_writer.Finalise();
+		}
+
+		String l_pxl;
+		{
+			using namespace GLSL;
+			GlslWriter l_writer{ GetRenderSystem()->CreateGlslWriter() };
+
+			// Inputs
+			auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
+			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+
+			// Outputs
+			auto plx_v4FragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+
+			l_writer.ImplementFunction< Vec2 >( cuT( "SampleSphericalMap" ), [&]( Vec3 const & v )
+				{
+					auto uv = l_writer.GetLocale( cuT( "uv" ), vec2( atan( v.z(), v.x() ), asin( v.y() ) ) );
+					uv *= vec2( 0.1591_f, 0.3183_f );
+					uv += 0.5_f;
+					l_writer.Return( uv );
+				}, InParam< Vec3 >( &l_writer, cuT( "v" ) ) );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+				{
+					auto uv = l_writer.GetLocale( cuT( "uv" ), GLSL::WriteFunctionCall< Vec2 >( &l_writer, cuT( "SampleSphericalMap" ), vtx_position ) );
+					plx_v4FragColor = vec4( texture( c3d_mapDiffuse, uv ).rgb(), 1.0_f );
+				} );
+
+			l_pxl = l_writer.Finalise();
+		}
+
+		auto l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
+		auto l_program = l_cache.GetNewProgram( false );
+		l_program->CreateObject( ShaderType::eVertex );
+		l_program->CreateObject( ShaderType::ePixel );
+		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+
+		l_program->Initialise();
+		return l_program;
+	}
+
 	void Context::DoInitialiseRTOTPipelinePlane( RTOTPipeline & p_pipeline, ShaderProgram & p_program, bool p_depth )
 	{
 		p_program.Initialise();
@@ -781,6 +985,58 @@ namespace Castor3D
 
 	void Context::DoCleanupRTOTPipelineCube( RTOTPipeline & p_pipeline )
 	{
+		p_pipeline.m_pipeline->Cleanup();
+		p_pipeline.m_pipeline.reset();
+		p_pipeline.m_vertexBuffer->Cleanup();
+		p_pipeline.m_vertexBuffer.reset();
+		p_pipeline.m_geometryBuffers->Cleanup();
+		p_pipeline.m_geometryBuffers.reset();
+	}
+
+	void Context::DoInitialiseRTOCubeMapPipeline( RTOCubeMapPipeline & p_pipeline, ShaderProgram & p_program )
+	{
+		p_program.Initialise();
+		p_pipeline.m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine()
+			, p_pipeline.m_declaration );
+		p_pipeline.m_vertexBuffer->Resize( uint32_t( p_pipeline.m_arrayVertex.size()
+			* p_pipeline.m_declaration.stride() ) );
+		p_pipeline.m_vertexBuffer->LinkCoords( p_pipeline.m_arrayVertex.begin(),
+			p_pipeline.m_arrayVertex.end() );
+		p_pipeline.m_vertexBuffer->Initialise( BufferAccessType::eStatic
+			, BufferAccessNature::eDraw );
+		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles
+			, p_program );
+		p_pipeline.m_geometryBuffers->Initialise( { *p_pipeline.m_vertexBuffer },
+			nullptr );
+
+		DepthStencilState l_dsState;
+		l_dsState.SetDepthFunc( DepthFunc::eLEqual );
+		l_dsState.SetDepthTest( false );
+		l_dsState.SetDepthMask( WritingMask::eAll );
+
+		RasteriserState l_rsState;
+		l_rsState.SetCulledFaces( Culling::eNone );
+
+		p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
+			, std::move( l_rsState )
+			, BlendState{}
+			, MultisampleState{}
+			, p_program
+			, PipelineFlags{} );
+		p_pipeline.m_pipeline->AddUniformBuffer( m_matrixUbo );
+
+		auto l_sampler = GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "ContextCube" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		p_pipeline.m_sampler = l_sampler;
+	}
+
+	void Context::DoCleanupRTOCubeMapPipeline( RTOCubeMapPipeline & p_pipeline )
+	{
+		p_pipeline.m_sampler.reset();
 		p_pipeline.m_pipeline->Cleanup();
 		p_pipeline.m_pipeline.reset();
 		p_pipeline.m_vertexBuffer->Cleanup();

@@ -397,6 +397,12 @@ namespace GLSL
 	}
 
 	template< typename Value >
+	inline Value atan( Value const & p_y, Value & p_x )
+	{
+		return WriteFunctionCall< Value >( p_y.m_writer, cuT( "atan" ), p_y, p_x );
+	}
+
+	template< typename Value >
 	inline Value asin( Value const & p_value )
 	{
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "asin" ), p_value );

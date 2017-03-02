@@ -27,6 +27,7 @@ SOFTWARE.
 #include "Viewport.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Shader/UniformBuffer.hpp"
 
 #include <Graphics/Colour.hpp>
@@ -102,6 +103,18 @@ namespace Castor3D
 		 *\brief		Echange les buffers de rendu
 		 */
 		C3D_API void SwapBuffers();
+		/**
+		 *\~english
+		 *\brief		Prepares the skybox faces from an equirectangular HDR image.
+		 *\param[in]	p_texture	The texture holding the HDR image.
+		 *\param[out]	p_skybox	The skybox to prepare.
+		 *\~french
+		 *\brief		Prépare les face d'une skybox depuis une image HDR equirectangulaire.
+		 *\param[in]	p_texture	La texture contenant l'image HDR.
+		 *\param[out]	p_skybox	La skybox à préparer.
+		 */
+		C3D_API void PrepareSkybox( TextureLayout const & p_texture
+			, Skybox & p_skybox );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture.
@@ -410,6 +423,27 @@ namespace Castor3D
 			, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
+		 *\brief		Renders the wanted equirectangular 2D texture to given cube texture.
+		 *\param[in]	p_size			La taille du viewport de rendu.
+		 *\param[in]	p_2dTexture		The 2D texture.
+		 *\param[out]	p_cubeTexture	The cube texture.
+		 *\param[out]	p_fbo			The active FBO
+		 *\param[out]	p_attachs		The cube texture attaches to the active FBO.
+		 *\~french
+		 *\brief		Dessine a texture equirectangulaire 2D donnée dans la texture cube donnée.
+		 *\param[in]	p_size			La taille du viewport de rendu.
+		 *\param[in]	p_2dTexture		La texture 2D.
+		 *\param[out]	p_cubeTexture	La texture cube.
+		 *\param[out]	p_fbo			Le FBO actif.
+		 *\param[out]	p_attachs		Les attaches de la texture cube au FBO actif.
+		 */
+		C3D_API void Context::DoRenderToCubeMap( Castor::Size const & p_size
+			, TextureLayout const & p_2dTexture
+			, TextureLayoutSPtr p_cubeTexture
+			, FrameBufferSPtr p_fbo
+			, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs );
+		/**
+		 *\~english
 		 *\brief		Creates the render a 2D texture shader program.
 		 *\return		The program.
 		 *\~french
@@ -426,6 +460,15 @@ namespace Castor3D
 		 *\return		Le programme.
 		 */
 		ShaderProgramSPtr DoCreateProgramCube( bool p_depth, bool p_array );
+		/**
+		 *\~english
+		 *\brief		Creates the render a cube texture shader program.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Crée le programme shader de dessin de texture cube.
+		 *\return		Le programme.
+		 */
+		ShaderProgramSPtr DoCreateProgramToCube();
 		/**
 		 *\~english
 		 *\brief		Initialises this context
@@ -514,10 +557,38 @@ namespace Castor3D
 			//!\~french		Le sampler pour la texture.
 			SamplerSPtr m_sampler;
 		};
+		struct RTOCubeMapPipeline
+			: public RTOTPipeline
+		{
+			RTOCubeMapPipeline( Viewport && p_viewport
+				, std::array< Castor::real, 6 * 6 * 3 > && p_buffer
+				, Castor3D::BufferDeclaration && p_declaration )
+				: m_viewport{ std::move( p_viewport ) }
+				, m_bufferVertex{ std::move( p_buffer ) }
+				, m_declaration{ std::move(p_declaration) }
+			{
+			}
+			//!\~english	The Viewport used when rendering a texture into to a frame buffer.
+			//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
+			Viewport m_viewport;
+			//!	6 (faces) * 6 (vertex) * 3 (vertex position)
+			std::array< Castor::real, 6 * 6 * 3 > m_bufferVertex;
+			//!\~english	Buffer elements declaration.
+			//!\~french		Déclaration des éléments d'un vertex.
+			Castor3D::BufferDeclaration m_declaration;
+			//!\~english	Vertex array (quad definition).
+			//!\~french		Tableau de vertex (définition du quad).
+			std::array< Castor3D::BufferElementGroupSPtr, 36 > m_arrayVertex;
+			//!\~english	The sampler for the texture.
+			//!\~french		Le sampler pour la texture.
+			SamplerSPtr m_sampler;
+		};
 		void DoInitialiseRTOTPipelinePlane( RTOTPipeline & p_pipeline, ShaderProgram & p_program, bool p_depth );
 		void DoCleanupRTOTPipelinePlane( RTOTPipeline & p_pipeline );
 		void DoInitialiseRTOTPipelineCube( RTOTPipeline & p_pipeline, ShaderProgram & p_program, bool p_depth );
 		void DoCleanupRTOTPipelineCube( RTOTPipeline & p_pipeline );
+		void DoInitialiseRTOCubeMapPipeline( RTOCubeMapPipeline & p_pipeline, ShaderProgram & p_program );
+		void DoCleanupRTOCubeMapPipeline( RTOCubeMapPipeline & p_pipeline );
 
 	protected:
 		//!\~english	RenderWindow associated to this context.
@@ -541,6 +612,9 @@ namespace Castor3D
 		//!\~english	The pipeline used to render a cube texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube dans le tampon d'image actuellement activé en dessin.
 		RTOTPipelineGroup< 36, 3 > m_rtotPipelineCube;
+		//!\~english	The pipeline used to render a cube texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube dans le tampon d'image actuellement activé en dessin.
+		RTOCubeMapPipeline m_rtoCubePipeline;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		UniformBuffer m_matrixUbo;

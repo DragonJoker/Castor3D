@@ -123,7 +123,18 @@ namespace Castor3D
 		 */
 		inline TextureLayout & GetTexture()
 		{
+			REQUIRE( m_texture );
 			return *m_texture;
+		}
+		/**
+		 *\~english
+		 *\return		The skybox's texture.
+		 *\~french
+		 *\return		La texture de la skybox.
+		 */
+		inline TextureLayoutSPtr GetTexture()const
+		{
+			return m_texture;
 		}
 		/**
 		 *\~english
