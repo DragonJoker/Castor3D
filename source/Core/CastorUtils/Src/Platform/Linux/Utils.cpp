@@ -18,14 +18,6 @@ namespace Castor
 {
 	namespace System
 	{
-		void Sleep( uint32_t p_uiTime )
-		{
-			std::this_thread::sleep_for( std::chrono::milliseconds( p_uiTime ) );
-		}
-	}
-
-	namespace System
-	{
 #	if CASTOR_HAS_XINERAMA
 
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
