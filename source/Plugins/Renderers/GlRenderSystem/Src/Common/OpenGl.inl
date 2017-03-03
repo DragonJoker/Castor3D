@@ -687,7 +687,6 @@ namespace GlRender
 	inline Castor::FlagCombination< GlBarrierBit > OpenGl::Get( Castor3D::MemoryBarriers const & p_barriers )const
 	{
 		Castor::FlagCombination< GlBarrierBit > l_return;
-		Castor3D::MemoryBarrier;
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eVertexBuffer ) )
 		{
