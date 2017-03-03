@@ -344,7 +344,7 @@ namespace GlRender
 		inline GlTexDim Get( Castor3D::CubeMapFace p_value )const;
 		inline GlCompareMode Get( Castor3D::ComparisonMode p_value )const;
 		inline bool Get( Castor3D::WritingMask p_eMask )const;
-		inline Castor::FlagCombination< GlBarrierBit > Get( Castor::FlagCombination< Castor3D::MemoryBarrier > const & p_barriers )const;
+		inline Castor::FlagCombination< GlBarrierBit > Get( Castor3D::MemoryBarriers const & p_barriers )const;
 		inline Castor::String const & GetVendor()const;
 		inline Castor::String const & GetRenderer()const;
 		inline Castor::String const & GetStrVersion()const;

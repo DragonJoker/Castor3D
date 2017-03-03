@@ -684,9 +684,10 @@ namespace GlRender
 		return WriteMasks[uint32_t( p_eMask )];
 	}
 
-	inline Castor::FlagCombination< GlBarrierBit > OpenGl::Get( Castor::FlagCombination< Castor3D::MemoryBarrier > const & p_barriers )const
+	inline Castor::FlagCombination< GlBarrierBit > OpenGl::Get( Castor3D::MemoryBarriers const & p_barriers )const
 	{
 		Castor::FlagCombination< GlBarrierBit > l_return;
+		Castor3D::MemoryBarrier;
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eVertexBuffer ) )
 		{

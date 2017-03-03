@@ -29,6 +29,9 @@ SOFTWARE.
 #	define CASTOR_X11
 #	define C3D_API
 #elif defined( _WIN32 )
+#	ifdef MemoryBarrier
+#		undef MemoryBarrier
+#	endif
 #	define CASTOR_MSW
 #	if defined( Castor3D_EXPORTS )
 #		define C3D_API __declspec( dllexport )

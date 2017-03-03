@@ -71,6 +71,7 @@
 #include "Texture/TextureUnit.hpp"
 
 #include <Graphics/Font.hpp>
+#include <Graphics/Image.hpp>
 #include <Log/Logger.hpp>
 
 using namespace Castor;
