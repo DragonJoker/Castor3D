@@ -24,15 +24,14 @@ SOFTWARE.
 #define ___C3D_PREREQUISITES_H___
 
 #undef RGB
+#include <CastorUtilsPrerequisites.hpp>
 
-#if defined( __linux__ )
-#	define CASTOR_X11
+#if !defined( CASTOR_PLATFORM_WINDOWS )
 #	define C3D_API
-#elif defined( _WIN32 )
+#else
 #	ifdef MemoryBarrier
 #		undef MemoryBarrier
 #	endif
-#	define CASTOR_MSW
 #	if defined( Castor3D_EXPORTS )
 #		define C3D_API __declspec( dllexport )
 #	else
@@ -40,7 +39,6 @@ SOFTWARE.
 #	endif
 #endif
 
-#include <CastorUtilsPrerequisites.hpp>
 #include <Design/Collection.hpp>
 #include <Design/FlagCombination.hpp>
 #include <Design/OwnedBy.hpp>

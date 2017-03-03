@@ -23,7 +23,9 @@ SOFTWARE.
 #ifndef ___GL_X11_CONTEXT_H___
 #define ___GL_X11_CONTEXT_H___
 
-#if defined( __linux__ )
+#include <Config/PlatformConfig.hpp>
+
+#if defined( CASTOR_PLATFORM_LINUX )
 #include "Common/GlHolder.hpp"
 #include "Common/OpenGl.hpp"
 

@@ -3,12 +3,6 @@
 #include "Uniform.hpp"
 #include "UniformBuffer.hpp"
 
-#if defined( _WIN32 )
-#	include <direct.h>
-#else
-#	include <sys/stat.h>
-#endif
-
 #include <Stream/StreamPrefixManipulators.hpp>
 
 using namespace Castor;

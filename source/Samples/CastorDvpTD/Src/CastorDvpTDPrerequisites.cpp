@@ -1,10 +1,10 @@
 #include "CastorDvpTDPrerequisites.hpp"
 
-#if defined( _MSC_VER ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
+#if defined( CASTOR_PLATFORM_WINDOWS  ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
 #	include <cstdlib>
 #	include <crtdbg.h>
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 #	include <gdk/gdkx.h>
 #	include <gtk/gtk.h>
 #endif

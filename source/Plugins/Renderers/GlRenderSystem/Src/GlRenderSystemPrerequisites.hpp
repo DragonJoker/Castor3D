@@ -45,7 +45,7 @@ SOFTWARE.
 #		endif
 #	endif
 
-#ifdef _WIN32
+#ifdef CASTOR_PLATFORM_WINDOWS
 #	ifdef GlRenderSystem_EXPORTS
 #		define C3D_Gl_API __declspec( dllexport )
 #	else

@@ -1,30 +1,40 @@
 option( CASTOR_BUILD_RENDERER_OGL "Build OpenGL Renderer plugin" TRUE )
+option( CASTOR_BUILD_RENDERER_OGL_ES3 "Build OpenGL ES 3.0 Renderer plugin" TRUE )
 option( CASTOR_BUILD_TEST_RENDERER_OGL "Build OpenGL Renderer Test application" TRUE )
 
 function( RenderersInit )
 	set( Ogl "no (Not wanted)" PARENT_SCOPE )
+	set( OglES3 "no (Not wanted)" PARENT_SCOPE )
 	set( OglT "no (Not wanted)" PARENT_SCOPE )
 	set( Trs "no (Not wanted)" PARENT_SCOPE )
 endfunction( RenderersInit )
 
 function( RenderersBuild )
-	if ( ${CASTOR_BUILD_RENDERER_OGL} )
-		set( Build ${Ogl} )
-		add_subdirectory( Plugins/Renderers/GlRenderSystem )
-		set( Ogl ${Build} PARENT_SCOPE )
-
-		if ( ${CASTOR_BUILDGRP_TEST} AND ${CASTOR_BUILD_TEST_RENDERER_OGL} )
-			set( Build ${OglT} )
-			add_subdirectory( Plugins/Renderers/GlRenderSystem/Test )
-			set( OglT ${Build} PARENT_SCOPE )
+	if ( ANDROID )
+		if ( ${CASTOR_BUILD_RENDERER_OGL_ES3} )
+			set( Build ${OglES3} )
+			add_subdirectory( Plugins/Renderers/GlES3RenderSystem )
+			set( OglES3 ${Build} PARENT_SCOPE )
 		endif()
-	endif()
+	else ()
+		if ( ${CASTOR_BUILD_RENDERER_OGL} )
+			set( Build ${Ogl} )
+			add_subdirectory( Plugins/Renderers/GlRenderSystem )
+			set( Ogl ${Build} PARENT_SCOPE )
 
-	if ( ${CASTOR_BUILDGRP_TEST} )
-		set( Build ${Trs} )
-		add_subdirectory( Plugins/Renderers/TestRenderSystem )
-		set( Trs ${Build} PARENT_SCOPE )
-	endif()
+			if ( ${CASTOR_BUILDGRP_TEST} AND ${CASTOR_BUILD_TEST_RENDERER_OGL} )
+				set( Build ${OglT} )
+				add_subdirectory( Plugins/Renderers/GlRenderSystem/Test )
+				set( OglT ${Build} PARENT_SCOPE )
+			endif()
+		endif()
+
+		if ( ${CASTOR_BUILDGRP_TEST} )
+			set( Build ${Trs} )
+			add_subdirectory( Plugins/Renderers/TestRenderSystem )
+			set( Trs ${Build} PARENT_SCOPE )
+		endif()
+	endif ()
 
 	set( CastorMinLibraries
 		${CastorMinLibraries}
@@ -40,6 +50,7 @@ endfunction( RenderersBuild )
 function( RenderersSummary msg_in msgtest_in )
 	set( msg_tmp "\n\nRenderers :" )
 	set( msg_tmp "${msg_tmp}\n    OpenGL              ${Ogl}" )
+	set( msg_tmp "${msg_tmp}\n    OpenGL ES 3.0       ${OglES3}" )
 	if ( ${CASTOR_BUILDGRP_TEST} )
 		set( msg_tmp "${msg_tmp}\n    Test                ${Trs}" )
 		set( msgtest_tmp "${msgtest_tmp}\n    OpenGL Test         ${OglT}" )
@@ -68,6 +79,23 @@ function( RenderersSetup )
 			DESCRIPTION "Development files for GlRenderSystem."
 			GROUP Development
 			DEPENDS GlRenderSystem CastorUtils_dev Castor3D_dev
+			INSTALL_TYPES Developer Full
+		)
+	endif ()
+	if( ${CASTOR_BUILD_RENDERER_OGL_ES3} )
+		cpack_add_component( GlES3RenderSystem
+			DISPLAY_NAME "GlES3RenderSystem"
+			DESCRIPTION "Enables OpenGL ES 3.0 rendering API in Castor3D."
+			REQUIRED
+			GROUP Renderers
+			DEPENDS Castor3D
+			INSTALL_TYPES Minimal Full
+		)
+		cpack_add_component( GlES3RenderSystem_dev
+			DISPLAY_NAME "GlES3RenderSystem SDK"
+			DESCRIPTION "Development files for GlES3RenderSystem."
+			GROUP Development
+			DEPENDS GlES3RenderSystem CastorUtils_dev Castor3D_dev
 			INSTALL_TYPES Developer Full
 		)
 	endif ()

@@ -8,6 +8,16 @@
 using namespace Castor3D;
 using namespace Castor;
 
+#ifndef CASTOR_PLATFORM_WINDOWS
+#	define C3D_Obj_API
+#else
+#	ifdef ObjImporter_EXPORTS
+#		define C3D_Obj_API __declspec(dllexport)
+#	else
+#		define C3D_Obj_API __declspec(dllimport)
+#	endif
+#endif
+
 C3D_Obj_API void GetRequiredVersion( Version & p_version )
 {
 	p_version = Version();

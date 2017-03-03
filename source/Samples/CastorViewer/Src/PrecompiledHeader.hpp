@@ -26,7 +26,7 @@ SOFTWARE.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	ifdef _WIN32
+#	ifdef CASTOR_PLATFORM_WINDOWS
 #		undef __WXGTK__
 #		define __WXMSW__
 #	endif
@@ -134,7 +134,7 @@ SOFTWARE.
 #	include <GuiCommonPrerequisites.hpp>
 #endif
 
-#if !defined( VLD_AVAILABLE ) && defined( _MSC_VER ) && !defined( NDEBUG )
+#if !defined( VLD_AVAILABLE ) && defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG )
 #	define _CRTDBG_MAP_ALLOC
 #	include <cstdlib>
 #	include <crtdbg.h>

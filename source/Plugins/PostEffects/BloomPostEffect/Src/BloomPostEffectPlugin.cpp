@@ -8,6 +8,16 @@
 
 #include "BloomPostEffect.hpp"
 
+#ifndef CASTOR_PLATFORM_WINDOWS
+#	define C3D_Bloom_API
+#else
+#	ifdef BloomPostEffect_EXPORTS
+#		define C3D_Bloom_API __declspec( dllexport )
+#	else
+#		define C3D_Bloom_API __declspec( dllimport )
+#	endif
+#endif
+
 using namespace Bloom;
 
 C3D_Bloom_API void GetRequiredVersion( Castor3D::Version & p_version )

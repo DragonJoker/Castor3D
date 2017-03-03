@@ -2,7 +2,7 @@
 
 #include "Miscellaneous/Version.hpp"
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <Windows.h>
 #else
 #	include <dlfcn.h>
@@ -14,7 +14,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#if defined( _MSC_VER)
+#if defined( CASTOR_COMPILER_MSVC )
 	static const String GetNameFunctionABIName = cuT( "?GetName@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
 #	if defined( _WIN64 )
 	static const String GetRequiredVersionFunctionABIName = cuT( "?GetRequiredVersion@@YAXAEAVVersion@Castor3D@@@Z" );
@@ -25,7 +25,7 @@ namespace Castor3D
 	static const String GetOnLoadFunctionABIName = cuT( "?OnLoad@@YAXPAVEngine@Castor3D@@@Z" );
 	static const String GetOnUnloadFunctionABIName = cuT( "?OnUnload@@YAXPAVEngine@Castor3D@@@Z" );
 #	endif
-#elif defined( __GNUG__)
+#elif defined( CASTOR_COMPILER_GNUC )
 #	if GCC_VERSION >= 50300
 	static const String GetNameFunctionABIName = cuT( "_Z7GetNameB5cxx11v" );
 #	else

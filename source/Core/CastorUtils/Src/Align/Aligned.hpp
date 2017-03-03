@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include "Miscellaneous/Utils.hpp"
 
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 #	define CASTOR_ALIGNED_DECL( a ) alignas( a )
 #else
 #	define CASTOR_ALIGNED_DECL( a )

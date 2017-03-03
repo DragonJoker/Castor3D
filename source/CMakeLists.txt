@@ -16,6 +16,7 @@ set( VERSION_YEAR 2016 )
 set( CMAKE_MODULE_PATH
 	${CMAKE_SOURCE_DIR}/CMake
 	${CMAKE_SOURCE_DIR}/CMake/Modules
+	${CMAKE_SOURCE_DIR}/CMake/Toolchains
 )
 set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
 # Experimental Precompiled headers support for GCC

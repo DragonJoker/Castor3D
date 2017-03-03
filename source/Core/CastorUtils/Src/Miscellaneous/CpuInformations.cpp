@@ -2,62 +2,13 @@
 
 #include "Exception/Assertion.hpp"
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#	include <intrin.h>
-#else
-#	include <X11/Xlib.h>
-#	include <cpuid.h>
-#endif
-
 namespace Castor
 {
-#if defined( __GNUG__ )
-
-	void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+	namespace Platform
 	{
-		uint32_t l_a;
-		uint32_t l_b;
-		uint32_t l_c;
-		uint32_t l_d;
-		__get_cpuid( func, &l_a, &l_b, &l_c, &l_d );
-		p_data[0] = int32_t( l_a );
-		p_data[1] = int32_t( l_b );
-		p_data[2] = int32_t( l_c );
-		p_data[3] = int32_t( l_d );
+		void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data );
+		uint32_t get_core_count();
 	}
-
-#elif defined( _MSC_VER )
-
-	void call_cpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
-	{
-		__cpuid( p_data.data(), func );
-	}
-
-#endif
-#if defined( _WIN32 )
-
-	inline uint32_t get_core_count()
-	{
-		SYSTEM_INFO sysinfo = { 0 };
-		::GetSystemInfo( &sysinfo );
-		return uint32_t( sysinfo.dwNumberOfProcessors );
-	}
-
-#elif defined( __linux__ )
-
-	inline uint32_t get_core_count()
-	{
-		char res[128];
-		FILE * fp = popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" );
-		ENSURE( fread( res, 1, sizeof( res ) - 1, fp ) < sizeof( res ) );
-		pclose( fp );
-		return uint32_t( res[0] );
-	}
-
-#else
-#	error "Yet unsupported OS"
-#endif
 
 	CpuInformations::CpuInformationsInternal::CpuInformationsInternal()
 	{
@@ -73,12 +24,12 @@ namespace Castor
 
 		std::vector< std::array< int, 4 > > l_datas{};
 		std::array< int32_t, 4 > l_data;
-		call_cpuid( 0u, l_data );
+		Platform::call_cpuid( 0u, l_data );
 		auto l_ids = l_data[0];
 
 		for ( int32_t i = 0; i < l_ids; ++i )
 		{
-			call_cpuid( i, l_data );
+			Platform::call_cpuid( i, l_data );
 			l_datas.push_back( l_data );
 		}
 
@@ -109,7 +60,7 @@ namespace Castor
 			m_f_7_ECX = l_datas[7][2];
 		}
 
-		m_coreCount = get_core_count();
+		m_coreCount = Platform::get_core_count();
 	}
 
 	CpuInformations::CpuInformationsInternal const CpuInformations::m_internal;

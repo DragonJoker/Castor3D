@@ -4,11 +4,12 @@
 
 namespace Castor
 {
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 	const xchar Path::Separator = cuT( '\\' );
 #else
 	const xchar Path::Separator = cuT( '/' );
 #endif
+
 	Path::Path()
 	{
 	}

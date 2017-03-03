@@ -35,7 +35,11 @@ SOFTWARE.
 
 //! Tells whether or not use SSE2 instructions for Point4f and Matrix4x4f operations.
 #undef CASTOR_USE_SSE2
-#define CASTOR_USE_SSE2 @CASTOR_USE_SSE2@
+#if !defined( ANDROID )
+#	define CASTOR_USE_SSE2 @CASTOR_USE_SSE2@
+#else
+#	define CASTOR_USE_SSE2 0
+#endif
 
 //! Tells whether or not the build has Xinerama.
 #undef CASTOR_HAS_XINERAMA

@@ -74,7 +74,7 @@ namespace GlRender
 				std::string l_tmp = string::string_cast< char >( m_loadedSource );
 				std::vector< char > l_pszTmp( m_loadedSource.size() + 1 );
 				char * l_buffer = l_pszTmp.data();
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 				strncpy_s( l_buffer, m_loadedSource.size() + 1, l_tmp.c_str(), l_tmp.size() );
 #else
 				strncpy( l_buffer, l_tmp.c_str(), l_tmp.size() );

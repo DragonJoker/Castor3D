@@ -20,9 +20,9 @@ namespace Castor3D
 {
 	template<> const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
 
-#if defined( _MSC_VER)
+#if defined( CASTOR_COMPILER_MSVC )
 	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4PluginType@Castor3D@@XZ" );
-#elif defined( __GNUG__)
+#elif defined( CASTOR_COMPILER_GNUC )
 	static const String GetTypeFunctionABIName = cuT( "_Z7GetTypev" );
 #endif
 	PluginCache::Cache( Engine & p_engine

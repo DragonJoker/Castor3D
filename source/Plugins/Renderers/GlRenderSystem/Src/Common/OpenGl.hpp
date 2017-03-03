@@ -23,9 +23,11 @@ SOFTWARE.
 #ifndef ___C3DGL_GlObjects___
 #define ___C3DGL_GlObjects___
 
-#if defined( _WIN32 )
+#include <Config/PlatformConfig.hpp>
+
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <Windows.h>
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 #	include <X11/Xlib.h>
 #	include <GL/glx.h>
 #	define GLX_GLXEXT_PROTOTYPES
@@ -408,7 +410,7 @@ namespace GlRender
 		/**@name Context functions */
 		//@{
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 		inline void MakeCurrent( HDC hdc, HGLRC hglrc )const;
 		inline void SwapBuffers( HDC hdc )const;
@@ -418,7 +420,7 @@ namespace GlRender
 		inline bool DeleteContext( HGLRC hContext )const;
 		inline bool HasCreateContextAttribs()const;
 
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 
 		inline void MakeCurrent( Display * pDisplay, GLXDrawable drawable, GLXContext context )const;
 		inline void SwapBuffers( Display * pDisplay, GLXDrawable drawable )const;
@@ -1002,14 +1004,14 @@ namespace GlRender
 		/**@name Context */
 		//@{
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 		std::function< BOOL( HDC hdc, HGLRC hglrc ) > m_pfnMakeCurrent;
 		std::function< BOOL( HDC hdc ) > m_pfnSwapBuffers;
 		std::function< HGLRC( HDC hdc ) > m_pfnCreateContext;
 		std::function< BOOL( HGLRC hContext ) > m_pfnDeleteContext;
 		std::function< HGLRC( HDC hDC, HGLRC hShareContext, int const * attribList ) > m_pfnCreateContextAttribs;
 		std::function< BOOL( int interval ) > m_pfnSwapInterval;
-#elif defined ( __linux__ )
+#elif defined ( CASTOR_PLATFORM_LINUX )
 		std::function< int( Display * pDisplay, GLXDrawable drawable, GLXContext context ) > m_pfnMakeCurrent;
 		std::function< void( Display * pDisplay, GLXDrawable drawable ) > m_pfnSwapBuffers;
 		std::function< GLXContext( Display * pDisplay, XVisualInfo * pVisualInfo, GLXContext shareList, Bool direct ) > m_pfnCreateContext;
@@ -1352,7 +1354,7 @@ namespace GlRender
 		template< typename Func >
 		bool GetFunction( Castor::String const & p_name, Func & p_func )
 		{
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 			p_func = reinterpret_cast< Func >( wglGetProcAddress( Castor::string::string_cast< char >( p_name ).c_str() ) );
 #else
 			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( reinterpret_cast< GLubyte const * >( Castor::string::string_cast< char >( p_name ).c_str() ) ) );
@@ -1434,14 +1436,14 @@ namespace GlRender
 	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory );
 	MAKE_GL_EXTENSION( NVX_gpu_memory_info );
 
-#	if defined( _WIN32 )
+#	if defined( CASTOR_PLATFORM_WINDOWS )
 
 #	define MAKE_WGL_EXTENSION( x )	static const Castor::String x = cuT( "WGL_" ) cuT( #x );
 	MAKE_WGL_EXTENSION( ARB_create_context )
 	MAKE_WGL_EXTENSION( ARB_pixel_format )
 	MAKE_WGL_EXTENSION( EXT_swap_control )
 
-#	elif defined( __linux__ )
+#	elif defined( CASTOR_PLATFORM_LINUX )
 
 #	define MAKE_GLX_EXTENSION( x )	static const Castor::String x = cuT( "GLX_" ) cuT( #x );
 	MAKE_GLX_EXTENSION( ARB_create_context )

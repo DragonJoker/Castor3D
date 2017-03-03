@@ -10,7 +10,7 @@
 using namespace Castor3D;
 using namespace Castor;
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_Ply_API
 #else
 #	ifdef PlyImporter_EXPORTS

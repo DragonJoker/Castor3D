@@ -6,6 +6,16 @@
 using namespace Castor;
 using namespace PnTriangles;
 
+#ifndef CASTOR_PLATFORM_WINDOWS
+#	define C3D_PnTriangles_API
+#else
+#	ifdef PnTrianglesDivider_EXPORTS
+#		define C3D_PnTriangles_API __declspec(dllexport)
+#	else
+#		define C3D_PnTriangles_API __declspec(dllimport)
+#	endif
+#endif
+
 C3D_PnTriangles_API void GetRequiredVersion( Castor3D::Version & p_version )
 {
 	p_version = Castor3D::Version();

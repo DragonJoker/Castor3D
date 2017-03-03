@@ -1,6 +1,6 @@
 ﻿#include "ImporterPlugin.hpp"
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <Windows.h>
 #else
 #	include <dlfcn.h>
@@ -12,13 +12,13 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#if defined( _MSC_VER)
+#if defined( CASTOR_COMPILER_MSVC )
 #	if defined( _WIN64 )
 	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@PEAVEngine@Castor3D@@@Z" );
 #	else
 	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@Z" );
 #	endif
-#elif defined( __GNUG__)
+#elif defined( CASTOR_COMPILER_GNUC )
 #	if GCC_VERSION >= 50300
 	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsB5cxx11PN8Castor3D6EngineE" );
 #	else

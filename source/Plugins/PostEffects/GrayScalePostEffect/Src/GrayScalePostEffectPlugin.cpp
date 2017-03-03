@@ -9,7 +9,7 @@
 
 #include "GrayScalePostEffect.hpp"
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_GrayScale_API
 #else
 #	ifdef GrayScalePostEffect_EXPORTS

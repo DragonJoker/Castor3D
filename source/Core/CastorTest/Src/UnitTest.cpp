@@ -1,5 +1,7 @@
 #include "UnitTest.hpp"
 
+#include <sstream>
+
 namespace Testing
 {
 	//*************************************************************************************************
@@ -80,8 +82,15 @@ namespace Testing
 
 	//*************************************************************************************************
 
+	std::string to_string( int p_value )
+	{
+		std::stringstream l_stream;
+		l_stream << p_value;
+		return l_stream.str();
+	}
+
 	TestFailed::TestFailed( std::string const & p_what, std::string const & p_file, std::string const & p_function, int p_line )
-		: m_what( p_file + " - " + p_function + ", line " + std::to_string( p_line ) + " : " + p_what )
+		: m_what( p_file + " - " + p_function + ", line " + to_string( p_line ) + " : " + p_what )
 	{
 	}
 

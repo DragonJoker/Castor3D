@@ -1,10 +1,10 @@
 #include "GuiCommonPrerequisites.hpp"
 
-#if defined( _MSC_VER ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
+#if defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
 #	include <cstdlib>
 #	include <crtdbg.h>
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 #	include <gdk/gdkx.h>
 #	include <gtk/gtk.h>
 #	undef None
@@ -132,7 +132,7 @@ namespace GuiCommon
 					for ( uint32_t i = 0; i < p_height && l_it.IsOk(); i++ )
 					{
 						uint8_t const * l_line = l_buffer;
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 						wxNativePixelData::Iterator l_rowStart = l_it;
 #endif
 
@@ -151,7 +151,7 @@ namespace GuiCommon
 
 						l_buffer -= l_pitch;
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 						l_it = l_rowStart;
 						l_it.OffsetY( l_data, 1 );
 #endif
@@ -163,7 +163,7 @@ namespace GuiCommon
 
 					for ( uint32_t i = 0; i < p_height && l_it.IsOk(); i++ )
 					{
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 						wxNativePixelData::Iterator l_rowStart = l_it;
 #endif
 
@@ -180,7 +180,7 @@ namespace GuiCommon
 							l_it++;
 						}
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 						l_it = l_rowStart;
 						l_it.OffsetY( l_data, 1 );
 #endif
@@ -355,11 +355,11 @@ namespace GuiCommon
 
 	Castor3D::WindowHandle make_WindowHandle( wxWindow * p_window )
 	{
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 
 		return WindowHandle( std::make_shared< IMswWindowHandle >( p_window->GetHandle() ) );
 
-#elif defined( __linux__ )
+#elif defined( CASTOR_PLATFORM_LINUX )
 
 		GtkWidget * l_pGtkWidget = static_cast< GtkWidget * >( p_window->GetHandle() );
 		GLXDrawable l_drawable = 0;

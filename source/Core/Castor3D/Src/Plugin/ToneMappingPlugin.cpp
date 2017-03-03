@@ -1,6 +1,6 @@
 #include "ToneMappingPlugin.hpp"
 
-#if defined( _WIN32 )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <Windows.h>
 #else
 #	include <dlfcn.h>

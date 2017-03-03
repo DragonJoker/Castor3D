@@ -11,7 +11,7 @@
 
 #include <Miscellaneous/Version.hpp>
 
-#ifndef _WIN32
+#ifndef CASTOR_PLATFORM_WINDOWS
 #	define C3D_ForwardMsaaTechnique_API
 #else
 #	ifdef ForwardMsaaTechnique_EXPORTS

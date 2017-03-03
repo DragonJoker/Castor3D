@@ -17,7 +17,7 @@
 #	include "MiniZip/iowin32.h"
 #endif
 
-#if defined( MSDOS ) || defined( OS2 ) || defined( _WIN32 ) || defined( __CYGWIN__ )
+#if defined( CASTOR_PLATFORM_WINDOWS )
 #	include <fcntl.h>
 #	include <io.h>
 #	define SET_BINARY_MODE( file ) setmode( fileno( file ), O_BINARY )
@@ -36,7 +36,7 @@ namespace Castor
 		std::string GetError( int p_error )
 		{
 			//std::string l_error( zError( p_error ) );
-			return "(code " + std::to_string( p_error ) + ")";
+			return "(code " + string::to_string( p_error ) + ")";
 		}
 
 		struct ZipImpl

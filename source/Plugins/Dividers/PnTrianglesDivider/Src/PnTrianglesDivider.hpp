@@ -37,16 +37,6 @@ SOFTWARE.
 
 #pragma warning( pop )
 
-#ifndef _WIN32
-#	define C3D_PnTriangles_API
-#else
-#	ifdef PnTrianglesDivider_EXPORTS
-#		define C3D_PnTriangles_API __declspec(dllexport)
-#	else
-#		define C3D_PnTriangles_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace PnTriangles
 {
 	/*!

@@ -36,7 +36,7 @@ SOFTWARE.
 #	define DEBUG_BUFFERS 0
 #endif
 
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( push )
 #	pragma warning( disable:4503 )
 #endif
@@ -467,7 +467,7 @@ namespace Castor3D
 	};
 }
 
-#if defined( _MSC_VER )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( pop )
 #endif
 

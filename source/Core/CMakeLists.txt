@@ -13,6 +13,11 @@ endfunction( CoreInit )
 
 function( CoreBuild )
 	set( Error FALSE )
+
+	if ( ANDROID )
+		add_subdirectory( Core/FreeType )
+	endif ()
+
 	set( Build ${Cutils} )
 	add_subdirectory( Core/CastorUtils )
 	set( Cutils ${Build} PARENT_SCOPE )

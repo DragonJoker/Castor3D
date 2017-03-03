@@ -12,35 +12,6 @@
 
 namespace Castor
 {
-#if defined( _MSC_VER )
-	int Vsnprintf( char * p_text, size_t p_count, const char * p_format, va_list p_valist )
-	{
-		return vsnprintf_s( p_text, p_count, p_count, p_format, p_valist );
-	}
-
-	int Vswprintf( wchar_t * p_text, size_t p_count, const wchar_t * p_format, va_list p_valist )
-	{
-		return vswprintf_s( p_text, p_count, p_format, p_valist );
-	}
-#else
-	int Vsnprintf( char * p_text, size_t p_count, const char * p_format, va_list p_valist )
-	{
-		return vsnprintf( p_text, p_count, p_format, p_valist );
-	}
-
-#	if defined( _WIN32 )
-	int Vswprintf( wchar_t * p_text, size_t p_count, const wchar_t * p_format, va_list p_valist )
-	{
-		return vswprintf( p_text, p_format, p_valist );
-	}
-#	else
-	int Vswprintf( wchar_t * p_text, size_t p_count, const wchar_t * p_format, va_list p_valist )
-	{
-		return vswprintf( p_text, p_count, p_format, p_valist );
-	}
-#	endif
-#endif
-
 	static const std::string ERROR_LOGGER_ALREADY_INITIALISED = "Logger instance already initialised";
 
 	template< typename CharType, typename LogStreambufTraits >

@@ -1,8 +1,11 @@
-#include <emmintrin.h>
 #include <cstring>
 #include "UnsupportedFormatException.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 #include "Exception/Assertion.hpp"
+
+#if CASTOR_USE_SSE2
+#	include <emmintrin.h>
+#endif
 
 #if defined( max )
 #	undef max
@@ -3283,7 +3286,7 @@ namespace Castor
 			}
 		};
 
-#if defined( _X64 )
+#if defined( _X64 ) && CASTOR_USE_SSE2
 
 		/*!
 		\author 	Sylvain DOREMUS

@@ -1,4 +1,4 @@
-#if defined( __linux__ )
+#if defined( CASTOR_PLATFORM_LINUX )
 
 #include "Render/GlX11Context.hpp"
 
