@@ -3,6 +3,7 @@
 #include "Exception/Assertion.hpp"
 
 #if defined( _WIN32 )
+#	include <Windows.h>
 #	include <intrin.h>
 #else
 #	include <X11/Xlib.h>

@@ -20,17 +20,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_CONTEXT_H___
-#define ___C3D_CONTEXT_H___
+#ifndef ___C3D_Context_H___
+#define ___C3D_Context_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "Viewport.hpp"
+#include "RenderColourToCube.hpp"
+#include "RenderColourLayerToTexture.hpp"
+#include "RenderColourToTexture.hpp"
+#include "RenderDepthLayerToTexture.hpp"
+#include "RenderDepthToTexture.hpp"
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Shader/UniformBuffer.hpp"
-
-#include <Graphics/Colour.hpp>
-#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -102,6 +101,21 @@ namespace Castor3D
 		 *\brief		Echange les buffers de rendu
 		 */
 		C3D_API void SwapBuffers();
+		/**
+		 *\~english
+		 *\brief		Prepares the skybox faces from an equirectangular HDR image.
+		 *\param[in]	p_texture	The texture holding the HDR image.
+		 *\param[in]	p_size		The skybox faces dimensions.
+		 *\param[out]	p_skybox	The skybox to prepare.
+		 *\~french
+		 *\brief		Prépare les face d'une skybox depuis une image HDR equirectangulaire.
+		 *\param[in]	p_texture	La texture contenant l'image HDR.
+		 *\param[in]	p_size		Les dimensions des faces de la skybox.
+		 *\param[out]	p_skybox	La skybox à préparer.
+		 */
+		C3D_API void PrepareSkybox( TextureLayout const & p_texture
+			, Castor::Size const & p_size
+			, Skybox & p_skybox );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture.
@@ -308,126 +322,6 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Renders the given texture.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\~french
-		 *\brief		Dessine la texture donnée.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo
-			, GeometryBuffers const & p_geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Renders the wanted layer of given texture array.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_index				The layer index.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\~french
-		 *\brief		Dessine la couche voulue du tableau de textures donné.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_index				L'index de la couche.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index
-			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo
-			, GeometryBuffers const & p_geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Renders the given cube texture.
-		 *\param[in]	p_position			The viewer position.
-		 *\param[in]	p_orientation		The viewer orientation.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\~french
-		 *\brief		Dessine la texture cube donnée.
-		 *\param[in]	p_position			La position de l'observateur.
-		 *\param[in]	p_orientation		L'orientation de l'observateur.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 */
-		C3D_API void DoRenderTexture( Castor::Point3r const & p_position
-			, Castor::Quaternion const & p_orientation
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo
-			, GeometryBuffers const & p_geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Renders the wanted layer of given cube texture array.
-		 *\param[in]	p_position			The viewer position.
-		 *\param[in]	p_orientation		The viewer orientation.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_index				The layer index.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\~french
-		 *\brief		Dessine la couche voulue du tableau de textures cube donné.
-		 *\param[in]	p_position			La position de l'observateur.
-		 *\param[in]	p_orientation		L'orientation de l'observateur.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_index				L'index de la couche.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 */
-		C3D_API void DoRenderTexture( Castor::Point3r const & p_position
-			, Castor::Quaternion const & p_orientation
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index
-			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo
-			, GeometryBuffers const & p_geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Creates the render a 2D texture shader program.
-		 *\return		The program.
-		 *\~french
-		 *\brief		Crée le programme shader de dessin de texture 2D.
-		 *\return		Le programme.
-		 */
-		ShaderProgramSPtr DoCreateProgram2D( bool p_depth, bool p_array );
-		/**
-		 *\~english
-		 *\brief		Creates the render a cube texture shader program.
-		 *\return		The program.
-		 *\~french
-		 *\brief		Crée le programme shader de dessin de texture cube.
-		 *\return		Le programme.
-		 */
-		ShaderProgramSPtr DoCreateProgramCube( bool p_depth, bool p_array );
-		/**
-		 *\~english
 		 *\brief		Initialises this context
 		 *\return		\p true if initialised, false if not
 		 *\~french
@@ -471,54 +365,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual void DoSwapBuffers() = 0;
 
-	private:
-		struct RTOTPipeline
-		{
-			//!\~english	The vertex buffer.
-			//!\~french		Le tampon de sommets.
-			VertexBufferSPtr m_vertexBuffer;
-			//!\~english	The GeometryBuffers used when rendering a texture to the current frame buffer.
-			//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
-			GeometryBuffersSPtr m_geometryBuffers;
-			//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
-			//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-			RenderPipelineUPtr m_pipeline;
-		};
-		template< size_t VtxCount, size_t VtxSize >
-		struct RTOTPipelineGroup
-		{
-			//!\~english	The Viewport used when rendering a texture into to a frame buffer.
-			//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
-			Viewport m_viewport;
-			//!	6 * [2(vertex position) 2(texture coordinates)]
-			std::array< Castor::real, VtxCount * VtxSize > m_bufferVertex;
-			//!\~english	Buffer elements declaration.
-			//!\~french		Déclaration des éléments d'un vertex.
-			Castor3D::BufferDeclaration m_declaration;
-			//!\~english	Vertex array (quad definition).
-			//!\~french		Tableau de vertex (définition du quad).
-			std::array< Castor3D::BufferElementGroupSPtr, VtxCount > m_arrayVertex;
-			//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
-			//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-			RTOTPipeline m_texture;
-			//!\~english	The pipeline used to render a layer from a texture array in the current draw-bound framebuffer.
-			//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures dans le tampon d'image actuellement activé en dessin.
-			RTOTPipeline m_textureArray;
-			//!\~english	The pipeline used to render a depth texture in the current draw-bound framebuffer.
-			//!\~french		Le pipeline utilisé pour le rendu d'une texture de profondeur dans le tampon d'image actuellement activé en dessin.
-			RTOTPipeline m_depth;
-			//!\~english	The pipeline used to render a layer from a depth texture array in the current draw-bound framebuffer.
-			//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures de profondeur dans le tampon d'image actuellement activé en dessin.
-			RTOTPipeline m_depthArray;
-			//!\~english	The sampler for the texture.
-			//!\~french		Le sampler pour la texture.
-			SamplerSPtr m_sampler;
-		};
-		void DoInitialiseRTOTPipelinePlane( RTOTPipeline & p_pipeline, ShaderProgram & p_program, bool p_depth );
-		void DoCleanupRTOTPipelinePlane( RTOTPipeline & p_pipeline );
-		void DoInitialiseRTOTPipelineCube( RTOTPipeline & p_pipeline, ShaderProgram & p_program, bool p_depth );
-		void DoCleanupRTOTPipelineCube( RTOTPipeline & p_pipeline );
-
 	protected:
 		//!\~english	RenderWindow associated to this context.
 		//!\~french		RenderWindow associée à ce contexte.
@@ -535,15 +381,24 @@ namespace Castor3D
 		//!\~english	The active query index.
 		//!\~french		L'index de la requête active.
 		uint32_t m_queryIndex = 0;
-		//!\~english	The pipeline used to render a 2D texture in the current draw-bound framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture 2D dans le tampon d'image actuellement activé en dessin.
-		RTOTPipelineGroup< 6, 4 > m_rtotPipelinePlane;
-		//!\~english	The pipeline used to render a cube texture in the current draw-bound framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube dans le tampon d'image actuellement activé en dessin.
-		RTOTPipelineGroup< 36, 3 > m_rtotPipelineCube;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		UniformBuffer m_matrixUbo;
+		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
+		RenderColourToTexture m_colour;
+		//!\~english	The pipeline used to render a layer from a texture array in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures dans le tampon d'image actuellement activé en dessin.
+		RenderColourLayerToTexture m_colourLayer;
+		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
+		RenderColourToTexture m_depth;
+		//!\~english	The pipeline used to render a layer from a texture array in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures dans le tampon d'image actuellement activé en dessin.
+		RenderColourLayerToTexture m_depthLayer;
+		//!\~english	The pipeline used to render a cube texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube dans le tampon d'image actuellement activé en dessin.
+		RenderColourToCube m_cube;
 	};
 }
 

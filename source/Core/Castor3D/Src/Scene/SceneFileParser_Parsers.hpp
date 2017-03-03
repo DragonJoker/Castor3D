@@ -291,6 +291,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationEnd )
 
 	// Skybox parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxEqui )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxLeft )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxRight )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxTop )

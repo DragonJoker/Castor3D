@@ -71,6 +71,7 @@
 #include "Texture/TextureUnit.hpp"
 
 #include <Graphics/Font.hpp>
+#include <Graphics/Image.hpp>
 #include <Log/Logger.hpp>
 
 using namespace Castor;
@@ -4339,6 +4340,56 @@ namespace Castor3D
 	{
 	}
 	END_ATTRIBUTE_POP()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxEqui )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( p_params.size() <= 1 )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else if ( !l_parsingContext->pSkybox )
+		{
+			PARSING_ERROR( cuT( "No skybox initialised." ) );
+		}
+		else
+		{
+			Path l_path;
+			Path l_filePath = p_context->m_file->GetFilePath();
+			p_params[0]->Get( l_path );
+			PxBufferBaseSPtr l_buffer;
+
+			if ( File::FileExists( l_filePath / l_path ) )
+			{
+				Image l_image{ l_path.GetFileName(), l_filePath / l_path };
+				l_buffer = l_image.GetPixels();
+			}
+
+			if ( l_buffer )
+			{
+				Size l_size;
+				p_params[1]->Get( l_size );
+				auto l_skybox = l_parsingContext->pSkybox;
+				auto l_engine = l_parsingContext->pScene->GetEngine();
+				l_parsingContext->pScene->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+					, [l_buffer, l_skybox, l_engine, l_size]()
+					{
+						auto l_texture = l_engine->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+						l_texture->GetImage().InitialiseSource( l_buffer );
+						l_texture->Initialise();
+						l_engine->GetRenderSystem()->GetCurrentContext()->PrepareSkybox( *l_texture, l_size, *l_skybox );
+						l_texture->Cleanup();
+						l_texture.reset();
+					} ) );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Couldn't load the image" ) );
+			}
+		}
+	}
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxLeft )
 	{

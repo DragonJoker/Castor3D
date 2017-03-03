@@ -150,6 +150,7 @@ namespace GLSL
 	template< typename Value > inline Value tan( Value const & p_value );
 	template< typename Value > inline Value sin( Value const & p_value );
 	template< typename Value > inline Value cos( Value const & p_value );
+	template< typename Value > inline Value atan( Value const & p_y, Value const & p_x );
 	template< typename Value > inline Value atan( Value const & p_value );
 	template< typename Value > inline Value asin( Value const & p_value );
 	template< typename Value > inline Value acos( Value const & p_value );

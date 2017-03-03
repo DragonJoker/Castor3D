@@ -226,14 +226,7 @@ namespace Castor3D
 
 	void Viewport::DoComputePerspective( Angle const & p_fovy, real p_aspect, real p_near, real p_far )
 	{
-		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
-		real l_range = real( ( 1 / tan( p_fovy.radians() * 0.5 ) ) );
-		m_projection.initialise();
-		m_projection[0][0] = real( l_range / p_aspect );
-		m_projection[1][1] = real( l_range );
-		m_projection[2][2] = real( ( p_far + p_near ) / ( p_near - p_far ) );
-		m_projection[2][3] = real( -1 );
-		m_projection[3][2] = real( 2 * p_far * p_near / ( p_near - p_far ) );
+		m_projection = matrix::perspective( p_fovy, p_aspect, p_near, p_far );
 	}
 
 	void Viewport::DoComputeFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
