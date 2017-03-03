@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/DragonJoker/Castor3D.svg?branch=master)](https://travis-ci.org/DragonJoker/Castor3D)
+Travis build: [![Build Status](https://travis-ci.org/DragonJoker/Castor3D.svg?branch=master)](https://travis-ci.org/DragonJoker/Castor3D)
 
 Castor3D
 ========
