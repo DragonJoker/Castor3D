@@ -13,6 +13,7 @@
 /source/Core/Castor3D/Test/Data/Bloom
 /source/Core/Castor3D/Test/Data/Deferred
 /source/Core/Castor3D/Test/Data/DeferredMsaa
+/source/Core/Castor3D/Test/Data/EquirectangularSkybox
 /source/Core/Castor3D/Test/Data/Formats
 /source/Core/Castor3D/Test/Data/Fxaa
 /source/Core/Castor3D/Test/Data/GrayScale
@@ -36,6 +37,7 @@
 /source/Core/Castor3D/Test/Data/ReinhardToneMapping
 /source/Core/Castor3D/Test/Data/Sampler
 /source/Core/Castor3D/Test/Data/Skybox
+/source/Core/Castor3D/Test/Data/Test
 /source/Core/Castor3D/Test/Data/Texturing
 /source/Samples/CastorDvpTD/Data/Data
 /.gitattributes

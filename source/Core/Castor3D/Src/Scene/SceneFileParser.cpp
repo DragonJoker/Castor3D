@@ -670,7 +670,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eAnimation ), cuT( "scale" ), Parser_AnimationScale, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::eAnimation ), cuT( "}" ), Parser_AnimationEnd );
 
-	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), Parser_SkyboxEqui, { MakeParameter< ParameterType::ePath >() } );
+	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), Parser_SkyboxEqui, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eSize >() } );
 	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "left" ), Parser_SkyboxLeft, { MakeParameter< ParameterType::ePath >() } );
 	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "right" ), Parser_SkyboxRight, { MakeParameter< ParameterType::ePath >() } );
 	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "top" ), Parser_SkyboxTop, { MakeParameter< ParameterType::ePath >() } );

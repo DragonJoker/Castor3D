@@ -4344,7 +4344,15 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSkybox )
+		if ( p_params.size() <= 1 )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else if ( !l_parsingContext->pSkybox )
+		{
+			PARSING_ERROR( cuT( "No skybox initialised." ) );
+		}
+		else
 		{
 			Path l_path;
 			Path l_filePath = p_context->m_file->GetFilePath();
@@ -4353,31 +4361,23 @@ namespace Castor3D
 
 			if ( File::FileExists( l_filePath / l_path ) )
 			{
-				String l_name{ l_path.GetFileName() };
-
-				if ( Engine::GetInstance().GetImageCache().has( l_name ) )
-				{
-					auto l_image = Engine::GetInstance().GetImageCache().find( l_name );
-					l_buffer = l_image->GetPixels();
-				}
-				else
-				{
-					auto l_image = Engine::GetInstance().GetImageCache().Add( l_name, l_filePath / l_path );
-					l_buffer = l_image->GetPixels();
-				}
+				Image l_image{ l_path.GetFileName(), l_filePath / l_path };
+				l_buffer = l_image.GetPixels();
 			}
 
 			if ( l_buffer )
 			{
+				Size l_size;
+				p_params[1]->Get( l_size );
 				auto l_skybox = l_parsingContext->pSkybox;
 				auto l_engine = l_parsingContext->pScene->GetEngine();
 				l_parsingContext->pScene->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-					, [l_buffer, l_skybox, l_engine]()
+					, [l_buffer, l_skybox, l_engine, l_size]()
 					{
 						auto l_texture = l_engine->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
 						l_texture->GetImage().InitialiseSource( l_buffer );
 						l_texture->Initialise();
-						l_engine->GetRenderSystem()->GetCurrentContext()->PrepareSkybox( *l_texture, *l_skybox );
+						l_engine->GetRenderSystem()->GetCurrentContext()->PrepareSkybox( *l_texture, l_size, *l_skybox );
 						l_texture->Cleanup();
 						l_texture.reset();
 					} ) );
@@ -4386,10 +4386,6 @@ namespace Castor3D
 			{
 				PARSING_ERROR( cuT( "Couldn't load the image" ) );
 			}
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "No skybox initialised" ) );
 		}
 	}
 	END_ATTRIBUTE()
