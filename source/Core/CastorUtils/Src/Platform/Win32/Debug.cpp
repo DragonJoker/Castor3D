@@ -19,6 +19,8 @@ namespace Castor
 {
 	namespace Debug
 	{
+#if !defined( NDEBUG )
+
 		namespace
 		{
 			template< typename CharU, typename CharT >
@@ -89,6 +91,15 @@ namespace Castor
 				}
 			}
 		}
+
+#else
+
+		template< typename CharT >
+		inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int, int )
+		{
+		}
+
+#endif
 
 		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{

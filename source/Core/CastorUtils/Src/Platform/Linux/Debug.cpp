@@ -18,6 +18,8 @@ namespace Castor
 {
 	namespace Debug
 	{
+#if !defined( NDEBUG )
+
 		template< typename CharU, typename CharT >
 		inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 		{
@@ -61,6 +63,15 @@ namespace Castor
 
 			free( l_fnStrings );
 		}
+
+#else
+
+		template< typename CharT >
+		inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
+		{
+		}
+
+#endif
 
 		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{

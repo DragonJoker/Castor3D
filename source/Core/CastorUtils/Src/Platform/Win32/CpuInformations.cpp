@@ -6,6 +6,7 @@
 
 #include "Exception/Assertion.hpp"
 
+#include <Windows.h>
 #include <intrin.h>
 
 namespace Castor
