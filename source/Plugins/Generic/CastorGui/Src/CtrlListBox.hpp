@@ -205,7 +205,7 @@ namespace CastorGui
 		 *\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline OnEvent::Connection Connect( ListBoxEvent p_event, OnEventFunction p_function )
+		inline OnEvent::connection Connect( ListBoxEvent p_event, OnEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
 		}

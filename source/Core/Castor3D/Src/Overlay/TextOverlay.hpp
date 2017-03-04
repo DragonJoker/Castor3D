@@ -566,7 +566,7 @@ namespace Castor3D
 		uint32_t m_tabSize{ 4 };
 		//!\~english	The connection to the FontTexture changed notification signal.
 		//!\~french		La connexion au signal de notification de changement de la texture.
-		FontTexture::OnChanged::Connection m_connection;
+		FontTexture::OnChanged::connection m_connection;
 		//!\~english	The text texture mapping mode.
 		//!\~french		Le mode de mappage de texture du texte.
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };

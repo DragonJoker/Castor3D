@@ -235,10 +235,10 @@ namespace Castor3D
 		bool m_changed{ true };
 		//!\~english	The connection to the scene change notification.
 		//!\~french		Les conenction à la notification de scène changée.
-		Scene::OnChanged::Connection m_sceneChanged;
+		Scene::OnChanged::connection m_sceneChanged;
 		//!\~english	The connection to the camera change notification.
 		//!\~french		Les conenction à la notification de caméra changée.
-		Camera::OnChanged::Connection m_cameraChanged;
+		Camera::OnChanged::connection m_cameraChanged;
 		//!\~english	The optional camera.
 		//!\~french		La camera optionnelle.
 		Camera const * m_camera{ nullptr };

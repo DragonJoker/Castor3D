@@ -110,11 +110,11 @@ namespace Castor3D
 	{
 		int l_w = p_size.width();
 		int l_h = p_size.height();
-		DoRender( Position{ l_w * 0, l_h * 1 }
+		DoRender( Position{ l_w * 2, l_h * 1 }
 			, p_size
 			, p_texture
-			, Point3f{ -1, 0, 0 }
-			, Point2f{ -1, 1 }
+			, Point3f{ 1, 0, 0 }
+			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
@@ -126,11 +126,11 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 2, l_h * 1 }
+		DoRender( Position{ l_w * 0, l_h * 1 }
 			, p_size
 			, p_texture
-			, Point3f{ 1, 0, 0 }
-			, Point2f{ 1, 1 }
+			, Point3f{ -1, 0, 0 }
+			, Point2f{ -1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );

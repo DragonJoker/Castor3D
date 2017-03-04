@@ -216,7 +216,7 @@ namespace Castor
 		using my_connection_ptr = my_connection *;
 
 	public:
-		using Connection = my_connection;
+		using connection = my_connection;
 
 	public:
 		/**

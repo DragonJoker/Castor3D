@@ -127,7 +127,7 @@ namespace Castor3D
 	private:
 		//!\~english	The connection to light's node changed signal.
 		//!\~french		La connexion au signal de changement du noeud de la source lumineuse.
-		SceneNode::OnChanged::Connection m_onNodeChanged;
+		SceneNode::OnChanged::connection m_onNodeChanged;
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
 		Castor::Matrix4x4r m_projection;

@@ -505,7 +505,7 @@ namespace GLSL
 			, Int const & p_index )
 			{
 				auto l_vertexToLight = m_writer.GetLocale( cuT( "l_vertexToLight" ), normalize( p_worldSpacePosition - p_lightPosition ) );
-				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), GetShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) / 8.0_f );
+				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), GetShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) );
 				auto l_worldSpace = m_writer.GetLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
 				auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) / SpotShadowMapCount );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );
