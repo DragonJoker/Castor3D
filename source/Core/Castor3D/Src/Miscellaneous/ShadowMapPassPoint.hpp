@@ -24,8 +24,7 @@ SOFTWARE.
 #define ___C3D_SHADOW_MAP_PASS_POINT_H___
 
 #include "ShadowMapPass.hpp"
-
-#define USE_GS_POINT_SHADOW_MAPS 1
+#include "Render/Viewport.hpp"
 
 namespace Castor3D
 {
@@ -132,26 +131,15 @@ namespace Castor3D
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
 		Castor::Matrix4x4r m_projection;
-		//!\~english	The shadow map matrices data UBO.
-		//!\~french		L'UBO de données des matrices de shadow map.
-		UniformBuffer m_shadowMatrices;
 		//!\~english	The shadow map coniguration data UBO.
 		//!\~french		L'UBO de données de configuration de shadow map.
 		UniformBuffer m_shadowConfig;
-
-#if USE_GS_POINT_SHADOW_MAPS
-
+		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
+		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
+		Viewport m_viewport;
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
 		TextureAttachmentSPtr m_depthAttach;
-
-#else
-
-		//!\~english	The attaches between depth buffer and main frame buffer.
-		//!\~french		Les attaches entre le tampon profondeur et le tampon principal.
-		std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) > m_depthAttachs;
-
-#endif
 	};
 }
 

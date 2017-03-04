@@ -399,6 +399,8 @@ namespace Castor3D
 		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 		bool l_return{ true };
 
 		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(
@@ -407,7 +409,6 @@ namespace Castor3D
 			AccessType::eRead | AccessType::eWrite,
 			PixelFormat::eD32F,
 			p_size );
-
 		m_pointShadowMap.SetTexture( l_texture );
 		m_pointShadowMap.SetSampler( l_sampler );
 

@@ -80,38 +80,45 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_position	The render viewport position.
 		 *\param[in]	p_size		The render viewport size.
 		 *\param[in]	p_texture	The texture.
 		 *\param[in]	p_pipeline	The pipleline used to render the texture.
 		 *\param[in]	p_matrixUbo	The uniform buffer receiving matrices.
 		 *\~french
 		 *\brief		Dessine la texture donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_position	La position du viewport de rendu.
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_pipeline	Le pipeline utilisé pour dessiner la texture.
 		 *\param[in]	p_matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
-		C3D_API void Render( Castor::Size const & p_size
+		C3D_API void Render( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, UniformBuffer & p_matrixUbo
 			, RenderPipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_position	The render viewport position.
 		 *\param[in]	p_size		The render viewport size.
 		 *\param[in]	p_texture	The texture.
 		 *\~french
 		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_position	La position du viewport de rendu.
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API void Render( Castor::Size const & p_size
+		C3D_API void Render( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture );
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
+		 *\param[in]	p_position			The render viewport position.
 		 *\param[in]	p_size				The render viewport size.
 		 *\param[in]	p_texture			The texture.
 		 *\param[in]	p_pipeline			The render pipeline.
@@ -119,13 +126,15 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
 		 *\~french
 		 *\brief		Dessine la texture donnée.
+		 *\param[in]	p_position			La position du viewport de rendu.
 		 *\param[in]	p_size				La taille du viewport de rendu.
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
 		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void DoRender( Castor::Size const & p_size
+		C3D_API void DoRender( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, RenderPipeline & p_pipeline
 			, UniformBuffer & p_matrixUbo

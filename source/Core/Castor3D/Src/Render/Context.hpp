@@ -23,9 +23,11 @@ SOFTWARE.
 #ifndef ___C3D_Context_H___
 #define ___C3D_Context_H___
 
-#include "RenderColourToCube.hpp"
+#include "RenderColourCubeToTexture.hpp"
 #include "RenderColourLayerToTexture.hpp"
+#include "RenderColourToCube.hpp"
 #include "RenderColourToTexture.hpp"
+#include "RenderDepthCubeToTexture.hpp"
 #include "RenderDepthLayerToTexture.hpp"
 #include "RenderDepthToTexture.hpp"
 
@@ -535,12 +537,18 @@ namespace Castor3D
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
 		RenderColourToTexture m_colour;
+		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
+		RenderColourCubeToTexture m_colourCube;
 		//!\~english	The pipeline used to render a layer from a texture array in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures dans le tampon d'image actuellement activé en dessin.
 		RenderColourLayerToTexture m_colourLayer;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		RenderColourToTexture m_depth;
+		RenderDepthToTexture m_depth;
+		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
+		RenderDepthCubeToTexture m_depthCube;
 		//!\~english	The pipeline used to render a layer from a texture array in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures dans le tampon d'image actuellement activé en dessin.
 		RenderColourLayerToTexture m_depthLayer;

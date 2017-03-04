@@ -9,6 +9,10 @@
 #include "Viewport.hpp"
 
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/RenderBufferAttachment.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
@@ -32,8 +36,10 @@ namespace Castor3D
 		, m_bMultiSampling{ false }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
 		, m_colour{ *this, m_matrixUbo }
+		, m_colourCube{ *this, m_matrixUbo }
 		, m_colourLayer{ *this, m_matrixUbo }
 		, m_depth{ *this, m_matrixUbo }
+		, m_depthCube{ *this, m_matrixUbo }
 		, m_depthLayer{ *this, m_matrixUbo }
 		, m_cube{ *this, m_matrixUbo }
 	{
@@ -61,8 +67,10 @@ namespace Castor3D
 			m_timerQuery[1 - m_queryIndex]->End();
 
 			m_colour.Initialise();
+			m_colourCube.Initialise();
 			m_colourLayer.Initialise();
 			m_depth.Initialise();
+			m_depthCube.Initialise();
 			m_depthLayer.Initialise();
 			m_cube.Initialise();
 
@@ -79,8 +87,10 @@ namespace Castor3D
 		DoCleanup();
 
 		m_colour.Cleanup();
+		m_colourCube.Cleanup();
 		m_colourLayer.Cleanup();
 		m_depth.Cleanup();
+		m_depthCube.Cleanup();
 		m_depthLayer.Cleanup();
 		m_cube.Cleanup();
 
@@ -191,106 +201,13 @@ namespace Castor3D
 	void Context::RenderTextureCube( Castor::Size const & p_size
 		, TextureLayout const & p_texture )
 	{
-		int l_w = p_size.width();
-		int l_h = p_size.height();
-		DoRenderTextureFace( Position{ l_w * 0, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeX
-			, *m_rtotPipeline.m_texture.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_texture.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeY
-			, *m_rtotPipeline.m_texture.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_texture.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 2, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveX
-			, *m_rtotPipeline.m_texture.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_texture.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 3, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveY
-			, *m_rtotPipeline.m_texture.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_texture.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 0 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeZ
-			, *m_rtotPipeline.m_texture.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_texture.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 2 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveZ
-			, *m_rtotPipeline.m_texture.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_texture.m_geometryBuffers );
+		m_colourCube.Render( p_size, p_texture );
 	}
 
 	void Context::RenderTextureCube( Castor::Size const & p_size
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{
-		int l_w = p_size.width();
-		int l_h = p_size.height();
-		DoRenderTextureFace( Position{ l_w * 0, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeX
-			, *m_rtotPipeline.m_textureArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_textureArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeY
-			, *m_rtotPipeline.m_textureArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_textureArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 2, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveX
-			, *m_rtotPipeline.m_textureArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_textureArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 3, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveY
-			, *m_rtotPipeline.m_textureArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_textureArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 0 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeZ
-			, *m_rtotPipeline.m_textureArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_textureArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 2 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveZ
-			, *m_rtotPipeline.m_textureArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_textureArray.m_geometryBuffers
-			, p_index );
 	}
 
 	void Context::RenderTexture( Position const & p_position
@@ -299,14 +216,20 @@ namespace Castor3D
 		, RenderPipeline & p_pipeline
 		, UniformBuffer & p_matrixUbo )
 	{
-		m_colour.Render( p_size, p_texture, p_matrixUbo, p_pipeline );
+		m_colour.Render( p_position
+			, p_size
+			, p_texture
+			, p_matrixUbo
+			, p_pipeline );
 	}
 
 	void Context::RenderTexture( Position const & p_position
 		, Size const & p_size
 		, TextureLayout const & p_texture )
 	{
-		m_colour.Render( p_size, p_texture );
+		m_colour.Render( p_position
+			, p_size
+			, p_texture );
 	}
 
 	void Context::RenderTexture( Position const & p_position
@@ -314,119 +237,31 @@ namespace Castor3D
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{
-		m_colourLayer.Render( p_size, p_texture, p_index );
+		m_colourLayer.Render( p_position
+			, p_size
+			, p_texture
+			, p_index );
 	}
 
 	void Context::RenderDepthCube( Castor::Size const & p_size
 		, TextureLayout const & p_texture )
 	{
-		int l_w = p_size.width();
-		int l_h = p_size.height();
-		DoRenderTextureFace( Position{ l_w * 0, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeX
-			, *m_rtotPipeline.m_depth.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depth.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeY
-			, *m_rtotPipeline.m_depth.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depth.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 2, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveX
-			, *m_rtotPipeline.m_depth.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depth.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 3, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveY
-			, *m_rtotPipeline.m_depth.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depth.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 0 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeZ
-			, *m_rtotPipeline.m_depth.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depth.m_geometryBuffers );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 2 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveZ
-			, *m_rtotPipeline.m_depth.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depth.m_geometryBuffers );
+		m_depthCube.Render( p_size, p_texture );
 	}
 
 	void Context::RenderDepthCube( Castor::Size const & p_size
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{
-		int l_w = p_size.width();
-		int l_h = p_size.height();
-		DoRenderTextureFace( Position{ l_w * 0, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeX
-			, *m_rtotPipeline.m_depthArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depthArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeY
-			, *m_rtotPipeline.m_depthArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depthArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 2, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveX
-			, *m_rtotPipeline.m_depthArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depthArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 3, l_h * 1 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveY
-			, *m_rtotPipeline.m_depthArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depthArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 0 }
-			, p_size
-			, p_texture
-			, CubeMapFace::eNegativeZ
-			, *m_rtotPipeline.m_depthArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depthArray.m_geometryBuffers
-			, p_index );
-		DoRenderTextureFace( Position{ l_w * 1, l_h * 2 }
-			, p_size
-			, p_texture
-			, CubeMapFace::ePositiveZ
-			, *m_rtotPipeline.m_depthArray.m_pipeline
-			, m_matrixUbo
-			, *m_rtotPipeline.m_depthArray.m_geometryBuffers
-			, p_index );
 	}
 
 	void Context::RenderDepth( Position const & p_position
 		, Size const & p_size
 		, TextureLayout const & p_texture )
 	{
-		m_depth.Render( p_size, p_texture );
+		m_depth.Render( p_position
+			, p_size
+			, p_texture );
 	}
 
 	void Context::RenderDepth( Position const & p_position
@@ -434,74 +269,9 @@ namespace Castor3D
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{
-		m_depthLayer.Render( p_size, p_texture, p_index );
+		m_depthLayer.Render( p_position
+			, p_size
+			, p_texture
+			, p_index );
 	}
-
-	void Context::DoRenderTextureFace( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, CubeMapFace p_face
-		, RenderPipeline & p_pipeline
-		, UniformBuffer & p_matrixUbo
-		, GeometryBuffers const & p_geometryBuffers )
-	{
-		REQUIRE( p_texture.GetType() == TextureType::eCube );
-		m_rtotPipeline.m_viewport.SetPosition( p_position );
-		m_rtotPipeline.m_viewport.Resize( p_size );
-		m_rtotPipeline.m_viewport.Update();
-		m_rtotPipeline.m_viewport.Apply();
-		p_pipeline.SetProjectionMatrix( m_rtotPipeline.m_viewport.GetProjection() );
-
-		auto l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
-
-		if ( l_variable )
-		{
-			l_variable->SetValue( float( p_face ) / float( CubeMapFace::eCount ) );
-		}
-
-		p_pipeline.ApplyProjection( p_matrixUbo );
-		p_matrixUbo.Update();
-		p_pipeline.Apply();
-
-		p_texture.Bind( 0u );
-		m_rtotPipeline.m_sampler->Bind( 0u );
-		p_geometryBuffers.Draw( uint32_t( m_rtotPipeline.m_arrayVertex.size() ), 0 );
-		m_rtotPipeline.m_sampler->Unbind( 0u );
-		p_texture.Unbind( 0u );
-	}
-
-	void Context::DoRenderTextureFace( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, CubeMapFace p_face
-		, RenderPipeline & p_pipeline
-		, UniformBuffer & p_matrixUbo
-		, GeometryBuffers const & p_geometryBuffers
-		, uint32_t p_index )
-	{
-		REQUIRE( p_texture.GetType() == TextureType::eCube );
-		m_rtotPipeline.m_viewport.SetPosition( p_position );
-		m_rtotPipeline.m_viewport.Resize( p_size );
-		m_rtotPipeline.m_viewport.Update();
-		m_rtotPipeline.m_viewport.Apply();
-		p_pipeline.SetProjectionMatrix( m_rtotPipeline.m_viewport.GetProjection() );
-
-		auto l_variable = p_pipeline.GetProgram().FindUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
-
-		if ( l_variable )
-		{
-			l_variable->SetValue( float( p_face ) / float( CubeMapFace::eCount ) );
-		}
-
-		p_pipeline.ApplyProjection( p_matrixUbo );
-		p_matrixUbo.Update();
-		p_pipeline.Apply();
-
-		p_texture.Bind( 0u );
-		m_rtotPipeline.m_sampler->Bind( 0u );
-		p_geometryBuffers.Draw( uint32_t( m_rtotPipeline.m_arrayVertex.size() ), 0 );
-		m_rtotPipeline.m_sampler->Unbind( 0u );
-		p_texture.Unbind( 0u );
-	}
-
 }
