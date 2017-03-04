@@ -28,6 +28,7 @@ SOFTWARE.
 #include <Math/Angle.hpp>
 #include <Math/PlaneEquation.hpp>
 #include <Design/OwnedBy.hpp>
+#include <Graphics/Position.hpp>
 #include <Graphics/Size.hpp>
 
 namespace Castor3D
@@ -316,6 +317,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The viewport render position.
+		 *\~french
+		 *\return		La position de rendu du viewport.
+		 */
+		inline const Castor::Position & GetPosition()const
+		{
+			return m_position;
+		}
+		/**
+		 *\~english
 		 *\return		The viewport projection type
 		 *\~french
 		 *\return		Le type de projection du viewport
@@ -445,13 +456,25 @@ namespace Castor3D
 			return m_projection;
 		}
 		/**
-		*\~english
-		*\brief		Sets the viewport render size
-		*\param[in]	p_size	The new value
-		*\~french
-		*\brief		Définit les dimensions de rendu du viewport
-		*\param[in]	p_size	La nouvelle valeur
-		*/
+		 *\~english
+		 *\brief		Sets the viewport render position.
+		 *\param[in]	p_position	The new value
+		 *\~french
+		 *\brief		Définit la position de rendu du viewport.
+		 *\param[in]	p_position	La nouvelle valeur
+		 */
+		inline void SetPosition( const Castor::Position & p_position )
+		{
+			m_position = p_position;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the viewport render size
+		 *\param[in]	p_size	The new value
+		 *\~french
+		 *\brief		Définit les dimensions de rendu du viewport
+		 *\param[in]	p_size	La nouvelle valeur
+		 */
 		inline void Resize( const Castor::Size & p_size )
 		{
 			m_size = p_size;
@@ -643,31 +666,47 @@ namespace Castor3D
 		void DoComputeLookAt( Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );
 
 	private:
-		//!\~english The left viewport plane	\~french Position du plan gauche
+		//!\~english	The left viewport plane.
+		//!\~french		Position du plan gauche.
 		real m_left;
-		//!\~english The right viewport plane	\~french Position du plan droit
+		//!\~english	The right viewport plane.
+		//!\~french		Position du plan droit
 		real m_right;
-		//!\~english The top viewport plane	\~french Position du plan haut
+		//!\~english	The top viewport plane.
+		//!\~french		Position du plan haut
 		real m_top;
-		//!\~english The bottom viewport plane	\~french Position du plan bas
+		//!\~english	The bottom viewport plane.
+		//!\~french		Position du plan bas
 		real m_bottom;
-		//!\~english The viewport farthest viewable distance	\~french Position du plan lointain
+		//!\~english	The viewport farthest viewable distance.
+		//!\~french		Position du plan lointain
 		real m_far;
-		//!\~english The viewport nearest viewable distance	\~french Position du plan proche
+		//!\~english	The viewport nearest viewable distance.
+		//!\~french		Position du plan proche
 		real m_near;
-		//!\~english The viewport vertical FOV 	\~french Angle de vue vezrtical
+		//!\~english	The viewport vertical FOV.
+		//!\~french		Angle de vue vezrtical
 		Castor::Angle m_fovY;
-		//!\~english The projection type	\~french Type de projection
+		//!\~english	The projection type.
+		//!\~french		Type de projection
 		ViewportType m_type;
-		//!\~english The viewport render size	\~french Dimensions du viewport
+		//!\~english	The viewport render size.
+		//!\~french		Dimensions du viewport
 		Castor::Size m_size;
-		//!\~english The display window ratio (4:3, 16:9, ...)	\~french Ratio d'affichage
+		//!\~english	The viewport render position.
+		//!\~french		La position du viewport
+		Castor::Position m_position;
+		//!\~english	The display window ratio (4:3, 16:9, ...).
+		//!\~french		Ratio d'affichage
 		real m_ratio;
-		//!\~english Tells the view frustum's planes need to be updated	\~french Dit que les plans du frustum de vue doivent être mis à jour
+		//!\~english	Tells the view frustum's planes need to be updated.
+		//!\~french		Dit que les plans du frustum de vue doivent être mis à jour
 		bool m_modified;
-		//!\~english The projection matrix.	\~french La matrice de projection.
+		//!\~english	The projection matrix.
+		//!\~french		La matrice de projection.
 		Castor::Matrix4x4r m_projection;
-		//!\~english The render API specific implementation.	\~french L'implémentation spécifique à l'API de rendu.
+		//!\~english	The render API specific implementation.
+		//!\~french		L'implémentation spécifique à l'API de rendu.
 		IViewportImplUPtr m_impl;
 	};
 }

@@ -436,6 +436,8 @@ namespace Castor3D
 
 	void PickingPass::DoCleanup()
 	{
+		m_pickingUbo.Cleanup();
+
 		if ( m_frameBuffer )
 		{
 			m_frameBuffer->Bind( FrameBufferMode::eConfig );

@@ -66,6 +66,10 @@ namespace Castor3D
 		, public Castor::Named
 	{
 	public:
+		using OnChangedFunction = std::function< void( Scene const & ) >;
+		using OnChanged = Castor::Signal< OnChangedFunction >;
+
+	public:
 		/*!
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
@@ -323,7 +327,7 @@ namespace Castor3D
 		inline void SetChanged()
 		{
 			m_changed = true;
-			m_signalChanged( *this );
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -377,32 +381,11 @@ namespace Castor3D
 		{
 			return m_fog;
 		}
-		/**
-		 *\~english
-		 *\brief		Connects a client to the changed notification signal.
-		 *\param[in]	p_function	The client function.
-		 *\return		The connection.
-		 *\~french
-		 *\brief		Connecte un client au signal de notification de changement.
-		 *\param[in]	p_function	La fonction du client.
-		 *\return		La connexion.
-		 */
-		inline uint32_t Connect( std::function< void( Scene const & ) > p_function )
-		{
-			return m_signalChanged.connect( p_function );
-		}
-		/**
-		 *\~english
-		 *\brief		Disconnects a client from the changed notification signal.
-		 *\return		The connection.
-		 *\~french
-		 *\brief		Déconnecte un client du signal de notification de changement.
-		 *\return		La connexion.
-		 */
-		inline void Disconnect( uint32_t p_connection )
-		{
-			m_signalChanged.disconnect( p_connection );
-		}
+
+	public:
+		//!\~english	The signal raised when the scene has changed.
+		//!\~french		Le signal levé lorsque la scène a changé.
+		OnChanged onChanged;
 
 	private:
 		//!\~english	The root node
@@ -477,9 +460,6 @@ namespace Castor3D
 		//!\~english	The fog's parameters.
 		//!\~french		Les paramètres de brouillard.
 		Fog m_fog;
-		//!\~english	The signal raised when the scene has changed.
-		//!\~french		Le signal levé lorsque la scène a changé.
-		Castor::Signal< std::function< void( Scene const & ) > > m_signalChanged;
 
 	public:
 		//!\~english	The cameras root node name.

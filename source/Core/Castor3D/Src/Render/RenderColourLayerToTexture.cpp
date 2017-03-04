@@ -105,13 +105,15 @@ namespace Castor3D
 		m_viewport.Cleanup();
 	}
 
-	void RenderColourLayerToTexture::Render( Size const & p_size
+	void RenderColourLayerToTexture::Render( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture
 		, UniformBuffer & p_matrixUbo
 		, RenderPipeline & p_pipeline
 		, uint32_t p_layer )
 	{
-		DoRender( p_size
+		DoRender( p_position
+			, p_size
 			, p_texture
 			, p_pipeline
 			, p_matrixUbo
@@ -119,11 +121,13 @@ namespace Castor3D
 			, p_layer );
 	}
 
-	void RenderColourLayerToTexture::Render( Size const & p_size
+	void RenderColourLayerToTexture::Render( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture
 		, uint32_t p_layer )
 	{
-		DoRender( p_size
+		DoRender( p_position
+			, p_size
 			, p_texture
 			, *m_pipeline
 			, m_matrixUbo
@@ -131,7 +135,8 @@ namespace Castor3D
 			, p_layer );
 	}
 
-	void RenderColourLayerToTexture::DoRender( Size const & p_size
+	void RenderColourLayerToTexture::DoRender( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture
 		, RenderPipeline & p_pipeline
 		, UniformBuffer & p_matrixUbo
@@ -139,6 +144,7 @@ namespace Castor3D
 		, uint32_t p_layer )
 	{
 		REQUIRE( p_texture.GetLayersCount() > p_layer );
+		m_viewport.SetPosition( p_position );
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
 		m_viewport.Apply();

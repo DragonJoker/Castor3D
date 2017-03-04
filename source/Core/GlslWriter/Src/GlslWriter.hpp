@@ -46,6 +46,40 @@ namespace GLSL
 	struct Endl {};
 	struct Endi {};
 
+	struct InputLayout
+	{
+		typedef enum Layout
+		{
+			ePoints,
+			eLines,
+			eLinesAdjacency,
+			eTriangles,
+			eTrianglesAdjacency
+		}	Layout;
+		InputLayout( Layout p_layout )
+			: m_layout{ p_layout }
+		{
+		}
+		Layout m_layout;
+	};
+
+	struct OutputLayout
+	{
+		typedef enum Layout
+		{
+			ePoints,
+			eLineStrip,
+			eTriangleStrip,
+		}	Layout;
+		OutputLayout( Layout p_layout, uint32_t p_count )
+			: m_layout{ p_layout }
+			, m_count{ p_count }
+		{
+		}
+		Layout m_layout;
+		uint32_t m_count;
+	};
+
 	struct IndentBlock
 	{
 		GlslWriter_API IndentBlock( GlslWriter & p_writter );
@@ -297,7 +331,8 @@ namespace GLSL
 		GlslWriter_API GlslWriter & operator<<( Out const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Layout const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Uniform const & p_rhs );
-
+		GlslWriter_API GlslWriter & operator<<( InputLayout const & p_rhs );
+		GlslWriter_API GlslWriter & operator<<( OutputLayout const & p_rhs );
 
 		GlslWriter_API GlslWriter & operator<<( Endl const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Endi const & p_rhs );

@@ -54,6 +54,10 @@ namespace Castor3D
 		using Detacher = ElementDetacher< Element >;
 
 	public:
+		using OnChangedFunction = std::function< void() >;
+		using OnChanged = Castor::Signal < OnChangedFunction >;
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -117,7 +121,7 @@ namespace Castor3D
 				m_clean( l_it.second );
 			}
 
-			m_onChanged();
+			onChanged();
 		}
 		/**
 		 *\~english
@@ -167,7 +171,7 @@ namespace Castor3D
 				else
 				{
 					m_elements.insert( p_name, p_element );
-					m_onChanged();
+					onChanged();
 				}
 			}
 			else
@@ -204,7 +208,7 @@ namespace Castor3D
 				m_elements.insert( p_name, l_return );
 				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
-				m_onChanged();
+				onChanged();
 			}
 			else
 			{
@@ -231,7 +235,7 @@ namespace Castor3D
 				auto l_element = m_elements.find( p_name );
 				m_detach( l_element );
 				m_elements.erase( p_name );
-				m_onChanged();
+				onChanged();
 			}
 		}
 		/**
@@ -253,7 +257,7 @@ namespace Castor3D
 			}
 
 			Clear();
-			m_onChanged();
+			onChanged();
 		}
 		/**
 		 *\~english
@@ -426,6 +430,11 @@ namespace Castor3D
 			return m_elements.end();
 		}
 
+	public:
+		//!\~english	The signal emitted when the content has changed.
+		//!\~french		Le signal émis lorsque le contenu a changé.
+		OnChanged onChanged;
+
 	protected:
 		//!\~english	The engine.
 		//!\~french		Le moteur.
@@ -463,9 +472,6 @@ namespace Castor3D
 		//!\~english	The object detacher.
 		//!\~french		Le détacheur d'objet.
 		Detacher m_detach;
-		//!\~english	The root node for every object other than camera.
-		//!\~french		Le noeud père de tous les noeuds d'objet.
-		Castor::Signal< std::function< void() > > m_onChanged;
 
 		friend class Scene;
 	};

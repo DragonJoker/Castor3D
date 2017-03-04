@@ -410,7 +410,7 @@ namespace Castor3D
 			}
 
 			m_derivedMtxChanged = false;
-			m_signalChanged( *this );
+			onChanged( *this );
 		}
 	}
 

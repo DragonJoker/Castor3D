@@ -35,7 +35,7 @@ function( SamplesBuild )
 				set( GTK2_FOUND TRUE )
 			endif()
 
-			find_package( FFMPEG COMPONENTS avcodec avformat avutil swscale )
+			find_package( FFMPEG COMPONENTS avcodec avformat avutil swscale swresample )
 
 			if( FFMPEG_FOUND )
 				include_directories( ${FFMPEG_INCLUDE_DIR} )

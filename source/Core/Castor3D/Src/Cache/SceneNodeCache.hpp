@@ -148,7 +148,7 @@ namespace Castor3D
 				this->m_elements.insert( p_name, l_return );
 				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-				this->m_onChanged();
+				this->onChanged();
 			}
 			else
 			{

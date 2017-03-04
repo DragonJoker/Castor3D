@@ -105,34 +105,40 @@ namespace Castor3D
 		m_viewport.Cleanup();
 	}
 
-	void RenderColourToTexture::Render( Size const & p_size
+	void RenderColourToTexture::Render( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture
 		, UniformBuffer & p_matrixUbo
 		, RenderPipeline & p_pipeline )
 	{
-		DoRender( p_size
+		DoRender( p_position
+			, p_size
 			, p_texture
 			, p_pipeline
 			, p_matrixUbo
 			, *m_geometryBuffers );
 	}
 
-	void RenderColourToTexture::Render( Size const & p_size
+	void RenderColourToTexture::Render( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture )
 	{
-		DoRender( p_size
+		DoRender( p_position
+			, p_size
 			, p_texture
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
 	}
 
-	void RenderColourToTexture::DoRender( Size const & p_size
+	void RenderColourToTexture::DoRender( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture
 		, RenderPipeline & p_pipeline
 		, UniformBuffer & p_matrixUbo
 		, GeometryBuffers const & p_geometryBuffers )
 	{
+		m_viewport.SetPosition( p_position );
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
 		m_viewport.Apply();

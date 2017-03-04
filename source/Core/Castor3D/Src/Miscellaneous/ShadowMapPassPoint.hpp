@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_SHADOW_MAP_PASS_POINT_H___
 
 #include "ShadowMapPass.hpp"
+#include "Render/Viewport.hpp"
 
 namespace Castor3D
 {
@@ -99,6 +100,11 @@ namespace Castor3D
 		 */
 		void DoUpdateProgram( ShaderProgram & p_program )override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 */
+		void DoPrepareBackPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
 		 */
 		Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
@@ -121,19 +127,19 @@ namespace Castor3D
 	private:
 		//!\~english	The connection to light's node changed signal.
 		//!\~french		La connexion au signal de changement du noeud de la source lumineuse.
-		uint32_t m_onNodeChanged{ 0 };
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
+		SceneNode::OnChanged::connection m_onNodeChanged;
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
 		Castor::Matrix4x4r m_projection;
-		//!\~english	The shadow map matrices data UBO.
-		//!\~french		L'UBO de données des matrices de shadow map.
-		UniformBuffer m_shadowMatrices;
 		//!\~english	The shadow map coniguration data UBO.
 		//!\~french		L'UBO de données de configuration de shadow map.
 		UniformBuffer m_shadowConfig;
+		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
+		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
+		Viewport m_viewport;
+		//!\~english	The attach between depth buffer and main frame buffer.
+		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
+		TextureAttachmentSPtr m_depthAttach;
 	};
 }
 

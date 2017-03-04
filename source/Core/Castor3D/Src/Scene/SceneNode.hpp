@@ -47,7 +47,9 @@ namespace Castor3D
 		, public Castor::OwnedBy< Scene >
 		, public Castor::Named
 	{
-		typedef std::function< void( SceneNode const & ) > NodeChangedNotifyFunction;
+	public:
+		using OnChangedFunction = std::function< void( SceneNode const & ) >;
+		using OnChanged = Castor::Signal< OnChangedFunction >;
 
 	public:
 		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
@@ -572,32 +574,6 @@ namespace Castor3D
 		{
 			m_visible = p_visible;
 		}
-		/**
-		 *\~english
-		 *\brief		Registers an object to be notified on changes.
-		 *\param[in]	p_function	The object notification function.
-		 *\return		The connection index.
-		 *\~french
-		 *\brief		Enregistre un objet à notifier des changements.
-		 *\param[in]	p_function	La fonction de notification de l'objet.
-		 *\return		L'indice de connexion.
-		 */
-		inline uint32_t RegisterObject( NodeChangedNotifyFunction p_function )
-		{
-			return m_signalChanged.connect( p_function );
-		}
-		/**
-		 *\~english
-		 *\brief		Unregisters an object from the changes notification.
-		 *\param[in]	p_index	The connection index.
-		 *\~french
-		 *\brief		Désnregistre un objet de la notification des changements.
-		 *\param[in]	p_index	L'indice de connexion.
-		 */
-		inline void UnregisterObject( uint32_t p_index )
-		{
-			m_signalChanged.disconnect( p_index );
-		}
 
 	private:
 		void DoComputeMatrix();
@@ -609,33 +585,48 @@ namespace Castor3D
 		 */
 		void DoUpdateChildsDerivedTransform();
 
+	public:
+		//!\~english	Signal used to notify attached objects that the node has changed.
+		//!\~french		Signal utilisé pour notifier aux objets attachés que le noeud a changé.
+		OnChanged onChanged;
+
 	protected:
-		//!\~english Tells if it is displayable. A node is displayable if his parent is either displayable or the root node	\~french Dit si le noeud est affichable. Il est affichable si son parent est le noeud racine ou s'il est affichable.
+		//!\~english	Tells if it is displayable. A node is displayable if his parent is either displayable or the root node.
+		//!\~french		Dit si le noeud est affichable. Il est affichable si son parent est le noeud racine ou s'il est affichable.
 		bool m_displayable;
-		//!\~english The visible status. If a node is hidden, all objects attached to it are hidden	\~french Le statut de visibilité. Si un noeud est caché, tous les objets qui y sont attachés sont cachés aussi.
+		//!\~english	The visible status. If a node is hidden, all objects attached to it are hidden.
+		//!\~french		Le statut de visibilité. Si un noeud est caché, tous les objets qui y sont attachés sont cachés aussi.
 		bool m_visible{ true };
-		//!\~english  The relative orientation of the node	\~french L'orientation du noeud, relative au parent
+		//!\~english  T	he relative orientation of the node.
+		//!\~french		L'orientation du noeud, relative au parent.
 		Castor::Quaternion m_orientation;
-		//!\~english  The relative position of the node	\~french La position du noeud, relative au parent
+		//!\~english	The relative position of the node.
+		//!\~french		La position du noeud, relative au parent.
 		Castor::Point3r m_position{ 0.0_r, 0.0_r, 0.0_r };
-		//!\~english  The relative scale transform value of the node	\~french La mise à l'échelle du noeud, relative au parent
+		//!\~english	The relative scale transform value of the node.
+		//!\~french		La mise à l'échelle du noeud, relative au parent.
 		Castor::Point3r m_scale{ 1.0_r, 1.0_r, 1.0_r };
-		//!\~english  The reative transformation matrix	\~french La matrice de transformation, relative au parent
+		//!\~english	The reative transformation matrix.
+		//!\~french		La matrice de transformation, relative au parent.
 		Castor::Matrix4x4r m_transform{ 1.0_r };
-		//!\~english Tells the relative transformation matrix needs recomputation	\~french Dit si la matrice de transformation relative doit être recalculée
+		//!\~english	Tells the relative transformation matrix needs recomputation.
+		//!\~french		Dit si la matrice de transformation relative doit être recalculée.
 		bool m_mtxChanged{ true };
-		//!\~english  The absolute transformation matrix	\~french la matrice de transformation absolue
+		//!\~english	The absolute transformation matrix.
+		//!\~french		la matrice de transformation absolue.
 		Castor::Matrix4x4r m_derivedTransform{ 1.0_r };
-		//!\~english Tells the absolute transformation matrix needs recomputation	\~french Dit si la matrice de transformation absolue doit être recalculée
+		//!\~english	Tells the absolute transformation matrix needs recomputation.
+		//!\~french		Dit si la matrice de transformation absolue doit être recalculée.
 		bool m_derivedMtxChanged{ true };
-		//!\~english  This node's parent	\~french Le noeud parent
+		//!\~english	This node's parent.
+		//!\~french		Le noeud parent.
 		SceneNodeWPtr m_parent;
-		//!\~english  This node's childs	\~french Les enfants de ce noeud
+		//!\~english	This node's childs.
+		//!\~french		Les enfants de ce noeud.
 		SceneNodePtrStrMap m_children;
-		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
+		//!\~english	This node's attached objects.
+		//!\~french		Les objets attachés à ce noeud.
 		MovableObjectArray m_objects;
-		//!\~english  Signal used to notify attached objects that the node has changed.	\~french Signal utilisé pour notifier aux objets attachés que le noeud a changé.
-		Castor::Signal< NodeChangedNotifyFunction > m_signalChanged;
 	};
 }
 

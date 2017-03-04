@@ -571,7 +571,7 @@ namespace GLSL
 
 				IF ( m_writer, p_receivesShadows != 0_i )
 				{
-					l_shadowFactor = l_shadows.ComputePointShadow( p_fragmentIn.m_v3Vertex, l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
+					l_shadowFactor = l_shadows.ComputePointShadow( p_fragmentIn.m_v3Vertex, p_light.m_v3Position().xyz(), p_fragmentIn.m_v3Normal, 0_i );
 				}
 				FI;
 			}

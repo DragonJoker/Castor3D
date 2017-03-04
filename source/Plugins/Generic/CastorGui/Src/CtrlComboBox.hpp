@@ -36,6 +36,10 @@ namespace CastorGui
 		: public Control
 	{
 	public:
+		using OnEventFunction = std::function< void( int ) >;
+		using OnEvent = Castor::Signal< OnEventFunction >;
+
+	public:
 		/** Constructor
 		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
@@ -168,18 +172,9 @@ namespace CastorGui
 		*\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		*/
-		inline uint32_t Connect( ComboBoxEvent p_event, std::function< void( int ) > p_function )
+		inline OnEvent::connection Connect( ComboBoxEvent p_event, OnEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
-		}
-
-		/** Disconnects a function from a combobox event
-		*\param[in]	p_event		The event type
-		*\param[in]	p_index		The function index
-		*/
-		inline void Disconnect( ComboBoxEvent p_event, uint32_t p_index )
-		{
-			m_signals[size_t( p_event )].disconnect( p_index );
 		}
 
 	private:
@@ -246,7 +241,7 @@ namespace CastorGui
 		//! Teh selected value index
 		int m_selected;
 		//! The combobox events signals
-		Castor::Signal< std::function< void( int ) > > m_signals[size_t( ComboBoxEvent::eCount )];
+		OnEvent m_signals[size_t( ComboBoxEvent::eCount )];
 	};
 }
 

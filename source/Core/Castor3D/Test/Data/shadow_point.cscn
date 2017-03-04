@@ -60,6 +60,21 @@ scene "Scene"
 	{
 	}
 
+	scene_node "SphereRight"
+	{
+		position 100 0 0
+	}
+
+	scene_node "SphereTop"
+	{
+		position 0 100 0
+	}
+
+	scene_node "SphereFar"
+	{
+		position 0 0 100
+	}
+
 	scene_node "Torus"
 	{
 	}
@@ -87,6 +102,34 @@ scene "Scene"
 		}
 
 		material "Gold"
+	}
+
+	object "SphereRight"
+	{
+		parent "SphereRight"
+
+		mesh "Sphere"
+		{
+			type sphere 20 10
+		}
+
+		material "Silver"
+	}
+
+	object "SphereTop"
+	{
+		parent "SphereTop"
+
+		mesh "Sphere"
+		material "Silver"
+	}
+
+	object "SphereFar"
+	{
+		parent "SphereFar"
+
+		mesh "Sphere"
+		material "Silver"
 	}
 
 	object "Torus"

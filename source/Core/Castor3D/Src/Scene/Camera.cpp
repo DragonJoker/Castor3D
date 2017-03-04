@@ -69,7 +69,7 @@ namespace Castor3D
 
 		if ( p_node )
 		{
-			m_notifyIndex = p_node->RegisterObject( std::bind( &Camera::OnNodeChanged, this, std::placeholders::_1 ) );
+			m_notifyIndex = p_node->onChanged.connect( std::bind( &Camera::OnNodeChanged, this, std::placeholders::_1 ) );
 			OnNodeChanged( *p_node );
 		}
 	}
@@ -81,6 +81,7 @@ namespace Castor3D
 
 	Camera::~Camera()
 	{
+		m_notifyIndex.disconnect();
 	}
 
 	void Camera::AttachTo( SceneNodeSPtr p_node )
@@ -89,7 +90,7 @@ namespace Castor3D
 
 		if ( p_node )
 		{
-			m_notifyIndex = p_node->RegisterObject( std::bind( &Camera::OnNodeChanged, this, std::placeholders::_1 ) );
+			m_notifyIndex = p_node->onChanged.connect( std::bind( &Camera::OnNodeChanged, this, std::placeholders::_1 ) );
 			OnNodeChanged( *p_node );
 		}
 	}
@@ -197,6 +198,6 @@ namespace Castor3D
 	void Camera::OnNodeChanged( SceneNode const & p_node )
 	{
 		m_nodeChanged = true;
-		m_signalChanged( *this );
+		onChanged( *this );
 	}
 }
