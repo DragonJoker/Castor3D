@@ -410,18 +410,18 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		double cos_theta( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
 		{
-			double l_dReturn = double( distance( p_ptA ) * distance( p_ptB ) );
+			double l_result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_dReturn != 0 )
+			if ( l_result != 0 )
 			{
-				l_dReturn = dot( p_ptA, p_ptB ) / l_dReturn;
+				l_result = dot( p_ptA, p_ptB ) / l_result;
 			}
 			else
 			{
-				l_dReturn = dot( p_ptA, p_ptB );
+				l_result = dot( p_ptA, p_ptB );
 			}
 
-			return l_dReturn;
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
@@ -436,19 +436,19 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		void normalise( Coords< T, Count > & p_point )
 		{
-			T l_tLength = T( distance( p_point ) );
+			T l_length = T( length( p_point ) );
 
-			if ( !Policy< T >::is_null( l_tLength ) )
+			if ( !Policy< T >::is_null( l_length ) )
 			{
-				std::transform( p_point.const_ptr(), p_point.const_ptr() + Count, p_point.ptr(), [l_tLength]( T const & p_value )
+				std::transform( p_point.const_ptr(), p_point.const_ptr() + Count, p_point.ptr(), [l_length]( T const & p_value )
 				{
-					return p_value / l_tLength;
+					return p_value / l_length;
 				} );
 			}
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_squared( Coords< T, Count > const & p_point )
+		double length_squared( Coords< T, Count > const & p_point )
 		{
 			return std::accumulate( p_point.const_ptr(), p_point.const_ptr() + Count, 0.0, []( double a, T const & b )
 			{
@@ -457,49 +457,79 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double distance( Coords< T, Count > const & p_point )
+		double length( Coords< T, Count > const & p_point )
 		{
-			return sqrt( distance_squared( p_point ) );
+			return sqrt( length_squared( p_point ) );
 		}
 
 		template< typename T, uint32_t Count >
-		inline double distance_manhattan( Coords< T, Count > const & p_point )
+		inline double length_manhattan( Coords< T, Count > const & p_point )
 		{
-			double l_dReturn = 0.0;
+			double l_result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn += abs( p_point[i] );
+				l_result += abs( p_point[i] );
 			}
 
-			return l_dReturn;
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_minkowski( Coords< T, Count > const & p_point, double p_dOrder )
+		double length_minkowski( Coords< T, Count > const & p_point, double p_order )
 		{
-			double l_dReturn = 0.0;
+			double l_result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn += pow( double( abs( p_point[i] ) ), p_dOrder );
+				l_result += pow( double( abs( p_point[i] ) ), p_order );
 			}
 
-			l_dReturn = pow( l_dReturn, 1.0 / p_dOrder );
-			return l_dReturn;
+			l_result = pow( l_result, 1.0 / p_order );
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_chebychev( Coords< T, Count > const & p_point )
+		double length_chebychev( Coords< T, Count > const & p_point )
 		{
-			double l_dReturn = 0.0;
+			double l_result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn = std::max( l_dReturn, double( abs( p_point[i] ) ) );
+				l_result = std::max( l_result, double( abs( p_point[i] ) ) );
 			}
 
-			return l_dReturn;
+			return l_result;
+		}
+
+		template< typename T, uint32_t Count >
+		double distance_squared( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs )
+		{
+			return length_squared( p_rhs - p_lhs );
+		}
+
+		template< typename T, uint32_t Count >
+		double distance( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs )
+		{
+			return length( p_rhs - p_lhs );
+		}
+
+		template< typename T, uint32_t Count >
+		inline double distance_manhattan( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs )
+		{
+			return length_manhattan( p_rhs - p_lhs );
+		}
+
+		template< typename T, uint32_t Count >
+		double distance_minkowski( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs, double p_order )
+		{
+			return length_minkowski( p_rhs - p_lhs, p_order );
+		}
+
+		template< typename T, uint32_t Count >
+		double distance_chebychev( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs )
+		{
+			return length_chebychev( p_rhs - p_lhs );
 		}
 	}
 }

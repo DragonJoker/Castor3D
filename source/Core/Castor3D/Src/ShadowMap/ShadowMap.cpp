@@ -106,9 +106,20 @@ namespace Castor3D
 	void ShadowMap::Update( Camera const & p_camera
 		, RenderQueueArray & p_queues )
 	{
+		std::map< double, ShadowMapPassSPtr > l_sorted;
+
 		for ( auto & l_it : m_shadowMaps )
 		{
-			l_it.second->Update( p_queues );
+			l_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
+					, l_it.first->GetParent()->GetDerivedPosition() )
+				, l_it.second );
+		}
+
+		auto l_it = l_sorted.begin();
+
+		for ( int32_t i = 0; i < DoGetMaxPasses() && l_it != l_sorted.end(); ++i, ++l_it )
+		{
+			l_it->second->Update( p_queues, i );
 		}
 	}
 

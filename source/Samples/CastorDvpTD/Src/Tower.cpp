@@ -85,6 +85,6 @@ namespace castortd
 
 	bool Tower::DoIsInRange( Enemy const & p_enemy )const
 	{
-		return point::distance( m_node.GetPosition() - p_enemy.GetNode().GetPosition() ) <= m_category->GetRange();
+		return point::length( m_node.GetPosition() - p_enemy.GetNode().GetPosition() ) <= m_category->GetRange();
 	}
 }

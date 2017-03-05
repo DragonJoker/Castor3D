@@ -535,7 +535,7 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		void normalise( Point< T, Count > & p_point )
 		{
-			T l_tLength = T( distance( p_point ) );
+			T l_tLength = T( length( p_point ) );
 
 			if ( !Policy< T >::is_null( l_tLength ) )
 			{
@@ -554,152 +554,182 @@ namespace Castor
 		template< typename T, typename U, uint32_t Count >
 		T dot( Point< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
-			T l_tReturn;
-			Policy< T >::init( l_tReturn );
+			T l_result;
+			Policy< T >::init( l_result );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_tReturn += T( p_ptA[i] * p_ptB[i] );
+				l_result += T( p_ptA[i] * p_ptB[i] );
 			}
 
-			return l_tReturn;
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
 		double cos_theta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
 		{
-			double l_dReturn = double( distance( p_ptA ) * distance( p_ptB ) );
+			double l_result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_dReturn != 0 )
+			if ( l_result != 0 )
 			{
-				l_dReturn = dot( p_ptA, p_ptB ) / l_dReturn;
+				l_result = dot( p_ptA, p_ptB ) / l_result;
 			}
 			else
 			{
-				l_dReturn = dot( p_ptA, p_ptB );
+				l_result = dot( p_ptA, p_ptB );
 			}
 
-			return l_dReturn;
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_squared( Point< T, Count > const & p_point )
+		double length_squared( Point< T, Count > const & p_point )
 		{
-			double l_dReturn = 0.0;
+			double l_result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn += p_point[i] * p_point[i];
+				l_result += p_point[i] * p_point[i];
 			}
 
-			return l_dReturn;
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
-		double distance( Point< T, Count > const & p_point )
+		double length( Point< T, Count > const & p_point )
 		{
-			return sqrt( distance_squared( p_point ) );
+			return sqrt( length_squared( p_point ) );
 		}
 
 		template< typename T, uint32_t Count >
-		inline double distance_manhattan( Point< T, Count > const & p_point )
+		inline double length_manhattan( Point< T, Count > const & p_point )
 		{
-			double l_dReturn = 0.0;
+			double l_result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn += abs( p_point[i] );
+				l_result += abs( p_point[i] );
 			}
 
-			return l_dReturn;
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_minkowski( Point< T, Count > const & p_point, double p_dOrder )
+		double length_minkowski( Point< T, Count > const & p_point, double p_order )
 		{
-			double l_dReturn = 0.0;
+			double l_result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn += pow( double( abs( p_point[i] ) ), p_dOrder );
+				l_result += pow( double( abs( p_point[i] ) ), p_order );
 			}
 
-			l_dReturn = pow( l_dReturn, 1.0 / p_dOrder );
-			return l_dReturn;
+			l_result = pow( l_result, 1.0 / p_order );
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_chebychev( Point< T, Count > const & p_point )
+		double length_chebychev( Point< T, Count > const & p_point )
 		{
-			double l_dReturn = 0.0;
+			double l_result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn = std::max( l_dReturn, double( abs( p_point[i] ) ) );
+				l_result = std::max( l_result, double( abs( p_point[i] ) ) );
 			}
 
-			return l_dReturn;
+			return l_result;
+		}
+
+		template< typename T, uint32_t Count >
+		double distance_squared( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
+		{
+			return length_squared( p_rhs - p_lhs );
+		}
+
+		template< typename T, uint32_t Count >
+		double distance( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
+		{
+			return length( p_rhs - p_lhs );
+		}
+
+		template< typename T, uint32_t Count >
+		inline double distance_manhattan( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
+		{
+			return length_manhattan( p_rhs - p_lhs );
+		}
+
+		template< typename T, uint32_t Count >
+		double distance_minkowski( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs, double p_order )
+		{
+			return length_minkowski( p_rhs - p_lhs, p_order );
+		}
+
+		template< typename T, uint32_t Count >
+		double distance_chebychev( Point< T, Count > const & p_lhs, Point< T, Count > const & p_rhs )
+		{
+			return length_chebychev( p_rhs - p_lhs );
 		}
 
 		template< typename T, typename U, uint32_t Count >
 		T dot( Point< T, Count > const & p_ptA, Coords< U, Count > const & p_ptB )
 		{
-			T l_tReturn = T();
+			T l_result = T();
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_tReturn += T( p_ptA[i] * p_ptB[i] );
+				l_result += T( p_ptA[i] * p_ptB[i] );
 			}
 
-			return l_tReturn;
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
 		double cos_theta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
 		{
-			double l_dReturn = double( distance( p_ptA ) * distance( p_ptB ) );
+			double l_result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_dReturn != 0 )
+			if ( l_result != 0 )
 			{
-				l_dReturn = dot( p_ptA, p_ptB ) / l_dReturn;
+				l_result = dot( p_ptA, p_ptB ) / l_result;
 			}
 			else
 			{
-				l_dReturn = dot( p_ptA, p_ptB );
+				l_result = dot( p_ptA, p_ptB );
 			}
 
-			return l_dReturn;
+			return l_result;
 		}
 
 		template< typename T, typename U, uint32_t Count >
 		T dot( Coords< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
-			T l_tReturn;
-			Policy< T >::init( l_tReturn );
+			T l_result;
+			Policy< T >::init( l_result );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_tReturn += T( p_ptA[i] * p_ptB[i] );
+				l_result += T( p_ptA[i] * p_ptB[i] );
 			}
 
-			return l_tReturn;
+			return l_result;
 		}
 
 		template< typename T, uint32_t Count >
 		double cos_theta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
 		{
-			double l_dReturn = double( distance( p_ptA ) * distance( p_ptB ) );
+			double l_result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_dReturn != 0 )
+			if ( l_result != 0 )
 			{
-				l_dReturn = dot( p_ptA, p_ptB ) / l_dReturn;
+				l_result = dot( p_ptA, p_ptB ) / l_result;
 			}
 			else
 			{
-				l_dReturn = dot( p_ptA, p_ptB );
+				l_result = dot( p_ptA, p_ptB );
 			}
 
-			return l_dReturn;
+			return l_result;
 		}
 	}
 }

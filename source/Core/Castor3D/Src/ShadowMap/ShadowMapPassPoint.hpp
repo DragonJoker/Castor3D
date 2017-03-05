@@ -69,7 +69,7 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoInitialise
+		 *\copydoc		Castor3D::RenderPass::DoInitialise
 		 */
 		bool DoInitialise( Castor::Size const & p_size )override;
 		/**
@@ -77,15 +77,15 @@ namespace Castor3D
 		 */
 		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
+		 *\copydoc		Castor3D::RenderPass::DoUpdate
 		 */
 		void DoUpdate( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoRender
+		 *\copydoc		Castor3D::RenderPass::DoRender
 		 */
 		void DoRender()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoPrepareBackPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
 		 */
 		void DoPrepareBackPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;

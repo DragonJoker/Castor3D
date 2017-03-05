@@ -269,7 +269,7 @@ namespace Castor3D
 			{
 				std::sort( l_elements.begin(), l_elements.end(), [this]( Element const & p_a, Element const & p_b )
 				{
-					return point::distance_squared( p_a.m_position - m_cameraPosition ) > point::distance_squared( p_b.m_position - m_cameraPosition );
+					return point::length_squared( p_a.m_position - m_cameraPosition ) > point::length_squared( p_b.m_position - m_cameraPosition );
 				} );
 
 				for ( auto & l_element : l_elements )

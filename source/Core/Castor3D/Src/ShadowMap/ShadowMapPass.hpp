@@ -74,6 +74,20 @@ namespace Castor3D
 		 *\brief		Fonction de rendu.
 		 */
 		C3D_API void Render();
+		/**
+		 *\~english
+		 *\brief		Updates the render pass.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	p_index		The pass index.
+		 *\~french
+		 *\brief		Met à jour la passe de rendu.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	p_index		L'indice de la passe.
+		 */
+		C3D_API void Update( RenderQueueArray & p_queues
+			, int32_t p_index );
 
 	protected:
 		/**
@@ -97,7 +111,7 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Render function
+		 *\brief		Render function.
 		 *\param[in]	p_scene		The scene to render.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\~french
@@ -107,7 +121,10 @@ namespace Castor3D
 		 */
 		C3D_API virtual void DoRender() = 0;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoCleanup
+		 *\~english
+		 *\brief		Cleans up the pass.
+		 *\~french
+		 *\brief		Nettoie la passe.
 		 */
 		virtual void DoCleanup()= 0;
 		/**
@@ -154,6 +171,9 @@ namespace Castor3D
 		//!\~english	Tells if the pass is initialised.
 		//!\~french		Dit si la passe est initialisée.
 		bool m_initialised{ false };
+		//!\~english	The pass index.
+		//!\~french		L'indice de la passe.
+		int32_t m_index{ 0u };
 	};
 }
 

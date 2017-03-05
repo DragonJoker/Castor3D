@@ -60,6 +60,11 @@ namespace Castor3D
 	{
 	}
 
+	int32_t ShadowMapSpot::DoGetMaxPasses()const
+	{
+		return GLSL::SpotShadowMapCount;
+	}
+
 	bool ShadowMapSpot::DoInitialise( Size const & p_size )
 	{
 		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );

@@ -45,7 +45,7 @@ namespace Castor3D
 					Point3r l_ptCameraLocal = l_position * l_mtxMeshGlobal;
 					l_renderNode.m_data.SortByDistance( l_ptCameraLocal );
 					l_ptCameraLocal -= l_renderNode.m_sceneNode.GetPosition();
-					p_output.emplace( point::distance_squared( l_ptCameraLocal ), MakeDistanceNode( l_renderNode ) );
+					p_output.emplace( point::length_squared( l_ptCameraLocal ), MakeDistanceNode( l_renderNode ) );
 				}
 			}
 		}

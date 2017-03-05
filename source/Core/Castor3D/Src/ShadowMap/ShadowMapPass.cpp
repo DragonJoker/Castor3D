@@ -57,6 +57,13 @@ namespace Castor3D
 		DoRender();
 	}
 
+	void ShadowMapPass::Update( RenderQueueArray & p_queues
+		, int32_t p_index )
+	{
+		m_index = p_index;
+		RenderPass::Update( p_queues );
+	}
+
 	void ShadowMapPass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera )
 	{

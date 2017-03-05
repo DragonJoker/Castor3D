@@ -62,6 +62,10 @@ namespace Castor3D
 
 	private:
 		/**
+		 *\copydoc		Castor3D::ShadowMap::DoGetMaxPasses
+		 */
+		int32_t DoGetMaxPasses()const override;
+		/**
 		 *\copydoc		Castor3D::ShadowMap::DoInitialise
 		 */
 		bool DoInitialise( Castor::Size const & p_size )override;

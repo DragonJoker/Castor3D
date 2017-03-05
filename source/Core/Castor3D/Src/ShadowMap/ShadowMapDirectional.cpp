@@ -62,6 +62,11 @@ namespace Castor3D
 	{
 	}
 
+	int32_t ShadowMapDirectional::DoGetMaxPasses()const
+	{
+		return 1;
+	}
+
 	bool ShadowMapDirectional::DoInitialise( Size const & p_size )
 	{
 		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );

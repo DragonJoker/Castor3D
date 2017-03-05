@@ -52,7 +52,7 @@ namespace Castor3D
 
 	void ShadowMapPassSpot::DoUpdate( RenderQueueArray & p_queues )
 	{
-		m_light.Update( m_camera->GetParent()->GetDerivedPosition() );
+		m_light.Update( m_camera->GetParent()->GetDerivedPosition(), m_index );
 		m_camera->Update();
 		p_queues.push_back( m_renderQueue );
 	}

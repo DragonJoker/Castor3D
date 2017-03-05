@@ -156,6 +156,13 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
+		 *\return		The maximum light type specific shadow map passes.
+		 *\~english
+		 *\return		Le nombre maximum de passes de shadow maps pour le type de source lumineuse.
+		 */
+		C3D_API virtual int32_t DoGetMaxPasses()const = 0;
+		/**
+		 *\~english
 		 *\brief		Initialises the light type specific data.
 		 *\param[in]	p_size	The wanted frame buffer dimensions.
 		 *\~french
