@@ -41,28 +41,22 @@ namespace GLSL
 		GlslWriter_API Float ComputeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
 		GlslWriter_API Float ComputePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
 		GlslWriter_API Float GetRandom( Vec4 const & p_seed );
-		GlslWriter_API Float FilterRaw( Vec2 const & p_uv, Float const & p_depth );
-		GlslWriter_API Float FilterRaw( Vec2 const & p_uv, Float const & p_depth, Float const & p_index );
-		GlslWriter_API Float FilterRaw( Vec3 const & p_direction, Float const & p_depth, Float const & p_index );
-		GlslWriter_API Float FilterPoisson( Vec2 const & p_uv, Float const & p_depth );
-		GlslWriter_API Float FilterPoisson( Vec2 const & p_uv, Float const & p_depth, Float const & p_index );
-		GlslWriter_API Float FilterPoisson( Vec3 const & p_direction, Float const & p_depth, Float const & p_index );
-		GlslWriter_API Float FilterStratifiedPoisson( Vec2 const & p_uv, Float const & p_depth );
-		GlslWriter_API Float FilterStratifiedPoisson( Vec2 const & p_uv, Float const & p_depth, Float const & p_index );
-		GlslWriter_API Float FilterStratifiedPoisson( Vec3 const & p_direction, Float const & p_depth, Float const & p_index );
+		GlslWriter_API Float FilterDirectional( Vec2 const & p_uv, Float const & p_depth );
+		GlslWriter_API Float FilterSpot( Vec2 const & p_uv, Float const & p_depth, Float const & p_index );
+		GlslWriter_API Float FilterPoint( Vec3 const & p_direction, Float const & p_depth, Float const & p_index );
 		GlslWriter_API Vec2 GetShadowOffset( Vec3 const & p_normal, Vec3 const & p_lightDirection );
 		GlslWriter_API Vec3 GetLightSpacePosition( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
 
 	private:
 		void DoDeclare_GetRandom();
-		void DoDeclare_FilterRaw();
-		void DoDeclare_FilterPoisson();
-		void DoDeclare_FilterStratifiedPoisson();
+		void DoDeclare_FilterDirectional( ShadowType p_type );
+		void DoDeclare_FilterSpot( ShadowType p_type );
+		void DoDeclare_FilterPoint( ShadowType p_type );
 		void DoDeclare_GetShadowOffset();
 		void DoDeclare_GetLightSpacePosition();
-		void DoDeclare_ComputeDirectionalShadow( ShadowType p_type );
-		void DoDeclare_ComputeSpotShadow( ShadowType p_type );
-		void DoDeclare_ComputePointShadow( ShadowType p_type );
+		void DoDeclare_ComputeDirectionalShadow();
+		void DoDeclare_ComputeSpotShadow();
+		void DoDeclare_ComputePointShadow();
 
 	private:
 		GlslWriter & m_writer;

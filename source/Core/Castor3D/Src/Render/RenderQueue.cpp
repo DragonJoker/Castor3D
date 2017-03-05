@@ -387,7 +387,8 @@ namespace Castor3D
 
 						if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
 						{
-							if ( !CheckFlag( l_programFlags, ProgramFlag::eShadowMap ) || l_primitive.second->IsShadowCaster() )
+							if ( !IsShadowMapProgram( l_programFlags )
+								|| l_primitive.second->IsShadowCaster() )
 							{
 								if ( CheckFlag( l_programFlags, ProgramFlag::eSkinning ) )
 								{
@@ -462,7 +463,7 @@ namespace Castor3D
 					, p_pass.IsTwoSided() );
 
 				if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque
-					&& !CheckFlag( l_programFlags, ProgramFlag::eShadowMap ) )
+					&& !IsShadowMapProgram( l_programFlags ) )
 				{
 					DoAddBillboardNode( p_renderPass
 						, l_textureFlags

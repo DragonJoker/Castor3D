@@ -33,12 +33,12 @@ namespace GLSL
 		DoDeclare_GetRandom();
 		DoDeclare_GetShadowOffset();
 		DoDeclare_GetLightSpacePosition();
-		DoDeclare_FilterRaw();
-		DoDeclare_FilterPoisson();
-		DoDeclare_FilterStratifiedPoisson();
-		DoDeclare_ComputeDirectionalShadow( p_type );
-		DoDeclare_ComputeSpotShadow( p_type );
-		DoDeclare_ComputePointShadow( p_type );
+		DoDeclare_FilterDirectional( p_type );
+		DoDeclare_FilterSpot( p_type );
+		DoDeclare_FilterPoint( p_type );
+		DoDeclare_ComputeDirectionalShadow();
+		DoDeclare_ComputeSpotShadow();
+		DoDeclare_ComputePointShadow();
 	}
 
 	Float Shadow::ComputeDirectionalShadow( Mat4 const & p_lightMatrix
@@ -98,94 +98,32 @@ namespace GLSL
 			, p_lightDirection );
 	}
 
-	Float Shadow::FilterRaw( Vec2 const & p_uv
+	Float Shadow::FilterDirectional( Vec2 const & p_uv
 		, Float const & p_depth )
 	{
 		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterRawDirectional" )
+			, cuT( "FilterDirectional" )
 			, p_uv
 			, p_depth );
 	}
 
-	Float Shadow::FilterRaw( Vec2 const & p_uv
+	Float Shadow::FilterSpot( Vec2 const & p_uv
 		, Float const & p_depth
 		, Float const & p_index )
 	{
 		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterRawSpot" )
+			, cuT( "FilterSpot" )
 			, p_uv
 			, p_depth
 			, p_index );
 	}
 
-	Float Shadow::FilterRaw( Vec3 const & p_direction
+	Float Shadow::FilterPoint( Vec3 const & p_direction
 		, Float const & p_depth
 		, Float const & p_index )
 	{
 		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterRawPoint" )
-			, p_direction
-			, p_depth
-			, p_index );
-	}
-
-	Float Shadow::FilterPoisson( Vec2 const & p_uv
-		, Float const & p_depth )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterPoissonDirectional" )
-			, p_uv
-			, p_depth );
-	}
-
-	Float Shadow::FilterPoisson( Vec2 const & p_uv
-		, Float const & p_depth
-		, Float const & p_index )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterPoissonSpot" )
-			, p_uv
-			, p_depth
-			, p_index );
-	}
-
-	Float Shadow::FilterPoisson( Vec3 const & p_direction
-		, Float const & p_depth
-		, Float const & p_index )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterPoissonPoint" )
-			, p_direction
-			, p_depth
-			, p_index );
-	}
-
-	Float Shadow::FilterStratifiedPoisson( Vec2 const & p_uv
-		, Float const & p_depth )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterStratifiedPoissonDirectional" )
-			, p_uv
-			, p_depth );
-	}
-
-	Float Shadow::FilterStratifiedPoisson( Vec2 const & p_uv
-		, Float const & p_depth
-		, Float const & p_index )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterStratifiedPoissonSpot" )
-			, p_uv
-			, p_depth
-			, p_index );
-	}
-
-	Float Shadow::FilterStratifiedPoisson( Vec3 const & p_direction
-		, Float const & p_depth
-		, Float const & p_index )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterStratifiedPoissonPoint" )
+			, cuT( "FilterPoint" )
 			, p_direction
 			, p_depth
 			, p_index );
@@ -215,178 +153,217 @@ namespace GLSL
 			, InParam< Vec4 >( &m_writer, cuT( "p_seed" ) ) );
 	}
 
-	void Shadow::DoDeclare_FilterRaw()
+	void Shadow::DoDeclare_FilterDirectional( ShadowType p_type )
 	{
-		m_writer.ImplementFunction< Float >( cuT( "FilterRawDirectional" )
-			, [this]( Vec2 const & p_uv
-				, Float const & p_depth )
-			{
-				auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
-				m_writer.Return( texture( c3d_mapShadowDirectional, vec3( p_uv, p_depth ) ) );
-			}
-			, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+		switch( p_type )
+		{
+		case ShadowType::eRaw:
+			m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
+				, [this]( Vec2 const & p_uv
+					, Float const & p_depth )
+				{
+					auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
+					m_writer.Return( texture( c3d_mapShadowDirectional, vec3( p_uv, p_depth ) ) );
+				}
+				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+			break;
 
-		m_writer.ImplementFunction< Float >( cuT( "FilterRawSpot" )
-			, [this]( Vec2 const & p_uv
-				, Float const & p_depth
-				, Float const & p_index )
-			{
-				auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
-				m_writer.Return( texture( c3d_mapShadowSpot, vec4( p_uv, p_index, p_depth ) ) );
-			}
-			, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-			, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+		case ShadowType::ePoisson:
+			m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
+				, [this]( Vec2 const & p_uv
+					, Float const & p_depth )
+				{
+					auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
+					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
+					auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 4000.0 ) );
+					auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
 
-		m_writer.ImplementFunction< Float >( cuT( "FilterRawPoint" )
-			, [this]( Vec3 const & p_direction
-				, Float const & p_depth
-				, Float const & p_index )
-			{
-				auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
-				m_writer.Return( texture( c3d_mapShadowPoint, vec4( p_direction, p_depth ) ) );
-			}
-			, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-			, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+					for ( int i = 0; i < 4; i++ )
+					{
+						l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[i] / l_diffusion, p_depth ) ) );
+					}
+
+					m_writer.Return( l_visibility );
+				}
+				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+			break;
+
+		case ShadowType::eStratifiedPoisson:
+			m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
+				, [this]( Vec2 const & p_uv
+					, Float const & p_depth )
+				{
+					auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
+					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
+					auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
+					auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), Int( 0 ) );
+					auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 2800.0 ) );
+					auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
+
+					for ( int i = 0; i < 4; i++ )
+					{
+						l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_depth ) ) );
+					}
+
+					m_writer.Return( l_visibility );
+				}
+				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+			break;
+
+		default:
+			FAILURE( "Unknown shadow type." );
+			break;
+		}
 	}
 
-	void Shadow::DoDeclare_FilterPoisson()
+	void Shadow::DoDeclare_FilterSpot( ShadowType p_type )
 	{
-		m_writer.ImplementFunction< Float >( cuT( "FilterPoissonDirectional" )
-			, [this]( Vec2 const & p_uv
-				, Float const & p_depth )
-			{
-				auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
-				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 4000.0 ) );
-				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
-
-				for ( int i = 0; i < 4; i++ )
+		switch ( p_type )
+		{
+		case ShadowType::eRaw:
+			m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
+				, [this]( Vec2 const & p_uv
+					, Float const & p_depth
+					, Float const & p_index )
 				{
-					l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[i] / l_diffusion, p_depth ) ) );
+					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
+					m_writer.Return( texture( c3d_mapShadowSpot, vec4( p_uv, p_index, p_depth ) ) );
 				}
+				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
+				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+			break;
 
-				m_writer.Return( l_visibility );
-			}
-			, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
-
-		m_writer.ImplementFunction< Float >( cuT( "FilterPoissonSpot" )
-			, [this]( Vec2 const & p_uv
-				, Float const & p_depth
-				, Float const & p_index )
-			{
-				auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
-				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 500.0_f );
-				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
-
-				for ( int i = 0; i < 4; i++ )
+		case ShadowType::ePoisson:
+			m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
+				, [this]( Vec2 const & p_uv
+					, Float const & p_depth
+					, Float const & p_index )
 				{
-					l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[i] / l_diffusion, p_index, p_depth ) ) );
+					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
+					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
+					auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 500.0_f );
+					auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
+
+					for ( int i = 0; i < 4; i++ )
+					{
+						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[i] / l_diffusion, p_index, p_depth ) ) );
+					}
+
+					m_writer.Return( l_visibility );
 				}
+				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
+				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+			break;
 
-				m_writer.Return( l_visibility );
-			}
-			, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-			, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
-
-		m_writer.ImplementFunction< Float >( cuT( "FilterPoissonPoint" )
-			, [this]( Vec3 const & p_direction
-				, Float const & p_depth
-				, Float const & p_index )
-			{
-				auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
-				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 500.0_f );
-				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
-
-				for ( int i = 0; i < 4; i++ )
+		case ShadowType::eStratifiedPoisson:
+			m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
+				, [this]( Vec2 const & p_uv
+					, Float const & p_depth
+					, Float const & p_index )
 				{
-					l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[i] / l_diffusion, p_direction.z(), p_depth ) ) );
-				}
+					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
+					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
+					auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
+					auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), 0_i );
+					auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 700.0_f );
+					auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
 
-				m_writer.Return( l_visibility );
-			}
-			, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-			, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+					for ( int i = 0; i < 4; i++ )
+					{
+						l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_index, p_depth ) ) );
+					}
+
+					m_writer.Return( l_visibility );
+				}
+				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
+				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+			break;
+
+		default:
+			FAILURE( "Unknown shadow type." );
+			break;
+		}
 	}
 
-	void Shadow::DoDeclare_FilterStratifiedPoisson()
+	void Shadow::DoDeclare_FilterPoint( ShadowType p_type )
 	{
-		m_writer.ImplementFunction< Float >( cuT( "FilterStratifiedPoissonDirectional" )
-			, [this]( Vec2 const & p_uv
-				, Float const & p_depth )
-			{
-				auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
-				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-				auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-				auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), Int( 0 ) );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 2800.0 ) );
-				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
-
-				for ( int i = 0; i < 4; i++ )
+		switch ( p_type )
+		{
+		case ShadowType::eRaw:
+			m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
+				, [this]( Vec3 const & p_direction
+					, Float const & p_depth
+					, Float const & p_index )
 				{
-					l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-					l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_depth ) ) );
+					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
+					m_writer.Return( texture( c3d_mapShadowPoint, vec4( p_direction, p_depth ) ) );
 				}
+				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
+				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+			break;
 
-				m_writer.Return( l_visibility );
-			}
-			, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
-
-		m_writer.ImplementFunction< Float >( cuT( "FilterStratifiedPoissonSpot" )
-			, [this]( Vec2 const & p_uv
-				, Float const & p_depth
-				, Float const & p_index )
-			{
-				auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
-				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-				auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-				auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), 0_i );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 700.0_f );
-				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
-
-				for ( int i = 0; i < 4; i++ )
+		case ShadowType::ePoisson:
+			m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
+				, [this]( Vec3 const & p_direction
+					, Float const & p_depth
+					, Float const & p_index )
 				{
-					l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-					l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_index, p_depth ) ) );
+					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
+					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
+					auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 500.0_f );
+					auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
+
+					for ( int i = 0; i < 4; i++ )
+					{
+						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[i] / l_diffusion, p_direction.z(), p_depth ) ) );
+					}
+
+					m_writer.Return( l_visibility );
 				}
+				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
+				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+			break;
 
-				m_writer.Return( l_visibility );
-			}
-			, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-			, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
-
-		m_writer.ImplementFunction< Float >( cuT( "FilterStratifiedPoissonPoint" )
-			, [this]( Vec3 const & p_direction
-				, Float const & p_depth
-				, Float const & p_index )
-			{
-				auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
-				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-				auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-				auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), 0_i );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 700.0_f );
-				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
-
-				for ( int i = 0; i < 4; i++ )
+		case ShadowType::eStratifiedPoisson:
+			m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
+				, [this]( Vec3 const & p_direction
+					, Float const & p_depth
+					, Float const & p_index )
 				{
-					l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-					l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, p_direction.z(), p_depth ) ) );
-				}
+					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
+					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
+					auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
+					auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), 0_i );
+					auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 700.0_f );
+					auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
 
-				m_writer.Return( l_visibility );
-			}
-			, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-			, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-			, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+					for ( int i = 0; i < 4; i++ )
+					{
+						l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, p_direction.z(), p_depth ) ) );
+					}
+
+					m_writer.Return( l_visibility );
+				}
+				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
+				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
+				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+			break;
+
+		default:
+			FAILURE( "Unknown shadow type." );
+			break;
+		}
 	}
 
 	void Shadow::DoDeclare_GetShadowOffset()
@@ -429,31 +406,18 @@ namespace GLSL
 			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) ) );
 	}
 
-	void Shadow::DoDeclare_ComputeDirectionalShadow( ShadowType p_type )
+	void Shadow::DoDeclare_ComputeDirectionalShadow()
 	{
 		m_writer.ImplementFunction< Float >( cuT( "ComputeDirectionalShadow" )
-			, [this, &p_type]( Mat4 const & p_lightMatrix
+			, [this]( Mat4 const & p_lightMatrix
 				, Vec3 const & p_worldSpacePosition
 				, Vec3 const & p_lightDirection
 				, Vec3 const & p_normal )
 			{
 				auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), GetLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
-
-				if ( p_type == ShadowType::eRaw )
-				{
-					l_visibility = FilterRaw( l_lightSpacePosition.xy(), l_lightSpacePosition.z() );
-				}
-				else if ( p_type == ShadowType::ePoisson )
-				{
-					l_visibility = FilterPoisson( l_lightSpacePosition.xy(), l_lightSpacePosition.z() );
-				}
-				else if ( p_type == ShadowType::eStratifiedPoisson )
-				{
-					l_visibility = FilterStratifiedPoisson( l_lightSpacePosition.xy(), l_lightSpacePosition.z() );
-				}
-
-				m_writer.Return( clamp( l_visibility, 0.0, 1.0 ) );
+				l_visibility = FilterDirectional( l_lightSpacePosition.xy(), l_lightSpacePosition.z() );
+				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
@@ -461,10 +425,10 @@ namespace GLSL
 			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) ) );
 	}
 
-	void Shadow::DoDeclare_ComputeSpotShadow( ShadowType p_type )
+	void Shadow::DoDeclare_ComputeSpotShadow()
 	{
 		m_writer.ImplementFunction< Float >( cuT( "ComputeSpotShadow" )
-			, [this, &p_type]( Mat4 const & p_lightMatrix
+			, [this]( Mat4 const & p_lightMatrix
 				, Vec3 const & p_worldSpacePosition
 				, Vec3 const & p_lightDirection
 				, Vec3 const & p_normal
@@ -473,21 +437,8 @@ namespace GLSL
 				auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), GetLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
 				auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) / SpotShadowMapCount );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );
-
-				if ( p_type == ShadowType::eRaw )
-				{
-					l_visibility = FilterRaw( l_lightSpacePosition.xy(), l_lightSpacePosition.z(), l_index );
-				}
-				else if ( p_type == ShadowType::ePoisson )
-				{
-					l_visibility = FilterPoisson( l_lightSpacePosition.xy(), l_lightSpacePosition.z(), l_index );
-				}
-				else if ( p_type == ShadowType::eStratifiedPoisson )
-				{
-					l_visibility = FilterStratifiedPoisson( l_lightSpacePosition.xy(), l_lightSpacePosition.z(), l_index );
-				}
-
-				m_writer.Return( clamp( l_visibility, 0.0, 1.0 ) );
+				l_visibility = FilterSpot( l_lightSpacePosition.xy(), l_lightSpacePosition.z(), l_index );
+				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
@@ -496,10 +447,10 @@ namespace GLSL
 			, InParam< Int >( &m_writer, cuT( "p_index" ) ) );
 	}
 
-	void Shadow::DoDeclare_ComputePointShadow( ShadowType p_type )
+	void Shadow::DoDeclare_ComputePointShadow()
 	{
 		m_writer.ImplementFunction< Float >( cuT( "ComputePointShadow" )
-			, [this, &p_type]( Vec3 const & p_worldSpacePosition
+			, [this]( Vec3 const & p_worldSpacePosition
 			, Vec3 const & p_lightPosition
 			, Vec3 const & p_normal
 			, Int const & p_index )
@@ -510,21 +461,8 @@ namespace GLSL
 				auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) / SpotShadowMapCount );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );
 				l_vertexToLight = l_worldSpace - p_lightPosition;
-
-				if ( p_type == ShadowType::eRaw )
-				{
-					l_visibility = FilterRaw( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, l_index );
-				}
-				else if ( p_type == ShadowType::ePoisson )
-				{
-					l_visibility = FilterPoisson( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, l_index );
-				}
-				else if ( p_type == ShadowType::eStratifiedPoisson )
-				{
-					l_visibility = FilterStratifiedPoisson( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, l_index );
-				}
-
-				m_writer.Return( clamp( l_visibility, 0.0, 1.0 ) );
+				l_visibility = FilterPoint( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, l_index );
+				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_lightPosition" ) )

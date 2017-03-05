@@ -161,20 +161,37 @@ namespace Castor3D
 		//!\~english	Shadow map is available as input.
 		//\~french		La map d'ombres est disponible en entrée.
 		eShadows = 0x0040,
-		//!\~english	Shader used to render a shadow map.
-		//\~french		Shader utilisé pour dessiner la shadow map.
-		eShadowMap = 0x0080,
 		//!\~english	Shader supporting lighting.
 		//\~french		Shader supportant les éclairages.
-		eLighting = 0x0100,
+		eLighting = 0x0080,
 		//!\~english	Shader for spherical billboards.
 		//\~french		Shader pour les billboards sphériques.
-		eSpherical = 0x0200,
+		eSpherical = 0x0100,
 		//!\~english	Shader for fixed size billboards.
 		//\~french		Shader pour les billboards à dimensions fixes.
-		eFixedSize = 0x0400,
+		eFixedSize = 0x0200,
+		//!\~english	Shader used to render a shadow map for directional light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
+		eShadowMapDirectional = 0x0400,
+		//!\~english	Shader used to render a shadow map for spot light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
+		eShadowMapSpot = 0x0800,
+		//!\~english	Shader used to render a shadow map for point light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
+		eShadowMapPoint = 0x1000,
 	};
 	IMPLEMENT_FLAGS( ProgramFlag )
+	/**
+	 *\~english
+	 *\brief		Tells if the given flags contain a shadow map flag.
+	 *\param[in]	p_flags	The flags to check.
+	 *\return		\p true if p_flags contain one of ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, or ProgramFlag::eShadowMapPoint.
+	 *\~french
+	 *\brief		Dit si les indicateurs donnés contiennent un indicateur de shadow map.
+	 *\param[in]	p_flags	Les indicateurs à vérifier.
+	 *\return		\p true si p_flags contient l'un de ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, ou ProgramFlag::eShadowMapPoint.
+	 */
+	bool IsShadowMapProgram( ProgramFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english

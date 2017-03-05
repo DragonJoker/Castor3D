@@ -100,6 +100,11 @@ namespace Castor3D
 		 */
 		void DoRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & p_camera );
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 */
+		void DoUpdateFlags( TextureChannels & p_textureFlags
+			, ProgramFlags & p_programFlags )const override;
 
 	private:
 		/**
@@ -162,11 +167,6 @@ namespace Castor3D
 		 */
 		void DoPrepareBackPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
-		 */
-		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags )const override;
 
 	protected:
 		//!\~english	The scene.

@@ -397,7 +397,7 @@ namespace Castor3D
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) != m_opaque
 			&& ( !CheckFlag( p_programFlags, ProgramFlag::eBillboards )
-				|| !CheckFlag( p_programFlags, ProgramFlag::eShadowMap ) ) )
+				|| !IsShadowMapProgram( p_programFlags ) ) )
 		{
 			if ( m_opaque )
 			{

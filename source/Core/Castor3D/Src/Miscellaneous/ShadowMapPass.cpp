@@ -66,6 +66,14 @@ namespace Castor3D
 		DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera );
 	}
 
+	void ShadowMapPass::DoUpdateFlags( TextureChannels & p_textureFlags
+		, ProgramFlags & p_programFlags )const
+	{
+		RemFlag( p_programFlags, ProgramFlag::eLighting );
+		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
+		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll ) & ~uint16_t( TextureChannel::eOpacity ) ) );
+	}
+
 	bool ShadowMapPass::DoInitialise( Size const & p_size )
 	{
 		bool l_return = true;
@@ -158,15 +166,5 @@ namespace Castor3D
 					m_initialised = true;
 				} ) );
 		}
-	}
-
-	void ShadowMapPass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
-	{
-		RemFlag( p_programFlags, ProgramFlag::eLighting );
-		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
-		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll ) & ~uint16_t( TextureChannel::eOpacity ) ) );
-
-		AddFlag( p_programFlags, ProgramFlag::eShadowMap );
 	}
 }

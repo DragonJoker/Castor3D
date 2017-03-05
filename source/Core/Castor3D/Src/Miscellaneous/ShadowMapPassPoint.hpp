@@ -100,6 +100,11 @@ namespace Castor3D
 		 */
 		void DoUpdateProgram( ShaderProgram & p_program )override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 */
+		void DoUpdateFlags( TextureChannels & p_textureFlags
+			, ProgramFlags & p_programFlags )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
 		 */
 		void DoPrepareBackPipeline( ShaderProgram & p_program

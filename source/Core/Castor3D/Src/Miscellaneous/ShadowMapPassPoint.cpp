@@ -149,6 +149,13 @@ namespace Castor3D
 		}
 	}
 
+	void ShadowMapPassPoint::DoUpdateFlags( TextureChannels & p_textureFlags
+		, ProgramFlags & p_programFlags )const
+	{
+		ShadowMapPass::DoUpdateFlags( p_textureFlags, p_programFlags );
+		AddFlag( p_programFlags, ProgramFlag::eShadowMapPoint );
+	}
+
 	void ShadowMapPassPoint::DoUpdateProgram( ShaderProgram & p_program )
 	{
 	}

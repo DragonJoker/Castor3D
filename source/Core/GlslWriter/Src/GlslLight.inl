@@ -180,9 +180,19 @@ namespace GLSL
 		return *this;
 	}
 
-	PointLight SpotLight::m_lightBase()const
+	Light SpotLight::m_lightBase()const
 	{
-		return PointLight( m_writer, m_name + cuT( ".m_lightBase" ) );
+		return Light( m_writer, m_name + cuT( ".m_lightBase" ) );
+	}
+
+	Vec3 SpotLight::m_v3Position()const
+	{
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Position" ) );
+	}
+
+	Vec3 SpotLight::m_v3Attenuation()const
+	{
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
 	}
 
 	Vec3 SpotLight::m_v3Direction()const

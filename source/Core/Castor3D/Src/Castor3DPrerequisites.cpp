@@ -180,4 +180,11 @@ namespace Castor3D
 			p_emissive = texture( c3d_mapEmissive, vtx_texture.xy() ).xyz();
 		}
 	}
+
+	bool IsShadowMapProgram( ProgramFlags const & p_flags )
+	{
+		return CheckFlag( p_flags, ProgramFlag::eShadowMapDirectional )
+			|| CheckFlag( p_flags, ProgramFlag::eShadowMapSpot )
+			|| CheckFlag( p_flags, ProgramFlag::eShadowMapPoint );
+	}
 }

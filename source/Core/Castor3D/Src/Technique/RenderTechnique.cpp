@@ -171,7 +171,7 @@ namespace Castor3D
 
 			if ( m_initialised )
 			{
-				m_initialised = DoInitialisePointShadowMap( Size{ 512, 512 } );
+				m_initialised = DoInitialisePointShadowMap( Size{ 1024, 1024 } );
 			}
 
 			auto & l_scene = *m_renderTarget.GetScene();

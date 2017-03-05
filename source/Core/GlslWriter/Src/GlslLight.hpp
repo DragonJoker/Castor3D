@@ -28,7 +28,6 @@ SOFTWARE.
 namespace GLSL
 {
 	static constexpr int BaseLightComponentsCount = 2;
-	static constexpr int PointLightComponentsCount = 4;
 	static constexpr int MaxLightComponentsCount = 14;
 	static constexpr float LightComponentsOffset = MaxLightComponentsCount * 0.001f;
 
@@ -74,7 +73,9 @@ namespace GLSL
 		inline SpotLight( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline SpotLight & operator=( SpotLight const & p_rhs );
 		template< typename T > inline SpotLight & operator=( T const & p_rhs );
-		inline PointLight m_lightBase()const;
+		inline Light m_lightBase()const;
+		inline Vec3 m_v3Position()const;
+		inline Vec3 m_v3Attenuation()const;
 		inline Vec3 m_v3Direction()const;
 		inline Float m_fExponent()const;
 		inline Float m_fCutOff()const;
