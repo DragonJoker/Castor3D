@@ -50,9 +50,9 @@ namespace Castor3D
 	{
 	}
 
-	void Light::Update( Point3r const & p_target )
+	void Light::Update( Point3r const & p_target, int32_t p_index )
 	{
-		m_category->Update( p_target );
+		m_category->Update( p_target, p_index );
 	}
 
 	void Light::Bind( PxBufferBase & p_texture, uint32_t p_index )

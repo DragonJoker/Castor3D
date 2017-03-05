@@ -45,15 +45,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_light		The light.
+		 *\param[in]	p_light		The light source.
+		 *\param[in]	p_shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_light		La source lumineuse.
+		 *\param[in]	p_shadowMap	La shadow map parente.
 		 */
-		C3D_API ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
+		C3D_API ShadowMapPassPoint( Engine & p_engine
+			, Light & p_light
+			, ShadowMap const & p_shadowMap );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,19 +63,6 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ShadowMapPassPoint();
-		/**
-		 *\~english
-		 *\brief		Creator function, used by the factory.
-		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_light		The light.
-		 *\~french
-		 *\brief		La fonction de création utilisée par la fabrique.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_light		La source lumineuse.
-		 */
-		C3D_API static ShadowMapPassSPtr Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
 
 	protected:
 		void DoRenderNodes( SceneRenderNodes & p_nodes );
@@ -82,11 +71,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoInitialise
 		 */
-		bool DoInitialisePass( Castor::Size const & p_size )override;
+		bool DoInitialise( Castor::Size const & p_size )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
 		 */
-		void DoCleanupPass()override;
+		void DoCleanup()override;
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
 		 */
@@ -96,38 +85,10 @@ namespace Castor3D
 		 */
 		void DoRender()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoUpdateProgram
-		 */
-		void DoUpdateProgram( ShaderProgram & p_program )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
-		 */
-		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 *\copydoc		Castor3D::ShadowMapPass::DoPrepareBackPipeline
 		 */
 		void DoPrepareBackPipeline( ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
-		 */
-		Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags
-			, bool p_invertNormals )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
-		 */
-		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
-		 */
-		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
 
 	private:
 		//!\~english	The connection to light's node changed signal.
@@ -142,9 +103,6 @@ namespace Castor3D
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
 	};
 }
 

@@ -64,6 +64,7 @@ namespace GLSL
 		inline Light m_lightBase()const;
 		inline Vec3 m_v3Position()const;
 		inline Vec3 m_v3Attenuation()const;
+		inline Int m_iIndex()const;
 	};
 
 	struct SpotLight
@@ -80,6 +81,7 @@ namespace GLSL
 		inline Float m_fExponent()const;
 		inline Float m_fCutOff()const;
 		inline Mat4 m_mtxLightSpace()const;
+		inline Int m_iIndex()const;
 	};
 }
 

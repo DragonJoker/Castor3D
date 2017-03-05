@@ -1,4 +1,4 @@
-#include "ShadowMapPassPoint.hpp"
+#include "ShadowMapPoint.hpp"
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
@@ -15,6 +15,7 @@
 #include "Scene/Light/Light.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "ShadowMap/ShadowMapPassPoint.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -34,177 +35,80 @@ namespace Castor3D
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
 		static String const ShadowMatrices = cuT( "c3d_mtxShadowMatrices" );
 
-		void DoUpdateShadowMatrices( Matrix4x4r const & p_projection
-			, Point3r const & p_position
-			, UniformBuffer & p_shadowConfig )
+		void DoInitialiseShadowMap( Engine & p_engine, Size const & p_size, TextureUnit & p_unit )
 		{
-			std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > const l_views
-			{
-				{
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
-				}
-			};
+			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Point" ) );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			bool l_return{ true };
 
-			p_shadowConfig.GetUniform< UniformType::eVec3f >( WorldLightPosition )->SetValue( p_position );
-			p_shadowConfig.GetUniform< UniformType::eFloat >( FarPlane )->SetValue( 4000.0f );
-			auto l_shadowMatrices = p_shadowConfig.GetUniform< UniformType::eMat4x4f >( ShadowMatrices );
-			uint32_t l_index{ 0 };
+			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
+				TextureType::eCube,
+				AccessType::eNone,
+				AccessType::eRead | AccessType::eWrite,
+				PixelFormat::eD32F,
+				p_size );
+			p_unit.SetTexture( l_texture );
+			p_unit.SetSampler( l_sampler );
 
-			for ( auto & l_view : l_views )
+			for ( auto & l_image : *l_texture )
 			{
-				l_shadowMatrices->SetValue( l_view, l_index++ );
+				l_image->InitialiseSource();
 			}
+
+			p_unit.Initialise();
 		}
 	}
 
-	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
-		: ShadowMapPass{ p_engine, p_scene, p_light, p_shadowMap, p_index }
-		, m_shadowConfig{ ShadowMapUbo, *p_engine.GetRenderSystem() }
-		, m_viewport{ p_engine }
-	{
-		m_shadowConfig.CreateUniform< UniformType::eVec3f >( WorldLightPosition );
-		m_shadowConfig.CreateUniform< UniformType::eFloat >( FarPlane );
-		m_shadowConfig.CreateUniform< UniformType::eMat4x4f >( ShadowMatrices, 6u );
-		m_renderQueue.Initialise( m_scene );
-	}
-
-	ShadowMapPassPoint::~ShadowMapPassPoint()
+	ShadowMapPoint::ShadowMapPoint( Engine & p_engine )
+		: ShadowMap{ p_engine }
 	{
 	}
 
-	ShadowMapPassSPtr ShadowMapPassPoint::Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
+	ShadowMapPoint::~ShadowMapPoint()
 	{
-		return std::make_shared< ShadowMapPassPoint >( p_engine, p_scene, p_light, p_shadowMap, p_index );
 	}
 
-	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
+	bool ShadowMapPoint::DoInitialise( Size const & p_size )
 	{
-		auto l_depthMaps = DepthMapArray{};
-		DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled );
-		DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled );
-		DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled );
-		DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled );
-		DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled );
-	}
+		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
 
-	bool ShadowMapPassPoint::DoInitialisePass( Size const & p_size )
-	{
-		bool l_return{ false };
 		auto l_texture = m_shadowMap.GetTexture();
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
-		m_frameBuffer->Bind( FrameBufferMode::eConfig );
-		m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType(), m_index );
-		m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
-		l_return = m_frameBuffer->IsComplete();
-		m_frameBuffer->Unbind();
 
-		real const l_aspect = real( p_size.width() ) / p_size.height();
-		real const l_near = 1.0_r;
-		real const l_far = 2000.0_r;
-		matrix::perspective( m_projection, Angle::from_degrees( 90.0_r ), l_aspect, l_near, l_far );
+		m_frameBuffer->Bind( FrameBufferMode::eConfig );
+		m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType(), 0u );
+		bool l_return = m_frameBuffer->IsComplete();
+		m_frameBuffer->Unbind();
 
 		constexpr float l_component = std::numeric_limits< float >::max();
 		m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
 
-		m_viewport.Resize( p_size );
-		m_viewport.Initialise();
 		return true;
 	}
 
-	void ShadowMapPassPoint::DoCleanupPass()
+	void ShadowMapPoint::DoCleanup()
 	{
-		m_viewport.Cleanup();
-		m_shadowConfig.Cleanup();
 		m_depthAttach.reset();
-
-		auto l_node = m_light.GetParent();
-		m_onNodeChanged.disconnect();
-		m_shadowMap.Cleanup();
 	}
 
-	void ShadowMapPassPoint::DoUpdate( RenderQueueArray & p_queues )
+	ShadowMapPassSPtr ShadowMapPoint::DoCreatePass( Light & p_light )const
 	{
-		auto l_position = m_light.GetParent()->GetDerivedPosition();
-		m_light.Update( l_position );
-		p_queues.push_back( m_renderQueue );
-		DoUpdateShadowMatrices( m_projection, l_position, m_shadowConfig );
+		return std::make_shared< ShadowMapPassPoint >( *GetEngine(), p_light, *this );
 	}
 
-	void ShadowMapPassPoint::DoRender()
-	{
-		if ( m_initialised )
-		{
-			m_viewport.Apply();
-			m_shadowConfig.Update();
-			m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
-			m_frameBuffer->Clear();
-			auto & l_nodes = m_renderQueue.GetRenderNodes();
-			DoRenderNodes( l_nodes );
-			m_frameBuffer->Unbind();
-		}
-	}
-
-	void ShadowMapPassPoint::DoUpdateFlags( TextureChannels & p_textureFlags
+	void ShadowMapPoint::DoUpdateFlags( TextureChannels & p_textureFlags
 		, ProgramFlags & p_programFlags )const
 	{
-		ShadowMapPass::DoUpdateFlags( p_textureFlags, p_programFlags );
 		AddFlag( p_programFlags, ProgramFlag::eShadowMapPoint );
 	}
 
-	void ShadowMapPassPoint::DoUpdateProgram( ShaderProgram & p_program )
-	{
-	}
-
-	void ShadowMapPassPoint::DoPrepareBackPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
-	{
-		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
-		{
-			DoUpdateProgram( p_program );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eNone );
-			auto & l_pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
-					, std::move( l_rsState )
-					, BlendState{}
-					, MultisampleState{}
-					, p_program
-					, p_flags ) ).first->second;
-
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &l_pipeline, p_flags]()
-			{
-				l_pipeline.AddUniformBuffer( m_matrixUbo );
-				l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-				l_pipeline.AddUniformBuffer( m_sceneUbo );
-				l_pipeline.AddUniformBuffer( m_shadowConfig );
-
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
-				{
-					l_pipeline.AddUniformBuffer( m_billboardUbo );
-				}
-
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
-				{
-					l_pipeline.AddUniformBuffer( m_skinningUbo );
-				}
-
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
-				{
-					l_pipeline.AddUniformBuffer( m_morphingUbo );
-				}
-
-				m_initialised = true;
-			} ) );
-		}
-	}
-
-	String ShadowMapPassPoint::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+	String ShadowMapPoint::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, uint8_t p_sceneFlags
 		, bool p_invertNormals )const
@@ -272,7 +176,7 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String ShadowMapPassPoint::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+	String ShadowMapPoint::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, uint8_t p_sceneFlags )const
 	{
@@ -319,12 +223,12 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String ShadowMapPassPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	String ShadowMapPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
-		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
+		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Fragment Intputs
 		Ubo l_shadowMap{ l_writer, ShadowMapUbo };

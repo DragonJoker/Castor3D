@@ -25,6 +25,9 @@ SOFTWARE.
 
 #include "HDR/ToneMapping.hpp"
 #include "Texture/TextureUnit.hpp"
+#include "ShadowMap/ShadowMapDirectional.hpp"
+#include "ShadowMap/ShadowMapPoint.hpp"
+#include "ShadowMap/ShadowMapSpot.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
@@ -60,9 +63,6 @@ namespace Castor3D
 		, public Castor::Named
 	{
 		friend class RenderTechniquePass;
-
-	public:
-		using ShadowMapLightMap = std::map< LightRPtr, ShadowMapPassSPtr >;
 
 	protected:
 		/*!
@@ -205,16 +205,6 @@ namespace Castor3D
 		C3D_API bool WriteInto( Castor::TextFile & p_file );
 		/**
 		 *\~english
-		 *\return		The shadow maps.
-		 *\~french
-		 *\return		Les maps d'ombre.
-		 */
-		inline ShadowMapLightMap const & GetShadowMaps()const
-		{
-			return m_shadowMaps;
-		}
-		/**
-		 *\~english
 		 *\return		The render area dimensions.
 		 *\~french
 		 *\return		Les dimensions de la zone de rendu.
@@ -259,85 +249,35 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~english
-		 *\return		The directional light shadow map.
-		 *\~french
-		 *\return		La map d'ombre de la lumière directionnelle.
-		 */
+		*\~english
+		*\return		The directional light shadow map.
+		*\~french
+		*\return		La map d'ombre de la lumière directionnelle.
+		*/
 		inline TextureUnit & GetDirectionalShadowMap()
 		{
-			return m_directionalShadowMap;
+			return m_directionalShadowMap.GetTexture();
 		}
 		/**
-		 *\~english
-		 *\return		The spot lights shadow map.
-		 *\~french
-		 *\return		La map d'ombre des lumières projecteur.
-		 */
+		*\~english
+		*\return		The spot lights shadow map.
+		*\~french
+		*\return		La map d'ombre des lumières projecteur.
+		*/
 		inline TextureUnit & GetSpotShadowMap()
 		{
-			return m_spotShadowMap;
+			return m_spotShadowMap.GetTexture();
 		}
 		/**
-		 *\~english
-		 *\return		The point lights shadow map.
-		 *\~french
-		 *\return		La map d'ombre des lumières ponctuelles.
-		 */
+		*\~english
+		*\return		The point lights shadow map.
+		*\~french
+		*\return		La map d'ombre des lumières ponctuelles.
+		*/
 		inline TextureUnit & GetPointShadowMap()
 		{
-			return m_pointShadowMap;
+			return m_pointShadowMap.GetTexture();
 		}
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Initialises the texture array used for directional lights shadow mapping.
-		 *\param[in]	p_size	The texture size.
-		 *\~french
-		 *\brief		Initialise le tableau de textures utilisé pour le mappage d'ombres des lumières de type directionnelle.
-		 *\param[in]	p_size	Les dimensions de la texture.
-		 */
-		bool DoInitialiseDirectionalShadowMap( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Initialises the texture array used for spot lights shadow mapping.
-		 *\param[in]	p_size	The texture size.
-		 *\~french
-		 *\brief		Initialise le tableau de textures utilisé pour le mappage d'ombres des lumières de type spot.
-		 *\param[in]	p_size	Les dimensions de la texture.
-		 */
-		bool DoInitialiseSpotShadowMap( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Initialises the texture array used for point lights shadow mapping.
-		 *\param[in]	p_size	The texture size.
-		 *\~french
-		 *\brief		Initialise le tableau de textures utilisé pour le mappage d'ombres des lumières de type point.
-		 *\param[in]	p_size	Les dimensions de la texture.
-		 */
-		bool DoInitialisePointShadowMap( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Cleans up the texture array used for spot lights shadow mapping.
-		 *\~french
-		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type spot.
-		 */
-		void DoCleanupSpotShadowMap();
-		/**
-		 *\~english
-		 *\brief		Cleans up the texture array used for directional lights shadow mapping.
-		 *\~french
-		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type directionnelle.
-		 */
-		void DoCleanupDirectionalShadowMap();
-		/**
-		 *\~english
-		 *\brief		Cleans up the texture array used for point lights shadow mapping.
-		 *\~french
-		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type point.
-		 */
-		void DoCleanupPointShadowMap();
 		/**
 		 *\~english
 		 *\brief		Creation function
@@ -434,9 +374,6 @@ namespace Castor3D
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
-		//!\~english	The shadow maps used during the render.
-		//!\~french		Les maps d'ombres utilisées pendant le rendu.
-		ShadowMapLightMap m_shadowMaps;
 		//!\~english	The parent render target.
 		//!\~french		La render target parente.
 		RenderTarget & m_renderTarget;
@@ -451,13 +388,13 @@ namespace Castor3D
 		stFRAME_BUFFER m_frameBuffer;
 		//!\~english	The shadow map texture used for directional lights.
 		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type directionnelles.
-		TextureUnit m_directionalShadowMap;
+		ShadowMapDirectional m_directionalShadowMap;
 		//!\~english	The shadow map texture used for spot lights.
 		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type spot.
-		TextureUnit m_spotShadowMap;
+		ShadowMapSpot m_spotShadowMap;
 		//!\~english	The shadow map texture used for pont lights.
 		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type point.
-		TextureUnit m_pointShadowMap;
+		ShadowMapPoint m_pointShadowMap;
 		//!\~english	The pass used to render opaque nodes.
 		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;

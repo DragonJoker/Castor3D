@@ -45,7 +45,7 @@ namespace Castor3D
 		return std::unique_ptr< DirectionalLight >( new DirectionalLight{ p_light } );
 	}
 
-	void DirectionalLight::Update( Point3r const & p_target )
+	void DirectionalLight::Update( Point3r const & p_target, int32_t p_index )
 	{
 		REQUIRE( m_viewport );
 		auto l_node = GetLight().GetParent();

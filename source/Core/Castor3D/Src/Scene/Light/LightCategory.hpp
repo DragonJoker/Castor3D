@@ -111,11 +111,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Updates the light viewport.
 		 *\param[in]	p_target	The target position, used by directional shadow map.
+		 *\param[in]	p_index		The light shadow map index, -1 if it doesn't have any.
 		 *\~french
 		 *\brief		Met le viewport de la source à jour.
 		 *\param[in]	p_target	La position de la cible, utilisée pour la map d'ombres des source directionnelles.
+		 *\param[in]	p_index		L'indice de la shadow map de la lumière, -1 si elle n'en a pas.
 		 */
-		C3D_API virtual void Update( Castor::Point3r const & p_target ) = 0;
+		C3D_API virtual void Update( Castor::Point3r const & p_target, int32_t p_index = -1 ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a LightCategroy specific TextLoader.
@@ -329,6 +331,7 @@ namespace Castor3D
 		void DoBindComponent( Castor::Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Matrix4x4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( int32_t const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
 
 	private:
 		/**

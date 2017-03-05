@@ -16,7 +16,7 @@
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Miscellaneous/ShadowMapPass.hpp>
+#include <ShadowMap/ShadowMapPass.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
@@ -334,13 +334,13 @@ namespace CastorViewer
 
 		if ( l_camera && l_window && l_scene )
 		{
-			auto & l_shadowMaps = l_window->GetRenderTarget()->GetTechnique()->GetShadowMaps();
+			//auto & l_shadowMaps = l_window->GetRenderTarget()->GetTechnique()->GetShadowMaps();
 
-			if ( !l_shadowMaps.empty() )
-			{
-				auto l_it = l_shadowMaps.begin();
-				m_currentNode = l_it->first->GetParent();
-			}
+			//if ( !l_shadowMaps.empty() )
+			//{
+			//	auto l_it = l_shadowMaps.begin();
+			//	m_currentNode = l_it->first->GetParent();
+			//}
 		}
 	}
 

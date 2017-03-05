@@ -20,10 +20,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_SHADOW_MAP_PASS_DIRECTIONAL_H___
-#define ___C3D_SHADOW_MAP_PASS_DIRECTIONAL_H___
+#ifndef ___C3D_ShadowMapPoint_H___
+#define ___C3D_ShadowMapPoint_H___
 
-#include "ShadowMapPass.hpp"
+#include "ShadowMap.hpp"
+#include "Render/Viewport.hpp"
 
 namespace Castor3D
 {
@@ -32,12 +33,12 @@ namespace Castor3D
 	\version	0.9.0
 	\date		30/08/2016
 	\~english
-	\brief		Shadow mapping implementation for spot lights.
+	\brief		Shadow mapping implementation.
 	\~french
-	\brief		Implémentation du mappage d'ombres pour les lumières spot.
+	\brief		Implémentation du mappage d'ombres.
 	*/
-	class ShadowMapPassDirectional
-		: public ShadowMapPass
+	class ShadowMapPoint
+		: public ShadowMap
 	{
 	public:
 		/**
@@ -45,79 +46,53 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
 		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_light		The light.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_light		La source lumineuse.
 		 */
-		C3D_API ShadowMapPassDirectional( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
+		C3D_API ShadowMapPoint( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapPassDirectional();
-		/**
-		 *\~english
-		 *\brief		Creator function, used by the factory.
-		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_light		The light.
-		 *\~french
-		 *\brief		La fonction de création utilisée par la fabrique.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_light		La source lumineuse.
-		 */
-		C3D_API static ShadowMapPassSPtr Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
-		/**
-		 *\~english
-		 *\return		The camera.
-		 *\~french
-		 *\return		La caméra.
-		 */
-		inline CameraSPtr GetCamera()const
-		{
-			return m_camera;
-		}
+		C3D_API ~ShadowMapPoint();
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoInitialise
+		 *\copydoc		Castor3D::ShadowMap::DoInitialise
 		 */
-		bool DoInitialisePass( Castor::Size const & p_size )override;
+		bool DoInitialise( Castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
+		 *\copydoc		Castor3D::ShadowMap::DoCleanup
 		 */
-		void DoCleanupPass()override;
+		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
+		 *\copydoc		Castor3D::ShadowMap::DoCreatePass
 		 */
-		void DoUpdate( RenderQueueArray & p_queues )override;
+		ShadowMapPassSPtr DoCreatePass( Light & p_light )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoRender
-		 */
-		void DoRender()override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 *\copydoc		Castor3D::ShadowMap::DoUpdateFlags
 		 */
 		void DoUpdateFlags( TextureChannels & p_textureFlags
 			, ProgramFlags & p_programFlags )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoUpdateProgram
+		 *\copydoc		Castor3D::ShadowMap::DoGetVertexShaderSource
 		 */
-		void DoUpdateProgram( ShaderProgram & p_program )override;
+		Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, uint8_t p_sceneFlags
+			, bool p_invertNormals )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
+		 *\copydoc		Castor3D::ShadowMap::DoGetGeometryShaderSource
 		 */
 		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, uint8_t p_sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
+		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
 		 */
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
@@ -127,12 +102,6 @@ namespace Castor3D
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
 		TextureAttachmentSPtr m_depthAttach;
-		//!\~english	The camera created from the light.
-		//!\~french		La caméra créée à partir de la lumière.
-		CameraSPtr m_camera;
-		//!\~english	The view matrix.
-		//!\~french		La matrice vue.
-		Castor::Matrix4x4r m_view;
 	};
 }
 

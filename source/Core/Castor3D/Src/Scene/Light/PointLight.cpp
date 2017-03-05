@@ -53,8 +53,9 @@ namespace Castor3D
 		return std::unique_ptr< PointLight >( new PointLight{ p_light } );
 	}
 
-	void PointLight::Update( Point3r const & p_target )
+	void PointLight::Update( Point3r const & p_target, int32_t p_index )
 	{
+		m_shadowMapIndex = p_index;
 	}
 
 	void PointLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
@@ -62,6 +63,7 @@ namespace Castor3D
 		auto l_position = GetLight().GetParent()->GetDerivedPosition();
 		DoBindComponent( l_position, p_index, p_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, p_offset, p_texture );
+		DoBindComponent( m_shadowMapIndex, p_index, p_offset, p_texture );
 	}
 
 	void PointLight::SetAttenuation( Point3f const & p_attenuation )

@@ -7,7 +7,6 @@
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
-#include "Miscellaneous/ShadowMapPass.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
@@ -16,6 +15,7 @@
 #include "Scene/Scene.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "ShadowMap/ShadowMapPass.hpp"
 #include "Technique/RenderTechniquePass.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -159,21 +159,6 @@ namespace Castor3D
 				m_initialised = m_frameBuffer.Initialise( m_size );
 			}
 
-			if ( m_initialised )
-			{
-				m_initialised = DoInitialiseDirectionalShadowMap( Size{ 4096, 4096 } );
-			}
-
-			if ( m_initialised )
-			{
-				m_initialised = DoInitialiseSpotShadowMap( Size{ 1024, 1024 } );
-			}
-
-			if ( m_initialised )
-			{
-				m_initialised = DoInitialisePointShadowMap( Size{ 1024, 1024 } );
-			}
-
 			auto & l_scene = *m_renderTarget.GetScene();
 
 			if ( m_initialised )
@@ -182,28 +167,34 @@ namespace Castor3D
 				{
 					if ( p_light.IsShadowProducer() )
 					{
-						TextureUnit * l_unit{ nullptr };
-
 						switch ( p_light.GetLightType() )
 						{
 						case LightType::eDirectional:
-							l_unit = &m_directionalShadowMap;
+							m_directionalShadowMap.AddLight( p_light );
 							break;
 
 						case LightType::ePoint:
-							l_unit = &m_pointShadowMap;
+							m_pointShadowMap.AddLight( p_light );
 							break;
 
 						case LightType::eSpot:
-							l_unit = &m_spotShadowMap;
+							m_spotShadowMap.AddLight( p_light );
 							break;
 						}
-
-						auto l_pass = GetEngine()->GetShadowMapPassFactory().Create( p_light.GetLightType(), *GetEngine(), l_scene, p_light, *l_unit, 0u );
-						auto l_insit = m_shadowMaps.insert( { &p_light, l_pass } ).first;
-						l_pass->Initialise( l_unit->GetTexture()->GetDimensions() );
 					}
 				} );
+
+				m_initialised = m_directionalShadowMap.Initialise( Size{ 4096, 4096 } );
+
+				if ( m_initialised )
+				{
+					m_initialised = m_spotShadowMap.Initialise( Size{ 1024, 1024 } );
+				}
+
+				if ( m_initialised )
+				{
+					m_initialised = m_pointShadowMap.Initialise( Size{ 1024, 1024 } );
+				}
 			}
 
 			if ( m_initialised )
@@ -220,17 +211,12 @@ namespace Castor3D
 	{
 		m_transparentPass->Cleanup();
 		m_opaquePass->Cleanup();
-		DoCleanupPointShadowMap();
-		DoCleanupSpotShadowMap();
-		DoCleanupDirectionalShadowMap();
+		m_pointShadowMap.Cleanup();
+		m_spotShadowMap.Cleanup();
+		m_directionalShadowMap.Cleanup();
 		m_initialised = false;
 		m_frameBuffer.Cleanup();
 		DoCleanup();
-
-		for ( auto & l_it: m_shadowMaps )
-		{
-			l_it.second->Cleanup();
-		}
 	}
 
 	void RenderTechnique::Update( RenderQueueArray & p_queues )
@@ -238,10 +224,9 @@ namespace Castor3D
 		m_opaquePass->Update( p_queues );
 		m_transparentPass->Update( p_queues );
 
-		for ( auto & l_it: m_shadowMaps )
-		{
-			l_it.second->Update( p_queues );
-		}
+		m_pointShadowMap.Update( *m_renderTarget.GetCamera(), p_queues );
+		m_spotShadowMap.Update( *m_renderTarget.GetCamera(), p_queues );
+		m_directionalShadowMap.Update( *m_renderTarget.GetCamera(), p_queues );
 	}
 
 	void RenderTechnique::Render( uint32_t & p_visible, uint32_t & p_particles )
@@ -250,14 +235,9 @@ namespace Castor3D
 		l_scene.GetLightCache().UpdateLights();
 		m_renderSystem.PushScene( &l_scene );
 		bool l_shadows = l_scene.HasShadows();
-
-		if ( l_shadows )
-		{
-			for ( auto & l_shadowMap : m_shadowMaps )
-			{
-				l_shadowMap.second->Render();
-			}
-		}
+		m_directionalShadowMap.Render();
+		m_pointShadowMap.Render();
+		m_spotShadowMap.Render();
 
 		DoBeginRender();
 		l_scene.RenderBackground( GetSize() );
@@ -285,7 +265,7 @@ namespace Castor3D
 		m_transparentPass->Render( p_visible, l_shadows );
 		DoEndTransparentRendering();
 
-#if !defined( NDEBUG )
+#if 0//!defined( NDEBUG )
 
 		if ( !m_shadowMaps.empty() )
 		{
@@ -334,104 +314,5 @@ namespace Castor3D
 	bool RenderTechnique::WriteInto( Castor::TextFile & p_file )
 	{
 		return DoWriteInto( p_file );
-	}
-
-	bool RenderTechnique::DoInitialiseDirectionalShadowMap( Size const & p_size )
-	{
-		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_DirectionalShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(
-			TextureType::eTwoDimensions,
-			AccessType::eNone,
-			AccessType::eRead | AccessType::eWrite,
-			PixelFormat::eD32F, p_size );
-		m_directionalShadowMap.SetTexture( l_texture );
-		m_directionalShadowMap.SetSampler( l_sampler );
-
-		for ( auto & l_image : *l_texture )
-		{
-			l_image->InitialiseSource();
-		}
-
-		return m_directionalShadowMap.Initialise();
-	}
-
-	bool RenderTechnique::DoInitialiseSpotShadowMap( Size const & p_size )
-	{
-		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_SpotShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(
-			TextureType::eTwoDimensionsArray,
-			AccessType::eNone,
-			AccessType::eRead | AccessType::eWrite,
-			PixelFormat::eD32F,
-			Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
-		m_spotShadowMap.SetTexture( l_texture );
-		m_spotShadowMap.SetSampler( l_sampler );
-
-		for ( auto & l_image : *l_texture )
-		{
-			l_image->InitialiseSource();
-		}
-
-		return m_spotShadowMap.Initialise();
-	}
-
-	bool RenderTechnique::DoInitialisePointShadowMap( Size const & p_size )
-	{
-		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_PointShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-		bool l_return{ true };
-
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(
-			TextureType::eCube,
-			AccessType::eNone,
-			AccessType::eRead | AccessType::eWrite,
-			PixelFormat::eD32F,
-			p_size );
-		m_pointShadowMap.SetTexture( l_texture );
-		m_pointShadowMap.SetSampler( l_sampler );
-
-		for ( auto & l_image : *l_texture )
-		{
-			l_image->InitialiseSource();
-		}
-
-		return m_pointShadowMap.Initialise();
-	}
-
-	void RenderTechnique::DoCleanupDirectionalShadowMap()
-	{
-		m_directionalShadowMap.Cleanup();
-	}
-
-	void RenderTechnique::DoCleanupSpotShadowMap()
-	{
-		m_spotShadowMap.Cleanup();
-	}
-
-	void RenderTechnique::DoCleanupPointShadowMap()
-	{
-		m_pointShadowMap.Cleanup();
 	}
 }
