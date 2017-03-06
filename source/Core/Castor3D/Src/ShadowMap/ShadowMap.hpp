@@ -220,6 +220,9 @@ namespace Castor3D
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;
+		//!\~english	The attach between depth buffer and main frame buffer.
+		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
+		std::vector< TextureAttachmentSPtr > m_depthAttach;
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;

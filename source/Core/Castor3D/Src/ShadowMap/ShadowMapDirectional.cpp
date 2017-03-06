@@ -70,26 +70,12 @@ namespace Castor3D
 	bool ShadowMapDirectional::DoInitialise( Size const & p_size )
 	{
 		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
-
-		auto l_texture = m_shadowMap.GetTexture();
-		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
-		bool l_return{ false };
-
-		m_frameBuffer->Bind( FrameBufferMode::eConfig );
-		m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType() );
-		l_return = m_frameBuffer->IsComplete();
-		m_frameBuffer->Unbind();
-
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-		return l_return;
+		return true;
 	}
 
 	void ShadowMapDirectional::DoCleanup()
 	{
-		m_frameBuffer->Bind( FrameBufferMode::eConfig );
-		m_frameBuffer->DetachAll();
-		m_frameBuffer->Unbind();
-		m_depthAttach.reset();
 	}
 
 	ShadowMapPassSPtr ShadowMapDirectional::DoCreatePass( Light & p_light )const

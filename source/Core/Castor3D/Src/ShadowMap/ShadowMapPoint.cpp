@@ -83,14 +83,6 @@ namespace Castor3D
 	{
 		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
 
-		auto l_texture = m_shadowMap.GetTexture();
-		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
-
-		m_frameBuffer->Bind( FrameBufferMode::eConfig );
-		m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType(), 0u );
-		bool l_return = m_frameBuffer->IsComplete();
-		m_frameBuffer->Unbind();
-
 		constexpr float l_component = std::numeric_limits< float >::max();
 		m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
 
@@ -99,7 +91,6 @@ namespace Castor3D
 
 	void ShadowMapPoint::DoCleanup()
 	{
-		m_depthAttach.reset();
 	}
 
 	ShadowMapPassSPtr ShadowMapPoint::DoCreatePass( Light & p_light )const

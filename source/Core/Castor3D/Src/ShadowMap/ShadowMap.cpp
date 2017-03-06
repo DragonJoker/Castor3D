@@ -68,6 +68,20 @@ namespace Castor3D
 				l_return = DoInitialise( p_size );
 			}
 
+			auto l_texture = m_shadowMap.GetTexture();
+			m_depthAttach.resize( DoGetMaxPasses() );
+			int i = 0;
+
+			for ( auto & l_attach : m_depthAttach )
+			{
+				l_attach = m_frameBuffer->CreateAttachment( l_texture );
+			}
+		
+			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach[0], l_texture->GetType(), 0u );
+			bool l_return = m_frameBuffer->IsComplete();
+			m_frameBuffer->Unbind();
+
 			for ( auto & l_it : m_shadowMaps )
 			{
 				l_it.second->Initialise( p_size );
@@ -86,8 +100,17 @@ namespace Castor3D
 
 		if ( m_frameBuffer )
 		{
-			m_shadowMap.Cleanup();
+			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->DetachAll();
+			m_frameBuffer->Unbind();
 
+			m_shadowMap.Cleanup();
+			
+			for ( auto & l_attach : m_depthAttach )
+			{
+				l_attach.reset();
+			}
+		
 			DoCleanup();
 
 			m_frameBuffer->Cleanup();

@@ -101,11 +101,6 @@ namespace Castor3D
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, uint8_t p_sceneFlags )const override;
-
-	private:
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
 	};
 }
 
