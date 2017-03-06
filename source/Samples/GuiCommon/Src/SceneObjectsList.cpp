@@ -22,19 +22,22 @@
 #include <wx/aui/framemanager.h>
 #include <wx/artprov.h>
 
-#include <AnimatedObjectGroupManager.hpp>
-#include <AnimatedObject.hpp>
-#include <Animation.hpp>
-#include <BillboardManager.hpp>
-#include <CameraManager.hpp>
-#include <GeometryManager.hpp>
 #include <Engine.hpp>
-#include <LightManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <OverlayManager.hpp>
-#include <SceneManager.hpp>
-#include <WindowManager.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Overlay/Overlay.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/BillboardList.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Scene/Light/Light.hpp>
+
+#include <Scene/BillboardList.hpp>
+
+#include <Animation/Animation.hpp>
+#include <Scene/Animation/AnimatedObject.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -98,7 +101,7 @@ namespace GuiCommon
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto && l_image : l_icons )
+		for ( auto l_image : l_icons )
 		{
 			int l_sizeOrig = l_image->GetWidth();
 
@@ -125,14 +128,14 @@ namespace GuiCommon
 		if ( p_scene )
 		{
 			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
-			p_scene->GetEngine()->GetWindowManager().lock();
+			p_scene->GetRenderWindowCache().lock();
 
-			for ( auto l_it : p_scene->GetEngine()->GetWindowManager() )
+			for ( auto l_it : p_scene->GetRenderWindowCache() )
 			{
 				DoAddRenderWindow( l_scene, l_it.second );
 			}
 
-			p_scene->GetEngine()->GetWindowManager().unlock();
+			p_scene->GetRenderWindowCache().unlock();
 			SceneNodeSPtr l_rootNode = p_scene->GetRootNode();
 
 			if ( l_rootNode )
@@ -140,30 +143,30 @@ namespace GuiCommon
 				DoAddNode( l_scene, l_rootNode );
 			}
 
-			p_scene->GetAnimatedObjectGroupManager().lock();
+			p_scene->GetAnimatedObjectGroupCache().lock();
 
-			for ( auto l_it : p_scene->GetAnimatedObjectGroupManager() )
+			for ( auto l_it : p_scene->GetAnimatedObjectGroupCache() )
 			{
 				DoAddAnimatedObjectGroup( AppendItem( l_scene, l_it.first, eBMP_ANIMATED_OBJECTGROUP, eBMP_ANIMATED_OBJECTGROUP_SEL, new AnimatedObjectGroupTreeItemProperty( m_propertiesHolder->IsEditable(), l_it.second ) ), l_it.second );
 			}
 
-			p_scene->GetAnimatedObjectGroupManager().unlock();
+			p_scene->GetAnimatedObjectGroupCache().unlock();
 
-			for ( auto && l_overlay : p_engine->GetOverlayManager() )
+			for ( auto l_overlay : p_engine->GetOverlayCache() )
 			{
 				if ( l_overlay->GetOverlayName().find( cuT( "DebugPanel" ) ) != 0 )
 				{
 					switch ( l_overlay->GetType() )
 					{
-					case eOVERLAY_TYPE_PANEL:
+					case OverlayType::ePanel:
 						DoAddOverlay( AppendItem( l_scene, l_overlay->GetOverlayName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 
-					case eOVERLAY_TYPE_BORDER_PANEL:
+					case OverlayType::eBorderPanel:
 						DoAddOverlay( AppendItem( l_scene, l_overlay->GetOverlayName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 
-					case eOVERLAY_TYPE_TEXT:
+					case OverlayType::eText:
 						DoAddOverlay( AppendItem( l_scene, l_overlay->GetOverlayName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 					}
@@ -191,83 +194,76 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsList::DoAddGeometry( wxTreeItemId p_id, MovableObjectSPtr p_geometry )
+	void SceneObjectsList::DoAddGeometry( wxTreeItemId p_id, Geometry & p_geometry )
 	{
-		GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( p_geometry );
-		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_geometry.GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), p_geometry ) );
 		int l_count = 0;
 
-		if ( l_geometry->GetMesh() )
+		if ( p_geometry.GetMesh() )
 		{
-			for ( auto l_submesh : *l_geometry->GetMesh() )
+			for ( auto l_submesh : *p_geometry.GetMesh() )
 			{
 				wxString l_name = _( "Submesh " );
 				l_name << l_count++;
-				wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry, l_submesh ) );
+				wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), p_geometry, *l_submesh ) );
 			}
 		}
 	}
 
-	void SceneObjectsList::DoAddCamera( wxTreeItemId p_id, MovableObjectSPtr p_camera )
+	void SceneObjectsList::DoAddCamera( wxTreeItemId p_id, Camera & p_camera )
 	{
-		CameraSPtr l_camera = std::static_pointer_cast< Camera >( p_camera );
-		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new CameraTreeItemProperty( m_propertiesHolder->IsEditable(), l_camera ) );
-		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), *l_camera->GetScene()->GetEngine(), l_camera->GetViewport() ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_camera.GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new CameraTreeItemProperty( m_propertiesHolder->IsEditable(), p_camera ) );
+		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), *p_camera.GetScene()->GetEngine(), p_camera.GetViewport() ) );
 	}
 
-	void SceneObjectsList::DoAddBillboard( wxTreeItemId p_id, MovableObjectSPtr p_object )
+	void SceneObjectsList::DoAddBillboard( wxTreeItemId p_id, BillboardList & p_billboard )
 	{
-		BillboardListSPtr l_billboard = std::static_pointer_cast< BillboardList >( p_object );
-		wxTreeItemId l_id = AppendItem( p_id, l_billboard->GetName(), eBMP_BILLBOARD, eBMP_BILLBOARD_SEL, new BillboardTreeItemProperty( m_propertiesHolder->IsEditable(), l_billboard ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_billboard.GetName(), eBMP_BILLBOARD, eBMP_BILLBOARD_SEL, new BillboardTreeItemProperty( m_propertiesHolder->IsEditable(), p_billboard ) );
 	}
 
-	void SceneObjectsList::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )
+	void SceneObjectsList::DoAddLight( wxTreeItemId p_id, Light & p_light )
 	{
-		LightSPtr l_light = std::static_pointer_cast< Light >( p_light );
-
-		switch ( l_light->GetLightType() )
+		switch ( p_light.GetLightType() )
 		{
-		case eLIGHT_TYPE_DIRECTIONAL:
-			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
+		case LightType::eDirectional:
+			AppendItem( p_id, p_light.GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), p_light ) );
 			break;
 
-		case eLIGHT_TYPE_POINT:
-			AppendItem( p_id, l_light->GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
+		case LightType::ePoint:
+			AppendItem( p_id, p_light.GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), p_light ) );
 			break;
 
-		case eLIGHT_TYPE_SPOT:
-			AppendItem( p_id, l_light->GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
+		case LightType::eSpot:
+			AppendItem( p_id, p_light.GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), p_light ) );
 			break;
 		}
 	}
 
 	void SceneObjectsList::DoAddNode( wxTreeItemId p_id, SceneNodeSPtr p_node )
 	{
-		for ( auto && l_pair : p_node->GetObjects() )
+		for ( auto & l_object : p_node->GetObjects() )
 		{
-			MovableObjectSPtr l_object = l_pair.lock();
-
-			switch ( l_object->GetType() )
+			switch ( l_object.get().GetType() )
 			{
-			case eMOVABLE_TYPE_GEOMETRY:
-				DoAddGeometry( p_id, l_object );
+			case MovableType::eGeometry:
+				DoAddGeometry( p_id, static_cast< Geometry & >( l_object.get() ) );
 				break;
 
-			case eMOVABLE_TYPE_CAMERA:
-				DoAddCamera( p_id, l_object );
+			case MovableType::eCamera:
+				DoAddCamera( p_id, static_cast< Camera & >( l_object.get() ) );
 				break;
 
-			case eMOVABLE_TYPE_LIGHT:
-				DoAddLight( p_id, l_object );
+			case MovableType::eLight:
+				DoAddLight( p_id, static_cast< Light & >( l_object.get() ) );
 				break;
 
-			case eMOVABLE_TYPE_BILLBOARD:
-				DoAddBillboard( p_id, l_object );
+			case MovableType::eBillboard:
+				DoAddBillboard( p_id, static_cast< BillboardList & >( l_object.get() ) );
 				break;
 			}
 		}
 
-		for ( auto && l_pair : p_node->GetChilds() )
+		for ( auto l_pair : p_node->GetChilds() )
 		{
 			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new NodeTreeItemProperty( m_propertiesHolder->IsEditable(), m_engine, l_pair.second.lock() ) ), l_pair.second.lock() );
 		}
@@ -275,7 +271,7 @@ namespace GuiCommon
 
 	void SceneObjectsList::DoAddAnimatedObjectGroup( wxTreeItemId p_id, Castor3D::AnimatedObjectGroupSPtr p_group )
 	{
-		for ( auto && l_it : p_group->GetAnimations() )
+		for ( auto l_it : p_group->GetAnimations() )
 		{
 			AppendItem( p_id, l_it.first, eBMP_ANIMATION, eBMP_ANIMATION_SEL, new AnimationTreeItemProperty( m_engine, m_propertiesHolder->IsEditable(), p_group, l_it.first, l_it.second ) );
 		}
@@ -283,19 +279,19 @@ namespace GuiCommon
 
 	void SceneObjectsList::DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlayCategorySPtr p_overlay )
 	{
-		for ( auto && l_overlay : p_overlay->GetOverlay() )
+		for ( auto l_overlay : p_overlay->GetOverlay() )
 		{
 			switch ( l_overlay->GetType() )
 			{
-			case eOVERLAY_TYPE_PANEL:
+			case OverlayType::ePanel:
 				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay->GetCategory() ) ), l_overlay->GetCategory() );
 				break;
 
-			case eOVERLAY_TYPE_BORDER_PANEL:
+			case OverlayType::eBorderPanel:
 				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay->GetCategory() ) ), l_overlay->GetCategory() );
 				break;
 
-			case eOVERLAY_TYPE_TEXT:
+			case OverlayType::eText:
 				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay->GetCategory() ) ), l_overlay->GetCategory() );
 				break;
 			}

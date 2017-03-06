@@ -25,7 +25,7 @@ function( GenericBuild )
 	endif ()
 endfunction( GenericBuild )
 
-function( GenericSummary msg )
+function( GenericSummary msg msgtest )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
 		set( msg_tmp "\n\nGeneric :" )
 		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
@@ -48,7 +48,7 @@ function( GenericSetup )
 				DESCRIPTION "Allows GUI creation using Castor3D."
 				GROUP Generic
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer Full
 			)
 			cpack_add_component( CastorGui_dev
 				DISPLAY_NAME "CastorGui SDK"

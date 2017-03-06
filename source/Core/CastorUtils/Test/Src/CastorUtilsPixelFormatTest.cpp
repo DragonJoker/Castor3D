@@ -1,14 +1,14 @@
 #include "CastorUtilsPixelFormatTest.hpp"
 
-#include <PixelBuffer.hpp>
+#include <Graphics/PixelBuffer.hpp>
 
 using namespace Castor;
 
 namespace
 {
-	template< TPL_PIXEL_FORMAT PF, typename Enable = void > struct PixelStreamer;
+	template< PixelFormat PF, typename Enable = void > struct PixelStreamer;
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	struct PixelStreamer< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 	{
 		template< typename CharType >
@@ -53,7 +53,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	struct PixelStreamer< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
 	{
 		template< typename CharType >
@@ -84,15 +84,15 @@ namespace
 		}
 	};
 
-	template< typename CharType, TPL_PIXEL_FORMAT PF >
+	template< typename CharType, PixelFormat PF >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
 	{
 		return PixelStreamer< PF >()( p_stream, p_pixel );
 	}
 
-	template< TPL_PIXEL_FORMAT PF, typename Enable = void > struct BufferStreamer;
+	template< PixelFormat PF, typename Enable = void > struct BufferStreamer;
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	struct BufferStreamer< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 	{
 		template< typename CharType >
@@ -129,7 +129,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	struct BufferStreamer< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
 	{
 		template< typename CharType >
@@ -174,14 +174,14 @@ namespace
 		return p_stream;
 	}
 
-	template< typename CharType, TPL_PIXEL_FORMAT PF >
+	template< typename CharType, PixelFormat PF >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 	{
 		p_stream << static_cast< PxBufferBase const & >( p_buffer );
 		return BufferStreamer< PF >()( p_stream, p_buffer );
 	}
 
-	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFDst, PixelFormat PFSrc >
 	struct PixelConverter
 	{
 		void operator()( Pixel< PFSrc > const & p_source )
@@ -190,11 +190,11 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Converted pixel : " << l_dest;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct PixelConverter< PFSrc, PFSrc >
 	{
 		void operator()( Pixel< PFSrc > const & p_source )
@@ -202,15 +202,15 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFDst, PixelFormat PFSrc >
 	void ConvertPixel( Pixel< PFSrc > const & p_source )
 	{
 		PixelConverter< PFDst, PFSrc >()( p_source );
 	}
 
-	template< TPL_PIXEL_FORMAT PFSrc, typename Enable = void > struct PixelConversionChecker;
+	template< PixelFormat PFSrc, typename Enable = void > struct PixelConversionChecker;
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct PixelConversionChecker< PFSrc, typename std::enable_if< is_colour_format< PFSrc >::value >::type >
 	{
 		void operator()()
@@ -223,23 +223,23 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source pixel : " << l_source;
-			Logger::LogDebug( l_stream );
-			ConvertPixel< ePIXEL_FORMAT_L8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_L32F >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_A8L8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_AL32F >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_A1R5G5B5 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_A4R4G4B4 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_R5G6B5 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_R8G8B8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_A8R8G8B8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_RGB32F >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_ARGB32F >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( l_stream );
+			ConvertPixel< PixelFormat::eL8 >( l_source );
+			ConvertPixel< PixelFormat::eL32F >( l_source );
+			ConvertPixel< PixelFormat::eA8L8 >( l_source );
+			ConvertPixel< PixelFormat::eAL32F >( l_source );
+			ConvertPixel< PixelFormat::eA1R5G5B5 >( l_source );
+			ConvertPixel< PixelFormat::eA4R4G4B4 >( l_source );
+			ConvertPixel< PixelFormat::eR5G6B5 >( l_source );
+			ConvertPixel< PixelFormat::eR8G8B8 >( l_source );
+			ConvertPixel< PixelFormat::eA8R8G8B8 >( l_source );
+			ConvertPixel< PixelFormat::eRGB32F >( l_source );
+			ConvertPixel< PixelFormat::eRGBA32F >( l_source );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct PixelConversionChecker< PFSrc, typename std::enable_if< is_depth_stencil_format< PFSrc >::value >::type >
 	{
 		void operator()()
@@ -250,36 +250,36 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source pixel : " << l_source;
-			Logger::LogDebug( l_stream );
-			ConvertPixel< ePIXEL_FORMAT_DEPTH16 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_DEPTH24 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_DEPTH32 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_STENCIL8 >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( l_stream );
+			ConvertPixel< PixelFormat::eD16 >( l_source );
+			ConvertPixel< PixelFormat::eD24 >( l_source );
+			ConvertPixel< PixelFormat::eD32 >( l_source );
+			ConvertPixel< PixelFormat::eD24S8 >( l_source );
+			ConvertPixel< PixelFormat::eS8 >( l_source );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	void CheckPixelConversions()
 	{
 		PixelConversionChecker< PF >()();
 	}
 
-	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFDst, PixelFormat PFSrc >
 	struct BufferConverter
 	{
 		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
 		{
-			std::shared_ptr< PxBuffer< PFDst > > l_dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( p_source->dimensions(), ePIXEL_FORMAT( PFDst ), p_source->ptr(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFDst > > l_dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( p_source->dimensions(), PixelFormat( PFDst ), p_source->ptr(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Converted buffer : " << *l_dest;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct BufferConverter< PFSrc, PFSrc >
 	{
 		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
@@ -287,15 +287,15 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFDst, PixelFormat PFSrc >
 	void ConvertBuffer( std::shared_ptr< PxBuffer< PFSrc > > p_source )
 	{
 		BufferConverter< PFDst, PFSrc >()( p_source );
 	}
 
-	template< TPL_PIXEL_FORMAT PFSrc, typename Enable = void > struct BufferConversionChecker;
+	template< PixelFormat PFSrc, typename Enable = void > struct BufferConversionChecker;
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct BufferConversionChecker< PFSrc, typename std::enable_if< is_colour_format< PFSrc >::value >::type >
 	{
 		void operator()()
@@ -316,28 +316,28 @@ namespace
 				PF::SetByteBlue( l_pixel, l_value++ );
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
-			Logger::LogDebug( l_stream );
-			ConvertBuffer< ePIXEL_FORMAT_L8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_L32F >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_A8L8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_AL32F >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_A1R5G5B5 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_A4R4G4B4 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_R5G6B5 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_R8G8B8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_A8R8G8B8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_RGB32F >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_ARGB32F >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( l_stream );
+			ConvertBuffer< PixelFormat::eL8 >( l_source );
+			ConvertBuffer< PixelFormat::eL32F >( l_source );
+			ConvertBuffer< PixelFormat::eA8L8 >( l_source );
+			ConvertBuffer< PixelFormat::eAL32F >( l_source );
+			ConvertBuffer< PixelFormat::eA1R5G5B5 >( l_source );
+			ConvertBuffer< PixelFormat::eA4R4G4B4 >( l_source );
+			ConvertBuffer< PixelFormat::eR5G6B5 >( l_source );
+			ConvertBuffer< PixelFormat::eR8G8B8 >( l_source );
+			ConvertBuffer< PixelFormat::eA8R8G8B8 >( l_source );
+			ConvertBuffer< PixelFormat::eRGB32F >( l_source );
+			ConvertBuffer< PixelFormat::eRGBA32F >( l_source );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_depth_format< PFSrc >::value && PFSrc != ePIXEL_FORMAT_DEPTH24S8 >::type >
+	template< PixelFormat PFSrc >
+	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_depth_format< PFSrc >::value && PFSrc != PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
 		{
@@ -358,21 +358,21 @@ namespace
 				l_stencil++;
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
-			Logger::LogDebug( l_stream );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH16 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH32 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( l_stream );
+			ConvertBuffer< PixelFormat::eD16 >( l_source );
+			ConvertBuffer< PixelFormat::eD24 >( l_source );
+			ConvertBuffer< PixelFormat::eD32 >( l_source );
+			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker< PFSrc, typename std::enable_if< PFSrc == ePIXEL_FORMAT_DEPTH24S8 >::type >
+	template< PixelFormat PFSrc >
+	struct BufferConversionChecker< PFSrc, typename std::enable_if< PFSrc == PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
 		{
@@ -393,22 +393,22 @@ namespace
 				l_stencil++;
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
-			Logger::LogDebug( l_stream );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH16 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH32 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_STENCIL8 >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( l_stream );
+			ConvertBuffer< PixelFormat::eD16 >( l_source );
+			ConvertBuffer< PixelFormat::eD24 >( l_source );
+			ConvertBuffer< PixelFormat::eD32 >( l_source );
+			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
+			ConvertBuffer< PixelFormat::eS8 >( l_source );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_stencil_format< PFSrc >::value && PFSrc != ePIXEL_FORMAT_DEPTH24S8 >::type >
+	template< PixelFormat PFSrc >
+	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_stencil_format< PFSrc >::value && PFSrc != PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
 		{
@@ -426,18 +426,18 @@ namespace
 				PF::SetByteStencil( l_pixel, l_value++ );
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
-			Logger::LogDebug( l_stream );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_STENCIL8 >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( l_stream );
+			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
+			ConvertBuffer< PixelFormat::eS8 >( l_source );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	void CheckBufferConversions()
 	{
 		BufferConversionChecker< PF >()();
@@ -455,49 +455,49 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsPixelFormatTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsPixelFormatTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsPixelFormatTest, TestPixelConversions, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsPixelFormatTest, TestBufferConversions, p_errCount, p_testCount );
+		DoRegisterTest( "TestPixelConversions", std::bind( &CastorUtilsPixelFormatTest::TestPixelConversions, this ) );
+		DoRegisterTest( "TestBufferConversions", std::bind( &CastorUtilsPixelFormatTest::TestBufferConversions, this ) );
 	}
 
-	void CastorUtilsPixelFormatTest::TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsPixelFormatTest::TestPixelConversions()
 	{
-		CheckPixelConversions< ePIXEL_FORMAT_L8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_L32F >();
-		CheckPixelConversions< ePIXEL_FORMAT_A8L8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_AL32F >();
-		CheckPixelConversions< ePIXEL_FORMAT_A1R5G5B5 >();
-		CheckPixelConversions< ePIXEL_FORMAT_A4R4G4B4 >();
-		CheckPixelConversions< ePIXEL_FORMAT_R5G6B5 >();
-		CheckPixelConversions< ePIXEL_FORMAT_R8G8B8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_A8R8G8B8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_RGB32F >();
-		CheckPixelConversions< ePIXEL_FORMAT_ARGB32F >();
-		CheckPixelConversions< ePIXEL_FORMAT_DEPTH16 >();
-		CheckPixelConversions< ePIXEL_FORMAT_DEPTH24 >();
-		CheckPixelConversions< ePIXEL_FORMAT_DEPTH32 >();
-		CheckPixelConversions< ePIXEL_FORMAT_DEPTH24S8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_STENCIL8 >();
+		CheckPixelConversions< PixelFormat::eL8 >();
+		CheckPixelConversions< PixelFormat::eL32F >();
+		CheckPixelConversions< PixelFormat::eA8L8 >();
+		CheckPixelConversions< PixelFormat::eAL32F >();
+		CheckPixelConversions< PixelFormat::eA1R5G5B5 >();
+		CheckPixelConversions< PixelFormat::eA4R4G4B4 >();
+		CheckPixelConversions< PixelFormat::eR5G6B5 >();
+		CheckPixelConversions< PixelFormat::eR8G8B8 >();
+		CheckPixelConversions< PixelFormat::eA8R8G8B8 >();
+		CheckPixelConversions< PixelFormat::eRGB32F >();
+		CheckPixelConversions< PixelFormat::eRGBA32F >();
+		CheckPixelConversions< PixelFormat::eD16 >();
+		CheckPixelConversions< PixelFormat::eD24 >();
+		CheckPixelConversions< PixelFormat::eD32 >();
+		CheckPixelConversions< PixelFormat::eD24S8 >();
+		CheckPixelConversions< PixelFormat::eS8 >();
 	}
 
-	void CastorUtilsPixelFormatTest::TestBufferConversions( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsPixelFormatTest::TestBufferConversions()
 	{
-		CheckBufferConversions< ePIXEL_FORMAT_L8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_L32F >();
-		CheckBufferConversions< ePIXEL_FORMAT_A8L8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_AL32F >();
-		CheckBufferConversions< ePIXEL_FORMAT_A1R5G5B5 >();
-		CheckBufferConversions< ePIXEL_FORMAT_A4R4G4B4 >();
-		CheckBufferConversions< ePIXEL_FORMAT_R5G6B5 >();
-		CheckBufferConversions< ePIXEL_FORMAT_R8G8B8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_A8R8G8B8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_RGB32F >();
-		CheckBufferConversions< ePIXEL_FORMAT_ARGB32F >();
-		CheckBufferConversions< ePIXEL_FORMAT_DEPTH16 >();
-		CheckBufferConversions< ePIXEL_FORMAT_DEPTH24 >();
-		CheckBufferConversions< ePIXEL_FORMAT_DEPTH32 >();
-		CheckBufferConversions< ePIXEL_FORMAT_DEPTH24S8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_STENCIL8 >();
+		CheckBufferConversions< PixelFormat::eL8 >();
+		CheckBufferConversions< PixelFormat::eL32F >();
+		CheckBufferConversions< PixelFormat::eA8L8 >();
+		CheckBufferConversions< PixelFormat::eAL32F >();
+		CheckBufferConversions< PixelFormat::eA1R5G5B5 >();
+		CheckBufferConversions< PixelFormat::eA4R4G4B4 >();
+		CheckBufferConversions< PixelFormat::eR5G6B5 >();
+		CheckBufferConversions< PixelFormat::eR8G8B8 >();
+		CheckBufferConversions< PixelFormat::eA8R8G8B8 >();
+		CheckBufferConversions< PixelFormat::eRGB32F >();
+		CheckBufferConversions< PixelFormat::eRGBA32F >();
+		CheckBufferConversions< PixelFormat::eD16 >();
+		CheckBufferConversions< PixelFormat::eD24 >();
+		CheckBufferConversions< PixelFormat::eD32 >();
+		CheckBufferConversions< PixelFormat::eD24S8 >();
+		CheckBufferConversions< PixelFormat::eS8 >();
 	}
 }

@@ -1,19 +1,24 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___LWO_IMPORTER_H___
 #define ___LWO_IMPORTER_H___
@@ -33,10 +38,54 @@ namespace Lwo
 	\remark		Importe les données à partir de fichiers LWO (LightWave Object)
 	*/
 	class LwoImporter
-		:	public Castor3D::Importer
+		: public Castor3D::Importer
 	{
 	public:
-		Castor::BinaryFile * m_pFile;
+		LwoImporter( Castor3D::Engine & p_engine );
+		virtual ~LwoImporter();
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+
+	private:
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+
+		bool DoRead( stLWO_CHUNK & p_chunk );
+		void DoProcess( Castor3D::Mesh & p_mesh, stLWO_CHUNK & p_chunk );
+		void DoDiscard( stLWO_CHUNK & p_chunk );
+		void DoDiscard( stLWO_SUBCHUNK & p_chunk );
+		bool DoIsValidChunk( stLWO_CHUNK & p_chunk, stLWO_CHUNK & p_pParent );
+		void DoToStr( char p_szId[5], UI4 p_uiId );
+		bool DoRead( std::string & p_strString );
+		bool DoRead( Castor::String const & p_strTabs, stLWO_SUBCHUNK & p_pSubchunk );
+		UI2 DoReadVX( UI4 & p_index );
+		bool DoIsChunk( eID_TAG p_eId );
+		bool DoIsTagId( eID_TAG p_eId );
+		void DoParsePTag( stLWO_CHUNK & p_chunk );
+		void DoReadBlock( stLWO_SUBCHUNK & p_pSubchunk, Castor3D::PassSPtr p_pass );
+		void DoSetChannel( Castor3D::TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel );
+		void DoReadShdr( stLWO_SUBCHUNK & p_pSubchunk );
+		void DoReadGrad( stLWO_SUBCHUNK & p_pSubchunk );
+		void DoReadProc( stLWO_SUBCHUNK & p_pSubchunk );
+		void DoReadIMap( stLWO_SUBCHUNK & p_pSubchunk, eTEX_CHANNEL & p_channel );
+		void DoReadTMap( stLWO_SUBCHUNK & p_pSubchunk );
+		UI2 DoReadBlockHeader( stLWO_SUBCHUNK & p_pSubchunk, eTEX_CHANNEL & p_channel );
+		void DoParseTags( stLWO_CHUNK & p_chunk );
+		void DoParseSurf( stLWO_CHUNK & p_chunk );
+		void DoParseClip( stLWO_CHUNK & p_chunk );
+		void DoParsePnts( stLWO_CHUNK & p_chunk );
+		void DoParseVMap( stLWO_CHUNK & p_chunk );
+		void DoParsePols( stLWO_CHUNK & p_chunk );
+		void DoParseLayr( stLWO_CHUNK & p_chunk );
+
+	public:
+		Castor::BinaryFile * m_file;
 		std::vector< Castor::Point3f > m_arrayPoints;
 		bool m_bHasUv;
 		std::vector< Castor::Point2f > m_arrayUvs;
@@ -48,42 +97,6 @@ namespace Lwo
 		std::string m_strSource;
 		std::map< std::string, Castor3D::TextureUnitSPtr > m_mapTextures;
 		bool m_bIgnored;
-
-	public:
-		LwoImporter( Castor3D::Engine & p_pEngine );
-		virtual ~LwoImporter();
-
-	private:
-		virtual Castor3D::SceneSPtr	DoImportScene();
-		virtual Castor3D::MeshSPtr	DoImportMesh( Castor3D::Scene & p_scene );
-
-		bool DoRead( stLWO_CHUNK *	p_pChunk );
-		void DoProcess( Castor3D::Scene & p_scene, stLWO_CHUNK * p_pChunk, Castor3D::MeshSPtr p_pMesh );
-		void DoDiscard( stLWO_CHUNK * p_pChunk );
-		void DoDiscard( stLWO_SUBCHUNK * p_pChunk );
-		bool DoIsValidChunk( stLWO_CHUNK * p_pChunk, stLWO_CHUNK * p_pParent );
-		void DoToStr( char p_szId[5], UI4 p_uiId );
-		bool DoRead( std::string & p_strString );
-		bool DoRead( Castor::String const & p_strTabs, stLWO_SUBCHUNK * p_pSubchunk );
-		UI2 DoReadVX( UI4 & p_uiIndex );
-		bool DoIsChunk( eID_TAG p_eId );
-		bool DoIsTagId( eID_TAG p_eId );
-		void DoParsePTag( stLWO_CHUNK * p_pChunk );
-		void DoReadBlock( stLWO_SUBCHUNK * p_pSubchunk, Castor3D::PassSPtr p_pPass );
-		void DoSetChannel( Castor3D::TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel );
-		void DoReadShdr( stLWO_SUBCHUNK * p_pSubchunk );
-		void DoReadGrad( stLWO_SUBCHUNK * p_pSubchunk );
-		void DoReadProc( stLWO_SUBCHUNK * p_pSubchunk );
-		void DoReadIMap( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel );
-		void DoReadTMap( stLWO_SUBCHUNK * p_pSubchunk );
-		UI2 DoReadBlockHeader( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel );
-		void DoParseTags( stLWO_CHUNK * p_pChunk );
-		void DoParseSurf( stLWO_CHUNK * p_pChunk );
-		void DoParseClip( stLWO_CHUNK * p_pChunk );
-		void DoParsePnts( stLWO_CHUNK * p_pChunk );
-		void DoParseVMap( stLWO_CHUNK * p_pChunk );
-		void DoParsePols( stLWO_CHUNK * p_pChunk );
-		void DoParseLayr( stLWO_CHUNK * p_pChunk );
 	};
 }
 

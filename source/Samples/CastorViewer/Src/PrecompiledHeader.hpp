@@ -1,10 +1,32 @@
+/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 #ifndef ___CV_PrecompiledHeader___
 #define ___CV_PrecompiledHeader___
 
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	ifdef _WIN32
+#	ifdef CASTOR_PLATFORM_WINDOWS
 #		undef __WXGTK__
 #		define __WXMSW__
 #	endif
@@ -49,51 +71,52 @@
 #	include <wx/aui/framemanager.h>
 
 #	include <CastorUtils.hpp>
-#	include <StringUtils.hpp>
-#	include <Templates.hpp>
-#	include <Logger.hpp>
-#	include <PreciseTimer.hpp>
-#	include <File.hpp>
-#	include <Point.hpp>
-#	include <Quaternion.hpp>
-#	include <Named.hpp>
-#	include <Path.hpp>
-#	include <Math.hpp>
-#	include <Colour.hpp>
-#	include <Angle.hpp>
+#	include <Miscellaneous/StringUtils.hpp>
+#	include <Design/Templates.hpp>
+#	include <Log/Logger.hpp>
+#	include <Miscellaneous/PreciseTimer.hpp>
+#	include <Data/File.hpp>
+#	include <Math/Point.hpp>
+#	include <Math/Quaternion.hpp>
+#	include <Design/Named.hpp>
+#	include <Data/Path.hpp>
+#	include <Math/Math.hpp>
+#	include <Graphics/Colour.hpp>
+#	include <Math/Angle.hpp>
 
 #	include <Castor3DPrerequisites.hpp>
-#	include <AnimatedObjectGroup.hpp>
-#	include <Animation.hpp>
-#	include <Buffer.hpp>
-#	include <Camera.hpp>
-#	include <DirectionalLight.hpp>
 #	include <Engine.hpp>
-#	include <Face.hpp>
-#	include <FrameListener.hpp>
-#	include <FrameVariable.hpp>
-#	include <Geometry.hpp>
-#	include <KeyFrame.hpp>
-#	include <Light.hpp>
-#	include <Material.hpp>
-#	include <Mesh.hpp>
-#	include <Overlay.hpp>
-#	include <Pass.hpp>
-#	include <Plugin.hpp>
-#	include <PointLight.hpp>
-#	include <Ray.hpp>
-#	include <RenderSystem.hpp>
-#	include <RenderWindow.hpp>
-#	include <Sampler.hpp>
-#	include <Scene.hpp>
-#	include <SceneFileParser.hpp>
-#	include <SceneNode.hpp>
-#	include <ShaderManager.hpp>
-#	include <ShaderProgram.hpp>
-#	include <SpotLight.hpp>
-#	include <Submesh.hpp>
-#	include <TextureUnit.hpp>
-#	include <Vertex.hpp>
+#	include <Cache/ShaderCache.hpp>
+
+#	include <Animation/Animation.hpp>
+#	include <Animation/KeyFrame.hpp>
+#	include <Event/Frame/FrameListener.hpp>
+#	include <Material/Material.hpp>
+#	include <Material/Pass.hpp>
+#	include <Mesh/Buffer/Buffer.hpp>
+#	include <Mesh/Face.hpp>
+#	include <Mesh/Mesh.hpp>
+#	include <Mesh/Submesh.hpp>
+#	include <Mesh/Vertex.hpp>
+#	include <Miscellaneous/Ray.hpp>
+#	include <Overlay/Overlay.hpp>
+#	include <Plugin/Plugin.hpp>
+#	include <Render/RenderSystem.hpp>
+#	include <Render/RenderWindow.hpp>
+#	include <Scene/Camera.hpp>
+#	include <Scene/Geometry.hpp>
+#	include <Scene/Scene.hpp>
+#	include <Scene/SceneFileParser.hpp>
+#	include <Scene/SceneNode.hpp>
+#	include <Scene/Animation/AnimatedObjectGroup.hpp>
+#	include <Scene/Light/DirectionalLight.hpp>
+#	include <Scene/Light/Light.hpp>
+#	include <Scene/Light/PointLight.hpp>
+#	include <Scene/Light/SpotLight.hpp>
+#	include <Shader/Uniform.hpp>
+#	include <Shader/ShaderProgram.hpp>
+#	include <Texture/Sampler.hpp>
+#	include <Texture/TextureUnit.hpp>
 
 #	include <iostream>
 #	include <string>
@@ -109,6 +132,12 @@
 #	include <SplashScreen.hpp>
 #else
 #	include <GuiCommonPrerequisites.hpp>
+#endif
+
+#if !defined( VLD_AVAILABLE ) && defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG )
+#	define _CRTDBG_MAP_ALLOC
+#	include <cstdlib>
+#	include <crtdbg.h>
 #endif
 
 #endif

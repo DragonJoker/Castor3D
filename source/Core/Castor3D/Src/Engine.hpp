@@ -1,45 +1,52 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_ENGINE_H___
 #define ___C3D_ENGINE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Cache/Cache.hpp"
+#include "Cache/ListenerCache.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Cache/OverlayCache.hpp"
+#include "Cache/PluginCache.hpp"
+#include "Cache/SamplerCache.hpp"
+#include "Cache/SceneCache.hpp"
+#include "Cache/ShaderCache.hpp"
+#include "Cache/TargetCache.hpp"
+#include "Cache/TechniqueCache.hpp"
 
-#include "TechniqueFactory.hpp"
-#include "Version.hpp"
+#include "Miscellaneous/Version.hpp"
 
-#include <FileParser.hpp>
-#include <FontManager.hpp>
-#include <ImageManager.hpp>
-#include <Unique.hpp>
+#include "Mesh/ImporterFactory.hpp"
+#include "Mesh/MeshFactory.hpp"
+#include "Mesh/SubdividerFactory.hpp"
+#include "Render/RenderSystemFactory.hpp"
+#include "Technique/TechniqueFactory.hpp"
 
-#define DECLARE_MANAGER_MEMBER( memberName, className )\
-	public:\
-		inline className##Manager & Get##className##Manager()\
-		{\
-			return *m_##memberName##Manager;\
-		}\
-		inline className##Manager const & Get##className##Manager()const\
-		{\
-			return *m_##memberName##Manager;\
-		}\
-	private:\
-		className##ManagerUPtr m_##memberName##Manager
+#include <FileParser/FileParser.hpp>
+#include <Graphics/FontCache.hpp>
+#include <Graphics/ImageCache.hpp>
+#include <Design/Unique.hpp>
+#include <Miscellaneous/CpuInformations.hpp>
 
 namespace Castor3D
 {
@@ -55,7 +62,7 @@ namespace Castor3D
 	\remark		Contient les fenêtres de rendu, les plug-ins, drivers de rendu...
 	*/
 	class Engine
-		: Castor::Unique< Engine >
+		: public Castor::Unique< Engine >
 	{
 	public:
 		/**
@@ -102,7 +109,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool LoadRenderer( eRENDERER_TYPE p_type );
+		C3D_API bool LoadRenderer( Castor::String const & p_type );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
@@ -111,7 +118,7 @@ namespace Castor3D
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	p_pEvent	L'évènement
 		 */
-		C3D_API void PostEvent( FrameEventSPtr p_pEvent );
+		C3D_API void PostEvent( FrameEventUPtr && p_pEvent );
 		/**
 		 *\~english
 		 *\brief		Retrieves the cleanup status
@@ -142,7 +149,7 @@ namespace Castor3D
 		 *\param[in]	p_eShaderModel	le shader model
 		 *\return		\p true si le shader model est supporté dans la configuration actuelle
 		 */
-		C3D_API bool SupportsShaderModel( eSHADER_MODEL p_eShaderModel );
+		C3D_API bool SupportsShaderModel( ShaderModel p_eShaderModel );
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
@@ -218,9 +225,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline Castor::ImageManager const & GetImageManager()const
+		inline Castor::ImageCache const & GetImageCache()const
 		{
-			return m_imageManager;
+			return m_imageCache;
 		}
 		/**
 		 *\~english
@@ -230,9 +237,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline Castor::ImageManager & GetImageManager()
+		inline Castor::ImageCache & GetImageCache()
 		{
-			return m_imageManager;
+			return m_imageCache;
 		}
 		/**
 		 *\~english
@@ -242,9 +249,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline Castor::FontManager const & GetFontManager()const
+		inline Castor::FontCache const & GetFontCache()const
 		{
-			return m_fontManager;
+			return m_fontCache;
 		}
 		/**
 		 *\~english
@@ -254,9 +261,31 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline Castor::FontManager & GetFontManager()
+		inline Castor::FontCache & GetFontCache()
 		{
-			return m_fontManager;
+			return m_fontCache;
+		}
+		/**
+		 *\~english
+		 *\return		The user input listener.
+		 *\~french
+		 *\return		Le listener d'entrées utilisateur.
+		 */
+		inline UserInputListenerSPtr GetUserInputListener()
+		{
+			return m_userInputListener;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the user input listener.
+		 *\param[in]	p_listener	The new value.
+		 *\~french
+		 *\brief		Définit le listener d'entrées utilisateur.
+		 *\param[in]	p_listener	La nouvelle valeur.
+		 */
+		inline void SetUserInputListener( UserInputListenerSPtr p_listener )
+		{
+			m_userInputListener = p_listener;
 		}
 		/**
 		 *\~english
@@ -268,19 +297,7 @@ namespace Castor3D
 		 */
 		inline RenderSystem * GetRenderSystem()const
 		{
-			return m_renderSystem;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the default BlendState (no blend)
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le BlendState par défault (pas de blend)
-		 *\return		La valeur
-		 */
-		inline BlendStateSPtr GetDefaultBlendState()const
-		{
-			return m_defaultBlendState;
+			return m_renderSystem.get();
 		}
 		/**
 		 *\~english
@@ -402,70 +419,225 @@ namespace Castor3D
 		{
 			return m_threaded;
 		}
+		/**
+		 *\~english
+		 *\return		The RenderSystem factory.
+		 *\~french
+		 *\return		La fabrique de RenderSystem.
+		 */
+		inline RenderSystemFactory const & GetRenderSystemFactory()const
+		{
+			return m_renderSystemFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The RenderSystem factory.
+		 *\~french
+		 *\return		La fabrique de RenderSystem.
+		 */
+		inline RenderSystemFactory & GetRenderSystemFactory()
+		{
+			return m_renderSystemFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The MeshGenerator factory.
+		 *\~french
+		 *\return		La fabrique de MeshGenerator.
+		 */
+		inline MeshFactory const & GetMeshFactory()const
+		{
+			return m_meshFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The MeshGenerator factory.
+		 *\~french
+		 *\return		La fabrique de MeshGenerator.
+		 */
+		inline MeshFactory & GetMeshFactory()
+		{
+			return m_meshFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The RenderTechnique factory.
+		 *\~french
+		 *\return		La fabrique de RenderTechnique.
+		 */
+		inline TechniqueFactory const & GetTechniqueFactory()const
+		{
+			return m_techniqueFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The RenderTechnique factory.
+		 *\~french
+		 *\return		La fabrique de RenderTechnique.
+		 */
+		inline TechniqueFactory & GetTechniqueFactory()
+		{
+			return m_techniqueFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The Subdivider factory.
+		 *\~french
+		 *\return		La fabrique de Subdivider.
+		 */
+		inline SubdividerFactory const & GetSubdividerFactory()const
+		{
+			return m_subdividerFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The Subdivider factory.
+		 *\~french
+		 *\return		La fabrique de Subdivider.
+		 */
+		inline SubdividerFactory & GetSubdividerFactory()
+		{
+			return m_subdividerFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The Importer factory.
+		 *\~french
+		 *\return		La fabrique de Importer.
+		 */
+		inline ImporterFactory const & GetImporterFactory()const
+		{
+			return m_importerFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The Subdivider factory.
+		 *\~french
+		 *\return		La fabrique de Subdivider.
+		 */
+		inline ImporterFactory & GetImporterFactory()
+		{
+			return m_importerFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The CpuParticleSystem factory.
+		 *\~french
+		 *\return		La fabrique de CpuParticleSystem.
+		 */
+		inline ParticleFactory & GetParticleFactory()
+		{
+			return m_particleFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The CPU informations.
+		 *\~french
+		 *\return		Les informations CPU.
+		 */
+		inline Castor::CpuInformations const & GetCpuInformations()const
+		{
+			return m_cpuInformations;
+		}
 
 	private:
 		void DoLoadCoreData();
 
 	private:
-		//!\~english The mutex, to make the engine resources access thread-safe	\~french Le mutex utilisé pour que l'accès aux ressources du moteur soit thread-safe
+		//!\~english	The mutex, to make the engine resources access thread-safe.
+		//!\~french		Le mutex utilisé pour que l'accès aux ressources du moteur soit thread-safe.
 		std::recursive_mutex m_mutexResources;
-		//!\~english The render loop.	\~french La boucle de rendu.
+		//!\~english	The render loop.
+		//!\~french		La boucle de rendu.
 		RenderLoopUPtr m_renderLoop;
-		//!\~english The engine version	\~french La version du moteur
+		//!\~english	The engine version.
+		//!\~french		La version du moteur.
 		Version m_version;
-		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
-		RenderSystem * m_renderSystem;
-		//!\~english Tells if engine is cleaned up	\~french Dit si le moteur est nettoyé
+		//!\~english	The current RenderSystem.
+		//!\~french		Le RenderSystem courant.
+		RenderSystemUPtr m_renderSystem;
+		//!\~english	Tells if engine is cleaned up.
+		//!\~french		Dit si le moteur est nettoyé.
 		bool m_cleaned;
-		//!\~english Tells if engine uses an asynchronous render loop.	\~french Dit si le moteur utilise un boucle de rendu asynchrone.
+		//!\~english	Tells if engine uses an asynchronous render loop.
+		//!\~french		Dit si le moteur utilise un boucle de rendu asynchrone.
 		bool m_threaded;
-		//!\~english Default blend states (no blend).	\~french Etats de blend par défaut (pas de blend).
-		BlendStateSPtr m_defaultBlendState;
-		//!\~english Default sampler.	\~french Le sampler par défaut.
-		SamplerSPtr m_defaultSampler;
-		//!\~english Lights textures sampler.	\~french L'échantillonneur utilisé pour les textures de lumières.
-		SamplerSPtr m_lightsSampler;
-		//!\~english The shaders collection.	\~french La collection de shaders.
-		DECLARE_MANAGER_MEMBER( shader, Shader );
-		//!\~english The sampler states collection.	\~french La collection de sampler states.
-		DECLARE_MANAGER_MEMBER( sampler, Sampler );
-		//!\~english The DepthStencilState collection.	\~french La collection de DepthStencilState.
-		DECLARE_MANAGER_MEMBER( depthStencilState, DepthStencilState );
-		//!\~english The RasteriserState collection.	\~french La collection de RasteriserState.
-		DECLARE_MANAGER_MEMBER( rasteriserState, RasteriserState );
-		//!\~english The BlendState collection.	\~french La collection de BlendState.
-		DECLARE_MANAGER_MEMBER( blendState, BlendState );
-		//!\~english The materials manager.	\~french Le gestionnaire de matériaux.
-		DECLARE_MANAGER_MEMBER( material, Material );
-		//!\~english The materials manager.	\~french Le gestionnaire de fenêtres.
-		DECLARE_MANAGER_MEMBER( window, Window );
-		//!\~english The meshes manager.	\~french Le gestionnaire de maillages.
-		DECLARE_MANAGER_MEMBER( mesh, Mesh );
-		//!\~english The plug-ins manager.	\~french Le gestionnaire de plug-ins.
-		DECLARE_MANAGER_MEMBER( plugin, Plugin );
-		//!\~english The overlays collection.	\~french La collection d'overlays.
-		DECLARE_MANAGER_MEMBER( overlay, Overlay );
-		//!\~english The scenes collection.	\~french La collection de scènes.
-		DECLARE_MANAGER_MEMBER( scene, Scene );
-		//!\~english The render targets map.	\~french La map des cibles de rendu.
-		DECLARE_MANAGER_MEMBER( target, Target );
-		//!\~english The frame listeners array	\~french Le tableau de frame listeners
-		DECLARE_MANAGER_MEMBER( listener, Listener );
-		//!\~english The render technique manager	\~french Le gestionnaire de techniques de rendu.
-		DECLARE_MANAGER_MEMBER( technique, RenderTechnique );
-		//!\~english The fonts collection	\~french La collection de polices
-		Castor::FontManager m_fontManager;
-		//!\~english The images collection	\~french La collection d'images
-		Castor::ImageManager m_imageManager;
-		//!\~english The map holding the parsers, sorted by section, and plug-in name	\~french La map de parseurs, triés par section, et nom de plug-in
-		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
-		//!\~english The map holding the sections, sorted plug-in name.	\~french La map de sections, triées par nom de plug-in.
-		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
-		//!\~english The need for per object lighting.	\~french Le besoin d'un éclairage par objet.
+		//!\~english	The need for per object lighting.
+		//!\~french		Le besoin d'un éclairage par objet.
 		bool m_perObjectLighting;
+		//!\~english	Default sampler.
+		//!\~french		Le sampler par défaut.
+		SamplerSPtr m_defaultSampler;
+		//!\~english	Lights textures sampler.
+		//!\~french		L'échantillonneur utilisé pour les textures de lumières.
+		SamplerSPtr m_lightsSampler;
+		//!\~english	The shaders collection.
+		//!\~french		La collection de shaders.
+		DECLARE_NAMED_CACHE_MEMBER( shader, ShaderProgram );
+		//!\~english	The sampler states collection.
+		//!\~french		La collection de sampler states.
+		DECLARE_CACHE_MEMBER( sampler, Sampler );
+		//!\~english	The materials cache.
+		//!\~french		Le cache de matériaux.
+		DECLARE_CACHE_MEMBER( material, Material );
+		//!\~english	The plug-ins cache.
+		//!\~french		Le cache de plug-ins.
+		DECLARE_CACHE_MEMBER( plugin, Plugin );
+		//!\~english	The overlays cache.
+		//!\~french		La cache d'overlays.
+		DECLARE_CACHE_MEMBER( overlay, Overlay );
+		//!\~english	The scenes cache.
+		//!\~french		La cache de scènes.
+		DECLARE_CACHE_MEMBER( scene, Scene );
+		//!\~english	The frame listeners cache.
+		//!\~french		Le cache de frame listeners.
+		DECLARE_CACHE_MEMBER( listener, FrameListener );
+		//!\~english	The render targets cache.
+		//!\~french		Le cache de cibles de rendu.
+		DECLARE_NAMED_CACHE_MEMBER( target, RenderTarget );
+		//!\~english	The render technique cache.
+		//!\~french		Le cache de techniques de rendu.
+		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
+		//!\~english	The fonts cache.
+		//!\~french		La cache de polices.
+		Castor::FontCache m_fontCache;
+		//!\~english	The images cache.
+		//!\~french		La cache d'images.
+		Castor::ImageCache m_imageCache;
+		//!\~english	The user input listener.
+		//!\~french		Le listener d'entrées utilisateur.
+		UserInputListenerSPtr m_userInputListener;
+		//!\~english	The map holding the parsers, sorted by section, and plug-in name.
+		//!\~french		La map de parseurs, triés par section, et nom de plug-in.
+		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
+		//!\~english	The map holding the sections, sorted plug-in name.
+		//!\~french		La map de sections, triées par nom de plug-in.
+		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
+		//!\~english	The default frame listener.
+		//!\~french		Le frame listener par défaut.
+		FrameListenerWPtr m_defaultListener;
+		//!\~english	The RenderSystem factory.
+		//!\~french		La fabrique de RenderSystem.
+		RenderSystemFactory m_renderSystemFactory;
+		//!\~english	The MeshGenerator factory.
+		//!\~french		La fabrique de MeshGenerator.
+		MeshFactory m_meshFactory;
+		//!\~english	The RenderTechnique factory.
+		//!\~french		La fabrique de RenderTechnique.
+		TechniqueFactory m_techniqueFactory;
+		//!\~english	The subdivider factory.
+		//!\~french		La fabrique de subdiviseurs.
+		SubdividerFactory m_subdividerFactory;
+		//!\~english	The importer factory.
+		//!\~french		La fabrique d'importeurs.
+		ImporterFactory m_importerFactory;
+		//!\~english	The CpuParticleSystem factory.
+		//!\~french		La fabrique de CpuParticleSystem.
+		ParticleFactory m_particleFactory;
+		//!\~english	The CPU informations.
+		//!\~french		Les informations sur le CPU.
+		Castor::CpuInformations m_cpuInformations;
 	};
 }
-
-#undef DECLARE_MANAGER_MEMBER
 
 #endif

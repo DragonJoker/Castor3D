@@ -1,45 +1,78 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+﻿/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___GLSL_MAT_H___
 #define ___GLSL_MAT_H___
 
-#include "GlslVeci.hpp"
+#include "GlslVec.hpp"
 
 namespace GLSL
 {
-	struct Mat3
-			: public Type
+	template< typename ValueT >
+	struct Mat2T
+		: public Type
 	{
-		inline Mat3();
-		inline Mat3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		inline Mat3 & operator=( Mat3 const & p_rhs );
-		template< typename T > inline Mat3 & operator=( T const & p_rhs );
-		template< typename T > inline Mat3 & operator[]( T const & p_rhs );
+		using my_type = ValueT;
+		using my_vec = Vec2T< ValueT >;
+		using my_mat = Mat2T< ValueT >;
+
+		inline Mat2T();
+		inline Mat2T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline my_mat & operator=( my_mat const & p_rhs );
+		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
+		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs );
+		inline my_vec operator[]( int const & p_rhs );
 	};
 
-	struct Mat4
-			: public Type
+	template< typename ValueT >
+	struct Mat3T
+		: public Type
 	{
-		inline Mat4();
-		inline Mat4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		inline Mat4 & operator=( Mat4 const & p_rhs );
-		template< typename T > inline Mat4 & operator=( T const & p_rhs );
-		template< typename T > inline Mat4 & operator[]( T const & p_rhs );
+		using my_type = ValueT;
+		using my_vec = Vec3T< ValueT >;
+		using my_mat = Mat3T< ValueT >;
+
+		inline Mat3T();
+		inline Mat3T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline my_mat & operator=( my_mat const & p_rhs );
+		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
+		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs );
+		inline my_vec operator[]( int const & p_rhs );
+	};
+
+	template< typename ValueT >
+	struct Mat4T
+		: public Type
+	{
+		using my_type = ValueT;
+		using my_vec = Vec4T< ValueT >;
+		using my_mat = Mat4T< ValueT >;
+
+		inline Mat4T();
+		inline Mat4T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline my_mat & operator=( my_mat const & p_rhs );
+		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
+		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs );
+		inline my_vec operator[]( int const & p_rhs );
 	};
 }
 

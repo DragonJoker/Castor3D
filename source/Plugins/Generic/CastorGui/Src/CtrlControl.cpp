@@ -2,22 +2,24 @@
 
 #include "ControlsManager.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <FunctorEvent.hpp>
-#include <InitialiseEvent.hpp>
-#include <Material.hpp>
-#include <Overlay.hpp>
-#include <OverlayManager.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
+#include <Engine.hpp>
+#include <Material/Material.hpp>
+#include <Overlay/Overlay.hpp>
+
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Texture/TextureUnit.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
 
 namespace CastorGui
 {
-	Control::Control( eCONTROL_TYPE p_type, Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: EventHandler< Control >( p_type != eCONTROL_TYPE_STATIC )
+	Control::Control( ControlType p_type, Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+		: NonClientEventHandler< Control >( p_type != ControlType::eStatic )
 		, m_type( p_type )
 		, m_id( p_id )
 		, m_position( p_position )
@@ -25,7 +27,7 @@ namespace CastorGui
 		, m_style( p_style )
 		, m_visible( p_visible )
 		, m_borders( 0, 0, 0, 0 )
-		, m_cursor( eMOUSE_CURSOR_HAND )
+		, m_cursor( MouseCursor::eHand )
 		, m_parent( p_parent )
 		, m_engine( p_engine )
 	{
@@ -37,11 +39,11 @@ namespace CastorGui
 			l_parentOv = l_parent->GetBackground()->GetOverlay().shared_from_this();
 		}
 
-		OverlaySPtr l_overlay = GetEngine()->GetOverlayManager().Create( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_BORDER_PANEL, l_parentOv, nullptr );
+		OverlaySPtr l_overlay = GetEngine()->GetOverlayCache().Add( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), OverlayType::eBorderPanel, nullptr, l_parentOv );
 		l_overlay->SetPixelPosition( GetPosition() );
 		l_overlay->SetPixelSize( GetSize() );
 		BorderPanelOverlaySPtr l_panel = l_overlay->GetBorderPanelOverlay();
-		l_panel->SetBorderPosition( eBORDER_POSITION_INTERNAL );
+		l_panel->SetBorderPosition( BorderPosition::eInternal );
 		l_panel->SetVisible( m_visible );
 		m_background = l_panel;
 	}
@@ -57,7 +59,7 @@ namespace CastorGui
 
 		if ( l_parent )
 		{
-			l_parent->m_childs.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
+			l_parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
 		}
 
 		BorderPanelOverlaySPtr l_panel = GetBackground();
@@ -126,6 +128,7 @@ namespace CastorGui
 
 	void Control::SetBackgroundMaterial( MaterialSPtr p_value )
 	{
+		REQUIRE( p_value );
 		m_backgroundMaterial = p_value;
 		BorderPanelOverlaySPtr l_panel = GetBackground();
 
@@ -181,12 +184,12 @@ namespace CastorGui
 
 	ControlSPtr Control::GetChildControl( uint32_t p_id )
 	{
-		auto l_it = std::find_if( std::begin( m_childs ), std::end( m_childs ), [&p_id]( ControlWPtr p_ctrl )
+		auto l_it = std::find_if( std::begin( m_children ), std::end( m_children ), [&p_id]( ControlWPtr p_ctrl )
 		{
 			return p_ctrl.expired() ? false : p_ctrl.lock()->GetId() == p_id;
 		} );
 
-		if ( l_it == m_childs.end() )
+		if ( l_it == m_children.end() )
 		{
 			CASTOR_EXCEPTION( "This control does not exist in my childs" );
 		}

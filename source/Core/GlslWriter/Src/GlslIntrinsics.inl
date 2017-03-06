@@ -1,22 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
-
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
-*/
-
-namespace GLSL
+﻿namespace GLSL
 {
 	//***********************************************************************************************
 
@@ -69,7 +51,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct ArithmeticOperator
-				: public Operator< TypeA, TypeA, TypeB >
+			: public Operator< TypeA, TypeA, TypeB >
 		{
 			using OperatorType = Operator< TypeA, TypeA, TypeB >;
 			using Ret = typename OperatorType::Ret;
@@ -79,7 +61,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct ArithmeticOperator< Optional< TypeA >, TypeB >
-				: public Operator< Optional< TypeA >, Optional< TypeA >, TypeB >
+			: public Operator< Optional< TypeA >, Optional< TypeA >, TypeB >
 		{
 			using OperatorType = Operator< Optional< TypeA >, Optional< TypeA >, TypeB >;
 			using Ret = typename OperatorType::Ret;
@@ -89,7 +71,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct ArithmeticOperator< TypeA, Optional< TypeB > >
-				: public Operator< Optional< TypeA >, TypeA, Optional< TypeB > >
+			: public Operator< Optional< TypeA >, TypeA, Optional< TypeB > >
 		{
 			using OperatorType = Operator< Optional< TypeA >, TypeA, Optional< TypeB > >;
 			using Ret = typename OperatorType::Ret;
@@ -99,7 +81,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct ArithmeticOperator< Optional< TypeA >, Optional< TypeB > >
-				: public Operator< Optional< TypeA >, Optional< TypeA >, Optional< TypeB > >
+			: public Operator< Optional< TypeA >, Optional< TypeA >, Optional< TypeB > >
 		{
 			using OperatorType = Operator< Optional< TypeA >, Optional< TypeA >, Optional< TypeB > >;
 			using Ret = typename OperatorType::Ret;
@@ -109,74 +91,158 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct BooleanOperator
-				: public Operator< GlslBool, TypeA, TypeB >
+			: public Operator< Boolean, TypeA, TypeB >
 		{
-			using OperatorType = Operator< GlslBool, TypeA, TypeB >;
+			using OperatorType = Operator< Boolean, TypeA, TypeB >;
 			using Ret = typename OperatorType::Ret;
 			using T = typename OperatorType::T;
 			using U = typename  OperatorType::U;
 		};
 	}
 
-	template< typename TypeA, typename TypeB, typename Enable >
-	TypeA operator+( TypeA const & p_a, TypeB const & p_b )
-	{
-		return ArithmeticOperator< TypeA, TypeB >::Write( "+", p_a, p_b );
+#	define GLSL_IMPLEMENT_OPERATOR( RetType, LhsType, RhsType, Operator, OperatorType )\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( LhsType const & p_lhs, RhsType const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( LhsType const & p_lhs, InParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( LhsType const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( LhsType const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( LhsType const & p_lhs, Optional< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, RhsType const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
+	}\
+	template< typename LhsType, typename RhsType, typename Enable >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
+	{\
+		return OperatorType< LhsType, RhsType >::Write( #Operator, p_lhs, p_rhs );\
 	}
 
-	template< typename TypeA, typename TypeB, typename Enable >
-	TypeA operator-( TypeA const & p_a, TypeB const & p_b )
-	{
-		return ArithmeticOperator< TypeA, TypeB >::Write( "-", p_a, p_b );
-	}
+#	define GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( LhsType, RhsType, Operator )\
+	GLSL_IMPLEMENT_OPERATOR( LhsType, LhsType, RhsType, Operator, ArithmeticOperator )
 
-	template< typename TypeA, typename TypeB, typename Enable >
-	TypeA operator*( TypeA const & p_a, TypeB const & p_b )
-	{
-		return ArithmeticOperator< TypeA, TypeB >::Write( "*", p_a, p_b );
-	}
+#	define GLSL_IMPLEMENT_BOOLEAN_OPERATOR( LhsType, RhsType, Operator )\
+	GLSL_IMPLEMENT_OPERATOR( Boolean, LhsType, RhsType, Operator, BooleanOperator )
 
-	template< typename TypeA, typename TypeB, typename Enable >
-	TypeA operator/( TypeA const & p_a, TypeB const & p_b )
-	{
-		return ArithmeticOperator< TypeA, TypeB >::Write( "/", p_a, p_b );
-	}
-
-	template< typename TypeA, typename TypeB, typename Enable >
-	GlslBool operator==( TypeA const & p_a, TypeB const & p_b )
-	{
-		return BooleanOperator< TypeA, TypeB >::Write( "==", p_a, p_b );
-	}
-
-	template< typename TypeA, typename TypeB, typename Enable >
-	GlslBool operator!=( TypeA const & p_a, TypeB const & p_b )
-	{
-		return BooleanOperator< TypeA, TypeB >::Write( "!=", p_a, p_b );
-	}
-
-	template< typename TypeA, typename TypeB, typename Enable >
-	GlslBool operator<( TypeA const & p_a, TypeB const & p_b )
-	{
-		return BooleanOperator< TypeA, TypeB >::Write( "<", p_a, p_b );
-	}
-
-	template< typename TypeA, typename TypeB, typename Enable >
-	GlslBool operator<=( TypeA const & p_a, TypeB const & p_b )
-	{
-		return BooleanOperator< TypeA, TypeB >::Write( "<=", p_a, p_b );
-	}
-
-	template< typename TypeA, typename TypeB, typename Enable >
-	GlslBool operator>( TypeA const & p_a, TypeB const & p_b )
-	{
-		return BooleanOperator< TypeA, TypeB >::Write( ">", p_a, p_b );
-	}
-
-	template< typename TypeA, typename TypeB, typename Enable >
-	GlslBool operator>=( TypeA const & p_a, TypeB const & p_b )
-	{
-		return BooleanOperator< TypeA, TypeB >::Write( ">=", p_a, p_b );
-	}
+	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, + )
+	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, - )
+	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, * )
+	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, / )
+	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, == )
+	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, != )
+	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, < )
+	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, <= )
+	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, > )
+	GLSL_IMPLEMENT_BOOLEAN_OPERATOR( TypeA, TypeB, >= )
 
 	//***********************************************************************************************
 
@@ -265,6 +331,12 @@ namespace GLSL
 	}
 
 	template< typename Value >
+	inline Value abs( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "abs" ), p_value );
+	}
+
+	template< typename Value >
 	inline Value neg( Value const & p_value )
 	{
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "-" ), p_value );
@@ -298,6 +370,48 @@ namespace GLSL
 	inline Value exp2( Value const & p_value )
 	{
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "exp2" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value tan( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "tan" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value sin( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "sin" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value cos( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "cos" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value atan( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "atan" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value atan( Value const & p_y, Value const & p_x )
+	{
+		return WriteFunctionCall< Value >( p_y.m_writer, cuT( "atan" ), p_y, p_x );
+	}
+
+	template< typename Value >
+	inline Value asin( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "asin" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value acos( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "acos" ), p_value );
 	}
 
 	//***********************************************************************************************

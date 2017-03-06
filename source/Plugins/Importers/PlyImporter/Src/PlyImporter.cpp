@@ -1,63 +1,67 @@
 #include "PlyImporter.hpp"
 
-#include <Camera.hpp>
 #include <Engine.hpp>
-#include <Face.hpp>
-#include <GeometryManager.hpp>
-#include <InitialiseEvent.hpp>
-#include <ManagerView.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <Pass.hpp>
-#include <Plugin.hpp>
-#include <RenderSystem.hpp>
-#include <SceneNodeManager.hpp>
-#include <SceneManager.hpp>
-#include <Submesh.hpp>
-#include <TextureUnit.hpp>
-#include <Version.hpp>
-#include <Vertex.hpp>
-#include <Viewport.hpp>
+
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Cache/CacheView.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Face.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Miscellaneous/Version.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/Viewport.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Texture/TextureUnit.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
 
 namespace C3dPly
 {
-	PlyImporter::PlyImporter( Engine & p_pEngine )
-		: Importer( p_pEngine )
+	PlyImporter::PlyImporter( Engine & p_engine )
+		: Importer( p_engine )
 	{
 	}
 
-	SceneSPtr PlyImporter::DoImportScene()
+	ImporterUPtr PlyImporter::Create( Engine & p_engine )
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_PLY" ), *GetEngine() );
-		MeshSPtr l_mesh = DoImportMesh( *l_scene );
+		return std::make_unique< PlyImporter >( p_engine );
+	}
 
-		if ( l_mesh )
+	bool PlyImporter::DoImportScene( Scene & p_scene )
+	{
+		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_PLY" ) );
+		bool l_return = DoImportMesh( *l_mesh );
+
+		if ( l_return )
 		{
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
-
-			for ( auto && l_submesh : *l_mesh )
-			{
-				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
-			}
-
+			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
+			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
 			l_geometry->SetMesh( l_mesh );
+			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
 		}
 
-		return l_scene;
+		return l_return;
 	}
 
-	MeshSPtr PlyImporter::DoImportMesh( Scene & p_scene )
+	bool PlyImporter::DoImportMesh( Mesh & p_mesh )
 	{
+		bool l_return{ false };
 		UIntArray l_faces;
 		RealArray l_sizes;
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 		String l_materialName = l_meshName;
-		MeshSPtr l_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		std::ifstream l_isFile;
 		l_isFile.open( string::string_cast< char >( m_fileName ).c_str(), std::ios::in );
 		std::string l_strLine;
@@ -67,17 +71,17 @@ namespace C3dPly
 		VertexSPtr l_pVertex;
 		Coords3r l_ptNml;
 		Coords2r l_ptTex;
-		SubmeshSPtr l_pSubmesh = l_mesh->CreateSubmesh();
-		MaterialSPtr l_pMaterial = p_scene.GetMaterialView().Find( l_materialName );
+		SubmeshSPtr l_submesh = p_mesh.CreateSubmesh();
+		MaterialSPtr l_pMaterial = p_mesh.GetScene()->GetMaterialView().Find( l_materialName );
 
 		if ( !l_pMaterial )
 		{
-			l_pMaterial = p_scene.GetMaterialView().Create( l_materialName, *GetEngine() );
+			l_pMaterial = p_mesh.GetScene()->GetMaterialView().Add( l_materialName, MaterialType::eLegacy );
 			l_pMaterial->CreatePass();
 		}
 
 		l_pMaterial->GetPass( 0 )->SetTwoSided( true );
-		l_pSubmesh->SetDefaultMaterial( l_pMaterial );
+		l_submesh->SetDefaultMaterial( l_pMaterial );
 		// Parsing the ply identification line
 		std::getline( l_isFile, l_strLine );
 
@@ -161,75 +165,50 @@ namespace C3dPly
 					}
 				}
 
-				stVERTEX_GROUP l_stVertices = { 0 };
-				std::vector< real > l_pVtx( l_iNbVertex * 3 );
-				std::vector< real > l_pNml;
-				std::vector< real > l_pTex;
-				real * l_pBufVtx = &l_pVtx[0];
-				l_stVertices.m_uiCount = l_iNbVertex;
-				l_stVertices.m_pVtx = &l_pVtx[0];
+				std::vector< InterleavedVertex > l_vertices{ size_t( l_iNbVertex ) };
 
 				if ( l_iNbProperties >= 8 )
 				{
-					l_pNml.resize( l_iNbVertex * 3 );
-					l_pTex.resize( l_iNbVertex * 3 );
-					real * l_pBufNml = &l_pNml[0];
-					real * l_pBufTex = &l_pTex[0];
-
-					// Parsing vertices
-					for ( int i = 0; i < l_iNbVertex; i++ )
+					// Parsing vertices : position + normal + texture
+					for ( auto & l_vertex : l_vertices )
 					{
 						std::getline( l_isFile, l_strLine );
 						l_ssToken.str( l_strLine );
-						l_ssToken >> l_pBufVtx[0] >> l_pBufVtx[1] >> l_pBufVtx[2];
-						l_ssToken >> l_pBufNml[0] >> l_pBufNml[1] >> l_pBufNml[2];
-						l_ssToken >> l_pBufTex[0] >> l_pBufTex[1];
-						l_pBufVtx += 3;
-						l_pBufNml += 3;
-						l_pBufTex += 3;
+						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
+						l_ssToken >> l_vertex.m_nml[0] >> l_vertex.m_nml[1] >> l_vertex.m_nml[2];
+						l_ssToken >> l_vertex.m_tex[0] >> l_vertex.m_tex[1];
 						l_ssToken.clear( std::istringstream::goodbit );
 					}
-
-					l_stVertices.m_pNml = &l_pNml[0];
-					l_stVertices.m_pTex = &l_pTex[0];
 				}
 				else if ( l_iNbProperties >= 6 )
 				{
-					l_pNml.resize( l_iNbVertex * 3 );
-					real * l_pBufNml = &l_pNml[0];
-
-					// Parsing vertices
-					for ( int i = 0; i < l_iNbVertex; i++ )
+					// Parsing vertices : position + normal
+					for ( auto & l_vertex : l_vertices )
 					{
 						std::getline( l_isFile, l_strLine );
 						l_ssToken.str( l_strLine );
-						l_ssToken >> l_pBufVtx[0] >> l_pBufVtx[1] >> l_pBufVtx[2];
-						l_ssToken >> l_pBufNml[0] >> l_pBufNml[1] >> l_pBufNml[2];
-						l_pBufVtx += 3;
-						l_pBufNml += 3;
+						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
+						l_ssToken >> l_vertex.m_nml[0] >> l_vertex.m_nml[1] >> l_vertex.m_nml[2];
 						l_ssToken.clear( std::istringstream::goodbit );
 					}
-
-					l_stVertices.m_pNml = &l_pNml[0];
 				}
 				else
 				{
-					// Parsing vertices
-					for ( int i = 0; i < l_iNbVertex; i++ )
+					// Parsing vertices : position
+					for ( auto & l_vertex : l_vertices )
 					{
 						std::getline( l_isFile, l_strLine );
 						l_ssToken.str( l_strLine );
-						l_ssToken >> l_pBufVtx[0] >> l_pBufVtx[1] >> l_pBufVtx[2];
-						l_pBufVtx += 3;
+						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
 						l_ssToken.clear( std::istringstream::goodbit );
 					}
 				}
 
-				l_pSubmesh->AddPoints( l_stVertices );
+				l_submesh->AddPoints( l_vertices );
 				// Parsing triangles
 				FaceSPtr l_pFace;
-				std::vector< stFACE_INDICES > l_faces( l_iNbFaces );
-				stFACE_INDICES * l_pFaces = &l_faces[0];
+				std::vector< FaceIndices > l_faces( l_iNbFaces );
+				FaceIndices * l_pFaces = &l_faces[0];
 
 				for ( int i = 0; i < l_iNbFaces; i++ )
 				{
@@ -239,25 +218,31 @@ namespace C3dPly
 
 					if ( l_iNbVertex >= 3 )
 					{
-						l_ssToken >> l_pFaces->m_uiVertexIndex[0] >> l_pFaces->m_uiVertexIndex[1] >> l_pFaces->m_uiVertexIndex[2];
+						l_ssToken >> l_pFaces->m_index[0] >> l_pFaces->m_index[1] >> l_pFaces->m_index[2];
 						l_pFaces++;
 					}
 
 					l_ssToken.clear( std::istringstream::goodbit );
 				}
 
-				l_pSubmesh->AddFaceGroup( &l_faces[0], l_iNbFaces );
+				l_submesh->AddFaceGroup( l_faces );
 			}
+
+			l_return = true;
 		}
 
-		l_pSubmesh->ComputeContainers();
+		l_submesh->ComputeContainers();
 
 		if ( l_iNbProperties < 6 )
 		{
-			l_mesh->ComputeNormals( false );
+			l_submesh->ComputeNormals( false );
+		}
+		else
+		{
+			l_submesh->ComputeTangentsFromNormals();
 		}
 
 		l_isFile.close();
-		return l_mesh;
+		return l_return;
 	}
 }

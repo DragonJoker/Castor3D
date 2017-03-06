@@ -3,14 +3,15 @@
 
 #include <wx/cmdline.h>
 
-#include <File.hpp>
-#include <Exception.hpp>
+#include <Data/File.hpp>
+#include <Exception/Exception.hpp>
+
+#include <Miscellaneous/Version.hpp>
 
 #include <ImagesLoader.hpp>
 #include <RendererSelector.hpp>
 
 #include <xpms/ajouter.xpm>
-#include <xpms/castor_transparent.xpm>
 #include <xpms/fichier.xpm>
 #include <xpms/mat_blanc.xpm>
 #include <xpms/parametres.xpm>
@@ -29,14 +30,16 @@ wxIMPLEMENT_APP( CastorShape::CastorShapeApp );
 namespace CastorShape
 {
 	CastorShapeApp::CastorShapeApp()
-		: CastorApplication( cuT( "CastorShape" ), cuT( "Castor Shape" ), 8 )
+		: CastorApplication{ cuT( "CastorShape" )
+				     , cuT( "Castor Shape" )
+				     , 8
+				     , Version{ CastorShape_VERSION_MAJOR, CastorShape_VERSION_MINOR, CastorShape_VERSION_BUILD } }
 		, m_mainFrame( NULL )
 	{
 	}
 
 	void CastorShapeApp::DoLoadAppImages()
 	{
-		ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
 		ImagesLoader::AddBitmap( eBMP_FICHIER, fichier_xpm );
 		ImagesLoader::AddBitmap( eBMP_AJOUTER, ajouter_xpm );
 		ImagesLoader::AddBitmap( eBMP_PARAMETRES, parametres_xpm );

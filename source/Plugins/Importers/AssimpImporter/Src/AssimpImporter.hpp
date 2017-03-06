@@ -1,65 +1,60 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3DAssimp___
 #define ___C3DAssimp___
 
 #include <Castor3DPrerequisites.hpp>
 
-#include <Importer.hpp>
-#include <Animation.hpp>
-#include <FileParser.hpp>
+#include <FileParser/FileParser.hpp>
 
-#include <RenderSystem.hpp>
-#include <Buffer.hpp>
-#include <SceneNode.hpp>
-#include <Scene.hpp>
-#include <Camera.hpp>
-#include <Viewport.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
-#include <Version.hpp>
-#include <Geometry.hpp>
-#include <Mesh.hpp>
 #include <Engine.hpp>
-#include <Submesh.hpp>
-#include <Texture.hpp>
-#include <Plugin.hpp>
-#include <Face.hpp>
-#include <Vertex.hpp>
-#include <Skeleton.hpp>
-#include <Parameter.hpp>
-#include <Animation.hpp>
-#include <KeyFrame.hpp>
+
+#include <Animation/Animation.hpp>
+#include <Animation/KeyFrame.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Face.hpp>
+#include <Mesh/Importer.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
+#include <Mesh/Skeleton/Skeleton.hpp>
+#include <Miscellaneous/Parameter.hpp>
+#include <Miscellaneous/Version.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/Viewport.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Scene/Scene.hpp>
+#include <Texture/TextureUnit.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <assimp/Importer.hpp> // C++ importer interface
 #include <assimp/scene.h> // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
-
-#ifndef _WIN32
-#	define C3D_Assimp_API
-#else
-#	ifdef AssimpImporter_EXPORTS
-#		define C3D_Assimp_API __declspec(dllexport)
-#	else
-#		define C3D_Assimp_API __declspec(dllimport)
-#	endif
-#endif
 
 namespace C3dAssimp
 {
@@ -78,20 +73,27 @@ namespace C3dAssimp
 		AssimpImporter( Castor3D::Engine & p_engine );
 		~AssimpImporter();
 
-	private:
-		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
-		bool DoProcessMesh( Castor3D::Scene & p_scene, Castor3D::SkeletonSPtr p_pSkeleton, aiMesh const * p_pAiMesh, aiScene const * p_pAiScene, Castor3D::SubmeshSPtr p_pSubmesh );
-		void DoLoadTexture( aiString const & p_name, Castor3D::Pass & p_pass, Castor3D::eTEXTURE_CHANNEL p_channel );
-		Castor3D::MaterialSPtr DoProcessMaterial( Castor3D::Scene & p_scene, aiMaterial const * p_pAiMaterial );
-		void DoProcessBones( Castor3D::SkeletonSPtr p_pSkeleton, aiBone ** p_pBones, uint32_t p_count, std::vector< Castor3D::stVERTEX_BONE_DATA > & p_arrayVertices );
-		Castor3D::AnimationSPtr DoProcessAnimation( Castor::String const & p_name, Castor3D::SkeletonSPtr, aiNode * p_node, aiAnimation * p_pAnimation );
-		void DoProcessAnimationNodes( Castor3D::AnimationSPtr p_pAnimation, Castor::real p_rTicksPerSecond, Castor3D::SkeletonSPtr, aiNode * p_node, aiAnimation * p_paiAnimation, Castor3D::AnimationObjectSPtr p_object );
+	private:
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+
+		bool DoProcessMesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor3D::Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Castor3D::Submesh & p_submesh );
+		Castor3D::MaterialSPtr DoProcessMaterial( Castor3D::Scene & p_scene, aiMaterial const & p_aiMaterial );
+		void DoProcessBones( Castor3D::Skeleton & p_pSkeleton, aiBone const * const * p_aiBones, uint32_t p_count, std::vector< Castor3D::VertexBoneData > & p_arrayVertices );
+		void DoProcessAnimation( Castor::String const & p_name, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation );
+		void DoProcessAnimationNodes( Castor3D::SkeletonAnimation & p_animation, int64_t p_ticksPerMilliSecond, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, Castor3D::SkeletonAnimationObjectSPtr p_object );
+		void DoProcessAnimationMeshes( Castor3D::Mesh & p_mesh, Castor3D::Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim );
 
 	private:
 		int m_anonymous;
-		Castor3D::MeshSPtr m_mesh;
 		std::map< Castor::String, uint32_t > m_mapBoneByID;
 		std::vector< Castor3D::BoneSPtr > m_arrayBones;
 	};

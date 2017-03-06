@@ -31,7 +31,7 @@ namespace CastorCom
 				CEngine * l_engn = static_cast< CEngine * >( engine );
 				Castor3D::Engine * l_engine = l_engn->GetInternal();
 				Castor::String l_name = FromBstr( name );
-				Castor::Path l_path = FromBstr( val );
+				Castor::Path l_path{ FromBstr( val ) };
 				Castor::Path l_pathImage = l_path;
 
 				if ( !Castor::File::FileExists( l_pathImage ) )
@@ -44,7 +44,7 @@ namespace CastorCom
 					l_pathImage = l_engine->GetDataDirectory() / cuT( "Texture" ) / l_path;
 				}
 
-				m_image = l_engine->GetImageManager().create( l_name, l_pathImage );
+				m_image = l_engine->GetImageCache().Add( l_name, l_pathImage );
 
 				if ( !m_image )
 				{
@@ -73,7 +73,7 @@ namespace CastorCom
 			if ( !m_image )
 			{
 				hr = S_OK;
-				m_image = l_engine->GetImageManager().create( l_name, *static_cast< CSize * >( size ), Castor::ePIXEL_FORMAT( fmt ) );
+				m_image = l_engine->GetImageCache().Add( l_name, *static_cast< CSize * >( size ), Castor::PixelFormat( fmt ) );
 			}
 			else
 			{

@@ -1,40 +1,37 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
-#ifndef ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
-#define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
+#ifndef ___C3D_DeferredRenderTechnique_H___
+#define ___C3D_DeferredRenderTechnique_H___
 
-#include <BufferDeclaration.hpp>
-#include <RenderTechnique.hpp>
-#include <Viewport.hpp>
+#include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Technique/RenderTechnique.hpp>
+#include <Render/Viewport.hpp>
+#include <Shader/UniformBuffer.hpp>
 
-#ifndef _WIN32
-#	define C3D_DeferredTechnique_API
-#else
-#	ifdef DeferredTechnique_EXPORTS
-#		define C3D_DeferredTechnique_API __declspec(dllexport)
-#	else
-#		define C3D_DeferredTechnique_API __declspec(dllimport)
-#	endif
-#endif
+#include <LightPass.hpp>
 
-namespace Deferred
+namespace deferred
 {
-	using Castor3D::Point3rFrameVariable;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -54,24 +51,6 @@ namespace Deferred
 		: public Castor3D::RenderTechnique
 	{
 	protected:
-		typedef enum eDS_TEXTURE
-			: uint8_t
-		{
-			eDS_TEXTURE_POSITION,
-			eDS_TEXTURE_AMBIENT,
-			eDS_TEXTURE_DIFFUSE,
-			eDS_TEXTURE_NORMALS,
-			eDS_TEXTURE_TANGENT,
-			eDS_TEXTURE_BITANGENT,
-			eDS_TEXTURE_SPECULAR,
-			eDS_TEXTURE_EMISSIVE,
-			eDS_TEXTURE_DEPTH,
-			eDS_TEXTURE_COUNT,
-		}	eDS_TEXTURE;
-
-		DECLARE_SMART_PTR( Point3rFrameVariable );
-
-	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -84,7 +63,7 @@ namespace Deferred
 		 *\param[in]	p_renderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
-		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
+		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
 
 	public:
 		/**
@@ -108,91 +87,78 @@ namespace Deferred
 		 *\param[in]	p_params		Les paramètres de la technique
 		 *\return		Un clône de cet objet
 		 */
-		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
 
 	protected:
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoCreate
-		 */
-		virtual bool DoCreate();
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
-		 */
-		virtual void DoDestroy();
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
-		virtual bool DoInitialise( uint32_t & p_index );
+		bool DoInitialise( uint32_t & p_index )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCleanup
 		 */
-		virtual void DoCleanup();
+		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderOpaque
 		 */
-		virtual bool DoBeginRender( Castor3D::Scene & p_scene );
+		void DoRenderOpaque( Castor3D::RenderInfo & p_info )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoRender
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderTransparent
 		 */
-		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime );
+		void DoRenderTransparent( Castor3D::RenderInfo & p_info )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
+		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
-		virtual void DoEndRender( Castor3D::Scene & p_scene );
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetPixelShaderSource
-		 */
-		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		Castor::String DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		Castor::String DoGetLightPassPixelShaderSource( uint32_t p_flags )const;
+		bool DoWriteInto( Castor::TextFile & p_file )override;
+		bool DoInitialiseGeometryPass( uint32_t & p_index );
+		bool DoInitialiseLightPass();
+		void DoCleanupGeometryPass();
+		void DoCleanupLightPass();
+		void DoUpdateSceneUbo();
+		void DoRenderLights( Castor3D::LightType p_type, bool & p_first );
 
-	protected:
-		//!\~english The various textures	\~french Les diverses textures
-		Castor3D::TextureUnitSPtr m_lightPassTextures[eDS_TEXTURE_COUNT];
-		//!\~english The deferred shading frame buffer	\~french Le tampon d'image pour le deferred shading
+	public:
+		static Castor::String const Type;
+		static Castor::String const Name;
+
+	private:
+		using GeometryBufferTextures = std::array< Castor3D::TextureUnitUPtr, size_t( deferred_common::DsTexture::eCount ) >;
+		using GeometryBufferAttachs = std::array< Castor3D::TextureAttachmentSPtr, size_t( deferred_common::DsTexture::eCount ) >;
+		using LightPasses = std::array< std::unique_ptr< deferred_common::LightPass >, size_t( Castor3D::LightType::eCount ) >;
+
+		//!\~english	The various textures.
+		//!\~french		Les diverses textures.
+		GeometryBufferTextures m_lightPassTextures;
+		//!\~english	The depth buffer.
+		//!\~french		Le tampon de profondeur.
+		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;
+		//!\~english	The deferred shading frame buffer.
+		//!\~french		Le tampon d'image pour le deferred shading.
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
-		//!\~english The attachments between textures and deferred shading frame buffer	\~french Les attaches entre les texture et le tampon deferred shading
-		Castor3D::TextureAttachmentSPtr m_geometryPassTexAttachs[eDS_TEXTURE_COUNT];
-		//!\~english The shader program used to render lights	\~french Le shader utilisé pour rendre les lumières
-		Castor3D::ShaderProgramSPtr m_lightPassShaderProgram;
-		//!\~english The framve variable buffer used to apply matrices	\~french Le tampon de variables shader utilisé pour appliquer les matrices
-		Castor3D::FrameVariableBufferWPtr m_lightPassMatrices;
-		//!\~english The framve variable buffer used to transmit scene values	\~french Le tampon de variables shader utilisé pour transmettre les variables de scène
-		Castor3D::FrameVariableBufferWPtr m_lightPassScene;
-		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
-		Castor3D::BufferDeclaration m_declaration;
-		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
-		//!\~english The vertex buffer.	\~french Le tampon de sommets.
-		Castor3D::VertexBufferUPtr m_vertexBuffer;
-		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
-		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)
-		Castor3D::Viewport m_viewport;
-		//!\~english The shader variable containing the camera position	\~french La variable de shader contenant la position de la caméra
-		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
-		//!\~english The depth stencil state used by the geometric pass	\~french Le DepthStencilState utilisé par la passe géométrique
-		Castor3D::DepthStencilStateSPtr m_geometryPassDsState;
-		//!\~english The depth stencil state used by the lights pass	\~french Le DepthStencilState utilisé par la passe lumières
-		Castor3D::DepthStencilStateSPtr m_lightPassDsState;
-		//!\~english The blend state used by the lights pass	\~french Le BlendState utilisé par la passe lumières
-		Castor3D::BlendStateSPtr m_lightPassBlendState;
+		//!\~english	The attachments between textures and deferred shading frame buffer.
+		//!\~french		Les attaches entre les textures et le tampon deferred shading.
+		GeometryBufferAttachs m_geometryPassTexAttachs;
+		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
+		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
+		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
+		//!\~english	The uniform buffer containing the scene data.
+		//!\~french		Le tampon d'uniformes contenant les données de scène.
+		Castor3D::UniformBuffer m_sceneUbo;
+		//!\~english	The shader variable holding the camera position.
+		//!\~french		La variable shader contenant la position de la caméra.
+		Castor3D::Uniform3fSPtr m_cameraPos;
+		//!\~english	The shader variable holding fog type.
+		//!\~french		La variable shader contenant le type de brouillard.
+		Castor3D::Uniform1iSPtr m_fogType;
+		//!\~english	The shader variable holding fog density.
+		//!\~french		La variable shader contenant la densité du brouillard.
+		Castor3D::Uniform1fSPtr m_fogDensity;
+		//!\~english	The shader program used to render directional lights.
+		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
+		LightPasses m_lightPass;
+		//!\~english	The shader program used to render directional lights.
+		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
+		LightPasses m_lightPassShadow;
 	};
 }
 

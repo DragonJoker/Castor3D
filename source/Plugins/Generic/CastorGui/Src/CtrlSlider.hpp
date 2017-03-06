@@ -1,28 +1,34 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (At your option ) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___CI_CTRL_SLIDER_H___
 #define ___CI_CTRL_SLIDER_H___
 
 #include "CtrlControl.hpp"
 
+#include <Math/RangedValue.hpp>
+
 namespace CastorGui
 {
-	typedef std::pair< int, int > Range;
 	/*!
 	 *\author		Sylvain DOREMU
 	 *\date		16/02/201
@@ -32,6 +38,11 @@ namespace CastorGui
 	class SliderCtrl
 		: public Control
 	{
+	public:
+		using OnEventFunction = std::function< void( int ) >;
+		using OnEvent = Castor::Signal< OnEventFunction >;
+		using OnEventConnection = OnEvent::connection;
+
 	public:
 		/** Constructor
 		 *\param[in]	p_engine	The engine
@@ -43,15 +54,21 @@ namespace CastorGui
 		/** Constructor
 		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
-		 *\param[in]	p_range		The slider min and max value
-		 *\param[in]	p_value		The slider initial value
+		 *\param[in]	p_value		The slider initial value, and its range
 		 *\param[in]	p_id		The control ID
 		 *\param[in]	p_position	The position
 		 *\param[in]	p_size		The size
 		 *\param[in]	p_style		The style
 		 *\param[in]	p_visible	Initial visibility status
 		 */
-		SliderCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		SliderCtrl( Castor3D::Engine * p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id
+			, Castor::RangedValue< int32_t > const & p_value
+			, Castor::Position const & p_position
+			, Castor::Size const & p_size
+			, uint32_t p_style = 0
+			, bool p_visible = true );
 
 		/** Destructor
 		*/
@@ -60,7 +77,7 @@ namespace CastorGui
 		/** Sets the range
 		*\param[in]	p_value		The new value
 		*/
-		void SetRange( Range const & p_value );
+		void SetRange( Castor::Range< int32_t > const & p_value );
 
 		/** Sets the caption
 		*\param[in]	p_value		The new value
@@ -70,9 +87,9 @@ namespace CastorGui
 		/** Retrieves the range
 		 *\return		The value
 		*/
-		inline Range const & GetRange()const
+		inline Castor::Range< int32_t > const & GetRange()const
 		{
-			return m_range;
+			return m_value.range();
 		}
 
 		/** Retrieves the caption
@@ -80,7 +97,7 @@ namespace CastorGui
 		*/
 		inline int32_t GetValue()const
 		{
-			return m_value;
+			return m_value.value();
 		}
 
 		/** Connects a function to a slider event
@@ -88,18 +105,9 @@ namespace CastorGui
 		*\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		*/
-		inline uint32_t Connect( eSLIDER_EVENT p_event, std::function< void( int ) > p_function )
+		inline OnEventConnection Connect( SliderEvent p_event, OnEventFunction p_function )
 		{
-			return m_signals[p_event].Connect( p_function );
-		}
-
-		/** Disconnects a function from a slider event
-		*\param[in]	p_event		The event type
-		*\param[in]	p_index		The function index
-		*/
-		inline void Disconnect( eSLIDER_EVENT p_event, uint32_t p_index )
-		{
-			m_signals[p_event].Disconnect( p_index );
+			return m_signals[size_t( p_event )].connect( p_function );
 		}
 
 	private:
@@ -144,45 +152,45 @@ namespace CastorGui
 		/** Event when mouse moves over the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseMove( MouseEvent const & p_event );
+		void OnMouseMove( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse leaves the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLeave( MouseEvent const & p_event );
+		void OnMouseLeave( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLButtonUp( MouseEvent const & p_event );
+		void OnMouseLButtonUp( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse moves over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseMove( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnTickMouseMove( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseLButtonDown( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnTickMouseLButtonDown( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseLButtonUp( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnTickMouseLButtonUp( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnKeyDown( KeyboardEvent const & p_event );
+		void OnKeyDown( Castor3D::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event );
+		void OnNcKeyDown( ControlSPtr p_control, Castor3D::KeyboardEvent const & p_event );
 
 		/** Updates the tick position
 		 *\param[in]	p_delta		The position delta
@@ -196,9 +204,7 @@ namespace CastorGui
 
 	private:
 		//! The slider range
-		Range m_range;
-		//! The slider current value
-		int32_t m_value;
+		Castor::RangedValue< int32_t > m_value;
 		//! Tells the tick is moving
 		bool m_scrolling;
 		//! The previous mouse position
@@ -208,7 +214,7 @@ namespace CastorGui
 		//! The static used to display the line
 		StaticCtrlWPtr m_tick;
 		//! The slider events signals
-		Signal< std::function< void( int ) > > m_signals[eSLIDER_EVENT_COUNT];
+		OnEvent m_signals[size_t( SliderEvent::eCount )];
 	};
 }
 

@@ -1,29 +1,34 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
-#ifndef ___CI_CONTROLS_MANAGER_H___
-#define ___CI_CONTROLS_MANAGER_H___
+#ifndef ___CI_CONTROLS_CACHE_H___
+#define ___CI_CONTROLS_CACHE_H___
 
 #include "CastorGuiPrerequisites.hpp"
 
-#include <Position.hpp>
-#include <FrameListener.hpp>
+#include <Graphics/Position.hpp>
+#include <Event/UserInput/UserInputListener.hpp>
 
-#include "EventHandler.hpp"
+#include <Event/UserInput/EventHandler.hpp>
 
 namespace CastorGui
 {
@@ -35,7 +40,7 @@ namespace CastorGui
 	*/
 	class ControlsManager
 		: public std::enable_shared_from_this< ControlsManager >
-		, public Castor3D::FrameListener
+		, public Castor3D::UserInputListener
 	{
 	public:
 		/**@name General */
@@ -44,32 +49,11 @@ namespace CastorGui
 		/** Constructor
 		 *\param[in]	p_engine		The engine
 		*/
-		C3D_CGui_API ControlsManager( Castor3D::Engine * p_engine );
+		C3D_CGui_API ControlsManager( Castor3D::Engine & p_engine );
 
 		/** Destructor
 		*/
 		C3D_CGui_API virtual ~ControlsManager();
-
-		/** Initialises the base materials.
-		 *\return		true, hopefully :P
-		*/
-		C3D_CGui_API bool Initialise();
-
-		/** Cleans up the manager.
-		*/
-		C3D_CGui_API void Cleanup();
-
-		/** Handles all queued events
-		*/
-		C3D_CGui_API void ProcessEvents();
-
-		/** Retrieves the current mouse position
-		 *\return		The value
-		*/
-		Castor::Position const & GetMousePosition()const
-		{
-			return m_mouse.m_position;
-		}
 
 		/** Retrieves the default font used by controls
 		 *\return		The font
@@ -86,63 +70,6 @@ namespace CastorGui
 		{
 			m_defaultFont = p_font;
 		}
-
-		//@}
-		/**@name Mouse events */
-		//@{
-
-		/** Fires a mouse move event.
-		 *\param[in]	p_position	The mouse position.
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireMouseMove( Castor::Position const & p_position );
-
-		/** Fires a mouse pushed event.
-		 *\param[in]	p_button	The mouse button.
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireMouseButtonPushed( eMOUSE_BUTTON p_button );
-
-		/** Fires a mouse released event.
-		 *\param[in]	p_button	The mouse button.
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireMouseButtonReleased( eMOUSE_BUTTON p_button );
-
-		/** Fires a mouse wheel event.
-		 *\param[in]	p_offsets	The mouse wheel offsets (x and y).
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireMouseWheel( Castor::Position const & p_offsets );
-
-		//@}
-		/**@name Keyboard events */
-		//@{
-
-		/** Fires a keyboard key down event.
-		 *\param[in]	p_key		The key.
-		 *\param[in]	p_ctrl		Tells if the Ctrl key is down.
-		 *\param[in]	p_alt		Tells if the Alt key is down.
-		 *\param[in]	p_shift		Tells if the Shift key is down.
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
-
-		/** Fires a keyboard key up event.
-		 *\param[in]	p_key		The key.
-		 *\param[in]	p_ctrl		Tells if the Ctrl key is down.
-		 *\param[in]	p_alt		Tells if the Alt key is down.
-		 *\param[in]	p_shift		Tells if the Shift key is down.
-		 *\return		\p true if the event is processed by a control.
-		*/
-		C3D_CGui_API bool FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
-
-		/** Fires a printable key event.
-		 *\param[in]	p_key		The key.
-		 *\param[in]	p_char		The character coorresponding to the key, displayable as is.
-		 *\return		\p true if the event is processed by a control.
-		*/
-		C3D_CGui_API bool FireChar( eKEYBOARD_KEY p_key, Castor::String const & p_char );
 
 		//@}
 		/**@name Controls management */
@@ -174,29 +101,22 @@ namespace CastorGui
 		*/
 		C3D_CGui_API ControlSPtr GetControl( uint32_t p_id );
 
-		/** Retrieves the active control
-		 *\return		The control
-		*/
-		inline ControlSPtr GetActiveControl()const
-		{
-			return m_activeControl.lock();
-		}
-
-		/** Retrieves the focused control
-		 *\return		The control
-		*/
-		inline ControlSPtr GetFocusedControl()const
-		{
-			return m_lastMouseTarget.lock();
-		}
-
 		//@}
 
 	private:
-		/** Retrieves the first control which can be targeted by mouse, at its position
+		/** Initialises the base materials.
+		*\return		true, hopefully :P
+		*/
+		bool DoInitialise();
+
+		/** Cleans up the manager.
+		*/
+		void DoCleanup();
+
+		/** Retrieves the first handler which can be targeted by mouse, at its position
 		 *\param[in]	p_position		The mouse position
 		*/
-		ControlSPtr DoGetMouseTargetableControl( Castor::Position const & p_position )const;
+		Castor3D::EventHandlerSPtr DoGetMouseTargetableHandler( Castor::Position const & p_position )const;
 
 		/** Updates the z-index ordered controls array
 		*/
@@ -211,38 +131,15 @@ namespace CastorGui
 		 */
 		virtual void DoFlush();
 
-		/** Retrieve the controls in a thread-safe way
-		 *\return		The controls array
-		*/
-		std::vector< ControlSPtr > DoGetControls()const
-		{
-			std::unique_lock< std::mutex > l_lock( m_mutexControls );
-			return m_controls;
-		}
-
 	private:
-		//! The engine
-		Castor3D::Engine * m_engine;
-		//! The current mouse state
-		MouseState m_mouse;
-		//! The current keyboard state
-		KeyboardState m_keyboard;
-		//! The currently active control
-		ControlWPtr m_activeControl;
-		//! The currently active control
-		ControlWPtr m_lastMouseTarget;
-		//! The mutex used to protect the controls array.
+		//!\~english  The mutex used to protect the controls array.	\~french Le mutex de protection du tableau de contrôles.
 		mutable std::mutex m_mutexControls;
-		//! The controls array
-		std::vector< ControlSPtr > m_controls;
 		//! The controls array
 		mutable std::vector< ControlSPtr > m_controlsByZIndex;
 		//! The controls map, sorted by ID
 		std::map< uint32_t, ControlWPtr > m_controlsById;
 		//! Tells the controls array has changed
 		bool m_changed;
-		//! Tells if the manager needs to be refreshed or not.
-		bool m_enabled;
 		//! The default font used by controls
 		Castor::FontWPtr m_defaultFont;
 	};

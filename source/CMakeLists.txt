@@ -1,4 +1,5 @@
 cmake_minimum_required( VERSION 2.8 )
+
 #--------------------------------------------------------------------------------------------------
 #	Initial configurations
 #--------------------------------------------------------------------------------------------------
@@ -7,14 +8,15 @@ set( MAIN_PROJECT_NAME "Castor3D" )
 
 # Set project version numbers
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 8 )
+set( VERSION_MINOR 9 )
 set( VERSION_BUILD 0 )
-set( VERSION_YEAR 2015 )
+set( VERSION_YEAR 2016 )
 
 # Used to look for external modules
 set( CMAKE_MODULE_PATH
 	${CMAKE_SOURCE_DIR}/CMake
 	${CMAKE_SOURCE_DIR}/CMake/Modules
+	${CMAKE_SOURCE_DIR}/CMake/Toolchains
 )
 set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
 # Experimental Precompiled headers support for GCC
@@ -36,18 +38,27 @@ include( ExternalDependencies )
 # Organize projects into folders
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 
-if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER}/${PROJECTS_PLATFORM}/ )
+set( COMPILER_FOLDER ${COMPILER} )
+
+if ( ${COMPILER_FOLDER} STREQUAL "vc15" )
+	set( COMPILER_FOLDER "vc14" )
+endif ()
+
+if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM}/ )
 	message( STATUS "Found dependencies folder, fetching libraries from it" )
-	set( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER}/${PROJECTS_PLATFORM} )
+	get_filename_component( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} REALPATH )
 	set( ENV{FREETYPE_DIR} ${DEPENDENCIES_DIR}/freetype )
 	set( ZLIB_ROOT ${DEPENDENCIES_DIR}/zlib )
 	set( FreeImage_ROOT_DIR ${DEPENDENCIES_DIR}/FreeImage )
-	set( LIBZIP_ROOT_DIR ${DEPENDENCIES_DIR}/libzip )
+	set( FbxSDK_ROOT_DIR ${DEPENDENCIES_DIR}/FbxSDK )
 	set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
 	set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
+	set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
 	set( OpenCV_DIR ${DEPENDENCIES_DIR}/opencv )
 	set( OpenCV_LIBRARY_DIR ${DEPENDENCIES_DIR}/opencv/lib )
 	set( OpenCV_LIB_DIR_OPT ${DEPENDENCIES_DIR}/opencv/lib )
+	#set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets )
+	#set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib )
 endif ()
 
 #--------------------------------------------------------------------------------------------------
@@ -106,15 +117,6 @@ foreach(Lib ${Boost_LIBRARIES})
 	endif()
 endforeach()
 
-if( MSVC )
-	# We remove the existing /Zm flag to replace it by /Zm300
-	string( REGEX REPLACE ".*(/Zm[0-9]+).*" "\\1" ZmFlag ${CMAKE_CXX_FLAGS} )
-	if( (NOT "${ZmFlag}" STREQUAL "") AND (NOT "${CMAKE_CXX_FLAGS}" STREQUAL "${ZmFlag}") )
-		string( REPLACE ${ZmFlag} "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
-	endif()
-	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
-endif()
-
 msg_debug( "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 msg_debug( "CMAKE_C_FLAGS    : ${CMAKE_C_FLAGS}" )
 msg_debug( "CMAKE_CXX_FLAGS  : ${CMAKE_CXX_FLAGS}" )
@@ -128,11 +130,50 @@ set( CastorBinsDependencies
 	Castor3D
 )
 
+#--------------------------------------------------------------------------------------------------
+#	MSVC specifics
+#--------------------------------------------------------------------------------------------------
+if( MSVC )
+	# We remove the existing /Zm flag to replace it by /Zm300
+	string( REGEX REPLACE ".*(/Zm[0-9]+).*" "\\1" ZmFlag ${CMAKE_CXX_FLAGS} )
+	if( (NOT "${ZmFlag}" STREQUAL "") AND (NOT "${CMAKE_CXX_FLAGS}" STREQUAL "${ZmFlag}") )
+		string( REPLACE ${ZmFlag} "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+	endif()
+	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
+	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
+	file( COPY ${CMAKE_SOURCE_DIR}/../data/VS/Rebracer.xml DESTINATION ${CMAKE_BINARY_DIR} )
+endif()
+
+add_definitions(
+ -DVERSION_MAJOR=${VERSION_MAJOR}
+ -DVERSION_MINOR=${VERSION_MINOR}
+ -DVERSION_BUILD=${VERSION_BUILD}
+)
+
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
 
+# Small macro to add subdirectory files to current target source and header files
+macro( parse_subdir_files _FOLDER _GROUP )
+	file( GLOB _FOLDER_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.inl
+ )
+	file( GLOB _FOLDER_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.c
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.cpp
+ )
+	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
+	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
+endmacro()
+
 if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	if( Boost_FOUND )
+		if ( CASTOR_BUILDGRP_TEST )
+			enable_testing()
+		endif ()
+
 		add_subdirectory( Core )
 		if ( ${CASTOR_BUILD_CASTOR3D} )
 			add_subdirectory( Plugins )
@@ -156,16 +197,20 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			InteropBuild()
 		endif ()
 		ToolsBuild()
-	
+
 		set( msg "\nCastor following projects will be built" )
-		CoreSummary( ${msg} )
+		set( msgtest "Test projects :" )
+		CoreSummary( ${msg} ${msgtest} )
 		if ( ${CASTOR_BUILD_CASTOR3D} )
-			PluginsSummary( ${msg} )
-			SamplesSummary( ${msg} )
-			InteropSummary( ${msg} )
+			PluginsSummary( ${msg} ${msgtest} )
+			SamplesSummary( ${msg} ${msgtest} )
+			InteropSummary( ${msg} ${msgtest} )
 		endif ()
-		ToolsSummary( ${msg} )
+		ToolsSummary( ${msg} ${msgtest} )
 		message( STATUS "${msg}\n" )
+		if( ${CASTOR_BUILDGRP_TEST} )
+			message( STATUS "${msgtest}\n" )
+		endif ()
 
 		if ( ${CASTOR_BUILDGRP_SETUP} )
 			if ( ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_DEB}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" ) )
@@ -180,7 +225,8 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				set( CPACK_PACKAGE_VENDOR "DragonJoker" )
 				set( CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${PROJECTS_PLATFORM}" )
 				set( CPACK_OUTPUT_FILE_PREFIX "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )
-				set( CPACK_RESOURCE_FILE_LICENSE "${PARENT_DIR}/LGPL.txt" )
+				set( CPACK_RESOURCE_FILE_LICENSE "${PARENT_DIR}/MIT.txt" )
+				set( CMAKE_SYSTEM_ARCHITECTURE ${PROJECTS_PLATFORM} )
 
 				if ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" )
 					set( CPACK_GENERATOR "WIX" )
@@ -198,7 +244,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 					set( CPACK_DEB_COMPONENT_INSTALL ON )
 					set( CPACK_GENERATOR "DEB" )
 					set( CPACK_DEBIAN_PACKAGE_MAINTAINER "Sylvain Doremus" )
-					set( CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}libfreetype6-dev (>= 2.4.2), libfreeimage-dev (>= 3.10.0)" )
+					set( CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}libfreetype6 (>= 2.5.2), libfreeimage3 (>= 3.15.4), zlib1g (>= 1.2.8)" )
 					set( CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_ARCHITECTURE}" )
 					set( CPACK_DEBIAN_PACKAGE_SECTION "devel" )
 					set( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
@@ -209,7 +255,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 					set( CPACK_RPM_PACKAGE_SUMMARY "Castor3D" )
 					set( CPACK_RPM_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_ARCHITECTURE}" )
 					set( CPACK_RPM_PACKAGE_GROUP "Development/Tools/Other" )
-					set( CPACK_RPM_PACKAGE_LICENSE "LGPL" )
+					set( CPACK_RPM_PACKAGE_LICENSE "MIT" )
 					set( CPACK_RPM_SPEC_MORE_DEFINE "%define _rpmdir ${Castor_PACKAGE_DIR}" )
 					set( CPACK_RPM_SPEC_MORE_DEFINE "%define _rpmfilename ${CPACK_PACKAGE_FILE_NAME}.rpm" )
 					set( CPACK_RPM_SPEC_MORE_DEFINE "%define _unpackaged_files_terminate_build 0" )

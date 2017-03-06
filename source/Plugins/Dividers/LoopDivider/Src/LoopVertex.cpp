@@ -4,8 +4,8 @@ using namespace Castor;
 
 namespace Loop
 {
-	Vertex::Vertex( Castor3D::BufferElementGroupSPtr p_ptPoint )
-		:	m_ptPoint( p_ptPoint	)
+	Vertex::Vertex( Castor3D::BufferElementGroupSPtr p_point )
+		:	m_ptPoint( p_point	)
 	{
 	}
 
@@ -14,15 +14,15 @@ namespace Loop
 		m_mapEdges.clear();
 	}
 
-	bool Vertex::HasEdge( uint32_t p_uiIndex )
+	bool Vertex::HasEdge( uint32_t p_index )
 	{
-		return m_mapEdges.find( p_uiIndex ) != m_mapEdges.end();
+		return m_mapEdges.find( p_index ) != m_mapEdges.end();
 	}
 
-	EdgeSPtr Vertex::GetEdge( uint32_t p_uiIndex )
+	EdgeSPtr Vertex::GetEdge( uint32_t p_index )
 	{
 		EdgeSPtr l_return;
-		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_uiIndex );
+		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_index );
 
 		if ( l_it != m_mapEdges.end() )
 		{
@@ -32,19 +32,19 @@ namespace Loop
 		return l_return;
 	}
 
-	void Vertex::AddEdge( EdgeSPtr p_pEdge, uint32_t p_uiIndex )
+	void Vertex::AddEdge( EdgeSPtr p_pEdge, uint32_t p_index )
 	{
-		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_uiIndex );
+		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_index );
 
 		if ( l_it == m_mapEdges.end() )
 		{
-			m_mapEdges.insert( std::make_pair( p_uiIndex, p_pEdge ) );
+			m_mapEdges.insert( std::make_pair( p_index, p_pEdge ) );
 		}
 	}
 
-	void Vertex::RemoveEdge( uint32_t p_uiIndex )
+	void Vertex::RemoveEdge( uint32_t p_index )
 	{
-		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_uiIndex );
+		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_index );
 
 		if ( l_it != m_mapEdges.end() )
 		{

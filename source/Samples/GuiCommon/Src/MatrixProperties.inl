@@ -100,7 +100,7 @@ namespace GuiCommon
 					l_names[j] << p_colNames[i] << wxT( "." ) << p_rowNames[j];
 				}
 
-				wxPGProperty * l_property = new PointProperty< T, Count >( l_names, wxString() << _( "Col " ) << p_rowNames[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i] ) );
+				wxPGProperty * l_property = new PointProperty< T, Count >( l_names, wxString() << _( "Col " ) << p_rowNames[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i].const_ptr() ) );
 				l_property->Enable( false );
 				p_prop->AddPrivateChild( l_property );
 			}
@@ -112,7 +112,7 @@ namespace GuiCommon
 			for ( size_t i = 0; i < Count; ++i )
 			{
 				wxVariant l_value = p_prop->Item( i )->GetValue();
-				SetVariantFromPoint< T, Count >( l_value, Castor::Point< T, Count >( l_matrix[i] ) );
+				SetVariantFromPoint< T, Count >( l_value, Castor::Point< T, Count >( l_matrix[i].const_ptr() ) );
 				p_prop->Item( i )->SetValue( l_value );
 			}
 		}

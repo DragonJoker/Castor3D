@@ -12,24 +12,24 @@
 
 #include "AdditionalProperties.hpp"
 
-#include <Geometry.hpp>
-#include <Submesh.hpp>
-#include <Light.hpp>
-#include <DirectionalLight.hpp>
-#include <PointLight.hpp>
-#include <SpotLight.hpp>
-#include <SceneNode.hpp>
-#include <Overlay.hpp>
-#include <PanelOverlay.hpp>
-#include <BorderPanelOverlay.hpp>
-#include <TextOverlay.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
-
-#include <MaterialManager.hpp>
 #include <Engine.hpp>
-#include <Font.hpp>
+#include <Cache/MaterialCache.hpp>
+
+#include <Material/Pass.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Overlay/Overlay.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Scene/Light/Light.hpp>
+#include <Scene/Light/DirectionalLight.hpp>
+#include <Scene/Light/PointLight.hpp>
+#include <Scene/Light/SpotLight.hpp>
+#include <Texture/TextureUnit.hpp>
+
+#include <Graphics/Font.hpp>
 
 #include <wx/propgrid/advprops.h>
 

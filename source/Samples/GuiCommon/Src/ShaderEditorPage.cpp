@@ -5,20 +5,20 @@
 #include "FrameVariablesList.hpp"
 #include "PropertiesHolder.hpp"
 
-#include <RenderSystem.hpp>
-#include <ShaderProgram.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
 namespace GuiCommon
 {
-	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_parent, wxPoint const & p_position, const wxSize p_size )
+	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::ShaderType p_type, wxWindow * p_parent, wxPoint const & p_position, const wxSize p_size )
 		: wxPanel( p_parent, wxID_ANY, p_position, p_size )
 		, m_shaderProgram( p_shader )
 		, m_stcContext( p_stcContext )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 		, m_shaderType( p_type )
-		, m_shaderModel( eSHADER_MODEL_COUNT )
+		, m_shaderModel( ShaderModel::eCount )
 #if defined( NDEBUG )
 		, m_canEdit( p_bCanEdit )
 #else
@@ -27,7 +27,7 @@ namespace GuiCommon
 	{
 		DoInitialiseShaderLanguage();
 
-		if ( m_shaderModel != eSHADER_MODEL_COUNT )
+		if ( m_shaderModel != ShaderModel::eCount )
 		{
 			DoInitialiseLayout();
 			DoLoadPage();
@@ -52,14 +52,8 @@ namespace GuiCommon
 		if ( m_shaderFile.empty() && p_createIfNone )
 		{
 			wxString l_wildcard;
-
-			switch ( l_program->GetLanguage() )
-			{
-			case Castor3D::eSHADER_LANGUAGE_GLSL:
-				l_wildcard = _( "GLSL Files" );
-				l_wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
-				break;
-			}
+			l_wildcard = _( "GLSL Files" );
+			l_wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
 
 			wxFileDialog l_dialog( this, _( "Save Shader file " ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -78,30 +72,10 @@ namespace GuiCommon
 
 	void ShaderEditorPage::DoInitialiseShaderLanguage()
 	{
-		m_shaderModel = eSHADER_MODEL_COUNT;
+		m_shaderModel = ShaderModel::eCount;
 		ShaderProgramSPtr l_program = m_shaderProgram.lock();
 		RenderSystem * l_renderSystem = l_program->GetRenderSystem();
-
-		if ( l_renderSystem->CheckSupport( eSHADER_MODEL_5 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_5;
-		}
-		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_4 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_4;
-		}
-		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_3 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_3;
-		}
-		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_2 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_2;
-		}
-		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_1 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_1;
-		}
+		m_shaderModel = l_program->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 	}
 
 	void ShaderEditorPage::DoInitialiseLayout()
@@ -147,32 +121,25 @@ namespace GuiCommon
 	void ShaderEditorPage::DoLoadPage()
 	{
 		ShaderProgramSPtr l_program = m_shaderProgram.lock();
-		wxString l_extension;
-
-		switch ( l_program->GetLanguage() )
-		{
-		case Castor3D::eSHADER_LANGUAGE_GLSL:
-			l_extension = wxT( ".glsl" );
-			break;
-		}
+		wxString l_extension = wxT( ".glsl" );
 
 		wxArrayString l_arrayChoices;
 		l_arrayChoices.push_back( wxCOMBO_NEW );
 
-		if ( l_program->GetObjectStatus( m_shaderType ) != eSHADER_STATUS_DONTEXIST )
+		if ( l_program->GetObjectStatus( m_shaderType ) != ShaderStatus::eDontExist )
 		{
 			// Load the shader source file/text
-			int l_shaderModel = m_shaderModel;
+			uint8_t l_shaderModel = uint8_t( m_shaderModel );
 
-			while ( m_shaderSource.empty() && m_shaderFile.empty() && l_shaderModel >= eSHADER_MODEL_1 )
+			while ( m_shaderSource.empty() && m_shaderFile.empty() && ShaderModel( l_shaderModel ) >= ShaderModel::eModel1 )
 			{
-				m_shaderSource = l_program->GetSource( m_shaderType, eSHADER_MODEL( l_shaderModel ) );
-				m_shaderFile = l_program->GetFile( m_shaderType, eSHADER_MODEL( l_shaderModel ) );
+				m_shaderSource = l_program->GetSource( m_shaderType, ShaderModel( l_shaderModel ) );
+				m_shaderFile = l_program->GetFile( m_shaderType, ShaderModel( l_shaderModel ) );
 
 				if ( !m_shaderSource.empty() || !m_shaderFile.empty() )
 				{
 					// Stop the loop as soon as we've got one of source or file
-					l_shaderModel = eSHADER_MODEL_1;
+					l_shaderModel = uint8_t( ShaderModel::eModel1 );
 				}
 
 				--l_shaderModel;

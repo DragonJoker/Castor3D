@@ -1,26 +1,31 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef __COMC3D_COM_RASTERISER_STATE_H__
 #define __COMC3D_COM_RASTERISER_STATE_H__
 
 #include "ComColour.hpp"
 
-#include <RasteriserState.hpp>
+#include <State/RasteriserState.hpp>
 
 namespace CastorCom
 {
@@ -66,13 +71,10 @@ namespace CastorCom
 		COM_PROPERTY( CulledFaces, eFACE, make_getter( m_state.get(), &Castor3D::RasteriserState::GetCulledFaces ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetCulledFaces ) );
 		COM_PROPERTY( FrontCCW, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetFrontCCW ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetFrontCCW ) );
 		COM_PROPERTY( AntialiasedLines, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetAntialiasedLines ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetAntialiasedLines ) );
-		COM_PROPERTY( DepthBias, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBias ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBias ) );
+		COM_PROPERTY( DepthBiasUnit, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBiasUnit ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBiasUnit ) );
+		COM_PROPERTY( DepthBiasFactor, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBiasFactor ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBiasFactor ) );
 		COM_PROPERTY( DepthClipping, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthClipping ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthClipping ) );
-		COM_PROPERTY( Multisample, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetMultisample ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetMultisample ) );
 		COM_PROPERTY( Scissor, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetScissor ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetScissor ) );
-
-		STDMETHOD( Initialise )();
-		STDMETHOD( Cleanup )();
 
 	private:
 		Castor3D::RasteriserStateSPtr m_state;

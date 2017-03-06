@@ -1,41 +1,23 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
-
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
-*/
-
-namespace GLSL
+﻿namespace GLSL
 {
-	inline GlslBool::GlslBool()
+	inline Boolean::Boolean()
 		: Type( cuT( "bool " ) )
 	{
 	}
 
-	inline GlslBool::GlslBool( bool p_value )
+	inline Boolean::Boolean( bool p_value )
 		: Type( cuT( "bool " ) )
 	{
 		m_value << p_value;
 	}
 
-	inline GlslBool::GlslBool( GlslWriter * p_writer, Castor::String const & p_name )
+	inline Boolean::Boolean( GlslWriter * p_writer, Castor::String const & p_name )
 		: Type( cuT( "bool " ), p_writer, p_name )
 	{
 	}
 
 	template< typename T >
-	inline GlslBool & GlslBool::operator=( T const & p_rhs )
+	inline Boolean & Boolean::operator=( T const & p_rhs )
 	{
 		UpdateWriter( p_rhs );
 		WriteAssign( m_writer, *this, p_rhs );
@@ -43,13 +25,13 @@ namespace GLSL
 	}
 
 	template< typename T >
-	inline GlslBool & GlslBool::operator=( int p_rhs )
+	inline Boolean & Boolean::operator=( int p_rhs )
 	{
 		WriteAssign( m_writer, *this, p_rhs );
 		return *this;
 	}
 
-	inline GlslBool::operator uint32_t()
+	inline Boolean::operator uint32_t()
 	{
 		return 0u;
 	}

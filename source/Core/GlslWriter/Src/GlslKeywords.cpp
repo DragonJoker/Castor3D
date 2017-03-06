@@ -21,7 +21,14 @@ namespace GLSL
 			break;
 
 		case 130:
-			l_return = std::make_unique< Keywords< 130 > >();
+			if ( p_rs.m_hasConstantsBuffers )
+			{
+				l_return = std::make_unique< Keywords< 140 > >();
+			}
+			else
+			{
+				l_return = std::make_unique< Keywords< 130 > >();
+			}
 			break;
 
 		case 140:
@@ -50,6 +57,14 @@ namespace GLSL
 
 		case 430:
 			l_return = std::make_unique< Keywords< 430 > >();
+			break;
+
+		case 440:
+			l_return = std::make_unique< Keywords< 440 > >();
+			break;
+
+		case 450:
+			l_return = std::make_unique< Keywords< 450 > >();
 			break;
 
 		default:

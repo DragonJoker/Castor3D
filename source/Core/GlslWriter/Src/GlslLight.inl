@@ -1,23 +1,7 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
-
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
-*/
-
 namespace GLSL
 {
+	//*********************************************************************************************
+
 	Light::Light()
 		: Type( cuT( "Light " ) )
 	{
@@ -61,33 +45,185 @@ namespace GLSL
 		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Intensity" ) );
 	}
 
-	Vec3 Light::m_v3Position()const
+	//*********************************************************************************************
+
+	DirectionalLight::DirectionalLight()
+		: Type( cuT( "DirectionalLight " ) )
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Position" ) );
 	}
 
-	Int Light::m_iType()const
+	DirectionalLight::DirectionalLight( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( cuT( "DirectionalLight " ), p_writer, p_name )
 	{
-		return Int( m_writer, Castor::String( *this ) + cuT( ".m_iType" ) );
 	}
 
-	Vec3 Light::m_v3Attenuation()const
+	DirectionalLight & DirectionalLight::operator=( DirectionalLight const & p_rhs )
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
+		if ( m_writer )
+		{
+			m_writer->WriteAssign( *this, p_rhs );
+		}
+		else
+		{
+			Type::operator=( p_rhs );
+			m_writer = p_rhs.m_writer;
+		}
+
+		return *this;
 	}
 
-	Vec3 Light::m_v3Direction()const
+	template< typename T >
+	DirectionalLight & DirectionalLight::operator=( T const & p_rhs )
+	{
+		UpdateWriter( p_rhs );
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	Light DirectionalLight::m_lightBase()const
+	{
+		return Light( m_writer, m_name + cuT( ".m_lightBase" ) );
+	}
+
+	Vec3 DirectionalLight::m_v3Direction()const
 	{
 		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Direction" ) );
 	}
 
-	Float Light::m_fExponent()const
+	Mat4 DirectionalLight::m_mtxLightSpace()const
+	{
+		return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_mtxLightSpace" ) );
+	}
+
+	//*********************************************************************************************
+
+	PointLight::PointLight()
+		: Type( cuT( "PointLight " ) )
+	{
+	}
+
+	PointLight::PointLight( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( cuT( "PointLight " ), p_writer, p_name )
+	{
+	}
+
+	PointLight & PointLight::operator=( PointLight const & p_rhs )
+	{
+		if ( m_writer )
+		{
+			m_writer->WriteAssign( *this, p_rhs );
+		}
+		else
+		{
+			Type::operator=( p_rhs );
+			m_writer = p_rhs.m_writer;
+		}
+
+		return *this;
+	}
+
+	template< typename T >
+	PointLight & PointLight::operator=( T const & p_rhs )
+	{
+		UpdateWriter( p_rhs );
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	Light PointLight::m_lightBase()const
+	{
+		return Light( m_writer, m_name + cuT( ".m_lightBase" ) );
+	}
+
+	Vec3 PointLight::m_v3Position()const
+	{
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Position" ) );
+	}
+
+	Vec3 PointLight::m_v3Attenuation()const
+	{
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
+	}
+
+	Int PointLight::m_iIndex()const
+	{
+		return Int( m_writer, Castor::String( *this ) + cuT( ".m_iIndex" ) );
+	}
+
+	//*********************************************************************************************
+
+	SpotLight::SpotLight()
+		: Type( cuT( "SpotLight " ) )
+	{
+	}
+
+	SpotLight::SpotLight( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( cuT( "SpotLight " ), p_writer, p_name )
+	{
+	}
+
+	SpotLight & SpotLight::operator=( SpotLight const & p_rhs )
+	{
+		if ( m_writer )
+		{
+			m_writer->WriteAssign( *this, p_rhs );
+		}
+		else
+		{
+			Type::operator=( p_rhs );
+			m_writer = p_rhs.m_writer;
+		}
+
+		return *this;
+	}
+
+	template< typename T >
+	SpotLight & SpotLight::operator=( T const & p_rhs )
+	{
+		UpdateWriter( p_rhs );
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	Light SpotLight::m_lightBase()const
+	{
+		return Light( m_writer, m_name + cuT( ".m_lightBase" ) );
+	}
+
+	Vec3 SpotLight::m_v3Position()const
+	{
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Position" ) );
+	}
+
+	Vec3 SpotLight::m_v3Attenuation()const
+	{
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
+	}
+
+	Vec3 SpotLight::m_v3Direction()const
+	{
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Direction" ) );
+	}
+
+	Float SpotLight::m_fExponent()const
 	{
 		return Float( m_writer, Castor::String( *this ) + cuT( ".m_fExponent" ) );
 	}
 
-	Float Light::m_fCutOff()const
+	Float SpotLight::m_fCutOff()const
 	{
 		return Float( m_writer, Castor::String( *this ) + cuT( ".m_fCutOff" ) );
 	}
+
+	Mat4 SpotLight::m_mtxLightSpace()const
+	{
+		return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_mtxLightSpace" ) );
+	}
+
+	Int SpotLight::m_iIndex()const
+	{
+		return Int( m_writer, Castor::String( *this ) + cuT( ".m_iIndex" ) );
+	}
+
+	//*********************************************************************************************
 }

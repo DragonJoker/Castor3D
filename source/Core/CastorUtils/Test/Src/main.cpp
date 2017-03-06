@@ -1,16 +1,20 @@
-﻿#include "Benchmark.hpp"
+#include "Benchmark.hpp"
 
-#include <Logger.hpp>
-#include <File.hpp>
+#include <Log/Logger.hpp>
+#include <Data/File.hpp>
 
 #include "BenchManager.hpp"
 #include "OpenClBench.hpp"
+#include "CastorUtilsArrayViewTest.hpp"
 #include "CastorUtilsMatrixTest.hpp"
 #include "CastorUtilsPixelFormatTest.hpp"
 #include "CastorUtilsStringTest.hpp"
 #include "CastorUtilsZipTest.hpp"
 #include "CastorUtilsUniqueTest.hpp"
 #include "CastorUtilsObjectsPoolTest.hpp"
+#include "CastorUtilsQuaternionTest.hpp"
+#include "CastorUtilsThreadPoolTest.hpp"
+#include "CastorUtilsWorkerThreadTest.hpp"
 
 int main( int argc, char const * argv[] )
 {
@@ -23,23 +27,26 @@ int main( int argc, char const * argv[] )
 	}
 
 #if defined( NDEBUG )
-	Castor::Logger::Initialise( Castor::ELogType_INFO );
+	Castor::Logger::Initialise( Castor::LogType::eInfo );
 #else
-	Castor::Logger::Initialise( Castor::ELogType_DEBUG );
+	Castor::Logger::Initialise( Castor::LogType::eDebug );
 #endif
 
 	Castor::Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "Tests.log" ) );
 #if defined( CASTOR_USE_OCL )
-	Testing::Register( std::make_shared< Testing::OpenCLBench >() );
+	Testing::Register( std::make_unique< Testing::OpenCLBench >() );
 #endif
-	//Testing::Register( std::make_shared< Testing::CastorUtilsMatrixBench >() );
-	Testing::Register( std::make_shared< Testing::CastorUtilsStringBench >() );
-	Testing::Register( std::make_shared< Testing::CastorUtilsUniqueTest >() );
-	//Testing::Register( std::make_shared< Testing::CastorUtilsMatrixTest >() );
-	Testing::Register( std::make_shared< Testing::CastorUtilsPixelFormatTest >() );
-	Testing::Register( std::make_shared< Testing::CastorUtilsStringTest >() );
-	Testing::Register( std::make_shared< Testing::CastorUtilsZipTest >() );
-	Testing::Register( std::make_shared< Testing::CastorUtilsObjectsPoolTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsWorkerThreadTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsThreadPoolTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsMatrixBench >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsArrayViewTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsUniqueTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsMatrixTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsPixelFormatTest >() );
+	//Testing::Register( std::make_unique< Testing::CastorUtilsStringTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsZipTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsObjectsPoolTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsQuaternionTest >() );
 	BENCHLOOP( l_iCount, l_iReturn );
 	Castor::Logger::Cleanup();
 	return l_iReturn;

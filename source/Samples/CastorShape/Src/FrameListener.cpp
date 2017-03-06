@@ -1,14 +1,14 @@
 #include "FrameListener.hpp"
 #include "RenderPanel.hpp"
 
-#include <Ray.hpp>
-#include <Scene.hpp>
+#include <Miscellaneous/Ray.hpp>
+#include <Scene/Scene.hpp>
 
 using namespace Castor3D;
 using namespace CastorShape;
 
 SelectObjectFrameEvent::SelectObjectFrameEvent( SceneSPtr p_scene, GeometrySPtr p_geometry, SubmeshSPtr p_submesh, FaceSPtr p_face, VertexSPtr p_vertex, CameraSPtr p_camera, RenderPanel * p_panel,  int p_x, int p_y )
-	: FrameEvent( eEVENT_TYPE_POST_RENDER )
+	: FrameEvent( EventType::PostRender )
 	, m_scene( p_scene )
 	, m_geometry( p_geometry )
 	, m_submesh( p_submesh )

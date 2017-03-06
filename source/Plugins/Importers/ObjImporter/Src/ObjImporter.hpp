@@ -1,19 +1,24 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___OBJ_IMPORTER_H___
 #define ___OBJ_IMPORTER_H___
@@ -32,35 +37,40 @@ namespace Obj
 		,	private Castor::NonCopyable
 	{
 	private:
-		DECLARE_MAP( Castor3D::PassSPtr, Castor::Point3f, FloatPass );
-		DECLARE_VECTOR( Castor3D::StaticTextureSPtr, StaticTexture );
+		DECLARE_MAP( Castor3D::PassRPtr, Castor::Point3f, FloatPass );
+		DECLARE_VECTOR( Castor3D::TextureLayoutSPtr, Texture );
 		typedef std::shared_ptr< std::thread > ThreadSPtr;
 
 	public:
 		/**
 		 * Constructor
 		 */
-		ObjImporter( Castor3D::Engine & p_pEngine );
+		ObjImporter( Castor3D::Engine & p_engine );
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
-		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
-		void DoCreateSubmesh();
-		Castor3D::MeshSPtr DoReadObjFile( Castor3D::Scene & p_scene );
-		uint32_t DoRetrieveIndex( Castor::String & p_strIndex, uint32_t p_uiSize );
-		uint32_t DoTreatFace( Castor3D::stFACE_INDICES & p_face, uint32_t p_uiIndex, Castor::String const & p_strFace, stGROUP * p_pGroup, VertexArray const & p_arrayVertex, NormalArray const & p_arrayNormals, UvArray const & p_arrayUv );
-		void DoCreateSubmesh( Castor3D::MeshSPtr p_pMesh, stGROUP * p_pGroup );
+		void DoReadObjFile( Castor3D::Mesh & p_mesh );
+		void DoCreateSubmesh( Castor3D::Mesh & p_mesh, Castor::String const & p_mtlName, std::vector< Castor3D::FaceIndices > && p_faces, Castor3D::InterleavedVertexArray && p_vertex );
 		void DoParseTexParams( Castor::String & p_strValue, float * p_offset, float * p_scale, float * p_turb );
 		void DoParseTexParam( Castor::String const & p_strParam, float * p_values );
-		bool DoIsValidValue( Castor::String const & p_strParam, Castor::String const & p_strSrc, uint32_t p_uiIndex );
-		void DoAddTexture( Castor::String const & p_strValue, Castor3D::PassSPtr p_pPass, Castor3D::eTEXTURE_CHANNEL p_channel );
-		void DoReadMaterials( Castor3D::Scene & p_scene, Castor::Path const & p_pathMatFile );
+		bool DoIsValidValue( Castor::String const & p_strParam, Castor::String const & p_strSrc, uint32_t p_index );
+		void DoAddTexture( Castor::String const & p_strValue, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
+		void DoReadMaterials( Castor3D::Mesh & p_mesh, Castor::Path const & p_pathMatFile );
 
 	private:
-		Castor::ImageManager & m_collImages;
+		Castor::ImageCache & m_collImages;
 		Castor3D::MaterialPtrArray m_arrayLoadedMaterials;
-		StaticTextureArray m_arrayTextures;
+		TextureArray m_arrayTextures;
 		Castor::TextFile * m_pFile;
 		FloatPassMap m_mapOffsets;
 		FloatPassMap m_mapScales;

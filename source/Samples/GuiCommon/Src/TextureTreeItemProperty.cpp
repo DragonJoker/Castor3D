@@ -1,8 +1,11 @@
 #include "TextureTreeItemProperty.hpp"
 
-#include <Texture.hpp>
-#include <TextureUnit.hpp>
-#include <FunctorEvent.hpp>
+#include <Engine.hpp>
+
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
@@ -71,39 +74,39 @@ namespace GuiCommon
 
 			switch ( l_unit->GetChannel() )
 			{
-			case eTEXTURE_CHANNEL_COLOUR:
+			case TextureChannel::eColour:
 				l_selected = PROPERTY_CHANNEL_COLOUR;
 				break;
 
-			case eTEXTURE_CHANNEL_DIFFUSE:
+			case TextureChannel::eDiffuse:
 				l_selected = PROPERTY_CHANNEL_DIFFUSE;
 				break;
 
-			case eTEXTURE_CHANNEL_NORMAL:
+			case TextureChannel::eNormal:
 				l_selected = PROPERTY_CHANNEL_NORMAL;
 				break;
 
-			case eTEXTURE_CHANNEL_OPACITY:
+			case TextureChannel::eOpacity:
 				l_selected = PROPERTY_CHANNEL_OPACITY;
 				break;
 
-			case eTEXTURE_CHANNEL_SPECULAR:
+			case TextureChannel::eSpecular:
 				l_selected = PROPERTY_CHANNEL_SPECULAR;
 				break;
 
-			case eTEXTURE_CHANNEL_EMISSIVE:
+			case TextureChannel::eEmissive:
 				l_selected = PROPERTY_CHANNEL_EMISSIVE;
 				break;
 
-			case eTEXTURE_CHANNEL_HEIGHT:
+			case TextureChannel::eHeight:
 				l_selected = PROPERTY_CHANNEL_HEIGHT;
 				break;
 
-			case eTEXTURE_CHANNEL_AMBIENT:
+			case TextureChannel::eAmbient:
 				l_selected = PROPERTY_CHANNEL_AMBIENT;
 				break;
 
-			case eTEXTURE_CHANNEL_GLOSS:
+			case TextureChannel::eGloss:
 				l_selected = PROPERTY_CHANNEL_GLOSS;
 				break;
 			}
@@ -111,9 +114,10 @@ namespace GuiCommon
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXTURE ) );
 			p_grid->Append( new wxEnumProperty( PROPERTY_CHANNEL, PROPERTY_CHANNEL, l_choices ) )->SetValue( l_selected );
 
-			if ( l_unit->GetTexture()->GetBaseType() == eTEXTURE_BASE_TYPE_STATIC )
+			if ( l_unit->GetTexture()->GetImage().IsStaticSource() )
 			{
-				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_unit->GetTexturePath() );
+				Path l_path{ l_unit->GetTexture()->GetImage().ToString() };
+				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_path );
 			}
 		}
 	}
@@ -129,47 +133,47 @@ namespace GuiCommon
 			{
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_COLOUR )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_COLOUR );
+					OnChannelChange( TextureChannel::eColour );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_DIFFUSE )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_DIFFUSE );
+					OnChannelChange( TextureChannel::eDiffuse );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_NORMAL );
+					OnChannelChange( TextureChannel::eNormal );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_OPACITY );
+					OnChannelChange( TextureChannel::eOpacity );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_SPECULAR );
+					OnChannelChange( TextureChannel::eSpecular );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_EMISSIVE )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_EMISSIVE );
+					OnChannelChange( TextureChannel::eEmissive );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_HEIGHT );
+					OnChannelChange( TextureChannel::eHeight );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_AMBIENT )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_AMBIENT );
+					OnChannelChange( TextureChannel::eAmbient );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_GLOSS );
+					OnChannelChange( TextureChannel::eGloss );
 				}
 			}
 			else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )
@@ -179,7 +183,7 @@ namespace GuiCommon
 		}
 	}
 
-	void TextureTreeItemProperty::OnChannelChange( eTEXTURE_CHANNEL p_value )
+	void TextureTreeItemProperty::OnChannelChange( TextureChannel p_value )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
@@ -195,11 +199,13 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_unit]()
 		{
-			if ( File::FileExists( p_value ) )
+			if ( File::FileExists( Path{ p_value } ) )
 			{
 				// Absolute path
 				l_unit->SetAutoMipmaps( true );
-				l_unit->LoadTexture( p_value );
+				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
+				l_texture->GetImage().InitialiseSource( Path{}, Path{ p_value } );
+				l_unit->SetTexture( l_texture );
 				l_unit->Initialise();
 			}
 		} );

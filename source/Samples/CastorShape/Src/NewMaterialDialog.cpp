@@ -1,10 +1,12 @@
 #include "NewMaterialDialog.hpp"
 
-#include <InitialiseEvent.hpp>
-#include <MaterialManager.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
+#include <Scene/Scene.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <GradientButton.hpp>
 #include <AdditionalProperties.hpp>
@@ -48,9 +50,9 @@ namespace CastorShape
 		static wxString PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 	}
 
-	NewMaterialDialog::NewMaterialDialog( wxPGEditor * p_editor, Engine * p_engine, wxWindow * parent, wxWindowID p_id, wxString const & p_name, wxPoint const & pos, wxSize const & size, long style )
+	NewMaterialDialog::NewMaterialDialog( wxPGEditor * p_editor, Scene & p_scene, wxWindow * parent, wxWindowID p_id, wxString const & p_name, wxPoint const & pos, wxSize const & size, long style )
 		: wxDialog( parent, p_id, p_name, pos, size, style, p_name )
-		, m_engine( p_engine )
+		, m_scene( p_scene )
 		, m_editor( p_editor )
 	{
 		PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
@@ -83,7 +85,7 @@ namespace CastorShape
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		wxSize l_size = GetClientSize();
 		l_size.y -= 30;
-		m_material = std::make_shared< Material >( cuT( "NewMaterial" ), *m_engine );
+		m_material = std::make_shared< Material >( cuT( "NewMaterial" ), *m_scene.GetEngine() );
 
 		m_properties = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, l_size, wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE );
 		m_properties->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -286,7 +288,7 @@ namespace CastorShape
 
 	bool NewMaterialDialog::OnEditShader( wxPGProperty * p_property )
 	{
-		ShaderDialog * l_editor = new ShaderDialog( m_pass->GetEngine(), true, NULL, m_pass );
+		ShaderDialog * l_editor = new ShaderDialog( m_scene, true, NULL, m_pass );
 		l_editor->Show();
 		return false;
 	}
@@ -302,41 +304,41 @@ namespace CastorShape
 
 			switch ( m_texture->GetChannel() )
 			{
-			case eTEXTURE_CHANNEL_COLOUR:
+			case TextureChannel::Colour:
 				l_selected = PROPERTY_CHANNEL_COLOUR;
 				break;
 
-			case eTEXTURE_CHANNEL_DIFFUSE:
+			case TextureChannel::Diffuse:
 				l_selected = PROPERTY_CHANNEL_DIFFUSE;
 				break;
 
-			case eTEXTURE_CHANNEL_NORMAL:
+			case TextureChannel::Normal:
 				l_selected = PROPERTY_CHANNEL_NORMAL;
 				break;
 
-			case eTEXTURE_CHANNEL_OPACITY:
+			case TextureChannel::Opacity:
 				l_selected = PROPERTY_CHANNEL_OPACITY;
 				break;
 
-			case eTEXTURE_CHANNEL_SPECULAR:
+			case TextureChannel::Specular:
 				l_selected = PROPERTY_CHANNEL_SPECULAR;
 				break;
 
-			case eTEXTURE_CHANNEL_HEIGHT:
+			case TextureChannel::Height:
 				l_selected = PROPERTY_CHANNEL_HEIGHT;
 				break;
 
-			case eTEXTURE_CHANNEL_AMBIENT:
+			case TextureChannel::Ambient:
 				l_selected = PROPERTY_CHANNEL_AMBIENT;
 				break;
 
-			case eTEXTURE_CHANNEL_GLOSS:
+			case TextureChannel::Gloss:
 				l_selected = PROPERTY_CHANNEL_GLOSS;
 				break;
 			}
 
 			m_properties->SetPropertyValue( PROPERTY_CHANNEL, l_selected );
-			m_properties->SetPropertyValue( PROPERTY_TEXTURE_IMAGE, make_wxString( m_texture->GetTexturePath() ) );
+			m_properties->SetPropertyValue( PROPERTY_TEXTURE_IMAGE, make_wxString( m_texture->GetTexture()->GetImage( 0u ).ToString() ) );
 		}
 		else
 		{
@@ -365,18 +367,18 @@ namespace CastorShape
 		m_properties->HideProperty( PROPERTY_TEXTURE_IMAGE, false );
 	}
 
-	void NewMaterialDialog::OnChannelChange( eTEXTURE_CHANNEL p_value )
+	void NewMaterialDialog::OnChannelChange( TextureChannel p_value )
 	{
 		m_texture->SetChannel( p_value );
 	}
 
-	void NewMaterialDialog::OnImageChange( Castor::String const & p_value )
+	void NewMaterialDialog::OnImageChange( Castor::Path const & p_value )
 	{
 		if ( File::FileExists( p_value ) )
 		{
 			// Absolute path
 			m_texture->SetAutoMipmaps( true );
-			m_texture->LoadTexture( p_value );
+			m_texture->GetTexture()->GetImage( 0u ).SetSource( p_value.GetPath(), p_value.GetFileName( true ) );
 			m_texture->Initialise();
 		}
 	}
@@ -394,8 +396,8 @@ namespace CastorShape
 
 	void NewMaterialDialog::OnOk( wxCommandEvent & WXUNUSED( p_event ) )
 	{
-		m_engine->GetMaterialManager().Insert( m_material->GetName(), m_material );
-		m_engine->PostEvent( MakeInitialiseEvent( *m_material ) );
+		m_scene.GetMaterialView().Add( m_material->GetName(), m_material );
+		m_scene.GetListener().PostEvent( MakeInitialiseEvent( *m_material ) );
 		EndModal( wxID_OK );
 	}
 
@@ -464,47 +466,47 @@ namespace CastorShape
 					{
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_COLOUR )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_COLOUR );
+							OnChannelChange( TextureChannel::Colour );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_DIFFUSE )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_DIFFUSE );
+							OnChannelChange( TextureChannel::Diffuse );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_NORMAL );
+							OnChannelChange( TextureChannel::Normal );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_OPACITY );
+							OnChannelChange( TextureChannel::Opacity );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_SPECULAR );
+							OnChannelChange( TextureChannel::Specular );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_HEIGHT );
+							OnChannelChange( TextureChannel::Height );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_AMBIENT )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_AMBIENT );
+							OnChannelChange( TextureChannel::Ambient );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_GLOSS );
+							OnChannelChange( TextureChannel::Gloss );
 						}
 					}
 					else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )
 					{
-						OnImageChange( String( l_property->GetValueAsString() ) );
+						OnImageChange( make_Path( l_property->GetValueAsString() ) );
 					}
 				}
 			}

@@ -13,13 +13,19 @@
 #	include <Windows.h>
 #endif
 
-#include <CameraManager.hpp>
-#include <GeometryManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
-#include <TargetManager.hpp>
-#include <WindowHandle.hpp>
-#include <WindowManager.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/TargetCache.hpp>
+#include <Cache/WindowCache.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Render/RenderTarget.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Miscellaneous/WindowHandle.hpp>
 
 using namespace Castor3D;
 using namespace CastorShape;
@@ -27,10 +33,9 @@ using namespace Castor;
 
 #define ID_NEW_WINDOW 10000
 
-RenderPanel::RenderPanel( eVIEWPORT_TYPE p_renderType, SceneSPtr p_scene, ePROJECTION_DIRECTION p_look, wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
+RenderPanel::RenderPanel( ViewportType p_renderType, SceneSPtr p_scene, wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 	: wxPanel( parent, p_id, pos, size, style )
 	, m_renderType( p_renderType )
-	, m_lookAt( p_look )
 	, m_mainScene( p_scene )
 	, m_mouseLeftDown( false )
 	, m_mouseRightDown( false )
@@ -79,33 +84,34 @@ void RenderPanel::InitialiseRenderWindow()
 	StringStream l_streamName;
 	l_streamName << cuT( "RenderPanel_" ) << GetId();
 	SceneNodeSPtr l_node;
-	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->GetWindowManager().Create( cuT( "CastorShape" ) );
-	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
-	SceneNodeSPtr l_pCamBaseNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
+	RenderWindowSPtr l_pRenderWindow = m_mainScene->GetRenderWindowCache().Add( cuT( "CastorShape" ) );
+	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->GetRenderTargetCache().Add( TargetType::Window );
+	SceneNodeSPtr l_pCamBaseNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
 	l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );
 
-	if ( m_renderType == eVIEWPORT_TYPE_PERSPECTIVE )
+	if ( m_renderType == ViewportType::Perspective )
 	{
-		SceneNodeSPtr l_pCamYawNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
-		SceneNodeSPtr l_pCamPitchNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
-		SceneNodeSPtr l_pCamRollNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamRollNode" ), l_pCamPitchNode );
+		SceneNodeSPtr l_pCamYawNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
+		SceneNodeSPtr l_pCamPitchNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
+		SceneNodeSPtr l_pCamRollNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamRollNode" ), l_pCamPitchNode );
 		l_node = l_pCamRollNode;
 	}
 
-	CameraSPtr l_pCamera = m_mainScene->GetCameraManager().Create( l_streamName.str() + cuT( "_Camera" ), l_node );
-	l_pCamera->GetViewport().SetSize( Size( GetClientSize().x, GetClientSize().y ) );
+	CameraSPtr l_pCamera = m_mainScene->GetCameraCache().Add( l_streamName.str() + cuT( "_Camera" ), l_node, Viewport{ *wxGetApp().GetCastor() } );
+	l_pCamera->GetViewport().Resize( Size( GetClientSize().x, GetClientSize().y ) );
+	l_pCamera->GetViewport().SetPerspective( Angle::from_degrees( 45.0 ), 1, 0.1_r, 1000.0_r );
 	l_pRenderTarget->SetScene( m_mainScene );
 	l_pRenderTarget->SetCamera( l_pCamera );
 	l_pRenderTarget->SetSize( Size( GetClientSize().x, GetClientSize().y ) );
-	l_pRenderTarget->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
+	l_pRenderTarget->SetPixelFormat( PixelFormat::A8R8G8B8 );
 	l_pRenderWindow->SetRenderTarget( l_pRenderTarget );
 	Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
 
 	if ( l_pRenderWindow->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 	{
 		m_listener = l_pRenderWindow->GetListener();
-		m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_pRenderWindow->GetScene()->GetObjectRootNode(), real( 0 ), real( 0 ), real( 0 ) );
-		m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_pRenderWindow->GetCamera()->GetParent(), real( 0 ), real( 0 ), real( 0 ) );
+		m_pRotateCamEvent = std::make_unique< CameraRotateEvent >( l_pRenderWindow->GetScene()->GetObjectRootNode(), real( 0 ), real( 0 ), real( 0 ) );
+		m_pTranslateCamEvent = std::make_unique< CameraTranslateEvent >( l_pRenderWindow->GetCamera()->GetParent(), real( 0 ), real( 0 ), real( 0 ) );
 		m_pRenderWindow = l_pRenderWindow;
 		//m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_pRenderWindow->GetCamera(), real( 0 ), real( 0 ), real( 0 ) );
 		//m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_pRenderWindow->GetCamera(), real( 0 ), real( 0 ), real( 0 ) );
@@ -292,18 +298,18 @@ void RenderPanel::OnMouseMove( wxMouseEvent & event )
 
 		if ( m_mouseLeftDown )
 		{
-			if ( l_pRenderWindow->GetViewportType() == eVIEWPORT_TYPE_PERSPECTIVE )
+			if ( l_pRenderWindow->GetViewportType() == ViewportType::Perspective )
 			{
-				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, m_deltaX, m_deltaY, 0 );
+				MouseCameraEvent::Add( std::make_unique< CameraRotateEvent >( *m_pRotateCamEvent ), m_listener, m_deltaX, m_deltaY, 0 );
 			}
 			else
 			{
-				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, 0, 0, m_deltaX );
+				MouseCameraEvent::Add( std::make_unique< CameraRotateEvent >( *m_pRotateCamEvent ), m_listener, 0, 0, m_deltaX );
 			}
 		}
 		else if ( m_mouseRightDown )
 		{
-			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, -m_rZoom * m_deltaX / real( 40 ), m_rZoom * m_deltaY / real( 40 ), 0 );
+			MouseCameraEvent::Add( std::make_unique< CameraTranslateEvent >( *m_pTranslateCamEvent ), m_listener, -m_rZoom * m_deltaX / real( 40 ), m_rZoom * m_deltaY / real( 40 ), 0 );
 		}
 	}
 }
@@ -318,12 +324,12 @@ void RenderPanel::OnMouseWheel( wxMouseEvent & event )
 
 		if ( l_wheelRotation < 0 )
 		{
-			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, ( l_cameraPos[2] - real( 1 ) ) / 10 );
+			MouseCameraEvent::Add( std::make_unique< CameraTranslateEvent >( *m_pTranslateCamEvent ), m_listener, 0, 0, ( l_cameraPos[2] - real( 1 ) ) / 10 );
 			m_rZoom /= real( 0.9 );
 		}
 		else if ( l_wheelRotation > 0 )
 		{
-			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, ( real( 1 ) - l_cameraPos[2] ) / 10 );
+			MouseCameraEvent::Add( std::make_unique< CameraTranslateEvent >( *m_pTranslateCamEvent ), m_listener, 0, 0, ( real( 1 ) - l_cameraPos[2] ) / 10 );
 			m_rZoom *= real( 0.9 );
 		}
 

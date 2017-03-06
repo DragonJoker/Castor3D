@@ -8,6 +8,7 @@ option( CASTOR_BUILD_IMPORTER_MD3 "Build MD3 Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_OBJ "Build OBJ Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_PLY "Build PLY Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_3DS "Build 3DS Importer plugin" TRUE )
+option( CASTOR_BUILD_IMPORTER_OGR "Build Ogre Importer plugin" FALSE )
 option( CASTOR_FORCE_ALL_IMPORTERS "Build every Importer plugin regardless of the presence of ASSIMP" FALSE )
 
 function( ImportersInit )
@@ -20,14 +21,18 @@ function( ImportersInit )
 	set( Lwo "no (Not wanted)" PARENT_SCOPE )
 	set( Obj "no (Not wanted)" PARENT_SCOPE )
 	set( Ply "no (Not wanted)" PARENT_SCOPE )
+	set( Ogr "no (Not wanted)" PARENT_SCOPE )
 endfunction( ImportersInit )
 
 function( ImportersBuild )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
+		set( BUILTIN_NEEDED ON )
+
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( Build ${Assimp} )
 			add_subdirectory( Plugins/Importers/AssimpImporter )
 			set( Assimp ${Build} PARENT_SCOPE )
+			set( BUILTIN_NEEDED OFF )
 		endif()
 
 		if( ${CASTOR_BUILD_IMPORTER_FBX} )
@@ -36,45 +41,50 @@ function( ImportersBuild )
 			set( Fbx ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_IMPORTER_OGR} )
+			set( Build ${Ogr} )
+			add_subdirectory( Plugins/Importers/OgreImporter )
+			set( Ogr ${Build} PARENT_SCOPE )
+		endif()
+
+		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
+			set( Build ${Obj} )
+			add_subdirectory( Plugins/Importers/ObjImporter )
+			set( Obj ${Build} PARENT_SCOPE )
+		endif()
+
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
 			set( Build ${Ply} )
 			add_subdirectory( Plugins/Importers/PlyImporter )
 			set( Ply ${Build} PARENT_SCOPE )
 		endif()
 
-		STRING( FIND "${Build}" "yes" POS )
-		if( ${POS} STREQUAL -1 OR CASTOR_FORCE_ALL_IMPORTERS )
+		if( BUILTIN_NEEDED OR CASTOR_FORCE_ALL_IMPORTERS )
 			msg_debug( "using builtin importers" )
 			if( ${CASTOR_BUILD_IMPORTER_ASE} )
 				set( Build ${Ase} )
 				add_subdirectory( Plugins/Importers/AseImporter )
 				set( Ase ${Build} PARENT_SCOPE )
 			endif()
-			
+
 			if( ${CASTOR_BUILD_IMPORTER_LWO} )
 				set( Build ${Lwo} )
 				add_subdirectory( Plugins/Importers/LwoImporter )
 				set( Lwo ${Build} PARENT_SCOPE )
 			endif()
-			
+
 			if( ${CASTOR_BUILD_IMPORTER_MD2} )
 				set( Build ${Md2} )
 				add_subdirectory( Plugins/Importers/Md2Importer )
 				set( Md2 ${Build} PARENT_SCOPE )
 			endif()
-			
+
 			if( ${CASTOR_BUILD_IMPORTER_MD3} )
 				set( Build ${Md3} )
 				add_subdirectory( Plugins/Importers/Md3Importer )
 				set( Md3 ${Build} PARENT_SCOPE )
 			endif()
-			
-			if( ${CASTOR_BUILD_IMPORTER_OBJ} )
-				set( Build ${Obj} )
-				add_subdirectory( Plugins/Importers/ObjImporter )
-				set( Obj ${Build} PARENT_SCOPE )
-			endif()
-			
+
 			if( ${CASTOR_BUILD_IMPORTER_3DS} )
 				set( Build ${3ds} )
 				add_subdirectory( Plugins/Importers/SMaxImporter )
@@ -86,7 +96,6 @@ function( ImportersBuild )
 			set( Md3 "no (Not needed)" PARENT_SCOPE )
 			set( 3ds "no (Not needed)" PARENT_SCOPE )
 			set( Lwo "no (Not needed)" PARENT_SCOPE )
-			set( Obj "no (Not needed)" PARENT_SCOPE )
 		endif()
 
 		set( CastorMinLibraries
@@ -101,7 +110,7 @@ function( ImportersBuild )
 	endif ()
 endfunction( ImportersBuild )
 
-function( ImportersSummary msg )
+function( ImportersSummary msg msgtest )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
 		set( msg_tmp "\n\nImporters :" )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
@@ -109,6 +118,12 @@ function( ImportersSummary msg )
 		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_FBX} )
 			set( msg_tmp "${msg_tmp}\n    Built-in FBX        ${Fbx}" )
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
+			set( msg_tmp "${msg_tmp}\n    Built-in OBJ        ${Obj}" )
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_OGR} )
+			set( msg_tmp "${msg_tmp}\n    Built-in Ogre       ${Ogr}" )
 		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
 			set( msg_tmp "${msg_tmp}\n    Built-in PLY        ${Ply}" )
@@ -130,9 +145,6 @@ function( ImportersSummary msg )
 			endif ()
 			if( ${CASTOR_BUILD_IMPORTER_LWO} )
 				set( msg_tmp "${msg_tmp}\n    Built-in LWO        ${Lwo}" )
-			endif ()
-			if( ${CASTOR_BUILD_IMPORTER_OBJ} )
-				set( msg_tmp "${msg_tmp}\n    Built-in OBJ        ${Obj}" )
 			endif ()
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
@@ -163,6 +175,26 @@ function( ImportersSetup )
 				GROUP Importers
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
+			)
+		endif ()
+
+		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
+			cpack_add_component( ObjImporter
+				DISPLAY_NAME "ObjImporter"
+				DESCRIPTION "Allows the OBJ objects import in Castor3D."
+				GROUP Importers
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif ()
+
+		if( ${CASTOR_BUILD_IMPORTER_OGR} )
+			cpack_add_component( OgreImporter
+				DISPLAY_NAME "OgreImporter"
+				DESCRIPTION "Allows the Ogre3D objects import in Castor3D."
+				GROUP Importers
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
 			)
 		endif ()
 
@@ -212,16 +244,6 @@ function( ImportersSetup )
 				cpack_add_component( Md3Importer
 					DISPLAY_NAME "Md3Importer"
 					DESCRIPTION "Allows the MD3 objects import in Castor3D."
-					GROUP Importers
-					DEPENDS Castor3D
-					INSTALL_TYPES Full
-				)
-			endif ()
-
-			if( ${CASTOR_BUILD_IMPORTER_OBJ} )
-				cpack_add_component( ObjImporter
-					DISPLAY_NAME "ObjImporter"
-					DESCRIPTION "Allows the OBJ objects import in Castor3D."
 					GROUP Importers
 					DEPENDS Castor3D
 					INSTALL_TYPES Full

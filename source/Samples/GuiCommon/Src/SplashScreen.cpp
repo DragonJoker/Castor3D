@@ -1,7 +1,8 @@
 #include "SplashScreen.hpp"
 
 #include <RequiredVersion.hpp>
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
+#include <Miscellaneous/Version.hpp>
 
 #include "xpms/splash.xpm"
 
@@ -11,7 +12,7 @@ using namespace GuiCommon;
 using namespace Castor3D;
 using namespace Castor;
 
-SplashScreen::SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange )
+SplashScreen::SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange, Version const & p_version )
 	: wxFrame( nullptr, wxID_ANY, p_strTitle, p_ptPos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
 	, m_bmpSplash( splash_xpm )
 	, m_ptTitlePosition( p_ptTitlePos )
@@ -22,7 +23,7 @@ SplashScreen::SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTit
 	m_strCopyright << wxDateTime().Now().GetCurrentYear() << wxT( " " ) << _( "DragonJoker, All rights shared" );
 	SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 	m_strEngineVersion.clear();
-	m_strEngineVersion << CASTOR_VERSION_MAJOR << wxT( "." ) << CASTOR_VERSION_MINOR << wxT( "." ) << CASTOR_VERSION_BUILD;
+	m_strEngineVersion << p_version.GetMajor() << wxT( "." ) << p_version.GetMinor() << wxT( "." ) << p_version.GetBuild();
 	wxSize l_size = GetClientSize();
 	m_pPanelBmp = new wxPanel( this, wxID_ANY, wxPoint( 0, 0 ), wxSize( l_size.x, l_size.y - 20 ) );
 	m_pGauge = new wxGauge( this, wxID_ANY, p_iRange, wxPoint( 0, l_size.y - 20 ), wxSize( l_size.x, 20 ), wxGA_SMOOTH | wxGA_HORIZONTAL | wxBORDER_NONE );

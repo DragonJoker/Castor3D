@@ -14,8 +14,8 @@ namespace CastorShape
 		static wxString CYLINDER_FACES = _( "Face count" );
 	}
 
-	NewCylinderDialog::NewCylinderDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id )
-		:	NewGeometryDialog( p_engine, parent, p_id, _( "New cylinder" ) )
+	NewCylinderDialog::NewCylinderDialog( Scene & p_scene, wxWindow * parent, wxWindowID p_id )
+		:	NewGeometryDialog( p_scene, parent, p_id, _( "New cylinder" ) )
 	{
 		CYLINDER_RADIUS = _( "Radius" );
 		CYLINDER_HEIGHT = _( "Height" );

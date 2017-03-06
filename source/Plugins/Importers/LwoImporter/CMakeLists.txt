@@ -8,12 +8,8 @@ set( CastorBinsDependencies
 
 set( ${PROJECT_NAME}_DESCRIPTION "LightWave Model Importer" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
-
-set( LWO_VERSION_MAJOR	0 )
-set( LWO_VERSION_MINOR	7 )
-set( LWO_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )

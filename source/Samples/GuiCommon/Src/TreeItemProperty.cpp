@@ -1,8 +1,8 @@
 #include "TreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
-#include <MaterialManager.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -25,6 +25,7 @@ namespace GuiCommon
 
 	TreeItemProperty::~TreeItemProperty()
 	{
+		delete m_menu;
 	}
 
 	void TreeItemProperty::DisplayTreeItemMenu( wxWindow * p_window, wxCoord x, wxCoord y )
@@ -48,11 +49,11 @@ namespace GuiCommon
 	wxEnumProperty * TreeItemProperty::DoCreateMaterialProperty( wxString const & p_name )
 	{
 		wxEnumProperty * l_material = new wxEnumProperty( p_name );
-		MaterialManager & l_manager = m_engine->GetMaterialManager();
+		auto & l_cache = m_engine->GetMaterialCache();
 		wxPGChoices l_choices;
-		std::unique_lock< MaterialManager > l_lock( l_manager );
+		auto l_lock = make_unique_lock( l_cache );
 
-		for ( auto && l_pair : l_manager )
+		for ( auto l_pair : l_cache )
 		{
 			l_choices.Add( l_pair.first );
 		}
@@ -63,7 +64,7 @@ namespace GuiCommon
 
 	void TreeItemProperty::DoApplyChange( std::function< void() > p_functor )
 	{
-		m_engine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, p_functor ) );
+		m_engine->PostEvent( MakeFunctorEvent( EventType::ePreRender, p_functor ) );
 	}
 
 	void TreeItemProperty::CreateTreeItemMenu()

@@ -1686,29 +1686,29 @@ namespace Testing
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	inline void point::negate( Point< T, Count > & p_ptPoint )
+	inline void point::negate( Point< T, Count > & p_point )
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			p_ptPoint[i] = -p_ptPoint[i];
+			p_point[i] = -p_point[i];
 		}
 	}
 
 	template< typename T, uint32_t Count >
-	void point::normalise( Point< T, Count > & p_ptPoint )
+	void point::normalise( Point< T, Count > & p_point )
 	{
-		T l_tLength = T( distance( p_ptPoint ) );
+		T l_tLength = T( distance( p_point ) );
 
 		if ( !Castor::Policy< T >::is_null( l_tLength ) )
 		{
-			p_ptPoint /= l_tLength;
+			p_point /= l_tLength;
 		}
 	}
 
 	template< typename T, uint32_t Count >
-	Point< T, Count > point::get_normalised( Point< T, Count > const & p_ptPoint )
+	Point< T, Count > point::get_normalised( Point< T, Count > const & p_point )
 	{
-		Point< T, Count > l_return( p_ptPoint );
+		Point< T, Count > l_return( p_point );
 		normalise( l_return );
 		return l_return;
 	}
@@ -1745,45 +1745,45 @@ namespace Testing
 	}
 
 	template< typename T, uint32_t Count >
-	double point::distance_squared( Point< T, Count > const & p_ptPoint )
+	double point::distance_squared( Point< T, Count > const & p_point )
 	{
 		double l_dReturn = 0.0;
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_dReturn += p_ptPoint[i] * p_ptPoint[i];
+			l_dReturn += p_point[i] * p_point[i];
 		}
 
 		return l_dReturn;
 	}
 
 	template< typename T, uint32_t Count >
-	double point::distance( Point< T, Count > const & p_ptPoint )
+	double point::distance( Point< T, Count > const & p_point )
 	{
-		return sqrt( distance_squared( p_ptPoint ) );
+		return sqrt( distance_squared( p_point ) );
 	}
 
 	template< typename T, uint32_t Count >
-	inline double point::distance_manhattan( Point< T, Count > const & p_ptPoint )
+	inline double point::distance_manhattan( Point< T, Count > const & p_point )
 	{
 		double l_dReturn = 0.0;
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_dReturn += abs( p_ptPoint[i] );
+			l_dReturn += abs( p_point[i] );
 		}
 
 		return l_dReturn;
 	}
 
 	template< typename T, uint32_t Count >
-	double point::distance_minkowski( Point< T, Count > const & p_ptPoint, double p_dOrder )
+	double point::distance_minkowski( Point< T, Count > const & p_point, double p_dOrder )
 	{
 		double l_dReturn = 0.0;
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_dReturn += pow( double( abs( p_ptPoint[i] ) ), p_dOrder );
+			l_dReturn += pow( double( abs( p_point[i] ) ), p_dOrder );
 		}
 
 		l_dReturn = pow( l_dReturn, 1.0 / p_dOrder );
@@ -1791,13 +1791,13 @@ namespace Testing
 	}
 
 	template< typename T, uint32_t Count >
-	double point::distance_chebychev( Point< T, Count > const & p_ptPoint )
+	double point::distance_chebychev( Point< T, Count > const & p_point )
 	{
 		double l_dReturn = 0.0;
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_dReturn = std::max( l_dReturn, double( abs( p_ptPoint[i] ) ) );
+			l_dReturn = std::max( l_dReturn, double( abs( p_point[i] ) ) );
 		}
 
 		return l_dReturn;
@@ -1896,65 +1896,65 @@ namespace Testing
 	}
 
 	template< typename T, uint32_t Count >
-	inline void point::negate( Coords< T, Count > & p_ptPoint )
+	inline void point::negate( Coords< T, Count > & p_point )
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			p_ptPoint[i] = -p_ptPoint[i];
+			p_point[i] = -p_point[i];
 		}
 	}
 
 	template< typename T, uint32_t Count >
-	void point::normalise( Coords< T, Count > & p_ptPoint )
+	void point::normalise( Coords< T, Count > & p_point )
 	{
-		T l_tLength = T( distance( p_ptPoint ) );
+		T l_tLength = T( distance( p_point ) );
 
 		if ( !Castor::Policy< T >::is_null( l_tLength ) )
 		{
-			p_ptPoint /= l_tLength;
+			p_point /= l_tLength;
 		}
 	}
 
 	template< typename T, uint32_t Count >
-	double point::distance_squared( Coords< T, Count > const & p_ptPoint )
+	double point::distance_squared( Coords< T, Count > const & p_point )
 	{
 		double l_dReturn = 0.0;
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_dReturn += p_ptPoint[i] * p_ptPoint[i];
-		}
-
-		return l_dReturn;
-	}
-
-	template< typename T, uint32_t Count >
-	double point::distance( Coords< T, Count > const & p_ptPoint )
-	{
-		return sqrt( distance_squared( p_ptPoint ) );
-	}
-
-	template< typename T, uint32_t Count >
-	inline double point::distance_manhattan( Coords< T, Count > const & p_ptPoint )
-	{
-		double l_dReturn = 0.0;
-
-		for ( uint32_t i = 0; i < Count; i++ )
-		{
-			l_dReturn += abs( p_ptPoint[i] );
+			l_dReturn += p_point[i] * p_point[i];
 		}
 
 		return l_dReturn;
 	}
 
 	template< typename T, uint32_t Count >
-	double point::distance_minkowski( Coords< T, Count > const & p_ptPoint, double p_dOrder )
+	double point::distance( Coords< T, Count > const & p_point )
+	{
+		return sqrt( distance_squared( p_point ) );
+	}
+
+	template< typename T, uint32_t Count >
+	inline double point::distance_manhattan( Coords< T, Count > const & p_point )
 	{
 		double l_dReturn = 0.0;
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_dReturn += pow( double( abs( p_ptPoint[i] ) ), p_dOrder );
+			l_dReturn += abs( p_point[i] );
+		}
+
+		return l_dReturn;
+	}
+
+	template< typename T, uint32_t Count >
+	double point::distance_minkowski( Coords< T, Count > const & p_point, double p_dOrder )
+	{
+		double l_dReturn = 0.0;
+
+		for ( uint32_t i = 0; i < Count; i++ )
+		{
+			l_dReturn += pow( double( abs( p_point[i] ) ), p_dOrder );
 		}
 
 		l_dReturn = pow( l_dReturn, 1.0 / p_dOrder );
@@ -1962,13 +1962,13 @@ namespace Testing
 	}
 
 	template< typename T, uint32_t Count >
-	double point::distance_chebychev( Coords< T, Count > const & p_ptPoint )
+	double point::distance_chebychev( Coords< T, Count > const & p_point )
 	{
 		double l_dReturn = 0.0;
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_dReturn = std::max( l_dReturn, double( abs( p_ptPoint[i] ) ) );
+			l_dReturn = std::max( l_dReturn, double( abs( p_point[i] ) ) );
 		}
 
 		return l_dReturn;

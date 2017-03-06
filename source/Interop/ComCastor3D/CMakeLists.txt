@@ -2,19 +2,19 @@ if ( MSVC )
 	project( ComCastor3D )
 	include( ComUtils )
 	find_package( ATL )
-	
+
 	if ( ATL_FOUND )
 		message( STATUS "+ Found ATL" )
-		set( CMC_VERSION_MAJOR 0 )
-		set( CMC_VERSION_MINOR 8 )
-		set( CMC_VERSION_BUILD 0 )
-		
+		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+		set( ${PROJECT_NAME}_VERSION_MINOR	9 )
+		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+
 		configure_file( 
 			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/ComCastorUtils.hpp.in
 			${CMAKE_CURRENT_BINARY_DIR}/Src/ComCastorUtils.hpp
 			NEWLINE_STYLE LF
 		)
-		
+
 		include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
 		include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
 		include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
@@ -25,7 +25,7 @@ if ( MSVC )
 		include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
 		include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src/Win32 )
 		include_directories( ${ATL_INCLUDE_DIR} )
-		
+
 		#ATL Libs
 		set( AtlLibraries "" )
 		FOREACH( Lib ${ATL_LIBRARIES} )
@@ -35,13 +35,7 @@ if ( MSVC )
 				set( AtlLibraries "${Lib}" )
 			endif ()
 		ENDFOREACH()
-		
-		if ( CASTOR_BUILD_GENERIC_CASTORGUI )
-			add_definitions( -DHAS_CASTORGUI=1 )
-			include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Generic/CastorGui/Src )
-			set( AtlLibraries "${AtlLibraries}|CastorGui" )
-		endif ()
-		
+
 		# Define Interfaces and their RGS files
 		set( RESOURCE_ID 102 )
 		set( RESRC_LIST "" )
@@ -61,7 +55,7 @@ if ( MSVC )
 		add_interface( "D2F8DD56-82D0-4467-9AB4-61F3BB228ACC" RESRC_LIST RESH_LIST RESOURCE_ID "PixelBuffer" )
 		add_interface( "032154A9-2E6F-4FEE-A132-5840EEEC21FD" RESRC_LIST RESH_LIST RESOURCE_ID "Image" )
 		add_interface( "A39A1B4B-9882-4B2E-AB1D-55257AF40727" RESRC_LIST RESH_LIST RESOURCE_ID "Logger" )
-		
+
 		# Castor3D interfaces
 		add_interface( "557E0DD9-00E5-48A2-AE26-B78CC6031956" RESRC_LIST RESH_LIST RESOURCE_ID "Engine" )
 		add_interface( "E59360F1-2F5B-4011-A61F-32E1A77207C8" RESRC_LIST RESH_LIST RESOURCE_ID "Submesh" )
@@ -90,41 +84,41 @@ if ( MSVC )
 		add_interface( "68E4373D-24BB-45FE-9717-CB512111A984" RESRC_LIST RESH_LIST RESOURCE_ID "RenderWindow" )
 		add_interface( "CA7E6B72-3130-4888-83D3-33BFBBA2B3FD" RESRC_LIST RESH_LIST RESOURCE_ID "BlendState" )
 		add_interface( "8699BD20-FDE7-4FA9-9265-60B539CCE45D" RESRC_LIST RESH_LIST RESOURCE_ID "DepthStencilState" )
+		add_interface( "3720BBC7-6B1D-454B-A062-677C4E2B365E" RESRC_LIST RESH_LIST RESOURCE_ID "MultisampleState" )
 		add_interface( "5880CD0C-969C-471D-8FD0-3F271A492D33" RESRC_LIST RESH_LIST RESOURCE_ID "RasteriserState" )
 		add_interface( "98978C6B-C6FB-447C-A874-15068F900011" RESRC_LIST RESH_LIST RESOURCE_ID "Sampler" )
-		add_interface( "0FF08968-9937-4771-8949-0E86E3615F98" RESRC_LIST RESH_LIST RESOURCE_ID "Texture" )
-		add_interface( "C10380AA-4B12-400E-BA6C-0B60866084FB" RESRC_LIST RESH_LIST RESOURCE_ID "StaticTexture" )
-		add_interface( "F88BDBA4-4D87-4839-9DEC-4534FE431C02" RESRC_LIST RESH_LIST RESOURCE_ID "DynamicTexture" )
+		add_interface( "3CA68187-BD17-4E78-8D5C-B994DDA134BA" RESRC_LIST RESH_LIST RESOURCE_ID "TextureImage" )
+		add_interface( "0FF08968-9937-4771-8949-0E86E3615F98" RESRC_LIST RESH_LIST RESOURCE_ID "TextureLayout" )
 		add_interface( "E8DD6F29-F296-4687-AADD-F6FD1D0AC670" RESRC_LIST RESH_LIST RESOURCE_ID "TextureUnit" )
 		add_interface( "B62FE384-D806-4DA7-B091-A7E260D95D7F" RESRC_LIST RESH_LIST RESOURCE_ID "ShaderProgram" )
 		add_interface( "1B6D6829-C5D7-4B75-8A92-E016C63147B3" RESRC_LIST RESH_LIST RESOURCE_ID "Pass" )
 		add_interface( "A9F3E2A5-A54C-4E4A-8448-0A663BE88E40" RESRC_LIST RESH_LIST RESOURCE_ID "Material" )
-		
+
 		# Add RGS files to the sources
 		file( GLOB COMCASTOR3D_RGS_FILES
 			${CMAKE_CURRENT_BINARY_DIR}/Src/Win32/*.rgs
 			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/*.rgs
 		)
 		source_group( "Registry Files" FILES ${COMCASTOR3D_RGS_FILES} )
-		
+
 		# Update resources IDs
 		configure_file( 
 			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/resource.h.in
 			${CMAKE_CURRENT_BINARY_DIR}/Src/Win32/resource.h
 			NEWLINE_STYLE LF
 		)
-		
+
 		# Define IDL files
 		file( GLOB COMCASTOR3D_IDL_FILES Src/*.idl )
 		file( GLOB COMCASTOR3D_DEF_FILES_RELEASE Src/${PROJECT_NAME}.def )
 		file( GLOB COMCASTOR3D_DEF_FILES_DEBUG Src/${PROJECT_NAME}d.def )
-		
+
 		if ( MSVC )
 		  set( CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DEF:${COMCASTOR3D_DEF_FILES_DEBUG}")
 		  set( CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEF:${COMCASTOR3D_DEF_FILES_RELEASE}")
 		  set( CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO} /DEF:${COMCASTOR3D_DEF_FILES_RELEASE}")
 		endif()
-		
+
 		# MIDL compiler
 		add_com_interfaces( COMCASTOR3D_SOURCES_IDL_FILES ${COMCASTOR3D_IDL_FILES} )
 		set( COMCASTOR3D_ADDITIONAL_FILES
@@ -135,7 +129,7 @@ if ( MSVC )
 		source_group( "IDL Files" FILES ${COMCASTOR3D_IDL_FILES} )
 		source_group( "IDL Files" FILES ${COMCASTOR3D_SOURCES_IDL_FILES} )
 		source_group( "IDL Files" FILES ${COMCASTOR3D_DEF_FILES} )
-		
+
 		add_target( 
 			${PROJECT_NAME}
 			dll
@@ -187,16 +181,11 @@ if ( MSVC )
 			COMPONENT ${PROJECT_NAME}
 		)
 
-		register_target( ${PROJECT_NAME} Debug )
-		register_target( ${PROJECT_NAME} Release )
+		register_target( ${PROJECT_NAME} )
 
-		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Interop/ComCastor3D" )
+		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Interop" )
 		add_target_astyle( ${PROJECT_NAME} ".hpp;.inl;.cpp" )
-		set( Build "yes (version ${CMC_VERSION_MAJOR}.${CMC_VERSION_MINOR}.${CMC_VERSION_BUILD})" PARENT_SCOPE )
-
-		if( ${CASTOR_BUILDGRP_TEST} )
-			add_subdirectory( Test )
-		endif()
+		set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 	else ()
 		set( Build "no (ATL libraries not found)" PARENT_SCOPE )
 	endif ()

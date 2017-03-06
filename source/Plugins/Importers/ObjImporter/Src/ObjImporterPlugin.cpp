@@ -1,19 +1,31 @@
 #include "ObjImporter.hpp"
 
-#include <ImporterPlugin.hpp>
+#include <Engine.hpp>
+#include <Plugin/ImporterPlugin.hpp>
+
 #include <Engine.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
+
+#ifndef CASTOR_PLATFORM_WINDOWS
+#	define C3D_Obj_API
+#else
+#	ifdef ObjImporter_EXPORTS
+#		define C3D_Obj_API __declspec(dllexport)
+#	else
+#		define C3D_Obj_API __declspec(dllimport)
+#	endif
+#endif
 
 C3D_Obj_API void GetRequiredVersion( Version & p_version )
 {
 	p_version = Version();
 }
 
-C3D_Obj_API ePLUGIN_TYPE GetType()
+C3D_Obj_API PluginType GetType()
 {
-	return ePLUGIN_TYPE_IMPORTER;
+	return PluginType::eImporter;
 }
 
 C3D_Obj_API String GetName()
@@ -28,20 +40,22 @@ C3D_Obj_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 	return l_arrayReturn;
 }
 
-C3D_Obj_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
-{
-	p_pPlugin->AttachImporter( std::make_shared< Obj::ObjImporter >( *p_pEngine ) );
-}
-
-C3D_Obj_API void Destroy( ImporterPlugin * p_pPlugin )
-{
-	p_pPlugin->DetachImporter();
-}
-
 C3D_Obj_API void OnLoad( Castor3D::Engine * p_engine )
 {
+	auto l_extensions = GetExtensions( p_engine );
+
+	for ( auto const & l_extension : l_extensions )
+	{
+		p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &Obj::ObjImporter::Create );
+	}
 }
 
 C3D_Obj_API void OnUnload( Castor3D::Engine * p_engine )
 {
+	auto l_extensions = GetExtensions( p_engine );
+
+	for ( auto const & l_extension : l_extensions )
+	{
+		p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+	}
 }

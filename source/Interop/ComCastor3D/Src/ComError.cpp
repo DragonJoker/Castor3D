@@ -1,6 +1,6 @@
 #include "ComError.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 namespace CastorCom
 {

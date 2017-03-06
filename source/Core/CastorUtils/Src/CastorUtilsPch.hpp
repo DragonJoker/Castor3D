@@ -1,19 +1,24 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___CASTOR_UTILS_PCH_H___
 #define ___CASTOR_UTILS_PCH_H___
@@ -67,33 +72,35 @@ FT_BEGIN_HEADER
 #	include FT_TYPES_H
 FT_END_HEADER
 
-#	if defined _WIN32
-#		if defined( _MSC_VER )
+#	if defined( CASTOR_PLATFORM_WINDOWS )
+#		if defined( CASTOR_COMPILER_MSVC )
 #			include <tchar.h>
 #		endif
 #		include <windows.h>
 #		include <direct.h>
 #	else
 #		include <sys/time.h>
-#		if defined( __linux__ )
+#		if defined( CASTOR_PLATFORM_ANDROID ) || defined( CASTOR_PLATFORM_LINUX )
 #			include <dlfcn.h>
 #		endif
 #	endif
 
-#	if defined( __GNUG__ )
+#	if defined( CASTOR_COMPILER_GNUC )
 #		include <sys/time.h>
 #		include <errno.h>
 #		include <iostream>
 #		include <unistd.h>
 #		include <cerrno>
-#		if !defined( _WIN32 )
+#		if defined( CASTOR_PLATFORM_LINUX )
 #			include <X11/Xlib.h>
 #		endif
 #	endif
 
 extern "C"
 {
-#	include <FreeImage.h>
+#	if !defined( CASTOR_PLATFORM_ANDROID )
+#		include <FreeImage.h>
+#	endif
 }
 
 #endif

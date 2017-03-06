@@ -1,7 +1,7 @@
 #include "ViewportTreeItemProperty.hpp"
 
-#include <Viewport.hpp>
-#include <FunctorEvent.hpp>
+#include <Render/Viewport.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
 
 #include "SizeProperties.hpp"
 
@@ -66,15 +66,15 @@ namespace GuiCommon
 
 		switch ( m_viewport.GetType() )
 		{
-		case eVIEWPORT_TYPE_PERSPECTIVE:
+		case ViewportType::ePerspective:
 			l_selected = PROPERTY_VIEWPORT_TYPE_PERSPECTIVE;
 			break;
 
-		case eVIEWPORT_TYPE_FRUSTUM:
+		case ViewportType::eFrustum:
 			l_selected = PROPERTY_VIEWPORT_TYPE_FRUSTUM;
 			break;
 
-		case eVIEWPORT_TYPE_ORTHO:
+		case ViewportType::eOrtho:
 			l_selected = PROPERTY_VIEWPORT_TYPE_ORTHO;
 			break;
 		}
@@ -102,15 +102,15 @@ namespace GuiCommon
 			{
 				if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_PERSPECTIVE )
 				{
-					OnTypeChange( eVIEWPORT_TYPE_PERSPECTIVE );
+					OnTypeChange( ViewportType::ePerspective );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_ORTHO )
 				{
-					OnTypeChange( eVIEWPORT_TYPE_ORTHO );
+					OnTypeChange( ViewportType::eOrtho );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_FRUSTUM )
 				{
-					OnTypeChange( eVIEWPORT_TYPE_FRUSTUM );
+					OnTypeChange( ViewportType::eFrustum );
 				}
 			}
 			else if ( l_property->GetName() == PROPERTY_VIEWPORT_SIZE )
@@ -152,11 +152,11 @@ namespace GuiCommon
 		}
 	}
 
-	void ViewportTreeItemProperty::OnTypeChange( eVIEWPORT_TYPE p_value )
+	void ViewportTreeItemProperty::OnTypeChange( ViewportType p_value )
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetType( p_value );
+			m_viewport.UpdateType( p_value );
 		} );
 	}
 
@@ -164,7 +164,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetSize( p_value );
+			m_viewport.Resize( p_value );
 		} );
 	}
 
@@ -172,7 +172,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetTop( float( p_value ) );
+			m_viewport.UpdateTop( float( p_value ) );
 		} );
 	}
 
@@ -180,7 +180,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetBottom( float( p_value ) );
+			m_viewport.UpdateBottom( float( p_value ) );
 		} );
 	}
 
@@ -188,7 +188,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetLeft( float( p_value ) );
+			m_viewport.UpdateLeft( float( p_value ) );
 		} );
 	}
 
@@ -196,7 +196,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetRight( float( p_value ) );
+			m_viewport.UpdateRight( float( p_value ) );
 		} );
 	}
 
@@ -204,7 +204,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetNear( float( p_value ) );
+			m_viewport.UpdateNear( float( p_value ) );
 		} );
 	}
 
@@ -212,7 +212,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetFar( float( p_value ) );
+			m_viewport.UpdateFar( float( p_value ) );
 		} );
 	}
 
@@ -220,7 +220,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetFovY( Angle::from_degrees( p_value ) );
+			m_viewport.UpdateFovY( Angle::from_degrees( p_value ) );
 		} );
 	}
 
@@ -228,7 +228,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetRatio( float( p_value ) );
+			m_viewport.UpdateRatio( float( p_value ) );
 		} );
 	}
 }
