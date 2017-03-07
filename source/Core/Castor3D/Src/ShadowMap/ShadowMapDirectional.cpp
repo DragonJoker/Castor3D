@@ -62,20 +62,46 @@ namespace Castor3D
 	{
 	}
 
+	void ShadowMapDirectional::Update( Camera const & p_camera
+		, RenderQueueArray & p_queues )
+	{
+		if ( !m_shadowMaps.empty() )
+		{
+			m_shadowMaps.begin()->second->Update( p_queues, 0u );
+		}
+	}
+
+	void ShadowMapDirectional::Render()
+	{
+		if ( !m_shadowMaps.empty() )
+		{
+			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			m_depthAttach->Attach( AttachmentPoint::eDepth );
+			m_frameBuffer->Clear( BufferComponent::eDepth );
+			m_shadowMaps.begin()->second->Render();
+			m_depthAttach->Detach();
+			m_frameBuffer->Unbind();
+		}
+	}
+
 	int32_t ShadowMapDirectional::DoGetMaxPasses()const
 	{
 		return 1;
 	}
 
-	bool ShadowMapDirectional::DoInitialise( Size const & p_size )
+	void ShadowMapDirectional::DoInitialise( Size const & p_size )
 	{
 		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-		return true;
+
+		auto l_texture = m_shadowMap.GetTexture();
+		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
+		m_depthAttach->SetTarget( l_texture->GetType() );
 	}
 
 	void ShadowMapDirectional::DoCleanup()
 	{
+		m_depthAttach.reset();
 	}
 
 	ShadowMapPassSPtr ShadowMapDirectional::DoCreatePass( Light & p_light )const

@@ -81,27 +81,6 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Updates the passes, selecting the lights that will project shadows.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[in]	p_camera	The viewer camera.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
-		 *\~french
-		 *\brief		Met à jour les passes, en sélectionnant les lumières qui projetteront une ombre.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[in]	p_camera	La caméra de l'observateur.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
-		 */
-		C3D_API void Update( Camera const & p_camera
-			, RenderQueueArray & p_queues );
-		/**
-		 *\~english
-		 *\brief		Renders the selected lights shadow map.
-		 *\~french
-		 *\brief		Dessine les shadow maps des lumières sélectionnées.
-		 */
-		C3D_API void Render();
-		/**
-		 *\~english
 		 *\brief		Adds a light source, creating a shadow map pass for it.
 		 *\param[in]	p_light	The light source.
 		 *\~french
@@ -190,7 +169,7 @@ namespace Castor3D
 		 *\brief		Initialise les données spécifiques au type de source lumineuse.
 		 *\param[in]	p_size	Les dimensions voulues pour le frame buffer.
 		 */
-		C3D_API virtual bool DoInitialise( Castor::Size const & p_size ) = 0;
+		C3D_API virtual void DoInitialise( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the light type specific data.
@@ -241,9 +220,6 @@ namespace Castor3D
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		std::vector< TextureAttachmentSPtr > m_depthAttach;
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;

@@ -59,21 +59,79 @@ namespace Castor3D
 	ShadowMapSpot::~ShadowMapSpot()
 	{
 	}
+	
+	void ShadowMapSpot::Update( Camera const & p_camera
+		, RenderQueueArray & p_queues )
+	{
+		if ( !m_shadowMaps.empty() )
+		{
+			m_sorted.clear();
+
+			for ( auto & l_it : m_shadowMaps )
+			{
+				m_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
+						, l_it.first->GetParent()->GetDerivedPosition() )
+					, l_it.second );
+			}
+
+			auto l_it = m_sorted.begin();
+			const int32_t l_max = DoGetMaxPasses();
+
+			for ( int32_t i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
+			{
+				l_it->second->Update( p_queues, i );
+			}
+		}
+	}
+
+	void ShadowMapSpot::Render()
+	{
+		if ( !m_sorted.empty() )
+		{
+			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			auto l_it = m_sorted.begin();
+			const int32_t l_max = DoGetMaxPasses();
+
+			for ( int32_t i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
+			{
+				m_depthAttach[i]->Attach( AttachmentPoint::eDepth );
+				m_frameBuffer->Clear( BufferComponent::eDepth );
+				l_it->second->Render();
+				m_depthAttach[i]->Detach();
+			}
+
+			m_frameBuffer->Unbind();
+		}
+	}
 
 	int32_t ShadowMapSpot::DoGetMaxPasses()const
 	{
 		return GLSL::SpotShadowMapCount;
 	}
 
-	bool ShadowMapSpot::DoInitialise( Size const & p_size )
+	void ShadowMapSpot::DoInitialise( Size const & p_size )
 	{
 		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-		return true;
+
+		auto l_texture = m_shadowMap.GetTexture();
+		m_depthAttach.resize( DoGetMaxPasses() );
+		int i = 0;
+
+		for ( auto & l_attach : m_depthAttach )
+		{
+			l_attach = m_frameBuffer->CreateAttachment( l_texture );
+			l_attach->SetTarget( l_texture->GetType() );
+			l_attach->SetLayer( i++ );
+		}
 	}
 
 	void ShadowMapSpot::DoCleanup()
 	{
+		for ( auto & l_attach : m_depthAttach )
+		{
+			l_attach.reset();
+		}
 	}
 
 	ShadowMapPassSPtr ShadowMapSpot::DoCreatePass( Light & p_light )const

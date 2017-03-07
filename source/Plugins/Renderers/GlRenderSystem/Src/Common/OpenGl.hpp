@@ -48,10 +48,75 @@ SOFTWARE.
 #	undef MemoryBarrier
 #endif
 
-//*************************************************************************************************
+#define GL_USE_STD_FUNCTION 0
 
 namespace GlRender
 {
+	//*********************************************************************************************
+
+	template< typename TRet, typename ... TParams >
+	class GlFunction
+	{
+	public:
+
+		using CFuncType = TRet( * )( TParams... );
+
+#if GL_USE_STD_FUNCTION
+
+		using FuncType = std::function< TRet( TParams... ) >;
+
+		inline GlFunction( CFuncType p_function )
+			: m_function{ p_function }
+		{
+		}
+
+		inline GlFunction & operator=( CFuncType p_function )
+		{
+			m_function = p_function;
+			return *this;
+		}
+
+#else
+
+		using FuncType = CFuncType;
+
+#endif
+
+		inline GlFunction() = default;
+
+		inline GlFunction( FuncType p_function )
+			: m_function{ p_function }
+		{
+		}
+
+		inline GlFunction & operator=( FuncType p_function )
+		{
+			m_function = p_function;
+			return *this;
+		}
+
+		inline TRet operator()( TParams ... p_params )const
+		{
+			REQUIRE( m_function );
+			return m_function( std::forward< TParams >( p_params )... );
+		}
+
+		bool operator==( nullptr_t )const
+		{
+			return m_function == nullptr;
+		}
+
+		bool operator!=( nullptr_t )const
+		{
+			return m_function != nullptr;
+		}
+
+	private:
+		FuncType m_function{ nullptr };
+	};
+
+	//*********************************************************************************************
+
 	class TexFunctionsBase
 		: public Holder
 	{
@@ -89,15 +154,15 @@ namespace GlRender
 		inline void TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )const override;
 		inline void GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img )const override;
 
-		std::function< void( uint32_t mode, uint32_t texture ) > m_pfnBindTexture;
-		std::function< void( uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage1D;
-		std::function< void( uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage2D;
-		std::function< void( uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage3D;
-		std::function< void( uint32_t target, int level, int internalFormat, int width, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage1D;
-		std::function< void( uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage2D;
-		std::function< void( uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage3D;
-		std::function< void( uint32_t target, int level, uint32_t format, uint32_t type, void * pixels ) > m_pfnGetTexImage;
-		std::function< void( uint32_t target ) > m_pfnGenerateMipmap;
+		GlFunction< void, uint32_t, uint32_t > m_pfnBindTexture;
+		GlFunction< void, uint32_t, int , int , int , uint32_t , uint32_t , void const * > m_pfnTexSubImage1D;
+		GlFunction< void, uint32_t, int , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTexSubImage2D;
+		GlFunction< void, uint32_t, int , int , int , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTexSubImage3D;
+		GlFunction< void, uint32_t, int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTexImage1D;
+		GlFunction< void, uint32_t, int , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTexImage2D;
+		GlFunction< void, uint32_t, int , int , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTexImage3D;
+		GlFunction< void, uint32_t, int , uint32_t , uint32_t , void * > m_pfnGetTexImage;
+		GlFunction< void, uint32_t > m_pfnGenerateMipmap;
 	};
 
 	class TexFunctionsDSA
@@ -122,14 +187,14 @@ namespace GlRender
 		inline void GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img )const override;
 
 		mutable uint32_t m_uiTexture;
-		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage1D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage2D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage3D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage1D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage2D;
-		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage3D;
-		std::function< void( uint32_t texture, uint32_t target, int level, uint32_t format, uint32_t type, void * pixels ) > m_pfnGetTextureImage;
-		std::function< void( uint32_t texture, uint32_t target ) > m_pfnGenerateMipmap;
+		GlFunction< void, uint32_t, uint32_t , int , int , int , uint32_t , uint32_t , void const * > m_pfnTextureSubImage1D;
+		GlFunction< void, uint32_t, uint32_t , int , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTextureSubImage2D;
+		GlFunction< void, uint32_t, uint32_t , int , int , int , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTextureSubImage3D;
+		GlFunction< void, uint32_t, uint32_t , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTextureImage1D;
+		GlFunction< void, uint32_t, uint32_t , int , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTextureImage2D;
+		GlFunction< void, uint32_t, uint32_t , int , int , int , int , int , int , uint32_t , uint32_t , void const * > m_pfnTextureImage3D;
+		GlFunction< void, uint32_t, uint32_t , int , uint32_t , uint32_t , void * > m_pfnGetTextureImage;
+		GlFunction< void, uint32_t, uint32_t > m_pfnGenerateMipmap;
 	};
 
 	class BufFunctionsBase
@@ -179,30 +244,30 @@ namespace GlRender
 		/*@name NV_vertex_buffer_unified_memory extension */
 		//@{
 
-		std::function< void( uint32_t pname, uint32_t index, uint64_t address, size_t length ) > m_pfnBufferAddressRange;
-		std::function< void( int size, uint32_t type, int stride ) > m_pfnVertexFormat;
-		std::function< void( uint32_t type, int stride ) > m_pfnNormalFormat;
-		std::function< void( int size, uint32_t type, int stride ) > m_pfnColorFormat;
-		std::function< void( uint32_t type, int stride ) > m_pfnIndexFormat;
-		std::function< void( int size, uint32_t type, int stride ) > m_pfnTexCoordFormat;
-		std::function< void( int stride ) > m_pfnEdgeFlagFormat;
-		std::function< void( int size, uint32_t type, int stride ) > m_pfnSecondaryColorFormat;
-		std::function< void( uint32_t type, int stride ) > m_pfnFogCoordFormat;
-		std::function< void( uint32_t index, int size, uint32_t type, bool normalized, int stride ) > m_pfnVertexAttribFormat;
-		std::function< void( uint32_t index, int size, uint32_t type, int stride ) > m_pfnVertexAttribIFormat;
+		GlFunction< void, uint32_t, uint32_t , uint64_t , size_t > m_pfnBufferAddressRange;
+		GlFunction< void, int, uint32_t , int > m_pfnVertexFormat;
+		GlFunction< void, uint32_t, int > m_pfnNormalFormat;
+		GlFunction< void, int, uint32_t , int > m_pfnColorFormat;
+		GlFunction< void, uint32_t, int > m_pfnIndexFormat;
+		GlFunction< void, int, uint32_t , int > m_pfnTexCoordFormat;
+		GlFunction< void, int > m_pfnEdgeFlagFormat;
+		GlFunction< void, int, uint32_t , int > m_pfnSecondaryColorFormat;
+		GlFunction< void, uint32_t, int > m_pfnFogCoordFormat;
+		GlFunction< void, uint32_t, int , uint32_t , bool , int > m_pfnVertexAttribFormat;
+		GlFunction< void, uint32_t, int , uint32_t , int > m_pfnVertexAttribIFormat;
 
 		//@}
 		/*@name NV_vertex_buffer_unified_memory extension */
 		//@{
 
-		std::function< void( uint32_t target, uint32_t access ) > m_pfnMakeBufferResident;
-		std::function< void( uint32_t target ) > m_pfnMakeBufferNonResident;
-		std::function< bool( uint32_t target ) > m_pfnIsBufferResident;
-		std::function< void( uint32_t buffer, uint32_t access ) > m_pfnMakeNamedBufferResident;
-		std::function< void( uint32_t buffer ) > m_pfnMakeNamedBufferNonResident;
-		std::function< bool( uint32_t buffer ) > m_pfnIsNamedBufferResident;
-		std::function< void( uint32_t target, uint32_t pname, uint64_t * params ) > m_pfnGetBufferParameterui64v;
-		std::function< void( uint32_t buffer, uint32_t pname,  uint64_t * params ) > m_pfnGetNamedBufferParameterui64v;
+		GlFunction< void, uint32_t, uint32_t > m_pfnMakeBufferResident;
+		GlFunction< void, uint32_t > m_pfnMakeBufferNonResident;
+		GlFunction< bool, uint32_t > m_pfnIsBufferResident;
+		GlFunction< void, uint32_t, uint32_t > m_pfnMakeNamedBufferResident;
+		GlFunction< void, uint32_t > m_pfnMakeNamedBufferNonResident;
+		GlFunction< bool, uint32_t > m_pfnIsNamedBufferResident;
+		GlFunction< void, uint32_t, uint32_t , uint64_t *> m_pfnGetBufferParameterui64v;
+		GlFunction< void, uint32_t, uint32_t , uint64_t *> m_pfnGetNamedBufferParameterui64v;
 
 		//@}
 	};
@@ -222,15 +287,15 @@ namespace GlRender
 		inline void GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const override;
 		inline void FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
 
-		std::function< void( uint32_t target, uint32_t buffer ) > m_pfnBindBuffer;
-		std::function< void( uint32_t target, ptrdiff_t size, void const * data, uint32_t usage ) > m_pfnBufferData;
-		std::function< void( uint32_t target, ptrdiff_t offset, ptrdiff_t size, void const * data ) > m_pfnBufferSubData;
-		std::function< void( uint32_t readtarget, uint32_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyBufferSubData;
-		std::function< void * ( uint32_t target, uint32_t access ) > m_pfnMapBuffer;
-		std::function< uint8_t( uint32_t target ) > m_pfnUnmapBuffer;
-		std::function< void * ( uint32_t target, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) > m_pfnMapBufferRange;
-		std::function< void( uint32_t target, ptrdiff_t offset, ptrdiff_t length ) > m_pfnFlushMappedBufferRange;
-		std::function< void( uint32_t target, uint32_t pname, int * params ) > m_pfnGetBufferParameteriv;
+		GlFunction< void, uint32_t, uint32_t > m_pfnBindBuffer;
+		GlFunction< void, uint32_t, ptrdiff_t , void const *, uint32_t > m_pfnBufferData;
+		GlFunction< void, uint32_t, ptrdiff_t , ptrdiff_t , void const * > m_pfnBufferSubData;
+		GlFunction< void, uint32_t, uint32_t , ptrdiff_t , ptrdiff_t , ptrdiff_t > m_pfnCopyBufferSubData;
+		GlFunction< void *, uint32_t, uint32_t > m_pfnMapBuffer;
+		GlFunction< uint8_t, uint32_t > m_pfnUnmapBuffer;
+		GlFunction< void *, uint32_t, ptrdiff_t , ptrdiff_t , uint32_t > m_pfnMapBufferRange;
+		GlFunction< void, uint32_t, ptrdiff_t , ptrdiff_t > m_pfnFlushMappedBufferRange;
+		GlFunction< void, uint32_t, uint32_t , int *> m_pfnGetBufferParameteriv;
 	};
 
 	class BufFunctionsDSA
@@ -252,14 +317,14 @@ namespace GlRender
 		inline void FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
 
 		mutable uint32_t m_uiBuffer;
-		std::function< void( uint32_t buffer, ptrdiff_t size, void const * data, uint32_t usage ) > m_pfnNamedBufferData;
-		std::function< void( uint32_t buffer, ptrdiff_t offset, ptrdiff_t size, void const * data ) > m_pfnNamedBufferSubData;
-		std::function< void( uint32_t readtarget, uint32_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyNamedBufferSubData;
-		std::function< void * ( uint32_t buffer, uint32_t access ) > m_pfnMapNamedBuffer;
-		std::function< uint8_t ( uint32_t buffer ) > m_pfnUnmapNamedBuffer;
-		std::function< void * ( uint32_t buffer, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) > m_pfnMapNamedBufferRange;
-		std::function< void( uint32_t buffer, ptrdiff_t offset, ptrdiff_t length ) > m_pfnFlushMappedNamedBufferRange;
-		std::function< void( uint32_t buffer, uint32_t pname, int * params ) > m_pfnGetNamedBufferParameteriv;
+		GlFunction< void, uint32_t, ptrdiff_t , void const *, uint32_t > m_pfnNamedBufferData;
+		GlFunction< void, uint32_t, ptrdiff_t , ptrdiff_t , void const * > m_pfnNamedBufferSubData;
+		GlFunction< void, uint32_t, uint32_t , ptrdiff_t , ptrdiff_t , ptrdiff_t > m_pfnCopyNamedBufferSubData;
+		GlFunction< void *, uint32_t, uint32_t > m_pfnMapNamedBuffer;
+		GlFunction< uint8_t, uint32_t > m_pfnUnmapNamedBuffer;
+		GlFunction< void *, uint32_t, ptrdiff_t , ptrdiff_t , uint32_t > m_pfnMapNamedBufferRange;
+		GlFunction< void, uint32_t, ptrdiff_t , ptrdiff_t > m_pfnFlushMappedNamedBufferRange;
+		GlFunction< void, uint32_t, uint32_t , int *> m_pfnGetNamedBufferParameteriv;
 	};
 
 	class OpenGl
@@ -947,77 +1012,77 @@ namespace GlRender
 		/**@name General */
 		//@{
 
-		std::function< void( float red, float green, float blue, float alpha ) > m_pfnClearColor;
-		std::function< void( double value ) > m_pfnClearDepth;
-		std::function< void( uint32_t mask ) > m_pfnClear;
-		std::function< void( uint32_t mode ) > m_pfnEnable;
-		std::function< void( uint32_t mode ) > m_pfnDisable;
-		std::function< void( int size, uint32_t * buffer ) > m_pfnSelectBuffer;
-		std::function< void( uint32_t pname, int * params ) > m_pfnGetIntegerv;
+		GlFunction< void, float, float , float , float > m_pfnClearColor;
+		GlFunction< void, double > m_pfnClearDepth;
+		GlFunction< void, uint32_t > m_pfnClear;
+		GlFunction< void, uint32_t > m_pfnEnable;
+		GlFunction< void, uint32_t > m_pfnDisable;
+		GlFunction< void, int, uint32_t *> m_pfnSelectBuffer;
+		GlFunction< void, uint32_t, int *> m_pfnGetIntegerv;
 
 		//@}
 		/**@name Depth stencil state */
 		//@{
 
-		std::function< void( uint32_t func ) >m_pfnDepthFunc;
-		std::function< void( uint8_t flag ) > m_pfnDepthMask;
-		std::function< void( uint8_t r, uint8_t g, uint8_t b, uint8_t a ) > m_pfnColorMask;
-		std::function< void( uint32_t sfail, uint32_t dpfail, uint32_t dppass ) > m_pfnStencilOp;
-		std::function< void( uint32_t func, int ref, uint32_t mask ) > m_pfnStencilFunc;
-		std::function< void( uint32_t mask ) > m_pfnStencilMask;
-		std::function< void( uint32_t face, uint32_t sfail, uint32_t dpfail, uint32_t dppass ) > m_pfnStencilOpSeparate;
-		std::function< void( uint32_t frontFunc, uint32_t backFunc, int ref, uint32_t mask ) > m_pfnStencilFuncSeparate;
-		std::function< void( uint32_t face, uint32_t mask ) > m_pfnStencilMaskSeparate;
+		GlFunction< void, uint32_t > m_pfnDepthFunc;
+		GlFunction< void, uint8_t > m_pfnDepthMask;
+		GlFunction< void, uint8_t, uint8_t , uint8_t , uint8_t > m_pfnColorMask;
+		GlFunction< void, uint32_t, uint32_t , uint32_t > m_pfnStencilOp;
+		GlFunction< void, uint32_t, int , uint32_t > m_pfnStencilFunc;
+		GlFunction< void, uint32_t > m_pfnStencilMask;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t > m_pfnStencilOpSeparate;
+		GlFunction< void, uint32_t, uint32_t , int , uint32_t > m_pfnStencilFuncSeparate;
+		GlFunction< void, uint32_t, uint32_t > m_pfnStencilMaskSeparate;
 
 		//@}
 		/**@name Rasterizer state */
 		//@{
 
-		std::function< void( uint32_t face, uint32_t mode ) > m_pfnPolygonMode;
-		std::function< void( uint32_t face ) > m_pfnCullFace;
-		std::function< void( uint32_t face ) > m_pfnFrontFace;
-		std::function< void( uint32_t target, uint32_t mode ) > m_pfnHint;
-		std::function< void( float factor, float units ) >m_pfnPolygonOffset;
+		GlFunction< void, uint32_t, uint32_t > m_pfnPolygonMode;
+		GlFunction< void, uint32_t > m_pfnCullFace;
+		GlFunction< void, uint32_t > m_pfnFrontFace;
+		GlFunction< void, uint32_t, uint32_t > m_pfnHint;
+		GlFunction< void, float, float > m_pfnPolygonOffset;
 
 		//@}
 		/**@name Blend state */
 		//@{
 
-		std::function< void( float red, float green, float blue, float alpha ) > m_pfnBlendColor;
-		std::function< void( uint32_t srcRGB, uint32_t dstRGB, uint32_t srcAlpha, uint32_t dstAlpha ) > m_pfnBlendFuncSeparate;
-		std::function< void( uint32_t buf, uint32_t srcRGB, uint32_t dstRGB, uint32_t srcAlpha, uint32_t dstAlpha ) > m_pfnBlendFuncSeparatei;
-		std::function< void( uint32_t mode ) > m_pfnBlendEquation;
-		std::function< void( uint32_t buf, uint32_t mode ) > m_pfnBlendEquationi;
-		std::function< void( float value, uint8_t invert ) > m_pfnSampleCoverage;
+		GlFunction< void, float, float , float , float > m_pfnBlendColor;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t > m_pfnBlendFuncSeparate;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t , uint32_t > m_pfnBlendFuncSeparatei;
+		GlFunction< void, uint32_t > m_pfnBlendEquation;
+		GlFunction< void, uint32_t, uint32_t > m_pfnBlendEquationi;
+		GlFunction< void, float, uint8_t > m_pfnSampleCoverage;
 
 		//@}
 		/**@name Buffer rendering */
 		//@{
 
-		std::function< void( uint32_t mode, int first, int count ) > m_pfnDrawArrays;
-		std::function< void( uint32_t mode, int count, uint32_t type, void const * indices ) > m_pfnDrawElements;
-		std::function< void( uint32_t mode, int first, int count, int primcount ) > m_pfnDrawArraysInstanced;
-		std::function< void( uint32_t mode, int count, uint32_t type, const void * indices, int primcount ) > m_pfnDrawElementsInstanced;
-		std::function< void( uint32_t index, uint32_t divisor ) > m_pfnVertexAttribDivisor;
+		GlFunction< void, uint32_t, int , int > m_pfnDrawArrays;
+		GlFunction< void, uint32_t, int , uint32_t , void const * > m_pfnDrawElements;
+		GlFunction< void, uint32_t, int , int , int > m_pfnDrawArraysInstanced;
+		GlFunction< void, uint32_t, int , uint32_t , void const * , int > m_pfnDrawElementsInstanced;
+		GlFunction< void, uint32_t, uint32_t > m_pfnVertexAttribDivisor;
 
 		//@}
 		/**@name Context */
 		//@{
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
-		std::function< BOOL( HDC hdc, HGLRC hglrc ) > m_pfnMakeCurrent;
-		std::function< BOOL( HDC hdc ) > m_pfnSwapBuffers;
-		std::function< HGLRC( HDC hdc ) > m_pfnCreateContext;
-		std::function< BOOL( HGLRC hContext ) > m_pfnDeleteContext;
-		std::function< HGLRC( HDC hDC, HGLRC hShareContext, int const * attribList ) > m_pfnCreateContextAttribs;
-		std::function< BOOL( int interval ) > m_pfnSwapInterval;
+		GlFunction< BOOL, HDC, HGLRC > m_pfnMakeCurrent;
+		GlFunction< BOOL, HDC > m_pfnSwapBuffers;
+		GlFunction< HGLRC, HDC > m_pfnCreateContext;
+		GlFunction< BOOL, HGLRC > m_pfnDeleteContext;
+		GlFunction< HGLRC, HDC, HGLRC , int const *> m_pfnCreateContextAttribs;
+		GlFunction< BOOL, int > m_pfnSwapInterval;
 #elif defined ( CASTOR_PLATFORM_LINUX )
-		std::function< int( Display * pDisplay, GLXDrawable drawable, GLXContext context ) > m_pfnMakeCurrent;
-		std::function< void( Display * pDisplay, GLXDrawable drawable ) > m_pfnSwapBuffers;
-		std::function< GLXContext( Display * pDisplay, XVisualInfo * pVisualInfo, GLXContext shareList, Bool direct ) > m_pfnCreateContext;
-		std::function< void( Display * pDisplay, GLXContext context ) > m_pfnDeleteContext;
-		std::function< GLXContext( Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList ) > m_pfnCreateContextAttribs;
-		std::function< void( Display * pDisplay, GLXDrawable drawable, int interval ) > m_pfnSwapInterval;
+		GlFunction< int, Display *, GLXDrawable , GLXContext > m_pfnMakeCurrent;
+		GlFunction< void, Display *, GLXDrawable > m_pfnSwapBuffers;
+		GlFunction< GLXContext, Display *, XVisualInfo *, GLXContext , Bool > m_pfnCreateContext;
+		GlFunction< void, Display *, GLXContext > m_pfnDeleteContext;
+		GlFunction< GLXContext, Display *, GLXFBConfig , GLXContext , Bool , int const * > m_pfnCreateContextAttribs;
+		GlFunction< void, Display *, GLXDrawable , int > m_pfnSwapInterval;
 #else
 #	error "Yet unsupported OS"
 #endif
@@ -1026,239 +1091,239 @@ namespace GlRender
 		/**@name Matrix */
 		//@{
 
-		std::function< void( int x, int y, int width, int height ) > m_pfnViewport;
+		GlFunction< void, int, int , int , int > m_pfnViewport;
 
 		//@}
 		/**@name Material */
 		//@{
 
-		std::function< void( uint32_t sfactor, uint32_t dfactor ) > m_pfnBlendFunc;
-		std::function< void( uint32_t func, float ref ) > m_pfnAlphaFunc;
-		std::function< void( uint32_t face, uint32_t pname, float param ) > m_pfnMaterialf;
-		std::function< void( uint32_t face, uint32_t pname, float const * params ) > m_pfnMaterialfv;
+		GlFunction< void, uint32_t, uint32_t > m_pfnBlendFunc;
+		GlFunction< void, uint32_t, float > m_pfnAlphaFunc;
+		GlFunction< void, uint32_t, uint32_t , float > m_pfnMaterialf;
+		GlFunction< void, uint32_t, uint32_t , float const *> m_pfnMaterialfv;
 
 		//@}
 		/**@name Texture */
 		//@{
 
-		std::function< void( int n, uint32_t * textures ) > m_pfnGenTextures;
-		std::function< void( int n, uint32_t const * textures ) > m_pfnDeleteTextures;
-		std::function< uint8_t( uint32_t texture ) > m_pfnIsTexture;
-		std::function< void( uint32_t texture ) > m_pfnActiveTexture;
-		std::function< void( uint32_t texture ) > m_pfnClientActiveTexture;
-		std::function< void( uint32_t mode ) > m_pfnReadBuffer;
-		std::function< void( int x, int y, int width, int height, uint32_t format, uint32_t type, void * pixels ) > m_pfnReadPixels;
-		std::function< void( uint32_t mode ) > m_pfnDrawBuffer;
-		std::function< void( int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnDrawPixels;
-		std::function< void( uint32_t pname, int param ) > m_pfnPixelStorei;
-		std::function< void( uint32_t pname, float param ) > m_pfnPixelStoref;
-		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width ) > m_pfnTexStorage1D;
-		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height ) > m_pfnTexStorage2D;
-		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth ) > m_pfnTexStorage3D;
-		std::function< void( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations ) > m_pfnTexStorage2DMultisample;
-		std::function< void( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations ) > m_pfnTexStorage3DMultisample;
+		GlFunction< void, int, uint32_t *> m_pfnGenTextures;
+		GlFunction< void, int, uint32_t const * > m_pfnDeleteTextures;
+		GlFunction< uint8_t, uint32_t > m_pfnIsTexture;
+		GlFunction< void, uint32_t > m_pfnActiveTexture;
+		GlFunction< void, uint32_t > m_pfnClientActiveTexture;
+		GlFunction< void, uint32_t > m_pfnReadBuffer;
+		GlFunction< void, int, int , int , int , uint32_t , uint32_t , void * > m_pfnReadPixels;
+		GlFunction< void, uint32_t > m_pfnDrawBuffer;
+		GlFunction< void, int, int , uint32_t , uint32_t , void const * > m_pfnDrawPixels;
+		GlFunction< void, uint32_t, int > m_pfnPixelStorei;
+		GlFunction< void, uint32_t, float > m_pfnPixelStoref;
+		GlFunction< void, GLenum, GLint , GLint , GLsizei > m_pfnTexStorage1D;
+		GlFunction< void, GLenum, GLint , GLint , GLsizei , GLsizei > m_pfnTexStorage2D;
+		GlFunction< void, GLenum, GLint , GLint , GLsizei , GLsizei , GLsizei > m_pfnTexStorage3D;
+		GlFunction< void, GLenum, GLsizei , GLint , GLsizei , GLsizei , GLboolean > m_pfnTexStorage2DMultisample;
+		GlFunction< void, GLenum, GLsizei , GLint , GLsizei , GLsizei , GLsizei , GLboolean > m_pfnTexStorage3DMultisample;
 
 		//@}
 		/**@name Sampler */
 		//@{
 
-		std::function< void( int count, const uint32_t * samplers ) > m_pfnDeleteSamplers;
-		std::function< void( int count, uint32_t * samplers ) > m_pfnGenSamplers;
-		std::function< uint8_t( uint32_t sampler ) > m_pfnIsSampler;
-		std::function< void( uint32_t unit, uint32_t sampler ) > m_pfnBindSampler;
-		std::function< void( uint32_t sampler, uint32_t pname, uint32_t * params ) > m_pfnGetSamplerParameteruiv;
-		std::function< void( uint32_t sampler, uint32_t pname, float * params ) > m_pfnGetSamplerParameterfv;
-		std::function< void( uint32_t sampler, uint32_t pname, int * params ) > m_pfnGetSamplerParameteriv;
-		std::function< void( uint32_t sampler, uint32_t pname, const uint32_t * params ) > m_pfnSamplerParameteruiv;
-		std::function< void( uint32_t sampler, uint32_t pname, float param ) > m_pfnSamplerParameterf;
-		std::function< void( uint32_t sampler, uint32_t pname, const float * params ) > m_pfnSamplerParameterfv;
-		std::function< void( uint32_t sampler, uint32_t pname, int param ) > m_pfnSamplerParameteri;
-		std::function< void( uint32_t sampler, uint32_t pname, const int * params ) > m_pfnSamplerParameteriv;
+		GlFunction< void, int, uint32_t const * > m_pfnDeleteSamplers;
+		GlFunction< void, int, uint32_t *> m_pfnGenSamplers;
+		GlFunction< uint8_t, uint32_t > m_pfnIsSampler;
+		GlFunction< void, uint32_t, uint32_t > m_pfnBindSampler;
+		GlFunction< void, uint32_t, uint32_t , uint32_t *> m_pfnGetSamplerParameteruiv;
+		GlFunction< void, uint32_t, uint32_t , float *> m_pfnGetSamplerParameterfv;
+		GlFunction< void, uint32_t, uint32_t , int *> m_pfnGetSamplerParameteriv;
+		GlFunction< void, uint32_t, uint32_t , uint32_t const *> m_pfnSamplerParameteruiv;
+		GlFunction< void, uint32_t, uint32_t , float > m_pfnSamplerParameterf;
+		GlFunction< void, uint32_t, uint32_t , float const *> m_pfnSamplerParameterfv;
+		GlFunction< void, uint32_t, uint32_t , int > m_pfnSamplerParameteri;
+		GlFunction< void, uint32_t, uint32_t , int const *> m_pfnSamplerParameteriv;
 
 		//@}
 		/**@name Texture Buffer Objects */
 		//@{
 
-		std::function< void( uint32_t target, uint32_t internalFormat, uint32_t buffer ) > m_pfnTexBuffer;
+		GlFunction< void, uint32_t, uint32_t , uint32_t > m_pfnTexBuffer;
 
 		//@}
 		/**@name Buffer Objects */
 		//@{
 
-		std::function< void( int n, uint32_t * buffers ) > m_pfnGenBuffers;
-		std::function< void( int n, uint32_t const * buffers ) > m_pfnDeleteBuffers;
-		std::function< uint8_t( uint32_t buffer ) > m_pfnIsBuffer;
+		GlFunction< void, int, uint32_t *> m_pfnGenBuffers;
+		GlFunction< void, int, uint32_t const * > m_pfnDeleteBuffers;
+		GlFunction< uint8_t, uint32_t > m_pfnIsBuffer;
 
 		//@}
 		/**@name Transform Feedback */
 		//@{
 
-		std::function< void( int n, uint32_t * buffers ) > m_pfnGenTransformFeedbacks;
-		std::function< void( int n, uint32_t const * buffers ) > m_pfnDeleteTransformFeedbacks;
-		std::function< void( GlBufferTarget target, uint32_t buffer ) > m_pfnBindTransformFeedback;
-		std::function< uint8_t( uint32_t buffer ) > m_pfnIsTransformFeedback;
-		std::function< void( uint32_t primitive ) > m_pfnBeginTransformFeedback;
-		std::function< void() > m_pfnPauseTransformFeedback;
-		std::function< void() > m_pfnResumeTransformFeedback;
-		std::function< void() > m_pfnEndTransformFeedback;
-		std::function< void( uint32_t program, int count, char const ** varyings, GlAttributeLayout bufferMode ) > m_pfnTransformFeedbackVaryings;
-		std::function< void( uint32_t mode, uint32_t p_id ) > m_pfnDrawTransformFeedback;
+		GlFunction< void, int, uint32_t *> m_pfnGenTransformFeedbacks;
+		GlFunction< void, int, uint32_t const * > m_pfnDeleteTransformFeedbacks;
+		GlFunction< void, GlBufferTarget, uint32_t > m_pfnBindTransformFeedback;
+		GlFunction< uint8_t, uint32_t > m_pfnIsTransformFeedback;
+		GlFunction< void, uint32_t > m_pfnBeginTransformFeedback;
+		GlFunction< void > m_pfnPauseTransformFeedback;
+		GlFunction< void > m_pfnResumeTransformFeedback;
+		GlFunction< void > m_pfnEndTransformFeedback;
+		GlFunction< void, uint32_t, int , char const **, GlAttributeLayout > m_pfnTransformFeedbackVaryings;
+		GlFunction< void, uint32_t, uint32_t > m_pfnDrawTransformFeedback;
 
 		//@}
 		/**@name FBO */
 		//@{
 
-		std::function< void( int n, uint32_t * framebuffers ) > m_pfnGenFramebuffers;
-		std::function< void( int n, uint32_t const * framebuffers ) > m_pfnDeleteFramebuffers;
-		std::function< uint8_t( uint32_t framebuffer ) > m_pfnIsFramebuffer;
-		std::function< void( uint32_t target, uint32_t framebuffer ) > m_pfnBindFramebuffer;
-		std::function< uint32_t( uint32_t target ) > m_pfnCheckFramebufferStatus;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t texture, int level ) > m_pfnFramebufferTexture;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level ) > m_pfnFramebufferTexture1D;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level ) > m_pfnFramebufferTexture2D;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t texture, int level, int layer ) > m_pfnFramebufferTextureLayer;
-		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level, int layer ) > m_pfnFramebufferTexture3D;
-		std::function< void( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, uint32_t filter ) > m_pfnBlitFramebuffer;
-		std::function< void( int n, uint32_t const * bufs ) > m_pfnDrawBuffers;
+		GlFunction< void, int, uint32_t *> m_pfnGenFramebuffers;
+		GlFunction< void, int, uint32_t const * > m_pfnDeleteFramebuffers;
+		GlFunction< uint8_t, uint32_t > m_pfnIsFramebuffer;
+		GlFunction< void, uint32_t, uint32_t > m_pfnBindFramebuffer;
+		GlFunction< uint32_t, uint32_t > m_pfnCheckFramebufferStatus;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , int > m_pfnFramebufferTexture;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t , int > m_pfnFramebufferTexture1D;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t , int > m_pfnFramebufferTexture2D;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , int , int > m_pfnFramebufferTextureLayer;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t , int , int > m_pfnFramebufferTexture3D;
+		GlFunction< void, int, int , int , int , int , int , int , int , uint32_t , uint32_t > m_pfnBlitFramebuffer;
+		GlFunction< void, int, uint32_t const * > m_pfnDrawBuffers;
 
 		//@}
 		/**@name RBO */
 		//@{
 
-		std::function< void( uint32_t target, uint32_t attachmentPoint, uint32_t renderbufferTarget, uint32_t renderbufferId ) > m_pfnFramebufferRenderbuffer;
-		std::function< void( int n, uint32_t * renderbuffers ) > m_pfnGenRenderbuffers;
-		std::function< void( int n, uint32_t const * renderbuffers ) > m_pfnDeleteRenderbuffers;
-		std::function< uint8_t( uint32_t renderbuffer ) > m_pfnIsRenderbuffer;
-		std::function< void( uint32_t target, uint32_t renderbuffer ) > m_pfnBindRenderbuffer;
-		std::function< void( uint32_t target, uint32_t internalFormat, int width, int height ) > m_pfnRenderbufferStorage;
-		std::function< void( uint32_t target, int isamples, uint32_t internalFormat, int width, int height ) > m_pfnRenderbufferStorageMultisample;
-		std::function< void( uint32_t target, int samples, int internalformat, int width, int height, uint8_t fixedsamplelocations ) > m_pfnTexImage2DMultisample;
-		std::function< void( uint32_t target, uint32_t param, int * value ) > m_pfnGetRenderbufferParameteriv;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t > m_pfnFramebufferRenderbuffer;
+		GlFunction< void, int, uint32_t *> m_pfnGenRenderbuffers;
+		GlFunction< void, int, uint32_t const * > m_pfnDeleteRenderbuffers;
+		GlFunction< uint8_t, uint32_t > m_pfnIsRenderbuffer;
+		GlFunction< void, uint32_t, uint32_t > m_pfnBindRenderbuffer;
+		GlFunction< void, uint32_t, uint32_t , int , int > m_pfnRenderbufferStorage;
+		GlFunction< void, uint32_t, int , uint32_t , int , int > m_pfnRenderbufferStorageMultisample;
+		GlFunction< void, uint32_t, int , int , int , int , uint8_t > m_pfnTexImage2DMultisample;
+		GlFunction< void, uint32_t, uint32_t , int *> m_pfnGetRenderbufferParameteriv;
 
 		//@}
 		/**@name Uniform variables */
 		//@{
 
-		std::function< int( uint32_t program, char const * name ) > m_pfnGetUniformLocation;
-		std::function< void( uint32_t program, uint32_t index, int maxLength, int * length, int * size, uint32_t * type, char * name ) > m_pfnGetActiveUniform;
-		std::function< void( int location, int v0 ) > m_pfnUniform1i;
-		std::function< void( int location, int v0, int v1 ) > m_pfnUniform2i;
-		std::function< void( int location, int v0, int v1, int v2 ) > m_pfnUniform3i;
-		std::function< void( int location, int v0, int v1, int v2, int v3 ) > m_pfnUniform4i;
-		std::function< void( int location, int count, int const * value ) > m_pfnUniform1iv;
-		std::function< void( int location, int count, int const * value ) > m_pfnUniform2iv;
-		std::function< void( int location, int count, int const * value ) > m_pfnUniform3iv;
-		std::function< void( int location, int count, int const * value ) > m_pfnUniform4iv;
-		std::function< void( int, uint32_t ) > m_pfnUniform1ui;
-		std::function< void( int, uint32_t, uint32_t ) > m_pfnUniform2ui;
-		std::function< void( int, uint32_t, uint32_t, uint32_t ) > m_pfnUniform3ui;
-		std::function< void( int, uint32_t, uint32_t, uint32_t, uint32_t ) > m_pfnUniform4ui;
-		std::function< void( int, int, uint32_t const * ) > m_pfnUniform1uiv;
-		std::function< void( int, int, uint32_t const * ) > m_pfnUniform2uiv;
-		std::function< void( int, int, uint32_t const * ) > m_pfnUniform3uiv;
-		std::function< void( int, int, uint32_t const * ) > m_pfnUniform4uiv;
-		std::function< void( int location, float v0 ) > m_pfnUniform1f;
-		std::function< void( int location, float v0, float v1 ) > m_pfnUniform2f;
-		std::function< void( int location, float v0, float v1, float v2 ) > m_pfnUniform3f;
-		std::function< void( int location, float v0, float v1, float v2, float v3 ) > m_pfnUniform4f;
-		std::function< void( int location, int count, float const * value ) > m_pfnUniform1fv;
-		std::function< void( int location, int count, float const * value ) > m_pfnUniform2fv;
-		std::function< void( int location, int count, float const * value ) > m_pfnUniform3fv;
-		std::function< void( int location, int count, float const * value ) > m_pfnUniform4fv;
-		std::function< void( int location, double x ) > m_pfnUniform1d;
-		std::function< void( int location, double x, double y ) > m_pfnUniform2d;
-		std::function< void( int location, double x, double y, double z ) > m_pfnUniform3d;
-		std::function< void( int location, double x, double y, double z, double w ) > m_pfnUniform4d;
-		std::function< void( int location, int count, double const * value ) > m_pfnUniform1dv;
-		std::function< void( int location, int count, double const * value ) > m_pfnUniform2dv;
-		std::function< void( int location, int count, double const * value ) > m_pfnUniform3dv;
-		std::function< void( int location, int count, double const * value ) > m_pfnUniform4dv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix2fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix2x3fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix2x4fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix3fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix3x2fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix3x4fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix4fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix4x2fv;
-		std::function< void( int location, int count, uint8_t transpose, float const * value ) >m_pfnUniformMatrix4x3fv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix2dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix2x3dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix2x4dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix3dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix3x2dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix3x4dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix4dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix4x2dv;
-		std::function< void( int location, int count, uint8_t transpose, double const * value ) > m_pfnUniformMatrix4x3dv;
+		GlFunction< int, uint32_t, char const * > m_pfnGetUniformLocation;
+		GlFunction< void, uint32_t, uint32_t , int , int * , int * , uint32_t * , char * > m_pfnGetActiveUniform;
+		GlFunction< void, int, int > m_pfnUniform1i;
+		GlFunction< void, int, int , int > m_pfnUniform2i;
+		GlFunction< void, int, int , int , int > m_pfnUniform3i;
+		GlFunction< void, int, int , int , int , int > m_pfnUniform4i;
+		GlFunction< void, int, int , int const *> m_pfnUniform1iv;
+		GlFunction< void, int, int , int const *> m_pfnUniform2iv;
+		GlFunction< void, int, int , int const *> m_pfnUniform3iv;
+		GlFunction< void, int, int , int const *> m_pfnUniform4iv;
+		GlFunction< void, int, uint32_t > m_pfnUniform1ui;
+		GlFunction< void, int, uint32_t, uint32_t > m_pfnUniform2ui;
+		GlFunction< void, int, uint32_t, uint32_t, uint32_t > m_pfnUniform3ui;
+		GlFunction< void, int, uint32_t, uint32_t, uint32_t, uint32_t > m_pfnUniform4ui;
+		GlFunction< void, int, int, uint32_t const *> m_pfnUniform1uiv;
+		GlFunction< void, int, int, uint32_t const *> m_pfnUniform2uiv;
+		GlFunction< void, int, int, uint32_t const *> m_pfnUniform3uiv;
+		GlFunction< void, int, int, uint32_t const *> m_pfnUniform4uiv;
+		GlFunction< void, int, float > m_pfnUniform1f;
+		GlFunction< void, int, float , float > m_pfnUniform2f;
+		GlFunction< void, int, float , float , float > m_pfnUniform3f;
+		GlFunction< void, int, float , float , float , float > m_pfnUniform4f;
+		GlFunction< void, int, int , float const *> m_pfnUniform1fv;
+		GlFunction< void, int, int , float const *> m_pfnUniform2fv;
+		GlFunction< void, int, int , float const *> m_pfnUniform3fv;
+		GlFunction< void, int, int , float const *> m_pfnUniform4fv;
+		GlFunction< void, int, double > m_pfnUniform1d;
+		GlFunction< void, int, double , double > m_pfnUniform2d;
+		GlFunction< void, int, double , double , double > m_pfnUniform3d;
+		GlFunction< void, int, double , double , double , double > m_pfnUniform4d;
+		GlFunction< void, int, int , double const *> m_pfnUniform1dv;
+		GlFunction< void, int, int , double const *> m_pfnUniform2dv;
+		GlFunction< void, int, int , double const *> m_pfnUniform3dv;
+		GlFunction< void, int, int , double const *> m_pfnUniform4dv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix2fv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix2x3fv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix2x4fv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix3fv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix3x2fv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix3x4fv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix4fv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix4x2fv;
+		GlFunction< void, int, int , uint8_t , float const * > m_pfnUniformMatrix4x3fv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix2dv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix2x3dv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix2x4dv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix3dv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix3x2dv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix3x4dv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix4dv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix4x2dv;
+		GlFunction< void, int, int , uint8_t , double const * > m_pfnUniformMatrix4x3dv;
 
 		//@}
 		/**@name Uniform buffer object */
 		//@{
 
-		std::function< uint32_t( uint32_t program, char const * uniformBlockName ) > m_pfnGetUniformBlockIndex;
-		std::function< void( uint32_t target, uint32_t index, uint32_t buffer ) > m_pfnBindBufferBase;
-		std::function< void( uint32_t program, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding ) > m_pfnUniformBlockBinding;
-		std::function< void( uint32_t program, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices ) > m_pfnGetUniformIndices;
-		std::function< void( uint32_t program, int uniformCount, uint32_t const * uniformIndices, uint32_t pname, int * params ) > m_pfnGetActiveUniformsiv;
-		std::function< void( uint32_t program, uint32_t uniformBlockIndex, uint32_t pname, int * params ) > m_pfnGetActiveUniformBlockiv;
+		GlFunction< uint32_t, uint32_t, char const * > m_pfnGetUniformBlockIndex;
+		GlFunction< void, uint32_t, uint32_t , uint32_t > m_pfnBindBufferBase;
+		GlFunction< void, uint32_t, uint32_t , uint32_t > m_pfnUniformBlockBinding;
+		GlFunction< void, uint32_t, int , char const **, uint32_t * > m_pfnGetUniformIndices;
+		GlFunction< void, uint32_t, int , uint32_t const *, uint32_t , int * > m_pfnGetActiveUniformsiv;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , int * > m_pfnGetActiveUniformBlockiv;
 
 		//@}
 		/**@name Shader object */
 		//@{
 
-		std::function< uint32_t( uint32_t type ) > m_pfnCreateShader;
-		std::function< void( uint32_t shader ) > m_pfnDeleteShader;
-		std::function< uint8_t( uint32_t shader ) > m_pfnIsShader;
-		std::function< void( uint32_t program, uint32_t shader ) > m_pfnAttachShader;
-		std::function< void( uint32_t program, uint32_t shader ) > m_pfnDetachShader;
-		std::function< void( uint32_t shader ) > m_pfnCompileShader;
-		std::function< void( uint32_t shader, uint32_t pname, int * param ) > m_pfnGetShaderiv;
-		std::function< void( uint32_t shader, int bufSize, int * length, char * infoLog ) > m_pfnGetShaderInfoLog;
-		std::function< void( uint32_t shader, int count, const char ** string, const int * length ) > m_pfnShaderSource;
+		GlFunction< uint32_t, uint32_t > m_pfnCreateShader;
+		GlFunction< void, uint32_t > m_pfnDeleteShader;
+		GlFunction< uint8_t, uint32_t > m_pfnIsShader;
+		GlFunction< void, uint32_t, uint32_t > m_pfnAttachShader;
+		GlFunction< void, uint32_t, uint32_t > m_pfnDetachShader;
+		GlFunction< void, uint32_t > m_pfnCompileShader;
+		GlFunction< void, uint32_t, uint32_t , int *> m_pfnGetShaderiv;
+		GlFunction< void, uint32_t, int , int *, char * > m_pfnGetShaderInfoLog;
+		GlFunction< void, uint32_t, int , char const **, int const * > m_pfnShaderSource;
 
 		//@}
 		/**@name Shader program */
 		//@{
 
-		std::function< uint32_t() > m_pfnCreateProgram;
-		std::function< void( uint32_t program ) > m_pfnDeleteProgram;
-		std::function< uint8_t( uint32_t program ) > m_pfnIsProgram;
-		std::function< void( uint32_t program ) > m_pfnLinkProgram;
-		std::function< void( uint32_t program ) > m_pfnValidateProgram;
-		std::function< void( uint32_t program ) > m_pfnUseProgram;
-		std::function< void( uint32_t program, uint32_t pname, int * param ) > m_pfnGetProgramiv;
-		std::function< void( uint32_t program, int bufSize, int * length, char * infoLog ) > m_pfnGetProgramInfoLog;
-		std::function< int( uint32_t program, char const * name ) > m_pfnGetAttribLocation;
-		std::function< void( uint32_t program, uint32_t pname, int value ) > m_pfnProgramParameteri;
-		std::function< void( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name ) > m_pfnGetActiveAttrib;
-		std::function< void( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z ) > m_pfnDispatchCompute;
-		std::function< void( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z, uint32_t work_group_size_x, uint32_t work_group_size_y, uint32_t work_group_size_z ) > m_pfnDispatchComputeGroupSize;
-		std::function< void( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding ) > m_pfnShaderStorageBlockBinding;
+		GlFunction< uint32_t > m_pfnCreateProgram;
+		GlFunction< void, uint32_t > m_pfnDeleteProgram;
+		GlFunction< uint8_t, uint32_t > m_pfnIsProgram;
+		GlFunction< void, uint32_t > m_pfnLinkProgram;
+		GlFunction< void, uint32_t > m_pfnValidateProgram;
+		GlFunction< void, uint32_t > m_pfnUseProgram;
+		GlFunction< void, uint32_t, uint32_t , int *> m_pfnGetProgramiv;
+		GlFunction< void, uint32_t, int , int *, char * > m_pfnGetProgramInfoLog;
+		GlFunction< int, uint32_t, char const * > m_pfnGetAttribLocation;
+		GlFunction< void, uint32_t, uint32_t , int > m_pfnProgramParameteri;
+		GlFunction< void, uint32_t, uint32_t , int , int * , int * , uint32_t * , char * > m_pfnGetActiveAttrib;
+		GlFunction< void, uint32_t, uint32_t , uint32_t > m_pfnDispatchCompute;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t , uint32_t , uint32_t > m_pfnDispatchComputeGroupSize;
+		GlFunction< void, uint32_t, uint32_t , uint32_t > m_pfnShaderStorageBlockBinding;
 
 		//@}
 		/**@name Vertex Attribute Pointer */
 		//@{
 
-		std::function< void( uint32_t ) > m_pfnEnableVertexAttribArray;
-		std::function< void( uint32_t index, int size, uint32_t type, uint8_t normalized, int stride, void const * pointer ) > m_pfnVertexAttribPointer;
-		std::function< void( uint32_t index, int size, uint32_t type, int stride, void const * pointer ) > m_pfnVertexAttribIPointer;
-		std::function< void( uint32_t ) > m_pfnDisableVertexAttribArray;
+		GlFunction< void, uint32_t > m_pfnEnableVertexAttribArray;
+		GlFunction< void, uint32_t, int , uint32_t , uint8_t , int , void const * > m_pfnVertexAttribPointer;
+		GlFunction< void, uint32_t, int , uint32_t , int , void const * > m_pfnVertexAttribIPointer;
+		GlFunction< void, uint32_t > m_pfnDisableVertexAttribArray;
 
 		//@}
 		/**@name Vertex Array Object */
 		//@{
 
-		std::function< void( int n, uint32_t * arrays ) > m_pfnGenVertexArrays;
-		std::function< void( int n, uint32_t const * arrays ) > m_pfnDeleteVertexArrays;
-		std::function< uint8_t( uint32_t array ) > m_pfnIsVertexArray;
-		std::function< void( uint32_t array ) > m_pfnBindVertexArray;
+		GlFunction< void, int, uint32_t *> m_pfnGenVertexArrays;
+		GlFunction< void, int, uint32_t const * > m_pfnDeleteVertexArrays;
+		GlFunction< uint8_t, uint32_t > m_pfnIsVertexArray;
+		GlFunction< void, uint32_t > m_pfnBindVertexArray;
 
 		//@}
 		/*@name NV_vertex_buffer_unified_memory extension */
 		//@{
 
-		std::function< void( uint32_t value, uint64_t * result ) > m_pfnGetIntegerui64v;
+		GlFunction< void, uint32_t, uint64_t *> m_pfnGetIntegerui64v;
 
 		//@}
 		/*@name Queries */
@@ -1266,43 +1331,43 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGenQueries.xhtml
 		*/
-		std::function< void( int n, uint32_t * queries ) > m_pfnGenQueries;
+		GlFunction< void, int, uint32_t *> m_pfnGenQueries;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glDeleteQueries.xhtml
 		*/
-		std::function< void( int n, uint32_t const * queries ) > m_pfnDeleteQueries;
+		GlFunction< void, int, uint32_t const * > m_pfnDeleteQueries;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glIsQuery.xhtml
 		*/
-		std::function< uint8_t( uint32_t query ) > m_pfnIsQuery;
+		GlFunction< uint8_t, uint32_t > m_pfnIsQuery;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glBeginQuery.xhtml
 		*/
-		std::function< void( uint32_t target, uint32_t query ) > m_pfnBeginQuery;
+		GlFunction< void, uint32_t, uint32_t > m_pfnBeginQuery;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glEndQuery.xhtml
 		*/
-		std::function< void( uint32_t target ) > m_pfnEndQuery;
+		GlFunction< void, uint32_t > m_pfnEndQuery;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glQueryCounter.xhtml
 		*/
-		std::function< void( uint32_t id, uint32_t target ) > m_pfnQueryCounter;
+		GlFunction< void, uint32_t, uint32_t > m_pfnQueryCounter;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
 		*/
-		std::function< void( uint32_t id, uint32_t pname, int32_t * params ) > m_pfnGetQueryObjectiv;
+		GlFunction< void, uint32_t, uint32_t , int32_t *> m_pfnGetQueryObjectiv;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
 		*/
-		std::function< void( uint32_t id, uint32_t pname, uint32_t * params ) > m_pfnGetQueryObjectuiv;
+		GlFunction< void, uint32_t, uint32_t , uint32_t *> m_pfnGetQueryObjectuiv;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
 		*/
-		std::function< void( uint32_t id, uint32_t pname, int64_t * params ) > m_pfnGetQueryObjecti64v;
+		GlFunction< void, uint32_t, uint32_t , int64_t *> m_pfnGetQueryObjecti64v;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
 		*/
-		std::function< void( uint32_t id, uint32_t pname, uint64_t * params ) > m_pfnGetQueryObjectui64v;
+		GlFunction< void, uint32_t, uint32_t , uint64_t *> m_pfnGetQueryObjectui64v;
 
 		//@}
 		/*@name GL_ARB_program_interface_query */
@@ -1310,27 +1375,27 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramInterface.xhtml
 		*/
-		std::function< void( uint32_t program, uint32_t programInterface, uint32_t name, int * params ) > m_pfnGetProgramInterfaceiv;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , int * > m_pfnGetProgramInterfaceiv;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceIndex.xhtml
 		*/
-		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceIndex;
+		GlFunction< int, uint32_t, uint32_t , char const * > m_pfnGetProgramResourceIndex;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceLocation.xhtml
 		*/
-		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocation;
+		GlFunction< int, uint32_t, uint32_t , char const * > m_pfnGetProgramResourceLocation;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceLocationIndex.xhtml
 		*/
-		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocationIndex;
+		GlFunction< int, uint32_t, uint32_t , char const * > m_pfnGetProgramResourceLocationIndex;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceName.xhtml
 		*/
-		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int bufSize, int * length, char * name ) > m_pfnGetProgramResourceName;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , int , int * , char * > m_pfnGetProgramResourceName;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResource.xhtml
 		*/
-		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params ) > m_pfnGetProgramResourceiv;
+		GlFunction< void, uint32_t, uint32_t , uint32_t , int , uint32_t * , int , int * , int * > m_pfnGetProgramResourceiv;
 
 		//@}
 		/**@name Memory transactions */
@@ -1338,15 +1403,15 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
 		*/
-		std::function< void( uint32_t barriers ) > m_pfnMemoryBarrier;
+		GlFunction< void, uint32_t > m_pfnMemoryBarrier;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
 		*/
-		std::function< void( uint32_t barriers ) > m_pfnMemoryBarrierByRegion;
+		GlFunction< void, uint32_t > m_pfnMemoryBarrierByRegion;
 
 		//@}
 
-		std::function< void( uint32_t p_param, int p_value ) > m_pfnPatchParameteri;
+		GlFunction< void, uint32_t, int > m_pfnPatchParameteri;
 	};
 
 	namespace gl_api
@@ -1360,6 +1425,20 @@ namespace GlRender
 			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( reinterpret_cast< GLubyte const * >( Castor::string::string_cast< char >( p_name ).c_str() ) ) );
 #endif
 			return p_func != nullptr;
+		}
+
+		template< typename Ret, typename ... Arguments >
+		bool GetFunction( Castor::String const & p_name, GlFunction< Ret, Arguments... > & p_func )
+		{
+			typedef Ret( CALLBACK * PFNType )( Arguments... );
+			PFNType l_pfnResult = nullptr;
+
+			if ( GetFunction( p_name, l_pfnResult ) )
+			{
+				p_func = l_pfnResult;
+			}
+
+			return l_pfnResult != nullptr;
 		}
 
 		template< typename Ret, typename ... Arguments >

@@ -9,9 +9,8 @@ namespace GlRender
 	template< typename RetT, typename ... ParamsT >
 	struct GlFuncCaller
 	{
-		static inline RetT Call( OpenGl const & p_gl, std::function< RetT( ParamsT ... ) > const & p_function, char const * const p_name, ParamsT const & ... p_params )
+		static inline RetT Call( OpenGl const & p_gl, GlFunction< RetT, ParamsT ... > const & p_function, char const * const p_name, ParamsT ... p_params )
 		{
-			REQUIRE( p_function );
 			RetT l_return = p_function( p_params... );
 			glCheckError( p_gl, p_name );
 			return l_return;
@@ -21,10 +20,9 @@ namespace GlRender
 	template< typename ... ParamsT >
 	struct GlFuncCaller< void, ParamsT... >
 	{
-		static inline void Call( OpenGl const & p_gl, std::function< void( ParamsT ... ) > const & p_function, char const * const p_name, ParamsT const & ... p_params )
+		static inline void Call( OpenGl const & p_gl, GlFunction< void, ParamsT ... > const & p_function, char const * const p_name, ParamsT ... p_params )
 		{
-			REQUIRE( p_function );
-			p_function( p_params... );
+			p_function( std::forward< ParamsT >( p_params )... );
 			glCheckError( p_gl, p_name );
 		}
 	};
@@ -32,18 +30,17 @@ namespace GlRender
 	template< typename RetT >
 	struct GlFuncCaller< RetT, void >
 	{
-		static inline void Call( OpenGl const & p_gl, std::function< RetT() > const & p_function, char const * const p_name )
+		static inline void Call( OpenGl const & p_gl, GlFunction< RetT > const & p_function, char const * const p_name )
 		{
-			REQUIRE( p_function );
 			p_function();
 			glCheckError( p_gl, p_name );
 		}
 	};
 
 	template< typename RetT, typename ... ParamsT >
-	inline RetT ExecuteFunction( OpenGl const & p_gl, std::function< RetT( ParamsT ... ) > const & p_function, char const * const p_name, ParamsT const & ... p_params )
+	inline RetT ExecuteFunction( OpenGl const & p_gl, GlFunction< RetT, ParamsT ... > const & p_function, char const * const p_name, ParamsT ... p_params )
 	{
-		return GlFuncCaller< RetT, ParamsT... >::Call( p_gl, p_function, p_name, p_params... );
+		return GlFuncCaller< RetT, ParamsT... >::Call( p_gl, p_function, p_name, std::forward< ParamsT >( p_params )... );
 	}
 
 #	define EXEC_FUNCTION( Name, ... )\

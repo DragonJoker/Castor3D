@@ -56,6 +56,27 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ShadowMapSpot();
+		/**
+		 *\~english
+		 *\brief		Updates the passes, selecting the lights that will project shadows.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[in]	p_camera	The viewer camera.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\~french
+		 *\brief		Met à jour les passes, en sélectionnant les lumières qui projetteront une ombre.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[in]	p_camera	La caméra de l'observateur.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 */
+		C3D_API void Update( Camera const & p_camera
+			, RenderQueueArray & p_queues );
+		/**
+		 *\~english
+		 *\brief		Renders the selected lights shadow map.
+		 *\~french
+		 *\brief		Dessine les shadow maps des lumières sélectionnées.
+		 */
+		C3D_API void Render();
 
 	private:
 		/**
@@ -65,7 +86,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		void DoInitialise( Castor::Size const & p_size )override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoCleanup
 		 */
@@ -85,6 +106,11 @@ namespace Castor3D
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, uint8_t p_sceneFlags )const override;
+
+	private:
+		//!\~english	The attach between depth buffer and main frame buffer.
+		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
+		std::vector< TextureAttachmentSPtr > m_depthAttach;
 	};
 }
 
