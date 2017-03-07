@@ -71,7 +71,7 @@ namespace TestRender
 		return std::make_shared< TestCubeTextureFaceAttachment >( p_texture, p_face );
 	}
 
-	void TestFrameBuffer::DoClear( uint32_t p_uiTargets )
+	void TestFrameBuffer::DoClear( Castor3D::BufferComponents p_uiTargets )
 	{
 	}
 

@@ -14,10 +14,6 @@ namespace TestRender
 	{
 	}
 
-	void TestTextureAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
-	{
-	}
-
 	void TestTextureAttachment::DoAttach()
 	{
 	}
