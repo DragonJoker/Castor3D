@@ -60,10 +60,10 @@ namespace Castor3D
 
 	void PointLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		auto l_position = GetLight().GetParent()->GetDerivedPosition();
+		auto & l_pos = GetLight().GetParent()->GetDerivedPosition();
+		Point4r l_position{ l_pos[0], l_pos[1], l_pos[2], float( m_shadowMapIndex ) };
 		DoBindComponent( l_position, p_index, p_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, p_offset, p_texture );
-		DoBindComponent( m_shadowMapIndex, p_index, p_offset, p_texture );
 	}
 
 	void PointLight::SetAttenuation( Point3f const & p_attenuation )

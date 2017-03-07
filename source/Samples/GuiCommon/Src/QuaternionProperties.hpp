@@ -49,6 +49,10 @@ namespace GuiCommon
 		{
 			m_value = WXVARIANT( value );
 		}
+
+	private:
+		Castor::Point3r m_axis;
+		Castor::Angle m_angle;
 	};
 }
 

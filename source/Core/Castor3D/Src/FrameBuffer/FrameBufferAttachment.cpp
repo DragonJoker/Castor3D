@@ -17,16 +17,16 @@ namespace Castor3D
 	{
 	}
 
-	void FrameBufferAttachment::Attach( AttachmentPoint p_eAttachment, FrameBufferSPtr p_frameBuffer )
+	void FrameBufferAttachment::Attach( AttachmentPoint p_eAttachment )
 	{
-		Attach( p_eAttachment, 0, p_frameBuffer );
+		Attach( p_eAttachment, 0 );
 	}
 
-	void FrameBufferAttachment::Attach( AttachmentPoint p_eAttachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer )
+	void FrameBufferAttachment::Attach( AttachmentPoint p_eAttachment
+		, uint8_t p_index )
 	{
 		m_index = p_index;
 		m_point = p_eAttachment;
-		m_frameBuffer = p_frameBuffer;
 		DoAttach();
 	}
 
@@ -35,19 +35,5 @@ namespace Castor3D
 		DoDetach();
 		m_point = AttachmentPoint::eNone;
 		m_index = 0;
-		m_frameBuffer.reset();
-	}
-
-	PxBufferBaseSPtr FrameBufferAttachment::DownloadBuffer()
-	{
-		PxBufferBaseSPtr l_return = GetBuffer();
-		FrameBufferSPtr l_frameBuffer = GetFrameBuffer();
-
-		if ( l_return && l_frameBuffer )
-		{
-			l_frameBuffer->DownloadBuffer( GetAttachmentPoint(), GetAttachmentIndex(), l_return );
-		}
-
-		return l_return;
 	}
 }

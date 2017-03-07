@@ -61,12 +61,11 @@ namespace Castor3D
 	{
 		if ( m_camera && m_initialised )
 		{
-			auto & l_nodes = m_renderQueue.GetRenderNodes();
 			m_camera->Apply();
 			m_projectionUniform->SetValue( m_camera->GetViewport().GetProjection() );
 			m_viewUniform->SetValue( m_camera->GetView() );
 			m_matrixUbo.Update();
-			DoRenderNodes( l_nodes, *m_camera );
+			DoRenderNodes( m_renderQueue.GetRenderNodes(), *m_camera );
 		}
 	}
 }

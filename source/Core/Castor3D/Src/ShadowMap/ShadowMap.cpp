@@ -75,11 +75,12 @@ namespace Castor3D
 			for ( auto & l_attach : m_depthAttach )
 			{
 				l_attach = m_frameBuffer->CreateAttachment( l_texture );
+				l_attach->SetTarget( l_texture->GetType() );
+				l_attach->SetLayer( i++ );
 			}
 		
 			m_frameBuffer->Bind( FrameBufferMode::eConfig );
-			m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach[0], l_texture->GetType(), 0u );
-			bool l_return = m_frameBuffer->IsComplete();
+			m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
 			m_frameBuffer->Unbind();
 
 			for ( auto & l_it : m_shadowMaps )
@@ -129,34 +130,45 @@ namespace Castor3D
 	void ShadowMap::Update( Camera const & p_camera
 		, RenderQueueArray & p_queues )
 	{
-		std::map< double, ShadowMapPassSPtr > l_sorted;
-
-		for ( auto & l_it : m_shadowMaps )
+		if ( !m_shadowMaps.empty() )
 		{
-			l_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
-					, l_it.first->GetParent()->GetDerivedPosition() )
-				, l_it.second );
-		}
+			m_sorted.clear();
 
-		auto l_it = l_sorted.begin();
+			for ( auto & l_it : m_shadowMaps )
+			{
+				m_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
+						, l_it.first->GetParent()->GetDerivedPosition() )
+					, l_it.second );
+			}
 
-		for ( int32_t i = 0; i < DoGetMaxPasses() && l_it != l_sorted.end(); ++i, ++l_it )
-		{
-			l_it->second->Update( p_queues, i );
+			auto l_it = m_sorted.begin();
+			const int32_t l_max = DoGetMaxPasses();
+
+			for ( int32_t i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
+			{
+				l_it->second->Update( p_queues, i );
+			}
 		}
 	}
 
 	void ShadowMap::Render()
 	{
-		m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-
-		for ( auto & l_it : m_shadowMaps )
+		if ( !m_sorted.empty() )
 		{
-			m_frameBuffer->Clear();
-			l_it.second->Render();
-		}
+			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			auto l_it = m_sorted.begin();
+			const int32_t l_max = DoGetMaxPasses();
 
-		m_frameBuffer->Unbind();
+			for ( int32_t i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
+			{
+				m_depthAttach[i]->Attach( AttachmentPoint::eDepth );
+				m_frameBuffer->Clear( BufferComponent::eDepth );
+				l_it->second->Render();
+				m_depthAttach[i]->Detach();
+			}
+
+			m_frameBuffer->Unbind();
+		}
 	}
 
 	void ShadowMap::AddLight( Light & p_light )

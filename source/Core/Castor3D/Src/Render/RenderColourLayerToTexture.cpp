@@ -151,7 +151,7 @@ namespace Castor3D
 		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 
 		REQUIRE( m_layerIndexUniform );
-		m_layerIndexUniform->SetValue( p_layer / float( p_texture.GetLayersCount() ) );
+		m_layerIndexUniform->SetValue( float( p_layer ) );
 
 		p_pipeline.ApplyProjection( p_matrixUbo );
 		p_matrixUbo.Update();

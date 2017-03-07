@@ -265,13 +265,12 @@ namespace Castor3D
 		m_transparentPass->Render( p_visible, l_shadows );
 		DoEndTransparentRendering();
 
-#if 0//!defined( NDEBUG )
+#if !defined( NDEBUG )
 
-		if ( !m_shadowMaps.empty() )
+		if ( !m_spotShadowMap.GetPasses().empty() )
 		{
-			auto l_it = m_shadowMaps.begin();
-			auto & l_depthMap = l_it->second->GetShadowMap();
-			auto l_lightNode = l_it->first->GetParent();
+			auto l_it = m_spotShadowMap.GetPasses().begin();
+			auto & l_depthMap = m_spotShadowMap.GetTexture();
 			Size l_size{ 512u, 512u };
 
 			switch ( l_depthMap.GetType() )
@@ -282,8 +281,12 @@ namespace Castor3D
 				break;
 
 			case TextureType::eTwoDimensionsArray:
-				m_renderSystem.GetCurrentContext()->RenderDepth( l_size
+				m_renderSystem.GetCurrentContext()->RenderDepth( Position{ 0, 0 }
+					, l_size
 					, *l_depthMap.GetTexture(), 0u );
+				m_renderSystem.GetCurrentContext()->RenderDepth( Position{ int32_t( l_size.width() ), 0 }
+					, l_size
+					, *l_depthMap.GetTexture(), 1u );
 				break;
 
 			case TextureType::eCube:

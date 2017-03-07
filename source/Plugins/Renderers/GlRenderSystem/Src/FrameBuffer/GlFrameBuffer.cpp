@@ -127,11 +127,11 @@ namespace GlRender
 		return std::make_shared< GlCubeTextureFaceAttachment >( GetOpenGl(), p_texture, p_face );
 	}
 
-	void GlFrameBuffer::DoClear( uint32_t p_uiTargets )
+	void GlFrameBuffer::DoClear( BufferComponents p_targets )
 	{
 		GetOpenGl().ClearColor( m_redClear, m_greenClear, m_blueClear, m_alphaClear );
 		GetOpenGl().ClearDepth( 1.0 );
-		GetOpenGl().Clear( GetOpenGl().GetComponents( p_uiTargets ) );
+		GetOpenGl().Clear( GetOpenGl().GetComponents( p_targets ) );
 	}
 
 	void GlFrameBuffer::DoBind( FrameBufferTarget p_target )const

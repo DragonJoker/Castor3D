@@ -50,9 +50,9 @@ namespace Castor3D
 		m_alphaClear = p_a;
 	}
 
-	void FrameBuffer::Clear( uint8_t p_targets )
+	void FrameBuffer::Clear( BufferComponents p_targets )
 	{
-		FlagCombination< BufferComponent > l_targets = p_targets;
+		auto l_targets = p_targets;
 
 		for ( auto l_attach : m_attaches )
 		{
@@ -242,7 +242,7 @@ namespace Castor3D
 	void FrameBuffer::DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
 	{
 		DoDetach( p_point, p_index );
-		p_attach->Attach( p_point, p_index, shared_from_this() );
+		p_attach->Attach( p_point, p_index );
 		m_attaches.push_back( p_attach );
 	}
 

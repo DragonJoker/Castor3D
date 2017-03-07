@@ -153,11 +153,12 @@ namespace Castor3D
 		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 
 		REQUIRE( m_layerIndexUniform );
-		m_layerIndexUniform->SetValue( p_layer / float( p_texture.GetLayersCount() ) );
+		m_layerIndexUniform->SetValue( int( p_layer ) );
 
 		p_pipeline.ApplyProjection( p_matrixUbo );
 		p_matrixUbo.Update();
 		p_pipeline.Apply();
+		m_layerIndexUniform->Update();
 
 		p_texture.Bind( 0u );
 		m_sampler->Bind( 0u );
@@ -199,7 +200,7 @@ namespace Castor3D
 
 			// Shader inputs
 			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2DArray >( ShaderProgram::MapDiffuse );
-			auto c3d_fIndex = l_writer.GetUniform< Float >( cuT( "c3d_fIndex" ) );
+			auto c3d_iIndex = l_writer.GetUniform< Int >( cuT( "c3d_iIndex" ) );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -207,7 +208,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec3( vtx_texture, c3d_fIndex ) ).x() );
+				auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec3( vtx_texture, l_writer.Cast< Float >( c3d_iIndex ) ) ).x() );
 				l_depth = 1.0_f - l_writer.Paren( 1.0_f - l_depth ) * 25.0f;
 				plx_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 			} );
@@ -222,7 +223,7 @@ namespace Castor3D
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-		m_layerIndexUniform = l_program->CreateUniform< UniformType::eFloat >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
+		m_layerIndexUniform = l_program->CreateUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
 		l_program->Initialise();
 		return l_program;
 	}

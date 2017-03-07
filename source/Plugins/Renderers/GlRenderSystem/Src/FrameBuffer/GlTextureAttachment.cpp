@@ -21,31 +21,6 @@ namespace GlRender
 	{
 	}
 
-	void GlTextureAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
-	{
-		REQUIRE( GetFrameBuffer()->IsComplete() );
-		GlFrameBufferSPtr l_pBuffer = std::static_pointer_cast< GlFrameBuffer >( p_buffer );
-		GetOpenGl().BindFramebuffer( GlFrameBufferMode::eRead, std::static_pointer_cast< GlFrameBuffer >( GetFrameBuffer() )->GetGlName() );
-		GetOpenGl().BindFramebuffer( GlFrameBufferMode::eDraw, l_pBuffer->GetGlName() );
-		GetOpenGl().ReadBuffer( GlBufferBinding( uint32_t( GetOpenGl().Get( GetOpenGl().Get( GetAttachmentPoint() ) ) ) + GetAttachmentIndex() ) );
-
-		if ( m_glAttachmentPoint == GlAttachmentPoint::eDepth )
-		{
-			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, uint32_t( GlBufferBit::eDepth ), GlInterpolationMode::eNearest );
-		}
-		else if ( m_glAttachmentPoint == GlAttachmentPoint::eStencil )
-		{
-			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, uint32_t( GlBufferBit::eStencil ), GlInterpolationMode::eNearest );
-		}
-		else
-		{
-			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, uint32_t( GlBufferBit::eColour ), GetOpenGl().Get( p_interpolation ) );
-		}
-
-		GetOpenGl().BindFramebuffer( GlFrameBufferMode::eRead, 0 );
-		GetOpenGl().BindFramebuffer( GlFrameBufferMode::eDraw, 0 );
-	}
-
 	void GlTextureAttachment::DoAttach()
 	{
 		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );

@@ -551,7 +551,7 @@ namespace Castor3D
 		RenderDepthCubeToTexture m_depthCube;
 		//!\~english	The pipeline used to render a layer from a texture array in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures dans le tampon d'image actuellement activé en dessin.
-		RenderColourLayerToTexture m_depthLayer;
+		RenderDepthLayerToTexture m_depthLayer;
 		//!\~english	The pipeline used to render a cube texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube dans le tampon d'image actuellement activé en dessin.
 		RenderColourToCube m_cube;

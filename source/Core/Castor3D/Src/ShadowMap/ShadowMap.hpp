@@ -44,6 +44,7 @@ namespace Castor3D
 	{
 	private:
 		using ShadowMapLightMap = std::map< LightRPtr, ShadowMapPassSPtr >;
+		using SortedPasses = std::map< double, ShadowMapPassSPtr >;
 
 	public:
 		/**
@@ -152,6 +153,26 @@ namespace Castor3D
 		{
 			return m_shadowMap;
 		}
+		/**
+		 *\~english
+		 *\return		The sorted shadow mapping passes.
+		 *\~english
+		 *\return		Les passes de shadow mapping triées.
+		 */
+		inline SortedPasses & GetPasses()
+		{
+			return m_sorted;
+		}
+		/**
+		 *\~english
+		 *\return		The sorted shadow mapping passes.
+		 *\~english
+		 *\return		Les passes de shadow mapping triées.
+		 */
+		inline SortedPasses const & GetPasses()const
+		{
+			return m_sorted;
+		}
 
 	private:
 		/**
@@ -229,6 +250,9 @@ namespace Castor3D
 		//!\~english	The shadow maps used during the render.
 		//!\~french		Les maps d'ombres utilisées pendant le rendu.
 		ShadowMapLightMap m_shadowMaps;
+		//!~english		The shadow map passes sorted by light source's distance to the camera.
+		//!\~french		Les passes de shadow mappint, triées par distance de la source lumineuse à la caméra.
+		SortedPasses m_sorted;
 	};
 }
 

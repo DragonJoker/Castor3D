@@ -370,7 +370,11 @@ namespace Castor3D
 		 */
 		inline uint32_t GetLayersCount()const
 		{
-			return ( m_type == TextureType::eTwoDimensionsArray || m_type == TextureType::eOneDimensionArray || m_type == TextureType::eCubeArray ) ? m_depth : 1;
+			return ( m_type == TextureType::eTwoDimensionsArray
+					|| m_type == TextureType::eOneDimensionArray
+					|| m_type == TextureType::eCubeArray )
+				? m_depth
+				: 1;
 		}
 		/**
 		 *\~english

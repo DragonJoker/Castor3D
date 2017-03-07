@@ -435,7 +435,7 @@ namespace GLSL
 				, Int const & p_index )
 			{
 				auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), GetLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
-				auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) / SpotShadowMapCount );
+				auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );
 				l_visibility = FilterSpot( l_lightSpacePosition.xy(), l_lightSpacePosition.z(), l_index );
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
@@ -458,7 +458,7 @@ namespace GLSL
 				auto l_vertexToLight = m_writer.GetLocale( cuT( "l_vertexToLight" ), normalize( p_worldSpacePosition - p_lightPosition ) );
 				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), GetShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) );
 				auto l_worldSpace = m_writer.GetLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
-				auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) / SpotShadowMapCount );
+				auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );
 				l_vertexToLight = l_worldSpace - p_lightPosition;
 				l_visibility = FilterPoint( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, l_index );
