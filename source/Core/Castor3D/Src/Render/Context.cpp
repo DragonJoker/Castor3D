@@ -38,9 +38,11 @@ namespace Castor3D
 		, m_colour{ *this, m_matrixUbo }
 		, m_colourCube{ *this, m_matrixUbo }
 		, m_colourLayer{ *this, m_matrixUbo }
+		, m_colourLayerCube{ *this, m_matrixUbo }
 		, m_depth{ *this, m_matrixUbo }
 		, m_depthCube{ *this, m_matrixUbo }
 		, m_depthLayer{ *this, m_matrixUbo }
+		, m_depthLayerCube{ *this, m_matrixUbo }
 		, m_cube{ *this, m_matrixUbo }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
@@ -69,9 +71,11 @@ namespace Castor3D
 			m_colour.Initialise();
 			m_colourCube.Initialise();
 			m_colourLayer.Initialise();
+			m_colourLayerCube.Initialise();
 			m_depth.Initialise();
 			m_depthCube.Initialise();
 			m_depthLayer.Initialise();
+			m_depthLayerCube.Initialise();
 			m_cube.Initialise();
 
 			DoEndCurrent();
@@ -89,9 +93,11 @@ namespace Castor3D
 		m_colour.Cleanup();
 		m_colourCube.Cleanup();
 		m_colourLayer.Cleanup();
+		m_colourLayerCube.Cleanup();
 		m_depth.Cleanup();
 		m_depthCube.Cleanup();
 		m_depthLayer.Cleanup();
+		m_depthLayerCube.Cleanup();
 		m_cube.Cleanup();
 
 		m_timerQuery[0]->Cleanup();
@@ -208,6 +214,9 @@ namespace Castor3D
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{
+		m_colourLayerCube.Render( p_size
+			, p_texture
+			, p_index );
 	}
 
 	void Context::RenderTexture( Position const & p_position
@@ -253,6 +262,9 @@ namespace Castor3D
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{
+		m_depthLayerCube.Render( p_size
+			, p_texture
+			, p_index );
 	}
 
 	void Context::RenderDepth( Position const & p_position

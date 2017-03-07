@@ -20,15 +20,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_RenderColourLayerToTexture_H___
-#define ___C3D_RenderColourLayerToTexture_H___
+#ifndef ___C3D_RenderDepthLayerCubeToTexture_H___
+#define ___C3D_RenderDepthLayerCubeToTexture_H___
 
 #include "Viewport.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
 #include <Design/OwnedBy.hpp>
-#include <Graphics/Position.hpp>
 
 namespace Castor3D
 {
@@ -37,11 +36,11 @@ namespace Castor3D
 	\date		02/03/2017
 	\version	0.9.0
 	\~english
-	\brief		Class used to render a colour texture array's layer.
+	\brief		Class used to render a depth cube texture array layer.
 	\~french
-	\brief		Classe utilisée pour rendre une couche d'un tableau de textures couleur.
+	\brief		Classe utilisée pour rendre une couche d'un tableau de textures cube profonedur.
 	*/
-	class RenderColourLayerToTexture
+	class RenderDepthLayerCubeToTexture
 		: public Castor::OwnedBy< Context >
 	{
 	public:
@@ -55,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	p_context	Le Context.
 		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
 		 */
-		C3D_API explicit RenderColourLayerToTexture( Context & p_context
+		C3D_API explicit RenderDepthLayerCubeToTexture( Context & p_context
 			, UniformBuffer & p_matrixUbo );
 		/**
 		 *\~english
@@ -63,7 +62,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~RenderColourLayerToTexture();
+		C3D_API ~RenderDepthLayerCubeToTexture();
 		/**
 		 *\~english
 		 *\brief		Initialises this render to texture.
@@ -80,63 +79,38 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Renders the wanted layer of given texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_pipeline	The pipleline used to render the texture.
-		 *\param[in]	p_matrixUbo	The uniform buffer receiving matrices.
-		 *\param[in]	p_layer		The layer index.
-		 *\~french
-		 *\brief		Dessine la couche voulue du tableau de textures donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_pipeline	Le pipeline utilisé pour dessiner la texture.
-		 *\param[in]	p_matrixUbo	Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_layer		L'index de la couche.
-		 */
-		C3D_API void Render( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, UniformBuffer & p_matrixUbo
-			, RenderPipeline & p_pipeline
-			, uint32_t p_layer );
-		/**
-		 *\~english
-		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
+		 *\brief		Renders the wanted layer of the given cube texture to the currently draw-bound frame buffer.
 		 *\param[in]	p_size		The render viewport size.
 		 *\param[in]	p_texture	The texture.
 		 *\param[in]	p_layer		The layer index.
 		 *\~french
-		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
+		 *\brief		Rend la couche voulue de la texture cube donnée dans le tampon d'image actuellement activé en dessin.
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_layer		L'index de la couche.
 		 */
-		C3D_API void Render( Castor::Position const & p_position
-			, Castor::Size const & p_size
+		C3D_API void Render( Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, uint32_t p_layer );
 
-	private:
+	protected:
 		/**
 		 *\~english
-		 *\brief		Renders the given texture.
+		 *\brief		Renders the wanted face of given cube texture.
 		 *\param[in]	p_position			The render viewport position.
 		 *\param[in]	p_size				The render viewport size.
 		 *\param[in]	p_texture			The texture.
+		 *\param[in]	p_face				The cube face.
 		 *\param[in]	p_pipeline			The render pipeline.
 		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
 		 *\param[in]	p_layer				The layer index.
 		 *\~french
-		 *\brief		Dessine la texture donnée.
+		 *\brief		Dessine la face voulue de la texture cube donnée.
 		 *\param[in]	p_position			La position du viewport de rendu.
 		 *\param[in]	p_size				La taille du viewport de rendu.
 		 *\param[in]	p_texture			La texture.
+		 *\param[in]	p_face				La face du cube.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
 		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
@@ -145,6 +119,8 @@ namespace Castor3D
 		C3D_API void DoRender( Castor::Position const & p_position
 			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
+			, Castor::Point3f const & p_face
+			, Castor::Point2f const & p_uvMult
 			, RenderPipeline & p_pipeline
 			, UniformBuffer & p_matrixUbo
 			, GeometryBuffers const & p_geometryBuffers
@@ -170,10 +146,10 @@ namespace Castor3D
 		std::array< Castor::real, 6 * ( 2 + 2 ) > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
-		BufferDeclaration m_declaration;
+		Castor3D::BufferDeclaration m_declaration;
 		//!\~english	Vertex array (quad definition).
 		//!\~french		Tableau de vertex (définition du quad).
-		std::array< BufferElementGroupSPtr, 6 > m_arrayVertex;
+		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
@@ -186,6 +162,12 @@ namespace Castor3D
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;
+		//!\~english	The uniform variable holding the direction of the face to render.
+		//!\~french		La variable uniforme contenant la direction de la face à dessiner.
+		PushUniform3fSPtr m_faceUniform;
+		//!\~english	The uniform variable holding the UV multiplier.
+		//!\~french		La variable uniforme contenant le multiplicateur d'UV.
+		PushUniform2fSPtr m_uvUniform;
 		//!\~english	The uniform variable holding the index of the layer to render.
 		//!\~french		La variable uniforme contenant l'indice de la couche à dessiner.
 		PushUniform1iSPtr m_layerIndexUniform;

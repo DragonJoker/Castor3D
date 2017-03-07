@@ -17,7 +17,7 @@ namespace GLSL
 	{
 		auto c3d_mapShadowDirectional = m_writer.GetUniform< Sampler2DShadow >( MapShadowDirectional );
 		auto c3d_mapShadowSpot = m_writer.GetUniform< Sampler2DArrayShadow >( MapShadowSpot );
-		auto c3d_mapShadowPoint = m_writer.GetUniform< SamplerCubeShadow >( MapShadowPoint );
+		auto c3d_mapShadowPoint = m_writer.GetUniform< SamplerCubeArrayShadow >( MapShadowPoint );
 
 		if ( p_type == ShadowType::ePoisson || p_type == ShadowType::eStratifiedPoisson )
 		{
@@ -303,8 +303,8 @@ namespace GLSL
 					, Float const & p_depth
 					, Float const & p_index )
 				{
-					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
-					m_writer.Return( texture( c3d_mapShadowPoint, vec4( p_direction, p_depth ) ) );
+					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeArrayShadow >( Shadow::MapShadowPoint );
+					m_writer.Return( texture( c3d_mapShadowPoint, vec4( p_direction, p_index ), p_depth ) );
 				}
 				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
 				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
@@ -317,14 +317,14 @@ namespace GLSL
 					, Float const & p_depth
 					, Float const & p_index )
 				{
-					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
+					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeArrayShadow >( Shadow::MapShadowPoint );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 					auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 500.0_f );
 					auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[i] / l_diffusion, p_direction.z(), p_depth ) ) );
+						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[i] / l_diffusion, p_direction.z(), p_index ), p_depth ) );
 					}
 
 					m_writer.Return( l_visibility );
@@ -340,7 +340,7 @@ namespace GLSL
 					, Float const & p_depth
 					, Float const & p_index )
 				{
-					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
+					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeArrayShadow >( Shadow::MapShadowPoint );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 					auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
 					auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), 0_i );
@@ -350,7 +350,7 @@ namespace GLSL
 					for ( int i = 0; i < 4; i++ )
 					{
 						l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, p_direction.z(), p_depth ) ) );
+						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, p_direction.z(), p_index ), p_depth ) );
 					}
 
 					m_writer.Return( l_visibility );

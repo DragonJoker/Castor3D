@@ -24,10 +24,12 @@ SOFTWARE.
 #define ___C3D_Context_H___
 
 #include "RenderColourCubeToTexture.hpp"
+#include "RenderColourLayerCubeToTexture.hpp"
 #include "RenderColourLayerToTexture.hpp"
 #include "RenderColourToCube.hpp"
 #include "RenderColourToTexture.hpp"
 #include "RenderDepthCubeToTexture.hpp"
+#include "RenderDepthLayerCubeToTexture.hpp"
 #include "RenderDepthLayerToTexture.hpp"
 #include "RenderDepthToTexture.hpp"
 
@@ -543,15 +545,21 @@ namespace Castor3D
 		//!\~english	The pipeline used to render a layer from a texture array in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures dans le tampon d'image actuellement activé en dessin.
 		RenderColourLayerToTexture m_colourLayer;
-		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
+		//!\~english	The pipeline used to render a layer from a cube texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'une texture cube dans le tampon d'image actuellement activé en dessin.
+		RenderColourLayerCubeToTexture m_colourLayerCube;
+		//!\~english	The pipeline used to render a depth texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture de profondeur dans le tampon d'image actuellement activé en dessin.
 		RenderDepthToTexture m_depth;
-		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
+		//!\~english	The pipeline used to render a cube depth texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube de profondeur dans le tampon d'image actuellement activé en dessin.
 		RenderDepthCubeToTexture m_depthCube;
-		//!\~english	The pipeline used to render a layer from a texture array in the current draw-bound framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures dans le tampon d'image actuellement activé en dessin.
+		//!\~english	The pipeline used to render a layer from a depth texture array in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures de profondeur dans le tampon d'image actuellement activé en dessin.
 		RenderDepthLayerToTexture m_depthLayer;
+		//!\~english	The pipeline used to render a layer from a cube depth texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'une texture cube de profondeur dans le tampon d'image actuellement activé en dessin.
+		RenderDepthLayerCubeToTexture m_depthLayerCube;
 		//!\~english	The pipeline used to render a cube texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture cube dans le tampon d'image actuellement activé en dessin.
 		RenderColourToCube m_cube;

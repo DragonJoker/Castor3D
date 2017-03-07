@@ -269,37 +269,18 @@ namespace Castor3D
 
 		if ( !m_spotShadowMap.GetPasses().empty() )
 		{
-			auto l_it = m_spotShadowMap.GetPasses().begin();
 			auto & l_depthMap = m_spotShadowMap.GetTexture();
+			Size l_size{ 256u, 256u };
+			m_renderSystem.GetCurrentContext()->RenderDepth( l_size
+				, *l_depthMap.GetTexture(), 0u );
+		}
+		else if ( !m_pointShadowMap.GetPasses().empty() )
+		{
+			auto & l_depthMap = m_pointShadowMap.GetTexture();
 			Size l_size{ 512u, 512u };
-
-			switch ( l_depthMap.GetType() )
-			{
-			case TextureType::eTwoDimensions:
-				m_renderSystem.GetCurrentContext()->RenderDepth( l_size
-					, *l_depthMap.GetTexture() );
-				break;
-
-			case TextureType::eTwoDimensionsArray:
-				m_renderSystem.GetCurrentContext()->RenderDepth( Position{ 0, 0 }
-					, l_size
-					, *l_depthMap.GetTexture(), 0u );
-				m_renderSystem.GetCurrentContext()->RenderDepth( Position{ int32_t( l_size.width() ), 0 }
-					, l_size
-					, *l_depthMap.GetTexture(), 1u );
-				break;
-
-			case TextureType::eCube:
-				m_renderSystem.GetCurrentContext()->RenderDepthCube( Size{ l_size.width() / 4, l_size.height() / 4 }
-					, *l_depthMap.GetTexture() );
-				break;
-
-			case TextureType::eCubeArray:
-				m_renderSystem.GetCurrentContext()->RenderDepthCube( Size{ l_size.width() / 4, l_size.height() / 4 }
-					, *l_depthMap.GetTexture()
-					, 0u );
-				break;
-			}
+			m_renderSystem.GetCurrentContext()->RenderDepthCube( Size{ l_size.width() / 4, l_size.height() / 4 }
+				, *l_depthMap.GetTexture()
+				, 0u );
 		}
 
 #endif

@@ -48,11 +48,11 @@ namespace Castor3D
 			bool l_return{ true };
 
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eCube,
+				TextureType::eCubeArray,
 				AccessType::eNone,
 				AccessType::eRead | AccessType::eWrite,
 				PixelFormat::eD32F,
-				p_size );
+				Point3ui{ p_size.width(), p_size.height(), GLSL::PointShadowMapCount } );
 			p_unit.SetTexture( l_texture );
 			p_unit.SetSampler( l_sampler );
 
