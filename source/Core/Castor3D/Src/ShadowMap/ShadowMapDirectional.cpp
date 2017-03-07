@@ -55,6 +55,7 @@ namespace Castor3D
 
 	ShadowMapDirectional::ShadowMapDirectional( Engine & p_engine )
 		: ShadowMap{ p_engine }
+		, m_shadowMap{ p_engine }
 	{
 	}
 
@@ -65,20 +66,20 @@ namespace Castor3D
 	void ShadowMapDirectional::Update( Camera const & p_camera
 		, RenderQueueArray & p_queues )
 	{
-		if ( !m_shadowMaps.empty() )
+		if ( !m_passes.empty() )
 		{
-			m_shadowMaps.begin()->second->Update( p_queues, 0u );
+			m_passes.begin()->second->Update( p_queues, 0u );
 		}
 	}
 
 	void ShadowMapDirectional::Render()
 	{
-		if ( !m_shadowMaps.empty() )
+		if ( !m_passes.empty() )
 		{
 			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 			m_depthAttach->Attach( AttachmentPoint::eDepth );
 			m_frameBuffer->Clear( BufferComponent::eDepth );
-			m_shadowMaps.begin()->second->Render();
+			m_passes.begin()->second->Render();
 			m_depthAttach->Detach();
 			m_frameBuffer->Unbind();
 		}
@@ -102,6 +103,7 @@ namespace Castor3D
 	void ShadowMapDirectional::DoCleanup()
 	{
 		m_depthAttach.reset();
+		m_shadowMap.Cleanup();
 	}
 
 	ShadowMapPassSPtr ShadowMapDirectional::DoCreatePass( Light & p_light )const

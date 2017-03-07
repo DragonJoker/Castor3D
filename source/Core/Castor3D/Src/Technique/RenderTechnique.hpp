@@ -274,9 +274,9 @@ namespace Castor3D
 		*\~french
 		*\return		La map d'ombre des lumières ponctuelles.
 		*/
-		inline TextureUnit & GetPointShadowMap()
+		inline std::vector< TextureUnit > & GetPointShadowMaps()
 		{
-			return m_pointShadowMap.GetTexture();
+			return m_pointShadowMap.GetTextures();
 		}
 		/**
 		 *\~english

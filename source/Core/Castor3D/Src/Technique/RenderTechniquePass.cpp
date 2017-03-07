@@ -58,7 +58,7 @@ namespace Castor3D
 			{
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel, 6u );
 			}
 		}
 
@@ -272,7 +272,11 @@ namespace Castor3D
 	{
 		p_depthMaps.push_back( std::ref( m_technique.GetDirectionalShadowMap() ) );
 		p_depthMaps.push_back( std::ref( m_technique.GetSpotShadowMap() ) );
-		p_depthMaps.push_back( std::ref( m_technique.GetPointShadowMap() ) );
+
+		for ( auto & l_map : m_technique.GetPointShadowMaps() )
+		{
+			p_depthMaps.push_back( std::ref( l_map ) );
+		}
 	}
 
 	bool RenderTechniquePass::DoInitialise( Size const & CU_PARAM_UNUSED( p_size ) )

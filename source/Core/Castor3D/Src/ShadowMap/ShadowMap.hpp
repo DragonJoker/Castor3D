@@ -114,26 +114,6 @@ namespace Castor3D
 			, uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La map d'ombres.
-		 */
-		inline TextureUnit & GetTexture()
-		{
-			return m_shadowMap;
-		}
-		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La map d'ombres.
-		 */
-		inline TextureUnit const & GetTexture()const
-		{
-			return m_shadowMap;
-		}
-		/**
-		 *\~english
 		 *\return		The sorted shadow mapping passes.
 		 *\~english
 		 *\return		Les passes de shadow mapping triées.
@@ -214,20 +194,17 @@ namespace Castor3D
 			, uint8_t p_sceneFlags )const = 0;
 
 	protected:
-		//!\~english	The shadow map texture.
-		//!\~french		La texture de mappage d'ombres.
-		TextureUnit m_shadowMap;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;
-		//!\~english	The shadow maps used during the render.
-		//!\~french		Les maps d'ombres utilisées pendant le rendu.
-		ShadowMapLightMap m_shadowMaps;
-		//!~english		The shadow map passes sorted by light source's distance to the camera.
-		//!\~french		Les passes de shadow mappint, triées par distance de la source lumineuse à la caméra.
+		//!\~english	The shadow mapping passes used during the render.
+		//!\~french		Les passes de shadow mapping utilisées pendant le rendu.
+		ShadowMapLightMap m_passes;
+		//!~english		The shadow mapping passes, sorted by light source's distance to the camera.
+		//!\~french		Les passes de shadow mapping, triées par distance de la source lumineuse à la caméra.
 		SortedPasses m_sorted;
 	};
 }

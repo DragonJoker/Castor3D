@@ -48,11 +48,11 @@ namespace Castor3D
 			bool l_return{ true };
 
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eCubeArray,
+				TextureType::eCube,
 				AccessType::eNone,
 				AccessType::eRead | AccessType::eWrite,
 				PixelFormat::eD32F,
-				Point3ui{ p_size.width(), p_size.height(), GLSL::PointShadowMapCount } );
+				p_size );
 			p_unit.SetTexture( l_texture );
 			p_unit.SetSampler( l_sampler );
 
@@ -77,11 +77,11 @@ namespace Castor3D
 	void ShadowMapPoint::Update( Camera const & p_camera
 		, RenderQueueArray & p_queues )
 	{
-		if ( !m_shadowMaps.empty() )
+		if ( !m_passes.empty() )
 		{
 			m_sorted.clear();
 
-			for ( auto & l_it : m_shadowMaps )
+			for ( auto & l_it : m_passes )
 			{
 				m_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
 						, l_it.first->GetParent()->GetDerivedPosition() )
@@ -125,20 +125,22 @@ namespace Castor3D
 
 	void ShadowMapPoint::DoInitialise( Size const & p_size )
 	{
-		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
-
-		constexpr float l_component = std::numeric_limits< float >::max();
-		m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
-
-		auto l_texture = m_shadowMap.GetTexture();
+		m_shadowMaps.reserve( DoGetMaxPasses() );
 		m_depthAttach.resize( DoGetMaxPasses() );
-		int i = 0;
 
 		for ( auto & l_attach : m_depthAttach )
 		{
+			m_shadowMaps.emplace_back( *GetEngine() );
+			auto & l_map = m_shadowMaps.back();
+			DoInitialiseShadowMap( *GetEngine(), p_size, l_map );
+
+			constexpr float l_component = std::numeric_limits< float >::max();
+			m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
+
+			auto l_texture = l_map.GetTexture();
+			m_depthAttach.resize( DoGetMaxPasses() );
 			l_attach = m_frameBuffer->CreateAttachment( l_texture );
 			l_attach->SetTarget( l_texture->GetType() );
-			l_attach->SetLayer( i++ );
 		}
 	}
 
@@ -147,6 +149,11 @@ namespace Castor3D
 		for ( auto & l_attach : m_depthAttach )
 		{
 			l_attach.reset();
+		}
+
+		for ( auto & l_map : m_shadowMaps )
+		{
+			l_map.Cleanup();
 		}
 	}
 

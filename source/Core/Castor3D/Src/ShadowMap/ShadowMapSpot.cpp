@@ -53,6 +53,7 @@ namespace Castor3D
 
 	ShadowMapSpot::ShadowMapSpot( Engine & p_engine )
 		: ShadowMap{ p_engine }
+		, m_shadowMap{ p_engine }
 	{
 	}
 
@@ -63,11 +64,11 @@ namespace Castor3D
 	void ShadowMapSpot::Update( Camera const & p_camera
 		, RenderQueueArray & p_queues )
 	{
-		if ( !m_shadowMaps.empty() )
+		if ( !m_passes.empty() )
 		{
 			m_sorted.clear();
 
-			for ( auto & l_it : m_shadowMaps )
+			for ( auto & l_it : m_passes )
 			{
 				m_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
 						, l_it.first->GetParent()->GetDerivedPosition() )
@@ -132,6 +133,8 @@ namespace Castor3D
 		{
 			l_attach.reset();
 		}
+
+		m_shadowMap.Cleanup();
 	}
 
 	ShadowMapPassSPtr ShadowMapSpot::DoCreatePass( Light & p_light )const

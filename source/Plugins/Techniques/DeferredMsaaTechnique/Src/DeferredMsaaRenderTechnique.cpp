@@ -554,8 +554,12 @@ namespace deferred_msaa
 			m_directionalShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
 			m_spotShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
 			m_spotShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
-			m_pointShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
-			m_pointShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
+
+			for ( auto & l_map : m_pointShadowMap.GetTextures() )
+			{
+				l_map.GetTexture()->Bind( p_startIndex );
+				l_map.GetSampler()->Bind( p_startIndex++ );
+			}
 		}
 	}
 
@@ -567,8 +571,12 @@ namespace deferred_msaa
 			m_directionalShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
 			m_spotShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
 			m_spotShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
-			m_pointShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
-			m_pointShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
+
+			for ( auto & l_map : m_pointShadowMap.GetTextures() )
+			{
+				l_map.GetTexture()->Unbind( p_startIndex );
+				l_map.GetSampler()->Unbind( p_startIndex++ );
+			}
 		}
 	}
 

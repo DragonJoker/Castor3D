@@ -80,6 +80,48 @@ namespace Castor3D
 		 *\brief		Dessine les shadow maps des lumières sélectionnées.
 		 */
 		C3D_API void Render();
+		/**
+		 *\~english
+		 *\return		The shadow map.
+		 *\~english
+		 *\return		La map d'ombres.
+		 */
+		inline TextureUnit & GetTexture( uint32_t p_index )
+		{
+			REQUIRE( p_index < m_shadowMaps.size() );
+			return m_shadowMaps[p_index];
+		}
+		/**
+		 *\~english
+		 *\return		The shadow map.
+		 *\~english
+		 *\return		La map d'ombres.
+		 */
+		inline TextureUnit const & GetTexture( uint32_t p_index )const
+		{
+			REQUIRE( p_index < m_shadowMaps.size() );
+			return m_shadowMaps[p_index];
+		}
+		/**
+		 *\~english
+		 *\return		The shadow maps.
+		 *\~english
+		 *\return		Les maps d'ombres.
+		 */
+		inline std::vector< TextureUnit > & GetTextures( )
+		{
+			return m_shadowMaps;
+		}
+		/**
+		 *\~english
+		 *\return		The shadow maps.
+		 *\~english
+		 *\return		Les maps d'ombres.
+		 */
+		inline std::vector< TextureUnit > const & GetTextures()const
+		{
+			return m_shadowMaps;
+		}
 
 	private:
 		/**
@@ -124,9 +166,13 @@ namespace Castor3D
 			, uint8_t p_sceneFlags )const override;
 
 	private:
+		using CubeAttachments = std::array< TextureAttachmentSPtr, 6u >;
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
 		std::vector< TextureAttachmentSPtr > m_depthAttach;
+		//!\~english	The shadow map texture.
+		//!\~french		La texture de mappage d'ombres.
+		std::vector< TextureUnit > m_shadowMaps;
 	};
 }
 

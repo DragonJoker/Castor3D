@@ -276,11 +276,10 @@ namespace Castor3D
 		}
 		else if ( !m_pointShadowMap.GetPasses().empty() )
 		{
-			auto & l_depthMap = m_pointShadowMap.GetTexture();
+			auto & l_depthMap = m_pointShadowMap.GetTexture( 0u );
 			Size l_size{ 512u, 512u };
 			m_renderSystem.GetCurrentContext()->RenderDepthCube( Size{ l_size.width() / 4, l_size.height() / 4 }
-				, *l_depthMap.GetTexture()
-				, 0u );
+				, *l_depthMap.GetTexture() );
 		}
 
 #endif

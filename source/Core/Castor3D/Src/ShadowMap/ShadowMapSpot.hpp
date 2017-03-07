@@ -77,6 +77,26 @@ namespace Castor3D
 		 *\brief		Dessine les shadow maps des lumières sélectionnées.
 		 */
 		C3D_API void Render();
+		/**
+		 *\~english
+		 *\return		The shadow map.
+		 *\~english
+		 *\return		La map d'ombres.
+		 */
+		inline TextureUnit & GetTexture()
+		{
+			return m_shadowMap;
+		}
+		/**
+		 *\~english
+		 *\return		The shadow map.
+		 *\~english
+		 *\return		La map d'ombres.
+		 */
+		inline TextureUnit const & GetTexture()const
+		{
+			return m_shadowMap;
+		}
 
 	private:
 		/**
@@ -111,6 +131,9 @@ namespace Castor3D
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
 		std::vector< TextureAttachmentSPtr > m_depthAttach;
+		//!\~english	The shadow map texture.
+		//!\~french		La texture de mappage d'ombres.
+		TextureUnit m_shadowMap;
 	};
 }
 

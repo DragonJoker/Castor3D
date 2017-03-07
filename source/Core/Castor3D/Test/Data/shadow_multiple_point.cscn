@@ -47,10 +47,10 @@ scene "Scene"
 		position 0 50 0
 	}
 
-	// scene_node "PointLightNode2"
-	// {
-		// position 0 -50 0
-	// }
+	scene_node "PointLightNode2"
+	{
+		position 0 -50 0
+	}
 
 	light "PointLight1"
 	{
@@ -62,15 +62,15 @@ scene "Scene"
 		shadow_producer true
 	}
 
-	// light "PointLight2"
-	// {
-		// type point
-		// parent "PointLightNode2"
-		// colour 1.0 1.0 1.0
-		// intensity 0.0 0.8 1.0 1.0
-		// attenuation 1.0 0.0 0.0
-		// shadow_producer true
-	// }
+	light "PointLight2"
+	{
+		type point
+		parent "PointLightNode2"
+		colour 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0 1.0
+		attenuation 1.0 0.0 0.0
+		shadow_producer true
+	}
 
 	scene_node "Cube"
 	{
@@ -108,13 +108,13 @@ scene "Scene"
 		material "WhiteEmit"
 	}
 
-	// object "PointLight2"
-	// {
-		// parent "PointLightNode2"
-		// cast_shadows false
-		// mesh "LightMesh"
-		// material "WhiteEmit"
-	// }
+	object "PointLight2"
+	{
+		parent "PointLightNode2"
+		cast_shadows false
+		mesh "LightMesh"
+		material "WhiteEmit"
+	}
 
 	object "Cube"
 	{

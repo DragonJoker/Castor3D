@@ -41,7 +41,6 @@ namespace Castor3D
 {
 	ShadowMap::ShadowMap( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
-		, m_shadowMap{ p_engine }
 	{
 	}
 
@@ -67,7 +66,7 @@ namespace Castor3D
 			{
 				DoInitialise( p_size );
 				
-				for ( auto & l_it : m_shadowMaps )
+				for ( auto & l_it : m_passes )
 				{
 					l_it.second->Initialise( p_size );
 				}
@@ -83,7 +82,7 @@ namespace Castor3D
 
 	void ShadowMap::Cleanup()
 	{
-		for ( auto & l_it : m_shadowMaps )
+		for ( auto & l_it : m_passes )
 		{
 			l_it.second->Cleanup();
 		}
@@ -94,8 +93,6 @@ namespace Castor3D
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 
-			m_shadowMap.Cleanup();
-			
 			DoCleanup();
 
 			m_frameBuffer->Cleanup();
@@ -113,7 +110,7 @@ namespace Castor3D
 
 	void ShadowMap::AddLight( Light & p_light )
 	{
-		m_shadowMaps.emplace( &p_light, DoCreatePass( p_light ) );
+		m_passes.emplace( &p_light, DoCreatePass( p_light ) );
 	}
 
 	void ShadowMap::UpdateFlags( TextureChannels & p_textureFlags
