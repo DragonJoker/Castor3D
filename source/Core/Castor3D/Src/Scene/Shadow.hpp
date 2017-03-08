@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -59,9 +59,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La densité du brouillard.
 		 */
-		inline GLSL::ShadowType GetType()const
+		inline GLSL::ShadowType GetFilterType()const
 		{
-			return m_type;
+			return m_filterType;
 		}
 		/**
 		 *\~english
@@ -71,15 +71,15 @@ namespace Castor3D
 		 *\brief		Définit le type de brouillard.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetType( GLSL::ShadowType p_value )
+		inline void SetFilterType( GLSL::ShadowType p_value )
 		{
-			m_type = p_value;
+			m_filterType = p_value;
 		}
 
 	private:
 		//!\~english	The shadows filter type type.
 		//!\~french		Le type de filtrage des ombres.
-		GLSL::ShadowType m_type{ GLSL::ShadowType::eRaw };
+		GLSL::ShadowType m_filterType{ GLSL::ShadowType::eRaw };
 	};
 }
 

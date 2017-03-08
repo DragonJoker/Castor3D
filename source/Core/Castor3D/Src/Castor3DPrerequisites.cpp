@@ -1,4 +1,4 @@
-﻿#include "Castor3DPrerequisites.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderSystem.hpp>
@@ -186,5 +186,45 @@ namespace Castor3D
 		return CheckFlag( p_flags, ProgramFlag::eShadowMapDirectional )
 			|| CheckFlag( p_flags, ProgramFlag::eShadowMapSpot )
 			|| CheckFlag( p_flags, ProgramFlag::eShadowMapPoint );
+	}
+
+	GLSL::ShadowType GetShadowType ( SceneFlags const & p_flags )
+	{
+		auto l_shadow = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eShadowFilterStratifiedPoisson ) );
+
+		switch ( l_shadow )
+		{
+		case SceneFlag::eShadowFilterRaw:
+			return GLSL::ShadowType::eRaw;
+
+		case SceneFlag::eShadowFilterPoisson:
+			return GLSL::ShadowType::ePoisson;
+
+		case SceneFlag::eShadowFilterStratifiedPoisson:
+			return GLSL::ShadowType::eStratifiedPoisson;
+
+		default:
+			return GLSL::ShadowType::eNone;
+		}
+	}
+
+	GLSL::FogType GetFogType ( SceneFlags const & p_flags )
+	{
+		auto l_fog = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eFogSquaredExponential ) );
+
+		switch ( l_fog )
+		{
+		case SceneFlag::eFogLinear:
+			return GLSL::FogType::eLinear;
+
+		case SceneFlag::eFogExponential:
+			return GLSL::FogType::eExponential;
+
+		case SceneFlag::eFogSquaredExponential:
+			return GLSL::FogType::eSquaredExponential;
+
+		default:
+			return GLSL::FogType::eDisabled;
+		}
 	}
 }

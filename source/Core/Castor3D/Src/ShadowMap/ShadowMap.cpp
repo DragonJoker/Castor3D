@@ -1,4 +1,4 @@
-﻿#include "ShadowMap.hpp"
+#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
@@ -114,12 +114,16 @@ namespace Castor3D
 	}
 
 	void ShadowMap::UpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		RemFlag( p_programFlags, ProgramFlag::eLighting );
 		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
-		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll ) & ~uint16_t( TextureChannel::eOpacity ) ) );
-		DoUpdateFlags( p_textureFlags, p_programFlags );
+		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll )
+			& ~uint16_t( TextureChannel::eOpacity ) ) );
+		DoUpdateFlags( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags );
 	}
 
 	String ShadowMap::GetVertexShaderSource( TextureChannels const & p_textureFlags

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -24,7 +24,7 @@ SOFTWARE.
 #define ___C3D_PREREQUISITES_H___
 
 #undef RGB
-#include <CastorUtilsPrerequisites.hpp>
+#include <GlslWriterPrerequisites.hpp>
 
 #if !defined( CASTOR_PLATFORM_WINDOWS )
 #	define C3D_API

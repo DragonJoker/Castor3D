@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -92,7 +92,8 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
 		C3D_API void UpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags )const;
+			, ProgramFlags & p_programFlags
+			, SceneFlags & p_sceneFlags )const;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
 		 */
@@ -172,7 +173,8 @@ namespace Castor3D
 		 *\copydoc		Castor3D::ShadowMap::UpdateFlags
 		 */
 		C3D_API virtual void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags )const = 0;
+			, ProgramFlags & p_programFlags
+			, SceneFlags & p_sceneFlags )const = 0;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetVertexShaderSource
 		 */

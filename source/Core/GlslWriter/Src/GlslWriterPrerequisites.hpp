@@ -37,14 +37,57 @@ SOFTWARE.
 
 namespace GLSL
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		31/05/2016
+	\~english
+	\brief		Shadow filter types enumeration.
+	\~french
+	\brief		Enum�ration des types de filtrage des ombres.
+	*/
 	enum class ShadowType
 	{
+		//!\~english	No shadows at all.
+		//!\~french		Pas d'ombres du tout.
 		eNone,
+		//!\~english	Poisson filtering.
+		//!\~french		Filtrage poisson.
 		eRaw,
+		//!\~english	Poisson filtering.
+		//!\~french		Filtrage poisson.
 		ePoisson,
-		eStratifiedPoisson
+		//!\~english	Stratified poisson filtering.
+		//!\~french		Filtrage poisson stratifi�.
+		eStratifiedPoisson,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
-
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		31/05/2016
+	\~english
+	\brief		Fog types enumeration.
+	\~french
+	\brief		Enum�ration des types de brouillard.
+	*/
+	enum class FogType
+	{
+		//!\~english	No fog.
+		//!\~french		Pas de brouillard
+		eDisabled,
+		//!\~english	Fog intensity increases linearly with distance to camera.
+		//!\~french		L'intensit� du brouillard augmente lin�airement avec la distance � la cam�ra.
+		eLinear,
+		//!\~english	Fog intensity increases exponentially with distance to camera.
+		//!\~french		L'intensit� du brouillard augmente exponentiellement avec la distance � la cam�ra.
+		//!\~french		
+		eExponential,
+		//!\~english	Fog intensity increases even more with distance to camera.
+		//!\~french		L'intensit� du brouillard augmente encore plus avec la distance � la cam�ra.
+		eSquaredExponential,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
+	};
 	enum class UboLayout
 	{
 		eStd140,

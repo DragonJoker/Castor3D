@@ -1,4 +1,4 @@
-﻿#include "ShadowMapSpot.hpp"
+#include "ShadowMapSpot.hpp"
 
 #include "Engine.hpp"
 
@@ -143,7 +143,8 @@ namespace Castor3D
 	}
 
 	void ShadowMapSpot::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::eShadowMapSpot );
 	}

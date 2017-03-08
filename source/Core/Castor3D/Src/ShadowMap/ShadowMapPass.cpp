@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPass.hpp"
+#include "ShadowMapPass.hpp"
 
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
@@ -75,9 +75,12 @@ namespace Castor3D
 	}
 
 	void ShadowMapPass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
-		m_shadowMap.UpdateFlags( p_textureFlags, p_programFlags );
+		m_shadowMap.UpdateFlags( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags );
 	}
 
 	void ShadowMapPass::DoUpdatePipeline( RenderPipeline & p_pipeline )const

@@ -1,4 +1,4 @@
-﻿#include "DeferredMsaaRenderTechniqueOpaquePass.hpp"
+#include "DeferredMsaaRenderTechniqueOpaquePass.hpp"
 
 #include "DeferredMsaaRenderTechnique.hpp"
 
@@ -29,11 +29,14 @@ namespace deferred_msaa
 	{
 	}
 
-	void OpaquePass::DoUpdateFlags( FlagCombination< TextureChannel > & p_textureFlags
-		, FlagCombination< ProgramFlag > & p_programFlags )const
+	void OpaquePass::DoUpdateFlags( TextureChannels  & p_textureFlags
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		RemFlag( p_programFlags, ProgramFlag::eLighting );
-		RemFlag( p_programFlags, ProgramFlag::eShadows );
+		RemFlag( p_sceneFlags, SceneFlag::eShadowFilterRaw );
+		RemFlag( p_sceneFlags, SceneFlag::eShadowFilterPoisson );
+		RemFlag( p_sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
 	}
 
 	String OpaquePass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags

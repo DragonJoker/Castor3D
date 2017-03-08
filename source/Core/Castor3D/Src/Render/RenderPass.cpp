@@ -1,4 +1,4 @@
-﻿#include "RenderPass.hpp"
+#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -394,7 +394,9 @@ namespace Castor3D
 		, SceneFlags & p_sceneFlags
 		, bool p_twoSided )
 	{
-		DoUpdateFlags( p_textureFlags, p_programFlags );
+		DoUpdateFlags( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags );
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) != m_opaque
 			&& ( !CheckFlag( p_programFlags, ProgramFlag::eBillboards )

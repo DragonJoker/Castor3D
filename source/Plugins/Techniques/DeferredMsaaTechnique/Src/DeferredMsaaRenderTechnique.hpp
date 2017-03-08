@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -303,7 +303,7 @@ namespace deferred_msaa
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
 		//!\~english	The shader program used to render lights.
 		//!\~french		Le shader utilisé pour rendre les lumières.
-		std::array< LightPassProgram, size_t( Castor3D::FogType::eCount ) > m_lightPassShaderPrograms;
+		std::array< LightPassProgram, size_t( GLSL::FogType::eCount ) > m_lightPassShaderPrograms;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;

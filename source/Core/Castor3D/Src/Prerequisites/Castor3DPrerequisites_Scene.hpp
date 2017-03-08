@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,32 +31,6 @@ namespace Castor3D
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Fog types enumeration.
-	\~french
-	\brief		Enumération des types de brouillard.
-	*/
-	enum class FogType
-	{
-		//!\~english	No fog.
-		//!\~french		Pas de brouillard
-		eDisabled,
-		//!\~english	Fog intensity increases linearly with distance to camera.
-		//!\~french		L'intensité du brouillard augmente linéairement avec la distance à la caméra.
-		eLinear,
-		//!\~english	Fog intensity increases exponentially with distance to camera.
-		//!\~french		L'intensité du brouillard augmente exponentiellement avec la distance à la caméra.
-		//!\~french		
-		eExponential,
-		//!\~english	Fog intensity increases even more with distance to camera.
-		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
-		eSquaredExponential,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
 	\date		08/03/2017
 	\~english
 	\brief		Scene flags enumeration.
@@ -68,7 +42,7 @@ namespace Castor3D
 	{
 		//!\~english	No flag.
 		//!\~french		Aucun indicateur.
-		eNone = 0x0001,
+		eNone = 0x0000,
 		//!\~english	Linear fog.
 		//!\~french		Brouillard linéaire.
 		eFogLinear = 0x0001,
@@ -77,19 +51,41 @@ namespace Castor3D
 		eFogExponential = 0x0002,
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
-		eFogSquaredExponential = 0x0004,
-		//!\~english	Linear fog.
-		//!\~french		Brouillard linéaire.
-		eShadowFilterRaw = 0x0008,
-		//!\~english	Exponential fog.
-		//!\~french		Brouillard exponentiel.
-		eShadowFilterPoisson = 0x0010,
-		//!\~english	Squared exponential fog.
-		//!\~french		Brouillard exponentiel au carré.
-		eShadowFilterStratifiedPoisson = 0x0020,
+		eFogSquaredExponential = 0x0003,
+		//!\~english	No filtering.
+		//!\~french		Pas de filtrage.
+		eShadowFilterRaw = 0x0004,
+		//!\~english	Poisson filtering.
+		//!\~french		Filtrage poisson.
+		eShadowFilterPoisson = 0x0008,
+		//!\~english	Stratified poisson filtering.
+		//!\~french		Filtrage poisson stratifié.
+		eShadowFilterStratifiedPoisson = 0x000C,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	IMPLEMENT_FLAGS( SceneFlag )
+	/**
+	 *\~english
+	 *\brief		Gives the shadow filter type matching the given flags.
+	 *\param[in]	p_flags	The scene flags.
+	 *\return		The shadow filter type.
+	 *\~french
+	 *\brief		Récupère le type de filtrage d'ombres correspondant aux indicateurs donnés.
+	 *\param[in]	p_flags	Les indicateurs de scène.
+	 *\return		Le type de filtrage d'ombres.
+	 */
+	C3D_API GLSL::ShadowType GetShadowType( SceneFlags const & p_flags );
+	/**
+	 *\~english
+	 *\brief		Gives the fog type matching the given flags.
+	 *\param[in]	p_flags	The scene flags.
+	 *\return		The fog type.
+	 *\~french
+	 *\brief		Récupère le type de brouillard correspondant aux indicateurs donnés.
+	 *\param[in]	p_flags	Les indicateurs de scène.
+	 *\return		Le type de brouillard.
+	 */
+	C3D_API GLSL::FogType GetFogType( SceneFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0

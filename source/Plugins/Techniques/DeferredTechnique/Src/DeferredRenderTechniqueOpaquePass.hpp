@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -69,8 +69,9 @@ namespace deferred
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
-		void DoUpdateFlags( Castor::FlagCombination< Castor3D::TextureChannel > & p_textureFlags
-			, Castor::FlagCombination< Castor3D::ProgramFlag > & p_programFlags )const override;
+		void DoUpdateFlags( Castor3D::TextureChannels & p_textureFlags
+			, Castor3D::ProgramFlags & p_programFlags
+			, Castor3D::SceneFlags & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */

@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
@@ -503,7 +503,8 @@ namespace Castor3D
 	}
 
 	void PickingPass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		RemFlag( p_programFlags, ProgramFlag::eLighting );
 		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );

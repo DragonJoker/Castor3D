@@ -4,10 +4,10 @@ using namespace Castor;
 
 namespace GLSL
 {
-	Fog::Fog( uint8_t p_flags, GlslWriter & p_writer )
+	Fog::Fog( FogType p_flags, GlslWriter & p_writer )
 		: m_writer{ p_writer }
 	{
-		if ( p_flags != 0 )
+		if ( p_flags != FogType::eDisabled )
 		{
 			auto l_apply = [this, p_flags]( Vec4 const & p_colour, Float const & p_dist, Float const & p_y )
 			{
@@ -18,35 +18,35 @@ namespace GLSL
 				auto l_dist = m_writer.GetLocale( cuT( "l_z" ), p_dist / 100 );
 				auto l_density = m_writer.GetLocale( cuT( "l_density" ), c3d_fFogDensity );
 
-				if ( p_flags == 1 )
+				if ( p_flags == FogType::eLinear )
 				{
 					// Linear
 					auto l_fogFactor = m_writer.GetLocale( cuT( "l_fogFactor" ), m_writer.Paren( 80.0_f - l_dist ) / m_writer.Paren( 80.0_f - 20.0_f ) );
 					l_fogFactor = clamp( l_fogFactor, 0.0f, 1.0f );
 					m_writer.Return( vec4( mix( c3d_v4BackgroundColour, p_colour, l_fogFactor ).rgb(), p_colour.a() ) );
 				}
-				else if ( p_flags == 2 )
+				else if ( p_flags == FogType::eExponential )
 				{
 					// Exponential
 					auto l_fogFactor = m_writer.GetLocale( cuT( "l_fogFactor" ), exp( -l_density * l_dist / 100 ) );
 					l_fogFactor = clamp( l_fogFactor, 0.0f, 1.0f );
 					m_writer.Return( vec4( mix( c3d_v4BackgroundColour, p_colour, l_fogFactor ).rgb(), p_colour.a() ) );
 				}
-				else if ( p_flags == 3 )
+				else if ( p_flags == FogType::eSquaredExponential )
 				{
 					//Squared exponential
 					auto l_fogFactor = m_writer.GetLocale( cuT( "l_fogFactor" ), exp( -l_density * l_density * l_dist * l_dist / 100 ) );
 					l_fogFactor = clamp( l_fogFactor, 0.0f, 1.0f );
 					m_writer.Return( vec4( mix( c3d_v4BackgroundColour, p_colour, l_fogFactor ).rgb(), p_colour.a() ) );
 				}
-				else if ( p_flags == 4 )
+				else if ( p_flags == FogType( 4 ) )
 				{
 					// Coloured
 					auto l_fogFactor = m_writer.GetLocale( cuT( "l_fogFactor" ), 0.0_f );
 					l_fogFactor = clamp( l_fogFactor, 0.0f, 1.0f );
 					m_writer.Return( vec4( mix( c3d_v4BackgroundColour, p_colour, l_fogFactor ).rgb(), p_colour.a() ) );
 				}
-				else if ( p_flags == 5 )
+				else if ( p_flags == FogType( 5 ) )
 				{
 					// Ground
 					//my camera y is 10.0. you can change it or pass it as a uniform

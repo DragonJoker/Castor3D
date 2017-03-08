@@ -250,7 +250,7 @@ namespace Castor3D
 		m_opaquePass->Render( p_visible, l_shadows );
 		DoEndOpaqueRendering();
 
-		if ( l_scene.GetFog().GetType() == FogType::eDisabled )
+		if ( l_scene.GetFog().GetType() == GLSL::FogType::eDisabled )
 		{
 			l_scene.RenderForeground( GetSize(), l_camera );
 		}

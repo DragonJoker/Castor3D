@@ -1,4 +1,4 @@
-﻿#include "DeferredRenderTechnique.hpp"
+#include "DeferredRenderTechnique.hpp"
 
 #include "DeferredRenderTechniqueOpaquePass.hpp"
 
@@ -236,7 +236,7 @@ namespace deferred
 		m_frameBuffer.m_frameBuffer->SetClearColour(l_scene.GetBackgroundColour() );
 		m_frameBuffer.m_frameBuffer->Clear();
 
-		auto & l_program = m_lightPassShaderPrograms[uint16_t( l_scene.GetFlags() )];
+		auto & l_program = m_lightPassShaderPrograms[uint16_t( GetFogType( l_scene.GetFlags() ) )];
 
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
@@ -247,7 +247,7 @@ namespace deferred
 			auto & l_fog = l_scene.GetFog();
 			m_sceneNode->m_fogType.SetValue( int( l_fog.GetType() ) );
 
-			if ( l_fog.GetType() != FogType::eDisabled )
+			if ( l_fog.GetType() != GLSL::FogType::eDisabled )
 			{
 				m_sceneNode->m_fogDensity.SetValue( l_fog.GetDensity() );
 			}
@@ -374,9 +374,9 @@ namespace deferred
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
 		auto c3d_mapInfos = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eInfos ) );
 
-		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name
-			, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
-		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
+		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name
+			, GetShadowType( p_sceneFlags ) );
+		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
 
 		// Shader outputs
 		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
@@ -396,7 +396,7 @@ namespace deferred
 				auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, vtx_texture ) );
 				auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, vtx_texture ) );
 				auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, vtx_texture ) );
-				auto l_v3MapAmbient = l_writer.GetLocale( cuT( "l_v3MapAmbient" ), c3d_v4AmbientLight.xyz() + vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
+				auto l_v3MapAmbient = l_writer.GetLocale( cuT( "l_v3MapAmbient" ), vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
 				auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
 				auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
 				auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
@@ -404,7 +404,7 @@ namespace deferred
 				auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
 				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
 				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), vec3( 0.0_f, 0, 0 ) );
+				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
 				auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 				auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
 				auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
@@ -417,11 +417,11 @@ namespace deferred
 					, l_output );
 
 				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() )
-														+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
-														+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
-														+ l_v3MapEmissive ), 1.0 );
+					+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
+					+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
+					+ l_v3MapEmissive ), 1.0 );
 
-				if ( p_sceneFlags != 0 )
+				if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
 				{
 					l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );
 				}
@@ -490,16 +490,14 @@ namespace deferred
 	{
 		ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto & l_scene = *m_renderTarget.GetScene();
-		uint8_t l_sceneFlags{ 0u };
+		uint16_t l_fog{ 0u };
 		ProgramFlags l_programFlags;
-			
-		if ( l_scene.HasShadows() )
-		{
-			l_programFlags |= ProgramFlag::eShadows;
-		}
 
 		for ( auto & l_program : m_lightPassShaderPrograms )
 		{
+			SceneFlags l_sceneFlags{ l_scene.GetFlags() };
+			RemFlag( l_sceneFlags, SceneFlag::eFogSquaredExponential );
+			AddFlag( l_sceneFlags, SceneFlag( l_fog ) );
 			l_program.m_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
 			l_program.m_program->CreateObject( ShaderType::eVertex );
 			l_program.m_program->CreateObject( ShaderType::ePixel );
@@ -514,16 +512,21 @@ namespace deferred
 				l_program.m_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture( i ) ), ShaderType::ePixel )->SetValue( i + 1 );
 			}
 
-			if ( CheckFlag( l_programFlags, ProgramFlag::eShadows ) )
+			if ( GetShadowType( l_scene.GetFlags() ) != GLSL::ShadowType::eNone )
 			{
 				l_program.m_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eInfos ), ShaderType::ePixel )->SetValue( int( DsTexture::eInfos ) + 1 );
 			}
 
 			if ( l_scene.HasShadows() )
 			{
-				l_program.m_program->CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 2u );
-				l_program.m_program->CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 3u );
-				l_program.m_program->CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 4u );
+				l_program.m_program->CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel )->SetValue( int( DsTexture::eInfos ) + 2 );
+				l_program.m_program->CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel )->SetValue( int( DsTexture::eInfos ) + 3 );
+				auto l_mapPoint = l_program.m_program->CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel, 6u );
+
+				for ( int i = 0; i < 6; ++i )
+				{
+					l_mapPoint->SetValue( int( DsTexture::eInfos ) + 4 + i, i );
+				}
 			}
 
 			DepthStencilState l_dsstate;
@@ -531,7 +534,7 @@ namespace deferred
 			l_dsstate.SetDepthMask( WritingMask::eZero );
 			l_program.m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program.m_program, PipelineFlags{} );
 
-			++l_sceneFlags;
+			++l_fog;
 		}
 
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
