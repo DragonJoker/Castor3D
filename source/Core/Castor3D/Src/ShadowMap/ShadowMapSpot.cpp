@@ -1,4 +1,4 @@
-#include "ShadowMapSpot.hpp"
+﻿#include "ShadowMapSpot.hpp"
 
 #include "Engine.hpp"
 
@@ -150,7 +150,7 @@ namespace Castor3D
 
 	String ShadowMapSpot::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

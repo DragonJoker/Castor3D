@@ -1,4 +1,4 @@
-#include "DeferredMsaaRenderTechnique.hpp"
+﻿#include "DeferredMsaaRenderTechnique.hpp"
 
 #include "DeferredMsaaRenderTechniqueOpaquePass.hpp"
 
@@ -239,7 +239,7 @@ namespace deferred_msaa
 		m_msaaFrameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
 		m_msaaFrameBuffer->Clear();
 
-		auto & l_program = m_lightPassShaderPrograms[l_scene.GetFlags()];
+		auto & l_program = m_lightPassShaderPrograms[uint16_t( l_scene.GetFlags() )];
 
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
@@ -326,7 +326,7 @@ namespace deferred_msaa
 	String RenderTechnique::DoGetLightPassVertexShaderSource(
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags )const
+		SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -352,7 +352,7 @@ namespace deferred_msaa
 	String RenderTechnique::DoGetLightPassPixelShaderSource(
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags )const
+		SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

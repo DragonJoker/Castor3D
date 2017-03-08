@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -38,7 +38,8 @@ SOFTWARE.
 #include "Cache/SamplerCache.hpp"
 #include "Cache/WindowCache.hpp"
 
-#include "Fog.hpp"
+#include "Scene/Fog.hpp"
+#include "Scene/Shadow.hpp"
 
 #include <Log/Logger.hpp>
 #include <Design/Named.hpp>
@@ -226,7 +227,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les indicateurs de la scène.
 		 */
-		C3D_API uint8_t GetFlags()const;
+		C3D_API SceneFlags GetFlags()const;
 		/**
 		 *\~english
 		 *\return		Tells if the scene has a shadow projecting light.
@@ -381,6 +382,26 @@ namespace Castor3D
 		{
 			return m_fog;
 		}
+		/**
+		 *\~english
+		 *\return		The shadows parameters.
+		 *\~french
+		 *\return		Les paramètres des ombres.
+		 */
+		inline Shadow const & GetShadow()const
+		{
+			return m_shadow;
+		}
+		/**
+		 *\~english
+		 *\return		The shadows parameters.
+		 *\~french
+		 *\return		Les paramètres des ombres.
+		 */
+		inline Shadow & GetShadow()
+		{
+			return m_shadow;
+		}
 
 	public:
 		//!\~english	The signal raised when the scene has changed.
@@ -460,6 +481,9 @@ namespace Castor3D
 		//!\~english	The fog's parameters.
 		//!\~french		Les paramètres de brouillard.
 		Fog m_fog;
+		//!\~english	The shadows parameters.
+		//!\~french		Les paramètres des ombres.
+		Shadow m_shadow;
 
 	public:
 		//!\~english	The cameras root node name.

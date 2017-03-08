@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -160,7 +160,7 @@ namespace deferred_msaa
 		Castor::String DoGetLightPassVertexShaderSource(
 			Castor3D::TextureChannels const & p_textureFlags,
 			Castor3D::ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags )const;
+			Castor3D::SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -172,7 +172,7 @@ namespace deferred_msaa
 		Castor::String DoGetLightPassPixelShaderSource(
 			Castor3D::TextureChannels const & p_textureFlags,
 			Castor3D::ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags )const;
+			Castor3D::SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Creates deferred rendering related stuff.

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -103,7 +103,7 @@ namespace Castor3D
 			RenderPass const & p_renderPass,
 			TextureChannels const & p_textureFlags,
 			ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags,
+			SceneFlags const & p_sceneFlags,
 			bool p_invertNormals );
 		/**
 		 *\~english
@@ -223,7 +223,7 @@ namespace Castor3D
 			RenderPass const & p_renderPass,
 			TextureChannels const & p_textureFlags,
 			ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags,
+			SceneFlags const & p_sceneFlags,
 			bool p_invertNormals )const;
 		/**
 		 *\~english
@@ -247,7 +247,7 @@ namespace Castor3D
 			ShaderProgramSPtr p_program,
 			TextureChannels const & p_textureFlags,
 			ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags,
+			SceneFlags const & p_sceneFlags,
 			bool p_invertNormals );
 		/**
 		 *\~english
@@ -269,7 +269,7 @@ namespace Castor3D
 			RenderPass const & p_renderPass,
 			TextureChannels const & p_textureFlags,
 			ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags )const;
+			SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Adds a billboards shader program corresponding to given flags.
@@ -288,7 +288,7 @@ namespace Castor3D
 			ShaderProgramSPtr p_program,
 			TextureChannels const & p_textureFlags,
 			ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags );
+			SceneFlags const & p_sceneFlags );
 
 	private:
 		DECLARE_MAP( uint64_t, ShaderProgramWPtr, ShaderProgramWPtrUInt64 );

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -741,7 +741,7 @@ namespace Castor3D
 		GLSL::Float & p_shininess,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags );
+		SceneFlags const & p_sceneFlags );
 
 	C3D_API void ComputePostLightingMapContributions(
 		GLSL::GlslWriter & p_writer,
@@ -751,7 +751,7 @@ namespace Castor3D
 		GLSL::Vec3 & p_emissive,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags );
+		SceneFlags const & p_sceneFlags );
 }
 
 DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine )

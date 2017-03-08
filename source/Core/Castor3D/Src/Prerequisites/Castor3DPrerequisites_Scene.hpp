@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -35,7 +35,7 @@ namespace Castor3D
 	\~english
 	\brief		Fog types enumeration.
 	\~french
-	\brief		EnumÈration des types de brouillard.
+	\brief		Enum√©ration des types de brouillard.
 	*/
 	enum class FogType
 	{
@@ -43,17 +43,53 @@ namespace Castor3D
 		//!\~french		Pas de brouillard
 		eDisabled,
 		//!\~english	Fog intensity increases linearly with distance to camera.
-		//!\~french		L'intensitÈ du brouillard augmente linÈairement avec la distance ‡ la camÈra.
+		//!\~french		L'intensit√© du brouillard augmente lin√©airement avec la distance √† la cam√©ra.
 		eLinear,
 		//!\~english	Fog intensity increases exponentially with distance to camera.
-		//!\~french		L'intensitÈ du brouillard augmente exponentiellement avec la distance ‡ la camÈra.
+		//!\~french		L'intensit√© du brouillard augmente exponentiellement avec la distance √† la cam√©ra.
 		//!\~french		
 		eExponential,
 		//!\~english	Fog intensity increases even more with distance to camera.
-		//!\~french		L'intensitÈ du brouillard augmente encore plus avec la distance ‡ la camÈra.
+		//!\~french		L'intensit√© du brouillard augmente encore plus avec la distance √† la cam√©ra.
 		eSquaredExponential,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		08/03/2017
+	\~english
+	\brief		Scene flags enumeration.
+	\~french
+	\brief		Enum√©ration des indicateurs de sc√®ne.
+	*/
+	enum class SceneFlag
+		: uint16_t
+	{
+		//!\~english	No flag.
+		//!\~french		Aucun indicateur.
+		eNone = 0x0001,
+		//!\~english	Linear fog.
+		//!\~french		Brouillard lin√©aire.
+		eFogLinear = 0x0001,
+		//!\~english	Exponential fog.
+		//!\~french		Brouillard exponentiel.
+		eFogExponential = 0x0002,
+		//!\~english	Squared exponential fog.
+		//!\~french		Brouillard exponentiel au carr√©.
+		eFogSquaredExponential = 0x0004,
+		//!\~english	Linear fog.
+		//!\~french		Brouillard lin√©aire.
+		eShadowFilterRaw = 0x0008,
+		//!\~english	Exponential fog.
+		//!\~french		Brouillard exponentiel.
+		eShadowFilterPoisson = 0x0010,
+		//!\~english	Squared exponential fog.
+		//!\~french		Brouillard exponentiel au carr√©.
+		eShadowFilterStratifiedPoisson = 0x0020,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
+	};
+	IMPLEMENT_FLAGS( SceneFlag )
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -61,12 +97,12 @@ namespace Castor3D
 	\~english
 	\brief		Billboard rendering types enumeration.
 	\~french
-	\brief		EnumÈration des types de rendu des billboards.
+	\brief		Enum√©ration des types de rendu des billboards.
 	*/
 	enum class BillboardType
 	{
 		//!\~english	Billboards always face the camera.
-		//!\~french		Les billboards font toujours face ‡ la camÈra.
+		//!\~french		Les billboards font toujours face √† la cam√©ra.
 		eSpherical,
 		//!\~english	Billboards rotate only on Y axis.
 		//!\~french		Les billboards tournent uniquement sur l'axe Y.
@@ -80,12 +116,12 @@ namespace Castor3D
 	\~english
 	\brief		Billboard sizing types enumeration.
 	\~french
-	\brief		EnumÈration des types de dimensions des billboards.
+	\brief		Enum√©ration des types de dimensions des billboards.
 	*/
 	enum class BillboardSize
 	{
 		//!\~english	Billboards size changes with camera position.
-		//!\~french		Les dimensions des billboards changent en fonction de la position de la camÈra.
+		//!\~french		Les dimensions des billboards changent en fonction de la position de la cam√©ra.
 		eDynamic,
 		//!\~english	Billboards size doesn't change.
 		//!\~french		Les dimensions des billboards ne changent pas.

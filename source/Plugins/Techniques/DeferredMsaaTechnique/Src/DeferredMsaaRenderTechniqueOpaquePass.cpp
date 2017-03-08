@@ -1,4 +1,4 @@
-#include "DeferredMsaaRenderTechniqueOpaquePass.hpp"
+﻿#include "DeferredMsaaRenderTechniqueOpaquePass.hpp"
 
 #include "DeferredMsaaRenderTechnique.hpp"
 
@@ -38,7 +38,7 @@ namespace deferred_msaa
 
 	String OpaquePass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

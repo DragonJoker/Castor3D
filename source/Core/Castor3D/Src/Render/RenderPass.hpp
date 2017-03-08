@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -134,7 +134,7 @@ namespace Castor3D
 		 */
 		C3D_API Castor::String GetVertexShaderSource( TextureChannels const & p_textureFlags
 			,ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags
+			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const;
 		/**
 		 *\~english
@@ -150,7 +150,7 @@ namespace Castor3D
 		 */
 		C3D_API Castor::String GetPixelShaderSource( TextureChannels const & p_textureFlags
 			,ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const;
+			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
@@ -165,7 +165,7 @@ namespace Castor3D
 		 */
 		C3D_API Castor::String GetGeometryShaderSource( TextureChannels const & p_textureFlags
 			,ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const;
+			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline matching the given flags.
@@ -188,7 +188,7 @@ namespace Castor3D
 			, BlendMode p_alphaBlendMode
 			, TextureChannels & p_textureFlags
 			, ProgramFlags & p_programFlags
-			, uint8_t p_sceneFlags
+			, SceneFlags & p_sceneFlags
 			, bool p_twoSided );
 		/**
 		 *\~english
@@ -212,7 +212,7 @@ namespace Castor3D
 			, BlendMode p_alphaBlendMode
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags );
+			, SceneFlags const & p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for back face culling.
@@ -235,7 +235,7 @@ namespace Castor3D
 			, BlendMode p_alphaBlendMode
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags );
+			, SceneFlags const & p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
@@ -384,7 +384,7 @@ namespace Castor3D
 		 */
 		C3D_API ShaderProgramSPtr DoGetProgram( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags
+			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const;
 		/**
 		 *\~english
@@ -792,7 +792,7 @@ namespace Castor3D
 		 */
 		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const = 0;
+			, SceneFlags const & p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -809,7 +809,7 @@ namespace Castor3D
 		 */
 		C3D_API virtual Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags
+			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const;
 		/**
 		 *\~english
@@ -825,7 +825,7 @@ namespace Castor3D
 		 */
 		C3D_API virtual Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const = 0;
+			, SceneFlags const & p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.

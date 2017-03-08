@@ -1,4 +1,4 @@
-#if defined( CASTOR_COMPILER_MSVC )
+﻿#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -379,11 +379,13 @@ namespace Castor3D
 						}
 
 						auto l_textureFlags = l_pass->GetTextureFlags();
+						auto l_sceneFlags = p_scene.GetFlags();
 						p_renderPass.PreparePipeline( l_pass->GetColourBlendMode()
 							, l_pass->GetAlphaBlendMode()
 							, l_textureFlags
 							, l_programFlags
-							, p_scene.GetFlags(), l_pass->IsTwoSided() );
+							, l_sceneFlags
+							, l_pass->IsTwoSided() );
 
 						if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
 						{
@@ -455,11 +457,12 @@ namespace Castor3D
 				}
 
 				auto l_textureFlags = p_pass.GetTextureFlags();
+				auto l_sceneFlags = p_scene.GetFlags();
 				p_renderPass.PreparePipeline( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
 					, l_textureFlags
 					, l_programFlags
-					, p_scene.GetFlags()
+					, l_sceneFlags
 					, p_pass.IsTwoSided() );
 
 				if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque

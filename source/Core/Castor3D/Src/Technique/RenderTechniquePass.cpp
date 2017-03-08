@@ -1,4 +1,4 @@
-#include "RenderTechniquePass.hpp"
+﻿#include "RenderTechniquePass.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -313,14 +313,14 @@ namespace Castor3D
 
 	String RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return String{};
 	}
 
 	String RenderTechniquePass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -361,7 +361,7 @@ namespace Castor3D
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
-		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
+		GLSL::Fog l_fog{ uint8_t( p_sceneFlags ), l_writer };
 
 		// Fragment Outputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );

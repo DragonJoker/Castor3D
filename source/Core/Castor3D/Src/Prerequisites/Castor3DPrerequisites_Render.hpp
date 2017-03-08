@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -613,7 +613,7 @@ namespace Castor3D
 		BlendMode m_alphaBlendMode;
 		TextureChannels m_textureFlags;
 		ProgramFlags m_programFlags;
-		uint8_t m_sceneFlags;
+		SceneFlags m_sceneFlags;
 	};
 
 	class GpuInformations;

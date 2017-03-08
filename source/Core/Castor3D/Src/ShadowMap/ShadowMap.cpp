@@ -1,4 +1,4 @@
-#include "ShadowMap.hpp"
+﻿#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
@@ -124,7 +124,7 @@ namespace Castor3D
 
 	String ShadowMap::GetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
 		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
@@ -132,21 +132,21 @@ namespace Castor3D
 
 	String ShadowMap::GetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
 	String ShadowMap::GetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return DoGetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
 	String ShadowMap::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
 		using namespace GLSL;
@@ -250,7 +250,7 @@ namespace Castor3D
 
 	String ShadowMap::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return String{};
 	}

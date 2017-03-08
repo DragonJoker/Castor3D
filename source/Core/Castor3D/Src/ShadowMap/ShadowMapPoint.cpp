@@ -1,4 +1,4 @@
-#include "ShadowMapPoint.hpp"
+﻿#include "ShadowMapPoint.hpp"
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
@@ -170,7 +170,7 @@ namespace Castor3D
 
 	String ShadowMapPoint::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
 		using namespace GLSL;
@@ -238,7 +238,7 @@ namespace Castor3D
 
 	String ShadowMapPoint::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -285,7 +285,7 @@ namespace Castor3D
 
 	String ShadowMapPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

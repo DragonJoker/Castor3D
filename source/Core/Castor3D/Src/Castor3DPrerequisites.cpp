@@ -1,4 +1,4 @@
-#include "Castor3DPrerequisites.hpp"
+﻿#include "Castor3DPrerequisites.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderSystem.hpp>
@@ -107,7 +107,7 @@ namespace Castor3D
 		GLSL::Float & p_shininess,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags )
+		SceneFlags const & p_sceneFlags )
 	{
 		using namespace GLSL;
 		auto vtx_texture( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_texture" ) ) );
@@ -140,7 +140,7 @@ namespace Castor3D
 		GLSL::Vec3 & p_emissive,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags )
+		SceneFlags const & p_sceneFlags )
 	{
 		using namespace GLSL;
 		auto vtx_texture( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_texture" ) ) );

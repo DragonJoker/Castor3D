@@ -1,4 +1,4 @@
-#include "RenderPass.hpp"
+﻿#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -367,21 +367,22 @@ namespace Castor3D
 
 	String RenderPass::GetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags, bool p_invertNormals )const
+		, SceneFlags const & p_sceneFlags
+		, bool p_invertNormals )const
 	{
 		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
 	}
 
 	String RenderPass::GetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return DoGetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
 	String RenderPass::GetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
@@ -390,7 +391,7 @@ namespace Castor3D
 		, BlendMode p_alphaBlendMode
 		, TextureChannels & p_textureFlags
 		, ProgramFlags & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags & p_sceneFlags
 		, bool p_twoSided )
 	{
 		DoUpdateFlags( p_textureFlags, p_programFlags );
@@ -432,7 +433,7 @@ namespace Castor3D
 		, BlendMode p_alphaBlendMode
 		, TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )
+		, SceneFlags const & p_sceneFlags )
 	{
 		if ( m_opaque )
 		{
@@ -454,7 +455,7 @@ namespace Castor3D
 		, BlendMode p_alphaBlendMode
 		, TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )
+		, SceneFlags const & p_sceneFlags )
 	{
 		if ( m_opaque )
 		{
@@ -588,7 +589,7 @@ namespace Castor3D
 
 	ShaderProgramSPtr RenderPass::DoGetProgram( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
 		return GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *this, p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
@@ -944,7 +945,7 @@ namespace Castor3D
 
 	String RenderPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
 		using namespace GLSL;

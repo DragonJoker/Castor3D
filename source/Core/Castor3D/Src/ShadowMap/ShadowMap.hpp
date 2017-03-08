@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -98,20 +98,20 @@ namespace Castor3D
 		 */
 		C3D_API Castor::String GetVertexShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags
+			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
 		C3D_API Castor::String GetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const;
+			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
 		C3D_API Castor::String GetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const;
+			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\return		The sorted shadow mapping passes.
@@ -178,20 +178,20 @@ namespace Castor3D
 		 */
 		C3D_API virtual Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags
+			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetGeometryShaderSource
 		 */
 		C3D_API virtual Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const;
+			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetPixelShaderSource
 		 */
 		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const = 0;
+			, SceneFlags const & p_sceneFlags )const = 0;
 
 	protected:
 		//!\~english	The frame buffer.

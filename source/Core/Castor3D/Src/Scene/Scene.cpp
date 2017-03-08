@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+﻿#include "Scene.hpp"
 
 #include "Engine.hpp"
 #include "Camera.hpp"
@@ -762,9 +762,41 @@ namespace Castor3D
 		return l_return;
 	}
 
-	uint8_t Scene::GetFlags()const
+	SceneFlags Scene::GetFlags()const
 	{
-		return uint8_t( m_fog.GetType() );
+		SceneFlags l_result;
+
+		switch ( m_fog.GetType() )
+		{
+		case FogType::eLinear:
+			l_result |= SceneFlag::eFogLinear;
+			break;
+
+		case FogType::eExponential:
+			l_result |= SceneFlag::eFogExponential;
+			break;
+
+		case FogType::eSquaredExponential:
+			l_result |= SceneFlag::eFogSquaredExponential;
+			break;
+		}
+
+		switch ( m_shadow.GetType() )
+		{
+		case GLSL::ShadowType::eRaw:
+			l_result |= SceneFlag::eShadowFilterRaw;
+			break;
+
+		case GLSL::ShadowType::ePoisson:
+			l_result |= SceneFlag::eShadowFilterPoisson;
+			break;
+
+		case GLSL::ShadowType::eStratifiedPoisson:
+			l_result |= SceneFlag::eShadowFilterStratifiedPoisson;
+			break;
+		}
+
+		return l_result;
 	}
 
 	bool Scene::HasShadows()const
