@@ -54,7 +54,7 @@ namespace Castor
 
 	SphericalVertex::SphericalVertex( Point3r const & p_vertex )
 	{
-		m_rRadius = real( point::distance( p_vertex ) );
+		m_rRadius = real( point::length( p_vertex ) );
 		m_rPhi = acos( p_vertex[2] / m_rRadius );
 		real l_dTmp = m_rRadius * sin( m_rPhi );
 

@@ -62,11 +62,11 @@ namespace GlRender
 		GetOpenGl().ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
 	}
 
-	void GlBackBuffers::DoClear( uint32_t p_uiTargets )
+	void GlBackBuffers::DoClear( BufferComponents p_targets )
 	{
 		GetOpenGl().ClearColor( m_redClear, m_greenClear, m_blueClear, m_alphaClear );
 		GetOpenGl().ClearDepth( 1.0 );
-		GetOpenGl().Clear( GetOpenGl().GetComponents( uint32_t( BufferComponent::eColour ) | uint32_t( BufferComponent::eDepth ) | uint32_t( BufferComponent::eStencil ) ) );
+		GetOpenGl().Clear( GetOpenGl().GetComponents( p_targets ) );
 	}
 
 	void GlBackBuffers::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const

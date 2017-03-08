@@ -68,7 +68,7 @@ namespace Castor3D
 		return std::unique_ptr< SpotLight >( new SpotLight{ p_light } );
 	}
 
-	void SpotLight::Update( Point3r const & p_target )
+	void SpotLight::Update( Point3r const & p_target, int32_t p_index )
 	{
 		REQUIRE( m_viewport );
 		auto l_node = GetLight().GetParent();
@@ -81,11 +81,13 @@ namespace Castor3D
 		l_orientation.transform( l_up, l_up );
 		matrix::look_at( m_lightSpace, l_position, l_position + m_direction, l_up );
 		m_lightSpace = m_viewport->GetProjection() * m_lightSpace;
+		m_shadowMapIndex = p_index;
 	}
 
 	void SpotLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		auto l_position = GetLight().GetParent()->GetDerivedPosition();
+		auto l_pos = GetLight().GetParent()->GetDerivedPosition();
+		Point4r l_position{ l_pos[0], l_pos[1], l_pos[2], float( m_shadowMapIndex ) };
 		DoBindComponent( l_position, p_index, p_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, p_offset, p_texture );
 		DoBindComponent( m_direction, p_index, p_offset, p_texture );

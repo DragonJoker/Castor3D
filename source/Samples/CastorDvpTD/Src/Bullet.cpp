@@ -37,7 +37,7 @@ namespace castortd
 			Point3r l_result = m_target.get().GetNode().GetPosition();
 			Point3r l_position{ m_node.get().GetPosition() };
 			Point3r l_direction{ l_result - l_position };
-			auto l_distanceToDst = point::distance( l_direction );
+			auto l_distanceToDst = point::length( l_direction );
 			l_direction[0] *= l_speed / l_distanceToDst;
 			l_direction[2] *= l_speed / l_distanceToDst;
 			l_reachDst = l_distanceToDst <= l_speed;

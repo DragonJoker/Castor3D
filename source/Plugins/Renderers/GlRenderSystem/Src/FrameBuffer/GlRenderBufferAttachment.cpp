@@ -24,28 +24,6 @@ namespace GlRender
 	{
 	}
 
-	void GlRenderBufferAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
-	{
-		REQUIRE( m_glStatus == GlFramebufferStatus::eComplete );
-		GlFrameBufferSPtr l_pBuffer = std::static_pointer_cast< GlFrameBuffer >( p_buffer );
-		GetOpenGl().BindFramebuffer( GlFrameBufferMode::eRead, std::static_pointer_cast< GlFrameBuffer >( GetFrameBuffer() )->GetGlName() );
-		GetOpenGl().BindFramebuffer( GlFrameBufferMode::eDraw, l_pBuffer->GetGlName() );
-		GetOpenGl().ReadBuffer( GetOpenGl().Get( m_glAttachmentPoint ) );
-
-		if ( m_glAttachmentPoint == GlAttachmentPoint::eDepth )
-		{
-			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eDepth, GlInterpolationMode::eNearest );
-		}
-		else if ( m_glAttachmentPoint == GlAttachmentPoint::eStencil )
-		{
-			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eStencil, GlInterpolationMode::eNearest );
-		}
-		else
-		{
-			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eColour, GetOpenGl().Get( p_interpolation ) );
-		}
-	}
-
 	void GlRenderBufferAttachment::DoAttach()
 	{
 		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );

@@ -440,12 +440,16 @@ namespace deferred
 	{
 		if ( m_renderTarget.GetScene()->HasShadows() )
 		{
-			m_directionalShadowMap.GetTexture()->Bind( p_startIndex );
-			m_directionalShadowMap.GetSampler()->Bind( p_startIndex++ );
-			m_spotShadowMap.GetTexture()->Bind( p_startIndex );
-			m_spotShadowMap.GetSampler()->Bind( p_startIndex++ );
-			m_pointShadowMap.GetTexture()->Bind( p_startIndex );
-			m_pointShadowMap.GetSampler()->Bind( p_startIndex++ );
+			m_directionalShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
+			m_directionalShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
+			m_spotShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
+			m_spotShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
+
+			for ( auto & l_map : m_pointShadowMap.GetTextures() )
+			{
+				l_map.GetTexture()->Bind( p_startIndex );
+				l_map.GetSampler()->Bind( p_startIndex++ );
+			}
 		}
 	}
 
@@ -453,12 +457,16 @@ namespace deferred
 	{
 		if ( m_renderTarget.GetScene()->HasShadows() )
 		{
-			m_directionalShadowMap.GetTexture()->Unbind( p_startIndex );
-			m_directionalShadowMap.GetSampler()->Unbind( p_startIndex++ );
-			m_spotShadowMap.GetTexture()->Unbind( p_startIndex );
-			m_spotShadowMap.GetSampler()->Unbind( p_startIndex++ );
-			m_pointShadowMap.GetTexture()->Unbind( p_startIndex );
-			m_pointShadowMap.GetSampler()->Unbind( p_startIndex++ );
+			m_directionalShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
+			m_directionalShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
+			m_spotShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
+			m_spotShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
+
+			for ( auto & l_map : m_pointShadowMap.GetTextures() )
+			{
+				l_map.GetTexture()->Unbind( p_startIndex );
+				l_map.GetSampler()->Unbind( p_startIndex++ );
+			}
 		}
 	}
 

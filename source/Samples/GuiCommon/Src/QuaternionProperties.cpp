@@ -15,10 +15,11 @@ namespace GuiCommon
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
-		AddPrivateChild( new wxFloatProperty( wxT( "X" ), wxPG_LABEL, value[0] ) );
-		AddPrivateChild( new wxFloatProperty( wxT( "Y" ), wxPG_LABEL, value[1] ) );
-		AddPrivateChild( new wxFloatProperty( wxT( "Z" ), wxPG_LABEL, value[2] ) );
-		AddPrivateChild( new wxFloatProperty( wxT( "W" ), wxPG_LABEL, value[3] ) );
+		value.to_axis_angle( m_axis, m_angle );
+		AddPrivateChild( new wxFloatProperty( wxT( "Axis X" ), wxPG_LABEL, m_axis[0] ) );
+		AddPrivateChild( new wxFloatProperty( wxT( "Axis Y" ), wxPG_LABEL, m_axis[1] ) );
+		AddPrivateChild( new wxFloatProperty( wxT( "Axis Z" ), wxPG_LABEL, m_axis[2] ) );
+		AddPrivateChild( new wxFloatProperty( wxT( "Angle" ), wxPG_LABEL, m_angle.degrees() ) );
 	}
 
 	QuaternionProperty::~QuaternionProperty()
@@ -29,40 +30,44 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			const Quaternion & point = QuaternionRefFromVariant( m_value );
-			Item( 0 )->SetValue( point[0] );
-			Item( 1 )->SetValue( point[1] );
-			Item( 2 )->SetValue( point[2] );
-			Item( 3 )->SetValue( point[3] );
+			const Quaternion & l_quat = QuaternionRefFromVariant( m_value );
+			l_quat.to_axis_angle( m_axis, m_angle );
+			Item( 0 )->SetValue( m_axis[0] );
+			Item( 1 )->SetValue( m_axis[1] );
+			Item( 2 )->SetValue( m_axis[2] );
+			Item( 3 )->SetValue( m_angle.degrees() );
 		}
 	}
 
 	wxVariant QuaternionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		Quaternion & point = QuaternionRefFromVariant( thisValue );
+		Quaternion & l_quat = QuaternionRefFromVariant( thisValue );
+		auto l_axis = m_axis;
+		auto l_angle = m_angle;
 		float val = float( childValue.GetDouble() );
 
 		switch ( childIndex )
 		{
 		case 0:
-			point[0] = val;
+			l_axis[0] = val;
 			break;
 
 		case 1:
-			point[1] = val;
+			l_axis[1] = val;
 			break;
 
 		case 2:
-			point[2] = val;
+			l_axis[2] = val;
 			break;
 
 		case 3:
-			point[3] = val;
+			l_angle.degrees( val );
 			break;
 		}
 
+		l_quat.from_axis_angle( l_axis, l_angle );
 		wxVariant newVariant;
-		newVariant << point;
+		newVariant << l_quat;
 		return newVariant;
 	}
 }

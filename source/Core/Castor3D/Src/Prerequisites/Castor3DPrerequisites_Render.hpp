@@ -645,6 +645,7 @@ namespace Castor3D
 	class RenderLoopAsync;
 	class RenderLoopSync;
 	class RenderQueue;
+	class ShadowMap;
 
 	template< typename T >
 	class GpuBuffer;
@@ -678,6 +679,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderWindow );
 	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( RenderTarget );
+	DECLARE_SMART_PTR( ShadowMap );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );

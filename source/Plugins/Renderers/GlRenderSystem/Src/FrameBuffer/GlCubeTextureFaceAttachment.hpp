@@ -55,10 +55,6 @@ namespace GlRender
 		 */
 		virtual ~GlCubeTextureFaceAttachment();
 		/**
-		 *\copydoc		Castor3D::TextureAttachment::Blit
-		 */
-		void Blit( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::InterpolationMode p_interpolation )override;
-		/**
 		 *\~english
 		 *\return		The OpenGL buffer status.
 		 *\~french

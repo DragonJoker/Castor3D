@@ -112,7 +112,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor::LightCategory::Update
 		 */
-		C3D_API void Update( Castor::Point3r const & p_target )override;
+		C3D_API void Update( Castor::Point3r const & p_target, int32_t p_index = -1 )override;
 		/**
 		 *\copydoc		Castor::LightCategory::CreateTextLoader
 		 */
@@ -169,6 +169,9 @@ namespace Castor3D
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//!\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
 		Castor::Point3f m_attenuation{ 1.0f, 0.0f, 0.0f };
+		//!\~english	The light source shadow map index.
+		//!\~french		L'index de la shadow map de la source lumineuse.
+		int32_t m_shadowMapIndex{ -1 };
 	};
 }
 

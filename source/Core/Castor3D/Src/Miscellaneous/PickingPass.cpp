@@ -285,7 +285,7 @@ namespace Castor3D
 	{
 		NodeType l_return{ NodeType::eNone };
 
-		if ( Castor::point::distance_squared( p_pixel ) )
+		if ( Castor::point::length_squared( p_pixel ) )
 		{
 			l_return = NodeType( uint32_t( p_pixel[0] ) & 0xFF );
 

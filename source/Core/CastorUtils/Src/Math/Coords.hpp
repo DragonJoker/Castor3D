@@ -777,61 +777,118 @@ namespace Castor
 		template< typename T, uint32_t Count > static double cos_theta( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
 		/**
 		 *\~english
-		 *\brief		Computes the squared Euclidian distance of the point
+		 *\brief		Computes the squared Euclidian length of the vector
 		 *\param[in]	p_point	The point
 		 *\return		The squared Euclidian distance
 		 *\~french
-		 *\brief		Calcule le carré de la norme Euclidienne du point
+		 *\brief		Calcule le carré de la longueur Euclidienne du vecteur
 		 *\param[in]	p_point	Le point
 		 *\return		Le carré de la norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double distance_squared( Coords< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double length_squared( Coords< T, Count > const & p_point );
 		/**
 		 *\~english
-		 *\brief		Computes the Euclidian distance of the point
+		 *\brief		Computes the Euclidian length of the vector
 		 *\param[in]	p_point	The point
 		 *\return		The Euclidian distance
 		 *\~french
-		 *\brief		Calcule la norme Euclidienne du point
+		 *\brief		Calcule la longueur Euclidienne du vecteur
 		 *\param[in]	p_point	Le point
 		 *\return		La norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double distance( Coords< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double length( Coords< T, Count > const & p_point );
 		/**
 		 *\~english
-		 *\brief		Computes the Manhattan distance of the point
+		 *\brief		Computes the Manhattan length of the vector
 		 *\param[in]	p_point	The point
 		 *\return		The Manhattan distance
 		 *\~french
-		 *\brief		Calcule la distance de Manhattan du point
+		 *\brief		Calcule la longueur de Manhattan du vecteur
 		 *\param[in]	p_point	Le point
 		 *\return		La distance de Manhattan
 		 */
-		template< typename T, uint32_t Count > static double distance_manhattan( Coords< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double length_manhattan( Coords< T, Count > const & p_point );
 		/**
 		 *\~english
-		 *\brief		Computes the Minkowski distance of the point
+		 *\brief		Computes the Minkowski length of the vector
 		 *\param[in]	p_point	The point
 		 *\param[in]	p_dOrder	The Minkowski order
 		 *\return		The Minkowski distance
 		 *\~french
-		 *\brief		Calcule la distance de Minkowski du point
+		 *\brief		Calcule la longueur de Minkowski du vecteur
 		 *\param[in]	p_point	Le point
 		 *\param[in]	p_dOrder	L'ordre Minkownski
 		 *\return		La distance de Minkowski
 		 */
-		template< typename T, uint32_t Count > static double distance_minkowski( Coords< T, Count > const & p_point, double p_dOrder );
+		template< typename T, uint32_t Count > static double length_minkowski( Coords< T, Count > const & p_point, double p_dOrder );
 		/**
 		 *\~english
-		 *\brief		Computes the Chebychev distance of the point
+		 *\brief		Computes the Chebychev length of the vector
 		 *\param[in]	p_point	The point
 		 *\return		The Chebychev distance
 		 *\~french
-		 *\brief		Calcule la distance de Chebychev du point
+		 *\brief		Calcule la longueur de Chebychev du vecteur
 		 *\param[in]	p_point	Le point
 		 *\return		La distance de Chebychev
 		 */
-		template< typename T, uint32_t Count > static double distance_chebychev( Coords< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double length_chebychev( Coords< T, Count > const & p_point );
+		/**
+		 *\~english
+		 *\brief		Computes the squared Euclidian distance between two points.
+		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\return		The squared Euclidian distance.
+		 *\~french
+		 *\brief		Calcule le carré de la distance Euclidienne entre deux points.
+		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\return		Le carré de la norme Euclidienne.
+		 */
+		template< typename T, uint32_t Count > static double distance_squared( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs );
+		/**
+		 *\~english
+		 *\brief		Computes the Euclidian distance between two points.
+		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\return		The Euclidian distance.
+		 *\~french
+		 *\brief		Calcule la norme Euclidienne entre deux points.
+		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\return		La norme Euclidienne.
+		 */
+		template< typename T, uint32_t Count > static double distance( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs );
+		/**
+		 *\~english
+		 *\brief		Computes the Manhattan distance between two points.
+		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\return		The Manhattan distance.
+		 *\~french
+		 *\brief		Calcule la distance de Manhattan entre deux points.
+		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\return		La distance de Manhattan.
+		 */
+		template< typename T, uint32_t Count > static double distance_manhattan( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs );
+		/**
+		 *\~english
+		 *\brief		Computes the Minkowski distance between two points.
+		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\param[in]	p_dOrder	The Minkowski order.
+		 *\return		The Minkowski distance.
+		 *\~french
+		 *\brief		Calcule la distance de Minkowski entre deux points.
+		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\param[in]	p_dOrder	L'ordre Minkownski.
+		 *\return		La distance de Minkowski.
+		 */
+		template< typename T, uint32_t Count > static double distance_minkowski( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs, double p_dOrder );
+		/**
+		 *\~english
+		 *\brief		Computes the Chebychev distance between two points.
+		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\return		The Chebychev distance.
+		 *\~french
+		 *\brief		Calcule la distance de Chebychev entre deux points.
+		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\return		La distance de Chebychev.
+		 */
+		template< typename T, uint32_t Count > static double distance_chebychev( Coords< T, Count > const & p_lhs, Coords< T, Count > const & p_rhs );
 	}
 }
 /**

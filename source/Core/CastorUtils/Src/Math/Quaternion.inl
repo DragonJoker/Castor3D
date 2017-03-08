@@ -535,7 +535,7 @@ namespace Castor
 	template< typename T >
 	double QuaternionT< T >::get_magnitude()const
 	{
-		return point::distance( *this );
+		return point::length( *this );
 	}
 
 	template< typename T >

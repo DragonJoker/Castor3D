@@ -310,15 +310,7 @@ namespace Castor3D
 
 	void TextureImage::InitialiseSource()
 	{
-		if ( GetOwner()->GetDepth() > 1 )
-		{
-			m_source = std::make_unique< Dynamic3DTextureSource >( Point3ui{ GetOwner()->GetWidth(), GetOwner()->GetHeight(), GetOwner()->GetDepth() }, GetOwner()->GetPixelFormat() );
-		}
-		else
-		{
-			m_source = std::make_unique< Dynamic2DTextureSource >( Size{ GetOwner()->GetWidth(), GetOwner()->GetHeight() }, GetOwner()->GetPixelFormat() );
-		}
-
+		m_source = std::make_unique< Dynamic2DTextureSource >( Size{ GetOwner()->GetWidth(), GetOwner()->GetHeight() }, GetOwner()->GetPixelFormat() );
 		auto l_buffer = m_source->GetBuffer();
 
 		if ( l_buffer )

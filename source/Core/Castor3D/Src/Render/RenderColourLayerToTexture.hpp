@@ -188,7 +188,7 @@ namespace Castor3D
 		SamplerSPtr m_sampler;
 		//!\~english	The uniform variable holding the index of the layer to render.
 		//!\~french		La variable uniforme contenant l'indice de la couche à dessiner.
-		PushUniform1fSPtr m_layerIndexUniform;
+		PushUniform1iSPtr m_layerIndexUniform;
 	};
 }
 

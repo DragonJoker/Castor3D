@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_SHADOW_MAP_PASS_SPOT_H___
-#define ___C3D_SHADOW_MAP_PASS_SPOT_H___
+#ifndef ___C3D_ShadowMapSpot_H___
+#define ___C3D_ShadowMapSpot_H___
 
-#include "ShadowMapPass.hpp"
+#include "ShadowMap.hpp"
 
 namespace Castor3D
 {
@@ -36,88 +36,92 @@ namespace Castor3D
 	\~french
 	\brief		Implémentation du mappage d'ombres pour les lumières spot.
 	*/
-	class ShadowMapPassSpot
-		: public ShadowMapPass
+	class ShadowMapSpot
+		: public ShadowMap
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_light		The light.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_light		La source lumineuse.
 		 */
-		C3D_API ShadowMapPassSpot( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
+		C3D_API ShadowMapSpot( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapPassSpot();
+		C3D_API ~ShadowMapSpot();
 		/**
 		 *\~english
-		 *\brief		Creator function, used by the factory.
-		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_light		The light.
+		 *\brief		Updates the passes, selecting the lights that will project shadows.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[in]	p_camera	The viewer camera.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
-		 *\brief		La fonction de création utilisée par la fabrique.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_light		La source lumineuse.
+		 *\brief		Met à jour les passes, en sélectionnant les lumières qui projetteront une ombre.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[in]	p_camera	La caméra de l'observateur.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API static ShadowMapPassSPtr Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
+		C3D_API void Update( Camera const & p_camera
+			, RenderQueueArray & p_queues );
 		/**
 		 *\~english
-		 *\return		The camera.
+		 *\brief		Renders the selected lights shadow map.
 		 *\~french
-		 *\return		La caméra.
+		 *\brief		Dessine les shadow maps des lumières sélectionnées.
 		 */
-		inline CameraSPtr GetCamera()const
+		C3D_API void Render();
+		/**
+		 *\~english
+		 *\return		The shadow map.
+		 *\~english
+		 *\return		La map d'ombres.
+		 */
+		inline TextureUnit & GetTexture()
 		{
-			return m_camera;
+			return m_shadowMap;
+		}
+		/**
+		 *\~english
+		 *\return		The shadow map.
+		 *\~english
+		 *\return		La map d'ombres.
+		 */
+		inline TextureUnit const & GetTexture()const
+		{
+			return m_shadowMap;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoInitialise
+		 *\copydoc		Castor3D::ShadowMap::DoGetMaxPasses
 		 */
-		bool DoInitialisePass( Castor::Size const & p_size )override;
+		int32_t DoGetMaxPasses()const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
+		 *\copydoc		Castor3D::ShadowMap::DoInitialise
 		 */
-		void DoCleanupPass()override;
+		void DoInitialise( Castor::Size const & p_size )override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoUpdate
+		 *\copydoc		Castor3D::ShadowMap::DoCleanup
 		 */
-		void DoUpdate( RenderQueueArray & p_queues )override;
+		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoRender
+		 *\copydoc		Castor3D::ShadowMap::DoCreatePass
 		 */
-		void DoRender()override;
+		ShadowMapPassSPtr DoCreatePass( Light & p_light )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 *\copydoc		Castor3D::ShadowMap::DoUpdateFlags
 		 */
 		void DoUpdateFlags( TextureChannels & p_textureFlags
 			, ProgramFlags & p_programFlags )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoUpdateProgram
-		 */
-		void DoUpdateProgram( ShaderProgram & p_program )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
-		 */
-		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
+		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
 		 */
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
@@ -126,13 +130,10 @@ namespace Castor3D
 	private:
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
-		//!\~english	The camera created from the light.
-		//!\~french		La caméra créée à partir de la lumière.
-		CameraSPtr m_camera;
-		//!\~english	The view matrix.
-		//!\~french		La matrice vue.
-		Castor::Matrix4x4r m_view;
+		std::vector< TextureAttachmentSPtr > m_depthAttach;
+		//!\~english	The shadow map texture.
+		//!\~french		La texture de mappage d'ombres.
+		TextureUnit m_shadowMap;
 	};
 }
 

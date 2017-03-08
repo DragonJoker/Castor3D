@@ -140,7 +140,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoClear
 		 */
-		void DoClear( uint32_t p_targets )override;
+		void DoClear( Castor3D::BufferComponents p_targets )override;
 
 	private:
 		mutable GlFrameBufferMode m_bindingMode;

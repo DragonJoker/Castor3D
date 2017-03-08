@@ -145,6 +145,11 @@ namespace GLSL
 		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
 	}
 
+	Int PointLight::m_iIndex()const
+	{
+		return Int( m_writer, Castor::String( *this ) + cuT( ".m_iIndex" ) );
+	}
+
 	//*********************************************************************************************
 
 	SpotLight::SpotLight()
@@ -213,6 +218,11 @@ namespace GLSL
 	Mat4 SpotLight::m_mtxLightSpace()const
 	{
 		return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_mtxLightSpace" ) );
+	}
+
+	Int SpotLight::m_iIndex()const
+	{
+		return Int( m_writer, Castor::String( *this ) + cuT( ".m_iIndex" ) );
 	}
 
 	//*********************************************************************************************

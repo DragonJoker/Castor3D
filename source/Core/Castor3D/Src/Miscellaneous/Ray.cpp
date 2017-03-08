@@ -106,9 +106,9 @@ namespace Castor3D
 		Point3r u( m_origin - p_vertex );
 		Point3r puv;
 
-		if ( ProjectVertex( u, puv ) && point::distance_squared( puv ) < 0.000001 )
+		if ( ProjectVertex( u, puv ) && point::length_squared( puv ) < 0.000001 )
 		{
-			p_distance = real( point::distance( u ) );
+			p_distance = real( point::length( u ) );
 			l_return = Intersection::eIn;
 		}
 
@@ -219,7 +219,7 @@ namespace Castor3D
 		if ( ProjectVertex( l_v, l_puv ) )
 		{
 			// Sphere's center projects on the ray.
-			p_distance = real( point::distance( l_puv - l_v ) );
+			p_distance = real( point::length( l_puv - l_v ) );
 
 			if ( p_distance == p_sphere.GetRadius() )
 			{
@@ -231,32 +231,32 @@ namespace Castor3D
 				// Two intersection points, we look for the nearest one.
 				l_return = Intersection::eIn;
 
-				if ( point::distance( l_v ) < p_sphere.GetRadius() )
+				if ( point::length( l_v ) < p_sphere.GetRadius() )
 				{
 					// The ray origin is inside the sphere.
-					p_distance = real( point::distance( l_puv ) + sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) );
+					p_distance = real( point::length( l_puv ) + sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) );
 				}
 				else
 				{
 					// The ray origin is outside the sphere
-					p_distance = real( point::distance( l_puv ) - sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) );
+					p_distance = real( point::length( l_puv ) - sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) );
 				}
 			}
 		}
 		else
 		{
-			p_distance = real( point::distance( l_v ) );
+			p_distance = real( point::length( l_v ) );
 
 			if ( p_distance == p_sphere.GetRadius() )
 			{
 				// Single intersection point.
 				l_return = Intersection::eIntersect;
 			}
-			else if ( point::distance( l_v ) < p_sphere.GetRadius() )
+			else if ( point::length( l_v ) < p_sphere.GetRadius() )
 			{
 				// The sphere's center is behind the ray, and the rays origin is inside the sphere.
-				p_distance = real( point::distance( l_puv - l_v ) );
-				p_distance = real( sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) - point::distance( l_puv ) );
+				p_distance = real( point::length( l_puv - l_v ) );
+				p_distance = real( sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) - point::length( l_puv ) );
 				l_return = Intersection::eIn;
 			}
 			else

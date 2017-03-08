@@ -30,7 +30,7 @@ namespace Castor
 
 	SphereBox::SphereBox( CubeBox const & p_box )
 		: ContainerBox3D( p_box.GetCenter() )
-		, m_radius( real( point::distance( p_box.GetMax() - m_ptCenter ) ) )
+		, m_radius( real( point::length( p_box.GetMax() - m_ptCenter ) ) )
 	{
 	}
 
@@ -62,17 +62,17 @@ namespace Castor
 	void SphereBox::Load( CubeBox const & p_box )
 	{
 		m_ptCenter = p_box.GetCenter();
-		m_radius = real( point::distance( p_box.GetMax() - m_ptCenter ) );
-		ENSURE( std::abs( m_radius - real( point::distance( m_ptCenter - p_box.GetMin() ) ) ) < 0.001 );
+		m_radius = real( point::length( p_box.GetMax() - m_ptCenter ) );
+		ENSURE( std::abs( m_radius - real( point::length( m_ptCenter - p_box.GetMin() ) ) ) < 0.001 );
 	}
 
 	bool SphereBox::IsWithin( Point3r const & p_v )
 	{
-		return point::distance( p_v - m_ptCenter ) < m_radius;
+		return point::length( p_v - m_ptCenter ) < m_radius;
 	}
 
 	bool SphereBox::IsOnLimits( Point3r const & p_v )
 	{
-		return policy::equals( real( point::distance( p_v - m_ptCenter ) ), m_radius );
+		return policy::equals( real( point::length( p_v - m_ptCenter ) ), m_radius );
 	}
 }

@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\brief		Vide les tampons.
 		 *\param[in]	p_targets	Les tampons à vider (combinaison de BufferComponent).
 		 */
-		C3D_API void Clear( uint8_t p_targets = 0 );
+		C3D_API void Clear( BufferComponents p_targets = 0 );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -406,7 +406,7 @@ namespace Castor3D
 		 *\brief		Vide les composantes de tampon données.
 		 *\param[in]	p_targets	Les composantes, combinaison de BufferComponent.
 		 */
-		C3D_API virtual void DoClear( uint32_t p_targets ) = 0;
+		C3D_API virtual void DoClear( BufferComponents p_targets ) = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active

@@ -317,7 +317,7 @@ namespace Castor3D
 
 		for ( VertexPtrArrayConstIt l_it = m_points.begin(); l_it != m_points.end() && l_iReturn == -1; ++l_it )
 		{
-			if ( point::distance_squared( p_vertex - Vertex::GetPosition( ( *l_it ), l_ptPos ) ) < p_precision )
+			if ( point::length_squared( p_vertex - Vertex::GetPosition( ( *l_it ), l_ptPos ) ) < p_precision )
 			{
 				l_iReturn = int( l_iIndex );
 			}
@@ -814,11 +814,11 @@ namespace Castor3D
 							{
 								double l_dDistance = 0.0;
 								Coords3r l_pVtx1( reinterpret_cast< real * >( &l_pVtx[l_it[0] * l_stride] ) );
-								l_dDistance += point::distance_squared( l_pVtx1 - p_ptCameraPosition );
+								l_dDistance += point::length_squared( l_pVtx1 - p_ptCameraPosition );
 								Coords3r l_pVtx2( reinterpret_cast< real * >( &l_pVtx[l_it[1] * l_stride] ) );
-								l_dDistance += point::distance_squared( l_pVtx2 - p_ptCameraPosition );
+								l_dDistance += point::length_squared( l_pVtx2 - p_ptCameraPosition );
 								Coords3r l_pVtx3( reinterpret_cast< real * >( &l_pVtx[l_it[2] * l_stride] ) );
-								l_dDistance += point::distance_squared( l_pVtx3 - p_ptCameraPosition );
+								l_dDistance += point::length_squared( l_pVtx3 - p_ptCameraPosition );
 								stFACE_DISTANCE l_face = { { l_it[0], l_it[1], l_it[2] }, l_dDistance };
 								l_arraySorted.push_back( l_face );
 							}

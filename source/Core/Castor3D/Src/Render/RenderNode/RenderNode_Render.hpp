@@ -27,30 +27,33 @@ namespace Castor3D
 		if ( !p_depthMaps.empty() )
 		{
 			auto l_index = p_pipeline.GetTexturesCount() + 1;
+			auto l_layer = 0u;
 
 			if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eShadows ) )
 			{
 				for ( auto & l_depthMap : p_depthMaps )
 				{
-					if ( l_depthMap.get().GetType() == TextureType::eTwoDimensions )
+					switch ( l_depthMap.get().GetType() )
 					{
+					case TextureType::eTwoDimensions:
 						l_depthMap.get().SetIndex( l_index );
 						p_pipeline.GetDirectionalShadowMapsVariable().SetValue( l_index++ );
-					}
-					else if ( l_depthMap.get().GetType() == TextureType::eTwoDimensionsArray )
-					{
+						break;
+
+					case TextureType::eTwoDimensionsArray:
 						l_depthMap.get().SetIndex( l_index );
 						p_pipeline.GetSpotShadowMapsVariable().SetValue( l_index++ );
-					}
-					else if ( l_depthMap.get().GetType() == TextureType::eCube )
-					{
+						break;
+
+					case TextureType::eCube:
+						l_depthMap.get().SetIndex( l_index );
+						p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++, l_layer++ );
+						break;
+
+					case TextureType::eCubeArray:
 						l_depthMap.get().SetIndex( l_index );
 						p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++ );
-					}
-					else if ( l_depthMap.get().GetType() == TextureType::eCubeArray )
-					{
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++ );
+						break;
 					}
 				}
 			}

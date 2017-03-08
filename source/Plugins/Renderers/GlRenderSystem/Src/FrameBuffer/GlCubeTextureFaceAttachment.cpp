@@ -20,11 +20,6 @@ namespace GlRender
 	{
 	}
 
-	void GlCubeTextureFaceAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
-	{
-		FAILURE( "Can't call Blit for a cube face attachment" );
-	}
-
 	void GlCubeTextureFaceAttachment::DoAttach()
 	{
 		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );

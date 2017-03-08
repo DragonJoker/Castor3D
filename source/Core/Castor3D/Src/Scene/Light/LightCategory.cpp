@@ -110,4 +110,10 @@ namespace Castor3D
 		DoBindComponent( p_component[2], p_index, p_offset, p_data );
 		DoBindComponent( p_component[3], p_index, p_offset, p_data );
 	}
+
+	void LightCategory::DoBindComponent( int32_t const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const
+	{
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
+		std::memcpy( l_pDst, &p_component, sizeof( int32_t ) );
+	}
 }

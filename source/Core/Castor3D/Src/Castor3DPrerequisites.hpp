@@ -511,7 +511,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TransformFeedback );
 	DECLARE_SMART_PTR( ComputePipeline );
 
-	using ShadowMapPassFactory = Castor::Factory< ShadowMapPass, LightType, ShadowMapPassSPtr, std::function< ShadowMapPassSPtr( Engine &, Scene &, Light &, TextureUnit & p_shadowMap, uint32_t p_index ) > >;
 	using ParticleFactory = Castor::Factory< CpuParticleSystem, Castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	/*!
