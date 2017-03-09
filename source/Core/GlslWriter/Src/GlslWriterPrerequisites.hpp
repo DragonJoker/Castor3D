@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -114,22 +114,25 @@ namespace GLSL
 	struct InOutParam;
 	template< typename TypeT >
 	struct Optional;
+	template< typename TypeT >
+	struct Vec2T;
+	template< typename TypeT >
+	struct Vec3T;
+	template< typename TypeT >
+	struct Vec4T;
+	template< typename TypeT >
+	struct Mat2T;
+	template< typename TypeT >
+	struct Mat3T;
+	template< typename TypeT >
+	struct Mat4T;
 
 	struct Expr;
 	struct Type;
 	struct Void;
-	struct GlslBool;
+	struct Boolean;
 	struct Int;
 	struct Float;
-	struct Vec2;
-	struct Vec3;
-	struct Vec4;
-	struct IVec2;
-	struct IVec3;
-	struct iVec4;
-	struct Mat2;
-	struct Mat3;
-	struct Mat4;
 	struct SamplerBuffer;
 	struct Sampler1D;
 	struct Sampler2D;
@@ -144,6 +147,25 @@ namespace GLSL
 	struct Sampler1DArrayShadow;
 	struct Sampler2DArrayShadow;
 	struct SamplerCubeArrayShadow;
+
+	using Vec2 = Vec2T< Float >;
+	using Vec3 = Vec3T< Float >;
+	using Vec4 = Vec4T< Float >;
+	using IVec2 = Vec2T< Int >;
+	using IVec3 = Vec3T< Int >;
+	using IVec4 = Vec4T< Int >;
+	using BVec2 = Vec2T< Boolean >;
+	using BVec3 = Vec3T< Boolean >;
+	using BVec4 = Vec4T< Boolean >;
+	using Mat2 = Mat2T< Float >;
+	using Mat3 = Mat3T< Float >;
+	using Mat4 = Mat4T< Float >;
+	using IMat2 = Mat2T< Int >;
+	using IMat3 = Mat3T< Int >;
+	using IMat4 = Mat4T< Int >;
+	using BMat2 = Mat2T< Boolean >;
+	using BMat3 = Mat3T< Boolean >;
+	using BMat4 = Mat4T< Boolean >;
 
 	constexpr uint32_t SpotShadowMapCount = 10u;
 	constexpr uint32_t PointShadowMapCount = 6u;

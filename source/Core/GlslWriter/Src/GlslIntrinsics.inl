@@ -1,4 +1,4 @@
-namespace GLSL
+﻿namespace GLSL
 {
 	//***********************************************************************************************
 
@@ -91,9 +91,9 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct BooleanOperator
-			: public Operator< GlslBool, TypeA, TypeB >
+			: public Operator< Boolean, TypeA, TypeB >
 		{
-			using OperatorType = Operator< GlslBool, TypeA, TypeB >;
+			using OperatorType = Operator< Boolean, TypeA, TypeB >;
 			using Ret = typename OperatorType::Ret;
 			using T = typename OperatorType::T;
 			using U = typename  OperatorType::U;
@@ -231,7 +231,7 @@ namespace GLSL
 	GLSL_IMPLEMENT_OPERATOR( LhsType, LhsType, RhsType, Operator, ArithmeticOperator )
 
 #	define GLSL_IMPLEMENT_BOOLEAN_OPERATOR( LhsType, RhsType, Operator )\
-	GLSL_IMPLEMENT_OPERATOR( GlslBool, LhsType, RhsType, Operator, BooleanOperator )
+	GLSL_IMPLEMENT_OPERATOR( Boolean, LhsType, RhsType, Operator, BooleanOperator )
 
 	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, + )
 	GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( TypeA, TypeB, - )

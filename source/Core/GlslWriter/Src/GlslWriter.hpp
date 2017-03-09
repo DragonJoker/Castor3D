@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -32,7 +32,6 @@ namespace GLSL
 {
 	struct Int;
 	struct UInt;
-	struct Vec4;
 	struct SamplerBuffer;
 	struct Sampler1D;
 	struct Sampler2D;

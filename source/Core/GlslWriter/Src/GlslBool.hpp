@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,19 +27,19 @@ SOFTWARE.
 
 namespace GLSL
 {
-	struct GlslBool
+	struct Boolean
 		: public Type
 	{
-		inline GlslBool();
-		inline GlslBool( bool p_value );
-		inline GlslBool( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		template< typename T > inline GlslBool & operator=( T const & p_rhs );
-		template< typename T > inline GlslBool & operator=( int p_rhs );
+		inline Boolean();
+		inline Boolean( bool p_value );
+		inline Boolean( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		template< typename T > inline Boolean & operator=( T const & p_rhs );
+		template< typename T > inline Boolean & operator=( int p_rhs );
 		inline operator uint32_t();
 	};
 
-	GlslWriter_API GlslBool operator==( Type const & p_a, Type const & p_b );
-	GlslWriter_API GlslBool operator!=( Type const & p_a, Type const & p_b );
+	GlslWriter_API Boolean operator==( Type const & p_a, Type const & p_b );
+	GlslWriter_API Boolean operator!=( Type const & p_a, Type const & p_b );
 }
 
 #include "GlslBool.inl"

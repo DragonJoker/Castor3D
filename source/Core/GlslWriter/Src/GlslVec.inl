@@ -5,69 +5,34 @@
 	namespace details
 	{
 		template< typename ValueT >
-		struct Mat2Traits;
+		struct Vec2Traits;
 
 		template<>
-		struct Mat2Traits< Float >
+		struct Vec2Traits< Float >
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "mat2" };
+				static xchar const * const l_name{ "vec2" };
 				return l_name;
 			}
 		};
 
 		template<>
-		struct Mat2Traits< Int >
+		struct Vec2Traits< Int >
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "imat2" };
+				static xchar const * const l_name{ "ivec2" };
 				return l_name;
 			}
 		};
 
 		template<>
-		struct Mat2Traits< Boolean >
+		struct Vec2Traits< Boolean >
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bmat2" };
-				return l_name;
-			}
-		};
-
-		//*****************************************************************************************
-
-		template< typename ValueT >
-		struct Mat3Traits;
-
-		template<>
-		struct Mat3Traits< Float >
-		{
-			static xchar const * const GetName()
-			{
-				static xchar const * const l_name{ "mat3" };
-				return l_name;
-			}
-		};
-
-		template<>
-		struct Mat3Traits< Int >
-		{
-			static xchar const * const GetName()
-			{
-				static xchar const * const l_name{ "imat3" };
-				return l_name;
-			}
-		};
-
-		template<>
-		struct Mat3Traits< Boolean >
-		{
-			static xchar const * const GetName()
-			{
-				static xchar const * const l_name{ "bmat3" };
+				static xchar const * const l_name{ "bvec2" };
 				return l_name;
 			}
 		};
@@ -75,34 +40,69 @@
 		//*****************************************************************************************
 
 		template< typename ValueT >
-		struct Mat4Traits;
+		struct Vec3Traits;
 
 		template<>
-		struct Mat4Traits< Float >
+		struct Vec3Traits< Float >
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "mat4" };
+				static xchar const * const l_name{ "vec3" };
 				return l_name;
 			}
 		};
 
 		template<>
-		struct Mat4Traits< Int >
+		struct Vec3Traits< Int >
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "imat4" };
+				static xchar const * const l_name{ "ivec3" };
 				return l_name;
 			}
 		};
 
 		template<>
-		struct Mat4Traits< Boolean >
+		struct Vec3Traits< Boolean >
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bmat4" };
+				static xchar const * const l_name{ "bvec3" };
+				return l_name;
+			}
+		};
+
+		//*****************************************************************************************
+
+		template< typename ValueT >
+		struct Vec4Traits;
+
+		template<>
+		struct Vec4Traits< Float >
+		{
+			static xchar const * const GetName()
+			{
+				static xchar const * const l_name{ "vec4" };
+				return l_name;
+			}
+		};
+
+		template<>
+		struct Vec4Traits< Int >
+		{
+			static xchar const * const GetName()
+			{
+				static xchar const * const l_name{ "ivec4" };
+				return l_name;
+			}
+		};
+
+		template<>
+		struct Vec4Traits< Boolean >
+		{
+			static xchar const * const GetName()
+			{
+				static xchar const * const l_name{ "bvec4" };
 				return l_name;
 			}
 		};
@@ -111,19 +111,19 @@
 	//*****************************************************************************************
 
 	template< typename ValueT >
-	Mat2T< ValueT >::Mat2T()
-		: Type( details::Mat2Traits< ValueT >::GetName() )
+	inline Vec2T< ValueT >::Vec2T()
+		: Type( details::Vec2Traits< ValueT >::GetName() )
 	{
 	}
 
 	template< typename ValueT >
-	Mat2T< ValueT >::Mat2T( GlslWriter * p_writer, Castor::String const & p_name )
-		: Type( details::Mat2Traits< ValueT >::GetName(), p_writer, p_name )
+	inline Vec2T< ValueT >::Vec2T( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( details::Vec2Traits< ValueT >::GetName(), p_writer, p_name )
 	{
 	}
 
 	template< typename ValueT >
-	Mat2T< ValueT > & Mat2T< ValueT >::operator=( Mat2T< ValueT > const & p_rhs )
+	inline Vec2T< ValueT > & Vec2T< ValueT >::operator=( Vec2T< ValueT > const & p_rhs )
 	{
 		if ( m_writer )
 		{
@@ -140,7 +140,7 @@
 
 	template< typename ValueT >
 	template< typename RhsT >
-	Mat2T< ValueT > & Mat2T< ValueT >::operator=( RhsT const & p_rhs )
+	inline Vec2T< ValueT > & Vec2T< ValueT >::operator=( RhsT const & p_rhs )
 	{
 		UpdateWriter( p_rhs );
 		m_writer->WriteAssign( *this, p_rhs );
@@ -149,35 +149,35 @@
 
 	template< typename ValueT >
 	template< typename IndexT >
-	Vec2T< ValueT > Mat2T< ValueT >::operator[]( IndexT const & p_rhs )
+	inline ValueT Vec2T< ValueT >::operator[]( IndexT const & p_rhs )
 	{
-		Vec2T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		ValueT l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 
 	template< typename ValueT >
-	Vec2T< ValueT > Mat2T< ValueT >::operator[]( int const & p_rhs )
+	inline ValueT Vec2T< ValueT >::operator[]( int const & p_rhs )
 	{
-		Vec2T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		ValueT l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 
 	//*****************************************************************************************
 
 	template< typename ValueT >
-	Mat3T< ValueT >::Mat3T()
-		: Type( details::Mat3Traits< ValueT >::GetName() )
+	inline Vec3T< ValueT >::Vec3T()
+		: Type( details::Vec3Traits< ValueT >::GetName() )
 	{
 	}
 
 	template< typename ValueT >
-	Mat3T< ValueT >::Mat3T( GlslWriter * p_writer, Castor::String const & p_name )
-		: Type( details::Mat3Traits< ValueT >::GetName(), p_writer, p_name )
+	inline Vec3T< ValueT >::Vec3T( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( details::Vec3Traits< ValueT >::GetName(), p_writer, p_name )
 	{
 	}
 
 	template< typename ValueT >
-	Mat3T< ValueT > & Mat3T< ValueT >::operator=( Mat3T< ValueT > const & p_rhs )
+	inline Vec3T< ValueT > & Vec3T< ValueT >::operator=( Vec3T< ValueT > const & p_rhs )
 	{
 		if ( m_writer )
 		{
@@ -194,7 +194,7 @@
 
 	template< typename ValueT >
 	template< typename RhsT >
-	Mat3T< ValueT > & Mat3T< ValueT >::operator=( RhsT const & p_rhs )
+	inline Vec3T< ValueT > & Vec3T< ValueT >::operator=( RhsT const & p_rhs )
 	{
 		UpdateWriter( p_rhs );
 		m_writer->WriteAssign( *this, p_rhs );
@@ -203,35 +203,35 @@
 
 	template< typename ValueT >
 	template< typename IndexT >
-	Vec3T< ValueT > Mat3T< ValueT >::operator[]( IndexT const & p_rhs )
+	inline ValueT Vec3T< ValueT >::operator[]( IndexT const & p_rhs )
 	{
-		Vec3T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		ValueT l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 
 	template< typename ValueT >
-	Vec3T< ValueT > Mat3T< ValueT >::operator[]( int const & p_rhs )
+	inline ValueT Vec3T< ValueT >::operator[]( int const & p_rhs )
 	{
-		Vec3T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		ValueT l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 
 	//*****************************************************************************************
 
 	template< typename ValueT >
-	Mat4T< ValueT >::Mat4T()
-		: Type( details::Mat4Traits< ValueT >::GetName() )
+	inline Vec4T< ValueT >::Vec4T()
+		: Type( details::Vec4Traits< ValueT >::GetName() )
 	{
 	}
 
 	template< typename ValueT >
-	Mat4T< ValueT >::Mat4T( GlslWriter * p_writer, Castor::String const & p_name )
-		: Type( details::Mat4Traits< ValueT >::GetName(), p_writer, p_name )
+	inline Vec4T< ValueT >::Vec4T( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( details::Vec4Traits< ValueT >::GetName(), p_writer, p_name )
 	{
 	}
 
 	template< typename ValueT >
-	Mat4T< ValueT > & Mat4T< ValueT >::operator=( Mat4T< ValueT > const & p_rhs )
+	inline Vec4T< ValueT > & Vec4T< ValueT >::operator=( Vec4T< ValueT > const & p_rhs )
 	{
 		if ( m_writer )
 		{
@@ -248,7 +248,7 @@
 
 	template< typename ValueT >
 	template< typename RhsT >
-	Mat4T< ValueT > & Mat4T< ValueT >::operator=( RhsT const & p_rhs )
+	inline Vec4T< ValueT > & Vec4T< ValueT >::operator=( RhsT const & p_rhs )
 	{
 		UpdateWriter( p_rhs );
 		m_writer->WriteAssign( *this, p_rhs );
@@ -257,16 +257,16 @@
 
 	template< typename ValueT >
 	template< typename IndexT >
-	Vec4T< ValueT > Mat4T< ValueT >::operator[]( IndexT const & p_rhs )
+	inline ValueT Vec4T< ValueT >::operator[]( IndexT const & p_rhs )
 	{
-		Vec4T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		ValueT l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 
 	template< typename ValueT >
-	Vec4T< ValueT > Mat4T< ValueT >::operator[]( int const & p_rhs )
+	inline ValueT Vec4T< ValueT >::operator[]( int const & p_rhs )
 	{
-		Vec4T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		ValueT l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 

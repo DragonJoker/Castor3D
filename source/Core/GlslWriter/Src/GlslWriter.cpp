@@ -1,6 +1,6 @@
-#include "GlslWriter.hpp"
+﻿#include "GlslWriter.hpp"
 
-#include "GlslVeci.hpp"
+#include "GlslVec.hpp"
 #include "GlslLighting.hpp"
 
 namespace GLSL
