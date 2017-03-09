@@ -80,6 +80,7 @@ namespace GLSL
 	LightingModel::LightingModel( ShadowType p_shadows, GlslWriter & p_writer )
 		: m_shadows{ p_shadows }
 		, m_writer{ p_writer }
+		, m_shadowModel{ p_writer }
 	{
 	}
 
@@ -87,8 +88,7 @@ namespace GLSL
 	{
 		if ( m_shadows != ShadowType::eNone )
 		{
-			Shadow l_shadow{ m_writer };
-			l_shadow.Declare( m_shadows );
+			m_shadowModel.Declare( m_shadows );
 		}
 
 		Declare_Light();
@@ -541,9 +541,8 @@ namespace GLSL
 
 			if ( m_shadows != ShadowType::eNone )
 			{
-				Shadow l_shadows{ m_writer };
 				l_shadowFactor = 1.0_f - min( p_receivesShadows
-					, l_shadows.ComputeDirectionalShadow( p_light.m_mtxLightSpace()
+					, m_shadowModel.ComputeDirectionalShadow( p_light.m_mtxLightSpace()
 						, p_fragmentIn.m_v3Vertex
 						, l_lightDirection
 						, p_fragmentIn.m_v3Normal ) );
@@ -593,12 +592,10 @@ namespace GLSL
 
 			if ( m_shadows != ShadowType::eNone )
 			{
-				Shadow l_shadows{ m_writer };
-
 				IF( m_writer, p_light.m_iIndex() >= 0_i )
 				{
 					l_shadowFactor = 1.0_f - min( p_receivesShadows
-						, l_shadows.ComputePointShadow( p_fragmentIn.m_v3Vertex
+						, m_shadowModel.ComputePointShadow( p_fragmentIn.m_v3Vertex
 							, p_light.m_v3Position().xyz()
 							, p_fragmentIn.m_v3Normal
 							, p_light.m_iIndex() ) );
@@ -658,12 +655,10 @@ namespace GLSL
 
 				if ( m_shadows != ShadowType::eNone )
 				{
-					Shadow l_shadows{ m_writer };
-
 					IF( m_writer, p_light.m_iIndex() >= 0_i )
 					{
 						l_shadowFactor = 1.0_f - min( p_receivesShadows
-							, l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace()
+							, m_shadowModel.ComputeSpotShadow( p_light.m_mtxLightSpace()
 								, p_fragmentIn.m_v3Vertex
 								, l_lightToVertex
 								, p_fragmentIn.m_v3Normal

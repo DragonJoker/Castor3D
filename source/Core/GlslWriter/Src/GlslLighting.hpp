@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___GLSL_LIGHTING_H___
 #define ___GLSL_LIGHTING_H___
 
-#include "GlslIntrinsics.hpp"
+#include "GlslShadow.hpp"
 
 namespace GLSL
 {
@@ -102,6 +102,7 @@ namespace GLSL
 	protected:
 		ShadowType m_shadows;
 		GlslWriter & m_writer;
+		Shadow m_shadowModel;
 	};
 
 	class PhongLightingModel

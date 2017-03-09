@@ -40,12 +40,6 @@ namespace GLSL
 		GlslWriter_API Float ComputeDirectionalShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
 		GlslWriter_API Float ComputeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
 		GlslWriter_API Float ComputePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
-		GlslWriter_API Float GetRandom( Vec4 const & p_seed );
-		GlslWriter_API Float FilterDirectional( Vec2 const & p_uv, Float const & p_depth );
-		GlslWriter_API Float FilterSpot( Vec2 const & p_uv, Float const & p_depth, Float const & p_index );
-		GlslWriter_API Float FilterPoint( Vec3 const & p_direction, Float const & p_depth, Float const & p_index );
-		GlslWriter_API Vec2 GetShadowOffset( Vec3 const & p_normal, Vec3 const & p_lightDirection );
-		GlslWriter_API Vec3 GetLightSpacePosition( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
 
 	private:
 		void DoDeclare_GetRandom();
@@ -60,6 +54,15 @@ namespace GLSL
 
 	private:
 		GlslWriter & m_writer;
+		Function< Float, InParam< Vec4 > > m_getRandom;
+		Function< Vec2, InParam< Vec3 >, InParam< Vec3 > > m_getShadowOffset;
+		Function< Vec3, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_getLightSpacePosition;
+		Function< Float, InParam< Vec2 >, InParam< Float > > m_filterDirectional;
+		Function< Float, InParam< Vec2 >, InParam< Float >, InParam< Float > > m_filterSpot;
+		Function< Float, InParam< Vec3 >, InParam< Float >, InParam< Int > > m_filterPoint;
+		Function< Float, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_computeDirectional;
+		Function< Float, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Int > > m_computeSpot;
+		Function< Float, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Int > > m_computePoint;
 	};
 }
 

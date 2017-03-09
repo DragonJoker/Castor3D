@@ -46,9 +46,7 @@ namespace GLSL
 		, Vec3 const & p_lightDirection
 		, Vec3 const & p_normal )
 	{
-		return WriteFunctionCall< Float >( &m_writer
-			, cuT( "ComputeDirectionalShadow" )
-			, p_lightMatrix
+		return m_computeDirectional( p_lightMatrix
 			, p_worldSpacePosition
 			, p_lightDirection
 			, p_normal );
@@ -60,9 +58,7 @@ namespace GLSL
 		, Vec3 const & p_normal
 		, Int const & p_index )
 	{
-		return WriteFunctionCall< Float >( &m_writer
-			, cuT( "ComputeSpotShadow" )
-			, p_lightMatrix
+		return m_computeSpot( p_lightMatrix
 			, p_worldSpacePosition
 			, p_lightDirection
 			, p_normal
@@ -74,77 +70,15 @@ namespace GLSL
 		, Vec3 const & p_normal
 		, Int const & p_index )
 	{
-		return WriteFunctionCall< Float >( &m_writer
-			, cuT( "ComputePointShadow" )
-			, p_worldSpacePosition
+		return m_computePoint( p_worldSpacePosition
 			, p_lightDirection
 			, p_normal
 			, p_index );
-	}
-
-	Float Shadow::GetRandom( Vec4 const & p_seed )
-	{
-		return WriteFunctionCall< Float >( &m_writer
-			, cuT( "GetRandom" )
-			, p_seed );
-	}
-
-	Vec2 Shadow::GetShadowOffset( Vec3 const & p_normal
-		, Vec3 const & p_lightDirection )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "GetShadowOffset" )
-			, p_normal
-			, p_lightDirection );
-	}
-
-	Float Shadow::FilterDirectional( Vec2 const & p_uv
-		, Float const & p_depth )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterDirectional" )
-			, p_uv
-			, p_depth );
-	}
-
-	Float Shadow::FilterSpot( Vec2 const & p_uv
-		, Float const & p_depth
-		, Float const & p_index )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterSpot" )
-			, p_uv
-			, p_depth
-			, p_index );
-	}
-
-	Float Shadow::FilterPoint( Vec3 const & p_direction
-		, Float const & p_depth
-		, Float const & p_index )
-	{
-		return WriteFunctionCall< Vec2 >( &m_writer
-			, cuT( "FilterPoint" )
-			, p_direction
-			, p_depth
-			, p_index );
-	}
-
-	Vec3 Shadow::GetLightSpacePosition( Mat4 const & p_lightMatrix
-		, Vec3 const & p_worldSpacePosition
-		, Vec3 const & p_lightDirection
-		, Vec3 const & p_normal )
-	{
-		return WriteFunctionCall< Vec3 >( &m_writer
-			, cuT( "GetLightSpacePosition" )
-			, p_lightMatrix
-			, p_worldSpacePosition
-			, p_lightDirection
-			, p_normal );
 	}
 
 	void Shadow::DoDeclare_GetRandom()
 	{
-		m_writer.ImplementFunction< Float >( cuT( "GetRandom" )
+		m_getRandom = m_writer.ImplementFunction< Float >( cuT( "GetRandom" )
 			, [this]( Vec4 const & p_seed )
 			{
 				auto l_dot = m_writer.GetLocale( cuT( "l_dot" ), dot( p_seed, vec4( 12.9898_f, 78.233, 45.164, 94.673 ) ) );
@@ -158,7 +92,7 @@ namespace GLSL
 		switch( p_type )
 		{
 		case ShadowType::eRaw:
-			m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
+			m_filterDirectional = m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
 				, [this]( Vec2 const & p_uv
 					, Float const & p_depth )
 				{
@@ -170,7 +104,7 @@ namespace GLSL
 			break;
 
 		case ShadowType::ePoisson:
-			m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
+			m_filterDirectional = m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
 				, [this]( Vec2 const & p_uv
 					, Float const & p_depth )
 				{
@@ -191,7 +125,7 @@ namespace GLSL
 			break;
 
 		case ShadowType::eStratifiedPoisson:
-			m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
+			m_filterDirectional = m_writer.ImplementFunction< Float >( cuT( "FilterDirectional" )
 				, [this]( Vec2 const & p_uv
 					, Float const & p_depth )
 				{
@@ -204,7 +138,7 @@ namespace GLSL
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						l_pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
 						l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_depth ) ) );
 					}
 
@@ -225,7 +159,7 @@ namespace GLSL
 		switch ( p_type )
 		{
 		case ShadowType::eRaw:
-			m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
+			m_filterSpot = m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
 				, [this]( Vec2 const & p_uv
 					, Float const & p_depth
 					, Float const & p_index )
@@ -239,7 +173,7 @@ namespace GLSL
 			break;
 
 		case ShadowType::ePoisson:
-			m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
+			m_filterSpot = m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
 				, [this]( Vec2 const & p_uv
 					, Float const & p_depth
 					, Float const & p_index )
@@ -262,7 +196,7 @@ namespace GLSL
 			break;
 
 		case ShadowType::eStratifiedPoisson:
-			m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
+			m_filterSpot = m_writer.ImplementFunction< Float >( cuT( "FilterSpot" )
 				, [this]( Vec2 const & p_uv
 					, Float const & p_depth
 					, Float const & p_index )
@@ -276,7 +210,7 @@ namespace GLSL
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						l_pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
 						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_index, p_depth ) ) );
 					}
 
@@ -298,7 +232,7 @@ namespace GLSL
 		switch ( p_type )
 		{
 		case ShadowType::eRaw:
-			m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
+			m_filterPoint = m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
 				, [this]( Vec3 const & p_direction
 					, Float const & p_depth
 					, Int const & p_index )
@@ -312,7 +246,7 @@ namespace GLSL
 			break;
 
 		case ShadowType::ePoisson:
-			m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
+			m_filterPoint = m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
 				, [this]( Vec3 const & p_direction
 					, Float const & p_depth
 					, Int const & p_index )
@@ -335,7 +269,7 @@ namespace GLSL
 			break;
 
 		case ShadowType::eStratifiedPoisson:
-			m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
+			m_filterPoint = m_writer.ImplementFunction< Float >( cuT( "FilterPoint" )
 				, [this]( Vec3 const & p_direction
 					, Float const & p_depth
 					, Int const & p_index )
@@ -349,7 +283,7 @@ namespace GLSL
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_pindex = m_writer.Cast< Int >( 16.0 * GetRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						l_pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
 						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint[p_index], vec4( p_direction.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, p_direction.z(), p_depth ) ) );
 					}
 
@@ -368,7 +302,7 @@ namespace GLSL
 
 	void Shadow::DoDeclare_GetShadowOffset()
 	{
-		m_writer.ImplementFunction< Vec2 >( cuT( "GetShadowOffset" )
+		m_getShadowOffset = m_writer.ImplementFunction< Vec2 >( cuT( "GetShadowOffset" )
 			, [this]( Vec3 const & p_normal
 				, Vec3 const & p_lightDirection )
 			{
@@ -383,14 +317,14 @@ namespace GLSL
 
 	void Shadow::DoDeclare_GetLightSpacePosition()
 	{
-		m_writer.ImplementFunction< Vec3 >( cuT( "GetLightSpacePosition" )
+		m_getLightSpacePosition = m_writer.ImplementFunction< Vec3 >( cuT( "GetLightSpacePosition" )
 			, [this]( Mat4 const & p_lightMatrix
 				, Vec3 const & p_worldSpacePosition
 				, Vec3 const & p_lightDirection
 				, Vec3 const & p_normal )
 			{
 				// Offset the vertex position along its normal.
-				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), GetShadowOffset( p_normal, p_lightDirection ) * 2.0_f );
+				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), m_getShadowOffset( p_normal, p_lightDirection ) * 2.0_f );
 				auto l_worldSpace = m_writer.GetLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
 				auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), p_lightMatrix * vec4( l_worldSpace, 1.0_f ) );
 				// Perspective divide (result in range [-1,1]).
@@ -408,15 +342,15 @@ namespace GLSL
 
 	void Shadow::DoDeclare_ComputeDirectionalShadow()
 	{
-		m_writer.ImplementFunction< Float >( cuT( "ComputeDirectionalShadow" )
+		m_computeDirectional = m_writer.ImplementFunction< Float >( cuT( "ComputeDirectionalShadow" )
 			, [this]( Mat4 const & p_lightMatrix
 				, Vec3 const & p_worldSpacePosition
 				, Vec3 const & p_lightDirection
 				, Vec3 const & p_normal )
 			{
-				auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), GetLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
+				auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), m_getLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
-				l_visibility = FilterDirectional( l_lightSpacePosition.xy(), l_lightSpacePosition.z() );
+				l_visibility = m_filterDirectional( l_lightSpacePosition.xy(), l_lightSpacePosition.z() );
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
@@ -427,17 +361,17 @@ namespace GLSL
 
 	void Shadow::DoDeclare_ComputeSpotShadow()
 	{
-		m_writer.ImplementFunction< Float >( cuT( "ComputeSpotShadow" )
+		m_computeSpot = m_writer.ImplementFunction< Float >( cuT( "ComputeSpotShadow" )
 			, [this]( Mat4 const & p_lightMatrix
 				, Vec3 const & p_worldSpacePosition
 				, Vec3 const & p_lightDirection
 				, Vec3 const & p_normal
 				, Int const & p_index )
 			{
-				auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), GetLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
+				auto l_lightSpacePosition = m_writer.GetLocale( cuT( "l_lightSpacePosition" ), m_getLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
 				auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );
-				l_visibility = FilterSpot( l_lightSpacePosition.xy(), l_lightSpacePosition.z(), l_index );
+				l_visibility = m_filterSpot( l_lightSpacePosition.xy(), l_lightSpacePosition.z(), l_index );
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
@@ -449,18 +383,18 @@ namespace GLSL
 
 	void Shadow::DoDeclare_ComputePointShadow()
 	{
-		m_writer.ImplementFunction< Float >( cuT( "ComputePointShadow" )
+		m_computePoint = m_writer.ImplementFunction< Float >( cuT( "ComputePointShadow" )
 			, [this]( Vec3 const & p_worldSpacePosition
 			, Vec3 const & p_lightPosition
 			, Vec3 const & p_normal
 			, Int const & p_index )
 			{
 				auto l_vertexToLight = m_writer.GetLocale( cuT( "l_vertexToLight" ), normalize( p_worldSpacePosition - p_lightPosition ) );
-				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), GetShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) );
+				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), m_getShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) );
 				auto l_worldSpace = m_writer.GetLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
 				auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );
 				l_vertexToLight = l_worldSpace - p_lightPosition;
-				l_visibility = FilterPoint( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, p_index );
+				l_visibility = m_filterPoint( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, p_index );
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
