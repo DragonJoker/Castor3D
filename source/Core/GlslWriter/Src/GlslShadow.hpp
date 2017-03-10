@@ -37,9 +37,14 @@ namespace GLSL
 	public:
 		GlslWriter_API Shadow( GlslWriter & p_writer );
 		GlslWriter_API void Declare( ShadowType p_type );
+		GlslWriter_API void DeclareDirectional( ShadowType p_type );
+		GlslWriter_API void DeclarePoint( ShadowType p_type );
+		GlslWriter_API void DeclareSpot( ShadowType p_type );
 		GlslWriter_API Float ComputeDirectionalShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
 		GlslWriter_API Float ComputeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
 		GlslWriter_API Float ComputePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
+		GlslWriter_API Float ComputeSpotShadow( Mat4 const & p_lightMatrix, Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
+		GlslWriter_API Float ComputePointShadow( Vec3 const & p_worldSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
 
 	private:
 		void DoDeclare_GetRandom();
@@ -51,6 +56,10 @@ namespace GLSL
 		void DoDeclare_ComputeDirectionalShadow();
 		void DoDeclare_ComputeSpotShadow();
 		void DoDeclare_ComputePointShadow();
+		void DoDeclare_FilterOneSpot( ShadowType p_type );
+		void DoDeclare_FilterOnePoint( ShadowType p_type );
+		void DoDeclare_ComputeOneSpotShadow();
+		void DoDeclare_ComputeOnePointShadow();
 
 	private:
 		GlslWriter & m_writer;
@@ -63,6 +72,10 @@ namespace GLSL
 		Function< Float, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_computeDirectional;
 		Function< Float, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Int > > m_computeSpot;
 		Function< Float, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Int > > m_computePoint;
+		Function< Float, InParam< Vec2 >, InParam< Float > > m_filterOneSpot;
+		Function< Float, InParam< Vec3 >, InParam< Float > > m_filterOnePoint;
+		Function< Float, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_computeOneSpot;
+		Function< Float, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_computeOnePoint;
 	};
 }
 

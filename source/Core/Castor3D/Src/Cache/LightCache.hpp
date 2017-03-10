@@ -29,7 +29,7 @@ SOFTWARE.
 namespace Castor3D
 {
 	using LightsArray = std::vector< LightSPtr >;
-	using LightsMap = std::map< LightType, LightsArray >;
+	using LightsMap = std::array< LightsArray, size_t( LightType::eCount ) >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/02/2016
@@ -173,15 +173,21 @@ namespace Castor3D
 		 */
 		inline uint32_t GetLightsCount( LightType p_type )const
 		{
-			uint32_t l_return = 0u;
-			auto l_it = m_typeSortedLights.find( p_type );
-
-			if ( l_it != m_typeSortedLights.end() )
-			{
-				l_return = uint32_t( l_it->second.size() );
-			}
-
-			return l_return;
+			return uint32_t( GetLights( p_type ).size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the lights of given type.
+		 *\param[in]	p_type	The light type.
+		 *\return		The lights.
+		 *\~french
+		 *\brief		Récupère les lumières du type donné.
+		 *\param[in]	p_type	Le type de lumière.
+		 *\return		Les lumières.
+		 */
+		inline LightsArray GetLights( LightType p_type )const
+		{
+			return m_typeSortedLights[size_t( p_type )];
 		}
 
 	private:

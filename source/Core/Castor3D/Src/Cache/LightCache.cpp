@@ -30,12 +30,14 @@ namespace Castor3D
 
 			inline void operator()( LightSPtr p_element )
 			{
-				auto l_it = m_typeSortedLights.insert( { p_element->GetLightType(), LightsArray() } ).first;
-				bool l_found = std::binary_search( l_it->second.begin(), l_it->second.end(), p_element );
+				auto l_index = size_t( p_element->GetLightType() );
+				auto l_it = std::find( m_typeSortedLights[l_index].begin()
+					, m_typeSortedLights[l_index].end()
+					, p_element );
 
-				if ( !l_found )
+				if ( l_it == m_typeSortedLights[l_index].end() )
 				{
-					l_it->second.push_back( p_element );
+					m_typeSortedLights[l_index].push_back( p_element );
 				}
 			}
 
@@ -51,16 +53,14 @@ namespace Castor3D
 
 			inline void operator()( LightSPtr p_element )
 			{
-				auto l_itMap = m_typeSortedLights.find( p_element->GetLightType() );
+				auto l_index = size_t( p_element->GetLightType() );
+				auto l_it = std::find( m_typeSortedLights[l_index].begin()
+					, m_typeSortedLights[l_index].end()
+					, p_element );
 
-				if ( l_itMap != m_typeSortedLights.end() )
+				if ( l_it != m_typeSortedLights[l_index].end() )
 				{
-					auto l_it = std::find( l_itMap->second.begin(), l_itMap->second.end(), p_element );
-
-					if ( l_it != l_itMap->second.end() )
-					{
-						l_itMap->second.erase( l_it );
-					}
+					m_typeSortedLights[l_index].erase( l_it );
 				}
 			}
 
@@ -126,9 +126,9 @@ namespace Castor3D
 			auto l_buffer = l_image.GetBuffer();
 			int l_index = 0;
 
-			for ( auto l_it : m_typeSortedLights )
+			for ( auto l_lights : m_typeSortedLights )
 			{
-				for ( auto l_light : l_it.second )
+				for ( auto l_light : l_lights )
 				{
 					l_light->Bind( *l_buffer, l_index++ );
 				}

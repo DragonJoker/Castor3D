@@ -55,6 +55,9 @@ namespace GLSL
 	public:
 		GlslWriter_API LightingModel( ShadowType p_shadows, GlslWriter & p_writer );
 		GlslWriter_API void DeclareModel();
+		GlslWriter_API void DeclareDirectionalModel();
+		GlslWriter_API void DeclarePointModel();
+		GlslWriter_API void DeclareSpotModel();
 		// Calls
 		GlslWriter_API DirectionalLight GetDirectionalLight( Type const & p_value );
 		GlslWriter_API PointLight GetPointLight( Type const & p_value );
@@ -103,6 +106,9 @@ namespace GLSL
 		ShadowType m_shadows;
 		GlslWriter & m_writer;
 		Shadow m_shadowModel;
+		Function< Void, DirectionalLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeDirectional;
+		Function< Void, PointLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computePoint;
+		Function< Void, SpotLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeSpot;
 	};
 
 	class PhongLightingModel

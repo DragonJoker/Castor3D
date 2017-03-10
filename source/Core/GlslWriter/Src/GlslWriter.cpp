@@ -1,4 +1,4 @@
-﻿#include "GlslWriter.hpp"
+#include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
 #include "GlslLighting.hpp"
@@ -128,6 +128,27 @@ namespace GLSL
 	{
 		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
 		l_lighting->DeclareModel();
+		return l_lighting;
+	}
+
+	std::unique_ptr< LightingModel > GlslWriter::CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows )
+	{
+		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		l_lighting->DeclareDirectionalModel();
+		return l_lighting;
+	}
+
+	std::unique_ptr< LightingModel > GlslWriter::CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows )
+	{
+		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		l_lighting->DeclarePointModel();
+		return l_lighting;
+	}
+
+	std::unique_ptr< LightingModel > GlslWriter::CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows )
+	{
+		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		l_lighting->DeclareSpotModel();
 		return l_lighting;
 	}
 

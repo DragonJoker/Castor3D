@@ -1,4 +1,4 @@
-﻿namespace GLSL
+namespace GLSL
 {
 	//*****************************************************************************************
 
@@ -12,7 +12,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "mat2" };
+				static xchar const * const l_name{ "mat2 " };
 				return l_name;
 			}
 		};
@@ -22,7 +22,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "imat2" };
+				static xchar const * const l_name{ "imat2 " };
 				return l_name;
 			}
 		};
@@ -32,7 +32,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bmat2" };
+				static xchar const * const l_name{ "bmat2 " };
 				return l_name;
 			}
 		};
@@ -47,7 +47,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "mat3" };
+				static xchar const * const l_name{ "mat3 " };
 				return l_name;
 			}
 		};
@@ -57,7 +57,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "imat3" };
+				static xchar const * const l_name{ "imat3 " };
 				return l_name;
 			}
 		};
@@ -67,7 +67,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bmat3" };
+				static xchar const * const l_name{ "bmat3 " };
 				return l_name;
 			}
 		};
@@ -82,7 +82,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "mat4" };
+				static xchar const * const l_name{ "mat4 " };
 				return l_name;
 			}
 		};
@@ -92,7 +92,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "imat4" };
+				static xchar const * const l_name{ "imat4 " };
 				return l_name;
 			}
 		};
@@ -102,7 +102,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bmat4" };
+				static xchar const * const l_name{ "bmat4 " };
 				return l_name;
 			}
 		};

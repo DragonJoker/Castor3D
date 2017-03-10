@@ -105,6 +105,45 @@ namespace GLSL
 		Declare_ComputeSpotLight();
 	}
 
+	void LightingModel::DeclareDirectionalModel()
+	{
+		if ( m_shadows != ShadowType::eNone )
+		{
+			m_shadowModel.DeclareDirectional( m_shadows );
+		}
+
+		Declare_Light();
+		Declare_DirectionalLight();
+		DoDeclareModel();
+		Declare_ComputeDirectionalLight();
+	}
+
+	void LightingModel::DeclarePointModel()
+	{
+		if ( m_shadows != ShadowType::eNone )
+		{
+			m_shadowModel.DeclarePoint( m_shadows );
+		}
+
+		Declare_Light();
+		Declare_PointLight();
+		DoDeclareModel();
+		Declare_ComputePointLight();
+	}
+
+	void LightingModel::DeclareSpotModel()
+	{
+		if ( m_shadows != ShadowType::eNone )
+		{
+			m_shadowModel.DeclareSpot( m_shadows );
+		}
+
+		Declare_Light();
+		Declare_SpotLight();
+		DoDeclareModel();
+		Declare_ComputeSpotLight();
+	}
+
 	DirectionalLight LightingModel::GetDirectionalLight( Type const & p_value )
 	{
 		return WriteFunctionCall< DirectionalLight >( &m_writer
@@ -182,14 +221,13 @@ namespace GLSL
 		, FragmentInput const & p_fragmentIn
 		, OutputComponents & p_output )
 	{
-		m_writer << WriteFunctionCall< Void >( &m_writer
-			, cuT( "ComputeDirectionalLight" )
-			, p_light
+		m_writer << m_computeDirectional( DirectionalLight{ p_light }
 			, p_worldEye
 			, p_shininess
 			, p_receivesShadows
-			, p_fragmentIn
-			, p_output ) << Endi();
+			, FragmentInput{ p_fragmentIn }
+			, p_output );
+		m_writer << Endi();
 	}
 
 	void LightingModel::ComputePointLight( PointLight const & p_light
@@ -199,14 +237,13 @@ namespace GLSL
 		, FragmentInput const & p_fragmentIn
 		, OutputComponents & p_output )
 	{
-		m_writer << WriteFunctionCall< Void >( &m_writer
-			, cuT( "ComputePointLight" )
-			, p_light
+		m_writer << m_computePoint( PointLight{ p_light }
 			, p_worldEye
 			, p_shininess
 			, p_receivesShadows
-			, p_fragmentIn
-			, p_output ) << Endi();
+			, FragmentInput{ p_fragmentIn }
+			, p_output );
+		m_writer << Endi();
 	}
 
 	void LightingModel::ComputeSpotLight( SpotLight const & p_light
@@ -216,14 +253,13 @@ namespace GLSL
 		, FragmentInput const & p_fragmentIn
 		, OutputComponents & p_output )
 	{
-		m_writer << WriteFunctionCall< Void >( &m_writer
-			, cuT( "ComputeSpotLight" )
-			, p_light
+		m_writer << m_computeSpot( SpotLight{ p_light }
 			, p_worldEye
 			, p_shininess
 			, p_receivesShadows
-			, p_fragmentIn
-			, p_output ) << Endi();
+			, FragmentInput{ p_fragmentIn }
+			, p_output );
+		m_writer << Endi();
 	}
 
 	void LightingModel::Declare_Light()
@@ -523,44 +559,43 @@ namespace GLSL
 	void PhongLightingModel::Declare_ComputeDirectionalLight()
 	{
 		OutputComponents l_output{ m_writer };
-		auto l_compute = [this]( DirectionalLight const & p_light
+		m_computeDirectional = m_writer.ImplementFunction< Void >( cuT( "ComputeDirectionalLight" )
+			, [this]( DirectionalLight const & p_light
 			, Vec3 const & p_worldEye
 			, Float const & p_shininess
 			, Int const & p_receivesShadows
 			, FragmentInput const & p_fragmentIn
 			, OutputComponents & p_output )
-		{
-			OutputComponents l_output
 			{
-				m_writer.GetLocale( cuT( "l_ambient" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
-				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
-				m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
-			};
-			auto l_lightDirection = m_writer.GetLocale( cuT( "l_lightDirection" ), normalize( p_light.m_v3Direction().xyz() ) );
-			auto l_shadowFactor = m_writer.GetLocale( cuT( "l_shadowFactor" ), 1.0_f );
+				OutputComponents l_output
+				{
+					m_writer.GetLocale( cuT( "l_ambient" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+					m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+					m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+				};
+				auto l_lightDirection = m_writer.GetLocale( cuT( "l_lightDirection" ), normalize( p_light.m_v3Direction().xyz() ) );
+				auto l_shadowFactor = m_writer.GetLocale( cuT( "l_shadowFactor" ), 1.0_f );
 
-			if ( m_shadows != ShadowType::eNone )
-			{
-				l_shadowFactor = 1.0_f - min( p_receivesShadows
-					, m_shadowModel.ComputeDirectionalShadow( p_light.m_mtxLightSpace()
-						, p_fragmentIn.m_v3Vertex
-						, l_lightDirection
-						, p_fragmentIn.m_v3Normal ) );
+				if ( m_shadows != ShadowType::eNone )
+				{
+					l_shadowFactor = 1.0_f - min( p_receivesShadows
+						, m_shadowModel.ComputeDirectionalShadow( p_light.m_mtxLightSpace()
+							, p_fragmentIn.m_v3Vertex
+							, l_lightDirection
+							, p_fragmentIn.m_v3Normal ) );
+				}
+
+				DoComputeLight( p_light.m_lightBase()
+					, p_worldEye
+					, l_lightDirection
+					, p_shininess
+					, l_shadowFactor
+					, p_fragmentIn
+					, l_output );
+				p_output.m_v3Ambient += l_output.m_v3Ambient;
+				p_output.m_v3Diffuse += l_output.m_v3Diffuse;
+				p_output.m_v3Specular += l_output.m_v3Specular;
 			}
-
-			DoComputeLight( p_light.m_lightBase()
-				, p_worldEye
-				, l_lightDirection
-				, p_shininess
-				, l_shadowFactor
-				, p_fragmentIn
-				, l_output );
-			p_output.m_v3Ambient += l_output.m_v3Ambient;
-			p_output.m_v3Diffuse += l_output.m_v3Diffuse;
-			p_output.m_v3Specular += l_output.m_v3Specular;
-		};
-		m_writer.ImplementFunction< Void >( cuT( "ComputeDirectionalLight" )
-			, l_compute
 			, DirectionalLight( &m_writer, cuT( "p_light" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
 			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )

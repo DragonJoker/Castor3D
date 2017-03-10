@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -153,6 +153,9 @@ namespace GLSL
 		}
 
 		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 
 		GlslWriter_API Castor::String Finalise();
 		GlslWriter_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );

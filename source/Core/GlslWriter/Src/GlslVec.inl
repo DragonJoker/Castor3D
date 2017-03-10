@@ -1,4 +1,4 @@
-﻿namespace GLSL
+namespace GLSL
 {
 	//*****************************************************************************************
 
@@ -12,7 +12,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "vec2" };
+				static xchar const * const l_name{ "vec2 " };
 				return l_name;
 			}
 		};
@@ -22,7 +22,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "ivec2" };
+				static xchar const * const l_name{ "ivec2 " };
 				return l_name;
 			}
 		};
@@ -32,7 +32,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bvec2" };
+				static xchar const * const l_name{ "bvec2 " };
 				return l_name;
 			}
 		};
@@ -47,7 +47,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "vec3" };
+				static xchar const * const l_name{ "vec3 " };
 				return l_name;
 			}
 		};
@@ -57,7 +57,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "ivec3" };
+				static xchar const * const l_name{ "ivec3 " };
 				return l_name;
 			}
 		};
@@ -67,7 +67,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bvec3" };
+				static xchar const * const l_name{ "bvec3 " };
 				return l_name;
 			}
 		};
@@ -82,7 +82,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "vec4" };
+				static xchar const * const l_name{ "vec4 " };
 				return l_name;
 			}
 		};
@@ -92,7 +92,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "ivec4" };
+				static xchar const * const l_name{ "ivec4 " };
 				return l_name;
 			}
 		};
@@ -102,7 +102,7 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bvec4" };
+				static xchar const * const l_name{ "bvec4 " };
 				return l_name;
 			}
 		};

@@ -29,22 +29,12 @@ SOFTWARE.
 #include <Render/RenderNode/SceneRenderNode.hpp>
 #include <Shader/UniformBuffer.hpp>
 
+#include "DirectionalLightPass.hpp"
+#include "PointLightPass.hpp"
+#include "SpotLightPass.hpp"
+
 namespace deferred
 {
-	using Castor3D::Uniform3r;
-
-	enum class DsTexture
-		: uint8_t
-	{
-		ePosition,
-		eDiffuse,
-		eNormals,
-		eTangent,
-		eSpecular,
-		eEmissive,
-		eInfos,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
-	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -63,9 +53,6 @@ namespace deferred
 	class RenderTechnique
 		: public Castor3D::RenderTechnique
 	{
-	protected:
-		DECLARE_SMART_PTR( Uniform3r );
-
 	protected:
 		/**
 		 *\~english
@@ -164,13 +151,37 @@ namespace deferred
 			Castor3D::SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
+		 */
+		Castor::String DoGetDirectionalLightPassPixelShaderSource(
+			Castor3D::TextureChannels const & p_textureFlags,
+			Castor3D::ProgramFlags const & p_programFlags,
+			Castor3D::SceneFlags const & p_sceneFlags )const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
 		 *\param[in]	p_textureFlags	A combination of TextureChannel
 		 *\~french
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
 		 */
-		Castor::String DoGetLightPassPixelShaderSource(
+		Castor::String DoGetSpotLightPassPixelShaderSource(
+			Castor3D::TextureChannels const & p_textureFlags,
+			Castor3D::ProgramFlags const & p_programFlags,
+			Castor3D::SceneFlags const & p_sceneFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_textureFlags	A combination of TextureChannel
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
+		 */
+		Castor::String DoGetPointLightPassPixelShaderSource(
 			Castor3D::TextureChannels const & p_textureFlags,
 			Castor3D::ProgramFlags const & p_programFlags,
 			Castor3D::SceneFlags const & p_sceneFlags )const;
@@ -201,23 +212,6 @@ namespace deferred
 		void DoCleanupGeometryPass();
 		void DoCleanupLightPass();
 
-	private:
-		struct LightPassProgram
-		{
-			//!\~english	The shader program used to render lights.
-			//!\~french		Le shader utilisé pour rendre les lumières.
-			Castor3D::ShaderProgramSPtr m_program;
-			//!\~english	The shader variable containing the camera position.
-			//!\~french		La variable de shader contenant la position de la caméra.
-			Castor3D::Uniform3rSPtr m_camera;
-			//!\~english	Geometry buffers holder.
-			//!\~french		Conteneur de buffers de géométries.
-			Castor3D::GeometryBuffersSPtr m_geometryBuffers;
-			//!\~english	The pipeline used by the light pass.
-			//!\~french		Le pipeline utilisé par la passe lumières.
-			Castor3D::RenderPipelineSPtr m_pipeline;
-		};
-
 	public:
 		static Castor::String const Type;
 		static Castor::String const Name;
@@ -238,30 +232,24 @@ namespace deferred
 		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
-		//!\~english	The shader program used to render lights.
-		//!\~french		Le shader utilisé pour rendre les lumières.
-		std::array< LightPassProgram, size_t( GLSL::FogType::eCount ) > m_lightPassShaderPrograms;
-		//!\~english	Buffer elements declaration.
-		//!\~french		Déclaration des éléments d'un vertex.
-		Castor3D::BufferDeclaration m_declaration;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		Castor3D::VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The viewport used when rendering is done.
-		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
-		Castor3D::Viewport m_viewport;
-		//!\~english	The uniform buffer containing the scene data.
-		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		Castor3D::UniformBuffer m_sceneUbo;
-		//!\~english	The scene render node.
-		//!\~french		Le noeud de rendu de la scène.
-		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		Castor3D::UniformBuffer m_matrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform{ nullptr };
+		//!\~english	The uniform buffer containing the scene data.
+		//!\~french		Le tampon d'uniformes contenant les données de scène.
+		Castor3D::UniformBuffer m_sceneUbo;
+		//!\~english	The shader program used to render directional lights.
+		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
+		DirectionalLightPassPrograms m_directionalLightPassShaderPrograms;
+		//!\~english	The shader program used to render point lights.
+		//!\~french		Le shader utilisé pour rendre les lumières ponctuelles.
+		PointLightPassPrograms m_pointLightPassShaderPrograms;
+		//!\~english	The shader program used to render spot lights.
+		//!\~french		Le shader utilisé pour rendre les lumières projecteur.
+		SpotLightPassPrograms m_spotLightPassShaderPrograms;
+		//!\~english	The scene render node.
+		//!\~french		Le noeud de rendu de la scène.
+		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;
 	};
 }
 

@@ -156,6 +156,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The light space transformation matrix.
+		 *\~french
+		 *\return		La matrice de transformation de la lumière.
+		 */
+		inline Castor::Matrix4x4f const & GetLightSpaceTransform()const
+		{
+			return m_lightSpace;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the attenuation components
 		 *\return		The attenuation components
 		 *\~french
