@@ -34,31 +34,80 @@ namespace deferred
 		PointLightPass( Castor3D::Engine & p_engine
 			, Castor3D::UniformBuffer & p_matrixUbo
 			, Castor3D::UniformBuffer & p_sceneUbo );
-		void Create( Castor3D::ShaderProgramSPtr p_program
-			, Castor3D::Scene const & p_scene );
+		void Create( Castor3D::Scene const & p_scene );
 		void Destroy();
 		void Initialise();
 		void Cleanup();
 		void Render( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp
 			, Castor3D::PointLight const & p_light
+			, Castor3D::Camera const & p_camera
+			, uint16_t p_fogType
 			, bool p_first );
 
 	private:
-		//!\~english	The variable containing the light position.
-		//!\~french		La variable contenant la position de la lumière.
-		Castor3D::PushUniform3fSPtr m_lightPosition;
-		//!\~english	The variable containing the light attenuation.
-		//!\~french		La variable contenant l'atténuation de la lumière.
-		Castor3D::PushUniform3fSPtr m_lightAttenuation;
-		//!\~english	Buffer elements declaration.
-		//!\~french		Déclaration des éléments d'un vertex.
-		Castor3D::BufferDeclaration m_declaration;
+		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const;
+		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const;
+
+	private:
+		struct Program
+			: public LightPass::Program
+		{
+		public:
+			void Create( Castor3D::Scene const & p_scene
+				, Castor3D::UniformBuffer & p_matrixUbo
+				, Castor3D::UniformBuffer & p_sceneUbo
+				, Castor3D::UniformBuffer & p_modelMatrixUbo
+				, Castor::String const & p_vtx
+				, Castor::String const & p_pxl
+				, uint16_t p_fogType );
+			void Destroy();
+			void Initialise( Castor3D::VertexBuffer & p_vbo
+				, Castor3D::IndexBufferSPtr p_ibo
+				, Castor3D::UniformBuffer & p_matrixUbo
+				, Castor3D::UniformBuffer & p_sceneUbo
+				, Castor3D::UniformBuffer & p_modelMatrixUbo );
+			void Cleanup();
+			void Render( Castor::Size const & p_size
+				, Castor3D::PointLight const & p_light
+				, Castor::Matrix4x4r const & p_projection
+				, Castor::Matrix4x4r const & p_view
+				, Castor3D::UniformBuffer & p_matrixUbo
+				, Castor3D::UniformBuffer & p_sceneUbo
+				, Castor3D::UniformBuffer & p_modelMatrixUbo
+				, uint32_t p_count
+				, bool p_first );
+
+		public:
+			//!\~english	The variable containing the light position.
+			//!\~french		La variable contenant la position de la lumière.
+			Castor3D::PushUniform3fSPtr m_lightPosition;
+			//!\~english	The variable containing the light attenuation.
+			//!\~french		La variable contenant l'atténuation de la lumière.
+			Castor3D::PushUniform3fSPtr m_lightAttenuation;
+			//!\~english	The uniform variable containing view matrix.
+			//!\~french		La variable uniforme contenant la matrice vue.
+			Castor3D::Uniform4x4fSPtr m_viewUniform;
+			//!\~english	The uniform variable containing model matrix.
+			//!\~french		La variable uniforme contenant la matrice modèle.
+			Castor3D::Uniform4x4fSPtr m_modelUniform;
+		};
+		using Programs = std::array< Program, size_t( GLSL::FogType::eCount ) >;
+
+	private:
+		//!\~english	The uniform buffer containing the model data.
+		//!\~french		Le tampon d'uniformes contenant les données de modèle.
+		Castor3D::UniformBuffer m_modelMatrixUbo;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		Castor3D::VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The index buffer.
+		//!\~french		Le tampon d'indices.
+		Castor3D::IndexBufferSPtr m_indexBuffer;
+		//!\~english	The light pass' programs.
+		//!\~french		Les programme de la passe de lumière.
+		Programs m_programs;
 	};
-	using PointLightPassPrograms = std::array< PointLightPass, size_t( GLSL::FogType::eCount ) >;
 }
 
 #endif

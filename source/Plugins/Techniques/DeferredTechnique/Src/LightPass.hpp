@@ -55,58 +55,72 @@ namespace deferred
 		LightPass( Castor3D::Engine & p_engine
 			, Castor3D::UniformBuffer & p_matrixUbo
 			, Castor3D::UniformBuffer & p_sceneUbo );
-		void DoCreate( Castor3D::ShaderProgramSPtr p_program
-			, Castor3D::Scene const & p_scene );
-		void DoDestroy();
-		void DoInitialise( Castor3D::VertexBuffer & p_vbo );
-		void DoCleanup();
 		void DoBeginRender( Castor::Size const & p_size
-			, GeometryPassResult const & p_gp
-			, Castor3D::LightCategory const & p_light
-			, bool p_first );
-		void DoEndRender( GeometryPassResult const & p_gp
-			, Castor3D::LightCategory const & p_light );
+			, GeometryPassResult const & p_gp );
+		void DoEndRender( GeometryPassResult const & p_gp );
 
 	protected:
+		struct Program
+		{
+		protected:
+			void DoCreate( Castor3D::Scene const & p_scene
+				, Castor3D::UniformBuffer & p_matrixUbo
+				, Castor3D::UniformBuffer & p_sceneUbo
+				, Castor::String const & p_vtx
+				, Castor::String const & p_pxl
+				, uint16_t p_fogType );
+			void DoDestroy();
+			void DoInitialise( Castor3D::UniformBuffer & p_matrixUbo
+			, Castor3D::UniformBuffer & p_sceneUbo );
+			void DoCleanup();
+			void DoBind( Castor::Size const & p_size
+				, Castor3D::LightCategory const & p_light
+				, Castor::Matrix4x4r const & p_projection
+				, bool p_first );
+
+		public:
+			//!\~english	The shader program used to render lights.
+			//!\~french		Le shader utilisé pour rendre les lumières.
+			Castor3D::ShaderProgramSPtr m_program;
+			//!\~english	Geometry buffers holder.
+			//!\~french		Conteneur de buffers de géométries.
+			Castor3D::GeometryBuffersSPtr m_geometryBuffers;
+			//!\~english	The pipeline used by the light pass.
+			//!\~french		Le pipeline utilisé par la passe lumières.
+			Castor3D::RenderPipelineSPtr m_blendPipeline;
+			//!\~english	The pipeline used by the light pass.
+			//!\~french		Le pipeline utilisé par la passe lumières.
+			Castor3D::RenderPipelineSPtr m_firstPipeline;
+			//!\~english	The pipeline used by the light pass.
+			//!\~french		Le pipeline utilisé par la passe lumières.
+			Castor3D::RenderPipelineSPtr m_currentPipeline;
+			//!\~english	The shader variable containing the camera position.
+			//!\~french		La variable de shader contenant la position de la caméra.
+			Castor3D::Uniform3fSPtr m_camera;
+			//!\~english	The shader variable containing the render area size.
+			//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
+			Castor3D::PushUniform2fSPtr m_renderSize;
+			//!\~english	The variable containing the light colour.
+			//!\~french		La variable contenant la couleur de la lumière.
+			Castor3D::PushUniform3fSPtr m_lightColour;
+			//!\~english	The variable containing the light intensities.
+			//!\~french		La variable contenant les intensités de la lumière.
+			Castor3D::PushUniform3fSPtr m_lightIntensity;
+			//!\~english	The uniform variable containing projection matrix.
+			//!\~french		La variable uniforme contenant la matrice projection.
+			Castor3D::Uniform4x4fSPtr m_projectionUniform;
+		};
+
+	protected:
+		//!\~english	The engine.
+		//!\~french		Le moteur.
+		Castor3D::Engine & m_engine;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		Castor3D::UniformBuffer & m_matrixUbo;
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		Castor3D::UniformBuffer & m_sceneUbo;
-		//!\~english	The viewport used when rendering is done.
-		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
-		Castor3D::Viewport m_viewport;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform;
-		//!\~english	The shader program used to render lights.
-		//!\~french		Le shader utilisé pour rendre les lumières.
-		Castor3D::ShaderProgramSPtr m_program;
-		//!\~english	Geometry buffers holder.
-		//!\~french		Conteneur de buffers de géométries.
-		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english	The pipeline used by the light pass.
-		//!\~french		Le pipeline utilisé par la passe lumières.
-		Castor3D::RenderPipelineSPtr m_blendPipeline;
-		//!\~english	The pipeline used by the light pass.
-		//!\~french		Le pipeline utilisé par la passe lumières.
-		Castor3D::RenderPipelineSPtr m_firstPipeline;
-		//!\~english	The pipeline used by the light pass.
-		//!\~french		Le pipeline utilisé par la passe lumières.
-		Castor3D::RenderPipelineSPtr m_currentPipeline;
-		//!\~english	The shader variable containing the camera position.
-		//!\~french		La variable de shader contenant la position de la caméra.
-		Castor3D::Uniform3fSPtr m_camera;
-		//!\~english	The shader variable containing the render area size.
-		//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
-		Castor3D::PushUniform2fSPtr m_renderSize;
-		//!\~english	The variable containing the light colour.
-		//!\~french		La variable contenant la couleur de la lumière.
-		Castor3D::PushUniform3fSPtr m_lightColour;
-		//!\~english	The variable containing the light intensities.
-		//!\~french		La variable contenant les intensités de la lumière.
-		Castor3D::PushUniform3fSPtr m_lightIntensity;
 	};
 }
 

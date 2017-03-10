@@ -139,54 +139,6 @@ namespace deferred
 		bool DoWriteInto( Castor::TextFile & p_file )override;
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
-		 */
-		Castor::String DoGetLightPassVertexShaderSource(
-			Castor3D::TextureChannels const & p_textureFlags,
-			Castor3D::ProgramFlags const & p_programFlags,
-			Castor3D::SceneFlags const & p_sceneFlags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
-		 */
-		Castor::String DoGetDirectionalLightPassPixelShaderSource(
-			Castor3D::TextureChannels const & p_textureFlags,
-			Castor3D::ProgramFlags const & p_programFlags,
-			Castor3D::SceneFlags const & p_sceneFlags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_textureFlags	A combination of TextureChannel
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
-		 */
-		Castor::String DoGetSpotLightPassPixelShaderSource(
-			Castor3D::TextureChannels const & p_textureFlags,
-			Castor3D::ProgramFlags const & p_programFlags,
-			Castor3D::SceneFlags const & p_sceneFlags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_textureFlags	A combination of TextureChannel
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
-		 */
-		Castor::String DoGetPointLightPassPixelShaderSource(
-			Castor3D::TextureChannels const & p_textureFlags,
-			Castor3D::ProgramFlags const & p_programFlags,
-			Castor3D::SceneFlags const & p_sceneFlags )const;
-		/**
-		 *\~english
 		 *\brief		Binds the depth maps, beginning at p_startIndex.
 		 *\param[in]	p_startIndex	The starting index.
 		 *\~french
@@ -240,13 +192,13 @@ namespace deferred
 		Castor3D::UniformBuffer m_sceneUbo;
 		//!\~english	The shader program used to render directional lights.
 		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
-		DirectionalLightPassPrograms m_directionalLightPassShaderPrograms;
+		DirectionalLightPass m_directionalLightPass;
 		//!\~english	The shader program used to render point lights.
 		//!\~french		Le shader utilisé pour rendre les lumières ponctuelles.
-		PointLightPassPrograms m_pointLightPassShaderPrograms;
+		PointLightPass m_pointLightPass;
 		//!\~english	The shader program used to render spot lights.
 		//!\~french		Le shader utilisé pour rendre les lumières projecteur.
-		SpotLightPassPrograms m_spotLightPassShaderPrograms;
+		SpotLightPass m_spotLightPass;
 		//!\~english	The scene render node.
 		//!\~french		Le noeud de rendu de la scène.
 		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;

@@ -1,5 +1,6 @@
 #include "LightPass.hpp"
 
+#include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/ShaderProgram.hpp>
@@ -91,21 +92,25 @@ namespace deferred
 
 	//************************************************************************************************
 
-	LightPass::LightPass( Engine & p_engine
+	void LightPass::Program::DoCreate( Scene const & p_scene
 		, UniformBuffer & p_matrixUbo
-		, UniformBuffer & p_sceneUbo )
-		: m_matrixUbo{ p_matrixUbo }
-		, m_sceneUbo{ p_sceneUbo }
-		, m_viewport{ p_engine }
+		, UniformBuffer & p_sceneUbo
+		, String const & p_vtx
+		, String const & p_pxl
+		, uint16_t p_fogType )
 	{
-	}
+		auto & l_engine = *p_scene.GetEngine();
+		auto & l_renderSystem = *l_engine.GetRenderSystem();
+		ShaderModel l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 
-	void LightPass::DoCreate( Castor3D::ShaderProgramSPtr p_program
-		, Scene const & p_scene )
-	{
-		m_program = p_program;
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
-		m_camera = m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
+		m_program = l_engine.GetShaderProgramCache().GetNewProgram( false );
+		m_program->CreateObject( ShaderType::eVertex );
+		m_program->CreateObject( ShaderType::ePixel );
+		m_program->SetSource( ShaderType::eVertex, l_model, p_vtx );
+		m_program->SetSource( ShaderType::ePixel, l_model, p_pxl );
+
+		m_projectionUniform = p_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
+		m_camera = p_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
 		m_renderSize = m_program->CreateUniform< UniformType::eVec2f >( cuT( "c3d_renderSize" ), ShaderType::ePixel );
 		m_lightColour = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_v3Colour" ), ShaderType::ePixel );
 		m_lightIntensity = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_v3Intensity" ), ShaderType::ePixel );
@@ -131,34 +136,9 @@ namespace deferred
 				l_mapPoint->SetValue( int( DsTexture::eInfos ) + 3 + i, i );
 			}
 		}
-
-		DepthStencilState l_dsstate1;
-		l_dsstate1.SetDepthTest( false );
-		l_dsstate1.SetDepthMask( WritingMask::eZero );
-		m_firstPipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate1 )
-			, RasteriserState{}
-			, BlendState{}
-			, MultisampleState{}
-			, *m_program
-			, PipelineFlags{} );
-
-		DepthStencilState l_dsstate2;
-		l_dsstate2.SetDepthTest( false );
-		l_dsstate2.SetDepthMask( WritingMask::eZero );
-		BlendState l_blstate;
-		l_blstate.EnableBlend( true );
-		l_blstate.SetRgbBlendOp( BlendOperation::eAdd );
-		l_blstate.SetRgbSrcBlend( BlendOperand::eOne );
-		l_blstate.SetRgbDstBlend( BlendOperand::eOne );
-		m_blendPipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate2 )
-			, RasteriserState{}
-			, std::move( l_blstate )
-			, MultisampleState{}
-			, *m_program
-			, PipelineFlags{} );
 	}
 
-	void LightPass::DoDestroy()
+	void LightPass::Program::DoDestroy()
 	{
 		m_firstPipeline->Cleanup();
 		m_blendPipeline->Cleanup();
@@ -166,48 +146,35 @@ namespace deferred
 		m_firstPipeline.reset();
 		m_blendPipeline.reset();
 		m_geometryBuffers.reset();
+		m_lightColour = nullptr;
+		m_lightIntensity = nullptr;
+		m_projectionUniform = nullptr;
+		m_camera = nullptr;
+		m_renderSize = nullptr;
 		m_program.reset();
 	}
 
-	void LightPass::DoInitialise( VertexBuffer & p_vbo )
+	void LightPass::Program::DoInitialise( UniformBuffer & p_matrixUbo
+		, UniformBuffer & p_sceneUbo )
 	{
 		m_program->Initialise();
-		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->Initialise( { p_vbo }, nullptr );
-		m_firstPipeline->AddUniformBuffer( m_matrixUbo );
-		m_firstPipeline->AddUniformBuffer( m_sceneUbo );
-		m_blendPipeline->AddUniformBuffer( m_matrixUbo );
-		m_blendPipeline->AddUniformBuffer( m_sceneUbo );
-		m_viewport.Initialise();
+		m_firstPipeline->AddUniformBuffer( p_matrixUbo );
+		m_firstPipeline->AddUniformBuffer( p_sceneUbo );
+		m_blendPipeline->AddUniformBuffer( p_matrixUbo );
+		m_blendPipeline->AddUniformBuffer( p_sceneUbo );
 	}
 
-	void LightPass::DoCleanup()
+	void LightPass::Program::DoCleanup()
 	{
-		m_viewport.Cleanup();
-		m_lightColour = nullptr;
-		m_lightIntensity = nullptr;
-		m_geometryBuffers->Cleanup();
-		m_geometryBuffers.reset();
 		m_program->Cleanup();
 	}
 
-	void LightPass::DoBeginRender( Size const & p_size
-		, GeometryPassResult const & p_gp
+	void LightPass::Program::DoBind( Size const & p_size
 		, Castor3D::LightCategory const & p_light
+		, Matrix4x4r const & p_projection
 		, bool p_first )
 	{
-		m_viewport.Resize( p_size );
-		m_viewport.Update();
-		m_projectionUniform->SetValue( m_viewport.GetProjection() );
-
-		p_gp[size_t( DsTexture::ePosition )]->Bind();
-		p_gp[size_t( DsTexture::eDiffuse )]->Bind();
-		p_gp[size_t( DsTexture::eNormals )]->Bind();
-		p_gp[size_t( DsTexture::eTangent )]->Bind();
-		p_gp[size_t( DsTexture::eSpecular )]->Bind();
-		p_gp[size_t( DsTexture::eEmissive )]->Bind();
-		p_gp[size_t( DsTexture::eInfos )]->Bind();
-
+		m_projectionUniform->SetValue( p_projection );
 		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
 		m_lightColour->SetValue( p_light.GetColour() );
 		m_lightIntensity->SetValue( p_light.GetIntensity() );
@@ -222,8 +189,30 @@ namespace deferred
 		}
 	}
 
-	void LightPass::DoEndRender( GeometryPassResult const & p_gp
-		, Castor3D::LightCategory const & p_light )
+	//************************************************************************************************
+
+	LightPass::LightPass( Engine & p_engine
+		, UniformBuffer & p_matrixUbo
+		, UniformBuffer & p_sceneUbo )
+		: m_engine{ p_engine }
+		, m_matrixUbo{ p_matrixUbo }
+		, m_sceneUbo{ p_sceneUbo }
+	{
+	}
+
+	void LightPass::DoBeginRender( Size const & p_size
+		, GeometryPassResult const & p_gp )
+	{
+		p_gp[size_t( DsTexture::ePosition )]->Bind();
+		p_gp[size_t( DsTexture::eDiffuse )]->Bind();
+		p_gp[size_t( DsTexture::eNormals )]->Bind();
+		p_gp[size_t( DsTexture::eTangent )]->Bind();
+		p_gp[size_t( DsTexture::eSpecular )]->Bind();
+		p_gp[size_t( DsTexture::eEmissive )]->Bind();
+		p_gp[size_t( DsTexture::eInfos )]->Bind();
+	}
+
+	void LightPass::DoEndRender( GeometryPassResult const & p_gp )
 	{
 		p_gp[size_t( DsTexture::eInfos )]->Unbind();
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();

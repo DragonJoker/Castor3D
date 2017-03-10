@@ -70,33 +70,9 @@ namespace deferred
 			, p_params )
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
-		, m_directionalLightPassShaderPrograms
-		{
-			{
-				DirectionalLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				DirectionalLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				DirectionalLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				DirectionalLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-			}
-		}
-		, m_pointLightPassShaderPrograms
-		{
-			{
-				PointLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				PointLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				PointLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				PointLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-			}
-		}
-		, m_spotLightPassShaderPrograms
-		{
-			{
-				SpotLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				SpotLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				SpotLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-				SpotLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo },
-			}
-		}
+		, m_directionalLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo }
+		, m_pointLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo }
+		, m_spotLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		UniformBuffer::FillSceneBuffer( m_sceneUbo );
@@ -213,33 +189,41 @@ namespace deferred
 
 		if ( l_cache.GetLightsCount( LightType::eDirectional ) )
 		{
-			auto & l_program = m_directionalLightPassShaderPrograms[uint16_t( GetFogType( l_scene.GetFlags() ) )];
-
 			for ( auto & l_light : l_cache.GetLights( LightType::eDirectional ) )
 			{
-				l_program.Render( m_size, m_lightPassTextures, *l_light->GetDirectionalLight(), l_first );
+				m_directionalLightPass.Render( m_size
+					, m_lightPassTextures
+					, *l_light->GetDirectionalLight()
+					, uint16_t( GetFogType( l_scene.GetFlags() ) )
+					, l_first );
 				l_first = false;
 			}
 		}
 
 		if ( l_cache.GetLightsCount( LightType::ePoint ) )
 		{
-			auto & l_program = m_pointLightPassShaderPrograms[uint16_t( GetFogType( l_scene.GetFlags() ) )];
-
 			for ( auto & l_light : l_cache.GetLights( LightType::ePoint ) )
 			{
-				l_program.Render( m_size, m_lightPassTextures, *l_light->GetPointLight(), l_first );
+				m_pointLightPass.Render( m_size
+					, m_lightPassTextures
+					, *l_light->GetPointLight()
+					, l_camera
+					, uint16_t( GetFogType( l_scene.GetFlags() ) )
+					, l_first );
 				l_first = false;
 			}
 		}
 
 		if ( l_cache.GetLightsCount( LightType::eSpot ) )
 		{
-			auto & l_program = m_spotLightPassShaderPrograms[uint16_t( GetFogType( l_scene.GetFlags() ) )];
-
 			for ( auto & l_light : l_cache.GetLights( LightType::eSpot ) )
 			{
-				l_program.Render( m_size, m_lightPassTextures, *l_light->GetSpotLight(), l_first );
+				m_spotLightPass.Render( m_size
+					, m_lightPassTextures
+					, *l_light->GetSpotLight()
+					, l_camera
+					, uint16_t( GetFogType( l_scene.GetFlags() ) )
+					, l_first );
 				l_first = false;
 			}
 		}
@@ -269,310 +253,6 @@ namespace deferred
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
 		return true;
-	}
-
-	String RenderTechnique::DoGetLightPassVertexShaderSource(
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
-
-		// Shader inputs
-		UBO_MATRIX( l_writer );
-		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
-
-		// Shader outputs
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			gl_Position = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
-		} );
-
-		return l_writer.Finalise();
-	}
-
-	String RenderTechnique::DoGetDirectionalLightPassPixelShaderSource(
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
-
-		// Shader inputs
-		UBO_SCENE( l_writer );
-		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::ePosition ) );
-		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormals ) );
-		auto c3d_mapTangent = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eTangent ) );
-		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
-		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-		auto c3d_mapInfos = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eInfos ) );
-		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
-
-		auto l_lighting = l_writer.CreateDirectionalLightingModel( PhongLightingModel::Name
-			, GetShadowType( p_sceneFlags ) );
-		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
-		auto light = l_writer.GetUniform< GLSL::DirectionalLight >( cuT( "light" ) );
-		auto c3d_renderSize = l_writer.GetUniform< Vec2 >( cuT( "c3d_renderSize" ) );
-
-		// Shader outputs
-		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
-
-		auto l_calcTexCoord = l_writer.ImplementFunction< Vec2 >( cuT( "CalcTexCoord" ), [&]()
-		{
-			l_writer.Return( gl_FragCoord.xy() / c3d_renderSize );
-		} );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_calcTexCoord() );
-			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
-			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), texture( c3d_mapTangent, l_texCoord ) );
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
-			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_v4Tangent.xyz() );
-
-			IF( l_writer, l_v3Normal != l_v3Tangent )
-			{
-				auto l_v4Infos = l_writer.GetLocale( cuT( "l_infos" ), texture( c3d_mapInfos, l_texCoord ) );
-				auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_receiver" ), l_writer.Cast< Int >( l_v4Infos.x() ) );
-				auto l_v4Position = l_writer.GetLocale( cuT( "l_v4Position" ), texture( c3d_mapPosition, l_texCoord ) );
-				auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, l_texCoord ) );
-				auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
-				auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
-				auto l_v3MapAmbient = l_writer.GetLocale( cuT( "l_v3MapAmbient" ), vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
-				auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
-				auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
-				auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
-				auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
-				auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
-				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-				auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-				auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
-				auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
-
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeDirectionalLight( light
-					, l_worldEye
-					, l_fMatShininess
-					, l_iShadowReceiver
-					, FragmentInput( l_v3Position, l_v3Normal )
-					, l_output );
-
-				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() )
-					+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
-					+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
-					+ l_v3MapEmissive ), 1.0 );
-
-				if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
-				{
-					l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );
-				}
-			}
-			ELSE
-			{
-				l_writer.Discard();
-			}
-			FI
-		} );
-
-		return l_writer.Finalise();
-	}
-
-	String RenderTechnique::DoGetPointLightPassPixelShaderSource(
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
-
-		// Shader inputs
-		UBO_SCENE( l_writer );
-		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::ePosition ) );
-		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormals ) );
-		auto c3d_mapTangent = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eTangent ) );
-		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
-		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-		auto c3d_mapInfos = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eInfos ) );
-		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
-
-		auto l_lighting = l_writer.CreatePointLightingModel( PhongLightingModel::Name
-			, GetShadowType( p_sceneFlags ) );
-		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
-		auto light = l_writer.GetUniform< GLSL::PointLight >( cuT( "light" ) );
-		auto c3d_renderSize = l_writer.GetUniform< Vec2 >( cuT( "c3d_renderSize" ) );
-
-		// Shader outputs
-		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
-
-		auto l_calcTexCoord = l_writer.ImplementFunction< Vec2 >( cuT( "CalcTexCoord" ), [&]()
-		{
-			l_writer.Return( gl_FragCoord.xy() / c3d_renderSize );
-		} );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_calcTexCoord() );
-			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
-			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), texture( c3d_mapTangent, l_texCoord ) );
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
-			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_v4Tangent.xyz() );
-
-			IF( l_writer, l_v3Normal != l_v3Tangent )
-			{
-				auto l_v4Infos = l_writer.GetLocale( cuT( "l_infos" ), texture( c3d_mapInfos, l_texCoord ) );
-				auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_receiver" ), l_writer.Cast< Int >( l_v4Infos.x() ) );
-				auto l_v4Position = l_writer.GetLocale( cuT( "l_v4Position" ), texture( c3d_mapPosition, l_texCoord ) );
-				auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, l_texCoord ) );
-				auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
-				auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
-				auto l_v3MapAmbient = l_writer.GetLocale( cuT( "l_v3MapAmbient" ), vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
-				auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
-				auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
-				auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
-				auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
-				auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
-				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-				auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-				auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
-				auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
-
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputePointLight( light
-					, l_worldEye
-					, l_fMatShininess
-					, l_iShadowReceiver
-					, FragmentInput( l_v3Position, l_v3Normal )
-					, l_output );
-
-				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() )
-					+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
-					+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
-					+ l_v3MapEmissive ), 1.0 );
-
-				if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
-				{
-					l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );
-				}
-			}
-			ELSE
-			{
-				l_writer.Discard();
-			}
-			FI
-		} );
-
-		return l_writer.Finalise();
-	}
-
-	String RenderTechnique::DoGetSpotLightPassPixelShaderSource(
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
-
-		// Shader inputs
-		UBO_SCENE( l_writer );
-		auto l_texCoord = l_writer.GetInput< Vec2 >( cuT( "l_texCoord" ) );
-
-		if ( l_writer.HasTextureBuffers() )
-		{
-			auto c3d_sLights = l_writer.GetUniform< SamplerBuffer >( ShaderProgram::Lights );
-		}
-		else
-		{
-			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( ShaderProgram::Lights );
-		}
-
-		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::ePosition ) );
-		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormals ) );
-		auto c3d_mapTangent = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eTangent ) );
-		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
-		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-		auto c3d_mapInfos = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eInfos ) );
-		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
-
-		auto l_lighting = l_writer.CreateSpotLightingModel( PhongLightingModel::Name
-			, GetShadowType( p_sceneFlags ) );
-		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
-		auto light = l_writer.GetUniform< GLSL::SpotLight >( cuT( "light" ) );
-		auto c3d_renderSize = l_writer.GetUniform< Vec2 >( cuT( "c3d_renderSize" ) );
-
-		// Shader outputs
-		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
-
-		auto l_calcTexCoord = l_writer.ImplementFunction< Vec2 >( cuT( "CalcTexCoord" ), [&]()
-		{
-			l_writer.Return( gl_FragCoord.xy() / c3d_renderSize );
-		} );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_calcTexCoord() );
-			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
-			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), texture( c3d_mapTangent, l_texCoord ) );
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
-			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_v4Tangent.xyz() );
-
-			IF( l_writer, l_v3Normal != l_v3Tangent )
-			{
-				auto l_v4Infos = l_writer.GetLocale( cuT( "l_infos" ), texture( c3d_mapInfos, l_texCoord ) );
-				auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_receiver" ), l_writer.Cast< Int >( l_v4Infos.x() ) );
-				auto l_v4Position = l_writer.GetLocale( cuT( "l_v4Position" ), texture( c3d_mapPosition, l_texCoord ) );
-				auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, l_texCoord ) );
-				auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
-				auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
-				auto l_v3MapAmbient = l_writer.GetLocale( cuT( "l_v3MapAmbient" ), vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
-				auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
-				auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
-				auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
-				auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
-				auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
-				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-				auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-				auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
-				auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
-
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeSpotLight( light
-					, l_worldEye
-					, l_fMatShininess
-					, l_iShadowReceiver
-					, FragmentInput( l_v3Position, l_v3Normal )
-					, l_output );
-
-				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() )
-					+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
-					+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
-					+ l_v3MapEmissive ), 1.0 );
-
-				if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
-				{
-					l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );
-				}
-			}
-			ELSE
-			{
-				l_writer.Discard();
-			}
-			FI
-		} );
-
-		return l_writer.Finalise();
 	}
 
 	void RenderTechnique::DoBindDepthMaps( uint32_t p_startIndex )
@@ -627,47 +307,10 @@ namespace deferred
 
 	bool RenderTechnique::DoCreateLightPass()
 	{
-		using PxlShaderGetter = std::function< String( TextureChannels const &, ProgramFlags const &, SceneFlags ) >;
-		auto l_createPasses = [this]( auto & p_programs
-			, PxlShaderGetter p_pixelShaderGetter )
-		{
-			ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			auto & l_scene = *m_renderTarget.GetScene();
-			ProgramFlags l_programFlags;
-			uint16_t l_fog{ 0u };
-
-			for ( auto & l_program : p_programs )
-			{
-				SceneFlags l_sceneFlags{ l_scene.GetFlags() };
-				RemFlag( l_sceneFlags, SceneFlag::eFogSquaredExponential );
-				AddFlag( l_sceneFlags, SceneFlag( l_fog ) );
-				auto l_shader = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
-				l_shader->CreateObject( ShaderType::eVertex );
-				l_shader->CreateObject( ShaderType::ePixel );
-				l_shader->SetSource( ShaderType::eVertex, l_model, DoGetLightPassVertexShaderSource( 0u, l_programFlags, l_sceneFlags ) );
-				l_shader->SetSource( ShaderType::ePixel, l_model, p_pixelShaderGetter( 0u, l_programFlags, l_sceneFlags ) );
-				l_program.Create( l_shader, l_scene );
-				++l_fog;
-			}
-		};
-		l_createPasses( m_directionalLightPassShaderPrograms
-			, std::bind( &RenderTechnique::DoGetDirectionalLightPassPixelShaderSource
-				, this
-				, std::placeholders::_1
-				, std::placeholders::_2
-				, std::placeholders::_3 ) );
-		l_createPasses( m_pointLightPassShaderPrograms
-			, std::bind( &RenderTechnique::DoGetPointLightPassPixelShaderSource
-				, this
-				, std::placeholders::_1
-				, std::placeholders::_2
-				, std::placeholders::_3 ) );
-		l_createPasses( m_spotLightPassShaderPrograms
-			, std::bind( &RenderTechnique::DoGetSpotLightPassPixelShaderSource
-				, this
-				, std::placeholders::_1
-				, std::placeholders::_2
-				, std::placeholders::_3 ) );
+		auto & l_scene = *m_renderTarget.GetScene();
+		m_directionalLightPass.Create( l_scene );
+		m_pointLightPass.Create( l_scene );
+		m_spotLightPass.Create( l_scene );
 		return true;
 	}
 
@@ -683,18 +326,9 @@ namespace deferred
 	{
 		m_matrixUbo.Cleanup();
 		m_sceneUbo.Cleanup();
-
-		auto l_destroyPasses = [this]( auto & p_programs )
-		{
-			for ( auto & l_program : p_programs )
-			{
-				l_program.Destroy();
-			}
-		};
-
-		l_destroyPasses( m_directionalLightPassShaderPrograms );
-		l_destroyPasses( m_pointLightPassShaderPrograms );
-		l_destroyPasses( m_spotLightPassShaderPrograms );
+		m_directionalLightPass.Destroy();
+		m_pointLightPass.Destroy();
+		m_spotLightPass.Destroy();
 	}
 
 	bool RenderTechnique::DoInitialiseGeometryPass()
@@ -724,20 +358,9 @@ namespace deferred
 	bool RenderTechnique::DoInitialiseLightPass( uint32_t & p_index )
 	{
 		bool l_return = true;
-
-		auto l_initPasses = [this]( auto & p_programs )
-		{
-			Scene & l_scene = *m_renderTarget.GetScene();
-
-			for ( auto & l_program : p_programs )
-			{
-				l_program.Initialise();
-			}
-		};
-
-		l_initPasses( m_directionalLightPassShaderPrograms );
-		l_initPasses( m_pointLightPassShaderPrograms );
-		l_initPasses( m_spotLightPassShaderPrograms );
+		m_directionalLightPass.Initialise();
+		m_pointLightPass.Initialise();
+		m_spotLightPass.Initialise();
 
 		for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
 		{
@@ -776,17 +399,9 @@ namespace deferred
 
 	void RenderTechnique::DoCleanupLightPass()
 	{
-		auto l_cleanPasses = [this]( auto & p_programs )
-		{
-			for ( auto & l_program : p_programs )
-			{
-				l_program.Cleanup();
-			}
-		};
-
-		l_cleanPasses( m_directionalLightPassShaderPrograms );
-		l_cleanPasses( m_pointLightPassShaderPrograms );
-		l_cleanPasses( m_spotLightPassShaderPrograms );
+		m_directionalLightPass.Cleanup();
+		m_pointLightPass.Cleanup();
+		m_spotLightPass.Cleanup();
 
 		for ( auto & l_unit : m_lightPassTextures )
 		{
