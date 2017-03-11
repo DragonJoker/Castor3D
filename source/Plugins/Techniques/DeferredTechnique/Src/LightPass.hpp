@@ -36,36 +36,35 @@ namespace deferred
 		ePosition,
 		eDiffuse,
 		eNormals,
-		eTangent,
+		eAmbient,
 		eSpecular,
 		eEmissive,
-		eInfos,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
 	};
 	Castor::String GetTextureName( DsTexture p_texture );
 	Castor::PixelFormat GetTextureFormat( DsTexture p_texture );
 	Castor3D::AttachmentPoint GetTextureAttachmentPoint( DsTexture p_texture );
 	uint32_t GetTextureAttachmentIndex( DsTexture p_texture );
+	float GetMaxDistance( Castor3D::LightCategory const & p_light
+		, Castor::Point3f const & p_attenuation );
 
 	using GeometryPassResult = std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) >;
 
 	class LightPass
 	{
 	protected:
-		LightPass( Castor3D::Engine & p_engine
-			, Castor3D::UniformBuffer & p_matrixUbo
-			, Castor3D::UniformBuffer & p_sceneUbo );
+		LightPass( Castor3D::Engine & p_engine );
 		void DoBeginRender( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp );
 		void DoEndRender( GeometryPassResult const & p_gp );
+		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
+			, Castor3D::LightType p_type )const;
 
 	protected:
 		struct Program
 		{
 		protected:
 			void DoCreate( Castor3D::Scene const & p_scene
-				, Castor3D::UniformBuffer & p_matrixUbo
-				, Castor3D::UniformBuffer & p_sceneUbo
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, uint16_t p_fogType );
@@ -75,7 +74,6 @@ namespace deferred
 			void DoCleanup();
 			void DoBind( Castor::Size const & p_size
 				, Castor3D::LightCategory const & p_light
-				, Castor::Matrix4x4r const & p_projection
 				, bool p_first );
 
 		public:
@@ -94,9 +92,6 @@ namespace deferred
 			//!\~english	The pipeline used by the light pass.
 			//!\~french		Le pipeline utilisé par la passe lumières.
 			Castor3D::RenderPipelineSPtr m_currentPipeline;
-			//!\~english	The shader variable containing the camera position.
-			//!\~french		La variable de shader contenant la position de la caméra.
-			Castor3D::Uniform3fSPtr m_camera;
 			//!\~english	The shader variable containing the render area size.
 			//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
 			Castor3D::PushUniform2fSPtr m_renderSize;
@@ -106,9 +101,6 @@ namespace deferred
 			//!\~english	The variable containing the light intensities.
 			//!\~french		La variable contenant les intensités de la lumière.
 			Castor3D::PushUniform3fSPtr m_lightIntensity;
-			//!\~english	The uniform variable containing projection matrix.
-			//!\~french		La variable uniforme contenant la matrice projection.
-			Castor3D::Uniform4x4fSPtr m_projectionUniform;
 		};
 
 	protected:
@@ -117,10 +109,7 @@ namespace deferred
 		Castor3D::Engine & m_engine;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		Castor3D::UniformBuffer & m_matrixUbo;
-		//!\~english	The uniform buffer containing the scene data.
-		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		Castor3D::UniformBuffer & m_sceneUbo;
+		Castor3D::UniformBuffer m_matrixUbo;
 	};
 }
 

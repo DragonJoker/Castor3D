@@ -2,8 +2,13 @@ debug_overlays true
 
 scene "Scene"
 {
-	background_colour 0.5 0.5 0.5 1.0
+	background_colour 0.0 0.0 0.0 1.0
 	ambient_light 0 0 0 1
+
+	// skybox
+	// {
+		// equirectangular "Textures/background.hdr" 1024 1024
+	// }
 
 	material "Silver"
 	{
@@ -40,7 +45,7 @@ scene "Scene"
 		parent "SpotLightNode"
 		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.0 0.0
+		attenuation 1.0 0.01 0.01
 		cut_off 20
 	}
 
@@ -49,9 +54,9 @@ scene "Scene"
 		parent "SpotLightNode"
 		cast_shadows false
 
-		mesh "LightMesh"
+		mesh "SpotLightMesh"
 		{
-			type cube 1.0 1.0 4.0
+			type cube 1 1 4
 		}
 
 		material "WhiteEmit"

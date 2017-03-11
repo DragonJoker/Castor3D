@@ -68,13 +68,11 @@ namespace deferred
 			, std::make_unique< OpaquePass >( p_renderTarget, *this )
 			, std::make_unique< RenderTechniquePass >( cuT( "deferred_transparent" ), p_renderTarget, *this, false, false )
 			, p_params )
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
-		, m_directionalLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo }
-		, m_pointLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo }
-		, m_spotLightPass{ *p_renderTarget.GetEngine(), m_matrixUbo, m_sceneUbo }
+		, m_directionalLightPass{ *p_renderTarget.GetEngine() }
+		, m_pointLightPass{ *p_renderTarget.GetEngine() }
+		, m_spotLightPass{ *p_renderTarget.GetEngine() }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		UniformBuffer::FillSceneBuffer( m_sceneUbo );
 
 		m_sceneNode = std::make_unique< SceneRenderNode >( m_sceneUbo );
@@ -183,7 +181,6 @@ namespace deferred
 
 		m_sceneNode->m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
 		m_sceneNode->m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
-		m_matrixUbo.Update();
 		m_sceneUbo.Update();
 		bool l_first{ true };
 
@@ -204,6 +201,7 @@ namespace deferred
 		{
 			for ( auto & l_light : l_cache.GetLights( LightType::ePoint ) )
 			{
+				m_frameBuffer.m_frameBuffer->ClearComponent( BufferComponent::eStencil );
 				m_pointLightPass.Render( m_size
 					, m_lightPassTextures
 					, *l_light->GetPointLight()
@@ -218,6 +216,7 @@ namespace deferred
 		{
 			for ( auto & l_light : l_cache.GetLights( LightType::eSpot ) )
 			{
+				m_frameBuffer.m_frameBuffer->ClearComponent( BufferComponent::eStencil );
 				m_spotLightPass.Render( m_size
 					, m_lightPassTextures
 					, *l_light->GetSpotLight()
@@ -255,45 +254,11 @@ namespace deferred
 		return true;
 	}
 
-	void RenderTechnique::DoBindDepthMaps( uint32_t p_startIndex )
-	{
-		if ( m_renderTarget.GetScene()->HasShadows() )
-		{
-			m_directionalShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
-			m_directionalShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
-			m_spotShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
-			m_spotShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
-
-			for ( auto & l_map : m_pointShadowMap.GetTextures() )
-			{
-				l_map.GetTexture()->Bind( p_startIndex );
-				l_map.GetSampler()->Bind( p_startIndex++ );
-			}
-		}
-	}
-
-	void RenderTechnique::DoUnbindDepthMaps( uint32_t p_startIndex )const
-	{
-		if ( m_renderTarget.GetScene()->HasShadows() )
-		{
-			m_directionalShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
-			m_directionalShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
-			m_spotShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
-			m_spotShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
-
-			for ( auto & l_map : m_pointShadowMap.GetTextures() )
-			{
-				l_map.GetTexture()->Unbind( p_startIndex );
-				l_map.GetSampler()->Unbind( p_startIndex++ );
-			}
-		}
-	}
-
 	bool RenderTechnique::DoCreateGeometryPass()
 	{
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
+		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
 		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 		bool l_return = m_geometryPassFrameBuffer->Create();
 
@@ -324,11 +289,10 @@ namespace deferred
 
 	void RenderTechnique::DoDestroyLightPass()
 	{
-		m_matrixUbo.Cleanup();
-		m_sceneUbo.Cleanup();
 		m_directionalLightPass.Destroy();
 		m_pointLightPass.Destroy();
 		m_spotLightPass.Destroy();
+		m_sceneUbo.Cleanup();
 	}
 
 	bool RenderTechnique::DoInitialiseGeometryPass()
@@ -347,8 +311,8 @@ namespace deferred
 					, m_lightPassTextures[i]->GetType() );
 			}
 
-			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepth, m_geometryPassDepthAttach );
-			m_geometryPassFrameBuffer->IsComplete();
+			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepthStencil, m_geometryPassDepthAttach );
+			ENSURE( m_geometryPassFrameBuffer->IsComplete() );
 			m_geometryPassFrameBuffer->Unbind();
 		}
 		
@@ -358,9 +322,9 @@ namespace deferred
 	bool RenderTechnique::DoInitialiseLightPass( uint32_t & p_index )
 	{
 		bool l_return = true;
-		m_directionalLightPass.Initialise();
-		m_pointLightPass.Initialise();
-		m_spotLightPass.Initialise();
+		m_directionalLightPass.Initialise( m_sceneUbo );
+		m_pointLightPass.Initialise( m_sceneUbo );
+		m_spotLightPass.Initialise( m_sceneUbo );
 
 		for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
 		{

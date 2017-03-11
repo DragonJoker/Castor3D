@@ -264,6 +264,7 @@ namespace Castor3D
 		eColour,
 		eDepth,
 		eStencil,
+		eDepthStencil,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/*!

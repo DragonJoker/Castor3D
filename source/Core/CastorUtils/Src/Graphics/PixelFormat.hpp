@@ -87,6 +87,7 @@ namespace Castor
 	template<> struct is_colour_format< PixelFormat::eD24S8 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eD32 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eD32F > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::eD32FS8 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eS1 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eS8 > : public std::false_type {};
 	/**
@@ -102,6 +103,7 @@ namespace Castor
 	template<> struct is_depth_format< PixelFormat::eD24S8 > : public std::true_type {};
 	template<> struct is_depth_format< PixelFormat::eD32 > : public std::true_type {};
 	template<> struct is_depth_format< PixelFormat::eD32F > : public std::true_type {};
+	template<> struct is_depth_format< PixelFormat::eD32FS8 > : public std::true_type {};
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a stencil pixel
@@ -111,6 +113,7 @@ namespace Castor
 	template< PixelFormat PF > struct is_stencil_format : public std::false_type {};
 
 	template<> struct is_stencil_format< PixelFormat::eD24S8 > : public std::true_type {};
+	template<> struct is_stencil_format< PixelFormat::eD32FS8 > : public std::true_type {};
 	template<> struct is_stencil_format< PixelFormat::eS1 > : public std::true_type {};
 	template<> struct is_stencil_format< PixelFormat::eS8 > : public std::true_type {};
 	/**
@@ -126,6 +129,7 @@ namespace Castor
 	template<> struct is_depth_stencil_format< PixelFormat::eD24S8 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eD32 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eD32F > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::eD32FS8 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eS1 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eS8 > : public std::true_type {};
 

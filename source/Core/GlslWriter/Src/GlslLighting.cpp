@@ -607,7 +607,7 @@ namespace GLSL
 	void PhongLightingModel::Declare_ComputePointLight()
 	{
 		OutputComponents l_output{ m_writer };
-		m_computePoint = m_writer.ImplementFunction< Void > (cuT ("ComputePointLight")
+		m_computePoint = m_writer.ImplementFunction< Void >( cuT( "ComputePointLight" )
 			, [this]( PointLight const & p_light
 				, Vec3 const & p_worldEye
 				, Float const & p_shininess

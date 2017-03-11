@@ -58,7 +58,7 @@ scene "Scene"
 		parent "SpotLightNode"
 		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.01 0.0
+		attenuation 1.0 0.001 0.001
 		cut_off 20
 	}
 
@@ -68,7 +68,7 @@ scene "Scene"
 		parent "PointLightNode"
 		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.01 0.0
+		attenuation 1.0 0.001 0.001
 	}
 
 	object "SpotLight"

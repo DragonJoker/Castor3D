@@ -74,10 +74,9 @@ namespace deferred
 		auto out_c3dPosition = l_writer.GetFragData< Vec4 >( cuT( "out_c3dPosition" ), l_index++ );
 		auto out_c3dDiffuse = l_writer.GetFragData< Vec4 >( cuT( "out_c3dDiffuse" ), l_index++ );
 		auto out_c3dNormal = l_writer.GetFragData< Vec4 >( cuT( "out_c3dNormal" ), l_index++ );
-		auto out_c3dTangent = l_writer.GetFragData< Vec4 >( cuT( "out_c3dTangent" ), l_index++ );
+		auto out_c3dAmbient = l_writer.GetFragData< Vec4 >( cuT( "out_c3dAmbient" ), l_index++ );
 		auto out_c3dSpecular = l_writer.GetFragData< Vec4 >( cuT( "out_c3dSpecular" ), l_index++ );
 		auto out_c3dEmissive = l_writer.GetFragData< Vec4 >( cuT( "out_c3dEmissive" ), l_index++ );
-		auto out_c3dInfos = l_writer.GetFragData< Vec4 >( cuT( "out_c3dInfos" ), l_index++ );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -88,19 +87,17 @@ namespace deferred
 			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
 			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
 			auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), vtx_worldSpacePosition );
-			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), normalize( vtx_tangent ) );
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 			
 			auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
-			out_c3dPosition = vec4( l_v3Position, l_v3Ambient.x() );
+			out_c3dPosition = vec4( l_v3Position, l_writer.Cast< Float >( c3d_iShadowReceiver ) );
 			out_c3dDiffuse = vec4( l_v3Diffuse, length( l_wvPosition ) );
-			out_c3dNormal = vec4( l_v3Normal, l_v3Ambient.y() );
-			out_c3dTangent = vec4( l_v3Tangent, l_v3Ambient.z() );
+			out_c3dNormal = vec4( l_v3Normal, 0.0_f );
+			out_c3dAmbient = vec4( l_v3Ambient, 0.0_f );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
 			out_c3dEmissive = vec4( l_v3Emissive, l_wvPosition.z() );
-			out_c3dInfos = vec4( c3d_iShadowReceiver, 0.0_f, 0.0_f, 0.0_f );
 		} );
 
 		return l_writer.Finalise();

@@ -84,6 +84,7 @@ namespace GlRender
 		eLeft = 0x0406,
 		eRight = 0x0407,
 		eFrontAndBack = 0x0408,
+		eDepthStencil = 0x821A,
 		eColor0 = 0x8CE0,
 		eColor1 = 0x8CE1,
 		eColor2 = 0x8CE2,
@@ -215,6 +216,7 @@ namespace GlRender
 		eSLuminance = 0x8C46,
 		eSL8 = 0x8C47,
 		eD32F = 0x8CAC,
+		eD32FS8 = 0x8CAD,
 		eS1 = 0x8D46,
 		eS4 = 0x8D47,
 		eS8 = 0x8D48,
@@ -591,6 +593,7 @@ namespace GlRender
 		: uint32_t
 	{
 		eNone = 0x0000,
+		eDepthStencil = 0x821A,
 		eColour0 = 0x8CE0,
 		eDepth = 0x8D00,
 		eStencil = 0x8D20,

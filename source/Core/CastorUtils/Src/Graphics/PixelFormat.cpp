@@ -213,6 +213,10 @@ namespace Castor
 				l_return = pixel_definitions< PixelFormat::eD32F >::Alpha;
 				break;
 
+			case PixelFormat::eD32FS8:
+				l_return = pixel_definitions< PixelFormat::eD32FS8 >::Alpha;
+				break;
+
 			case PixelFormat::eS1:
 				l_return = pixel_definitions< PixelFormat::eS1 >::Alpha;
 				break;
@@ -345,6 +349,10 @@ namespace Castor
 
 			case PixelFormat::eD32F:
 				l_return = pixel_definitions< PixelFormat::eD32F >::Compressed;
+				break;
+
+			case PixelFormat::eD32FS8:
+				l_return = pixel_definitions< PixelFormat::eD32FS8 >::Compressed;
 				break;
 
 			case PixelFormat::eS1:
@@ -526,6 +534,10 @@ namespace Castor
 				l_return = pixel_definitions< PixelFormat::eD32F >::Size;
 				break;
 
+			case PixelFormat::eD32FS8:
+				l_return = pixel_definitions< PixelFormat::eD32FS8 >::Size;
+				break;
+
 			case PixelFormat::eS1:
 				l_return = pixel_definitions<	PixelFormat::eS1 >::Size;
 				break;
@@ -658,6 +670,10 @@ namespace Castor
 				pixel_definitions< PixelFormat::eD32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
+			case PixelFormat::eD32FS8:
+				pixel_definitions< PixelFormat::eD32FS8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
 			case PixelFormat::eS1:
 				pixel_definitions< PixelFormat::eS1 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
@@ -786,6 +802,10 @@ namespace Castor
 
 			case PixelFormat::eD32F:
 				pixel_definitions< PixelFormat::eD32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case PixelFormat::eD32FS8:
+				pixel_definitions< PixelFormat::eD32FS8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eS1:
@@ -922,6 +942,10 @@ namespace Castor
 					l_return = ( p_strFormat == pixel_definitions< PixelFormat::eD32F >::to_str() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
+				case PixelFormat::eD32FS8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::eD32FS8 >::to_str() ? PixelFormat( i ) : PixelFormat::eCount );
+					break;
+
 				case PixelFormat::eS1:
 					l_return = ( p_strFormat == pixel_definitions< PixelFormat::eS1 >::to_str() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
@@ -1055,6 +1079,10 @@ namespace Castor
 
 			case PixelFormat::eD32F:
 				l_return = pixel_definitions< PixelFormat::eD32F >::to_str();
+				break;
+
+			case PixelFormat::eD32FS8:
+				l_return = pixel_definitions< PixelFormat::eD32FS8 >::to_str();
 				break;
 
 			case PixelFormat::eS1:

@@ -137,24 +137,6 @@ namespace deferred
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
-		/**
-		 *\~english
-		 *\brief		Binds the depth maps, beginning at p_startIndex.
-		 *\param[in]	p_startIndex	The starting index.
-		 *\~french
-		 *\brief		Active les textures de profondeur, en commençant à p_startIndex.
-		 *\param[in]	p_textureFlags	L'index de départ.
-		 */
-		void DoBindDepthMaps( uint32_t p_startIndex );
-		/**
-		 *\~english
-		 *\brief		Unbinds the depth maps, beginning at p_startIndex.
-		 *\param[in]	p_startIndex	The starting index.
-		 *\~french
-		 *\brief		Désactive les textures de profondeur, en commençant à p_startIndex.
-		 *\param[in]	p_textureFlags	L'index de départ.
-		 */
-		void DoUnbindDepthMaps( uint32_t p_startIndex )const;
 		bool DoCreateGeometryPass();
 		bool DoCreateLightPass();
 		void DoDestroyGeometryPass();
@@ -184,9 +166,6 @@ namespace deferred
 		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		Castor3D::UniformBuffer m_matrixUbo;
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		Castor3D::UniformBuffer m_sceneUbo;

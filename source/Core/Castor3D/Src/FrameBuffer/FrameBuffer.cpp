@@ -70,10 +70,20 @@ namespace Castor3D
 			case AttachmentPoint::eStencil:
 				AddFlag( l_targets, BufferComponent::eStencil );
 				break;
+
+			case AttachmentPoint::eDepthStencil:
+				AddFlag( l_targets, BufferComponent::eDepth );
+				AddFlag( l_targets, BufferComponent::eStencil );
+				break;
 			}
 		}
 
 		DoClear( l_targets );
+	}
+
+	void FrameBuffer::ClearComponent( BufferComponent p_target )
+	{
+		DoClear( p_target );
 	}
 
 	void FrameBuffer::Bind( FrameBufferMode p_mode, FrameBufferTarget p_target )const

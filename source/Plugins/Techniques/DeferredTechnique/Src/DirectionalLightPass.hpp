@@ -31,12 +31,10 @@ namespace deferred
 		: public LightPass
 	{
 	public:
-		DirectionalLightPass( Castor3D::Engine & p_engine
-			, Castor3D::UniformBuffer & p_matrixUbo
-			, Castor3D::UniformBuffer & p_sceneUbo );
+		DirectionalLightPass( Castor3D::Engine & p_engine );
 		void Create( Castor3D::Scene const & p_scene );
 		void Destroy();
-		void Initialise();
+		void Initialise( Castor3D::UniformBuffer & p_sceneUbo );
 		void Cleanup();
 		void Render( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp
@@ -46,7 +44,6 @@ namespace deferred
 
 	private:
 		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const;
-		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const;
 
 	private:
 		struct Program
@@ -54,8 +51,6 @@ namespace deferred
 		{
 		public:
 			void Create( Castor3D::Scene const & p_scene
-				, Castor3D::UniformBuffer & p_matrixUbo
-				, Castor3D::UniformBuffer & p_sceneUbo
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, uint16_t p_fogType );
@@ -66,9 +61,6 @@ namespace deferred
 			void Cleanup();
 			void Render( Castor::Size const & p_size
 				, Castor3D::DirectionalLight const & p_light
-				, Castor::Matrix4x4r const & p_projection
-				, Castor3D::UniformBuffer & p_matrixUbo
-				, Castor3D::UniformBuffer & p_sceneUbo
 				, bool p_first );
 
 		public:
@@ -91,6 +83,9 @@ namespace deferred
 		//!\~english	The light pass' programs.
 		//!\~french		Les programme de la passe de lumière.
 		Programs m_programs;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_projectionUniform;
 	};
 }
 
