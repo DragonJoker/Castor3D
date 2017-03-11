@@ -197,10 +197,10 @@ namespace Castor3D
 			}
 		}
 
-		if ( l_return && p_scene.GetSkybox() )
+		if ( l_return && p_scene.HasSkybox() )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Skybox" ) );
-			l_return = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( *p_scene.GetSkybox(), p_file );
+			l_return = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( p_scene.GetSkybox(), p_file );
 		}
 
 		if ( l_return )
@@ -664,6 +664,34 @@ namespace Castor3D
 			p_group.Update();
 		} );
 
+		if ( !m_skybox )
+		{
+			m_skybox = std::make_unique< Skybox >( *GetEngine() );
+			Size l_size{ 16, 16 };
+			constexpr PixelFormat l_format{ PixelFormat::eR8G8B8 };
+			UbPixel l_pixel{ true };
+			uint8_t l_c;
+			l_pixel.set< l_format >( { { m_backgroundColour.red().convert_to( l_c )
+				, m_backgroundColour.green().convert_to( l_c )
+				, m_backgroundColour.blue().convert_to( l_c ) } } );
+			auto l_buffer = PxBufferBase::create( l_size, l_format );
+			auto l_data = l_buffer->ptr();
+
+			for ( uint32_t i = 0u; i < 256; ++i )
+			{
+				std::memcpy( l_data, l_pixel.const_ptr(), 3 );
+				l_data += 3;
+			}
+
+			m_skybox->GetTexture().GetImage( 0u ).InitialiseSource( l_buffer );
+			m_skybox->GetTexture().GetImage( 1u ).InitialiseSource( l_buffer );
+			m_skybox->GetTexture().GetImage( 2u ).InitialiseSource( l_buffer );
+			m_skybox->GetTexture().GetImage( 3u ).InitialiseSource( l_buffer );
+			m_skybox->GetTexture().GetImage( 4u ).InitialiseSource( l_buffer );
+			m_skybox->GetTexture().GetImage( 5u ).InitialiseSource( l_buffer );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *m_skybox ) );
+		}
+
 		m_changed = false;
 	}
 
@@ -693,12 +721,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool Scene::SetForeground( SkyboxSPtr p_skybox )
+	bool Scene::SetForeground( SkyboxUPtr && p_skybox )
 	{
-		m_skybox = p_skybox;
-		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [p_skybox]()
+		m_skybox = std::move( p_skybox );
+		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{
-			p_skybox->Initialise();
+			m_skybox->Initialise();
 		} ) );
 		return true;
 	}

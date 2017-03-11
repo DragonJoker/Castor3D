@@ -1157,7 +1157,7 @@ namespace Castor3D
 		}
 		else
 		{
-			l_parsingContext->pSkybox = std::make_shared< Skybox >( *l_parsingContext->m_pParser->GetEngine() );
+			l_parsingContext->pSkybox = std::make_unique< Skybox >( *l_parsingContext->m_pParser->GetEngine() );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSkybox )
@@ -4370,15 +4370,15 @@ namespace Castor3D
 			{
 				Size l_size;
 				p_params[1]->Get( l_size );
-				auto l_skybox = l_parsingContext->pSkybox;
+				auto & l_skybox = *l_parsingContext->pSkybox;
 				auto l_engine = l_parsingContext->pScene->GetEngine();
 				l_parsingContext->pScene->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-					, [l_buffer, l_skybox, l_engine, l_size]()
+					, [l_buffer, &l_skybox, l_engine, l_size]()
 					{
 						auto l_texture = l_engine->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
 						l_texture->GetImage().InitialiseSource( l_buffer );
 						l_texture->Initialise();
-						l_engine->GetRenderSystem()->GetCurrentContext()->PrepareSkybox( *l_texture, l_size, *l_skybox );
+						l_engine->GetRenderSystem()->GetCurrentContext()->PrepareSkybox( *l_texture, l_size, l_skybox );
 						l_texture->Cleanup();
 						l_texture.reset();
 					} ) );
@@ -4498,7 +4498,7 @@ namespace Castor3D
 
 		if ( l_parsingContext->pSkybox )
 		{
-			l_parsingContext->pScene->SetForeground( l_parsingContext->pSkybox );
+			l_parsingContext->pScene->SetForeground( std::move( l_parsingContext->pSkybox ) );
 			l_parsingContext->pSkybox.reset();
 		}
 		else

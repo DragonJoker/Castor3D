@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\brief		Définit la skybox de la scène.
 		 *\param[in]	p_skybox	La skybox.
 		 */
-		C3D_API bool SetForeground( SkyboxSPtr p_skybox );
+		C3D_API bool SetForeground( SkyboxUPtr && p_skybox );
 		/**
 		 *\~english
 		 *\brief		Imports a scene from an foreign file
@@ -354,13 +354,24 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		\p true if the skybox is defined.
+		 *\~french
+		 *\return		\p true si la skybox est définie.
+		 */
+		inline bool HasSkybox()const
+		{
+			return m_skybox != nullptr;
+		}
+		/**
+		 *\~english
 		 *\return		The skybox.
 		 *\~french
 		 *\return		La skybox.
 		 */
-		inline SkyboxSPtr GetSkybox()const
+		inline Skybox const & GetSkybox()const
 		{
-			return m_skybox;
+			REQUIRE( m_skybox );
+			return *m_skybox;
 		}
 		/**
 		 *\~english
@@ -474,7 +485,7 @@ namespace Castor3D
 		TextureLayoutSPtr m_backgroundImage;
 		//!\~english	The skybox
 		//!\~french		La skybox
-		SkyboxSPtr m_skybox;
+		SkyboxUPtr m_skybox;
 		//!\~english	The LightCategory factory.
 		//!\~french		La fabrique de LightCategory.
 		LightFactory m_lightFactory;
