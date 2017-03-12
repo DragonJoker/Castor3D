@@ -30,44 +30,20 @@ namespace deferred
 	class SpotLightPass
 		: public LightPass
 	{
-	public:
-		SpotLightPass( Castor3D::Engine & p_engine );
-		void Create( Castor3D::Scene const & p_scene );
-		void Destroy();
-		void Initialise( Castor3D::UniformBuffer & p_sceneUbo );
-		void Cleanup();
-		void Render( Castor::Size const & p_size
-			, GeometryPassResult const & p_gp
-			, Castor3D::SpotLight const & p_light
-			, Castor3D::Camera const & p_camera
-			, uint16_t p_fogType
-			, bool p_first );
-
-	private:
-		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const;
-
-	private:
+	protected:
 		struct Program
 			: public LightPass::Program
 		{
 		public:
-			void Create( Castor3D::Scene const & p_scene
+			Program( Castor3D::Scene const & p_scene
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl
-				, uint16_t p_fogType );
-			void Destroy();
-			void Initialise( Castor3D::VertexBuffer & p_vbo
-				, Castor3D::IndexBufferSPtr p_ibo
-				, Castor3D::UniformBuffer & p_matrixUbo
-				, Castor3D::UniformBuffer & p_sceneUbo
-				, Castor3D::UniformBuffer & p_modelMatrixUbo );
-			void Cleanup();
-			void Render( Castor::Size const & p_size
-				, Castor3D::SpotLight const & p_light
-				, uint32_t p_count
-				, bool p_first );
+				, Castor::String const & p_pxl );
+			virtual ~Program();
 
-		public:
+		private:
+			void DoBind( Castor3D::Light const & p_light )override;
+
+		private:
 			//!\~english	The variable containing the light position.
 			//!\~french		La variable contenant la position de la lumière.
 			Castor3D::PushUniform3fSPtr m_lightPosition;
@@ -87,7 +63,30 @@ namespace deferred
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
 			Castor3D::PushUniform4x4fSPtr m_lightTransform;
 		};
-		using Programs = std::array< Program, size_t( GLSL::FogType::eCount ) >;
+		using ProgramPtr = std::unique_ptr< Program >;
+		using Programs = std::array< ProgramPtr, size_t( GLSL::FogType::eCount ) >;
+
+	public:
+		SpotLightPass( Castor3D::Engine & p_engine
+			, Castor3D::FrameBuffer & p_frameBuffer
+			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, bool p_shadows );
+		~SpotLightPass();
+		void Initialise( Castor3D::Scene const & p_scene
+			, Castor3D::UniformBuffer & p_sceneUbo )override;
+		void Cleanup()override;
+		uint32_t GetCount()const override;
+
+	protected:
+		void DoUpdate( Castor::Size const & p_size
+			, Castor3D::Light const & p_light
+			, Castor3D::Camera const & p_camera )override;
+
+	private:
+		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const;
+		LightPass::ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
+			, Castor::String const & p_vtx
+			, Castor::String const & p_pxl )override;
 
 	private:
 		//!\~english	The uniform buffer containing the model data.
@@ -108,9 +107,6 @@ namespace deferred
 		//!\~english	The index buffer.
 		//!\~french		Le tampon d'indices.
 		Castor3D::IndexBufferSPtr m_indexBuffer;
-		//!\~english	The light pass' programs.
-		//!\~french		Les programme de la passe de lumière.
-		Programs m_programs;
 		//!\~english	The light's stencil pass.
 		//!\~french		La passe stencil de la lumière.
 		StencilPass m_stencilPass;

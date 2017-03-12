@@ -3,7 +3,7 @@ debug_overlays true
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0 0 0 1
+	ambient_light 0.5 0.5 0.5 1.0
 
 	material "Silver"
 	{
@@ -15,6 +15,7 @@ scene "Scene"
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.628281 0.628281 0.628281 1.0
 			shininess 51.2
+			two_sided true
 		}
 	}
 
@@ -27,6 +28,20 @@ scene "Scene"
 			diffuse 0.75164 0.60648 0.22648 1.0
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.628281 0.555802 0.366065 1.0
+			shininess 51.2
+			two_sided true
+		}
+	}
+
+	material "Copper"
+	{
+		type legacy
+		pass
+		{
+			ambient 0.19125 0.0735 0.0225 1.0
+			diffuse 0.7038 0.27048 0.0828 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.256777 0.137622 0.086014 1.0
 			shininess 51.2
 			two_sided true
 		}
@@ -47,17 +62,6 @@ scene "Scene"
 		orientation 1 0 0 45
 	}
 
-	scene_node "SpotLightNode"
-	{
-		orientation 1 0 0 45
-		position 0.0 100.0 -100.0
-	}
-
-	scene_node "PointLightNode"
-	{
-		position 0.0 100.0 0.0
-	}
-
 	light "Light"
 	{
 		type directional
@@ -67,62 +71,20 @@ scene "Scene"
 		shadow_producer true
 	}
 
-	light "PointLight"
-	{
-		type point
-		parent "PointLightNode"
-		colour 0.0 1.0 0.0
-		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.001 0.001
-		shadow_producer true
-	}
-
-	light "SpotLight"
-	{
-		type spot
-		parent "SpotLightNode"
-		colour 1.0 0.0 0.0
-		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.0001 0.0001
-		cut_off 20
-		shadow_producer true
-	}
-
 	scene_node "Plane"
 	{
-		position 0.0 0.0 0.0
+		position 0.0 0.0 50.0
 		orientation 1.0 0.0 0.0 90.0
+	}
+
+	scene_node "Plane2"
+	{
+		position 0.0 50.0 150.0
 	}
 
 	scene_node "Torus"
 	{
 		position 0.0 30.0 0.0
-	}
-
-	object "SpotLight"
-	{
-		parent "SpotLightNode"
-		cast_shadows false
-
-		mesh "SpotLightMesh"
-		{
-			type cube 1.0 1.0 4.0
-		}
-
-		material "WhiteEmit"
-	}
-
-	object "PointLight"
-	{
-		parent "PointLightNode"
-		cast_shadows false
-
-		mesh "PointLightMesh"
-		{
-			type sphere 20 1
-		}
-
-		material "WhiteEmit"
 	}
 
 	object "Plane"
@@ -135,6 +97,19 @@ scene "Scene"
 		}
 
 		material "Gold"
+	}
+
+	object "Plane2"
+	{
+		parent "Plane2"
+		receive_shadows false
+
+		mesh "Plane2"
+		{
+			type plane 0 0 200 200
+		}
+
+		material "Copper"
 	}
 
 	object "Torus"
@@ -151,8 +126,8 @@ scene "Scene"
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 180.0 -200.0
-		orientation 0.320588 0 0 40.947219
+		position 0.0 200.0 -200.0
+		orientation 1 0 0 45
 	}
 
 	camera "MainCamera"
@@ -177,7 +152,7 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
-			technique "deferred"
+			technique "deferred_msaa" -samples_count=8
 		}
 
 		fullscreen false

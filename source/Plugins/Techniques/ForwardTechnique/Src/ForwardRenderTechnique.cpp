@@ -53,15 +53,6 @@ namespace forward
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
-	bool RenderTechnique::DoCreate()
-	{
-		return true;
-	}
-
-	void RenderTechnique::DoDestroy()
-	{
-	}
-
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		return true;

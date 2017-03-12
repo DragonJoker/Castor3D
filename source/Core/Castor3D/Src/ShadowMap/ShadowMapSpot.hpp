@@ -82,6 +82,13 @@ namespace Castor3D
 		C3D_API void Render();
 		/**
 		 *\~english
+		 *\brief		Renders the given light's shadow map.
+		 *\~french
+		 *\brief		Dessine la shadow map de la lumière donnée.
+		 */
+		C3D_API void Render( SpotLight const & p_light );
+		/**
+		 *\~english
 		 *\return		The shadow map.
 		 *\~english
 		 *\return		La map d'ombres.

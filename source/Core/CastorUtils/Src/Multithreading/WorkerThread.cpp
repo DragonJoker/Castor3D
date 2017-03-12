@@ -23,7 +23,6 @@ namespace Castor
 	{
 		REQUIRE( m_start == false );
 		{
-			auto l_lock = make_unique_lock( m_mutex );
 			m_currentJob = p_job;
 		}
 		m_start = true;
@@ -61,11 +60,9 @@ namespace Castor
 		{
 			if ( m_start )
 			{
-				{
-					auto l_lock = make_unique_lock( m_mutex );
-					m_currentJob();
-				}
+				m_currentJob();
 				m_start = false;
+				onEnded( *this );
 			}
 			else
 			{

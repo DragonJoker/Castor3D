@@ -4,12 +4,6 @@ scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0 0 0 1
-	background_image "Textures/background.hdr"
-
-	// skybox
-	// {
-		// equirectangular "Textures/background.hdr" 1024 1024
-	// }
 
 	material "Silver"
 	{

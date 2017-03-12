@@ -50,7 +50,7 @@ namespace Castor3D
 	{
 		if ( !m_passes.empty() )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
 			m_depthAttach->Attach( AttachmentPoint::eDepth );
 			m_frameBuffer->Clear( BufferComponent::eDepth );
 			m_passes.begin()->second->Render();
@@ -63,7 +63,7 @@ namespace Castor3D
 	{
 		auto l_it = m_passes.find( &p_light.GetLight() );
 		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
-		m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
 		m_depthAttach->Attach( AttachmentPoint::eDepth );
 		m_frameBuffer->Clear( BufferComponent::eDepth );
 		l_it->second->Render();

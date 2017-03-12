@@ -21,6 +21,8 @@ namespace deferred
 
 	namespace
 	{
+		static uint32_t constexpr FaceCount = 20;
+
 		Point2f DoCalcSpotLightBCone( const Castor3D::SpotLight & p_light
 			, float p_max )
 		{
@@ -30,16 +32,60 @@ namespace deferred
 			auto l_width = p_light.GetCutOff().radians() / Angle::from_degrees( 22.5f ).radians();
 			return Point2f{ l_length * l_width, l_length };
 		}
+
+		Point3fArray DoGenerateVertices()
+		{
+			Point3fArray l_data;
+			Angle l_alpha;
+			auto l_angle = Angle::from_degrees( 360.0f / FaceCount );
+
+			l_data.emplace_back( 0.0f, 0.0f, 0.0f );
+			l_data.emplace_back( 0.0f, 0.0f, 1.0f );
+
+			for ( auto i = 0u; i < FaceCount; l_alpha += l_angle, ++i )
+			{
+				l_data.emplace_back( l_alpha.cos() / 2.0f, l_alpha.sin() / 2.0f, 1.0f );
+			}
+
+			return l_data;
+		}
+
+		UIntArray DoGenerateFaces()
+		{
+			UIntArray l_faces;
+
+			for ( auto i = 0u; i < FaceCount - 1; i++ )
+			{
+				// Side
+				l_faces.push_back( 0u );
+				l_faces.push_back( i + 3u );
+				l_faces.push_back( i + 2u );
+				// Base
+				l_faces.push_back( 1u );
+				l_faces.push_back( i + 2u );
+				l_faces.push_back( i + 3u );
+			}
+
+			// Side last face
+			l_faces.push_back( 0u );
+			l_faces.push_back( 2u );
+			l_faces.push_back( FaceCount + 1 );
+			// Base last face
+			l_faces.push_back( 1u );
+			l_faces.push_back( FaceCount + 1 );
+			l_faces.push_back( 2u );
+
+			return l_faces;
+		}
 	}
 
 	//*********************************************************************************************
 	
-	void SpotLightPass::Program::Create( Scene const & p_scene
+	SpotLightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl
-		, uint16_t p_fogType )
+		, String const & p_pxl )
+		: LightPass::Program{ p_scene, p_vtx, p_pxl }
 	{
-		DoCreate( p_scene, p_vtx, p_pxl, p_fogType );
 		m_lightDirection = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Direction" ), ShaderType::ePixel );
 		m_lightTransform = m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_mtxLightSpace" ), ShaderType::ePixel );
 		m_lightPosition = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Position" ), ShaderType::ePixel );
@@ -87,7 +133,7 @@ namespace deferred
 			, PipelineFlags{} );
 	}
 
-	void SpotLightPass::Program::Destroy()
+	SpotLightPass::Program::~Program()
 	{
 		m_lightDirection = nullptr;
 		m_lightTransform = nullptr;
@@ -95,148 +141,51 @@ namespace deferred
 		m_lightPosition = nullptr;
 		m_lightExponent = nullptr;
 		m_lightCutOff = nullptr;
-		DoDestroy();
 	}
 
-	void SpotLightPass::Program::Initialise( VertexBuffer & p_vbo
-		, IndexBufferSPtr p_ibo
-		, UniformBuffer & p_matrixUbo
-		, UniformBuffer & p_sceneUbo
-		, UniformBuffer & p_modelMatrixUbo )
+	void SpotLightPass::Program::DoBind( Light const & p_light )
 	{
-		DoInitialise( p_matrixUbo, p_sceneUbo );
-		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->Initialise( { p_vbo }, p_ibo );
-		m_firstPipeline->AddUniformBuffer( p_modelMatrixUbo );
-		m_blendPipeline->AddUniformBuffer( p_modelMatrixUbo );
-	}
-
-	void SpotLightPass::Program::Cleanup()
-	{
-		m_geometryBuffers->Cleanup();
-		m_geometryBuffers.reset();
-		DoCleanup();
-	}
-
-	void SpotLightPass::Program::Render( Size const & p_size
-		, Castor3D::SpotLight const & p_light
-		, uint32_t p_count
-		, bool p_first )
-	{
-		DoBind( p_size, p_light, p_first );
-		m_lightAttenuation->SetValue( p_light.GetAttenuation() );
-		m_lightPosition->SetValue( p_light.GetLight().GetParent()->GetDerivedPosition() );
-		m_lightExponent->SetValue( p_light.GetExponent() );
-		m_lightCutOff->SetValue( p_light.GetCutOff().cos() );
-		m_lightDirection->SetValue( p_light.GetDirection() );
-		m_lightTransform->SetValue( p_light.GetLightSpaceTransform() );
-		m_currentPipeline->Apply();
-		m_geometryBuffers->Draw( p_count, 0 );
+		auto & l_light = *p_light.GetSpotLight();
+		m_lightAttenuation->SetValue( l_light.GetAttenuation() );
+		m_lightPosition->SetValue( l_light.GetLight().GetParent()->GetDerivedPosition() );
+		m_lightExponent->SetValue( l_light.GetExponent() );
+		m_lightCutOff->SetValue( l_light.GetCutOff().cos() );
+		m_lightDirection->SetValue( l_light.GetDirection() );
+		m_lightTransform->SetValue( l_light.GetLightSpaceTransform() );
 	}
 
 	//*********************************************************************************************
 
-	SpotLightPass::SpotLightPass( Engine & p_engine )
-		: LightPass{ p_engine }
+	SpotLightPass::SpotLightPass( Engine & p_engine
+		, FrameBuffer & p_frameBuffer
+		, RenderBufferAttachment & p_depthAttach
+		, bool p_shadows )
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
+		, m_stencilPass{ p_frameBuffer, p_depthAttach }
 		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
 	{
 		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
-	}
-
-	void SpotLightPass::Create( Castor3D::Scene const & p_scene )
-	{
-		uint16_t l_fogType{ 0u };
-
-		for ( auto & l_program : m_programs )
-		{
-			SceneFlags l_sceneFlags{ p_scene.GetFlags() };
-			RemFlag( l_sceneFlags, SceneFlag::eFogSquaredExponential );
-			AddFlag( l_sceneFlags, SceneFlag( l_fogType ) );
-			l_program.Create( p_scene
-				, DoGetVertexShaderSource( l_sceneFlags )
-				, DoGetPixelShaderSource( l_sceneFlags, LightType::eSpot )
-				, l_fogType++ );
-		}
-
 		auto l_declaration = BufferDeclaration(
 		{
 			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
 		} );
 
-		uint32_t l_nbFaces = 8;
-		Point3fArray l_data;
-		Angle l_alpha;
-		auto l_angle = Angle::from_degrees( 360.0f / l_nbFaces );
-
-		l_data.emplace_back( 0.0f, 0.0f, 0.0f );
-		l_data.emplace_back( 0.0f, 0.0f, 1.0f );
-
-		for ( auto i = 0u; i < l_nbFaces; l_alpha += l_angle, ++i )
-		{
-			l_data.emplace_back( l_alpha.cos() / 2.0f, l_alpha.sin() / 2.0f, 1.0f );
-		}
-
+		auto l_data = DoGenerateVertices();
 		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, l_declaration );
 		auto l_size = l_data.size() * sizeof( *l_data.data() );
 		m_vertexBuffer->Resize( uint32_t( l_size ) );
 		std::memcpy( m_vertexBuffer->data()
 			, l_data.data()->const_ptr()
 			, l_size );
+		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 
-		UIntArray l_faces;
-
-		for ( auto i = 0u; i < l_nbFaces - 1; i++ )
-		{
-			// Side
-			l_faces.push_back( 0u );
-			l_faces.push_back( i + 3u );
-			l_faces.push_back( i + 2u );
-			// Base
-			l_faces.push_back( 1u );
-			l_faces.push_back( i + 2u );
-			l_faces.push_back( i + 3u );
-		}
-
-		// Side last face
-		l_faces.push_back( 0u );
-		l_faces.push_back( 2u );
-		l_faces.push_back( l_nbFaces + 1 );
-		// Base last face
-		l_faces.push_back( 1u );
-		l_faces.push_back( l_nbFaces + 1 );
-		l_faces.push_back( 2u );
-
+		auto l_faces = DoGenerateFaces();
 		m_indexBuffer = std::make_shared< IndexBuffer >( m_engine );
 		m_indexBuffer->Resize( uint32_t( l_faces.size() ) );
 		std::memcpy( m_indexBuffer->data()
 			, l_faces.data()
 			, l_faces.size() * sizeof( *l_faces.data() ) );
-	}
-
-	void SpotLightPass::Destroy()
-	{
-		m_indexBuffer.reset();
-		m_vertexBuffer.reset();
-
-		for ( auto & l_program : m_programs )
-		{
-			l_program.Destroy();
-		}
-	}
-
-	void SpotLightPass::Initialise( Castor3D::UniformBuffer & p_sceneUbo )
-	{
-		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 		m_indexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-
-		for ( auto & l_program : m_programs )
-		{
-			l_program.Initialise( *m_vertexBuffer
-				, m_indexBuffer
-				, m_matrixUbo
-				, p_sceneUbo
-				, m_modelMatrixUbo );
-		}
 
 		m_stencilPass.Initialise( *m_vertexBuffer
 			, m_indexBuffer );
@@ -245,54 +194,62 @@ namespace deferred
 		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
 	}
 
-	void SpotLightPass::Cleanup()
+	SpotLightPass::~SpotLightPass()
 	{
 		m_modelUniform = nullptr;
 		m_viewUniform = nullptr;
 		m_projectionUniform = nullptr;
 		m_stencilPass.Cleanup();
-
-		for ( auto & l_program : m_programs )
-		{
-			l_program.Cleanup();
-		}
-
 		m_indexBuffer->Cleanup();
 		m_vertexBuffer->Cleanup();
 		m_modelMatrixUbo.Cleanup();
 		m_matrixUbo.Cleanup();
+		m_indexBuffer.reset();
+		m_vertexBuffer.reset();
 	}
 
-	void SpotLightPass::Render( Size const & p_size
-		, GeometryPassResult const & p_gp
-		, Castor3D::SpotLight const & p_light
-		, Castor3D::Camera const & p_camera
-		, uint16_t p_fogType
-		, bool p_first )
+	void SpotLightPass::Initialise( Scene const & p_scene
+		, UniformBuffer & p_sceneUbo )
 	{
-		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-		m_viewUniform->SetValue( p_camera.GetView() );
-		auto l_lightPos = p_light.GetLight().GetParent()->GetDerivedPosition();
+		DoInitialise( p_scene
+			, LightType::eSpot
+			, *m_vertexBuffer
+			, m_indexBuffer
+			, p_sceneUbo
+			, &m_modelMatrixUbo );
+	}
+
+	void SpotLightPass::Cleanup()
+	{
+		DoCleanup();
+	}
+
+	uint32_t SpotLightPass::GetCount()const
+	{
+		return m_indexBuffer->GetSize();
+	}
+
+	void SpotLightPass::DoUpdate( Size const & p_size
+		, Light const & p_light
+		, Camera const & p_camera )
+	{
+		auto l_lightPos = p_light.GetParent()->GetDerivedPosition();
 		auto l_camPos = p_camera.GetParent()->GetDerivedPosition();
 		auto l_far = p_camera.GetViewport().GetFar();
-		auto l_scale = DoCalcSpotLightBCone( p_light
+		auto l_scale = DoCalcSpotLightBCone( *p_light.GetSpotLight()
 			, float( l_far - point::distance( l_lightPos, l_camPos ) - ( l_far / 50.0f ) ) );
 		Matrix4x4r l_model{ 1.0f };
 		matrix::set_transform( l_model
-			, p_light.GetLight().GetParent()->GetDerivedPosition()
+			, p_light.GetParent()->GetDerivedPosition()
 			, Point3f{ l_scale[0], l_scale[0], l_scale[1] }
-			, p_light.GetLight().GetParent()->GetDerivedOrientation() );
+		, p_light.GetParent()->GetDerivedOrientation() );
+		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
+		m_viewUniform->SetValue( p_camera.GetView() );
 		m_modelUniform->SetValue( l_model );
 		m_matrixUbo.Update();
 		m_modelMatrixUbo.Update();
 		m_stencilPass.Render( m_indexBuffer->GetSize() );
-		DoBeginRender( p_size, p_gp );
-		auto & l_program = m_programs[uint16_t( GetFogType( p_fogType ) )];
-		l_program.Render( p_size
-			, p_light
-			, m_indexBuffer->GetSize()
-			, p_first );
-		DoEndRender( p_gp );
+		p_camera.Apply();
 	}
 	
 	String SpotLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
@@ -314,6 +271,13 @@ namespace deferred
 		} );
 
 		return l_writer.Finalise();
+	}
+
+	LightPass::ProgramPtr SpotLightPass::DoCreateProgram( Castor3D::Scene const & p_scene
+		, Castor::String const & p_vtx
+		, Castor::String const & p_pxl )
+	{
+		return std::make_unique< Program >( p_scene, p_vtx, p_pxl );
 	}
 
 	//*********************************************************************************************

@@ -23,71 +23,194 @@ SOFTWARE.
 #ifndef ___C3D_LightPassShadow_H___
 #define ___C3D_LightPassShadow_H___
 
-#include "LightPass.hpp"
+#include "DirectionalLightPass.hpp"
+#include "PointLightPass.hpp"
+#include "SpotLightPass.hpp"
+
+#include <Scene/Light/Light.hpp>
+#include <Render/Context.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Texture/TextureUnit.hpp>
+
+#include <GlslShadow.hpp>
 
 namespace deferred
 {
-	class LightPassShadow
-	{
-	protected:
-		LightPassShadow( Castor3D::Engine & p_engine );
-		void DoBeginRender( Castor::Size const & p_size
-			, GeometryPassResult const & p_gp );
-		void DoEndRender( GeometryPassResult const & p_gp );
-		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
-			, Castor3D::LightType p_type )const;
+#if !defined( NDEBUG )
 
-	protected:
-		struct Program
+	uint32_t g_index = 0u;
+
+#endif
+	template< Castor3D::LightType LightType >
+	struct LightPassShadowTraits;
+
+	template<>
+	struct LightPassShadowTraits< Castor3D::LightType::eDirectional >
+	{
+		using light_type = Castor3D::DirectionalLight;
+		using light_pass_type = DirectionalLightPass;
+		using shadow_pass_type = Castor3D::ShadowMapDirectional;
+
+		static Castor::String const & GetName()
 		{
-		protected:
-			void DoCreate( Castor3D::Scene const & p_scene
-				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl
-				, uint16_t p_fogType );
-			void DoDestroy();
-			void DoInitialise( Castor3D::UniformBuffer & p_matrixUbo
-			, Castor3D::UniformBuffer & p_sceneUbo );
-			void DoCleanup();
-			void DoBind( Castor::Size const & p_size
-				, Castor3D::LightCategory const & p_light
-				, bool p_first );
+			static Castor::String const l_name = GLSL::Shadow::MapShadowDirectional;
+			return l_name;
+		}
+
+		static Castor3D::TextureUnit & GetTexture( shadow_pass_type & p_shadowMap )
+		{
+			return p_shadowMap.GetTexture();
+		}
+
+		static light_type const & GetTypedLight( Castor3D::Light const & p_light )
+		{
+			return *p_light.GetDirectionalLight();
+		}
+	};
+
+	template<>
+	struct LightPassShadowTraits< Castor3D::LightType::ePoint >
+	{
+		using light_type = Castor3D::PointLight;
+		using light_pass_type = PointLightPass;
+		using shadow_pass_type = Castor3D::ShadowMapPoint;
+
+		static Castor::String const & GetName()
+		{
+			static Castor::String const l_name = GLSL::Shadow::MapShadowPoint;
+			return l_name;
+		}
+
+		static Castor3D::TextureUnit & GetTexture( shadow_pass_type & p_shadowMap )
+		{
+			return p_shadowMap.GetTexture( 0u );
+		}
+
+		static light_type const & GetTypedLight( Castor3D::Light const & p_light )
+		{
+			return *p_light.GetPointLight();
+		}
+	};
+
+	template<>
+	struct LightPassShadowTraits< Castor3D::LightType::eSpot >
+	{
+		using light_type = Castor3D::SpotLight;
+		using light_pass_type = SpotLightPass;
+		using shadow_pass_type = Castor3D::ShadowMapSpot;
+
+		static Castor::String const & GetName()
+		{
+			static Castor::String const l_name = GLSL::Shadow::MapShadowSpot;
+			return l_name;
+		}
+
+		static Castor3D::TextureUnit & GetTexture( shadow_pass_type & p_shadowMap )
+		{
+			return p_shadowMap.GetTexture();
+		}
+
+		static light_type const & GetTypedLight( Castor3D::Light const & p_light )
+		{
+			return *p_light.GetSpotLight();
+		}
+	};
+
+	template< Castor3D::LightType LightType >
+	class LightPassShadow
+		: public LightPassShadowTraits< LightType >::light_pass_type
+	{
+	public:
+		using my_traits = LightPassShadowTraits< LightType >;
+		using my_light_type = typename my_traits::light_type;
+		using my_pass_type = typename my_traits::light_pass_type;
+		using my_shadow_map_type = typename my_traits::shadow_pass_type;
+
+	private:
+		struct Program
+			: public my_pass_type::Program
+		{
+		public:
+			using my_program_type = typename my_pass_type::Program;
 
 		public:
-			//!\~english	The shader program used to render lights.
-			//!\~french		Le shader utilisé pour rendre les lumières.
-			Castor3D::ShaderProgramSPtr m_program;
-			//!\~english	Geometry buffers holder.
-			//!\~french		Conteneur de buffers de géométries.
-			Castor3D::GeometryBuffersSPtr m_geometryBuffers;
-			//!\~english	The pipeline used by the light pass.
-			//!\~french		Le pipeline utilisé par la passe lumières.
-			Castor3D::RenderPipelineSPtr m_blendPipeline;
-			//!\~english	The pipeline used by the light pass.
-			//!\~french		Le pipeline utilisé par la passe lumières.
-			Castor3D::RenderPipelineSPtr m_firstPipeline;
-			//!\~english	The pipeline used by the light pass.
-			//!\~french		Le pipeline utilisé par la passe lumières.
-			Castor3D::RenderPipelineSPtr m_currentPipeline;
-			//!\~english	The shader variable containing the render area size.
-			//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
-			Castor3D::PushUniform2fSPtr m_renderSize;
-			//!\~english	The variable containing the light colour.
-			//!\~french		La variable contenant la couleur de la lumière.
-			Castor3D::PushUniform3fSPtr m_lightColour;
-			//!\~english	The variable containing the light intensities.
-			//!\~french		La variable contenant les intensités de la lumière.
-			Castor3D::PushUniform3fSPtr m_lightIntensity;
+			Program( Castor3D::Scene const & p_scene
+				, Castor::String const & p_vtx
+				, Castor::String const & p_pxl )
+				: my_program_type{ p_scene, p_vtx, p_pxl }
+			{
+				my_program_type::m_program->CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
+					, Castor3D::ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
+			}
 		};
 
-	protected:
-		//!\~english	The engine.
-		//!\~french		Le moteur.
-		Castor3D::Engine & m_engine;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		Castor3D::UniformBuffer m_matrixUbo;
+	public:
+		LightPassShadow( Castor3D::Engine & p_engine
+			, Castor3D::FrameBuffer & p_frameBuffer
+			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, my_shadow_map_type & p_shadowMap )
+			: my_pass_type{ p_engine
+				, p_frameBuffer
+				, p_depthAttach
+				, true }
+			, m_shadowMap{ p_shadowMap }
+			, m_shadowMapTexture{ my_traits::GetTexture( p_shadowMap ) }
+		{
+			m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) );
+		}
+
+		void Render( Castor::Size const & p_size
+			, GeometryPassResult const & p_gp
+			, Castor3D::Light const & p_light
+			, Castor3D::Camera const & p_camera
+			, GLSL::FogType p_fogType
+			, bool p_first )override
+		{
+			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
+			my_pass_type::Update( p_size, p_light, p_camera );
+			m_shadowMapTexture.Bind();
+			my_pass_type::DoRender( p_size
+				, p_gp
+				, p_light
+				, p_fogType
+				, p_first );
+			m_shadowMapTexture.Unbind();
+
+#if !defined( NDEBUG )
+
+			LightPass::m_frameBuffer.Bind();
+			auto & l_depthMap = my_traits::GetTexture( m_shadowMap );
+			Castor::Size l_size{ 256u, 256u };
+			LightPass::m_engine.GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
+				, l_size
+				, *l_depthMap.GetTexture() );
+			++g_index;
+			LightPass::m_frameBuffer.Unbind();
+
+#endif
+		}
+
+	private:
+		typename LightPass::ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
+			, Castor::String const & p_vtx
+			, Castor::String const & p_pxl )override
+		{
+			return std::make_unique< Program >( p_scene, p_vtx, p_pxl );
+		}
+
+	private:
+		//!\~english	The shadow map.
+		//!\~french		Le mappage d'ombres.
+		my_shadow_map_type & m_shadowMap;
+		//!\~english	The shadow map texture.
+		//!\~french		La texture de mappage d'ombres.
+		Castor3D::TextureUnit & m_shadowMapTexture;
 	};
+
+	using DirectionalLightPassShadow = LightPassShadow< Castor3D::LightType::eDirectional >;
+	using PointLightPassShadow = LightPassShadow< Castor3D::LightType::ePoint >;
+	using SpotLightPassShadow = LightPassShadow< Castor3D::LightType::eSpot >;
 }
 
 #endif

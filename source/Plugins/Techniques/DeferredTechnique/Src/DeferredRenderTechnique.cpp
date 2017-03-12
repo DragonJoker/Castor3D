@@ -1,6 +1,10 @@
 #include "DeferredRenderTechnique.hpp"
 
 #include "DeferredRenderTechniqueOpaquePass.hpp"
+#include "DirectionalLightPass.hpp"
+#include "LightPassShadow.hpp"
+#include "PointLightPass.hpp"
+#include "SpotLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Cache/CameraCache.hpp>
@@ -69,17 +73,12 @@ namespace deferred
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_transparent" ), p_renderTarget, *this, false, false )
 			, p_params )
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
-		, m_directionalLightPass{ *p_renderTarget.GetEngine() }
-		, m_pointLightPass{ *p_renderTarget.GetEngine() }
-		, m_spotLightPass{ *p_renderTarget.GetEngine() }
-		, m_directionalLightPassShadow{ *p_renderTarget.GetEngine(), m_opaquePass->GetDirectionalShadowMap().GetTexture() }
-		, m_pointLightPassShadow{ *p_renderTarget.GetEngine() }
-		, m_spotLightPassShadow{ *p_renderTarget.GetEngine() }
 	{
 		UniformBuffer::FillSceneBuffer( m_sceneUbo );
-
-		m_sceneNode = std::make_unique< SceneRenderNode >( m_sceneUbo );
-		Logger::LogInfo( cuT( "Using deferred shading" ) );
+		m_cameraPos = m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
+		m_fogType = m_sceneUbo.GetUniform< UniformType::eInt >( ShaderProgram::FogType );
+		m_fogDensity = m_sceneUbo.GetUniform< UniformType::eFloat >( ShaderProgram::FogDensity );
+		Logger::LogInfo( cuT( "Using deferred rendering" ) );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -92,33 +91,16 @@ namespace deferred
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
-	bool RenderTechnique::DoCreate()
-	{
-		bool l_return = DoCreateGeometryPass();
-
-		if ( l_return )
-		{
-			l_return = DoCreateLightPass();
-		}
-
-		return l_return;
-	}
-
-	void RenderTechnique::DoDestroy()
-	{
-		DoDestroyLightPass();
-		DoDestroyGeometryPass();
-	}
-
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
-		bool l_return = DoInitialiseLightPass( p_index );
+		bool l_return = DoInitialiseGeometryPass( p_index );
 
 		if ( l_return )
 		{
-			l_return = DoInitialiseGeometryPass();
+			l_return = DoInitialiseLightPass();
 		}
 
+		m_frameBuffer.m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eHighAlphaBlack ) );
 		return l_return;
 	}
 
@@ -126,6 +108,22 @@ namespace deferred
 	{
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();
+	}
+
+	void RenderTechnique::DoUpdateSceneUbo()
+	{
+		auto & l_fog = m_renderTarget.GetScene()->GetFog();
+		auto l_fogType = l_fog.GetType();
+
+		m_fogType->SetValue( int( l_fog.GetType() ) );
+
+		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
+		{
+			m_fogDensity->SetValue( l_fog.GetDensity() );
+		}
+
+		m_cameraPos->SetValue( m_renderTarget.GetCamera()->GetParent()->GetDerivedPosition() );
+		m_sceneUbo.Update();
 	}
 
 	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
@@ -136,7 +134,6 @@ namespace deferred
 		m_geometryPassFrameBuffer->Clear();
 		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
-		// Render the light pass.
 
 #if DEBUG_DEFERRED_BUFFERS
 
@@ -157,92 +154,34 @@ namespace deferred
 		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( DsTexture::eEmissive )]->GetTexture() );
 
 #else
-		auto & l_scene = *m_renderTarget.GetScene();
-		auto & l_camera = *m_renderTarget.GetCamera();
+
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
 		m_frameBuffer.m_frameBuffer->Clear();
-
-		auto & l_fog = l_scene.GetFog();
-		auto l_fogType = l_fog.GetType();
-		m_sceneNode->m_fogType.SetValue( int( l_fog.GetType() ) );
-
-		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
-		{
-			m_sceneNode->m_fogDensity.SetValue( l_fog.GetDensity() );
-		}
-
-		auto & l_cache = l_scene.GetLightCache();
-		auto l_lock = make_unique_lock( l_cache );
-		m_sceneNode->m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
-
-		m_sceneNode->m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
-		m_sceneNode->m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
-		m_sceneUbo.Update();
-		bool l_first{ true };
-
-		if ( l_cache.GetLightsCount( LightType::eDirectional ) )
-		{
-			for ( auto & l_light : l_cache.GetLights( LightType::eDirectional ) )
-			{
-				if ( l_light->IsShadowProducer() )
-				{
-					m_opaquePass->GetDirectionalShadowMap().Render( *l_light->GetDirectionalLight() );
-					m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-					m_directionalLightPassShadow.Render( m_size
-						, m_lightPassTextures
-						, *l_light->GetDirectionalLight()
-						, uint16_t( l_fogType )
-						, l_first );
-				}
-				else
-				{
-					m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-					m_directionalLightPass.Render( m_size
-						, m_lightPassTextures
-						, *l_light->GetDirectionalLight()
-						, uint16_t( l_fogType )
-						, l_first );
-				}
-				l_first = false;
-			}
-		}
-
-		if ( l_cache.GetLightsCount( LightType::ePoint ) )
-		{
-			for ( auto & l_light : l_cache.GetLights( LightType::ePoint ) )
-			{
-				m_frameBuffer.m_frameBuffer->ClearComponent( BufferComponent::eStencil );
-				m_pointLightPass.Render( m_size
-					, m_lightPassTextures
-					, *l_light->GetPointLight()
-					, l_camera
-					, uint16_t( l_fogType )
-					, l_first );
-				l_first = false;
-			}
-		}
-
-		if ( l_cache.GetLightsCount( LightType::eSpot ) )
-		{
-			for ( auto & l_light : l_cache.GetLights( LightType::eSpot ) )
-			{
-				m_frameBuffer.m_frameBuffer->ClearComponent( BufferComponent::eStencil );
-				m_spotLightPass.Render( m_size
-					, m_lightPassTextures
-					, *l_light->GetSpotLight()
-					, l_camera
-					, uint16_t( GetFogType( l_scene.GetFlags() ) )
-					, l_first );
-				l_first = false;
-			}
-		}
-
 		m_frameBuffer.m_frameBuffer->Unbind();
+
+		DoUpdateSceneUbo();
+
+		auto & l_cache = m_renderTarget.GetScene()->GetLightCache();
+
+		if ( !l_cache.IsEmpty() )
+		{
+#if !defined( NDEBUG )
+
+			g_index = 0;
+
+#endif
+
+			auto l_lock = make_unique_lock( l_cache );
+			bool l_first{ true };
+			DoRenderLights( LightType::eDirectional, l_first );
+			DoRenderLights( LightType::ePoint, l_first );
+			DoRenderLights( LightType::eSpot, l_first );
+		}
+
 		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
 			, Rectangle{ Position{}, m_size }
-		, BufferComponent::eDepth | BufferComponent::eStencil );
+			, BufferComponent::eDepth | BufferComponent::eStencil );
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 
 #endif
@@ -261,7 +200,7 @@ namespace deferred
 		return true;
 	}
 
-	bool RenderTechnique::DoCreateGeometryPass()
+	bool RenderTechnique::DoInitialiseGeometryPass( uint32_t & p_index )
 	{
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
@@ -274,46 +213,33 @@ namespace deferred
 			l_return = m_lightPassDepthBuffer->Create();
 		}
 
-		return l_return;
-	}
-
-	bool RenderTechnique::DoCreateLightPass()
-	{
-		auto & l_scene = *m_renderTarget.GetScene();
-		m_directionalLightPass.Create( l_scene );
-		m_pointLightPass.Create( l_scene );
-		m_spotLightPass.Create( l_scene );
-		m_directionalLightPassShadow.Create( l_scene );
-		m_pointLightPassShadow.Create( l_scene );
-		m_spotLightPassShadow.Create( l_scene );
-		return true;
-	}
-
-	void RenderTechnique::DoDestroyGeometryPass()
-	{
-		m_lightPassDepthBuffer->Destroy();
-		m_lightPassDepthBuffer.reset();
-		m_geometryPassFrameBuffer->Destroy();
-		m_geometryPassFrameBuffer.reset();
-	}
-
-	void RenderTechnique::DoDestroyLightPass()
-	{
-		m_directionalLightPass.Destroy();
-		m_pointLightPass.Destroy();
-		m_spotLightPass.Destroy();
-		m_directionalLightPassShadow.Destroy();
-		m_pointLightPassShadow.Destroy();
-		m_spotLightPassShadow.Destroy();
-		m_sceneUbo.Cleanup();
-	}
-
-	bool RenderTechnique::DoInitialiseGeometryPass()
-	{
-		bool l_return = m_geometryPassFrameBuffer->Initialise( m_size );
+		if ( l_return )
+		{
+			l_return = m_geometryPassFrameBuffer->Initialise( m_size );
+		}
 
 		if ( l_return )
 		{
+			for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
+			{
+				auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions
+					, AccessType::eNone
+					, AccessType::eRead | AccessType::eWrite
+					, GetTextureFormat( DsTexture( i ) )
+					, m_size );
+				l_texture->GetImage().InitialiseSource();
+
+				m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
+				m_lightPassTextures[i]->SetIndex( i );
+				m_lightPassTextures[i]->SetTexture( l_texture );
+				m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
+				m_lightPassTextures[i]->Initialise();
+
+				m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
+				p_index++;
+			}
+
+			m_lightPassDepthBuffer->Initialise( m_size );
 			m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
 
 			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
@@ -332,41 +258,45 @@ namespace deferred
 		return l_return;
 	}
 
-	bool RenderTechnique::DoInitialiseLightPass( uint32_t & p_index )
+	bool RenderTechnique::DoInitialiseLightPass()
 	{
-		bool l_return = true;
-		m_directionalLightPass.Initialise( m_sceneUbo );
-		m_pointLightPass.Initialise( m_sceneUbo );
-		m_spotLightPass.Initialise( m_sceneUbo );
-		m_directionalLightPassShadow.Initialise( m_sceneUbo );
-		m_pointLightPassShadow.Initialise( m_sceneUbo );
-		m_spotLightPassShadow.Initialise( m_sceneUbo );
+		auto & l_scene = *m_renderTarget.GetScene();
+		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( *m_renderTarget.GetEngine()
+			, *m_frameBuffer.m_frameBuffer
+			, *m_frameBuffer.m_depthAttach
+			, false );
+		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( *m_renderTarget.GetEngine()
+			, *m_frameBuffer.m_frameBuffer
+			, *m_frameBuffer.m_depthAttach
+			, false );
+		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( *m_renderTarget.GetEngine()
+			, *m_frameBuffer.m_frameBuffer
+			, *m_frameBuffer.m_depthAttach
+			, false );
+		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( *m_renderTarget.GetEngine()
+			, *m_frameBuffer.m_frameBuffer
+			, *m_frameBuffer.m_depthAttach
+			, m_opaquePass->GetDirectionalShadowMap() );
+		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( *m_renderTarget.GetEngine()
+			, *m_frameBuffer.m_frameBuffer
+			, *m_frameBuffer.m_depthAttach
+			, m_opaquePass->GetPointShadowMaps() );
+		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( *m_renderTarget.GetEngine()
+			, *m_frameBuffer.m_frameBuffer
+			, *m_frameBuffer.m_depthAttach
+			, m_opaquePass->GetSpotShadowMap() );
 
-		for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
+		for ( auto & l_lightPass : m_lightPass )
 		{
-			auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, GetTextureFormat( DsTexture( i ) )
-				, m_size );
-			l_texture->GetImage().InitialiseSource();
-
-			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
-			m_lightPassTextures[i]->SetIndex( i );
-			m_lightPassTextures[i]->SetTexture( l_texture );
-			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
-			m_lightPassTextures[i]->Initialise();
-
-			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
-			p_index++;
+			l_lightPass->Initialise( l_scene, m_sceneUbo );
 		}
 
-		if ( l_return )
+		for ( auto & l_lightPass : m_lightPassShadow )
 		{
-			m_lightPassDepthBuffer->Initialise( m_size );
+			l_lightPass->Initialise( l_scene, m_sceneUbo );
 		}
 
-		return l_return;
+		return true;
 	}
 
 	void RenderTechnique::DoCleanupGeometryPass()
@@ -375,21 +305,70 @@ namespace deferred
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();
+		m_lightPassDepthBuffer->Destroy();
+		m_lightPassDepthBuffer.reset();
+		m_geometryPassFrameBuffer->Destroy();
+		m_geometryPassFrameBuffer.reset();
 	}
 
 	void RenderTechnique::DoCleanupLightPass()
 	{
-		m_directionalLightPass.Cleanup();
-		m_pointLightPass.Cleanup();
-		m_spotLightPass.Cleanup();
-		m_directionalLightPassShadow.Cleanup();
-		m_pointLightPassShadow.Cleanup();
-		m_spotLightPassShadow.Cleanup();
-
 		for ( auto & l_unit : m_lightPassTextures )
 		{
 			l_unit->Cleanup();
 			l_unit.reset();
+		}
+
+		for ( auto & l_lightPass : m_lightPass )
+		{
+			l_lightPass->Cleanup();
+			l_lightPass.reset();
+		}
+
+		for ( auto & l_lightPass : m_lightPassShadow )
+		{
+			l_lightPass->Cleanup();
+			l_lightPass.reset();
+		}
+
+		m_sceneUbo.Cleanup();
+	}
+
+	void RenderTechnique::DoRenderLights( LightType p_type, bool & p_first )
+	{
+		auto & l_scene = *m_renderTarget.GetScene();
+		auto & l_cache = l_scene.GetLightCache();
+
+		if ( l_cache.GetLightsCount( p_type ) )
+		{
+			auto l_fogType = l_scene.GetFog().GetType();
+			auto & l_camera = *m_renderTarget.GetCamera();
+			auto & l_lightPass = *m_lightPass[size_t( p_type )];
+			auto & l_lightPassShadow = *m_lightPassShadow[size_t( p_type )];
+
+			for ( auto & l_light : l_cache.GetLights( p_type ) )
+			{
+				if ( l_light->IsShadowProducer() )
+				{
+					l_lightPassShadow.Render( m_size
+						, m_lightPassTextures
+						, *l_light
+						, l_camera
+						, l_fogType
+						, p_first );
+				}
+				else
+				{
+					l_lightPass.Render( m_size
+						, m_lightPassTextures
+						, *l_light
+						, l_camera
+						, l_fogType
+						, p_first );
+				}
+
+				p_first = false;
+			}
 		}
 	}
 }

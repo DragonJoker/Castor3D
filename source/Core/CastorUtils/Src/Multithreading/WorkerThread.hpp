@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___CU_WorkerThread_H___
 
 #include "CastorUtilsPrerequisites.hpp"
+#include "Design/Signal.hpp"
 
 #include <thread>
 #include <functional>
@@ -45,6 +46,7 @@ namespace Castor
 	{
 	public:
 		using Job = std::function< void() >;
+		using OnEnded = Signal< std::function< void( WorkerThread & ) > >;
 
 	public:
 		/**
@@ -66,15 +68,15 @@ namespace Castor
 		 *\brief		Runs the given job.
 		 *\param[in]	p_job	The job.
 		 *\~french
-		 *\brief		Lance la tàche donnàe.
-		 *\param[in]	p_job	La tàche.
+		 *\brief		Lance la tâche donnée.
+		 *\param[in]	p_job	La tâche.
 		 */
 		CU_API void Feed( Job p_job );
 		/**
 		 *\~english
 		 *\return		\p true if the job is ended.
 		 *\~french
-		 *\return		\p true si la tàche est terminàe.
+		 *\return		\p true si la tâche est terminàe.
 		 */
 		CU_API bool IsEnded()const;
 		/**
@@ -83,11 +85,18 @@ namespace Castor
 		 *\param[in]	p_timeout	The maximum time to wait.
 		 *\return		\p true if the task is ended.
 		 *\~french
-		 *\brief		Attend la fin de la tàche pour un temps donné.
+		 *\brief		Attend la fin de la tâche pour un temps donné.
 		 *\param[in]	p_timeout	Le temps maximal à attendre.
-		 *\return		\p true si la tàche est terminàe.
+		 *\return		\p true si la tâche est terminée.
 		 */
 		CU_API bool Wait( std::chrono::milliseconds const & p_timeout )const;
+		/**
+		 *\~english
+		 *\return		The signal raised when the worker has ended his job.
+		 *\~french
+		 *\return		Le signal lancé quand le worker a fini sa tâche.
+		 */
+		OnEnded onEnded;
 
 	private:
 		/**
@@ -104,6 +113,7 @@ namespace Castor
 		std::atomic_bool m_start{ false };
 		std::atomic_bool m_terminate{ false };
 		Job m_currentJob;
+		
 	};
 }
 

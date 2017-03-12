@@ -140,22 +140,6 @@ namespace Castor3D
 		C3D_API virtual ~RenderTechnique();
 		/**
 		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Create();
-		/**
-		 *\~english
-		 *\brief		Destruction function
-		 *\~french
-		 *\brief		Fonction de destruction
-		 */
-		C3D_API void Destroy();
-		/**
-		 *\~english
 		 *\brief		Initialisation function.
 		 *\param[in]	p_index		The base texture index.
 		 *\return		\p true if ok.
@@ -248,22 +232,6 @@ namespace Castor3D
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoCreate() = 0;
-		/**
-		 *\~english
-		 *\brief		Destruction function
-		 *\~french
-		 *\brief		Fonction de destruction
-		 */
-		C3D_API virtual void DoDestroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function

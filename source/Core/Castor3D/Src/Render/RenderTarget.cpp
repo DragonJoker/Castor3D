@@ -199,7 +199,6 @@ namespace Castor3D
 			}
 
 			m_size = m_frameBuffer.m_colorTexture.GetTexture()->GetDimensions();
-			m_renderTechnique->Create();
 			m_renderTechnique->Initialise( p_index );
 
 			for ( auto l_effect : m_postEffects )
@@ -227,7 +226,6 @@ namespace Castor3D
 			m_initialised = false;
 			GetEngine()->GetRenderTechniqueCache().Remove( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ) );
 			m_renderTechnique->Cleanup();
-			m_renderTechnique->Destroy();
 			m_frameBuffer.Cleanup();
 			m_renderTechnique.reset();
 		}

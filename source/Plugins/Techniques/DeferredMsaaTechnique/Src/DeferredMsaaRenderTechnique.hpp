@@ -106,14 +106,6 @@ namespace deferred_msaa
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoCreate
-		 */
-		bool DoCreate()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
-		 */
-		void DoDestroy()override;
-		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
 		bool DoInitialise( uint32_t & p_index )override;
@@ -157,38 +149,6 @@ namespace deferred_msaa
 			Castor3D::TextureChannels const & p_textureFlags,
 			Castor3D::ProgramFlags const & p_programFlags,
 			Castor3D::SceneFlags const & p_sceneFlags )const;
-		/**
-		 *\~english
-		 *\brief		Creates deferred rendering related stuff.
-		 *\return		\p false if anything went wrong (the technique is then not usable).
-		 *\~french
-		 *\brief		Crée les données liées au deferred rendering.
-		 *\return		\p false si un problème est survenu, la technique est alors inutilisable.
-		 */
-		bool DoCreateDeferred();
-		/**
-		 *\~english
-		 *\brief		Creates MSAA related stuff.
-		 *\return		\p false if anything went wrong (the technique is then not usable).
-		 *\~french
-		 *\brief		Crée les données liées au MSAA.
-		 *\return		\p false si un problème est survenu, la technique est alors inutilisable.
-		 */
-		bool DoCreateMsaa();
-		/**
-		 *\~english
-		 *\brief		Destroys deferred rendering related stuff.
-		 *\~french
-		 *\brief		Détruit les données liées au deferred rendering.
-		 */
-		void DoDestroyDeferred();
-		/**
-		 *\~english
-		 *\brief		Destroys MSAA related stuff.
-		 *\~french
-		 *\brief		Détruit les données liées au MSAA.
-		 */
-		void DoDestroyMsaa();
 		/**
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
@@ -239,12 +199,8 @@ namespace deferred_msaa
 		 *\param[in]	p_textureFlags	L'index de départ.
 		 */
 		void DoUnbindDepthMaps( uint32_t p_startIndex )const;
-		bool DoCreateGeometryPass();
-		bool DoCreateLightPass();
-		void DoDestroyGeometryPass();
-		void DoDestroyLightPass();
-		bool DoInitialiseGeometryPass();
-		bool DoInitialiseLightPass( uint32_t & p_index );
+		bool DoInitialiseGeometryPass( uint32_t & p_index );
+		bool DoInitialiseLightPass();
 		void DoCleanupGeometryPass();
 		void DoCleanupLightPass();
 

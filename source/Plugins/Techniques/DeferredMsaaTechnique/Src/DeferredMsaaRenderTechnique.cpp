@@ -178,17 +178,6 @@ namespace deferred_msaa
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
-	bool RenderTechnique::DoCreate()
-	{
-		return DoCreateDeferred() && DoCreateMsaa();
-	}
-
-	void RenderTechnique::DoDestroy()
-	{
-		DoDestroyMsaa();
-		DoDestroyDeferred();
-	}
-
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		return DoInitialiseDeferred( p_index ) && DoInitialiseMsaa();
@@ -432,59 +421,13 @@ namespace deferred_msaa
 		return l_writer.Finalise();
 	}
 
-	bool RenderTechnique::DoCreateDeferred()
-	{
-		bool l_return = DoCreateGeometryPass();
-
-		if ( l_return )
-		{
-			l_return = DoCreateLightPass();
-		}
-
-		return l_return;
-	}
-
-	bool RenderTechnique::DoCreateMsaa()
-	{
-		m_msaaFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_msaaColorBuffer = m_msaaFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
-		m_msaaDepthBuffer = m_msaaFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
-		m_msaaColorAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaColorBuffer );
-		m_msaaDepthAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaDepthBuffer );
-
-		bool l_bReturn = m_msaaFrameBuffer->Create();
-		m_msaaColorBuffer->SetSamplesCount( m_samplesCount );
-		m_msaaDepthBuffer->SetSamplesCount( m_samplesCount );
-		l_bReturn &= m_msaaColorBuffer->Create();
-		l_bReturn &= m_msaaDepthBuffer->Create();
-		return l_bReturn;
-	}
-
-	void RenderTechnique::DoDestroyDeferred()
-	{
-		DoDestroyLightPass();
-		DoDestroyGeometryPass();
-	}
-
-	void RenderTechnique::DoDestroyMsaa()
-	{
-		m_msaaColorBuffer->Destroy();
-		m_msaaDepthBuffer->Destroy();
-		m_msaaFrameBuffer->Destroy();
-		m_msaaDepthAttach.reset();
-		m_msaaColorAttach.reset();
-		m_msaaColorBuffer.reset();
-		m_msaaDepthBuffer.reset();
-		m_msaaFrameBuffer.reset();
-	}
-
 	bool RenderTechnique::DoInitialiseDeferred( uint32_t & p_index )
 	{
-		bool l_return = DoInitialiseLightPass( p_index );
+		bool l_return = DoInitialiseGeometryPass( p_index );
 
 		if ( l_return )
 		{
-			l_return = DoInitialiseGeometryPass();
+			l_return = DoInitialiseLightPass();
 		}
 
 		return l_return;
@@ -492,25 +435,43 @@ namespace deferred_msaa
 
 	bool RenderTechnique::DoInitialiseMsaa()
 	{
-		bool l_bReturn = true;
 		m_rect = Castor::Rectangle( Position(), m_size );
+		m_msaaFrameBuffer = m_renderSystem.CreateFrameBuffer();
+		m_msaaColorBuffer = m_msaaFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
+		m_msaaDepthBuffer = m_msaaFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
+		m_msaaColorAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaColorBuffer );
+		m_msaaDepthAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaDepthBuffer );
 
-		if ( l_bReturn )
+		bool l_result = m_msaaFrameBuffer->Create();
+		m_msaaColorBuffer->SetSamplesCount( m_samplesCount );
+		m_msaaDepthBuffer->SetSamplesCount( m_samplesCount );
+
+		if ( l_result )
 		{
-			l_bReturn = m_msaaColorBuffer->Initialise( m_size );
+			l_result = m_msaaColorBuffer->Create();
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			l_bReturn = m_msaaDepthBuffer->Initialise( m_size );
+			l_result = m_msaaDepthBuffer->Create();
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			l_bReturn = m_msaaFrameBuffer->Initialise( m_size );
+			l_result = m_msaaColorBuffer->Initialise( m_size );
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
+		{
+			l_result = m_msaaDepthBuffer->Initialise( m_size );
+		}
+
+		if ( l_result )
+		{
+			l_result = m_msaaFrameBuffer->Initialise( m_size );
+		}
+
+		if ( l_result )
 		{
 			m_msaaFrameBuffer->Bind( FrameBufferMode::eConfig );
 			m_msaaFrameBuffer->Attach( AttachmentPoint::eColour, m_msaaColorAttach );
@@ -518,7 +479,7 @@ namespace deferred_msaa
 			m_msaaFrameBuffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_result;
 	}
 
 	void RenderTechnique::DoCleanupDeferred()
@@ -535,6 +496,14 @@ namespace deferred_msaa
 		m_msaaFrameBuffer->Cleanup();
 		m_msaaColorBuffer->Cleanup();
 		m_msaaDepthBuffer->Cleanup();
+		m_msaaColorBuffer->Destroy();
+		m_msaaDepthBuffer->Destroy();
+		m_msaaFrameBuffer->Destroy();
+		m_msaaDepthAttach.reset();
+		m_msaaColorAttach.reset();
+		m_msaaColorBuffer.reset();
+		m_msaaDepthBuffer.reset();
+		m_msaaFrameBuffer.reset();
 	}
 
 	void RenderTechnique::DoBindDepthMaps( uint32_t p_startIndex )
@@ -571,7 +540,7 @@ namespace deferred_msaa
 		//}
 	}
 
-	bool RenderTechnique::DoCreateGeometryPass()
+	bool RenderTechnique::DoInitialiseGeometryPass( uint32_t & p_index )
 	{
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
@@ -584,11 +553,73 @@ namespace deferred_msaa
 			l_return = m_lightPassDepthBuffer->Create();
 		}
 
+		if ( l_return )
+		{
+			l_return = m_geometryPassFrameBuffer->Initialise( m_size );
+		}
+
+		if ( l_return )
+		{
+			for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
+			{
+				auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, GetTextureFormat( DsTexture( i ) ), m_size );
+				l_texture->GetImage().InitialiseSource();
+
+				m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
+				m_lightPassTextures[i]->SetIndex( i + 1 ); // +1 because light texture is at index 0
+				m_lightPassTextures[i]->SetTexture( l_texture );
+				m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
+				m_lightPassTextures[i]->Initialise();
+
+				m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
+				p_index++;
+			}
+
+			m_lightPassDepthBuffer->Initialise( m_size );
+			m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
+
+			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
+			{
+				m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
+					, GetTextureAttachmentIndex( DsTexture( i ) )
+					, m_geometryPassTexAttachs[i]
+					, m_lightPassTextures[i]->GetType() );
+			}
+
+			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepth, m_geometryPassDepthAttach );
+			m_geometryPassFrameBuffer->IsComplete();
+			m_geometryPassFrameBuffer->Unbind();
+		}
+
+		m_viewport.Initialise();
 		return l_return;
 	}
 
-	bool RenderTechnique::DoCreateLightPass()
+	bool RenderTechnique::DoInitialiseLightPass()
 	{
+		m_declaration = BufferDeclaration(
+		{
+			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 ),
+			BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 ),
+		} );
+
+		real l_data[] =
+		{
+			0, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 1, 0, 1,
+			0, 0, 0, 0,
+			1, 0, 1, 0,
+			1, 1, 1, 1,
+		};
+
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem.GetEngine(), m_declaration );
+		uint32_t l_stride = m_declaration.stride();
+		m_vertexBuffer->Resize( sizeof( l_data ) );
+		uint8_t * l_buffer = m_vertexBuffer->data();
+		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
+		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+
 		ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto & l_scene = *m_renderTarget.GetScene();
 		uint16_t l_fog{ 0u };
@@ -633,121 +664,18 @@ namespace deferred_msaa
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
 			l_dsstate.SetDepthMask( WritingMask::eZero );
+			l_program.m_program->Initialise();
 			l_program.m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program.m_program, PipelineFlags{} );
+			l_program.m_pipeline->AddUniformBuffer( m_matrixUbo );
+			l_program.m_pipeline->AddUniformBuffer( m_sceneUbo );
+			l_program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::eTriangles, *l_program.m_program );
+			l_program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 
 			++l_fog;
 		}
 
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
-		m_declaration = BufferDeclaration(
-		{
-			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 ),
-			BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 ),
-		} );
-
-		real l_data[] =
-		{
-			0, 0, 0, 0,
-			1, 1, 1, 1,
-			0, 1, 0, 1,
-			0, 0, 0, 0,
-			1, 0, 1, 0,
-			1, 1, 1, 1,
-		};
-
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem.GetEngine(), m_declaration );
-		uint32_t l_stride = m_declaration.stride();
-		m_vertexBuffer->Resize( sizeof( l_data ) );
-		uint8_t * l_buffer = m_vertexBuffer->data();
-		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
-
 		return true;
-	}
-
-	void RenderTechnique::DoDestroyGeometryPass()
-	{
-		m_lightPassDepthBuffer->Destroy();
-		m_lightPassDepthBuffer.reset();
-		m_geometryPassFrameBuffer->Destroy();
-		m_geometryPassFrameBuffer.reset();
-	}
-
-	void RenderTechnique::DoDestroyLightPass()
-	{
-		m_vertexBuffer.reset();
-		m_matrixUbo.Cleanup();
-		m_sceneUbo.Cleanup();
-
-		for ( auto & program : m_lightPassShaderPrograms )
-		{
-			program.m_pipeline->Cleanup();
-			program.m_pipeline.reset();
-			program.m_geometryBuffers.reset();
-			program.m_program.reset();
-		}
-	}
-
-	bool RenderTechnique::DoInitialiseGeometryPass()
-	{
-		bool l_return = m_geometryPassFrameBuffer->Initialise( m_size );
-
-		if ( l_return )
-		{
-			m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
-
-			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
-			{
-				m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
-					, GetTextureAttachmentIndex( DsTexture( i ) )
-					, m_geometryPassTexAttachs[i]
-					, m_lightPassTextures[i]->GetType() );
-			}
-
-			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepth, m_geometryPassDepthAttach );
-			m_geometryPassFrameBuffer->IsComplete();
-			m_geometryPassFrameBuffer->Unbind();
-		}
-
-		m_viewport.Initialise();
-		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-
-		for ( auto & program : m_lightPassShaderPrograms )
-		{
-			program.m_program->Initialise();
-			program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::eTriangles, *program.m_program );
-			program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
-			program.m_pipeline->AddUniformBuffer( m_matrixUbo );
-			program.m_pipeline->AddUniformBuffer( m_sceneUbo );
-		}
-
-		return l_return;
-	}
-
-	bool RenderTechnique::DoInitialiseLightPass( uint32_t & p_index )
-	{
-		bool l_return = true;
-
-		for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
-		{
-			auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, GetTextureFormat( DsTexture( i ) ), m_size );
-			l_texture->GetImage().InitialiseSource();
-
-			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
-			m_lightPassTextures[i]->SetIndex( i + 1 ); // +1 because light texture is at index 0
-			m_lightPassTextures[i]->SetTexture( l_texture );
-			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
-			m_lightPassTextures[i]->Initialise();
-
-			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
-			p_index++;
-		}
-
-		if ( l_return )
-		{
-			m_lightPassDepthBuffer->Initialise( m_size );
-		}
-
-		return l_return;
 	}
 
 	void RenderTechnique::DoCleanupGeometryPass()
@@ -756,6 +684,10 @@ namespace deferred_msaa
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();
+		m_lightPassDepthBuffer->Destroy();
+		m_lightPassDepthBuffer.reset();
+		m_geometryPassFrameBuffer->Destroy();
+		m_geometryPassFrameBuffer.reset();
 	}
 
 	void RenderTechnique::DoCleanupLightPass()
@@ -764,16 +696,22 @@ namespace deferred_msaa
 		{
 			program.m_geometryBuffers->Cleanup();
 			program.m_geometryBuffers.reset();
-			program.m_program->Cleanup();
+			program.m_pipeline->Cleanup();
+			program.m_pipeline.reset();
+			program.m_program.reset();
 		}
 
 		m_viewport.Cleanup();
 		m_vertexBuffer->Cleanup();
+		m_vertexBuffer.reset();
 
 		for ( auto & l_unit : m_lightPassTextures )
 		{
 			l_unit->Cleanup();
 			l_unit.reset();
 		}
+
+		m_matrixUbo.Cleanup();
+		m_sceneUbo.Cleanup();
 	}
 }

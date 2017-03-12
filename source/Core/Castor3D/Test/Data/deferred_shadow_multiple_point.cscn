@@ -3,7 +3,7 @@ debug_overlays true
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0 0 0 1
+	ambient_light 0.5 0.5 0.5 1.0
 
 	material "Silver"
 	{
@@ -42,82 +42,65 @@ scene "Scene"
 		}
 	}
 
-	scene_node "LightNode"
+	scene_node "PointLightNode1"
 	{
-		orientation 1 0 0 45
+		position 0 50 0
 	}
 
-	scene_node "SpotLightNode"
+	scene_node "PointLightNode2"
 	{
-		orientation 1 0 0 45
-		position 0.0 100.0 -100.0
+		position 0 -50 0
 	}
 
-	scene_node "PointLightNode"
-	{
-		position 0.0 100.0 0.0
-	}
-
-	light "Light"
-	{
-		type directional
-		parent "LightNode"
-		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
-		shadow_producer true
-	}
-
-	light "PointLight"
+	light "PointLight1"
 	{
 		type point
-		parent "PointLightNode"
-		colour 0.0 1.0 0.0
-		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.001 0.001
-		shadow_producer true
-	}
-
-	light "SpotLight"
-	{
-		type spot
-		parent "SpotLightNode"
-		colour 1.0 0.0 0.0
+		parent "PointLightNode1"
+		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
 		attenuation 1.0 0.0001 0.0001
-		cut_off 20
 		shadow_producer true
 	}
 
-	scene_node "Plane"
+	light "PointLight2"
 	{
-		position 0.0 0.0 0.0
-		orientation 1.0 0.0 0.0 90.0
+		type point
+		parent "PointLightNode2"
+		colour 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0 1.0
+		attenuation 1.0 0.0001 0.0001
+		shadow_producer true
+	}
+
+	scene_node "Cube"
+	{
+	}
+
+	scene_node "SphereRight"
+	{
+		position 100 0 0
+	}
+
+	scene_node "SphereTop"
+	{
+		position 0 100 0
+	}
+
+	scene_node "SphereFar"
+	{
+		position 0 0 100
 	}
 
 	scene_node "Torus"
 	{
-		position 0.0 30.0 0.0
 	}
 
-	object "SpotLight"
+	object "PointLight1"
 	{
-		parent "SpotLightNode"
+		parent "PointLightNode1"
 		cast_shadows false
 
-		mesh "SpotLightMesh"
-		{
-			type cube 1.0 1.0 4.0
-		}
-
-		material "WhiteEmit"
-	}
-
-	object "PointLight"
-	{
-		parent "PointLightNode"
-		cast_shadows false
-
-		mesh "PointLightMesh"
+		mesh "LightMesh"
 		{
 			type sphere 20 1
 		}
@@ -125,16 +108,52 @@ scene "Scene"
 		material "WhiteEmit"
 	}
 
-	object "Plane"
+	object "PointLight2"
 	{
-		parent "Plane"
+		parent "PointLightNode2"
+		cast_shadows false
+		mesh "LightMesh"
+		material "WhiteEmit"
+	}
 
-		mesh "Plane"
+	object "Cube"
+	{
+		parent "Cube"
+
+		mesh "Cube"
 		{
-			type plane 0 0 200 200
+			type cube 400 400 400
 		}
 
 		material "Gold"
+	}
+
+	object "SphereRight"
+	{
+		parent "SphereRight"
+
+		mesh "Sphere"
+		{
+			type sphere 20 10
+		}
+
+		material "Silver"
+	}
+
+	object "SphereTop"
+	{
+		parent "SphereTop"
+
+		mesh "Sphere"
+		material "Silver"
+	}
+
+	object "SphereFar"
+	{
+		parent "SphereFar"
+
+		mesh "Sphere"
+		material "Silver"
 	}
 
 	object "Torus"
@@ -151,8 +170,7 @@ scene "Scene"
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 180.0 -200.0
-		orientation 0.320588 0 0 40.947219
+		position 0.0 80.0 -100.0
 	}
 
 	camera "MainCamera"
@@ -177,7 +195,6 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
-			technique "deferred"
 		}
 
 		fullscreen false

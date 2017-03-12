@@ -1,6 +1,8 @@
 #include "LightPass.hpp"
 
 #include <Engine.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/ShaderProgram.hpp>
@@ -132,10 +134,9 @@ namespace deferred
 
 	//************************************************************************************************
 
-	void LightPass::Program::DoCreate( Scene const & p_scene
+	LightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl
-		, uint16_t p_fogType )
+		, String const & p_pxl )
 	{
 		auto & l_engine = *p_scene.GetEngine();
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
@@ -157,7 +158,7 @@ namespace deferred
 		}
 	}
 
-	void LightPass::Program::DoDestroy()
+	LightPass::Program::~Program()
 	{
 		m_firstPipeline->Cleanup();
 		m_blendPipeline->Cleanup();
@@ -171,23 +172,38 @@ namespace deferred
 		m_program.reset();
 	}
 
-	void LightPass::Program::DoInitialise( UniformBuffer & p_matrixUbo
-		, UniformBuffer & p_sceneUbo )
+	void LightPass::Program::Initialise( VertexBuffer & p_vbo
+		, IndexBufferSPtr p_ibo
+		, UniformBuffer & p_matrixUbo
+		, UniformBuffer & p_sceneUbo
+		, UniformBuffer * p_modelMatrixUbo )
 	{
 		m_program->Initialise();
 		m_firstPipeline->AddUniformBuffer( p_matrixUbo );
 		m_firstPipeline->AddUniformBuffer( p_sceneUbo );
 		m_blendPipeline->AddUniformBuffer( p_matrixUbo );
 		m_blendPipeline->AddUniformBuffer( p_sceneUbo );
+
+		if ( p_modelMatrixUbo )
+		{
+			m_firstPipeline->AddUniformBuffer( *p_modelMatrixUbo );
+			m_blendPipeline->AddUniformBuffer( *p_modelMatrixUbo );
+		}
+
+		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
+		m_geometryBuffers->Initialise( { p_vbo }, p_ibo );
 	}
 
-	void LightPass::Program::DoCleanup()
+	void LightPass::Program::Cleanup()
 	{
+		m_geometryBuffers->Cleanup();
+		m_geometryBuffers.reset();
 		m_program->Cleanup();
 	}
 
-	void LightPass::Program::DoBind( Size const & p_size
-		, Castor3D::LightCategory const & p_light
+	void LightPass::Program::Render( Size const & p_size
+		, Castor3D::Light const & p_light
+		, uint32_t p_count
 		, bool p_first )
 	{
 		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
@@ -202,36 +218,112 @@ namespace deferred
 		{
 			m_currentPipeline = m_blendPipeline;
 		}
+
+		DoBind( p_light );
+		m_currentPipeline->Apply();
+		m_geometryBuffers->Draw( p_count, 0 );
 	}
 
 	//************************************************************************************************
 
-	LightPass::LightPass( Engine & p_engine )
+	LightPass::LightPass( Engine & p_engine
+		, FrameBuffer & p_frameBuffer
+		, RenderBufferAttachment & p_depthAttach
+		, bool p_shadows )
 		: m_engine{ p_engine }
+		, m_shadows{ p_shadows }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
+		, m_frameBuffer{ p_frameBuffer }
+		, m_depthAttach{ p_depthAttach }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 	}
 
-	void LightPass::DoBeginRender( Size const & p_size
-		, GeometryPassResult const & p_gp )
+	void LightPass::Update( Castor::Size const & p_size
+		, Castor3D::Light const & p_light
+		, Castor3D::Camera const & p_camera )
 	{
+		DoUpdate( p_size, p_light, p_camera );
+	}
+
+	void LightPass::DoInitialise( Scene const & p_scene
+		, LightType p_type
+		, VertexBuffer & p_vbo
+		, IndexBufferSPtr p_ibo
+		, UniformBuffer & p_sceneUbo
+		, UniformBuffer * p_modelMatrixUbo )
+	{
+		uint16_t l_fogType{ 0u };
+
+		for ( auto & l_program : m_programs )
+		{
+			SceneFlags l_sceneFlags{ p_scene.GetFlags() };
+			RemFlag( l_sceneFlags, SceneFlag::eFogSquaredExponential );
+			AddFlag( l_sceneFlags, SceneFlag( l_fogType ) );
+			l_program = DoCreateProgram( p_scene
+				, DoGetVertexShaderSource( l_sceneFlags )
+				, DoGetPixelShaderSource( l_sceneFlags, p_type ) );
+			l_program->Initialise( p_vbo
+				, p_ibo
+				, m_matrixUbo
+				, p_sceneUbo
+				, p_modelMatrixUbo );
+			l_fogType++;
+		}
+	}
+
+	void LightPass::DoCleanup()
+	{
+		for ( auto & l_program : m_programs )
+		{
+			l_program->Cleanup();
+			l_program.reset();
+		}
+	}
+
+	void LightPass::Render( Size const & p_size
+		, GeometryPassResult const & p_gp
+		, Light const & p_light
+		, Camera const & p_camera
+		, GLSL::FogType p_fogType
+		, bool p_first )
+	{
+		Update( p_size, p_light, p_camera );
+		DoRender( p_size
+			, p_gp
+			, p_light
+			, p_fogType
+			, p_first );
+	}
+
+	void LightPass::DoRender( Castor::Size const & p_size
+		, GeometryPassResult const & p_gp
+		, Castor3D::Light const & p_light
+		, GLSL::FogType p_fogType
+		, bool p_first )
+	{
+		m_frameBuffer.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 		p_gp[size_t( DsTexture::ePosition )]->Bind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Bind();
 		p_gp[size_t( DsTexture::eNormals )]->Bind();
 		p_gp[size_t( DsTexture::eAmbient )]->Bind();
 		p_gp[size_t( DsTexture::eSpecular )]->Bind();
 		p_gp[size_t( DsTexture::eEmissive )]->Bind();
-	}
 
-	void LightPass::DoEndRender( GeometryPassResult const & p_gp )
-	{
+		auto & l_program = *m_programs[uint16_t( p_fogType )];
+		l_program.Render( p_size
+			, p_light
+			, GetCount()
+			, p_first );
+
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
 		p_gp[size_t( DsTexture::eSpecular )]->Unbind();
 		p_gp[size_t( DsTexture::eAmbient )]->Unbind();
 		p_gp[size_t( DsTexture::eNormals )]->Unbind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Unbind();
 		p_gp[size_t( DsTexture::ePosition )]->Unbind();
+		m_frameBuffer.Unbind();
 	}
 
 	String LightPass::DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
@@ -257,7 +349,7 @@ namespace deferred
 		case LightType::eDirectional:
 			{
 				l_lighting = l_writer.CreateDirectionalLightingModel( PhongLightingModel::Name
-					, ShadowType::eNone );
+					, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
 				auto light = l_writer.GetUniform< GLSL::DirectionalLight >( cuT( "light" ) );
 			}
 			break;
@@ -265,7 +357,7 @@ namespace deferred
 		case LightType::ePoint:
 			{
 				l_lighting = l_writer.CreatePointLightingModel( PhongLightingModel::Name
-					, ShadowType::eNone );
+					, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
 				auto light = l_writer.GetUniform< GLSL::PointLight >( cuT( "light" ) );
 			}
 			break;
@@ -273,7 +365,7 @@ namespace deferred
 		case LightType::eSpot:
 			{
 				l_lighting = l_writer.CreateSpotLightingModel( PhongLightingModel::Name
-					, ShadowType::eNone );
+					, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
 				auto light = l_writer.GetUniform< GLSL::SpotLight >( cuT( "light" ) );
 			}
 			break;

@@ -1,6 +1,8 @@
 #include "StencilPass.hpp"
 
 #include <Engine.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Scene.hpp>
@@ -57,6 +59,13 @@ namespace deferred
 
 	//*********************************************************************************************
 
+	StencilPass::StencilPass( FrameBuffer & p_frameBuffer
+		, RenderBufferAttachment & p_depthAttach )
+		: m_frameBuffer{ p_frameBuffer }
+		, m_depthAttach{ p_depthAttach }
+	{
+	}
+
 	void StencilPass::Initialise( Castor3D::VertexBuffer & p_vbo
 		, Castor3D::IndexBufferSPtr p_ibo )
 	{
@@ -107,8 +116,12 @@ namespace deferred
 
 	void StencilPass::Render( uint32_t p_count )
 	{
+		m_frameBuffer.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
+		m_frameBuffer.ClearComponent( BufferComponent::eStencil );
 		m_pipeline->Apply();
 		m_geometryBuffers->Draw( p_count, 0 );
+		m_frameBuffer.Unbind();
 	}
 
 	//*********************************************************************************************

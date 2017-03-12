@@ -13,6 +13,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Light/Light.hpp"
+#include "Scene/Light/PointLight.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "ShadowMap/ShadowMapPassPoint.hpp"
@@ -52,21 +53,32 @@ namespace Castor3D
 	{
 		if ( !m_passes.empty() )
 		{
-			m_sorted.clear();
-
-			for ( auto & l_it : m_passes )
-			{
-				m_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
-						, l_it.first->GetParent()->GetDerivedPosition() )
-					, l_it.second );
-			}
-
 			const int32_t l_max = DoGetMaxPasses();
-			auto l_it = m_sorted.begin();
 
-			for ( auto i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
+			if ( l_max > 1 )
 			{
-				l_it->second->Update( p_queues, i );
+				m_sorted.clear();
+
+				for ( auto & l_it : m_passes )
+				{
+					m_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
+							, l_it.first->GetParent()->GetDerivedPosition() )
+						, l_it.second );
+				}
+
+				auto l_it = m_sorted.begin();
+
+				for ( auto i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
+				{
+					l_it->second->Update( p_queues, i );
+				}
+			}
+			else
+			{
+				for ( auto & l_pass : m_passes )
+				{
+					l_pass.second->Update( p_queues, 0 );
+				}
 			}
 		}
 	}
@@ -82,13 +94,25 @@ namespace Castor3D
 			for ( int32_t i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
 			{
 				m_depthAttach[i]->Attach( AttachmentPoint::eDepth );
-				m_frameBuffer->Clear( BufferComponent::eDepth );
+				m_frameBuffer->ClearComponent( BufferComponent::eDepth );
 				l_it->second->Render();
 				m_depthAttach[i]->Detach();
 			}
 
 			m_frameBuffer->Unbind();
 		}
+	}
+
+	void ShadowMapPoint::Render( PointLight const & p_light )
+	{
+		auto l_it = m_passes.find( &p_light.GetLight() );
+		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
+		m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_depthAttach[0]->Attach( AttachmentPoint::eDepth );
+		m_frameBuffer->ClearComponent( BufferComponent::eDepth );
+		l_it->second->Render();
+		m_depthAttach[0]->Detach();
+		m_frameBuffer->Unbind();
 	}
 
 	int32_t ShadowMapPoint::DoGetMaxPasses()const

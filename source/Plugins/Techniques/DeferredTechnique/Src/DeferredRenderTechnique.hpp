@@ -29,12 +29,7 @@ SOFTWARE.
 #include <Render/RenderNode/SceneRenderNode.hpp>
 #include <Shader/UniformBuffer.hpp>
 
-#include "DirectionalLightPass.hpp"
-#include "DirectionalLightPassShadow.hpp"
-#include "PointLightPass.hpp"
-#include "PointLightPassShadow.hpp"
-#include "SpotLightPass.hpp"
-#include "SpotLightPassShadow.hpp"
+#include "LightPass.hpp"
 
 namespace deferred
 {
@@ -97,14 +92,6 @@ namespace deferred
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoCreate
-		 */
-		bool DoCreate()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
-		 */
-		void DoDestroy()override;
-		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
 		bool DoInitialise( uint32_t & p_index )override;
@@ -124,14 +111,12 @@ namespace deferred
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
-		bool DoCreateGeometryPass();
-		bool DoCreateLightPass();
-		void DoDestroyGeometryPass();
-		void DoDestroyLightPass();
-		bool DoInitialiseGeometryPass();
-		bool DoInitialiseLightPass( uint32_t & p_index );
+		bool DoInitialiseGeometryPass( uint32_t & p_index );
+		bool DoInitialiseLightPass();
 		void DoCleanupGeometryPass();
 		void DoCleanupLightPass();
+		void DoUpdateSceneUbo();
+		void DoRenderLights( Castor3D::LightType p_type, bool & p_first );
 
 	public:
 		static Castor::String const Type;
@@ -140,6 +125,7 @@ namespace deferred
 	private:
 		using GeometryBufferTextures = std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) >;
 		using GeometryBufferAttachs = std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::eCount ) >;
+		using LightPasses = std::array< std::unique_ptr< LightPass >, size_t( Castor3D::LightType::eCount ) >;
 
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
@@ -159,27 +145,21 @@ namespace deferred
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		Castor3D::UniformBuffer m_sceneUbo;
+		//!\~english	The shader variable holding the camera position.
+		//!\~french		La variable shader contenant la position de la caméra.
+		Castor3D::Uniform3fSPtr m_cameraPos;
+		//!\~english	The shader variable holding fog type.
+		//!\~french		La variable shader contenant le type de brouillard.
+		Castor3D::Uniform1iSPtr m_fogType;
+		//!\~english	The shader variable holding fog density.
+		//!\~french		La variable shader contenant la densité du brouillard.
+		Castor3D::Uniform1fSPtr m_fogDensity;
 		//!\~english	The shader program used to render directional lights.
 		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
-		DirectionalLightPass m_directionalLightPass;
-		//!\~english	The shader program used to render point lights.
-		//!\~french		Le shader utilisé pour rendre les lumières ponctuelles.
-		PointLightPass m_pointLightPass;
-		//!\~english	The shader program used to render spot lights.
-		//!\~french		Le shader utilisé pour rendre les lumières projecteur.
-		SpotLightPass m_spotLightPass;
+		LightPasses m_lightPass;
 		//!\~english	The shader program used to render directional lights.
 		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
-		DirectionalLightPassShadow m_directionalLightPassShadow;
-		//!\~english	The shader program used to render point lights.
-		//!\~french		Le shader utilisé pour rendre les lumières ponctuelles.
-		PointLightPassShadow m_pointLightPassShadow;
-		//!\~english	The shader program used to render spot lights.
-		//!\~french		Le shader utilisé pour rendre les lumières projecteur.
-		SpotLightPassShadow m_spotLightPassShadow;
-		//!\~english	The scene render node.
-		//!\~french		Le noeud de rendu de la scène.
-		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;
+		LightPasses m_lightPassShadow;
 	};
 }
 

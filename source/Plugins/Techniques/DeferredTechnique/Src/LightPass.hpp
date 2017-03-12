@@ -54,28 +54,26 @@ namespace deferred
 	class LightPass
 	{
 	protected:
-		LightPass( Castor3D::Engine & p_engine );
-		void DoBeginRender( Castor::Size const & p_size
-			, GeometryPassResult const & p_gp );
-		void DoEndRender( GeometryPassResult const & p_gp );
-		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
-			, Castor3D::LightType p_type )const;
-
-	protected:
 		struct Program
 		{
-		protected:
-			void DoCreate( Castor3D::Scene const & p_scene
+		public:
+			Program( Castor3D::Scene const & p_scene
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl
-				, uint16_t p_fogType );
-			void DoDestroy();
-			void DoInitialise( Castor3D::UniformBuffer & p_matrixUbo
-			, Castor3D::UniformBuffer & p_sceneUbo );
-			void DoCleanup();
-			void DoBind( Castor::Size const & p_size
-				, Castor3D::LightCategory const & p_light
+				, Castor::String const & p_pxl );
+			virtual ~Program()noexcept;
+			void Initialise( Castor3D::VertexBuffer & p_vbo
+				, Castor3D::IndexBufferSPtr p_ibo
+				, Castor3D::UniformBuffer & p_matrixUbo
+				, Castor3D::UniformBuffer & p_sceneUbo
+				, Castor3D::UniformBuffer * p_modelMatrixUbo );
+			void Cleanup();
+			void Render( Castor::Size const & p_size
+				, Castor3D::Light const & p_light
+				, uint32_t p_count
 				, bool p_first );
+
+		private:
+			virtual void DoBind( Castor3D::Light const & p_light ) = 0;
 
 		public:
 			//!\~english	The shader program used to render lights.
@@ -103,14 +101,71 @@ namespace deferred
 			//!\~french		La variable contenant les intensités de la lumière.
 			Castor3D::PushUniform3fSPtr m_lightIntensity;
 		};
+		using ProgramPtr = std::unique_ptr< Program >;
+		using Programs = std::array< ProgramPtr, size_t( GLSL::FogType::eCount ) >;
+
+	public:
+		virtual ~LightPass() = default;
+		virtual void Initialise( Castor3D::Scene const & p_scene
+			, Castor3D::UniformBuffer & p_sceneUbo ) = 0;
+		virtual void Cleanup() = 0;
+		void Update( Castor::Size const & p_size
+			, Castor3D::Light const & p_light
+			, Castor3D::Camera const & p_camera );
+		virtual void Render( Castor::Size const & p_size
+			, GeometryPassResult const & p_gp
+			, Castor3D::Light const & p_light
+			, Castor3D::Camera const & p_camera
+			, GLSL::FogType p_fogType
+			, bool p_first );
+		virtual uint32_t GetCount()const = 0;
+
+	protected:
+		LightPass( Castor3D::Engine & p_engine
+			, Castor3D::FrameBuffer & p_frameBuffer
+			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, bool p_shadows );
+		void DoInitialise( Castor3D::Scene const & p_scene
+			, Castor3D::LightType p_type
+			, Castor3D::VertexBuffer & p_vbo
+			, Castor3D::IndexBufferSPtr p_ibo
+			, Castor3D::UniformBuffer & p_sceneUbo
+			, Castor3D::UniformBuffer * p_modelMatrixUbo );
+		void DoCleanup();
+		void DoRender( Castor::Size const & p_size
+			, GeometryPassResult const & p_gp
+			, Castor3D::Light const & p_light
+			, GLSL::FogType p_fogType
+			, bool p_first );
+		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
+			, Castor3D::LightType p_type )const;
+		virtual Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const = 0;
+		virtual void DoUpdate( Castor::Size const & p_size
+			, Castor3D::Light const & p_light
+			, Castor3D::Camera const & p_camera ) = 0;
+		virtual ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
+			, Castor::String const & p_vtx
+			, Castor::String const & p_pxl ) = 0;
 
 	protected:
 		//!\~english	The engine.
 		//!\~french		Le moteur.
 		Castor3D::Engine & m_engine;
+		//!\~english	Tells if shadows are enabled.
+		//!\~french		Dit si les ombres sont activées.
+		bool m_shadows;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		Castor3D::UniformBuffer m_matrixUbo;
+		//!\~english	The target FBO.
+		//!\~french		Le FBO cible.
+		Castor3D::FrameBuffer & m_frameBuffer;
+		//!\~english	The target RBO attach.
+		//!\~french		L'attache de RBO cible.
+		Castor3D::RenderBufferAttachment & m_depthAttach;
+		//!\~english	The light pass' programs.
+		//!\~french		Les programme de la passe de lumière.
+		Programs m_programs;
 	};
 }
 

@@ -30,12 +30,20 @@ namespace deferred
 	class StencilPass
 	{
 	public:
+		StencilPass( Castor3D::FrameBuffer & p_frameBuffer
+			, Castor3D::RenderBufferAttachment & p_depthAttach );
 		void Initialise( Castor3D::VertexBuffer & p_vbo
 			, Castor3D::IndexBufferSPtr p_ibo );
 		void Cleanup();
 		void Render( uint32_t p_count );
 
 	private:
+		//!\~english	The target FBO.
+		//!\~french		Le FBO cible.
+		Castor3D::FrameBuffer & m_frameBuffer;
+		//!\~english	The target RBO attach.
+		//!\~french		L'attache de RBO cible.
+		Castor3D::RenderBufferAttachment & m_depthAttach;
 		//!\~english	The shader program used to render lights.
 		//!\~french		Le shader utilisé pour rendre les lumières.
 		Castor3D::ShaderProgramSPtr m_program;

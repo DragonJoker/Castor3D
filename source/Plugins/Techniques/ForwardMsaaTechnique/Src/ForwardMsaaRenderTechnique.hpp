@@ -86,14 +86,6 @@ namespace forward_msaa
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoCreate
-		 */
-		bool DoCreate()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
-		 */
-		void DoDestroy()override;
-		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
 		bool DoInitialise( uint32_t & p_index )override;

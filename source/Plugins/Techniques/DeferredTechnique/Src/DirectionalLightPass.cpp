@@ -25,12 +25,11 @@ namespace deferred
 
 	//*********************************************************************************************
 
-	void DirectionalLightPass::Program::Create( Scene const & p_scene
+	DirectionalLightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl
-		, uint16_t p_fogType )
+		, String const & p_pxl )
+		: LightPass::Program{ p_scene, p_vtx, p_pxl }
 	{
-		DoCreate( p_scene, p_vtx, p_pxl, p_fogType );
 		m_lightDirection = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Direction" ), ShaderType::ePixel );
 		m_lightTransform = m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_mtxLightSpace" ), ShaderType::ePixel );
 
@@ -60,63 +59,28 @@ namespace deferred
 			, PipelineFlags{} );
 	}
 
-	void DirectionalLightPass::Program::Destroy()
+	DirectionalLightPass::Program::~Program()
 	{
 		m_lightDirection = nullptr;
 		m_lightTransform = nullptr;
-		DoDestroy();
 	}
 
-	void DirectionalLightPass::Program::Initialise( VertexBuffer & p_vbo
-		, UniformBuffer & p_matrixUbo
-		, UniformBuffer & p_sceneUbo )
+	void DirectionalLightPass::Program::DoBind( Light const & p_light )
 	{
-		DoInitialise( p_matrixUbo, p_sceneUbo );
-		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->Initialise( { p_vbo }, nullptr );
-	}
-
-	void DirectionalLightPass::Program::Cleanup()
-	{
-		m_geometryBuffers->Cleanup();
-		m_geometryBuffers.reset();
-		DoCleanup();
-	}
-
-	void DirectionalLightPass::Program::Render( Size const & p_size
-		, Castor3D::DirectionalLight const & p_light
-		, bool p_first )
-	{
-		DoBind( p_size, p_light, p_first );
-		m_lightDirection->SetValue( p_light.GetDirection() );
-		m_lightTransform->SetValue( p_light.GetLightSpaceTransform() );
-		m_currentPipeline->Apply();
-		m_geometryBuffers->Draw( VertexCount, 0 );
+		auto & l_light = *p_light.GetDirectionalLight();
+		m_lightDirection->SetValue( l_light.GetDirection() );
+		m_lightTransform->SetValue( l_light.GetLightSpaceTransform() );
 	}
 
 	//*********************************************************************************************
 
-	DirectionalLightPass::DirectionalLightPass( Engine & p_engine )
-		: LightPass{ p_engine }
+	DirectionalLightPass::DirectionalLightPass( Engine & p_engine
+		, FrameBuffer & p_frameBuffer
+		, RenderBufferAttachment & p_depthAttach
+		, bool p_shadows )
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
 		, m_viewport{ p_engine }
 	{
-	}
-
-	void DirectionalLightPass::Create( Scene const & p_scene )
-	{
-		uint16_t l_fogType{ 0u };
-
-		for ( auto & l_program : m_programs )
-		{
-			SceneFlags l_sceneFlags{ p_scene.GetFlags() };
-			RemFlag( l_sceneFlags, SceneFlag::eFogSquaredExponential );
-			AddFlag( l_sceneFlags, SceneFlag( l_fogType ) );
-			l_program.Create( p_scene
-				, DoGetVertexShaderSource( l_sceneFlags )
-				, DoGetPixelShaderSource( l_sceneFlags, LightType::eDirectional )
-				, l_fogType++ );
-		}
-
 		auto l_declaration = BufferDeclaration(
 		{
 			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 ),
@@ -138,66 +102,51 @@ namespace deferred
 		uint8_t * l_buffer = m_vertexBuffer->data();
 		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
-	}
-
-	void DirectionalLightPass::Destroy()
-	{
-		m_vertexBuffer.reset();
-
-		for ( auto & l_program : m_programs )
-		{
-			l_program.Destroy();
-		}
-	}
-
-	void DirectionalLightPass::Initialise( Castor3D::UniformBuffer & p_sceneUbo )
-	{
 		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
 		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-		
-		for ( auto & l_program : m_programs )
-		{
-			l_program.Initialise( *m_vertexBuffer
-				, m_matrixUbo
-				, p_sceneUbo );
-		}
-		
 		m_viewport.Initialise();
 	}
 
-	void DirectionalLightPass::Cleanup()
+	DirectionalLightPass::~DirectionalLightPass()
 	{
-		m_viewport.Cleanup();
-
-		for ( auto & l_program : m_programs )
-		{
-			l_program.Cleanup();
-		}
-
 		m_vertexBuffer->Cleanup();
+		m_vertexBuffer.reset();
+		m_viewport.Cleanup();
 		m_projectionUniform = nullptr;
 		m_matrixUbo.Cleanup();
 	}
 
-	void DirectionalLightPass::Render( Size const & p_size
-		, GeometryPassResult const & p_gp
-		, Castor3D::DirectionalLight const & p_light
-		, uint16_t p_fogType
-		, bool p_first )
+	void DirectionalLightPass::Initialise( Scene const & p_scene
+		, UniformBuffer & p_sceneUbo )
+	{
+		DoInitialise( p_scene
+			, LightType::eDirectional
+			, *m_vertexBuffer
+			, nullptr
+			, p_sceneUbo
+			, nullptr );
+	}
+
+	void DirectionalLightPass::Cleanup()
+	{
+		DoCleanup();
+	}
+
+	uint32_t DirectionalLightPass::GetCount()const
+	{
+		return VertexCount;
+	}
+
+	void DirectionalLightPass::DoUpdate( Size const & p_size
+		, Light const & p_light
+		, Camera const & p_camera )
 	{
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
-
-		DoBeginRender( p_size, p_gp );
-		auto & l_program = m_programs[uint16_t( GetFogType( p_fogType ) )];
 		m_projectionUniform->SetValue( m_viewport.GetProjection() );
 		m_matrixUbo.Update();
-		l_program.Render( p_size
-			, p_light
-			, p_first );
-		DoEndRender( p_gp );
 	}
-	
+
 	String DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
@@ -216,5 +165,12 @@ namespace deferred
 		} );
 
 		return l_writer.Finalise();
+	}
+
+	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( Scene const & p_scene
+		, String const & p_vtx
+		, String const & p_pxl )
+	{
+		return std::make_unique< Program >( p_scene, p_vtx, p_pxl );
 	}
 }

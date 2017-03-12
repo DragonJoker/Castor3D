@@ -45,7 +45,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
+			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
 			l_return = m_depthBuffer->Create();
 		}
 
@@ -74,7 +74,7 @@ namespace Castor3D
 			{
 				m_frameBuffer->Bind( FrameBufferMode::eConfig );
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
-				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
+				m_frameBuffer->Attach( AttachmentPoint::eDepthStencil, m_depthAttach );
 				l_return = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
@@ -134,27 +134,12 @@ namespace Castor3D
 	{
 	}
 
-	bool RenderTechnique::Create()
-	{
-		return DoCreate();
-	}
-
-	void RenderTechnique::Destroy()
-	{
-		DoDestroy();
-	}
-
 	bool RenderTechnique::Initialise( uint32_t & p_index )
 	{
 		if ( !m_initialised )
 		{
 			m_size = m_renderTarget.GetSize();
-			m_initialised = DoInitialise( p_index );
-
-			if ( m_initialised )
-			{
-				m_initialised = m_frameBuffer.Initialise( m_size );
-			}
+			m_initialised = m_frameBuffer.Initialise( m_size );
 
 			if ( m_initialised )
 			{
@@ -172,6 +157,11 @@ namespace Castor3D
 				m_transparentPass->Initialise( m_size );
 			}
 
+			if ( m_initialised )
+			{
+				m_initialised = DoInitialise( p_index );
+			}
+
 			ENSURE( m_initialised );
 		}
 
@@ -180,13 +170,13 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
+		DoCleanup();
 		m_transparentPass->CleanupShadowMaps();
 		m_opaquePass->CleanupShadowMaps();
 		m_transparentPass->Cleanup();
 		m_opaquePass->Cleanup();
 		m_initialised = false;
 		m_frameBuffer.Cleanup();
-		DoCleanup();
 	}
 
 	void RenderTechnique::Update( RenderQueueArray & p_queues )
@@ -212,37 +202,6 @@ namespace Castor3D
 
 		DoRenderOpaque( p_visible );
 
-#if !defined( NDEBUG )
-
-		//if ( !m_spotShadowMap.GetPasses().empty() )
-		//{
-		//	auto & l_depthMap = m_opaquePass->GetDirectionalShadowMap().GetTexture();
-		//	Size l_size{ 256u, 256u };
-		//	m_renderSystem.GetCurrentContext()->RenderDepth( l_size
-		//		, *l_depthMap.GetTexture(), 0u );
-		//}
-		//else if ( !m_spotShadowMap.GetPasses().empty() )
-		//{
-		//	auto & l_depthMap = m_opaquePass->GetSpotShadowMap();
-		//	Size l_size{ 256u, 256u };
-		//	m_renderSystem.GetCurrentContext()->RenderDepth( l_size
-		//		, *l_depthMap.GetTexture(), 0u );
-		//}
-		//else if ( !m_pointShadowMap.GetPasses().empty() )
-		//{
-		//	Size l_size{ 512u, 512u };
-		//	auto & l_depthMap1 = m_opaquePass->GetPointShadowMaps()[0u];
-		//	m_renderSystem.GetCurrentContext()->RenderDepthCube( Position{ 0, 0 }
-		//		, Size{ l_size.width() / 4, l_size.height() / 4 }
-		//		, *l_depthMap1.GetTexture() );
-		//	auto & l_depthMap2 = m_opaquePass->GetPointShadowMaps()[1u];
-		//	m_renderSystem.GetCurrentContext()->RenderDepthCube( Position{ 0, 512 }
-		//		, Size{ l_size.width() / 4, l_size.height() / 4 }
-		//		, *l_depthMap2.GetTexture() );
-		//}
-
-#endif
-
 		if ( l_scene.GetFog().GetType() == GLSL::FogType::eDisabled )
 		{
 			l_scene.RenderBackground( GetSize(), l_camera );
@@ -260,6 +219,35 @@ namespace Castor3D
 		{
 			l_effect->Apply( *m_frameBuffer.m_frameBuffer );
 		}
+
+#if !defined( NDEBUG )
+
+		//m_frameBuffer.m_frameBuffer->Bind();
+
+		//auto & l_depthMap = m_opaquePass->GetDirectionalShadowMap().GetTexture();
+		//Size l_size{ 256u, 256u };
+		//m_renderSystem.GetCurrentContext()->RenderDepth( l_size
+		//	, *l_depthMap.GetTexture(), 0u );
+
+		//auto & l_depthMap = m_opaquePass->GetSpotShadowMap().GetTexture();
+		//Size l_size{ 256u, 256u };
+		//m_renderSystem.GetCurrentContext()->RenderDepth( Position{}
+		//	, l_size
+		//	, *l_depthMap.GetTexture(), 0u );
+
+		//Size l_size{ 512u, 512u };
+		//auto & l_depthMap1 = m_opaquePass->GetPointShadowMaps()[0u];
+		//m_renderSystem.GetCurrentContext()->RenderDepthCube( Position{ 0, 0 }
+		//	, Size{ l_size.width() / 4, l_size.height() / 4 }
+		//	, *l_depthMap1.GetTexture() );
+		//auto & l_depthMap2 = m_opaquePass->GetPointShadowMaps()[1u];
+		//m_renderSystem.GetCurrentContext()->RenderDepthCube( Position{ 0, 512 }
+		//	, Size{ l_size.width() / 4, l_size.height() / 4 }
+		//	, *l_depthMap2.GetTexture() );
+
+		//m_frameBuffer.m_frameBuffer->Unbind();
+
+#endif
 
 		m_renderSystem.PopScene();
 	}

@@ -3,7 +3,12 @@ debug_overlays true
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0 0 0 1
+	ambient_light 0.5 0.5 0.5 1.0
+
+	skybox
+	{
+		equirectangular "Textures/background.hdr" 1024 1024
+	}
 
 	material "Silver"
 	{
@@ -42,46 +47,34 @@ scene "Scene"
 		}
 	}
 
-	scene_node "LightNode"
-	{
-		orientation 1 0 0 45
-	}
-
-	scene_node "SpotLightNode"
+	scene_node "SpotLightNode1"
 	{
 		orientation 1 0 0 45
 		position 0.0 100.0 -100.0
 	}
 
-	scene_node "PointLightNode"
+	scene_node "SpotLightNode2"
 	{
-		position 0.0 100.0 0.0
+		orientation 0.82 -0.5 -0.25 95
+		position 100.0 100.0 0.0
 	}
 
-	light "Light"
-	{
-		type directional
-		parent "LightNode"
-		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
-		shadow_producer true
-	}
-
-	light "PointLight"
-	{
-		type point
-		parent "PointLightNode"
-		colour 0.0 1.0 0.0
-		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.001 0.001
-		shadow_producer true
-	}
-
-	light "SpotLight"
+	light "SpotLight1"
 	{
 		type spot
-		parent "SpotLightNode"
-		colour 1.0 0.0 0.0
+		parent "SpotLightNode1"
+		colour 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0 1.0
+		attenuation 1.0 0.0001 0.0001
+		cut_off 20
+		shadow_producer true
+	}
+
+	light "SpotLight2"
+	{
+		type spot
+		parent "SpotLightNode2"
+		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
 		attenuation 1.0 0.0001 0.0001
 		cut_off 20
@@ -99,12 +92,12 @@ scene "Scene"
 		position 0.0 30.0 0.0
 	}
 
-	object "SpotLight"
+	object "SpotLight1"
 	{
-		parent "SpotLightNode"
+		parent "SpotLightNode1"
 		cast_shadows false
 
-		mesh "SpotLightMesh"
+		mesh "LightMesh"
 		{
 			type cube 1.0 1.0 4.0
 		}
@@ -112,16 +105,11 @@ scene "Scene"
 		material "WhiteEmit"
 	}
 
-	object "PointLight"
+	object "SpotLight2"
 	{
-		parent "PointLightNode"
+		parent "SpotLightNode2"
 		cast_shadows false
-
-		mesh "PointLightMesh"
-		{
-			type sphere 20 1
-		}
-
+		mesh "LightMesh"
 		material "WhiteEmit"
 	}
 

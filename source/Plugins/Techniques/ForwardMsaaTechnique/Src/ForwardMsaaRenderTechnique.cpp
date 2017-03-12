@@ -77,44 +77,39 @@ namespace forward_msaa
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
-	bool RenderTechnique::DoCreate()
-	{
-		bool l_bReturn = m_msFrameBuffer->Create();
-		m_pMsColorBuffer->SetSamplesCount( m_samplesCount );
-		m_pMsDepthBuffer->SetSamplesCount( m_samplesCount );
-		l_bReturn &= m_pMsColorBuffer->Create();
-		l_bReturn &= m_pMsDepthBuffer->Create();
-		return l_bReturn;
-	}
-
-	void RenderTechnique::DoDestroy()
-	{
-		m_pMsColorBuffer->Destroy();
-		m_pMsDepthBuffer->Destroy();
-		m_msFrameBuffer->Destroy();
-	}
-
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
-		bool l_bReturn = true;
+		bool l_result = m_msFrameBuffer->Create();
 		m_rect = Castor::Rectangle( Position(), m_size );
+		m_pMsColorBuffer->SetSamplesCount( m_samplesCount );
+		m_pMsDepthBuffer->SetSamplesCount( m_samplesCount );
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			l_bReturn = m_pMsColorBuffer->Initialise( m_size );
+			l_result = m_pMsColorBuffer->Create();
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			l_bReturn = m_pMsDepthBuffer->Initialise( m_size );
+			l_result = m_pMsDepthBuffer->Create();
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			l_bReturn = m_msFrameBuffer->Initialise( m_size );
+			l_result = m_pMsColorBuffer->Initialise( m_size );
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
+		{
+			l_result = m_pMsDepthBuffer->Initialise( m_size );
+		}
+
+		if ( l_result )
+		{
+			l_result = m_msFrameBuffer->Initialise( m_size );
+		}
+
+		if ( l_result )
 		{
 			m_msFrameBuffer->Bind( FrameBufferMode::eConfig );
 			m_msFrameBuffer->Attach( AttachmentPoint::eColour, m_pMsColorAttach );
@@ -122,7 +117,7 @@ namespace forward_msaa
 			m_msFrameBuffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_result;
 	}
 
 	void RenderTechnique::DoCleanup()
@@ -133,6 +128,9 @@ namespace forward_msaa
 		m_msFrameBuffer->Cleanup();
 		m_pMsColorBuffer->Cleanup();
 		m_pMsDepthBuffer->Cleanup();
+		m_pMsColorBuffer->Destroy();
+		m_pMsDepthBuffer->Destroy();
+		m_msFrameBuffer->Destroy();
 	}
 
 	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )

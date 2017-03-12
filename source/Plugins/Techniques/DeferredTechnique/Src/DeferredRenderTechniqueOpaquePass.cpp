@@ -1,7 +1,5 @@
 #include "DeferredRenderTechniqueOpaquePass.hpp"
 
-#include "DeferredRenderTechnique.hpp"
-
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>

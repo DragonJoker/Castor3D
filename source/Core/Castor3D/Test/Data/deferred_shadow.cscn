@@ -152,7 +152,7 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
-			technique "deferred_msaa" -samples_count=8
+			technique "deferred"
 		}
 
 		fullscreen false

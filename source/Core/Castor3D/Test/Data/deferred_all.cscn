@@ -56,9 +56,9 @@ scene "Scene"
 	{
 		type spot
 		parent "SpotLightNode"
-		colour 1.0 1.0 1.0
+		colour 1.0 0.0 0.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.001 0.001
+		attenuation 1.0 0.0001 0.0001
 		cut_off 20
 	}
 
@@ -66,7 +66,7 @@ scene "Scene"
 	{
 		type point
 		parent "PointLightNode"
-		colour 1.0 1.0 1.0
+		colour 0.0 1.0 0.0
 		intensity 0.0 0.8 1.0 1.0
 		attenuation 1.0 0.001 0.001
 	}
