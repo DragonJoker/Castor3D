@@ -128,7 +128,7 @@ namespace GLSL
 		Declare_Light();
 		Declare_PointLight();
 		DoDeclareModel();
-		Declare_ComputePointLight();
+		Declare_ComputeOnePointLight();
 	}
 
 	void LightingModel::DeclareSpotModel()
@@ -141,7 +141,7 @@ namespace GLSL
 		Declare_Light();
 		Declare_SpotLight();
 		DoDeclareModel();
-		Declare_ComputeSpotLight();
+		Declare_ComputeOneSpotLight();
 	}
 
 	DirectionalLight LightingModel::GetDirectionalLight( Type const & p_value )
@@ -254,6 +254,38 @@ namespace GLSL
 		, OutputComponents & p_output )
 	{
 		m_writer << m_computeSpot( SpotLight{ p_light }
+			, p_worldEye
+			, p_shininess
+			, p_receivesShadows
+			, FragmentInput{ p_fragmentIn }
+			, p_output );
+		m_writer << Endi();
+	}
+
+	void LightingModel::ComputeOnePointLight( PointLight const & p_light
+		, Vec3 const & p_worldEye
+		, Float const & p_shininess
+		, Int const & p_receivesShadows
+		, FragmentInput const & p_fragmentIn
+		, OutputComponents & p_output )
+	{
+		m_writer << m_computeOnePoint( PointLight{ p_light }
+			, p_worldEye
+			, p_shininess
+			, p_receivesShadows
+			, FragmentInput{ p_fragmentIn }
+			, p_output );
+		m_writer << Endi();
+	}
+
+	void LightingModel::ComputeOneSpotLight( SpotLight const & p_light
+		, Vec3 const & p_worldEye
+		, Float const & p_shininess
+		, Int const & p_receivesShadows
+		, FragmentInput const & p_fragmentIn
+		, OutputComponents & p_output )
+	{
+		m_writer << m_computeOneSpot( SpotLight{ p_light }
 			, p_worldEye
 			, p_shininess
 			, p_receivesShadows
@@ -700,6 +732,120 @@ namespace GLSL
 									, p_light.m_iIndex() ) );
 						}
 						FI;
+					}
+
+					DoComputeLight( p_light.m_lightBase()
+						, p_worldEye
+						, l_lightDirection
+						, p_shininess
+						, l_shadowFactor
+						, p_fragmentIn
+						, l_output );
+					auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" )
+						, p_light.m_v3Attenuation().x()
+						+ p_light.m_v3Attenuation().y() * l_distance
+						+ p_light.m_v3Attenuation().z() * l_distance * l_distance );
+					l_spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - l_spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - p_light.m_fCutOff() ) );
+					p_output.m_v3Ambient += l_spotFactor * l_output.m_v3Ambient / l_attenuation;
+					p_output.m_v3Diffuse += l_spotFactor * l_output.m_v3Diffuse / l_attenuation;
+					p_output.m_v3Specular += l_spotFactor * l_output.m_v3Specular / l_attenuation;
+				}
+				FI;
+			}
+			, SpotLight( &m_writer, cuT( "p_light" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
+			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
+			, FragmentInput{ m_writer }
+			, l_output );
+	}
+
+	void PhongLightingModel::Declare_ComputeOnePointLight()
+	{
+		OutputComponents l_output{ m_writer };
+		m_computeOnePoint = m_writer.ImplementFunction< Void >( cuT( "ComputePointLight" )
+			, [this]( PointLight const & p_light
+				, Vec3 const & p_worldEye
+				, Float const & p_shininess
+				, Int const & p_receivesShadows
+				, FragmentInput const & p_fragmentIn
+				, OutputComponents & p_output )
+			{
+				OutputComponents l_output
+				{
+					m_writer.GetLocale( cuT( "l_ambient" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+					m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+					m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+				};
+				auto l_lightToVertex = m_writer.GetLocale( cuT( "l_lightToVertex" ), p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
+				auto l_distance = m_writer.GetLocale( cuT( "l_distance" ), length( l_lightToVertex ) );
+				auto l_lightDirection = m_writer.GetLocale( cuT( "l_lightDirection" ), normalize( l_lightToVertex ) );
+				auto l_shadowFactor = m_writer.GetLocale( cuT( "l_shadowFactor" ), 1.0_f );
+
+				if ( m_shadows != ShadowType::eNone )
+				{
+					l_shadowFactor = 1.0_f - min( p_receivesShadows
+						, m_shadowModel.ComputePointShadow( p_fragmentIn.m_v3Vertex
+							, p_light.m_v3Position().xyz()
+							, p_fragmentIn.m_v3Normal ) );
+				}
+
+				DoComputeLight( p_light.m_lightBase()
+					, p_worldEye
+					, l_lightDirection
+					, p_shininess
+					, l_shadowFactor
+					, p_fragmentIn
+					, l_output );
+				auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" )
+					, p_light.m_v3Attenuation().x()
+					+ p_light.m_v3Attenuation().y() * l_distance
+					+ p_light.m_v3Attenuation().z() * l_distance * l_distance );
+				p_output.m_v3Ambient += l_output.m_v3Ambient / l_attenuation;
+				p_output.m_v3Diffuse += l_output.m_v3Diffuse / l_attenuation;
+				p_output.m_v3Specular += l_output.m_v3Specular / l_attenuation;
+			}
+			, PointLight( &m_writer, cuT( "p_light" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
+			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
+			, FragmentInput{ m_writer }
+			, l_output );
+	}
+
+	void PhongLightingModel::Declare_ComputeOneSpotLight()
+	{
+		OutputComponents l_output{ m_writer };
+		m_computeOneSpot = m_writer.ImplementFunction< Void >( cuT( "ComputeSpotLight" )
+			, [this]( SpotLight const & p_light
+				, Vec3 const & p_worldEye
+				, Float const & p_shininess
+				, Int const & p_receivesShadows
+				, FragmentInput const & p_fragmentIn
+				, OutputComponents & p_output )
+			{
+				OutputComponents l_output
+				{
+					m_writer.GetLocale( cuT( "l_ambient" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+					m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+					m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+				};
+				auto l_lightToVertex = m_writer.GetLocale( cuT( "l_lightToVertex" ), p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
+				auto l_distance = m_writer.GetLocale( cuT( "l_distance" ), length( l_lightToVertex ) );
+				auto l_lightDirection = m_writer.GetLocale( cuT( "l_lightDirection" ), normalize( l_lightToVertex ) );
+				auto l_spotFactor = m_writer.GetLocale( cuT( "l_spotFactor" ), dot( l_lightDirection, p_light.m_v3Direction() ) );
+
+				IF( m_writer, l_spotFactor > p_light.m_fCutOff() )
+				{
+					auto l_shadowFactor = m_writer.GetLocale( cuT( "l_shadowFactor" ), Float( 1 ) );
+
+					if ( m_shadows != ShadowType::eNone )
+					{
+						l_shadowFactor = 1.0_f - min( p_receivesShadows
+							, m_shadowModel.ComputeSpotShadow( p_light.m_mtxLightSpace()
+								, p_fragmentIn.m_v3Vertex
+								, l_lightToVertex
+								, p_fragmentIn.m_v3Normal ) );
 					}
 
 					DoComputeLight( p_light.m_lightBase()

@@ -65,27 +65,6 @@ namespace GLSL
 
 	void Shadow::DeclarePoint( ShadowType p_type )
 	{
-		auto c3d_mapShadowSpot = m_writer.GetUniform< Sampler2DShadow >( MapShadowSpot );
-
-		if ( p_type == ShadowType::ePoisson || p_type == ShadowType::eStratifiedPoisson )
-		{
-			auto c3d_poissonDisk = m_writer.GetUniform< Vec2 >( cuT( "c3d_poissonDisk" ), 4,
-			{
-				vec2( -0.94201624_f, -0.39906216 ),
-				vec2( 0.94558609_f, -0.76890725 ),
-				vec2( -0.094184101_f, -0.92938870 ),
-				vec2( 0.34495938_f, 0.29387760 )
-			} );
-		}
-
-		DoDeclare_GetRandom();
-		DoDeclare_GetShadowOffset();
-		DoDeclare_FilterPoint( p_type );
-		DoDeclare_ComputeOnePointShadow();
-	}
-
-	void Shadow::DeclareSpot( ShadowType p_type )
-	{
 		auto c3d_mapShadowPoint = m_writer.GetUniform< SamplerCubeShadow >( MapShadowPoint );
 
 		if ( p_type == ShadowType::ePoisson || p_type == ShadowType::eStratifiedPoisson )
@@ -101,8 +80,29 @@ namespace GLSL
 
 		DoDeclare_GetRandom();
 		DoDeclare_GetShadowOffset();
+		DoDeclare_FilterOnePoint( p_type );
+		DoDeclare_ComputeOnePointShadow();
+	}
+
+	void Shadow::DeclareSpot( ShadowType p_type )
+	{
+		auto c3d_mapShadowSpot = m_writer.GetUniform< Sampler2DShadow >( MapShadowSpot );
+
+		if ( p_type == ShadowType::ePoisson || p_type == ShadowType::eStratifiedPoisson )
+		{
+			auto c3d_poissonDisk = m_writer.GetUniform< Vec2 >( cuT( "c3d_poissonDisk" ), 4,
+			{
+				vec2( -0.94201624_f, -0.39906216 ),
+				vec2( 0.94558609_f, -0.76890725 ),
+				vec2( -0.094184101_f, -0.92938870 ),
+				vec2( 0.34495938_f, 0.29387760 )
+			} );
+		}
+
+		DoDeclare_GetRandom();
+		DoDeclare_GetShadowOffset();
 		DoDeclare_GetLightSpacePosition();
-		DoDeclare_FilterSpot( p_type );
+		DoDeclare_FilterOneSpot( p_type );
 		DoDeclare_ComputeOneSpotShadow();
 	}
 

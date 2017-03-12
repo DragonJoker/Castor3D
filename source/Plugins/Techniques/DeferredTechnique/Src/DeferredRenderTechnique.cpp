@@ -72,7 +72,7 @@ namespace deferred
 		, m_directionalLightPass{ *p_renderTarget.GetEngine() }
 		, m_pointLightPass{ *p_renderTarget.GetEngine() }
 		, m_spotLightPass{ *p_renderTarget.GetEngine() }
-		, m_directionalLightPassShadow{ *p_renderTarget.GetEngine() }
+		, m_directionalLightPassShadow{ *p_renderTarget.GetEngine(), m_opaquePass->GetDirectionalShadowMap().GetTexture() }
 		, m_pointLightPassShadow{ *p_renderTarget.GetEngine() }
 		, m_spotLightPassShadow{ *p_renderTarget.GetEngine() }
 	{
@@ -157,14 +157,15 @@ namespace deferred
 		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( DsTexture::eEmissive )]->GetTexture() );
 
 #else
-
-		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 		auto & l_scene = *m_renderTarget.GetScene();
 		auto & l_camera = *m_renderTarget.GetCamera();
+
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
 		m_frameBuffer.m_frameBuffer->Clear();
 
 		auto & l_fog = l_scene.GetFog();
+		auto l_fogType = l_fog.GetType();
 		m_sceneNode->m_fogType.SetValue( int( l_fog.GetType() ) );
 
 		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
@@ -185,11 +186,25 @@ namespace deferred
 		{
 			for ( auto & l_light : l_cache.GetLights( LightType::eDirectional ) )
 			{
-				m_directionalLightPass.Render( m_size
-					, m_lightPassTextures
-					, *l_light->GetDirectionalLight()
-					, uint16_t( GetFogType( l_scene.GetFlags() ) )
-					, l_first );
+				if ( l_light->IsShadowProducer() )
+				{
+					m_opaquePass->GetDirectionalShadowMap().Render( *l_light->GetDirectionalLight() );
+					m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+					m_directionalLightPassShadow.Render( m_size
+						, m_lightPassTextures
+						, *l_light->GetDirectionalLight()
+						, uint16_t( l_fogType )
+						, l_first );
+				}
+				else
+				{
+					m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+					m_directionalLightPass.Render( m_size
+						, m_lightPassTextures
+						, *l_light->GetDirectionalLight()
+						, uint16_t( l_fogType )
+						, l_first );
+				}
 				l_first = false;
 			}
 		}
@@ -203,7 +218,7 @@ namespace deferred
 					, m_lightPassTextures
 					, *l_light->GetPointLight()
 					, l_camera
-					, uint16_t( GetFogType( l_scene.GetFlags() ) )
+					, uint16_t( l_fogType )
 					, l_first );
 				l_first = false;
 			}
@@ -268,6 +283,9 @@ namespace deferred
 		m_directionalLightPass.Create( l_scene );
 		m_pointLightPass.Create( l_scene );
 		m_spotLightPass.Create( l_scene );
+		m_directionalLightPassShadow.Create( l_scene );
+		m_pointLightPassShadow.Create( l_scene );
+		m_spotLightPassShadow.Create( l_scene );
 		return true;
 	}
 
@@ -284,6 +302,9 @@ namespace deferred
 		m_directionalLightPass.Destroy();
 		m_pointLightPass.Destroy();
 		m_spotLightPass.Destroy();
+		m_directionalLightPassShadow.Destroy();
+		m_pointLightPassShadow.Destroy();
+		m_spotLightPassShadow.Destroy();
 		m_sceneUbo.Cleanup();
 	}
 
@@ -317,6 +338,9 @@ namespace deferred
 		m_directionalLightPass.Initialise( m_sceneUbo );
 		m_pointLightPass.Initialise( m_sceneUbo );
 		m_spotLightPass.Initialise( m_sceneUbo );
+		m_directionalLightPassShadow.Initialise( m_sceneUbo );
+		m_pointLightPassShadow.Initialise( m_sceneUbo );
+		m_spotLightPassShadow.Initialise( m_sceneUbo );
 
 		for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
 		{
@@ -358,6 +382,9 @@ namespace deferred
 		m_directionalLightPass.Cleanup();
 		m_pointLightPass.Cleanup();
 		m_spotLightPass.Cleanup();
+		m_directionalLightPassShadow.Cleanup();
+		m_pointLightPassShadow.Cleanup();
+		m_spotLightPassShadow.Cleanup();
 
 		for ( auto & l_unit : m_lightPassTextures )
 		{

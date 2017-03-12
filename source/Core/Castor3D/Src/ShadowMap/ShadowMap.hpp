@@ -43,7 +43,7 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	protected:
-		using ShadowMapLightMap = std::map< LightRPtr, ShadowMapPassSPtr >;
+		using ShadowMapLightMap = std::map< Light const *, ShadowMapPassSPtr >;
 		using SortedPasses = std::map< double, ShadowMapPassSPtr >;
 
 	public:

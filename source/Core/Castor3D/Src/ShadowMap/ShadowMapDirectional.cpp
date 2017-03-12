@@ -39,7 +39,10 @@ namespace Castor3D
 	{
 		if ( !m_passes.empty() )
 		{
-			m_passes.begin()->second->Update( p_queues, 0u );
+			for ( auto & l_it : m_passes )
+			{
+				l_it.second->Update( p_queues, 0u );
+			}
 		}
 	}
 
@@ -54,6 +57,18 @@ namespace Castor3D
 			m_depthAttach->Detach();
 			m_frameBuffer->Unbind();
 		}
+	}
+
+	void ShadowMapDirectional::Render( DirectionalLight const & p_light )
+	{
+		auto l_it = m_passes.find( &p_light.GetLight() );
+		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
+		m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_depthAttach->Attach( AttachmentPoint::eDepth );
+		m_frameBuffer->Clear( BufferComponent::eDepth );
+		l_it->second->Render();
+		m_depthAttach->Detach();
+		m_frameBuffer->Unbind();
 	}
 
 	int32_t ShadowMapDirectional::DoGetMaxPasses()const

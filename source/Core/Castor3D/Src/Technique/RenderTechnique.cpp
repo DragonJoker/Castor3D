@@ -216,6 +216,13 @@ namespace Castor3D
 
 		//if ( !m_spotShadowMap.GetPasses().empty() )
 		//{
+		//	auto & l_depthMap = m_opaquePass->GetDirectionalShadowMap().GetTexture();
+		//	Size l_size{ 256u, 256u };
+		//	m_renderSystem.GetCurrentContext()->RenderDepth( l_size
+		//		, *l_depthMap.GetTexture(), 0u );
+		//}
+		//else if ( !m_spotShadowMap.GetPasses().empty() )
+		//{
 		//	auto & l_depthMap = m_opaquePass->GetSpotShadowMap();
 		//	Size l_size{ 256u, 256u };
 		//	m_renderSystem.GetCurrentContext()->RenderDepth( l_size

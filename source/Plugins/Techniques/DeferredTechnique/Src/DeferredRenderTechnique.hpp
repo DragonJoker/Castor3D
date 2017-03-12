@@ -138,9 +138,12 @@ namespace deferred
 		static Castor::String const Name;
 
 	private:
+		using GeometryBufferTextures = std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) >;
+		using GeometryBufferAttachs = std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::eCount ) >;
+
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
-		std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) > m_lightPassTextures;
+		GeometryBufferTextures m_lightPassTextures;
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
 		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;
@@ -149,7 +152,7 @@ namespace deferred
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english	The attachments between textures and deferred shading frame buffer.
 		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::eCount ) > m_geometryPassTexAttachs;
+		GeometryBufferAttachs m_geometryPassTexAttachs;
 		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;

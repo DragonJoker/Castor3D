@@ -85,6 +85,18 @@ namespace GLSL
 			, Int const & p_receivesShadows
 			, FragmentInput const & p_fragmentIn
 			, OutputComponents & p_output );
+		GlslWriter_API void ComputeOnePointLight( PointLight const & p_light
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, Int const & p_receivesShadows
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output );
+		GlslWriter_API void ComputeOneSpotLight( SpotLight const & p_light
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, Int const & p_receivesShadows
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output );
 
 	protected:
 		GlslWriter_API Light GetBaseLight( Type const & p_value );
@@ -101,6 +113,8 @@ namespace GLSL
 		virtual void Declare_ComputeDirectionalLight() = 0;
 		virtual void Declare_ComputePointLight() = 0;
 		virtual void Declare_ComputeSpotLight() = 0;
+		virtual void Declare_ComputeOnePointLight() = 0;
+		virtual void Declare_ComputeOneSpotLight() = 0;
 
 	protected:
 		ShadowType m_shadows;
@@ -109,6 +123,8 @@ namespace GLSL
 		Function< Void, DirectionalLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeDirectional;
 		Function< Void, PointLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computePoint;
 		Function< Void, SpotLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeSpot;
+		Function< Void, PointLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeOnePoint;
+		Function< Void, SpotLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeOneSpot;
 	};
 
 	class PhongLightingModel
@@ -123,6 +139,8 @@ namespace GLSL
 		void Declare_ComputeDirectionalLight()override;
 		void Declare_ComputePointLight()override;
 		void Declare_ComputeSpotLight()override;
+		void Declare_ComputeOnePointLight()override;
+		void Declare_ComputeOneSpotLight()override;
 
 		void DoComputeLight( Light const & p_light
 			, Vec3 const & p_worldEye

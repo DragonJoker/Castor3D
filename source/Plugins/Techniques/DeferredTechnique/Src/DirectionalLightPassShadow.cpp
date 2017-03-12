@@ -25,42 +25,6 @@ namespace deferred
 	{
 		static constexpr uint32_t VertexCount = 6u;
 
-		void DoInitialiseShadowMap( Engine & p_engine, Size const & p_size, TextureUnit & p_unit )
-		{
-			SamplerSPtr l_sampler;
-
-			if ( !p_engine.GetSamplerCache().Has( cuT( "ShadowMap_Directional" ) ) )
-			{
-				l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Directional" ) );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-				l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-				l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-				l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-			}
-			else
-			{
-				l_sampler = p_engine.GetSamplerCache().Find( cuT( "ShadowMap_Directional" ) );
-			}
-
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eTwoDimensions,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F, p_size );
-			p_unit.SetTexture( l_texture );
-			p_unit.SetSampler( l_sampler );
-
-			for ( auto & l_image : *l_texture )
-			{
-				l_image->InitialiseSource();
-			}
-
-			p_unit.Initialise();
-		}
-
 		String DoGetShadowPixelShaderSource( Engine const & p_engine
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
@@ -175,11 +139,13 @@ namespace deferred
 
 	//*********************************************************************************************
 
-	DirectionalLightPassShadow::DirectionalLightPassShadow( Engine & p_engine )
+	DirectionalLightPassShadow::DirectionalLightPassShadow( Engine & p_engine
+		, Castor3D::TextureUnit & p_shadowMap )
 		: LightPassShadow{ p_engine }
 		, m_viewport{ p_engine }
-		, m_shadowMap{ p_engine }
+		, m_shadowMap{ p_shadowMap }
 	{
+		m_shadowMap.SetIndex( uint32_t( DsTexture::eCount ) );
 	}
 
 	void DirectionalLightPassShadow::Create( Scene const & p_scene )
@@ -243,12 +209,10 @@ namespace deferred
 		}
 		
 		m_viewport.Initialise();
-		DoInitialiseShadowMap( m_engine, Size{ 4096, 4096 }, m_shadowMap );
 	}
 
 	void DirectionalLightPassShadow::Cleanup()
 	{
-		m_shadowMap.Cleanup();
 		m_viewport.Cleanup();
 
 		for ( auto & l_program : m_programs )

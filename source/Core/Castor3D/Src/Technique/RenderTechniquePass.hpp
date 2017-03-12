@@ -120,9 +120,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La map d'ombre de la lumière directionnelle.
 		 */
-		inline TextureUnit & GetDirectionalShadowMap()
+		inline ShadowMapDirectional & GetDirectionalShadowMap()
 		{
-			return m_directionalShadowMap.GetTexture();
+			return m_directionalShadowMap;
 		}
 		/**
 		 *\~english
@@ -130,9 +130,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La map d'ombre des lumières projecteur.
 		 */
-		inline TextureUnit & GetSpotShadowMap()
+		inline ShadowMapSpot & GetSpotShadowMap()
 		{
-			return m_spotShadowMap.GetTexture();
+			return m_spotShadowMap;
 		}
 		/**
 		 *\~english
@@ -140,9 +140,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La map d'ombre des lumières ponctuelles.
 		 */
-		inline std::vector< TextureUnit > & GetPointShadowMaps()
+		inline ShadowMapPoint & GetPointShadowMaps()
 		{
-			return m_pointShadowMap.GetTextures();
+			return m_pointShadowMap;
 		}
 
 	private:

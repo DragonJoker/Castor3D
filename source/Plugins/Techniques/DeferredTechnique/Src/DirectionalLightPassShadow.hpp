@@ -31,7 +31,8 @@ namespace deferred
 		: public LightPassShadow
 	{
 	public:
-		DirectionalLightPassShadow( Castor3D::Engine & p_engine );
+		DirectionalLightPassShadow( Castor3D::Engine & p_engine
+			, Castor3D::TextureUnit & p_shadowMap );
 		void Create( Castor3D::Scene const & p_scene );
 		void Destroy();
 		void Initialise( Castor3D::UniformBuffer & p_sceneUbo );
@@ -88,7 +89,7 @@ namespace deferred
 		Castor3D::Uniform4x4fSPtr m_projectionUniform;
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
-		Castor3D::TextureUnit m_shadowMap;
+		Castor3D::TextureUnit & m_shadowMap;
 	};
 }
 

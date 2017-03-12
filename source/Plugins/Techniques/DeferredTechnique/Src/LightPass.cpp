@@ -333,7 +333,7 @@ namespace deferred
 			case LightType::ePoint:
 				{
 				auto light = l_writer.GetBuiltin< GLSL::PointLight >( cuT( "light" ) );
-					l_lighting->ComputePointLight( light
+					l_lighting->ComputeOnePointLight( light
 						, l_worldEye
 						, l_fMatShininess
 						, l_iShadowReceiver
@@ -345,7 +345,7 @@ namespace deferred
 			case LightType::eSpot:
 				{
 				auto light = l_writer.GetBuiltin< GLSL::SpotLight >( cuT( "light" ) );
-					l_lighting->ComputeSpotLight( light
+					l_lighting->ComputeOneSpotLight( light
 						, l_worldEye
 						, l_fMatShininess
 						, l_iShadowReceiver
