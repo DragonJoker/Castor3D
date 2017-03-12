@@ -636,18 +636,15 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::RenderBackground( Size const & p_size )
+	void Scene::RenderBackgroundImage( Size const & p_size )
 	{
-		if ( m_backgroundImage )
+		if ( m_backgroundImage && m_backgroundImage->IsInitialised() )
 		{
-			if ( m_backgroundImage->IsInitialised() )
-			{
-				GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, *m_backgroundImage );
-			}
+			GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, *m_backgroundImage );
 		}
 	}
 
-	void Scene::RenderForeground( Size const & p_size, Camera const & p_camera )
+	void Scene::RenderBackground( Size const & p_size, Camera const & p_camera )
 	{
 		if ( m_skybox )
 		{
@@ -664,7 +661,7 @@ namespace Castor3D
 			p_group.Update();
 		} );
 
-		if ( !m_skybox )
+		if ( !m_skybox && !m_backgroundImage )
 		{
 			m_skybox = std::make_unique< Skybox >( *GetEngine() );
 			Size l_size{ 16, 16 };

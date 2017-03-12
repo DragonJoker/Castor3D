@@ -1,11 +1,11 @@
-#include "PointLightPass.hpp"
+#include "SpotLightPassShadow.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Scene/Scene.hpp>
 #include <Scene/Camera.hpp>
-#include <Scene/Light/PointLight.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/Light/SpotLight.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
@@ -21,32 +21,38 @@ namespace deferred
 
 	namespace
 	{
-		float DoCalcPointLightBSphere( const Castor3D::PointLight & p_light
+		Point2f DoCalcSpotLightBCone( const Castor3D::SpotLight & p_light
 			, float p_max )
 		{
-			return GetMaxDistance( p_light
+			auto l_length = GetMaxDistance( p_light
 				, p_light.GetAttenuation()
 				, p_max );
+			auto l_width = p_light.GetCutOff().radians() / Angle::from_degrees( 22.5f ).radians();
+			return Point2f{ l_length * l_width, l_length };
 		}
 	}
 
 	//*********************************************************************************************
-
-	void PointLightPass::Program::Create( Scene const & p_scene
+	
+	void SpotLightPassShadow::Program::Create( Scene const & p_scene
 		, String const & p_vtx
 		, String const & p_pxl
 		, uint16_t p_fogType )
 	{
 		DoCreate( p_scene, p_vtx, p_pxl, p_fogType );
+		m_program->CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
+		m_lightDirection = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Direction" ), ShaderType::ePixel );
+		m_lightTransform = m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_mtxLightSpace" ), ShaderType::ePixel );
 		m_lightPosition = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Position" ), ShaderType::ePixel );
 		m_lightAttenuation = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Attenuation" ), ShaderType::ePixel );
+		m_lightExponent = m_program->CreateUniform< UniformType::eFloat >( cuT( "light.m_fExponent" ), ShaderType::ePixel );
+		m_lightCutOff = m_program->CreateUniform< UniformType::eFloat >( cuT( "light.m_fCutOff" ), ShaderType::ePixel );
 
 		RasteriserState l_rsstate1;
 		l_rsstate1.SetCulledFaces( Culling::eFront );
 		DepthStencilState l_dsstate1;
 		l_dsstate1.SetDepthTest( false );
 		l_dsstate1.SetDepthMask( WritingMask::eZero );
-		l_dsstate1.SetStencilTest( true );
 		l_dsstate1.SetStencilWriteMask( 0xFFFFFFFFu );
 		l_dsstate1.SetStencilBackFunc( StencilFunc::eNEqual );
 		l_dsstate1.SetStencilBackRef( 0u );
@@ -64,7 +70,6 @@ namespace deferred
 		DepthStencilState l_dsstate2;
 		l_dsstate2.SetDepthTest( false );
 		l_dsstate2.SetDepthMask( WritingMask::eZero );
-		l_dsstate2.SetStencilTest( true );
 		l_dsstate2.SetStencilWriteMask( 0xFFFFFFFFu );
 		l_dsstate2.SetStencilBackFunc( StencilFunc::eNEqual );
 		l_dsstate2.SetStencilBackRef( 0u );
@@ -83,14 +88,18 @@ namespace deferred
 			, PipelineFlags{} );
 	}
 
-	void PointLightPass::Program::Destroy()
+	void SpotLightPassShadow::Program::Destroy()
 	{
+		m_lightDirection = nullptr;
+		m_lightTransform = nullptr;
 		m_lightAttenuation = nullptr;
 		m_lightPosition = nullptr;
+		m_lightExponent = nullptr;
+		m_lightCutOff = nullptr;
 		DoDestroy();
 	}
 
-	void PointLightPass::Program::Initialise( VertexBuffer & p_vbo
+	void SpotLightPassShadow::Program::Initialise( VertexBuffer & p_vbo
 		, IndexBufferSPtr p_ibo
 		, UniformBuffer & p_matrixUbo
 		, UniformBuffer & p_sceneUbo
@@ -103,35 +112,40 @@ namespace deferred
 		m_blendPipeline->AddUniformBuffer( p_modelMatrixUbo );
 	}
 
-	void PointLightPass::Program::Cleanup()
+	void SpotLightPassShadow::Program::Cleanup()
 	{
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
 		DoCleanup();
 	}
 
-	void PointLightPass::Program::Render( Size const & p_size
-		, Castor3D::PointLight const & p_light
+	void SpotLightPassShadow::Program::Render( Size const & p_size
+		, Castor3D::SpotLight const & p_light
 		, uint32_t p_count
 		, bool p_first )
 	{
 		DoBind( p_size, p_light, p_first );
 		m_lightAttenuation->SetValue( p_light.GetAttenuation() );
 		m_lightPosition->SetValue( p_light.GetLight().GetParent()->GetDerivedPosition() );
+		m_lightExponent->SetValue( p_light.GetExponent() );
+		m_lightCutOff->SetValue( p_light.GetCutOff().cos() );
+		m_lightDirection->SetValue( p_light.GetDirection() );
+		m_lightTransform->SetValue( p_light.GetLightSpaceTransform() );
 		m_currentPipeline->Apply();
 		m_geometryBuffers->Draw( p_count, 0 );
 	}
 
 	//*********************************************************************************************
 
-	PointLightPass::PointLightPass( Engine & p_engine )
-		: LightPass{ p_engine }
+	SpotLightPassShadow::SpotLightPassShadow( Engine & p_engine )
+		: LightPassShadow{ p_engine }
 		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
+		, m_shadowMap{ p_engine }
 	{
 		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
 	}
 
-	void PointLightPass::Create( Castor3D::Scene const & p_scene )
+	void SpotLightPassShadow::Create( Castor3D::Scene const & p_scene )
 	{
 		uint16_t l_fogType{ 0u };
 
@@ -142,7 +156,7 @@ namespace deferred
 			AddFlag( l_sceneFlags, SceneFlag( l_fogType ) );
 			l_program.Create( p_scene
 				, DoGetVertexShaderSource( l_sceneFlags )
-				, DoGetPixelShaderSource( l_sceneFlags, LightType::ePoint )
+				, DoGetPixelShaderSource( l_sceneFlags, LightType::eSpot )
 				, l_fogType++ );
 		}
 
@@ -150,53 +164,18 @@ namespace deferred
 		{
 			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
 		} );
-		
-		uint32_t l_faceCount = 20u;
-		Angle l_angle = Angle::from_degrees( 360.0f / l_faceCount );
-		std::vector< Point2f > l_arc{ l_faceCount + 1 };
+
+		uint32_t l_nbFaces = 8;
+		Point3fArray l_data;
 		Angle l_alpha;
-		std::vector< Point3f > l_data;
-		std::vector< uint32_t > l_faces;
-		l_data.reserve( l_faceCount * l_faceCount * 4 );
-		l_faces.reserve( l_faceCount * l_faceCount * 6 );
+		auto l_angle = Angle::from_degrees( 360.0f / l_nbFaces );
 
-		for ( uint32_t i = 0; i <= l_faceCount; i++ )
+		l_data.emplace_back( 0.0f, 0.0f, 0.0f );
+		l_data.emplace_back( 0.0f, 0.0f, 1.0f );
+
+		for ( auto i = 0u; i < l_nbFaces; l_alpha += l_angle, ++i )
 		{
-			float l_x = +l_alpha.sin();
-			float l_y = -l_alpha.cos();
-			l_arc[i][0] = l_x;
-			l_arc[i][1] = l_y;
-			l_alpha += l_angle / 2;
-		}
-
-		Angle l_iAlpha;
-		Point3f l_pos;
-
-		for ( uint32_t k = 0; k < l_faceCount; ++k )
-		{
-			auto l_ptT = l_arc[k + 0];
-			auto l_ptB = l_arc[k + 1];
-
-			if ( k == 0 )
-			{
-				// Calcul de la position des points du haut
-				for ( uint32_t i = 0; i <= l_faceCount; l_iAlpha += l_angle, ++i )
-				{
-					auto l_cos = l_iAlpha.cos();
-					auto l_sin = l_iAlpha.sin();
-					l_data.emplace_back( l_ptT[0] * l_cos, l_ptT[1], l_ptT[0] * l_sin );
-				}
-			}
-
-			// Calcul de la position des points
-			l_iAlpha = 0.0_radians;
-
-			for ( uint32_t i = 0; i <= l_faceCount; l_iAlpha += l_angle, ++i )
-			{
-				auto l_cos = l_iAlpha.cos();
-				auto l_sin = l_iAlpha.sin();
-				l_data.emplace_back( l_ptB[0] * l_cos, l_ptB[1], l_ptB[0] * l_sin );
-			}
+			l_data.emplace_back( l_alpha.cos() / 2.0f, l_alpha.sin() / 2.0f, 1.0f );
 		}
 
 		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, l_declaration );
@@ -206,35 +185,28 @@ namespace deferred
 			, l_data.data()->const_ptr()
 			, l_size );
 
-		// Reconstition des faces
-		uint32_t l_cur = 0;
-		uint32_t l_prv = 0;
+		UIntArray l_faces;
 
-		for ( uint32_t k = 0; k < l_faceCount; ++k )
+		for ( auto i = 0u; i < l_nbFaces - 1; i++ )
 		{
-			if ( k == 0 )
-			{
-				for ( uint32_t i = 0; i <= l_faceCount; ++i )
-				{
-					l_cur++;
-				}
-			}
-
-			for ( uint32_t i = 0; i < l_faceCount; ++i )
-			{
-				l_faces.push_back( l_prv + 0 );
-				l_faces.push_back( l_cur + 0 );
-				l_faces.push_back( l_prv + 1 );
-				l_faces.push_back( l_cur + 0 );
-				l_faces.push_back( l_cur + 1 );
-				l_faces.push_back( l_prv + 1 );
-				l_prv++;
-				l_cur++;
-			}
-
-			l_prv++;
-			l_cur++;
+			// Side
+			l_faces.push_back( 0u );
+			l_faces.push_back( i + 3u );
+			l_faces.push_back( i + 2u );
+			// Base
+			l_faces.push_back( 1u );
+			l_faces.push_back( i + 2u );
+			l_faces.push_back( i + 3u );
 		}
+
+		// Side last face
+		l_faces.push_back( 0u );
+		l_faces.push_back( 2u );
+		l_faces.push_back( l_nbFaces + 1 );
+		// Base last face
+		l_faces.push_back( 1u );
+		l_faces.push_back( l_nbFaces + 1 );
+		l_faces.push_back( 2u );
 
 		m_indexBuffer = std::make_shared< IndexBuffer >( m_engine );
 		m_indexBuffer->Resize( uint32_t( l_faces.size() ) );
@@ -243,7 +215,7 @@ namespace deferred
 			, l_faces.size() * sizeof( *l_faces.data() ) );
 	}
 
-	void PointLightPass::Destroy()
+	void SpotLightPassShadow::Destroy()
 	{
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
@@ -254,7 +226,7 @@ namespace deferred
 		}
 	}
 
-	void PointLightPass::Initialise( UniformBuffer & p_sceneUbo )
+	void SpotLightPassShadow::Initialise( Castor3D::UniformBuffer & p_sceneUbo )
 	{
 		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 		m_indexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
@@ -275,7 +247,7 @@ namespace deferred
 		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
 	}
 
-	void PointLightPass::Cleanup()
+	void SpotLightPassShadow::Cleanup()
 	{
 		m_modelUniform = nullptr;
 		m_viewUniform = nullptr;
@@ -293,25 +265,25 @@ namespace deferred
 		m_matrixUbo.Cleanup();
 	}
 
-	void PointLightPass::Render( Size const & p_size
+	void SpotLightPassShadow::Render( Size const & p_size
 		, GeometryPassResult const & p_gp
-		, Castor3D::PointLight const & p_light
+		, Castor3D::SpotLight const & p_light
 		, Castor3D::Camera const & p_camera
 		, uint16_t p_fogType
 		, bool p_first )
 	{
+		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
+		m_viewUniform->SetValue( p_camera.GetView() );
 		auto l_lightPos = p_light.GetLight().GetParent()->GetDerivedPosition();
 		auto l_camPos = p_camera.GetParent()->GetDerivedPosition();
 		auto l_far = p_camera.GetViewport().GetFar();
-		auto l_scale = DoCalcPointLightBSphere( p_light
+		auto l_scale = DoCalcSpotLightBCone( p_light
 			, float( l_far - point::distance( l_lightPos, l_camPos ) - ( l_far / 50.0f ) ) );
-		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-		m_viewUniform->SetValue( p_camera.GetView() );
 		Matrix4x4r l_model{ 1.0f };
 		matrix::set_transform( l_model
 			, p_light.GetLight().GetParent()->GetDerivedPosition()
-			, Point3f{ l_scale, l_scale, l_scale }
-		, Quaternion::identity() );
+			, Point3f{ l_scale[0], l_scale[0], l_scale[1] }
+			, p_light.GetLight().GetParent()->GetDerivedOrientation() );
 		m_modelUniform->SetValue( l_model );
 		m_matrixUbo.Update();
 		m_modelMatrixUbo.Update();
@@ -325,7 +297,7 @@ namespace deferred
 		DoEndRender( p_gp );
 	}
 	
-	String PointLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
+	String SpotLightPassShadow::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();

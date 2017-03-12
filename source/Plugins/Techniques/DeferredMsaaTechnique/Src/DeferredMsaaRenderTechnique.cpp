@@ -34,7 +34,7 @@
 #include <State/DepthStencilState.hpp>
 #include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
-#include <Technique/RenderTechniquePass.hpp>
+#include <Technique/ForwardRenderTechniquePass.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -152,7 +152,7 @@ namespace deferred_msaa
 			, p_renderTarget
 			, p_renderSystem
 			, std::make_unique< OpaquePass >( p_renderTarget, *this )
-			, std::make_unique< RenderTechniquePass >( cuT( "deferred_msaa_transparent" ), p_renderTarget, *this, false, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_msaa_transparent" ), p_renderTarget, *this, false, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 			, p_params
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 		, m_viewport{ *p_renderSystem.GetEngine() }
@@ -200,19 +200,14 @@ namespace deferred_msaa
 		DoCleanupDeferred();
 	}
 
-	void RenderTechnique::DoBeginRender()
+	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
 	{
-	}
-
-	void RenderTechnique::DoBeginOpaqueRendering()
-	{
+		m_opaquePass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
 		GetEngine()->SetPerObjectLighting( false );
 		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 		m_geometryPassFrameBuffer->Clear();
-	}
-
-	void RenderTechnique::DoEndOpaqueRendering()
-	{
+		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 		// Render the light pass.
 
@@ -279,7 +274,7 @@ namespace deferred_msaa
 			m_lightPassTextures[size_t( DsTexture::eEmissive )]->Bind();
 			m_lightPassTextures[size_t( DsTexture::eInfos )]->Bind();
 			DoBindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
-			
+
 			l_program.m_pipeline->Apply();
 			l_program.m_geometryBuffers->Draw( VertexCount, 0 );
 
@@ -297,25 +292,21 @@ namespace deferred_msaa
 
 		m_msaaFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer, m_rect, uint32_t( BufferComponent::eDepth ) );
-		m_msaaFrameBuffer->Bind();
+		m_msaaFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 
 #endif
-
 	}
 
-	void RenderTechnique::DoBeginTransparentRendering()
-	{
-		GetEngine()->SetPerObjectLighting( true );
-	}
-
-	void RenderTechnique::DoEndTransparentRendering()
+	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
 	{
 		m_msaaFrameBuffer->Unbind();
+		GetEngine()->SetPerObjectLighting( true );
+		m_transparentPass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
+		m_msaaFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_msaaFrameBuffer->Unbind();
 		m_msaaFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::eColour | BufferComponent::eDepth );
-	}
-
-	void RenderTechnique::DoEndRender()
-	{
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
@@ -548,36 +539,36 @@ namespace deferred_msaa
 
 	void RenderTechnique::DoBindDepthMaps( uint32_t p_startIndex )
 	{
-		if ( m_renderTarget.GetScene()->HasShadows() )
-		{
-			m_directionalShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
-			m_directionalShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
-			m_spotShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
-			m_spotShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
+		//if ( m_renderTarget.GetScene()->HasShadows() )
+		//{
+		//	m_directionalShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
+		//	m_directionalShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
+		//	m_spotShadowMap.GetTexture().GetTexture()->Bind( p_startIndex );
+		//	m_spotShadowMap.GetTexture().GetSampler()->Bind( p_startIndex++ );
 
-			for ( auto & l_map : m_pointShadowMap.GetTextures() )
-			{
-				l_map.GetTexture()->Bind( p_startIndex );
-				l_map.GetSampler()->Bind( p_startIndex++ );
-			}
-		}
+		//	for ( auto & l_map : m_pointShadowMap.GetTextures() )
+		//	{
+		//		l_map.GetTexture()->Bind( p_startIndex );
+		//		l_map.GetSampler()->Bind( p_startIndex++ );
+		//	}
+		//}
 	}
 
 	void RenderTechnique::DoUnbindDepthMaps( uint32_t p_startIndex )const
 	{
-		if ( m_renderTarget.GetScene()->HasShadows() )
-		{
-			m_directionalShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
-			m_directionalShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
-			m_spotShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
-			m_spotShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
+		//if ( m_renderTarget.GetScene()->HasShadows() )
+		//{
+		//	m_directionalShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
+		//	m_directionalShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
+		//	m_spotShadowMap.GetTexture().GetTexture()->Unbind( p_startIndex );
+		//	m_spotShadowMap.GetTexture().GetSampler()->Unbind( p_startIndex++ );
 
-			for ( auto & l_map : m_pointShadowMap.GetTextures() )
-			{
-				l_map.GetTexture()->Unbind( p_startIndex );
-				l_map.GetSampler()->Unbind( p_startIndex++ );
-			}
-		}
+		//	for ( auto & l_map : m_pointShadowMap.GetTextures() )
+		//	{
+		//		l_map.GetTexture()->Unbind( p_startIndex );
+		//		l_map.GetSampler()->Unbind( p_startIndex++ );
+		//	}
+		//}
 	}
 
 	bool RenderTechnique::DoCreateGeometryPass()

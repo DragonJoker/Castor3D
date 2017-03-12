@@ -21,9 +21,12 @@ namespace deferred
 
 	namespace
 	{
-		Point2f DoCalcSpotLightBCone( const Castor3D::SpotLight & p_light )
+		Point2f DoCalcSpotLightBCone( const Castor3D::SpotLight & p_light
+			, float p_max )
 		{
-			auto l_length = GetMaxDistance( p_light, p_light.GetAttenuation() );
+			auto l_length = GetMaxDistance( p_light
+				, p_light.GetAttenuation()
+				, p_max );
 			auto l_width = p_light.GetCutOff().radians() / Angle::from_degrees( 22.5f ).radians();
 			return Point2f{ l_length * l_width, l_length };
 		}
@@ -269,7 +272,11 @@ namespace deferred
 	{
 		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
 		m_viewUniform->SetValue( p_camera.GetView() );
-		auto l_scale = DoCalcSpotLightBCone( p_light );
+		auto l_lightPos = p_light.GetLight().GetParent()->GetDerivedPosition();
+		auto l_camPos = p_camera.GetParent()->GetDerivedPosition();
+		auto l_far = p_camera.GetViewport().GetFar();
+		auto l_scale = DoCalcSpotLightBCone( p_light
+			, float( l_far - point::distance( l_lightPos, l_camPos ) - ( l_far / 50.0f ) ) );
 		Matrix4x4r l_model{ 1.0f };
 		matrix::set_transform( l_model
 			, p_light.GetLight().GetParent()->GetDerivedPosition()

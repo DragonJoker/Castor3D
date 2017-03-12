@@ -18,7 +18,7 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Technique/RenderTechniquePass.hpp>
+#include <Technique/ForwardRenderTechniquePass.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <Graphics/FontCache.hpp>
@@ -53,8 +53,8 @@ namespace forward_msaa
 		: Castor3D::RenderTechnique( RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
-			, std::make_unique< RenderTechniquePass >( cuT( "forward_msaa_opaque" ), p_renderTarget, *this, true, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
-			, std::make_unique< RenderTechniquePass >( cuT( "forward_msaa_transparent" ), p_renderTarget, *this, false, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_msaa_opaque" ), p_renderTarget, *this, true, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_msaa_transparent" ), p_renderTarget, *this, false, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 			, p_params
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 	{
@@ -135,31 +135,23 @@ namespace forward_msaa
 		m_pMsDepthBuffer->Cleanup();
 	}
 
-	void RenderTechnique::DoBeginRender()
+	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
 	{
+		m_opaquePass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
 		m_msFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 		m_msFrameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
 		m_msFrameBuffer->Clear();
+		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 	}
 
-	void RenderTechnique::DoBeginOpaqueRendering()
+	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
 	{
-	}
-
-	void RenderTechnique::DoEndOpaqueRendering()
-	{
-	}
-
-	void RenderTechnique::DoBeginTransparentRendering()
-	{
-	}
-
-	void RenderTechnique::DoEndTransparentRendering()
-	{
-	}
-
-	void RenderTechnique::DoEndRender()
-	{
+		m_msFrameBuffer->Unbind();
+		m_transparentPass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
+		m_msFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_msFrameBuffer->Unbind();
 		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::eColour | BufferComponent::eDepth );
 	}

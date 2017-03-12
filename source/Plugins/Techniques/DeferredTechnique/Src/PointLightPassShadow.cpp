@@ -1,4 +1,4 @@
-#include "PointLightPass.hpp"
+#include "PointLightPassShadow.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -32,12 +32,13 @@ namespace deferred
 
 	//*********************************************************************************************
 
-	void PointLightPass::Program::Create( Scene const & p_scene
+	void PointLightPassShadow::Program::Create( Scene const & p_scene
 		, String const & p_vtx
 		, String const & p_pxl
 		, uint16_t p_fogType )
 	{
 		DoCreate( p_scene, p_vtx, p_pxl, p_fogType );
+		m_program->CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
 		m_lightPosition = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Position" ), ShaderType::ePixel );
 		m_lightAttenuation = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Attenuation" ), ShaderType::ePixel );
 
@@ -46,7 +47,6 @@ namespace deferred
 		DepthStencilState l_dsstate1;
 		l_dsstate1.SetDepthTest( false );
 		l_dsstate1.SetDepthMask( WritingMask::eZero );
-		l_dsstate1.SetStencilTest( true );
 		l_dsstate1.SetStencilWriteMask( 0xFFFFFFFFu );
 		l_dsstate1.SetStencilBackFunc( StencilFunc::eNEqual );
 		l_dsstate1.SetStencilBackRef( 0u );
@@ -64,7 +64,6 @@ namespace deferred
 		DepthStencilState l_dsstate2;
 		l_dsstate2.SetDepthTest( false );
 		l_dsstate2.SetDepthMask( WritingMask::eZero );
-		l_dsstate2.SetStencilTest( true );
 		l_dsstate2.SetStencilWriteMask( 0xFFFFFFFFu );
 		l_dsstate2.SetStencilBackFunc( StencilFunc::eNEqual );
 		l_dsstate2.SetStencilBackRef( 0u );
@@ -83,14 +82,14 @@ namespace deferred
 			, PipelineFlags{} );
 	}
 
-	void PointLightPass::Program::Destroy()
+	void PointLightPassShadow::Program::Destroy()
 	{
 		m_lightAttenuation = nullptr;
 		m_lightPosition = nullptr;
 		DoDestroy();
 	}
 
-	void PointLightPass::Program::Initialise( VertexBuffer & p_vbo
+	void PointLightPassShadow::Program::Initialise( VertexBuffer & p_vbo
 		, IndexBufferSPtr p_ibo
 		, UniformBuffer & p_matrixUbo
 		, UniformBuffer & p_sceneUbo
@@ -103,14 +102,14 @@ namespace deferred
 		m_blendPipeline->AddUniformBuffer( p_modelMatrixUbo );
 	}
 
-	void PointLightPass::Program::Cleanup()
+	void PointLightPassShadow::Program::Cleanup()
 	{
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
 		DoCleanup();
 	}
 
-	void PointLightPass::Program::Render( Size const & p_size
+	void PointLightPassShadow::Program::Render( Size const & p_size
 		, Castor3D::PointLight const & p_light
 		, uint32_t p_count
 		, bool p_first )
@@ -124,14 +123,15 @@ namespace deferred
 
 	//*********************************************************************************************
 
-	PointLightPass::PointLightPass( Engine & p_engine )
-		: LightPass{ p_engine }
+	PointLightPassShadow::PointLightPassShadow( Engine & p_engine )
+		: LightPassShadow{ p_engine }
 		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
+		, m_shadowMap{ p_engine }
 	{
 		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
 	}
 
-	void PointLightPass::Create( Castor3D::Scene const & p_scene )
+	void PointLightPassShadow::Create( Castor3D::Scene const & p_scene )
 	{
 		uint16_t l_fogType{ 0u };
 
@@ -243,7 +243,7 @@ namespace deferred
 			, l_faces.size() * sizeof( *l_faces.data() ) );
 	}
 
-	void PointLightPass::Destroy()
+	void PointLightPassShadow::Destroy()
 	{
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
@@ -254,7 +254,7 @@ namespace deferred
 		}
 	}
 
-	void PointLightPass::Initialise( UniformBuffer & p_sceneUbo )
+	void PointLightPassShadow::Initialise( UniformBuffer & p_sceneUbo )
 	{
 		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 		m_indexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
@@ -275,7 +275,7 @@ namespace deferred
 		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
 	}
 
-	void PointLightPass::Cleanup()
+	void PointLightPassShadow::Cleanup()
 	{
 		m_modelUniform = nullptr;
 		m_viewUniform = nullptr;
@@ -293,7 +293,7 @@ namespace deferred
 		m_matrixUbo.Cleanup();
 	}
 
-	void PointLightPass::Render( Size const & p_size
+	void PointLightPassShadow::Render( Size const & p_size
 		, GeometryPassResult const & p_gp
 		, Castor3D::PointLight const & p_light
 		, Castor3D::Camera const & p_camera
@@ -325,7 +325,7 @@ namespace deferred
 		DoEndRender( p_gp );
 	}
 	
-	String PointLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
+	String PointLightPassShadow::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();

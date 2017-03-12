@@ -105,12 +105,13 @@ namespace Castor3D
 		m_viewport.Cleanup();
 	}
 
-	void RenderDepthCubeToTexture::Render( Castor::Size const & p_size
+	void RenderDepthCubeToTexture::Render( Castor::Position const & p_position
+		, Castor::Size const & p_size
 		, TextureLayout const & p_texture )
 	{
 		int l_w = p_size.width();
 		int l_h = p_size.height();
-		DoRender( Position{ l_w * 2, l_h * 1 }
+		DoRender( p_position + Position{ l_w * 2, l_h * 1 }
 			, p_size
 			, p_texture
 			, Point3f{ 1, 0, 0 }
@@ -118,7 +119,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 1 }
+		DoRender( p_position + Position{ l_w * 1, l_h * 1 }
 			, p_size
 			, p_texture
 			, Point3f{ 0, -1, 0 }
@@ -126,7 +127,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 0, l_h * 1 }
+		DoRender( p_position + Position{ l_w * 0, l_h * 1 }
 			, p_size
 			, p_texture
 			, Point3f{ -1, 0, 0 }
@@ -134,7 +135,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 3, l_h * 1 }
+		DoRender( p_position + Position{ l_w * 3, l_h * 1 }
 			, p_size
 			, p_texture
 			, Point3f{ 0, 1, 0 }
@@ -142,7 +143,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 0 }
+		DoRender( p_position + Position{ l_w * 1, l_h * 0 }
 			, p_size
 			, p_texture
 			, Point3f{ 0, 0, -1 }
@@ -150,7 +151,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 2 }
+		DoRender( p_position + Position{ l_w * 1, l_h * 2 }
 			, p_size
 			, p_texture
 			, Point3f{ 0, 0, 1 }
@@ -160,7 +161,7 @@ namespace Castor3D
 			, *m_geometryBuffers );
 	}
 
-	void RenderDepthCubeToTexture::DoRender( Position const & p_position
+	void RenderDepthCubeToTexture::DoRender( Point2i const & p_position
 		, Size const & p_size
 		, TextureLayout const & p_texture
 		, Point3f const & p_face
@@ -170,7 +171,7 @@ namespace Castor3D
 		, GeometryBuffers const & p_geometryBuffers )
 	{
 		REQUIRE( p_texture.GetType() == TextureType::eCube );
-		m_viewport.SetPosition( p_position );
+		m_viewport.SetPosition( Position{ p_position[0], p_position[1] } );
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
 		m_viewport.Apply();

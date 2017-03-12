@@ -45,9 +45,10 @@ namespace Castor3D
 		return std::unique_ptr< DirectionalLight >( new DirectionalLight{ p_light } );
 	}
 
-	void DirectionalLight::Update( Point3r const & p_target, int32_t p_index )
+	void DirectionalLight::Update( Point3r const & p_target
+		, Viewport & p_viewport
+		, int32_t p_index )
 	{
-		REQUIRE( m_viewport );
 		auto l_node = GetLight().GetParent();
 		l_node->Update();
 		auto l_orientation = l_node->GetDerivedOrientation();
@@ -55,7 +56,7 @@ namespace Castor3D
 		Point3f l_up{ 0, 1, 0 };
 		l_orientation.transform( l_up, l_up );
 		matrix::look_at( m_lightSpace, l_position, l_position + m_direction, l_up );
-		m_lightSpace = m_viewport->GetProjection() * m_lightSpace;
+		m_lightSpace = p_viewport.GetProjection() * m_lightSpace;
 	}
 
 	void DirectionalLight::UpdateNode( SceneNode const & p_node )

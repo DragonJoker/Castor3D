@@ -96,29 +96,13 @@ namespace forward
 		 */
 		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderOpaque
 		 */
-		void DoBeginRender()override;
+		void DoRenderOpaque( uint32_t & p_visible )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderTransparent
 		 */
-		void DoBeginOpaqueRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
-		 */
-		void DoEndOpaqueRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
-		 */
-		void DoBeginTransparentRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
-		 */
-		void DoEndTransparentRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
-		 */
-		void DoEndRender()override;
+		void DoRenderTransparent( uint32_t & p_visible )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */

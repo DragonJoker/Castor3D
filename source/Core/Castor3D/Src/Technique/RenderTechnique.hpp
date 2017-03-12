@@ -249,36 +249,6 @@ namespace Castor3D
 
 	private:
 		/**
-		*\~english
-		*\return		The directional light shadow map.
-		*\~french
-		*\return		La map d'ombre de la lumière directionnelle.
-		*/
-		inline TextureUnit & GetDirectionalShadowMap()
-		{
-			return m_directionalShadowMap.GetTexture();
-		}
-		/**
-		*\~english
-		*\return		The spot lights shadow map.
-		*\~french
-		*\return		La map d'ombre des lumières projecteur.
-		*/
-		inline TextureUnit & GetSpotShadowMap()
-		{
-			return m_spotShadowMap.GetTexture();
-		}
-		/**
-		*\~english
-		*\return		The point lights shadow map.
-		*\~french
-		*\return		La map d'ombre des lumières ponctuelles.
-		*/
-		inline std::vector< TextureUnit > & GetPointShadowMaps()
-		{
-			return m_pointShadowMap.GetTextures();
-		}
-		/**
 		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
@@ -314,52 +284,22 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Render begin function.
-		 *\remarks		At the end of this method, the frame buffer that will receive draw calls must be bound.
-		 *\return		\p true if ok.
+		 *\brief		Renders opaque nodes.
+		 *\param[out]	p_visible	The visible objects count.
 		 *\~french
-		 *\brief		Fonction de début de rendu.
-		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
-		 *\return		\p true si tout s'est bien passé.
+		 *\brief		Dessine les noeuds opaques.
+		 *\param[out]	p_visible	Le nombre d'objets visibles.
 		 */
-		C3D_API virtual void DoBeginRender() = 0;
+		C3D_API virtual void DoRenderOpaque( uint32_t & p_visible ) = 0;
 		/**
 		 *\~english
-		 *\brief		Opaque objets render begin function.
+		 *\brief		Renders transparent nodes.
+		 *\param[out]	p_visible	The visible objects count.
 		 *\~french
-		 *\brief		Fonction de début de rendu des objets opaques.
+		 *\brief		Dessine les noeuds transparents.
+		 *\param[out]	p_visible	Le nombre d'objets visibles.
 		 */
-		C3D_API virtual void DoBeginOpaqueRendering() = 0;
-		/**
-		 *\~english
-		 *\brief		Opaque objets render end function.
-		 *\~french
-		 *\brief		Fonction de fin de rendu des objets opaques.
-		 */
-		C3D_API virtual void DoEndOpaqueRendering() = 0;
-		/**
-		 *\~english
-		 *\brief		Transparent objets render begin function.
-		 *\~french
-		 *\brief		Fonction de début de rendu des objets transparents.
-		 */
-		C3D_API virtual void DoBeginTransparentRendering() = 0;
-		/**
-		 *\~english
-		 *\brief		Transparent objets render end function.
-		 *\~french
-		 *\brief		Fonction de fin de rendu des objets transparents.
-		 */
-		C3D_API virtual void DoEndTransparentRendering() = 0;
-		/**
-		 *\~english
-		 *\brief		Render end function.
-		 *\remarks		At the end of this method, no frame buffer must be bound.
-		 *\~french
-		 *\brief		Fonction de fin de rendu.
-		 *\remarks		A la sortie de cette méthode, aucun tampon d'image ne doit être activé.
-		 */
-		C3D_API virtual void DoEndRender() = 0;
+		C3D_API virtual void DoRenderTransparent( uint32_t & p_visible ) = 0;
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
@@ -386,15 +326,6 @@ namespace Castor3D
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
-		//!\~english	The shadow map texture used for directional lights.
-		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type directionnelles.
-		ShadowMapDirectional m_directionalShadowMap;
-		//!\~english	The shadow map texture used for spot lights.
-		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type spot.
-		ShadowMapSpot m_spotShadowMap;
-		//!\~english	The shadow map texture used for pont lights.
-		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type point.
-		ShadowMapPoint m_pointShadowMap;
 		//!\~english	The pass used to render opaque nodes.
 		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;

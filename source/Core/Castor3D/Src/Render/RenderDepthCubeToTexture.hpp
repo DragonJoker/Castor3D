@@ -87,7 +87,8 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API void Render( Castor::Size const & p_size
+		C3D_API void Render( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture );
 
 	protected:
@@ -111,7 +112,7 @@ namespace Castor3D
 		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void DoRender( Castor::Position const & p_position
+		C3D_API void DoRender( Castor::Point2i const & p_position
 			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, Castor::Point3f const & p_face

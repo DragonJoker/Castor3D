@@ -50,9 +50,13 @@ namespace Castor3D
 	{
 	}
 
-	void Light::Update( Point3r const & p_target, int32_t p_index )
+	void Light::Update( Point3r const & p_target
+		, Viewport & p_viewport
+		, int32_t p_index )
 	{
-		m_category->Update( p_target, p_index );
+		m_category->Update( p_target
+			, p_viewport
+			, p_index );
 	}
 
 	void Light::Bind( PxBufferBase & p_texture, uint32_t p_index )
@@ -89,38 +93,20 @@ namespace Castor3D
 
 	DirectionalLightSPtr Light::GetDirectionalLight()const
 	{
-		DirectionalLightSPtr l_return;
-
-		if ( m_category->GetLightType() == LightType::eDirectional )
-		{
-			l_return = std::static_pointer_cast< DirectionalLight >( m_category );
-		}
-
-		return l_return;
+		REQUIRE( m_category->GetLightType() == LightType::eDirectional );
+		return std::static_pointer_cast< DirectionalLight >( m_category );
 	}
 
 	PointLightSPtr Light::GetPointLight()const
 	{
-		PointLightSPtr l_return;
-
-		if ( m_category->GetLightType() == LightType::ePoint )
-		{
-			l_return = std::static_pointer_cast< PointLight >( m_category );
-		}
-
-		return l_return;
+		REQUIRE( m_category->GetLightType() == LightType::ePoint );
+		return std::static_pointer_cast< PointLight >( m_category );
 	}
 
 	SpotLightSPtr Light::GetSpotLight()const
 	{
-		SpotLightSPtr l_return;
-
-		if ( m_category->GetLightType() == LightType::eSpot )
-		{
-			l_return = std::static_pointer_cast< SpotLight >( m_category );
-		}
-
-		return l_return;
+		REQUIRE( m_category->GetLightType() == LightType::eSpot );
+		return std::static_pointer_cast< SpotLight >( m_category );
 	}
 
 	void Light::OnNodeChanged( SceneNode const & p_node )

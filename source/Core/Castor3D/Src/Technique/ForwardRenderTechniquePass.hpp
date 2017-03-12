@@ -20,72 +20,64 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_DeferredMsaaOpaquePass_H___
-#define ___C3D_DeferredMsaaOpaquePass_H___
+#ifndef ___C3D_ForwardRenderTechniquePass_H___
+#define ___C3D_ForwardRenderTechniquePass_H___
 
-#include <Technique/RenderTechniquePass.hpp>
+#include "RenderTechniquePass.hpp"
 
-namespace deferred_msaa
+namespace Castor3D
 {
-	class RenderTechnique;
 	/*!
 	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		12/11/2012
+	\version	0.9.0
+	\date		08/12/2016
 	\~english
-	\brief		Deferred lighting Render technique pass.
+	\brief		Forward render technique pass class.
 	\~french
-	\brief		Classe de passe de technique de rendu implémentant le Deferred lighting.
+	\brief		Classe de passe de technique de rendu de type forward.
 	*/
-	class OpaquePass
-		: public Castor3D::RenderTechniquePass
+	class ForwardRenderTechniquePass
+		: public RenderTechniquePass
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_name			The technique name.
 		 *\param[in]	p_renderTarget	The render target for this technique.
 		 *\param[in]	p_technique		The parent render technique.
+		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
+		 *\param[in]	p_multisampling	The multisampling status
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_name			Le nom de la technique.
 		 *\param[in]	p_renderTarget	La render target pour cette technique.
 		 *\param[in]	p_technique		La technique de rendu parente.
+		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
+		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
 		 */
-		OpaquePass( Castor3D::RenderTarget & p_renderTarget
-			, Castor3D::RenderTechnique & p_technique );
+		C3D_API ForwardRenderTechniquePass( Castor::String const & p_name
+			, RenderTarget & p_renderTarget
+			, RenderTechnique & p_technique
+			, bool p_opaque
+			, bool p_multisampling = false );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~OpaquePass();
+		C3D_API virtual ~ForwardRenderTechniquePass();
 		/**
 		 *\copydoc		Castor3D::RenderPass::RenderShadowMaps
 		 */
-		void RenderShadowMaps()override;
+		C3D_API void RenderShadowMaps()override;
 
-	protected:
+	private:
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetDepthMaps
 		 */
-		void DoGetDepthMaps( Castor3D::DepthMapArray & p_depthMaps )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
-		 */
-		void DoUpdateFlags( Castor3D::TextureChannels & p_textureFlags
-			, Castor3D::ProgramFlags & p_programFlags
-			, Castor3D::SceneFlags & p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
-		 */
-		Castor::String DoGetPixelShaderSource( Castor3D::TextureChannels const & p_textureFlags
-			, Castor3D::ProgramFlags const & p_programFlags
-			, Castor3D::SceneFlags const & p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
-		 */
-		void DoUpdatePipeline( Castor3D::RenderPipeline & p_pipeline )const override;
+		C3D_API void DoGetDepthMaps( DepthMapArray & p_depthMaps )override;
 	};
 }
 

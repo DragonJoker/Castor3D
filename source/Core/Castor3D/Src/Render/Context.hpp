@@ -211,7 +211,8 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API void RenderDepthCube( Castor::Size const & p_size
+		C3D_API void RenderDepthCube( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture );
 		/**
 		 *\~english
@@ -225,7 +226,8 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_index		L'index de la couche.
 		 */
-		C3D_API void RenderDepthCube( Castor::Size const & p_size
+		C3D_API void RenderDepthCube( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, uint32_t p_index );
 		/**
@@ -358,6 +360,44 @@ namespace Castor3D
 			, uint32_t p_index )
 		{
 			RenderDepth( Castor::Position{}
+				, p_size
+				, p_texture
+				, p_index );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the given depth cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\~french
+		 *\brief		Rend la texture cube de profondeur donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 */
+		inline void RenderDepthCube( Castor::Size const & p_size
+			, TextureLayout const & p_texture )
+		{
+			RenderDepthCube( Castor::Position{}
+				, p_size
+				, p_texture );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_index		The layer index.
+		 *\~french
+		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_index		L'index de la couche.
+		 */
+		inline void RenderDepthCube( Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, uint32_t p_index )
+		{
+			RenderDepthCube( Castor::Position{}
 				, p_size
 				, p_texture
 				, p_index );

@@ -48,7 +48,7 @@ namespace Castor3D
 	{
 	}
 
-	bool ShadowMap::Initialise( Size const & p_size )
+	bool ShadowMap::Initialise()
 	{
 		bool l_return = true;
 
@@ -56,19 +56,20 @@ namespace Castor3D
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			l_return = m_frameBuffer->Create();
+			auto & l_size = DoGetSize();
 
 			if ( l_return )
 			{
-				l_return = m_frameBuffer->Initialise( p_size );
+				l_return = m_frameBuffer->Initialise( l_size );
 			}
 
 			if ( l_return )
 			{
-				DoInitialise( p_size );
+				DoInitialise();
 				
 				for ( auto & l_it : m_passes )
 				{
-					l_it.second->Initialise( p_size );
+					l_it.second->Initialise( l_size );
 				}
 			}
 

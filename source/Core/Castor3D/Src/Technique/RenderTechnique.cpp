@@ -127,9 +127,6 @@ namespace Castor3D
 		, m_transparentPass{ std::move( p_transparentPass ) }
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
-		, m_directionalShadowMap{ *p_renderTarget.GetEngine() }
-		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
-		, m_pointShadowMap{ *p_renderTarget.GetEngine() }
 	{
 	}
 
@@ -159,42 +156,14 @@ namespace Castor3D
 				m_initialised = m_frameBuffer.Initialise( m_size );
 			}
 
-			auto & l_scene = *m_renderTarget.GetScene();
+			if ( m_initialised )
+			{
+				m_initialised = m_opaquePass->InitialiseShadowMaps();
+			}
 
 			if ( m_initialised )
 			{
-				l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
-				{
-					if ( p_light.IsShadowProducer() )
-					{
-						switch ( p_light.GetLightType() )
-						{
-						case LightType::eDirectional:
-							m_directionalShadowMap.AddLight( p_light );
-							break;
-
-						case LightType::ePoint:
-							m_pointShadowMap.AddLight( p_light );
-							break;
-
-						case LightType::eSpot:
-							m_spotShadowMap.AddLight( p_light );
-							break;
-						}
-					}
-				} );
-
-				m_initialised = m_directionalShadowMap.Initialise( Size{ 4096, 4096 } );
-
-				if ( m_initialised )
-				{
-					m_initialised = m_spotShadowMap.Initialise( Size{ 1024, 1024 } );
-				}
-
-				if ( m_initialised )
-				{
-					m_initialised = m_pointShadowMap.Initialise( Size{ 1024, 1024 } );
-				}
+				m_initialised = m_transparentPass->InitialiseShadowMaps();
 			}
 
 			if ( m_initialised )
@@ -202,6 +171,8 @@ namespace Castor3D
 				m_opaquePass->Initialise( m_size );
 				m_transparentPass->Initialise( m_size );
 			}
+
+			ENSURE( m_initialised );
 		}
 
 		return m_initialised;
@@ -209,11 +180,10 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
+		m_transparentPass->CleanupShadowMaps();
+		m_opaquePass->CleanupShadowMaps();
 		m_transparentPass->Cleanup();
 		m_opaquePass->Cleanup();
-		m_pointShadowMap.Cleanup();
-		m_spotShadowMap.Cleanup();
-		m_directionalShadowMap.Cleanup();
 		m_initialised = false;
 		m_frameBuffer.Cleanup();
 		DoCleanup();
@@ -223,10 +193,8 @@ namespace Castor3D
 	{
 		m_opaquePass->Update( p_queues );
 		m_transparentPass->Update( p_queues );
-
-		m_pointShadowMap.Update( *m_renderTarget.GetCamera(), p_queues );
-		m_spotShadowMap.Update( *m_renderTarget.GetCamera(), p_queues );
-		m_directionalShadowMap.Update( *m_renderTarget.GetCamera(), p_queues );
+		m_opaquePass->UpdateShadowMaps( p_queues );
+		m_transparentPass->UpdateShadowMaps( p_queues );
 	}
 
 	void RenderTechnique::Render( uint32_t & p_visible, uint32_t & p_particles )
@@ -235,24 +203,42 @@ namespace Castor3D
 		l_scene.GetLightCache().UpdateLights();
 		m_renderSystem.PushScene( &l_scene );
 		bool l_shadows = l_scene.HasShadows();
-		m_directionalShadowMap.Render();
-		m_pointShadowMap.Render();
-		m_spotShadowMap.Render();
 
-		DoBeginRender();
-		l_scene.RenderBackground( GetSize() );
+		l_scene.RenderBackgroundImage( GetSize() );
+
 		auto & l_camera = *m_renderTarget.GetCamera();
 		l_camera.Resize( m_size );
 		l_camera.Update();
-		l_camera.Apply();
 
-		DoBeginOpaqueRendering();
-		m_opaquePass->Render( p_visible, l_shadows );
-		DoEndOpaqueRendering();
+		DoRenderOpaque( p_visible );
+
+#if !defined( NDEBUG )
+
+		//if ( !m_spotShadowMap.GetPasses().empty() )
+		//{
+		//	auto & l_depthMap = m_opaquePass->GetSpotShadowMap();
+		//	Size l_size{ 256u, 256u };
+		//	m_renderSystem.GetCurrentContext()->RenderDepth( l_size
+		//		, *l_depthMap.GetTexture(), 0u );
+		//}
+		//else if ( !m_pointShadowMap.GetPasses().empty() )
+		//{
+		//	Size l_size{ 512u, 512u };
+		//	auto & l_depthMap1 = m_opaquePass->GetPointShadowMaps()[0u];
+		//	m_renderSystem.GetCurrentContext()->RenderDepthCube( Position{ 0, 0 }
+		//		, Size{ l_size.width() / 4, l_size.height() / 4 }
+		//		, *l_depthMap1.GetTexture() );
+		//	auto & l_depthMap2 = m_opaquePass->GetPointShadowMaps()[1u];
+		//	m_renderSystem.GetCurrentContext()->RenderDepthCube( Position{ 0, 512 }
+		//		, Size{ l_size.width() / 4, l_size.height() / 4 }
+		//		, *l_depthMap2.GetTexture() );
+		//}
+
+#endif
 
 		if ( l_scene.GetFog().GetType() == GLSL::FogType::eDisabled )
 		{
-			l_scene.RenderForeground( GetSize(), l_camera );
+			l_scene.RenderBackground( GetSize(), l_camera );
 		}
 
 		l_scene.GetParticleSystemCache().ForEach( [this, &p_particles]( ParticleSystem & p_particleSystem )
@@ -261,30 +247,7 @@ namespace Castor3D
 			p_particles += p_particleSystem.GetParticlesCount();
 		} );
 
-		DoBeginTransparentRendering();
-		m_transparentPass->Render( p_visible, l_shadows );
-		DoEndTransparentRendering();
-
-#if !defined( NDEBUG )
-
-		if ( !m_spotShadowMap.GetPasses().empty() )
-		{
-			auto & l_depthMap = m_spotShadowMap.GetTexture();
-			Size l_size{ 256u, 256u };
-			m_renderSystem.GetCurrentContext()->RenderDepth( l_size
-				, *l_depthMap.GetTexture(), 0u );
-		}
-		else if ( !m_pointShadowMap.GetPasses().empty() )
-		{
-			auto & l_depthMap = m_pointShadowMap.GetTexture( 0u );
-			Size l_size{ 512u, 512u };
-			m_renderSystem.GetCurrentContext()->RenderDepthCube( Size{ l_size.width() / 4, l_size.height() / 4 }
-				, *l_depthMap.GetTexture() );
-		}
-
-#endif
-
-		DoEndRender();
+		DoRenderTransparent( p_visible );
 
 		for ( auto l_effect : m_renderTarget.GetPostEffects() )
 		{

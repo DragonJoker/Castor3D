@@ -156,8 +156,8 @@ namespace Castor3D
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
-		//!	6 * [2(vertex position) + 2(texture coordinates)]
-		std::array< Castor::real, 6 * ( 2 + 2 ) > m_bufferVertex;
+		//!	6 * [3(vertex position) + 2(texture coordinates)]
+		std::array< Castor::real, 6 * ( 3 + 2 ) > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;

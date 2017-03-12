@@ -30,8 +30,11 @@ SOFTWARE.
 #include <Shader/UniformBuffer.hpp>
 
 #include "DirectionalLightPass.hpp"
+#include "DirectionalLightPassShadow.hpp"
 #include "PointLightPass.hpp"
+#include "PointLightPassShadow.hpp"
 #include "SpotLightPass.hpp"
+#include "SpotLightPassShadow.hpp"
 
 namespace deferred
 {
@@ -110,29 +113,13 @@ namespace deferred
 		 */
 		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderOpaque
 		 */
-		void DoBeginRender()override;
+		void DoRenderOpaque( uint32_t & p_visible )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderTransparent
 		 */
-		void DoBeginOpaqueRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
-		 */
-		void DoEndOpaqueRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
-		 */
-		void DoBeginTransparentRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
-		 */
-		void DoEndTransparentRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
-		 */
-		void DoEndRender()override;
+		void DoRenderTransparent( uint32_t & p_visible )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
@@ -178,6 +165,15 @@ namespace deferred
 		//!\~english	The shader program used to render spot lights.
 		//!\~french		Le shader utilisé pour rendre les lumières projecteur.
 		SpotLightPass m_spotLightPass;
+		//!\~english	The shader program used to render directional lights.
+		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
+		DirectionalLightPassShadow m_directionalLightPassShadow;
+		//!\~english	The shader program used to render point lights.
+		//!\~french		Le shader utilisé pour rendre les lumières ponctuelles.
+		PointLightPassShadow m_pointLightPassShadow;
+		//!\~english	The shader program used to render spot lights.
+		//!\~french		Le shader utilisé pour rendre les lumières projecteur.
+		SpotLightPassShadow m_spotLightPassShadow;
 		//!\~english	The scene render node.
 		//!\~french		Le noeud de rendu de la scène.
 		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;

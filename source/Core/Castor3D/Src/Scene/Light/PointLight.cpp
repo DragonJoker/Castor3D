@@ -53,7 +53,9 @@ namespace Castor3D
 		return std::unique_ptr< PointLight >( new PointLight{ p_light } );
 	}
 
-	void PointLight::Update( Point3r const & p_target, int32_t p_index )
+	void PointLight::Update( Point3r const & p_target
+		, Viewport & p_viewport
+		, int32_t p_index )
 	{
 		m_shadowMapIndex = p_index;
 	}

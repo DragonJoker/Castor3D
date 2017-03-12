@@ -115,7 +115,9 @@ namespace Castor3D
 	void ShadowMapPassPoint::DoUpdate( RenderQueueArray & p_queues )
 	{
 		auto l_position = m_light.GetParent()->GetDerivedPosition();
-		m_light.Update( l_position, m_index );
+		m_light.Update( l_position
+			, m_viewport
+			, m_index );
 		p_queues.push_back( m_renderQueue );
 		DoUpdateShadowMatrices( m_projection, l_position, m_shadowConfig );
 	}

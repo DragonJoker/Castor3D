@@ -60,6 +60,10 @@ namespace deferred
 		 *\brief		Destructeur
 		 */
 		virtual ~OpaquePass();
+		/**
+		 *\copydoc		Castor3D::RenderPass::RenderShadowMaps
+		 */
+		void RenderShadowMaps()override;
 
 	protected:
 		/**

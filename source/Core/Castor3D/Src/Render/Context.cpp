@@ -252,17 +252,22 @@ namespace Castor3D
 			, p_index );
 	}
 
-	void Context::RenderDepthCube( Castor::Size const & p_size
+	void Context::RenderDepthCube( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture )
 	{
-		m_depthCube.Render( p_size, p_texture );
+		m_depthCube.Render( p_position
+			, p_size
+			, p_texture );
 	}
 
-	void Context::RenderDepthCube( Castor::Size const & p_size
+	void Context::RenderDepthCube( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{
-		m_depthLayerCube.Render( p_size
+		m_depthLayerCube.Render( p_position
+			, p_size
 			, p_texture
 			, p_index );
 	}

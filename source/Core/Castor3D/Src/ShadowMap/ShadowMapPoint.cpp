@@ -34,39 +34,12 @@ namespace Castor3D
 		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
 		static String const ShadowMatrices = cuT( "c3d_mtxShadowMatrices" );
-
-		void DoInitialiseShadowMap( Engine & p_engine, Size const & p_size, TextureUnit & p_unit )
-		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Point" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-			bool l_return{ true };
-
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eCube,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F,
-				p_size );
-			p_unit.SetTexture( l_texture );
-			p_unit.SetSampler( l_sampler );
-
-			for ( auto & l_image : *l_texture )
-			{
-				l_image->InitialiseSource();
-			}
-
-			p_unit.Initialise();
-		}
 	}
 
-	ShadowMapPoint::ShadowMapPoint( Engine & p_engine )
+	ShadowMapPoint::ShadowMapPoint( Engine & p_engine
+		, std::vector< TextureUnit > && p_textures )
 		: ShadowMap{ p_engine }
+		, m_shadowMaps{ std::move( p_textures ) }
 	{
 	}
 
@@ -88,10 +61,10 @@ namespace Castor3D
 					, l_it.second );
 			}
 
-			auto l_it = m_sorted.begin();
 			const int32_t l_max = DoGetMaxPasses();
+			auto l_it = m_sorted.begin();
 
-			for ( int32_t i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
+			for ( auto i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
 			{
 				l_it->second->Update( p_queues, i );
 			}
@@ -120,27 +93,27 @@ namespace Castor3D
 
 	int32_t ShadowMapPoint::DoGetMaxPasses()const
 	{
-		return GLSL::PointShadowMapCount;
+		return int32_t( m_shadowMaps.size() );
 	}
 
-	void ShadowMapPoint::DoInitialise( Size const & p_size )
+	Size ShadowMapPoint::DoGetSize()const
 	{
-		m_shadowMaps.reserve( DoGetMaxPasses() );
-		m_depthAttach.resize( DoGetMaxPasses() );
+		return m_shadowMaps[0].GetTexture()->GetDimensions();
+	}
 
-		for ( auto & l_attach : m_depthAttach )
+	void ShadowMapPoint::DoInitialise()
+	{
+		constexpr float l_component = std::numeric_limits< float >::max();
+		m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
+		m_depthAttach.reserve( DoGetMaxPasses() );
+
+		for ( auto & l_map : m_shadowMaps )
 		{
-			m_shadowMaps.emplace_back( *GetEngine() );
-			auto & l_map = m_shadowMaps.back();
-			DoInitialiseShadowMap( *GetEngine(), p_size, l_map );
-
-			constexpr float l_component = std::numeric_limits< float >::max();
-			m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
-
 			auto l_texture = l_map.GetTexture();
-			m_depthAttach.resize( DoGetMaxPasses() );
-			l_attach = m_frameBuffer->CreateAttachment( l_texture );
+			l_texture->Initialise();
+			auto l_attach = m_frameBuffer->CreateAttachment( l_texture );
 			l_attach->SetTarget( l_texture->GetType() );
+			m_depthAttach.push_back( l_attach );
 		}
 	}
 

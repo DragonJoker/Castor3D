@@ -44,11 +44,14 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_texture	The texture.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API ShadowMapDirectional( Engine & p_engine );
+		C3D_API ShadowMapDirectional( Engine & p_engine
+			, TextureUnit && p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -104,9 +107,13 @@ namespace Castor3D
 		 */
 		int32_t DoGetMaxPasses()const override;
 		/**
+		 *\copydoc		Castor3D::ShadowMap::DoGetSize
+		 */
+		Castor::Size DoGetSize()const override;
+		/**
 		 *\copydoc		Castor3D::ShadowMap::DoInitialise
 		 */
-		void DoInitialise( Castor::Size const & p_size )override;
+		void DoInitialise()override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoCleanup
 		 */

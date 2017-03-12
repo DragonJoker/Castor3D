@@ -59,6 +59,9 @@ namespace Castor3D
 		C3D_API RenderTechniquePass( Castor::String const & p_name
 			, RenderTarget & p_renderTarget
 			, RenderTechnique & p_technique
+			, TextureUnit && p_directionalShadowMap
+			, std::vector< TextureUnit > && p_pointShadowMaps
+			, TextureUnit && p_spotShadowMap
 			, bool p_opaque
 			, bool p_multisampling = false );
 		/**
@@ -79,6 +82,68 @@ namespace Castor3D
 		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
 		C3D_API void Render( uint32_t & p_visible, bool p_shadows );
+		/**
+		 *\~english
+		 *\return		Initialises the shadow maps.
+		 *\~french
+		 *\return		Initialise les maps de'ombres.
+		 */
+		C3D_API bool InitialiseShadowMaps();
+		/**
+		 *\~english
+		 *\return		Cleans up the shadow maps.
+		 *\~french
+		 *\return		Nettoie les maps de'ombres.
+		 */
+		C3D_API void CleanupShadowMaps();
+		/**
+		 *\~english
+		 *\brief		Updates the shadow maps.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\~french
+		 *\brief		Met à jour les maps d'ombres.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 */
+		C3D_API void UpdateShadowMaps( RenderQueueArray & p_queues );
+		/**
+		 *\~english
+		 *\brief		Renders the shadow maps.
+		 *\~french
+		 *\brief		Dessine les maps d'ombres.
+		 */
+		C3D_API virtual void RenderShadowMaps() = 0;
+		/**
+		 *\~english
+		 *\return		The directional light shadow map.
+		 *\~french
+		 *\return		La map d'ombre de la lumière directionnelle.
+		 */
+		inline TextureUnit & GetDirectionalShadowMap()
+		{
+			return m_directionalShadowMap.GetTexture();
+		}
+		/**
+		 *\~english
+		 *\return		The spot lights shadow map.
+		 *\~french
+		 *\return		La map d'ombre des lumières projecteur.
+		 */
+		inline TextureUnit & GetSpotShadowMap()
+		{
+			return m_spotShadowMap.GetTexture();
+		}
+		/**
+		 *\~english
+		 *\return		The point lights shadow map.
+		 *\~french
+		 *\return		La map d'ombre des lumières ponctuelles.
+		 */
+		inline std::vector< TextureUnit > & GetPointShadowMaps()
+		{
+			return m_pointShadowMap.GetTextures();
+		}
 
 	private:
 		/**
@@ -140,7 +205,7 @@ namespace Castor3D
 		 *\brief		Récupère les textures de profondeur pour les noeuds opaques.
 		 *\param[out]	p_depthMaps	Reçoit les textures.
 		 */
-		C3D_API virtual void DoGetDepthMaps( DepthMapArray & p_depthMaps );
+		C3D_API virtual void DoGetDepthMaps( DepthMapArray & p_depthMaps ) = 0;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoInitialise
 		 */
@@ -196,6 +261,15 @@ namespace Castor3D
 		//!\~english	The scene render node.
 		//!\~french		Le noeud de rendu de la scène.
 		SceneRenderNode m_sceneNode;
+		//!\~english	The shadow map used for directional lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type directionnelles.
+		ShadowMapDirectional m_directionalShadowMap;
+		//!\~english	The shadow map used for spot lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type spot.
+		ShadowMapSpot m_spotShadowMap;
+		//!\~english	The shadow map used for pont lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type point.
+		ShadowMapPoint m_pointShadowMap;
 	};
 }
 

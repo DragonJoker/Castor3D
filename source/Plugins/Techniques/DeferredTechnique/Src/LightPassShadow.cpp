@@ -1,4 +1,4 @@
-#include "LightPass.hpp"
+#include "LightPassShadow.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -18,121 +18,7 @@ using namespace Castor3D;
 
 namespace deferred
 {
-	//************************************************************************************************
-
-	String GetTextureName( DsTexture p_texture )
-	{
-		static std::array< String, size_t( DsTexture::eCount ) > Values
-		{
-			{
-				cuT( "c3d_mapPosition" ),
-				cuT( "c3d_mapDiffuse" ),
-				cuT( "c3d_mapNormals" ),
-				cuT( "c3d_mapAmbient" ),
-				cuT( "c3d_mapSpecular" ),
-				cuT( "c3d_mapEmissive" ),
-			}
-		};
-
-		return Values[size_t( p_texture )];
-	}
-
-	PixelFormat GetTextureFormat( DsTexture p_texture )
-	{
-		static std::array< PixelFormat, size_t( DsTexture::eCount ) > Values
-		{
-			{
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
-			}
-		};
-
-		return Values[size_t( p_texture )];
-	}
-
-	AttachmentPoint GetTextureAttachmentPoint( DsTexture p_texture )
-	{
-		static std::array< AttachmentPoint, size_t( DsTexture::eCount ) > Values
-		{
-			{
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
-			}
-		};
-
-		return Values[size_t( p_texture )];
-	}
-
-	uint32_t GetTextureAttachmentIndex( DsTexture p_texture )
-	{
-		static std::array< uint32_t, size_t( DsTexture::eCount ) > Values
-		{
-			{
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-			}
-		};
-
-		return Values[size_t( p_texture )];
-	}
-
-	float GetMaxDistance( LightCategory const & p_light
-		, Point3f const & p_attenuation
-		, float p_max )
-	{
-		constexpr float l_threshold = 0.000001f;
-		auto l_const = std::abs( p_attenuation[0] );
-		auto l_linear = std::abs( p_attenuation[1] );
-		auto l_quadr = std::abs( p_attenuation[2] );
-		float l_result = p_max;
-
-		if ( l_const >= l_threshold
-			|| l_linear >= l_threshold
-			|| l_quadr >= l_threshold )
-		{
-			float l_maxChannel = std::max( std::max( p_light.GetColour()[0]
-				, p_light.GetColour()[1] )
-				, p_light.GetColour()[2] );
-			auto l_c = 256.0f * l_maxChannel * p_light.GetDiffuseIntensity();
-
-			if ( l_quadr >= l_threshold )
-			{
-				if ( l_linear < l_threshold )
-				{
-					REQUIRE( l_c >= l_const );
-					l_result = sqrtf( ( l_c - l_const ) / l_quadr );
-				}
-				else
-				{
-					auto l_delta = l_linear * l_linear - 4 * l_quadr * ( l_const - l_c );
-					REQUIRE( l_delta >= 0 );
-					l_result = ( -l_linear + sqrtf( l_delta ) ) / ( 2 * l_quadr );
-				}
-			}
-			else if ( l_linear >= l_threshold )
-			{
-				l_result = ( l_c - l_const ) / l_linear;
-			}
-		}
-
-		return std::min( p_max, l_result );
-	}
-
-	//************************************************************************************************
-
-	void LightPass::Program::DoCreate( Scene const & p_scene
+	void LightPassShadow::Program::DoCreate( Scene const & p_scene
 		, String const & p_vtx
 		, String const & p_pxl
 		, uint16_t p_fogType )
@@ -157,7 +43,7 @@ namespace deferred
 		}
 	}
 
-	void LightPass::Program::DoDestroy()
+	void LightPassShadow::Program::DoDestroy()
 	{
 		m_firstPipeline->Cleanup();
 		m_blendPipeline->Cleanup();
@@ -171,7 +57,7 @@ namespace deferred
 		m_program.reset();
 	}
 
-	void LightPass::Program::DoInitialise( UniformBuffer & p_matrixUbo
+	void LightPassShadow::Program::DoInitialise( UniformBuffer & p_matrixUbo
 		, UniformBuffer & p_sceneUbo )
 	{
 		m_program->Initialise();
@@ -181,12 +67,12 @@ namespace deferred
 		m_blendPipeline->AddUniformBuffer( p_sceneUbo );
 	}
 
-	void LightPass::Program::DoCleanup()
+	void LightPassShadow::Program::DoCleanup()
 	{
 		m_program->Cleanup();
 	}
 
-	void LightPass::Program::DoBind( Size const & p_size
+	void LightPassShadow::Program::DoBind( Size const & p_size
 		, Castor3D::LightCategory const & p_light
 		, bool p_first )
 	{
@@ -206,14 +92,14 @@ namespace deferred
 
 	//************************************************************************************************
 
-	LightPass::LightPass( Engine & p_engine )
+	LightPassShadow::LightPassShadow( Engine & p_engine )
 		: m_engine{ p_engine }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 	}
 
-	void LightPass::DoBeginRender( Size const & p_size
+	void LightPassShadow::DoBeginRender( Size const & p_size
 		, GeometryPassResult const & p_gp )
 	{
 		p_gp[size_t( DsTexture::ePosition )]->Bind();
@@ -224,7 +110,7 @@ namespace deferred
 		p_gp[size_t( DsTexture::eEmissive )]->Bind();
 	}
 
-	void LightPass::DoEndRender( GeometryPassResult const & p_gp )
+	void LightPassShadow::DoEndRender( GeometryPassResult const & p_gp )
 	{
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
 		p_gp[size_t( DsTexture::eSpecular )]->Unbind();
@@ -234,7 +120,7 @@ namespace deferred
 		p_gp[size_t( DsTexture::ePosition )]->Unbind();
 	}
 
-	String LightPass::DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
+	String LightPassShadow::DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
 		, LightType p_type )const
 	{
 		using namespace GLSL;
@@ -257,7 +143,7 @@ namespace deferred
 		case LightType::eDirectional:
 			{
 				l_lighting = l_writer.CreateDirectionalLightingModel( PhongLightingModel::Name
-					, ShadowType::eNone );
+					, GetShadowType( p_sceneFlags ) );
 				auto light = l_writer.GetUniform< GLSL::DirectionalLight >( cuT( "light" ) );
 			}
 			break;
@@ -265,7 +151,7 @@ namespace deferred
 		case LightType::ePoint:
 			{
 				l_lighting = l_writer.CreatePointLightingModel( PhongLightingModel::Name
-					, ShadowType::eNone );
+					, GetShadowType( p_sceneFlags ) );
 				auto light = l_writer.GetUniform< GLSL::PointLight >( cuT( "light" ) );
 			}
 			break;
@@ -273,7 +159,7 @@ namespace deferred
 		case LightType::eSpot:
 			{
 				l_lighting = l_writer.CreateSpotLightingModel( PhongLightingModel::Name
-					, ShadowType::eNone );
+					, GetShadowType( p_sceneFlags ) );
 				auto light = l_writer.GetUniform< GLSL::SpotLight >( cuT( "light" ) );
 			}
 			break;

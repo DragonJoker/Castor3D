@@ -23,39 +23,10 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	namespace
-	{
-		void DoInitialiseShadowMap( Engine & p_engine, Size const & p_size, TextureUnit & p_unit )
-		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Directional" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eTwoDimensions,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F, p_size );
-			p_unit.SetTexture( l_texture );
-			p_unit.SetSampler( l_sampler );
-
-			for ( auto & l_image : *l_texture )
-			{
-				l_image->InitialiseSource();
-			}
-
-			p_unit.Initialise();
-		}
-	}
-
-	ShadowMapDirectional::ShadowMapDirectional( Engine & p_engine )
+	ShadowMapDirectional::ShadowMapDirectional( Engine & p_engine
+		, TextureUnit && p_texture )
 		: ShadowMap{ p_engine }
-		, m_shadowMap{ p_engine }
+		, m_shadowMap{ std::move( p_texture ) }
 	{
 	}
 
@@ -90,9 +61,14 @@ namespace Castor3D
 		return 1;
 	}
 
-	void ShadowMapDirectional::DoInitialise( Size const & p_size )
+	Size ShadowMapDirectional::DoGetSize()const
 	{
-		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
+		return m_shadowMap.GetTexture()->GetDimensions();
+	}
+
+	void ShadowMapDirectional::DoInitialise()
+	{
+		m_shadowMap.Initialise();
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 
 		auto l_texture = m_shadowMap.GetTexture();

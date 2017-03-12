@@ -42,7 +42,7 @@ namespace Castor3D
 	class ShadowMap
 		: public Castor::OwnedBy< Engine >
 	{
-	private:
+	protected:
 		using ShadowMapLightMap = std::map< LightRPtr, ShadowMapPassSPtr >;
 		using SortedPasses = std::map< double, ShadowMapPassSPtr >;
 
@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\brief		Initialise le frame buffer et les données spécifiques au type de source lumineuse.
 		 *\param[in]	p_size	Les dimensions voulues pour le frame buffer.
 		 */
-		C3D_API bool Initialise( Castor::Size const & p_size );
+		C3D_API bool Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer and light type specific data.
@@ -144,13 +144,20 @@ namespace Castor3D
 		C3D_API virtual int32_t DoGetMaxPasses()const = 0;
 		/**
 		 *\~english
+		 *\return		The shadow map texture dimensions.
+		 *\~english
+		 *\return		Les dimensions de la texture de map d'ombres.
+		 */
+		C3D_API virtual Castor::Size DoGetSize()const = 0;
+		/**
+		 *\~english
 		 *\brief		Initialises the light type specific data.
 		 *\param[in]	p_size	The wanted frame buffer dimensions.
 		 *\~french
 		 *\brief		Initialise les données spécifiques au type de source lumineuse.
 		 *\param[in]	p_size	Les dimensions voulues pour le frame buffer.
 		 */
-		C3D_API virtual void DoInitialise( Castor::Size const & p_size ) = 0;
+		C3D_API virtual void DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the light type specific data.

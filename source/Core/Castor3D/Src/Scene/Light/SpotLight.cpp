@@ -68,19 +68,20 @@ namespace Castor3D
 		return std::unique_ptr< SpotLight >( new SpotLight{ p_light } );
 	}
 
-	void SpotLight::Update( Point3r const & p_target, int32_t p_index )
+	void SpotLight::Update( Point3r const & p_target
+		, Viewport & p_viewport
+		, int32_t p_index )
 	{
-		REQUIRE( m_viewport );
 		auto l_node = GetLight().GetParent();
 		l_node->Update();
-		m_viewport->SetPerspective( GetCutOff() * 2, m_viewport->GetRatio(), 1.0_r, 1000.0_r );
-		m_viewport->Update();
+		p_viewport.SetPerspective( GetCutOff() * 2, p_viewport.GetRatio(), 1.0_r, 1000.0_r );
+		p_viewport.Update();
 		auto l_orientation = l_node->GetDerivedOrientation();
 		auto l_position = l_node->GetDerivedPosition();
 		Point3f l_up{ 0, 1, 0 };
 		l_orientation.transform( l_up, l_up );
 		matrix::look_at( m_lightSpace, l_position, l_position + m_direction, l_up );
-		m_lightSpace = m_viewport->GetProjection() * m_lightSpace;
+		m_lightSpace = p_viewport.GetProjection() * m_lightSpace;
 		m_shadowMapIndex = p_index;
 	}
 

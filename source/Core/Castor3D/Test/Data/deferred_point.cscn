@@ -4,6 +4,7 @@ scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0 0 0 1
+	background_image "Textures/background.hdr"
 
 	// skybox
 	// {
@@ -43,8 +44,8 @@ scene "Scene"
 		type point
 		parent "PointLightNode"
 		colour 1.0 1.0 1.0
-		intensity 0.0 8.0 10.0 10.0
-		attenuation 1.0 0.01 0.01
+		intensity 0.0 0.8 1.0 1.0
+		attenuation 1.0 0.01 0.0
 	}
 
 	object "PointLight"

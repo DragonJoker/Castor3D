@@ -20,41 +20,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_LightPass_H___
-#define ___C3D_LightPass_H___
+#ifndef ___C3D_LightPassShadow_H___
+#define ___C3D_LightPassShadow_H___
 
-#include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Technique/RenderTechnique.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/UniformBuffer.hpp>
+#include "LightPass.hpp"
 
 namespace deferred
 {
-	enum class DsTexture
-		: uint8_t
-	{
-		ePosition,
-		eDiffuse,
-		eNormals,
-		eAmbient,
-		eSpecular,
-		eEmissive,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
-	};
-	Castor::String GetTextureName( DsTexture p_texture );
-	Castor::PixelFormat GetTextureFormat( DsTexture p_texture );
-	Castor3D::AttachmentPoint GetTextureAttachmentPoint( DsTexture p_texture );
-	uint32_t GetTextureAttachmentIndex( DsTexture p_texture );
-	float GetMaxDistance( Castor3D::LightCategory const & p_light
-		, Castor::Point3f const & p_attenuation
-		, float p_max );
-
-	using GeometryPassResult = std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) >;
-
-	class LightPass
+	class LightPassShadow
 	{
 	protected:
-		LightPass( Castor3D::Engine & p_engine );
+		LightPassShadow( Castor3D::Engine & p_engine );
 		void DoBeginRender( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp );
 		void DoEndRender( GeometryPassResult const & p_gp );

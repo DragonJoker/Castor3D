@@ -38,7 +38,7 @@
 #include <State/DepthStencilState.hpp>
 #include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
-#include <Technique/RenderTechniquePass.hpp>
+#include <Technique/ForwardRenderTechniquePass.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -66,12 +66,15 @@ namespace deferred
 			, p_renderTarget
 			, p_renderSystem
 			, std::make_unique< OpaquePass >( p_renderTarget, *this )
-			, std::make_unique< RenderTechniquePass >( cuT( "deferred_transparent" ), p_renderTarget, *this, false, false )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_transparent" ), p_renderTarget, *this, false, false )
 			, p_params )
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
 		, m_directionalLightPass{ *p_renderTarget.GetEngine() }
 		, m_pointLightPass{ *p_renderTarget.GetEngine() }
 		, m_spotLightPass{ *p_renderTarget.GetEngine() }
+		, m_directionalLightPassShadow{ *p_renderTarget.GetEngine() }
+		, m_pointLightPassShadow{ *p_renderTarget.GetEngine() }
+		, m_spotLightPassShadow{ *p_renderTarget.GetEngine() }
 	{
 		UniformBuffer::FillSceneBuffer( m_sceneUbo );
 
@@ -125,19 +128,13 @@ namespace deferred
 		DoCleanupLightPass();
 	}
 
-	void RenderTechnique::DoBeginRender()
-	{
-	}
-
-	void RenderTechnique::DoBeginOpaqueRendering()
+	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
 	{
 		GetEngine()->SetPerObjectLighting( false );
+		m_renderTarget.GetCamera()->Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 		m_geometryPassFrameBuffer->Clear();
-	}
-
-	void RenderTechnique::DoEndOpaqueRendering()
-	{
+		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 		// Render the light pass.
 
@@ -164,7 +161,7 @@ namespace deferred
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 		auto & l_scene = *m_renderTarget.GetScene();
 		auto & l_camera = *m_renderTarget.GetCamera();
-		m_frameBuffer.m_frameBuffer->SetClearColour(l_scene.GetBackgroundColour() );
+		m_frameBuffer.m_frameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
 		m_frameBuffer.m_frameBuffer->Clear();
 
 		auto & l_fog = l_scene.GetFog();
@@ -228,25 +225,20 @@ namespace deferred
 		}
 
 		m_frameBuffer.m_frameBuffer->Unbind();
-		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, Rectangle{ Position{}, m_size }, uint32_t( BufferComponent::eDepth ) );
-		m_frameBuffer.m_frameBuffer->Bind();
+		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
+			, Rectangle{ Position{}, m_size }
+		, BufferComponent::eDepth | BufferComponent::eStencil );
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 
 #endif
-
 	}
 
-	void RenderTechnique::DoBeginTransparentRendering()
+	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
 	{
 		GetEngine()->SetPerObjectLighting( true );
-	}
-
-	void RenderTechnique::DoEndTransparentRendering()
-	{
+		m_renderTarget.GetCamera()->Apply();
+		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
-	}
-
-	void RenderTechnique::DoEndRender()
-	{
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
