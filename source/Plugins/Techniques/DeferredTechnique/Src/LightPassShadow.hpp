@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,6 +27,7 @@ SOFTWARE.
 #include "PointLightPass.hpp"
 #include "SpotLightPass.hpp"
 
+#include <Engine.hpp>
 #include <Scene/Light/Light.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>

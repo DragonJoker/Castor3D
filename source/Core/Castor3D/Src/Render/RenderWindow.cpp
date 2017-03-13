@@ -1,4 +1,4 @@
-#include "RenderWindow.hpp"
+﻿#include "RenderWindow.hpp"
 
 #include "Engine.hpp"
 #include "Cache/CameraCache.hpp"
@@ -422,7 +422,7 @@ namespace Castor3D
 		}
 
 		m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
-		m_backBuffers->Clear();
+		m_backBuffers->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_context->RenderTexture( m_size, *l_texture );
 		m_backBuffers->Unbind();
 	}

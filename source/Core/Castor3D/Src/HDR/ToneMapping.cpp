@@ -1,4 +1,4 @@
-#include "ToneMapping.hpp"
+﻿#include "ToneMapping.hpp"
 
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
@@ -84,6 +84,7 @@ namespace Castor3D
 		{
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
+			l_dsState.SetDepthMask( WritingMask::eZero );
 			m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 			m_pipeline->AddUniformBuffer( m_matrixUbo );
 			m_pipeline->AddUniformBuffer( m_configUbo );

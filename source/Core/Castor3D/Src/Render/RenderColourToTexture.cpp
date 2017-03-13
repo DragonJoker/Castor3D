@@ -1,4 +1,4 @@
-#include "RenderColourToTexture.hpp"
+﻿#include "RenderColourToTexture.hpp"
 
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
@@ -82,6 +82,7 @@ namespace Castor3D
 
 		DepthStencilState l_dsState;
 		l_dsState.SetDepthTest( false );
+		l_dsState.SetDepthMask( WritingMask::eAll );
 		m_pipeline = l_renderSystem.CreateRenderPipeline( std::move( l_dsState )
 			, RasteriserState{}
 			, BlendState{}
