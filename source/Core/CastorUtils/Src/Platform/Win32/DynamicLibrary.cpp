@@ -20,19 +20,27 @@ namespace Castor
 			try
 			{
 				m_pLibrary = ::LoadLibraryA( l_name.c_str() );
+
+				if ( !m_pLibrary )
+				{
+					CASTOR_EXCEPTION( System::GetLastErrorText() );
+				}
+
 				m_pathLibrary = p_name;
 			}
-			catch ( ... )
+			catch ( std::exception & p_exc )
 			{
-				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_name + std::string( "]" ) );
+				String l_strError = cuT( "Can't load dynamic library at [" ) + p_name + cuT( "]: " );
+				l_strError += p_exc.what();
+				Logger::LogError( l_strError );
 				m_pLibrary = nullptr;
 			}
-
-			if ( !m_pLibrary )
+			catch ( ... )
 			{
 				String l_strError = cuT( "Can't load dynamic library at [" ) + p_name + cuT( "]: " );
 				l_strError += System::GetLastErrorText();
 				Logger::LogError( l_strError );
+				m_pLibrary = nullptr;
 			}
 
 			//::SetErrorMode( l_uiOldMode );

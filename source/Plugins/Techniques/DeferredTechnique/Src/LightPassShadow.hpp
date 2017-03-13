@@ -67,6 +67,15 @@ namespace deferred
 		{
 			return *p_light.GetDirectionalLight();
 		}
+
+		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
+		{
+			Castor::Size l_size{ 256u, 256u };
+			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
+				, l_size
+				, *p_shadowMap.GetTexture() );
+			++g_index;
+		}
 	};
 
 	template<>
@@ -91,6 +100,15 @@ namespace deferred
 		{
 			return *p_light.GetPointLight();
 		}
+
+		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
+		{
+			Castor::Size l_size{ 128u, 128u };
+			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( Castor::Position{ 0, int32_t( g_index * 3 * l_size.height() ) }
+				, l_size
+				, *p_shadowMap.GetTexture() );
+			++g_index;
+		}
 	};
 
 	template<>
@@ -114,6 +132,15 @@ namespace deferred
 		static light_type const & GetTypedLight( Castor3D::Light const & p_light )
 		{
 			return *p_light.GetSpotLight();
+		}
+
+		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
+		{
+			Castor::Size l_size{ 256u, 256u };
+			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
+				, l_size
+				, *p_shadowMap.GetTexture() );
+			++g_index;
 		}
 	};
 
@@ -169,23 +196,35 @@ namespace deferred
 		{
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
 			my_pass_type::Update( p_size, p_light, p_camera );
+			LightPass::m_frameBuffer.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+			LightPass::m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
+			p_gp[size_t( DsTexture::ePosition )]->Bind();
+			p_gp[size_t( DsTexture::eDiffuse )]->Bind();
+			p_gp[size_t( DsTexture::eNormals )]->Bind();
+			p_gp[size_t( DsTexture::eAmbient )]->Bind();
+			p_gp[size_t( DsTexture::eSpecular )]->Bind();
+			p_gp[size_t( DsTexture::eEmissive )]->Bind();
 			m_shadowMapTexture.Bind();
-			my_pass_type::DoRender( p_size
-				, p_gp
+
+			auto & l_program = *LightPass::m_programs[uint16_t( p_fogType )];
+			l_program.Render( p_size
 				, p_light
-				, p_fogType
+				, my_pass_type::GetCount()
 				, p_first );
+
 			m_shadowMapTexture.Unbind();
+			p_gp[size_t( DsTexture::eEmissive )]->Unbind();
+			p_gp[size_t( DsTexture::eSpecular )]->Unbind();
+			p_gp[size_t( DsTexture::eAmbient )]->Unbind();
+			p_gp[size_t( DsTexture::eNormals )]->Unbind();
+			p_gp[size_t( DsTexture::eDiffuse )]->Unbind();
+			p_gp[size_t( DsTexture::ePosition )]->Unbind();
+			LightPass::m_frameBuffer.Unbind();
 
 #if !defined( NDEBUG )
 
 			LightPass::m_frameBuffer.Bind();
-			auto & l_depthMap = my_traits::GetTexture( m_shadowMap );
-			Castor::Size l_size{ 256u, 256u };
-			LightPass::m_engine.GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
-				, l_size
-				, *l_depthMap.GetTexture() );
-			++g_index;
+			my_traits::DebugDisplay( m_shadowMapTexture );
 			LightPass::m_frameBuffer.Unbind();
 
 #endif
@@ -194,7 +233,7 @@ namespace deferred
 	private:
 		typename LightPass::ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
 			, Castor::String const & p_vtx
-			, Castor::String const & p_pxl )override
+			, Castor::String const & p_pxl )const override
 		{
 			return std::make_unique< Program >( p_scene, p_vtx, p_pxl );
 		}

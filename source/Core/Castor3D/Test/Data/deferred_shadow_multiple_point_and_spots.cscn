@@ -70,7 +70,7 @@ scene "Scene"
 		parent "PointLightNode1"
 		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.02 0.0
+		attenuation 1.0 0.02 0.0001
 		shadow_producer true
 	}
 
@@ -80,7 +80,7 @@ scene "Scene"
 		parent "PointLightNode2"
 		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.02 0.0
+		attenuation 1.0 0.02 0.0001
 		shadow_producer true
 	}
 
@@ -90,7 +90,7 @@ scene "Scene"
 		parent "SpotLightNode1"
 		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.0 0.0
+		attenuation 1.0 0.0001 0.0001
 		cut_off 20
 		shadow_producer true
 	}
@@ -101,7 +101,7 @@ scene "Scene"
 		parent "SpotLightNode2"
 		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.0 0.0
+		attenuation 1.0 0.0001 0.0001
 		cut_off 20
 		shadow_producer true
 	}

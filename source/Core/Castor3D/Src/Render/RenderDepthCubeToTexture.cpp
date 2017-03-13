@@ -77,6 +77,7 @@ namespace Castor3D
 
 		DepthStencilState l_dsState;
 		l_dsState.SetDepthTest( false );
+		l_dsState.SetDepthMask( WritingMask::eZero );
 		m_pipeline = l_renderSystem.CreateRenderPipeline( std::move( l_dsState )
 			, RasteriserState{}
 			, BlendState{}

@@ -145,7 +145,7 @@ namespace deferred
 			, Castor3D::Camera const & p_camera ) = 0;
 		virtual ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
 			, Castor::String const & p_vtx
-			, Castor::String const & p_pxl ) = 0;
+			, Castor::String const & p_pxl )const = 0;
 
 	protected:
 		//!\~english	The engine.

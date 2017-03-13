@@ -169,7 +169,7 @@ namespace deferred
 
 	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl )
+		, String const & p_pxl )const
 	{
 		return std::make_unique< Program >( p_scene, p_vtx, p_pxl );
 	}

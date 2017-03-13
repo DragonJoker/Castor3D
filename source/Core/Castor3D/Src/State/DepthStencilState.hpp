@@ -512,7 +512,7 @@ namespace Castor3D
 		WritingMask m_eDepthMask{ WritingMask::eAll };
 		//!\~english	Tells whether the stencil test is activated or not.
 		//!\~french		Dit si le test stencil est activé ou non.
-		bool m_bStencilTest{ true };
+		bool m_bStencilTest{ false };
 		//!\~english	The stencil read mask.
 		//!\~french		Le masque de lecture du stencil.
 		uint32_t m_uiStencilReadMask{ 0xFFFFFFFF };

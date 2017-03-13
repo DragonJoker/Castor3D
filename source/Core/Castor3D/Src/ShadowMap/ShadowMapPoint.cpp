@@ -75,9 +75,11 @@ namespace Castor3D
 			}
 			else
 			{
+				int32_t i = 0;
+
 				for ( auto & l_pass : m_passes )
 				{
-					l_pass.second->Update( p_queues, 0 );
+					l_pass.second->Update( p_queues, i++ );
 				}
 			}
 		}
