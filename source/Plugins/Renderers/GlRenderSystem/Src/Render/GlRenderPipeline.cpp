@@ -7,8 +7,12 @@
 #include <Shader/ShaderProgram.hpp>
 #include <Shader/UniformBufferBinding.hpp>
 
+#define CHECK_GL_STATES 0
+
 using namespace Castor3D;
 using namespace Castor;
+
+#if CHECK_GL_STATES
 
 namespace Castor3D
 {
@@ -80,10 +84,14 @@ namespace Castor3D
 	}
 }
 
+#endif
+
 namespace GlRender
 {
 	namespace
 	{
+#if CHECK_GL_STATES
+
 		void DoLoad( DepthStencilState & p_state )
 		{
 			static GLint const GL_INCR_WRAP = 0x8507;
@@ -212,8 +220,11 @@ namespace GlRender
 			static DepthStencilState save;
 			static String stack;
 		};
+
 		DepthStencilState StateCheck::save;
 		String StateCheck::stack;
+
+#endif
 
 		void DoApply( BlendState const p_state, OpenGl const & p_gl )
 		{
@@ -276,9 +287,9 @@ namespace GlRender
 
 		void DoApply( DepthStencilState const & p_state, OpenGl const & p_gl )
 		{
-#if !defined( NDEBUG )
+#if CHECK_GL_STATES
 
-			//StateCheck l_check( p_state );
+			StateCheck l_check( p_state );
 
 #endif
 

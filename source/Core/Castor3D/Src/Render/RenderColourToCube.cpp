@@ -141,7 +141,7 @@ namespace Castor3D
 		m_viewport.Resize( p_size );
 		m_viewport.Apply();
 		p_fbo->Bind( FrameBufferTarget::eDraw );
-		p_fbo->Clear();
+		p_fbo->Clear( BufferComponent::eColour | BufferComponent::eDepth );
 		p_2dTexture.Bind( 0u );
 
 		for ( uint32_t i = 0; i < 6; ++i )

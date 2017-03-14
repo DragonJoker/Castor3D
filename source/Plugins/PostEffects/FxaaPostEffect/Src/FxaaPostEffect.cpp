@@ -271,7 +271,7 @@ namespace Fxaa
 			m_pipeline->Apply();
 			m_surface.m_fbo->Bind( FrameBufferTarget::eDraw );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
-			m_surface.m_fbo->Clear();
+			m_surface.m_fbo->Clear( BufferComponent::eColour );
 			m_mapDiffuse->SetValue( 0 );
 			GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size
 				, *l_texture

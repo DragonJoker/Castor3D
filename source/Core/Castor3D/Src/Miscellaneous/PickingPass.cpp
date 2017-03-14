@@ -258,7 +258,7 @@ namespace Castor3D
 		, SceneRenderNodes & p_nodes )
 	{
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer->Clear();
+		m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
 		p_camera.Apply();
 		DoRenderNodes( p_nodes, p_camera );
 		m_frameBuffer->Unbind();

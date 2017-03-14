@@ -480,7 +480,7 @@ namespace Bloom
 	{
 		auto l_source = &m_hiPassSurfaces[0];
 		l_source->m_fbo->Bind( FrameBufferTarget::eDraw );
-		l_source->m_fbo->Clear();
+		l_source->m_fbo->Clear( BufferComponent::eColour );
 		m_hiPassMapDiffuse->SetValue( 0 );
 		GetRenderSystem()->GetCurrentContext()->RenderTexture( l_source->m_size
 			, p_origin
@@ -498,7 +498,7 @@ namespace Bloom
 		{
 			auto l_destination = &m_hiPassSurfaces[i];
 			l_destination->m_fbo->Bind( FrameBufferTarget::eDraw );
-			l_destination->m_fbo->Clear();
+			l_destination->m_fbo->Clear( BufferComponent::eColour );
 			l_context->RenderTexture( l_destination->m_size
 				, *l_source->m_colourTexture.GetTexture() );
 			l_destination->m_fbo->Unbind();
@@ -519,7 +519,7 @@ namespace Bloom
 			auto l_source = &p_sources[i];
 			auto l_destination = &p_destinations[i];
 			l_destination->m_fbo->Bind( FrameBufferTarget::eDraw );
-			l_destination->m_fbo->Clear();
+			l_destination->m_fbo->Clear( BufferComponent::eColour );
 			l_context->RenderTexture( l_source->m_size
 				, *l_source->m_colourTexture.GetTexture()
 				, p_pipeline
@@ -531,7 +531,7 @@ namespace Bloom
 	void BloomPostEffect::DoCombine( TextureLayout const & p_origin )
 	{
 		m_blurSurfaces[0].m_fbo->Bind( FrameBufferTarget::eDraw );
-		m_blurSurfaces[0].m_fbo->Clear();
+		m_blurSurfaces[0].m_fbo->Clear( BufferComponent::eColour );
 		m_viewport.Resize( p_origin.GetDimensions() );
 		m_viewport.Update();
 		m_viewport.Apply();

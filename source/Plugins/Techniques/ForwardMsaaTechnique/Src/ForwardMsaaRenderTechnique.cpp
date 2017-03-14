@@ -152,7 +152,7 @@ namespace forward_msaa
 		m_renderTarget.GetCamera()->Apply();
 		m_msFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msFrameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
-		m_msFrameBuffer->Clear();
+		m_msFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
 		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 	}
 

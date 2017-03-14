@@ -52,38 +52,7 @@ namespace Castor3D
 
 	void FrameBuffer::Clear( BufferComponents p_targets )
 	{
-		auto l_targets = p_targets;
-
-		for ( auto l_attach : m_attaches )
-		{
-			switch ( l_attach->GetAttachmentPoint() )
-			{
-			case AttachmentPoint::eColour:
-				AddFlag( l_targets, BufferComponent::eColour );
-				break;
-
-			case AttachmentPoint::eDepth:
-				AddFlag( l_targets, BufferComponent::eDepth );
-				AddFlag( l_targets, BufferComponent::eStencil );
-				break;
-
-			case AttachmentPoint::eStencil:
-				AddFlag( l_targets, BufferComponent::eStencil );
-				break;
-
-			case AttachmentPoint::eDepthStencil:
-				AddFlag( l_targets, BufferComponent::eDepth );
-				AddFlag( l_targets, BufferComponent::eStencil );
-				break;
-			}
-		}
-
-		DoClear( l_targets );
-	}
-
-	void FrameBuffer::ClearComponent( BufferComponent p_target )
-	{
-		DoClear( p_target );
+		DoClear( p_targets );
 	}
 
 	void FrameBuffer::Bind( FrameBufferTarget p_target )const

@@ -68,7 +68,7 @@ namespace forward
 		m_renderTarget.GetCamera()->Apply();
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
-		m_frameBuffer.m_frameBuffer->Clear();
+		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
 		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 	}
 

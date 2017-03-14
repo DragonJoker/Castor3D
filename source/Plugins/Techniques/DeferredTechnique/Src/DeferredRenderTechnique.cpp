@@ -131,6 +131,7 @@ namespace deferred
 		GetEngine()->SetPerObjectLighting( false );
 		m_renderTarget.GetCamera()->Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
@@ -155,8 +156,13 @@ namespace deferred
 
 #else
 
+		//m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
+		//	, Rectangle{ Position{}, m_size }
+		//	, BufferComponent::eDepth );
+
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
+		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eStencil );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
 		DoUpdateSceneUbo();
@@ -178,9 +184,6 @@ namespace deferred
 			DoRenderLights( LightType::eSpot, l_first );
 		}
 
-		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
-			, Rectangle{ Position{}, m_size }
-		, BufferComponent::eDepth | BufferComponent::eStencil );
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
 
@@ -250,7 +253,7 @@ namespace deferred
 					, m_lightPassTextures[i]->GetType() );
 			}
 
-			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepthStencil, m_geometryPassDepthAttach );
+			//m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepthStencil, m_geometryPassDepthAttach );
 			ENSURE( m_geometryPassFrameBuffer->IsComplete() );
 			m_geometryPassFrameBuffer->SetDrawBuffers();
 			m_geometryPassFrameBuffer->Unbind();

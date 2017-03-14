@@ -38,11 +38,9 @@ namespace deferred
 		DepthStencilState l_dsstate;
 		l_dsstate.SetDepthTest( false );
 		l_dsstate.SetDepthMask( WritingMask::eZero );
-		//l_dsstate.SetStencilTest( true );
-		//l_dsstate.SetStencilBackFunc( StencilFunc::eNEqual );
-		//l_dsstate.SetStencilBackRef( 0u );
-		//l_dsstate.SetStencilFrontFunc( StencilFunc::eNEqual );
-		//l_dsstate.SetStencilFrontRef( 0u );
+		l_dsstate.SetStencilTest( true );
+		l_dsstate.SetStencilFunc( StencilFunc::eNEqual );
+		l_dsstate.SetStencilRef( 0u );
 
 		BlendState l_blstate;
 
@@ -70,8 +68,8 @@ namespace deferred
 		, LightType p_type
 		, bool p_shadows )
 		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
-		, m_stencilPass{ p_frameBuffer, p_depthAttach }
 		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
+		, m_stencilPass{ p_frameBuffer, p_depthAttach, m_matrixUbo, m_modelMatrixUbo }
 		, m_type{ p_type }
 	{
 		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );

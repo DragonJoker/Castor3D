@@ -195,7 +195,7 @@ namespace deferred_msaa
 		m_renderTarget.GetCamera()->Apply();
 		GetEngine()->SetPerObjectLighting( false );
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_geometryPassFrameBuffer->Clear();
+		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
 		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 		// Render the light pass.
@@ -221,7 +221,7 @@ namespace deferred_msaa
 		auto & l_scene = *m_renderTarget.GetScene();
 		auto & l_camera = *m_renderTarget.GetCamera();
 		m_msaaFrameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
-		m_msaaFrameBuffer->Clear();
+		m_msaaFrameBuffer->Clear( BufferComponent::eColour );
 
 		auto & l_program = m_lightPassShaderPrograms[uint16_t( GetFogType( l_scene.GetFlags() ) )];
 

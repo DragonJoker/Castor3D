@@ -31,7 +31,9 @@ namespace deferred
 	{
 	public:
 		StencilPass( Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::RenderBufferAttachment & p_depthAttach );
+			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::UniformBuffer & p_matrixUbo
+			, Castor3D::UniformBuffer & p_modelMatrixUbo );
 		void Initialise( Castor3D::VertexBuffer & p_vbo
 			, Castor3D::IndexBufferSPtr p_ibo );
 		void Cleanup();
@@ -44,6 +46,12 @@ namespace deferred
 		//!\~english	The target RBO attach.
 		//!\~french		L'attache de RBO cible.
 		Castor3D::RenderBufferAttachment & m_depthAttach;
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		Castor3D::UniformBuffer & m_matrixUbo;
+		//!\~english	The uniform buffer containing the model data.
+		//!\~french		Le tampon d'uniformes contenant les données de modèle.
+		Castor3D::UniformBuffer & m_modelMatrixUbo;
 		//!\~english	The shader program used to render lights.
 		//!\~french		Le shader utilisé pour rendre les lumières.
 		Castor3D::ShaderProgramSPtr m_program;

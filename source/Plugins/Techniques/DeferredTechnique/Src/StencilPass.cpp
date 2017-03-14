@@ -60,9 +60,13 @@ namespace deferred
 	//*********************************************************************************************
 
 	StencilPass::StencilPass( FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach )
+		, RenderBufferAttachment & p_depthAttach
+		, UniformBuffer & p_matrixUbo
+		, UniformBuffer & p_modelMatrixUbo )
 		: m_frameBuffer{ p_frameBuffer }
 		, m_depthAttach{ p_depthAttach }
+		, m_matrixUbo{ p_matrixUbo }
+		, m_modelMatrixUbo{ p_modelMatrixUbo }
 	{
 	}
 
@@ -88,16 +92,10 @@ namespace deferred
 		l_dsstate.SetDepthMask( WritingMask::eZero );
 		l_dsstate.SetStencilTest( true );
 		l_dsstate.SetStencilReadMask( 0 );
-		l_dsstate.SetStencilBackRef( 0 );
-		l_dsstate.SetStencilBackFunc( StencilFunc::eAlways );
-		l_dsstate.SetStencilBackFailOp( StencilOp::eKeep );
-		l_dsstate.SetStencilBackDepthFailOp( StencilOp::eIncrWrap );
-		l_dsstate.SetStencilBackPassOp( StencilOp::eKeep );
-		l_dsstate.SetStencilFrontRef( 0 );
-		l_dsstate.SetStencilFrontFunc( StencilFunc::eAlways );
-		l_dsstate.SetStencilFrontFailOp( StencilOp::eKeep );
-		l_dsstate.SetStencilFrontDepthFailOp( StencilOp::eDecrWrap );
-		l_dsstate.SetStencilFrontPassOp( StencilOp::eKeep );
+		l_dsstate.SetStencilRef( 0 );
+		l_dsstate.SetStencilFunc( StencilFunc::eAlways );
+		l_dsstate.SetStencilBackOps( StencilOp::eKeep, StencilOp::eIncrWrap, StencilOp::eKeep );
+		l_dsstate.SetStencilFrontOps( StencilOp::eKeep, StencilOp::eDecrWrap, StencilOp::eKeep );
 		RasteriserState l_rsstate;
 		l_rsstate.SetCulledFaces( Culling::eNone );
 		m_pipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate )
@@ -106,6 +104,8 @@ namespace deferred
 			, MultisampleState{}
 			, *m_program
 			, PipelineFlags{} );
+		m_pipeline->AddUniformBuffer( m_matrixUbo );
+		m_pipeline->AddUniformBuffer( m_modelMatrixUbo );
 	}
 
 	void StencilPass::Cleanup()
