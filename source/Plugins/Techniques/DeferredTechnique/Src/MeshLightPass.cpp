@@ -145,7 +145,6 @@ namespace deferred
 		, Light const & p_light
 		, Camera const & p_camera )
 	{
-		CASTOR_TRACK( l_tracker );
 		auto l_model = DoComputeModelMatrix( p_light, p_camera );
 		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
 		m_viewUniform->SetValue( p_camera.GetView() );

@@ -207,7 +207,6 @@ namespace deferred
 		, uint32_t p_count
 		, bool p_first )
 	{
-		CASTOR_TRACK( l_tracker );
 		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
 		m_lightColour->SetValue( p_light.GetColour() );
 		m_lightIntensity->SetValue( p_light.GetIntensity() );
@@ -305,6 +304,7 @@ namespace deferred
 		, bool p_first )
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.SetDrawBuffers();
 		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 		p_gp[size_t( DsTexture::ePosition )]->Bind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Bind();

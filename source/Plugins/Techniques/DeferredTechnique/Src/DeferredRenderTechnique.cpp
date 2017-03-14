@@ -157,6 +157,7 @@ namespace deferred
 
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
 		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
