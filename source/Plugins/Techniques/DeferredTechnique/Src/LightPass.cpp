@@ -240,13 +240,6 @@ namespace deferred
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 	}
 
-	void LightPass::Update( Castor::Size const & p_size
-		, Castor3D::Light const & p_light
-		, Castor3D::Camera const & p_camera )
-	{
-		DoUpdate( p_size, p_light, p_camera );
-	}
-
 	void LightPass::DoInitialise( Scene const & p_scene
 		, LightType p_type
 		, VertexBuffer & p_vbo
@@ -282,21 +275,6 @@ namespace deferred
 		}
 	}
 
-	void LightPass::Render( Size const & p_size
-		, GeometryPassResult const & p_gp
-		, Light const & p_light
-		, Camera const & p_camera
-		, GLSL::FogType p_fogType
-		, bool p_first )
-	{
-		Update( p_size, p_light, p_camera );
-		DoRender( p_size
-			, p_gp
-			, p_light
-			, p_fogType
-			, p_first );
-	}
-
 	void LightPass::DoRender( Castor::Size const & p_size
 		, GeometryPassResult const & p_gp
 		, Castor3D::Light const & p_light
@@ -305,7 +283,6 @@ namespace deferred
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.SetDrawBuffers();
-		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 		p_gp[size_t( DsTexture::ePosition )]->Bind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Bind();
 		p_gp[size_t( DsTexture::eNormals )]->Bind();

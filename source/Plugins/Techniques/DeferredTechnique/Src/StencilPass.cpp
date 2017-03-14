@@ -87,10 +87,13 @@ namespace deferred
 		l_dsstate.SetDepthTest( true );
 		l_dsstate.SetDepthMask( WritingMask::eZero );
 		l_dsstate.SetStencilTest( true );
+		l_dsstate.SetStencilReadMask( 0 );
+		l_dsstate.SetStencilBackRef( 0 );
 		l_dsstate.SetStencilBackFunc( StencilFunc::eAlways );
 		l_dsstate.SetStencilBackFailOp( StencilOp::eKeep );
 		l_dsstate.SetStencilBackDepthFailOp( StencilOp::eIncrWrap );
 		l_dsstate.SetStencilBackPassOp( StencilOp::eKeep );
+		l_dsstate.SetStencilFrontRef( 0 );
 		l_dsstate.SetStencilFrontFunc( StencilFunc::eAlways );
 		l_dsstate.SetStencilFrontFailOp( StencilOp::eKeep );
 		l_dsstate.SetStencilFrontDepthFailOp( StencilOp::eDecrWrap );
@@ -118,7 +121,6 @@ namespace deferred
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.SetDrawBuffers( FrameBuffer::AttachArray{} );
-		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 		m_depthAttach.Clear( BufferComponent::eStencil );
 		m_pipeline->Apply();
 		m_geometryBuffers->Draw( p_count, 0 );

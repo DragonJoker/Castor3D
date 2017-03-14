@@ -109,15 +109,12 @@ namespace deferred
 		virtual void Initialise( Castor3D::Scene const & p_scene
 			, Castor3D::UniformBuffer & p_sceneUbo ) = 0;
 		virtual void Cleanup() = 0;
-		void Update( Castor::Size const & p_size
-			, Castor3D::Light const & p_light
-			, Castor3D::Camera const & p_camera );
 		virtual void Render( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp
 			, Castor3D::Light const & p_light
 			, Castor3D::Camera const & p_camera
 			, GLSL::FogType p_fogType
-			, bool p_first );
+			, bool p_first ) = 0;
 		virtual uint32_t GetCount()const = 0;
 
 	protected:
@@ -140,9 +137,6 @@ namespace deferred
 		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
 			, Castor3D::LightType p_type )const;
 		virtual Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const = 0;
-		virtual void DoUpdate( Castor::Size const & p_size
-			, Castor3D::Light const & p_light
-			, Castor3D::Camera const & p_camera ) = 0;
 		virtual ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
 			, Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const = 0;

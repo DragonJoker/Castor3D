@@ -54,12 +54,18 @@ namespace deferred
 		void Initialise( Castor3D::Scene const & p_scene
 			, Castor3D::UniformBuffer & p_sceneUbo )override;
 		void Cleanup()override;
+		void Render( Castor::Size const & p_size
+			, GeometryPassResult const & p_gp
+			, Castor3D::Light const & p_light
+			, Castor3D::Camera const & p_camera
+			, GLSL::FogType p_fogType
+			, bool p_first )override;
 		uint32_t GetCount()const override;
 
 	protected:
 		void DoUpdate( Castor::Size const & p_size
 			, Castor3D::Light const & p_light
-			, Castor3D::Camera const & p_camera )override;
+			, Castor3D::Camera const & p_camera );
 
 	private:
 		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const override;

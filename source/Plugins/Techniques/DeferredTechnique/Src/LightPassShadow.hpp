@@ -215,7 +215,7 @@ namespace deferred
 		{
 			CASTOR_TRACK( l_tracker );
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
-			my_pass_type::Update( p_size, p_light, p_camera );
+			my_pass_type::DoUpdate( p_size, p_light, p_camera );
 			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 			LightPass::m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 			p_gp[size_t( DsTexture::ePosition )]->Bind();

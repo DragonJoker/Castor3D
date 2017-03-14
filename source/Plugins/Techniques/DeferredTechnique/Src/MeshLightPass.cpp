@@ -38,12 +38,11 @@ namespace deferred
 		DepthStencilState l_dsstate;
 		l_dsstate.SetDepthTest( false );
 		l_dsstate.SetDepthMask( WritingMask::eZero );
-		l_dsstate.SetStencilTest( true );
-		l_dsstate.SetStencilWriteMask( 0xFFFFFFFFu );
-		l_dsstate.SetStencilBackFunc( StencilFunc::eNEqual );
-		l_dsstate.SetStencilBackRef( 0u );
-		l_dsstate.SetStencilFrontFunc( StencilFunc::eNEqual );
-		l_dsstate.SetStencilFrontRef( 0u );
+		//l_dsstate.SetStencilTest( true );
+		//l_dsstate.SetStencilBackFunc( StencilFunc::eNEqual );
+		//l_dsstate.SetStencilBackRef( 0u );
+		//l_dsstate.SetStencilFrontFunc( StencilFunc::eNEqual );
+		//l_dsstate.SetStencilFrontRef( 0u );
 
 		BlendState l_blstate;
 
@@ -136,6 +135,22 @@ namespace deferred
 		DoCleanup();
 	}
 
+	void MeshLightPass::Render( Size const & p_size
+		, GeometryPassResult const & p_gp
+		, Light const & p_light
+		, Camera const & p_camera
+		, GLSL::FogType p_fogType
+		, bool p_first )
+	{
+		DoUpdate( p_size, p_light, p_camera );
+		m_stencilPass.Render( m_indexBuffer->GetSize() );
+		DoRender( p_size
+			, p_gp
+			, p_light
+			, p_fogType
+			, p_first );
+	}
+
 	uint32_t MeshLightPass::GetCount()const
 	{
 		return m_indexBuffer->GetSize();
@@ -151,7 +166,6 @@ namespace deferred
 		m_modelUniform->SetValue( l_model );
 		m_matrixUbo.Update();
 		m_modelMatrixUbo.Update();
-		m_stencilPass.Render( m_indexBuffer->GetSize() );
 		p_camera.Apply();
 	}
 	

@@ -155,9 +155,7 @@ namespace deferred
 
 #else
 
-
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
 		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
@@ -182,8 +180,9 @@ namespace deferred
 
 		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
 			, Rectangle{ Position{}, m_size }
-			, BufferComponent::eDepth | BufferComponent::eStencil );
+		, BufferComponent::eDepth | BufferComponent::eStencil );
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
 
 #endif
 	}

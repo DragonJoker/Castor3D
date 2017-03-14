@@ -50,8 +50,8 @@ if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER}/${PROJECTS_PLATFORM}
 	set( OpenCV_DIR ${DEPENDENCIES_DIR}/opencv )
 	set( OpenCV_LIBRARY_DIR ${DEPENDENCIES_DIR}/opencv/lib )
 	set( OpenCV_LIB_DIR_OPT ${DEPENDENCIES_DIR}/opencv/lib )
-	set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets )
-	set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib )
+	#set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets )
+	#set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib )
 endif ()
 
 #--------------------------------------------------------------------------------------------------
