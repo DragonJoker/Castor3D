@@ -18,119 +18,75 @@ using namespace Castor3D;
 
 namespace deferred_msaa
 {
-	//*********************************************************************************************
-
-	namespace
-	{
-		TextureUnit DoInitialiseDirectional( Engine & p_engine, Size const & p_size )
-		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Directional" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eTwoDimensions,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F, p_size );
-			TextureUnit l_unit{ p_engine };
-			l_unit.SetTexture( l_texture );
-			l_unit.SetSampler( l_sampler );
-
-			for ( auto & l_image : *l_texture )
-			{
-				l_image->InitialiseSource();
-			}
-
-			return l_unit;
-		}
-
-		std::vector< TextureUnit > DoInitialisePoint( Engine & p_engine, Size const & p_size )
-		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Point" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-			std::vector< TextureUnit > l_result;
-
-			for ( auto i = 0u; i < GLSL::PointShadowMapCount; ++i )
-			{
-				auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-					TextureType::eCube,
-					AccessType::eNone,
-					AccessType::eRead | AccessType::eWrite,
-					PixelFormat::eD32F,
-					p_size );
-				l_result.emplace_back( p_engine );
-				TextureUnit & l_unit = l_result.back();
-				l_unit.SetTexture( l_texture );
-				l_unit.SetSampler( l_sampler );
-
-				for ( auto & l_image : *l_texture )
-				{
-					l_image->InitialiseSource();
-				}
-			}
-
-			return l_result;
-		}
-
-		TextureUnit DoInitialiseSpot( Engine & p_engine, Size const & p_size )
-		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Spot" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eTwoDimensionsArray,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F,
-				Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
-			TextureUnit l_unit{ p_engine };
-			l_unit.SetTexture( l_texture );
-			l_unit.SetSampler( l_sampler );
-
-			for ( auto & l_image : *l_texture )
-			{
-				l_image->InitialiseSource();
-			}
-
-			return l_unit;
-		}
-	}
-
-	//*********************************************************************************************
-
 	OpaquePass::OpaquePass( RenderTarget & p_renderTarget
 		, Castor3D::RenderTechnique & p_technique )
 		: Castor3D::RenderTechniquePass{ cuT( "deferred_msaa_opaque" )
 			, p_renderTarget
 			, p_technique
-			, DoInitialiseDirectional( *p_renderTarget.GetEngine(), Size{ 4096, 4096 } )
-			, DoInitialisePoint( *p_renderTarget.GetEngine(), Size{ 1024, 1024 } )
-			, DoInitialiseSpot( *p_renderTarget.GetEngine(), Size{ 1024, 1024 } )
 			, true
 			, false }
+		, m_directionalShadowMap{ *p_renderTarget.GetEngine() }
+		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
+		, m_pointShadowMap{ *p_renderTarget.GetEngine() }
 	{
 	}
 
 	OpaquePass::~OpaquePass()
 	{
+	}
+
+	bool OpaquePass::InitialiseShadowMaps()
+	{
+		auto & l_scene = *m_target.GetScene();
+		l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
+		{
+			if ( p_light.IsShadowProducer() )
+			{
+				switch ( p_light.GetLightType() )
+				{
+				case LightType::eDirectional:
+					m_directionalShadowMap.AddLight( p_light );
+					break;
+
+				case LightType::ePoint:
+					m_pointShadowMap.AddLight( p_light );
+					break;
+
+				case LightType::eSpot:
+					m_spotShadowMap.AddLight( p_light );
+					break;
+				}
+			}
+		} );
+
+		bool l_result = m_directionalShadowMap.Initialise();
+
+		if ( l_result )
+		{
+			l_result = m_spotShadowMap.Initialise();
+		}
+
+		if ( l_result )
+		{
+			l_result = m_pointShadowMap.Initialise();
+		}
+
+		ENSURE( l_result );
+		return l_result;
+	}
+
+	void OpaquePass::CleanupShadowMaps()
+	{
+		m_pointShadowMap.Cleanup();
+		m_spotShadowMap.Cleanup();
+		m_directionalShadowMap.Cleanup();
+	}
+
+	void OpaquePass::UpdateShadowMaps( RenderQueueArray & p_queues )
+	{
+		m_pointShadowMap.Update( *m_target.GetCamera(), p_queues );
+		m_spotShadowMap.Update( *m_target.GetCamera(), p_queues );
+		m_directionalShadowMap.Update( *m_target.GetCamera(), p_queues );
 	}
 
 	void OpaquePass::RenderShadowMaps()
@@ -226,6 +182,4 @@ namespace deferred_msaa
 	void OpaquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 	}
-
-	//*********************************************************************************************
 }

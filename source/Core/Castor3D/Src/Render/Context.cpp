@@ -35,7 +35,7 @@ namespace Castor3D
 		, m_initialised{ false }
 		, m_bMultiSampling{ false }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
-		, m_colour{ *this, m_matrixUbo }
+		, m_colour{ *this, m_matrixUbo, false }
 		, m_colourCube{ *this, m_matrixUbo }
 		, m_colourLayer{ *this, m_matrixUbo }
 		, m_colourLayerCube{ *this, m_matrixUbo }

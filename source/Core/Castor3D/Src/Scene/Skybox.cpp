@@ -308,6 +308,7 @@ namespace Castor3D
 	bool Skybox::DoInitialisePipeline( ShaderProgram & p_program )
 	{
 		DepthStencilState l_dsState;
+		l_dsState.SetDepthTest( true );
 		l_dsState.SetDepthFunc( DepthFunc::eLEqual );
 
 		RasteriserState l_rsState;

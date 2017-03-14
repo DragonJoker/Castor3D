@@ -1,27 +1,29 @@
 #include "ShadowMapDirectional.hpp"
 
-#include "Engine.hpp"
+#include <Engine.hpp>
 
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Scene/Light/DirectionalLight.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "ShadowMap/ShadowMapPassDirectional.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureImage.hpp"
-#include "Texture/TextureLayout.hpp"
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Render/RenderPipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Scene/Light/Light.hpp>
+#include <Scene/Light/DirectionalLight.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Shader/UniformBuffer.hpp>
+#include <ShadowMap/ShadowMapPassDirectional.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureImage.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
 
 #include <Graphics/Image.hpp>
+#include <Miscellaneous/BlockTracker.hpp>
 
 using namespace Castor;
+using namespace Castor3D;
 
-namespace Castor3D
+namespace deferred
 {
 	namespace
 	{
@@ -76,17 +78,17 @@ namespace Castor3D
 		}
 	}
 
-	void ShadowMapDirectional::Render()
+	void ShadowMapDirectional::Render( DirectionalLight const & p_light )
 	{
-		if ( !m_passes.empty() )
-		{
-			m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
-			m_depthAttach->Attach( AttachmentPoint::eDepth );
-			m_frameBuffer->Clear( BufferComponent::eDepth );
-			m_passes.begin()->second->Render();
-			m_depthAttach->Detach();
-			m_frameBuffer->Unbind();
-		}
+		CASTOR_TRACK( l_tracker );
+		auto l_it = m_passes.find( &p_light.GetLight() );
+		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
+		m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_depthAttach->Attach( AttachmentPoint::eDepth );
+		m_frameBuffer->Clear( BufferComponent::eDepth );
+		l_it->second->Render();
+		m_depthAttach->Detach();
+		m_frameBuffer->Unbind();
 	}
 
 	int32_t ShadowMapDirectional::DoGetMaxPasses()const

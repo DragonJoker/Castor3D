@@ -28,6 +28,8 @@ SOFTWARE.
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
 
+#include <Miscellaneous/BlockTracker.hpp>
+
 namespace deferred
 {
 	enum class DsTexture
@@ -73,6 +75,7 @@ namespace deferred
 				, bool p_first );
 
 		private:
+			virtual Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend ) = 0;
 			virtual void DoBind( Castor3D::Light const & p_light ) = 0;
 
 		public:
@@ -88,9 +91,6 @@ namespace deferred
 			//!\~english	The pipeline used by the light pass.
 			//!\~french		Le pipeline utilisé par la passe lumières.
 			Castor3D::RenderPipelineSPtr m_firstPipeline;
-			//!\~english	The pipeline used by the light pass.
-			//!\~french		Le pipeline utilisé par la passe lumières.
-			Castor3D::RenderPipelineSPtr m_currentPipeline;
 			//!\~english	The shader variable containing the render area size.
 			//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
 			Castor3D::PushUniform2fSPtr m_renderSize;

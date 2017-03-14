@@ -308,7 +308,7 @@ namespace Castor3D
 			m_renderTechnique->Render( m_visibleObjectsCount, m_particlesCount );
 
 			// Then draw the render's result to the RenderTarget's frame buffer.
-			p_fb.m_frameBuffer->Bind();
+			p_fb.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 			p_fb.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 			GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
 			// We also render overlays.

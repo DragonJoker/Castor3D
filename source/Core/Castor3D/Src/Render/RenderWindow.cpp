@@ -1,4 +1,4 @@
-﻿#include "RenderWindow.hpp"
+#include "RenderWindow.hpp"
 
 #include "Engine.hpp"
 #include "Cache/CameraCache.hpp"
@@ -22,10 +22,7 @@
 #include "Miscellaneous/WindowHandle.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Shader/Uniform.hpp"
 
@@ -109,6 +106,10 @@ namespace Castor3D
 			if ( m_initialised )
 			{
 				m_context->SetCurrent();
+				m_matrixUbo = std::make_unique< UniformBuffer >( ShaderProgram::BufferMatrix, *GetEngine()->GetRenderSystem() );
+				UniformBuffer::FillMatrixBuffer( *m_matrixUbo );
+				m_colour = std::make_unique< RenderColourToTexture >( *m_context, *m_matrixUbo, true );
+				m_colour->Initialise();
 				m_backBuffers->Initialise( GetSize(), GetPixelFormat() );
 
 				SceneSPtr l_scene = GetScene();
@@ -151,6 +152,10 @@ namespace Castor3D
 				m_context->SetCurrent();
 			}
 
+			m_colour->Cleanup();
+			m_colour.reset();
+			m_matrixUbo->Cleanup();
+			m_matrixUbo.reset();
 			m_pickingPass->Cleanup();
 			RenderTargetSPtr l_target = GetRenderTarget();
 
@@ -422,8 +427,8 @@ namespace Castor3D
 		}
 
 		m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
-		m_backBuffers->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_context->RenderTexture( m_size, *l_texture );
+		m_backBuffers->Clear( BufferComponent::eColour );
+		m_colour->Render( Position{}, m_size, *l_texture );
 		m_backBuffers->Unbind();
 	}
 

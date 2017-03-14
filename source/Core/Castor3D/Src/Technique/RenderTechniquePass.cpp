@@ -148,18 +148,12 @@ namespace Castor3D
 	RenderTechniquePass::RenderTechniquePass( String const & p_name
 		, RenderTarget & p_renderTarget
 		, RenderTechnique & p_technique
-		, TextureUnit && p_directionalShadowMap
-		, std::vector< TextureUnit > && p_pointShadowMaps
-		, TextureUnit && p_spotShadowMap
 		, bool p_opaque
 		, bool p_multisampling )
 		: RenderPass{ p_name, *p_renderTarget.GetEngine(), p_opaque, p_multisampling }
 		, m_target{ p_renderTarget }
 		, m_technique{ p_technique }
 		, m_sceneNode{ m_sceneUbo }
-		, m_directionalShadowMap{ *p_renderTarget.GetEngine(), std::move( p_directionalShadowMap ) }
-		, m_spotShadowMap{ *p_renderTarget.GetEngine(), std::move( p_spotShadowMap ) }
-		, m_pointShadowMap{ *p_renderTarget.GetEngine(), std::move( p_pointShadowMaps ) }
 	{
 	}
 
@@ -180,60 +174,6 @@ namespace Castor3D
 
 		DoRenderNodes( l_nodes, *m_target.GetCamera(), l_depthMaps, p_visible );
 		p_visible += uint32_t( p_visible );
-	}
-
-	bool RenderTechniquePass::InitialiseShadowMaps()
-	{
-		auto & l_scene = *m_target.GetScene();
-		l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
-		{
-			if ( p_light.IsShadowProducer() )
-			{
-				switch ( p_light.GetLightType() )
-				{
-				case LightType::eDirectional:
-					m_directionalShadowMap.AddLight( p_light );
-					break;
-
-				case LightType::ePoint:
-					m_pointShadowMap.AddLight( p_light );
-					break;
-
-				case LightType::eSpot:
-					m_spotShadowMap.AddLight( p_light );
-					break;
-				}
-			}
-		} );
-
-		bool l_result = m_directionalShadowMap.Initialise();
-
-		if ( l_result )
-		{
-			l_result = m_spotShadowMap.Initialise();
-		}
-
-		if ( l_result )
-		{
-			l_result = m_pointShadowMap.Initialise();
-		}
-
-		ENSURE( l_result );
-		return l_result;
-	}
-
-	void RenderTechniquePass::CleanupShadowMaps()
-	{
-		m_pointShadowMap.Cleanup();
-		m_spotShadowMap.Cleanup();
-		m_directionalShadowMap.Cleanup();
-	}
-
-	void RenderTechniquePass::UpdateShadowMaps( RenderQueueArray & p_queues )
-	{
-		m_pointShadowMap.Update( *m_target.GetCamera(), p_queues );
-		m_spotShadowMap.Update( *m_target.GetCamera(), p_queues );
-		m_directionalShadowMap.Update( *m_target.GetCamera(), p_queues );
 	}
 
 	void RenderTechniquePass::DoRenderNodes( SceneRenderNodes & p_nodes
@@ -517,6 +457,7 @@ namespace Castor3D
 				, p_flags.m_programFlags
 				, p_flags.m_sceneFlags );
 			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
 
 			if ( !m_opaque )
 			{
@@ -573,6 +514,7 @@ namespace Castor3D
 				, p_flags.m_programFlags
 				, p_flags.m_sceneFlags );
 			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
 
 			if ( !m_opaque )
 			{

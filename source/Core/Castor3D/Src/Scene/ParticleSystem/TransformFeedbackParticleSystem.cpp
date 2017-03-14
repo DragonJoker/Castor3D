@@ -217,7 +217,14 @@ namespace Castor3D
 		{
 			RasteriserState l_rs;
 			l_rs.SetDiscardPrimitives( true );
-			m_updatePipeline = l_renderSystem.CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
+			DepthStencilState l_ds;
+			l_ds.SetDepthTest( true );
+			m_updatePipeline = l_renderSystem.CreateRenderPipeline( std::move( l_ds )
+				, std::move( l_rs )
+				, BlendState{}
+				, MultisampleState{}
+				, *m_updateProgram
+				, PipelineFlags{} );
 			m_updatePipeline->AddUniformBuffer( m_ubo );
 		}
 

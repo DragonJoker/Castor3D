@@ -39,6 +39,9 @@ namespace deferred
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl );
 			virtual ~Program();
+
+		private:
+			Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend )override;
 		};
 
 	public:

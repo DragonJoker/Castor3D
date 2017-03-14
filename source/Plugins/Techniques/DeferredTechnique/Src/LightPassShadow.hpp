@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -26,6 +26,9 @@ SOFTWARE.
 #include "DirectionalLightPass.hpp"
 #include "PointLightPass.hpp"
 #include "SpotLightPass.hpp"
+#include "ShadowMapDirectional.hpp"
+#include "ShadowMapPoint.hpp"
+#include "ShadowMapSpot.hpp"
 
 #include <Engine.hpp>
 #include <Scene/Light/Light.hpp>
@@ -51,7 +54,7 @@ namespace deferred
 	{
 		using light_type = Castor3D::DirectionalLight;
 		using light_pass_type = DirectionalLightPass;
-		using shadow_pass_type = Castor3D::ShadowMapDirectional;
+		using shadow_pass_type = ShadowMapDirectional;
 
 		static Castor::String const & GetName()
 		{
@@ -71,6 +74,7 @@ namespace deferred
 
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
+			CASTOR_TRACK( l_tracker );
 			Castor::Size l_size{ 256u, 256u };
 			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
 				, l_size
@@ -84,7 +88,7 @@ namespace deferred
 	{
 		using light_type = Castor3D::PointLight;
 		using light_pass_type = PointLightPass;
-		using shadow_pass_type = Castor3D::ShadowMapPoint;
+		using shadow_pass_type = ShadowMapPoint;
 
 		static Castor::String const & GetName()
 		{
@@ -94,7 +98,7 @@ namespace deferred
 
 		static Castor3D::TextureUnit & GetTexture( shadow_pass_type & p_shadowMap )
 		{
-			return p_shadowMap.GetTexture( 0u );
+			return p_shadowMap.GetTexture();
 		}
 
 		static light_type const & GetTypedLight( Castor3D::Light const & p_light )
@@ -104,6 +108,7 @@ namespace deferred
 
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
+			CASTOR_TRACK( l_tracker );
 			Castor::Size l_size{ 128u, 128u };
 			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( Castor::Position{ 0, int32_t( g_index * 3 * l_size.height() ) }
 				, l_size
@@ -117,7 +122,7 @@ namespace deferred
 	{
 		using light_type = Castor3D::SpotLight;
 		using light_pass_type = SpotLightPass;
-		using shadow_pass_type = Castor3D::ShadowMapSpot;
+		using shadow_pass_type = ShadowMapSpot;
 
 		static Castor::String const & GetName()
 		{
@@ -137,6 +142,7 @@ namespace deferred
 
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
+			CASTOR_TRACK( l_tracker );
 			Castor::Size l_size{ 256u, 256u };
 			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
 				, l_size
@@ -195,9 +201,10 @@ namespace deferred
 			, GLSL::FogType p_fogType
 			, bool p_first )override
 		{
+			CASTOR_TRACK( l_tracker );
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
 			my_pass_type::Update( p_size, p_light, p_camera );
-			LightPass::m_frameBuffer.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+			LightPass::m_frameBuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 			LightPass::m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 			p_gp[size_t( DsTexture::ePosition )]->Bind();
 			p_gp[size_t( DsTexture::eDiffuse )]->Bind();
@@ -224,7 +231,7 @@ namespace deferred
 
 #if !defined( NDEBUG )
 
-			LightPass::m_frameBuffer.Bind();
+			LightPass::m_frameBuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 			my_traits::DebugDisplay( m_shadowMapTexture );
 			LightPass::m_frameBuffer.Unbind();
 

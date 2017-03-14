@@ -47,15 +47,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The Context.
-		 *\param[in]	p_matrixUbo	The UBO containing matrix data.
+		 *\param[in]	p_context		The Context.
+		 *\param[in]	p_matrixUbo		The UBO containing matrix data.
+		 *\param[in]	p_depthWrite	Tells if depth buffer writing is enabled.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le Context.
-		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
+		 *\param[in]	p_context		Le Context.
+		 *\param[in]	p_matrixUbo		L'UBO contenant les données de matrices.
+		 *\param[in]	p_depthWrite	Dit si l'écriture dans le tampon de profondeur est activée.
 		 */
 		C3D_API explicit RenderColourToTexture( Context & p_context
-			, UniformBuffer & p_matrixUbo );
+			, UniformBuffer & p_matrixUbo
+			, bool p_depthWrite );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -176,6 +179,9 @@ namespace Castor3D
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;
+		//!\~english	Tells if depth buffer writing is enabled.
+		//!\~french		Dit si l'écriture dans le tampon de profondeur est activée.
+		bool m_depthWrite;
 	};
 }
 

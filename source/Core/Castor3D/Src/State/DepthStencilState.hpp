@@ -488,7 +488,7 @@ namespace Castor3D
 			StencilOp m_eFailOp{ StencilOp::eKeep };
 			//!\~english	The operation on deph test fail.
 			//!\~french		Opération faite en cas d'échec du test de profondeur.
-			StencilOp m_eDepthFailOp{ StencilOp::eIncrement };
+			StencilOp m_eDepthFailOp{ StencilOp::eKeep };
 			//!\~english	The operation on depth and stencil tests success.
 			//!\~french		Opération faite en cas de réussite des tests stencil et profondeur.
 			StencilOp m_ePassOp{ StencilOp::eKeep };
@@ -497,7 +497,7 @@ namespace Castor3D
 	protected:
 		//!\~english	Tells whether the depth test is activated or not.
 		//!\~french		Dit si oui on non le test de profondeur est activé.
-		bool m_bDepthTest{ true };
+		bool m_bDepthTest{ false };
 		//!\~english	The depth test function.
 		//!\~french		La fonction du test de profondeur.
 		DepthFunc m_eDepthFunc{ DepthFunc::eLess };

@@ -99,7 +99,16 @@ namespace deferred
 
 		for ( auto i = 0u; i < FaceCount; l_alpha += l_angle, ++i )
 		{
-			l_data.emplace_back( l_alpha.cos() / 2.0f, l_alpha.sin() / 2.0f, 1.0f );
+			l_data.push_back( point::get_normalised( Point3f{ l_alpha.cos() / 2.0f
+				, l_alpha.sin() / 2.0f
+				, 1.0f } ) );
+		}
+
+		for ( auto i = 0u; i < FaceCount; l_alpha += l_angle, ++i )
+		{
+			l_data.push_back( point::get_normalised( Point3f{ l_alpha.cos() / 4.0f
+				, l_alpha.sin() / 4.0f
+				, 1.0f } ) );
 		}
 
 		return l_data;
@@ -109,26 +118,48 @@ namespace deferred
 	{
 		UIntArray l_faces;
 
+		// Side
 		for ( auto i = 0u; i < FaceCount - 1; i++ )
 		{
-			// Side
 			l_faces.push_back( 0u );
 			l_faces.push_back( i + 3u );
 			l_faces.push_back( i + 2u );
-			// Base
-			l_faces.push_back( 1u );
-			l_faces.push_back( i + 2u );
-			l_faces.push_back( i + 3u );
 		}
 
-		// Side last face
+		// Last face
 		l_faces.push_back( 0u );
 		l_faces.push_back( 2u );
 		l_faces.push_back( FaceCount + 1 );
-		// Base last face
+
+		// Base
+		auto l_second = 2u + FaceCount;
+		for ( auto i = 0u; i < FaceCount - 1; i++ )
+		{
+			// Center to intermediate.
+			l_faces.push_back( 1u );
+			l_faces.push_back( i + l_second + 0u );
+			l_faces.push_back( i + l_second + 1u );
+			// Intermediate to border.
+			l_faces.push_back( i + l_second + 0u );
+			l_faces.push_back( i + 2u );
+			l_faces.push_back( i + 3u );
+			l_faces.push_back( i + l_second + 0u );
+			l_faces.push_back( i + 3u );
+			l_faces.push_back( i + l_second + 1u );
+		}
+		// Last face
+		auto l_third = l_second + FaceCount - 1u;
+		// Center to intermediate.
 		l_faces.push_back( 1u );
-		l_faces.push_back( FaceCount + 1 );
+		l_faces.push_back( l_third );
+		l_faces.push_back( l_second );
+		// Intermediate to border
+		l_faces.push_back( l_third );
+		l_faces.push_back( FaceCount + 1u );
 		l_faces.push_back( 2u );
+		l_faces.push_back( l_third );
+		l_faces.push_back( 2u );
+		l_faces.push_back( l_second );
 
 		return l_faces;
 	}

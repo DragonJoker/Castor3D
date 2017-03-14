@@ -376,11 +376,11 @@ namespace GlRender
 
 		StencilFuncs[uint32_t( Castor3D::StencilFunc::eNever )] = GlComparator::eNever;
 		StencilFuncs[uint32_t( Castor3D::StencilFunc::eLess )] = GlComparator::eLess;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eEqual )] = GlComparator::eLEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eLEqual )] = GlComparator::eEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eGreater )] = GlComparator::eNEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eNEqual )] = GlComparator::eGEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eGEqual )] = GlComparator::eGreater;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eLEqual )] = GlComparator::eLEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eEqual )] = GlComparator::eEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eNEqual )] = GlComparator::eNEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eGEqual )] = GlComparator::eGEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eGreater )] = GlComparator::eGreater;
 		StencilFuncs[uint32_t( Castor3D::StencilFunc::eAlways )] = GlComparator::eAlways;
 
 		StencilOps[uint32_t( Castor3D::StencilOp::eKeep )] = GlStencilOp::eKeep;

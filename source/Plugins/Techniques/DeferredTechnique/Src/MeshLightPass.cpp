@@ -24,50 +24,43 @@ namespace deferred
 		, String const & p_pxl )
 		: LightPass::Program{ p_scene, p_vtx, p_pxl }
 	{
-		RasteriserState l_rsstate1;
-		l_rsstate1.SetCulledFaces( Culling::eFront );
-		DepthStencilState l_dsstate1;
-		l_dsstate1.SetDepthTest( false );
-		l_dsstate1.SetDepthMask( WritingMask::eZero );
-		l_dsstate1.SetStencilTest( true );
-		l_dsstate1.SetStencilWriteMask( 0xFFFFFFFFu );
-		l_dsstate1.SetStencilBackFunc( StencilFunc::eNEqual );
-		l_dsstate1.SetStencilBackRef( 0u );
-		l_dsstate1.SetStencilFrontFunc( StencilFunc::eNEqual );
-		l_dsstate1.SetStencilFrontRef( 0u );
-		m_firstPipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate1 )
-			, std::move( l_rsstate1 )
-			, BlendState{}
-			, MultisampleState{}
-			, *m_program
-			, PipelineFlags{} );
-
-		RasteriserState l_rsstate2;
-		l_rsstate2.SetCulledFaces( Culling::eFront );
-		DepthStencilState l_dsstate2;
-		l_dsstate2.SetDepthTest( false );
-		l_dsstate2.SetDepthMask( WritingMask::eZero );
-		l_dsstate2.SetStencilTest( true );
-		l_dsstate2.SetStencilWriteMask( 0xFFFFFFFFu );
-		l_dsstate2.SetStencilBackFunc( StencilFunc::eNEqual );
-		l_dsstate2.SetStencilBackRef( 0u );
-		l_dsstate2.SetStencilFrontFunc( StencilFunc::eNEqual );
-		l_dsstate2.SetStencilFrontRef( 0u );
-		BlendState l_blstate;
-		l_blstate.EnableBlend( true );
-		l_blstate.SetRgbBlendOp( BlendOperation::eAdd );
-		l_blstate.SetRgbSrcBlend( BlendOperand::eOne );
-		l_blstate.SetRgbDstBlend( BlendOperand::eOne );
-		m_blendPipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate2 )
-			, std::move( l_rsstate2 )
-			, std::move( l_blstate )
-			, MultisampleState{}
-			, *m_program
-			, PipelineFlags{} );
 	}
 
 	MeshLightPass::Program::~Program()
 	{
+	}
+
+	RenderPipelineUPtr MeshLightPass::Program::DoCreatePipeline( bool p_blend )
+	{
+		RasteriserState l_rsstate;
+		l_rsstate.SetCulledFaces( Culling::eFront );
+
+		DepthStencilState l_dsstate;
+		l_dsstate.SetDepthTest( false );
+		l_dsstate.SetDepthMask( WritingMask::eZero );
+		l_dsstate.SetStencilTest( true );
+		l_dsstate.SetStencilWriteMask( 0xFFFFFFFFu );
+		l_dsstate.SetStencilBackFunc( StencilFunc::eNEqual );
+		l_dsstate.SetStencilBackRef( 0u );
+		l_dsstate.SetStencilFrontFunc( StencilFunc::eNEqual );
+		l_dsstate.SetStencilFrontRef( 0u );
+
+		BlendState l_blstate;
+
+		if ( p_blend )
+		{
+			l_blstate.EnableBlend( true );
+			l_blstate.SetRgbBlendOp( BlendOperation::eAdd );
+			l_blstate.SetRgbSrcBlend( BlendOperand::eOne );
+			l_blstate.SetRgbDstBlend( BlendOperand::eOne );
+		}
+
+		return m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate )
+			, std::move( l_rsstate )
+			, std::move( l_blstate )
+			, MultisampleState{}
+			, *m_program
+			, PipelineFlags{} );
 	}
 
 	//*********************************************************************************************
@@ -152,6 +145,7 @@ namespace deferred
 		, Light const & p_light
 		, Camera const & p_camera )
 	{
+		CASTOR_TRACK( l_tracker );
 		auto l_model = DoComputeModelMatrix( p_light, p_camera );
 		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
 		m_viewUniform->SetValue( p_camera.GetView() );

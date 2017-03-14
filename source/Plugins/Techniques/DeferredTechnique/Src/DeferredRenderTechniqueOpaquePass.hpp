@@ -25,6 +25,10 @@ SOFTWARE.
 
 #include <Technique/RenderTechniquePass.hpp>
 
+#include "ShadowMapDirectional.hpp"
+#include "ShadowMapPoint.hpp"
+#include "ShadowMapSpot.hpp"
+
 namespace deferred
 {
 	class RenderTechnique;
@@ -61,9 +65,51 @@ namespace deferred
 		 */
 		virtual ~OpaquePass();
 		/**
+		 *\copydoc		Castor3D::RenderPass::InitialiseShadowMaps
+		 */
+		bool InitialiseShadowMaps()override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::CleanupShadowMaps
+		 */
+		void CleanupShadowMaps()override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::UpdateShadowMaps
+		 */
+		void UpdateShadowMaps( Castor3D::RenderQueueArray & p_queues )override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::RenderShadowMaps
 		 */
 		void RenderShadowMaps()override;
+		/**
+		 *\~english
+		 *\return		The directional light shadow map.
+		 *\~french
+		 *\return		La map d'ombre de la lumière directionnelle.
+		 */
+		inline ShadowMapDirectional & GetDirectionalShadowMap()
+		{
+			return m_directionalShadowMap;
+		}
+		/**
+		 *\~english
+		 *\return		The spot lights shadow map.
+		 *\~french
+		 *\return		La map d'ombre des lumières projecteur.
+		 */
+		inline ShadowMapSpot & GetSpotShadowMap()
+		{
+			return m_spotShadowMap;
+		}
+		/**
+		 *\~english
+		 *\return		The point lights shadow map.
+		 *\~french
+		 *\return		La map d'ombre des lumières ponctuelles.
+		 */
+		inline ShadowMapPoint & GetPointShadowMaps()
+		{
+			return m_pointShadowMap;
+		}
 
 	protected:
 		/**
@@ -86,6 +132,17 @@ namespace deferred
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
 		void DoUpdatePipeline( Castor3D::RenderPipeline & p_pipeline )const override;
+
+	private:
+		//!\~english	The shadow map used for directional lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type directionnelles.
+		ShadowMapDirectional m_directionalShadowMap;
+		//!\~english	The shadow map used for spot lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type spot.
+		ShadowMapSpot m_spotShadowMap;
+		//!\~english	The shadow map used for pont lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type point.
+		ShadowMapPoint m_pointShadowMap;
 	};
 }
 

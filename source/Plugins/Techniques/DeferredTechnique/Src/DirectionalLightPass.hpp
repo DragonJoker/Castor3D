@@ -41,6 +41,7 @@ namespace deferred
 			virtual ~Program();
 
 		private:
+			virtual Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend )override;
 			void DoBind( Castor3D::Light const & p_light )override;
 
 		private:

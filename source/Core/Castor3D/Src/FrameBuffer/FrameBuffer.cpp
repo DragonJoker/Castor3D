@@ -94,6 +94,10 @@ namespace Castor3D
 		{
 			SetDrawBuffers( m_attaches );
 		}
+		else if ( p_mode != FrameBufferMode::eConfig )
+		{
+			SetDrawBuffers( FrameBuffer::AttachArray{} );
+		}
 	}
 
 	void FrameBuffer::Unbind()const

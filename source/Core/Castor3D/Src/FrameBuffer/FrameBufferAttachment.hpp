@@ -88,6 +88,15 @@ namespace Castor3D
 		 */
 		C3D_API void Detach();
 		/**
+		 *\~english
+		 *\brief		Clears the attachment buffer.
+		 *\param[in]	p_component	The component to clear.
+		 *\~french
+		 *\brief		Vide le tampon de l'attache.
+		 *\param[in]	p_component	La composante à vider.
+		 */
+		C3D_API void Clear( BufferComponent p_component )const;
+		/**
 		*\~english
 		*\return		The data buffer.
 		*\~french
@@ -140,6 +149,15 @@ namespace Castor3D
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
 		C3D_API virtual void DoDetach() = 0;
+		/**
+		 *\~english
+		 *\brief		Clears the attachment buffer.
+		 *\param[in]	p_component	The component to clear.
+		 *\~french
+		 *\brief		Vide le tampon de l'attache.
+		 *\param[in]	p_component	La composante à vider.
+		 */
+		C3D_API virtual void DoClear( BufferComponent p_component )const = 0;
 
 	private:
 		//!\~english	The attachment type.

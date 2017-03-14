@@ -260,6 +260,7 @@ namespace deferred
 
 	bool RenderTechnique::DoInitialiseLightPass()
 	{
+		auto & l_opaquePass = *reinterpret_cast< OpaquePass * >( m_opaquePass.get() );
 		auto & l_scene = *m_renderTarget.GetScene();
 		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
@@ -276,15 +277,15 @@ namespace deferred
 		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
-			, m_opaquePass->GetDirectionalShadowMap() );
+			, l_opaquePass.GetDirectionalShadowMap() );
 		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
-			, m_opaquePass->GetPointShadowMaps() );
+			, l_opaquePass.GetPointShadowMaps() );
 		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
-			, m_opaquePass->GetSpotShadowMap() );
+			, l_opaquePass.GetSpotShadowMap() );
 
 		for ( auto & l_lightPass : m_lightPass )
 		{

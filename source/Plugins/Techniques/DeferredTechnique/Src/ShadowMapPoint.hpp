@@ -20,42 +20,45 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_ShadowMapDirectional_H___
-#define ___C3D_ShadowMapDirectional_H___
+#ifndef ___C3D_DeferredShadowMapPoint_H___
+#define ___C3D_DeferredShadowMapPoint_H___
 
-#include "ShadowMap.hpp"
+#include <ShadowMap/ShadowMap.hpp>
+#include <Render/Viewport.hpp>
 
-namespace Castor3D
+namespace deferred
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		30/08/2016
 	\~english
-	\brief		Shadow mapping implementation for spot lights.
+	\brief		Shadow mapping implementation.
 	\~french
-	\brief		Implémentation du mappage d'ombres pour les lumières spot.
+	\brief		Implémentation du mappage d'ombres.
 	*/
-	class ShadowMapDirectional
-		: public ShadowMap
+	class ShadowMapPoint
+		: public Castor3D::ShadowMap
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_textures	The textures.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_textures	Les textures.
 		 */
-		C3D_API ShadowMapDirectional( Engine & p_engine );
+		ShadowMapPoint( Castor3D::Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapDirectional();
+		~ShadowMapPoint();
 		/**
 		 *\~english
 		 *\brief		Updates the passes, selecting the lights that will project shadows.
@@ -68,22 +71,22 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra de l'observateur.
 		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( Camera const & p_camera
-			, RenderQueueArray & p_queues );
+		void Update( Castor3D::Camera const & p_camera
+			, Castor3D::RenderQueueArray & p_queues );
 		/**
 		 *\~english
-		 *\brief		Renders the selected lights shadow map.
+		 *\brief		Renders the given light's shadow map.
 		 *\~french
-		 *\brief		Dessine les shadow maps des lumières sélectionnées.
+		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		C3D_API void Render();
+		void Render( Castor3D::PointLight const & p_light );
 		/**
 		 *\~english
 		 *\return		The shadow map.
 		 *\~english
 		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit & GetTexture()
+		inline Castor3D::TextureUnit & GetTexture()
 		{
 			return m_shadowMap;
 		}
@@ -93,7 +96,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit const & GetTexture()const
+		inline Castor3D::TextureUnit const & GetTexture()const
 		{
 			return m_shadowMap;
 		}
@@ -118,27 +121,40 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoCreatePass
 		 */
-		ShadowMapPassSPtr DoCreatePass( Light & p_light )const override;
+		Castor3D::ShadowMapPassSPtr DoCreatePass( Castor3D::Light & p_light )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoUpdateFlags
 		 */
-		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags )const override;
+		void DoUpdateFlags( Castor3D::TextureChannels & p_textureFlags
+			, Castor3D::ProgramFlags & p_programFlags
+			, Castor3D::SceneFlags & p_sceneFlags )const override;
+		/**
+		 *\copydoc		Castor3D::ShadowMap::DoGetVertexShaderSource
+		 */
+		Castor::String DoGetVertexShaderSource( Castor3D::TextureChannels const & p_textureFlags
+			, Castor3D::ProgramFlags const & p_programFlags
+			, Castor3D::SceneFlags const & p_sceneFlags
+			, bool p_invertNormals )const override;
+		/**
+		 *\copydoc		Castor3D::ShadowMap::DoGetGeometryShaderSource
+		 */
+		Castor::String DoGetGeometryShaderSource( Castor3D::TextureChannels const & p_textureFlags
+			, Castor3D::ProgramFlags const & p_programFlags
+			, Castor3D::SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
 		 */
-		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const override;
+		Castor::String DoGetPixelShaderSource( Castor3D::TextureChannels const & p_textureFlags
+			, Castor3D::ProgramFlags const & p_programFlags
+			, Castor3D::SceneFlags const & p_sceneFlags )const override;
 
 	private:
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
+		Castor3D::TextureAttachmentSPtr m_depthAttach;
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
-		TextureUnit m_shadowMap;
+		Castor3D::TextureUnit m_shadowMap;
 	};
 }
 

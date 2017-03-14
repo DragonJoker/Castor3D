@@ -1,33 +1,35 @@
 #include "ShadowMapPoint.hpp"
 
-#include "Engine.hpp"
-#include "Cache/SamplerCache.hpp"
+#include <Engine.hpp>
+#include <Cache/SamplerCache.hpp>
 
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Scene/Light/PointLight.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "ShadowMap/ShadowMapPassPoint.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureImage.hpp"
-#include "Texture/TextureLayout.hpp"
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Render/RenderPipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Scene/BillboardList.hpp>
+#include <Scene/Light/Light.hpp>
+#include <Scene/Light/PointLight.hpp>
+#include <Shader/UniformBuffer.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <ShadowMap/ShadowMapPassPoint.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureImage.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
 
 #include <Graphics/Image.hpp>
+#include <Miscellaneous/BlockTracker.hpp>
 
 using namespace Castor;
+using namespace Castor3D;
 
-namespace Castor3D
+namespace deferred
 {
 	namespace
 	{
@@ -36,45 +38,38 @@ namespace Castor3D
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
 		static String const ShadowMatrices = cuT( "c3d_mtxShadowMatrices" );
 
-		std::vector< TextureUnit > DoInitialisePoint( Engine & p_engine, Size const & p_size )
+		TextureUnit DoInitialisePoint( Engine & p_engine, Size const & p_size )
 		{
-			std::vector< TextureUnit > l_result;
+			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Point" ) );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			TextureUnit l_unit{ p_engine };
+			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
+				TextureType::eCube,
+				AccessType::eNone,
+				AccessType::eRead | AccessType::eWrite,
+				PixelFormat::eD32F,
+				p_size );
+			l_unit.SetTexture( l_texture );
+			l_unit.SetSampler( l_sampler );
 
-			for ( auto i = 0u; i < GLSL::PointShadowMapCount; ++i )
+			for ( auto & l_image : *l_texture )
 			{
-				auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Point_" ) + string::to_string( i ) );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-				l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-
-				auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-					TextureType::eCube,
-					AccessType::eNone,
-					AccessType::eRead | AccessType::eWrite,
-					PixelFormat::eD32F,
-					p_size );
-				l_result.emplace_back( p_engine );
-				TextureUnit & l_unit = l_result.back();
-				l_unit.SetTexture( l_texture );
-				l_unit.SetSampler( l_sampler );
-
-				for ( auto & l_image : *l_texture )
-				{
-					l_image->InitialiseSource();
-				}
+				l_image->InitialiseSource();
 			}
 
-			return l_result;
+			return l_unit;
 		}
 	}
 
 	ShadowMapPoint::ShadowMapPoint( Engine & p_engine )
-		: ShadowMap{ p_engine }
-		, m_shadowMaps{ DoInitialisePoint( p_engine, Size{ 1024, 1024 } ) }
+		: Castor3D::ShadowMap{ p_engine }
+		, m_shadowMap{ DoInitialisePoint( p_engine, Size{ 1024, 1024 } ) }
 	{
 	}
 
@@ -85,84 +80,49 @@ namespace Castor3D
 	void ShadowMapPoint::Update( Camera const & p_camera
 		, RenderQueueArray & p_queues )
 	{
-		if ( !m_passes.empty() )
+		for ( auto & l_pass : m_passes )
 		{
-			const int32_t l_max = DoGetMaxPasses();
-			m_sorted.clear();
-
-			for ( auto & l_it : m_passes )
-			{
-				m_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
-						, l_it.first->GetParent()->GetDerivedPosition() )
-					, l_it.second );
-			}
-
-			auto l_it = m_sorted.begin();
-
-			for ( auto i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
-			{
-				l_it->second->Update( p_queues, i );
-			}
+			l_pass.second->Update( p_queues, 0 );
 		}
 	}
 
-	void ShadowMapPoint::Render()
+	void ShadowMapPoint::Render( PointLight const & p_light )
 	{
-		if ( !m_sorted.empty() )
-		{
-			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-			auto l_it = m_sorted.begin();
-			const int32_t l_max = DoGetMaxPasses();
-
-			for ( int32_t i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
-			{
-				m_depthAttach[i]->Attach( AttachmentPoint::eDepth );
-				m_depthAttach[i]->Clear( BufferComponent::eDepth );
-				l_it->second->Render();
-				m_depthAttach[i]->Detach();
-			}
-
-			m_frameBuffer->Unbind();
-		}
+		CASTOR_TRACK( l_tracker );
+		auto l_it = m_passes.find( &p_light.GetLight() );
+		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
+		m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_depthAttach->Attach( AttachmentPoint::eDepth );
+		m_depthAttach->Clear( BufferComponent::eDepth );
+		l_it->second->Render();
+		m_depthAttach->Detach();
+		m_frameBuffer->Unbind();
 	}
 
 	int32_t ShadowMapPoint::DoGetMaxPasses()const
 	{
-		return int32_t( m_shadowMaps.size() );
+		return 1;
 	}
 
 	Size ShadowMapPoint::DoGetSize()const
 	{
-		return m_shadowMaps[0].GetTexture()->GetDimensions();
+		return m_shadowMap.GetTexture()->GetDimensions();
 	}
 
 	void ShadowMapPoint::DoInitialise()
 	{
 		constexpr float l_component = std::numeric_limits< float >::max();
 		m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
-		m_depthAttach.reserve( DoGetMaxPasses() );
-
-		for ( auto & l_map : m_shadowMaps )
-		{
-			auto l_texture = l_map.GetTexture();
-			l_texture->Initialise();
-			auto l_attach = m_frameBuffer->CreateAttachment( l_texture );
-			l_attach->SetTarget( l_texture->GetType() );
-			m_depthAttach.push_back( l_attach );
-		}
+		auto l_texture = m_shadowMap.GetTexture();
+		l_texture->Initialise();
+		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
+		m_depthAttach->SetTarget( l_texture->GetType() );
 	}
 
 	void ShadowMapPoint::DoCleanup()
 	{
-		for ( auto & l_attach : m_depthAttach )
-		{
-			l_attach.reset();
-		}
-
-		for ( auto & l_map : m_shadowMaps )
-		{
-			l_map.Cleanup();
-		}
+		m_depthAttach.reset();
+		m_shadowMap.Cleanup();
 	}
 
 	ShadowMapPassSPtr ShadowMapPoint::DoCreatePass( Light & p_light )const

@@ -82,6 +82,10 @@ namespace GlRender
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
 		 */
 		void DoDetach()override;
+		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		 */
+		void DoClear( Castor3D::BufferComponent p_component )const override;
 
 	private:
 		GlAttachmentPoint m_glAttachmentPoint;

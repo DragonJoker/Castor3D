@@ -45,14 +45,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_textures	The textures.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_textures	Les textures.
 		 */
-		C3D_API ShadowMapPoint( Engine & p_engine
-			, std::vector< TextureUnit > && p_textures );
+		C3D_API ShadowMapPoint( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -81,13 +78,6 @@ namespace Castor3D
 		 *\brief		Dessine les shadow maps des lumières sélectionnées.
 		 */
 		C3D_API void Render();
-		/**
-		 *\~english
-		 *\brief		Renders the given light's shadow map.
-		 *\~french
-		 *\brief		Dessine la shadow map de la lumière donnée.
-		 */
-		C3D_API void Render( PointLight const & p_light );
 		/**
 		 *\~english
 		 *\return		The shadow map.

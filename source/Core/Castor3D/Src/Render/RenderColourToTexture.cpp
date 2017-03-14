@@ -1,4 +1,4 @@
-﻿#include "RenderColourToTexture.hpp"
+#include "RenderColourToTexture.hpp"
 
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
@@ -22,7 +22,8 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderColourToTexture::RenderColourToTexture( Context & p_context
-		, UniformBuffer & p_matrixUbo )
+		, UniformBuffer & p_matrixUbo
+		, bool p_depthWrite )
 		: OwnedBy< Context >{ p_context }
 		, m_matrixUbo{ p_matrixUbo }
 		, m_viewport{ *p_context.GetRenderSystem()->GetEngine() }
@@ -44,6 +45,7 @@ namespace Castor3D
 				BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 }
 			}
 		}
+		, m_depthWrite{ p_depthWrite }
 	{
 		uint32_t i = 0;
 
@@ -82,7 +84,7 @@ namespace Castor3D
 
 		DepthStencilState l_dsState;
 		l_dsState.SetDepthTest( false );
-		l_dsState.SetDepthMask( WritingMask::eAll );
+		l_dsState.SetDepthMask( m_depthWrite ? WritingMask::eAll : WritingMask::eZero );
 		m_pipeline = l_renderSystem.CreateRenderPipeline( std::move( l_dsState )
 			, RasteriserState{}
 			, BlendState{}
@@ -97,6 +99,7 @@ namespace Castor3D
 		m_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
 		m_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 		m_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		m_viewport.Update();
 	}
 
 	void RenderColourToTexture::Cleanup()
@@ -146,7 +149,6 @@ namespace Castor3D
 	{
 		m_viewport.SetPosition( p_position );
 		m_viewport.Resize( p_size );
-		m_viewport.Update();
 		m_viewport.Apply();
 		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 		

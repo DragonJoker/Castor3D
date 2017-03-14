@@ -32,37 +32,35 @@ namespace deferred
 	{
 		m_lightDirection = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Direction" ), ShaderType::ePixel );
 		m_lightTransform = m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_mtxLightSpace" ), ShaderType::ePixel );
-
-		DepthStencilState l_dsstate1;
-		l_dsstate1.SetDepthTest( false );
-		l_dsstate1.SetDepthMask( WritingMask::eZero );
-		m_firstPipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate1 )
-			, RasteriserState{}
-			, BlendState{}
-			, MultisampleState{}
-			, *m_program
-			, PipelineFlags{} );
-
-		DepthStencilState l_dsstate2;
-		l_dsstate2.SetDepthTest( false );
-		l_dsstate2.SetDepthMask( WritingMask::eZero );
-		BlendState l_blstate;
-		l_blstate.EnableBlend( true );
-		l_blstate.SetRgbBlendOp( BlendOperation::eAdd );
-		l_blstate.SetRgbSrcBlend( BlendOperand::eOne );
-		l_blstate.SetRgbDstBlend( BlendOperand::eOne );
-		m_blendPipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate2 )
-			, RasteriserState{}
-			, std::move( l_blstate )
-			, MultisampleState{}
-			, *m_program
-			, PipelineFlags{} );
 	}
 
 	DirectionalLightPass::Program::~Program()
 	{
 		m_lightDirection = nullptr;
 		m_lightTransform = nullptr;
+	}
+
+	RenderPipelineUPtr DirectionalLightPass::Program::DoCreatePipeline( bool p_blend )
+	{
+		DepthStencilState l_dsstate;
+		l_dsstate.SetDepthTest( false );
+		l_dsstate.SetDepthMask( WritingMask::eZero );
+		BlendState l_blstate;
+
+		if ( p_blend )
+		{
+			l_blstate.EnableBlend( true );
+			l_blstate.SetBlendOp( BlendOperation::eAdd );
+			l_blstate.SetSrcBlend( BlendOperand::eOne );
+			l_blstate.SetDstBlend( BlendOperand::eOne );
+		}
+
+		return m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate )
+			, RasteriserState{}
+			, std::move( l_blstate )
+			, MultisampleState{}
+			, *m_program
+			, PipelineFlags{} );
 	}
 
 	void DirectionalLightPass::Program::DoBind( Light const & p_light )
@@ -125,6 +123,9 @@ namespace deferred
 			, nullptr
 			, p_sceneUbo
 			, nullptr );
+		m_viewport.Update();
+		m_projectionUniform->SetValue( m_viewport.GetProjection() );
+		m_matrixUbo.Update();
 	}
 
 	void DirectionalLightPass::Cleanup()
@@ -142,9 +143,6 @@ namespace deferred
 		, Camera const & p_camera )
 	{
 		m_viewport.Resize( p_size );
-		m_viewport.Update();
-		m_projectionUniform->SetValue( m_viewport.GetProjection() );
-		m_matrixUbo.Update();
 	}
 
 	String DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const

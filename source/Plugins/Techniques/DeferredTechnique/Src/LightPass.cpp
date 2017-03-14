@@ -162,7 +162,6 @@ namespace deferred
 	{
 		m_firstPipeline->Cleanup();
 		m_blendPipeline->Cleanup();
-		m_currentPipeline.reset();
 		m_firstPipeline.reset();
 		m_blendPipeline.reset();
 		m_geometryBuffers.reset();
@@ -179,6 +178,8 @@ namespace deferred
 		, UniformBuffer * p_modelMatrixUbo )
 	{
 		m_program->Initialise();
+		m_firstPipeline = DoCreatePipeline( false );
+		m_blendPipeline = DoCreatePipeline( true );
 		m_firstPipeline->AddUniformBuffer( p_matrixUbo );
 		m_firstPipeline->AddUniformBuffer( p_sceneUbo );
 		m_blendPipeline->AddUniformBuffer( p_matrixUbo );
@@ -206,21 +207,22 @@ namespace deferred
 		, uint32_t p_count
 		, bool p_first )
 	{
+		CASTOR_TRACK( l_tracker );
 		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
 		m_lightColour->SetValue( p_light.GetColour() );
 		m_lightIntensity->SetValue( p_light.GetIntensity() );
+		DoBind( p_light );
 
 		if ( p_first )
 		{
-			m_currentPipeline = m_firstPipeline;
+			m_firstPipeline->Apply();
 		}
 		else
 		{
-			m_currentPipeline = m_blendPipeline;
+			//m_blendPipeline->Apply();
+			m_firstPipeline->Apply();
 		}
 
-		DoBind( p_light );
-		m_currentPipeline->Apply();
 		m_geometryBuffers->Draw( p_count, 0 );
 	}
 
@@ -302,7 +304,7 @@ namespace deferred
 		, GLSL::FogType p_fogType
 		, bool p_first )
 	{
-		m_frameBuffer.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_frameBuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 		p_gp[size_t( DsTexture::ePosition )]->Bind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Bind();

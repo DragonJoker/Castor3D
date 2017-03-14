@@ -59,9 +59,6 @@ namespace Castor3D
 		C3D_API RenderTechniquePass( Castor::String const & p_name
 			, RenderTarget & p_renderTarget
 			, RenderTechnique & p_technique
-			, TextureUnit && p_directionalShadowMap
-			, std::vector< TextureUnit > && p_pointShadowMaps
-			, TextureUnit && p_spotShadowMap
 			, bool p_opaque
 			, bool p_multisampling = false );
 		/**
@@ -88,14 +85,14 @@ namespace Castor3D
 		 *\~french
 		 *\return		Initialise les maps de'ombres.
 		 */
-		C3D_API bool InitialiseShadowMaps();
+		C3D_API virtual bool InitialiseShadowMaps() = 0;
 		/**
 		 *\~english
 		 *\return		Cleans up the shadow maps.
 		 *\~french
 		 *\return		Nettoie les maps de'ombres.
 		 */
-		C3D_API void CleanupShadowMaps();
+		C3D_API virtual void CleanupShadowMaps() = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the shadow maps.
@@ -106,7 +103,7 @@ namespace Castor3D
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void UpdateShadowMaps( RenderQueueArray & p_queues );
+		C3D_API virtual void UpdateShadowMaps( RenderQueueArray & p_queues ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the shadow maps.
@@ -114,36 +111,6 @@ namespace Castor3D
 		 *\brief		Dessine les maps d'ombres.
 		 */
 		C3D_API virtual void RenderShadowMaps() = 0;
-		/**
-		 *\~english
-		 *\return		The directional light shadow map.
-		 *\~french
-		 *\return		La map d'ombre de la lumière directionnelle.
-		 */
-		inline ShadowMapDirectional & GetDirectionalShadowMap()
-		{
-			return m_directionalShadowMap;
-		}
-		/**
-		 *\~english
-		 *\return		The spot lights shadow map.
-		 *\~french
-		 *\return		La map d'ombre des lumières projecteur.
-		 */
-		inline ShadowMapSpot & GetSpotShadowMap()
-		{
-			return m_spotShadowMap;
-		}
-		/**
-		 *\~english
-		 *\return		The point lights shadow map.
-		 *\~french
-		 *\return		La map d'ombre des lumières ponctuelles.
-		 */
-		inline ShadowMapPoint & GetPointShadowMaps()
-		{
-			return m_pointShadowMap;
-		}
 
 	private:
 		/**
@@ -261,15 +228,6 @@ namespace Castor3D
 		//!\~english	The scene render node.
 		//!\~french		Le noeud de rendu de la scène.
 		SceneRenderNode m_sceneNode;
-		//!\~english	The shadow map used for directional lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type directionnelles.
-		ShadowMapDirectional m_directionalShadowMap;
-		//!\~english	The shadow map used for spot lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type spot.
-		ShadowMapSpot m_spotShadowMap;
-		//!\~english	The shadow map used for pont lights.
-		//!\~french		Le mappage d'ombres utilisée pour les lumières de type point.
-		ShadowMapPoint m_pointShadowMap;
 	};
 }
 

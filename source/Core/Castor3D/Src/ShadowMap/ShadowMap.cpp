@@ -4,6 +4,7 @@
 #include "Cache/ShaderCache.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -66,11 +67,6 @@ namespace Castor3D
 			if ( l_return )
 			{
 				DoInitialise();
-				
-				for ( auto & l_it : m_passes )
-				{
-					l_it.second->Initialise( l_size );
-				}
 			}
 
 			m_frameBuffer->Bind( FrameBufferMode::eConfig );
@@ -111,7 +107,14 @@ namespace Castor3D
 
 	void ShadowMap::AddLight( Light & p_light )
 	{
-		m_passes.emplace( &p_light, DoCreatePass( p_light ) );
+		auto l_pass = DoCreatePass( p_light );
+		auto & l_size = DoGetSize();
+		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+			, [l_pass, l_size]()
+			{
+				l_pass->Initialise( l_size );
+			} ) );
+		m_passes.emplace( &p_light, l_pass );
 	}
 
 	void ShadowMap::UpdateFlags( TextureChannels & p_textureFlags

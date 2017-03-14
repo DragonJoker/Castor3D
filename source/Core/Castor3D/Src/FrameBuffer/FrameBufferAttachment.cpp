@@ -36,4 +36,16 @@ namespace Castor3D
 		m_point = AttachmentPoint::eNone;
 		m_index = 0;
 	}
+
+	void FrameBufferAttachment::Clear( BufferComponent p_component )const
+	{
+		REQUIRE( ( p_component == BufferComponent::eColour && m_point == AttachmentPoint::eColour )
+			|| ( p_component == BufferComponent::eDepth
+				&& ( m_point == AttachmentPoint::eDepth
+					|| m_point == AttachmentPoint::eDepthStencil ) )
+			|| ( p_component == BufferComponent::eStencil
+				&& ( m_point == AttachmentPoint::eStencil
+					|| m_point == AttachmentPoint::eDepthStencil ) ) );
+		DoClear( p_component );
+	}
 }

@@ -25,6 +25,10 @@ SOFTWARE.
 
 #include <Technique/RenderTechniquePass.hpp>
 
+#include <ShadowMap/ShadowMapDirectional.hpp>
+#include <ShadowMap/ShadowMapPoint.hpp>
+#include <ShadowMap/ShadowMapSpot.hpp>
+
 namespace deferred_msaa
 {
 	class RenderTechnique;
@@ -61,6 +65,18 @@ namespace deferred_msaa
 		 */
 		~OpaquePass();
 		/**
+		 *\copydoc		Castor3D::RenderPass::InitialiseShadowMaps
+		 */
+		bool InitialiseShadowMaps()override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::CleanupShadowMaps
+		 */
+		void CleanupShadowMaps()override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::UpdateShadowMaps
+		 */
+		void UpdateShadowMaps( Castor3D::RenderQueueArray & p_queues )override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::RenderShadowMaps
 		 */
 		void RenderShadowMaps()override;
@@ -86,6 +102,17 @@ namespace deferred_msaa
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
 		void DoUpdatePipeline( Castor3D::RenderPipeline & p_pipeline )const override;
+
+	private:
+		//!\~english	The shadow map used for directional lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type directionnelles.
+		Castor3D::ShadowMapDirectional m_directionalShadowMap;
+		//!\~english	The shadow map used for spot lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type spot.
+		Castor3D::ShadowMapSpot m_spotShadowMap;
+		//!\~english	The shadow map used for pont lights.
+		//!\~french		Le mappage d'ombres utilisée pour les lumières de type point.
+		Castor3D::ShadowMapPoint m_pointShadowMap;
 	};
 }
 

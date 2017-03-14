@@ -529,8 +529,10 @@ namespace Castor3D
 		{
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eBack );
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
 			auto & l_pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
 					, std::move( l_rsState )
 					, BlendState{}
 					, MultisampleState{}
