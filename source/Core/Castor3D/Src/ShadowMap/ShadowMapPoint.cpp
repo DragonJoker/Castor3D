@@ -39,17 +39,27 @@ namespace Castor3D
 		std::vector< TextureUnit > DoInitialisePoint( Engine & p_engine, Size const & p_size )
 		{
 			std::vector< TextureUnit > l_result;
+			String const l_name = cuT( "ShadowMap_Point_" );
 
 			for ( auto i = 0u; i < GLSL::PointShadowMapCount; ++i )
 			{
-				auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Point_" ) + string::to_string( i ) );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-				l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+				SamplerSPtr l_sampler;
+
+				if ( p_engine.GetSamplerCache().Has( l_name + string::to_string( i ) ) )
+				{
+					l_sampler = p_engine.GetSamplerCache().Find( l_name + string::to_string( i ) );
+				}
+				else
+				{
+					l_sampler = p_engine.GetSamplerCache().Add( l_name + string::to_string( i ) );
+					l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+					l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+					l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+					l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+					l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+					l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+					l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+				}
 
 				auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
 					TextureType::eCube,
@@ -110,7 +120,7 @@ namespace Castor3D
 	{
 		if ( !m_sorted.empty() )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 			auto l_it = m_sorted.begin();
 			const int32_t l_max = DoGetMaxPasses();
 

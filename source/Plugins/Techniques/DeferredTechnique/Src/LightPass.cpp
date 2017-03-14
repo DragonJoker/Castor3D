@@ -219,8 +219,8 @@ namespace deferred
 		}
 		else
 		{
-			//m_blendPipeline->Apply();
-			m_firstPipeline->Apply();
+			m_blendPipeline->Apply();
+			//m_firstPipeline->Apply();
 		}
 
 		m_geometryBuffers->Draw( p_count, 0 );
@@ -304,7 +304,7 @@ namespace deferred
 		, GLSL::FogType p_fogType
 		, bool p_first )
 	{
-		m_frameBuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 		p_gp[size_t( DsTexture::ePosition )]->Bind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Bind();

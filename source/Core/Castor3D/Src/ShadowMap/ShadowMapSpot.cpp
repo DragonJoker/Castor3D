@@ -24,14 +24,24 @@ namespace Castor3D
 	{
 		TextureUnit DoInitialiseSpot( Engine & p_engine, Size const & p_size )
 		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Spot" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			SamplerSPtr l_sampler;
+			String const l_name = cuT( "ShadowMap_Spot" );
+
+			if ( p_engine.GetSamplerCache().Has( l_name ) )
+			{
+				l_sampler = p_engine.GetSamplerCache().Find( l_name );
+			}
+			else
+			{
+				l_sampler = p_engine.GetSamplerCache().Add( l_name );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+				l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+				l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+				l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			}
 
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
 				TextureType::eTwoDimensionsArray,
@@ -90,7 +100,7 @@ namespace Castor3D
 	{
 		if ( !m_sorted.empty() )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+			m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 			auto l_it = m_sorted.begin();
 			const int32_t l_max = DoGetMaxPasses();
 

@@ -117,7 +117,7 @@ namespace deferred
 	void StencilPass::Render( uint32_t p_count )
 	{
 		CASTOR_TRACK( l_tracker );
-		m_frameBuffer.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 		m_depthAttach.Clear( BufferComponent::eStencil );
 		m_pipeline->Apply();

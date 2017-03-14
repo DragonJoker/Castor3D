@@ -194,7 +194,7 @@ namespace deferred_msaa
 		m_opaquePass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
 		GetEngine()->SetPerObjectLighting( false );
-		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_geometryPassFrameBuffer->Clear();
 		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
@@ -217,7 +217,7 @@ namespace deferred_msaa
 
 #else
 
-		m_msaaFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		auto & l_scene = *m_renderTarget.GetScene();
 		auto & l_camera = *m_renderTarget.GetCamera();
 		m_msaaFrameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
@@ -281,7 +281,7 @@ namespace deferred_msaa
 
 		m_msaaFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer, m_rect, uint32_t( BufferComponent::eDepth ) );
-		m_msaaFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 
 #endif
 	}
@@ -292,7 +292,7 @@ namespace deferred_msaa
 		GetEngine()->SetPerObjectLighting( true );
 		m_transparentPass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
-		m_msaaFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_msaaFrameBuffer->Unbind();
 		m_msaaFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::eColour | BufferComponent::eDepth );
@@ -473,9 +473,11 @@ namespace deferred_msaa
 
 		if ( l_result )
 		{
-			m_msaaFrameBuffer->Bind( FrameBufferMode::eConfig );
+			m_msaaFrameBuffer->Bind();
 			m_msaaFrameBuffer->Attach( AttachmentPoint::eColour, m_msaaColorAttach );
 			m_msaaFrameBuffer->Attach( AttachmentPoint::eDepth, m_msaaDepthAttach );
+			m_msaaFrameBuffer->SetDrawBuffer( m_msaaColorAttach );
+			REQUIRE( m_msaaFrameBuffer->IsComplete() );
 			m_msaaFrameBuffer->Unbind();
 		}
 
@@ -490,7 +492,7 @@ namespace deferred_msaa
 
 	void RenderTechnique::DoCleanupMsaa()
 	{
-		m_msaaFrameBuffer->Bind( FrameBufferMode::eConfig );
+		m_msaaFrameBuffer->Bind();
 		m_msaaFrameBuffer->DetachAll();
 		m_msaaFrameBuffer->Unbind();
 		m_msaaFrameBuffer->Cleanup();
@@ -576,7 +578,7 @@ namespace deferred_msaa
 			}
 
 			m_lightPassDepthBuffer->Initialise( m_size );
-			m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
+			m_geometryPassFrameBuffer->Bind();
 
 			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
 			{
@@ -587,7 +589,8 @@ namespace deferred_msaa
 			}
 
 			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepth, m_geometryPassDepthAttach );
-			m_geometryPassFrameBuffer->IsComplete();
+			m_geometryPassFrameBuffer->SetDrawBuffers();
+			REQUIRE( m_geometryPassFrameBuffer->IsComplete() );
 			m_geometryPassFrameBuffer->Unbind();
 		}
 
@@ -680,7 +683,7 @@ namespace deferred_msaa
 
 	void RenderTechnique::DoCleanupGeometryPass()
 	{
-		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
+		m_geometryPassFrameBuffer->Bind();
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();

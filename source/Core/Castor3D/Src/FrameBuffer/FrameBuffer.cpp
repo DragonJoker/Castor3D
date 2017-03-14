@@ -86,18 +86,9 @@ namespace Castor3D
 		DoClear( p_target );
 	}
 
-	void FrameBuffer::Bind( FrameBufferMode p_mode, FrameBufferTarget p_target )const
+	void FrameBuffer::Bind( FrameBufferTarget p_target )const
 	{
 		DoBind( p_target );
-
-		if ( !m_attaches.empty() && p_mode == FrameBufferMode::eAutomatic )
-		{
-			SetDrawBuffers( m_attaches );
-		}
-		else if ( p_mode != FrameBufferMode::eConfig )
-		{
-			SetDrawBuffers( FrameBuffer::AttachArray{} );
-		}
 	}
 
 	void FrameBuffer::Unbind()const
@@ -193,8 +184,8 @@ namespace Castor3D
 
 	void FrameBuffer::BlitInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrcDst, FlagCombination< BufferComponent > const & p_components )const
 	{
-		p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
-		Bind( FrameBufferMode::eManual, FrameBufferTarget::eRead );
+		p_target.Bind( FrameBufferTarget::eDraw );
+		Bind( FrameBufferTarget::eRead );
 		DoBlitInto( p_target, p_rectSrcDst, p_components );
 		Unbind();
 		p_target.Unbind();
@@ -202,8 +193,8 @@ namespace Castor3D
 
 	void FrameBuffer::StretchInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
-		p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
-		Bind( FrameBufferMode::eManual, FrameBufferTarget::eRead );
+		p_target.Bind( FrameBufferTarget::eDraw );
+		Bind( FrameBufferTarget::eRead );
 		DoStretchInto( p_target, p_rectSrc, p_rectDst, p_components, p_interpolation );
 		Unbind();
 		p_target.Unbind();
@@ -214,12 +205,7 @@ namespace Castor3D
 		SetDrawBuffers( m_attaches );
 	}
 
-	void FrameBuffer::SetDrawBuffer( TextureAttachmentSPtr p_attach )const
-	{
-		SetDrawBuffers( AttachArray( 1, p_attach ) );
-	}
-
-	void FrameBuffer::SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )const
+	void FrameBuffer::SetDrawBuffer( FrameBufferAttachmentSPtr p_attach )const
 	{
 		SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}

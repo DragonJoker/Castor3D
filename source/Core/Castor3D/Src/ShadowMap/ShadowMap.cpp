@@ -69,7 +69,7 @@ namespace Castor3D
 				DoInitialise();
 			}
 
-			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->Bind();
 			m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
 			m_frameBuffer->Unbind();
 		}
@@ -86,7 +86,7 @@ namespace Castor3D
 
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->Bind();
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 

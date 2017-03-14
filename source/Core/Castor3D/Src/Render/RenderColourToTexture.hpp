@@ -50,15 +50,18 @@ namespace Castor3D
 		 *\param[in]	p_context		The Context.
 		 *\param[in]	p_matrixUbo		The UBO containing matrix data.
 		 *\param[in]	p_depthWrite	Tells if depth buffer writing is enabled.
+		 *\param[in]	p_depthFunc		The depth function used (if not DepthFunc::eLess, the depth test will be enabled, otherwise it will be disabled).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_context		Le Context.
 		 *\param[in]	p_matrixUbo		L'UBO contenant les données de matrices.
 		 *\param[in]	p_depthWrite	Dit si l'écriture dans le tampon de profondeur est activée.
+		 *\param[in]	p_depthFunc		La fonction de profondeur utilisée (Si DepthFunc::eLess, le test de profondeur sera activé, sinon il sera désactivé).
 		 */
 		C3D_API explicit RenderColourToTexture( Context & p_context
 			, UniformBuffer & p_matrixUbo
-			, bool p_depthWrite );
+			, bool p_depthWrite
+			, DepthFunc p_depthFunc = DepthFunc::eLess );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -182,6 +185,9 @@ namespace Castor3D
 		//!\~english	Tells if depth buffer writing is enabled.
 		//!\~french		Dit si l'écriture dans le tampon de profondeur est activée.
 		bool m_depthWrite;
+		//!\~english	The depth function used (if not DepthFunc::eLess, the depth test will be enabled, otherwise it will be disabled).
+		//!\~french		La fonction de profondeur utilisée (Si DepthFunc::eLess, le tes de profondeur sera activé, sinon il sera désactivé).
+		DepthFunc m_depthFunc;
 	};
 }
 

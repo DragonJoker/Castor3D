@@ -53,19 +53,29 @@ namespace Castor3D
 			{ StencilOp::eInvert, "Invt" },
 		};
 		p_stream << cuT( "Depth - mask: " ) << l_depthMasks.at( p_state.GetDepthMask() )
-			<< cuT( ", test: " ) << ( p_state.GetDepthTest() ? "1" : "0" )
-			<< cuT( ", func: " ) << l_depthFuncs.at( p_state.GetDepthFunc() )
-			<< cuT( ", Stencil - test: " ) << ( p_state.GetStencilTest() ? "1" : "0" )
-			<< cuT( ", Back - ref: " ) << p_state.GetStencilBackRef()
-			<< cuT( ", func: " ) << l_stencilFuncs.at( p_state.GetStencilBackFunc() )
-			<< cuT( ", fail op: " ) << l_stencilOps.at( p_state.GetStencilBackFailOp() )
-			<< cuT( ", depth fail op: " ) << l_stencilOps.at( p_state.GetStencilBackDepthFailOp() )
-			<< cuT( ", pass op: " ) << l_stencilOps.at( p_state.GetStencilBackPassOp() )
-			<< cuT( " - Front ref: " ) << p_state.GetStencilFrontRef()
-			<< cuT( ", func: " ) << l_stencilFuncs.at( p_state.GetStencilFrontFunc() )
-			<< cuT( ", fail op: " ) << l_stencilOps.at( p_state.GetStencilFrontFailOp() )
-			<< cuT( ", depth fail op: " ) << l_stencilOps.at( p_state.GetStencilFrontDepthFailOp() )
-			<< cuT( ", pass op: " ) << l_stencilOps.at( p_state.GetStencilFrontPassOp() );
+			<< cuT( ", test: " ) << ( p_state.GetDepthTest() ? "1" : "0" );
+
+		if ( p_state.GetDepthTest() )
+		{
+			p_stream << cuT( ", func: " ) << l_depthFuncs.at( p_state.GetDepthFunc() );
+		}
+
+		p_stream << cuT( ", Stencil - test: " ) << ( p_state.GetStencilTest() ? "1" : "0" );
+
+		if ( p_state.GetDepthTest() )
+		{
+			p_stream << cuT( ", Back - ref: " ) << p_state.GetStencilBackRef()
+				<< cuT( ", func: " ) << l_stencilFuncs.at( p_state.GetStencilBackFunc() )
+				<< cuT( ", fail op: " ) << l_stencilOps.at( p_state.GetStencilBackFailOp() )
+				<< cuT( ", depth fail op: " ) << l_stencilOps.at( p_state.GetStencilBackDepthFailOp() )
+				<< cuT( ", pass op: " ) << l_stencilOps.at( p_state.GetStencilBackPassOp() )
+				<< cuT( " - Front ref: " ) << p_state.GetStencilFrontRef()
+				<< cuT( ", func: " ) << l_stencilFuncs.at( p_state.GetStencilFrontFunc() )
+				<< cuT( ", fail op: " ) << l_stencilOps.at( p_state.GetStencilFrontFailOp() )
+				<< cuT( ", depth fail op: " ) << l_stencilOps.at( p_state.GetStencilFrontDepthFailOp() )
+				<< cuT( ", pass op: " ) << l_stencilOps.at( p_state.GetStencilFrontPassOp() );
+		}
+
 		return p_stream;
 	}
 }
@@ -147,41 +157,63 @@ namespace GlRender
 			p_state.SetStencilFrontPassOp( l_stencilOps.at( l_value ) );
 		}
 
-		bool DoCompare( DepthStencilState const & p_lhs, DepthStencilState const & p_rhs )
+		bool DoCompare( DepthStencilState const & p_gl
+			, DepthStencilState const & p_save
+			, String const & p_stack )
 		{
-			bool l_result = p_lhs.GetDepthTest() == p_rhs.GetDepthTest()
-				&& p_lhs.GetDepthMask() == p_rhs.GetDepthMask()
-				&& p_lhs.GetDepthFunc() == p_rhs.GetDepthFunc()
-				&& p_lhs.GetStencilTest() == p_rhs.GetStencilTest()
-				&& p_lhs.GetStencilBackRef() == p_rhs.GetStencilBackRef()
-				&& p_lhs.GetStencilBackFunc() == p_rhs.GetStencilBackFunc()
-				&& p_lhs.GetStencilBackFailOp() == p_rhs.GetStencilBackFailOp()
-				&& p_lhs.GetStencilBackDepthFailOp() == p_rhs.GetStencilBackDepthFailOp()
-				&& p_lhs.GetStencilBackPassOp() == p_rhs.GetStencilBackPassOp()
-				&& p_lhs.GetStencilFrontRef() == p_rhs.GetStencilFrontRef()
-				&& p_lhs.GetStencilFrontFunc() == p_rhs.GetStencilFrontFunc()
-				&& p_lhs.GetStencilFrontFailOp() == p_rhs.GetStencilFrontFailOp()
-				&& p_lhs.GetStencilFrontDepthFailOp() == p_rhs.GetStencilFrontDepthFailOp()
-				&& p_lhs.GetStencilFrontPassOp() == p_rhs.GetStencilFrontPassOp();
+			bool l_result = p_gl.GetDepthTest() == p_save.GetDepthTest()
+				&& p_gl.GetDepthMask() == p_save.GetDepthMask()
+				&& ( !p_gl.GetDepthTest()
+					|| p_gl.GetDepthFunc() == p_save.GetDepthFunc() )
+				&& p_gl.GetStencilTest() == p_save.GetStencilTest()
+				&& ( !p_gl.GetStencilTest()
+					|| ( p_gl.GetStencilBackRef() == p_save.GetStencilBackRef()
+						&& p_gl.GetStencilBackFunc() == p_save.GetStencilBackFunc()
+						&& p_gl.GetStencilBackFailOp() == p_save.GetStencilBackFailOp()
+						&& p_gl.GetStencilBackDepthFailOp() == p_save.GetStencilBackDepthFailOp()
+						&& p_gl.GetStencilBackPassOp() == p_save.GetStencilBackPassOp()
+						&& p_gl.GetStencilFrontRef() == p_save.GetStencilFrontRef()
+						&& p_gl.GetStencilFrontFunc() == p_save.GetStencilFrontFunc()
+						&& p_gl.GetStencilFrontFailOp() == p_save.GetStencilFrontFailOp()
+						&& p_gl.GetStencilFrontDepthFailOp() == p_save.GetStencilFrontDepthFailOp()
+						&& p_gl.GetStencilFrontPassOp() == p_save.GetStencilFrontPassOp() ) );
 
 			if ( !l_result )
 			{
 				Logger::LogDebug( StringStream{} << cuT( "DepthStencilState comparison failed" ) );
-				Logger::LogDebug( StringStream{} << cuT( "LHS:\n" ) << p_lhs );
-				Logger::LogDebug( StringStream{} << cuT( "RHS:\n" ) << p_rhs );
+				Logger::LogDebug( StringStream{} << cuT( "GL  :\n" ) << p_gl );
+				Logger::LogDebug( StringStream{} << cuT( "SAVE:\n" ) << p_save );
+				Logger::LogDebug( p_stack );
 			}
 
 			return l_result;
 		}
 
-		void DoCheck( DepthStencilState const & p_state )
+		struct StateCheck
 		{
-			static DepthStencilState l_save;
-			DepthStencilState l_gl;
-			DoLoad( l_gl );
-			REQUIRE( DoCompare( l_gl, l_save ) );
-			l_save = p_state;
-		}
+			StateCheck( DepthStencilState const & p_state )
+			{
+				DepthStencilState l_gl;
+				DoLoad( l_gl );
+				REQUIRE( DoCompare( l_gl, save, stack ) );
+				save = p_state;
+				StringStream l_stream;
+				l_stream << Debug::Backtrace{};
+				stack = l_stream.str();
+			}
+
+			~StateCheck()
+			{
+				DepthStencilState l_gl;
+				DoLoad( l_gl );
+				REQUIRE( DoCompare( l_gl, save, stack ) );
+			}
+
+			static DepthStencilState save;
+			static String stack;
+		};
+		DepthStencilState StateCheck::save;
+		String StateCheck::stack;
 
 		void DoApply( BlendState const p_state, OpenGl const & p_gl )
 		{
@@ -246,7 +278,7 @@ namespace GlRender
 		{
 #if !defined( NDEBUG )
 
-			DoCheck( p_state );
+			//StateCheck l_check( p_state );
 
 #endif
 

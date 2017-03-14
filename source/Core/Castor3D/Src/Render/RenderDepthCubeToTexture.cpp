@@ -86,7 +86,7 @@ namespace Castor3D
 			, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo );
 
-		m_sampler = GetOwner()->GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "ContextPlane" ) );
+		m_sampler = GetOwner()->GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "RenderDepthCubeToTexture" ) );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 		m_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );

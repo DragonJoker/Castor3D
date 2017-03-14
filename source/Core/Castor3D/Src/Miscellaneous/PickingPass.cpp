@@ -257,7 +257,7 @@ namespace Castor3D
 		, Camera const & p_camera
 		, SceneRenderNodes & p_nodes )
 	{
-		m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear();
 		p_camera.Apply();
 		DoRenderNodes( p_nodes, p_camera );
@@ -419,9 +419,10 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				m_frameBuffer->Bind( FrameBufferMode::eConfig );
+				m_frameBuffer->Bind();
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
+				m_frameBuffer->SetDrawBuffer( m_colourAttach );
 				l_return = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
@@ -440,7 +441,7 @@ namespace Castor3D
 
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->Bind();
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 			m_frameBuffer->Cleanup();

@@ -130,7 +130,7 @@ namespace deferred
 	{
 		GetEngine()->SetPerObjectLighting( false );
 		m_renderTarget.GetCamera()->Apply();
-		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
@@ -156,7 +156,7 @@ namespace deferred
 #else
 
 
-		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
@@ -182,7 +182,7 @@ namespace deferred
 		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
 			, Rectangle{ Position{}, m_size }
 			, BufferComponent::eDepth | BufferComponent::eStencil );
-		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 
 #endif
 	}
@@ -240,7 +240,7 @@ namespace deferred
 			}
 
 			m_lightPassDepthBuffer->Initialise( m_size );
-			m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
+			m_geometryPassFrameBuffer->Bind();
 
 			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
 			{
@@ -252,6 +252,7 @@ namespace deferred
 
 			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepthStencil, m_geometryPassDepthAttach );
 			ENSURE( m_geometryPassFrameBuffer->IsComplete() );
+			m_geometryPassFrameBuffer->SetDrawBuffers();
 			m_geometryPassFrameBuffer->Unbind();
 		}
 		
@@ -302,7 +303,7 @@ namespace deferred
 
 	void RenderTechnique::DoCleanupGeometryPass()
 	{
-		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
+		m_geometryPassFrameBuffer->Bind();
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();

@@ -23,7 +23,8 @@ namespace Castor3D
 {
 	RenderColourToTexture::RenderColourToTexture( Context & p_context
 		, UniformBuffer & p_matrixUbo
-		, bool p_depthWrite )
+		, bool p_depthWrite
+		, DepthFunc p_depthFunc )
 		: OwnedBy< Context >{ p_context }
 		, m_matrixUbo{ p_matrixUbo }
 		, m_viewport{ *p_context.GetRenderSystem()->GetEngine() }
@@ -46,6 +47,7 @@ namespace Castor3D
 			}
 		}
 		, m_depthWrite{ p_depthWrite }
+		, m_depthFunc{ p_depthFunc }
 	{
 		uint32_t i = 0;
 
@@ -83,8 +85,9 @@ namespace Castor3D
 		, nullptr );
 
 		DepthStencilState l_dsState;
-		l_dsState.SetDepthTest( false );
+		l_dsState.SetDepthTest( m_depthFunc != DepthFunc::eLess );
 		l_dsState.SetDepthMask( m_depthWrite ? WritingMask::eAll : WritingMask::eZero );
+		l_dsState.SetDepthFunc( m_depthFunc );
 		m_pipeline = l_renderSystem.CreateRenderPipeline( std::move( l_dsState )
 			, RasteriserState{}
 			, BlendState{}
@@ -93,7 +96,7 @@ namespace Castor3D
 			, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo );
 
-		m_sampler = GetOwner()->GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "ContextPlane" ) );
+		m_sampler = GetOwner()->GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "RenderColourToTexture" ) );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 		m_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );

@@ -99,7 +99,7 @@ namespace Castor3D
 			, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo );
 
-		m_sampler = l_renderSystem.GetEngine()->GetSamplerCache().Add( cuT( "ContextCube" ) );
+		m_sampler = l_renderSystem.GetEngine()->GetSamplerCache().Add( cuT( "RenderColourToCube" ) );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 		m_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
@@ -140,7 +140,7 @@ namespace Castor3D
 		m_pipeline->SetProjectionMatrix( l_projection );
 		m_viewport.Resize( p_size );
 		m_viewport.Apply();
-		p_fbo->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		p_fbo->Bind( FrameBufferTarget::eDraw );
 		p_fbo->Clear();
 		p_2dTexture.Bind( 0u );
 

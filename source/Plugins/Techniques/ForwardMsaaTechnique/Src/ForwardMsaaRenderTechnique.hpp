@@ -45,7 +45,7 @@ namespace forward_msaa
 	class RenderTechnique
 		:	public Castor3D::RenderTechnique
 	{
-	protected:
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -59,8 +59,6 @@ namespace forward_msaa
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
 		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -116,16 +114,16 @@ namespace forward_msaa
 		Castor3D::FrameBufferSPtr m_msFrameBuffer;
 		//!\~english The buffer receiving the multisampled color render.
 		//!\~french Le tampon recevant le rendu couleur multisamplé.
-		Castor3D::ColourRenderBufferSPtr m_pMsColorBuffer;
+		Castor3D::ColourRenderBufferSPtr m_msColourBuffer;
 		//!\~english The buffer receiving the multisampled depth render.
 		//!\~french Le tampon recevant le rendu profondeur multisamplé.
-		Castor3D::DepthStencilRenderBufferSPtr m_pMsDepthBuffer;
+		Castor3D::DepthStencilRenderBufferSPtr m_msDepthBuffer;
 		//!\~english The attach between multisampled colour buffer and multisampled frame buffer.
 		//!\~french L'attache entre le tampon couleur multisamplé et le tampon multisamplé.
-		Castor3D::RenderBufferAttachmentSPtr m_pMsColorAttach;
+		Castor3D::RenderBufferAttachmentSPtr m_msColourAttach;
 		//!\~english The attach between multisampled depth buffer and multisampled frame buffer.
 		//!\~french L'attache entre le tampon profondeur multisamplé et le tampon multisamplé.
-		Castor3D::RenderBufferAttachmentSPtr m_pMsDepthAttach;
+		Castor3D::RenderBufferAttachmentSPtr m_msDepthAttach;
 		//!\~english The samples count.
 		//!\~french Le nombre de samples.
 		int m_samplesCount;

@@ -72,6 +72,8 @@ namespace deferred
 			return *p_light.GetDirectionalLight();
 		}
 
+#if !defined( NDEBUG )
+
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
 			CASTOR_TRACK( l_tracker );
@@ -81,6 +83,8 @@ namespace deferred
 				, *p_shadowMap.GetTexture() );
 			++g_index;
 		}
+
+#endif
 	};
 
 	template<>
@@ -106,6 +110,8 @@ namespace deferred
 			return *p_light.GetPointLight();
 		}
 
+#if !defined( NDEBUG )
+
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
 			CASTOR_TRACK( l_tracker );
@@ -115,6 +121,8 @@ namespace deferred
 				, *p_shadowMap.GetTexture() );
 			++g_index;
 		}
+
+#endif
 	};
 
 	template<>
@@ -140,6 +148,8 @@ namespace deferred
 			return *p_light.GetSpotLight();
 		}
 
+#if !defined( NDEBUG )
+
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
 			CASTOR_TRACK( l_tracker );
@@ -149,6 +159,8 @@ namespace deferred
 				, *p_shadowMap.GetTexture() );
 			++g_index;
 		}
+
+#endif
 	};
 
 	template< Castor3D::LightType LightType >
@@ -204,7 +216,7 @@ namespace deferred
 			CASTOR_TRACK( l_tracker );
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
 			my_pass_type::Update( p_size, p_light, p_camera );
-			LightPass::m_frameBuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 			LightPass::m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 			p_gp[size_t( DsTexture::ePosition )]->Bind();
 			p_gp[size_t( DsTexture::eDiffuse )]->Bind();
@@ -231,7 +243,7 @@ namespace deferred
 
 #if !defined( NDEBUG )
 
-			LightPass::m_frameBuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 			my_traits::DebugDisplay( m_shadowMapTexture );
 			LightPass::m_frameBuffer.Unbind();
 

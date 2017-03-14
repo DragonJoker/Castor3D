@@ -106,7 +106,7 @@ namespace Castor3D
 
 	RenderTarget::stFRAME_BUFFER::stFRAME_BUFFER( RenderTarget & p_renderTarget )
 		: m_renderTarget{ p_renderTarget }
-		, m_colorTexture{ *p_renderTarget.GetEngine() }
+		, m_colourTexture{ *p_renderTarget.GetEngine() }
 	{
 	}
 
@@ -115,18 +115,19 @@ namespace Castor3D
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, m_renderTarget.GetPixelFormat(), p_size );
-		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
-		m_colorTexture.SetTexture( l_colourTexture );
-		m_colorTexture.SetSampler( l_sampler );
-		m_colorTexture.SetIndex( p_index );
-		m_colorTexture.GetTexture()->GetImage().InitialiseSource();
-		Size l_size = m_colorTexture.GetTexture()->GetDimensions();
+		m_colourAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
+		m_colourTexture.SetTexture( l_colourTexture );
+		m_colourTexture.SetSampler( l_sampler );
+		m_colourTexture.SetIndex( p_index );
+		m_colourTexture.GetTexture()->GetImage().InitialiseSource();
+		Size l_size = m_colourTexture.GetTexture()->GetDimensions();
 		m_frameBuffer->Create();
-		m_colorTexture.GetTexture()->Initialise();
+		m_colourTexture.GetTexture()->Initialise();
 		m_frameBuffer->Initialise( l_size );
 
-		m_frameBuffer->Bind( FrameBufferMode::eConfig );
-		m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_pColorAttach, m_colorTexture.GetTexture()->GetType() );
+		m_frameBuffer->Bind();
+		m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture.GetTexture()->GetType() );
+		m_frameBuffer->SetDrawBuffer( m_colourAttach );
 		bool l_return = m_frameBuffer->IsComplete();
 		m_frameBuffer->Unbind();
 
@@ -135,14 +136,14 @@ namespace Castor3D
 
 	void RenderTarget::stFRAME_BUFFER::Cleanup()
 	{
-		m_frameBuffer->Bind( FrameBufferMode::eConfig );
+		m_frameBuffer->Bind();
 		m_frameBuffer->DetachAll();
 		m_frameBuffer->Unbind();
 		m_frameBuffer->Cleanup();
-		m_colorTexture.Cleanup();
+		m_colourTexture.Cleanup();
 		m_frameBuffer->Destroy();
-		m_pColorAttach.reset();
-		m_colorTexture.SetTexture( nullptr );
+		m_colourAttach.reset();
+		m_colourTexture.SetTexture( nullptr );
 		m_frameBuffer.reset();
 	}
 
@@ -198,7 +199,7 @@ namespace Castor3D
 				}
 			}
 
-			m_size = m_frameBuffer.m_colorTexture.GetTexture()->GetDimensions();
+			m_size = m_frameBuffer.m_colourTexture.GetTexture()->GetDimensions();
 			m_renderTechnique->Initialise( p_index );
 
 			for ( auto l_effect : m_postEffects )
@@ -308,7 +309,7 @@ namespace Castor3D
 			m_renderTechnique->Render( m_visibleObjectsCount, m_particlesCount );
 
 			// Then draw the render's result to the RenderTarget's frame buffer.
-			p_fb.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			p_fb.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 			p_fb.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 			GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
 			// We also render overlays.
@@ -318,9 +319,9 @@ namespace Castor3D
 
 #if DEBUG_BUFFERS
 
-		p_fb.m_pColorAttach->DownloadBuffer();
-		const Image l_tmp( cuT( "tmp" ), *p_fb.m_colorTexture.GetTexture()->GetImage().GetBuffer() );
-		Image::BinaryWriter()( l_tmp, Engine::GetEngineDirectory() / String( cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( p_fb.m_colorTexture.GetTexture().get() ), 16 ) + cuT( ".png" ) ) );
+		p_fb.m_colourAttach->DownloadBuffer();
+		const Image l_tmp( cuT( "tmp" ), *p_fb.m_colourTexture.GetTexture()->GetImage().GetBuffer() );
+		Image::BinaryWriter()( l_tmp, Engine::GetEngineDirectory() / String( cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( p_fb.m_colourTexture.GetTexture().get() ), 16 ) + cuT( ".png" ) ) );
 
 #endif
 

@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
@@ -37,8 +38,9 @@ namespace Castor3D
 		m_fbo->Initialise( p_size );
 		m_fbo->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 
-		m_fbo->Bind( FrameBufferMode::eConfig );
+		m_fbo->Bind();
 		m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, l_colourTexture->GetType() );
+		m_fbo->SetDrawBuffer( m_colourAttach );
 		bool l_return = m_fbo->IsComplete();
 		m_fbo->Unbind();
 
@@ -47,7 +49,7 @@ namespace Castor3D
 
 	void PostEffect::PostEffectSurface::Cleanup()
 	{
-		m_fbo->Bind( FrameBufferMode::eConfig );
+		m_fbo->Bind();
 		m_fbo->DetachAll();
 		m_fbo->Unbind();
 		m_fbo->Cleanup();

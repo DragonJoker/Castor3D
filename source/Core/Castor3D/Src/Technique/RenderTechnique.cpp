@@ -7,6 +7,7 @@
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
@@ -72,9 +73,10 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				m_frameBuffer->Bind( FrameBufferMode::eConfig );
+				m_frameBuffer->Bind();
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( AttachmentPoint::eDepthStencil, m_depthAttach );
+				m_frameBuffer->SetDrawBuffer( m_colourAttach );
 				l_return = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
@@ -91,7 +93,7 @@ namespace Castor3D
 	{
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->Bind();
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 			m_frameBuffer->Cleanup();
@@ -193,9 +195,7 @@ namespace Castor3D
 		l_scene.GetLightCache().UpdateLights();
 		m_renderSystem.PushScene( &l_scene );
 		bool l_shadows = l_scene.HasShadows();
-
-		l_scene.RenderBackgroundImage( GetSize() );
-
+		
 		auto & l_camera = *m_renderTarget.GetCamera();
 		l_camera.Resize( m_size );
 		l_camera.Update();

@@ -1,0 +1,118 @@
+debug_overlays true
+
+scene "Scene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0 0 0 1
+
+	material "WhiteEmit"
+	{
+		type legacy
+		pass
+		{
+			emissive 1.1 1.1 1.1 1.1
+			ambient 1 1 1 1
+		}
+	}
+
+	material "Silver"
+	{
+		type legacy
+		pass
+		{
+			ambient 0.0745	0.0745	0.0745 1.0
+			diffuse 0.75164	0.75164	0.75164 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.628281 0.628281 0.628281 1.0
+			shininess 50.0
+		}
+	}
+
+	scene_node "PointLightsNode"
+	{
+		orientation 0.0 1.0 0.0 225.0
+		position  0.0 0.0 0.0
+	}
+	scene_node "PointLightNode"
+	{
+		parent "PointLightsNode"
+		position  0 0 -20
+	}
+	
+	light "PointLight"
+	{
+		type point
+		parent "PointLightNode"
+		colour 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0 1.0
+		attenuation 1 0.1 0
+	}
+	object "LightPrimitive"
+	{
+		parent "PointLightNode"
+		mesh "LightMesh"
+		{
+			type sphere 20 1
+		}
+		material "WhiteEmit"
+	}
+
+	scene_node "SunLightNode1"
+	{
+		orientation 1 0 0 -45
+	}
+	light "SunLight1"
+	{
+		type directional
+		parent "SunLightNode1"
+		colour 1.0 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0 1.0
+	}
+
+	scene_node "FinalNode"
+	{
+		position 0.0 0.0 0.0
+	}
+	object "FinalPrimitive"
+	{
+		parent "FinalNode"
+		mesh "FinalMesh"
+		{
+			type cube 25 25 25
+		}
+		material "Silver"
+	}
+
+	scene_node "MainCameraNode"
+	{
+		orientation 0 1 0 180
+		position 0.0 0.0 100.0
+	}
+	camera "MainCamera"
+	{
+		parent "MainCameraNode"
+		primitive triangles
+		viewport "MainViewport"
+		{
+			type perspective
+			fov_y 45.0
+			aspect_ratio 1.778
+			near 0.1
+			far 20000.0
+		}
+	}
+
+	window "Window"
+	{
+		render_target
+		{
+			format argb16
+			size screen_size
+			scene "Scene"
+			camera "MainCamera"
+			postfx "bloom"
+		}
+		fullscreen false
+		vsync false
+	}
+}

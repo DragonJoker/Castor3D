@@ -91,7 +91,7 @@ namespace deferred
 		CASTOR_TRACK( l_tracker );
 		auto l_it = m_passes.find( &p_light.GetLight() );
 		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
-		m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_depthAttach->Attach( AttachmentPoint::eDepth );
 		m_depthAttach->Clear( BufferComponent::eDepth );
 		l_it->second->Render();

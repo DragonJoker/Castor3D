@@ -108,11 +108,11 @@ namespace Castor3D
 			void Cleanup();
 
 			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
-			TextureUnit m_colorTexture;
+			TextureUnit m_colourTexture;
 			//!\~english The frame buffer	\~french Le tampon d'image
 			FrameBufferSPtr m_frameBuffer;
 			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
-			TextureAttachmentSPtr m_pColorAttach;
+			TextureAttachmentSPtr m_colourAttach;
 
 		private:
 			RenderTarget & m_renderTarget;
@@ -386,7 +386,7 @@ namespace Castor3D
 		 */
 		inline TextureUnit const & GetTexture()const
 		{
-			return m_frameBuffer.m_colorTexture;
+			return m_frameBuffer.m_colourTexture;
 		}
 		/**
 		 *\~english
