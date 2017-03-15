@@ -240,6 +240,23 @@ namespace deferred
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 	}
 
+	void LightPass::Render( Size const & p_size
+		, GeometryPassResult const & p_gp
+		, Light const & p_light
+		, Camera const & p_camera
+		, GLSL::FogType p_fogType
+		, bool p_first )
+	{
+		DoUpdate( p_size
+			, p_light
+			, p_camera );
+		DoRender( p_size
+			, p_gp
+			, p_light
+			, p_fogType
+			, p_first );
+	}
+
 	void LightPass::DoInitialise( Scene const & p_scene
 		, LightType p_type
 		, VertexBuffer & p_vbo

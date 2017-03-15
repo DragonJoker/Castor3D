@@ -133,22 +133,6 @@ namespace deferred
 		DoCleanup();
 	}
 
-	void MeshLightPass::Render( Size const & p_size
-		, GeometryPassResult const & p_gp
-		, Light const & p_light
-		, Camera const & p_camera
-		, GLSL::FogType p_fogType
-		, bool p_first )
-	{
-		DoUpdate( p_size, p_light, p_camera );
-		m_stencilPass.Render( m_indexBuffer->GetSize() );
-		DoRender( p_size
-			, p_gp
-			, p_light
-			, p_fogType
-			, p_first );
-	}
-
 	uint32_t MeshLightPass::GetCount()const
 	{
 		return m_indexBuffer->GetSize();
@@ -165,6 +149,7 @@ namespace deferred
 		m_matrixUbo.Update();
 		m_modelMatrixUbo.Update();
 		p_camera.Apply();
+		m_stencilPass.Render( m_indexBuffer->GetSize() );
 	}
 	
 	String MeshLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const

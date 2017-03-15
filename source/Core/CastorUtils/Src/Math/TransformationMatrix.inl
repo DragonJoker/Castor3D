@@ -235,11 +235,37 @@ namespace Castor
 			return p_matrix;
 		}
 
+		template< typename T, typename U >
+		SquareMatrix< T, 4 > & perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_fovy, U p_aspect, U p_near )
+		{
+			T l_range = T( tan( p_fovy.radians() * 0.5 ) * p_near );
+			T const l_left = -l_range * p_aspect;
+			T const l_right = l_range * p_aspect;
+			T const l_bottom = -l_range;
+			T const l_top = l_range;
+
+			p_matrix.initialise();
+			p_matrix[0][0] = ( static_cast< T >( 2 ) * p_near ) / ( l_right - l_left );
+			p_matrix[1][1] = ( static_cast< T >( 2 ) * p_near ) / ( l_top - l_bottom );
+			p_matrix[2][2] = -static_cast< T >( 1 );
+			p_matrix[2][3] = -static_cast< T >( 1 );
+			p_matrix[3][2] = -static_cast< T >( 2 ) * p_near;
+			return p_matrix;
+		}
+
 		template< typename T >
 		SquareMatrix< T, 4 > perspective( Angle const & p_fovy, T p_aspect, T p_near, T p_far )
 		{
 			SquareMatrix< T, 4 > l_return;
 			perspective( l_return, p_fovy, p_aspect, p_near, p_far );
+			return l_return;
+		}
+
+		template< typename T >
+		SquareMatrix< T, 4 > perspective( Angle const & p_fovy, T p_aspect, T p_near )
+		{
+			SquareMatrix< T, 4 > l_return;
+			perspective( l_return, p_fovy, p_aspect, p_near );
 			return l_return;
 		}
 

@@ -80,14 +80,11 @@ namespace deferred
 
 	void ShadowMapDirectional::Render( DirectionalLight const & p_light )
 	{
-		CASTOR_TRACK( l_tracker );
 		auto l_it = m_passes.find( &p_light.GetLight() );
 		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_depthAttach->Attach( AttachmentPoint::eDepth );
 		m_frameBuffer->Clear( BufferComponent::eDepth );
 		l_it->second->Render();
-		m_depthAttach->Detach();
 		m_frameBuffer->Unbind();
 	}
 
@@ -108,7 +105,10 @@ namespace deferred
 
 		auto l_texture = m_shadowMap.GetTexture();
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
-		m_depthAttach->SetTarget( l_texture->GetType() );
+		m_frameBuffer->Bind();
+		m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach, m_shadowMap.GetTexture()->GetType() );
+		ENSURE( m_frameBuffer->IsComplete() );
+		m_frameBuffer->Unbind();
 	}
 
 	void ShadowMapDirectional::DoCleanup()

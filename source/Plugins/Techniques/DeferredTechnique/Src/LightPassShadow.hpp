@@ -76,7 +76,6 @@ namespace deferred
 
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
-			CASTOR_TRACK( l_tracker );
 			Castor::Size l_size{ 256u, 256u };
 			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
 				, l_size
@@ -114,7 +113,6 @@ namespace deferred
 
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
-			CASTOR_TRACK( l_tracker );
 			Castor::Size l_size{ 128u, 128u };
 			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( Castor::Position{ 0, int32_t( g_index * 3 * l_size.height() ) }
 				, l_size
@@ -152,7 +150,6 @@ namespace deferred
 
 		static void DebugDisplay( Castor3D::TextureUnit & p_shadowMap )
 		{
-			CASTOR_TRACK( l_tracker );
 			Castor::Size l_size{ 256u, 256u };
 			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
 				, l_size
@@ -213,35 +210,19 @@ namespace deferred
 			, GLSL::FogType p_fogType
 			, bool p_first )override
 		{
-			CASTOR_TRACK( l_tracker );
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
-			my_pass_type::DoUpdate( p_size, p_light, p_camera );
-			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
-			LightPass::m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
-			p_gp[size_t( DsTexture::ePosition )]->Bind();
-			p_gp[size_t( DsTexture::eDiffuse )]->Bind();
-			p_gp[size_t( DsTexture::eNormals )]->Bind();
-			p_gp[size_t( DsTexture::eAmbient )]->Bind();
-			p_gp[size_t( DsTexture::eSpecular )]->Bind();
-			p_gp[size_t( DsTexture::eEmissive )]->Bind();
-			m_shadowMapTexture.Bind();
-
-			auto & l_program = *LightPass::m_programs[uint16_t( p_fogType )];
-			l_program.Render( p_size
+			my_pass_type::DoUpdate( p_size
 				, p_light
-				, my_pass_type::GetCount()
+				, p_camera );
+			m_shadowMapTexture.Bind();
+			my_pass_type::DoRender( p_size
+				, p_gp
+				, p_light
+				, p_fogType
 				, p_first );
-
 			m_shadowMapTexture.Unbind();
-			p_gp[size_t( DsTexture::eEmissive )]->Unbind();
-			p_gp[size_t( DsTexture::eSpecular )]->Unbind();
-			p_gp[size_t( DsTexture::eAmbient )]->Unbind();
-			p_gp[size_t( DsTexture::eNormals )]->Unbind();
-			p_gp[size_t( DsTexture::eDiffuse )]->Unbind();
-			p_gp[size_t( DsTexture::ePosition )]->Unbind();
-			LightPass::m_frameBuffer.Unbind();
 
-#if !defined( NDEBUG )
+#if 0//!defined( NDEBUG )
 
 			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 			my_traits::DebugDisplay( m_shadowMapTexture );
