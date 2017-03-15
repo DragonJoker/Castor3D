@@ -30,7 +30,7 @@ SOFTWARE.
 
 #include <Miscellaneous/BlockTracker.hpp>
 
-namespace deferred
+namespace deferred_common
 {
 	enum class DsTexture
 		: uint8_t

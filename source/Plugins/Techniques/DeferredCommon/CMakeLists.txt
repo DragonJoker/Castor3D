@@ -1,4 +1,4 @@
-project( DeferredTechnique )
+project( DeferredCommon )
 
 set( CastorBinsDependencies 
 	${CastorBinsDependencies}
@@ -6,17 +6,7 @@ set( CastorBinsDependencies
 	PARENT_SCOPE
 )
 
-set( TechniqueLibraries
-	${TechniqueLibraries}
-	DeferredCommon
-)
-
-set( TechniqueIncludes
-	${TechniqueIncludes}
-	${CMAKE_SOURCE_DIR}/Plugins/Techniques/DeferredCommon/Src
-)
-
-set( ${PROJECT_NAME}_DESCRIPTION "Deferred RenderTechnique" )
+set( ${PROJECT_NAME}_DESCRIPTION "DeferredCommon" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
@@ -26,7 +16,7 @@ include_directories( ${TechniqueIncludes} )
 
 add_target(
 	${PROJECT_NAME}
-	plugin
+	lib
 	"Castor3D"
 	"${TechniqueLibraries}"
 )

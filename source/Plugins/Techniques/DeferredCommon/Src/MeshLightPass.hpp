@@ -20,14 +20,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_DirectionalLightPass_H___
-#define ___C3D_DirectionalLightPass_H___
+#ifndef ___C3D_MeshLightPass_H___
+#define ___C3D_MeshLightPass_H___
 
-#include "LightPass.hpp"
+#include "StencilPass.hpp"
 
-namespace deferred
+namespace deferred_common
 {
-	class DirectionalLightPass
+	class MeshLightPass
 		: public LightPass
 	{
 	protected:
@@ -41,24 +41,16 @@ namespace deferred
 			virtual ~Program();
 
 		private:
-			virtual Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend )override;
-			void DoBind( Castor3D::Light const & p_light )override;
-
-		private:
-			//!\~english	The variable containing the light direction.
-			//!\~french		La variable contenant la direction de la lumière.
-			Castor3D::PushUniform3fSPtr m_lightDirection;
-			//!\~english	The variable containing the light space transformation matrix.
-			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			Castor3D::PushUniform4x4fSPtr m_lightTransform;
+			Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend )override;
 		};
 
 	public:
-		DirectionalLightPass( Castor3D::Engine & p_engine
+		MeshLightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
 			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::LightType p_type
 			, bool p_shadows );
-		~DirectionalLightPass();
+		~MeshLightPass();
 		void Initialise( Castor3D::Scene const & p_scene
 			, Castor3D::UniformBuffer & p_sceneUbo )override;
 		void Cleanup()override;
@@ -71,20 +63,36 @@ namespace deferred
 
 	private:
 		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const override;
-		LightPass::ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
-			, Castor::String const & p_vtx
-			, Castor::String const & p_pxl )const override;
+		virtual Castor::Point3fArray DoGenerateVertices()const = 0;
+		virtual Castor3D::UIntArray DoGenerateFaces()const = 0;
+		virtual Castor::Matrix4x4r DoComputeModelMatrix( Castor3D::Light const & p_light
+			, Castor3D::Camera const & p_camera )const = 0;
 
 	private:
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		Castor3D::VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The viewport used when rendering is done.
-		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
-		Castor3D::Viewport m_viewport;
+		//!\~english	The uniform buffer containing the model data.
+		//!\~french		Le tampon d'uniformes contenant les données de modèle.
+		Castor3D::UniformBuffer m_modelMatrixUbo;
 		//!\~english	The uniform variable containing projection matrix.
 		//!\~french		La variable uniforme contenant la matrice projection.
 		Castor3D::Uniform4x4fSPtr m_projectionUniform;
+		//!\~english	The uniform variable containing view matrix.
+		//!\~french		La variable uniforme contenant la matrice vue.
+		Castor3D::Uniform4x4fSPtr m_viewUniform;
+		//!\~english	The uniform variable containing model matrix.
+		//!\~french		La variable uniforme contenant la matrice modèle.
+		Castor3D::Uniform4x4fSPtr m_modelUniform;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		Castor3D::VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The index buffer.
+		//!\~french		Le tampon d'indices.
+		Castor3D::IndexBufferSPtr m_indexBuffer;
+		//!\~english	The light's stencil pass.
+		//!\~french		La passe stencil de la lumière.
+		StencilPass m_stencilPass;
+		//!\~english	The light source type.
+		//!\~french		Le type de source lumineuse.
+		Castor3D::LightType m_type;
 	};
 }
 

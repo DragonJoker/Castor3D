@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "LightPass.hpp"
 
-namespace deferred
+namespace deferred_common
 {
 	class StencilPass
 	{

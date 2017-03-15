@@ -26,7 +26,7 @@ SOFTWARE.
 #include <ShadowMap/ShadowMap.hpp>
 #include <Render/Viewport.hpp>
 
-namespace deferred
+namespace deferred_common
 {
 	/*!
 	\author		Sylvain DOREMUS

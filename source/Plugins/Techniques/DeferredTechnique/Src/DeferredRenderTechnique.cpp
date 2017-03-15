@@ -1,10 +1,11 @@
 #include "DeferredRenderTechnique.hpp"
 
-#include "DeferredRenderTechniqueOpaquePass.hpp"
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
 #include "PointLightPass.hpp"
 #include "SpotLightPass.hpp"
+
+#include <OpaquePass.hpp>
 
 #include <Engine.hpp>
 #include <Cache/CameraCache.hpp>
@@ -60,17 +61,21 @@ using namespace Castor3D;
 
 namespace deferred
 {
-	//************************************************************************************************
-
 	String const RenderTechnique::Type = cuT( "deferred" );
 	String const RenderTechnique::Name = cuT( "Deferred Lighting Render Technique" );
 
-	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
+	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget
+		, RenderSystem & p_renderSystem
+		, Parameters const & p_params )
 		: Castor3D::RenderTechnique( RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
-			, std::make_unique< OpaquePass >( p_renderTarget, *this )
-			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_transparent" ), p_renderTarget, *this, false, false )
+			, std::make_unique< deferred_common::OpaquePass >( p_renderTarget, *this )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_transparent" )
+				, p_renderTarget
+				, *this
+				, false
+				, false )
 			, p_params )
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
 	{
@@ -156,10 +161,6 @@ namespace deferred
 
 #else
 
-		//m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
-		//	, Rectangle{ Position{}, m_size }
-		//	, BufferComponent::eDepth );
-
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eStencil );
@@ -192,8 +193,11 @@ namespace deferred
 
 	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
 	{
+		m_frameBuffer.m_frameBuffer->Unbind();
 		GetEngine()->SetPerObjectLighting( true );
+		m_transparentPass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 	}
@@ -223,12 +227,12 @@ namespace deferred
 
 		if ( l_return )
 		{
-			for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
+			for ( uint32_t i = 0; i < uint32_t( deferred_common::DsTexture::eCount ); i++ )
 			{
 				auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions
 					, AccessType::eNone
 					, AccessType::eRead | AccessType::eWrite
-					, GetTextureFormat( DsTexture( i ) )
+					, GetTextureFormat( deferred_common::DsTexture( i ) )
 					, m_size );
 				l_texture->GetImage().InitialiseSource();
 
@@ -245,15 +249,14 @@ namespace deferred
 			m_lightPassDepthBuffer->Initialise( m_size );
 			m_geometryPassFrameBuffer->Bind();
 
-			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
+			for ( int i = 0; i < size_t( deferred_common::DsTexture::eCount ) && l_return; i++ )
 			{
-				m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
-					, GetTextureAttachmentIndex( DsTexture( i ) )
+				m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( deferred_common::DsTexture( i ) )
+					, GetTextureAttachmentIndex( deferred_common::DsTexture( i ) )
 					, m_geometryPassTexAttachs[i]
 					, m_lightPassTextures[i]->GetType() );
 			}
 
-			//m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepthStencil, m_geometryPassDepthAttach );
 			ENSURE( m_geometryPassFrameBuffer->IsComplete() );
 			m_geometryPassFrameBuffer->SetDrawBuffers();
 			m_geometryPassFrameBuffer->Unbind();
@@ -264,29 +267,29 @@ namespace deferred
 
 	bool RenderTechnique::DoInitialiseLightPass()
 	{
-		auto & l_opaquePass = *reinterpret_cast< OpaquePass * >( m_opaquePass.get() );
+		auto & l_opaquePass = *reinterpret_cast< deferred_common::OpaquePass * >( m_opaquePass.get() );
 		auto & l_scene = *m_renderTarget.GetScene();
-		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( *m_renderTarget.GetEngine()
+		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
 			, false );
-		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( *m_renderTarget.GetEngine()
+		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
 			, false );
-		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( *m_renderTarget.GetEngine()
+		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
 			, false );
-		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( *m_renderTarget.GetEngine()
+		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
 			, l_opaquePass.GetDirectionalShadowMap() );
-		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( *m_renderTarget.GetEngine()
+		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
 			, l_opaquePass.GetPointShadowMaps() );
-		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( *m_renderTarget.GetEngine()
+		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
 			, l_opaquePass.GetSpotShadowMap() );

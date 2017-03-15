@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "MeshLightPass.hpp"
 
-namespace deferred
+namespace deferred_common
 {
 	class SpotLightPass
 		: public MeshLightPass

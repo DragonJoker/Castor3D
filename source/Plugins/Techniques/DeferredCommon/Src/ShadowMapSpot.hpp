@@ -20,12 +20,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_DeferredShadowMapDirectional_H___
-#define ___C3D_DeferredShadowMapDirectional_H___
+#ifndef ___C3D_DeferredfShadowMapSpot_H___
+#define ___C3D_DeferredfShadowMapSpot_H___
 
 #include <ShadowMap/ShadowMap.hpp>
 
-namespace deferred
+namespace deferred_common
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -36,7 +36,7 @@ namespace deferred
 	\~french
 	\brief		Implémentation du mappage d'ombres pour les lumières spot.
 	*/
-	class ShadowMapDirectional
+	class ShadowMapSpot
 		: public Castor3D::ShadowMap
 	{
 	public:
@@ -48,14 +48,14 @@ namespace deferred
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		ShadowMapDirectional( Castor3D::Engine & p_engine );
+		ShadowMapSpot( Castor3D::Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~ShadowMapDirectional();
+		~ShadowMapSpot();
 		/**
 		 *\~english
 		 *\brief		Updates the passes, selecting the lights that will project shadows.
@@ -76,7 +76,7 @@ namespace deferred
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		void Render( Castor3D::DirectionalLight const & p_light );
+		void Render( Castor3D::SpotLight const & p_light );
 		/**
 		 *\~english
 		 *\return		The shadow map.

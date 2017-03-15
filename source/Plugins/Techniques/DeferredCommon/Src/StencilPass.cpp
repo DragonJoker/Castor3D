@@ -19,7 +19,7 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace deferred
+namespace deferred_common
 {
 	//*********************************************************************************************
 

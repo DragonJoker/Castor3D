@@ -26,10 +26,9 @@ SOFTWARE.
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Render/Viewport.hpp>
-#include <Render/RenderNode/SceneRenderNode.hpp>
 #include <Shader/UniformBuffer.hpp>
 
-#include "LightPass.hpp"
+#include <LightPass.hpp>
 
 namespace deferred
 {
@@ -123,9 +122,9 @@ namespace deferred
 		static Castor::String const Name;
 
 	private:
-		using GeometryBufferTextures = std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) >;
-		using GeometryBufferAttachs = std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::eCount ) >;
-		using LightPasses = std::array< std::unique_ptr< LightPass >, size_t( Castor3D::LightType::eCount ) >;
+		using GeometryBufferTextures = std::array< Castor3D::TextureUnitUPtr, size_t( deferred_common::DsTexture::eCount ) >;
+		using GeometryBufferAttachs = std::array< Castor3D::TextureAttachmentSPtr, size_t( deferred_common::DsTexture::eCount ) >;
+		using LightPasses = std::array< std::unique_ptr< deferred_common::LightPass >, size_t( Castor3D::LightType::eCount ) >;
 
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.

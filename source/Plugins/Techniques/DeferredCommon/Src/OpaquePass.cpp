@@ -1,4 +1,4 @@
-#include "DeferredRenderTechniqueOpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -14,43 +14,8 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace deferred
+namespace deferred_common
 {
-	//*********************************************************************************************
-
-	namespace
-	{
-		TextureUnit DoInitialiseDirectional( Engine & p_engine, Size const & p_size )
-		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Directional" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
-
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eTwoDimensions,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F, p_size );
-			TextureUnit l_unit{ p_engine };
-			l_unit.SetTexture( l_texture );
-			l_unit.SetSampler( l_sampler );
-
-			for ( auto & l_image : *l_texture )
-			{
-				l_image->InitialiseSource();
-			}
-
-			return l_unit;
-		}
-	}
-
-	//*********************************************************************************************
-
 	OpaquePass::OpaquePass( RenderTarget & p_renderTarget
 		, Castor3D::RenderTechnique & p_technique )
 		: Castor3D::RenderTechniquePass{ cuT( "deferred_opaque" )
@@ -207,6 +172,4 @@ namespace deferred
 	void OpaquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 	}
-
-	//*********************************************************************************************
 }

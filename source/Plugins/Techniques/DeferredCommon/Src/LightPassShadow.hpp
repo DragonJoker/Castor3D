@@ -39,7 +39,7 @@ SOFTWARE.
 
 #include <GlslShadow.hpp>
 
-namespace deferred
+namespace deferred_common
 {
 #if !defined( NDEBUG )
 
