@@ -174,7 +174,7 @@ namespace deferred
 		{
 #if !defined( NDEBUG )
 
-			g_index = 0;
+			deferred_common::g_index = 0;
 
 #endif
 

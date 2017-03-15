@@ -122,13 +122,14 @@ namespace deferred_msaa
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
-		return DoInitialiseDeferred( p_index ) && DoInitialiseMsaa();
+		return DoInitialiseMsaa()
+			&& DoInitialiseDeferred( p_index );
 	}
 
 	void RenderTechnique::DoCleanup()
 	{
-		DoCleanupMsaa();
 		DoCleanupDeferred();
+		DoCleanupMsaa();
 	}
 
 	void RenderTechnique::DoUpdateSceneUbo()
@@ -152,7 +153,7 @@ namespace deferred_msaa
 		GetEngine()->SetPerObjectLighting( false );
 		m_renderTarget.GetCamera()->Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
+		m_msaaDepthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
@@ -177,10 +178,10 @@ namespace deferred_msaa
 
 #else
 
-		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
-		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eStencil );
-		m_frameBuffer.m_frameBuffer->Unbind();
+		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_msaaDepthAttach->Attach( AttachmentPoint::eDepthStencil );
+		m_msaaFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eStencil );
+		m_msaaFrameBuffer->Unbind();
 
 		DoUpdateSceneUbo();
 
@@ -190,7 +191,7 @@ namespace deferred_msaa
 		{
 #if !defined( NDEBUG )
 
-			g_index = 0;
+			deferred_common::g_index = 0;
 
 #endif
 
@@ -201,7 +202,7 @@ namespace deferred_msaa
 			DoRenderLights( LightType::eSpot, l_first );
 		}
 
-		m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer, m_rect, uint32_t( BufferComponent::eDepth ) );
+		//m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer, m_rect, uint32_t( BufferComponent::eDepth ) );
 		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msaaFrameBuffer->SetDrawBuffers();
 
@@ -375,28 +376,28 @@ namespace deferred_msaa
 		auto & l_opaquePass = *reinterpret_cast< deferred_common::OpaquePass * >( m_opaquePass.get() );
 		auto & l_scene = *m_renderTarget.GetScene();
 		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPass >( *m_renderTarget.GetEngine()
-			, *m_frameBuffer.m_frameBuffer
-			, *m_frameBuffer.m_depthAttach
+			, *m_msaaFrameBuffer
+			, *m_msaaDepthAttach
 			, false );
 		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPass >( *m_renderTarget.GetEngine()
-			, *m_frameBuffer.m_frameBuffer
-			, *m_frameBuffer.m_depthAttach
+			, *m_msaaFrameBuffer
+			, *m_msaaDepthAttach
 			, false );
 		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPass >( *m_renderTarget.GetEngine()
-			, *m_frameBuffer.m_frameBuffer
-			, *m_frameBuffer.m_depthAttach
+			, *m_msaaFrameBuffer
+			, *m_msaaDepthAttach
 			, false );
 		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPassShadow >( *m_renderTarget.GetEngine()
-			, *m_frameBuffer.m_frameBuffer
-			, *m_frameBuffer.m_depthAttach
+			, *m_msaaFrameBuffer
+			, *m_msaaDepthAttach
 			, l_opaquePass.GetDirectionalShadowMap() );
 		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPassShadow >( *m_renderTarget.GetEngine()
-			, *m_frameBuffer.m_frameBuffer
-			, *m_frameBuffer.m_depthAttach
+			, *m_msaaFrameBuffer
+			, *m_msaaDepthAttach
 			, l_opaquePass.GetPointShadowMaps() );
 		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPassShadow >( *m_renderTarget.GetEngine()
-			, *m_frameBuffer.m_frameBuffer
-			, *m_frameBuffer.m_depthAttach
+			, *m_msaaFrameBuffer
+			, *m_msaaDepthAttach
 			, l_opaquePass.GetSpotShadowMap() );
 
 		for ( auto & l_lightPass : m_lightPass )
