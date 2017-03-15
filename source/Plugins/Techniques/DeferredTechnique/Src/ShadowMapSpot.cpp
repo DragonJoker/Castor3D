@@ -51,6 +51,33 @@ namespace deferred
 
 			return l_unit;
 		}
+
+		void DoSavePic( TextureLayout & p_texture
+			, String const & p_name )
+		{
+			auto l_data = p_texture.Lock( AccessType::eRead );
+
+			if ( l_data )
+			{
+				auto l_buffer = PxBuffer< PixelFormat::eA8R8G8B8 >{ p_texture.GetDimensions()
+					, l_data
+					, p_texture.GetPixelFormat() };
+
+				for ( auto & l_pixel : l_buffer )
+				{
+					auto l_value = uint8_t( 255.0f - ( 255.0f - *l_pixel.begin() ) * 25.0f );
+
+					for ( auto & l_component : l_pixel )
+					{
+						l_component = l_value;
+					}
+				}
+
+				Image::BinaryWriter()( Image{ cuT( "tmp" ), l_buffer }
+					, Engine::GetEngineDirectory() / p_name );
+				p_texture.Unlock( false );
+			}
+		}
 	}
 
 	ShadowMapSpot::ShadowMapSpot( Engine & p_engine )
@@ -78,12 +105,7 @@ namespace deferred
 		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eDepth );
-
-		if ( l_it == m_passes.begin() )
-		{
-			l_it->second->Render();
-		}
-
+		l_it->second->Render();
 		m_frameBuffer->Unbind();
 	}
 

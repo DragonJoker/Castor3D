@@ -104,14 +104,14 @@
 	}
 
 	template< PixelFormat FT >
-	typename PxBuffer< FT >::iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
+	typename PxBufferBase::pixel_data PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
 		REQUIRE( x < width() && y < height() );
 		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
 	}
 
 	template< PixelFormat FT >
-	typename PxBuffer< FT >::const_iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
+	typename PxBufferBase::const_pixel_data PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
 		REQUIRE( x < width() && y < height() );
 		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );

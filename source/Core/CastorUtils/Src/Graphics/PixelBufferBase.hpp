@@ -44,8 +44,8 @@ namespace Castor
 	{
 	public:
 		typedef std::vector< uint8_t > px_array;
-		typedef px_array::iterator iterator;
-		typedef px_array::const_iterator const_iterator;
+		typedef px_array::iterator pixel_data;
+		typedef px_array::const_iterator const_pixel_data;
 
 	public:
 		/**
@@ -91,7 +91,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Détruit le tampon de données
 		 */
-		CU_API virtual void clear();
+		CU_API void clear();
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer to the given one
@@ -104,7 +104,7 @@ namespace Castor
 		 *\param[in]	p_buffer		Buffer de données
 		 *\param[in]	p_pixelFormat	Format des pixels du buffer de données
 		 */
-		CU_API virtual void init( uint8_t const * p_buffer, PixelFormat p_pixelFormat );
+		CU_API void init( uint8_t const * p_buffer, PixelFormat p_pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer at the given size
@@ -115,7 +115,14 @@ namespace Castor
 		 *\remarks		Des conversions sont faites si besoin est
 		 *\param[in]	p_size		Les dimensions du buffer
 		 */
-		CU_API virtual void init( Size const & p_size );
+		CU_API void init( Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Makes a vertical swap of pixels
+		 *\~french
+		 *\brief		Effectue un échange vertical des pixels
+		 */
+		CU_API void flip();
 		/**
 		 *\~english
 		 *\brief		Swaps this buffer's data with the given one's
@@ -124,14 +131,7 @@ namespace Castor
 		 *\brief		Echange les données de ce buffer avec celles du buffer donné
 		 *\param[in]	p_pixelBuffer	Le buffer à échanger
 		 */
-		CU_API virtual void swap( PxBufferBase & p_pixelBuffer );
-		/**
-		 *\~english
-		 *\brief		Makes a vertical swap of pixels
-		 *\~french
-		 *\brief		Effectue un échange vertical des pixels
-		 */
-		CU_API void flip();
+		CU_API void swap( PxBufferBase & p_pixelBuffer );
 		/**
 		 *\~english
 		 *\brief		Converts and assigns a data buffer to this buffer
@@ -180,7 +180,7 @@ namespace Castor
 		 *\brief		Crée un nouveau buffer avec les mêmes valeurs
 		 *\return		Le buffer créé
 		 */
-		CU_API virtual std::shared_ptr<PxBufferBase> clone()const = 0;
+		CU_API virtual std::shared_ptr< PxBufferBase > clone()const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel data at given position
@@ -191,7 +191,7 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		Les données du pixel
 		 */
-		CU_API virtual iterator get_at( uint32_t x, uint32_t y ) = 0;
+		CU_API virtual pixel_data get_at( uint32_t x, uint32_t y ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel data at given position
@@ -202,7 +202,7 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		Les données constantes du pixel
 		 */
-		CU_API virtual const_iterator get_at( uint32_t x, uint32_t y )const = 0;
+		CU_API virtual const_pixel_data get_at( uint32_t x, uint32_t y )const = 0;
 		/**
 		 *\~english
 		 *\brief		Makes a horizontal swap of pixels
@@ -280,7 +280,7 @@ namespace Castor
 		 *\param[in]	p_position	The pixel position
 		 *\return		Les données du pixel
 		 */
-		inline iterator get_at( Position const & p_position )
+		inline pixel_data get_at( Position const & p_position )
 		{
 			return get_at( p_position.x(), p_position.y() );
 		}
@@ -294,7 +294,7 @@ namespace Castor
 		 *\param[in]	p_position	The pixel position
 		 *\return		Les données constantes du pixel
 		 */
-		inline const_iterator get_at( Position const & p_position )const
+		inline const_pixel_data get_at( Position const & p_position )const
 		{
 			return get_at( p_position.x(), p_position.y() );
 		}
