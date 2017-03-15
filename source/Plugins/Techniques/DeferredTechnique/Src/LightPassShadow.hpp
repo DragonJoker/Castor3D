@@ -222,7 +222,7 @@ namespace deferred
 				, p_first );
 			m_shadowMapTexture.Unbind();
 
-#if !defined( NDEBUG )
+#if 0//!defined( NDEBUG )
 
 			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 			my_traits::DebugDisplay( m_shadowMapTexture );

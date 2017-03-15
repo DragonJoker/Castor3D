@@ -137,7 +137,6 @@ namespace Castor3D
 					m_frameBuffer->Unbind();
 				}
 			}
-
 		}
 	}
 

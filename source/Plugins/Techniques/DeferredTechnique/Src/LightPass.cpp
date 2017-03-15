@@ -219,8 +219,7 @@ namespace deferred
 		}
 		else
 		{
-			m_firstPipeline->Apply();
-			//m_blendPipeline->Apply();
+			m_blendPipeline->Apply();
 		}
 
 		m_geometryBuffers->Draw( p_count, 0 );

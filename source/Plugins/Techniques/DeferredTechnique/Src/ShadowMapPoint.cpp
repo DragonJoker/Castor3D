@@ -36,7 +36,6 @@ namespace deferred
 		static String const ShadowMapUbo = cuT( "ShadowMap" );
 		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
-		static String const ShadowMatrix = cuT( "c3d_mtxShadowMatrix" );
 
 		TextureUnit DoInitialisePoint( Engine & p_engine, Size const & p_size )
 		{
@@ -51,9 +50,9 @@ namespace deferred
 			TextureUnit l_unit{ p_engine };
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
 				TextureType::eCube,
-				AccessType::eRead,
+				AccessType::eNone,
 				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F,
+				PixelFormat::eL32F,
 				p_size );
 			l_unit.SetTexture( l_texture );
 			l_unit.SetSampler( l_sampler );
@@ -90,18 +89,17 @@ namespace deferred
 	{
 		auto l_it = m_passes.find( &p_light.GetLight() );
 		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
-		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		uint32_t l_face = 0u;
 
-		for ( auto & l_attach : m_depthAttach )
+		for ( auto & l_attach : m_colourAttach )
 		{
-			l_attach->Attach( AttachmentPoint::eDepth );
-			l_attach->Clear( BufferComponent::eDepth );
+			m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+			l_attach->Attach( AttachmentPoint::eColour, 0u );
+			m_frameBuffer->SetDrawBuffer( l_attach );
+			m_frameBuffer->Clear( BufferComponent::eDepth | BufferComponent::eColour );
 			l_it->second->Render( l_face++ );
-			l_attach->Detach();
+			m_frameBuffer->Unbind();
 		}
-
-		m_frameBuffer->Unbind();
 	}
 
 	int32_t ShadowMapPoint::DoGetMaxPasses()const
@@ -122,19 +120,34 @@ namespace deferred
 		l_texture->Initialise();
 		int i = 0;
 
-		for ( auto & l_attach : m_depthAttach )
+		for ( auto & l_attach : m_colourAttach )
 		{
 			l_attach = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace( i++ ) );
 			l_attach->SetTarget( TextureType::eTwoDimensions );
 		}
+
+		m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
+		m_depthBuffer->Create();
+		m_depthBuffer->Initialise( l_texture->GetDimensions() );
+
+		m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
+		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
+		m_frameBuffer->Unbind();
 	}
 
 	void ShadowMapPoint::DoCleanup()
 	{
-		for ( auto & l_attach : m_depthAttach )
+		m_depthAttach.reset();
+
+		for ( auto & l_attach : m_colourAttach )
 		{
 			l_attach.reset();
 		}
+
+		m_depthBuffer->Cleanup();
+		m_depthBuffer->Destroy();
+		m_depthBuffer.reset();
 
 		m_shadowMap.Cleanup();
 	}
@@ -175,12 +188,10 @@ namespace deferred
 		Ubo l_shadowMap{ l_writer, ShadowMapUbo };
 		auto c3d_v3WordLightPosition( l_shadowMap.GetUniform< Vec3 >( WorldLightPosition ) );
 		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
-		auto c3d_mtxShadowMatrix = l_shadowMap.GetUniform< Mat4 >( ShadowMatrix );
 		l_shadowMap.End();
 
 		// Outputs
 		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-		auto vtx_position( l_writer.GetOutput< Vec4 >( cuT( "vtx_position" ) ) );
 		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		std::function< void() > l_main = [&]()
@@ -218,8 +229,7 @@ namespace deferred
 
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
 			vtx_worldSpacePosition = l_v4Vertex.xyz();
-			vtx_position = l_v4Vertex;
-			gl_Position = c3d_mtxShadowMatrix * vtx_position;
+			gl_Position = c3d_mtxProjection * c3d_mtxView * l_v4Vertex;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
@@ -244,18 +254,17 @@ namespace deferred
 		Ubo l_shadowMap{ l_writer, ShadowMapUbo };
 		auto c3d_v3WordLightPosition( l_shadowMap.GetUniform< Vec3 >( WorldLightPosition ) );
 		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
-		auto c3d_mtxShadowMatrix = l_shadowMap.GetUniform< Mat4 >( ShadowMatrix );
 		l_shadowMap.End();
 
-		auto vtx_position( l_writer.GetInput< Vec4 >( cuT( "vtx_position" ) ) );
+		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
 
 		// Fragment Outputs
-		auto gl_FragDepth( l_writer.GetBuiltin< Float >( cuT( "gl_FragDepth" ) ) );
+		auto pxl_fFragColor = l_writer.GetFragData< Float >( cuT( "pxl_fFragColor" ), 0u );
 
 		auto l_main = [&]()
 		{
-			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_position.xyz() - c3d_v3WordLightPosition ) );
-			gl_FragDepth = l_distance / c3d_fFarPlane;
+			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_worldSpacePosition - c3d_v3WordLightPosition ) );
+			pxl_fFragColor = l_distance / c3d_fFarPlane;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
