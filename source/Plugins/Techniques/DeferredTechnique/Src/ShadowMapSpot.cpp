@@ -78,7 +78,12 @@ namespace deferred
 		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eDepth );
-		l_it->second->Render();
+
+		if ( l_it == m_passes.begin() )
+		{
+			l_it->second->Render();
+		}
+
 		m_frameBuffer->Unbind();
 	}
 
@@ -96,7 +101,6 @@ namespace deferred
 	{
 		m_shadowMap.Initialise();
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-
 		auto l_texture = m_shadowMap.GetTexture();
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
 		m_frameBuffer->Bind();
