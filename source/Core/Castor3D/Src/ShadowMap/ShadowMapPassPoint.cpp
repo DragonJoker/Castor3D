@@ -35,7 +35,7 @@ namespace Castor3D
 		static String const ShadowMatrix = cuT( "c3d_mtxShadowMatrix" );
 
 		void DoUpdateShadowMatrices( Point3r const & p_position
-			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > p_matrices )
+			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & p_matrices )
 		{
 			p_matrices =
 			{

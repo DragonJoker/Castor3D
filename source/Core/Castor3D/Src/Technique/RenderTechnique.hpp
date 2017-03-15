@@ -25,9 +25,6 @@ SOFTWARE.
 
 #include "HDR/ToneMapping.hpp"
 #include "Texture/TextureUnit.hpp"
-#include "ShadowMap/ShadowMapDirectional.hpp"
-#include "ShadowMap/ShadowMapPoint.hpp"
-#include "ShadowMap/ShadowMapSpot.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>

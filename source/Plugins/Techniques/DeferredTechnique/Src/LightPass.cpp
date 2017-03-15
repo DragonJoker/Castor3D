@@ -1,6 +1,7 @@
 #include "LightPass.hpp"
 
 #include <Engine.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <Render/RenderPipeline.hpp>

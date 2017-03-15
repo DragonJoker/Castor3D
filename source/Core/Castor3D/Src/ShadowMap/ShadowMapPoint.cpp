@@ -54,9 +54,9 @@ namespace Castor3D
 					l_sampler = p_engine.GetSamplerCache().Add( l_name + string::to_string( i ) );
 					l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 					l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-					l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-					l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-					l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+					l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+					l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+					l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 					l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
 					l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 				}
@@ -65,7 +65,7 @@ namespace Castor3D
 					TextureType::eCube,
 					AccessType::eNone,
 					AccessType::eRead | AccessType::eWrite,
-					PixelFormat::eD32F,
+					PixelFormat::eL32F,
 					p_size );
 				l_result.emplace_back( p_engine );
 				TextureUnit & l_unit = l_result.back();
@@ -120,7 +120,6 @@ namespace Castor3D
 	{
 		if ( !m_sorted.empty() )
 		{
-			m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 			auto l_it = m_sorted.begin();
 			const int32_t l_max = DoGetMaxPasses();
 
@@ -128,16 +127,17 @@ namespace Castor3D
 			{
 				uint32_t l_face = 0;
 
-				for ( auto & l_attach : m_depthAttach[i] )
+				for ( auto & l_attach : m_colourAttachs[i] )
 				{
-					l_attach->Attach( AttachmentPoint::eDepth );
-					l_attach->Clear( BufferComponent::eDepth );
+					m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+					l_attach->Attach( AttachmentPoint::eColour, 0u );
+					m_frameBuffer->SetDrawBuffer( l_attach );
+					m_frameBuffer->Clear( BufferComponent::eDepth | BufferComponent::eColour );
 					l_it->second->Render( l_face++ );
-					l_attach->Detach();
+					m_frameBuffer->Unbind();
 				}
 			}
 
-			m_frameBuffer->Unbind();
 		}
 	}
 
@@ -155,8 +155,8 @@ namespace Castor3D
 	{
 		constexpr float l_component = std::numeric_limits< float >::max();
 		m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
-		m_depthAttach.resize( DoGetMaxPasses() );
-		auto l_it = m_depthAttach.begin();
+		m_colourAttachs.resize( DoGetMaxPasses() );
+		auto l_it = m_colourAttachs.begin();
 
 		for ( auto & l_map : m_shadowMaps )
 		{
@@ -172,17 +172,32 @@ namespace Castor3D
 
 			++l_it;
 		}
+
+		m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
+		m_depthBuffer->Create();
+		m_depthBuffer->Initialise( m_shadowMaps[0].GetTexture()->GetDimensions() );
+
+		m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
+		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
+		m_frameBuffer->Unbind();
 	}
 
 	void ShadowMapPoint::DoCleanup()
 	{
-		for ( auto & l_attach : m_depthAttach )
+		m_depthAttach.reset();
+
+		for ( auto & l_attach : m_colourAttachs )
 		{
 			for ( auto & l_face : l_attach )
 			{
 				l_face.reset();
 			}
 		}
+
+		m_depthBuffer->Cleanup();
+		m_depthBuffer->Destroy();
+		m_depthBuffer.reset();
 
 		for ( auto & l_map : m_shadowMaps )
 		{
@@ -297,12 +312,12 @@ namespace Castor3D
 		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
 
 		// Fragment Outputs
-		auto gl_FragDepth = l_writer.GetBuiltin< Float >( cuT( "gl_FragDepth" ) );
+		auto pxl_fFragColor = l_writer.GetFragData< Float >( cuT( "pxl_fFragColor" ), 0u );
 
 		auto l_main = [&]()
 		{
 			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_worldSpacePosition - c3d_v3WordLightPosition ) );
-			gl_FragDepth = l_distance / c3d_fFarPlane;
+			pxl_fFragColor = l_distance / c3d_fFarPlane;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

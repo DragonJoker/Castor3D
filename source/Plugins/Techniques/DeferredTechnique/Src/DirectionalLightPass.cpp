@@ -1,6 +1,7 @@
 #include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Scene.hpp>

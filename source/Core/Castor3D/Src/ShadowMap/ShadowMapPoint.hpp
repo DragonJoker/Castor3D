@@ -169,10 +169,17 @@ namespace Castor3D
 			, SceneFlags const & p_sceneFlags )const override;
 
 	private:
-		using CubeAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
+		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
+		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
 		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		std::vector< CubeAttachment > m_depthAttach;
+		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
+		CubeDepthAttachment m_depthAttach;
+		//!\~english	The depth buffer.
+		//!\~french		Le tampon de profondeur.
+		DepthStencilRenderBufferSPtr m_depthBuffer;
+		//!\~english	The attach between colour buffer and main frame buffer.
+		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
+		std::vector< CubeColourAttachment > m_colourAttachs;
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
 		std::vector< TextureUnit > m_shadowMaps;
