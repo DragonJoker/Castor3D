@@ -36,7 +36,7 @@ namespace deferred
 		static String const ShadowMapUbo = cuT( "ShadowMap" );
 		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
-		static String const ShadowMatrices = cuT( "c3d_mtxShadowMatrices" );
+		static String const ShadowMatrix = cuT( "c3d_mtxShadowMatrix" );
 
 		TextureUnit DoInitialisePoint( Engine & p_engine, Size const & p_size )
 		{
@@ -51,7 +51,7 @@ namespace deferred
 			TextureUnit l_unit{ p_engine };
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
 				TextureType::eCube,
-				AccessType::eNone,
+				AccessType::eRead,
 				AccessType::eRead | AccessType::eWrite,
 				PixelFormat::eD32F,
 				p_size );
@@ -91,8 +91,16 @@ namespace deferred
 		auto l_it = m_passes.find( &p_light.GetLight() );
 		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_depthAttach->Clear( BufferComponent::eDepth );
-		l_it->second->Render();
+		uint32_t l_face = 0u;
+
+		for ( auto & l_attach : m_depthAttach )
+		{
+			l_attach->Attach( AttachmentPoint::eDepth );
+			l_attach->Clear( BufferComponent::eDepth );
+			l_it->second->Render( l_face++ );
+			l_attach->Detach();
+		}
+
 		m_frameBuffer->Unbind();
 	}
 
@@ -112,16 +120,22 @@ namespace deferred
 		m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
 		auto l_texture = m_shadowMap.GetTexture();
 		l_texture->Initialise();
-		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
-		m_frameBuffer->Bind();
-		m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach, m_shadowMap.GetTexture()->GetType() );
-		ENSURE( m_frameBuffer->IsComplete() );
-		m_frameBuffer->Unbind();
+		int i = 0;
+
+		for ( auto & l_attach : m_depthAttach )
+		{
+			l_attach = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace( i++ ) );
+			l_attach->SetTarget( TextureType::eTwoDimensions );
+		}
 	}
 
 	void ShadowMapPoint::DoCleanup()
 	{
-		m_depthAttach.reset();
+		for ( auto & l_attach : m_depthAttach )
+		{
+			l_attach.reset();
+		}
+
 		m_shadowMap.Cleanup();
 	}
 
@@ -158,9 +172,15 @@ namespace deferred
 		UBO_MODEL_MATRIX( l_writer );
 		UBO_SKINNING( l_writer, p_programFlags );
 		UBO_MORPHING( l_writer, p_programFlags );
+		Ubo l_shadowMap{ l_writer, ShadowMapUbo };
+		auto c3d_v3WordLightPosition( l_shadowMap.GetUniform< Vec3 >( WorldLightPosition ) );
+		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
+		auto c3d_mtxShadowMatrix = l_shadowMap.GetUniform< Mat4 >( ShadowMatrix );
+		l_shadowMap.End();
 
 		// Outputs
 		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_position( l_writer.GetOutput< Vec4 >( cuT( "vtx_position" ) ) );
 		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		std::function< void() > l_main = [&]()
@@ -198,7 +218,8 @@ namespace deferred
 
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
 			vtx_worldSpacePosition = l_v4Vertex.xyz();
-			gl_Position = l_v4Vertex;
+			vtx_position = l_v4Vertex;
+			gl_Position = c3d_mtxShadowMatrix * vtx_position;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
@@ -209,47 +230,7 @@ namespace deferred
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
 	{
-		using namespace GLSL;
-		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
-
-		// Geometry layout
-		l_writer << InputLayout{ InputLayout::eTriangles };
-		l_writer << OutputLayout{ OutputLayout::eTriangleStrip, 18 };
-
-		// Geometry inputs
-		Ubo l_shadowMap{ l_writer, ShadowMapUbo };
-		auto c3d_v3WordLightPosition( l_shadowMap.GetUniform< Vec3 >( WorldLightPosition ) );
-		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
-		auto c3d_mtxShadowMatrices = l_shadowMap.GetUniform< Mat4 >( ShadowMatrices, 6u );
-		l_shadowMap.End();
-
-		auto gl_in = l_writer.GetBuiltin< gl_PerVertex >( cuT( "gl_in" ), 8u );
-		auto gl_Layer = l_writer.GetBuiltin< Int >( cuT( "gl_Layer" ) );
-
-		//Geometry outputs
-		auto geo_position = l_writer.GetOutput< Vec4 >( cuT( "geo_position" ) );
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-		std::function< void() > l_main = [&]()
-		{
-			for( int face = 0; face < 6; ++face )
-			{
-				gl_Layer = face; // built-in variable that specifies to which face we render.
-
-				for ( int i = 0; i < 3; ++i )
-				{
-					geo_position = gl_in[i].gl_Position();
-					gl_Position = c3d_mtxShadowMatrices[face] * geo_position;
-					l_writer.EmitVertex();
-					l_writer << Endl();
-				}
-
-				l_writer.EndPrimitive();
-			}
-		};
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
+		return String{};
 	}
 
 	String ShadowMapPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
@@ -263,17 +244,17 @@ namespace deferred
 		Ubo l_shadowMap{ l_writer, ShadowMapUbo };
 		auto c3d_v3WordLightPosition( l_shadowMap.GetUniform< Vec3 >( WorldLightPosition ) );
 		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
-		auto c3d_mtxShadowMatrices = l_shadowMap.GetUniform< Mat4 >( ShadowMatrices, 6u );
+		auto c3d_mtxShadowMatrix = l_shadowMap.GetUniform< Mat4 >( ShadowMatrix );
 		l_shadowMap.End();
 
-		auto geo_position( l_writer.GetInput< Vec4 >( cuT( "geo_position" ) ) );
+		auto vtx_position( l_writer.GetInput< Vec4 >( cuT( "vtx_position" ) ) );
 
 		// Fragment Outputs
 		auto gl_FragDepth( l_writer.GetBuiltin< Float >( cuT( "gl_FragDepth" ) ) );
 
 		auto l_main = [&]()
 		{
-			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( geo_position.xyz() - c3d_v3WordLightPosition ) );
+			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_position.xyz() - c3d_v3WordLightPosition ) );
 			gl_FragDepth = l_distance / c3d_fFarPlane;
 		};
 

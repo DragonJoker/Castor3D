@@ -73,7 +73,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
-		C3D_API void Render();
+		C3D_API void Render( uint32_t p_face = 0 );
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
@@ -120,7 +120,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène à dessiner.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API virtual void DoRender() = 0;
+		C3D_API virtual void DoRender( uint32_t p_face ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.

@@ -52,9 +52,9 @@ namespace Castor3D
 	{
 	}
 
-	void ShadowMapPass::Render()
+	void ShadowMapPass::Render( uint32_t p_face )
 	{
-		DoRender();
+		DoRender( p_face );
 	}
 
 	void ShadowMapPass::Update( RenderQueueArray & p_queues

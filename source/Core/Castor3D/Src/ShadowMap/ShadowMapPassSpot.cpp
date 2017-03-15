@@ -58,7 +58,7 @@ namespace Castor3D
 		p_queues.push_back( m_renderQueue );
 	}
 
-	void ShadowMapPassSpot::DoRender()
+	void ShadowMapPassSpot::DoRender( uint32_t p_face )
 	{
 		if ( m_camera && m_initialised )
 		{

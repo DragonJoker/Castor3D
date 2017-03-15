@@ -32,33 +32,22 @@ namespace Castor3D
 		static String const ShadowMapUbo = cuT( "ShadowMap" );
 		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
-		static String const ShadowMatrices = cuT( "c3d_mtxShadowMatrices" );
+		static String const ShadowMatrix = cuT( "c3d_mtxShadowMatrix" );
 
-		void DoUpdateShadowMatrices( Matrix4x4r const & p_projection
-			, Point3r const & p_position
-			, UniformBuffer & p_shadowConfig )
+		void DoUpdateShadowMatrices( Point3r const & p_position
+			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > p_matrices )
 		{
-			std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > const l_views
+			p_matrices =
 			{
 				{
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
-					p_projection * matrix::look_at( p_position, p_position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
+					matrix::look_at( p_position, p_position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
+					matrix::look_at( p_position, p_position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
+					matrix::look_at( p_position, p_position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
+					matrix::look_at( p_position, p_position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
+					matrix::look_at( p_position, p_position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
+					matrix::look_at( p_position, p_position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
 				}
 			};
-
-			p_shadowConfig.GetUniform< UniformType::eVec3f >( WorldLightPosition )->SetValue( p_position );
-			p_shadowConfig.GetUniform< UniformType::eFloat >( FarPlane )->SetValue( 4000.0f );
-			auto l_shadowMatrices = p_shadowConfig.GetUniform< UniformType::eMat4x4f >( ShadowMatrices );
-			uint32_t l_index{ 0 };
-
-			for ( auto & l_view : l_views )
-			{
-				l_shadowMatrices->SetValue( l_view, l_index++ );
-			}
 		}
 	}
 
@@ -69,9 +58,9 @@ namespace Castor3D
 		, m_shadowConfig{ ShadowMapUbo, *p_engine.GetRenderSystem() }
 		, m_viewport{ p_engine }
 	{
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		m_shadowConfig.CreateUniform< UniformType::eVec3f >( WorldLightPosition );
 		m_shadowConfig.CreateUniform< UniformType::eFloat >( FarPlane );
-		m_shadowConfig.CreateUniform< UniformType::eMat4x4f >( ShadowMatrices, 6u );
 		m_renderQueue.Initialise( *p_light.GetScene() );
 	}
 
@@ -100,12 +89,14 @@ namespace Castor3D
 
 		m_viewport.Resize( p_size );
 		m_viewport.Initialise();
+		m_projectionUniform->SetValue( m_projection );
 		return true;
 	}
 
 	void ShadowMapPassPoint::DoCleanup()
 	{
 		m_viewport.Cleanup();
+		m_matrixUbo.Cleanup();
 		m_shadowConfig.Cleanup();
 
 		auto l_node = m_light.GetParent();
@@ -119,15 +110,19 @@ namespace Castor3D
 			, m_viewport
 			, m_index );
 		p_queues.push_back( m_renderQueue );
-		DoUpdateShadowMatrices( m_projection, l_position, m_shadowConfig );
+		DoUpdateShadowMatrices( l_position, m_matrices );
+		m_shadowConfig.GetUniform< UniformType::eVec3f >( WorldLightPosition )->SetValue( l_position );
+		m_shadowConfig.GetUniform< UniformType::eFloat >( FarPlane )->SetValue( 4000.0f );
 	}
 
-	void ShadowMapPassPoint::DoRender()
+	void ShadowMapPassPoint::DoRender( uint32_t p_face )
 	{
 		if ( m_initialised )
 		{
-			m_viewport.Apply();
 			m_shadowConfig.Update();
+			m_viewport.Apply();
+			m_viewUniform->SetValue( m_matrices[p_face] );
+			m_matrixUbo.Update();
 			DoRenderNodes( m_renderQueue.GetRenderNodes() );
 		}
 	}

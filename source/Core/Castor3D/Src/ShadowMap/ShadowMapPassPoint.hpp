@@ -83,7 +83,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRender
 		 */
-		void DoRender()override;
+		void DoRender( uint32_t p_face )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
 		 */
@@ -97,12 +97,15 @@ namespace Castor3D
 		//!\~english	The projection matrix.
 		//!\~french		La matrice de projection.
 		Castor::Matrix4x4r m_projection;
-		//!\~english	The shadow map coniguration data UBO.
+		//!\~english	The shadow map configuration data UBO.
 		//!\~french		L'UBO de données de configuration de shadow map.
 		UniformBuffer m_shadowConfig;
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
+		//!\~english	The view matrices for the render of each cube face.
+		//!\~french		Les matrices vue pour le dessin de chaque face du cube.
+		std::array< Castor::Matrix4x4r, size_t( CubeMapFace::eCount ) > m_matrices;
 	};
 }
 
