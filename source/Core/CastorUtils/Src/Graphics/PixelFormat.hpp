@@ -138,12 +138,21 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Function to retrieve Pixel size without templates
-		 *\param[in]	p_pfFormat	The pixel format
+		 *\param[in]	p_format	The pixel format
 		 *\~french
 		 *\brief		Fonction de récuperation de la taille d'un pixel sans templates
-		 *\param[in]	p_pfFormat	Le format de pixels
+		 *\param[in]	p_format	Le format de pixels
 		 */
-		CU_API uint8_t GetBytesPerPixel( PixelFormat p_pfFormat );
+		CU_API uint8_t GetBytesPerPixel( PixelFormat p_format );
+		/**
+		 *\~english
+		 *\brief		Function to retrieve the number of components of a pixel format.
+		 *\param[in]	p_format	The pixel format
+		 *\~french
+		 *\brief		Fonction de récuperation du nombre de composantes d'un format de pixel.
+		 *\param[in]	p_format	Le format de pixels
+		 */
+		CU_API uint8_t GetComponentsCount( PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel format from a name

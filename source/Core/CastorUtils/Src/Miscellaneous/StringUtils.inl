@@ -84,47 +84,47 @@ namespace Castor
 		template< typename T >
 		inline String to_string( T const & p_value, int p_base, std::locale const & p_locale )
 		{
-			StringStream l_return;
-			l_return.imbue( p_locale );
-			l_return << manip::xbase( p_base ) << p_value;
-			return l_return.str();
+			StringStream l_result;
+			l_result.imbue( p_locale );
+			l_result << manip::xbase( p_base ) << p_value;
+			return l_result.str();
 		}
 
 		template< typename T, typename U >
 		std::basic_string< T > string_cast( std::basic_string< U > const & p_src )
 		{
-			std::basic_string< T > l_return;
-			StringConverter< U, T >::Convert( p_src, l_return );
-			return l_return;
+			std::basic_string< T > l_result;
+			StringConverter< U, T >::Convert( p_src, l_result );
+			return l_result;
 		}
 
 		template< typename T, typename U >
 		std::basic_string< T > string_cast( U const * p_src )
 		{
-			std::basic_string< T > l_return;
+			std::basic_string< T > l_result;
 
 			if ( p_src )
 			{
-				StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), l_return );
+				StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), l_result );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		template< typename T, typename U >
 		std::basic_string< T > string_cast( U const * p_begin, U const * p_end )
 		{
-			std::basic_string< T > l_return;
-			StringConverter< U, T >::Convert( std::basic_string< U >( p_begin, p_end ), l_return );
-			return l_return;
+			std::basic_string< T > l_result;
+			StringConverter< U, T >::Convert( std::basic_string< U >( p_begin, p_end ), l_result );
+			return l_result;
 		}
 
 		template< typename T, typename U >
 		std::basic_string< T > string_cast( std::initializer_list< U > const & p_src )
 		{
-			std::basic_string< T > l_return;
-			StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), l_return );
-			return l_return;
+			std::basic_string< T > l_result;
+			StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), l_result );
+			return l_result;
 		}
 
 		namespace utf8
@@ -140,7 +140,7 @@ namespace Castor
 				static const unsigned char FourthBitMask = 0x10; // 0001000
 				static const unsigned char FifthBitMask = 0x08; // 0000100
 
-				char32_t l_return;
+				char32_t l_result;
 				char l_firstByte = *p_value;
 
 				if ( l_firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
@@ -149,36 +149,36 @@ namespace Castor
 					{
 						if ( l_firstByte & FourthBitMask ) // This means that the first byte has a value greater than 224, and so it must be a four-octet code point.
 						{
-							l_return = ( l_firstByte & 0x07 ) << 18;
+							l_result = ( l_firstByte & 0x07 ) << 18;
 							char l_secondByte = *( p_value + 1 );
-							l_return += ( l_secondByte & 0x3f ) << 12;
+							l_result += ( l_secondByte & 0x3f ) << 12;
 							char l_thirdByte = *( p_value + 2 );
-							l_return += ( l_thirdByte & 0x3f ) << 6;;
+							l_result += ( l_thirdByte & 0x3f ) << 6;;
 							char l_fourthByte = *( p_value + 3 );
-							l_return += ( l_fourthByte & 0x3f );
+							l_result += ( l_fourthByte & 0x3f );
 						}
 						else
 						{
-							l_return = ( l_firstByte & 0x0f ) << 12;
+							l_result = ( l_firstByte & 0x0f ) << 12;
 							char l_secondByte = *( p_value + 1 );
-							l_return += ( l_secondByte & 0x3f ) << 6;
+							l_result += ( l_secondByte & 0x3f ) << 6;
 							char l_thirdByte = *( p_value + 2 );
-							l_return += ( l_thirdByte & 0x3f );
+							l_result += ( l_thirdByte & 0x3f );
 						}
 					}
 					else
 					{
-						l_return = ( l_firstByte & 0x1f ) << 6;
+						l_result = ( l_firstByte & 0x1f ) << 6;
 						char l_secondByte = *( p_value + 1 );
-						l_return += ( l_secondByte & 0x3f );
+						l_result += ( l_secondByte & 0x3f );
 					}
 				}
 				else
 				{
-					l_return = l_firstByte;
+					l_result = l_firstByte;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			//*************************************************************************************************

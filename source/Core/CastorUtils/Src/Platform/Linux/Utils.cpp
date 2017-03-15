@@ -22,7 +22,7 @@ namespace Castor
 
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
-			bool l_return = false;
+			bool l_result = false;
 			auto l_display = XOpenDisplay( nullptr );
 
 			if ( !l_display )
@@ -44,7 +44,7 @@ namespace Castor
 						if ( l_heads > 0 && l_screenIndex < l_heads )
 						{
 							p_size.set( l_screenInfo[l_screenIndex].width, l_screenInfo[l_screenIndex].height );
-							l_return = true;
+							l_result = true;
 						}
 						else
 						{
@@ -63,7 +63,7 @@ namespace Castor
 					std::cout << "No Xinerama extension" << std::endl;
 				}
 
-				if ( !l_return )
+				if ( !l_result )
 				{
 					auto l_screen = ScreenOfDisplay( l_display, l_screenIndex );
 
@@ -74,21 +74,21 @@ namespace Castor
 					else
 					{
 						p_size.set( l_screen->width, l_screen->height );
-						l_return = true;
+						l_result = true;
 					}
 				}
 
 				XCloseDisplay( l_display );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 #	else
 
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
-			bool l_return = false;
+			bool l_result = false;
 			auto l_display = XOpenDisplay( nullptr );
 
 			if ( !l_display )
@@ -107,12 +107,12 @@ namespace Castor
 				else
 				{
 					p_size.set( l_screen->width, l_screen->height );
-					l_return = true;
+					l_result = true;
 				}
 			}
 
 			XCloseDisplay( l_display );
-			return l_return;
+			return l_result;
 		}
 
 #	endif

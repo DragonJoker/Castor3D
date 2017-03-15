@@ -86,9 +86,9 @@ namespace Castor
 			l_streamWord << p_object[i];
 		}
 
-		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
-		Castor::TextWriter< Point< T, Count > >::CheckError( l_return, "Point value" );
-		return l_return;
+		bool l_result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
+		Castor::TextWriter< Point< T, Count > >::CheckError( l_result, "Point value" );
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -339,14 +339,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator==( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_return = ( Count == _Count );
+		bool l_result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_return; i++ )
+		for ( uint32_t i = 0; i < Count && l_result; i++ )
 		{
-			l_return = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator!=( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -416,14 +416,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator==( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_return = ( Count == _Count );
+		bool l_result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_return; i++ )
+		for ( uint32_t i = 0; i < Count && l_result; i++ )
 		{
-			l_return = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator!=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -463,14 +463,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator==( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_return = ( Count == _Count );
+		bool l_result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_return; i++ )
+		for ( uint32_t i = 0; i < Count && l_result; i++ )
 		{
-			l_return = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator!=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
@@ -509,14 +509,14 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > operator-( Point< T, Count > const & p_pt )
 	{
-		Point< T, Count > l_return;
+		Point< T, Count > l_result;
 
 		for ( uint32_t i = 0; i < Count; ++i )
 		{
-			l_return[i] = -p_pt[i];
+			l_result[i] = -p_pt[i];
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -546,9 +546,9 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		Point< T, Count > get_normalised( Point< T, Count > const & p_point )
 		{
-			Point< T, Count > l_return( p_point );
-			normalise( l_return );
-			return l_return;
+			Point< T, Count > l_result( p_point );
+			normalise( l_result );
+			return l_result;
 		}
 
 		template< typename T, typename U, uint32_t Count >

@@ -18,15 +18,15 @@ namespace Castor
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( CheckFlag( m_mode, OpenMode::eWrite ) || CheckFlag( m_mode, OpenMode::eAppend ) );
-		bool l_return = Write( uint32_t( p_toWrite.size() ) ) == sizeof( uint32_t );
+		bool l_result = Write( uint32_t( p_toWrite.size() ) ) == sizeof( uint32_t );
 
-		if ( l_return && p_toWrite.size() > 0 )
+		if ( l_result && p_toWrite.size() > 0 )
 		{
-			l_return = WriteArray< xchar >( p_toWrite.c_str(), p_toWrite.size() ) ==  p_toWrite.size() * sizeof( xchar );
+			l_result = WriteArray< xchar >( p_toWrite.c_str(), p_toWrite.size() ) ==  p_toWrite.size() * sizeof( xchar );
 		}
 
 		CHECK_INVARIANTS();
-		return l_return;
+		return l_result;
 	}
 
 	bool BinaryFile::Read( String & p_toRead )
@@ -35,20 +35,20 @@ namespace Castor
 		REQUIRE( CheckFlag( m_mode, OpenMode::eRead ) );
 		p_toRead.clear();
 		uint32_t l_uiSize = 0;
-		bool l_return = Read( l_uiSize ) == sizeof( uint32_t );
+		bool l_result = Read( l_uiSize ) == sizeof( uint32_t );
 
-		if ( l_return && l_uiSize > 0 )
+		if ( l_result && l_uiSize > 0 )
 		{
 			std::vector< xchar > l_pTmp( l_uiSize + 1, 0 );
-			l_return = ReadArray< xchar >( l_pTmp.data(), l_uiSize ) == l_uiSize * sizeof( xchar );
+			l_result = ReadArray< xchar >( l_pTmp.data(), l_uiSize ) == l_uiSize * sizeof( xchar );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				p_toRead = l_pTmp.data();
 			}
 		}
 
 		CHECK_INVARIANTS();
-		return l_return;
+		return l_result;
 	}
 }

@@ -28,7 +28,7 @@ namespace Castor
 		bool TraverseDirectory( Path const & p_folderPath, DirectoryFuncType p_directoryFunction, FileFuncType p_fileFunction )
 		{
 			REQUIRE( !p_folderPath.empty() );
-			bool l_return = false;
+			bool l_result = false;
 			DIR * l_dir;
 
 			if ( ( l_dir = opendir( string::string_cast< char >( p_folderPath ).c_str() ) ) == nullptr )
@@ -68,14 +68,14 @@ namespace Castor
 					break;
 				}
 
-				l_return = false;
+				l_result = false;
 			}
 			else
 			{
-				l_return = true;
+				l_result = true;
 				dirent * l_dirent;
 
-				while ( l_return && ( l_dirent = readdir( l_dir ) ) != nullptr )
+				while ( l_result && ( l_dirent = readdir( l_dir ) ) != nullptr )
 				{
 					String l_name = string::string_cast< xchar >( l_dirent->d_name );
 
@@ -83,7 +83,7 @@ namespace Castor
 					{
 						if ( l_dirent->d_type == DT_DIR )
 						{
-							l_return = p_directoryFunction( p_folderPath / l_name );
+							l_result = p_directoryFunction( p_folderPath / l_name );
 						}
 						else
 						{
@@ -95,14 +95,14 @@ namespace Castor
 				closedir( l_dir );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		bool DeleteEmptyDirectory( Path const & p_path )
 		{
-			bool l_return = rmdir( string::string_cast< char >( p_path ).c_str() ) == 0;
+			bool l_result = rmdir( string::string_cast< char >( p_path ).c_str() ) == 0;
 
-			if ( !l_return )
+			if ( !l_result )
 			{
 				auto l_error = errno;
 
@@ -126,7 +126,7 @@ namespace Castor
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 	}
@@ -309,25 +309,25 @@ namespace Castor
 		{
 			bool operator()( Path const & p_path )
 			{
-				bool l_return = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+				bool l_result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
 
-				if ( l_return )
+				if ( l_result )
 				{
-					l_return = DeleteEmptyDirectory( p_path );
+					l_result = DeleteEmptyDirectory( p_path );
 				}
 
-				return l_return;
+				return l_result;
 			}
 		};
 
-		bool l_return = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+		bool l_result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DeleteEmptyDirectory( p_path );
+			l_result = DeleteEmptyDirectory( p_path );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }
 

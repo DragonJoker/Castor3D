@@ -44,9 +44,9 @@ namespace Castor
 
 	bool ThreadPool::WaitAll( std::chrono::milliseconds const & p_timeout )const
 	{
-		bool l_return = IsFull();
+		bool l_result = IsFull();
 
-		if ( !l_return )
+		if ( !l_result )
 		{
 			auto l_begin = std::chrono::high_resolution_clock::now();
 			std::chrono::milliseconds l_wait{ 0 };
@@ -54,13 +54,13 @@ namespace Castor
 			do
 			{
 				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-				l_return = IsFull();
+				l_result = IsFull();
 				l_wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - l_begin );
 			}
-			while ( l_wait < p_timeout && !l_return );
+			while ( l_wait < p_timeout && !l_result );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ThreadPool::PushJob( WorkerThread::Job p_job )

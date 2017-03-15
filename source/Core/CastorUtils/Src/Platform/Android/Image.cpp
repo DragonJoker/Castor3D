@@ -17,7 +17,7 @@ namespace Castor
 	{
 		PxBufferBaseSPtr DoLoad8BitsPerChannel( Path const & p_path )
 		{
-			PxBufferBaseSPtr l_return;
+			PxBufferBaseSPtr l_result;
 			int x = 0;
 			int y = 0;
 			int n = 0;
@@ -50,16 +50,16 @@ namespace Castor
 					break;
 				}
 
-				l_return = PxBufferBase::create( Size( x, y ), l_format, l_data, l_format );
+				l_result = PxBufferBase::create( Size( x, y ), l_format, l_data, l_format );
 				stbi_image_free( l_data );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		PxBufferBaseSPtr DoLoad32BitsPerChannel( Path const & p_path )
 		{
-			PxBufferBaseSPtr l_return;
+			PxBufferBaseSPtr l_result;
 			int x = 0;
 			int y = 0;
 			int n = 0;
@@ -92,14 +92,14 @@ namespace Castor
 					break;
 				}
 
-				l_return = PxBufferBase::create( Size( x, y )
+				l_result = PxBufferBase::create( Size( x, y )
 					, l_format
 					, reinterpret_cast< uint8_t * >( l_data )
 					, l_format );
 				stbi_image_free( l_data );
 			}
 
-			return l_return;
+			return l_result;
 		}
 	}
 
@@ -139,9 +139,9 @@ namespace Castor
 
 	bool Image::BinaryWriter::operator()( Image const & p_image, Path const & p_path )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
-		return l_return;
+		return l_result;
 	}
 
 	//************************************************************************************************

@@ -89,7 +89,7 @@ namespace Castor
 				{ 0x0B01, "Invalid post table" },
 			};
 
-			bool l_return = true;
+			bool l_result = true;
 
 			if ( p_error != 0 )
 			{
@@ -102,10 +102,10 @@ namespace Castor
 				}
 
 				LOADER_ERROR( l_error );
-				l_return = false;
+				l_result = false;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		struct SFreeTypeFontImpl
@@ -206,29 +206,29 @@ namespace Castor
 	bool Font::TextWriter::operator()( Font const & p_object, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Font " ) + p_object.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< Font >::CheckError( l_return, "Font name" );
+		Castor::TextWriter< Font >::CheckError( l_result, "Font name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
 			Path l_relative = CopyFile( p_object.GetFilePath(), p_file.GetFilePath(), Path{} );
-			l_return = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Font >::CheckError( l_return, "Font file" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< Font >::CheckError( l_result, "Font file" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\theight " ) + string::to_string( p_object.GetHeight() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Font >::CheckError( l_return, "Font height" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\theight " ) + string::to_string( p_object.GetHeight() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Font >::CheckError( l_result, "Font height" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//************************************************************************************************
@@ -245,7 +245,7 @@ namespace Castor
 
 	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( ! p_pathFile.empty() )
 		{
@@ -277,7 +277,7 @@ namespace Castor
 				p_font.GetGlyphLoader().Cleanup();
 				p_font.SetMaxHeight( l_maxHeight );
 				p_font.SetMaxWidth( l_maxWidth );
-				l_return = true;
+				l_result = true;
 			}
 			catch ( std::runtime_error & p_exc )
 			{
@@ -285,7 +285,7 @@ namespace Castor
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*********************************************************************************************

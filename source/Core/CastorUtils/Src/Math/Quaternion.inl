@@ -80,9 +80,9 @@ namespace Castor
 		}
 
 		l_streamWord << cuT( " " ) << l_angle.degrees();
-		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
-		Castor::TextWriter< QuaternionT< T > >::CheckError( l_return, "Quaternion value" );
-		return l_return;
+		bool l_result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
+		Castor::TextWriter< QuaternionT< T > >::CheckError( l_result, "Quaternion value" );
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -527,9 +527,9 @@ namespace Castor
 	template< typename T >
 	QuaternionT< T > QuaternionT< T >::get_conjugate()const
 	{
-		QuaternionT< T > l_return( *this );
-		l_return.conjugate();
-		return l_return;
+		QuaternionT< T > l_result( *this );
+		l_result.conjugate();
+		return l_result;
 	}
 
 	template< typename T >
@@ -705,64 +705,64 @@ namespace Castor
 	template< typename T >
 	QuaternionT< T > operator+( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs )
 	{
-		QuaternionT< T > l_return( p_lhs );
-		l_return += p_rhs;
-		return l_return;
+		QuaternionT< T > l_result( p_lhs );
+		l_result += p_rhs;
+		return l_result;
 	}
 
 	template< typename T >
 	QuaternionT< T > operator-( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs )
 	{
-		QuaternionT< T > l_return( p_lhs );
-		l_return -= p_rhs;
-		return l_return;
+		QuaternionT< T > l_result( p_lhs );
+		l_result -= p_rhs;
+		return l_result;
 	}
 
 	template< typename T >
 	QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs )
 	{
-		QuaternionT< T > l_return( p_lhs );
-		l_return *= p_rhs;
-		return l_return;
+		QuaternionT< T > l_result( p_lhs );
+		l_result *= p_rhs;
+		return l_result;
 	}
 
 	template< typename T >
 	QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, double p_rhs )
 	{
-		QuaternionT< T > l_return( p_lhs );
-		l_return *= p_rhs;
-		return l_return;
+		QuaternionT< T > l_result( p_lhs );
+		l_result *= p_rhs;
+		return l_result;
 	}
 
 	template< typename T >
 	QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, float p_rhs )
 	{
-		QuaternionT< T > l_return( p_lhs );
-		l_return *= p_rhs;
-		return l_return;
+		QuaternionT< T > l_result( p_lhs );
+		l_result *= p_rhs;
+		return l_result;
 	}
 
 	template< typename T >
 	QuaternionT< T > operator*( double p_lhs, QuaternionT< T > const & p_rhs )
 	{
-		QuaternionT< T > l_return( p_rhs );
-		l_return *= p_lhs;
-		return l_return;
+		QuaternionT< T > l_result( p_rhs );
+		l_result *= p_lhs;
+		return l_result;
 	}
 
 	template< typename T >
 	QuaternionT< T > operator*( float p_lhs, QuaternionT< T > const & p_rhs )
 	{
-		QuaternionT< T > l_return( p_rhs );
-		l_return *= p_lhs;
-		return l_return;
+		QuaternionT< T > l_result( p_rhs );
+		l_result *= p_lhs;
+		return l_result;
 	}
 
 	template< typename T >
 	QuaternionT< T > operator-( QuaternionT< T > const & p_q )
 	{
-		QuaternionT< T > l_return( p_q );
-		l_return.w = -l_return.w;
-		return l_return;
+		QuaternionT< T > l_result( p_q );
+		l_result.w = -l_result.w;
+		return l_result;
 	}
 }

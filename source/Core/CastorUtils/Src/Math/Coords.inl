@@ -55,9 +55,9 @@ namespace Castor
 			l_streamWord << p_object[i];
 		}
 
-		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
-		Castor::TextWriter< Coords< T, Count > >::CheckError( l_return, "Coords value" );
-		return l_return;
+		bool l_result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
+		Castor::TextWriter< Coords< T, Count > >::CheckError( l_result, "Coords value" );
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -266,14 +266,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_return = ( Count == _Count );
+		bool l_result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_return; i++ )
+		for ( uint32_t i = 0; i < Count && l_result; i++ )
 		{
-			l_return = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >

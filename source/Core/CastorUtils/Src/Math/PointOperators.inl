@@ -11,108 +11,108 @@ namespace Castor
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & p_lhs, T2 const & p_rhs )
 	{
-		Point< T1, C1 > l_return( p_lhs );
-		T1 * l_pBuffer = l_return.ptr();
+		Point< T1, C1 > l_result( p_lhs );
+		T1 * l_pBuffer = l_result.ptr();
 		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value += p_rhs;
 		} );
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & p_lhs, T2 const & p_rhs )
 	{
-		Point< T1, C1 > l_return( p_lhs );
-		T1 * l_pBuffer = l_return.ptr();
+		Point< T1, C1 > l_result( p_lhs );
+		T1 * l_pBuffer = l_result.ptr();
 		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value -= p_rhs;
 		} );
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & p_lhs, T2 const & p_rhs )
 	{
-		Point< T1, C1 > l_return( p_lhs );
-		T1 * l_pBuffer = l_return.ptr();
+		Point< T1, C1 > l_result( p_lhs );
+		T1 * l_pBuffer = l_result.ptr();
 		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value *= p_rhs;
 		} );
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & p_lhs, T2 const & p_rhs )
 	{
-		Point< T1, C1 > l_return( p_lhs );
-		T1 * l_pBuffer = l_return.ptr();
+		Point< T1, C1 > l_result( p_lhs );
+		T1 * l_pBuffer = l_result.ptr();
 		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value /= p_rhs;
 		} );
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & p_lhs, T2 const * p_rhs )
 	{
-		Point< T1, C1 > l_return( p_lhs );
-		T1 * l_pBuffer = l_return.ptr();
+		Point< T1, C1 > l_result( p_lhs );
+		T1 * l_pBuffer = l_result.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*l_pBuffer += p_pVal;
 			l_pBuffer++;
 		} );
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & p_lhs, T2 const * p_rhs )
 	{
-		Point< T1, C1 > l_return( p_lhs );
-		T1 * l_pBuffer = l_return.ptr();
+		Point< T1, C1 > l_result( p_lhs );
+		T1 * l_pBuffer = l_result.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*l_pBuffer -= p_pVal;
 			l_pBuffer++;
 		} );
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & p_lhs, T2 const * p_rhs )
 	{
-		Point< T1, C1 > l_return( p_lhs );
-		T1 * l_pBuffer = l_return.ptr();
+		Point< T1, C1 > l_result( p_lhs );
+		T1 * l_pBuffer = l_result.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*l_pBuffer *= p_pVal;
 			l_pBuffer++;
 		} );
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & p_lhs, T2 const * p_rhs )
 	{
-		Point< T1, C1 > l_return( p_lhs );
-		T1 * l_pBuffer = l_return.ptr();
+		Point< T1, C1 > l_result( p_lhs );
+		T1 * l_pBuffer = l_result.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
 			*l_pBuffer /= p_pVal;
 			l_pBuffer++;
 		} );
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >

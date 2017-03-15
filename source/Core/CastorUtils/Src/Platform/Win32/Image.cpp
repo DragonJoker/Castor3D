@@ -209,7 +209,7 @@ namespace Castor
 
 	bool Image::BinaryWriter::operator()( Image const & p_image, Path const & p_path )
 	{
-		bool l_return = false;
+		bool l_result = false;
 		FIBITMAP * l_fiImage = nullptr;
 		Size const & l_size = p_image.GetDimensions();
 		int32_t l_w = int32_t( l_size.width() );
@@ -231,7 +231,7 @@ namespace Castor
 
 				memcpy( FreeImage_GetBits( l_fiImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
 				FREE_IMAGE_FORMAT l_fif = FIF_PNG;
-				l_return = FreeImage_Save( l_fif, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
+				l_result = FreeImage_Save( l_fif, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
 				FreeImage_Unload( l_fiImage );
 			}
 		}
@@ -276,7 +276,7 @@ namespace Castor
 			if ( l_fiImage )
 			{
 				FREE_IMAGE_FORMAT l_fif = FIF_HDR;
-				l_return = FreeImage_Save( l_fif, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
+				l_result = FreeImage_Save( l_fif, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
 				FreeImage_Unload( l_fiImage );
 			}
 		}
@@ -322,12 +322,12 @@ namespace Castor
 					}
 				}
 
-				l_return = FreeImage_Save( FIF_BMP, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
+				l_result = FreeImage_Save( FIF_BMP, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
 				FreeImage_Unload( l_fiImage );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//************************************************************************************************

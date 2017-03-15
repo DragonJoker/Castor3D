@@ -14,7 +14,7 @@ namespace Castor
 	{
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
-			bool l_return = false;
+			bool l_result = false;
 			auto l_display = eglGetDisplay( EGLNativeDisplayType( p_screen ) );
 
 			if ( !l_display )
@@ -36,11 +36,11 @@ namespace Castor
 					eglQuerySurface( l_display, l_surface, EGL_WIDTH, &l_width );
 					eglQuerySurface( l_display, l_surface, EGL_HEIGHT, &l_height );
 					p_size.set( l_width, l_height );
-					l_return = true;
+					l_result = true;
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		String GetLastErrorText()

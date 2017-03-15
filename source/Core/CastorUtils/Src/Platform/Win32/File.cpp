@@ -28,20 +28,20 @@ namespace Castor
 		bool TraverseDirectory( Path const & p_folderPath, DirectoryFuncType p_directoryFunction, FileFuncType p_fileFunction )
 		{
 			REQUIRE( !p_folderPath.empty() );
-			bool l_return = false;
+			bool l_result = false;
 			WIN32_FIND_DATA l_findData;
 			HANDLE l_handle = ::FindFirstFile( ( p_folderPath / cuT( "*.*" ) ).c_str(), &l_findData );
 
 			if ( l_handle != INVALID_HANDLE_VALUE )
 			{
-				l_return = true;
+				l_result = true;
 				String l_name = l_findData.cFileName;
 
 				if ( l_name != cuT( "." ) && l_name != cuT( ".." ) )
 				{
 					if ( ( l_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 					{
-						l_return = p_directoryFunction( p_folderPath / l_name );
+						l_result = p_directoryFunction( p_folderPath / l_name );
 					}
 					else
 					{
@@ -49,7 +49,7 @@ namespace Castor
 					}
 				}
 
-				while ( l_return && ::FindNextFile( l_handle, &l_findData ) == TRUE )
+				while ( l_result && ::FindNextFile( l_handle, &l_findData ) == TRUE )
 				{
 					if ( l_findData.cFileName != l_name )
 					{
@@ -59,7 +59,7 @@ namespace Castor
 						{
 							if ( ( l_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 							{
-								l_return = p_directoryFunction( p_folderPath / l_name );
+								l_result = p_directoryFunction( p_folderPath / l_name );
 							}
 							else
 							{
@@ -72,22 +72,22 @@ namespace Castor
 				::FindClose( l_handle );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		bool DeleteEmptyDirectory( Path const & p_path )
 		{
 #if defined( CASTOR_COMPILER_MSVC )
 
-			bool l_return = _trmdir( p_path.c_str() ) == 0;
+			bool l_result = _trmdir( p_path.c_str() ) == 0;
 
 #else
 
-			bool l_return = rmdir( string::string_cast< char >( p_path ).c_str() ) == 0;
+			bool l_result = rmdir( string::string_cast< char >( p_path ).c_str() ) == 0;
 
 #endif
 
-			if ( !l_return )
+			if ( !l_result )
 			{
 				auto l_error = errno;
 
@@ -111,7 +111,7 @@ namespace Castor
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 	}
@@ -297,25 +297,25 @@ namespace Castor
 		{
 			bool operator()( Path const & p_path )
 			{
-				bool l_return = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+				bool l_result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
 
-				if ( l_return )
+				if ( l_result )
 				{
-					l_return = DeleteEmptyDirectory( p_path );
+					l_result = DeleteEmptyDirectory( p_path );
 				}
 
-				return l_return;
+				return l_result;
 			}
 		};
 
-		bool l_return = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+		bool l_result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DeleteEmptyDirectory( p_path );
+			l_result = DeleteEmptyDirectory( p_path );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }
 

@@ -116,64 +116,64 @@ namespace Castor
 
 	Path Path::GetPath()const
 	{
-		Path l_return;
+		Path l_result;
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_return = Path{ substr( 0, l_index ) };
+			l_result = Path{ substr( 0, l_index ) };
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	Path Path::GetFileName( bool p_withExtension )const
 	{
-		Path l_return = ( * this );
+		Path l_result = ( * this );
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_return = Path{ substr( l_index + 1, String::npos ) };
+			l_result = Path{ substr( l_index + 1, String::npos ) };
 		}
 
 		if ( !p_withExtension )
 		{
-			l_index = l_return.find_last_of( cuT( "." ) );
+			l_index = l_result.find_last_of( cuT( "." ) );
 
 			if ( l_index != String::npos )
 			{
-				l_return = Path{ l_return.substr( 0, l_index ) };
+				l_result = Path{ l_result.substr( 0, l_index ) };
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	Path Path::GetFullFileName()const
 	{
-		Path l_return = ( * this );
+		Path l_result = ( * this );
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_return = Path{ substr( l_index + 1, String::npos ) };
+			l_result = Path{ substr( l_index + 1, String::npos ) };
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	String Path::GetExtension()const
 	{
-		String l_return = ( * this );
+		String l_result = ( * this );
 		std::size_t l_index = find_last_of( cuT( "." ) );
 
 		if ( l_index != String::npos )
 		{
-			l_return = substr( l_index + 1, String::npos );
+			l_result = substr( l_index + 1, String::npos );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Path::DoNormalise()

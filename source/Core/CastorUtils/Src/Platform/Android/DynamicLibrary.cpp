@@ -33,7 +33,7 @@ namespace Castor
 
 	void * DynamicLibrary::DoGetFunction( String const & p_name )throw()
 	{
-		void * l_return = nullptr;
+		void * l_result = nullptr;
 
 		if ( m_pLibrary )
 		{
@@ -42,7 +42,7 @@ namespace Castor
 			try
 			{
 				dlerror();
-				l_return = dlsym( m_pLibrary, l_name.c_str() );
+				l_result = dlsym( m_pLibrary, l_name.c_str() );
 				auto l_error = dlerror();
 
 				if ( l_error != NULL )
@@ -52,12 +52,12 @@ namespace Castor
 			}
 			catch ( std::exception & exc )
 			{
-				l_return = nullptr;
+				l_result = nullptr;
 				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]: " ) + exc.what() );
 			}
 			catch ( ... )
 			{
-				l_return = nullptr;
+				l_result = nullptr;
 				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]: Unknown error." ) );
 			}
 		}
@@ -66,7 +66,7 @@ namespace Castor
 			Logger::LogError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void DynamicLibrary::DoClose()throw()
