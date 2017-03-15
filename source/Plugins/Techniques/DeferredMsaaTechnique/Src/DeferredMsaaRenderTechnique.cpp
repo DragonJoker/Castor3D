@@ -202,7 +202,6 @@ namespace deferred_msaa
 			DoRenderLights( LightType::eSpot, l_first );
 		}
 
-		//m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer, m_rect, uint32_t( BufferComponent::eDepth ) );
 		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msaaFrameBuffer->SetDrawBuffers();
 

@@ -220,35 +220,6 @@ namespace Castor3D
 			l_effect->Apply( *m_frameBuffer.m_frameBuffer );
 		}
 
-#if !defined( NDEBUG )
-
-		//m_frameBuffer.m_frameBuffer->Bind();
-
-		//auto & l_depthMap = m_opaquePass->GetDirectionalShadowMap().GetTexture();
-		//Size l_size{ 256u, 256u };
-		//m_renderSystem.GetCurrentContext()->RenderDepth( l_size
-		//	, *l_depthMap.GetTexture(), 0u );
-
-		//auto & l_depthMap = m_opaquePass->GetSpotShadowMap().GetTexture();
-		//Size l_size{ 256u, 256u };
-		//m_renderSystem.GetCurrentContext()->RenderDepth( Position{}
-		//	, l_size
-		//	, *l_depthMap.GetTexture(), 0u );
-
-		//Size l_size{ 512u, 512u };
-		//auto & l_depthMap1 = m_opaquePass->GetPointShadowMaps()[0u];
-		//m_renderSystem.GetCurrentContext()->RenderDepthCube( Position{ 0, 0 }
-		//	, Size{ l_size.width() / 4, l_size.height() / 4 }
-		//	, *l_depthMap1.GetTexture() );
-		//auto & l_depthMap2 = m_opaquePass->GetPointShadowMaps()[1u];
-		//m_renderSystem.GetCurrentContext()->RenderDepthCube( Position{ 0, 512 }
-		//	, Size{ l_size.width() / 4, l_size.height() / 4 }
-		//	, *l_depthMap2.GetTexture() );
-
-		//m_frameBuffer.m_frameBuffer->Unbind();
-
-#endif
-
 		m_renderSystem.PopScene();
 	}
 
