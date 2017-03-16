@@ -64,6 +64,8 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 	set( CASTOR_HAS_XINERAMA 0 )
 	if ( EXISTS "/usr/lib/X11/extensions/Xinerama.h" )
 		set( CASTOR_HAS_XINERAMA 1 )
+	elseif ( EXISTS "/usr/include/X11/extensions/Xinerama.h" )
+		set( CASTOR_HAS_XINERAMA 1 )
 	endif ()
 
 	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
@@ -115,7 +117,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		${CastorBinsDependencies}
 		${PROJECT_NAME}
 		PARENT_SCOPE
- )
+	)
 
 	set( CastorMinLibraries
 		${CastorMinLibraries}
@@ -123,7 +125,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		${FreeTypeLibraries}
 		${ZlibLibraries}
 		${X11Libraries}
- )
+	)
 
 	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
@@ -156,7 +158,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
 		@ONLY
 		NEWLINE_STYLE LF
- )
+	)
 
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
@@ -172,7 +174,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		""
 		""
 		"${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp"
- )
+	)
 
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME} Dbghelp )
@@ -201,10 +203,10 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 	file( GLOB CASTOR_Config_HEADER_FILES
 		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.hpp
 		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.inl
- )
+	)
 	file( GLOB CASTOR_Config_SOURCE_FILES
 		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.cpp
- )
+	)
 	source_group( "Header Files\\Config" FILES ${CASTOR_Config_HEADER_FILES} )
 	source_group( "Source Files\\Config" FILES ${CASTOR_Config_SOURCE_FILES} )
 
@@ -212,7 +214,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		FILES ${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
 		DESTINATION include/${PROJECT_NAME}
 		COMPONENT ${PROJECT_NAME}_dev
- )
+	)
 
 	if ( WIN32 )
 		include( InstallRequiredSystemLibraries )

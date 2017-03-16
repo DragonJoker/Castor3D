@@ -119,45 +119,4 @@ namespace Testing
 	}
 
 	//*********************************************************************************************
-
-	CastorUtilsStringBench::CastorUtilsStringBench()
-		: BenchCase( "CastorUtilsStringBench" )
-		, m_strIn( "STR : Bonjoir éêèàÉÊÈÀ" )
-		, m_wstrIn( L"STR : Bonjoir éêèàÉÊÈÀ" )
-	{
-	}
-
-	CastorUtilsStringBench::~CastorUtilsStringBench()
-	{
-	}
-
-	void CastorUtilsStringBench::Execute()
-	{
-		BENCHMARK( StrToWStrUsingConvert, NB_TESTS );
-		BENCHMARK( StrToWStrUsingWiden, NB_TESTS );
-		BENCHMARK( WStrToStrUsingConvert, NB_TESTS );
-		BENCHMARK( WStrToStrUsingNarrow, NB_TESTS );
-	}
-
-	void CastorUtilsStringBench::StrToWStrUsingConvert()
-	{
-		convert( m_strIn, m_wstrOut );
-	}
-
-	void CastorUtilsStringBench::StrToWStrUsingWiden()
-	{
-		widen( m_strIn, m_wstrOut );
-	}
-
-	void CastorUtilsStringBench::WStrToStrUsingConvert()
-	{
-		convert( m_wstrIn, m_strOut );
-	}
-
-	void CastorUtilsStringBench::WStrToStrUsingNarrow()
-	{
-		narrow( m_wstrIn, m_strOut );
-	}
-
-	//*********************************************************************************************
 }

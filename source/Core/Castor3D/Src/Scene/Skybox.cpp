@@ -185,6 +185,7 @@ namespace Castor3D
 
 		if ( l_sampler )
 		{
+			p_camera.Apply();
 			auto l_node = p_camera.GetParent();
 			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
 			m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
