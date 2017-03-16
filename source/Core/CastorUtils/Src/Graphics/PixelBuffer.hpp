@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "PixelBufferBase.hpp"
 
+#include <cstddef>
 #include <iterator>
 
 namespace Castor
@@ -33,7 +34,7 @@ namespace Castor
 	struct pixel_iterator
 		: public std::iterator< std::random_access_iterator_tag
 			, Pixel< PF >
-			, ptrdiff_t
+			, std::ptrdiff_t
 			, Pixel< PF > *
 			, Pixel< PF > & >
 	{
@@ -177,7 +178,7 @@ namespace Castor
 	struct const_pixel_iterator
 		: public std::iterator< std::random_access_iterator_tag
 			, Pixel< PF >
-			, ptrdiff_t
+			, std::ptrdiff_t
 			, Pixel< PF > const *
 			, Pixel< PF > const & >
 	{
@@ -276,7 +277,7 @@ namespace Castor
 
 		inline bool operator==( const_pixel_iterator const & p_it )const
 		{
-			return m_internal == p_it.m_internal;
+			return m_current == p_it.m_current;
 		}
 
 		inline bool operator!=( const_pixel_iterator const & p_it )const

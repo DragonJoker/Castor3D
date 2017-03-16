@@ -57,7 +57,7 @@ namespace Castor3D
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			l_return = m_frameBuffer->Create();
-			auto & l_size = DoGetSize();
+			auto l_size = DoGetSize();
 
 			if ( l_return )
 			{
@@ -108,7 +108,7 @@ namespace Castor3D
 	void ShadowMap::AddLight( Light & p_light )
 	{
 		auto l_pass = DoCreatePass( p_light );
-		auto & l_size = DoGetSize();
+		auto l_size = DoGetSize();
 		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
 			, [l_pass, l_size]()
 			{

@@ -35,6 +35,7 @@ SOFTWARE.
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Shader/PushUniform.hpp>
 #include <Texture/TextureUnit.hpp>
 
 #include <GlslShadow.hpp>
@@ -181,9 +182,9 @@ namespace deferred_common
 			Program( Castor3D::Scene const & p_scene
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl )
-				: my_program_type{ p_scene, p_vtx, p_pxl }
+				: my_program_type( p_scene, p_vtx, p_pxl )
 			{
-				my_program_type::m_program->CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
+				this->m_program->template CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
 					, Castor3D::ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
 			}
 		};
@@ -236,7 +237,7 @@ namespace deferred_common
 			, Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const override
 		{
-			return std::make_unique< Program >( p_scene, p_vtx, p_pxl );
+			return std::make_unique< LightPassShadow::Program >( p_scene, p_vtx, p_pxl );
 		}
 
 	private:

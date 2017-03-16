@@ -21,4 +21,8 @@ namespace TestRender
 	void TestRenderBufferAttachment::DoDetach()
 	{
 	}
+
+	void TestRenderBufferAttachment::DoClear( BufferComponent p_component )const
+	{	
+	}
 }

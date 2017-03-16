@@ -22,4 +22,8 @@ namespace TestRender
 	void TestCubeTextureFaceAttachment::DoDetach()
 	{
 	}
+
+	void TestCubeTextureFaceAttachment::DoClear( BufferComponent p_component )const
+	{	
+	}
 }
