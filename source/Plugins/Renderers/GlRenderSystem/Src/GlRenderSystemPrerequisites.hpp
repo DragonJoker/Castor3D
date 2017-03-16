@@ -1165,6 +1165,7 @@ namespace GlRender
 	struct DestroyerHelper;
 
 	class GlRenderSystem;
+	class GlContext;
 	class GlAttributeBase;
 	template< typename T, uint32_t Columns, uint32_t Rows > class GlMatAttribute;
 	template< typename T, uint32_t Count > class GlVecAttribute;

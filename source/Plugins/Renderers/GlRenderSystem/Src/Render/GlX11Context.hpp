@@ -33,14 +33,12 @@ SOFTWARE.
 
 namespace GlRender
 {
-	class GlContext;
-
 	class GlContextImpl
 		: public Holder
 	{
 	public:
 		GlContextImpl( OpenGl & p_gl, GlContext * p_context );
-		virtual ~GlContextImpl();
+		~GlContextImpl();
 
 		bool Initialise( Castor3D::RenderWindow * p_window );
 		void Cleanup();

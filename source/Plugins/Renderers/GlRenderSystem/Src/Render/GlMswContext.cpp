@@ -1,3 +1,5 @@
+#include <Config/PlatformConfig.hpp>
+
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
 #include "Render/GlMswContext.hpp"

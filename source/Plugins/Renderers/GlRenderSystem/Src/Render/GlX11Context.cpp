@@ -1,3 +1,5 @@
+#include <Config/PlatformConfig.hpp>
+
 #if defined( CASTOR_PLATFORM_LINUX )
 
 #include "Render/GlX11Context.hpp"

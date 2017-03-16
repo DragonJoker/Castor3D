@@ -444,6 +444,7 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
+			technique "forward"
 		}
 		vsync false
 	}

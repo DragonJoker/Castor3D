@@ -110,6 +110,7 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
+			technique "forward"
 			postfx "bloom"
 		}
 		fullscreen false

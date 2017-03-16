@@ -171,6 +171,7 @@ namespace GuiCommon
 		l_parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
 		l_parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 		l_parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
+		l_parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test" ) );
 		bool l_return = l_parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
@@ -199,6 +200,11 @@ namespace GuiCommon
 			if ( l_parser.Found( wxT( "opengl" ) ) )
 			{
 				m_rendererType = cuT( "opengl" );
+			}
+
+			if ( l_parser.Found( wxT( "test" ) ) )
+			{
+				m_rendererType = cuT( "test" );
 			}
 
 			wxString l_strFileName;
