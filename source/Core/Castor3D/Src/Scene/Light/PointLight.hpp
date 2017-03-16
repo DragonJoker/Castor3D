@@ -112,7 +112,9 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor::LightCategory::Update
 		 */
-		C3D_API void Update( Castor::Point3r const & p_target, int32_t p_index = -1 )override;
+		C3D_API void Update( Castor::Point3r const & p_target
+			, Viewport & p_viewport
+			, int32_t p_index = -1 )override;
 		/**
 		 *\copydoc		Castor::LightCategory::CreateTextLoader
 		 */

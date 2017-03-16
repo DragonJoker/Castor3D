@@ -51,9 +51,10 @@ namespace Castor3D
 		}
 
 		inline void DoUpdateProgram( ShaderProgram & p_program
-			, ProgramFlags const & p_programFlags )
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags )
 		{
-			if ( CheckFlag( p_programFlags, ProgramFlag::eShadows )
+			if ( GetShadowType( p_sceneFlags ) != GLSL::ShadowType::eNone
 				&& !p_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
@@ -268,17 +269,6 @@ namespace Castor3D
 		p_count += uint32_t( p_nodes.size() );
 	}
 
-	void RenderTechniquePass::DoGetDepthMaps( DepthMapArray & p_depthMaps )
-	{
-		p_depthMaps.push_back( std::ref( m_technique.GetDirectionalShadowMap() ) );
-		p_depthMaps.push_back( std::ref( m_technique.GetSpotShadowMap() ) );
-
-		for ( auto & l_map : m_technique.GetPointShadowMaps() )
-		{
-			p_depthMaps.push_back( std::ref( l_map ) );
-		}
-	}
-
 	bool RenderTechniquePass::DoInitialise( Size const & CU_PARAM_UNUSED( p_size ) )
 	{
 		auto & l_scene = *m_target.GetScene();
@@ -306,21 +296,22 @@ namespace Castor3D
 	}
 
 	void RenderTechniquePass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::eLighting );
 	}
 
 	String RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return String{};
 	}
 
 	String RenderTechniquePass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -360,8 +351,9 @@ namespace Castor3D
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
-		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
+		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name
+			, GetShadowType( p_sceneFlags ) );
+		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
 
 		// Fragment Outputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
@@ -419,7 +411,7 @@ namespace Castor3D
 					, l_fAlpha );
 			}
 
-			if ( p_sceneFlags != 0 )
+			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
 			{
 				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
 				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
@@ -436,7 +428,7 @@ namespace Castor3D
 		auto & l_fog = l_scene.GetFog();
 		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
 
-		if ( l_fog.GetType() != FogType::eDisabled )
+		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
 		{
 			m_sceneNode.m_fogDensity.SetValue( l_fog.GetDensity() );
 		}
@@ -461,8 +453,11 @@ namespace Castor3D
 
 		if ( l_it == m_frontPipelines.end() )
 		{
-			DoUpdateProgram( p_program, p_flags.m_programFlags );
+			DoUpdateProgram( p_program
+				, p_flags.m_programFlags
+				, p_flags.m_sceneFlags );
 			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
 
 			if ( !m_opaque )
 			{
@@ -515,8 +510,11 @@ namespace Castor3D
 
 		if ( l_it == m_backPipelines.end() )
 		{
-			DoUpdateProgram( p_program, p_flags.m_programFlags );
+			DoUpdateProgram( p_program
+				, p_flags.m_programFlags
+				, p_flags.m_sceneFlags );
 			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
 
 			if ( !m_opaque )
 			{

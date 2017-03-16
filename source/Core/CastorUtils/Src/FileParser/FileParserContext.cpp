@@ -31,9 +31,9 @@ namespace Castor
 			CASTOR_EXCEPTION( "No user context with name [" + string::string_cast< char >( p_name ) + "]." );
 		}
 
-		void * l_return = l_it->second;
+		void * l_result = l_it->second;
 		m_userContexts.erase( l_it );
-		return l_return;
+		return l_result;
 	}
 
 	void * FileParserContext::GetUserContext( String const & p_name )

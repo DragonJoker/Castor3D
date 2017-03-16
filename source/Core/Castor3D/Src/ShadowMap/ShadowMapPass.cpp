@@ -52,9 +52,9 @@ namespace Castor3D
 	{
 	}
 
-	void ShadowMapPass::Render()
+	void ShadowMapPass::Render( uint32_t p_face )
 	{
-		DoRender();
+		DoRender( p_face );
 	}
 
 	void ShadowMapPass::Update( RenderQueueArray & p_queues
@@ -75,9 +75,12 @@ namespace Castor3D
 	}
 
 	void ShadowMapPass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
-		m_shadowMap.UpdateFlags( p_textureFlags, p_programFlags );
+		m_shadowMap.UpdateFlags( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags );
 	}
 
 	void ShadowMapPass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
@@ -96,8 +99,10 @@ namespace Castor3D
 		{
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
 			auto & l_pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
 					, std::move( l_rsState )
 					, BlendState{}
 					, MultisampleState{}
@@ -133,7 +138,7 @@ namespace Castor3D
 
 	String ShadowMapPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
 		return m_shadowMap.GetVertexShaderSource( p_textureFlags
@@ -144,7 +149,7 @@ namespace Castor3D
 
 	String ShadowMapPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return m_shadowMap.GetGeometryShaderSource( p_textureFlags
 			, p_programFlags
@@ -153,7 +158,7 @@ namespace Castor3D
 
 	String ShadowMapPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return m_shadowMap.GetPixelShaderSource( p_textureFlags
 			, p_programFlags

@@ -235,12 +235,38 @@ namespace Castor
 			return p_matrix;
 		}
 
+		template< typename T, typename U >
+		SquareMatrix< T, 4 > & perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_fovy, U p_aspect, U p_near )
+		{
+			T l_range = T( tan( p_fovy.radians() * 0.5 ) * p_near );
+			T const l_left = -l_range * p_aspect;
+			T const l_right = l_range * p_aspect;
+			T const l_bottom = -l_range;
+			T const l_top = l_range;
+
+			p_matrix.initialise();
+			p_matrix[0][0] = ( static_cast< T >( 2 ) * p_near ) / ( l_right - l_left );
+			p_matrix[1][1] = ( static_cast< T >( 2 ) * p_near ) / ( l_top - l_bottom );
+			p_matrix[2][2] = -static_cast< T >( 1 );
+			p_matrix[2][3] = -static_cast< T >( 1 );
+			p_matrix[3][2] = -static_cast< T >( 2 ) * p_near;
+			return p_matrix;
+		}
+
 		template< typename T >
 		SquareMatrix< T, 4 > perspective( Angle const & p_fovy, T p_aspect, T p_near, T p_far )
 		{
-			SquareMatrix< T, 4 > l_return;
-			perspective( l_return, p_fovy, p_aspect, p_near, p_far );
-			return l_return;
+			SquareMatrix< T, 4 > l_result;
+			perspective( l_result, p_fovy, p_aspect, p_near, p_far );
+			return l_result;
+		}
+
+		template< typename T >
+		SquareMatrix< T, 4 > perspective( Angle const & p_fovy, T p_aspect, T p_near )
+		{
+			SquareMatrix< T, 4 > l_result;
+			perspective( l_result, p_fovy, p_aspect, p_near );
+			return l_result;
 		}
 
 		template< typename T, typename U >
@@ -260,9 +286,9 @@ namespace Castor
 		template< typename T >
 		SquareMatrix< T, 4 > ortho( T p_left, T p_right, T p_bottom, T p_top, T p_near, T p_far )
 		{
-			SquareMatrix< T, 4 > l_return;
-			ortho( l_return, p_left, p_right, p_bottom, p_top, p_near, p_far );
-			return l_return;
+			SquareMatrix< T, 4 > l_result;
+			ortho( l_result, p_left, p_right, p_bottom, p_top, p_near, p_far );
+			return l_result;
 		}
 
 		template< typename T, typename U >
@@ -283,9 +309,9 @@ namespace Castor
 		template< typename T >
 		SquareMatrix< T, 4 > frustum( T p_left, T p_right, T p_bottom, T p_top, T p_near, T p_far )
 		{
-			SquareMatrix< T, 4 > l_return;
-			frustum( l_return, p_left, p_right, p_bottom, p_top, p_near, p_far );
-			return l_return;
+			SquareMatrix< T, 4 > l_result;
+			frustum( l_result, p_left, p_right, p_bottom, p_top, p_near, p_far );
+			return l_result;
 		}
 
 		template< typename T, typename U >
@@ -314,9 +340,9 @@ namespace Castor
 		template< typename T >
 		SquareMatrix< T, 4 > look_at( Point< T, 3 > const & p_eye, Point< T, 3 > const & p_center, Point< T, 3 > const & p_up )
 		{
-			SquareMatrix< T, 4 > l_return;
-			look_at( l_return, p_eye, p_center, p_up );
-			return l_return;
+			SquareMatrix< T, 4 > l_result;
+			look_at( l_result, p_eye, p_center, p_up );
+			return l_result;
 		}
 
 		template< typename T >
@@ -333,9 +359,9 @@ namespace Castor
 		template< typename T >
 		SquareMatrix< T, 4 > get_switch_hand( SquareMatrix< T, 4 > const & p_matrix )
 		{
-			SquareMatrix< T, 4 > l_return( p_matrix );
-			switch_hand( l_return );
-			return l_return;
+			SquareMatrix< T, 4 > l_result( p_matrix );
+			switch_hand( l_result );
+			return l_result;
 		}
 	}
 }

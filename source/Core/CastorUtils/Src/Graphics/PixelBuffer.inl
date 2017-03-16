@@ -104,14 +104,14 @@
 	}
 
 	template< PixelFormat FT >
-	typename PxBuffer< FT >::iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
+	typename PxBufferBase::pixel_data PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
 		REQUIRE( x < width() && y < height() );
 		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
 	}
 
 	template< PixelFormat FT >
-	typename PxBuffer< FT >::const_iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
+	typename PxBufferBase::const_pixel_data PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
 		REQUIRE( x < width() && y < height() );
 		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
@@ -126,17 +126,17 @@
 		for ( uint32_t i = 0; i < l_height; i++ )
 		{
 			uint8_t * l_pxA = &m_buffer[i * l_width];
-			uint8_t * l_pxB = &m_buffer[( i + 1 ) * l_width - 1];
+			uint8_t * l_rhs = &m_buffer[( i + 1 ) * l_width - 1];
 
 			for ( uint32_t j = 0; j < l_width / 2; j += pixel_definitions< FT >::Size )
 			{
 				for ( uint32_t k = 0; k < pixel_definitions< FT >::Size; k++ )
 				{
-					std::swap( l_pxA[k], l_pxB[k] );
+					std::swap( l_pxA[k], l_rhs[k] );
 				}
 
 				l_pxA += pixel_definitions< FT >::Size;
-				l_pxB -= pixel_definitions< FT >::Size;
+				l_rhs -= pixel_definitions< FT >::Size;
 			}
 		}
 	}

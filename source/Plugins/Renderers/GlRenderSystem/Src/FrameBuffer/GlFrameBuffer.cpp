@@ -131,6 +131,12 @@ namespace GlRender
 	{
 		GetOpenGl().ClearColor( m_redClear, m_greenClear, m_blueClear, m_alphaClear );
 		GetOpenGl().ClearDepth( 1.0 );
+
+		if ( CheckFlag( p_targets, BufferComponent::eDepth ) )
+		{
+			GetOpenGl().DepthMask( true );
+		}
+
 		GetOpenGl().Clear( GetOpenGl().GetComponents( p_targets ) );
 	}
 

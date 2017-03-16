@@ -290,6 +290,22 @@ namespace Castor
 		static SquareMatrix< T, 4 > & perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_fovy, U aspect, U zNear, U zFar );
 		/**
 		 *\~english
+		 *\brief		Builds a matrix that sets a centered infinite perspective projection from the given parameters
+		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
+		 *\param[in]	p_fovy		Y Field of View
+		 *\param[in]	aspect		Width / Height ratio
+		 *\param[in]	zNear		Near clipping plane value
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective infinie centrée
+		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
+		 *\param[in]	p_fovy		Angle de vision Y
+		 *\param[in]	aspect		Ratio Largeur / Hauteur
+		 *\param[in]	zNear		Position du plan proche
+		 */
+		template< typename T, typename U >
+		static SquareMatrix< T, 4 > & perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_fovy, U aspect, U zNear );
+		/**
+		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
 		 *\param[in]	p_fovy		Y Field of View
 		 *\param[in]	aspect		Width / Height ratio
@@ -306,6 +322,22 @@ namespace Castor
 		 */
 		template< typename T >
 		static SquareMatrix< T, 4 > perspective( Angle const & p_fovy, T aspect, T nearVal, T farVal );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a centered infinite perspective projection from the given parameters
+		 *\param[in]	p_fovy		Y Field of View
+		 *\param[in]	aspect		Width / Height ratio
+		 *\param[in]	nearVal		Near clipping plane value
+		 *\return		The resulting matrix
+		 *\~french
+		 *\brief		Construit une matrice de projection infinie en perspective centrée
+		 *\param[in]	p_fovy		Angle de vision Y
+		 *\param[in]	aspect		Ratio Largeur / Hauteur
+		 *\param[in]	nearVal		Position du plan proche
+		 *\return		La matrice résultante
+		 */
+		template< typename T >
+		static SquareMatrix< T, 4 > perspective( Angle const & p_fovy, T aspect, T nearVal );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters

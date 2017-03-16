@@ -120,15 +120,15 @@ namespace Castor
 		 */
 		std::vector< Key > ListRegisteredTypes()
 		{
-			std::vector< Key > l_return;
-			l_return.reserve( m_registered.size() );
+			std::vector< Key > l_result;
+			l_result.reserve( m_registered.size() );
 
 			for ( auto const & l_it : m_registered )
 			{
-				l_return.push_back( l_it.first );
+				l_result.push_back( l_it.first );
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english
@@ -145,19 +145,19 @@ namespace Castor
 		template< typename ... Parameters >
 		ObjPtr Create( Key const & p_key, Parameters && ... p_params )const
 		{
-			ObjPtr l_return;
+			ObjPtr l_result;
 			auto l_it = m_registered.find( p_key );
 
 			if ( l_it != m_registered.end() )
 			{
-				l_return = l_it->second( std::forward< Parameters >( p_params )... );
+				l_result = l_it->second( std::forward< Parameters >( p_params )... );
 			}
 			else
 			{
 				CASTOR_EXCEPTION( ERROR_UNKNOWN_OBJECT );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 	protected:

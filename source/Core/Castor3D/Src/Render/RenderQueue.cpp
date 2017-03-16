@@ -116,8 +116,8 @@ namespace Castor3D
 		void DoAddNode( RenderPass & p_renderPass
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
 			, Pass & p_pass
-			, Scene const & p_scene
 			, NodesType & p_nodes
 			, CreatorFunc p_creator )
 		{
@@ -128,7 +128,7 @@ namespace Castor3D
 					, p_pass.GetAlphaBlendMode()
 					, p_textureFlags
 					, p_programFlags
-					, p_scene.GetFlags() );
+					, p_sceneFlags );
 
 				if ( l_pipeline )
 				{
@@ -141,7 +141,7 @@ namespace Castor3D
 				, p_pass.GetAlphaBlendMode()
 				, p_textureFlags
 				, p_programFlags
-				, p_scene.GetFlags() );
+				, p_sceneFlags );
 
 			if ( l_pipeline )
 			{
@@ -153,6 +153,7 @@ namespace Castor3D
 		void DoAddSkinningNode( RenderPass & p_renderPass
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
 			, Pass & p_pass
 			, Submesh & p_submesh
 			, Geometry & p_primitive
@@ -162,8 +163,8 @@ namespace Castor3D
 			DoAddNode( p_renderPass
 				, p_textureFlags
 				, p_programFlags
+				, p_sceneFlags
 				, p_pass
-				, *p_primitive.GetScene()
 				, p_animated
 				, std::bind( &RenderPass::CreateSkinningNode
 					, &p_renderPass
@@ -177,6 +178,7 @@ namespace Castor3D
 		void DoAddMorphingNode( RenderPass & p_renderPass
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
 			, Pass & p_pass
 			, Submesh & p_submesh
 			, Geometry & p_primitive
@@ -186,8 +188,8 @@ namespace Castor3D
 			DoAddNode( p_renderPass
 				, p_textureFlags
 				, p_programFlags
+				, p_sceneFlags
 				, p_pass
-				, *p_primitive.GetScene()
 				, p_animated
 				, std::bind( &RenderPass::CreateMorphingNode
 					, &p_renderPass
@@ -201,6 +203,7 @@ namespace Castor3D
 		void DoAddStaticNode( RenderPass & p_renderPass
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
 			, Pass & p_pass
 			, Submesh & p_submesh
 			, Geometry & p_primitive
@@ -217,7 +220,7 @@ namespace Castor3D
 							, p_pass.GetAlphaBlendMode()
 							, p_textureFlags
 							, p_programFlags
-							, p_primitive.GetScene()->GetFlags() );
+							, p_sceneFlags );
 
 						if ( l_pipeline )
 						{
@@ -230,7 +233,7 @@ namespace Castor3D
 						, p_pass.GetAlphaBlendMode()
 						, p_textureFlags
 						, p_programFlags
-						, p_primitive.GetScene()->GetFlags() );
+						, p_sceneFlags );
 
 					if ( l_pipeline )
 					{
@@ -244,7 +247,7 @@ namespace Castor3D
 						, p_pass.GetAlphaBlendMode()
 						, p_textureFlags
 						, p_programFlags
-						, p_primitive.GetScene()->GetFlags() );
+						, p_sceneFlags );
 
 					if ( l_pipeline )
 					{
@@ -256,7 +259,7 @@ namespace Castor3D
 						, p_pass.GetAlphaBlendMode()
 						, p_textureFlags
 						, p_programFlags
-						, p_primitive.GetScene()->GetFlags() );
+						, p_sceneFlags );
 
 					if ( l_pipeline )
 					{
@@ -270,8 +273,8 @@ namespace Castor3D
 				DoAddNode( p_renderPass
 					, p_textureFlags
 					, p_programFlags
+					, p_sceneFlags
 					, p_pass
-					, *p_primitive.GetScene()
 					, p_static
 					, std::bind( &RenderPass::CreateStaticNode
 						, &p_renderPass
@@ -285,6 +288,7 @@ namespace Castor3D
 		void DoAddBillboardNode( RenderPass & p_renderPass
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
 			, Pass & p_pass
 			, BillboardBase & p_billboard
 			, SceneRenderNodes::BillboardNodesMap & p_nodes )
@@ -292,8 +296,8 @@ namespace Castor3D
 			DoAddNode( p_renderPass
 				, p_textureFlags
 				, p_programFlags
+				, p_sceneFlags
 				, p_pass
-				, p_billboard.GetParentScene()
 				, p_nodes
 				, std::bind( &RenderPass::CreateBillboardNode
 					, &p_renderPass
@@ -336,6 +340,7 @@ namespace Castor3D
 					for ( auto l_pass : *l_material )
 					{
 						auto l_programFlags = l_submesh->GetProgramFlags();
+						auto l_sceneFlags = p_scene.GetFlags();
 						RemFlag( l_programFlags, ProgramFlag::eSkinning );
 						RemFlag( l_programFlags, ProgramFlag::eMorphing );
 						auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
@@ -351,10 +356,10 @@ namespace Castor3D
 							AddFlag( l_programFlags, ProgramFlag::eMorphing );
 						}
 
-						if ( l_shadows
-							&& l_primitive.second->IsShadowReceiver() )
+						if ( !l_shadows
+							|| !l_primitive.second->IsShadowReceiver() )
 						{
-							AddFlag( l_programFlags, ProgramFlag::eShadows );
+							RemFlag( l_sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
 						}
 
 						l_pass->PrepareTextures();
@@ -383,7 +388,8 @@ namespace Castor3D
 							, l_pass->GetAlphaBlendMode()
 							, l_textureFlags
 							, l_programFlags
-							, p_scene.GetFlags(), l_pass->IsTwoSided() );
+							, l_sceneFlags
+							, l_pass->IsTwoSided() );
 
 						if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
 						{
@@ -395,6 +401,7 @@ namespace Castor3D
 									DoAddSkinningNode( p_renderPass
 										, l_textureFlags
 										, l_programFlags
+										, l_sceneFlags
 										, *l_pass
 										, *l_submesh
 										, *l_primitive.second
@@ -406,6 +413,7 @@ namespace Castor3D
 									DoAddMorphingNode( p_renderPass
 										, l_textureFlags
 										, l_programFlags
+										, l_sceneFlags
 										, *l_pass
 										, *l_submesh
 										, *l_primitive.second
@@ -417,6 +425,7 @@ namespace Castor3D
 									DoAddStaticNode( p_renderPass
 										, l_textureFlags
 										, l_programFlags
+										, l_sceneFlags
 										, *l_pass
 										, *l_submesh
 										, *l_primitive.second
@@ -441,6 +450,7 @@ namespace Castor3D
 			{
 				p_pass.PrepareTextures();
 				auto l_programFlags = p_billboard.GetProgramFlags();
+				auto l_sceneFlags = p_scene.GetFlags();
 				AddFlag( l_programFlags, ProgramFlag::eBillboards );
 
 				if ( p_pass.HasAlphaBlending() )
@@ -448,10 +458,12 @@ namespace Castor3D
 					AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
 				}
 
-				if ( l_shadows
-					&& p_billboard.IsShadowReceiver() )
+				if ( !l_shadows
+					|| !p_billboard.IsShadowReceiver() )
 				{
-					AddFlag( l_programFlags, ProgramFlag::eShadows );
+					RemFlag( l_sceneFlags, SceneFlag::eShadowFilterRaw );
+					RemFlag( l_sceneFlags, SceneFlag::eShadowFilterPoisson );
+					RemFlag( l_sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
 				}
 
 				auto l_textureFlags = p_pass.GetTextureFlags();
@@ -459,7 +471,7 @@ namespace Castor3D
 					, p_pass.GetAlphaBlendMode()
 					, l_textureFlags
 					, l_programFlags
-					, p_scene.GetFlags()
+					, l_sceneFlags
 					, p_pass.IsTwoSided() );
 
 				if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque
@@ -468,6 +480,7 @@ namespace Castor3D
 					DoAddBillboardNode( p_renderPass
 						, l_textureFlags
 						, l_programFlags
+						, l_sceneFlags
 						, p_pass
 						, p_billboard
 						, p_nodes );

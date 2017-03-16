@@ -15,24 +15,24 @@ namespace Castor
 	{
 		bool is_integer( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
-			bool l_return = true;
+			bool l_result = true;
 
 			if ( ! p_strToTest.empty() )
 			{
-				l_return = ( p_strToTest[0] >= '0' && p_strToTest[0] <= '9' ) || p_strToTest[0] == '-';
+				l_result = ( p_strToTest[0] >= '0' && p_strToTest[0] <= '9' ) || p_strToTest[0] == '-';
 
-				for ( std::size_t i = 1; i < p_strToTest.size() && l_return; i++ )
+				for ( std::size_t i = 1; i < p_strToTest.size() && l_result; i++ )
 				{
-					l_return = p_strToTest[i] >= '0' && p_strToTest[i] <= '9';
+					l_result = p_strToTest[i] >= '0' && p_strToTest[i] <= '9';
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		bool is_floating( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
-			bool		l_return = false;
+			bool		l_result = false;
 			StringArray	l_arrayParts;
 			String		l_strText( p_strToTest );
 			std::size_t	l_nSize;
@@ -42,15 +42,15 @@ namespace Castor
 
 			if ( l_nSize > 0 && l_nSize < 3 )
 			{
-				l_return = is_integer( l_arrayParts[0] );
+				l_result = is_integer( l_arrayParts[0] );
 
-				if ( l_return && l_nSize > 1 )
+				if ( l_result && l_nSize > 1 )
 				{
-					l_return = is_integer( l_arrayParts[1] );
+					l_result = is_integer( l_arrayParts[1] );
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		short to_short( String const & p_strToTest, std::locale const & p_locale )
@@ -310,23 +310,23 @@ namespace Castor
 		String & replace( String & p_str, String const & p_find, String const & p_replaced )
 		{
 			String l_temp;
-			String l_return;
+			String l_result;
 			std::size_t l_currentPos = 0;
 			std::size_t l_pos = 0;
 
 			while ( ( l_pos = p_str.find( p_find, l_currentPos ) ) != String::npos )
 			{
-				l_return.append( p_str.substr( l_currentPos, l_pos - l_currentPos ) );
-				l_return.append( p_replaced );
+				l_result.append( p_str.substr( l_currentPos, l_pos - l_currentPos ) );
+				l_result.append( p_replaced );
 				l_currentPos = l_pos + p_find.size();
 			}
 
 			if ( l_currentPos != p_str.size() )
 			{
-				l_return.append( p_str.substr( l_currentPos, l_pos - l_currentPos ) );
+				l_result.append( p_str.substr( l_currentPos, l_pos - l_currentPos ) );
 			}
 
-			p_str = l_return;
+			p_str = l_result;
 			return p_str;
 		}
 	}

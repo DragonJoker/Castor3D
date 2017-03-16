@@ -46,7 +46,7 @@ namespace Castor
 	funcname( Castor::FileParser * p_parser, Castor::ParserParameterArray const & p_params )
 
 #define DO_WRITE_PARSER_END( retval )\
-		l_return = retval;
+		l_result = retval;
 
 	//!\~english Define to ease the declaration of a parser	\~french Un define pour faciliter la déclaration d'un analyseur
 #define DECLARE_ATTRIBUTE_PARSER( funcname )\
@@ -56,34 +56,34 @@ namespace Castor
 #define IMPLEMENT_ATTRIBUTE_PARSER( funcname )\
 	bool DO_WRITE_PARSER_NAME( funcname )\
 	{\
-		bool l_return = false;\
+		bool l_result = false;\
 		Castor::FileParserContextSPtr p_context = p_parser->GetContext();
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define IMPLEMENT_ATTRIBUTE_PARSER_NMSPC( nmspc, funcname )\
 	bool nmspc::DO_WRITE_PARSER_NAME( funcname )\
 	{\
-		bool l_return = false;\
+		bool l_result = false;\
 		Castor::FileParserContextSPtr p_context = p_parser->GetContext();
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE_PUSH( section )\
 		DO_WRITE_PARSER_END( true )\
 		p_context->m_sections.push_back( uint32_t( section ) );\
-		return l_return;\
+		return l_result;\
 	}
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE()\
 		DO_WRITE_PARSER_END( false )\
-		return l_return;\
+		return l_result;\
 	}
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE_POP()\
 		DO_WRITE_PARSER_END( false )\
 		p_context->m_sections.pop_back();\
-		return l_return;\
+		return l_result;\
 	}
 
 	//!\~english Define to ease the call to FileParser::ParseError	\~french Un define pour faciliter l'appel de FileParser::ParseError

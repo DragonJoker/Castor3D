@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___GLSL_WRITER_H___
 #define ___GLSL_WRITER_H___
 
-#include "GlslOptionalArray.hpp"
+#include "GlslFunction.hpp"
 
 #include <Design/Factory.hpp>
 #include <Design/OwnedBy.hpp>
@@ -32,7 +32,6 @@ namespace GLSL
 {
 	struct Int;
 	struct UInt;
-	struct Vec4;
 	struct SamplerBuffer;
 	struct Sampler1D;
 	struct Sampler2D;
@@ -154,6 +153,9 @@ namespace GLSL
 		}
 
 		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 
 		GlslWriter_API Castor::String Finalise();
 		GlslWriter_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
@@ -288,7 +290,7 @@ namespace GLSL
 		GlslWriter_API Optional< Float > TextureLodOffset( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const & p_offset );
 
 		template< typename T > void WriteAssign( Type const & p_lhs, Optional< T > const & p_rhs );
-		template< typename RetType, typename FuncType, typename ... Params > inline void ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
+		template< typename RetType, typename FuncType, typename ... Params > inline Function< RetType, Params... > ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
 		template< typename RetType > void Return( RetType const & p_return );
 		template< typename ExprType > ExprType Paren( ExprType const p_expr );
 		template< typename ExprType > ExprType Ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right );

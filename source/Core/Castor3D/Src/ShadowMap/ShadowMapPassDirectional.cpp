@@ -25,7 +25,6 @@ namespace Castor3D
 		, ShadowMap const & p_shadowMap )
 		: ShadowMapPass{ p_engine, p_light, p_shadowMap }
 	{
-
 	}
 
 	ShadowMapPassDirectional::~ShadowMapPassDirectional()
@@ -44,7 +43,6 @@ namespace Castor3D
 			, m_light.GetParent()
 			, std::move( l_viewport ) );
 		m_camera->Resize( p_size );
-		m_light.GetDirectionalLight()->SetViewport( m_camera->GetViewport() );
 
 		m_renderQueue.Initialise( *m_light.GetScene(), *m_camera );
 		return true;
@@ -58,12 +56,14 @@ namespace Castor3D
 
 	void ShadowMapPassDirectional::DoUpdate( RenderQueueArray & p_queues )
 	{
-		m_light.Update( m_camera->GetParent()->GetDerivedPosition(), m_index );
+		m_light.Update( m_camera->GetParent()->GetDerivedPosition()
+			, m_camera->GetViewport()
+			, m_index );
 		m_camera->Update();
 		p_queues.push_back( m_renderQueue );
 	}
 
-	void ShadowMapPassDirectional::DoRender()
+	void ShadowMapPassDirectional::DoRender( uint32_t p_face )
 	{
 		if ( m_camera && m_initialised )
 		{

@@ -173,7 +173,7 @@ namespace Castor
 		 */
 		bool Intersects( Line3D const & p_line, Point< T, 3 > & p_point )
 		{
-			bool l_return;
+			bool l_result;
 			double a = m_origin[0];
 			double b = m_origin[1];
 			double c = m_origin[2];
@@ -199,12 +199,12 @@ namespace Castor
 					p_point[0] = T( m_slope[0] * t + m_origin[0] );
 					p_point[1] = T( m_slope[1] * t + m_origin[1] );
 					p_point[2] = T( m_slope[2] * t + m_origin[2] );
-					l_return = true;
+					l_result = true;
 				}
 				else
 				{
 					//invalid couple, no intersection
-					l_return = false;
+					l_result = false;
 				}
 			}
 			else if ( std::abs( rp ) > std::numeric_limits< double >::epsilon() && std::abs( p * rp - pp * r ) > std::numeric_limits< double >::epsilon() )
@@ -217,21 +217,21 @@ namespace Castor
 					p_point[0] = T( m_slope[0] * t + m_origin[0] );
 					p_point[1] = T( m_slope[1] * t + m_origin[1] );
 					p_point[2] = T( m_slope[2] * t + m_origin[2] );
-					l_return = true;
+					l_result = true;
 				}
 				else
 				{
 					//invalid couple, no intersection
-					l_return = false;
+					l_result = false;
 				}
 			}
 			else
 			{
 				// The 2 lines are parallel, no intersection
-				l_return = false;
+				l_result = false;
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english

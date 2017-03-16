@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,41 +23,56 @@ SOFTWARE.
 #ifndef ___GLSL_MAT_H___
 #define ___GLSL_MAT_H___
 
-#include "GlslVeci.hpp"
+#include "GlslVec.hpp"
 
 namespace GLSL
 {
-	struct Mat2
+	template< typename ValueT >
+	struct Mat2T
 		: public Type
 	{
-		inline Mat2();
-		inline Mat2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		inline Mat2 & operator=( Mat2 const & p_rhs );
-		template< typename T > inline Mat2 & operator=( T const & p_rhs );
-		template< typename T > inline Vec2 operator[]( T const & p_rhs );
-		inline Vec2 operator[]( int const & p_rhs );
+		using my_type = ValueT;
+		using my_vec = Vec2T< ValueT >;
+		using my_mat = Mat2T< ValueT >;
+
+		inline Mat2T();
+		inline Mat2T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline my_mat & operator=( my_mat const & p_rhs );
+		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
+		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs );
+		inline my_vec operator[]( int const & p_rhs );
 	};
 
-	struct Mat3
+	template< typename ValueT >
+	struct Mat3T
 		: public Type
 	{
-		inline Mat3();
-		inline Mat3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		inline Mat3 & operator=( Mat3 const & p_rhs );
-		template< typename T > inline Mat3 & operator=( T const & p_rhs );
-		template< typename T > inline Vec3 operator[]( T const & p_rhs );
-		inline Vec3 operator[]( int const & p_rhs );
+		using my_type = ValueT;
+		using my_vec = Vec3T< ValueT >;
+		using my_mat = Mat3T< ValueT >;
+
+		inline Mat3T();
+		inline Mat3T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline my_mat & operator=( my_mat const & p_rhs );
+		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
+		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs );
+		inline my_vec operator[]( int const & p_rhs );
 	};
 
-	struct Mat4
+	template< typename ValueT >
+	struct Mat4T
 		: public Type
 	{
-		inline Mat4();
-		inline Mat4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		inline Mat4 & operator=( Mat4 const & p_rhs );
-		template< typename T > inline Mat4 & operator=( T const & p_rhs );
-		template< typename T > inline Vec4 operator[]( T const & p_rhs );
-		inline Vec4 operator[]( int const & p_rhs );
+		using my_type = ValueT;
+		using my_vec = Vec4T< ValueT >;
+		using my_mat = Mat4T< ValueT >;
+
+		inline Mat4T();
+		inline Mat4T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline my_mat & operator=( my_mat const & p_rhs );
+		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
+		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs );
+		inline my_vec operator[]( int const & p_rhs );
 	};
 }
 

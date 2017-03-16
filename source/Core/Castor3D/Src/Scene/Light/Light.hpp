@@ -106,15 +106,19 @@ namespace Castor3D
 		C3D_API ~Light();
 		/**
 		 *\~english
-		 *\brief		Updates the light viewport.
-		 *\param[in]	p_target	The target position, used by directional shadow map.
-		 *\param[in]	p_index		The light shadow map index, -1 if it doesn't have any.
+		 *\brief			Updates the light viewport.
+		 *\param[in]		p_target	The target position, used by directional shadow map.
+		 *\param[in,out]	p_viewport	The viewport to update.
+		 *\param[in]		p_index		The light shadow map index, -1 if it doesn't have any.
 		 *\~french
-		 *\brief		Met le viewport de la source à jour.
-		 *\param[in]	p_target	La position de la cible, utilisée pour la map d'ombres des source directionnelles.
-		 *\param[in]	p_index		L'indice de la shadow map de la lumière, -1 si elle n'en a pas.
+		 *\brief			Met le viewport de la source à jour.
+		 *\param[in]		p_target	La position de la cible, utilisée pour la map d'ombres des source directionnelles.
+		 *\param[in,out]	p_viewport	Le viewport à mettre à jour.
+		 *\param[in]		p_index		L'indice de la shadow map de la lumière, -1 si elle n'en a pas.
 		 */
-		C3D_API void Update( Castor::Point3r const & p_target, int32_t p_index = -1 );
+		C3D_API void Update( Castor::Point3r const & p_target
+			, Viewport & p_viewport
+			, int32_t p_index = -1 );
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.

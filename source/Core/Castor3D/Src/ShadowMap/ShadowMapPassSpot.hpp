@@ -89,7 +89,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRender
 		 */
-		void DoRender()override;
+		void DoRender( uint32_t p_face )override;
 
 	private:
 		//!\~english	The camera created from the light.

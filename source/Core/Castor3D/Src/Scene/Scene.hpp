@@ -38,7 +38,9 @@ SOFTWARE.
 #include "Cache/SamplerCache.hpp"
 #include "Cache/WindowCache.hpp"
 
-#include "Fog.hpp"
+#include "RenderToTexture/TextureProjection.hpp"
+#include "Scene/Fog.hpp"
+#include "Scene/Shadow.hpp"
 
 #include <Log/Logger.hpp>
 #include <Design/Named.hpp>
@@ -137,22 +139,13 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Renders the scene background.
+		 *\brief		Renders the scene background (skybox or image).
 		 *\param[in]	p_size		The target dimensions.
 		 *\~french
-		 *\brief		Rend le fond de la scène.
+		 *\brief		Rend l'arrière plan de la scène (skybox ou image).
 		 *\param[in]	p_size		Les dimensions de la cible.
 		 */
-		C3D_API void RenderBackground( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Renders the scene foreground (skybox).
-		 *\param[in]	p_size		The target dimensions.
-		 *\~french
-		 *\brief		Rend le devant de la scène (skybox).
-		 *\param[in]	p_size		Les dimensions de la cible.
-		 */
-		C3D_API void RenderForeground( Castor::Size const & p_size, Camera const & p_camera );
+		C3D_API void RenderBackground( Castor::Size const & p_size, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Updates the scene before render.
@@ -179,7 +172,7 @@ namespace Castor3D
 		 *\brief		Définit la skybox de la scène.
 		 *\param[in]	p_skybox	La skybox.
 		 */
-		C3D_API bool SetForeground( SkyboxSPtr p_skybox );
+		C3D_API bool SetForeground( SkyboxUPtr && p_skybox );
 		/**
 		 *\~english
 		 *\brief		Imports a scene from an foreign file
@@ -226,7 +219,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les indicateurs de la scène.
 		 */
-		C3D_API uint8_t GetFlags()const;
+		C3D_API SceneFlags GetFlags()const;
 		/**
 		 *\~english
 		 *\return		Tells if the scene has a shadow projecting light.
@@ -353,13 +346,24 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		\p true if the skybox is defined.
+		 *\~french
+		 *\return		\p true si la skybox est définie.
+		 */
+		inline bool HasSkybox()const
+		{
+			return m_skybox != nullptr;
+		}
+		/**
+		 *\~english
 		 *\return		The skybox.
 		 *\~french
 		 *\return		La skybox.
 		 */
-		inline SkyboxSPtr GetSkybox()const
+		inline Skybox const & GetSkybox()const
 		{
-			return m_skybox;
+			REQUIRE( m_skybox );
+			return *m_skybox;
 		}
 		/**
 		 *\~english
@@ -380,6 +384,26 @@ namespace Castor3D
 		inline Fog & GetFog()
 		{
 			return m_fog;
+		}
+		/**
+		 *\~english
+		 *\return		The shadows parameters.
+		 *\~french
+		 *\return		Les paramètres des ombres.
+		 */
+		inline Shadow const & GetShadow()const
+		{
+			return m_shadow;
+		}
+		/**
+		 *\~english
+		 *\return		The shadows parameters.
+		 *\~french
+		 *\return		Les paramètres des ombres.
+		 */
+		inline Shadow & GetShadow()
+		{
+			return m_shadow;
 		}
 
 	public:
@@ -453,13 +477,19 @@ namespace Castor3D
 		TextureLayoutSPtr m_backgroundImage;
 		//!\~english	The skybox
 		//!\~french		La skybox
-		SkyboxSPtr m_skybox;
+		SkyboxUPtr m_skybox;
 		//!\~english	The LightCategory factory.
 		//!\~french		La fabrique de LightCategory.
 		LightFactory m_lightFactory;
 		//!\~english	The fog's parameters.
 		//!\~french		Les paramètres de brouillard.
 		Fog m_fog;
+		//!\~english	The shadows parameters.
+		//!\~french		Les paramètres des ombres.
+		Shadow m_shadow;
+		//!\~english	The pipeline used to render the background image, if any.
+		//!\~french		Le pipeline utilisé pour le rendu de l'image de fond, s'il y en a une.
+		std::unique_ptr< TextureProjection > m_colour;
 
 	public:
 		//!\~english	The cameras root node name.

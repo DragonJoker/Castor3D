@@ -25,37 +25,48 @@ namespace Castor3D
 {
 	namespace
 	{
-		void DoInitialiseShadowMap( Engine & p_engine, Size const & p_size, TextureUnit & p_unit )
+		TextureUnit DoInitialiseDirectional( Engine & p_engine, Size const & p_size )
 		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Directional" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			SamplerSPtr l_sampler;
+			String const l_name = cuT( "ShadowMap_Directional" );
+
+			if ( p_engine.GetSamplerCache().Has( l_name ) )
+			{
+				l_sampler = p_engine.GetSamplerCache().Find( l_name );
+			}
+			else
+			{
+				l_sampler = p_engine.GetSamplerCache().Add( l_name );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+				l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+				l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+				l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			}
 
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
 				TextureType::eTwoDimensions,
 				AccessType::eNone,
 				AccessType::eRead | AccessType::eWrite,
 				PixelFormat::eD32F, p_size );
-			p_unit.SetTexture( l_texture );
-			p_unit.SetSampler( l_sampler );
+			TextureUnit l_unit{ p_engine };
+			l_unit.SetTexture( l_texture );
+			l_unit.SetSampler( l_sampler );
 
 			for ( auto & l_image : *l_texture )
 			{
 				l_image->InitialiseSource();
 			}
 
-			p_unit.Initialise();
+			return l_unit;
 		}
 	}
 
 	ShadowMapDirectional::ShadowMapDirectional( Engine & p_engine )
 		: ShadowMap{ p_engine }
-		, m_shadowMap{ p_engine }
+		, m_shadowMap{ DoInitialiseDirectional( p_engine, Size{ 4096, 4096 } ) }
 	{
 	}
 
@@ -68,7 +79,10 @@ namespace Castor3D
 	{
 		if ( !m_passes.empty() )
 		{
-			m_passes.begin()->second->Update( p_queues, 0u );
+			for ( auto & l_it : m_passes )
+			{
+				l_it.second->Update( p_queues, 0u );
+			}
 		}
 	}
 
@@ -76,7 +90,7 @@ namespace Castor3D
 	{
 		if ( !m_passes.empty() )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 			m_depthAttach->Attach( AttachmentPoint::eDepth );
 			m_frameBuffer->Clear( BufferComponent::eDepth );
 			m_passes.begin()->second->Render();
@@ -90,9 +104,14 @@ namespace Castor3D
 		return 1;
 	}
 
-	void ShadowMapDirectional::DoInitialise( Size const & p_size )
+	Size ShadowMapDirectional::DoGetSize()const
 	{
-		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
+		return m_shadowMap.GetTexture()->GetDimensions();
+	}
+
+	void ShadowMapDirectional::DoInitialise()
+	{
+		m_shadowMap.Initialise();
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 
 		auto l_texture = m_shadowMap.GetTexture();
@@ -112,14 +131,15 @@ namespace Castor3D
 	}
 
 	void ShadowMapDirectional::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::eShadowMapDirectional );
 	}
 
 	String ShadowMapDirectional::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

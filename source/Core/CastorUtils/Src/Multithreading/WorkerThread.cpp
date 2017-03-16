@@ -23,7 +23,6 @@ namespace Castor
 	{
 		REQUIRE( m_start == false );
 		{
-			auto l_lock = make_unique_lock( m_mutex );
 			m_currentJob = p_job;
 		}
 		m_start = true;
@@ -36,9 +35,9 @@ namespace Castor
 
 	bool WorkerThread::Wait( std::chrono::milliseconds const & p_timeout )const
 	{
-		bool l_return = IsEnded() && !m_terminate;
+		bool l_result = IsEnded() && !m_terminate;
 
-		if ( !l_return )
+		if ( !l_result )
 		{
 			auto l_begin = std::chrono::high_resolution_clock::now();
 			std::chrono::milliseconds l_wait{ 0 };
@@ -46,13 +45,13 @@ namespace Castor
 			do
 			{
 				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-				l_return = IsEnded();
+				l_result = IsEnded();
 				l_wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - l_begin );
 			}
-			while ( l_wait < p_timeout && !l_return && !m_terminate );
+			while ( l_wait < p_timeout && !l_result && !m_terminate );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void WorkerThread::DoRun()
@@ -61,11 +60,9 @@ namespace Castor
 		{
 			if ( m_start )
 			{
-				{
-					auto l_lock = make_unique_lock( m_mutex );
-					m_currentJob();
-				}
+				m_currentJob();
 				m_start = false;
+				onEnded( *this );
 			}
 			else
 			{

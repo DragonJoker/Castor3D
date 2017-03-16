@@ -14,6 +14,10 @@ namespace Castor
 		for ( size_t i = 0u; i < p_count; ++i )
 		{
 			m_available.push_back( std::make_unique< WorkerThread >() );
+			m_endConnections.push_back( m_available.back()->onEnded.connect( [this]( WorkerThread & p_worker )
+			{
+				DoFreeWorker( p_worker );
+			} ) );
 		}
 	}
 
@@ -21,6 +25,7 @@ namespace Castor
 	{
 		WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) );
 		auto l_lock = make_unique_lock( m_mutex );
+		m_endConnections.clear();
 		m_busy.clear();
 		m_available.clear();
 	}
@@ -39,9 +44,9 @@ namespace Castor
 
 	bool ThreadPool::WaitAll( std::chrono::milliseconds const & p_timeout )const
 	{
-		bool l_return = IsFull();
+		bool l_result = IsFull();
 
-		if ( !l_return )
+		if ( !l_result )
 		{
 			auto l_begin = std::chrono::high_resolution_clock::now();
 			std::chrono::milliseconds l_wait{ 0 };
@@ -49,24 +54,19 @@ namespace Castor
 			do
 			{
 				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-				l_return = IsFull();
+				l_result = IsFull();
 				l_wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - l_begin );
 			}
-			while ( l_wait < p_timeout && !l_return );
+			while ( l_wait < p_timeout && !l_result );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ThreadPool::PushJob( WorkerThread::Job p_job )
 	{
 		auto & l_worker = DoReserveWorker();
-
-		l_worker.Feed( [this, p_job, &l_worker]()
-		{
-			p_job();
-			DoFreeWorker( l_worker );
-		} );
+		l_worker.Feed( p_job );
 	}
 
 	WorkerThread & ThreadPool::DoReserveWorker()

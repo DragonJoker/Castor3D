@@ -229,7 +229,7 @@ namespace GLSL
 	}
 
 	template< typename RetType, typename FuncType, typename ... Params >
-	inline void GlslWriter::ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params )
+	inline Function< RetType, Params... > GlslWriter::ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params )
 	{
 		m_stream << std::endl;
 		WriteFunctionHeader< RetType >( *this, p_name, p_params... );
@@ -238,6 +238,7 @@ namespace GLSL
 			p_function( std::forward < Params && > ( p_params )... );
 		}
 		m_stream << std::endl;
+		return Function< RetType, Params... >{ this, p_name };
 	}
 
 	template< typename RetType >

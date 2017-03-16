@@ -22,16 +22,26 @@ namespace Castor3D
 {
 	namespace
 	{
-		void DoInitialiseShadowMap( Engine & p_engine, Size const & p_size, TextureUnit & p_unit )
+		TextureUnit DoInitialiseSpot( Engine & p_engine, Size const & p_size )
 		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Spot" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			SamplerSPtr l_sampler;
+			String const l_name = cuT( "ShadowMap_Spot" );
+
+			if ( p_engine.GetSamplerCache().Has( l_name ) )
+			{
+				l_sampler = p_engine.GetSamplerCache().Find( l_name );
+			}
+			else
+			{
+				l_sampler = p_engine.GetSamplerCache().Add( l_name );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+				l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+				l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+				l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			}
 
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
 				TextureType::eTwoDimensionsArray,
@@ -39,21 +49,22 @@ namespace Castor3D
 				AccessType::eRead | AccessType::eWrite,
 				PixelFormat::eD32F,
 				Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
-			p_unit.SetTexture( l_texture );
-			p_unit.SetSampler( l_sampler );
+			TextureUnit l_unit{ p_engine };
+			l_unit.SetTexture( l_texture );
+			l_unit.SetSampler( l_sampler );
 
 			for ( auto & l_image : *l_texture )
 			{
 				l_image->InitialiseSource();
 			}
 
-			p_unit.Initialise();
+			return l_unit;
 		}
 	}
 
 	ShadowMapSpot::ShadowMapSpot( Engine & p_engine )
 		: ShadowMap{ p_engine }
-		, m_shadowMap{ p_engine }
+		, m_shadowMap{ DoInitialiseSpot( p_engine, Size{ 1024, 1024 } ) }
 	{
 	}
 
@@ -66,17 +77,17 @@ namespace Castor3D
 	{
 		if ( !m_passes.empty() )
 		{
+			const int32_t l_max = DoGetMaxPasses();
 			m_sorted.clear();
 
 			for ( auto & l_it : m_passes )
 			{
 				m_sorted.emplace( point::distance_squared( p_camera.GetParent()->GetDerivedPosition()
-						, l_it.first->GetParent()->GetDerivedPosition() )
+					, l_it.first->GetParent()->GetDerivedPosition() )
 					, l_it.second );
 			}
 
 			auto l_it = m_sorted.begin();
-			const int32_t l_max = DoGetMaxPasses();
 
 			for ( int32_t i = 0; i < l_max && l_it != m_sorted.end(); ++i, ++l_it )
 			{
@@ -89,7 +100,7 @@ namespace Castor3D
 	{
 		if ( !m_sorted.empty() )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 			auto l_it = m_sorted.begin();
 			const int32_t l_max = DoGetMaxPasses();
 
@@ -107,12 +118,17 @@ namespace Castor3D
 
 	int32_t ShadowMapSpot::DoGetMaxPasses()const
 	{
-		return GLSL::SpotShadowMapCount;
+		return int32_t( m_shadowMap.GetTexture()->GetLayersCount() );
 	}
 
-	void ShadowMapSpot::DoInitialise( Size const & p_size )
+	Size ShadowMapSpot::DoGetSize()const
 	{
-		DoInitialiseShadowMap( *GetEngine(), p_size, m_shadowMap );
+		return m_shadowMap.GetTexture()->GetDimensions();
+	}
+
+	void ShadowMapSpot::DoInitialise()
+	{
+		m_shadowMap.Initialise();
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 
 		auto l_texture = m_shadowMap.GetTexture();
@@ -143,14 +159,15 @@ namespace Castor3D
 	}
 
 	void ShadowMapSpot::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::eShadowMapSpot );
 	}
 
 	String ShadowMapSpot::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

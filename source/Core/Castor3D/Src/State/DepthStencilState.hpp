@@ -275,14 +275,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the operation when stencil test failed, for front faces
-		 *\param[in]	p_eOp The operation
+		 *\param[in]	p_op The operation
 		 *\~french
 		 *\brief		Définit l'opération lors de l'échec du test de stencil, pour les faces avant
-		 *\param[in]	p_eOp	L'opération
+		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilFrontFailOp( StencilOp p_eOp )
+		inline void SetStencilFrontFailOp( StencilOp p_op )
 		{
-			m_stStencilFront.m_eFailOp = p_eOp;
+			m_stStencilFront.m_failOp = p_op;
 		}
 		/**
 		 *\~english
@@ -294,19 +294,19 @@ namespace Castor3D
 		 */
 		inline StencilOp GetStencilFrontFailOp()const
 		{
-			return m_stStencilFront.m_eFailOp;
+			return m_stStencilFront.m_failOp;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the operation when stencil test passes but depth test failed, for front faces
-		 *\param[in]	p_eOp The operation
+		 *\param[in]	p_op The operation
 		 *\~french
 		 *\brief		Définit l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces avant
-		 *\param[in]	p_eOp	L'opération
+		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilFrontDepthFailOp( StencilOp p_eOp )
+		inline void SetStencilFrontDepthFailOp( StencilOp p_op )
 		{
-			m_stStencilFront.m_eDepthFailOp = p_eOp;
+			m_stStencilFront.m_depthFailOp = p_op;
 		}
 		/**
 		 *\~english
@@ -318,19 +318,19 @@ namespace Castor3D
 		 */
 		inline StencilOp GetStencilFrontDepthFailOp()const
 		{
-			return m_stStencilFront.m_eDepthFailOp;
+			return m_stStencilFront.m_depthFailOp;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the operation when stencil stencil and depth tests passed, for front faces
-		 *\param[in]	p_eOp The operation
+		 *\param[in]	p_op The operation
 		 *\~french
 		 *\brief		Définit l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces avant
-		 *\param[in]	p_eOp	L'opération
+		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilFrontPassOp( StencilOp p_eOp )
+		inline void SetStencilFrontPassOp( StencilOp p_op )
 		{
-			m_stStencilFront.m_ePassOp = p_eOp;
+			m_stStencilFront.m_passOp = p_op;
 		}
 		/**
 		 *\~english
@@ -342,7 +342,25 @@ namespace Castor3D
 		 */
 		inline StencilOp GetStencilFrontPassOp()const
 		{
-			return m_stStencilFront.m_ePassOp;
+			return m_stStencilFront.m_passOp;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the all the stencil test operations, for front faces
+		 *\param[in]	p_fail		The stencil fail operation
+		 *\param[in]	p_depthFail	The stencil pass, depth fail operation
+		 *\param[in]	p_pass		The stencil pass, depth pass operation
+		 *\~french
+		 *\brief		Définit toutes les opération des tests de stencil, pour les faces avant
+		 *\param[in]	p_fail		L'opération d'échec stencil
+		 *\param[in]	p_depthFail	L'opération de réussite stencil, échec profondeur
+		 *\param[in]	p_pass		L'opération de réussite stencil, réussite profondeur
+		 */
+		inline void SetStencilFrontOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
+		{
+			m_stStencilFront.m_failOp = p_fail;
+			m_stStencilFront.m_depthFailOp = p_depthFail;
+			m_stStencilFront.m_passOp = p_pass;
 		}
 		/**
 		 *\~english
@@ -395,14 +413,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the operation when stencil test failed, for back faces
-		 *\param[in]	p_eOp The operation
+		 *\param[in]	p_op The operation
 		 *\~french
 		 *\brief		Définit l'opération lors de l'échec du test de stencil, pour les faces arrières
-		 *\param[in]	p_eOp	L'opération
+		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilBackFailOp( StencilOp p_eOp )
+		inline void SetStencilBackFailOp( StencilOp p_op )
 		{
-			m_stStencilBack.m_eFailOp = p_eOp;
+			m_stStencilBack.m_failOp = p_op;
 		}
 		/**
 		 *\~english
@@ -414,19 +432,19 @@ namespace Castor3D
 		 */
 		inline StencilOp GetStencilBackFailOp()const
 		{
-			return m_stStencilBack.m_eFailOp;
+			return m_stStencilBack.m_failOp;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the operation when stencil test passes but depth test failed, for back faces
-		 *\param[in]	p_eOp The operation
+		 *\param[in]	p_op The operation
 		 *\~french
 		 *\brief		Définit l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces arrières
-		 *\param[in]	p_eOp	L'opération
+		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilBackDepthFailOp( StencilOp p_eOp )
+		inline void SetStencilBackDepthFailOp( StencilOp p_op )
 		{
-			m_stStencilBack.m_eDepthFailOp = p_eOp;
+			m_stStencilBack.m_depthFailOp = p_op;
 		}
 		/**
 		 *\~english
@@ -438,19 +456,37 @@ namespace Castor3D
 		 */
 		inline StencilOp GetStencilBackDepthFailOp()const
 		{
-			return m_stStencilBack.m_eDepthFailOp;
+			return m_stStencilBack.m_depthFailOp;
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the operation when stencil stencil and depth tests passed, for back faces
-		 *\param[in]	p_eOp The operation
+		 *\brief		Defines the operation when stencil and depth tests passed, for back faces
+		 *\param[in]	p_op The operation
 		 *\~french
 		 *\brief		Définit l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces arrières
-		 *\param[in]	p_eOp	L'opération
+		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilBackPassOp( StencilOp p_eOp )
+		inline void SetStencilBackPassOp( StencilOp p_op )
 		{
-			m_stStencilBack.m_ePassOp = p_eOp;
+			m_stStencilBack.m_passOp = p_op;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the all the stencil test operations, for back faces
+		 *\param[in]	p_fail		The stencil fail operation
+		 *\param[in]	p_depthFail	The stencil pass, depth fail operation
+		 *\param[in]	p_pass		The stencil pass, depth pass operation
+		 *\~french
+		 *\brief		Définit toutes les opération des tests de stencil, pour les faces arrières
+		 *\param[in]	p_fail		L'opération d'échec stencil
+		 *\param[in]	p_depthFail	L'opération de réussite stencil, échec profondeur
+		 *\param[in]	p_pass		L'opération de réussite stencil, réussite profondeur
+		 */
+		inline void SetStencilBackOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
+		{
+			m_stStencilBack.m_failOp = p_fail;
+			m_stStencilBack.m_depthFailOp = p_depthFail;
+			m_stStencilBack.m_passOp = p_pass;
 		}
 		/**
 		 *\~english
@@ -462,7 +498,93 @@ namespace Castor3D
 		 */
 		inline StencilOp GetStencilBackPassOp()const
 		{
-			return m_stStencilBack.m_ePassOp;
+			return m_stStencilBack.m_passOp;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the stencil reference value
+		 *\param[in]	p_ref The reference value
+		 *\~french
+		 *\brief		Définit la valeur de référence de stencil
+		 *\param[in]	p_ref	La valeur de référence
+		 */
+		inline void SetStencilRef( uint32_t p_ref )
+		{
+			m_stStencilFront.m_ref = p_ref;
+			m_stStencilBack.m_ref = p_ref;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the stencil function for
+		 *\param[in]	p_func The function
+		 *\~french
+		 *\brief		Définit la fonction de stencil
+		 *\param[in]	p_func	La fonction
+		 */
+		inline void SetStencilFunc( StencilFunc p_func )
+		{
+			m_stStencilFront.m_eFunc = p_func;
+			m_stStencilBack.m_eFunc = p_func;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the operation when stencil test failed
+		 *\param[in]	p_op The operation
+		 *\~french
+		 *\brief		Définit l'opération lors de l'échec du test de stencil
+		 *\param[in]	p_op	L'opération
+		 */
+		inline void SetStencilFailOp( StencilOp p_op )
+		{
+			m_stStencilFront.m_failOp = p_op;
+			m_stStencilBack.m_failOp = p_op;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the operation when stencil test passes but depth test failed
+		 *\param[in]	p_op The operation
+		 *\~french
+		 *\brief		Définit l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur
+		 *\param[in]	p_op	L'opération
+		 */
+		inline void SetStencilDepthFailOp( StencilOp p_op )
+		{
+			m_stStencilFront.m_depthFailOp = p_op;
+			m_stStencilBack.m_depthFailOp = p_op;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the operation when stencil stencil and depth tests passed
+		 *\param[in]	p_op The operation
+		 *\~french
+		 *\brief		Définit l'opération lors de la réussite des tests de stencil et de profondeur
+		 *\param[in]	p_op	L'opération
+		 */
+		inline void SetStencilPassOp( StencilOp p_op )
+		{
+			m_stStencilFront.m_passOp = p_op;
+			m_stStencilBack.m_passOp = p_op;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the all the stencil test operations
+		 *\param[in]	p_fail		The stencil fail operation
+		 *\param[in]	p_depthFail	The stencil pass, depth fail operation
+		 *\param[in]	p_pass		The stencil pass, depth pass operation
+		 *\~french
+		 *\brief		Définit toutes les opération des tests de stencil
+		 *\param[in]	p_fail		L'opération d'échec stencil
+		 *\param[in]	p_depthFail	L'opération de réussite stencil, échec profondeur
+		 *\param[in]	p_pass		L'opération de réussite stencil, réussite profondeur
+		 */
+		inline void SetStencilOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
+		{
+			m_stStencilFront.m_failOp = p_fail;
+			m_stStencilFront.m_depthFailOp = p_depthFail;
+			m_stStencilFront.m_passOp = p_pass;
+			m_stStencilBack.m_failOp = p_fail;
+			m_stStencilBack.m_depthFailOp = p_depthFail;
+			m_stStencilBack.m_passOp = p_pass;
 		}
 
 	protected:
@@ -485,19 +607,19 @@ namespace Castor3D
 			uint32_t m_ref{ 0 };
 			//!\~english	The operation on stencil test fail.
 			//!\~french		Opération faite en cas d'échec du stencil test.
-			StencilOp m_eFailOp{ StencilOp::eKeep };
+			StencilOp m_failOp{ StencilOp::eKeep };
 			//!\~english	The operation on deph test fail.
 			//!\~french		Opération faite en cas d'échec du test de profondeur.
-			StencilOp m_eDepthFailOp{ StencilOp::eIncrement };
+			StencilOp m_depthFailOp{ StencilOp::eKeep };
 			//!\~english	The operation on depth and stencil tests success.
 			//!\~french		Opération faite en cas de réussite des tests stencil et profondeur.
-			StencilOp m_ePassOp{ StencilOp::eKeep };
+			StencilOp m_passOp{ StencilOp::eKeep };
 		};
 
 	protected:
 		//!\~english	Tells whether the depth test is activated or not.
 		//!\~french		Dit si oui on non le test de profondeur est activé.
-		bool m_bDepthTest{ true };
+		bool m_bDepthTest{ false };
 		//!\~english	The depth test function.
 		//!\~french		La fonction du test de profondeur.
 		DepthFunc m_eDepthFunc{ DepthFunc::eLess };
@@ -512,7 +634,7 @@ namespace Castor3D
 		WritingMask m_eDepthMask{ WritingMask::eAll };
 		//!\~english	Tells whether the stencil test is activated or not.
 		//!\~french		Dit si le test stencil est activé ou non.
-		bool m_bStencilTest{ true };
+		bool m_bStencilTest{ false };
 		//!\~english	The stencil read mask.
 		//!\~french		Le masque de lecture du stencil.
 		uint32_t m_uiStencilReadMask{ 0xFFFFFFFF };

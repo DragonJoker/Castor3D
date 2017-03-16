@@ -257,8 +257,8 @@ namespace Castor3D
 		, Camera const & p_camera
 		, SceneRenderNodes & p_nodes )
 	{
-		m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-		m_frameBuffer->Clear();
+		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
 		p_camera.Apply();
 		DoRenderNodes( p_nodes, p_camera );
 		m_frameBuffer->Unbind();
@@ -419,9 +419,10 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				m_frameBuffer->Bind( FrameBufferMode::eConfig );
+				m_frameBuffer->Bind();
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
+				m_frameBuffer->SetDrawBuffer( m_colourAttach );
 				l_return = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
@@ -440,7 +441,7 @@ namespace Castor3D
 
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->Bind();
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 			m_frameBuffer->Cleanup();
@@ -464,14 +465,14 @@ namespace Castor3D
 
 	String PickingPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return String{};
 	}
 
 	String PickingPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -503,7 +504,8 @@ namespace Castor3D
 	}
 
 	void PickingPass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		RemFlag( p_programFlags, ProgramFlag::eLighting );
 		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
@@ -528,8 +530,10 @@ namespace Castor3D
 		{
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eBack );
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
 			auto & l_pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
 					, std::move( l_rsState )
 					, BlendState{}
 					, MultisampleState{}

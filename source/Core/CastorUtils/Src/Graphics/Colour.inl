@@ -14,18 +14,18 @@ namespace Castor
 	template< typename ComponentType >
 	bool ColourT< ComponentType >::TextLoader::operator()( ColourT< ComponentType > & p_colour, TextFile & p_file )
 	{
-		bool l_return;
+		bool l_result;
 		String l_strLine;
-		l_return = p_file.ReadLine( l_strLine, 1024 ) > 0;
+		l_result = p_file.ReadLine( l_strLine, 1024 ) > 0;
 		StringArray l_arraySplitted;
 
-		if ( l_return )
+		if ( l_result )
 		{
 			l_arraySplitted = string::split( l_strLine, cuT( " \t,;" ) );
-			l_return = l_arraySplitted.size() >= size_t( Component::eCount );
+			l_result = l_arraySplitted.size() >= size_t( Component::eCount );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			while ( l_arraySplitted.size() > size_t( Component::eCount ) )
 			{
@@ -38,7 +38,7 @@ namespace Castor
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -66,9 +66,9 @@ namespace Castor
 			l_streamWord << l_component.value();
 		}
 
-		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
-		Castor::TextWriter< ColourT >::CheckError( l_return, "ColourT value" );
-		return l_return;
+		bool l_result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
+		Castor::TextWriter< ColourT >::CheckError( l_result, "ColourT value" );
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -138,14 +138,14 @@ namespace Castor
 		}
 
 		MapIt l_it = l_mapNames.find( p_predefined );
-		String l_return = cuT( "black" );
+		String l_result = cuT( "black" );
 
 		if ( l_it != l_mapNames.end() )
 		{
-			l_return = l_it->second;
+			l_result = l_it->second;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	PredefinedColour get_predefined( String const & p_name )
@@ -213,14 +213,14 @@ namespace Castor
 		}
 
 		MapIt l_it = l_mapNames.find( p_name );
-		PredefinedColour l_return = PredefinedColour::eOpaqueBlack;
+		PredefinedColour l_result = PredefinedColour::eOpaqueBlack;
 
 		if ( l_it != l_mapNames.end() )
 		{
-			l_return = l_it->second;
+			l_result = l_it->second;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	template< typename ComponentType >
@@ -557,14 +557,14 @@ namespace Castor
 	template< typename ComponentType >
 	bool operator==( ColourT< ComponentType > const & p_clrA, ColourT< ComponentType > const & p_clrB )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
-		for ( uint8_t i = 0; i < uint8_t( Component::eCount ) && l_return; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Component::eCount ) && l_result; i++ )
 		{
-			l_return = p_clrA[Component( i )] == p_clrB[Component( i )];
+			l_result = p_clrA[Component( i )] == p_clrB[Component( i )];
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	template< typename ComponentType >
@@ -591,124 +591,124 @@ namespace Castor
 
 	Point3ub rgb_byte( ColourT< ColourComponent > const & p_colour )
 	{
-		Point3ub l_return;
-		p_colour.get( Component::eRed ).convert_to( l_return[0] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[1] );
-		p_colour.get( Component::eBlue ).convert_to( l_return[2] );
-		return l_return;
+		Point3ub l_result;
+		p_colour.get( Component::eRed ).convert_to( l_result[0] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[1] );
+		p_colour.get( Component::eBlue ).convert_to( l_result[2] );
+		return l_result;
 	}
 
 	Point3ub bgr_byte( ColourT< ColourComponent > const & p_colour )
 	{
-		Point3ub l_return;
-		p_colour.get( Component::eBlue ).convert_to( l_return[0] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[1] );
-		p_colour.get( Component::eRed ).convert_to( l_return[2] );
-		return l_return;
+		Point3ub l_result;
+		p_colour.get( Component::eBlue ).convert_to( l_result[0] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[1] );
+		p_colour.get( Component::eRed ).convert_to( l_result[2] );
+		return l_result;
 	}
 
 	Point4ub rgba_byte( ColourT< ColourComponent > const & p_colour )
 	{
-		Point4ub l_return;
-		p_colour.get( Component::eRed ).convert_to( l_return[0] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[1] );
-		p_colour.get( Component::eBlue ).convert_to( l_return[2] );
-		p_colour.get( Component::eAlpha ).convert_to( l_return[3] );
-		return l_return;
+		Point4ub l_result;
+		p_colour.get( Component::eRed ).convert_to( l_result[0] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[1] );
+		p_colour.get( Component::eBlue ).convert_to( l_result[2] );
+		p_colour.get( Component::eAlpha ).convert_to( l_result[3] );
+		return l_result;
 	}
 
 	Point4ub bgra_byte( ColourT< ColourComponent > const & p_colour )
 	{
-		Point4ub l_return;
-		p_colour.get( Component::eBlue ).convert_to( l_return[0] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[1] );
-		p_colour.get( Component::eRed ).convert_to( l_return[2] );
-		p_colour.get( Component::eAlpha ).convert_to( l_return[3] );
-		return l_return;
+		Point4ub l_result;
+		p_colour.get( Component::eBlue ).convert_to( l_result[0] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[1] );
+		p_colour.get( Component::eRed ).convert_to( l_result[2] );
+		p_colour.get( Component::eAlpha ).convert_to( l_result[3] );
+		return l_result;
 	}
 
 	Point4ub argb_byte( ColourT< ColourComponent > const & p_colour )
 	{
-		Point4ub l_return;
-		p_colour.get( Component::eAlpha ).convert_to( l_return[0] );
-		p_colour.get( Component::eRed ).convert_to( l_return[1] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[2] );
-		p_colour.get( Component::eBlue ).convert_to( l_return[3] );
-		return l_return;
+		Point4ub l_result;
+		p_colour.get( Component::eAlpha ).convert_to( l_result[0] );
+		p_colour.get( Component::eRed ).convert_to( l_result[1] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[2] );
+		p_colour.get( Component::eBlue ).convert_to( l_result[3] );
+		return l_result;
 	}
 
 	Point4ub abgr_byte( ColourT< ColourComponent > const & p_colour )
 	{
-		Point4ub l_return;
-		p_colour.get( Component::eAlpha ).convert_to( l_return[0] );
-		p_colour.get( Component::eBlue ).convert_to( l_return[1] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[2] );
-		p_colour.get( Component::eRed ).convert_to( l_return[3] );
-		return l_return;
+		Point4ub l_result;
+		p_colour.get( Component::eAlpha ).convert_to( l_result[0] );
+		p_colour.get( Component::eBlue ).convert_to( l_result[1] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[2] );
+		p_colour.get( Component::eRed ).convert_to( l_result[3] );
+		return l_result;
 	}
 
 	template< typename ComponentType >
 	Point3f rgb_float( ColourT< ComponentType > const & p_colour )
 	{
-		Point3f l_return;
-		p_colour.get( Component::eRed ).convert_to( l_return[0] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[1] );
-		p_colour.get( Component::eBlue ).convert_to( l_return[2] );
-		return l_return;
+		Point3f l_result;
+		p_colour.get( Component::eRed ).convert_to( l_result[0] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[1] );
+		p_colour.get( Component::eBlue ).convert_to( l_result[2] );
+		return l_result;
 	}
 
 	template< typename ComponentType >
 	Point3f bgr_float( ColourT< ComponentType > const & p_colour )
 	{
-		Point3f l_return;
-		p_colour.get( Component::eBlue ).convert_to( l_return[0] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[1] );
-		p_colour.get( Component::eRed ).convert_to( l_return[2] );
-		return l_return;
+		Point3f l_result;
+		p_colour.get( Component::eBlue ).convert_to( l_result[0] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[1] );
+		p_colour.get( Component::eRed ).convert_to( l_result[2] );
+		return l_result;
 	}
 
 	template< typename ComponentType >
 	Point4f rgba_float( ColourT< ComponentType > const & p_colour )
 	{
-		Point4f l_return;
-		p_colour.get( Component::eRed ).convert_to( l_return[0] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[1] );
-		p_colour.get( Component::eBlue ).convert_to( l_return[2] );
-		p_colour.get( Component::eAlpha ).convert_to( l_return[3] );
-		return l_return;
+		Point4f l_result;
+		p_colour.get( Component::eRed ).convert_to( l_result[0] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[1] );
+		p_colour.get( Component::eBlue ).convert_to( l_result[2] );
+		p_colour.get( Component::eAlpha ).convert_to( l_result[3] );
+		return l_result;
 	}
 
 	template< typename ComponentType >
 	Point4f argb_float( ColourT< ComponentType > const & p_colour )
 	{
-		Point4f l_return;
-		p_colour.get( Component::eAlpha ).convert_to( l_return[0] );
-		p_colour.get( Component::eRed ).convert_to( l_return[1] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[2] );
-		p_colour.get( Component::eBlue ).convert_to( l_return[3] );
-		return l_return;
+		Point4f l_result;
+		p_colour.get( Component::eAlpha ).convert_to( l_result[0] );
+		p_colour.get( Component::eRed ).convert_to( l_result[1] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[2] );
+		p_colour.get( Component::eBlue ).convert_to( l_result[3] );
+		return l_result;
 	}
 
 	template< typename ComponentType >
 	Point4f abgr_float( ColourT< ComponentType > const & p_colour )
 	{
-		Point4f l_return;
-		p_colour.get( Component::eAlpha ).convert_to( l_return[0] );
-		p_colour.get( Component::eBlue ).convert_to( l_return[1] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[2] );
-		p_colour.get( Component::eRed ).convert_to( l_return[3] );
-		return l_return;
+		Point4f l_result;
+		p_colour.get( Component::eAlpha ).convert_to( l_result[0] );
+		p_colour.get( Component::eBlue ).convert_to( l_result[1] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[2] );
+		p_colour.get( Component::eRed ).convert_to( l_result[3] );
+		return l_result;
 	}
 
 	template< typename ComponentType >
 	Point4f bgra_float( ColourT< ComponentType > const & p_colour )
 	{
-		Point4f l_return;
-		p_colour.get( Component::eBlue ).convert_to( l_return[0] );
-		p_colour.get( Component::eGreen ).convert_to( l_return[1] );
-		p_colour.get( Component::eRed ).convert_to( l_return[2] );
-		p_colour.get( Component::eAlpha ).convert_to( l_return[3] );
-		return l_return;
+		Point4f l_result;
+		p_colour.get( Component::eBlue ).convert_to( l_result[0] );
+		p_colour.get( Component::eGreen ).convert_to( l_result[1] );
+		p_colour.get( Component::eRed ).convert_to( l_result[2] );
+		p_colour.get( Component::eAlpha ).convert_to( l_result[3] );
+		return l_result;
 	}
 
 	uint32_t rgb_packed( ColourT< ColourComponent > const & p_colour )

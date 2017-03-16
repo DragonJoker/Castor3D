@@ -115,7 +115,9 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor::LightCategory::Update
 		 */
-		C3D_API void Update( Castor::Point3r const & p_target, int32_t p_index = -1 )override;
+		C3D_API void Update( Castor::Point3r const & p_target
+			, Viewport & p_viewport
+			, int32_t p_index = -1 )override;
 		/**
 		 *\copydoc		Castor::LightCategory::CreateTextLoader
 		 */
@@ -135,15 +137,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		Sets the shadow map rendering viewport.
-		 *\param[in]	p_value	The new value.
+		 *\return		The light space transformation matrix.
 		 *\~french
-		 *\return		Définit le viewport de rendu de shadow map.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\return		La matrice de transformation de la lumière.
 		 */
-		inline void SetViewport( Viewport & p_value )
+		inline Castor::Matrix4x4f const & GetLightSpaceTransform()const
 		{
-			m_viewport = &p_value;
+			return m_lightSpace;
 		}
 
 	private:
@@ -163,9 +163,6 @@ namespace Castor3D
 		//!\~english	The light source space transformation matrix.
 		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
 		mutable Castor::Matrix4x4f m_lightSpace;
-		//!\~english	The shadow map rendering viewport.
-		//\~french		Le viewport de rendu de la mp d'ombres.
-		Viewport * m_viewport{ nullptr };
 	};
 }
 

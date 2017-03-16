@@ -71,4 +71,9 @@ namespace GlES3Render
 
 		m_glAttachmentPoint = GlES3AttachmentPoint::eNone;
 	}
+
+	void GlES3CubeTextureFaceAttachment::DoClear( BufferComponent p_component )const
+	{
+		GetOpenGl().Clear( GetOpenGl().GetComponents( p_component ) );
+	}
 }

@@ -66,4 +66,9 @@ namespace GlRender
 
 		m_glAttachmentPoint = GlAttachmentPoint::eNone;
 	}
+
+	void GlCubeTextureFaceAttachment::DoClear( BufferComponent p_component )const
+	{
+		GetOpenGl().Clear( GetOpenGl().GetComponents( p_component ) );
+	}
 }

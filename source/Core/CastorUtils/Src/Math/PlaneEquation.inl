@@ -71,7 +71,7 @@ namespace Castor
 	template< typename T >
 	bool PlaneEquation< T >::Intersects( PlaneEquation< T > const & p_plane, Line3D<T> & p_line )const
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( ! IsParallel( p_plane ) )
 		{
@@ -94,16 +94,16 @@ namespace Castor
 				p_line = Line3D< T >::FromPointAndSlope( l_point, l_normal );
 			}
 
-			l_return = true;
+			l_result = true;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T >
 	bool PlaneEquation< T >::Intersects( PlaneEquation< T > const & p_plane1, PlaneEquation< T > const & p_plane2, Point<T, 3> & p_intersection )const
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( ! IsParallel( p_plane1 ) && ! IsParallel( p_plane2 ) && ! p_plane1.IsParallel( p_plane2 ) )
 		{
@@ -129,11 +129,11 @@ namespace Castor
 				p_intersection[0] = x;
 				p_intersection[1] = y;
 				p_intersection[2] = z;
-				l_return = true;
+				l_result = true;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T >
@@ -145,16 +145,16 @@ namespace Castor
 	template< typename T >
 	bool operator==( PlaneEquation< T > const & p_a, PlaneEquation< T > const & p_b )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( p_a.IsParallel( p_b ) )
 		{
 			T l_ratioA = p_a.m_normal[0] / p_b.m_normal[0];
 			T l_ratioD = p_a.m_d / p_b.m_d;
-			l_return = PlaneEquation< T >::policy::equals( l_ratioA, l_ratioD );
+			l_result = PlaneEquation< T >::policy::equals( l_ratioA, l_ratioD );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	template< typename T >

@@ -45,7 +45,7 @@ namespace forward_msaa
 	class RenderTechnique
 		:	public Castor3D::RenderTechnique
 	{
-	protected:
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -59,8 +59,6 @@ namespace forward_msaa
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
 		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -86,14 +84,6 @@ namespace forward_msaa
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoCreate
-		 */
-		bool DoCreate()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
-		 */
-		void DoDestroy()override;
-		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
 		bool DoInitialise( uint32_t & p_index )override;
@@ -102,29 +92,13 @@ namespace forward_msaa
 		 */
 		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderOpaque
 		 */
-		void DoBeginRender()override;
+		void DoRenderOpaque( uint32_t & p_visible )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderTransparent
 		 */
-		void DoBeginOpaqueRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
-		 */
-		void DoEndOpaqueRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
-		 */
-		void DoBeginTransparentRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
-		 */
-		void DoEndTransparentRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
-		 */
-		void DoEndRender()override;
+		void DoRenderTransparent( uint32_t & p_visible )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
@@ -135,19 +109,26 @@ namespace forward_msaa
 		static Castor::String const Name;
 
 	protected:
-		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplé
+		//!\~english The multisampled frame buffer.
+		//!\~french Le tampon d'image multisamplé.
 		Castor3D::FrameBufferSPtr m_msFrameBuffer;
-		//!\~english The buffer receiving the multisampled color render	\~french Le tampon recevant le rendu couleur multisamplé
-		Castor3D::ColourRenderBufferSPtr m_pMsColorBuffer;
-		//!\~english The buffer receiving the multisampled depth render	\~french Le tampon recevant le rendu profondeur multisamplé
-		Castor3D::DepthStencilRenderBufferSPtr m_pMsDepthBuffer;
-		//!\~english The attach between multisampled colour buffer and multisampled frame buffer	\~french L'attache entre le tampon couleur multisamplé et le tampon multisamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pMsColorAttach;
-		//!\~english The attach between multisampled depth buffer and multisampled frame buffer	\~french L'attache entre le tampon profondeur multisamplé et le tampon multisamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pMsDepthAttach;
-		//!\~english The samples count	\~french Le nombre de samples
+		//!\~english The buffer receiving the multisampled color render.
+		//!\~french Le tampon recevant le rendu couleur multisamplé.
+		Castor3D::ColourRenderBufferSPtr m_msColourBuffer;
+		//!\~english The buffer receiving the multisampled depth render.
+		//!\~french Le tampon recevant le rendu profondeur multisamplé.
+		Castor3D::DepthStencilRenderBufferSPtr m_msDepthBuffer;
+		//!\~english The attach between multisampled colour buffer and multisampled frame buffer.
+		//!\~french L'attache entre le tampon couleur multisamplé et le tampon multisamplé.
+		Castor3D::RenderBufferAttachmentSPtr m_msColourAttach;
+		//!\~english The attach between multisampled depth buffer and multisampled frame buffer.
+		//!\~french L'attache entre le tampon profondeur multisamplé et le tampon multisamplé.
+		Castor3D::RenderBufferAttachmentSPtr m_msDepthAttach;
+		//!\~english The samples count.
+		//!\~french Le nombre de samples.
 		int m_samplesCount;
-		//!\~english The technique blit rectangle	\~french Le rectangle de blit de la technique
+		//!\~english The technique blit rectangle.
+		//!\~french Le rectangle de blit de la technique.
 		Castor::Rectangle m_rect;
 	};
 }

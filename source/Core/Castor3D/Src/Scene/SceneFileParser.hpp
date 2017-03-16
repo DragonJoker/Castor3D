@@ -29,6 +29,7 @@ SOFTWARE.
 #include <FileParser/FileParserContext.hpp>
 
 #include "Mesh/Submesh.hpp"
+#include "Scene/Skybox.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -137,7 +138,7 @@ namespace Castor3D
 		AnimatedObjectSPtr pAnimMesh;
 		AnimatedObjectSPtr pAnimMovable;
 		AnimationInstanceRPtr pAnimation;
-		SkyboxSPtr pSkybox;
+		SkyboxUPtr pSkybox;
 		ParticleSystemSPtr particleSystem;
 
 	public:

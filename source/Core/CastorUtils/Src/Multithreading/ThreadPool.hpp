@@ -114,6 +114,7 @@ namespace Castor
 		WorkerArray m_available;
 		WorkerArray m_busy;
 		mutable std::mutex m_mutex;
+		std::vector< WorkerThread::OnEnded::connection > m_endConnections;
 	};
 }
 

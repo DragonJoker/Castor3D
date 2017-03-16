@@ -23,15 +23,15 @@ SOFTWARE.
 #ifndef ___C3D_Context_H___
 #define ___C3D_Context_H___
 
-#include "RenderColourCubeToTexture.hpp"
-#include "RenderColourLayerCubeToTexture.hpp"
-#include "RenderColourLayerToTexture.hpp"
-#include "RenderColourToCube.hpp"
-#include "RenderColourToTexture.hpp"
-#include "RenderDepthCubeToTexture.hpp"
-#include "RenderDepthLayerCubeToTexture.hpp"
-#include "RenderDepthLayerToTexture.hpp"
-#include "RenderDepthToTexture.hpp"
+#include "RenderToTexture/RenderColourCubeToTexture.hpp"
+#include "RenderToTexture/RenderColourLayerCubeToTexture.hpp"
+#include "RenderToTexture/RenderColourLayerToTexture.hpp"
+#include "RenderToTexture/RenderColourToCube.hpp"
+#include "RenderToTexture/RenderColourToTexture.hpp"
+#include "RenderToTexture/RenderDepthCubeToTexture.hpp"
+#include "RenderToTexture/RenderDepthLayerCubeToTexture.hpp"
+#include "RenderToTexture/RenderDepthLayerToTexture.hpp"
+#include "RenderToTexture/RenderDepthToTexture.hpp"
 
 #include "Shader/UniformBuffer.hpp"
 
@@ -211,7 +211,8 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API void RenderDepthCube( Castor::Size const & p_size
+		C3D_API void RenderDepthCube( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture );
 		/**
 		 *\~english
@@ -225,7 +226,8 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_index		L'index de la couche.
 		 */
-		C3D_API void RenderDepthCube( Castor::Size const & p_size
+		C3D_API void RenderDepthCube( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, uint32_t p_index );
 		/**
@@ -280,7 +282,8 @@ namespace Castor3D
 			, RenderPipeline & p_pipeline
 			, UniformBuffer & p_matrixUbo )
 		{
-			RenderTexture( Castor::Position{}
+			static Castor::Position const l_position;
+			RenderTexture( l_position
 				, p_size
 				, p_texture
 				, p_pipeline
@@ -299,7 +302,8 @@ namespace Castor3D
 		inline void RenderTexture( Castor::Size const & p_size
 			, TextureLayout const & p_texture )
 		{
-			RenderTexture( Castor::Position{}
+			static Castor::Position const l_position;
+			RenderTexture( l_position
 				, p_size
 				, p_texture );
 		}
@@ -319,7 +323,8 @@ namespace Castor3D
 			, TextureLayout const & p_texture
 			, uint32_t p_index )
 		{
-			RenderTexture( Castor::Position{}
+			static Castor::Position const l_position;
+			RenderTexture( l_position
 				, p_size
 				, p_texture
 				, p_index );
@@ -337,7 +342,8 @@ namespace Castor3D
 		inline void RenderDepth( Castor::Size const & p_size
 			, TextureLayout const & p_texture )
 		{
-			RenderDepth( Castor::Position{}
+			static Castor::Position const l_position;
+			RenderDepth( l_position
 				, p_size
 				, p_texture );
 		}
@@ -357,7 +363,48 @@ namespace Castor3D
 			, TextureLayout const & p_texture
 			, uint32_t p_index )
 		{
-			RenderDepth( Castor::Position{}
+			static Castor::Position const l_position;
+			RenderDepth( l_position
+				, p_size
+				, p_texture
+				, p_index );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the given depth cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\~french
+		 *\brief		Rend la texture cube de profondeur donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 */
+		inline void RenderDepthCube( Castor::Size const & p_size
+			, TextureLayout const & p_texture )
+		{
+			static Castor::Position const l_position;
+			RenderDepth( l_position
+				, p_size
+				, p_texture );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_index		The layer index.
+		 *\~french
+		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_index		L'index de la couche.
+		 */
+		inline void RenderDepthCube( Castor::Size const & p_size
+			, TextureLayout const & p_texture
+			, uint32_t p_index )
+		{
+			static Castor::Position const l_position;
+			RenderDepth( l_position
 				, p_size
 				, p_texture
 				, p_index );

@@ -176,6 +176,9 @@ namespace Castor
 		//!\~english	Depth 32 bits floating point.
 		//!\~french		Profondeur en float 32 bits.
 		eD32F,
+		//!\~english	Depth 32 bits floating point, Stencil 8 bits.
+		//!\~french		Profondeur en float 32 bits, Stencil 8 bits.
+		eD32FS8,
 		//!\~english	Stencil 1 bit.
 		//!\~french		Stencil 1 bit.
 		eS1,

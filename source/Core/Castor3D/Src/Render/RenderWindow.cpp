@@ -22,10 +22,7 @@
 #include "Miscellaneous/WindowHandle.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Shader/Uniform.hpp"
 
@@ -422,7 +419,7 @@ namespace Castor3D
 		}
 
 		m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
-		m_backBuffers->Clear();
+		m_backBuffers->Clear( BufferComponent::eColour );
 		m_context->RenderTexture( m_size, *l_texture );
 		m_backBuffers->Unbind();
 	}

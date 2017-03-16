@@ -104,9 +104,13 @@ namespace Castor3D
 		 */
 		int32_t DoGetMaxPasses()const override;
 		/**
+		 *\copydoc		Castor3D::ShadowMap::DoGetSize
+		 */
+		Castor::Size DoGetSize()const override;
+		/**
 		 *\copydoc		Castor3D::ShadowMap::DoInitialise
 		 */
-		void DoInitialise( Castor::Size const & p_size )override;
+		void DoInitialise()override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoCleanup
 		 */
@@ -119,13 +123,14 @@ namespace Castor3D
 		 *\copydoc		Castor3D::ShadowMap::DoUpdateFlags
 		 */
 		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags )const override;
+			, ProgramFlags & p_programFlags
+			, SceneFlags & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
 		 */
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 
 	private:
 		//!\~english	The attach between depth buffer and main frame buffer.

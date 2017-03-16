@@ -145,7 +145,7 @@ namespace Castor
 
 	bool File::IsOk()const
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( m_file )
 		{
@@ -153,12 +153,12 @@ namespace Castor
 			{
 				if ( feof( m_file ) == 0 )
 				{
-					l_return = true;
+					l_result = true;
 				}
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	long long File::Tell()
@@ -227,23 +227,23 @@ namespace Castor
 
 	bool File::DeleteFile( Path const & p_file )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( FileExists( p_file ) )
 		{
-			l_return = std::remove( string::string_cast< char >( p_file ).c_str() ) == 0;
+			l_result = std::remove( string::string_cast< char >( p_file ).c_str() ) == 0;
 		}
 		else
 		{
-			l_return = true;
+			l_result = true;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool File::CopyFile( Path const & p_file, Path const & p_folder )
 	{
-		bool l_return = false;
+		bool l_result = false;
 		Path l_file{ p_folder / p_file.GetFileName() + cuT( "." ) + p_file.GetExtension() };
 		std::ifstream l_src( string::string_cast< char >( p_file ), std::ios::binary );
 
@@ -254,7 +254,7 @@ namespace Castor
 			if ( l_src.is_open() )
 			{
 				l_dst << l_src.rdbuf();
-				l_return = true;
+				l_result = true;
 			}
 			else
 			{
@@ -266,6 +266,6 @@ namespace Castor
 			Logger::LogWarning( cuT( "CopyFile - Can't open source file : " ) + p_file );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

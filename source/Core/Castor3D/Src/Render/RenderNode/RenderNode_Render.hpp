@@ -29,7 +29,7 @@ namespace Castor3D
 			auto l_index = p_pipeline.GetTexturesCount() + 1;
 			auto l_layer = 0u;
 
-			if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eShadows ) )
+			if ( GetShadowType( p_pipeline.GetFlags().m_sceneFlags ) != GLSL::ShadowType::eNone )
 			{
 				for ( auto & l_depthMap : p_depthMaps )
 				{

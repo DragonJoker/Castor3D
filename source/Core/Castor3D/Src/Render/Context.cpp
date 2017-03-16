@@ -175,8 +175,9 @@ namespace Castor3D
 		// Fill the FBO
 		l_fbo->Create();
 		l_fbo->Initialise( p_size );
-		l_fbo->Bind( FrameBufferMode::eConfig );
+		l_fbo->Bind();
 		l_fbo->Attach( AttachmentPoint::eDepth, l_depthAttach );
+		l_fbo->SetDrawBuffer( l_attachs[0] );
 		REQUIRE( l_fbo->IsComplete() );
 		l_fbo->Unbind();
 		
@@ -252,17 +253,22 @@ namespace Castor3D
 			, p_index );
 	}
 
-	void Context::RenderDepthCube( Castor::Size const & p_size
+	void Context::RenderDepthCube( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture )
 	{
-		m_depthCube.Render( p_size, p_texture );
+		m_depthCube.Render( p_position
+			, p_size
+			, p_texture );
 	}
 
-	void Context::RenderDepthCube( Castor::Size const & p_size
+	void Context::RenderDepthCube( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{
-		m_depthLayerCube.Render( p_size
+		m_depthLayerCube.Render( p_position
+			, p_size
 			, p_texture
 			, p_index );
 	}

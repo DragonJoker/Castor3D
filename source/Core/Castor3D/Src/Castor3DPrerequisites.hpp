@@ -24,7 +24,7 @@ SOFTWARE.
 #define ___C3D_PREREQUISITES_H___
 
 #undef RGB
-#include <CastorUtilsPrerequisites.hpp>
+#include <GlslWriterPrerequisites.hpp>
 
 #if !defined( CASTOR_PLATFORM_WINDOWS )
 #	define C3D_API
@@ -264,6 +264,7 @@ namespace Castor3D
 		eColour,
 		eDepth,
 		eStencil,
+		eDepthStencil,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/*!
@@ -741,7 +742,7 @@ namespace Castor3D
 		GLSL::Float & p_shininess,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags );
+		SceneFlags const & p_sceneFlags );
 
 	C3D_API void ComputePostLightingMapContributions(
 		GLSL::GlslWriter & p_writer,
@@ -751,7 +752,7 @@ namespace Castor3D
 		GLSL::Vec3 & p_emissive,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags );
+		SceneFlags const & p_sceneFlags );
 }
 
 DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine )

@@ -4,6 +4,7 @@
 #include "Cache/ShaderCache.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -48,7 +49,7 @@ namespace Castor3D
 	{
 	}
 
-	bool ShadowMap::Initialise( Size const & p_size )
+	bool ShadowMap::Initialise()
 	{
 		bool l_return = true;
 
@@ -56,23 +57,19 @@ namespace Castor3D
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			l_return = m_frameBuffer->Create();
+			auto l_size = DoGetSize();
 
 			if ( l_return )
 			{
-				l_return = m_frameBuffer->Initialise( p_size );
+				l_return = m_frameBuffer->Initialise( l_size );
 			}
 
 			if ( l_return )
 			{
-				DoInitialise( p_size );
-				
-				for ( auto & l_it : m_passes )
-				{
-					l_it.second->Initialise( p_size );
-				}
+				DoInitialise();
 			}
 
-			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->Bind();
 			m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
 			m_frameBuffer->Unbind();
 		}
@@ -89,7 +86,7 @@ namespace Castor3D
 
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::eConfig );
+			m_frameBuffer->Bind();
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 
@@ -110,21 +107,32 @@ namespace Castor3D
 
 	void ShadowMap::AddLight( Light & p_light )
 	{
-		m_passes.emplace( &p_light, DoCreatePass( p_light ) );
+		auto l_pass = DoCreatePass( p_light );
+		auto l_size = DoGetSize();
+		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+			, [l_pass, l_size]()
+			{
+				l_pass->Initialise( l_size );
+			} ) );
+		m_passes.emplace( &p_light, l_pass );
 	}
 
 	void ShadowMap::UpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags )const
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
 	{
 		RemFlag( p_programFlags, ProgramFlag::eLighting );
 		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
-		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll ) & ~uint16_t( TextureChannel::eOpacity ) ) );
-		DoUpdateFlags( p_textureFlags, p_programFlags );
+		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll )
+			& ~uint16_t( TextureChannel::eOpacity ) ) );
+		DoUpdateFlags( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags );
 	}
 
 	String ShadowMap::GetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
 		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
@@ -132,21 +140,21 @@ namespace Castor3D
 
 	String ShadowMap::GetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
 	String ShadowMap::GetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return DoGetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
 	String ShadowMap::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags
+		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
 		using namespace GLSL;
@@ -250,7 +258,7 @@ namespace Castor3D
 
 	String ShadowMap::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, uint8_t p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags )const
 	{
 		return String{};
 	}

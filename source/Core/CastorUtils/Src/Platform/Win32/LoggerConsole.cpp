@@ -189,7 +189,7 @@ namespace Castor
 	private:
 		static BOOL __stdcall DoCodePageProc( xchar * szCodePage )
 		{
-			BOOL l_return = TRUE;
+			BOOL l_result = TRUE;
 			String l_codePage( szCodePage );
 			int l_cp = stoi( l_codePage );
 
@@ -197,10 +197,10 @@ namespace Castor
 			{
 				::SetConsoleCP( l_cp );
 				::SetConsoleOutputCP( l_cp );
-				l_return = FALSE;
+				l_result = FALSE;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 	private:
@@ -294,7 +294,7 @@ namespace Castor
 	private:
 		static BOOL __stdcall DoCodePageProc( xchar * szCodePage )
 		{
-			BOOL l_return = TRUE;
+			BOOL l_result = TRUE;
 			String l_codePage( szCodePage );
 			int l_cp = stoi( l_codePage );
 
@@ -302,10 +302,10 @@ namespace Castor
 			{
 				::SetConsoleCP( l_cp );
 				::SetConsoleOutputCP( l_cp );
-				l_return = FALSE;
+				l_result = FALSE;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 	private:

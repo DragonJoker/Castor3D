@@ -112,18 +112,16 @@ namespace Castor3D
 		 *\brief		Vide les tampons.
 		 *\param[in]	p_targets	Les tampons à vider (combinaison de BufferComponent).
 		 */
-		C3D_API void Clear( BufferComponents p_targets = 0 );
+		C3D_API void Clear( BufferComponents p_targets );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\param[in]	p_target	The frame buffer binding target
-		 *\param[in]	p_mode		The frame buffer binding mode
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\param[in]	p_target	La cible d'activation du tampon d'image
-		 *\param[in]	p_mode		Le mode d'activation du tampon d'image
 		 */
-		C3D_API void Bind( FrameBufferMode p_mode = FrameBufferMode::eAutomatic, FrameBufferTarget p_target = FrameBufferTarget::eBoth )const;
+		C3D_API void Bind( FrameBufferTarget p_target = FrameBufferTarget::eBoth )const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -173,22 +171,13 @@ namespace Castor3D
 		C3D_API void SetDrawBuffers()const;
 		/**
 		 *\~english
-		 *\brief		Specifies the color buffer to be drawn into
-		 *\param[in]	p_attach	The color buffer
+		 *\brief		Specifies the buffer to be drawn into.
+		 *\param[in]	p_attach	The buffer.
 		 *\~french
-		 *\brief		Définit le tampon de couleur dans lequel le dessin doit être effectué
-		 *\param[in]	p_attach	Le tampon de couleur
+		 *\brief		Définit le tampon de dans lequel le dessin doit être effectué.
+		 *\param[in]	p_attach	Le tampon.
 		 */
-		C3D_API void SetDrawBuffer( TextureAttachmentSPtr p_attach )const;
-		/**
-		 *\~english
-		 *\brief		Specifies the color buffer to be drawn into
-		 *\param[in]	p_attach	The color buffer
-		 *\~french
-		 *\brief		Définit le tampon de couleur dans lequel le dessin doit être effectué
-		 *\param[in]	p_attach	Le tampon de couleur
-		 */
-		C3D_API void SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )const;
+		C3D_API void SetDrawBuffer( FrameBufferAttachmentSPtr p_attach )const;
 		/**
 		 *\~english
 		 *\brief		Attaches a texture to this frame buffer, at given attachment point

@@ -79,6 +79,38 @@ namespace Castor3D
 		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
 		C3D_API void Render( uint32_t & p_visible, bool p_shadows );
+		/**
+		 *\~english
+		 *\return		Initialises the shadow maps.
+		 *\~french
+		 *\return		Initialise les maps de'ombres.
+		 */
+		C3D_API virtual bool InitialiseShadowMaps() = 0;
+		/**
+		 *\~english
+		 *\return		Cleans up the shadow maps.
+		 *\~french
+		 *\return		Nettoie les maps de'ombres.
+		 */
+		C3D_API virtual void CleanupShadowMaps() = 0;
+		/**
+		 *\~english
+		 *\brief		Updates the shadow maps.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\~french
+		 *\brief		Met à jour les maps d'ombres.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 */
+		C3D_API virtual void UpdateShadowMaps( RenderQueueArray & p_queues ) = 0;
+		/**
+		 *\~english
+		 *\brief		Renders the shadow maps.
+		 *\~french
+		 *\brief		Dessine les maps d'ombres.
+		 */
+		C3D_API virtual void RenderShadowMaps() = 0;
 
 	private:
 		/**
@@ -140,7 +172,7 @@ namespace Castor3D
 		 *\brief		Récupère les textures de profondeur pour les noeuds opaques.
 		 *\param[out]	p_depthMaps	Reçoit les textures.
 		 */
-		C3D_API virtual void DoGetDepthMaps( DepthMapArray & p_depthMaps );
+		C3D_API virtual void DoGetDepthMaps( DepthMapArray & p_depthMaps ) = 0;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoInitialise
 		 */
@@ -157,19 +189,20 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
 		C3D_API void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags )const override;
+			, ProgramFlags & p_programFlags
+			, SceneFlags & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
 		C3D_API Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
 		C3D_API Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */

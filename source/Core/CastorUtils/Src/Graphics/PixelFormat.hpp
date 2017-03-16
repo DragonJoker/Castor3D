@@ -87,6 +87,7 @@ namespace Castor
 	template<> struct is_colour_format< PixelFormat::eD24S8 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eD32 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eD32F > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::eD32FS8 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eS1 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eS8 > : public std::false_type {};
 	/**
@@ -102,6 +103,7 @@ namespace Castor
 	template<> struct is_depth_format< PixelFormat::eD24S8 > : public std::true_type {};
 	template<> struct is_depth_format< PixelFormat::eD32 > : public std::true_type {};
 	template<> struct is_depth_format< PixelFormat::eD32F > : public std::true_type {};
+	template<> struct is_depth_format< PixelFormat::eD32FS8 > : public std::true_type {};
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a stencil pixel
@@ -111,6 +113,7 @@ namespace Castor
 	template< PixelFormat PF > struct is_stencil_format : public std::false_type {};
 
 	template<> struct is_stencil_format< PixelFormat::eD24S8 > : public std::true_type {};
+	template<> struct is_stencil_format< PixelFormat::eD32FS8 > : public std::true_type {};
 	template<> struct is_stencil_format< PixelFormat::eS1 > : public std::true_type {};
 	template<> struct is_stencil_format< PixelFormat::eS8 > : public std::true_type {};
 	/**
@@ -126,6 +129,7 @@ namespace Castor
 	template<> struct is_depth_stencil_format< PixelFormat::eD24S8 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eD32 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eD32F > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::eD32FS8 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eS1 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eS8 > : public std::true_type {};
 
@@ -134,12 +138,21 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Function to retrieve Pixel size without templates
-		 *\param[in]	p_pfFormat	The pixel format
+		 *\param[in]	p_format	The pixel format
 		 *\~french
 		 *\brief		Fonction de récuperation de la taille d'un pixel sans templates
-		 *\param[in]	p_pfFormat	Le format de pixels
+		 *\param[in]	p_format	Le format de pixels
 		 */
-		CU_API uint8_t GetBytesPerPixel( PixelFormat p_pfFormat );
+		CU_API uint8_t GetBytesPerPixel( PixelFormat p_format );
+		/**
+		 *\~english
+		 *\brief		Function to retrieve the number of components of a pixel format.
+		 *\param[in]	p_format	The pixel format
+		 *\~french
+		 *\brief		Fonction de récuperation du nombre de composantes d'un format de pixel.
+		 *\param[in]	p_format	Le format de pixels
+		 */
+		CU_API uint8_t GetComponentsCount( PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel format from a name

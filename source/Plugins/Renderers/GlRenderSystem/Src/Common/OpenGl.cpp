@@ -269,6 +269,7 @@ namespace GlRender
 		PixelFormats[uint32_t( Castor::PixelFormat::eD24S8 )] = PixelFmt( GlFormat::eDepthStencil, GlInternal::eD24S8, GlType::eUnsignedInt248 );
 		PixelFormats[uint32_t( Castor::PixelFormat::eD32 )] = PixelFmt( GlFormat::eDepth, GlInternal::eD32, GlType::eUnsignedByte );
 		PixelFormats[uint32_t( Castor::PixelFormat::eD32F )] = PixelFmt( GlFormat::eDepth, GlInternal::eD32, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::eD32FS8 )] = PixelFmt( GlFormat::eDepthStencil, GlInternal::eD32FS8, GlType::eFloat );
 		PixelFormats[uint32_t( Castor::PixelFormat::eS1 )] = PixelFmt( GlFormat::eStencil, GlInternal::eS1, GlType::eUnsignedByte );
 		PixelFormats[uint32_t( Castor::PixelFormat::eS8 )] = PixelFmt( GlFormat::eStencil, GlInternal::eS8, GlType::eUnsignedByte );
 
@@ -303,6 +304,7 @@ namespace GlRender
 		Attachments[uint32_t( Castor3D::AttachmentPoint::eColour )] = GlAttachmentPoint::eColour0;
 		Attachments[uint32_t( Castor3D::AttachmentPoint::eDepth )] = GlAttachmentPoint::eDepth;
 		Attachments[uint32_t( Castor3D::AttachmentPoint::eStencil )] = GlAttachmentPoint::eStencil;
+		Attachments[uint32_t( Castor3D::AttachmentPoint::eDepthStencil )] = GlAttachmentPoint::eDepthStencil;
 
 		FramebufferModes[uint32_t( Castor3D::FrameBufferTarget::eDraw )] = GlFrameBufferMode::eDraw;
 		FramebufferModes[uint32_t( Castor3D::FrameBufferTarget::eRead )] = GlFrameBufferMode::eRead;
@@ -336,6 +338,7 @@ namespace GlRender
 		RboStorages[uint32_t( Castor::PixelFormat::eD24S8 )] = GlInternal::eD24;
 		RboStorages[uint32_t( Castor::PixelFormat::eD32 )] = GlInternal::eD32;
 		RboStorages[uint32_t( Castor::PixelFormat::eD32F )] = GlInternal::eD32F;
+		RboStorages[uint32_t( Castor::PixelFormat::eD32FS8 )] = GlInternal::eD32FS8;
 		RboStorages[uint32_t( Castor::PixelFormat::eS1 )] = GlInternal::eS1;
 		RboStorages[uint32_t( Castor::PixelFormat::eS8 )] = GlInternal::eS8;
 
@@ -373,11 +376,11 @@ namespace GlRender
 
 		StencilFuncs[uint32_t( Castor3D::StencilFunc::eNever )] = GlComparator::eNever;
 		StencilFuncs[uint32_t( Castor3D::StencilFunc::eLess )] = GlComparator::eLess;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eEqual )] = GlComparator::eLEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eLEqual )] = GlComparator::eEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eGreater )] = GlComparator::eNEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eNEqual )] = GlComparator::eGEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::eGEqual )] = GlComparator::eGreater;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eLEqual )] = GlComparator::eLEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eEqual )] = GlComparator::eEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eNEqual )] = GlComparator::eNEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eGEqual )] = GlComparator::eGEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::eGreater )] = GlComparator::eGreater;
 		StencilFuncs[uint32_t( Castor3D::StencilFunc::eAlways )] = GlComparator::eAlways;
 
 		StencilOps[uint32_t( Castor3D::StencilOp::eKeep )] = GlStencilOp::eKeep;
@@ -393,6 +396,7 @@ namespace GlRender
 		BuffersTA[GlAttachmentPoint::eColour0] = GlBufferBinding::eColor0;
 		BuffersTA[GlAttachmentPoint::eDepth] = GlBufferBinding::eDepth;
 		BuffersTA[GlAttachmentPoint::eStencil] = GlBufferBinding::eStencil;
+		BuffersTA[GlAttachmentPoint::eDepthStencil] = GlBufferBinding::eDepthStencil;
 
 		Queries[uint32_t( Castor3D::QueryType::eTimeElapsed )] = GlQueryType::eTimeElapsed;
 		Queries[uint32_t( Castor3D::QueryType::eSamplesPassed )] = GlQueryType::eSamplesPassed;

@@ -215,13 +215,13 @@ namespace Castor3D
 		 */
 		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
@@ -239,8 +239,9 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
-		void DoUpdateFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
-			, ProgramFlags & p_programFlags )const override;
+		void DoUpdateFlags( TextureChannels & p_textureFlags
+			, ProgramFlags & p_programFlags
+			, SceneFlags & p_sceneFlags )const override;
 
 	private:
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;

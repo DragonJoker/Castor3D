@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -97,7 +97,7 @@ namespace GLSL
 	GLSL_DECLARE_OPERATOR( LhsType, LhsType, RhsType, Operator )
 
 #	define GLSL_DECLARE_BOOLEAN_OPERATOR( LhsType, RhsType, Operator )\
-	GLSL_DECLARE_OPERATOR( GlslBool, LhsType, RhsType, Operator )
+	GLSL_DECLARE_OPERATOR( Boolean, LhsType, RhsType, Operator )
 
 	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, + );
 	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, - );

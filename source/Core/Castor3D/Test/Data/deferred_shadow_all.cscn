@@ -3,7 +3,7 @@ debug_overlays true
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0.5 0.5 0.5 1.0
+	ambient_light 0 0 0 1
 
 	material "Silver"
 	{
@@ -47,30 +47,10 @@ scene "Scene"
 		orientation 1 0 0 45
 	}
 
-	light "Light"
-	{
-		type directional
-		parent "LightNode"
-		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
-		shadow_producer true
-	}
-
 	scene_node "SpotLightNode"
 	{
 		orientation 1 0 0 45
 		position 0.0 100.0 -100.0
-	}
-
-	light "SpotLight"
-	{
-		type spot
-		parent "SpotLightNode"
-		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.01 0.0
-		cut_off 20
-		shadow_producer true
 	}
 
 	scene_node "PointLightNode"
@@ -78,13 +58,33 @@ scene "Scene"
 		position 0.0 100.0 0.0
 	}
 
+	light "Light"
+	{
+		type directional
+		parent "LightNode"
+		colour 1.0 1.0 1.0
+		intensity 0.5 0.8 1.0 1.0
+		shadow_producer true
+	}
+
 	light "PointLight"
 	{
 		type point
 		parent "PointLightNode"
-		colour 1.0 1.0 1.0
+		colour 0.0 1.0 0.0
 		intensity 0.0 0.8 1.0 1.0
-		attenuation 1.0 0.01 0.0
+		attenuation 1.0 0.0001 0.0001
+		shadow_producer true
+	}
+
+	light "SpotLight"
+	{
+		type spot
+		parent "SpotLightNode"
+		colour 1.0 0.0 0.0
+		intensity 0.0 0.8 1.0 1.0
+		attenuation 1.0 0.0001 0.0001
+		cut_off 20
 		shadow_producer true
 	}
 

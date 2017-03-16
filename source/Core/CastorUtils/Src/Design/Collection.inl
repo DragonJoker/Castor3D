@@ -67,19 +67,19 @@ namespace Castor
 	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::find( key_param_type p_key )const
 	{
 		auto l_lock( make_unique_lock( m_mutex ) );
-		TObjSPtr l_return;
+		TObjSPtr l_result;
 		do_update_last( p_key );
 
 		if ( m_last.m_result != m_objects.end() )
 		{
-			l_return = m_last.m_result->second;
+			l_result = m_last.m_result->second;
 		}
 		else
 		{
 			Logger::LogWarning( WARNING_COLLECTION_UNKNOWN_OBJECT + string::to_string( p_key ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename TObj, typename TKey >
 	inline std::size_t Collection< TObj, TKey >::size()const
@@ -92,21 +92,21 @@ namespace Castor
 	{
 		auto l_lock( make_unique_lock( m_mutex ) );
 		TObjPtrMapIt l_it = m_objects.find( p_key );
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( l_it == m_objects.end() )
 		{
 			m_last.m_key = std::move( TKey() );
 			m_objects.insert( value_type( p_key, p_element ) );
 			do_init_last();
-			l_return = true;
+			l_result = true;
 		}
 		else
 		{
 			Logger::LogWarning( WARNING_COLLECTION_DUPLICATE_OBJECT + string::to_string( p_key ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename TObj, typename TKey >
 	inline bool Collection< TObj, TKey >::has( key_param_type p_key )const

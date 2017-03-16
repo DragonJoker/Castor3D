@@ -18,7 +18,7 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Technique/RenderTechniquePass.hpp>
+#include <Technique/ForwardRenderTechniquePass.hpp>
 
 #include <Graphics/FontCache.hpp>
 #include <Graphics/Image.hpp>
@@ -36,8 +36,8 @@ namespace forward
 		: Castor3D::RenderTechnique{ RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
-		, std::make_unique< RenderTechniquePass >( cuT( "forward_opaque" ), p_renderTarget, *this, true, false )
-		, std::make_unique< RenderTechniquePass >( cuT( "forward_transparent" ), p_renderTarget, *this, false, false )
+		, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_opaque" ), p_renderTarget, *this, true, false )
+		, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_transparent" ), p_renderTarget, *this, false, false )
 			, p_params }
 	{
 		Logger::LogInfo( "Using Forward rendering" );
@@ -53,15 +53,6 @@ namespace forward
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
-	bool RenderTechnique::DoCreate()
-	{
-		return true;
-	}
-
-	void RenderTechnique::DoDestroy()
-	{
-	}
-
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		return true;
@@ -71,31 +62,23 @@ namespace forward
 	{
 	}
 
-	void RenderTechnique::DoBeginRender()
+	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
 	{
-		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_opaquePass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
-		m_frameBuffer.m_frameBuffer->Clear();
+		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
+		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 	}
 
-	void RenderTechnique::DoBeginOpaqueRendering()
+	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
 	{
-	}
-
-	void RenderTechnique::DoEndOpaqueRendering()
-	{
-	}
-
-	void RenderTechnique::DoBeginTransparentRendering()
-	{
-	}
-
-	void RenderTechnique::DoEndTransparentRendering()
-	{
-	}
-
-	void RenderTechnique::DoEndRender()
-	{
+		m_frameBuffer.m_frameBuffer->Unbind();
+		m_transparentPass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
 #if DEBUG_BUFFERS
@@ -107,11 +90,11 @@ namespace forward
 			Path l_name{ Engine::GetEngineDirectory() };
 			l_name /= cuT( "ColourBuffer_Technique_Unbind.png" );
 			Image::BinaryWriter()( Image{ cuT( "tmp" )
-										  , m_frameBuffer.m_colourTexture->GetImage().GetDimensions()
-										  , PixelFormat::eR8G8B8
-										  , l_buffer
-										  , m_frameBuffer.m_colourTexture->GetImage().GetPixelFormat() }
-								   , l_name );
+				, m_frameBuffer.m_colourTexture->GetImage().GetDimensions()
+				, PixelFormat::eR8G8B8
+				, l_buffer
+				, m_frameBuffer.m_colourTexture->GetImage().GetPixelFormat() }
+			, l_name );
 			m_frameBuffer.m_colourTexture->Unlock( 0u, false );
 		}
 

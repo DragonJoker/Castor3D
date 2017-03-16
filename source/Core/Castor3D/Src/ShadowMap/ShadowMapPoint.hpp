@@ -45,11 +45,9 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_scene		The scene.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_scene		La scène.
 		 */
 		C3D_API ShadowMapPoint( Engine & p_engine );
 		/**
@@ -129,9 +127,13 @@ namespace Castor3D
 		 */
 		int32_t DoGetMaxPasses()const override;
 		/**
+		 *\copydoc		Castor3D::ShadowMap::DoGetSize
+		 */
+		Castor::Size DoGetSize()const override;
+		/**
 		 *\copydoc		Castor3D::ShadowMap::DoInitialise
 		 */
-		void DoInitialise( Castor::Size const & p_size )override;
+		void DoInitialise()override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoCleanup
 		 */
@@ -144,32 +146,40 @@ namespace Castor3D
 		 *\copydoc		Castor3D::ShadowMap::DoUpdateFlags
 		 */
 		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags )const override;
+			, ProgramFlags & p_programFlags
+			, SceneFlags & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetVertexShaderSource
 		 */
 		Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags
+			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetGeometryShaderSource
 		 */
 		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
 		 */
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 
 	private:
-		using CubeAttachments = std::array< TextureAttachmentSPtr, 6u >;
+		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
+		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
 		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		std::vector< TextureAttachmentSPtr > m_depthAttach;
+		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
+		CubeDepthAttachment m_depthAttach;
+		//!\~english	The depth buffer.
+		//!\~french		Le tampon de profondeur.
+		DepthStencilRenderBufferSPtr m_depthBuffer;
+		//!\~english	The attach between colour buffer and main frame buffer.
+		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
+		std::vector< CubeColourAttachment > m_colourAttachs;
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
 		std::vector< TextureUnit > m_shadowMaps;

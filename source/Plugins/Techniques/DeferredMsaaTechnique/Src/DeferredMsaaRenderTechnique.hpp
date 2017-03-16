@@ -28,22 +28,10 @@ SOFTWARE.
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
 
+#include <LightPass.hpp>
+
 namespace deferred_msaa
 {
-	using Castor3D::Uniform3r;
-
-	enum class DsTexture
-		: uint8_t
-	{
-		ePosition,
-		eDiffuse,
-		eNormals,
-		eTangent,
-		eSpecular,
-		eEmissive,
-		eInfos,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
-	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -62,10 +50,7 @@ namespace deferred_msaa
 	class RenderTechnique
 		: public Castor3D::RenderTechnique
 	{
-	protected:
-		DECLARE_SMART_PTR( Uniform3r );
-
-	protected:
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -79,8 +64,6 @@ namespace deferred_msaa
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
 		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -106,14 +89,6 @@ namespace deferred_msaa
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoCreate
-		 */
-		bool DoCreate()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
-		 */
-		void DoDestroy()override;
-		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
 		bool DoInitialise( uint32_t & p_index )override;
@@ -122,89 +97,17 @@ namespace deferred_msaa
 		 */
 		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderOpaque
 		 */
-		void DoBeginRender()override;
+		void DoRenderOpaque( uint32_t & p_visible )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
+		 *\copydoc		Castor3D::RenderTechnique::DoRenderTransparent
 		 */
-		void DoBeginOpaqueRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
-		 */
-		void DoEndOpaqueRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
-		 */
-		void DoBeginTransparentRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
-		 */
-		void DoEndTransparentRendering()override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
-		 */
-		void DoEndRender()override;
+		void DoRenderTransparent( uint32_t & p_visible )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
-		 */
-		Castor::String DoGetLightPassVertexShaderSource(
-			Castor3D::TextureChannels const & p_textureFlags,
-			Castor3D::ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_textureFlags	A combination of TextureChannel
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
-		 */
-		Castor::String DoGetLightPassPixelShaderSource(
-			Castor3D::TextureChannels const & p_textureFlags,
-			Castor3D::ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags )const;
-		/**
-		 *\~english
-		 *\brief		Creates deferred rendering related stuff.
-		 *\return		\p false if anything went wrong (the technique is then not usable).
-		 *\~french
-		 *\brief		Crée les données liées au deferred rendering.
-		 *\return		\p false si un problème est survenu, la technique est alors inutilisable.
-		 */
-		bool DoCreateDeferred();
-		/**
-		 *\~english
-		 *\brief		Creates MSAA related stuff.
-		 *\return		\p false if anything went wrong (the technique is then not usable).
-		 *\~french
-		 *\brief		Crée les données liées au MSAA.
-		 *\return		\p false si un problème est survenu, la technique est alors inutilisable.
-		 */
-		bool DoCreateMsaa();
-		/**
-		 *\~english
-		 *\brief		Destroys deferred rendering related stuff.
-		 *\~french
-		 *\brief		Détruit les données liées au deferred rendering.
-		 */
-		void DoDestroyDeferred();
-		/**
-		 *\~english
-		 *\brief		Destroys MSAA related stuff.
-		 *\~french
-		 *\brief		Détruit les données liées au MSAA.
-		 */
-		void DoDestroyMsaa();
 		/**
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
@@ -237,58 +140,25 @@ namespace deferred_msaa
 		 *\brief		Détruit les données liées au MSAA.
 		 */
 		void DoCleanupMsaa();
-		/**
-		 *\~english
-		 *\brief		Binds the depth maps, beginning at p_startIndex.
-		 *\param[in]	p_startIndex	The starting index.
-		 *\~french
-		 *\brief		Active les textures de profondeur, en commençant à p_startIndex.
-		 *\param[in]	p_textureFlags	L'index de départ.
-		 */
-		void DoBindDepthMaps( uint32_t p_startIndex );
-		/**
-		 *\~english
-		 *\brief		Unbinds the depth maps, beginning at p_startIndex.
-		 *\param[in]	p_startIndex	The starting index.
-		 *\~french
-		 *\brief		Désactive les textures de profondeur, en commençant à p_startIndex.
-		 *\param[in]	p_textureFlags	L'index de départ.
-		 */
-		void DoUnbindDepthMaps( uint32_t p_startIndex )const;
-		bool DoCreateGeometryPass();
-		bool DoCreateLightPass();
-		void DoDestroyGeometryPass();
-		void DoDestroyLightPass();
-		bool DoInitialiseGeometryPass();
-		bool DoInitialiseLightPass( uint32_t & p_index );
+		bool DoInitialiseGeometryPass( uint32_t & p_index );
+		bool DoInitialiseLightPass();
 		void DoCleanupGeometryPass();
 		void DoCleanupLightPass();
-
-	protected:
-		struct LightPassProgram
-		{
-			//!\~english	The shader program used to render lights.
-			//!\~french		Le shader utilisé pour rendre les lumières.
-			Castor3D::ShaderProgramSPtr m_program;
-			//!\~english	The shader variable containing the camera position.
-			//!\~french		La variable de shader contenant la position de la caméra.
-			Castor3D::Uniform3rSPtr m_camera;
-			//!\~english	Geometry buffers holder.
-			//!\~french		Conteneur de buffers de géométries.
-			Castor3D::GeometryBuffersSPtr m_geometryBuffers;
-			//!\~english	The pipeline used by the light pass.
-			//!\~french		Le pipeline utilisé par la passe lumières.
-			Castor3D::RenderPipelineSPtr m_pipeline;
-		};
+		void DoUpdateSceneUbo();
+		void DoRenderLights( Castor3D::LightType p_type, bool & p_first );
 
 	public:
 		static Castor::String const Type;
 		static Castor::String const Name;
 
-	protected:
+	private:
+		using GeometryBufferTextures = std::array< Castor3D::TextureUnitUPtr, size_t( deferred_common::DsTexture::eCount ) >;
+		using GeometryBufferAttachs = std::array< Castor3D::TextureAttachmentSPtr, size_t( deferred_common::DsTexture::eCount ) >;
+		using LightPasses = std::array< std::unique_ptr< deferred_common::LightPass >, size_t( Castor3D::LightType::eCount ) >;
+
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
-		std::array< Castor3D::TextureUnitSPtr, size_t( DsTexture::eCount ) > m_lightPassTextures;
+		GeometryBufferTextures m_lightPassTextures;
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
 		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;
@@ -297,13 +167,28 @@ namespace deferred_msaa
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english	The attachments between textures and deferred shading frame buffer.
 		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::eCount ) > m_geometryPassTexAttachs;
+		GeometryBufferAttachs m_geometryPassTexAttachs;
 		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
-		//!\~english	The shader program used to render lights.
-		//!\~french		Le shader utilisé pour rendre les lumières.
-		std::array< LightPassProgram, size_t( Castor3D::FogType::eCount ) > m_lightPassShaderPrograms;
+		//!\~english	The uniform buffer containing the scene data.
+		//!\~french		Le tampon d'uniformes contenant les données de scène.
+		Castor3D::UniformBuffer m_sceneUbo;
+		//!\~english	The shader variable holding the camera position.
+		//!\~french		La variable shader contenant la position de la caméra.
+		Castor3D::Uniform3fSPtr m_cameraPos;
+		//!\~english	The shader variable holding fog type.
+		//!\~french		La variable shader contenant le type de brouillard.
+		Castor3D::Uniform1iSPtr m_fogType;
+		//!\~english	The shader variable holding fog density.
+		//!\~french		La variable shader contenant la densité du brouillard.
+		Castor3D::Uniform1fSPtr m_fogDensity;
+		//!\~english	The shader program used to render directional lights.
+		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
+		LightPasses m_lightPass;
+		//!\~english	The shader program used to render directional lights.
+		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
+		LightPasses m_lightPassShadow;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;
@@ -334,18 +219,6 @@ namespace deferred_msaa
 		//!\~english	The technique blit rectangle.
 		//!\~french		Le rectangle de blit de la technique.
 		Castor::Rectangle m_rect;
-		//!\~english	The uniform buffer containing the scene data.
-		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		Castor3D::UniformBuffer m_sceneUbo;
-		//!\~english	The scene render node.
-		//!\~french		Le noeud de rendu de la scène.
-		std::unique_ptr< Castor3D::SceneRenderNode > m_sceneNode;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		Castor3D::UniformBuffer m_matrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform{ nullptr };
 	};
 }
 

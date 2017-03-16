@@ -31,29 +31,61 @@ namespace Castor3D
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
-	\date		31/05/2016
+	\date		08/03/2017
 	\~english
-	\brief		Fog types enumeration.
+	\brief		Scene flags enumeration.
 	\~french
-	\brief		EnumÈration des types de brouillard.
+	\brief		Enum√©ration des indicateurs de sc√®ne.
 	*/
-	enum class FogType
+	enum class SceneFlag
+		: uint16_t
 	{
-		//!\~english	No fog.
-		//!\~french		Pas de brouillard
-		eDisabled,
-		//!\~english	Fog intensity increases linearly with distance to camera.
-		//!\~french		L'intensitÈ du brouillard augmente linÈairement avec la distance ‡ la camÈra.
-		eLinear,
-		//!\~english	Fog intensity increases exponentially with distance to camera.
-		//!\~french		L'intensitÈ du brouillard augmente exponentiellement avec la distance ‡ la camÈra.
-		//!\~french		
-		eExponential,
-		//!\~english	Fog intensity increases even more with distance to camera.
-		//!\~french		L'intensitÈ du brouillard augmente encore plus avec la distance ‡ la camÈra.
-		eSquaredExponential,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
+		//!\~english	No flag.
+		//!\~french		Aucun indicateur.
+		eNone = 0x0000,
+		//!\~english	Linear fog.
+		//!\~french		Brouillard lin√©aire.
+		eFogLinear = 0x0001,
+		//!\~english	Exponential fog.
+		//!\~french		Brouillard exponentiel.
+		eFogExponential = 0x0002,
+		//!\~english	Squared exponential fog.
+		//!\~french		Brouillard exponentiel au carr√©.
+		eFogSquaredExponential = 0x0003,
+		//!\~english	No filtering.
+		//!\~french		Pas de filtrage.
+		eShadowFilterRaw = 0x0004,
+		//!\~english	Poisson filtering.
+		//!\~french		Filtrage poisson.
+		eShadowFilterPoisson = 0x0008,
+		//!\~english	Stratified poisson filtering.
+		//!\~french		Filtrage poisson stratifi√©.
+		eShadowFilterStratifiedPoisson = 0x000C,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
+	IMPLEMENT_FLAGS( SceneFlag )
+	/**
+	 *\~english
+	 *\brief		Gives the shadow filter type matching the given flags.
+	 *\param[in]	p_flags	The scene flags.
+	 *\return		The shadow filter type.
+	 *\~french
+	 *\brief		R√©cup√®re le type de filtrage d'ombres correspondant aux indicateurs donn√©s.
+	 *\param[in]	p_flags	Les indicateurs de sc√®ne.
+	 *\return		Le type de filtrage d'ombres.
+	 */
+	C3D_API GLSL::ShadowType GetShadowType( SceneFlags const & p_flags );
+	/**
+	 *\~english
+	 *\brief		Gives the fog type matching the given flags.
+	 *\param[in]	p_flags	The scene flags.
+	 *\return		The fog type.
+	 *\~french
+	 *\brief		R√©cup√®re le type de brouillard correspondant aux indicateurs donn√©s.
+	 *\param[in]	p_flags	Les indicateurs de sc√®ne.
+	 *\return		Le type de brouillard.
+	 */
+	C3D_API GLSL::FogType GetFogType( SceneFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -61,12 +93,12 @@ namespace Castor3D
 	\~english
 	\brief		Billboard rendering types enumeration.
 	\~french
-	\brief		EnumÈration des types de rendu des billboards.
+	\brief		Enum√©ration des types de rendu des billboards.
 	*/
 	enum class BillboardType
 	{
 		//!\~english	Billboards always face the camera.
-		//!\~french		Les billboards font toujours face ‡ la camÈra.
+		//!\~french		Les billboards font toujours face √† la cam√©ra.
 		eSpherical,
 		//!\~english	Billboards rotate only on Y axis.
 		//!\~french		Les billboards tournent uniquement sur l'axe Y.
@@ -80,12 +112,12 @@ namespace Castor3D
 	\~english
 	\brief		Billboard sizing types enumeration.
 	\~french
-	\brief		EnumÈration des types de dimensions des billboards.
+	\brief		Enum√©ration des types de dimensions des billboards.
 	*/
 	enum class BillboardSize
 	{
 		//!\~english	Billboards size changes with camera position.
-		//!\~french		Les dimensions des billboards changent en fonction de la position de la camÈra.
+		//!\~french		Les dimensions des billboards changent en fonction de la position de la cam√©ra.
 		eDynamic,
 		//!\~english	Billboards size doesn't change.
 		//!\~french		Les dimensions des billboards ne changent pas.

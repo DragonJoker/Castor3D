@@ -123,7 +123,7 @@ namespace Castor
 
 			virtual bool FindFolder( String const & p_folder )
 			{
-				bool l_return = false;
+				bool l_result = false;
 				//std::string l_folder = string::string_cast< char >( p_folder );
 
 				////Search for the folder
@@ -138,15 +138,15 @@ namespace Castor
 				//}
 				//else
 				//{
-				//	l_return = true;
+				//	l_result = true;
 				//}
 
-				return l_return;
+				return l_result;
 			}
 
 			virtual bool FindFile( String const & p_file )
 			{
-				bool l_return = false;
+				bool l_result = false;
 				//std::string l_file = string::string_cast< char >( p_file );
 
 				////Search for the folder
@@ -161,10 +161,10 @@ namespace Castor
 				//}
 				//else
 				//{
-				//	l_return = true;
+				//	l_result = true;
 				//}
 
-				return l_return;
+				return l_result;
 			}
 
 			virtual void Deflate( ZipArchive::Folder const & p_folder )
@@ -382,7 +382,7 @@ namespace Castor
 
 	ZipArchive::Folder * ZipArchive::Folder::FindFolder( Path const & p_path )
 	{
-		ZipArchive::Folder * l_return = nullptr;
+		ZipArchive::Folder * l_result = nullptr;
 
 		if ( name.empty() )
 		{
@@ -395,13 +395,13 @@ namespace Castor
 			{
 				// The file is inside a subfolder
 				Folder & l_folder = *l_it;
-				l_return = &l_folder;
+				l_result = &l_folder;
 			}
 		}
 		else if ( p_path == name )
 		{
 			// The file path is this one
-			l_return = this;
+			l_result = this;
 		}
 		else if ( p_path.find( name + Path::Separator ) == 0 )
 		{
@@ -417,16 +417,16 @@ namespace Castor
 			{
 				// The file is inside a subfolder
 				Folder & l_folder = *l_it;
-				l_return = &l_folder;
+				l_result = &l_folder;
 			}
 			else
 			{
 				// This folder is the farthest we can go
-				l_return = this;
+				l_result = this;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ZipArchive::Folder::AddFile( Path const & p_path )
@@ -495,14 +495,14 @@ namespace Castor
 
 	bool ZipArchive::Deflate()const
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( !m_uncompressed.files.empty() || !m_uncompressed.folders.empty() )
 		{
 			try
 			{
 				m_impl->Deflate( m_uncompressed );
-				l_return = true;
+				l_result = true;
 			}
 			catch ( std::exception & exc )
 			{
@@ -510,12 +510,12 @@ namespace Castor
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool ZipArchive::Inflate( Path const & p_folder )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		try
 		{
@@ -528,14 +528,14 @@ namespace Castor
 				AddFile( Path{ *l_it } );
 			}
 
-			l_return = true;
+			l_result = true;
 		}
 		catch ( std::exception & exc )
 		{
 			Logger::LogError( exc.what() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ZipArchive::AddFile( Path const & p_fileName )

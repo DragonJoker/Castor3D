@@ -123,6 +123,12 @@ namespace GlES3Render
 	{
 		GetOpenGlES3().ClearColor( m_redClear, m_greenClear, m_blueClear, m_alphaClear );
 		GetOpenGlES3().ClearDepth( 1.0 );
+
+		if ( CheckFlag( p_targets, BufferComponent::eDepth ) )
+		{
+			GetOpenGlES3().DepthMask( true );
+		}
+
 		GetOpenGlES3().Clear( GetOpenGlES3().GetComponents( p_uiTargets ) );
 	}
 

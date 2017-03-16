@@ -1,4 +1,4 @@
-#include "ShaderCache.hpp"
+﻿#include "ShaderCache.hpp"
 
 #include "Engine.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
@@ -22,7 +22,7 @@ namespace Castor3D
 		uint64_t MakeKey(
 			TextureChannels const & p_textureFlags,
 			ProgramFlags const & p_programFlags,
-			uint8_t p_sceneFlags,
+			SceneFlags const & p_sceneFlags,
 			bool p_invertNormals )
 		{
 			return ( uint64_t( p_textureFlags ) << 48 )
@@ -72,7 +72,7 @@ namespace Castor3D
 		RenderPass const & p_renderPass,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags,
+		SceneFlags const & p_sceneFlags,
 		bool p_invertNormals )
 	{
 		ShaderProgramSPtr l_return;
@@ -196,7 +196,7 @@ namespace Castor3D
 		RenderPass const & p_renderPass,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags,
+		SceneFlags const & p_sceneFlags,
 		bool p_invertNormals )const
 	{
 		ShaderProgramSPtr l_return = GetEngine()->GetRenderSystem()->CreateShaderProgram();
@@ -228,7 +228,7 @@ namespace Castor3D
 		ShaderProgramSPtr p_program,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags,
+		SceneFlags const & p_sceneFlags,
 		bool p_invertNormals )
 	{
 		uint64_t l_key = MakeKey( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
@@ -245,7 +245,7 @@ namespace Castor3D
 		RenderPass const & p_renderPass,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags )const
+		SceneFlags const & p_sceneFlags )const
 	{
 		auto & l_engine = *GetEngine();
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
@@ -338,7 +338,7 @@ namespace Castor3D
 		ShaderProgramSPtr p_program,
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
-		uint8_t p_sceneFlags )
+		SceneFlags const & p_sceneFlags )
 	{
 		uint64_t l_key = MakeKey( p_textureFlags, p_programFlags, p_sceneFlags, false );
 		auto const & l_it = m_mapBillboards.find( l_key );

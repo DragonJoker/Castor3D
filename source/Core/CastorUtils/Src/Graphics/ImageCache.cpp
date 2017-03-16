@@ -29,15 +29,15 @@ namespace Castor
 	ImageSPtr ImageCache::Add( String const & p_name, Path const & p_path )
 	{
 		auto l_lock = make_unique_lock( *this );
-		ImageSPtr l_return;
+		ImageSPtr l_result;
 
 		if ( Collection< Image, String >::has( p_name ) )
 		{
-			l_return = Collection< Image, String >::find( p_name );
+			l_result = Collection< Image, String >::find( p_name );
 
-			if ( !l_return->GetBuffer() )
+			if ( !l_result->GetBuffer() )
 			{
-				Image::BinaryLoader()( *l_return, p_path );
+				Image::BinaryLoader()( *l_result, p_path );
 			}
 			else
 			{
@@ -50,8 +50,8 @@ namespace Castor
 
 			if ( File::FileExists( p_path ) )
 			{
-				l_return = std::make_shared< Image >( p_name, p_path );
-				Collection< Image, String >::insert( p_name, l_return );
+				l_result = std::make_shared< Image >( p_name, p_path );
+				Collection< Image, String >::insert( p_name, l_result );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
 			}
 			else
@@ -60,21 +60,21 @@ namespace Castor
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	ImageSPtr ImageCache::Add( String const & p_name, Size const & p_size, PixelFormat p_format )
 	{
 		auto l_lock = make_unique_lock( *this );
-		ImageSPtr l_return;
+		ImageSPtr l_result;
 
 		if ( Collection< Image, String >::has( p_name ) )
 		{
-			l_return = Collection< Image, String >::find( p_name );
+			l_result = Collection< Image, String >::find( p_name );
 
-			if ( !l_return->GetBuffer() )
+			if ( !l_result->GetBuffer() )
 			{
-				*l_return = std::move( Image( p_name, p_size, p_format ) );
+				*l_result = std::move( Image( p_name, p_size, p_format ) );
 			}
 			else
 			{
@@ -83,11 +83,11 @@ namespace Castor
 		}
 		else
 		{
-			l_return = std::make_shared< Image >( p_name, p_size, p_format );
-			Collection< Image, String >::insert( p_name, l_return );
+			l_result = std::make_shared< Image >( p_name, p_size, p_format );
+			Collection< Image, String >::insert( p_name, l_result );
 			Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

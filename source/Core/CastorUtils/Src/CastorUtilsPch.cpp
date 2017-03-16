@@ -115,14 +115,14 @@ namespace Castor
 			1u << 31
 		};
 
-		uint32_t l_return = 0;
+		uint32_t l_result = 0;
 
-		for ( uint32_t i = 0; i < TwoPows.size() && l_return < p_value; i++ )
+		for ( uint32_t i = 0; i < TwoPows.size() && l_result < p_value; i++ )
 		{
-			l_return = TwoPows[i];
+			l_result = TwoPows[i];
 		}
 
-		return l_return;
+		return l_result;
 	}
 }
 

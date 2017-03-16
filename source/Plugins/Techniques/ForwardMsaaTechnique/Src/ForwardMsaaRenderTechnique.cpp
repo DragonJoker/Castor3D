@@ -10,6 +10,7 @@
 #include <FrameBuffer/ColourRenderBuffer.hpp>
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Overlay/PanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
@@ -18,7 +19,7 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/UniformBuffer.hpp>
-#include <Technique/RenderTechniquePass.hpp>
+#include <Technique/ForwardRenderTechniquePass.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <Graphics/FontCache.hpp>
@@ -49,20 +50,30 @@ namespace forward_msaa
 	String const RenderTechnique::Type = cuT( "forward_msaa" );
 	String const RenderTechnique::Name = cuT( "MSAA Render Technique" );
 
-	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
+	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget
+		, RenderSystem & p_renderSystem
+		, Parameters const & p_params )
 		: Castor3D::RenderTechnique( RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
-			, std::make_unique< RenderTechniquePass >( cuT( "forward_msaa_opaque" ), p_renderTarget, *this, true, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
-			, std::make_unique< RenderTechniquePass >( cuT( "forward_msaa_transparent" ), p_renderTarget, *this, false, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_msaa_opaque" )
+				, p_renderTarget
+				, *this
+				, true
+				, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_msaa_transparent" )
+				, p_renderTarget
+				, *this
+				, false
+				, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 			, p_params
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 	{
 		m_msFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
-		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
-		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
-		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
+		m_msColourBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
+		m_msDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
+		m_msColourAttach = m_msFrameBuffer->CreateAttachment( m_msColourBuffer );
+		m_msDepthAttach = m_msFrameBuffer->CreateAttachment( m_msDepthBuffer );
 
 		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 	}
@@ -71,97 +82,91 @@ namespace forward_msaa
 	{
 	}
 
-	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
+	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget
+		, RenderSystem & p_renderSystem
+		, Parameters const & p_params )
 	{
-		// No make_shared because ctor is protected;
-		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
-	}
-
-	bool RenderTechnique::DoCreate()
-	{
-		bool l_bReturn = m_msFrameBuffer->Create();
-		m_pMsColorBuffer->SetSamplesCount( m_samplesCount );
-		m_pMsDepthBuffer->SetSamplesCount( m_samplesCount );
-		l_bReturn &= m_pMsColorBuffer->Create();
-		l_bReturn &= m_pMsDepthBuffer->Create();
-		return l_bReturn;
-	}
-
-	void RenderTechnique::DoDestroy()
-	{
-		m_pMsColorBuffer->Destroy();
-		m_pMsDepthBuffer->Destroy();
-		m_msFrameBuffer->Destroy();
+		return std::make_shared< RenderTechnique >( p_renderTarget, p_renderSystem, p_params );
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
-		bool l_bReturn = true;
+		bool l_result = m_msFrameBuffer->Create();
 		m_rect = Castor::Rectangle( Position(), m_size );
+		m_msColourBuffer->SetSamplesCount( m_samplesCount );
+		m_msDepthBuffer->SetSamplesCount( m_samplesCount );
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			l_bReturn = m_pMsColorBuffer->Initialise( m_size );
+			l_result = m_msColourBuffer->Create();
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			l_bReturn = m_pMsDepthBuffer->Initialise( m_size );
+			l_result = m_msDepthBuffer->Create();
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			l_bReturn = m_msFrameBuffer->Initialise( m_size );
+			l_result = m_msColourBuffer->Initialise( m_size );
 		}
 
-		if ( l_bReturn )
+		if ( l_result )
 		{
-			m_msFrameBuffer->Bind( FrameBufferMode::eConfig );
-			m_msFrameBuffer->Attach( AttachmentPoint::eColour, m_pMsColorAttach );
-			m_msFrameBuffer->Attach( AttachmentPoint::eDepth, m_pMsDepthAttach );
+			l_result = m_msDepthBuffer->Initialise( m_size );
+		}
+
+		if ( l_result )
+		{
+			l_result = m_msFrameBuffer->Initialise( m_size );
+		}
+
+		if ( l_result )
+		{
+			m_msFrameBuffer->Bind();
+			m_msFrameBuffer->Attach( AttachmentPoint::eColour, m_msColourAttach );
+			m_msFrameBuffer->Attach( AttachmentPoint::eDepthStencil, m_msDepthAttach );
+			m_msFrameBuffer->SetDrawBuffer( m_msColourAttach );
 			m_msFrameBuffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_result;
 	}
 
 	void RenderTechnique::DoCleanup()
 	{
-		m_msFrameBuffer->Bind( FrameBufferMode::eConfig );
+		m_msFrameBuffer->Bind();
 		m_msFrameBuffer->DetachAll();
 		m_msFrameBuffer->Unbind();
 		m_msFrameBuffer->Cleanup();
-		m_pMsColorBuffer->Cleanup();
-		m_pMsDepthBuffer->Cleanup();
+		m_msColourBuffer->Cleanup();
+		m_msDepthBuffer->Cleanup();
+		m_msColourBuffer->Destroy();
+		m_msDepthBuffer->Destroy();
+		m_msFrameBuffer->Destroy();
 	}
 
-	void RenderTechnique::DoBeginRender()
+	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
 	{
-		m_msFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_opaquePass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
+		m_msFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msFrameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
-		m_msFrameBuffer->Clear();
+		m_msFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
+		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
 	}
 
-	void RenderTechnique::DoBeginOpaqueRendering()
-	{
-	}
-
-	void RenderTechnique::DoEndOpaqueRendering()
-	{
-	}
-
-	void RenderTechnique::DoBeginTransparentRendering()
-	{
-	}
-
-	void RenderTechnique::DoEndTransparentRendering()
-	{
-	}
-
-	void RenderTechnique::DoEndRender()
+	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
 	{
 		m_msFrameBuffer->Unbind();
-		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::eColour | BufferComponent::eDepth );
+		m_transparentPass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
+		m_msFrameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_msFrameBuffer->Unbind();
+		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
+			, m_rect
+			, BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )

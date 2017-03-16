@@ -73,7 +73,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
-		C3D_API void Render();
+		C3D_API void Render( uint32_t p_face = 0 );
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
@@ -106,7 +106,8 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
 		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags )const override;
+			, ProgramFlags & p_programFlags
+			, SceneFlags & p_sceneFlags )const override;
 
 	private:
 		/**
@@ -119,7 +120,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène à dessiner.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API virtual void DoRender() = 0;
+		C3D_API virtual void DoRender( uint32_t p_face ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
@@ -146,20 +147,20 @@ namespace Castor3D
 		 */
 		Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags
+			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetGeometryShaderSource
 		 */
 		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
 		 */
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, uint8_t p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags )const override;
 
 	protected:
 		//!\~english	The parent shadow map.
