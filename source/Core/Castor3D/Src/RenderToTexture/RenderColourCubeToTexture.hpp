@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_RenderColourCubeToTexture_H___
 #define ___C3D_RenderColourCubeToTexture_H___
 
-#include "Viewport.hpp"
+#include "Render/Viewport.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 

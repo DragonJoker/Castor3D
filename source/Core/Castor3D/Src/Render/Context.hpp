@@ -23,15 +23,15 @@ SOFTWARE.
 #ifndef ___C3D_Context_H___
 #define ___C3D_Context_H___
 
-#include "RenderColourCubeToTexture.hpp"
-#include "RenderColourLayerCubeToTexture.hpp"
-#include "RenderColourLayerToTexture.hpp"
-#include "RenderColourToCube.hpp"
-#include "RenderColourToTexture.hpp"
-#include "RenderDepthCubeToTexture.hpp"
-#include "RenderDepthLayerCubeToTexture.hpp"
-#include "RenderDepthLayerToTexture.hpp"
-#include "RenderDepthToTexture.hpp"
+#include "RenderToTexture/RenderColourCubeToTexture.hpp"
+#include "RenderToTexture/RenderColourLayerCubeToTexture.hpp"
+#include "RenderToTexture/RenderColourLayerToTexture.hpp"
+#include "RenderToTexture/RenderColourToCube.hpp"
+#include "RenderToTexture/RenderColourToTexture.hpp"
+#include "RenderToTexture/RenderDepthCubeToTexture.hpp"
+#include "RenderToTexture/RenderDepthLayerCubeToTexture.hpp"
+#include "RenderToTexture/RenderDepthLayerToTexture.hpp"
+#include "RenderToTexture/RenderDepthToTexture.hpp"
 
 #include "Shader/UniformBuffer.hpp"
 

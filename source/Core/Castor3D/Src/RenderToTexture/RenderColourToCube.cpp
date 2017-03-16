@@ -3,9 +3,8 @@
 #include "Engine.hpp"
 #include "Cache/ShaderCache.hpp"
 
-#include "RenderPipeline.hpp"
-#include "RenderSystem.hpp"
-#include "Viewport.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
 
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -198,7 +197,7 @@ namespace Castor3D
 			// Outputs
 			auto plx_v4FragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
-			l_writer.ImplementFunction< Vec2 >( cuT( "SampleSphericalMap" ), [&]( Vec3 const & v )
+			auto l_sampleSphericalMap = l_writer.ImplementFunction< Vec2 >( cuT( "SampleSphericalMap" ), [&]( Vec3 const & v )
 			{
 				auto uv = l_writer.GetLocale( cuT( "uv" ), vec2( atan( v.z(), v.x() ), asin( v.y() ) ) );
 				uv *= vec2( 0.1591_f, 0.3183_f );
@@ -208,7 +207,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto uv = l_writer.GetLocale( cuT( "uv" ), GLSL::WriteFunctionCall< Vec2 >( &l_writer, cuT( "SampleSphericalMap" ), normalize( vtx_position ) ) );
+				auto uv = l_writer.GetLocale( cuT( "uv" ), l_sampleSphericalMap( normalize( vtx_position ) ) );
 				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( uv.x(), 1.0_r - uv.y() ) ).rgb(), 1.0_f );
 			} );
 

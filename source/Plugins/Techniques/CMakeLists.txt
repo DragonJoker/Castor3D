@@ -1,5 +1,5 @@
 option( CASTOR_BUILDGRP_TECHNIQUE "Build Castor3D RenderTechnique plugins" TRUE )
-option( CASTOR_BUILD_TECHNIQUE_DEFERRED "Build Deferred Lighting RenderTechnique plugin" TRUE )
+option( CASTOR_BUILD_TECHNIQUE_FORWARD "Build Forward Lighting RenderTechnique plugin" TRUE )
 option( CASTOR_BUILD_TECHNIQUE_FORWARD_MSAA "Build Forward MSAA RenderTechnique plugin" TRUE )
 option( CASTOR_BUILD_TECHNIQUE_DEFERRED_MSAA "Build Deferred Lighting & MSAA RenderTechnique plugin" TRUE )
 
@@ -21,22 +21,20 @@ function( TechniquesBuild )
 		${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src
 	)
 
-	set( Build ${Drct} )
-	add_subdirectory( Plugins/Techniques/ForwardTechnique )
-	set( Drct ${Build} PARENT_SCOPE )
+	set( Build ${DefC} )
+	add_subdirectory( Plugins/Techniques/DeferredCommon )
+	set( DefC ${Build} PARENT_SCOPE )
+
+	set( Build ${Defr} )
+	add_subdirectory( Plugins/Techniques/DeferredTechnique )
+	set( Defr ${Build} PARENT_SCOPE )
 
 	if ( ${CASTOR_BUILDGRP_TECHNIQUE} )
-		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} OR ${CASTOR_BUILD_TECHNIQUE_FORWARD_MSAA} )
-			set( Build ${DefC} )
-			add_subdirectory( Plugins/Techniques/DeferredCommon )
-			set( DefC ${Build} PARENT_SCOPE )
-		endif()
-
-		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} )
-			set( Build ${Defr} )
-			add_subdirectory( Plugins/Techniques/DeferredTechnique )
-			set( Defr ${Build} PARENT_SCOPE )
-		endif()
+		if ( ${CASTOR_BUILD_TECHNIQUE_FORWARD} )
+			set( Build ${Drct} )
+			add_subdirectory( Plugins/Techniques/ForwardTechnique )
+			set( Drct ${Build} PARENT_SCOPE )
+		endif ()
 
 		if( ${CASTOR_BUILD_TECHNIQUE_FORWARD_MSAA} )
 			set( Build ${Msaa} )
@@ -64,17 +62,17 @@ endfunction( TechniquesBuild )
 
 function( TechniquesSummary msg msgtest )
 	set( msg_tmp "\n\nRenderTechniques :" )
-	set( msg_tmp "${msg_tmp}\n    Forward             ${Drct}" )
+	set( msg_tmp "${msg_tmp}\n    Deferred Common     ${DefC}" )
+	set( msg_tmp "${msg_tmp}\n    Deferred Lighting   ${Defr}" )
   
 	if ( ${CASTOR_BUILDGRP_TECHNIQUE} )
+		if( ${CASTOR_BUILD_TECHNIQUE_FORWARD} )
+			set( msg_tmp "${msg_tmp}\n    Forward             ${Drct}" )
+		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_FORWARD_MSAA} )
 			set( msg_tmp "${msg_tmp}\n    Forward MSAA        ${Msaa}" )
 		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} OR ${CASTOR_BUILD_TECHNIQUE_DEFERRED_MSAA} )
-			set( msg_tmp "${msg_tmp}\n    Deferred Common     ${DefC}" )
-		endif()
-		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} )
-			set( msg_tmp "${msg_tmp}\n    Deferred Lighting   ${Defr}" )
 		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED_MSAA} )
 			set( msg_tmp "${msg_tmp}\n    Deferred & MSAA     ${DrMs}" )
@@ -89,37 +87,34 @@ function( TechniquesSetup )
 		DESCRIPTION "Render technique plugins usable in Castor3D."
 		PARENT_GROUP Plugins
 	)
-	cpack_add_component( ForwardTechnique
-		DISPLAY_NAME "ForwardTechnique"
-		DESCRIPTION "Allows rendering with Forward technique"
+	cpack_add_component( DeferredCommon
+		DISPLAY_NAME "DeferredCommon"
+		DESCRIPTION "Common classes used by Deferred rendering techniques."
 		GROUP Techniques
 		DEPENDS Castor3D
-		INSTALL_TYPES Minimal Full
+		INSTALL_TYPES Developer Full
 	)
-
+	cpack_add_component( DeferredTechnique
+		DISPLAY_NAME "DeferredTechnique"
+		DESCRIPTION "Allows rendering with Deferred Lighting technique."
+		GROUP Techniques
+		DEPENDS Castor3D
+		INSTALL_TYPES Developer Full
+	)
 	if ( ${CASTOR_BUILDGRP_TECHNIQUE} )
+		if( ${CASTOR_BUILD_TECHNIQUE_FORWARD} )
+			cpack_add_component( ForwardTechnique
+				DISPLAY_NAME "ForwardTechnique"
+				DESCRIPTION "Allows rendering with Forward technique"
+				GROUP Techniques
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
+			)
+		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_FORWARD_MSAA} )
 			cpack_add_component( ForwardMsaaTechnique
 				DISPLAY_NAME "ForwardMsaaTechnique"
 				DESCRIPTION "Allows rendering with Forward MSAA technique."
-				GROUP Techniques
-				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
-			)
-		endif()
-		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} OR ${CASTOR_BUILD_TECHNIQUE_DEFERRED_MSAA} )
-			cpack_add_component( DeferredCommon
-				DISPLAY_NAME "DeferredCommon"
-				DESCRIPTION "Common classes used by deferred rendering techniques."
-				GROUP Techniques
-				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
-			)
-		endif()
-		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} )
-			cpack_add_component( DeferredTechnique
-				DISPLAY_NAME "DeferredTechnique"
-				DESCRIPTION "Allows rendering with Deferred Lighting technique."
 				GROUP Techniques
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full

@@ -106,10 +106,6 @@ namespace Castor3D
 			if ( m_initialised )
 			{
 				m_context->SetCurrent();
-				m_matrixUbo = std::make_unique< UniformBuffer >( ShaderProgram::BufferMatrix, *GetEngine()->GetRenderSystem() );
-				UniformBuffer::FillMatrixBuffer( *m_matrixUbo );
-				m_colour = std::make_unique< RenderColourToTexture >( *m_context, *m_matrixUbo, true );
-				m_colour->Initialise();
 				m_backBuffers->Initialise( GetSize(), GetPixelFormat() );
 
 				SceneSPtr l_scene = GetScene();
@@ -152,10 +148,6 @@ namespace Castor3D
 				m_context->SetCurrent();
 			}
 
-			m_colour->Cleanup();
-			m_colour.reset();
-			m_matrixUbo->Cleanup();
-			m_matrixUbo.reset();
 			m_pickingPass->Cleanup();
 			RenderTargetSPtr l_target = GetRenderTarget();
 
@@ -428,7 +420,7 @@ namespace Castor3D
 
 		m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
 		m_backBuffers->Clear( BufferComponent::eColour );
-		m_colour->Render( Position{}, m_size, *l_texture );
+		m_context->RenderTexture( m_size, *l_texture );
 		m_backBuffers->Unbind();
 	}
 

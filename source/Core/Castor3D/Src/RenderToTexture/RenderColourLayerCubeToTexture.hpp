@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_RenderDepthLayerCubeToTexture_H___
-#define ___C3D_RenderDepthLayerCubeToTexture_H___
+#ifndef ___C3D_RenderColourLayerCubeToTexture_H___
+#define ___C3D_RenderColourLayerCubeToTexture_H___
 
-#include "Viewport.hpp"
+#include "Render/Viewport.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
@@ -36,11 +36,11 @@ namespace Castor3D
 	\date		02/03/2017
 	\version	0.9.0
 	\~english
-	\brief		Class used to render a depth cube texture array layer.
+	\brief		Class used to render a colour cube texture array layer.
 	\~french
-	\brief		Classe utilisée pour rendre une couche d'un tableau de textures cube profonedur.
+	\brief		Classe utilisée pour rendre une couche d'un tableau de textures cube couleur.
 	*/
-	class RenderDepthLayerCubeToTexture
+	class RenderColourLayerCubeToTexture
 		: public Castor::OwnedBy< Context >
 	{
 	public:
@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	p_context	Le Context.
 		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
 		 */
-		C3D_API explicit RenderDepthLayerCubeToTexture( Context & p_context
+		C3D_API explicit RenderColourLayerCubeToTexture( Context & p_context
 			, UniformBuffer & p_matrixUbo );
 		/**
 		 *\~english
@@ -62,7 +62,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~RenderDepthLayerCubeToTexture();
+		C3D_API ~RenderColourLayerCubeToTexture();
 		/**
 		 *\~english
 		 *\brief		Initialises this render to texture.
@@ -89,8 +89,7 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_layer		L'index de la couche.
 		 */
-		C3D_API void Render( Castor::Position const & p_position
-			, Castor::Size const & p_size
+		C3D_API void Render( Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, uint32_t p_layer );
 
@@ -117,7 +116,7 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_layer				L'index de la couche.
 		 */
-		C3D_API void DoRender( Castor::Point2i const & p_position
+		C3D_API void DoRender( Castor::Position const & p_position
 			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, Castor::Point3f const & p_face

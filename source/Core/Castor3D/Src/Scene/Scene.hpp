@@ -38,6 +38,7 @@ SOFTWARE.
 #include "Cache/SamplerCache.hpp"
 #include "Cache/WindowCache.hpp"
 
+#include "RenderToTexture/TextureProjection.hpp"
 #include "Scene/Fog.hpp"
 #include "Scene/Shadow.hpp"
 
@@ -486,12 +487,9 @@ namespace Castor3D
 		//!\~english	The shadows parameters.
 		//!\~french		Les paramètres des ombres.
 		Shadow m_shadow;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		std::unique_ptr< UniformBuffer > m_matrixUbo;
 		//!\~english	The pipeline used to render the background image, if any.
 		//!\~french		Le pipeline utilisé pour le rendu de l'image de fond, s'il y en a une.
-		std::unique_ptr< RenderColourToTexture > m_colour;
+		std::unique_ptr< TextureProjection > m_colour;
 
 	public:
 		//!\~english	The cameras root node name.

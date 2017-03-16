@@ -653,9 +653,7 @@ namespace Castor3D
 
 		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{
-			m_matrixUbo = std::make_unique< UniformBuffer >( ShaderProgram::BufferMatrix, *GetEngine()->GetRenderSystem() );
-			UniformBuffer::FillMatrixBuffer( *m_matrixUbo );
-			m_colour = std::make_unique< RenderColourToTexture >( *GetEngine()->GetRenderSystem()->GetCurrentContext(), *m_matrixUbo, false, DepthFunc::eLEqual );
+			m_colour = std::make_unique< TextureProjection >( *GetEngine()->GetRenderSystem()->GetCurrentContext() );
 			m_colour->Initialise();
 		} ) );
 	}
@@ -682,8 +680,6 @@ namespace Castor3D
 
 		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{
-			m_matrixUbo->Cleanup();
-			m_matrixUbo.reset();
 			m_colour->Cleanup();
 			m_colour.reset();
 		} ) );
@@ -709,10 +705,8 @@ namespace Castor3D
 	{
 		if ( m_backgroundImage && m_backgroundImage->IsInitialised() )
 		{
-			static Position const l_position;
-			m_colour->Render( l_position
-				, p_size
-				, *m_backgroundImage );
+			m_colour->Render( *m_backgroundImage
+				, p_camera );
 		}
 		else if ( m_skybox )
 		{

@@ -530,12 +530,6 @@ namespace Castor3D
 		//!\~english	The picking pass.
 		//!\~french		La passe de picking.
 		PickingPassUPtr m_pickingPass;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		std::unique_ptr< UniformBuffer > m_matrixUbo;
-		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		std::unique_ptr< RenderColourToTexture > m_colour;
 	};
 }
 

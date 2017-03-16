@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_RenderColourToTexture_H___
 #define ___C3D_RenderColourToTexture_H___
 
-#include "Viewport.hpp"
+#include "Render/Viewport.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
@@ -59,9 +59,7 @@ namespace Castor3D
 		 *\param[in]	p_depthFunc		La fonction de profondeur utilisée (Si DepthFunc::eLess, le test de profondeur sera activé, sinon il sera désactivé).
 		 */
 		C3D_API explicit RenderColourToTexture( Context & p_context
-			, UniformBuffer & p_matrixUbo
-			, bool p_depthWrite
-			, DepthFunc p_depthFunc = DepthFunc::eLess );
+			, UniformBuffer & p_matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -182,12 +180,6 @@ namespace Castor3D
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;
-		//!\~english	Tells if depth buffer writing is enabled.
-		//!\~french		Dit si l'écriture dans le tampon de profondeur est activée.
-		bool m_depthWrite;
-		//!\~english	The depth function used (if not DepthFunc::eLess, the depth test will be enabled, otherwise it will be disabled).
-		//!\~french		La fonction de profondeur utilisée (Si DepthFunc::eLess, le tes de profondeur sera activé, sinon il sera désactivé).
-		DepthFunc m_depthFunc;
 	};
 }
 
