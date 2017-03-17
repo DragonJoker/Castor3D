@@ -19,7 +19,7 @@ namespace Castor3D
 	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@Z" );
 #	endif
 #elif defined( CASTOR_COMPILER_GNUC )
-#	if GCC_VERSION >= 50300
+#	if CASTOR_COMPILER_VERSION >= 50300
 	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsB5cxx11PN8Castor3D6EngineE" );
 #	else
 	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsPN8Castor3D6EngineE" );

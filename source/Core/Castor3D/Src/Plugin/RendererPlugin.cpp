@@ -17,7 +17,7 @@ namespace Castor3D
 #if defined( CASTOR_COMPILER_MSVC )
 	static const String GetRendererTypeFunctionABIName = cuT( "?GetRendererType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
 #elif defined( CASTOR_COMPILER_GNUC )
-#	if GCC_VERSION >= 50300
+#	if CASTOR_COMPILER_VERSION >= 50300
 	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypeB5cxx11v" );
 #	else
 	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypev" );

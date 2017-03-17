@@ -39,7 +39,6 @@ int main( int argc, char const * argv[] )
 	Testing::Register( std::make_unique< Testing::CastorUtilsWorkerThreadTest >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsThreadPoolTest >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsMatrixBench >() );
-	Testing::Register( std::make_unique< Testing::CastorUtilsStringBench >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsArrayViewTest >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsUniqueTest >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsMatrixTest >() );

@@ -26,7 +26,7 @@ namespace Castor3D
 	static const String GetOnUnloadFunctionABIName = cuT( "?OnUnload@@YAXPAVEngine@Castor3D@@@Z" );
 #	endif
 #elif defined( CASTOR_COMPILER_GNUC )
-#	if GCC_VERSION >= 50300
+#	if CASTOR_COMPILER_VERSION >= 50300
 	static const String GetNameFunctionABIName = cuT( "_Z7GetNameB5cxx11v" );
 #	else
 	static const String GetNameFunctionABIName = cuT( "_Z7GetNamev" );

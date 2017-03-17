@@ -185,6 +185,7 @@ scene "FinalScene"
 			size 1125 600
 			scene "FinalScene"
 			camera "MainCamera"
+			technique "forward"
 		}
 		fullscreen false
 		vsync false

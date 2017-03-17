@@ -40,27 +40,6 @@ namespace Testing
 	private:
 		void StringConversions();
 	};
-
-	class CastorUtilsStringBench
-		: public BenchCase
-	{
-	public:
-		CastorUtilsStringBench();
-		virtual ~CastorUtilsStringBench();
-		virtual void Execute();
-
-	private:
-		void StrToWStrUsingConvert();
-		void StrToWStrUsingWiden();
-		void WStrToStrUsingConvert();
-		void WStrToStrUsingNarrow();
-
-	private:
-		std::string m_strIn;
-		std::wstring m_wstrIn;
-		std::wstring m_wstrOut;
-		std::string m_strOut;
-	};
 }
 
 #endif
