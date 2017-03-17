@@ -191,9 +191,9 @@ namespace Castor3D
 	//! MeshAnimationInstanceSubmesh map, sorted by submesh ID.
 	DECLARE_MAP( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
 	//! Animation pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimationInstanceSPtr, AnimationInstancePtrStr );
+	DECLARE_MAP( Castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
 	//! Skeleton animation instance pointer array.
-	DECLARE_VECTOR( SkeletonAnimationInstanceSPtr, SkeletonAnimationInstancePtr );
+	DECLARE_VECTOR( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
 
 	//@}
 }

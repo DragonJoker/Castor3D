@@ -140,11 +140,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoStartAnimation
 		 */
-		void DoStartAnimation( AnimationInstanceSPtr p_animation )override;
+		void DoStartAnimation( AnimationInstance & p_animation )override;
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoStopAnimation
 		 */
-		void DoStopAnimation( AnimationInstanceSPtr p_animation )override;
+		void DoStopAnimation( AnimationInstance & p_animation )override;
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoClearAnimations
 		 */
@@ -156,7 +156,7 @@ namespace Castor3D
 		Mesh & m_mesh;
 		//!\~english	Currently playing animation.
 		//!\~french		L'animation en cours de lecture.
-		MeshAnimationInstanceSPtr m_playingAnimation;
+		MeshAnimationInstanceRPtr m_playingAnimation;
 	};
 }
 

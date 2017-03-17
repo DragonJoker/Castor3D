@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_ANIMATED_OBJECT_H___
 #define ___C3D_ANIMATED_OBJECT_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "AnimationInstance.hpp"
 
 #include <Design/Named.hpp>
 
@@ -58,6 +58,34 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API ~AnimatedObject();
+		/**
+		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API AnimatedObject( AnimatedObject && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API AnimatedObject & operator=( AnimatedObject && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API AnimatedObject( AnimatedObject const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API AnimatedObject & operator=( AnimatedObject const & p_rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Adds the animation to the list
@@ -183,7 +211,7 @@ namespace Castor3D
 		 *\brief		Démarre l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		virtual void DoStartAnimation( AnimationInstanceSPtr p_animation ) = 0;
+		virtual void DoStartAnimation( AnimationInstance & p_animation ) = 0;
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
@@ -192,7 +220,7 @@ namespace Castor3D
 		 *\brief		Stoppe l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		virtual void DoStopAnimation( AnimationInstanceSPtr p_animation ) = 0;
+		virtual void DoStopAnimation( AnimationInstance & p_animation ) = 0;
 		/**
 		 *\~english
 		 *\brief		Stops all animations

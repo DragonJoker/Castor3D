@@ -16,11 +16,11 @@ namespace Castor3D
 
 	namespace
 	{
-		inline void DoFind( std::chrono::milliseconds const & p_time,
-							typename KeyFrameArray::const_iterator const & p_first,
-							typename KeyFrameArray::const_iterator const & p_last,
-							typename KeyFrameArray::const_iterator & p_prv,
-							typename KeyFrameArray::const_iterator & p_cur )
+		inline void DoFind( std::chrono::milliseconds const & p_time
+			, typename KeyFrameArray::const_iterator const & p_first
+			, typename KeyFrameArray::const_iterator const & p_last
+			, typename KeyFrameArray::const_iterator & p_prv
+			, typename KeyFrameArray::const_iterator & p_cur )
 		{
 			while ( p_prv != p_first && p_prv->GetTimeIndex() >= p_time )
 			{
