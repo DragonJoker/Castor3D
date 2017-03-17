@@ -1195,8 +1195,8 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				m_bones.clear();
-				m_bonesData.clear();
+				//m_bones.clear();
+				//m_bonesData.clear();
 			}
 		}
 	}

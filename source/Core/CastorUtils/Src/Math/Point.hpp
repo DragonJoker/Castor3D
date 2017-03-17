@@ -1195,6 +1195,50 @@ namespace Castor
 		 *\return		Le cosinus
 		 */
 		template< typename T, uint32_t Count > static double cos_theta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		/**
+		 *\~english
+		 *\brief		Computes the scalar product of 2 points
+		 *\param[in]	p_ptA, p_ptB	The points
+		 *\return		The scalar product
+		 *\~french
+		 *\brief		Calcule le produit scalaire entre 2 points
+		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\return		Le produit scalaire
+		 */
+		template< typename T, typename U, uint32_t Count > static T dot( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		/**
+		 *\~english
+		 *\brief		Computes the trigonometric cosine of the angle between 2 points
+		 *\param[in]	p_ptA, p_ptB	The points
+		 *\return		The cosine
+		 *\~french
+		 *\brief		Calcule le cosinus trigonométrique de l'angle entre 2 points
+		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\return		Le cosinus
+		 */
+		template< typename T, uint32_t Count > static double cos_theta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		/**
+		 *\~english
+		 *\brief		Computes the scalar product of 2 points
+		 *\param[in]	p_ptA, p_ptB	The points
+		 *\return		The scalar product
+		 *\~french
+		 *\brief		Calcule le produit scalaire entre 2 points
+		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\return		Le produit scalaire
+		 */
+		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB );
+		/**
+		 *\~english
+		 *\brief		Computes the trigonometric cosine of the angle between 2 points
+		 *\param[in]	p_ptA, p_ptB	The points
+		 *\return		The cosine
+		 *\~french
+		 *\brief		Calcule le cosinus trigonométrique de l'angle entre 2 points
+		 *\param[in]	p_ptA, p_ptB	Les points
+		 *\return		Le cosinus
+		 */
+		template< typename T, uint32_t Count > static double cos_theta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB );
 	}
 }
 /**

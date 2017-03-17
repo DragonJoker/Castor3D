@@ -147,15 +147,20 @@ namespace Castor
 		set_column( p_index, p_col.const_ptr() );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
+	inline void Matrix< T, Columns, Rows >::set_column( uint32_t p_index, Coords< T const, Rows > const & p_col )
+	{
+		set_column( p_index, p_col.const_ptr() );
+	}
+	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::set_column( uint32_t p_index, Coords< T, Rows > const & p_col )
 	{
 		set_column( p_index, p_col.const_ptr() );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Point< T, Rows > Matrix< T, Columns, Rows >::get_column( uint32_t p_index )const
+	inline Coords< T const, Rows > Matrix< T, Columns, Rows >::get_column( uint32_t p_index )const
 	{
 		REQUIRE( p_index < Columns );
-		return Point< T, Rows >( m_columns[p_index] );
+		return Coords< T const, Rows >( m_columns[p_index].const_ptr() );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Coords< T, Rows > Matrix< T, Columns, Rows >::get_column( uint32_t p_index )
@@ -164,10 +169,10 @@ namespace Castor
 		return m_columns[p_index];
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline void Matrix< T, Columns, Rows >::get_column( uint32_t p_index, Point< T, Rows > & p_result )const
+	inline void Matrix< T, Columns, Rows >::get_column( uint32_t p_index, Coords< T const, Rows > & p_result )const
 	{
 		REQUIRE( p_index < Columns );
-		p_result = Point< T, Rows >( m_columns[p_index] );
+		p_result = Coords< T const, Rows >( m_columns[p_index] );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::get_column( uint32_t p_index, Coords< T, Rows > & p_result )
@@ -390,10 +395,10 @@ namespace Castor
 		return *this;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Point< T, Rows > Matrix< T, Columns, Rows >::operator[]( uint32_t i )const
+	inline Coords< T const, Rows > Matrix< T, Columns, Rows >::operator[]( uint32_t i )const
 	{
 		REQUIRE( i < Columns );
-		return Point< T, Rows >( m_columns[i] );
+		return Coords< T const, Rows >( m_columns[i].const_ptr() );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Coords< T, Rows > & Matrix< T, Columns, Rows >::operator[]( uint32_t i )

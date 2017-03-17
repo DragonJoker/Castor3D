@@ -731,6 +731,67 @@ namespace Castor
 
 			return l_result;
 		}
+
+		template< typename T, typename U, uint32_t Count >
+		T dot( Point< T, Count > const & p_ptA, Coords< U const, Count > const & p_ptB )
+		{
+			T l_result = T();
+
+			for ( uint32_t i = 0; i < Count; i++ )
+			{
+				l_result += T( p_ptA[i] * p_ptB[i] );
+			}
+
+			return l_result;
+		}
+
+		template< typename T, uint32_t Count >
+		double cos_theta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB )
+		{
+			double l_result = double( length( p_ptA ) * length( p_ptB ) );
+
+			if ( l_result != 0 )
+			{
+				l_result = dot( p_ptA, p_ptB ) / l_result;
+			}
+			else
+			{
+				l_result = dot( p_ptA, p_ptB );
+			}
+
+			return l_result;
+		}
+
+		template< typename T, typename U, uint32_t Count >
+		T dot( Coords< T const, Count > const & p_ptA, Point< U, Count > const & p_ptB )
+		{
+			T l_result;
+			Policy< T >::init( l_result );
+
+			for ( uint32_t i = 0; i < Count; i++ )
+			{
+				l_result += T( p_ptA[i] * p_ptB[i] );
+			}
+
+			return l_result;
+		}
+
+		template< typename T, uint32_t Count >
+		double cos_theta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		{
+			double l_result = double( length( p_ptA ) * length( p_ptB ) );
+
+			if ( l_result != 0 )
+			{
+				l_result = dot( p_ptA, p_ptB ) / l_result;
+			}
+			else
+			{
+				l_result = dot( p_ptA, p_ptB );
+			}
+
+			return l_result;
+		}
 	}
 }
 
