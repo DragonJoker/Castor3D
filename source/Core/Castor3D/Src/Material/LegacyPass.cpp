@@ -74,7 +74,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = Castor::TextWriter< Pass >{ m_tabs }( p_pass, p_file );
+			l_return = Pass::TextWriter{ m_tabs }( p_pass, p_file );
 		}
 
 		if ( l_return )

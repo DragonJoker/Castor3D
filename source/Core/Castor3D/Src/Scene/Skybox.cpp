@@ -36,56 +36,73 @@ namespace Castor3D
 
 	bool Skybox::TextWriter::operator()( Skybox const & p_obj, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-
 		Path l_subfolder{ cuT( "Textures" ) };
+		Path l_posX = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveX ) ).ToString() }
+			, p_file.GetFilePath()
+			, l_subfolder );
+		Path l_negX = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeX ) ).ToString() }
+			, p_file.GetFilePath()
+			, l_subfolder );
+		Path l_posY = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveY ) ).ToString() }
+			, p_file.GetFilePath()
+			, l_subfolder );
+		Path l_negY = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeY ) ).ToString() }
+			, p_file.GetFilePath()
+			, l_subfolder );
+		Path l_posZ = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveZ ) ).ToString() }
+			, p_file.GetFilePath()
+			, l_subfolder );
+		Path l_negZ = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeZ ) ).ToString() }
+			, p_file.GetFilePath()
+			, l_subfolder );
 
-		if ( l_return )
-		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
-			l_return = p_file.WriteText( m_tabs + cuT( "\tright \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox right" );
-		}
+		bool l_return = true;
 
-		if ( l_return )
+		if ( !l_posX.empty() && !l_negX.empty() && !l_posY.empty() && !l_negY.empty() && !l_posZ.empty() && !l_negZ.empty() )
 		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
-			l_return = p_file.WriteText( m_tabs + cuT( "\tleft \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox left" );
-		}
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_return )
-		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttop \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox top" );
-		}
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tright \"" ) + l_posX + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox right" );
+			}
 
-		if ( l_return )
-		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
-			l_return = p_file.WriteText( m_tabs + cuT( "\tbottom \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox bottom" );
-		}
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tleft \"" ) + l_negX + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox left" );
+			}
 
-		if ( l_return )
-		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
-			l_return = p_file.WriteText( m_tabs + cuT( "\tback \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox back" );
-		}
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\ttop \"" ) + l_posY + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox top" );
+			}
 
-		if ( l_return )
-		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
-			l_return = p_file.WriteText( m_tabs + cuT( "\tfront \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox front" );
-		}
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tbottom \"" ) + l_negY + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox bottom" );
+			}
 
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tback \"" ) + l_posZ + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox back" );
+			}
+
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tfront \"" ) + l_negZ + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox front" );
+			}
+
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			}
 		}
 
 		return l_return;

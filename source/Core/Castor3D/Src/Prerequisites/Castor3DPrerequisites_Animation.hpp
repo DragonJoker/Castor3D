@@ -117,6 +117,25 @@ namespace Castor3D
 		eBone,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNode )
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		14/06/2016
+	\~english
+	\brief		Class which represents the mesh animation submeshes buffers.
+	\~french
+	\brief		Classe de représentation des tampons de sous-maillages d'animations de maillage.
+	*/
+	template< typename T >
+	struct SubmeshAnimationBufferT
+	{
+		//!\~english	The start time index.
+		//!\~french		L'index de temps de début.
+		float m_timeIndex;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		std::vector< InterleavedVertexT< T > > m_buffer;
+	};
 
 	class Animable;
 	class Animation;
@@ -129,6 +148,8 @@ namespace Castor3D
 	class KeyFrame;
 	template< typename T > class Interpolator;
 	template< typename T, InterpolatorType > class InterpolatorT;
+	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
+	using SubmeshAnimationBufferArray = std::vector< SubmeshAnimationBuffer >;
 
 	struct GroupAnimation
 	{

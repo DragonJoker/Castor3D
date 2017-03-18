@@ -96,11 +96,13 @@ namespace Castor3D
 		 */
 		static inline bool Parse( T * p_values, size_t p_count, BinaryChunk & p_chunk )
 		{
-			bool l_return{ ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values ), p_count * sizeof( T ), p_chunk ) };
+			bool l_return{ ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values )
+				, p_count * sizeof( T )
+				, p_chunk ) };
 
 			for ( uint32_t i = 0; i < p_count; ++i )
 			{
-				ChunkDataPreparator< T >::Prepare( *p_values++ );
+				PrepareChunkData( *p_values++ );
 			}
 
 			return l_return;
@@ -119,8 +121,10 @@ namespace Castor3D
 		 */
 		static inline bool Parse( T & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_return{ ChunkParserBase::Parse( ChunkData< T >::GetBuffer( p_value ), uint32_t( ChunkData< T >::GetDataSize( p_value ) ), p_chunk ) };
-			ChunkDataPreparator< T >::Prepare( p_value );
+			bool l_return{ ChunkParserBase::Parse( GetBuffer( p_value )
+				, uint32_t( GetDataSize( p_value ) )
+				, p_chunk ) };
+			PrepareChunkData( p_value );
 			return l_return;
 		}
 	};
@@ -153,16 +157,18 @@ namespace Castor3D
 		static inline bool Parse( Castor::String & p_value, BinaryChunk & p_chunk )
 		{
 			bool l_return = p_chunk.CheckAvailable( 1 );
-			uint32_t l_uiSize = p_chunk.GetRemaining();
+			uint32_t l_size = p_chunk.GetRemaining();
 
 			if ( l_return )
 			{
-				std::vector< char > l_pChar( l_uiSize + 1, 0 );
-				l_return = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
+				std::vector< char > l_buffer( l_size + 1, 0 );
+				l_return = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_buffer.data() )
+					, l_size
+					, p_chunk );
 
 				if ( l_return )
 				{
-					p_value = Castor::string::string_cast< xchar >( l_pChar.data() );
+					p_value = Castor::string::string_cast< xchar >( l_buffer.data() );
 				}
 			}
 
@@ -198,16 +204,18 @@ namespace Castor3D
 		static inline bool Parse( Castor::Path & p_value, BinaryChunk & p_chunk )
 		{
 			bool l_return = p_chunk.CheckAvailable( 1 );
-			uint32_t l_uiSize = p_chunk.GetRemaining();
+			uint32_t l_size = p_chunk.GetRemaining();
 
 			if ( l_return )
 			{
-				std::vector< char > l_pChar( l_uiSize + 1, 0 );
-				l_return = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
+				std::vector< char > l_buffer( l_size + 1, 0 );
+				l_return = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_buffer.data() )
+					, l_size
+					, p_chunk );
 
 				if ( l_return )
 				{
-					p_value = Castor::Path{ Castor::string::string_cast< xchar >( l_pChar.data() ) };
+					p_value = Castor::Path{ Castor::string::string_cast< xchar >( l_buffer.data() ) };
 				}
 			}
 

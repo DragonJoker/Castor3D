@@ -56,7 +56,10 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( uint8_t const * p_begin, uint8_t const * p_end, ChunkType p_type, BinaryChunk & p_chunk )
+		static inline bool Write( uint8_t const * p_begin
+			, uint8_t const * p_end
+			, ChunkType p_type
+			, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 
@@ -104,16 +107,22 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( T const * p_begin, T const * p_end, ChunkType p_type, BinaryChunk & p_chunk )
+		static inline bool Write( T const * p_begin
+			, T const * p_end
+			, ChunkType p_type
+			, BinaryChunk & p_chunk )
 		{
 			std::vector< T > l_values{ p_begin, p_end };
 
 			for ( auto & l_value : l_values )
 			{
-				ChunkDataPreparator< T >::Prepare( l_value );
+				PrepareChunkData( l_value );
 			}
 
-			return ChunkWriterBase::Write( reinterpret_cast< uint8_t const * >( l_values.data() ), reinterpret_cast< uint8_t const * >( l_values.data() + l_values.size() ), p_type, p_chunk );
+			return ChunkWriterBase::Write( reinterpret_cast< uint8_t const * >( l_values.data() )
+				, reinterpret_cast< uint8_t const * >( l_values.data() + l_values.size() )
+				, p_type
+				, p_chunk );
 		}
 		/**
 		 *\~english
@@ -129,12 +138,14 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( T const & p_value, ChunkType p_type, BinaryChunk & p_chunk )
+		static inline bool Write( T const & p_value
+			, ChunkType p_type
+			, BinaryChunk & p_chunk )
 		{
 			auto l_value = p_value;
-			ChunkDataPreparator< T >::Prepare( l_value );
-			auto l_begin = ChunkData< T >::GetBuffer( l_value );
-			auto l_end = l_begin + ChunkData< T >::GetDataSize( l_value );
+			PrepareChunkData( l_value );
+			auto l_begin = GetBuffer( l_value );
+			auto l_end = l_begin + GetDataSize( l_value );
 			return ChunkWriterBase::Write( l_begin, l_end, p_type, p_chunk );
 		}
 	};
@@ -166,7 +177,9 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( Castor::String const & p_value, ChunkType p_type, BinaryChunk & p_chunk )
+		static inline bool Write( Castor::String const & p_value
+			, ChunkType p_type
+			, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 
@@ -212,7 +225,9 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Write( Castor::Path const & p_value, ChunkType p_type, BinaryChunk & p_chunk )
+		static inline bool Write( Castor::Path const & p_value
+			, ChunkType p_type
+			, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 

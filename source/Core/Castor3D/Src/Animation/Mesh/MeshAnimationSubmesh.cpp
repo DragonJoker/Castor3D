@@ -9,11 +9,7 @@ namespace Castor3D
 	namespace
 	{
 		using InterleavedVertexd = InterleavedVertexT< double >;
-		struct SubmeshAnimationBufferd
-		{
-			double m_timeIndex;
-			std::vector< InterleavedVertexd > m_buffer;
-		};
+		using SubmeshAnimationBufferd = SubmeshAnimationBufferT< double >;
 
 		template< typename T, typename U >
 		void DoConvert( std::vector< InterleavedVertexT< T > > const & p_in, std::vector< InterleavedVertexT< U > > & p_out )
