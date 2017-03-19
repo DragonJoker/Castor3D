@@ -11,6 +11,7 @@
 #include <Scene/Scene.hpp>
 #include <Scene/SceneNode.hpp>
 
+#include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
@@ -300,7 +301,7 @@ namespace C3DMd3
 					}
 
 					m_mapSubmeshesByName.find( l_strSection )->second->SetDefaultMaterial( l_material );
-					p_mesh.GetScene().GetListener().PostEvent( MakeInitialiseEvent( *l_material ) );
+					p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_material ) );
 				}
 			}
 
@@ -347,7 +348,7 @@ namespace C3DMd3
 				}
 
 				p_mesh.GetSubmesh( l_uiIndex )->SetDefaultMaterial( l_material );
-				p_mesh.GetScene().GetListener().PostEvent( MakeInitialiseEvent( *l_material ) );
+				p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_material ) );
 				l_uiIndex++;
 			}
 

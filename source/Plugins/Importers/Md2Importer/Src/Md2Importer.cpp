@@ -11,6 +11,7 @@
 #include <Scene/Scene.hpp>
 #include <Scene/SceneNode.hpp>
 
+#include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
@@ -99,7 +100,7 @@ namespace C3DMd2
 			}
 
 			p_mesh.ComputeNormals();
-			p_mesh.GetScene().GetListener().PostEvent( MakeInitialiseEvent( *l_material ) );
+			p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_material ) );
 			l_return = true;
 		}
 

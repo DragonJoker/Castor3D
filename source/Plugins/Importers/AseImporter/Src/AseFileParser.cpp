@@ -5,6 +5,7 @@
 #include <Engine.hpp>
 
 #include <Cache/CacheView.hpp>
+#include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
