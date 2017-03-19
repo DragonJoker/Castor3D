@@ -9,6 +9,10 @@
 using namespace Castor3D;
 using namespace Castor;
 
+#ifdef MemoryBarrier
+#	undef MemoryBarrier
+#endif
+
 namespace GlRender
 {
 	GlComputePipeline::GlComputePipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem, ShaderProgram & p_program )
@@ -21,10 +25,9 @@ namespace GlRender
 	{
 	}
 
-	void GlComputePipeline::Run(
-		Point3ui const & p_workgroups,
-		Point3ui const & p_workgroupSize,
-		FlagCombination< MemoryBarrier > const & p_barriers )const
+	void GlComputePipeline::Run( Point3ui const & p_workgroups
+		, Point3ui const & p_workgroupSize
+		, MemoryBarriers const & p_barriers )const
 	{
 		m_program.Bind();
 

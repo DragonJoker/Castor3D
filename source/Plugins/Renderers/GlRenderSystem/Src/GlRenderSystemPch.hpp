@@ -90,4 +90,8 @@ SOFTWARE.
 #	undef None
 #endif
 
+#ifdef MemoryBarrier
+#	undef MemoryBarrier
+#endif
+
 #endif

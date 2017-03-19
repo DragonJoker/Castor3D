@@ -85,12 +85,11 @@ namespace Castor3D
 		 *\brief		Lance les calculs.
 		 *\param[in]	p_workgroups	Le nombre de groupes de travail.
 		 *\param[in]	p_workgroupSize	La taille d'un groupe de travail.
-		 *\param[in]	p_barriers		Les barrières mémoire.
+		 *\param[in]	p_barriers		Les barriï¿½res mï¿½moire.
 		 */
-		C3D_API virtual void Run(
-			Castor::Point3ui const & p_workgroups,
-			Castor::Point3ui const & p_workgroupSize,
-			Castor::FlagCombination< MemoryBarrier > const & p_barriers )const = 0;
+		C3D_API virtual void Run( Castor::Point3ui const & p_workgroups
+			, Castor::Point3ui const & p_workgroupSize
+			, MemoryBarriers const & p_barriers )const = 0;
 		/**
 		 *\~english
 		 *\return		The shader program.

@@ -42,8 +42,7 @@ namespace Testing
 
 	bool C3DTestCase::compare( Angle const & p_a, Angle const & p_b )
 	{
-		return p_a.radians() == p_b.radians()
-			|| ( std::isnan( p_a.radians() && std::isnan( p_b.radians() ) ) );
+		return p_a.radians() == p_b.radians();
 	}
 
 	bool C3DTestCase::compare( Castor::Quaternion const & p_a, Castor::Quaternion const & p_b )
