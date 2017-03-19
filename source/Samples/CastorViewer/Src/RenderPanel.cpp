@@ -432,7 +432,7 @@ namespace CastorViewer
 					l_pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
 				}
 
-				l_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry, p_submesh]()
+				p_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry, p_submesh]()
 				{
 					p_geometry->SetMaterial( *p_submesh, m_selectedSubmeshMaterialClone );
 					p_geometry->GetScene()->SetChanged();

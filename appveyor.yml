@@ -1,0 +1,40 @@
+version: "{build}"
+
+os:
+  - Visual Studio 2015
+
+platform:
+  - Win32
+  - x64
+
+environment:
+  MSVC_DEFAULT_OPTIONS: ON
+
+configuration:
+  - Release
+
+clone_folder:
+  C:\projects\Castor3D
+
+branches:
+  only:
+    - master
+    - development
+
+install:
+  - cmd: git submodule init
+  - cmd: git submodule update
+  - cmd: cd C:\projects\Castor3D
+  - cmd: md build
+  - cmd: cd build
+  - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 14 2015
+  - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 14 2015 Win64
+  - cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% ../source -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_TEST=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILD_SAMPLE_CASTOR_TD=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=OFF -DCASTOR_BUILD_TEST_RENDERER_OGL=OFF -DCASTOR_FORCE_ALL_IMPORTERS=ON
+
+build:
+  project: build/Castor3D.sln
+  parallel: true
+
+test:
+  test_script:
+    - cmd: ctest --build-config %configuration% --output-on-failure

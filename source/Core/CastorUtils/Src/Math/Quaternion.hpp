@@ -189,19 +189,6 @@ namespace Castor
 		inline QuaternionT( Point3d const & p_vector, Angle const & p_angle );
 		/**
 		 *\~english
-		 *\brief		Constructor from Euler angles.
-		 *\param[in]	p_pitch	The X axis angle.
-		 *\param[in]	p_yaw	The Y axis angle.
-		 *\param[in]	p_roll	The Z axis angle.
-		 *\~french
-		 *\brief		Constructeur à partir d'angles d'Euler.
-		 *\param[in]	p_pitch	L'angle de rotation autour de l'axe X.
-		 *\param[in]	p_yaw	L'angle de rotation autour de l'axe Y.
-		 *\param[in]	p_roll	L'angle de rotation autour de l'axe Z.
-		 */
-		inline QuaternionT( Angle const & p_pitch, Angle const & p_yaw, Angle const & p_roll );
-		/**
-		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_values	The quaternion values
 		 *\~french
@@ -480,59 +467,6 @@ namespace Castor
 		 *\param[out]	p_x, p_y, p_z	Les axes
 		 */
 		inline void to_axes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const;
-		/**
-		 *\~english
-		 *\brief		Updates this Quaternion from Euler angles
-		 *\param[in]	p_yaw	The Y axis angle (also called heading or azimuth)
-		 *\param[in]	p_pitch	The X axis angle (also called attitude or elevation)
-		 *\param[in]	p_roll	The Z axis angle (also called bank or tilt)
-		 *\~french
-		 *\brief		Met àjour ce Quaternion à partir d'angles d'Euler
-		 *\param[in]	p_yaw	L'angle de rotation autour de l'axe Y aussi appelé cap ou azimut)
-		 *\param[in]	p_pitch	L'angle de rotation autour de l'axe X aussi appelé calage ou élévation)
-		 *\param[in]	p_roll	L'angle de rotation autour de l'axe Z aussi appelé virage ou inclinaison)
-		 */
-		inline void from_euler( Angle const & p_pitch, Angle const & p_yaw, Angle const & p_roll );
-		/**
-		 *\~english
-		 *\brief		Computes Euler angles from this Quaternion
-		 *\param[out]	p_yaw	The Y axis angle (also called heading or azimuth)
-		 *\param[out]	p_pitch	The X axis angle (also called attitude or elevation)
-		 *\param[out]	p_roll	The Z axis angle (also called bank or tilt)
-		 *\~french
-		 *\brief		Calcule des angles d'Euler à partir de ce Quaternion
-		 *\param[out]	p_yaw	L'angle de rotation autour de l'axe Y (aussi appelé cap ou azimut)
-		 *\param[out]	p_pitch	L'angle de rotation autour de l'axe X (aussi appelé calage ou élévation)
-		 *\param[out]	p_roll	L'angle de rotation autour de l'axe Z (aussi appelé virage ou inclinaison)
-		 */
-		inline void to_euler( Angle & p_pitch, Angle & p_yaw, Angle & p_roll )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the Y axis rotation value (also called heading or azimuth)
-		 *\return		The Y axis rotation value
-		 *\~french
-		 *\brief		Récupère la valeur de la rotation sur l'axe Y (aussi appelé cap ou azimut)
-		 *\return		La valeur de la rotation autour de l'axe Y
-		 */
-		inline Angle get_yaw()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the Y axis rotation value (also called attitude or elevation)
-		 *\return		The Y axis rotation value
-		 *\~french
-		 *\brief		Récupère la valeur de la rotation sur l'axe Y (aussi appelé calage ou élévation)
-		 *\return		La valeur de la rotation autour de l'axe Y
-		 */
-		inline Angle get_pitch()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the Y axis rotation value (also called bank or tilt)
-		 *\return		The Y axis rotation value
-		 *\~french
-		 *\brief		Récupère la valeur de la rotation sur l'axe Y (aussi appelé virage ou inclinaison)
-		 *\return		La valeur de la rotation autour de l'axe Y
-		 */
-		inline Angle get_roll()const;
 		/**
 		 *\~english
 		 *\brief		Sets this Quaternion to its conjugate

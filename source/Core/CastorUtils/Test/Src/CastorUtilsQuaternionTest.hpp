@@ -48,12 +48,6 @@ namespace Testing
 
 		void TransformationMatrixComparison();
 
-#	if GLM_VERSION >= 95
-
-		void QuaternionComparison();
-
-#	endif
-
 #endif
 
 	private:

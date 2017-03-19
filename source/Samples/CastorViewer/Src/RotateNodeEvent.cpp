@@ -23,7 +23,12 @@ namespace CastorViewer
 
 		if ( l_node && ( m_dx || m_dy || m_dz ) )
 		{
-			l_node->Rotate( Quaternion{ Angle::from_degrees( m_dx ), Angle::from_degrees( m_dy ), Angle::from_degrees( m_dz ) } );
+			Quaternion l_x{ Point3r{ 1.0, 0.0, 0.0 }, Angle::from_degrees( m_dx ) };
+			Quaternion l_y{ Point3r{ 0.0, 1.0, 0.0 }, Angle::from_degrees( m_dy ) };
+			Quaternion l_z{ Point3r{ 0.0, 0.0, 1.0 }, Angle::from_degrees( m_dz ) };
+			l_node->Rotate( l_x );
+			l_node->Rotate( l_y );
+			l_node->Rotate( l_z );
 		}
 
 		m_dx = 0;
