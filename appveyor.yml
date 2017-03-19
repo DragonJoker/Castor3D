@@ -36,5 +36,4 @@ build:
   parallel: true
 
 test:
-  test_script:
-    - cmd: ctest --build-config %configuration% --output-on-failure
+  - cmd: ctest --build-config %configuration% --output-on-failure
