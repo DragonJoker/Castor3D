@@ -591,8 +591,8 @@ namespace Castor3D
 			, l_eventClean
 			, GetEngine()->GetSamplerCache() );
 		m_overlayCacheView = MakeCacheView< Overlay, EventType::ePreRender >( GetName()
-			, l_dummy
-			, l_dummy
+			, std::bind( OverlayCache::OverlayInitialiser{ GetEngine()->GetOverlayCache() }, std::placeholders::_1 )
+			, std::bind( OverlayCache::OverlayCleaner{ GetEngine()->GetOverlayCache() }, std::placeholders::_1 )
 			, GetEngine()->GetOverlayCache() );
 		m_fontCacheView = MakeCacheView< Font, EventType::ePreRender >( GetName()
 			, l_dummy

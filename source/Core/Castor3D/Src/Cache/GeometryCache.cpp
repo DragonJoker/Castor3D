@@ -41,7 +41,7 @@ namespace Castor3D
 		};
 	}
 
-	GeometryCache::ObjectCache( Engine & p_engine
+	ObjectCache< Geometry, Castor::String >::ObjectCache( Engine & p_engine
 		, Scene & p_scene
 		, SceneNodeSPtr p_rootNode
 		, SceneNodeSPtr p_rootCameraNode
@@ -66,11 +66,11 @@ namespace Castor3D
 	{
 	}
 
-	GeometryCache::~ObjectCache()
+	ObjectCache< Geometry, Castor::String >::~ObjectCache()
 	{
 	}
 
-	uint32_t GeometryCache::GetObjectCount()const
+	uint32_t ObjectCache< Geometry, Castor::String >::GetObjectCount()const
 	{
 		auto l_lock = Castor::make_unique_lock( m_elements );
 

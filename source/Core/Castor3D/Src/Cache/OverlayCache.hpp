@@ -101,6 +101,26 @@ namespace Castor3D
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
 		DECLARE_MAP( Castor::String, FontTextureSPtr, FontTextureStr );
 
+		struct OverlayInitialiser
+		{
+			OverlayInitialiser( Cache< Overlay, Castor::String > & p_cache );
+			void operator()( OverlaySPtr p_element );
+
+		private:
+			OverlayCategorySet & m_overlays;
+			std::vector< int > & m_overlayCountPerLevel;
+		};
+
+		struct OverlayCleaner
+		{
+			OverlayCleaner( Cache< Overlay, Castor::String > & p_cache );
+			void operator()( OverlaySPtr p_element );
+
+		private:
+			OverlayCategorySet & m_overlays;
+			std::vector< int > & m_overlayCountPerLevel;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -109,10 +129,10 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 */
 		C3D_API Cache( Engine & p_engine
-					   , Producer && p_produce
-					   , Initialiser && p_initialise = Initialiser{}
-					   , Cleaner && p_clean = Cleaner{}
-					   , Merger && p_merge = Merger{} );
+		   , Producer && p_produce
+		   , Initialiser && p_initialise = Initialiser{}
+		   , Cleaner && p_clean = Cleaner{}
+		   , Merger && p_merge = Merger{} );
 		/**
 		 *\~english
 		 *\brief		Destructor

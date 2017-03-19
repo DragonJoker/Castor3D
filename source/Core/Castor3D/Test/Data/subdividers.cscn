@@ -103,7 +103,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "PnTri2Torus"
 	{
 		position 60 -20 0
@@ -133,7 +133,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "Loop3Torus"
 	{
 		position 90 -20 -30
@@ -148,7 +148,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "PnTri3Torus"
 	{
 		position 90 -20 0
@@ -163,7 +163,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "Phong3Torus"
 	{
 		position 90 -20 30
@@ -178,7 +178,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "Loop4Torus"
 	{
 		position 120 -20 -30
@@ -193,7 +193,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "PnTri4Torus"
 	{
 		position 120 -20 0
@@ -237,7 +237,7 @@ scene "Scene"
 		}
 		material "ShowNormals"
 	}
-	
+
 	scene_node "Loop1Sphere"
 	{
 		position 30 20 -30
@@ -282,7 +282,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "Loop2Sphere"
 	{
 		position 60 20 -30
@@ -297,7 +297,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "PnTri2Sphere"
 	{
 		position 60 20 0
@@ -327,7 +327,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "Loop3Sphere"
 	{
 		position 90 20 -30
@@ -342,7 +342,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "PnTri3Sphere"
 	{
 		position 90 20 0
@@ -372,7 +372,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "Loop4Sphere"
 	{
 		position 120 20 -30
@@ -387,7 +387,7 @@ scene "Scene"
 		}
 		material "Silver"
 	}
-	
+
 	scene_node "PnTri4Sphere"
 	{
 		position 120 20 0

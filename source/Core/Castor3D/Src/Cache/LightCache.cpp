@@ -69,7 +69,7 @@ namespace Castor3D
 		};
 	}
 
-	LightCache::ObjectCache( Engine & p_engine
+	ObjectCache< Light, Castor::String >::ObjectCache( Engine & p_engine
 		, Scene & p_scene
 		, SceneNodeSPtr p_rootNode
 		, SceneNodeSPtr p_rootCameraNode
@@ -95,14 +95,18 @@ namespace Castor3D
 	{
 	}
 
-	LightCache::~ObjectCache()
+	ObjectCache< Light, Castor::String >::~ObjectCache()
 	{
 		m_lightsTexture.reset();
 	}
 
-	void LightCache::Initialise()
+	void ObjectCache< Light, Castor::String >::Initialise()
 	{
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer, AccessType::eWrite, AccessType::eRead, PixelFormat::eRGBA32F, Size( 1000, 1 ) );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer
+			, AccessType::eWrite
+			, AccessType::eRead
+			, PixelFormat::eRGBA32F
+			, Size( 1000, 1 ) );
 		l_texture->GetImage().InitialiseSource();
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );
@@ -111,13 +115,13 @@ namespace Castor3D
 		m_scene.GetListener().PostEvent( MakeInitialiseEvent( *m_lightsTexture ) );
 	}
 
-	void LightCache::Cleanup()
+	void ObjectCache< Light, Castor::String >::Cleanup()
 	{
 		m_scene.GetListener().PostEvent( MakeCleanupEvent( *m_lightsTexture ) );
 		MyObjectCache::Cleanup();
 	}
 
-	void LightCache::UpdateLights()const
+	void ObjectCache< Light, Castor::String >::UpdateLights()const
 	{
 		auto l_layout = m_lightsTexture->GetTexture();
 
@@ -146,12 +150,12 @@ namespace Castor3D
 		}
 	}
 
-	void LightCache::BindLights()const
+	void ObjectCache< Light, Castor::String >::BindLights()const
 	{
 		m_lightsTexture->Bind();
 	}
 
-	void LightCache::UnbindLights()const
+	void ObjectCache< Light, Castor::String >::UnbindLights()const
 	{
 		m_lightsTexture->Unbind();
 	}

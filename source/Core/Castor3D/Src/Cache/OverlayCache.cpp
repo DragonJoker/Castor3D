@@ -23,78 +23,69 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	//*************************************************************************************************
+
 	template<> const String CacheTraits< Overlay, String >::Name = cuT( "Overlay" );
 
-	namespace
+	//*************************************************************************************************
+
+	OverlayCache::OverlayInitialiser::OverlayInitialiser( Cache< Overlay, Castor::String > & p_cache )
+		: m_overlays{ p_cache.m_overlays }
+		, m_overlayCountPerLevel{ p_cache.m_overlayCountPerLevel }
 	{
-		struct OverlayInitialiser
+	}
+
+	void OverlayCache::OverlayInitialiser::operator()( OverlaySPtr p_element )
+	{
+		int l_level = 0;
+
+		if ( p_element->GetParent() )
 		{
-			OverlayInitialiser( OverlayCategorySet & p_overlays, std::vector< int > & p_overlayCountPerLevel )
-				: m_overlays{ p_overlays }
-				, m_overlayCountPerLevel{ p_overlayCountPerLevel }
-			{
-			}
+			l_level = p_element->GetParent()->GetLevel() + 1;
+			p_element->GetParent()->AddChild( p_element );
+		}
 
-			inline void operator()( OverlaySPtr p_element )
-			{
-				int l_level = 0;
-
-				if ( p_element->GetParent() )
-				{
-					l_level = p_element->GetParent()->GetLevel() + 1;
-					p_element->GetParent()->AddChild( p_element );
-				}
-
-				while ( l_level >= int( m_overlayCountPerLevel.size() ) )
-				{
-					m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
-				}
-
-				p_element->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
-				m_overlays.insert( p_element->GetCategory() );
-			}
-
-			OverlayCategorySet & m_overlays;
-			std::vector< int > & m_overlayCountPerLevel;
-		};
-
-		struct OverlayCleaner
+		while ( l_level >= int( m_overlayCountPerLevel.size() ) )
 		{
-			OverlayCleaner( OverlayCategorySet & p_overlays, std::vector< int > & p_overlayCountPerLevel )
-				: m_overlays{ p_overlays }
-				, m_overlayCountPerLevel{ p_overlayCountPerLevel }
-			{
-			}
+			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
+		}
 
-			inline void operator()( OverlaySPtr p_element )
-			{
-				if ( p_element->GetChildrenCount() )
-				{
-					for ( auto l_child : *p_element )
-					{
-						l_child->SetPosition( l_child->GetAbsolutePosition() );
-						l_child->SetSize( l_child->GetAbsoluteSize() );
-					}
-				}
-			}
-
-			OverlayCategorySet & m_overlays;
-			std::vector< int > & m_overlayCountPerLevel;
-		};
+		p_element->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
+		m_overlays.insert( p_element->GetCategory() );
 	}
 
 	//*************************************************************************************************
 
-	OverlayCache::Cache( Engine & p_engine
-						 , Producer && p_produce
-						 , Initialiser && p_initialise
-						 , Cleaner && p_clean
-						 , Merger && p_merge )
+	OverlayCache::OverlayCleaner::OverlayCleaner( Cache< Overlay, Castor::String > & p_cache )
+		: m_overlays{ p_cache.m_overlays }
+		, m_overlayCountPerLevel{ p_cache.m_overlayCountPerLevel }
+	{
+	}
+
+	void OverlayCache::OverlayCleaner::operator()( OverlaySPtr p_element )
+	{
+		if ( p_element->GetChildrenCount() )
+		{
+			for ( auto l_child : *p_element )
+			{
+				l_child->SetPosition( l_child->GetAbsolutePosition() );
+				l_child->SetSize( l_child->GetAbsoluteSize() );
+			}
+		}
+	}
+
+	//*************************************************************************************************
+
+	Cache< Overlay, Castor::String >::Cache( Engine & p_engine
+		 , Producer && p_produce
+		 , Initialiser && p_initialise
+		 , Cleaner && p_clean
+		 , Merger && p_merge )
 		: MyCacheType( p_engine
-					   , std::move( p_produce )
-					   , std::bind( OverlayInitialiser{ m_overlays, m_overlayCountPerLevel }, std::placeholders::_1 )
-					   , std::bind( OverlayCleaner{ m_overlays, m_overlayCountPerLevel }, std::placeholders::_1 )
-					   , std::move( p_merge ) )
+		   , std::move( p_produce )
+		   , std::bind( OverlayInitialiser{ *this }, std::placeholders::_1 )
+		   , std::bind( OverlayCleaner{ *this }, std::placeholders::_1 )
+		   , std::move( p_merge ) )
 		, m_overlayCountPerLevel{ 1000, 0 }
 		, m_viewport{ *GetEngine() }
 	{
@@ -102,18 +93,18 @@ namespace Castor3D
 		GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
 	}
 
-	OverlayCache::~OverlayCache()
+	Cache< Overlay, Castor::String >::~Cache()
 	{
 	}
 
-	void OverlayCache::Clear()
+	void Cache< Overlay, Castor::String >::Clear()
 	{
 		auto l_lock = make_unique_lock( *this );
 		m_overlays.clear();
 		m_fontTextures.clear();
 	}
 
-	void OverlayCache::Cleanup()
+	void Cache< Overlay, Castor::String >::Cleanup()
 	{
 		m_viewport.Cleanup();
 		auto l_lock = make_unique_lock( *this );
@@ -124,7 +115,7 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayCache::UpdateRenderer()
+	void Cache< Overlay, Castor::String >::UpdateRenderer()
 	{
 		if ( GetEngine()->IsCleaned() )
 		{
@@ -144,7 +135,7 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayCache::Update()
+	void Cache< Overlay, Castor::String >::Update()
 	{
 		auto l_lock = make_unique_lock( *this );
 
@@ -154,7 +145,7 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayCache::Render( Scene const & p_scene, Castor::Size const & p_size )
+	void Cache< Overlay, Castor::String >::Render( Scene const & p_scene, Castor::Size const & p_size )
 	{
 		auto l_lock = make_unique_lock( *this );
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
@@ -181,7 +172,7 @@ namespace Castor3D
 		}
 	}
 
-	bool OverlayCache::Write( Castor::TextFile & p_file )const
+	bool Cache< Overlay, Castor::String >::Write( Castor::TextFile & p_file )const
 	{
 		auto l_lock = make_unique_lock( *this );
 		bool l_return = true;
@@ -208,14 +199,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool OverlayCache::Read( Castor::TextFile & p_file )
+	bool Cache< Overlay, Castor::String >::Read( Castor::TextFile & p_file )
 	{
 		auto l_lock = make_unique_lock( *this );
 		SceneFileParser l_parser( *GetEngine() );
 		return l_parser.ParseFile( p_file );
 	}
 
-	FontTextureSPtr OverlayCache::GetFontTexture( Castor::String const & p_name )
+	FontTextureSPtr Cache< Overlay, Castor::String >::GetFontTexture( Castor::String const & p_name )
 	{
 		auto l_it = m_fontTextures.find( p_name );
 		FontTextureSPtr l_return;
@@ -228,7 +219,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	FontTextureSPtr OverlayCache::CreateFontTexture( Castor::FontSPtr p_font )
+	FontTextureSPtr Cache< Overlay, Castor::String >::CreateFontTexture( Castor::FontSPtr p_font )
 	{
 		auto l_it = m_fontTextures.find( p_font->GetName() );
 		FontTextureSPtr l_return;
@@ -236,7 +227,7 @@ namespace Castor3D
 		if ( l_it == m_fontTextures.end() )
 		{
 			l_return = std::make_shared< FontTexture >( *GetEngine(), p_font );
-			m_fontTextures.insert( { p_font->GetName(), l_return } );
+			m_fontTextures.emplace( p_font->GetName(), l_return );
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
 		}
 
