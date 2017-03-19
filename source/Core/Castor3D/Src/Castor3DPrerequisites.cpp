@@ -188,7 +188,7 @@ namespace Castor3D
 			|| CheckFlag( p_flags, ProgramFlag::eShadowMapPoint );
 	}
 
-	GLSL::ShadowType GetShadowType ( SceneFlags const & p_flags )
+	GLSL::ShadowType GetShadowType( SceneFlags const & p_flags )
 	{
 		auto l_shadow = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eShadowFilterStratifiedPoisson ) );
 
@@ -208,7 +208,7 @@ namespace Castor3D
 		}
 	}
 
-	GLSL::FogType GetFogType ( SceneFlags const & p_flags )
+	GLSL::FogType GetFogType( SceneFlags const & p_flags )
 	{
 		auto l_fog = SceneFlag( uint16_t( p_flags ) & uint16_t( SceneFlag::eFogSquaredExponential ) );
 

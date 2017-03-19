@@ -687,14 +687,17 @@ namespace Castor3D
 		m_overlayCacheView->Clear();
 		m_fontCacheView->Clear();
 
-		// Those two ones, being ResourceCache, need to be cleared in destructor only
+		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->Cleanup();
 		m_windowCache->Cleanup();
 
 		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{
-			m_colour->Cleanup();
-			m_colour.reset();
+			if ( m_colour )
+			{
+				m_colour->Cleanup();
+				m_colour.reset();
+			}
 		} ) );
 
 		if ( m_backgroundImage )

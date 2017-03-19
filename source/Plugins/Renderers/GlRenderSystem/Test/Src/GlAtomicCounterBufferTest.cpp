@@ -97,6 +97,7 @@ namespace Testing
 		l_atomicCounterBuffer.Download( 0u, 1u, &l_count );
 		CT_EQUAL( l_count, 1u );
 		l_atomicCounterBuffer.Cleanup();
+		l_program->Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
 	}
 }

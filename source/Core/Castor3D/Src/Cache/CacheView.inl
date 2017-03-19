@@ -36,9 +36,9 @@ namespace Castor3D
 			l_result = m_cache.Create( p_name, std::forward< Params >( p_params )... );
 			m_initialise( l_result );
 			m_cache.Add( p_name, l_result );
+			m_createdElements.insert( p_name );
 		}
 
-		m_createdElements.insert( p_name );
 		return l_result;
 	}
 
@@ -65,6 +65,7 @@ namespace Castor3D
 			if ( l_resource )
 			{
 				m_cache.Remove( l_name );
+				m_cleaning.push_back( l_resource );
 				m_clean( l_resource );
 			}
 		}

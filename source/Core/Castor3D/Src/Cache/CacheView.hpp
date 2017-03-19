@@ -48,6 +48,7 @@ namespace Castor3D
 	private:
 		using Initialiser = ElementInitialiser< ResourceType >;
 		using Cleaner = ElementCleaner< ResourceType >;
+		using ResourcePtr = std::shared_ptr< ResourceType >;
 
 	public:
 		/**
@@ -84,7 +85,7 @@ namespace Castor3D
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Params >
-		inline std::shared_ptr< ResourceType > Add( Castor::String const & p_name, Params && ... p_params );
+		inline ResourcePtr Add( Castor::String const & p_name, Params && ... p_params );
 		/**
 		 *\~english
 		 *\brief		Adds an already created an element.
@@ -95,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_element	L'élément.
 		 */
-		inline std::shared_ptr< ResourceType > Add( Castor::String const & p_name, std::shared_ptr< ResourceType > p_element );
+		inline ResourcePtr Add( Castor::String const & p_name, ResourcePtr p_element );
 		/**
 		 *\~english
 		 *\brief		Removes from the cache the elements created through this view.
@@ -122,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline std::shared_ptr< ResourceType > Find( Castor::String const & p_name )const;
+		inline ResourcePtr Find( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
@@ -194,6 +195,9 @@ namespace Castor3D
 		//!\~english	The element cleaner.
 		//!\~french		Le nettoyeur d'éléments.
 		Cleaner m_clean;
+		//!\~english	The elements that are being cleaned.
+		//!\~french		Les éléments en cours de nettoyage.
+		std::vector< ResourcePtr > m_cleaning;
 	};
 }
 
