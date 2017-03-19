@@ -35,5 +35,5 @@ build:
   project: build/Castor3D.sln
   parallel: true
 
-test:
+test_script:
   - cmd: ctest --build-config %configuration% --output-on-failure
