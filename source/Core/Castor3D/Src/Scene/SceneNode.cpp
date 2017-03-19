@@ -49,9 +49,6 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				Point3r l_axis;
-				Angle l_angle;
-				p_node.GetOrientation().to_axis_angle( l_axis, l_angle );
 				l_return = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
 						   && Quaternion::TextWriter( String() )( p_node.GetOrientation(), p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;

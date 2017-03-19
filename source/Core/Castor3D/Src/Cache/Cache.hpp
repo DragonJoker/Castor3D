@@ -69,10 +69,10 @@ namespace Castor3D
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
 		inline CacheBase( Engine & p_engine
-						  , Producer && p_produce
-						  , Initialiser && p_initialise
-						  , Cleaner && p_clean
-						  , Merger && p_merge )
+			, Producer && p_produce
+			, Initialiser && p_initialise
+			, Cleaner && p_clean
+			, Merger && p_merge )
 			: m_engine{ p_engine }
 			, m_produce{ std::move( p_produce ) }
 			, m_initialise{ std::move( p_initialise ) }
@@ -126,11 +126,28 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Removes an object, given a name.
+		 *\brief		Creates an element.
+		 *\param[in]	p_name		The element name.
+		 *\param[in]	p_params	The other constructor parameters.
+		 *\return		The created element.
+		 *\~french
+		 *\brief		Crée un élément.
+		 *\param[in]	p_name		Le nom d'élément.
+		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\return		L'élément créé.
+		 */
+		template< typename ... Parameters >
+		inline ElementPtr Create( Key const & p_name, Parameters && ... p_parameters )
+		{
+			return m_produce( p_name, std::forward< Parameters >( p_parameters )... );
+		}
+		/**
+		 *\~english
+		 *\brief		Removes an element, given a name.
 		 *\param[in]	p_name		The element name.
 		 *\param[in]	p_element	The element.
 		 *\~french
-		 *\brief		Retire un objet à partir d'un nom.
+		 *\brief		Retire un élément à partir d'un nom.
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_element	L'élément.
 		 */
@@ -161,15 +178,15 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Creates an object.
-		 *\param[in]	p_name		The object name.
+		 *\brief		Creates an element.
+		 *\param[in]	p_name		The element name.
 		 *\param[in]	p_params	The other constructor parameters.
 		 *\return		The created object.
 		 *\~french
-		 *\brief		Crée un objet.
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\brief		Crée un élément.
+		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_params	Les autres paramètres de construction.
-		 *\return		L'objet créé.
+		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
 		inline ElementPtr Add( Key const & p_name, Parameters && ... p_parameters )
@@ -194,11 +211,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Removes an object, given a name.
-		 *\param[in]	p_name		The object name.
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	p_name		The element name.
 		 *\~french
-		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	p_name		Le nom d'élément.
 		 */
 		inline void Remove( Key const & p_name )
 		{
@@ -262,9 +279,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The objects count.
+		 *\return		The elements count.
 		 *\~french
-		 *\return		Le nombre d'objets
+		 *\return		Le nombre d'éléments.
 		 */
 		inline uint32_t GetObjectCount()const
 		{
@@ -292,10 +309,10 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_name		The element name.
 		 *\return		\p true if an element with given name exists.
 		 *\~french
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_name		Le nom d'élément.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
 		inline bool Has( Key const & p_name )const
@@ -309,7 +326,7 @@ namespace Castor3D
 		 *\return		The found element, nullptr if not found.
 		 *\~french
 		 *\brief		Cherche un élément par son nom.
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_name		Le nom d'élément.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
 		inline ElementPtr Find( Key const & p_name )const
@@ -338,11 +355,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Returns an iterator to the first element of the collection
-		 *\return		The iterator
+		 *\return		The iterator to the beginning of the collection.
 		 *\~french
-		 *\brief		Renvoie un itérateur sur le premier élément de la collection
-		 *\return		L'itérateur
+		 *\return		L'itérateur sur le début de la collection.
 		 */
 		inline auto begin()
 		{
@@ -350,11 +365,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Returns an constant iterator to the first element of the collection
-		 *\return		The iterator
+		 *\return		The iterator to the beginning of the collection.
 		 *\~french
-		 *\brief		Renvoie un itérateur constant sur le premier élément de la collection
-		 *\return		L'itérateur
+		 *\return		L'itérateur sur le début de la collection.
 		 */
 		inline auto begin()const
 		{
@@ -362,11 +375,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Returns an iterator to the after last element of the collection
-		 *\return		The iterator
+		 *\return		The iterator to the end of the collection.
 		 *\~french
-		 *\brief		Renvoie un itérateur sur l'après dernier élément de la collection
-		 *\return		L'itérateur
+		 *\return		L'itérateur sur la fin de la collection.
 		 */
 		inline auto end()
 		{
@@ -374,11 +385,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Returns an constant iterator to the after last element of the collection
-		 *\return		The iterator
+		 *\return		The iterator to the end of the collection.
 		 *\~french
-		 *\brief		Renvoie un itérateur constant sur l'après dernier élément de la collection
-		 *\return		L'itérateur
+		 *\return		L'itérateur sur la fin de la collection.
 		 */
 		inline auto end()const
 		{
@@ -401,8 +410,8 @@ namespace Castor3D
 		//!\~english	The element cleaner.
 		//!\~french		Le nettoyeur d'éléments.
 		Cleaner m_clean;
-		//!\~english	The objects collection merger.
-		//!\~french		Le fusionneur de collection d'objets.
+		//!\~english	The elements collection merger.
+		//!\~french		Le fusionneur de collection d'éléments.
 		Merger m_merge;
 	};
 	/*!
@@ -438,15 +447,15 @@ namespace Castor3D
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
 		inline Cache( Engine & p_engine
-					  , Producer && p_produce
-					  , Initialiser && p_initialise = Initialiser{}
-					  , Cleaner && p_clean = Cleaner{}
-					  , Merger && p_merge = Merger{} )
+			, Producer && p_produce
+			, Initialiser && p_initialise = Initialiser{}
+			, Cleaner && p_clean = Cleaner{}
+			, Merger && p_merge = Merger{} )
 			: MyCacheType( p_engine
-						   , std::move( p_produce )
-						   , std::move( p_initialise )
-						   , std::move( p_clean )
-						   , std::move( p_merge ) )
+				, std::move( p_produce )
+				, std::move( p_initialise )
+				, std::move( p_clean )
+				, std::move( p_merge ) )
 		{
 		}
 		/**
@@ -472,18 +481,18 @@ namespace Castor3D
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< Cache< ElementType, KeyType > >
 	MakeCache( Engine & p_engine
-			   , typename CacheTraits< ElementType, KeyType >::Producer && p_produce
-			   , ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
-			   , ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
-			   , typename CacheTraits< ElementType, KeyType >::Merger && p_merge = []( CacheBase< ElementType, KeyType > const &
-																					   , Castor::Collection< ElementType, KeyType > &
-																					   , std::shared_ptr< ElementType > ){} )
+		, typename CacheTraits< ElementType, KeyType >::Producer && p_produce
+		, ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
+		, ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
+		, typename CacheTraits< ElementType, KeyType >::Merger && p_merge = []( CacheBase< ElementType, KeyType > const &
+			, Castor::Collection< ElementType, KeyType > &
+			, std::shared_ptr< ElementType > ){} )
 	{
 		return std::make_unique< Cache< ElementType, KeyType > >( p_engine
-																  , std::move( p_produce )
-																  , std::move( p_initialise )
-																  , std::move( p_clean )
-																  , std::move(p_merge) );
+			, std::move( p_produce )
+			, std::move( p_initialise )
+			, std::move( p_clean )
+			, std::move(p_merge) );
 	}
 }
 

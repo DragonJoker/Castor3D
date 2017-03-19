@@ -48,7 +48,7 @@ namespace Testing
 #if defined( CASTOR_USE_GLM )
 #	if GLM_VERSION >= 95
 
-		DoRegisterTest( "QuaternionComparison", std::bind( &CastorUtilsQuaternionTest::QuaternionComparison, this ) );
+		//DoRegisterTest( "QuaternionComparison", std::bind( &CastorUtilsQuaternionTest::QuaternionComparison, this ) );
 
 #	endif
 

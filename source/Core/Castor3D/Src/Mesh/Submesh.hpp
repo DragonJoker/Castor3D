@@ -820,6 +820,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The parent mesh.
+		 *\~french
+		 *\return		Le maillage parent.
+		 */
+		inline Mesh & GetParent()
+		{
+			return m_parentMesh;
+		}
+		/**
+		 *\~english
 		 *\return		The shader program flags.
 		 *\~french
 		 *\return		Les indicateurs de shader.

@@ -280,6 +280,8 @@ namespace Testing
 
 	protected:
 		using TestCase::compare;
+		bool compare( Castor::Angle const & p_a, Castor::Angle const & p_b );
+		bool compare( Castor::Quaternion const & p_a, Castor::Quaternion const & p_b );
 		bool compare( Castor3D::Scene const & p_a, Castor3D::Scene const & p_b );
 		bool compare( Castor3D::SceneNode const & p_a, Castor3D::SceneNode const & p_b );
 		bool compare( Castor3D::Animable const & p_a, Castor3D::Animable const & p_b );

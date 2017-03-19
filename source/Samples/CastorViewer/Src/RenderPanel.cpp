@@ -282,7 +282,7 @@ namespace CastorViewer
 		if ( l_camera )
 		{
 			m_currentNode = l_camera->GetParent();
-			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_camera]()
+			l_camera->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_camera]()
 			{
 				auto l_cameraNode = l_camera->GetParent();
 				l_cameraNode->SetOrientation( m_qOriginalOrientation );
@@ -300,7 +300,7 @@ namespace CastorViewer
 		if ( l_camera )
 		{
 			auto l_cameraNode = l_camera->GetParent();
-			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_cameraNode]()
+			l_camera->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_cameraNode]()
 			{
 				Quaternion l_orientation{ l_cameraNode->GetOrientation() };
 				l_orientation *= Quaternion{ Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
@@ -317,7 +317,7 @@ namespace CastorViewer
 		if ( l_camera )
 		{
 			auto l_cameraNode = l_camera->GetParent();
-			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_cameraNode]()
+			l_camera->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_cameraNode]()
 			{
 				Quaternion l_orientation{ l_cameraNode->GetOrientation() };
 				l_orientation *= Quaternion{ Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
@@ -412,7 +412,7 @@ namespace CastorViewer
 			if ( l_submesh && l_geometry )
 			{
 				auto l_material = m_selectedSubmeshMaterialOrig;
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, l_geometry, l_submesh, l_material]()
+				l_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, l_geometry, l_submesh, l_material]()
 				{
 					l_geometry->SetMaterial( *l_submesh, l_material );
 					l_geometry->GetScene()->SetChanged();
@@ -432,7 +432,7 @@ namespace CastorViewer
 					l_pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
 				}
 
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry, p_submesh]()
+				l_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry, p_submesh]()
 				{
 					p_geometry->SetMaterial( *p_submesh, m_selectedSubmeshMaterialClone );
 					p_geometry->GetScene()->SetChanged();

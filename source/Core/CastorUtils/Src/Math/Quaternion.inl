@@ -351,27 +351,27 @@ namespace Castor
 	template< typename T >
 	void QuaternionT< T >::to_axis_angle( Point3f & p_vector, Angle & p_angle )const
 	{
-		double const l_x = quat.x;
-		double const l_y = quat.y;
-		double const l_z = quat.z;
-		double const l_w = quat.w;
-		double l_rSqrLength = l_x * l_x + l_y * l_y + l_z * l_z;
+		T const l_x = quat.x;
+		T const l_y = quat.y;
+		T const l_z = quat.z;
+		T const l_w = quat.w;
+		T l_s = sqrt( T{ 1.0 } - ( l_w * l_w ) );
 
-		if ( l_rSqrLength > 0.0 )
-		{
-			p_angle = Angle::from_radians( 2.0 * acos( l_w ) );
-			double l_rSin = p_angle.sin();
-			p_vector[0] = float( l_x / l_rSin );
-			p_vector[1] = float( l_y / l_rSin );
-			p_vector[2] = float( l_z / l_rSin );
-		}
-		else
+		if ( std::abs( l_s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
 			p_angle = Angle::from_radians( 0.0 );
-			p_vector[0] = 1.0f;
-			p_vector[1] = 0.0f;
-			p_vector[2] = 0.0f;
+			p_vector[0] = T{ 1 };
+			p_vector[1] = T{ 0 };
+			p_vector[2] = T{ 0 };
+		}
+		else
+		{
+			p_angle.acos( l_w );
+			p_angle *= 2;
+			p_vector[0] = l_x / l_s;
+			p_vector[1] = l_y / l_s;
+			p_vector[2] = l_z / l_s;
 		}
 
 		point::normalise( p_vector );
@@ -380,27 +380,27 @@ namespace Castor
 	template< typename T >
 	void QuaternionT< T >::to_axis_angle( Point3d & p_vector, Angle & p_angle )const
 	{
-		double const l_x = quat.x;
-		double const l_y = quat.y;
-		double const l_z = quat.z;
-		double const l_w = quat.w;
-		double l_rSqrLength = l_x * l_x + l_y * l_y + l_z * l_z;
+		T const l_x = quat.x;
+		T const l_y = quat.y;
+		T const l_z = quat.z;
+		T const l_w = quat.w;
+		T l_s = sqrt( T{ 1.0 } - ( l_w * l_w ) );
 
-		if ( l_rSqrLength > 0.0 )
-		{
-			p_angle = Angle::from_radians( 2.0 * acos( l_w ) );
-			double l_rSin = p_angle.sin();
-			p_vector[0] = l_x / l_rSin;
-			p_vector[1] = l_y / l_rSin;
-			p_vector[2] = l_z / l_rSin;
-		}
-		else
+		if ( std::abs( l_s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
 			p_angle = Angle::from_radians( 0.0 );
-			p_vector[0] = 1.0;
-			p_vector[1] = 0.0;
-			p_vector[2] = 0.0;
+			p_vector[0] = T{ 1 };
+			p_vector[1] = T{ 0 };
+			p_vector[2] = T{ 0 };
+		}
+		else
+		{
+			p_angle.acos( l_w );
+			p_angle *= 2;
+			p_vector[0] = l_x / l_s;
+			p_vector[1] = l_y / l_s;
+			p_vector[2] = l_z / l_s;
 		}
 
 		point::normalise( p_vector );
@@ -473,47 +473,130 @@ namespace Castor
 	template< typename T >
 	void QuaternionT< T >::from_euler( Angle const & p_pitch, Angle const & p_yaw, Angle const & p_roll )
 	{
-		T l_cx = cos( T( p_pitch.radians() * 0.5 ) );
-		T l_sx = sin( T( p_pitch.radians() * 0.5 ) );
-		T l_cy = cos( T( p_yaw.radians() * 0.5 ) );
-		T l_sy = sin( T( p_yaw.radians() * 0.5 ) );
-		T l_cz = cos( T( p_roll.radians() * 0.5 ) );
-		T l_sz = sin( T( p_roll.radians() * 0.5 ) );
-		quat.w = T( l_cx * l_cy * l_cz ) + T( l_sx * l_sy * l_sz );
-		quat.x = T( l_sx * l_cy * l_cz ) - T( l_cx * l_sy * l_sz );
-		quat.y = T( l_cx * l_sy * l_cz ) + T( l_sx * l_cy * l_sz );
-		quat.z = T( l_cx * l_cy * l_sz ) - T( l_sx * l_sy * l_cz );
+		T l_c1 = cos( T( p_pitch.radians() * 0.5 ) );
+		T l_s1 = sin( T( p_pitch.radians() * 0.5 ) );
+		T l_c2 = cos( T( p_yaw.radians() * 0.5 ) );
+		T l_s2 = sin( T( p_yaw.radians() * 0.5 ) );
+		T l_c3 = cos( T( p_roll.radians() * 0.5 ) );
+		T l_s3 = sin( T( p_roll.radians() * 0.5 ) );
+		quat.w = T( l_c1 * l_c2 * l_c3 ) - T( l_s1 * l_s2 * l_s3 );
+		quat.x = T( l_s1 * l_s2 * l_c3 ) + T( l_c1 * l_c2 * l_s3 );
+		quat.y = T( l_s1 * l_c2 * l_c3 ) - T( l_c1 * l_s2 * l_s3 );
+		quat.z = T( l_c1 * l_s2 * l_s3 ) + T( l_s1 * l_c2 * l_s3 );
 	}
 
 	template< typename T >
 	void QuaternionT< T >::to_euler( Angle & p_pitch, Angle & p_yaw, Angle & p_roll )const
 	{
-		p_yaw = get_yaw();
-		p_pitch = get_pitch();
-		p_roll = get_roll();
+		T const l_x = quat.x;
+		T const l_y = quat.y;
+		T const l_z = quat.z;
+		T const l_w = quat.w;
+		T const l_test = l_x * l_y + l_z * l_w;
+
+		if ( l_test > 0.499 )
+		{ // singularity at north pole
+			p_yaw = Angle::from_radians( 2 * atan2( l_x, l_w ) );
+			p_pitch = Angle::from_radians( Angle::PiDiv2 );
+			p_roll = Angle{};
+		}
+		else if ( l_test < -0.499 )
+		{ // singularity at south pole
+			p_yaw = Angle::from_radians( -2 * atan2( l_x, l_w ) );
+			p_pitch = Angle::from_radians( -Angle::PiDiv2 );
+			p_roll = Angle{};
+		}
+		else
+		{
+			T l_sqx = l_x * l_x;
+			T l_sqy = l_y * l_y;
+			T l_sqz = l_z * l_z;
+			p_yaw = Angle::from_radians( atan2( 2 * l_y * l_w - 2 * l_x * l_z, 1 - 2 * l_sqy - 2 * l_sqz ) );
+			p_pitch = Angle::from_radians( asin( 2 * l_test ) );
+			p_roll = Angle::from_radians( atan2( 2 * l_x * l_w - 2 * l_y * l_z, 1 - 2 * l_sqx - 2 * l_sqz ) );
+		}
 	}
 
 	template< typename T >
 	Angle QuaternionT< T >::get_yaw()const
 	{
-		//return Angle::from_radians( 2 * acos( quat.w ) );
-		return Angle::from_radians( asin( T( -2 ) * ( quat.x * quat.z - quat.w * quat.y ) ) );
+		T const l_x = quat.x;
+		T const l_y = quat.y;
+		T const l_z = quat.z;
+		T const l_w = quat.w;
+		T const l_test = l_x * l_y + l_z * l_w;
+		Angle l_yaw;
+
+		if ( l_test > 0.499 )
+		{ // singularity at north pole
+			l_yaw = Angle::from_radians( 2 * atan2( l_x, l_w ) );
+		}
+		else if ( l_test < -0.499 )
+		{ // singularity at south pole
+			l_yaw = Angle::from_radians( -2 * atan2( l_x, l_w ) );
+		}
+		else
+		{
+			T l_sqy = l_y * l_y;
+			T l_sqz = l_z * l_z;
+			l_yaw = Angle::from_radians( atan2( 2 * l_y * l_w - 2 * l_x * l_z, 1 - 2 * l_sqy - 2 * l_sqz ) );
+		}
+
+		return l_yaw;
 	}
 
 	template< typename T >
 	Angle QuaternionT< T >::get_pitch()const
 	{
-		T l_res1 = T( 2.0 ) * ( quat.y * quat.z + quat.w * quat.x );
-		T l_res2 = quat.w * quat.w - quat.x * quat.x - quat.y * quat.y + quat.z * quat.z;
-		return Angle::from_radians( atan2( l_res1, l_res2 ) );
+		T const l_x = quat.x;
+		T const l_y = quat.y;
+		T const l_z = quat.z;
+		T const l_w = quat.w;
+		T const l_test = l_x * l_y + l_z * l_w;
+		Angle l_pitch;
+
+		if ( l_test > 0.499 )
+		{ // singularity at north pole
+			l_pitch = Angle::from_radians( Angle::PiDiv2 );
+		}
+		else if ( l_test < -0.499 )
+		{ // singularity at south pole
+			l_pitch = Angle::from_radians( -Angle::PiDiv2 );
+		}
+		else
+		{
+			l_pitch = Angle::from_radians( asin( 2 * l_test ) );
+		}
+
+		return l_pitch;
 	}
 
 	template< typename T >
 	Angle QuaternionT< T >::get_roll()const
 	{
-		T l_res1 = T( 2.0 ) * ( quat.x * quat.y + quat.w * quat.z );
-		T l_res2 = quat.w * quat.w + quat.x * quat.x - quat.y * quat.y - quat.z * quat.z;
-		return Angle::from_radians( atan2( l_res1, l_res2 ) );
+		T const l_x = quat.x;
+		T const l_y = quat.y;
+		T const l_z = quat.z;
+		T const l_w = quat.w;
+		T const l_test = l_x * l_y + l_z * l_w;
+		Angle l_roll;
+
+		if ( l_test > 0.499 )
+		{ // singularity at north pole
+			l_roll = Angle{};
+		}
+		else if ( l_test < -0.499 )
+		{ // singularity at south pole
+			l_roll = Angle{};
+		}
+		else
+		{
+			T l_sqx = l_x * l_x;
+			T l_sqz = l_z * l_z;
+			l_roll = Angle::from_radians( atan2( 2 * l_x * l_w - 2 * l_y * l_z, 1 - 2 * l_sqx - 2 * l_sqz ) );
+		}
+
+		return l_roll;
 	}
 
 	template< typename T >

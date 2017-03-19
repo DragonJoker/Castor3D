@@ -99,7 +99,7 @@ namespace C3DMd2
 			}
 
 			p_mesh.ComputeNormals();
-			GetEngine()->PostEvent( MakeInitialiseEvent( *l_material ) );
+			p_mesh.GetScene().GetListener().PostEvent( MakeInitialiseEvent( *l_material ) );
 			l_return = true;
 		}
 

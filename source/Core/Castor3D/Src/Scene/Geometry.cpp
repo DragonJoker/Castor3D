@@ -9,6 +9,7 @@
 #include "SceneNode.hpp"
 
 #include "Animation/AnimatedObject.hpp"
+#include "Event/Frame/FrameListener.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Render/RenderSystem.hpp"
@@ -191,7 +192,7 @@ namespace Castor3D
 					{
 						// We need to update the render nodes afterwards (since the submesh's geometry buffers are now invalid).
 						GetScene()->SetChanged();
-						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::eQueueRender, [this, &p_submesh]()
+						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::eQueueRender, [this, &p_submesh]()
 						{
 							p_submesh.ResetGpuBuffers();
 						} ) );
@@ -199,7 +200,7 @@ namespace Castor3D
 					else if ( p_submesh.HasMatrixBuffer() && l_count > 1 )
 					{
 						// We need to update the matrix buffers only.
-						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, &p_submesh]()
+						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, &p_submesh]()
 						{
 							p_submesh.ResetMatrixBuffers();
 						} ) );

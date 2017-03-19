@@ -397,7 +397,7 @@ namespace CastorShape
 	void NewMaterialDialog::OnOk( wxCommandEvent & WXUNUSED( p_event ) )
 	{
 		m_scene.GetMaterialView().Add( m_material->GetName(), m_material );
-		m_scene.GetEngine()->PostEvent( MakeInitialiseEvent( *m_material ) );
+		m_scene.GetListener().PostEvent( MakeInitialiseEvent( *m_material ) );
 		EndModal( wxID_OK );
 	}
 

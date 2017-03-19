@@ -168,6 +168,5 @@ namespace Testing
 		m_engine.GetSceneCache().Remove( l_name );
 		l_src.reset();
 		l_dst.reset();
-		m_engine.GetRenderLoop().Cleanup();
 	}
 }

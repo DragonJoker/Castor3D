@@ -5,6 +5,7 @@
 #include "Scene.hpp"
 #include "SceneNode.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
@@ -64,7 +65,7 @@ namespace Castor3D
 		}
 		else
 		{
-			p_scene.GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
+			p_scene.GetListener().PostEvent( MakeInitialiseEvent( m_viewport ) );
 		}
 
 		if ( p_node )

@@ -221,6 +221,22 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Adds an already created object.
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_element	The object.
+		 *\return		The object.
+		 *\~french
+		 *\brief		Ajoute un objet déjà créé.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_element	L'objet'.
+		 *\return		L'objet.
+		 */
+		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
+		{
+			return MyCacheType::Add( p_name, p_element );
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the overlay renderer
 		 *\return		The overlay renderer
 		 *\~french

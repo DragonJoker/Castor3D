@@ -732,7 +732,7 @@ namespace Ase
 		for ( auto l_submesh : *l_pContext->pMesh )
 		{
 			l_submesh->ComputeNormals();
-			l_pContext->pMesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			l_pContext->pMesh->GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
 	}
 	END_ATTRIBUTE_POP()

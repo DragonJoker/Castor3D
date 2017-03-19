@@ -339,7 +339,7 @@ namespace C3dSMax
 				}
 			}
 
-			GetEngine()->PostEvent( MakeInitialiseEvent( *l_pMaterial ) );
+			p_scene.GetListener().PostEvent( MakeInitialiseEvent( *l_pMaterial ) );
 		}
 	}
 
