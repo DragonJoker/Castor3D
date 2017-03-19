@@ -29,7 +29,13 @@ install:
   - cmd: if "%platform%"=="Win32" set DEPS_PLATFORM_NAME=x86
   - cmd: if "%platform%"=="x64"   set DEPS_PLATFORM_NAME=x64
   - cmd: cd C:\projects\Castor3D\dependencies\vc14\%DEPS_PLATFORM_NAME%
-  - cmd: 7z e *.zip
+  - cmd: 7z e assim-3.2-win32.zip -oassimp
+  - cmd: 7z e FbxSDK-2016.1.2-win32.zip -oFbxSDK
+  - cmd: 7z e ffmpeg-20160422-git-268b5ae.zip -offmpeg
+  - cmd: 7z e FreeImage-3.16.0-win32.zip -oFreeImage
+  - cmd: 7z e freetype-2.3.5-win32.zip -ofreetype
+  - cmd: 7z e glm-0.9.5.2-win32.zip -oglm
+  - cmd: 7z e zlib-1.2.7-win32.zip -ozlib
   - cmd: cd C:\projects\Castor3D
   - cmd: md build
   - cmd: cd build
