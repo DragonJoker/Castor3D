@@ -29,7 +29,7 @@ install:
   - cmd: if "%platform%"=="Win32" set DEPS_PLATFORM_NAME=x86
   - cmd: if "%platform%"=="x64"   set DEPS_PLATFORM_NAME=x64
   - cmd: cd C:\projects\Castor3D\dependencies\vc14\%DEPS_PLATFORM_NAME%
-  - cmd: 7z -e ./*.zip
+  - cmd: 7z e *.zip
   - cmd: cd C:\projects\Castor3D
   - cmd: md build
   - cmd: cd build
