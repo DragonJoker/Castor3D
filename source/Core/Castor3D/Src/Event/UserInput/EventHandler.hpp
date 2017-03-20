@@ -50,12 +50,33 @@ namespace Castor3D
 		using EventQueue = std::deque< std::pair< UserInputEventSPtr, EventHandlerFunction > >;
 
 	public:
-		//!\~english Catcher definition for mouse events.	\~french Dàfinition d'une fonction de traitement d'évènement de souris.
+		//!\~english	Catcher definition for mouse events.
+		//!\~french		Définition d'une fonction de traitement d'évènement de souris.
 		using ClientMouseFunction = std::function< void( MouseEvent const & ) >;
-		//!\~english Catcher definition for keyboard events.	\~french Dàfinition d'une fonction de traitement d'évènement de clavier.
+		//!\~english	Catcher definition for keyboard events.
+		//!\~french		Définition d'une fonction de traitement d'évènement de clavier.
 		using ClientKeyboardFunction = std::function< void( KeyboardEvent const & ) >;
-		//!\~english Catcher definition for handler events.	\~french Dàfinition d'une fonction de traitement d'évènement de gestionnaire.
+		//!\~english	Catcher definition for handler events.
+		//!\~french		Définition d'une fonction de traitement d'évènement de gestionnaire.
 		using ClientHandlerFunction = std::function< void( HandlerEvent const & ) >;
+		//!\~english	Mouse event signal definition.
+		//!\~french		Définition d'un signal d'évènement de souris.
+		using OnClientMouseEvent = Castor::Signal< ClientMouseFunction >;
+		//!\~english	Keyboard event signal definition.
+		//!\~french		Définition d'un signal d'évènement de clavier.
+		using OnClientKeyboardEvent = Castor::Signal< ClientKeyboardFunction >;
+		//!\~english	Handler event signal definition.
+		//!\~french		Définition d'un signal d'évènement de gestionnaire.
+		using OnClientHandlerEvent = Castor::Signal< ClientHandlerFunction >;
+		//!\~english	Mouse event signal connection definition.
+		//!\~french		Définition d'une connexion au signal d'évènement de souris.
+		using OnClientMouseEventConnection = OnClientMouseEvent::connection;
+		//!\~english	Keyboard event signal connection definition.
+		//!\~french		Définition d'une connexion au signal d'évènement de clavier.
+		using OnClientKeyboardEventConnection = OnClientKeyboardEvent::connection;
+		//!\~english	Handler event signal connection definition.
+		//!\~french		Définition d'une connexion au signal d'évènement de gestionnaire.
+		using OnClientHandlerEventConnection = OnClientHandlerEvent::connection;
 
 		/**@name General */
 		//@{
@@ -131,7 +152,7 @@ namespace Castor3D
 		 */
 		void Connect( MouseEventType p_event, ClientMouseFunction p_function )
 		{
-			m_mouseSlots[size_t( p_event )].connect( p_function );
+			m_mouseSlotsConnections[size_t( p_event )].push_back( m_mouseSlots[size_t( p_event )].connect( p_function ) );
 		}
 
 		//@}
@@ -164,7 +185,7 @@ namespace Castor3D
 		 */
 		void Connect( KeyboardEventType p_event, ClientKeyboardFunction p_function )
 		{
-			m_keyboardSlots[size_t( p_event )].connect( p_function );
+			m_keyboardSlotsConnections[size_t( p_event )].push_back( m_keyboardSlots[size_t( p_event )].connect( p_function ) );
 		}
 		/**
 		 *\~english
@@ -216,7 +237,7 @@ namespace Castor3D
 		 */
 		void Connect( HandlerEventType p_event, ClientHandlerFunction p_function )
 		{
-			m_handlerSlots[size_t( p_event )].connect( p_function );
+			m_handlerSlotsConnections[size_t( p_event )].push_back( m_handlerSlots[size_t( p_event )].connect( p_function ) );
 		}
 		/**
 		 *\~english
@@ -349,25 +370,43 @@ namespace Castor3D
 		C3D_API virtual bool DoCatchesReturnKey()const = 0;
 
 	protected:
-		//!\~english The mouse events slots.	\~french Les slots d'évènements souris.
-		std::array< Castor::Signal< ClientMouseFunction >, size_t( MouseEventType::eCount ) > m_mouseSlots;
-		//!\~english The keyboard events slots.	\~french Les slots d'évènements clavier.
-		std::array< Castor::Signal< ClientKeyboardFunction >, size_t( KeyboardEventType::eCount ) > m_keyboardSlots;
-		//!\~english The handler events slots.	\~french Les slots d'évènements de gestionnaire.
-		std::array< Castor::Signal< ClientHandlerFunction >, size_t( HandlerEventType::eCount ) > m_handlerSlots;
+		//!\~english	The mouse events slots.
+		//!\~french		Les slots d'évènements souris.
+		std::array< OnClientMouseEvent, size_t( MouseEventType::eCount ) > m_mouseSlots;
+		//!\~english	The mouse events slots connections.
+		//!\~french		Les connexions aux slots d'évènements souris.
+		std::array< std::vector< OnClientMouseEventConnection >, size_t( MouseEventType::eCount ) > m_mouseSlotsConnections;
+		//!\~english	The keyboard events slots.
+		//!\~french		Les slots d'évènements clavier.
+		std::array< OnClientKeyboardEvent, size_t( KeyboardEventType::eCount ) > m_keyboardSlots;
+		//!\~english	The handler events slots connections.
+		//!\~french		Les connexions aux slots d'évènements de gestionnaire.
+		std::array< std::vector< OnClientKeyboardEventConnection >, size_t( KeyboardEventType::eCount ) > m_keyboardSlotsConnections;
+		//!\~english	The keyboard events slots.
+		//!\~french		Les slots d'évènements clavier.
+		std::array< OnClientHandlerEvent, size_t( HandlerEventType::eCount ) > m_handlerSlots;
+		//!\~english	The handler events slots connections.
+		//!\~french		Les connexions aux slots d'évènements de gestionnaire.
+		std::array< std::vector< OnClientHandlerEventConnection >, size_t( HandlerEventType::eCount ) > m_handlerSlotsConnections;
 
 	private:
-		//!\~english Activation status.	\~french Le statu d'activation
+		//!\~english	Activation status.
+		//!\~french		Le statut d'activation
 		bool m_enabled;
-		//!\~english The mutex used to protect the events queue.	\~french Le mutex utilisà pour protàger la file d'évènements.
+		//!\~english	The mutex used to protect the events queue.
+		//!\~french		Le mutex utilisà pour protàger la file d'évènements.
 		std::mutex m_mutex;
-		//!\~english The events queue.	\~french La file d'évènements.
+		//!\~english	The events queue.
+		//!\~french		La file d'évènements.
 		EventQueue m_queue;
-		//!\~english Tells if the control catches mouse events.
+		//!\~english	Tells if the control catches mouse events.
+		//!\~french		Dit si le contrôle traite les évènements souris.
 		bool m_catchMouseEvents;
-		//!\~english Tells if the control catches 'tab' key.
+		//!\~english	Tells if the control catches 'tab' key.
+		//!\~french		Dit si le contrôle traite la touche 'tab'.
 		bool m_catchTabKey;
-		//!\~english Tells if the control catches 'return' key.
+		//!\~english	Tells if the control catches 'return' key.
+		//!\~french		Dit si le contrôle traite la touche 'entrée'.
 		bool m_catchReturnKey;
 	};
 	/*!
@@ -393,12 +432,33 @@ namespace Castor3D
 		using ClientMouseFunction = EventHandler::ClientMouseFunction;
 		using ClientKeyboardFunction = EventHandler::ClientKeyboardFunction;
 		using ClientHandlerFunction = EventHandler::ClientHandlerFunction;
-		//!\~english Catcher definition for non client mouse events.	\~french Dàfinition d'une fonction de traitement d'évènement non client de souris.
+		//!\~english	Catcher definition for non client mouse events.
+		//!\~french		Définition d'une fonction de traitement d'évènement non client de souris.
 		using NonClientMouseFunction = std::function< void( DerivedSPtr, MouseEvent const & ) >;
-		//!\~english Catcher definition for non client keyboard events.	\~french Dàfinition d'une fonction de traitement d'évènement non client de clavier.
+		//!\~english	Catcher definition for non client keyboard events.
+		//!\~french		Définition d'une fonction de traitement d'évènement non client de clavier.
 		using NonClientKeyboardFunction = std::function< void( DerivedSPtr, KeyboardEvent const & ) >;
-		//!\~english Catcher definition for non client handler events.	\~french Dàfinition d'une fonction de traitement d'évènement non client de gestionnaire.
+		//!\~english	Catcher definition for non client handler events.
+		//!\~french		Définition d'une fonction de traitement d'évènement non client de gestionnaire.
 		using NonClientHandlerFunction = std::function< void( DerivedSPtr, HandlerEvent const & ) >;
+		//!\~english	Non client mouse event signal definition.
+		//!\~french		Définition d'un signal d'évènement non client de souris.
+		using OnNonClientMouseEvent = Castor::Signal< NonClientMouseFunction >;
+		//!\~english	Non client keyboard event signal definition.
+		//!\~french		Définition d'un signal d'évènement non client de clavier.
+		using OnNonClientKeyboardEvent = Castor::Signal< NonClientKeyboardFunction >;
+		//!\~english	Non client handler event signal definition.
+		//!\~french		Définition d'un signal d'évènement non client de gestionnaire.
+		using OnNonClientHandlerEvent = Castor::Signal< NonClientHandlerFunction >;
+		//!\~english	Non client mouse event signal connection definition.
+		//!\~french		Définition d'une connexion au signal d'évènement non client de souris.
+		using OnNonClientMouseEventConnection = typename OnNonClientMouseEvent::connection;
+		//!\~english	Non client keyboard event signal connection definition.
+		//!\~french		Définition d'une connexion au signal d'évènement non client de clavier.
+		using OnNonClientKeyboardEventConnection = typename OnNonClientKeyboardEvent::connection;
+		//!\~english	Non client handler event signal connection definition.
+		//!\~french		Définition d'une connexion au signal d'évènement non client de gestionnaire.
+		using OnNonClientHandlerEventConnection = typename OnNonClientHandlerEvent::connection;
 
 	public:
 		/**
@@ -425,7 +485,7 @@ namespace Castor3D
 		 */
 		void ConnectNC( MouseEventType p_event, NonClientMouseFunction p_function )
 		{
-			m_ncMouseSlots[size_t( p_event )].connect( p_function );
+			m_ncMouseSlotsConnections[size_t( p_event )].push_back( m_ncMouseSlots[size_t( p_event )].connect( p_function ) );
 		}
 		/**
 		 *\~english
@@ -439,7 +499,7 @@ namespace Castor3D
 		 */
 		void ConnectNC( KeyboardEventType p_event, NonClientKeyboardFunction p_function )
 		{
-			m_ncKeyboardSlots[size_t( p_event )].connect( p_function );
+			m_ncKeyboardSlotsConnections[size_t( p_event )].push_back( m_ncKeyboardSlots[size_t( p_event )].connect( p_function ) );
 		}
 		/**
 		 *\~english
@@ -453,7 +513,7 @@ namespace Castor3D
 		 */
 		void ConnectNC( HandlerEventType p_event, NonClientHandlerFunction p_function )
 		{
-			m_ncKeyboardSlots[size_t( p_event )].connect( p_function );
+			m_ncHandlerSlotsConnections[size_t( p_event )].push_back( m_ncHandlerSlots[size_t( p_event )].connect( p_function ) );
 		}
 
 		//@}
@@ -482,12 +542,24 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The non client mouse events slots.	\~french Les slots d'évènements souris non clients.
-		std::array< Castor::Signal< NonClientMouseFunction >, size_t( MouseEventType::eCount ) > m_ncMouseSlots;
-		//!\~english The non client keyboard events slots.	\~french Les slots d'évènements clavier non clients.
-		std::array< Castor::Signal< NonClientKeyboardFunction >, size_t( KeyboardEventType::eCount ) > m_ncKeyboardSlots;
-		//!\~english The non client handler events slots.	\~french Les slots d'évènements de gestionnaire non clients.
-		std::array< Castor::Signal< NonClientHandlerFunction >, size_t( HandlerEventType::eCount ) > m_ncHandlerSlots;
+		//!\~english	The non client mouse events slots.
+		//!\~french		Les slots d'évènements souris non clients.
+		std::array< OnNonClientMouseEvent, size_t( MouseEventType::eCount ) > m_ncMouseSlots;
+		//!\~english	The non client mouse events slots.
+		//!\~french		Les slots d'évènements souris non clients.
+		std::array< std::vector< OnNonClientMouseEventConnection >, size_t( MouseEventType::eCount ) > m_ncMouseSlotsConnections;
+		//!\~english	The non client keyboard events slots.
+		//!\~french		Les slots d'évènements clavier non clients.
+		std::array< OnNonClientKeyboardEvent, size_t( KeyboardEventType::eCount ) > m_ncKeyboardSlots;
+		//!\~english	The non client keyboard events slots.
+		//!\~french		Les slots d'évènements clavier non clients.
+		std::array< std::vector< OnNonClientKeyboardEventConnection >, size_t( KeyboardEventType::eCount ) > m_ncKeyboardSlotsConnections;
+		//!\~english	The non client handler events slots.
+		//!\~french		Les slots d'évènements de gestionnaire non clients.
+		std::array< OnNonClientHandlerEvent, size_t( HandlerEventType::eCount ) > m_ncHandlerSlots;
+		//!\~english	The non client handler events slots.
+		//!\~french		Les slots d'évènements de gestionnaire non clients.
+		std::array< std::vector< OnNonClientHandlerEventConnection >, size_t( HandlerEventType::eCount ) > m_ncHandlerSlotsConnections;
 	};
 }
 
