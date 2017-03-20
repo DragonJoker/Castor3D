@@ -5,6 +5,7 @@ os:
 
 platform:
   - Win32
+  - x64
 
 environment:
   MSVC_DEFAULT_OPTIONS: ON

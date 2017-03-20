@@ -55,13 +55,17 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 			cpufeatures
 		)
 	else ()
-		include_directories( ${FREETYPE_INCLUDE_DIRS} )
-		include_directories( ${FreeImage_INCLUDE_DIR} )
-
 		# Don't ask me why, in Windows x64 it is different from other builds...
 		if ( ${FREETYPE_INCLUDE_DIR_ft2build} STREQUAL ${FREETYPE_INCLUDE_DIR_freetype2} )
-			set( FREETYPE_INCLUDE_DIR_freetype2 ${FREETYPE_INCLUDE_DIR_freetype2}/freetype )
+			set( FREETYPE_INCLUDE_DIR_freetype2 ${FREETYPE_INCLUDE_DIR_freetype2}/freetype CACHE STRING "" FORCE )
+			set( FREETYPE_INCLUDE_DIRS
+				${FREETYPE_INCLUDE_DIRS}
+				${FREETYPE_INCLUDE_DIR_freetype2}
+			)
 		endif ()
+
+		include_directories( ${FREETYPE_INCLUDE_DIRS} )
+		include_directories( ${FreeImage_INCLUDE_DIR} )
 	endif ()
 
 	include_directories( ${ZLIB_INCLUDE_DIRS} )
