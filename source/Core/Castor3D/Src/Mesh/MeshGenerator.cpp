@@ -5,6 +5,7 @@
 #include "Mesh.hpp"
 #include "Submesh.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Scene/Scene.hpp"
 
@@ -32,7 +33,7 @@ namespace Castor3D
 
 		for ( auto l_submesh : p_mesh )
 		{
-			p_mesh.GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
 	}
 

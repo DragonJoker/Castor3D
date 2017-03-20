@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
@@ -9,6 +10,7 @@
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Geometry.hpp"
+#include "Scene/Scene.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -42,7 +44,7 @@ namespace Castor3D
 
 				for ( auto l_submesh : *l_mesh )
 				{
-					GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+					p_scene.GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
 				}
 			}
 		}
@@ -69,7 +71,7 @@ namespace Castor3D
 
 				for ( auto l_submesh : p_mesh )
 				{
-					GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+					p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
 				}
 			}
 		}

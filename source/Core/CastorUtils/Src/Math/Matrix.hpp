@@ -82,6 +82,7 @@ namespace Castor
 		typedef Matrix< __value_type, Rows, Columns > __transpose;
 		typedef Point< __value_type, Columns > __row;
 		typedef Coords< __value_type, Rows > __column;
+		typedef Coords< __value_type const, Rows > __const_column;
 		static const std::size_t count = Rows * Columns;
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
 
@@ -95,6 +96,9 @@ namespace Castor
 		//!\~english	Typedef on the column type
 		//!\~french		Typedef sur le type de colonne.
 		typedef __column col_type;
+		//!\~english	Typedef on the column type
+		//!\~french		Typedef sur le type de colonne.
+		typedef __const_column const_col_type;
 		//!\~english	Typedef on the line type.
 		//!\~french		Typedef sur le type de ligne.
 		typedef __row row_type;
@@ -270,6 +274,17 @@ namespace Castor
 		 *\param[in]	p_index	La colonne à affecter.
 		 *\param[in]	p_col	Les valeurs.
 		 */
+		void set_column( uint32_t p_index, Coords< value_type const, Rows > const & p_col );
+		/**
+		 *\~english
+		 *\brief		Sets the values for the given column.
+		 *\param[in]	p_index	The column to affect.
+		 *\param[in]	p_col	The values.
+		 *\~french
+		 *\brief		Définit les valeurs d'une colonne donnée.
+		 *\param[in]	p_index	La colonne à affecter.
+		 *\param[in]	p_col	Les valeurs.
+		 */
 		void set_column( uint32_t p_index, Coords< value_type, Rows > const & p_col );
 		/**
 		 *\~english
@@ -281,7 +296,7 @@ namespace Castor
 		 *\param[in]	p_index	L'index de la colonne.
 		 *\return		La colonne.
 		 */
-		Point< value_type, Rows > get_column( uint32_t p_index )const;
+		const_col_type get_column( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a column.
@@ -303,7 +318,7 @@ namespace Castor
 		 *\param[in]	p_index		L'index de la colonne.
 		 *\param[out]	p_result	Reçoit les valeurs de la colonne.
 		 */
-		void get_column( uint32_t p_index, Point< value_type, Rows > & p_result )const;
+		void get_column( uint32_t p_index, const_col_type & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a column.
@@ -336,7 +351,7 @@ namespace Castor
 		 *\param[in]	p_index	L'index.
 		 *\return		Un pointeur constant sur le premier élément de la colonne.
 		 */
-		Point< value_type, Rows > operator[]( uint32_t p_index )const;
+		const_col_type operator[]( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the column at given index.

@@ -154,7 +154,7 @@ namespace Castor3D
 
 			case ChunkType::eAnimLength:
 				l_return = DoParseChunk( l_length, l_chunk );
-				p_obj.m_length = std::chrono::milliseconds{ int64_t( l_length * 1000 ) };
+				p_obj.m_length = std::chrono::milliseconds{ int64_t( l_length / 1000 ) };
 				break;
 
 			case ChunkType::eSkeletonAnimationBone:

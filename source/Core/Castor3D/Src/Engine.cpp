@@ -78,8 +78,8 @@ namespace Castor3D
 			p_element->Flush();
 		};
 		auto l_mergeResource = []( auto const & p_source
-								   , auto & p_destination
-								   , auto p_element )
+		   , auto & p_destination
+		   , auto p_element )
 		{
 		};
 		std::locale::global( std::locale() );
@@ -87,64 +87,64 @@ namespace Castor3D
 
 		// m_listenerCache *MUST* be the first created.
 		m_listenerCache = MakeCache< FrameListener, String >(	*this
-																, []( String const & p_name )
-																{
-																	return std::make_shared< FrameListener >( p_name );
-																}
-																, l_dummy
-																, l_listenerClean
-																, l_mergeResource );
+			, []( String const & p_name )
+			{
+				return std::make_shared< FrameListener >( p_name );
+			}
+			, l_dummy
+			, l_listenerClean
+			, l_mergeResource );
 		m_defaultListener = m_listenerCache->Add( cuT( "Default" ) );
 
 		m_shaderCache = MakeCache( *this );
 		m_samplerCache = MakeCache< Sampler, String >(	*this
-														, [this]( String const & p_name )
-														{
-															return GetRenderSystem()->CreateSampler( p_name );
-														}
-														, l_eventInit
-														, l_eventClean
-														, l_mergeResource );
+			, [this]( String const & p_name )
+			{
+				return GetRenderSystem()->CreateSampler( p_name );
+			}
+			, l_eventInit
+			, l_eventClean
+			, l_mergeResource );
 		m_materialCache = MakeCache< Material, String >( *this
-														, [this]( String const & p_name, MaterialType p_type )
-														{
-															return std::make_shared< Material >( p_name, *this, p_type );
-														}
-														, l_eventInit
-														, l_eventClean
-														, l_mergeResource );
+			, [this]( String const & p_name, MaterialType p_type )
+			{
+				return std::make_shared< Material >( p_name, *this, p_type );
+			}
+			, l_eventInit
+			, l_eventClean
+			, l_mergeResource );
 		m_pluginCache = MakeCache< Plugin, String >( *this
-													, []( String const & p_name, PluginType p_type, Castor::DynamicLibrarySPtr p_library )
-													{
-														return nullptr;
-													} );
+			, []( String const & p_name, PluginType p_type, Castor::DynamicLibrarySPtr p_library )
+			{
+				return nullptr;
+			} );
 		m_overlayCache = MakeCache< Overlay, String >(	*this
-														, [this]( String const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
-														{
-															auto l_return = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
-															l_return->SetName( p_name );
-															return l_return;
-														}
-														, l_dummy
-														, l_dummy
-														, l_mergeResource );
+			, [this]( String const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+			{
+				auto l_return = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
+				l_return->SetName( p_name );
+				return l_return;
+			}
+			, l_dummy
+			, l_dummy
+			, l_mergeResource );
 		m_sceneCache = MakeCache< Scene, String >(	*this
-													, [this]( Castor::String const & p_name )
-													{
-														return std::make_shared< Scene >( p_name, *this );
-													}
-													, l_instantInit
-													, l_instantClean
-													, l_mergeResource );
+			, [this]( Castor::String const & p_name )
+			{
+				return std::make_shared< Scene >( p_name, *this );
+			}
+			, l_instantInit
+			, l_instantClean
+			, l_mergeResource );
 		m_targetCache = std::make_unique< RenderTargetCache >( *this );
 		m_techniqueCache = MakeCache< RenderTechnique, String >( *this
-																, [this]( String const & p_name, String const & p_type, RenderTarget & p_renderTarget, Parameters const & p_parameters )
-																{
-																	return m_techniqueFactory.Create( p_type, p_renderTarget, *GetRenderSystem(), p_parameters );
-																}
-																, l_dummy
-																, l_dummy
-																, l_mergeResource );
+			, [this]( String const & p_name, String const & p_type, RenderTarget & p_renderTarget, Parameters const & p_parameters )
+			{
+				return m_techniqueFactory.Create( p_type, p_renderTarget, *GetRenderSystem(), p_parameters );
+			}
+			, l_dummy
+			, l_dummy
+			, l_mergeResource );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{

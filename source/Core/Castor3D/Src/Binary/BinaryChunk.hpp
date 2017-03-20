@@ -24,8 +24,7 @@ SOFTWARE.
 #define ___C3D_BINARY_CHUNK_H___
 
 #include "Castor3DPrerequisites.hpp"
-
-#include <Data/Endianness.hpp>
+#include "ChunkData.hpp"
 
 #include <cstring>
 
@@ -103,72 +102,21 @@ namespace Castor3D
 		eSubmeshAnimationBuffersCount = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'C', 'T' ),
 		eSubmeshAnimationBuffers = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'U', 'F', 'S' ),
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		30/05/2016
-	\~english
-	\brief		Chunk data preparator, setting it to big endian.
-	\~french
-	\brief		Préparateur de données de chunk, les mettant en big endian.
-	*/
-	template< typename T >
-	struct ChunkDataPreparator
+	/**
+	 *\~english
+	 *\brief			Sets given value to big endian.
+	 *\param[in,out]	p_value	The value.
+	 *\~french
+	 *\brief			Met la valeur donnée en big endian.
+	 *\param[in,out]	p_value	La valeur.
+	 */
+	static inline void PrepareChunkData( ChunkType & p_value )
 	{
-		static inline void Prepare( T & p_value )
+		if ( !Castor::IsBigEndian() )
 		{
-			if ( !Castor::IsBigEndian() )
-			{
-				Castor::SwitchEndianness( p_value );
-			}
+			Castor::SwitchEndianness( p_value );
 		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		30/05/2016
-	\~english
-	\brief		Chunk data preparator, setting it to big endian.
-	\~french
-	\brief		Préparateur de données de chunk, les mettant en big endian.
-	*/
-	template< typename T, size_t N >
-	struct ChunkDataPreparator< std::array< T, N > >
-	{
-		static inline void Prepare( std::array< T, N > & p_value )
-		{
-			if ( !Castor::IsBigEndian() )
-			{
-				for ( auto & l_value : p_value )
-				{
-					Castor::SwitchEndianness( l_value );
-				}
-			}
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		30/05/2016
-	\~english
-	\brief		Chunk data preparator, setting it to big endian.
-	\~french
-	\brief		Préparateur de données de chunk, les mettant en big endian.
-	*/
-	template< typename T >
-	struct ChunkDataPreparator< std::vector< T > >
-	{
-		static inline void Prepare( std::vector< T > & p_value )
-		{
-			if ( !Castor::IsBigEndian() )
-			{
-				for ( auto & l_value : p_value )
-				{
-					Castor::SwitchEndianness( l_value );
-				}
-			}
-		}
-	};
+	}
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -388,7 +336,7 @@ namespace Castor3D
 				for ( auto l_it = l_begin; l_it != l_end; ++l_it )
 				{
 					( *l_value ) = *l_it;
-					ChunkDataPreparator< T >::Prepare( *l_value );
+					PrepareChunkData( *l_value );
 					++l_value;
 				}
 

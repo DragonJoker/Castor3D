@@ -5,6 +5,7 @@
 #include <Engine.hpp>
 
 #include <Cache/CacheView.hpp>
+#include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
@@ -732,7 +733,7 @@ namespace Ase
 		for ( auto l_submesh : *l_pContext->pMesh )
 		{
 			l_submesh->ComputeNormals();
-			l_pContext->pMesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			l_pContext->pMesh->GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
 	}
 	END_ATTRIBUTE_POP()

@@ -26,6 +26,32 @@ namespace Castor
 	{
 	}
 
+	FontSPtr FontCache::Create( String const & p_name, uint32_t p_height, Path const & p_path )
+	{
+		String l_name = p_path.GetFileName() + cuT( "." ) + p_path.GetExtension();
+		FontSPtr l_result;
+
+		if ( File::FileExists( p_path ) )
+		{
+			l_result = std::make_shared< Font >( p_name, p_height, p_path );
+		}
+		else
+		{
+			auto l_it = m_paths.find( l_name );
+
+			if ( l_it != m_paths.end() )
+			{
+				l_result = std::make_shared< Font >( p_name, p_height, l_it->second );
+			}
+			else
+			{
+				CASTOR_EXCEPTION( "Can't create the font, invalid name: " + string::string_cast< char >( p_name ) + ", path: " + string::string_cast< char >( p_path ) );
+			}
+		}
+
+		return l_result;
+	}
+
 	FontSPtr FontCache::Add( String const & p_name, uint32_t p_height, Path const & p_path )
 	{
 		auto l_lock = make_unique_lock( *this );
@@ -70,9 +96,39 @@ namespace Castor
 		return l_result;
 	}
 
+	FontSPtr FontCache::Add( Castor::String const & p_name, FontSPtr p_font )
+	{
+		auto l_lock = make_unique_lock( *this );
+		FontSPtr l_result{ p_font };
+
+		if ( Collection< Font, String >::has( p_name ) )
+		{
+			l_result = Collection< Font, String >::find( p_name );
+			Logger::LogWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
+		}
+		else
+		{
+			auto l_path = p_font->GetFilePath();
+			String l_name = l_path.GetFileName() + cuT( "." ) + l_path.GetExtension();
+			Collection< Font, String >::insert( p_name, l_result );
+
+			if ( m_paths.find( l_name ) == m_paths.end() )
+			{
+				m_paths.insert( std::make_pair( l_name, l_path ) );
+			}
+		}
+
+		return l_result;
+	}
+
 	FontSPtr FontCache::Find( String const & p_name )
 	{
 		return Collection< Font, String >::find( p_name );
+	}
+
+	bool FontCache::Has( String const & p_name )
+	{
+		return Collection< Font, String >::has( p_name );
 	}
 
 	void FontCache::Remove( String const & p_name )

@@ -6,6 +6,7 @@
 
 #include "Face.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
@@ -1195,8 +1196,8 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				m_bones.clear();
-				m_bonesData.clear();
+				//m_bones.clear();
+				//m_bonesData.clear();
 			}
 		}
 	}
@@ -1252,7 +1253,7 @@ namespace Castor3D
 		}
 		else
 		{
-			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, l_buffers]()
+			GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, l_buffers]()
 			{
 				p_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
 			} ) );

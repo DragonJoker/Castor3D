@@ -11,6 +11,7 @@
 #include <Scene/Scene.hpp>
 #include <Scene/SceneNode.hpp>
 
+#include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
@@ -339,7 +340,7 @@ namespace C3dSMax
 				}
 			}
 
-			GetEngine()->PostEvent( MakeInitialiseEvent( *l_pMaterial ) );
+			p_scene.GetListener().PostEvent( MakeInitialiseEvent( *l_pMaterial ) );
 		}
 	}
 

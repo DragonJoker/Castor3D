@@ -190,6 +190,14 @@ typedef wchar_t ychar;
 	DECLARE_VECTOR( Coords##count##name##SPtr, Coords##count##name##Ptr );\
 	DECLARE_LIST( Coords##count##name##SPtr, Coords##count##name##Ptr )
 
+#define DECLARE_CONST_COORD( type, count, name )\
+	typedef Coords< type const, count > ConstCoords##count##name;\
+	DECLARE_SMART_PTR( ConstCoords##count##name );\
+	DECLARE_VECTOR( ConstCoords##count##name, ConstCoords##count##name );\
+	DECLARE_LIST( ConstCoords##count##name, ConstCoords##count##name );\
+	DECLARE_VECTOR( ConstCoords##count##name##SPtr, ConstCoords##count##name##Ptr );\
+	DECLARE_LIST( ConstCoords##count##name##SPtr, ConstCoords##count##name##Ptr )
+
 #define DECLARE_MTX( type, rows, cols, name )\
 	typedef Matrix< type, rows, cols > Matrix##rows##x##cols##name;\
 	DECLARE_SMART_PTR( Matrix##rows##x##cols##name );\

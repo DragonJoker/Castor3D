@@ -2,8 +2,10 @@
 
 #include "Engine.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Scene/Geometry.hpp"
+#include "Scene/Scene.hpp"
 #include "Mesh/Mesh.hpp"
 
 using namespace Castor;
@@ -16,16 +18,18 @@ namespace Castor3D
 	{
 		struct GeometryInitialiser
 		{
-			GeometryInitialiser( uint32_t & p_faceCount, uint32_t & p_vertexCount, Engine & p_engine )
+			GeometryInitialiser( uint32_t & p_faceCount
+				, uint32_t & p_vertexCount
+				, FrameListener & p_listener )
 				: m_faceCount{ p_faceCount }
 				, m_vertexCount{ p_vertexCount }
-				, m_engine{ p_engine }
+				, m_listener{ p_listener }
 			{
 			}
 
 			inline void operator()( GeometrySPtr p_element )
 			{
-				m_engine.PostEvent( MakeFunctorEvent( EventType::ePreRender, [p_element, this]()
+				m_listener.PostEvent( MakeFunctorEvent( EventType::ePreRender, [p_element, this]()
 				{
 					p_element->CreateBuffers( m_faceCount, m_vertexCount );
 				} ) );
@@ -33,40 +37,40 @@ namespace Castor3D
 
 			uint32_t & m_faceCount;
 			uint32_t & m_vertexCount;
-			Engine & m_engine;
+			FrameListener & m_listener;
 		};
 	}
 
-	GeometryCache::ObjectCache( Engine & p_engine
-								, Scene & p_scene
-								, SceneNodeSPtr p_rootNode
-								, SceneNodeSPtr p_rootCameraNode
-								, SceneNodeSPtr p_rootObjectNode
-								, Producer && p_produce
-								, Initialiser && p_initialise
-								, Cleaner && p_clean
-								, Merger && p_merge
-								, Attacher && p_attach
-								, Detacher && p_detach )
+	ObjectCache< Geometry, Castor::String >::ObjectCache( Engine & p_engine
+		, Scene & p_scene
+		, SceneNodeSPtr p_rootNode
+		, SceneNodeSPtr p_rootCameraNode
+		, SceneNodeSPtr p_rootObjectNode
+		, Producer && p_produce
+		, Initialiser && p_initialise
+		, Cleaner && p_clean
+		, Merger && p_merge
+		, Attacher && p_attach
+		, Detacher && p_detach )
 		: MyObjectCache( p_engine
-						 , p_scene
-						 , p_rootNode
-						 , p_rootCameraNode
-						 , p_rootCameraNode
-						 , std::move( p_produce )
-						 , std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, p_engine }, std::placeholders::_1 )
-						 , std::move( p_clean )
-						 , std::move( p_merge )
-						 , std::move( p_attach )
-						 , std::move( p_detach ) )
+			, p_scene
+			, p_rootNode
+			, p_rootCameraNode
+			, p_rootCameraNode
+			, std::move( p_produce )
+			, std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, p_scene.GetListener() }, std::placeholders::_1 )
+			, std::move( p_clean )
+			, std::move( p_merge )
+			, std::move( p_attach )
+			, std::move( p_detach ) )
 	{
 	}
 
-	GeometryCache::~ObjectCache()
+	ObjectCache< Geometry, Castor::String >::~ObjectCache()
 	{
 	}
 
-	uint32_t GeometryCache::GetObjectCount()const
+	uint32_t ObjectCache< Geometry, Castor::String >::GetObjectCount()const
 	{
 		auto l_lock = Castor::make_unique_lock( m_elements );
 

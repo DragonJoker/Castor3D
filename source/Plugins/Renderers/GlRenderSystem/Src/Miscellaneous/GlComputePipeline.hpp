@@ -76,10 +76,9 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ComputePipeline::Run
 		 */
-		void Run(
-			Castor::Point3ui const & p_workgroups,
-			Castor::Point3ui const & p_workgroupSize,
-			Castor::FlagCombination< Castor3D::MemoryBarrier > const & p_barriers )const override;
+		void Run( Castor::Point3ui const & p_workgroups
+			, Castor::Point3ui const & p_workgroupSize
+			, Castor3D::MemoryBarriers const & p_barriers )const override;
 	};
 }
 

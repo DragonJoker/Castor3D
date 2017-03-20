@@ -33,25 +33,6 @@ namespace Castor3D
 	\version	0.9.0
 	\date		14/06/2016
 	\~english
-	\brief		Class which represents the mesh animation submeshes buffers.
-	\~french
-	\brief		Classe de représentation des tampons de sous-maillages d'animations de maillage.
-	*/
-	struct SubmeshAnimationBuffer
-	{
-		//!\~english	The start time index.
-		//!\~french		L'index de temps de début.
-		real m_timeIndex;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		InterleavedVertexArray m_buffer;
-	};
-	using SubmeshAnimationBufferArray = std::vector< SubmeshAnimationBuffer >;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		14/06/2016
-	\~english
 	\brief		Class which represents the mesh animation submeshes.
 	\~french
 	\brief		Classe de représentation de sous-maillages d'animations de maillage.

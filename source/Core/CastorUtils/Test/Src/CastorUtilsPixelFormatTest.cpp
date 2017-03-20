@@ -190,7 +190,7 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Converted pixel : " << l_dest;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 		}
 	};
 
@@ -223,7 +223,7 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source pixel : " << l_source;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 			ConvertPixel< PixelFormat::eL8 >( l_source );
 			ConvertPixel< PixelFormat::eL32F >( l_source );
 			ConvertPixel< PixelFormat::eA8L8 >( l_source );
@@ -235,7 +235,7 @@ namespace
 			ConvertPixel< PixelFormat::eA8R8G8B8 >( l_source );
 			ConvertPixel< PixelFormat::eRGB32F >( l_source );
 			ConvertPixel< PixelFormat::eRGBA32F >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
@@ -250,13 +250,13 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source pixel : " << l_source;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 			ConvertPixel< PixelFormat::eD16 >( l_source );
 			ConvertPixel< PixelFormat::eD24 >( l_source );
 			ConvertPixel< PixelFormat::eD32 >( l_source );
 			ConvertPixel< PixelFormat::eD24S8 >( l_source );
 			ConvertPixel< PixelFormat::eS8 >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
@@ -275,7 +275,7 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Converted buffer : " << *l_dest;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 		}
 	};
 
@@ -320,7 +320,7 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 			ConvertBuffer< PixelFormat::eL8 >( l_source );
 			ConvertBuffer< PixelFormat::eL32F >( l_source );
 			ConvertBuffer< PixelFormat::eA8L8 >( l_source );
@@ -332,7 +332,7 @@ namespace
 			ConvertBuffer< PixelFormat::eA8R8G8B8 >( l_source );
 			ConvertBuffer< PixelFormat::eRGB32F >( l_source );
 			ConvertBuffer< PixelFormat::eRGBA32F >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
@@ -362,12 +362,12 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 			ConvertBuffer< PixelFormat::eD16 >( l_source );
 			ConvertBuffer< PixelFormat::eD24 >( l_source );
 			ConvertBuffer< PixelFormat::eD32 >( l_source );
 			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
@@ -397,13 +397,13 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 			ConvertBuffer< PixelFormat::eD16 >( l_source );
 			ConvertBuffer< PixelFormat::eD24 >( l_source );
 			ConvertBuffer< PixelFormat::eD32 >( l_source );
 			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
 			ConvertBuffer< PixelFormat::eS8 >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 
@@ -430,10 +430,10 @@ namespace
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
-			Logger::LogDebug( l_stream );
+			Logger::LogTrace( l_stream );
 			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
 			ConvertBuffer< PixelFormat::eS8 >( l_source );
-			Logger::LogDebug( StringStream() << std::endl );
+			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
 

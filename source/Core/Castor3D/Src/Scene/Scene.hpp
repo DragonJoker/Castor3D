@@ -405,6 +405,28 @@ namespace Castor3D
 		{
 			return m_shadow;
 		}
+		/**
+		 *\~english
+		 *\return		The scene's frame listener.
+		 *\~french
+		 *\return		Le frame listener de la scène.
+		 */
+		inline FrameListener const & GetListener()const
+		{
+			REQUIRE( !m_listener.expired() );
+			return *m_listener.lock();
+		}
+		/**
+		 *\~english
+		 *\return		The scene's frame listener.
+		 *\~french
+		 *\return		Le frame listener de la scène.
+		 */
+		inline FrameListener & GetListener()
+		{
+			REQUIRE( !m_listener.expired() );
+			return *m_listener.lock();
+		}
 
 	public:
 		//!\~english	The signal raised when the scene has changed.
@@ -466,9 +488,6 @@ namespace Castor3D
 		//!\~english	Ambient light color
 		//!\~french		Couleur de la lumière ambiante
 		Castor::Colour m_ambientLight;
-		//!\~english	The overlays array
-		//!\~french		Le tableau d'overlays
-		OverlayPtrArray m_overlays;
 		//!\~english	The scene background colour
 		//!\~french		La couleur de fond de la scène
 		Castor::Colour m_backgroundColour;
@@ -490,6 +509,9 @@ namespace Castor3D
 		//!\~english	The pipeline used to render the background image, if any.
 		//!\~french		Le pipeline utilisé pour le rendu de l'image de fond, s'il y en a une.
 		std::unique_ptr< TextureProjection > m_colour;
+		//!\~english	The frame listener for the scene.
+		//!\~french		Le frame listener pour la scène.
+		FrameListenerWPtr m_listener;
 
 	public:
 		//!\~english	The cameras root node name.

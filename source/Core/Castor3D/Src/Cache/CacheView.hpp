@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Cache.hpp"
 
 #include <Design/Named.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -44,6 +45,11 @@ namespace Castor3D
 	class CacheView
 		: public Castor::Named
 	{
+	private:
+		using Initialiser = ElementInitialiser< ResourceType >;
+		using Cleaner = ElementCleaner< ResourceType >;
+		using ResourcePtr = std::shared_ptr< ResourceType >;
+
 	public:
 		/**
 		 *\~english
@@ -55,7 +61,10 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de la vue.
 		 *\param[in]	p_cache	Le cache vu.
 		 */
-		inline CacheView( Castor::String const & p_name, CacheType & p_cache );
+		inline CacheView( Castor::String const & p_name
+			, Initialiser && p_initialise
+			, Cleaner && p_clean
+			, CacheType & p_cache );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -76,18 +85,18 @@ namespace Castor3D
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Params >
-		inline std::shared_ptr< ResourceType > Add( Castor::String const & p_name, Params && ... p_params );
+		inline ResourcePtr Add( Castor::String const & p_name, Params && ... p_params );
 		/**
 		 *\~english
-		 *\brief		Removes an object, given a name.
+		 *\brief		Adds an already created an element.
 		 *\param[in]	p_name		The element name.
 		 *\param[in]	p_element	The element.
 		 *\~french
-		 *\brief		Retire un objet à partir d'un nom.
+		 *\brief		Ajoute un élément déjà créé.
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_element	L'élément.
 		 */
-		inline std::shared_ptr< ResourceType > Add( Castor::String const & p_name, std::shared_ptr< ResourceType > p_element );
+		inline ResourcePtr Add( Castor::String const & p_name, ResourcePtr p_element );
 		/**
 		 *\~english
 		 *\brief		Removes from the cache the elements created through this view.
@@ -114,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline std::shared_ptr< ResourceType > Find( Castor::String const & p_name )const;
+		inline ResourcePtr Find( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
@@ -180,6 +189,15 @@ namespace Castor3D
 		//!\~english	The created elements names.
 		//!\~french		Les noms des éléments créés.
 		std::set< Castor::String > m_createdElements;
+		//!\~english	The element initialiser.
+		//!\~french		L'initaliseur d'éléments.
+		Initialiser m_initialise;
+		//!\~english	The element cleaner.
+		//!\~french		Le nettoyeur d'éléments.
+		Cleaner m_clean;
+		//!\~english	The elements that are being cleaned.
+		//!\~french		Les éléments en cours de nettoyage.
+		std::vector< ResourcePtr > m_cleaning;
 	};
 }
 

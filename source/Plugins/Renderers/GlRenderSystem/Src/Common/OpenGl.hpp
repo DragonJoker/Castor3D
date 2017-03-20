@@ -50,6 +50,14 @@ SOFTWARE.
 
 #define GL_USE_STD_FUNCTION 0
 
+#if !defined( CALLBACK )
+#	if defined( CASTOR_PLATFORM_WINDOWS )
+#		define CALLBACK __stdcall
+#	else
+#		define CALLBACK
+#	endif
+#endif
+
 namespace GlRender
 {
 	//*********************************************************************************************
@@ -59,7 +67,7 @@ namespace GlRender
 	{
 	public:
 
-		using CFuncType = TRet( * )( TParams... );
+		using CFuncType = TRet( CALLBACK * )( TParams... );
 
 #if GL_USE_STD_FUNCTION
 

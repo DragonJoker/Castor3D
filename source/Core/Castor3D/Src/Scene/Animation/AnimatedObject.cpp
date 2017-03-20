@@ -34,12 +34,12 @@ namespace Castor3D
 
 		if ( l_it != m_animations.end() )
 		{
-			auto l_animation = l_it->second;
+			auto & l_animation = *l_it->second;
 
-			if ( l_animation->GetState() != AnimationState::ePlaying
-					&& l_animation->GetState() != AnimationState::ePaused )
+			if ( l_animation.GetState() != AnimationState::ePlaying
+					&& l_animation.GetState() != AnimationState::ePaused )
 			{
-				l_animation->Play();
+				l_animation.Play();
 				DoStartAnimation( l_animation );
 			}
 		}
@@ -51,11 +51,11 @@ namespace Castor3D
 
 		if ( l_it != m_animations.end() )
 		{
-			auto l_animation = l_it->second;
+			auto & l_animation = *l_it->second;
 
-			if ( l_animation->GetState() != AnimationState::eStopped )
+			if ( l_animation.GetState() != AnimationState::eStopped )
 			{
-				l_animation->Stop();
+				l_animation.Stop();
 				DoStopAnimation( l_animation );
 			}
 		}
@@ -75,16 +75,16 @@ namespace Castor3D
 	{
 		DoClearAnimations();
 
-		for ( auto l_it : m_animations )
+		for ( auto & l_it : m_animations )
 		{
 			l_it.second->Play();
-			DoStartAnimation( l_it.second );
+			DoStartAnimation( *l_it.second );
 		}
 	}
 
 	void AnimatedObject::StopAllAnimations()
 	{
-		for ( auto l_it : m_animations )
+		for ( auto & l_it : m_animations )
 		{
 			l_it.second->Stop();
 		}
@@ -94,7 +94,7 @@ namespace Castor3D
 
 	void AnimatedObject::PauseAllAnimations()
 	{
-		for ( auto l_it : m_animations )
+		for ( auto & l_it : m_animations )
 		{
 			l_it.second->Pause();
 		}

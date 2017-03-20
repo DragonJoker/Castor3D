@@ -97,6 +97,12 @@ namespace Castor3D
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
+	void LightCategory::DoBindComponent( ConstCoords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	{
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
+		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
+	}
+
 	void LightCategory::DoBindComponent( Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
 		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );

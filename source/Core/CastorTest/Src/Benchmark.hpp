@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "TestPrerequisites.hpp"
 
+#include <chrono>
+
 namespace Testing
 {
 	///
@@ -57,7 +59,7 @@ namespace Testing
 		virtual void Execute() = 0;
 		inline std::string const & GetSummary()const
 		{
-			return m_strSummary;
+			return m_summary;
 		}
 
 	protected:
@@ -67,9 +69,9 @@ namespace Testing
 		using clock = std::chrono::high_resolution_clock;
 		clock::time_point m_saved;
 		std::string m_name;
-		double m_dCumulativeTimes;
-		uint64_t m_uiTotalExecutions;
-		std::string m_strSummary;
+		std::chrono::nanoseconds m_cumulativeTimes;
+		uint64_t m_totalExecutions;
+		std::string m_summary;
 	};
 
 #	define BENCHMARK( Name, Calls ) DoBench( #Name, [&](){ Name(); }, Calls )

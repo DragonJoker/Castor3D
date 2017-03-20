@@ -81,11 +81,10 @@ namespace Testing
 		auto & l_rhs = *l_dst;
 		CT_EQUAL( l_lhs, l_rhs );
 		File::DeleteFile( l_path );
+		l_scene.Cleanup();
+		m_engine.GetRenderLoop().RenderSyncFrame();
 		l_src.reset();
 		l_dst.reset();
-		l_scene.GetMeshCache().Remove( l_name );
-		l_scene.GetMeshCache().Remove( l_name + cuT( "_imp" ) );
-		m_engine.GetRenderLoop().Cleanup();
 	}
 
 	void BinaryExportTest::ImportExport()
@@ -129,11 +128,10 @@ namespace Testing
 		auto & l_rhs = *l_dst;
 		CT_EQUAL( l_lhs, l_rhs );
 		File::DeleteFile( l_path );
+		l_scene.Cleanup();
+		m_engine.GetRenderLoop().RenderSyncFrame();
 		l_src.reset();
 		l_dst.reset();
-		l_scene.GetMeshCache().Remove( l_name + cuT( "_imp" ) );
-		l_scene.GetMeshCache().Remove( l_name + cuT( "_exp" ) );
-		m_engine.GetRenderLoop().Cleanup();
 	}
 
 	void BinaryExportTest::AnimatedMesh()
@@ -178,14 +176,13 @@ namespace Testing
 		auto & l_rhs = *l_dst;
 		CT_EQUAL( l_lhs, l_rhs );
 		File::DeleteFile( l_path );
-		l_dst.reset();
-		l_sceneDst.GetMeshCache().Remove( l_name + cuT( "_imp" ) );
-		l_src.reset();
-		l_scene->GetMeshCache().Remove( l_name );
-		m_engine.GetRenderLoop().Cleanup();
-		m_engine.GetSceneCache().Remove( l_scene->GetName() );
 		l_scene->Cleanup();
-		m_engine.GetRenderLoop().Cleanup();
+		l_sceneDst.Cleanup();
+		m_engine.GetSceneCache().Remove( l_scene->GetName() );
+		m_engine.GetRenderLoop().RenderSyncFrame();
+		l_src.reset();
+		l_dst.reset();
+		l_scene.reset();
 	}
 
 	//*********************************************************************************************

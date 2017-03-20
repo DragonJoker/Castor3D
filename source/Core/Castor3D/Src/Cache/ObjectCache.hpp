@@ -563,32 +563,32 @@ namespace Castor3D
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< ObjectCache< ElementType, KeyType > >
 	MakeObjectCache( Engine & p_engine
-					 , Scene & p_scene
-					 , SceneNodeSPtr p_rootNode
-					 , SceneNodeSPtr p_rootCameraNode
-					 , SceneNodeSPtr p_rootObjectNode
-					 , typename ObjectCacheTraits< ElementType, KeyType >::Producer && p_produce
-					 , ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
-					 , ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
-					 , typename ObjectCacheTraits< ElementType, KeyType >::Merger && p_merge = []( ObjectCacheBase< ElementType, KeyType > const &
-																										   , Castor::Collection< ElementType, KeyType > &
-																										   , std::shared_ptr< ElementType >
-																										   , SceneNodeSPtr
-																										   , SceneNodeSPtr ){}
-					, ElementAttacher< ElementType > && p_attach = []( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ){}
-					, ElementDetacher< ElementType > && p_detach = []( std::shared_ptr< ElementType > ){} )
+		, Scene & p_scene
+		, SceneNodeSPtr p_rootNode
+		, SceneNodeSPtr p_rootCameraNode
+		, SceneNodeSPtr p_rootObjectNode
+		, typename ObjectCacheTraits< ElementType, KeyType >::Producer && p_produce
+		, ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
+		, ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
+		, typename ObjectCacheTraits< ElementType, KeyType >::Merger && p_merge = []( ObjectCacheBase< ElementType, KeyType > const &
+			, Castor::Collection< ElementType, KeyType > &
+			, std::shared_ptr< ElementType >
+			, SceneNodeSPtr
+			, SceneNodeSPtr ){}
+		, ElementAttacher< ElementType > && p_attach = []( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ){}
+		, ElementDetacher< ElementType > && p_detach = []( std::shared_ptr< ElementType > ){} )
 	{
 		return std::make_unique< ObjectCache< ElementType, KeyType > >( p_engine
-																		, p_scene
-																		, p_rootNode
-																		, p_rootCameraNode
-																		, p_rootObjectNode
-																		, std::move( p_produce )
-																		, std::move( p_initialise )
-																		, std::move( p_clean )
-																		, std::move( p_merge )
-																		, std::move( p_attach )
-																		, std::move( p_detach ) );
+			, p_scene
+			, p_rootNode
+			, p_rootCameraNode
+			, p_rootObjectNode
+			, std::move( p_produce )
+			, std::move( p_initialise )
+			, std::move( p_clean )
+			, std::move( p_merge )
+			, std::move( p_attach )
+			, std::move( p_detach ) );
 	}
 }
 

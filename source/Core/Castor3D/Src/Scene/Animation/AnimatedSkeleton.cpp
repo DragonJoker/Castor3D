@@ -24,9 +24,9 @@ namespace Castor3D
 
 	void AnimatedSkeleton::Update( std::chrono::milliseconds const & p_tslf )
 	{
-		for ( auto l_animation : m_playingAnimations )
+		for ( auto & l_animation : m_playingAnimations )
 		{
-			l_animation->Update( p_tslf );
+			l_animation.get().Update( p_tslf );
 		}
 	}
 
@@ -49,9 +49,9 @@ namespace Castor3D
 			{
 				Matrix4x4r l_final{ 1.0_r };
 
-				for ( auto l_animation : m_playingAnimations )
+				for ( auto & l_animation : m_playingAnimations )
 				{
-					auto l_object = l_animation->GetObject( *l_bone );
+					auto l_object = l_animation.get().GetObject( *l_bone );
 
 					if ( l_object )
 					{
@@ -71,19 +71,24 @@ namespace Castor3D
 		if ( l_it == m_animations.end() )
 		{
 			auto & l_animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
-			auto l_instance = std::make_shared< SkeletonAnimationInstance >( *this, l_animation );
-			m_animations.insert( { p_name, l_instance } );
+			auto l_instance = std::make_unique< SkeletonAnimationInstance >( *this, l_animation );
+			m_animations.emplace( p_name, std::move( l_instance ) );
 		}
 	}
 
-	void AnimatedSkeleton::DoStartAnimation( AnimationInstanceSPtr p_animation )
+	void AnimatedSkeleton::DoStartAnimation( AnimationInstance & p_animation )
 	{
-		m_playingAnimations.push_back( std::static_pointer_cast< SkeletonAnimationInstance >( p_animation ) );
+		m_playingAnimations.push_back( static_cast< SkeletonAnimationInstance & >( p_animation ) );
 	}
 
-	void AnimatedSkeleton::DoStopAnimation( AnimationInstanceSPtr p_animation )
+	void AnimatedSkeleton::DoStopAnimation( AnimationInstance & p_animation )
 	{
-		m_playingAnimations.erase( std::find( m_playingAnimations.begin(), m_playingAnimations.end(), std::static_pointer_cast< SkeletonAnimationInstance >( p_animation ) ) );
+		m_playingAnimations.erase( std::find_if( m_playingAnimations.begin()
+			, m_playingAnimations.end()
+			, [&p_animation]( std::reference_wrapper< SkeletonAnimationInstance > & p_instance )
+			{
+				return &p_instance.get() == &static_cast< SkeletonAnimationInstance & >( p_animation );
+			} ) );
 	}
 
 	void AnimatedSkeleton::DoClearAnimations()

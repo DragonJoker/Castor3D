@@ -7,6 +7,7 @@
 #include "Scene.hpp"
 #include "SceneNode.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
@@ -180,7 +181,7 @@ namespace Castor3D
 		{
 			l_buffers = GetParentScene().GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangleFan, p_program );
 
-			GetParentScene().GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_buffers]()
+			GetParentScene().GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_buffers]()
 			{
 				l_buffers->Initialise( { *m_quad, *m_vertexBuffer }, nullptr );
 			} ) );

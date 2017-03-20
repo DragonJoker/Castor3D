@@ -37,10 +37,20 @@ namespace Castor3D
 
 	namespace
 	{
-		template< typename ResourceType, EventType EventType, typename CacheType >
-		std::unique_ptr< CacheView< ResourceType, CacheType, EventType > > MakeCacheView( Castor::String const & p_name, CacheType & p_cache )
+		template< typename ResourceType
+			, EventType EventType
+			, typename CacheType
+			, typename Initialiser
+			, typename Cleaner >
+		std::unique_ptr< CacheView< ResourceType, CacheType, EventType > > MakeCacheView( Castor::String const & p_name
+			, Initialiser && p_initialise
+			, Cleaner && p_clean
+			, CacheType & p_cache )
 		{
-			return std::make_unique< CacheView< ResourceType, CacheType, EventType > >( p_name, p_cache );
+			return std::make_unique< CacheView< ResourceType, CacheType, EventType > >( p_name
+				, std::move( p_initialise )
+				, std::move( p_clean )
+				, p_cache );
 		}
 	}
 
@@ -309,15 +319,10 @@ namespace Castor3D
 	String Scene::CameraRootNode = cuT( "CameraRootNode" );
 	String Scene::ObjectRootNode = cuT( "ObjectRootNode" );
 
-	namespace
-	{
-	}
-
 	Scene::Scene( String const & p_name, Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
-		, Named( p_name )
-		, m_rootCameraNode()
-		, m_rootObjectNode()
+		, Named{ p_name }
+		, m_listener{ p_engine.GetFrameListenerCache().Add( cuT( "Scene_" ) + p_name + string::to_string( (size_t)this ) ) }
 	{
 		auto l_mergeObject = [this]( auto const & p_source
 			, auto & p_destination
@@ -362,11 +367,11 @@ namespace Castor3D
 		};
 		auto l_eventInitialise = [this]( auto p_element )
 		{
-			this->GetEngine()->PostEvent( MakeInitialiseEvent( *p_element ) );
+			this->GetListener().PostEvent( MakeInitialiseEvent( *p_element ) );
 		};
 		auto l_eventClean = [this]( auto p_element )
 		{
-			this->GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
+			this->GetListener().PostEvent( MakeCleanupEvent( *p_element ) );
 		};
 		auto l_attachObject = []( auto p_element
 			, SceneNodeSPtr p_parent
@@ -578,12 +583,20 @@ namespace Castor3D
 			, l_mergeResource );
 
 		m_materialCacheView = MakeCacheView< Material, EventType::ePreRender >( GetName()
+			, l_eventInitialise
+			, l_eventClean
 			, GetEngine()->GetMaterialCache() );
 		m_samplerCacheView = MakeCacheView< Sampler, EventType::ePreRender >( GetName()
+			, l_eventInitialise
+			, l_eventClean
 			, GetEngine()->GetSamplerCache() );
 		m_overlayCacheView = MakeCacheView< Overlay, EventType::ePreRender >( GetName()
+			, std::bind( OverlayCache::OverlayInitialiser{ GetEngine()->GetOverlayCache() }, std::placeholders::_1 )
+			, std::bind( OverlayCache::OverlayCleaner{ GetEngine()->GetOverlayCache() }, std::placeholders::_1 )
 			, GetEngine()->GetOverlayCache() );
 		m_fontCacheView = MakeCacheView< Font, EventType::ePreRender >( GetName()
+			, l_dummy
+			, l_dummy
 			, GetEngine()->GetFontCache() );
 
 		auto l_notify = [this]()
@@ -645,13 +658,14 @@ namespace Castor3D
 		}
 
 		m_rootNode.reset();
+		GetEngine()->GetFrameListenerCache().Remove( m_listener.lock()->GetName() );
 	}
 
 	void Scene::Initialise()
 	{
 		m_lightCache->Initialise();
 
-		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{
 			m_colour = std::make_unique< TextureProjection >( *GetEngine()->GetRenderSystem()->GetCurrentContext() );
 			m_colour->Initialise();
@@ -660,7 +674,6 @@ namespace Castor3D
 
 	void Scene::Cleanup()
 	{
-		m_overlays.clear();
 		m_animatedObjectGroupCache->Cleanup();
 		m_cameraCache->Cleanup();
 		m_billboardCache->Cleanup();
@@ -674,19 +687,22 @@ namespace Castor3D
 		m_overlayCacheView->Clear();
 		m_fontCacheView->Clear();
 
-		// Those two ones, being ResourceCache, need to be cleared in destructor only
+		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->Cleanup();
 		m_windowCache->Cleanup();
 
-		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{
-			m_colour->Cleanup();
-			m_colour.reset();
+			if ( m_colour )
+			{
+				m_colour->Cleanup();
+				m_colour.reset();
+			}
 		} ) );
 
 		if ( m_backgroundImage )
 		{
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_backgroundImage->Cleanup();
 			} ) );
@@ -694,7 +710,7 @@ namespace Castor3D
 
 		if ( m_skybox )
 		{
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_skybox->Cleanup();
 			} ) );
@@ -748,7 +764,7 @@ namespace Castor3D
 			m_skybox->GetTexture().GetImage( 3u ).InitialiseSource( l_buffer );
 			m_skybox->GetTexture().GetImage( 4u ).InitialiseSource( l_buffer );
 			m_skybox->GetTexture().GetImage( 5u ).InitialiseSource( l_buffer );
-			GetEngine()->PostEvent( MakeInitialiseEvent( *m_skybox ) );
+			GetListener().PostEvent( MakeInitialiseEvent( *m_skybox ) );
 		}
 
 		m_changed = false;
@@ -763,7 +779,7 @@ namespace Castor3D
 			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
 			l_texture->SetSource( p_folder, p_relative );
 			m_backgroundImage = l_texture;
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_backgroundImage->Initialise();
 				m_backgroundImage->Bind( 0 );
@@ -783,7 +799,7 @@ namespace Castor3D
 	bool Scene::SetForeground( SkyboxUPtr && p_skybox )
 	{
 		m_skybox = std::move( p_skybox );
-		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{
 			m_skybox->Initialise();
 		} ) );

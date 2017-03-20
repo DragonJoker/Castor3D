@@ -333,6 +333,7 @@ namespace Castor3D
 	protected:
 		void DoBindComponent( Castor::Point3f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::ConstCoords4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Matrix4x4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( int32_t const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;

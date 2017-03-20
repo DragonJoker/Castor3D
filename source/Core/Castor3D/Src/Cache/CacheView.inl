@@ -5,9 +5,14 @@
 namespace Castor3D
 {
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline CacheView< ResourceType, CacheType, EventType >::CacheView( Castor::String const & p_name, CacheType & p_cache )
+	inline CacheView< ResourceType, CacheType, EventType >::CacheView( Castor::String const & p_name
+		, Initialiser && p_initialise
+		, Cleaner && p_clean
+		, CacheType & p_cache )
 		: Castor::Named( p_name )
 		, m_cache( p_cache )
+		, m_initialise{ p_initialise }
+		, m_clean{ p_clean }
 	{
 	}
 
@@ -20,27 +25,34 @@ namespace Castor3D
 	template< typename ... Params >
 	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::Add( Castor::String const & p_name, Params && ... p_params )
 	{
-		std::shared_ptr< ResourceType > l_resource = m_cache.Add( p_name, std::forward< Params >( p_params )... );
+		std::shared_ptr< ResourceType > l_result;
 
-		if ( l_resource )
+		if ( m_cache.Has( p_name ) )
 		{
+			l_result = m_cache.Find( p_name );
+		}
+		else
+		{
+			l_result = m_cache.Create( p_name, std::forward< Params >( p_params )... );
+			m_initialise( l_result );
+			m_cache.Add( p_name, l_result );
 			m_createdElements.insert( p_name );
 		}
 
-		return l_resource;
+		return l_result;
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
 	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::Add( Castor::String const & p_name, std::shared_ptr< ResourceType > p_element )
 	{
-		std::shared_ptr< ResourceType > l_resource = m_cache.Add( p_name, p_element );
+		auto l_result = m_cache.Add( p_name, p_element );
 
-		if ( l_resource )
+		if ( l_result )
 		{
 			m_createdElements.insert( p_name );
 		}
 
-		return l_resource;
+		return l_result;
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
@@ -53,10 +65,8 @@ namespace Castor3D
 			if ( l_resource )
 			{
 				m_cache.Remove( l_name );
-				m_cache.GetEngine()->PostEvent( MakeFunctorEvent( EventType, [l_resource]()
-				{
-					l_resource->Cleanup();
-				} ) );
+				m_cleaning.push_back( l_resource );
+				m_clean( l_resource );
 			}
 		}
 	}

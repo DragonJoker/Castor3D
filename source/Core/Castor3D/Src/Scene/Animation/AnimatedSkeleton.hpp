@@ -118,16 +118,6 @@ namespace Castor3D
 		{
 			return m_skeleton;
 		}
-		/**
-		 *\~english
-		 *\return		The currently animations for this object.
-		 *\~french
-		 *\return		Les animations en cours de lecture sur cet objet.
-		 */
-		inline SkeletonAnimationInstancePtrArray const & GetPlayingAnimations()const
-		{
-			return m_playingAnimations;
-		}
 
 	private:
 		/**
@@ -137,11 +127,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
-		void DoStartAnimation( AnimationInstanceSPtr p_animation )override;
+		void DoStartAnimation( AnimationInstance & p_animation )override;
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
-		void DoStopAnimation( AnimationInstanceSPtr p_animation )override;
+		void DoStopAnimation( AnimationInstance & p_animation )override;
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
@@ -153,7 +143,7 @@ namespace Castor3D
 		Skeleton & m_skeleton;
 		//!\~english	Currently playing animations.
 		//!\~french		Les animations en cours de lecture.
-		SkeletonAnimationInstancePtrArray m_playingAnimations;
+		SkeletonAnimationInstanceArray m_playingAnimations;
 	};
 }
 

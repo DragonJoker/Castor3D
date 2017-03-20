@@ -30,7 +30,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttype \"" ) + TypeName[p_material.GetType()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + TypeName[p_material.GetType()] + cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Material >::CheckError( l_return, "Material type" );
 		}
 

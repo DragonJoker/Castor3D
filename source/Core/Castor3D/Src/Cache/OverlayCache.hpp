@@ -101,6 +101,26 @@ namespace Castor3D
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
 		DECLARE_MAP( Castor::String, FontTextureSPtr, FontTextureStr );
 
+		struct OverlayInitialiser
+		{
+			OverlayInitialiser( Cache< Overlay, Castor::String > & p_cache );
+			void operator()( OverlaySPtr p_element );
+
+		private:
+			OverlayCategorySet & m_overlays;
+			std::vector< int > & m_overlayCountPerLevel;
+		};
+
+		struct OverlayCleaner
+		{
+			OverlayCleaner( Cache< Overlay, Castor::String > & p_cache );
+			void operator()( OverlaySPtr p_element );
+
+		private:
+			OverlayCategorySet & m_overlays;
+			std::vector< int > & m_overlayCountPerLevel;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -109,10 +129,10 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 */
 		C3D_API Cache( Engine & p_engine
-					   , Producer && p_produce
-					   , Initialiser && p_initialise = Initialiser{}
-					   , Cleaner && p_clean = Cleaner{}
-					   , Merger && p_merge = Merger{} );
+		   , Producer && p_produce
+		   , Initialiser && p_initialise = Initialiser{}
+		   , Cleaner && p_clean = Cleaner{}
+		   , Merger && p_merge = Merger{} );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -218,6 +238,22 @@ namespace Castor3D
 		inline ElementPtr Add( Key const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
 		{
 			return MyCacheType::Add( p_name, p_type, p_scene, p_parent );
+		}
+		/**
+		 *\~english
+		 *\brief		Adds an already created object.
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_element	The object.
+		 *\return		The object.
+		 *\~french
+		 *\brief		Ajoute un objet déjà créé.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_element	L'objet'.
+		 *\return		L'objet.
+		 */
+		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
+		{
+			return MyCacheType::Add( p_name, p_element );
 		}
 		/**
 		 *\~english

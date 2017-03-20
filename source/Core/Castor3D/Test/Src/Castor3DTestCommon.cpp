@@ -40,6 +40,23 @@ namespace Testing
 	{
 	}
 
+	bool C3DTestCase::compare( Angle const & p_a, Angle const & p_b )
+	{
+		return p_a.radians() == p_b.radians();
+	}
+
+	bool C3DTestCase::compare( Castor::Quaternion const & p_a, Castor::Quaternion const & p_b )
+	{
+		Castor::Angle l_alphaA;
+		Castor::Angle l_alphaB;
+		Castor::Point3r l_axisA;
+		Castor::Point3r l_axisB;
+		p_a.to_axis_angle( l_axisA, l_alphaA );
+		p_b.to_axis_angle( l_axisB, l_alphaB );
+		auto l_return = CT_EQUAL( l_axisA, l_axisB );
+		return l_return && CT_EQUAL( l_alphaA, l_alphaB );
+	}
+
 	bool C3DTestCase::compare( Scene const & p_a, Scene const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
@@ -156,13 +173,7 @@ namespace Testing
 	bool C3DTestCase::compare( SceneNode const & p_a, SceneNode const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		Castor::Angle l_xa, l_ya, l_za;
-		Castor::Angle l_xb, l_yb, l_zb;
-		p_a.GetOrientation().to_euler( l_xa, l_ya, l_za );
-		p_b.GetOrientation().to_euler( l_xb, l_yb, l_zb );
-		CT_EQUAL( std::fmod( l_xa.radians() - l_xb.radians(), Angle::Pi ), 0.0 );
-		CT_EQUAL( std::fmod( l_ya.radians() - l_yb.radians(), Angle::Pi ), 0.0 );
-		CT_EQUAL( std::fmod( l_za.radians() - l_zb.radians(), Angle::Pi ), 0.0 );
+		l_return &= CT_EQUAL( p_a.GetOrientation(), p_b.GetOrientation() );
 		l_return &= CT_EQUAL( p_a.GetPosition(), p_b.GetPosition() );
 		l_return &= CT_EQUAL( p_a.GetScale(), p_b.GetScale() );
 		l_return &= CT_EQUAL( p_a.GetParent() != nullptr, p_b.GetParent() != nullptr );

@@ -38,24 +38,6 @@ namespace Loop
 		return std::make_unique< Subdivider >();
 	}
 
-	void Subdivider::DoInitialise()
-	{
-		Castor3D::Subdivider::DoInitialise();
-		uint32_t l_index = 0;
-
-		for ( auto & l_point : GetPoints() )
-		{
-			m_mapVertex.insert( std::make_pair( l_index++, std::make_shared< Vertex >( l_point ) ) );
-		}
-
-		for ( auto & l_face : m_submesh->GetFaces() )
-		{
-			m_facesEdges.push_back( std::make_shared< FaceEdges >( this, l_face, m_mapVertex ) );
-		}
-
-		m_submesh->ClearFaces();
-	}
-
 	void Subdivider::Cleanup()
 	{
 		Castor3D::Subdivider::Cleanup();
@@ -82,6 +64,24 @@ namespace Loop
 		VertexSPtr l_return = std::make_shared< Vertex >( Castor3D::Subdivider::AddPoint( p_v ) );
 		m_mapVertex.insert( std::make_pair( l_return->GetIndex(), l_return ) );
 		return l_return;
+	}
+
+	void Subdivider::DoInitialise()
+	{
+		Castor3D::Subdivider::DoInitialise();
+		uint32_t l_index = 0;
+
+		for ( auto & l_point : GetPoints() )
+		{
+			m_mapVertex.insert( std::make_pair( l_index++, std::make_shared< Vertex >( l_point ) ) );
+		}
+
+		for ( auto & l_face : m_submesh->GetFaces() )
+		{
+			m_facesEdges.push_back( std::make_shared< FaceEdges >( this, l_face, m_mapVertex ) );
+		}
+
+		m_submesh->ClearFaces();
 	}
 
 	void Subdivider::DoSubdivide()
@@ -117,19 +117,20 @@ namespace Loop
 		{
 			VertexSPtr l_vertex = l_it.second;
 			uint32_t l_nbEdges = l_vertex->size();
-			Coords3r l_position = Castor3D::Vertex::GetPosition( l_vertex->GetPoint(), l_position );
+			Coords3r l_position;
+			Castor3D::Vertex::GetPosition( l_vertex->GetPoint(), l_position );
 			real l_alpha = real( alpha( l_nbEdges ) );
 			l_position *= l_alpha;
 
-			for ( auto & l_it : *l_vertex )
+			for ( auto & l_itI : *l_vertex )
 			{
-				l_position += l_positions[l_it.first];
+				l_position += l_positions[l_itI.first];
 			}
 
 			l_position /= l_alpha + l_nbEdges;
 		}
 
-		for ( auto l_face : m_submesh->GetFaces() )
+		for ( auto & l_face : m_submesh->GetFaces() )
 		{
 			Coords3r l_dump;
 			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_face[0] ), Castor3D::Vertex::GetPosition( m_mapVertex[l_face[0]]->GetPoint(), l_dump ) );

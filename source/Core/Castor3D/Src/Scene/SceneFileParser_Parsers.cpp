@@ -1107,7 +1107,10 @@ namespace Castor3D
 		else if ( !p_params.empty() )
 		{
 			String l_name;
-			l_parsingContext->pOverlay = l_parsingContext->pScene->GetOverlayView().Add( p_params[0]->Get( l_name ), OverlayType::ePanel, l_parsingContext->pScene, l_parsingContext->pOverlay );
+			l_parsingContext->pOverlay = l_parsingContext->pScene->GetOverlayView().Add( p_params[0]->Get( l_name )
+				, OverlayType::ePanel
+				, l_parsingContext->pScene
+				, l_parsingContext->pOverlay );
 			l_parsingContext->pOverlay->SetVisible( false );
 		}
 	}
@@ -2632,7 +2635,7 @@ namespace Castor3D
 			l_parsingContext->vertexTan.clear();
 			l_parsingContext->vertexTex.clear();
 			l_parsingContext->faces.clear();
-			l_parsingContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_parsingContext->pSubmesh ) );
+			l_parsingContext->pSubmesh->GetParent().GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_parsingContext->pSubmesh ) );
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -2649,7 +2652,15 @@ namespace Castor3D
 		{
 			uint32_t l_value;
 			p_params[0]->Get( l_value );
-			l_parsingContext->pMaterial = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Add( l_parsingContext->strName, MaterialType( l_value ) );
+
+			if ( l_parsingContext->pScene )
+			{
+				l_parsingContext->pMaterial = l_parsingContext->pScene->GetMaterialView().Add( l_parsingContext->strName, MaterialType( l_value ) );
+			}
+			else
+			{
+				l_parsingContext->pMaterial = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Add( l_parsingContext->strName, MaterialType( l_value ) );
+			}
 		}
 	}
 	END_ATTRIBUTE()
@@ -4372,7 +4383,7 @@ namespace Castor3D
 				p_params[1]->Get( l_size );
 				auto & l_skybox = *l_parsingContext->pSkybox;
 				auto l_engine = l_parsingContext->pScene->GetEngine();
-				l_parsingContext->pScene->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+				l_parsingContext->pScene->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender
 					, [l_buffer, &l_skybox, l_engine, l_size]()
 					{
 						auto l_texture = l_engine->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );

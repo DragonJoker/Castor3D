@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Render/RenderSystem.hpp"
@@ -68,55 +69,59 @@ namespace Castor3D
 		};
 	}
 
-	LightCache::ObjectCache( Engine & p_engine
-							 , Scene & p_scene
-							 , SceneNodeSPtr p_rootNode
-							 , SceneNodeSPtr p_rootCameraNode
-							 , SceneNodeSPtr p_rootObjectNode
-							 , Producer && p_produce
-							 , Initialiser && p_initialise
-							 , Cleaner && p_clean
-							 , Merger && p_merge
-							 , Attacher && p_attach
-							 , Detacher && p_detach )
+	ObjectCache< Light, Castor::String >::ObjectCache( Engine & p_engine
+		, Scene & p_scene
+		, SceneNodeSPtr p_rootNode
+		, SceneNodeSPtr p_rootCameraNode
+		, SceneNodeSPtr p_rootObjectNode
+		, Producer && p_produce
+		, Initialiser && p_initialise
+		, Cleaner && p_clean
+		, Merger && p_merge
+		, Attacher && p_attach
+		, Detacher && p_detach )
 		: MyObjectCache( p_engine
-						 , p_scene
-						 , p_rootNode
-						 , p_rootCameraNode
-						 , p_rootObjectNode
-						 , std::move( p_produce )
-						 , std::bind( LightInitialiser{ m_typeSortedLights }, std::placeholders::_1 )
-						 , std::bind( LightCleaner{ m_typeSortedLights }, std::placeholders::_1 )
-						 , std::move( p_merge )
-						 , std::move( p_attach )
-						 , std::move( p_detach ) )
+			, p_scene
+			, p_rootNode
+			, p_rootCameraNode
+			, p_rootObjectNode
+			, std::move( p_produce )
+			, std::bind( LightInitialiser{ m_typeSortedLights }, std::placeholders::_1 )
+			, std::bind( LightCleaner{ m_typeSortedLights }, std::placeholders::_1 )
+			, std::move( p_merge )
+			, std::move( p_attach )
+			, std::move( p_detach ) )
 		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
 	{
 	}
 
-	LightCache::~ObjectCache()
+	ObjectCache< Light, Castor::String >::~ObjectCache()
 	{
 		m_lightsTexture.reset();
 	}
 
-	void LightCache::Initialise()
+	void ObjectCache< Light, Castor::String >::Initialise()
 	{
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer, AccessType::eWrite, AccessType::eRead, PixelFormat::eRGBA32F, Size( 1000, 1 ) );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer
+			, AccessType::eWrite
+			, AccessType::eRead
+			, PixelFormat::eRGBA32F
+			, Size( 1000, 1 ) );
 		l_texture->GetImage().InitialiseSource();
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );
 		m_lightsTexture->SetSampler( l_sampler );
 		m_lightsTexture->SetTexture( l_texture );
-		GetEngine()->PostEvent( MakeInitialiseEvent( *m_lightsTexture ) );
+		m_scene.GetListener().PostEvent( MakeInitialiseEvent( *m_lightsTexture ) );
 	}
 
-	void LightCache::Cleanup()
+	void ObjectCache< Light, Castor::String >::Cleanup()
 	{
-		GetEngine()->PostEvent( MakeCleanupEvent( *m_lightsTexture ) );
+		m_scene.GetListener().PostEvent( MakeCleanupEvent( *m_lightsTexture ) );
 		MyObjectCache::Cleanup();
 	}
 
-	void LightCache::UpdateLights()const
+	void ObjectCache< Light, Castor::String >::UpdateLights()const
 	{
 		auto l_layout = m_lightsTexture->GetTexture();
 
@@ -145,12 +150,12 @@ namespace Castor3D
 		}
 	}
 
-	void LightCache::BindLights()const
+	void ObjectCache< Light, Castor::String >::BindLights()const
 	{
 		m_lightsTexture->Bind();
 	}
 
-	void LightCache::UnbindLights()const
+	void ObjectCache< Light, Castor::String >::UnbindLights()const
 	{
 		m_lightsTexture->Unbind();
 	}

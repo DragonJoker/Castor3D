@@ -38,9 +38,15 @@ include( ExternalDependencies )
 # Organize projects into folders
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 
-if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER}/${PROJECTS_PLATFORM}/ )
+set( COMPILER_FOLDER ${COMPILER} )
+
+if ( ${COMPILER_FOLDER} STREQUAL "vc15" )
+	set( COMPILER_FOLDER "vc14" )
+endif ()
+
+if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM}/ )
 	message( STATUS "Found dependencies folder, fetching libraries from it" )
-	set( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER}/${PROJECTS_PLATFORM} )
+	set( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
 	set( ENV{FREETYPE_DIR} ${DEPENDENCIES_DIR}/freetype )
 	set( ZLIB_ROOT ${DEPENDENCIES_DIR}/zlib )
 	set( FreeImage_ROOT_DIR ${DEPENDENCIES_DIR}/FreeImage )

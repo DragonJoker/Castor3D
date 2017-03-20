@@ -48,11 +48,11 @@ namespace Testing
 
 	void CastorUtilsMatrixTest::DoRegisterTests()
 	{
-		//DoRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
+		DoRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
 
 #if defined( CASTOR_USE_GLM )
 
-		DoRegisterTest( "MatrixInversionComparison", std::bind( &CastorUtilsMatrixTest::MatrixInversionComparison, this ) );
+		//DoRegisterTest( "MatrixInversionComparison", std::bind( &CastorUtilsMatrixTest::MatrixInversionComparison, this ) );
 		DoRegisterTest( "MatrixMultiplicationComparison", std::bind( &CastorUtilsMatrixTest::MatrixMultiplicationComparison, this ) );
 		DoRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsMatrixTest::TransformationMatrixComparison, this ) );
 		DoRegisterTest( "ProjectionMatrixComparison", std::bind( &CastorUtilsMatrixTest::ProjectionMatrixComparison, this ) );
@@ -94,11 +94,11 @@ namespace Testing
 		for ( int i = 0; i < 10; ++i )
 		{
 			char l_msg[64] = { 0 };
-			Matrix4x4r l_mtx;
+			Matrix4x4f l_mtx;
 			glm::mat4 l_glm;
 			randomInit( l_mtx.ptr(), &l_glm[0][0], 16 );
 			CT_EQUAL( l_mtx, l_glm );
-			Matrix4x4r l_mtxInv( l_mtx.get_inverse() );
+			Matrix4x4f l_mtxInv( l_mtx.get_inverse() );
 			glm::mat4 l_glmInv( glm::inverse( l_glm ) );
 			CT_EQUAL( l_mtxInv, l_glmInv );
 		}

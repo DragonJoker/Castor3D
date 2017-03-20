@@ -44,10 +44,10 @@ namespace Castor3D
 		C3D_API static const Castor::String Name;
 		using Producer = std::function< std::shared_ptr< Geometry >( KeyType const &, SceneNodeSPtr, MeshSPtr ) >;
 		using Merger = std::function< void( ObjectCacheBase< Geometry, KeyType > const &
-											, Castor::Collection< Geometry, KeyType > &
-											, std::shared_ptr< Geometry >
-											, SceneNodeSPtr
-											, SceneNodeSPtr ) >;
+			, Castor::Collection< Geometry, KeyType > &
+			, std::shared_ptr< Geometry >
+			, SceneNodeSPtr
+			, SceneNodeSPtr ) >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -88,16 +88,16 @@ namespace Castor3D
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
 		C3D_API ObjectCache( Engine & p_engine
-							 , Scene & p_scene
-							 , SceneNodeSPtr p_rootNode
-							 , SceneNodeSPtr p_rootCameraNode
-							 , SceneNodeSPtr p_rootObjectNode
-							 , Producer && p_produce
-							 , Initialiser && p_initialise = Initialiser{}
-							 , Cleaner && p_clean = Cleaner{}
-							 , Merger && p_merge = Merger{}
-							 , Attacher && p_attach = Attacher{}
-							 , Detacher && p_detach = Detacher{} );
+			, Scene & p_scene
+			, SceneNodeSPtr p_rootNode
+			, SceneNodeSPtr p_rootCameraNode
+			, SceneNodeSPtr p_rootObjectNode
+			, Producer && p_produce
+			, Initialiser && p_initialise = Initialiser{}
+			, Cleaner && p_clean = Cleaner{}
+			, Merger && p_merge = Merger{}
+			, Attacher && p_attach = Attacher{}
+			, Detacher && p_detach = Detacher{} );
 		/**
 		 *\~english
 		 *\brief		Destructor.
