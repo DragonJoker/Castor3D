@@ -59,7 +59,7 @@ namespace Castor3D
 
 			for ( auto const & l_in : p_in )
 			{
-				l_it->m_timeIndex = double( l_in.m_timeIndex );
+				l_it->m_timeIndex = float( l_in.m_timeIndex );
 				DoConvert( l_in.m_buffer, l_it->m_buffer );
 				++l_it;
 			}

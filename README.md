@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.org/DragonJoker/Castor3D.svg?branch=master)](https://travis-ci.org/DragonJoker/Castor3D)
+|         Server     | Result |
+|:------------------:|--------|
+|  Travis CI (Linux) | [![Build Status](https://travis-ci.org/DragonJoker/Castor3D.svg?branch=development)](https://travis-ci.org/DragonJoker/Castor3D) |
+| AppVeyor (Windows) | [![Build Status](https://ci.appveyor.com/api/projects/status/github/DragonJoker/castor3d?branch=development&svg=true)](https://ci.appveyor.com/project/DragonJoker/castor3d) |
 
 Castor3D
 ========
