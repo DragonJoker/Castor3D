@@ -46,11 +46,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_animation	The parent animation.
-		 *\param[in]	p_type		The skeleton animation object type.
+		 *\param[in]	p_submesh	The submesh.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_animation	L'animation parente.
-		 *\param[in]	p_type		Le type d'objet d'animation de squelette.
+		 *\param[in]	p_submesh	Le sous-maillage.
 		 */
 		C3D_API MeshAnimationSubmesh( MeshAnimation & p_animation, Submesh & p_submesh );
 		/**

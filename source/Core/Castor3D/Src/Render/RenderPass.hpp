@@ -66,13 +66,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_name			The pass name.
-		 *\param[in]	p_renderTarget	The engine.
+		 *\param[in]	p_engine		The engine.
 		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
 		 *\param[in]	p_multisampling	The multisampling status.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			Le nom de la passe.
-		 *\param[in]	p_renderTarget	Le moteur.
+		 *\param[in]	p_engine		Le moteur.
 		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
 		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
 		 */
@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Prepares the pipeline matching the given flags.
 		 *\param[in]	p_colourBlendMode	The colour blend mode.
-		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\param[in]	p_alphaBlendMode	The alpha blend mode.
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
@@ -178,7 +178,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Prépare le pipeline qui correspond aux indicateurs donnés.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
-		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 *\param[in]	p_alphaBlendMode	Le mode de mélange alpha.
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
@@ -357,12 +357,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a scene render node.
-		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_scene		The scene.
 		 *\param[in]	p_pipeline	The pipeline.
 		 *\return		The render node.
 		 *\~french
 		 *\brief		Crée un noeud de rendu de scène.
-		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_pipeline	Le pipeline.
 		 *\return		Le noeud de rendu.
 		 */
@@ -418,12 +418,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_nodes	The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_nodes	Les noeuds de rendu.
 		 */
 		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**

@@ -112,14 +112,14 @@ function( CoreSetup )
 			DISPLAY_NAME "Castor test library"
 			DESCRIPTION "Test library for tests."
 			GROUP Test
-			INSTALL_TYPES Minimal Full
+			INSTALL_TYPES Developer Full
 		)
 		cpack_add_component( CastorTest_dev
 			DISPLAY_NAME "Castor test SDK"
 			DESCRIPTION "Development files for CastorTest."
 			GROUP Test
 			DEPENDS CastorTest
-			INSTALL_TYPES Minimal Full
+			INSTALL_TYPES Developer Full
 		)
 
 		if ( ${CASTOR_BUILD_TEST_CASTORUTILS} )
@@ -128,7 +128,7 @@ function( CoreSetup )
 				DESCRIPTION "Test application for CastorUtils."
 				GROUP Test
 				DEPENDS CastorTest
-				INSTALL_TYPES Minimal Full
+				INSTALL_TYPES Developer Full
 			)
 		endif ()
 
@@ -138,7 +138,7 @@ function( CoreSetup )
 				DESCRIPTION "Test application for Castor3D."
 				GROUP Test
 				DEPENDS CastorTest
-				INSTALL_TYPES Minimal Full
+				INSTALL_TYPES Developer Full
 			)
 		endif ()
 	endif ()

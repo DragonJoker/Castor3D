@@ -66,11 +66,9 @@ namespace Castor3D
 		C3D_API virtual ~IViewportImpl();
 		/**
 		 *\~english
-		 *\brief		Applies the given viewport dimension.
-		 *\param[in]	p_windowWidth, p_windowHeight	The dimensions.
+		 *\brief		Applies the viewport.
 		 *\~french
-		 *\brief		Applique les dimensions de viewport données.
-		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
+		 *\brief		Applique le viewport.
 		 */
 		C3D_API virtual void Apply()const = 0;
 
@@ -239,11 +237,9 @@ namespace Castor3D
 		C3D_API bool Update();
 		/**
 		 *\~english
-		 *\brief		Applies the given viewport dimension.
-		 *\param[in]	p_windowWidth, p_windowHeight	The dimensions.
+		 *\brief		Applies the viewport.
 		 *\~french
-		 *\brief		Applique les dimensions de viewport données.
-		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
+		 *\brief		Applique le viewport.
 		 */
 		C3D_API void Apply()const;
 		/**

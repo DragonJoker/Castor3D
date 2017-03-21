@@ -78,7 +78,7 @@ namespace Castor3D
 			 */
 			C3D_API bool operator()( BorderPanelOverlay const & p_overlay, Castor::TextFile & p_file );
 			/**
-			 *\copydoc		Castor::OverlayCategory::WriteInto
+			 *\copydoc		Castor3D::OverlayCategory::TextWriter::WriteInto
 			 */
 			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
 
@@ -111,7 +111,7 @@ namespace Castor3D
 		 */
 		C3D_API static OverlayCategorySPtr Create();
 		/**
-		 *\copydoc		Castor::OverlayCategory::CreateTextLoader
+		 *\copydoc		Castor3D::OverlayCategory::CreateTextWriter
 		 */
 		C3D_API std::unique_ptr < OverlayCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
 		{

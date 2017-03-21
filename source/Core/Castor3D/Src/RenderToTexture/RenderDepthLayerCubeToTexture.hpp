@@ -80,11 +80,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of the given cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_position	The render viewport position.
 		 *\param[in]	p_size		The render viewport size.
 		 *\param[in]	p_texture	The texture.
 		 *\param[in]	p_layer		The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue de la texture cube donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_position	La position du viewport de rendu.
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_layer		L'index de la couche.
@@ -102,6 +104,7 @@ namespace Castor3D
 		 *\param[in]	p_size				The render viewport size.
 		 *\param[in]	p_texture			The texture.
 		 *\param[in]	p_face				The cube face.
+		 *\param[in]	p_uvMult			The UV multiplier.
 		 *\param[in]	p_pipeline			The render pipeline.
 		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
@@ -112,6 +115,7 @@ namespace Castor3D
 		 *\param[in]	p_size				La taille du viewport de rendu.
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_face				La face du cube.
+		 *\param[in]	p_uvMult			Le multiplicateur d'UV.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
 		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.

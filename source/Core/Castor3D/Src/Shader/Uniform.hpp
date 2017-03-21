@@ -103,11 +103,9 @@ namespace Castor3D
 		C3D_API void SetStrValues( Castor::String const & p_value );
 		/**
 		 *\~english
-		 *\brief		Retrieves the string value of the variable.
-		 *\param[in]	p_index	The value index.
+		 *\brief		Retrieves the string values of the variable.
 		 *\~french
-		 *\brief		Récupère la valeur chaîne de la variable.
-		 *\param[in]	p_index	L'indice de la valeur.
+		 *\brief		Récupère les valeurs chaîne de la variable.
 		 */
 		C3D_API Castor::String GetStrValues()const;
 		/**
@@ -237,9 +235,9 @@ namespace Castor3D
 		 *\return		Définit statut de changement.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetChanged( bool p_changed = true )
+		inline void SetChanged( bool p_value = true )
 		{
-			m_changed = p_changed;
+			m_changed = p_value;
 		}
 
 	private:
@@ -303,13 +301,11 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_program		The program
-		 *\param[in]	p_occurences	The array dimension
+		 *\brief		Constructor.
+		 *\param[in]	p_occurences	The array dimension.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_occurences	Les dimensions du tableau
-		 *\param[in]	p_program		Le programme
+		 *\brief		Constructeur.
+		 *\param[in]	p_occurences	Les dimensions du tableau.
 		 */
 		inline TUniform( uint32_t p_occurences );
 		/**

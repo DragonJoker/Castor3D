@@ -73,7 +73,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Copie le fichier dont le chemin est donné dans le dossier de sortie.
 		 *\param[in]	p_path		Le chemin du fichier à copier.
-		 *\param[in]	p_file		Le dossier de sortie.
+		 *\param[in]	p_folder	Le dossier de sortie.
 		 *\param[in]	p_subfolder	Le sous-dossier de sortie.
 		 *\return		Le chemin du fichier copié, relatif au dossier de sortie.
 		 */

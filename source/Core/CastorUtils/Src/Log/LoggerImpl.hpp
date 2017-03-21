@@ -112,10 +112,12 @@ namespace Castor
 		 *\brief		Prints a message to the console
 		 *\param[in]	p_logLevel	The log level
 		 *\param[in]	p_message	The message
+		 *\param[in]	p_newLine	Tells if the new line character must be added
 		 *\~french
 		 *\brief		Affiche un message dans la console
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
+		 *\param[in]	p_newLine	Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
 		void PrintMessage( LogType p_logLevel, std::string const & p_message, bool p_newLine );
 		/**
@@ -123,10 +125,12 @@ namespace Castor
 		 *\brief		Prints a message to the console
 		 *\param[in]	p_logLevel	The log level
 		 *\param[in]	p_message	The message
+		 *\param[in]	p_newLine	Tells if the new line character must be added
 		 *\~french
 		 *\brief		Affiche un message dans la console
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
+		 *\param[in]	p_newLine	Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
 		void PrintMessage( LogType p_logLevel, std::wstring const & p_message, bool p_newLine );
 		/**

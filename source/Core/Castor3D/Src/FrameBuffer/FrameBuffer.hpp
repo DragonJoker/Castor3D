@@ -348,7 +348,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée une attache à une face d'une texture cube.
 		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_texture	La face.
+		 *\param[in]	p_face	La face.
 		 *\return		L'attache créée
 		 */
 		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face ) = 0;

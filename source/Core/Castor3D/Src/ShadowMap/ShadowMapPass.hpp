@@ -103,7 +103,16 @@ namespace Castor3D
 		void DoRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & p_camera );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
+		 *\~english
+		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in,out]	p_sceneFlags	A combination of SceneFlag.
+		 *\~french
+		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in,out]	p_sceneFlags	Une combinaison de SceneFlag.
 		 */
 		void DoUpdateFlags( TextureChannels & p_textureFlags
 			, ProgramFlags & p_programFlags

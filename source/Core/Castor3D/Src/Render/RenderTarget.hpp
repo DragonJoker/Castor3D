@@ -69,12 +69,10 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor
-			 *\param[in]	p_tabs			The tabulations to put at the beginning of each line
-			 *\param[in]	p_encodingMode	The file encoding mode
+			 *\param[in]	p_tabs	The tabulations to put at the beginning of each line
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_tabs			Les tabulations à mettre à chaque début de ligne
-			 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
+			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
 			 */
 			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**

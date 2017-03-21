@@ -73,25 +73,25 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~ForwardRenderTechniquePass();
 		/**
-		 *\copydoc		Castor3D::RenderPass::InitialiseShadowMaps
+		 *\copydoc		Castor3D::RenderTechniquePass::InitialiseShadowMaps
 		 */
 		C3D_API bool InitialiseShadowMaps()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::CleanupShadowMaps
+		 *\copydoc		Castor3D::RenderTechniquePass::CleanupShadowMaps
 		 */
 		C3D_API void CleanupShadowMaps()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::UpdateShadowMaps
+		 *\copydoc		Castor3D::RenderTechniquePass::UpdateShadowMaps
 		 */
 		C3D_API void UpdateShadowMaps( RenderQueueArray & p_queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::RenderShadowMaps
+		 *\copydoc		Castor3D::RenderTechniquePass::RenderShadowMaps
 		 */
 		C3D_API void RenderShadowMaps()override;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetDepthMaps
+		 *\copydoc		Castor3D::RenderTechniquePass::DoGetDepthMaps
 		 */
 		C3D_API void DoGetDepthMaps( DepthMapArray & p_depthMaps )override;
 

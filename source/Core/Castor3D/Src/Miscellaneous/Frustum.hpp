@@ -44,11 +44,9 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_node		The scene node.
 		 *\param[in]	p_viewport	The viewport.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_node		Le noeud de scène parent.
 		 *\param[in]	p_viewport	Le viewport.
 		 */
 		C3D_API Frustum( Viewport & p_viewport );
@@ -71,30 +69,30 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Checks if given CubeBox is in the view frustum.
 		 *\param[in]	p_box				The CubeBox.
-		 *\param[in]	m_transformations	The CubeBox transformations matrix.
+		 *\param[in]	p_transformations	The CubeBox transformations matrix.
 		 *\return		\p false if the CubeBox is completely out of the view frustum.
 		 *\~french
 		 *\brief
 		 *\brief		Vérifie si la CubeBox donnée est dans le frustum de vue.
 		 *\param[in]	p_box				La CubeBox.
-		 *\param[in]	m_transformations	La matrice de transformations de la CubeBox.
+		 *\param[in]	p_transformations	La matrice de transformations de la CubeBox.
 		 *\return		\p false si la CubeBox est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
+		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & p_transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given SphereBox is in the view frustum.
 		 *\param[in]	p_box				The SphereBox.
-		 *\param[in]	m_transformations	The SphereBox transformations matrix.
+		 *\param[in]	p_transformations	The SphereBox transformations matrix.
 		 *\return		\p false if the SphereBox is completely out of the view frustum.
 		 *\~french
 		 *\brief
 		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue.
 		 *\param[in]	p_box				La SphereBox.
-		 *\param[in]	m_transformations	La SphereBox de transformations de la CubeBox.
+		 *\param[in]	p_transformations	La SphereBox de transformations de la CubeBox.
 		 *\return		\p false si la SphereBox est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
+		C3D_API bool IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & p_transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum.

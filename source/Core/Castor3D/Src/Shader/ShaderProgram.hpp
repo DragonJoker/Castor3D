@@ -96,11 +96,9 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_renderSystem	The RenderSystem instance.
-		 *\param[in]	p_langage		The program language.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_renderSystem	L'instance du RenderSystem.
-		 *\param[in]	p_langage		Le langage du programme.
 		 */
 		C3D_API explicit ShaderProgram( RenderSystem & p_renderSystem );
 		/**

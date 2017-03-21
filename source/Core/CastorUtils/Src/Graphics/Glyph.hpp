@@ -48,18 +48,22 @@ namespace Castor
 		 *\brief		Constructor
 		 *\param[in]	p_char		The glyph character
 		 *\param[in]	p_size		The glyph dimensions
-		 *\param[in]	p_position	The glyph position relative to cursor
+		 *\param[in]	p_bearing	The glyph position relative to cursor
 		 *\param[in]	p_advance	Pixels to advance in order to go next character
 		 *\param[in]	p_bitmap	The glyph image
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_char		Le caractère de la glyphe
 		 *\param[in]	p_size		Les dimensions de la glyphe
-		 *\param[in]	p_position	La position de la glyphe par rapport au curseur
+		 *\param[in]	p_bearing	La position de la glyphe par rapport au curseur
 		 *\param[in]	p_advance	Nombre de pixels pour placer le caractère suivant
 		 *\param[in]	p_bitmap	L'image de la glyphe
 		 */
-		inline Glyph( char32_t p_char, Size const & p_size, Position const & p_bearing, uint32_t p_advance, ByteArray const & p_bitmap )
+		inline Glyph( char32_t p_char
+			, Size const & p_size
+			, Position const & p_bearing
+			, uint32_t p_advance
+			, ByteArray const & p_bitmap )
 			: m_size{ p_size }
 			, m_bearing{ p_bearing }
 			, m_bitmap{ p_bitmap }

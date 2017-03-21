@@ -83,16 +83,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name			The name.
-		 *\param[in]	p_scene			The parent scene.
-		 *\param[in]	p_parent		The parent scene node.
-		 *\param[in]	p_count			The particles count.
+		 *\param[in]	p_name		The name.
+		 *\param[in]	p_scene		The parent scene.
+		 *\param[in]	p_parent	The parent scene node.
+		 *\param[in]	p_count		The particles count.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom.
-		 *\param[in]	p_scene			La scene parente.
-		 *\param[in]	p_parent		Le noeud de scène parent.
-		 *\param[in]	p_count			Le nombre de particules.
+		 *\param[in]	p_name		Le nom.
+		 *\param[in]	p_scene		La scene parente.
+		 *\param[in]	p_parent	Le noeud de scène parent.
+		 *\param[in]	p_count		Le nombre de particules.
 		 */
 		C3D_API ParticleSystem( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, size_t p_count );
 		/**
@@ -169,12 +169,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a particle variable.
-		 *\param[in]	p_name	The variable name.
-		 *\param[in]	p_type	The variable type.
+		 *\param[in]	p_name			The variable name.
+		 *\param[in]	p_type			The variable type.
+		 *\param[in]	p_defaultValue	The variable default value.
 		 *\~french
 		 *\brief		Ajoute une variable de particule.
-		 *\param[in]	p_name	Le nom de la variable.
-		 *\param[in]	p_type	Le type de la variable.
+		 *\param[in]	p_name			Le nom de la variable.
+		 *\param[in]	p_type			Le type de la variable.
+		 *\param[in]	p_defaultValue	La valeur par défaut de la variable.
 		 */
 		C3D_API void AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue );
 		/**

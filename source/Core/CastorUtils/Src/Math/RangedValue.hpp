@@ -197,11 +197,11 @@ namespace Castor
 	 *\return		L'objet créé.
 	 */
 	template< typename T >
-	inline RangedValue< T > makeRangedValue( T const & value
-		, T const & min
-		, T const & max )noexcept
+	inline RangedValue< T > makeRangedValue( T const & p_value
+		, T const & p_min
+		, T const & p_max )noexcept
 	{
-		return RangedValue< T >{ value, makeRange( min, max ) };
+		return RangedValue< T >{ p_value, makeRange( p_min, p_max ) };
 	}
 	/**
 	 *\~english

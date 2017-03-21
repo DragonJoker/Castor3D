@@ -298,12 +298,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the chunk's data
-		 *\param[in]	p_data	The data buffer
-		 *\param[in]	p_size	The buffer size
+		 *\param[in]	p_begin	The data buffer's begin
+		 *\param[in]	p_end	The data buffer's end
 		 *\~french
 		 *\brief		Définit les données du chunk
-		 *\param[in]	p_data	Le tampon de données
-		 *\param[in]	p_size	La taille du tampon
+		 *\param[in]	p_begin	Le début du tampon de données
+		 *\param[in]	p_end	La fin du tampon de données
 		 */
 		inline void SetData( uint8_t const * p_begin, uint8_t const * p_end )
 		{

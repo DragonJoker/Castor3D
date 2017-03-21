@@ -158,7 +158,6 @@ namespace Castor3D
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable du type demandé.
-		 *\param[in]	p_program		Le programme.
 		 *\param[in]	p_type			Le type voulu.
 		 *\param[in]	p_name			Le nom de la variable.
 		 *\param[in]	p_occurences	Les dimensions du tableau.
@@ -195,13 +194,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves a variable by name.
 		 *\param[in]	p_name		The variable name.
-		 *\param[out]	p_variable	Receives the found variable, nullptr if failed.
-		 *\return		\p false if failed.
+		 *\return		The retrieved variable, \p nullptr if not found.
 		 *\~french
 		 *\brief		Récupère une variable par son nom.
 		 *\param[in]	p_name		Le nom de la variable.
-		 *\param[out]	p_variable	Reçoit la variable récupérée, nullptr en cas d'échec.
-		 *\return		\p false en cas d'échec.
+		 *\return		La variable récupérée, nullptr si non trouvée.
 		 */
 		template< UniformType Type >
 		inline std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;

@@ -63,10 +63,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_owner	The owner.
+		 *\param[in]	p_engine		The engine.
+		 *\param[in]	p_produce		The element producer.
+		 *\param[in]	p_initialise	The element initialiser.
+		 *\param[in]	p_clean			The element cleaner.
+		 *\param[in]	p_merge			The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_owner	Le propriétaire.
+		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	p_produce		Le créateur d'objet.
+		 *\param[in]	p_initialise	L'initialiseur d'objet.
+		 *\param[in]	p_clean			Le nettoyeur d'objet.
+		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
 		 */
 		inline CacheBase( Engine & p_engine
 			, Producer && p_produce
@@ -127,13 +135,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an element.
-		 *\param[in]	p_name		The element name.
-		 *\param[in]	p_params	The other constructor parameters.
+		 *\param[in]	p_name			The element name.
+		 *\param[in]	p_parameters	The other constructor parameters.
 		 *\return		The created element.
 		 *\~french
 		 *\brief		Crée un élément.
-		 *\param[in]	p_name		Le nom d'élément.
-		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\param[in]	p_name			Le nom d'élément.
+		 *\param[in]	p_parameters	Les autres paramètres de construction.
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
@@ -179,13 +187,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an element.
-		 *\param[in]	p_name		The element name.
-		 *\param[in]	p_params	The other constructor parameters.
+		 *\param[in]	p_name			The element name.
+		 *\param[in]	p_parameters	The other constructor parameters.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un élément.
-		 *\param[in]	p_name		Le nom d'élément.
-		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\param[in]	p_name			Le nom d'élément.
+		 *\param[in]	p_parameters	Les autres paramètres de construction.
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
@@ -441,10 +449,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_owner	The owner.
+		 *\param[in]	p_engine		The engine.
+		 *\param[in]	p_produce		The element producer.
+		 *\param[in]	p_initialise	The element initialiser.
+		 *\param[in]	p_clean			The element cleaner.
+		 *\param[in]	p_merge			The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_owner	Le propriétaire.
+		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	p_produce		Le créateur d'objet.
+		 *\param[in]	p_initialise	L'initialiseur d'objet.
+		 *\param[in]	p_clean			Le nettoyeur d'objet.
+		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
 		 */
 		inline Cache( Engine & p_engine
 			, Producer && p_produce
@@ -471,12 +487,18 @@ namespace Castor3D
 	/**
 	 *\~english
 	 *\brief		Creates a cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
+	 *\param[in]	p_engine		The engine.
+	 *\param[in]	p_produce		The element producer.
+	 *\param[in]	p_initialise	The element initialiser.
+	 *\param[in]	p_clean			The element cleaner.
+	 *\param[in]	p_merge			The element collection merger.
 	 *\~french
 	 *\brief		Crée un cache.
-	 *\param[in]	p_get		Le récupérteur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
+	 *\param[in]	p_engine		Le moteur.
+	 *\param[in]	p_produce		Le créateur d'objet.
+	 *\param[in]	p_initialise	L'initialiseur d'objet.
+	 *\param[in]	p_clean			Le nettoyeur d'objet.
+	 *\param[in]	p_merge			Le fusionneur de collection d'objets.
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< Cache< ElementType, KeyType > >

@@ -152,9 +152,10 @@ namespace Fxaa
 				, InParam< Sampler2D >( &l_writer, cuT( "p_tex" ) )
 				, InParam< Vec2 >( &l_writer, cuT( "p_rcpFrame" ) ) );
 
-			auto l_postFX = l_writer.ImplementFunction< Vec4 >( cuT( "PostFX" ), [&]( Sampler2D const & p_tex
-				, Vec2 const & p_uv
-				, Float const & p_time )
+			auto l_postFX = l_writer.ImplementFunction< Vec4 >( cuT( "PostFX" )
+				, [&]( Sampler2D const & p_tex
+					, Vec2 const & p_uv
+					, Float const & p_time )
 				{
 					auto c = l_writer.GetLocale( cuT( "c" ), vec4( Float( 0.0f ) ) );
 					auto rcpFrame = l_writer.GetLocale( cuT( "rcpFrame" ), vec2( Float( 1.0f ) / c3d_fRenderTargetWidth, Float( 1.0f ) / c3d_fRenderTargetHeight ) );
@@ -166,7 +167,8 @@ namespace Fxaa
 				, InParam< Vec2 >( &l_writer, cuT( "p_uv" ) )
 				, InParam< Float >( &l_writer, cuT( "p_time" ) ) );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			l_writer.ImplementFunction< void >( cuT( "main" )
+				, [&]()
 				{
 					plx_v4FragColor = l_postFX( c3d_mapDiffuse, vtx_texture, 0.0_f );
 				} );
@@ -260,6 +262,8 @@ namespace Fxaa
 
 	void FxaaPostEffect::Cleanup()
 	{
+		m_matrixUbo.Cleanup();
+		m_fxaaUbo.Cleanup();
 		m_mapDiffuse.reset();
 		m_surface.Cleanup();
 	}

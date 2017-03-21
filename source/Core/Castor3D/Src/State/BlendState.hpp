@@ -200,6 +200,26 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the RGB blending operation and operands.
+		 *\param[in]	p_op	The blend operation.
+		 *\param[in]	p_src	The blend source operand.
+		 *\param[in]	p_dst	The blend destination operand.
+		 *\param[in]	p_index	The value index.
+		 *\~french
+		 *\brief		Définit l'opération et les opérandes de blend RGB.
+		 *\param[in]	p_op	L'opération de blend.
+		 *\param[in]	p_src	L'opérande source du blend.
+		 *\param[in]	p_dst	L'opérande destination du blend.
+		 *\param[in]	p_index	L'indice de la valeur.
+		 */
+		inline void SetRgbBlend( BlendOperation p_op, BlendOperand p_src, BlendOperand p_dst, uint8_t p_index = 0 )
+		{
+			m_states[p_index].m_rgbBlendOp = p_op;
+			m_states[p_index].m_rgbSrcBlend = p_src;
+			m_states[p_index].m_rgbDstBlend = p_dst;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the alpha source blending factor.
 		 *\param[in]	p_index	The value index.
 		 *\return		The value.
@@ -281,6 +301,26 @@ namespace Castor3D
 		inline void SetAlphaBlendOp( BlendOperation p_value, uint8_t p_index = 0 )
 		{
 			m_states[p_index].m_alphaBlendOp = p_value;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the alpha blending operation and operands.
+		 *\param[in]	p_op	The blend operation.
+		 *\param[in]	p_src	The blend source operand.
+		 *\param[in]	p_dst	The blend destination operand.
+		 *\param[in]	p_index	The value index.
+		 *\~french
+		 *\brief		Définit l'opération et les opérandes de blend alpha.
+		 *\param[in]	p_op	L'opération de blend.
+		 *\param[in]	p_src	L'opérande source du blend.
+		 *\param[in]	p_dst	L'opérande destination du blend.
+		 *\param[in]	p_index	L'indice de la valeur.
+		 */
+		inline void SetAlphaBlend( BlendOperation p_op, BlendOperand p_src, BlendOperand p_dst, uint8_t p_index = 0 )
+		{
+			m_states[p_index].m_alphaBlendOp = p_op;
+			m_states[p_index].m_alphaSrcBlend = p_src;
+			m_states[p_index].m_alphaDstBlend = p_dst;
 		}
 		/**
 		 *\~english

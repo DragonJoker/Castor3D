@@ -245,8 +245,8 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-	add_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
-	add_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
+	target_add_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
+	target_add_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
 
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 else ()

@@ -92,12 +92,19 @@ function( TechniquesSetup )
 		DEPENDS Castor3D
 		INSTALL_TYPES Developer Full
 	)
+	cpack_add_component( DeferredCommon_dev
+		DISPLAY_NAME "DeferredCommon Libraries"
+		DESCRIPTION "Development files for Deferred rendering techniques."
+		GROUP Development
+		DEPENDS Castor3D DeferredCommon
+		INSTALL_TYPES Developer Full
+	)
 	cpack_add_component( DeferredTechnique
 		DISPLAY_NAME "DeferredTechnique"
 		DESCRIPTION "Allows rendering with Deferred Lighting technique."
 		GROUP Techniques
 		DEPENDS Castor3D
-		INSTALL_TYPES Developer Full
+		INSTALL_TYPES Minimal Full
 	)
 	if ( ${CASTOR_BUILDGRP_TECHNIQUE} )
 		if( ${CASTOR_BUILD_TECHNIQUE_FORWARD} )
@@ -106,7 +113,7 @@ function( TechniquesSetup )
 				DESCRIPTION "Allows rendering with Forward technique"
 				GROUP Techniques
 				DEPENDS Castor3D
-				INSTALL_TYPES Minimal Full
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_FORWARD_MSAA} )
