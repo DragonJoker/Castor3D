@@ -147,6 +147,7 @@ namespace Castor3D
 		{
 			m_pipeline->SetViewMatrix( l_views[i] );
 			p_attachs[i]->Attach( AttachmentPoint::eColour, 0u );
+			p_fbo->SetDrawBuffer( p_attachs[i] );
 			m_pipeline->ApplyMatrices( m_matrixUbo, ~0u );
 			m_matrixUbo.Update();
 			m_pipeline->Apply();

@@ -177,7 +177,6 @@ namespace Castor3D
 		l_fbo->Initialise( p_size );
 		l_fbo->Bind();
 		l_fbo->Attach( AttachmentPoint::eDepth, l_depthAttach );
-		l_fbo->SetDrawBuffer( l_attachs[0] );
 		REQUIRE( l_fbo->IsComplete() );
 		l_fbo->Unbind();
 		
