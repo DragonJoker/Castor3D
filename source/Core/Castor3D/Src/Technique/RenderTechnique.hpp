@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_RENDER_TECHNIQUE_H___
 
 #include "HDR/ToneMapping.hpp"
+#include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/Named.hpp>
@@ -167,14 +168,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[out]	p_visible	The visible objects count.
-		 *\param[out]	p_particles	The particles count.
+		 *\param[out]	p_info	Receives the render informations.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	p_visible	Le nombre d'objets visibles.
-		 *\param[out]	p_particles	Le nombre de particules.
+		 *\param[out]	p_info	Reçoit les informations de rendu.
 		 */
-		C3D_API void Render( uint32_t & p_visible, uint32_t & p_particles );
+		C3D_API void Render( RenderInfo & p_info );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
@@ -250,21 +249,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
-		 *\param[out]	p_visible	The visible objects count.
+		 *\param[out]	p_info	Receives the render informations.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	p_visible	Le nombre d'objets visibles.
+		 *\param[out]	p_info	Reçoit les informations de rendu.
 		 */
-		C3D_API virtual void DoRenderOpaque( uint32_t & p_visible ) = 0;
+		C3D_API virtual void DoRenderOpaque( RenderInfo & p_info ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders transparent nodes.
-		 *\param[out]	p_visible	The visible objects count.
+		 *\param[out]	p_info	Receives the render informations.
 		 *\~french
 		 *\brief		Dessine les noeuds transparents.
-		 *\param[out]	p_visible	Le nombre d'objets visibles.
+		 *\param[out]	p_info	Reçoit les informations de rendu.
 		 */
-		C3D_API virtual void DoRenderTransparent( uint32_t & p_visible ) = 0;
+		C3D_API virtual void DoRenderTransparent( RenderInfo & p_info ) = 0;
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.

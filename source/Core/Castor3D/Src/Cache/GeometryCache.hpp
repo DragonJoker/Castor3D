@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_GEOMETRY_CACHE_H___
 
 #include "Cache/ObjectCache.hpp"
+#include "Render/RenderInfo.hpp"
 
 namespace Castor3D
 {
@@ -127,7 +128,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'objets
 		 */
-		C3D_API uint32_t GetObjectCount()const;
+		C3D_API void FillInfo( RenderInfo & p_info )const;
 		/**
 		 *\~english
 		 *\brief		Creates an object.
@@ -145,26 +146,6 @@ namespace Castor3D
 		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
 		{
 			return MyObjectCache::Add( p_name, p_parent, p_mesh );
-		}
-		/**
-		*\~english
-		*\return		The faces count for all objects.
-		*\~french
-		*\return		Le nombre de faces de tous les objets.
-		*/
-		inline uint32_t GetFaceCount()const
-		{
-			return m_faceCount;
-		}
-		/**
-		*\~english
-		*\return		The vertex count for all objects.
-		*\~french
-		*\return		Le nombre de sommets de tous les objets.
-		*/
-		inline uint32_t GetVertexCount()const
-		{
-			return m_vertexCount;
 		}
 
 	private:

@@ -4,6 +4,7 @@
 #include "Animation/Mesh/MeshAnimation.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
 using namespace Castor;
 

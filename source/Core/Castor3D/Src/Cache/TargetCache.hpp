@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include "HDR/ToneMappingFactory.hpp"
 #include "PostEffect/PostEffectFactory.hpp"
+#include "Render/RenderInfo.hpp"
 
 namespace Castor3D
 {
@@ -82,20 +83,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief			Renders into the render targets.
-		 *\param[in,out]	p_vtxCount	Receives the total vertex count.
-		 *\param[in]		p_fceCount	Receives the total faces count.
-		 *\param[in]		p_objCount	Receives the total objects count.
-		 *\param[in]		p_visible	Receives the visible objects count.
-		 *\param[in]		p_particles	Receives the particles count.
+		 *\param[in,out]	p_vtxCount	Receives the render informations.
 		 *\~french
 		 *\brief			Dessine dans les cibles de rendu.
-		 *\param[in,out]	p_vtxCount	Reçoit le nombre total de sommets.
-		 *\param[in,out]	p_fceCount	Reçoit le nombre total de faces.
-		 *\param[in,out]	p_objCount	Reçoit le nombre total d'objets.
-		 *\param[in,out]	p_visible	Reçoit le nombre d'objets visible.
-		 *\param[in,out]	p_particles	Reçoit le nombre de particules.
+		 *\param[in,out]	p_vtxCount	Reçoit les informations de rendu.
 		 */
-		C3D_API void Render( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible, uint32_t & p_particles );
+		C3D_API void Render( RenderInfo & p_info );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.

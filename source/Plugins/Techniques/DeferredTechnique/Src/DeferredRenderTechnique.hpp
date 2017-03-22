@@ -101,11 +101,11 @@ namespace deferred
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoRenderOpaque
 		 */
-		void DoRenderOpaque( uint32_t & p_visible )override;
+		void DoRenderOpaque( Castor3D::RenderInfo & p_info )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoRenderTransparent
 		 */
-		void DoRenderTransparent( uint32_t & p_visible )override;
+		void DoRenderTransparent( Castor3D::RenderInfo & p_info )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */

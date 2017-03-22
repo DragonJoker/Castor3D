@@ -97,14 +97,14 @@ namespace deferred
 		m_sceneUbo.Update();
 	}
 
-	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
+	void RenderTechnique::DoRenderOpaque( RenderInfo & p_info )
 	{
 		GetEngine()->SetPerObjectLighting( false );
 		m_renderTarget.GetCamera()->Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 
 #if DEBUG_DEFERRED_BUFFERS
@@ -157,14 +157,14 @@ namespace deferred
 #endif
 	}
 
-	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
+	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
 	{
 		m_frameBuffer.m_frameBuffer->Unbind();
 		GetEngine()->SetPerObjectLighting( true );
 		m_transparentPass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 	}
 
