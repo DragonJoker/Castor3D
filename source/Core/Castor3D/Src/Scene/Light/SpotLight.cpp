@@ -1,6 +1,5 @@
 #include "SpotLight.hpp"
 
-#include "Scene/SceneNode.hpp"
 #include "Render/Viewport.hpp"
 
 #include <Graphics/PixelBuffer.hpp>

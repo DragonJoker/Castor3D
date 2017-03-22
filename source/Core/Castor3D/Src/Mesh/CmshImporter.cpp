@@ -1,13 +1,9 @@
 #include "CmshImporter.hpp"
 
 #include "Engine.hpp"
-#include "Cache/MeshCache.hpp"
 
-#include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Scene/Scene.hpp"
-
-#include <Data/BinaryFile.hpp>
 
 using namespace Castor;
 

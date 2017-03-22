@@ -100,9 +100,15 @@ function( CoreSetup )
 		DEPENDS CastorUtils
 		INSTALL_TYPES Developer Full
 	)
-	cpack_add_component( CastorUtils_doc
-		DISPLAY_NAME "CastorUtils help"
-		DESCRIPTION "CastorUtils HTML documentation."
+	cpack_add_component( CastorUtils_French_Doc
+		DISPLAY_NAME "CastorUtils French help"
+		DESCRIPTION "CastorUtils French HTML documentation."
+		GROUP Documentation
+		INSTALL_TYPES Developer Full
+	)
+	cpack_add_component( CastorUtils_English_Doc
+		DISPLAY_NAME "CastorUtils English help"
+		DESCRIPTION "CastorUtils English HTML documentation."
 		GROUP Documentation
 		INSTALL_TYPES Developer Full
 	)
@@ -112,14 +118,14 @@ function( CoreSetup )
 			DISPLAY_NAME "Castor test library"
 			DESCRIPTION "Test library for tests."
 			GROUP Test
-			INSTALL_TYPES Minimal Full
+			INSTALL_TYPES Developer Full
 		)
 		cpack_add_component( CastorTest_dev
 			DISPLAY_NAME "Castor test SDK"
 			DESCRIPTION "Development files for CastorTest."
 			GROUP Test
 			DEPENDS CastorTest
-			INSTALL_TYPES Minimal Full
+			INSTALL_TYPES Developer Full
 		)
 
 		if ( ${CASTOR_BUILD_TEST_CASTORUTILS} )
@@ -128,7 +134,7 @@ function( CoreSetup )
 				DESCRIPTION "Test application for CastorUtils."
 				GROUP Test
 				DEPENDS CastorTest
-				INSTALL_TYPES Minimal Full
+				INSTALL_TYPES Developer Full
 			)
 		endif ()
 
@@ -138,7 +144,7 @@ function( CoreSetup )
 				DESCRIPTION "Test application for Castor3D."
 				GROUP Test
 				DEPENDS CastorTest
-				INSTALL_TYPES Minimal Full
+				INSTALL_TYPES Developer Full
 			)
 		endif ()
 	endif ()
@@ -175,9 +181,15 @@ function( CoreSetup )
 			DEPENDS CastorUtils CastorUtils_dev Castor3D Castor3D_dev
 			INSTALL_TYPES Developer Full
 		)
-		cpack_add_component( Castor3D_doc
-			DISPLAY_NAME "Castor3D help"
-			DESCRIPTION "Castor3D HTML documentation."
+		cpack_add_component( Castor3D_French_Doc
+			DISPLAY_NAME "Castor3D French help"
+			DESCRIPTION "Castor3D French HTML documentation."
+			GROUP Documentation
+			INSTALL_TYPES Developer Full
+		)
+		cpack_add_component( Castor3D_English_Doc
+			DISPLAY_NAME "Castor3D English help"
+			DESCRIPTION "Castor3D English HTML documentation."
 			GROUP Documentation
 			INSTALL_TYPES Developer Full
 		)

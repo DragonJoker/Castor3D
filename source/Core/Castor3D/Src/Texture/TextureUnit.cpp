@@ -1,18 +1,12 @@
 #include "TextureUnit.hpp"
 
 #include "Engine.hpp"
-#include "Cache/TargetCache.hpp"
 
 #include "TextureLayout.hpp"
 #include "Sampler.hpp"
-#include "TextureImage.hpp"
-#include "TextureLayout.hpp"
 
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
-#include "Technique/RenderTechnique.hpp"
 
 #include <Graphics/Image.hpp>
 

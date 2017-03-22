@@ -2,21 +2,12 @@
 
 #include "Engine.hpp"
 
-#include "Scene.hpp"
-#include "SceneNode.hpp"
-
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/Viewport.hpp"
-#include "Render/RenderNode/SceneRenderNode.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Scene/Scene.hpp"
 
 #include <Graphics/CubeBox.hpp>
 #include <Graphics/SphereBox.hpp>
-#include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
 

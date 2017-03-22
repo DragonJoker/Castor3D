@@ -4,20 +4,13 @@
 
 #include "Data/File.hpp"
 
-#include "Math/Math.hpp"
 #include "Miscellaneous/Utils.hpp"
-#include "Log/Logger.hpp"
-#include <cstdio>
-#include <cstring>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <iostream>
 
 #include <unistd.h>
-#include <sys/types.h>
 #include <dirent.h>
-#include <errno.h>
 #include <pwd.h>
+
 #define GetCurrentDir getcwd
 
 namespace Castor

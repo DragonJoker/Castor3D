@@ -3,9 +3,6 @@
 #include "LegacyPass.hpp"
 
 #include "Scene/SceneFileParser.hpp"
-#include "Texture/Sampler.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

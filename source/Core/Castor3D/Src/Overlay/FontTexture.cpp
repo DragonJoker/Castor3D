@@ -1,13 +1,9 @@
 #include "FontTexture.hpp"
 
 #include "Engine.hpp"
-#include "Cache/SamplerCache.hpp"
 
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Texture/TextureImage.hpp"
 
 #include <Graphics/Font.hpp>
 #include <Graphics/Image.hpp>

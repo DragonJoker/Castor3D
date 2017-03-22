@@ -100,12 +100,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a particle variable.
-		 *\param[in]	p_name	The variable name.
-		 *\param[in]	p_type	The variable type.
+		 *\param[in]	p_name			The variable name.
+		 *\param[in]	p_type			The variable type.
+		 *\param[in]	p_defaultValue	The variable default value.
 		 *\~french
 		 *\brief		Ajoute une variable de particule.
-		 *\param[in]	p_name	Le nom de la variable.
-		 *\param[in]	p_type	Le type de la variable.
+		 *\param[in]	p_name			Le nom de la variable.
+		 *\param[in]	p_type			Le type de la variable.
+		 *\param[in]	p_defaultValue	La valeur par défaut de la variable.
 		 */
 		C3D_API virtual void AddParticleVariable( Castor::String const & p_name
 			, ElementType p_type

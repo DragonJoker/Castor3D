@@ -1,7 +1,6 @@
 ﻿#include "UniformBufferBinding.hpp"
 
 #include "UniformBuffer.hpp"
-#include "Mesh/Buffer/GpuBuffer.hpp"
 
 using namespace Castor;
 

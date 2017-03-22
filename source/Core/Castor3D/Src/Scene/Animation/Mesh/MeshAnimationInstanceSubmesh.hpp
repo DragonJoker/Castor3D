@@ -50,12 +50,10 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
 		 *\param[in]	p_animationObject	The animation object.
-		 *\param[out]	p_allObjects		Receives this object's children.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
 		 *\param[in]	p_animationObject	L'animation d'objet.
-		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
 		 */
 		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh & p_animationObject );
 		/**
@@ -96,12 +94,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time.
-		 *\param[in]	p_time				Current time index.
-		 *\param[in]	p_transformations	The current transformation matrix.
+		 *\param[in]	p_time	Current time index.
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
-		 *\param[in]	p_time				Index de temps courant.
-		 *\param[in]	p_transformations	La matrice de transformation courante.
+		 *\param[in]	p_time	Index de temps courant.
 		 */
 		C3D_API void Update( std::chrono::milliseconds const & p_time );
 		/**

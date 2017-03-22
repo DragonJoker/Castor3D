@@ -1,8 +1,5 @@
 #include "Debug.hpp"
 
-#include "StringUtils.hpp"
-#include "Config/MultiThreadConfig.hpp"
-
 namespace Castor
 {
 	namespace Debug

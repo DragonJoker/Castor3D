@@ -1,30 +1,15 @@
 #include "PickingPass.hpp"
 
-#include "Engine.hpp"
-#include "Cache/ShaderCache.hpp"
-
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/BufferElementGroup.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/RenderTarget.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Geometry.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
-#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 

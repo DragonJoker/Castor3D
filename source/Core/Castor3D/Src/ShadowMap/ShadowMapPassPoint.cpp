@@ -1,25 +1,11 @@
 #include "ShadowMapPassPoint.hpp"
 
-#include "Engine.hpp"
-#include "Cache/SamplerCache.hpp"
-
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Texture/Sampler.hpp"
 #include "Texture/TextureImage.hpp"
-#include "Texture/TextureLayout.hpp"
-
-#include <GlslSource.hpp>
 
 #include <Graphics/Image.hpp>
 

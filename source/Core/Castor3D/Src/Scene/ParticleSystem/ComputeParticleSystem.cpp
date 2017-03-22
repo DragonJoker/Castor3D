@@ -6,17 +6,13 @@
 #include "Engine.hpp"
 
 #include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Miscellaneous/ComputePipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/UniformBufferBinding.hpp"
-#include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
-#include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Graphics/PixelBuffer.hpp>

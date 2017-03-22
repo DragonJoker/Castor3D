@@ -3,8 +3,6 @@
 #include "Engine.hpp"
 
 #include "Animation/Skeleton/SkeletonAnimation.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Bone.hpp"
 
 using namespace Castor;
 

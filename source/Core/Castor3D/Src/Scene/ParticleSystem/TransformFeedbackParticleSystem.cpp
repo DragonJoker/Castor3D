@@ -6,15 +6,11 @@
 #include "Engine.hpp"
 
 #include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Miscellaneous/TransformFeedback.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 

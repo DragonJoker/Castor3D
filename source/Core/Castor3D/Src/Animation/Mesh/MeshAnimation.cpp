@@ -2,11 +2,7 @@
 
 #include "Engine.hpp"
 
-#include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Animation/Mesh/MeshAnimationSubmesh.hpp"
-
-#include "Scene/Geometry.hpp"
 
 using namespace Castor;
 

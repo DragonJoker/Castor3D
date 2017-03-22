@@ -1,21 +1,11 @@
 #include "SceneNode.hpp"
 
 #include "Engine.hpp"
-#include "Cache/SceneNodeCache.hpp"
 
 #include "Camera.hpp"
-#include "Geometry.hpp"
-#include "MovableObject.hpp"
 #include "Scene.hpp"
 
 #include "Mesh/Mesh.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Miscellaneous/Ray.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-
-#include <Log/Logger.hpp>
-#include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
 

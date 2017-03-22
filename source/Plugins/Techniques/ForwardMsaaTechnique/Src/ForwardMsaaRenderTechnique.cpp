@@ -146,23 +146,23 @@ namespace forward_msaa
 		m_msFrameBuffer->Destroy();
 	}
 
-	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
+	void RenderTechnique::DoRenderOpaque( RenderInfo & p_info )
 	{
 		m_opaquePass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
 		m_msFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msFrameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
 		m_msFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
-		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 	}
 
-	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
+	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
 	{
 		m_msFrameBuffer->Unbind();
 		m_transparentPass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
 		m_msFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_msFrameBuffer->Unbind();
 		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
 			, m_rect

@@ -24,7 +24,9 @@ SOFTWARE.
 #define ___C3D_RENDER_LOOP_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Multithreading/ThreadPool.hpp"
+#include "Render/RenderInfo.hpp"
+
+#include <Multithreading/ThreadPool.hpp>
 
 #include <chrono>
 
@@ -200,7 +202,7 @@ namespace Castor3D
 
 	private:
 		void DoProcessEvents( EventType p_eventType );
-		void DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible, uint32_t & p_particles );
+		void DoGpuStep( RenderInfo & p_info );
 		void DoCpuStep();
 		void DoUpdateQueues( RenderQueueArray & p_queues );
 

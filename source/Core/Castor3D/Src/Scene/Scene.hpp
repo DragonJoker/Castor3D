@@ -141,9 +141,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders the scene background (skybox or image).
 		 *\param[in]	p_size		The target dimensions.
+		 *\param[in]	p_camera	The current camera.
 		 *\~french
 		 *\brief		Rend l'arrière plan de la scène (skybox ou image).
 		 *\param[in]	p_size		Les dimensions de la cible.
+		 *\param[in]	p_camera	La caméra courante.
 		 */
 		C3D_API void RenderBackground( Castor::Size const & p_size, Camera const & p_camera );
 		/**

@@ -1,20 +1,12 @@
 #include "RenderTechniquePass.hpp"
 
-#include "Event/Frame/FunctorEvent.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Shader/Uniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslShadow.hpp>
 
 using namespace Castor;
 
@@ -161,7 +153,7 @@ namespace Castor3D
 	{
 	}
 
-	void RenderTechniquePass::Render( uint32_t & p_visible, bool p_shadows )
+	void RenderTechniquePass::Render( RenderInfo & p_info, bool p_shadows )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes();
 		auto & l_scene = *m_target.GetScene();
@@ -172,14 +164,13 @@ namespace Castor3D
 			DoGetDepthMaps( l_depthMaps );
 		}
 
-		DoRenderNodes( l_nodes, *m_target.GetCamera(), l_depthMaps, p_visible );
-		p_visible += uint32_t( p_visible );
+		DoRenderNodes( l_nodes, *m_target.GetCamera(), l_depthMaps, p_info );
 	}
 
 	void RenderTechniquePass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
+		, RenderInfo & p_info )
 	{
 		if ( !p_nodes.m_staticNodes.m_backCulled.empty()
 			|| !p_nodes.m_instancedNodes.m_backCulled.empty()
@@ -199,11 +190,11 @@ namespace Castor3D
 				DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_frontCulled, p_camera, p_depthMaps );
 				DoRenderBillboards( p_nodes.m_billboardNodes.m_frontCulled, p_camera, p_depthMaps );
 
-				DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera, p_depthMaps, p_count );
-				DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_count );
-				DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera, p_depthMaps, p_count );
-				DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_count );
-				DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_count );
+				DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+				DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+				DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+				DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+				DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_info );
 			}
 			else
 			{
@@ -228,7 +219,7 @@ namespace Castor3D
 
 					if ( !l_distanceSortedRenderNodes.empty() )
 					{
-						DoRenderByDistance( l_distanceSortedRenderNodes, p_camera, p_depthMaps, p_count );
+						DoRenderByDistance( l_distanceSortedRenderNodes, p_camera, p_depthMaps, p_info );
 					}
 				}
 			}
@@ -263,10 +254,11 @@ namespace Castor3D
 	void RenderTechniquePass::DoRenderByDistance( DistanceSortedNodeMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
+		, RenderInfo & p_info )
 	{
 		DoRenderByDistance( p_nodes, p_camera, p_depthMaps );
-		p_count += uint32_t( p_nodes.size() );
+		p_info.m_visibleObjectsCount += uint32_t( p_nodes.size() );
+		p_info.m_drawCalls += uint32_t( p_nodes.size() );
 	}
 
 	bool RenderTechniquePass::DoInitialise( Size const & CU_PARAM_UNUSED( p_size ) )
@@ -390,7 +382,7 @@ namespace Castor3D
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque )
 			{
-				l_fAlpha = texture( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
+				l_fAlpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
 
 			if ( m_opaque )
@@ -403,10 +395,10 @@ namespace Castor3D
 			}
 			else
 			{
-				pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren(
-					l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() )
-						+ l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() )
-						+ l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() )
+				pxl_v4FragColor = vec4( l_writer.Paren(
+					l_v3Ambient * c3d_v4MatAmbient.xyz()
+						+ l_v3Diffuse * c3d_v4MatDiffuse.xyz()
+						+ l_v3Specular * c3d_v4MatSpecular.xyz()
 						+ l_v3Emissive )
 					, l_fAlpha );
 			}

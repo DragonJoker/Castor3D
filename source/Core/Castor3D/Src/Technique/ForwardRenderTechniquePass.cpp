@@ -1,20 +1,13 @@
 #include "ForwardRenderTechniquePass.hpp"
 
-#include "Event/Frame/FunctorEvent.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Shader/Uniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslShadow.hpp>
 
 using namespace Castor;
 

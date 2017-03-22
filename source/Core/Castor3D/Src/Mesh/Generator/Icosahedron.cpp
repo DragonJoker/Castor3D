@@ -2,9 +2,7 @@
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
-#include "Mesh/Face.hpp"
 
-#include <Math/Angle.hpp>
 #include <Math/SphericalVertex.hpp>
 
 using namespace Castor3D;

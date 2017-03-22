@@ -94,17 +94,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_values	The values
-		 *\param[in]	p_count		The values count
-		 *\param[in]	p_type		The subchunk type
-		 *\param[in]	p_chunk		The chunk
+		 *\param[in]	p_begin	The values begin
+		 *\param[in]	p_end	The values end
+		 *\param[in]	p_type	The subchunk type
+		 *\param[in]	p_chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_values	Les valeurs
-		 *\param[in]	p_count		Le nombre de valeurs
-		 *\param[in]	p_type		Le type du subchunk
-		 *\param[in]	p_chunk		Le chunk
+		 *\param[in]	p_begin	Le début des valeurs
+		 *\param[in]	p_end	La fin de valeurs
+		 *\param[in]	p_type	Le type du subchunk
+		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		static inline bool Write( T const * p_begin

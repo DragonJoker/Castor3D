@@ -2,8 +2,6 @@
 
 #if defined( CASTOR_PLATFORM_LINUX )
 
-#include "Miscellaneous/StringUtils.hpp"
-
 #include <iomanip>
 
 namespace Castor

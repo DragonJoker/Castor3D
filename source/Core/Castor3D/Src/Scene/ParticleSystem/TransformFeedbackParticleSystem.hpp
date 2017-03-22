@@ -47,10 +47,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_scene			The parent scene.
+		 *\param[in]	p_parent	The parent particle system.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_scene			La scene parente.
+		 *\param[in]	p_parent	Le système de particule parent.
 		 */
 		C3D_API TransformFeedbackParticleSystem( ParticleSystem & p_parent );
 		/**

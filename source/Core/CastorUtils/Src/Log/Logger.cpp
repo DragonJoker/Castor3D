@@ -1,14 +1,8 @@
-#include "CastorUtilsPch.hpp"
-
 #include "Logger.hpp"
 #include "LoggerImpl.hpp"
 
 #include "Config/MultiThreadConfig.hpp"
 #include "Data/File.hpp"
-#include "Miscellaneous/StringUtils.hpp"
-#include "Exception/Exception.hpp"
-
-#include <iostream>
 
 namespace Castor
 {

@@ -1,8 +1,6 @@
 #include "PreciseTimer.hpp"
 #include "CastorUtils.hpp"
 
-#include <chrono>
-
 namespace Castor
 {
 	PreciseTimer::PreciseTimer()

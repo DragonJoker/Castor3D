@@ -1,7 +1,6 @@
 #include "ImageCache.hpp"
 
 #include "Image.hpp"
-#include "Log/Logger.hpp"
 
 #if defined( CreateFont )
 #	undef CreateFont

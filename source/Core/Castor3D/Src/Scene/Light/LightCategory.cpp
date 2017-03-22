@@ -1,7 +1,6 @@
 #include "LightCategory.hpp"
 #include "Light.hpp"
 
-#include <Log/Logger.hpp>
 #include <Graphics/PixelBuffer.hpp>
 
 #include <GlslSource.hpp>

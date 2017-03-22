@@ -1,12 +1,5 @@
 #include "StringUtils.hpp"
 
-#include "Exception/Exception.hpp"
-
-#include <locale>
-#include <wchar.h>
-#include <cstdlib>
-#include <cstring>
-
 using namespace Castor;
 
 namespace Castor

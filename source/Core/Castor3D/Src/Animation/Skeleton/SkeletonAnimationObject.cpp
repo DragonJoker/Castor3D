@@ -2,8 +2,6 @@
 
 #include "SkeletonAnimation.hpp"
 
-#include "Animation/Interpolator.hpp"
-#include "Animation/KeyFrame.hpp"
 #include "SkeletonAnimationBone.hpp"
 #include "SkeletonAnimationNode.hpp"
 

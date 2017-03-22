@@ -8,12 +8,10 @@
 #include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
 
 using namespace Castor;
 

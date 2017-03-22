@@ -1,20 +1,11 @@
 #include "BillboardList.hpp"
 
 #include "Engine.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/ShaderCache.hpp"
-
-#include "Scene.hpp"
-#include "SceneNode.hpp"
 
 #include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
 #include "Material/Material.hpp"
-#include "Material/Pass.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <Design/ArrayView.hpp>

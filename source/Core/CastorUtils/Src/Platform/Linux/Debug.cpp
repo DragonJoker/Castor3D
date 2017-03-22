@@ -9,7 +9,6 @@
 
 #if !defined( NDEBUG )
 #	include <execinfo.h>
-#	include <signal.h>
 #	include <cxxabi.h>
 #endif
 

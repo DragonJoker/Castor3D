@@ -1,21 +1,9 @@
 #include "RenderLoop.hpp"
 
 #include "Engine.hpp"
-#include "Cache/ListenerCache.hpp"
-#include "Cache/OverlayCache.hpp"
-#include "Cache/SamplerCache.hpp"
-#include "Cache/SceneCache.hpp"
-#include "Cache/TargetCache.hpp"
-#include "Cache/TechniqueCache.hpp"
-#include "Cache/WindowCache.hpp"
 
-#include "RenderPipeline.hpp"
-#include "RenderSystem.hpp"
-#include "RenderWindow.hpp"
-
-#include "Event/Frame/FrameListener.hpp"
 #include "Overlay/DebugOverlays.hpp"
-#include "Scene/Scene.hpp"
+#include "Render/RenderWindow.hpp"
 
 #include <Design/BlockGuard.hpp>
 
@@ -25,9 +13,6 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
-	static const char * C3D_UNKNOWN_EXCEPTION = "Unknown exception";
-
 	RenderLoop::RenderLoop( Engine & p_engine, uint32_t p_wantedFPS, bool p_isAsync )
 		: OwnedBy< Engine >( p_engine )
 		, m_wantedFPS{ p_wantedFPS }
@@ -134,15 +119,11 @@ namespace Castor3D
 	{
 		if ( m_renderSystem.GetMainContext() )
 		{
-			uint32_t l_vertices = 0;
-			uint32_t l_faces = 0;
-			uint32_t l_objects = 0;
-			uint32_t l_visible = 0;
-			uint32_t l_particles = 0;
+			RenderInfo l_info;
 			m_debugOverlays->StartFrame();
-			DoGpuStep( l_vertices, l_faces, l_objects, l_visible, l_particles );
+			DoGpuStep( l_info );
 			DoCpuStep();
-			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects, l_visible, l_particles );
+			m_debugOverlays->EndFrame( l_info );
 		}
 	}
 
@@ -154,7 +135,7 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderLoop::DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible, uint32_t & p_particles )
+	void RenderLoop::DoGpuStep( RenderInfo & p_info )
 	{
 		{
 			auto l_guard = make_block_guard(
@@ -168,7 +149,7 @@ namespace Castor3D
 				} );
 			DoProcessEvents( EventType::ePreRender );
 			GetEngine()->GetOverlayCache().UpdateRenderer();
-			GetEngine()->GetRenderTargetCache().Render( p_vtxCount, p_fceCount, p_objCount, p_visible, p_particles );
+			GetEngine()->GetRenderTargetCache().Render( p_info );
 			DoProcessEvents( EventType::eQueueRender );
 		}
 

@@ -1,15 +1,11 @@
 #include "TextOverlay.hpp"
 
 #include "Engine.hpp"
-#include "Cache/OverlayCache.hpp"
-#include "Cache/SamplerCache.hpp"
 
-#include "FontTexture.hpp"
 #include "OverlayRenderer.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Material/Material.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Graphics/Font.hpp>

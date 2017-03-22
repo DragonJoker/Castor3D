@@ -1,6 +1,5 @@
 #include "ZipArchive.hpp"
 
-#include "Exception/Assertion.hpp"
 #include "Log/Logger.hpp"
 #include "BinaryFile.hpp"
 
@@ -10,7 +9,6 @@
 
 #include "MiniZip/unzip.h"
 #include "MiniZip/zip.h"
-#include <limits>
 
 #ifdef WIN32
 #	define USEWIN32IOAPI

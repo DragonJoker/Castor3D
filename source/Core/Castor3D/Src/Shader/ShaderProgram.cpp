@@ -2,13 +2,9 @@
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "Shader/PushUniform.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
 
-#include <Log/Logger.hpp>
-#include <Math/TransformationMatrix.hpp>
 #include <Stream/StreamPrefixManipulators.hpp>
 
 using namespace Castor;

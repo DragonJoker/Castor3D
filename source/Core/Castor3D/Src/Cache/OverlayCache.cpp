@@ -3,13 +3,7 @@
 #include "Engine.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
-#include "Overlay/BorderPanelOverlay.hpp"
-#include "Overlay/Overlay.hpp"
 #include "Overlay/OverlayRenderer.hpp"
-#include "Overlay/PanelOverlay.hpp"
-#include "Overlay/TextOverlay.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneFileParser.hpp"
 

@@ -3,14 +3,8 @@
 #include "Engine.hpp"
 #include "Material/Material.hpp"
 #include "Render/RenderNode/PassRenderNode.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Shader/Uniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

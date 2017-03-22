@@ -233,14 +233,16 @@ namespace Castor
 		 *\brief		Opens the file at the given path with the given mode and encoding
 		 *\param[in]	p_fileName	The file path
 		 *\param[in]	p_mode		The opening mode, combination of one or more OpenMode
-		 *\param[in]	p_eEncoding	The file encoding mode
+		 *\param[in]	p_encoding	The file encoding mode
 		 *\~french
 		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
 		 *\param[in]	p_fileName	Le chemin du fichier
 		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
-		 *\param[in]	p_eEncoding	Le mode d'encodage du fichier
+		 *\param[in]	p_encoding	Le mode d'encodage du fichier
 		 */
-		CU_API File( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
+		CU_API File( Path const & p_fileName
+			, FlagCombination< OpenMode > const & p_mode
+			, EncodingMode p_encoding = EncodingMode::eASCII );
 
 	public:
 		/**

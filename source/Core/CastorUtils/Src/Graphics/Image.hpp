@@ -264,11 +264,13 @@ namespace Castor
 		 *\brief		Fills the wanted pixel with the given buffer
 		 *\param[in]	x,y			The pixel coordinates
 		 *\param[in]	p_pPixel	The buffer
+		 *\param[in]	p_format	The buffer's pixel format
 		 *\return		A reference to the image
 		 *\~french
 		 *\brief		Remplit le pixel demandé avec le buffer donné
 		 *\param[in]	x,y			Les coordonnées du pixel
 		 *\param[in]	p_pPixel	Le buffer
+		 *\param[in]	p_format	Le format de pixel du tampon
 		 *\return		La référence de l'image
 		 */
 		CU_API Image & SetPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel, PixelFormat p_format );

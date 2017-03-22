@@ -1,6 +1,5 @@
 #include "Uniform.hpp"
 
-
 using namespace Castor;
 
 namespace Castor3D

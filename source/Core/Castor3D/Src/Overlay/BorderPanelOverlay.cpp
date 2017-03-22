@@ -3,8 +3,6 @@
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "Engine.hpp"
-#include "Cache/OverlayCache.hpp"
-#include "Cache/MaterialCache.hpp"
 
 #include "Material/Material.hpp"
 

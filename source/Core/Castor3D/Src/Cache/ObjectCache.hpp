@@ -61,16 +61,30 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_owner				The owner.
+		 *\param[in]	p_engine			The engine.
+		 *\param[in]	p_scene				The scene.
 		 *\param[in]	p_rootNode			The root node.
 		 *\param[in]	p_rootCameraNode	The cameras root node.
 		 *\param[in]	p_rootObjectNode	The objects root node.
+		 *\param[in]	p_produce			The element producer.
+		 *\param[in]	p_initialise		The element initialiser.
+		 *\param[in]	p_clean				The element cleaner.
+		 *\param[in]	p_merge				The element collection merger.
+		 *\param[in]	p_attach			The element attacher (to a scene node).
+		 *\param[in]	p_detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_owner				Le propriétaire.
+		 *\param[in]	p_engine			Le moteur.
+		 *\param[in]	p_scene				La scène.
 		 *\param[in]	p_rootNode			Le noeud racine.
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
+		 *\param[in]	p_produce			Le créateur d'objet.
+		 *\param[in]	p_initialise		L'initialiseur d'objet.
+		 *\param[in]	p_clean				Le nettoyeur d'objet.
+		 *\param[in]	p_merge				Le fusionneur de collection d'objets.
+		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
+		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		inline ObjectCacheBase( Engine & p_engine
 								, Scene & p_scene
@@ -146,13 +160,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds an object.
-		 *\param[in]	p_name	The object name.
-		 *\param[in]	p_value	The object.
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_element	The object.
 		 *\return		The added object, or the existing one.
 		 *\~french
 		 *\brief		Ajoute un objet.
-		 *\param[in]	p_name	Le nom d'objet.
-		 *\param[in]	p_value	L'objet.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_element	L'objet.
 		 *\return		L'objet ajouté, ou celui existant.
 		 */
 		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
@@ -184,15 +198,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an object.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_parent	The parent scene node.
-		 *\param[in]	p_params	The other constructor parameters.
+		 *\param[in]	p_name			The object name.
+		 *\param[in]	p_parent		The parent scene node.
+		 *\param[in]	p_parameters	The other constructor parameters.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_parent	Le noeud de scène parent.
-		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\param[in]	p_name			Le nom d'objet.
+		 *\param[in]	p_parent		Le noeud de scène parent.
+		 *\param[in]	p_parameters	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
 		template< typename ... Parameters >
@@ -505,16 +519,30 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_owner				The owner.
+		 *\param[in]	p_engine			The engine.
+		 *\param[in]	p_scene				The scene.
 		 *\param[in]	p_rootNode			The root node.
 		 *\param[in]	p_rootCameraNode	The cameras root node.
 		 *\param[in]	p_rootObjectNode	The objects root node.
+		 *\param[in]	p_produce			The element producer.
+		 *\param[in]	p_initialise		The element initialiser.
+		 *\param[in]	p_clean				The element cleaner.
+		 *\param[in]	p_merge				The element collection merger.
+		 *\param[in]	p_attach			The element attacher (to a scene node).
+		 *\param[in]	p_detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_owner				Le propriétaire.
+		 *\param[in]	p_engine			Le moteur.
+		 *\param[in]	p_scene				La scène.
 		 *\param[in]	p_rootNode			Le noeud racine.
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
+		 *\param[in]	p_produce			Le créateur d'objet.
+		 *\param[in]	p_initialise		L'initialiseur d'objet.
+		 *\param[in]	p_clean				Le nettoyeur d'objet.
+		 *\param[in]	p_merge				Le fusionneur de collection d'objets.
+		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
+		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		inline ObjectCache( Engine & p_engine
 							, Scene & p_scene
@@ -553,12 +581,30 @@ namespace Castor3D
 	/**
 	 *\~english
 	 *\brief		Creates an object cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
+	 *\param[in]	p_engine			The engine.
+	 *\param[in]	p_scene				The scene.
+	 *\param[in]	p_rootNode			The scene root node.
+	 *\param[in]	p_rootCameraNode	The root node for cameras.
+	 *\param[in]	p_rootObjectNode	The root node for objects.
+	 *\param[in]	p_produce			The element producer.
+	 *\param[in]	p_initialise		The element initialiser.
+	 *\param[in]	p_clean				The element cleaner.
+	 *\param[in]	p_merge				The element collection merger.
+	 *\param[in]	p_attach			The element attacher (to a scene node).
+	 *\param[in]	p_detach			The element detacher (from a scene node).
 	 *\~french
 	 *\brief		Crée un cache d'objets.
-	 *\param[in]	p_get		Le récupérteur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
+	 *\param[in]	p_engine			Le moteur.
+	 *\param[in]	p_scene				La scène.
+	 *\param[in]	p_rootNode			Le noeud racine de la scène.
+	 *\param[in]	p_rootCameraNode	Le noeud racine pour les caméras.
+	 *\param[in]	p_rootObjectNode	Le noeud racine pour les objets.
+	 *\param[in]	p_produce			Le créateur d'objet.
+	 *\param[in]	p_initialise		L'initialiseur d'objet.
+	 *\param[in]	p_clean				Le nettoyeur d'objet.
+	 *\param[in]	p_merge				Le fusionneur de collection d'objets.
+	 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
+	 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< ObjectCache< ElementType, KeyType > >

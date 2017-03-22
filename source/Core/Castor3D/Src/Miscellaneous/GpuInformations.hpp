@@ -411,9 +411,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Defines the support for given shader type.
 		 *\param[in]	p_type	The shader type.
+		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le support du type de shader donné.
 		 *\param[in]	p_type	Le type de shader.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
 		inline void UseShaderType( ShaderType p_type, bool p_value )
 		{

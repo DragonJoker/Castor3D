@@ -9,9 +9,6 @@
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Scene/Scene.hpp"
 
-#include <Math/Line3D.hpp>
-#include <Math/PlaneEquation.hpp>
-
 using namespace Castor;
 
 namespace Castor3D

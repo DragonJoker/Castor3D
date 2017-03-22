@@ -2,57 +2,23 @@
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
-#include "PointLightPass.hpp"
-#include "SpotLightPass.hpp"
 
 #include <OpaquePass.hpp>
-
-#include <Engine.hpp>
-#include <Cache/CameraCache.hpp>
-#include <Cache/LightCache.hpp>
-#include <Cache/SceneCache.hpp>
-#include <Cache/SceneNodeCache.hpp>
-#include <Cache/ShaderCache.hpp>
-#include <Cache/TargetCache.hpp>
 
 #include <FrameBuffer/ColourRenderBuffer.hpp>
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
-#include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Mesh/Buffer/BufferElementDeclaration.hpp>
 #include <Mesh/Buffer/BufferElementGroup.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/IndexBuffer.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
-#include <Render/Context.hpp>
 #include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
-#include <Render/Viewport.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Light/Light.hpp>
 #include <Scene/Light/DirectionalLight.hpp>
 #include <Scene/Light/PointLight.hpp>
 #include <Scene/Light/SpotLight.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/DepthStencilState.hpp>
-#include <State/MultisampleState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Technique/ForwardRenderTechniquePass.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
-
-#include <Log/Logger.hpp>
-
-#include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 
 #define DEBUG_DEFERRED_BUFFERS 0
 
@@ -131,14 +97,14 @@ namespace deferred
 		m_sceneUbo.Update();
 	}
 
-	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
+	void RenderTechnique::DoRenderOpaque( RenderInfo & p_info )
 	{
 		GetEngine()->SetPerObjectLighting( false );
 		m_renderTarget.GetCamera()->Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 
 #if DEBUG_DEFERRED_BUFFERS
@@ -191,14 +157,14 @@ namespace deferred
 #endif
 	}
 
-	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
+	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
 	{
 		m_frameBuffer.m_frameBuffer->Unbind();
 		GetEngine()->SetPerObjectLighting( true );
 		m_transparentPass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 	}
 

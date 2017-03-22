@@ -5,38 +5,18 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
 #include "Mesh/Mesh.hpp"
-#include "Miscellaneous/VersionException.hpp"
 #include "Overlay/DebugOverlays.hpp"
-#include "Overlay/Overlay.hpp"
-#include "Overlay/TextOverlay.hpp"
 #include "Plugin/Plugin.hpp"
-#include "Plugin/PostFxPlugin.hpp"
-#include "Plugin/RendererPlugin.hpp"
-#include "Plugin/TechniquePlugin.hpp"
-#include "Render/RenderPipeline.hpp"
 #include "Render/RenderLoopAsync.hpp"
 #include "Render/RenderLoopSync.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderWindow.hpp"
-#include "Scene/Scene.hpp"
 #include "Scene/SceneFileParser.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "ShadowMap/ShadowMapPassDirectional.hpp"
-#include "ShadowMap/ShadowMapPassPoint.hpp"
-#include "ShadowMap/ShadowMapPassSpot.hpp"
-#include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 
 #include <Miscellaneous/DynamicLibrary.hpp>
-#include <Design/Factory.hpp>
-#include <Data/File.hpp>
 #include <Graphics/Image.hpp>
-#include <Log/Logger.hpp>
-#include <Miscellaneous/PreciseTimer.hpp>
-#include <Design/Templates.hpp>
 #include <Pool/UniqueObjectPool.hpp>
-#include <Miscellaneous/Utils.hpp>
 
 using namespace Castor;
 

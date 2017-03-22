@@ -73,7 +73,7 @@ namespace Castor3D
 			 */
 			C3D_API bool operator()( PointLight const & p_light, Castor::TextFile & p_file );
 			/**
-			 *\copydoc		Castor::LightCategory::WriteInto
+			 *\copydoc		Castor3D::LightCategory::TextWriter::WriteInto
 			 */
 			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
 
@@ -110,13 +110,13 @@ namespace Castor3D
 		 */
 		C3D_API static LightCategoryUPtr Create( Light & p_light );
 		/**
-		 *\copydoc		Castor::LightCategory::Update
+		 *\copydoc		Castor3D::LightCategory::Update
 		 */
 		C3D_API void Update( Castor::Point3r const & p_target
 			, Viewport & p_viewport
 			, int32_t p_index = -1 )override;
 		/**
-		 *\copydoc		Castor::LightCategory::CreateTextLoader
+		 *\copydoc		Castor3D::LightCategory::CreateTextWriter
 		 */
 		C3D_API std::unique_ptr < LightCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
 		{

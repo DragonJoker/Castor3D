@@ -1,10 +1,4 @@
 #include "FileParser.hpp"
-#include "FileParserContext.hpp"
-#include "Graphics/Colour.hpp"
-#include "Graphics/Pixel.hpp"
-#include "Log/Logger.hpp"
-
-#include <cstdarg>
 
 namespace Castor
 {

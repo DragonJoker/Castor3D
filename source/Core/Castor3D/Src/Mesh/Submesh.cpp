@@ -1,20 +1,11 @@
 #include "Submesh.hpp"
 
 #include "Engine.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/ShaderCache.hpp"
-
-#include "Face.hpp"
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
-#include "Material/Pass.hpp"
 #include "Mesh/Skeleton/BonedVertex.hpp"
-#include "Mesh/Skeleton/Skeleton.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Vertex.hpp"

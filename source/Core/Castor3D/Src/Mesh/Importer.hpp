@@ -109,7 +109,7 @@ namespace Castor3D
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de Scene.
-		 *\param[out]	p_mesh	Reçoit les données importées.
+		 *\param[out]	p_scene	Reçoit les données importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API virtual bool DoImportScene( Scene & p_scene ) = 0;

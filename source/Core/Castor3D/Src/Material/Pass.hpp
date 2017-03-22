@@ -354,49 +354,49 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Prepares a texture to be integrated to the pass.
-		 *\remarks		Removes alpha channel if any, stores it in p_opacity if it is empty.
-		 *\param[in]	p_channel		The texture channel.
-		 *\param[in,out]p_index			The texture index.
-		 *\param[in,out]p_opacitySource	Receives the texture unit if p_opacity is modified.
-		 *\param[in,out]p_opacity		Receives the alpha channel of the texture.
-		 *\return		\p true if there were an alpha channel in the texture.
+		 *\brief			Prepares a texture to be integrated to the pass.
+		 *\remarks			Removes alpha channel if any, stores it in p_opacity if it is empty.
+		 *\param[in]		p_channel		The texture channel.
+		 *\param[in,out]	p_index			The texture index.
+		 *\param[in,out]	p_opacitySource	Receives the texture unit if p_opacity is modified.
+		 *\param[in,out]	p_opacity		Receives the alpha channel of the texture.
+		 *\return			\p true if there were an alpha channel in the texture.
 		 *\~french
-		 *\brief		Prépare une texture à être intégrée à la passe.
-		 *\remarks		Enlève le canal alpha s'il y en avait un, il est stocké dans p_opacity si celui-ci est vide.
-		 *\param[in]	p_channel		Le canal de texture.
-		 *\param[in,out]p_index			L'index de la texture.
-		 *\param[in,out]p_opacitySource	Reçoit l'unité de texture si p_opacity est modifié.
-		 *\param[in,out]p_opacity		Reçoit le canal alpha de la texture.
-		 *\return		\p true Si la texture possédait un canal alpha.
+		 *\brief			Prépare une texture à être intégrée à la passe.
+		 *\remarks			Enlève le canal alpha s'il y en avait un, il est stocké dans p_opacity si celui-ci est vide.
+		 *\param[in]		p_channel		Le canal de texture.
+		 *\param[in,out]	p_index			L'index de la texture.
+		 *\param[in,out]	p_opacitySource	Reçoit l'unité de texture si p_opacity est modifié.
+		 *\param[in,out]	p_opacity		Reçoit le canal alpha de la texture.
+		 *\return			\p true Si la texture possédait un canal alpha.
 		 */
 		C3D_API bool DoPrepareTexture( TextureChannel p_channel, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, Castor::PxBufferBaseSPtr & p_opacity );
 		/**
 		 *\~english
-		 *\brief		Prepares a texture to be integrated to the pass.
-		 *\remarks		Removes alpha channel if any.
-		 *\param[in]	p_channel	The texture channel.
-		 *\param[in,out]p_index		The texture index.
-		 *\return		The original texture's alpha channel.
+		 *\brief			Prepares a texture to be integrated to the pass.
+		 *\remarks			Removes alpha channel if any.
+		 *\param[in]		p_channel	The texture channel.
+		 *\param[in,out]	p_index		The texture index.
+		 *\return			The original texture's alpha channel.
 		 *\~french
-		 *\brief		Prépare une texture à être intégrée à la passe.
-		 *\remarks		Enlève le canal alpha s'il y en avait un.
-		 *\param[in]	p_channel	Le canal de texture.
-		 *\param[in,out]p_index		L'index de la texture.
-		 *\return		Le canal alpha de la texture originale.
+		 *\brief			Prépare une texture à être intégrée à la passe.
+		 *\remarks			Enlève le canal alpha s'il y en avait un.
+		 *\param[in]		p_channel	Le canal de texture.
+		 *\param[in,out]	p_index		L'index de la texture.
+		 *\return			Le canal alpha de la texture originale.
 		 */
 		C3D_API Castor::PxBufferBaseSPtr DoPrepareTexture( TextureChannel p_channel, uint32_t & p_index );
 		/**
 		 *\~english
-		 *\brief		Prepares the opacity channel.
-		 *\param[in]	p_opacitySource	The texture unit from which opacity comes.
-		 *\param[in]	p_opacityImage	The alpha channel from p_opacitySource.
-		 *\param[in,out]p_index			The texture index.
+		 *\brief			Prepares the opacity channel.
+		 *\param[in]		p_opacitySource	The texture unit from which opacity comes.
+		 *\param[in]		p_opacityImage	The alpha channel from p_opacitySource.
+		 *\param[in,out]	p_index			The texture index.
 		 *\~french
-		 *\brief		Prépare le canal d'opacité.
-		 *\param[in]	p_opacitySource	L'unité de texture depuis laquelle l'opacité provient.
-		 *\param[in]	p_opacityImage	Le canal alpha de p_opacitySource.
-		 *\param[in,out]p_index			L'index de la texture.
+		 *\brief			Prépare le canal d'opacité.
+		 *\param[in]		p_opacitySource	L'unité de texture depuis laquelle l'opacité provient.
+		 *\param[in]		p_opacityImage	Le canal alpha de p_opacitySource.
+		 *\param[in,out]	p_index			L'index de la texture.
 		 */
 		C3D_API void DoPrepareOpacity( TextureUnitSPtr p_opacitySource, Castor::PxBufferBaseSPtr p_opacityImage, uint32_t & p_index );
 		/**

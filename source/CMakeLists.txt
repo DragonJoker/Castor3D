@@ -272,48 +272,48 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				EXPANDED
 				DISPLAY_NAME "Main"
 				DESCRIPTION "Main components to run Castor3D."
-		 )
+			)
 
 			cpack_add_component_group( Core
 				DISPLAY_NAME "Core libraries"
 				DESCRIPTION "Base libraries needed to use Castor3D."
 				PARENT_GROUP Main
-		 )
+			)
 
 			cpack_add_component_group( Plugins
 				DISPLAY_NAME "Plugins"
 				DESCRIPTION "Plugins usable in Castor3D."
 				PARENT_GROUP Main
-		 )
+			)
 
 			cpack_add_component_group( Tools
 				DISPLAY_NAME "Tools"
 				DESCRIPTION "Some tools"
 				PARENT_GROUP Main
-		 )
+			)
 
 			cpack_add_component_group( Samples
 				DISPLAY_NAME "Samples"
 				DESCRIPTION "Sample applications and scenes using Castor3D."
 				PARENT_GROUP Main
-		 )
+			)
 
 			cpack_add_component_group( Development
 				DISPLAY_NAME "Development"
 				DESCRIPTION "All the tools needed to develop a project using Castor3D."
-		 )
+			)
 
 			cpack_add_component_group( Test
 				DISPLAY_NAME "Test"
 				DESCRIPTION "Applications used to perform regression and performance tests."
 				PARENT_GROUP Development
-		 )
+			)
 
 			cpack_add_component_group( Documentation
 				DISPLAY_NAME "Documentation"
 				DESCRIPTION "Projects documentations"
 				PARENT_GROUP Development
-		 )
+			)
 
 			CoreSetup()
 			if ( ${CASTOR_BUILD_CASTOR3D} )

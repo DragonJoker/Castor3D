@@ -20,28 +20,42 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___CV_MOUSE_CAMERA_EVENT_H___
-#define ___CV_MOUSE_CAMERA_EVENT_H___
+#ifndef ___C3D_RenderInfo_H___
+#define ___C3D_RenderInfo_H___
 
-#include "RenderPanel.hpp"
+#include <cstdint>
 
-#include <Event/Frame/FrameEvent.hpp>
-#include <Math/RangedValue.hpp>
-
-namespace CastorViewer
+namespace Castor3D
 {
-	class MouseNodeEvent
-		: public Castor3D::FrameEvent
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		22/06/2017
+	\~english
+	\brief		Holds render informations.
+	\~french
+	\brief		Contient les informations de rendu.
+	*/
+	struct RenderInfo
 	{
-	public:
-		MouseNodeEvent( Castor3D::SceneNodeSPtr p_node, Castor::real p_dx, Castor::real p_dy, Castor::real p_dz );
-		virtual ~MouseNodeEvent();
-
-	protected:
-		Castor3D::SceneNodeWPtr m_node;
-		Castor::real m_dx;
-		Castor::real m_dy;
-		Castor::real m_dz;
+		//!\~english	The total vertex count.
+		//!\~french		Le nombre total de sommets.
+		uint32_t m_totalVertexCount{ 0u };
+		//!\~english	The total face count.
+		//!\~french		Le nombre total de faces.
+		uint32_t m_totalFaceCount{ 0u };
+		//!\~english	The total object count.
+		//!\~french		Le nombre total d'objets.
+		uint32_t m_totalObjectsCount{ 0u };
+		//!\~english	The visible objects count.
+		//!\~french		Le nombre d'objets visibles.
+		uint32_t m_visibleObjectsCount{ 0u };
+		//!\~english	The particles count.
+		//!\~french		Le nombre de particules.
+		uint32_t m_particlesCount{ 0u };
+		//!\~english	The draw calls count.
+		//!\~french		Le nombre d'appels aux fonctions de dessin.
+		uint32_t m_drawCalls{ 0u };
 	};
 }
 

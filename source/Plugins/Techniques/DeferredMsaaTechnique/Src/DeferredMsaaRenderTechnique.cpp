@@ -148,14 +148,13 @@ namespace deferred_msaa
 		m_sceneUbo.Update();
 	}
 
-	void RenderTechnique::DoRenderOpaque( uint32_t & p_visible )
+	void RenderTechnique::DoRenderOpaque( RenderInfo & p_info )
 	{
 		GetEngine()->SetPerObjectLighting( false );
 		m_renderTarget.GetCamera()->Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_msaaDepthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_opaquePass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 
 #if DEBUG_DEFERRED_BUFFERS
@@ -177,6 +176,10 @@ namespace deferred_msaa
 		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( DsTexture::eEmissive )]->GetTexture() );
 
 #else
+
+		m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer
+			, Rectangle{ Position{}, GetSize() }
+			, BufferComponent::eDepth | BufferComponent::eStencil );
 
 		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msaaDepthAttach->Attach( AttachmentPoint::eDepthStencil );
@@ -208,14 +211,14 @@ namespace deferred_msaa
 #endif
 	}
 
-	void RenderTechnique::DoRenderTransparent( uint32_t & p_visible )
+	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
 	{
 		m_msaaFrameBuffer->Unbind();
 		GetEngine()->SetPerObjectLighting( true );
 		m_transparentPass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
 		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_transparentPass->Render( p_visible, m_renderTarget.GetScene()->HasShadows() );
+		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_msaaFrameBuffer->Unbind();
 		m_msaaFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::eColour | BufferComponent::eDepth );
 	}
@@ -353,6 +356,7 @@ namespace deferred_msaa
 
 			m_lightPassDepthBuffer->Initialise( m_size );
 			m_geometryPassFrameBuffer->Bind();
+			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepthStencil, m_geometryPassDepthAttach );
 
 			for ( int i = 0; i < size_t( deferred_common::DsTexture::eCount ) && l_return; i++ )
 			{

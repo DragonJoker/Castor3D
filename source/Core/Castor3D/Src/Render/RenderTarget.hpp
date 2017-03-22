@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 #include "Miscellaneous/Parameter.hpp"
+#include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -69,12 +70,10 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor
-			 *\param[in]	p_tabs			The tabulations to put at the beginning of each line
-			 *\param[in]	p_encodingMode	The file encoding mode
+			 *\param[in]	p_tabs	The tabulations to put at the beginning of each line
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_tabs			Les tabulations à mettre à chaque début de ligne
-			 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
+			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
 			 */
 			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
@@ -140,10 +139,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
-		 *\~english
+		 *\param[out]	p_info	Receives the render informations.
+		 *\~french
 		 *\brief		Dessine une frame.
+		 *\param[out]	p_info	Reçoit les informations de rendu.
 		 */
-		C3D_API void Render();
+		C3D_API void Render( RenderInfo & p_info );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -235,26 +236,6 @@ namespace Castor3D
 		inline bool IsInitialised()const
 		{
 			return m_initialised;
-		}
-		/**
-		 *\~english
-		 *\return		The visible objects count.
-		 *\~french
-		 *\return		Le nombre d'objets visibles.
-		 */
-		inline uint32_t GetVisbleObjectsCount()const
-		{
-			return m_visibleObjectsCount;
-		}
-		/**
-		 *\~english
-		 *\return		The particles count.
-		 *\~french
-		 *\return		Le nombre de particules.
-		 */
-		inline uint32_t GetParticlesCount()const
-		{
-			return m_particlesCount;
 		}
 		/**
 		 *\~english
@@ -468,7 +449,7 @@ namespace Castor3D
 		}
 
 	private:
-		C3D_API void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera );
+		C3D_API void DoRender( RenderInfo & p_info, stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -523,12 +504,6 @@ namespace Castor3D
 		//!\~english	The tone mapping implementation.
 		//!\~french		L'implémentation de mappage de ton.
 		ToneMappingSPtr m_toneMapping;
-		//!\~english	The visible objects count.
-		//!\~french		Le nombre d'objets visibles.
-		uint32_t m_visibleObjectsCount;
-		//!\~english	The particles count.
-		//!\~french		Le nombre de particules.
-		uint32_t m_particlesCount;
 	};
 }
 

@@ -3,7 +3,6 @@
 #include "GpuQuery.hpp"
 
 #include "Render/RenderSystem.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
 
 namespace Castor3D
 {

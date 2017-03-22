@@ -108,12 +108,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates the textures related frame variables.
-		 *\param[in]	p_textureFlags	TextureChannel combination.
 		 *\param[in]	p_program		The program to which the buffer is bound.
+		 *\param[in]	p_textureFlags	TextureChannel combination.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\~french
 		 *\brief		Crée les frame variables relatives aux textures.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_program		Le programme auquel le buffer est lié.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
 		C3D_API void CreateTextureVariables(
 			ShaderProgram & p_program,

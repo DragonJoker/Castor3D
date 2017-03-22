@@ -1,18 +1,11 @@
 #include "RenderPipeline.hpp"
 
-#include "RenderSystem.hpp"
-#include "Viewport.hpp"
-
+#include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
-#include "Scene/SceneNode.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/UniformBufferBinding.hpp"
 #include "Shader/ShaderProgram.hpp"
 
-#include <Math/TransformationMatrix.hpp>
-
 #include <GlslSource.hpp>
-#include <GlslShadow.hpp>
 
 using namespace Castor;
 

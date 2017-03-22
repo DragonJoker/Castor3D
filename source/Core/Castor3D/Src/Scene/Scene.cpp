@@ -1,33 +1,24 @@
 #include "Scene.hpp"
 
-#include "Engine.hpp"
 #include "Camera.hpp"
 #include "BillboardList.hpp"
 #include "Geometry.hpp"
-#include "SceneNode.hpp"
 #include "Skybox.hpp"
 
 #include "Animation/AnimatedObjectGroup.hpp"
-#include "Cache/CacheView.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
-#include "Light/Light.hpp"
 #include "Material/Material.hpp"
-#include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
-#include "Overlay/Overlay.hpp"
 #include "ParticleSystem/ParticleSystem.hpp"
 #include "Render/RenderLoop.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Render/RenderWindow.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Graphics/Font.hpp>
 #include <Graphics/Image.hpp>
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

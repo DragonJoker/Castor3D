@@ -48,7 +48,7 @@ function( GenericSetup )
 				DESCRIPTION "Allows GUI creation using Castor3D."
 				GROUP Generic
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer Full
 			)
 			cpack_add_component( CastorGui_dev
 				DISPLAY_NAME "CastorGui SDK"

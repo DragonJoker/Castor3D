@@ -1,13 +1,6 @@
 #include "File.hpp"
 
-#include "Math/Math.hpp"
 #include "Miscellaneous/Utils.hpp"
-#include "Log/Logger.hpp"
-#include <cstdio>
-#include <cstring>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <iostream>
 
 namespace Castor
 {

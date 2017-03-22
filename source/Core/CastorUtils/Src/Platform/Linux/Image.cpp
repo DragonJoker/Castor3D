@@ -3,9 +3,6 @@
 #if defined( CASTOR_PLATFORM_LINUX )
 
 #include "Graphics/Image.hpp"
-#include "Data/Path.hpp"
-#include "Graphics/Rectangle.hpp"
-#include "Log/Logger.hpp"
 
 extern "C"
 {

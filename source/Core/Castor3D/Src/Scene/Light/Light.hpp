@@ -363,10 +363,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the light enabled status
-		 *\param[in]	p_enabled	The new value
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation de la lumère
-		 *\param[in]	p_enabled	La nouvelle valeur
+		 *\param[in]	p_value	La nouvelle valeur
 		 */
 		inline void SetEnabled( bool p_value )
 		{

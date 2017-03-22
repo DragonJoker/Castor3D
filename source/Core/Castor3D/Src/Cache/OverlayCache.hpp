@@ -124,9 +124,19 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_engine		The engine.
+		 *\param[in]	p_produce		The element producer.
+		 *\param[in]	p_initialise	The element initialiser.
+		 *\param[in]	p_clean			The element cleaner.
+		 *\param[in]	p_merge			The element collection merger.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	p_produce		Le créateur d'objet.
+		 *\param[in]	p_initialise	L'initialiseur d'objet.
+		 *\param[in]	p_clean			Le nettoyeur d'objet.
+		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
 		 */
 		C3D_API Cache( Engine & p_engine
 		   , Producer && p_produce
@@ -202,15 +212,15 @@ namespace Castor3D
 		 */
 		C3D_API bool Read( Castor::TextFile & p_file );
 		/**
-		*\~english
-		*\brief		Retrieves a FontTexture given a font name.
-		*\param[in]	p_name	The font name.
-		*\return		The FontTexture if it exist, nullptr if not.
-		*\~french
-		*\brief		Récupère une FontTexture, à partir d'un nom de police.
-		*\param[in]	p_name	Le nom de la police.
-		*\return		La FontTexture si elle exite, nullptr sinon.
-		*/
+		 *\~english
+		 *\brief		Retrieves a FontTexture given a font name.
+		 *\param[in]	p_name	The font name.
+		 *\return		The FontTexture if it exist, nullptr if not.
+		 *\~french
+		 *\brief		Récupère une FontTexture, à partir d'un nom de police.
+		 *\param[in]	p_name	Le nom de la police.
+		 *\return		La FontTexture si elle exite, nullptr sinon.
+		 */
 		C3D_API FontTextureSPtr GetFontTexture( Castor::String const & p_name );
 		/**
 		 *\~english
@@ -227,12 +237,16 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates an object.
 		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_params	The other constructor parameters.
+		 *\param[in]	p_type		The overlay type.
+		 *\param[in]	p_scene		The scene.
+		 *\param[in]	p_parent	The parent overlay, if any.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet.
 		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\param[in]	p_type		Le type d'incrustation.
+		 *\param[in]	p_scene		La scène.
+		 *\param[in]	p_parent	L'incrustation parente, si elle existe.
 		 *\return		L'objet créé.
 		 */
 		inline ElementPtr Add( Key const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )

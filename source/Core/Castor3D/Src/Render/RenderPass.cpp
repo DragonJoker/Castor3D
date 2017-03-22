@@ -271,7 +271,7 @@ namespace Castor3D
 			, Scene & p_scene
 			, PassRenderNodeUniforms & p_passNode
 			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count )
+			, RenderInfo & p_info )
 		{
 			for ( auto l_itPipelines : p_nodes )
 			{
@@ -287,6 +287,7 @@ namespace Castor3D
 						, p_depthMaps );
 
 					DoRenderNode( l_renderNode );
+					++p_info.m_drawCalls;
 
 					DoUnbindPass( l_renderNode.m_passNode
 						, l_renderNode.m_passNode.m_pass
@@ -294,7 +295,7 @@ namespace Castor3D
 						, *l_itPipelines.first
 						, p_depthMaps );
 
-					++p_count;
+					++p_info.m_visibleObjectsCount;
 				}
 			}
 		}
@@ -620,7 +621,7 @@ namespace Castor3D
 
 	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
 		, VertexBuffer & p_matrixBuffer
-		, uint32_t & p_count )
+		, RenderInfo & p_info )
 	{
 		constexpr uint32_t l_stride = 16 * sizeof( real );
 		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
@@ -631,7 +632,7 @@ namespace Castor3D
 		while ( i < l_count )
 		{
 			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-			++p_count;
+			++p_info.m_visibleObjectsCount;
 			l_buffer += l_stride;
 			++i;
 			++l_it;
@@ -724,7 +725,7 @@ namespace Castor3D
 	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
+		, RenderInfo & p_info )
 	{
 		DoTraverseNodes( *this
 			, p_camera
@@ -732,15 +733,16 @@ namespace Castor3D
 			, *m_passNode
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, p_depthMaps
-			, [this, &p_count, &p_depthMaps]( RenderPipeline & p_pipeline
+			, [this, &p_info, &p_depthMaps]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh
 				, StaticRenderNodeArray & p_renderNodes )
 			{
 				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_count );
+					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_info );
 					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					++p_info.m_drawCalls;
 				}
 			} );
 	}
@@ -784,7 +786,7 @@ namespace Castor3D
 	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
+		, RenderInfo & p_info )
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -792,7 +794,7 @@ namespace Castor3D
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, *m_passNode
 			, p_depthMaps
-			, p_count );
+			, p_info );
 	}
 
 	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes )
@@ -834,7 +836,7 @@ namespace Castor3D
 	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
+		, RenderInfo & p_info )
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -842,7 +844,7 @@ namespace Castor3D
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, *m_passNode
 			, p_depthMaps
-			, p_count );
+			, p_info );
 	}
 
 	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes )
@@ -884,7 +886,7 @@ namespace Castor3D
 	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
+		, RenderInfo & p_info )
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -892,7 +894,7 @@ namespace Castor3D
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, *m_passNode
 			, p_depthMaps
-			, p_count );
+			, p_info );
 	}
 
 	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes )
@@ -934,7 +936,7 @@ namespace Castor3D
 	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, uint32_t & p_count )
+		, RenderInfo & p_info )
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -942,7 +944,7 @@ namespace Castor3D
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, *m_passNode
 			, p_depthMaps
-			, p_count );
+			, p_info );
 	}
 
 	String RenderPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags

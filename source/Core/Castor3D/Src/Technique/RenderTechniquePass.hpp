@@ -71,14 +71,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[out]	p_visible	The visible objects count.
+		 *\param[out]	p_info		Receives the render informations.
 		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	p_visible	Le nombre d'objets visibles.
+		 *\param[out]	p_info		Reçoit les informations de rendu.
 		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		C3D_API void Render( uint32_t & p_visible, bool p_shadows );
+		C3D_API void Render( RenderInfo & p_info, bool p_shadows );
 		/**
 		 *\~english
 		 *\return		Initialises the shadow maps.
@@ -130,7 +130,7 @@ namespace Castor3D
 		C3D_API void DoRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
+			, RenderInfo & p_info );
 		/**
 		 *\~english
 		 *\brief		Renders objects sorted by distance to camera.
@@ -163,7 +163,7 @@ namespace Castor3D
 		C3D_API void DoRenderByDistance( DistanceSortedNodeMap & p_nodes
 			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
-			, uint32_t & p_count );
+			, RenderInfo & p_info );
 		/**
 		 *\~english
 		 *\brief		Retrieves the depth maps for opaque nodes.

@@ -127,13 +127,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an OverlayCategory specific TextLoader.
-		 *\param[in]	p_tabs			The current indentation level.
-		 *\param[in]	p_encodingMode	The file encoding mode.
+		 *\param[in]	p_tabs	The current indentation level.
 		 *\return		The TextLoader.
 		 *\~french
 		 *\brief		Crée un OverlayCategory spécifique à la LightCategory.
-		 *\param[in]	p_tabs			Le niveau d'intentation actuel.
-		 *\param[in]	p_encodingMode	Le mode d'encodage du fichier.
+		 *\param[in]	p_tabs	Le niveau d'intentation actuel.
 		 *\return		Le TextLoader.
 		 */
 		C3D_API virtual std::unique_ptr< TextWriter > CreateTextWriter( Castor::String const & p_tabs ) = 0;

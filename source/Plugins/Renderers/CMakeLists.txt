@@ -81,6 +81,15 @@ function( RenderersSetup )
 			DEPENDS GlRenderSystem CastorUtils_dev Castor3D_dev
 			INSTALL_TYPES Developer Full
 		)
+		if( ${CASTOR_BUILDGRP_TEST} AND ${CASTOR_BUILD_TEST_RENDERER_OGL} )
+			cpack_add_component( GlRenderSystemTest
+				DISPLAY_NAME "GlRenderSystemTest"
+				DESCRIPTION "Test application for GlRenderSystem."
+				GROUP Test
+				DEPENDS GlRenderSystem
+				INSTALL_TYPES Developer Full
+			)
+		endif ()
 	endif ()
 	if( ${CASTOR_BUILD_RENDERER_OGL_ES3} )
 		cpack_add_component( GlES3RenderSystem
@@ -105,14 +114,14 @@ function( RenderersSetup )
 			DESCRIPTION "Enables Test rendering API in Castor3D."
 			GROUP Test
 			DEPENDS Castor3D
-			INSTALL_TYPES Test Full
+			INSTALL_TYPES Developer Full
 		)
 		cpack_add_component( TestRenderSystem_dev
 			DISPLAY_NAME "TestRenderSystem SDK"
 			DESCRIPTION "Development files for TestRenderSystem."
 			GROUP Test
 			DEPENDS TestRenderSystem CastorUtils_dev Castor3D_dev
-			INSTALL_TYPES Developer Test Full
+			INSTALL_TYPES Developer Full
 		)
 	endif ()
 endfunction( RenderersSetup )

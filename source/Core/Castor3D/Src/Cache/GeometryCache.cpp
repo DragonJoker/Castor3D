@@ -70,13 +70,17 @@ namespace Castor3D
 	{
 	}
 
-	uint32_t ObjectCache< Geometry, Castor::String >::GetObjectCount()const
+	void ObjectCache< Geometry, Castor::String >::FillInfo( RenderInfo & p_info )const
 	{
+		p_info.m_totalVertexCount += m_vertexCount;
+		p_info.m_totalFaceCount += m_faceCount;
 		auto l_lock = Castor::make_unique_lock( m_elements );
-
-		return std::accumulate( m_elements.begin(), m_elements.end(), 0u, []( uint32_t p_value, std::pair< String, GeometrySPtr > const & p_pair )
-		{
-			return p_value + p_pair.second->GetMesh()->GetSubmeshCount();
-		} );
+		p_info.m_totalObjectsCount += std::accumulate( m_elements.begin()
+			, m_elements.end()
+			, 0u
+			, []( uint32_t p_value, std::pair< String, GeometrySPtr > const & p_pair )
+			{
+				return p_value + p_pair.second->GetMesh()->GetSubmeshCount();
+			} );
 	}
 }

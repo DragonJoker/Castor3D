@@ -1,14 +1,7 @@
 #include "AnimatedObject.hpp"
 
-#include "Animation/Animable.hpp"
-#include "Animation/Animation.hpp"
-
 #include "Mesh/Mesh.hpp"
-#include "Mesh/Skeleton/Bone.hpp"
-#include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Geometry.hpp"
-#include "Scene/MovableObject.hpp"
-#include "Scene/Animation/AnimationInstance.hpp"
 
 using namespace Castor;
 

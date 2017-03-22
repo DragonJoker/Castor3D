@@ -99,19 +99,16 @@ namespace Castor
 		CU_API FontSPtr Add( Castor::String const & p_name, uint32_t p_height, Castor::Path const & p_path );
 		/**
 		 *\~english
-		 *\brief		Creates a font.
-		 *\remarks		If the font already exists, it is returned.
-		 *\param[in]	p_path		The full access path to the file.
-		 *\param[in]	p_name		The font name.
-		 *\param[in]	p_height	The font precision.
-		 *\return		The created (or retrieved) font.
+		 *\brief		Adds an already created font.
+		 *\param[in]	p_name	The font name.
+		 *\param[in]	p_font	The font.
+		 *\return		The font.
 		 *\~french
-		 *\brief		Crée une police.
+		 *\brief		Ajoute une police déjà créée.
 		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	p_path		Le chemin complet d'accès au fichier.
-		 *\param[in]	p_name		Le nom de la police.
-		 *\param[in]	p_height	La précision de la police.
-		 *\return		La police créée (ou récupérée).
+		 *\param[in]	p_name	Le nom de la police.
+		 *\param[in]	p_font	La police.
+		 *\return		La police.
 		 */
 		CU_API FontSPtr Add( Castor::String const & p_name, FontSPtr p_font );
 		/**

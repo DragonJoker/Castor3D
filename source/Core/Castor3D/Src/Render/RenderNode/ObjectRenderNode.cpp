@@ -7,7 +7,7 @@
 namespace Castor3D
 {
 	template<>
-	SubmeshRenderNode::ObjectRenderNode( RenderPipeline & p_pipeline
+	ObjectRenderNode< Submesh, Geometry >::ObjectRenderNode( RenderPipeline & p_pipeline
 		, PassRenderNode && p_pass
 		, UniformBuffer & p_modelMatrixBuffer
 		, UniformBuffer & p_modelBuffer
@@ -30,7 +30,7 @@ namespace Castor3D
 	}
 
 	template<>
-	BillboardListRenderNode::ObjectRenderNode( RenderPipeline & p_pipeline
+	ObjectRenderNode< BillboardBase, BillboardBase >::ObjectRenderNode( RenderPipeline & p_pipeline
 		, PassRenderNode && p_pass
 		, UniformBuffer & p_modelMatrixBuffer
 		, UniformBuffer & p_modelBuffer

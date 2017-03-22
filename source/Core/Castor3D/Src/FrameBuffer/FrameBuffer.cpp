@@ -5,12 +5,7 @@
 
 #include "Engine.hpp"
 
-#include "Render/RenderSystem.hpp"
-#include "Render/Context.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Texture/TextureImage.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

@@ -1,13 +1,8 @@
 #include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
-#include "Cache/OverlayCache.hpp"
-
 #include "TextOverlay.hpp"
 
-#include "Render/RenderSystem.hpp"
-
-#include <algorithm>
 #include <iomanip>
 
 namespace std
@@ -116,7 +111,7 @@ namespace Castor3D
 		m_externalTime = m_frameTimer.Time();
 	}
 
-	void DebugOverlays::EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible, uint32_t p_particles )
+	void DebugOverlays::EndFrame( RenderInfo const & p_info )
 	{
 		auto l_totalTime = m_frameTimer.Time() + m_externalTime;
 
@@ -127,11 +122,11 @@ namespace Castor3D
 			m_debugTotalTime->SetCaption( StringStream() << l_totalTime );
 			m_debugCpuTime->SetCaption( StringStream() << m_cpuTime );
 			m_externTime->SetCaption( StringStream() << m_externalTime );
-			m_debugVertexCount->SetCaption( string::to_string( p_vertices ) );
-			m_debugFaceCount->SetCaption( string::to_string( p_faces ) );
-			m_debugObjectCount->SetCaption( string::to_string( p_objects ) );
-			m_debugVisibleObjectCount->SetCaption( string::to_string( p_visible ) );
-			m_debugParticlesCount->SetCaption( string::to_string( p_particles ) );
+			m_debugVertexCount->SetCaption( string::to_string( p_info.m_totalVertexCount ) );
+			m_debugFaceCount->SetCaption( string::to_string( p_info.m_totalFaceCount ) );
+			m_debugObjectCount->SetCaption( string::to_string( p_info.m_totalObjectsCount ) );
+			m_debugVisibleObjectCount->SetCaption( string::to_string( p_info.m_visibleObjectsCount ) );
+			m_debugParticlesCount->SetCaption( string::to_string( p_info.m_particlesCount ) );
 
 			auto l_serverTime = GetEngine()->GetRenderSystem()->GetGpuTime();
 			m_debugGpuClientTime->SetCaption( StringStream() << ( m_gpuTime - l_serverTime ) );

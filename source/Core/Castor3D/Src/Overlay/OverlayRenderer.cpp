@@ -1,28 +1,15 @@
 #include "OverlayRenderer.hpp"
 
 #include "Engine.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/SamplerCache.hpp"
-#include "Cache/ShaderCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
-#include "Overlay.hpp"
 #include "PanelOverlay.hpp"
-#include "TextOverlay.hpp"
 
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
-#include "Render/RenderNode/RenderNode.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/Viewport.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 

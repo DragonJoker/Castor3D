@@ -1,12 +1,8 @@
 ﻿#include "ToneMapping.hpp"
 
 #include "Engine.hpp"
-#include "Cache/ShaderCache.hpp"
 
-#include "Miscellaneous/Parameter.hpp"
-#include "Render/Context.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>

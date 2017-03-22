@@ -2,7 +2,6 @@
 
 #include "Engine.hpp"
 
-#include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Skeleton/Bone.hpp"
 #include "SkeletonAnimationBone.hpp"
 #include "SkeletonAnimationNode.hpp"

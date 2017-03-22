@@ -1,7 +1,6 @@
 #include "WorkerThread.hpp"
 
 #include "Config/MultiThreadConfig.hpp"
-#include "Exception/Assertion.hpp"
 
 namespace Castor
 {

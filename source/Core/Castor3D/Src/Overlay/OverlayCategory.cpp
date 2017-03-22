@@ -1,13 +1,10 @@
 #include "OverlayCategory.hpp"
 
 #include "Engine.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/OverlayCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "PanelOverlay.hpp"
-#include "TextOverlay.hpp"
 
 #include "Material/Material.hpp"
 

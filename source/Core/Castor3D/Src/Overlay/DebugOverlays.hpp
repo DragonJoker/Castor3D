@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_DEBUG_OVERLAYS_H___
 
 #include "Cache/OverlayCache.hpp"
+#include "Render/RenderInfo.hpp"
 
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/OwnedBy.hpp>
@@ -89,20 +90,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the overlays texts.
-		 *\param[in]	p_vertices	The vertex count.
-		 *\param[in]	p_faces		The faces count.
-		 *\param[in]	p_objects	The objects count.
-		 *\param[in]	p_visible	The visible objects count.
-		 *\param[in]	p_particles	The particles count.
+		 *\param[in]	p_info	The render informations.
 		 *\~french
 		 *\brief		Met à jour les textes des incrustations de débogage.
-		 *\param[in]	p_vertices	Le nombre de sommets.
-		 *\param[in]	p_faces		Le nombre de faces.
-		 *\param[in]	p_objects	Le nombre d'objets.
-		 *\param[in]	p_visible	Le nombre d'objets visibles.
-		 *\param[in]	p_particles	Le nombre de particules.
+		 *\param[in]	p_info	Les informations de rendu.
 		 */
-		void EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible, uint32_t p_particles );
+		void EndFrame( RenderInfo const & p_info );
 		/**
 		 *\~english
 		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either EndGpuTask or EndCpuTask

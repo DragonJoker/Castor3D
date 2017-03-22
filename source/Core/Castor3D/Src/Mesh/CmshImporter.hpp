@@ -61,11 +61,11 @@ namespace Castor3D
 
 	protected:
 		/**
-		 *\copydoc		Castor::Importer::DoImportScene
+		 *\copydoc		Castor3D::Importer::DoImportScene
 		 */
 		C3D_API bool DoImportScene( Scene & p_scene )override;
 		/**
-		 *\copydoc		Castor::Importer::DoImportMesh
+		 *\copydoc		Castor3D::Importer::DoImportMesh
 		 */
 		C3D_API bool DoImportMesh( Mesh & p_mesh )override;
 

@@ -3,12 +3,8 @@
 #include "Engine.hpp"
 
 #include "Animation/Mesh/MeshAnimation.hpp"
-#include "Mesh/MeshFactory.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
-
-#include <Design/Factory.hpp>
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

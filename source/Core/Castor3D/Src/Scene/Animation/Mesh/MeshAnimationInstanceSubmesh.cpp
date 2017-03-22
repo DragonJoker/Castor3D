@@ -1,7 +1,6 @@
 #include "MeshAnimationInstanceSubmesh.hpp"
 
 #include "Animation/Mesh/MeshAnimation.hpp"
-#include "Animation/Mesh/MeshAnimationSubmesh.hpp"
 #include "MeshAnimationInstance.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"

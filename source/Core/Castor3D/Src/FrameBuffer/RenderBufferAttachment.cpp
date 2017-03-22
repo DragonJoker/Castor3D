@@ -1,6 +1,5 @@
 ﻿#include "RenderBufferAttachment.hpp"
 
-#include "FrameBuffer.hpp"
 #include "RenderBuffer.hpp"
 
 #include <Graphics/PixelBufferBase.hpp>

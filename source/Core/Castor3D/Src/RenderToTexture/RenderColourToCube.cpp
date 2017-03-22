@@ -1,19 +1,12 @@
 #include "RenderColourToCube.hpp"
 
 #include "Engine.hpp"
-#include "Cache/ShaderCache.hpp"
 
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
-#include "Scene/Skybox.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -147,6 +140,7 @@ namespace Castor3D
 		{
 			m_pipeline->SetViewMatrix( l_views[i] );
 			p_attachs[i]->Attach( AttachmentPoint::eColour, 0u );
+			p_fbo->SetDrawBuffer( p_attachs[i] );
 			m_pipeline->ApplyMatrices( m_matrixUbo, ~0u );
 			m_matrixUbo.Update();
 			m_pipeline->Apply();

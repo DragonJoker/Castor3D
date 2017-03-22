@@ -2,7 +2,6 @@
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/Uniform.hpp"
 #include "Shader/UniformBufferBinding.hpp"
 
 #include "Render/RenderSystem.hpp"

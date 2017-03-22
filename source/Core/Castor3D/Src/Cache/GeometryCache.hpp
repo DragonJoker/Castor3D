@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_GEOMETRY_CACHE_H___
 
 #include "Cache/ObjectCache.hpp"
+#include "Render/RenderInfo.hpp"
 
 namespace Castor3D
 {
@@ -78,14 +79,30 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	p_engine			The engine.
+		 *\param[in]	p_scene				The scene.
 		 *\param[in]	p_rootNode			The root node.
 		 *\param[in]	p_rootCameraNode	The cameras root node.
 		 *\param[in]	p_rootObjectNode	The objects root node.
+		 *\param[in]	p_produce			The element producer.
+		 *\param[in]	p_initialise		The element initialiser.
+		 *\param[in]	p_clean				The element cleaner.
+		 *\param[in]	p_merge				The element collection merger.
+		 *\param[in]	p_attach			The element attacher (to a scene node).
+		 *\param[in]	p_detach			The element detacher (from a scene node).
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine			Le moteur.
+		 *\param[in]	p_scene				La scène.
 		 *\param[in]	p_rootNode			Le noeud racine.
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
+		 *\param[in]	p_produce			Le créateur d'objet.
+		 *\param[in]	p_initialise		L'initialiseur d'objet.
+		 *\param[in]	p_clean				Le nettoyeur d'objet.
+		 *\param[in]	p_merge				Le fusionneur de collection d'objets.
+		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
+		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		C3D_API ObjectCache( Engine & p_engine
 			, Scene & p_scene
@@ -111,44 +128,24 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'objets
 		 */
-		C3D_API uint32_t GetObjectCount()const;
+		C3D_API void FillInfo( RenderInfo & p_info )const;
 		/**
 		 *\~english
 		 *\brief		Creates an object.
 		 *\param[in]	p_name		The object name.
 		 *\param[in]	p_parent	The parent scene node.
-		 *\param[in]	p_params	The other constructor parameters.
+		 *\param[in]	p_mesh		The mesh.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet.
 		 *\param[in]	p_name		Le nom d'objet.
 		 *\param[in]	p_parent	Le noeud de scène parent.
-		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\param[in]	p_mesh		Le maillage.
 		 *\return		L'objet créé.
 		 */
 		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
 		{
 			return MyObjectCache::Add( p_name, p_parent, p_mesh );
-		}
-		/**
-		*\~english
-		*\return		The faces count for all objects.
-		*\~french
-		*\return		Le nombre de faces de tous les objets.
-		*/
-		inline uint32_t GetFaceCount()const
-		{
-			return m_faceCount;
-		}
-		/**
-		*\~english
-		*\return		The vertex count for all objects.
-		*\~french
-		*\return		Le nombre de sommets de tous les objets.
-		*/
-		inline uint32_t GetVertexCount()const
-		{
-			return m_vertexCount;
 		}
 
 	private:

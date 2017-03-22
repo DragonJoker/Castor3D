@@ -1,7 +1,5 @@
 ﻿#include "FrameBufferAttachment.hpp"
 
-#include "FrameBuffer.hpp"
-
 using namespace Castor;
 
 namespace Castor3D

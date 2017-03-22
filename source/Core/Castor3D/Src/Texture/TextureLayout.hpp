@@ -170,12 +170,10 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
 		 *\remarks		Unbinds the texture.
-		 *\param[in]	p_index		The texture index.
 		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
 		 *\~french
 		 *\brief		Délocke le buffer de l'image à partir du GPU.
 		 *\remarks		Désactive la texture.
-		 *\param[in]	p_index		L'index de texture.
 		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
 		 */
 		C3D_API void Unlock( bool p_modified );

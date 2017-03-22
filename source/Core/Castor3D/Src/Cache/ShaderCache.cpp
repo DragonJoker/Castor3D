@@ -1,14 +1,11 @@
 ﻿#include "ShaderCache.hpp"
 
 #include "Engine.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
+
 #include "Event/Frame/CleanupEvent.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderPass.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Technique/RenderTechnique.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>

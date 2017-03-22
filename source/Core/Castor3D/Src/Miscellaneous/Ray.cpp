@@ -9,7 +9,6 @@
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
-#include "Scene/SceneNode.hpp"
 
 using namespace Castor;
 
