@@ -1,7 +1,6 @@
 ﻿#include "RenderLoopAsync.hpp"
 
 #include "Engine.hpp"
-#include "RenderSystem.hpp"
 
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/ScopeGuard.hpp>
@@ -15,7 +14,6 @@ namespace Castor3D
 	static const char * CALL_RENDER_SYNC_FRAME = "Can't call RenderSyncFrame in threaded render loop";
 	static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
 	static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
-	static const char * RLA_UNKNOWN_EXCEPTION = "Unknown exception";
 
 	RenderLoopAsync::RenderLoopAsync( Engine & p_engine, uint32_t p_wantedFPS )
 		: RenderLoop( p_engine, p_wantedFPS, true )

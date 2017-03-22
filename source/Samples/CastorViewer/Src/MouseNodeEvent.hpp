@@ -26,6 +26,7 @@ SOFTWARE.
 #include "RenderPanel.hpp"
 
 #include <Event/Frame/FrameEvent.hpp>
+#include <Math/RangedValue.hpp>
 
 namespace CastorViewer
 {
@@ -35,8 +36,6 @@ namespace CastorViewer
 	public:
 		MouseNodeEvent( Castor3D::SceneNodeSPtr p_node, Castor::real p_dx, Castor::real p_dy, Castor::real p_dz );
 		virtual ~MouseNodeEvent();
-
-		void Modify( Castor::real p_dx, Castor::real p_dy, Castor::real p_dz );
 
 	protected:
 		Castor3D::SceneNodeWPtr m_node;

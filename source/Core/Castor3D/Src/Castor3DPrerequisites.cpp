@@ -1,8 +1,7 @@
 #include "Castor3DPrerequisites.hpp"
 
-#include <Engine.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Scene.hpp>
+#include "Engine.hpp"
+#include "Scene/Scene.hpp"
 
 #include <GlslSource.hpp>
 

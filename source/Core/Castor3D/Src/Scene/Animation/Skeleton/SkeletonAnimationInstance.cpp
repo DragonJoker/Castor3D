@@ -8,11 +8,8 @@
 #include "Animation/Skeleton/SkeletonAnimation.hpp"
 #include "Animation/Skeleton/SkeletonAnimationNode.hpp"
 #include "Animation/Skeleton/SkeletonAnimationBone.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Skeleton/Bone.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
-
-#include "Scene/Geometry.hpp"
 
 using namespace Castor;
 

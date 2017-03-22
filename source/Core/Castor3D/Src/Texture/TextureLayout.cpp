@@ -2,10 +2,6 @@
 
 #include "Engine.hpp"
 
-#include "TextureStorage.hpp"
-
-#include "Render/RenderSystem.hpp"
-
 using namespace Castor;
 
 namespace Castor3D

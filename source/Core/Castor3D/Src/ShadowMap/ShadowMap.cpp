@@ -1,40 +1,15 @@
 #include "ShadowMap.hpp"
 
 #include "Engine.hpp"
-#include "Cache/ShaderCache.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "FrameBuffer/ColourRenderBuffer.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/BufferElementGroup.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/RenderTarget.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Geometry.hpp"
 #include "Scene/Light/Light.hpp"
-#include "Scene/Light/DirectionalLight.hpp"
-#include "Scene/Light/SpotLight.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
-
-#include <Graphics/Image.hpp>
 
 using namespace Castor;
 

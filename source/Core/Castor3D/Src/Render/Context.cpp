@@ -1,26 +1,16 @@
 #include "Context.hpp"
 
 #include "Engine.hpp"
-#include "Cache/ShaderCache.hpp"
 
-#include "RenderPipeline.hpp"
-#include "RenderWindow.hpp"
-#include "RenderSystem.hpp"
-#include "Viewport.hpp"
-
-#include "Event/Frame/InitialiseEvent.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderWindow.hpp"
 #include "Scene/Skybox.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "State/DepthStencilState.hpp"
-#include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>

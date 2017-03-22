@@ -4,17 +4,12 @@
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Scene/Light/Light.hpp"
-#include "Scene/Light/SpotLight.hpp"
 #include "ShadowMap/ShadowMapPassSpot.hpp"
 #include "Texture/Sampler.hpp"
-#include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
-
-#include <Graphics/Image.hpp>
 
 using namespace Castor;
 

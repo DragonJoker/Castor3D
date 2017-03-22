@@ -1,32 +1,10 @@
 #include "RenderWindow.hpp"
 
-#include "Engine.hpp"
-#include "Cache/CameraCache.hpp"
-#include "Cache/ListenerCache.hpp"
-#include "Cache/TargetCache.hpp"
-#include "Cache/SceneCache.hpp"
-#include "Cache/ShaderCache.hpp"
-
-#include "Context.hpp"
-#include "RenderPipeline.hpp"
-#include "RenderLoop.hpp"
-#include "RenderSystem.hpp"
-#include "Viewport.hpp"
-
-#include "Event/Frame/CleanupEvent.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
 #include "FrameBuffer/BackBuffers.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
-#include "Miscellaneous/WindowHandle.hpp"
+#include "Render/RenderLoop.hpp"
 #include "Render/RenderTarget.hpp"
-#include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Shader/Uniform.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

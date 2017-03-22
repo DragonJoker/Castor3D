@@ -1,7 +1,6 @@
 ﻿#include "Generator.hpp"
 #include "Engine.hpp"
 
-#include <Miscellaneous/Utils.hpp>
 #include <Graphics/Image.hpp>
 
 using namespace Castor3D;

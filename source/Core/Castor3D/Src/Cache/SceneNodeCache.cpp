@@ -1,7 +1,5 @@
 #include "SceneNodeCache.hpp"
 
-#include "Engine.hpp"
-
 using namespace Castor;
 
 namespace Castor3D

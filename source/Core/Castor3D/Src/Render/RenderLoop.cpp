@@ -1,21 +1,9 @@
 #include "RenderLoop.hpp"
 
 #include "Engine.hpp"
-#include "Cache/ListenerCache.hpp"
-#include "Cache/OverlayCache.hpp"
-#include "Cache/SamplerCache.hpp"
-#include "Cache/SceneCache.hpp"
-#include "Cache/TargetCache.hpp"
-#include "Cache/TechniqueCache.hpp"
-#include "Cache/WindowCache.hpp"
 
-#include "RenderPipeline.hpp"
-#include "RenderSystem.hpp"
-#include "RenderWindow.hpp"
-
-#include "Event/Frame/FrameListener.hpp"
 #include "Overlay/DebugOverlays.hpp"
-#include "Scene/Scene.hpp"
+#include "Render/RenderWindow.hpp"
 
 #include <Design/BlockGuard.hpp>
 
@@ -25,9 +13,6 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
-	static const char * C3D_UNKNOWN_EXCEPTION = "Unknown exception";
-
 	RenderLoop::RenderLoop( Engine & p_engine, uint32_t p_wantedFPS, bool p_isAsync )
 		: OwnedBy< Engine >( p_engine )
 		, m_wantedFPS{ p_wantedFPS }

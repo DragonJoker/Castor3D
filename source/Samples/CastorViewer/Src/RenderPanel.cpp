@@ -5,11 +5,8 @@
 #include "TranslateNodeEvent.hpp"
 #include "KeyboardEvent.hpp"
 
-#include <algorithm>
-
 #include <wx/display.h>
 
-#include <Engine.hpp>
 #include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/UserInput/UserInputListener.hpp>
@@ -20,14 +17,6 @@
 #include <Miscellaneous/WindowHandle.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneNode.hpp>
-
-#include <Math/Math.hpp>
-#include <Miscellaneous/Utils.hpp>
-
-#define ID_NEW_WINDOW 10000
 
 using namespace Castor3D;
 using namespace Castor;
@@ -202,6 +191,7 @@ namespace CastorViewer
 
 			if ( l_scene )
 			{
+				m_nodeState = std::make_unique< NodeState >( l_scene->GetListener() );
 				auto l_camera = p_window->GetCamera();
 
 				if ( l_camera )
@@ -219,9 +209,8 @@ namespace CastorViewer
 
 					if ( l_cameraNode )
 					{
-						m_ptOriginalPosition = l_cameraNode->GetPosition();
-						m_qOriginalOrientation = l_cameraNode->GetOrientation();
 						m_currentNode = l_cameraNode;
+						m_nodeState->SetNode( l_cameraNode );
 					}
 
 					m_renderWindow = p_window;
@@ -254,16 +243,16 @@ namespace CastorViewer
 		m_oldY = 0.0_r;
 	}
 
-	void RenderPanel::DoStartTimer( int p_iId )
+	void RenderPanel::DoStartTimer( int p_id )
 	{
-		m_pTimer[p_iId]->Start( 10 );
+		m_pTimer[p_id]->Start( 10 );
 	}
 
-	void RenderPanel::DoStopTimer( int p_iId )
+	void RenderPanel::DoStopTimer( int p_id )
 	{
-		if ( p_iId != eTIMER_ID_COUNT )
+		if ( p_id != eTIMER_ID_COUNT )
 		{
-			m_pTimer[p_iId]->Stop();
+			m_pTimer[p_id]->Stop();
 		}
 		else
 		{
@@ -274,22 +263,10 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::DoResetCamera()
+	void RenderPanel::DoResetNode()
 	{
 		DoResetTimers();
-		auto l_camera = m_camera.lock();
-
-		if ( l_camera )
-		{
-			m_currentNode = l_camera->GetParent();
-			l_camera->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_camera]()
-			{
-				auto l_cameraNode = l_camera->GetParent();
-				l_cameraNode->SetOrientation( m_qOriginalOrientation );
-				l_cameraNode->SetPosition( m_ptOriginalPosition );
-			} ) );
-			m_camSpeed = DEF_CAM_SPEED;
-		}
+		m_nodeState->Reset( DEF_CAM_SPEED );
 	}
 
 	void RenderPanel::DoTurnCameraHoriz()
@@ -445,6 +422,7 @@ namespace CastorViewer
 				m_currentNode = m_camera.lock()->GetParent();
 			}
 
+			m_nodeState->SetNode( m_currentNode );
 			m_selectedSubmesh = p_submesh;
 			m_selectedGeometry = p_geometry;
 		}
@@ -457,6 +435,7 @@ namespace CastorViewer
 		EVT_TIMER( eTIMER_ID_RIGHT, RenderPanel::OnTimerRgt )
 		EVT_TIMER( eTIMER_ID_UP, RenderPanel::OnTimerUp )
 		EVT_TIMER( eTIMER_ID_DOWN, RenderPanel::OnTimerDwn )
+		EVT_TIMER( eTIMER_ID_MOUSE, RenderPanel::OnTimerMouse )
 		EVT_SIZE( RenderPanel::OnSize )
 		EVT_MOVE( RenderPanel::OnMove )
 		EVT_PAINT( RenderPanel::OnPaint )
@@ -513,6 +492,12 @@ namespace CastorViewer
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
 		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_camSpeed, 0.0_r ) );
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnTimerMouse( wxTimerEvent & p_event )
+	{
+		m_nodeState->Update();
 		p_event.Skip();
 	}
 
@@ -633,6 +618,7 @@ namespace CastorViewer
 
 			case 'L':
 				m_currentNode = m_lightsNode;
+				m_nodeState->SetNode( m_currentNode );
 				break;
 			}
 		}
@@ -649,7 +635,7 @@ namespace CastorViewer
 			switch ( p_event.GetKeyCode() )
 			{
 			case 'R':
-				DoResetCamera();
+				DoResetNode();
 				break;
 
 			case 'T':
@@ -702,6 +688,7 @@ namespace CastorViewer
 
 			case 'L':
 				m_currentNode = m_camera.lock()->GetParent();
+				m_nodeState->SetNode( m_currentNode );
 				break;
 			}
 		}
@@ -785,7 +772,7 @@ namespace CastorViewer
 			}
 			else
 			{
-				SetCursor( *m_pCursorNone );
+				DoStartTimer( eTIMER_ID_MOUSE );
 			}
 		}
 
@@ -804,7 +791,7 @@ namespace CastorViewer
 
 		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( MouseButton::eLeft ) )
 		{
-			SetCursor( *m_pCursorArrow );
+			DoStopTimer( eTIMER_ID_MOUSE );
 		}
 
 		p_event.Skip();
@@ -860,8 +847,9 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( MouseButton::eMiddle ) )
+		if ( l_inputListener  )
 		{
+			l_inputListener->FireMouseButtonReleased( MouseButton::eMiddle );
 		}
 
 		p_event.Skip();
@@ -877,9 +865,9 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( MouseButton::eRight ) )
+		if ( l_inputListener  )
 		{
-			SetCursor( *m_pCursorNone );
+			l_inputListener->FireMouseButtonPushed( MouseButton::eRight );
 		}
 
 		p_event.Skip();
@@ -895,9 +883,9 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( MouseButton::eRight ) )
+		if ( l_inputListener  )
 		{
-			SetCursor( *m_pCursorArrow );
+			l_inputListener->FireMouseButtonReleased( MouseButton::eRight );
 		}
 
 		p_event.Skip();
@@ -910,54 +898,33 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( l_inputListener && l_inputListener->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
+		if ( !l_inputListener || !l_inputListener->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
 		{
-			p_event.Skip();
-		}
-		else
-		{
-			auto l_window = m_renderWindow.lock();
+			real l_deltaX = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
+			real l_deltaY = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
 
-			if ( l_window )
+			if ( p_event.ControlDown() )
 			{
-				real l_deltaX = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
-				real l_deltaY = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
-
-				if ( p_event.ControlDown() )
-				{
-					l_deltaX = 0;
-				}
-				else if ( p_event.ShiftDown() )
-				{
-					l_deltaY = 0;
-				}
-
-				if ( m_mouseLeftDown )
-				{
-					m_listener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, -l_deltaY, l_deltaX, 0.0_r ) );
-				}
-				else if ( m_mouseRightDown )
-				{
-					m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, l_deltaX, l_deltaY, 0.0_r ) );
-				}
-
-				if ( m_mouseLeftDown || m_mouseRightDown )
-				{
-					WarpPointer( DoTransformX( m_oldX ), DoTransformY( m_oldY ) );
-					m_x = m_oldX;
-					m_y = m_oldY;
-				}
-
-				p_event.Skip( false );
+				l_deltaX = 0;
 			}
-			else
+			else if ( p_event.ShiftDown() )
 			{
-				p_event.Skip();
+				l_deltaY = 0;
+			}
+
+			if ( m_mouseLeftDown )
+			{
+				m_nodeState->SetAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
+			}
+			else if ( m_mouseRightDown )
+			{
+				m_nodeState->SetScalarVelocity( Point3r{ l_deltaX, l_deltaY, 0.0_r } );
 			}
 		}
 
 		m_oldX = m_x;
 		m_oldY = m_y;
+		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseWheel( wxMouseEvent & p_event )

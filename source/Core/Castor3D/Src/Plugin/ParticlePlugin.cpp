@@ -1,11 +1,5 @@
 #include "ParticlePlugin.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
-#	include <Windows.h>
-#else
-#	include <dlfcn.h>
-#endif
-
 #include <Miscellaneous/DynamicLibrary.hpp>
 
 using namespace Castor;

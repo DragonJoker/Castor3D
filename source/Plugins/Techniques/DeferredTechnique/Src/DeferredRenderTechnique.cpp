@@ -2,57 +2,23 @@
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
-#include "PointLightPass.hpp"
-#include "SpotLightPass.hpp"
 
 #include <OpaquePass.hpp>
-
-#include <Engine.hpp>
-#include <Cache/CameraCache.hpp>
-#include <Cache/LightCache.hpp>
-#include <Cache/SceneCache.hpp>
-#include <Cache/SceneNodeCache.hpp>
-#include <Cache/ShaderCache.hpp>
-#include <Cache/TargetCache.hpp>
 
 #include <FrameBuffer/ColourRenderBuffer.hpp>
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
-#include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Mesh/Buffer/BufferElementDeclaration.hpp>
 #include <Mesh/Buffer/BufferElementGroup.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/IndexBuffer.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
-#include <Render/Context.hpp>
 #include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
-#include <Render/Viewport.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Light/Light.hpp>
 #include <Scene/Light/DirectionalLight.hpp>
 #include <Scene/Light/PointLight.hpp>
 #include <Scene/Light/SpotLight.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/DepthStencilState.hpp>
-#include <State/MultisampleState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Technique/ForwardRenderTechniquePass.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
-
-#include <Log/Logger.hpp>
-
-#include <GlslSource.hpp>
-#include <GlslLight.hpp>
-#include <GlslShadow.hpp>
 
 #define DEBUG_DEFERRED_BUFFERS 0
 

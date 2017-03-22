@@ -4,8 +4,6 @@
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
-
-#include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 
 #include "Texture/TextureLayout.hpp"

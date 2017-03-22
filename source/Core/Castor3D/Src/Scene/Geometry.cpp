@@ -1,21 +1,13 @@
 #include "Geometry.hpp"
 
 #include "Engine.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/MeshCache.hpp"
-#include "Cache/ShaderCache.hpp"
 
-#include "Scene.hpp"
-#include "SceneNode.hpp"
+#include "Scene/Scene.hpp"
 
 #include "Animation/AnimatedObject.hpp"
 #include "Event/Frame/FrameListener.hpp"
 #include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Mesh/Submesh.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

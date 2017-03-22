@@ -23,6 +23,8 @@ SOFTWARE.
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
+#include "NodeState.hpp"
+
 #include <Engine.hpp>
 
 #include <Math/Point.hpp>
@@ -42,16 +44,15 @@ namespace CastorViewer
 		eTIMER_ID_RIGHT,
 		eTIMER_ID_UP,
 		eTIMER_ID_DOWN,
+		eTIMER_ID_MOUSE,
 		eTIMER_ID_COUNT,
 	}	eTIMER_ID;
 
 	class MouseNodeEvent;
-	class RotateNodeEvent;
 	class TranslateNodeEvent;
 	class KeyboardEvent;
 
 	DECLARE_SMART_PTR( MouseNodeEvent );
-	DECLARE_SMART_PTR( RotateNodeEvent );
 	DECLARE_SMART_PTR( TranslateNodeEvent );
 	DECLARE_SMART_PTR( KeyboardEvent );
 
@@ -77,7 +78,7 @@ namespace CastorViewer
 		void DoResetTimers();
 		void DoStartTimer( int p_iId );
 		void DoStopTimer( int p_iId );
-		void DoResetCamera();
+		void DoResetNode();
 		void DoTurnCameraHoriz();
 		void DoTurnCameraVertic();
 		void DoChangeCamera();
@@ -95,6 +96,7 @@ namespace CastorViewer
 		void OnTimerRgt( wxTimerEvent & p_event );
 		void OnTimerUp( wxTimerEvent & p_event );
 		void OnTimerDwn( wxTimerEvent &	p_event );
+		void OnTimerMouse( wxTimerEvent &	p_event );
 		void OnSize( wxSizeEvent & p_event );
 		void OnMove( wxMoveEvent & p_event );
 		void OnPaint( wxPaintEvent & p_event );
@@ -122,8 +124,6 @@ namespace CastorViewer
 		Castor::real m_y{ 0.0_r };
 		Castor::real m_oldX{ 0.0_r };
 		Castor::real m_oldY{ 0.0_r };
-		Castor::Point3r m_ptOriginalPosition;
-		Castor::Quaternion m_qOriginalOrientation;
 		bool m_altDown{ false };
 		bool m_mouseLeftDown{ false };
 		bool m_mouseRightDown{ false };
@@ -145,6 +145,8 @@ namespace CastorViewer
 		Castor3D::SceneNodeSPtr m_currentNode;
 		KeyboardEventUPtr m_keyboardEvent;
 		Castor::real m_camSpeed;
+
+		std::unique_ptr< NodeState > m_nodeState;
 	};
 }
 

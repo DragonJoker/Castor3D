@@ -203,7 +203,7 @@ namespace Castor
 	 *\return		L'intervalle créé.
 	 */
 	template< typename T >
-	inline Range< T > makeRange( T const & p_min, T const & p_max )noexcept
+	inline Range< T > make_range( T const & p_min, T const & p_max )noexcept
 	{
 		return Range< T >( p_min, p_max );
 	}

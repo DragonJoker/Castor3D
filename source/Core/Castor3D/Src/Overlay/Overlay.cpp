@@ -1,14 +1,10 @@
 #include "Overlay.hpp"
 
 #include "Engine.hpp"
-#include "Cache/OverlayCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
-#include "OverlayFactory.hpp"
 #include "PanelOverlay.hpp"
 #include "TextOverlay.hpp"
-
-#include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
 

@@ -2,7 +2,6 @@
 
 #include "SkeletonAnimation.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
-#include "Mesh/Skeleton/Bone.hpp"
 
 using namespace Castor;
 

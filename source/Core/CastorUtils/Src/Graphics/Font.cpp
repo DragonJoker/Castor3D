@@ -6,9 +6,6 @@
 FT_BEGIN_HEADER
 #	include FT_FREETYPE_H
 #	include FT_GLYPH_H
-#	include FT_OUTLINE_H
-#	include FT_TRIGONOMETRY_H
-#	include FT_TYPES_H
 FT_END_HEADER
 
 namespace Castor

@@ -1,6 +1,5 @@
 #include "BlockTimer.hpp"
 #include "Log/Logger.hpp"
-#include "StringUtils.hpp"
 
 namespace Castor
 {
@@ -13,11 +12,9 @@ namespace Castor
 
 	BlockTimer::~BlockTimer()
 	{
-#if CASTOR_USE_TRACK
 		Logger::LogInfo( StringStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction
 			<< cuT( " in " ) << m_strFile
 			<< cuT( ", line " ) << m_uiLine
-			<< cuT( " - time: " ) << std::chrono::duration_cast< std::chrono::milliseconds >( m_timer.Time() ) << cuT( " ms" ) );
-#endif
+			<< cuT( " - time: " ) << std::chrono::duration_cast< std::chrono::milliseconds >( m_timer.Time() ).count() << cuT( " ms" ) );
 	}
 }

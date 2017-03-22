@@ -1,15 +1,10 @@
 #include "RenderColourLayerToTexture.hpp"
 
 #include "Engine.hpp"
-#include "Cache/ShaderCache.hpp"
-
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
 
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
-#include "Scene/Skybox.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"

@@ -1,13 +1,8 @@
 #include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
-#include "Cache/OverlayCache.hpp"
-
 #include "TextOverlay.hpp"
 
-#include "Render/RenderSystem.hpp"
-
-#include <algorithm>
 #include <iomanip>
 
 namespace std

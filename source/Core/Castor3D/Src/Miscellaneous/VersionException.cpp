@@ -1,7 +1,4 @@
 #include "VersionException.hpp"
-#include "Version.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

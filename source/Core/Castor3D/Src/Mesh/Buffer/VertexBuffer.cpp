@@ -1,7 +1,6 @@
 #include "VertexBuffer.hpp"
 
 #include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
 
 using namespace Castor;
 

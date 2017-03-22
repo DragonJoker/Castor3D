@@ -1,7 +1,5 @@
 #include "Image.hpp"
-#include "Data/Path.hpp"
 #include "Rectangle.hpp"
-#include "Log/Logger.hpp"
 
 namespace Castor
 {

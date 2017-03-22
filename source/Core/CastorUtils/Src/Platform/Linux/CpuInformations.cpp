@@ -6,7 +6,6 @@
 
 #include "Exception/Assertion.hpp"
 
-#include <X11/Xlib.h>
 #include <cpuid.h>
 
 namespace Castor

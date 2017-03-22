@@ -4,13 +4,9 @@
 #include "AnimatedSkeleton.hpp"
 #include "AnimatedMesh.hpp"
 
-#include "Animation/Animation.hpp"
 #include "Scene/Geometry.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
-#include "Scene/Animation/AnimationInstance.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

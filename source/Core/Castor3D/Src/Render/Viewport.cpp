@@ -1,10 +1,6 @@
 #include "Viewport.hpp"
 
 #include "Engine.hpp"
-#include "RenderPipeline.hpp"
-#include "RenderSystem.hpp"
-
-#include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
 

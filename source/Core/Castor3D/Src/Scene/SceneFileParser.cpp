@@ -2,17 +2,8 @@
 
 #include "Engine.hpp"
 
-#include "Material/Pass.hpp"
-#include "Overlay/Overlay.hpp"
-#include "Plugin/GenericPlugin.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/Viewport.hpp"
-#include "Scene/Fog.hpp"
-#include "Scene/MovableObject.hpp"
 #include "Scene/SceneFileParser_Parsers.hpp"
-#include "Scene/SceneNode.hpp"
 
-#include <Log/Logger.hpp>
 #include <Data/ZipArchive.hpp>
 
 using namespace Castor3D;

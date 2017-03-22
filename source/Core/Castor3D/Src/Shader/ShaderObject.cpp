@@ -1,6 +1,5 @@
 #include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
-#include "Uniform.hpp"
 #include "UniformBuffer.hpp"
 
 #include <Stream/StreamPrefixManipulators.hpp>

@@ -1,15 +1,11 @@
 #include "MaterialCache.hpp"
 
 #include "Engine.hpp"
-#include "SamplerCache.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
-#include "Event/Frame/CleanupEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Scene/SceneFileParser.hpp"
 #include "Texture/Sampler.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace Castor;
 

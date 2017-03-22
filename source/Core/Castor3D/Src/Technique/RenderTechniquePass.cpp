@@ -1,20 +1,12 @@
 #include "RenderTechniquePass.hpp"
 
-#include "Event/Frame/FunctorEvent.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Shader/Uniform.hpp"
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslShadow.hpp>
 
 using namespace Castor;
 
@@ -390,7 +382,7 @@ namespace Castor3D
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque )
 			{
-				l_fAlpha = texture( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
+				l_fAlpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
 
 			if ( m_opaque )
@@ -403,10 +395,10 @@ namespace Castor3D
 			}
 			else
 			{
-				pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren(
-					l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() )
-						+ l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() )
-						+ l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() )
+				pxl_v4FragColor = vec4( l_writer.Paren(
+					l_v3Ambient * c3d_v4MatAmbient.xyz()
+						+ l_v3Diffuse * c3d_v4MatDiffuse.xyz()
+						+ l_v3Specular * c3d_v4MatSpecular.xyz()
 						+ l_v3Emissive )
 					, l_fAlpha );
 			}

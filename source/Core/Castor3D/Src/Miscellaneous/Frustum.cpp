@@ -4,7 +4,6 @@
 
 #include <Graphics/CubeBox.hpp>
 #include <Graphics/SphereBox.hpp>
-#include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
 

@@ -1,9 +1,6 @@
 #include "TextureAttachment.hpp"
 
-#include "FrameBuffer.hpp"
-
 #include "Texture/TextureLayout.hpp"
-#include "Texture/TextureImage.hpp"
 
 using namespace Castor;
 

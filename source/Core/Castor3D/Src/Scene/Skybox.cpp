@@ -1,26 +1,15 @@
 #include "Skybox.hpp"
 
 #include "Engine.hpp"
-#include "Cache/ShaderCache.hpp"
-#include "Cache/SamplerCache.hpp"
 
-#include "Mesh/Buffer/BufferElementDeclaration.hpp"
 #include "Mesh/Buffer/BufferElementGroup.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/SceneNode.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBufferBinding.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Texture/TextureImage.hpp"
 
 #include <GlslSource.hpp>
 

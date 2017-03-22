@@ -2,19 +2,11 @@
 
 #include "Engine.hpp"
 
-#include "DirectionalLight.hpp"
-#include "LightFactory.hpp"
-#include "PointLight.hpp"
-#include "SpotLight.hpp"
-
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/Viewport.hpp"
+#include "Scene/Light/DirectionalLight.hpp"
+#include "Scene/Light/LightFactory.hpp"
+#include "Scene/Light/PointLight.hpp"
+#include "Scene/Light/SpotLight.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/SceneNode.hpp"
-
-#include <Design/Factory.hpp>
 
 using namespace Castor;
 

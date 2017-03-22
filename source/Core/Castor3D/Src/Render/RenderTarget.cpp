@@ -1,35 +1,15 @@
 #include "RenderTarget.hpp"
 
 #include "Engine.hpp"
-#include "Cache/CameraCache.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/OverlayCache.hpp"
-#include "Cache/SamplerCache.hpp"
-#include "Cache/SceneCache.hpp"
-#include "Cache/SceneNodeCache.hpp"
-#include "Cache/TargetCache.hpp"
-#include "Cache/TechniqueCache.hpp"
-
-#include "Context.hpp"
-#include "RenderPipeline.hpp"
-#include "RenderSystem.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
-#include "FrameBuffer/ColourRenderBuffer.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
-#include "Miscellaneous/Parameter.hpp"
-#include "PostEffect/PostEffectFactory.hpp"
-#include "Render/RenderTarget.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Log/Logger.hpp>
 #include <Graphics/Image.hpp>
 
 using namespace Castor;

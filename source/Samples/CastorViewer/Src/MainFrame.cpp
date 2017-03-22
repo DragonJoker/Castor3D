@@ -5,32 +5,15 @@
 #include "PropertiesHolder.hpp"
 
 #include <wx/display.h>
-#include <wx/aui/auibar.h>
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 
 #include <Graphics/PixelBufferBase.hpp>
 
-#include <Engine.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Material.hpp>
-#include <Material/Pass.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/IndexBuffer.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
-#include <Miscellaneous/VersionException.hpp>
-#include <Plugin/PluginException.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneFileParser.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureUnit.hpp>
 
 #include <ImagesLoader.hpp>
 #include <MaterialsList.hpp>
@@ -62,8 +45,10 @@ namespace CastorViewer
 #if defined( NDEBUG )
 		static const int CASTOR_WANTED_FPS = 1000;
 #else
-		static const int CASTOR_WANTED_FPS = 30;
+		static const int CASTOR_WANTED_FPS = 60;
 #endif
+
+		static const int CASTOR_RECORD_FPS = 30;
 		static const wxString OBJ_WILDCARD = wxT( " (*.obj)|*.obj|" );
 
 		typedef enum eID
@@ -135,7 +120,7 @@ namespace CastorViewer
 		, m_toolBar( nullptr )
 		, m_splashScreen( p_splashScreen )
 		, m_recorder()
-		, m_recordFps( CASTOR_WANTED_FPS / 3 )
+		, m_recordFps( CASTOR_RECORD_FPS )
 	{
 	}
 
@@ -609,17 +594,20 @@ namespace CastorViewer
 		m_toolBar->EnableTool( eID_TOOL_STOP, false );
 		m_toolBar->EnableTool( eID_TOOL_RECORD, true );
 
-		if ( !CASTOR3D_THREADED )
+		if ( m_timer )
 		{
-			wxGetApp().GetCastor()->GetRenderLoop().Resume();
-			m_timer->Stop();
-			m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps() );
-		}
-		else if ( m_timer )
-		{
-			m_timer->Stop();
-			delete m_timer;
-			m_timer = nullptr;
+			if ( CASTOR3D_THREADED )
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().Resume();
+				m_timer->Stop();
+				delete m_timer;
+				m_timer = nullptr;
+			}
+			else
+			{
+				m_timer->Stop();
+				m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps() );
+			}
 		}
 
 #endif
@@ -653,19 +641,19 @@ namespace CastorViewer
 
 	void MainFrame::OnRenderTimer( wxTimerEvent & p_event )
 	{
-		if ( wxGetApp().GetCastor() )
-		{
-			auto & l_castor = *wxGetApp().GetCastor();
+		auto l_castor = wxGetApp().GetCastor();
 
-			if ( !l_castor.IsCleaned() )
+		if ( l_castor )
+		{
+			if ( !l_castor->IsCleaned() )
 			{
 				if ( m_pRenderPanel && m_recorder.IsRecording() && m_recorder.UpdateTime() )
 				{
 					DoRecordFrame();
 				}
-				else if ( !l_castor.IsThreaded() )
+				else if ( !l_castor->IsThreaded() )
 				{
-					wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+					l_castor->GetRenderLoop().RenderSyncFrame();
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 #include "Miscellaneous/Utils.hpp"
-#include "Graphics/Size.hpp"
+
+#include <thread>
 
 namespace Castor
 {

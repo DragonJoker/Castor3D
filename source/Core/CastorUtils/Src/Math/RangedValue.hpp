@@ -201,7 +201,7 @@ namespace Castor
 		, T const & p_min
 		, T const & p_max )noexcept
 	{
-		return RangedValue< T >{ p_value, makeRange( p_min, p_max ) };
+		return RangedValue< T >{ p_value, make_range( p_min, p_max ) };
 	}
 	/**
 	 *\~english

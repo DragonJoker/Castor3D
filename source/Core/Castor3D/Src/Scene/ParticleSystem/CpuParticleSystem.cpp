@@ -2,8 +2,6 @@
 
 #include "ParticleSystem.hpp"
 
-#include "Mesh/Buffer/BufferElementGroup.hpp"
-
 using namespace Castor;
 
 namespace Castor3D

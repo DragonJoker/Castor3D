@@ -8,21 +8,15 @@
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
 #include "Technique/RenderTechniquePass.hpp"
-#include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
-#include <GlslShadow.hpp>
 
 using namespace Castor;
 

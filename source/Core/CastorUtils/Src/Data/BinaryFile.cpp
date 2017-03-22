@@ -1,6 +1,5 @@
 #include "BinaryFile.hpp"
 
-#include "Design/FlagCombination.hpp"
 #include "Miscellaneous/Utils.hpp"
 
 namespace Castor

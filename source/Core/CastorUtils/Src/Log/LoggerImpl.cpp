@@ -2,7 +2,6 @@
 
 #include "LoggerConsole.hpp"
 #include "Logger.hpp"
-#include "Miscellaneous/StringUtils.hpp"
 #include "Data/TextFile.hpp"
 #include "Miscellaneous/Utils.hpp"
 

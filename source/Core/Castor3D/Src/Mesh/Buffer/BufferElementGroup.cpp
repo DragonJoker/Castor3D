@@ -1,7 +1,5 @@
 ﻿#include "BufferElementGroup.hpp"
 
-#include <cstring>
-
 using namespace Castor;
 
 namespace Castor3D
