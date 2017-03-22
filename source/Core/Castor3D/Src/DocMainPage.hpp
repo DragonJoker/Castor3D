@@ -4,6 +4,59 @@
  *\section intro_sec Change log
  *This page is here to inform about the changes since the earliest versions of the engine.
  *
+ *\section version_0_9_0 Version 0.9.0
+ *\subsection feat_0_9_0 Features
+ *\subsubsection feat_0_9_0_cu CastorUtils
+ *<ul>
+ *<li>Dropped libzip, and added minizip to the source tree.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_c3d Castor3D
+ *<ul>
+ *<li>Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings.\n
+ * It has been done to prepare the arrival of Vulkan, in which the pipeline can't be modified once it has been created, and that is now the case in Castor3D too.</li>
+ *<li>The rendering has been splitted in RenderPasses, that each have one or more RenderQueues, that are updated asynchronously on CPU.\n
+ * This allows the GPU loop to be cleaned of most CPU computations.</li>
+ *<li>Skybox have been added.</li>
+ *<li>Binary export has been completely reviewed, it now uses a chunk data format (like LWO or 3DS).\n
+ * It is used for meshes, and skeletons.</li>
+ *<li>Plug-ins interface's consistency has been improved.</li>
+ *<li>Fog basic implementations (linear, exponential, and squared exponential) have been added.</li>
+ *<li>Morphing (per-vertex) animations are now supported by Castor3D.</li>
+ *<li>Frustum culling has been implemented.</li>
+ *<li>Colour picking has been implemented.</li>
+ *<li>Shadow mapping is implemented, lights can produce shadows, and objects can cast shadows.</li>
+ *<li>Particle system has been implemented, giving to the user the implementation choice (CPU through class override, GPU through Transform Feedback or Compute shaders).</li>
+ *<li>Fixed the lighting in GLSL, to make it behave properly without dirty hacks.</li>
+ *<li>Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers.</li>
+ *<li>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureImage(s), and the TextureStorage per image.\n
+ * It has allowed the creation of cube textures.</li>
+ *<li>Textures transfer to RAM has been fixed.</li>
+ *<li>Billboard rendering no more uses a geometry shader, it now relies on hardware instantiation of a quad, and the positions are given as side attributes.</li>
+ *<li>UniformBuffer (formerly FrameVariableBuffer) no longer depends on ShaderProgram.</li>
+ *<li>A new class, UniformBufferBinding has been created which depends on both UniformBuffer and ShaderProgram.\n
+ * Instances of this class are held by RenderPipeline.</li>
+ *<li>FrameVariable class has been split in two classes: Uniform (for uniform variables contained in a UniformBuffer) and PushUniform (for uniform variables out of a UniformBuffer).</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_gl GlRenderSystem
+ *<ul>
+ *<li>Updated to support the features provided by Castor3D.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_tec Techniques
+ *<ul>
+ *<li>DeferredRenderTechnique and DeferredMsaaRenderTechnique are now real deferred rendering techniques, with a light pass per light, taking care of it's impact area.</li>
+ *<li>DeferredRenderTechnique is now the default render technique, when none is specified.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_pos PostEffects
+ *<ul>
+ *<li>Added GrayScale post effect.</li>
+ *<li>Added FXAA post effect.</li>
+ *</ul>
+ *
+ *
  *\section version_0_8_0 Version 0.8.0
  *\subsection feat_0_8_0 Features
  *\subsubsection feat_0_8_0_gen General
@@ -412,6 +465,59 @@
  *\mainpage Moteur Castor3D
  *\section intro_sec Suivi de versions
  *Cette page sert à informer des évolutions du moteur depuis les premières versions.
+ *
+ *\section version_0_9_0 Version 0.9.0
+ *\subsection feat_0_9_0 Fonctionnalités
+ *\subsubsection feat_0_9_0_cu CastorUtils
+ *<ul>
+ *<li>Dropped libzip, and added minizip to the source tree.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_c3d Castor3D
+ *<ul>
+ *<li>Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings.\n
+ * It has been done to prepare the arrival of Vulkan, in which the pipeline can't be modified once it has been created, and that is now the case in Castor3D too.</li>
+ *<li>The rendering has been splitted in RenderPasses, that each have one or more RenderQueues, that are updated asynchronously on CPU.\n
+ * This allows the GPU loop to be cleaned of most CPU computations.</li>
+ *<li>Skybox have been added.</li>
+ *<li>Binary export has been completely reviewed, it now uses a chunk data format (like LWO or 3DS).\n
+ * It is used for meshes, and skeletons.</li>
+ *<li>Plug-ins interface's consistency has been improved.</li>
+ *<li>Fog basic implementations (linear, exponential, and squared exponential) have been added.</li>
+ *<li>Morphing (per-vertex) animations are now supported by Castor3D.</li>
+ *<li>Frustum culling has been implemented.</li>
+ *<li>Colour picking has been implemented.</li>
+ *<li>Shadow mapping is implemented, lights can produce shadows, and objects can cast shadows.</li>
+ *<li>Particle system has been implemented, giving to the user the implementation choice (CPU through class override, GPU through Transform Feedback or Compute shaders).</li>
+ *<li>Fixed the lighting in GLSL, to make it behave properly without dirty hacks.</li>
+ *<li>Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers.</li>
+ *<li>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureImage(s), and the TextureStorage per image.\n
+ * It has allowed the creation of cube textures.</li>
+ *<li>Textures transfer to RAM has been fixed.</li>
+ *<li>Billboard rendering no more uses a geometry shader, it now relies on hardware instantiation of a quad, and the positions are given as side attributes.</li>
+ *<li>UniformBuffer (formerly FrameVariableBuffer) no longer depends on ShaderProgram.</li>
+ *<li>A new class, UniformBufferBinding has been created which depends on both UniformBuffer and ShaderProgram.\n
+ * Instances of this class are held by RenderPipeline.</li>
+ *<li>FrameVariable class has been split in two classes: Uniform (for uniform variables contained in a UniformBuffer) and PushUniform (for uniform variables out of a UniformBuffer).</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_gl GlRenderSystem
+ *<ul>
+ *<li>Updated to support the features provided by Castor3D.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_tec Techniques
+ *<ul>
+ *<li>DeferredRenderTechnique and DeferredMsaaRenderTechnique are now real deferred rendering techniques, with a light pass per light, taking care of it's impact area.</li>
+ *<li>DeferredRenderTechnique is now the default render technique, when none is specified.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_pos PostEffects
+ *<ul>
+ *<li>Added GrayScale post effect.</li>
+ *<li>Added FXAA post effect.</li>
+ *</ul>
+ *
  *
  *\section version_0_8_0 Version 0.8.0
  *\subsection feat_0_8_0 Modifications
