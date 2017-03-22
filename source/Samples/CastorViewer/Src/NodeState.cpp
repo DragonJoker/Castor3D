@@ -36,17 +36,13 @@ namespace CastorViewer
 		}
 	}
 
-	NodeState::NodeState( FrameListener & p_listener )
+	NodeState::NodeState( FrameListener & p_listener
+		, Castor3D::SceneNodeSPtr p_node )
 		: m_listener{ p_listener }
+		, m_node{ p_node }
+		, m_originalOrientation{ p_node->GetOrientation() }
+		, m_originalPosition{ p_node->GetPosition() }
 	{
-	}
-
-	void NodeState::SetNode( Castor3D::SceneNodeSPtr p_node )
-	{
-		m_node = p_node;
-		m_originalOrientation = p_node->GetOrientation();
-		m_originalPosition = p_node->GetPosition();
-		DoReset();
 	}
 
 	void NodeState::Reset( float p_speed )
@@ -58,7 +54,13 @@ namespace CastorViewer
 		m_scalarVelocityX.update_range( make_range( -p_speed, p_speed ) );
 		m_scalarVelocityY.update_range( make_range( -p_speed, p_speed ) );
 		m_scalarVelocityZ.update_range( make_range( -p_speed, p_speed ) );
-		DoReset();
+		m_angularVelocityX = 0.0_degrees;
+		m_angularVelocityY = 0.0_degrees;
+		m_angles = Angles{ { 0.0_radians, 0.0_radians } };
+		m_scalarVelocityX = 0.0f;
+		m_scalarVelocityY = 0.0f;
+		m_scalarVelocityZ = 0.0f;
+		m_translate = Point3r{};
 
 		m_listener.PostEvent( MakeFunctorEvent( EventType::ePostRender
 			, [this]()
@@ -105,16 +107,5 @@ namespace CastorViewer
 		m_scalarVelocityX = p_value[0];
 		m_scalarVelocityY = p_value[1];
 		m_scalarVelocityZ = p_value[2];
-	}
-
-	void NodeState::DoReset()
-	{
-		m_angularVelocityX = 0.0_degrees;
-		m_angularVelocityY = 0.0_degrees;
-		m_angles = Angles{ { 0.0_radians, 0.0_radians } };
-		m_scalarVelocityX = 0.0f;
-		m_scalarVelocityY = 0.0f;
-		m_scalarVelocityZ = 0.0f;
-		m_translate = Point3r{};
 	}
 }

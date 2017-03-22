@@ -40,14 +40,16 @@ namespace CastorViewer
 	class NodeState
 	{
 	public:
-		NodeState( Castor3D::FrameListener & p_listener );
 		/**
 		*\brief
 		*	Définit le noeud affecté par les évènements.
+		*\param[in] p_listener
+		*	Le listener qui recevra les évènements.
 		*\param[in] p_node
 		*	Le noeud
 		*/
-		void SetNode( Castor3D::SceneNodeSPtr p_node );
+		NodeState( Castor3D::FrameListener & p_listener
+			, Castor3D::SceneNodeSPtr p_node );
 		/**
 		*\brief
 		*	Réinitialise l'état.
@@ -75,21 +77,14 @@ namespace CastorViewer
 		void SetScalarVelocity( Castor::Point3r const & p_value )noexcept;
 
 	private:
-		/**
-		*\brief
-		*	Réinitialise l'état.
-		*/
-		void DoReset();
-
-	private:
 		//! Le listener qui recevra les évènements de déplacement / rotation.
 		Castor3D::FrameListener & m_listener;
 		//! Le noeud de scène affecté par les évènements.
-		Castor3D::SceneNodeSPtr m_node;
+		Castor3D::SceneNodeSPtr const m_node;
 		//! La position originelle du noeud.
-		Castor::Point3r m_originalPosition;
+		Castor::Point3r const m_originalPosition;
 		//! L'orientation originelle du noeud.
-		Castor::Quaternion m_originalOrientation;
+		Castor::Quaternion const m_originalOrientation;
 		//! La rotation sur les axes X et Y.
 		Angles m_angles;
 		//! La vitesse de rotation sur l'axe X.

@@ -100,9 +100,15 @@ function( CoreSetup )
 		DEPENDS CastorUtils
 		INSTALL_TYPES Developer Full
 	)
-	cpack_add_component( CastorUtils_doc
-		DISPLAY_NAME "CastorUtils help"
-		DESCRIPTION "CastorUtils HTML documentation."
+	cpack_add_component( CastorUtils_French_Doc
+		DISPLAY_NAME "CastorUtils French help"
+		DESCRIPTION "CastorUtils French HTML documentation."
+		GROUP Documentation
+		INSTALL_TYPES Developer Full
+	)
+	cpack_add_component( CastorUtils_English_Doc
+		DISPLAY_NAME "CastorUtils English help"
+		DESCRIPTION "CastorUtils English HTML documentation."
 		GROUP Documentation
 		INSTALL_TYPES Developer Full
 	)
@@ -175,9 +181,15 @@ function( CoreSetup )
 			DEPENDS CastorUtils CastorUtils_dev Castor3D Castor3D_dev
 			INSTALL_TYPES Developer Full
 		)
-		cpack_add_component( Castor3D_doc
-			DISPLAY_NAME "Castor3D help"
-			DESCRIPTION "Castor3D HTML documentation."
+		cpack_add_component( Castor3D_French_Doc
+			DISPLAY_NAME "Castor3D French help"
+			DESCRIPTION "Castor3D French HTML documentation."
+			GROUP Documentation
+			INSTALL_TYPES Developer Full
+		)
+		cpack_add_component( Castor3D_English_Doc
+			DISPLAY_NAME "Castor3D English help"
+			DESCRIPTION "Castor3D English HTML documentation."
 			GROUP Documentation
 			INSTALL_TYPES Developer Full
 		)

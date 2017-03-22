@@ -52,8 +52,8 @@ function( ParticlesSetup )
 			PARENT_GROUP Plugins
 		)
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )
-			cpack_add_component( FireworksParticles
-				DISPLAY_NAME "FireworksParticles"
+			cpack_add_component( FireworksParticle
+				DISPLAY_NAME "FireworksParticle"
 				DESCRIPTION "Allows HDR Fireworks particles."
 				GROUP Particles
 				DEPENDS Castor3D

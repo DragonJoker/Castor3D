@@ -88,6 +88,7 @@ namespace CastorViewer
 		int DoTransformX( Castor::real x );
 		int DoTransformY( Castor::real y );
 		void DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry, Castor3D::SubmeshSPtr p_submesh );
+		NodeState & DoAddNodeState( Castor3D::SceneNodeSPtr p_node );
 
 		DECLARE_EVENT_TABLE()
 		void OnTimerFwd( wxTimerEvent & p_event );
@@ -146,7 +147,9 @@ namespace CastorViewer
 		KeyboardEventUPtr m_keyboardEvent;
 		Castor::real m_camSpeed;
 
-		std::unique_ptr< NodeState > m_nodeState;
+		using NodeStatePtr = std::unique_ptr< NodeState >;
+		std::map< Castor::String, NodeStatePtr > m_nodesStates;
+		NodeState * m_currentState;
 	};
 }
 

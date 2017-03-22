@@ -174,7 +174,7 @@ namespace CastorViewer
 		wxClientDC l_dc( this );
 	}
 
-	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_window )
+	void RenderPanel::SetRenderWindow( RenderWindowSPtr p_window )
 	{
 		m_renderWindow.reset();
 		Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
@@ -191,7 +191,6 @@ namespace CastorViewer
 
 			if ( l_scene )
 			{
-				m_nodeState = std::make_unique< NodeState >( l_scene->GetListener() );
 				auto l_camera = p_window->GetCamera();
 
 				if ( l_camera )
@@ -210,7 +209,7 @@ namespace CastorViewer
 					if ( l_cameraNode )
 					{
 						m_currentNode = l_cameraNode;
-						m_nodeState->SetNode( l_cameraNode );
+						m_currentState = &DoAddNodeState( m_currentNode );
 					}
 
 					m_renderWindow = p_window;
@@ -266,7 +265,7 @@ namespace CastorViewer
 	void RenderPanel::DoResetNode()
 	{
 		DoResetTimers();
-		m_nodeState->Reset( DEF_CAM_SPEED );
+		m_currentState->Reset( DEF_CAM_SPEED );
 	}
 
 	void RenderPanel::DoTurnCameraHoriz()
@@ -422,10 +421,23 @@ namespace CastorViewer
 				m_currentNode = m_camera.lock()->GetParent();
 			}
 
-			m_nodeState->SetNode( m_currentNode );
+			m_currentState = &DoAddNodeState( m_currentNode );
 			m_selectedSubmesh = p_submesh;
 			m_selectedGeometry = p_geometry;
 		}
+	}
+
+	NodeState & RenderPanel::DoAddNodeState( SceneNodeSPtr p_node )
+	{
+		auto l_it = m_nodesStates.find( p_node->GetName() );
+
+		if ( l_it == m_nodesStates.end() )
+		{
+			l_it = m_nodesStates.emplace( p_node->GetName()
+				, std::make_unique< NodeState >( *m_listener, p_node ) ).first;
+		}
+
+		return *l_it->second;
 	}
 
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
@@ -497,7 +509,7 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerMouse( wxTimerEvent & p_event )
 	{
-		m_nodeState->Update();
+		m_currentState->Update();
 		p_event.Skip();
 	}
 
@@ -618,7 +630,7 @@ namespace CastorViewer
 
 			case 'L':
 				m_currentNode = m_lightsNode;
-				m_nodeState->SetNode( m_currentNode );
+				m_currentState = &DoAddNodeState( m_currentNode );
 				break;
 			}
 		}
@@ -688,7 +700,7 @@ namespace CastorViewer
 
 			case 'L':
 				m_currentNode = m_camera.lock()->GetParent();
-				m_nodeState->SetNode( m_currentNode );
+				m_currentState = &DoAddNodeState( m_currentNode );
 				break;
 			}
 		}
@@ -914,11 +926,11 @@ namespace CastorViewer
 
 			if ( m_mouseLeftDown )
 			{
-				m_nodeState->SetAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
+				m_currentState->SetAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
 			}
 			else if ( m_mouseRightDown )
 			{
-				m_nodeState->SetScalarVelocity( Point3r{ l_deltaX, l_deltaY, 0.0_r } );
+				m_currentState->SetScalarVelocity( Point3r{ l_deltaX, l_deltaY, 0.0_r } );
 			}
 		}
 

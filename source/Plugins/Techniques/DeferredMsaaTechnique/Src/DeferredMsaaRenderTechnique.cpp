@@ -153,7 +153,6 @@ namespace deferred_msaa
 		GetEngine()->SetPerObjectLighting( false );
 		m_renderTarget.GetCamera()->Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_msaaDepthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
@@ -177,6 +176,10 @@ namespace deferred_msaa
 		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( DsTexture::eEmissive )]->GetTexture() );
 
 #else
+
+		m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer
+			, Rectangle{ Position{}, GetSize() }
+			, BufferComponent::eDepth | BufferComponent::eStencil );
 
 		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msaaDepthAttach->Attach( AttachmentPoint::eDepthStencil );
@@ -353,6 +356,7 @@ namespace deferred_msaa
 
 			m_lightPassDepthBuffer->Initialise( m_size );
 			m_geometryPassFrameBuffer->Bind();
+			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepthStencil, m_geometryPassDepthAttach );
 
 			for ( int i = 0; i < size_t( deferred_common::DsTexture::eCount ) && l_return; i++ )
 			{
