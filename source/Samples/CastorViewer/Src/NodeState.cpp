@@ -74,7 +74,6 @@ namespace CastorViewer
 	{
 		m_angles[0] += m_angularVelocityX.value();
 		m_angles[1] += m_angularVelocityY.value();
-		Logger::LogInfo( StringStream{} << "NodeState::Update - " << m_angles[0].degrees() << ", " << m_angles[1].degrees() );
 		m_angularVelocityX = doUpdateVelocity( m_angularVelocityX );
 		m_angularVelocityY = doUpdateVelocity( m_angularVelocityY );
 		m_translate[0] = m_scalarVelocityX.value();
@@ -87,7 +86,6 @@ namespace CastorViewer
 		m_listener.PostEvent( MakeFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
-				Logger::LogInfo( StringStream{} << "NodeState::Apply - " << m_angles[0].degrees() << ", " << m_angles[1].degrees() );
 				Quaternion l_x{ Point3r{ 1.0, 0.0, 0.0 }, m_angles[0] };
 				Quaternion l_y{ Point3r{ 0.0, 1.0, 0.0 }, m_angles[1] };
 				m_node->SetOrientation( m_originalOrientation * l_y * l_x );
@@ -97,7 +95,6 @@ namespace CastorViewer
 
 	void NodeState::SetAngularVelocity( Castor::Point2r const & p_value )noexcept
 	{
-		Logger::LogInfo( StringStream{} << "NodeState::SetAngularVelocity - " << p_value[0] << ", " << p_value[1] );
 		m_angularVelocityX = Castor::Angle::from_degrees( p_value[0] );
 		m_angularVelocityY = Castor::Angle::from_degrees( p_value[1] );
 	}

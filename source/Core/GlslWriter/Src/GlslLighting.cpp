@@ -894,7 +894,7 @@ namespace GLSL
 				auto l_lightReflect = m_writer.GetLocale( cuT( "l_lightReflect" ), normalize( reflect( p_direction, p_fragmentIn.m_v3Normal ) ) );
 				auto l_specularFactor = m_writer.GetLocale( cuT( "l_specularFactor" ), max( dot( l_vertexToEye, l_lightReflect ), 0.0 ) );
 				p_output.m_v3Diffuse = p_shadowFactor * p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor;
-				p_output.m_v3Specular = p_shadowFactor * p_light.m_v3Colour() * p_light.m_v3Intensity().z() * pow( l_specularFactor, max( p_shininess, 0.001_f ) );
+				p_output.m_v3Specular = p_shadowFactor * p_light.m_v3Colour() * p_light.m_v3Intensity().z() * pow( l_specularFactor, max( p_shininess, 0.1_f ) );
 			}
 			FI;
 		};
