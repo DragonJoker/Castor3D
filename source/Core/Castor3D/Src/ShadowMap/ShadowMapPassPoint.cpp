@@ -44,7 +44,6 @@ namespace Castor3D
 		, m_shadowConfig{ ShadowMapUbo, *p_engine.GetRenderSystem() }
 		, m_viewport{ p_engine }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		m_shadowConfig.CreateUniform< UniformType::eVec3f >( WorldLightPosition );
 		m_shadowConfig.CreateUniform< UniformType::eFloat >( FarPlane );
 		m_renderQueue.Initialise( *p_light.GetScene() );
@@ -56,7 +55,6 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
 	{
-		auto l_depthMaps = DepthMapArray{};
 		DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled );
 		DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled );
 		DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled );
@@ -71,8 +69,6 @@ namespace Castor3D
 		real const l_far = 2000.0_r;
 		matrix::perspective( m_projection, Angle::from_degrees( 90.0_r ), l_aspect, l_near, l_far );
 
-		constexpr float l_component = std::numeric_limits< float >::max();
-
 		m_viewport.Resize( p_size );
 		m_viewport.Initialise();
 		m_projectionUniform->SetValue( m_projection );
@@ -84,8 +80,6 @@ namespace Castor3D
 		m_viewport.Cleanup();
 		m_matrixUbo.Cleanup();
 		m_shadowConfig.Cleanup();
-
-		auto l_node = m_light.GetParent();
 		m_onNodeChanged.disconnect();
 	}
 
