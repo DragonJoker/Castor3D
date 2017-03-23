@@ -176,7 +176,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		${PROJECT_NAME}
 		api_dll
 		""
-		"${CastorMinLibraries};${x11Libraries}"
+		"${CastorMinLibraries};${X11Libraries}"
 		"CastorUtilsPch.hpp"
 		"CastorUtilsPch.cpp"
 		"${FreeImage_FLAGS}"
@@ -232,7 +232,15 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 			set( ZLibLibPath ${ZLibLibPath}/zlib1.dll )
 			copy_dll( ${PROJECT_NAME} ${ZLibLibPath} ${ZLibLibPath} )
 		elseif ( ZLIB_LIBRARY_RELEASE OR ZLIB_LIBRARY_DEBUG )
-			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY_DEBUG} ${ZLIB_LIBRARY_RELEASE} )
+			if ( ZLIB_LIBRARY_RELEASE AND ZLIB_LIBRARY_DEBUG )
+				copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY_DEBUG} ${ZLIB_LIBRARY_RELEASE} )
+			elseif ( ZLIB_LIBRARY_RELEASE )
+				set( SHOW_DEBUG_LOGS TRUE )
+				copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY_RELEASE} ${ZLIB_LIBRARY_RELEASE} )
+				set( SHOW_DEBUG_LOGS FALSE )
+			else ()
+				copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY_DEBUG} ${ZLIB_LIBRARY_DEBUG} )
+			endif ()
 		else ()
 			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} )
 		endif ()
