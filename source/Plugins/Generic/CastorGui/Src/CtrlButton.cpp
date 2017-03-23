@@ -2,16 +2,17 @@
 
 #include "ControlsManager.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <InitialiseEvent.hpp>
-#include <Material.hpp>
-#include <MaterialManager.hpp>
-#include <Overlay.hpp>
-#include <OverlayManager.hpp>
-#include <Pass.hpp>
-#include <TextOverlay.hpp>
+#include <Engine.hpp>
+#include <Material/Material.hpp>
+#include <Material/LegacyPass.hpp>
+#include <Overlay/Overlay.hpp>
 
-#include <Font.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+
+#include <Graphics/Font.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -24,19 +25,31 @@ namespace CastorGui
 	}
 
 	ButtonCtrl::ButtonCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_BUTTON, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eButton, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 	{
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ButtonCtrl::OnMouseEnter, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ButtonCtrl::OnMouseLeave, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &ButtonCtrl::OnMouseButtonDown, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ButtonCtrl::OnMouseButtonUp, this, std::placeholders::_1 ) );
+		EventHandler::Connect( MouseEventType::eEnter, [this]( MouseEvent const & p_event )
+		{
+			OnMouseEnter( p_event );
+		} );
+		EventHandler::Connect( MouseEventType::eLeave, [this]( MouseEvent const & p_event )
+		{
+			OnMouseLeave( p_event );
+		} );
+		EventHandler::Connect( MouseEventType::ePushed, [this]( MouseEvent const & p_event )
+		{
+			OnMouseButtonDown( p_event );
+		} );
+		EventHandler::Connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
+		{
+			OnMouseButtonUp( p_event );
+		} );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
-		l_text->SetHAlign( eHALIGN_CENTER );
-		l_text->SetVAlign( eVALIGN_CENTER );
+		l_text->SetHAlign( HAlign::eCenter );
+		l_text->SetVAlign( VAlign::eCenter );
 		l_text->SetCaption( m_caption );
 		l_text->SetVisible( DoIsVisible() );
 		m_text = l_text;
@@ -104,11 +117,16 @@ namespace CastorGui
 
 	void ButtonCtrl::DoCreate()
 	{
-		GetBackground()->SetBorderPosition( eBORDER_POSITION_INTERNAL );
+		GetBackground()->SetBorderPosition( BorderPosition::eInternal );
 
 		if ( !GetBackgroundMaterial() )
 		{
-			SetBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "Black" ) ) );
+			SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "Black" ) ) );
+		}
+
+		if ( !GetForegroundMaterial() )
+		{
+			SetForegroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
 		}
 
 		if ( m_textMaterial.expired() )
@@ -234,7 +252,7 @@ namespace CastorGui
 
 	void ButtonCtrl::OnMouseButtonDown( MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		if ( p_event.GetButton() == MouseButton::eLeft )
 		{
 			m_text.lock()->SetMaterial( m_pushedTextMaterial.lock() );
 			BorderPanelOverlaySPtr l_panel = GetBackground();
@@ -250,7 +268,7 @@ namespace CastorGui
 
 	void ButtonCtrl::OnMouseButtonUp( MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		if ( p_event.GetButton() == MouseButton::eLeft )
 		{
 			m_text.lock()->SetMaterial( m_highlightedTextMaterial.lock() );
 			BorderPanelOverlaySPtr l_panel = GetBackground();
@@ -262,13 +280,13 @@ namespace CastorGui
 				l_panel.reset();
 			}
 
-			m_signals[eBUTTON_EVENT_CLICKED]();
+			m_signals[size_t( ButtonEvent::eClicked )]();
 		}
 	}
 
 	MaterialSPtr ButtonCtrl::DoCreateMaterial( MaterialSPtr p_material, float p_offset )
 	{
-		Colour l_colour = p_material->GetPass( 0 )->GetAmbient();
+		Colour l_colour = p_material->GetTypedPass< MaterialType::eLegacy >( 0u )->GetAmbient();
 		l_colour.red() = float( l_colour.red() ) + p_offset;
 		l_colour.green() = float( l_colour.green() ) + p_offset;
 		l_colour.blue() = float( l_colour.blue() ) + p_offset;

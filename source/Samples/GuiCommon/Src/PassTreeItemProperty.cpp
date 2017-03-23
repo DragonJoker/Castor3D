@@ -3,15 +3,17 @@
 #include "ShaderDialog.hpp"
 
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Material/Material.hpp>
+#include <Material/LegacyPass.hpp>
 
 #include "AdditionalProperties.hpp"
+#include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor3D;
 using namespace Castor;
+using namespace GuiCommon;
 
 namespace GuiCommon
 {
@@ -29,9 +31,10 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
 	}
 
-	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass )
-		: TreeItemProperty( p_pass->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_PASS )
+	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, PassSPtr p_pass, Scene & p_scene )
+		: TreeItemProperty( p_pass->GetOwner()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_PASS )
 		, m_pass( p_pass )
+		, m_scene( p_scene )
 	{
 		PROPERTY_CATEGORY_PASS = _( "Pass: " );
 		PROPERTY_PASS_AMBIENT = _( "Ambient" );
@@ -57,14 +60,20 @@ namespace GuiCommon
 
 		if ( l_pass )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( l_pass->GetParent()->GetName() ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetAmbient() ) ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetDiffuse() ) ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetSpecular() ) ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetEmissive() ) ) ) );
-			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_pass->GetShininess() );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( l_pass->GetOwner()->GetName() ) ) );
+
+			if ( l_pass->GetType() == MaterialType::eLegacy )
+			{
+				auto l_legacy = std::static_pointer_cast< LegacyPass >( l_pass );
+				p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetAmbient() ) ) ) );
+				p_grid->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetDiffuse() ) ) ) );
+				p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetSpecular() ) ) ) );
+				p_grid->Append( new Point4fProperty( GC_HDR_COLOUR, PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( rgba_float( l_legacy->GetEmissive() ) ) );
+				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_legacy->GetShininess() );
+			}
+
 			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( l_pass->IsTwoSided() );
-			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetAlpha() );
+			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetOpacity() );
 			p_grid->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, p_editor ) );
 		}
 	}
@@ -95,8 +104,8 @@ namespace GuiCommon
 			}
 			else if ( l_property->GetName() == PROPERTY_PASS_EMISSIVE )
 			{
-				l_colour << l_property->GetValue();
-				OnEmissiveColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+				Point4f l_value = PointRefFromVariant< float, 4 >( l_property->GetValue() );
+				OnEmissiveColourChange( HdrColour::from_rgba( l_value ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_PASS_EXPONENT )
 			{
@@ -115,7 +124,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -125,7 +134,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -135,7 +144,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -143,19 +152,19 @@ namespace GuiCommon
 		} );
 	}
 
-	void PassTreeItemProperty::OnEmissiveColourChange( Colour const & p_value )
+	void PassTreeItemProperty::OnEmissiveColourChange( HdrColour const & p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetSpecular( p_value );
+			l_pass->SetEmissive( p_value );
 		} );
 	}
 
 	void PassTreeItemProperty::OnExponentChange( double p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -179,14 +188,14 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetAlpha( float( p_value ) );
+			l_pass->SetOpacity( float( p_value ) );
 		} );
 	}
 
 	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )
 	{
 		PassSPtr l_pass = GetPass();
-		ShaderDialog * l_editor = new ShaderDialog( l_pass->GetEngine(), IsEditable(), nullptr, l_pass );
+		ShaderDialog * l_editor = new ShaderDialog( m_scene, IsEditable(), nullptr, l_pass );
 		l_editor->Show();
 		return false;
 	}

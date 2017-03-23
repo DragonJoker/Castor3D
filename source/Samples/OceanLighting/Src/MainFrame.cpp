@@ -4,16 +4,23 @@
 
 #include "MainFrame.hpp"
 
-#include <CameraManager.hpp>
-#include <PlatformWindowHandle.hpp>
-#include <PluginManager.hpp>
-#include <Parameter.hpp>
-#include <RenderLoop.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
-#include <TargetManager.hpp>
-#include <TechniqueManager.hpp>
-#include <WindowManager.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/TargetCache.hpp>
+#include <Cache/TechniqueCache.hpp>
+#include <Cache/WindowCache.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Render/RenderTarget.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Technique/RenderTechnique.hpp>
+#include <Miscellaneous/Parameter.hpp>
+#include <Miscellaneous/PlatformWindowHandle.hpp>
+#include <Render/RenderLoop.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -41,9 +48,9 @@ namespace OceanLighting
 		}
 		void operator()( Engine * p_engine, Path const & p_pathFile )
 		{
-			PluginBaseSPtr l_pPlugin = p_engine->GetPluginManager().LoadPlugin( p_pathFile );
+			auto l_plugin = p_engine->GetPluginCache().LoadPlugin( p_pathFile );
 
-			if ( !l_pPlugin )
+			if ( !l_plugin)
 			{
 				if ( m_pMutex && m_pArrayFailed )
 				{
@@ -315,11 +322,11 @@ namespace OceanLighting
 
 		try
 		{
-			eRENDERER_TYPE l_eRenderer = eRENDERER_TYPE_OPENGL;
+			String l_renderer = cuT( "opengl" );
 
 			if ( l_bReturn )
 			{
-				l_bReturn = m_pCastor3D->LoadRenderer( l_eRenderer );
+				l_bReturn = m_pCastor3D->LoadRenderer( l_renderer );
 			}
 		}
 		catch ( ... )
@@ -330,26 +337,26 @@ namespace OceanLighting
 
 		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
 		m_pCastor3D->Initialise( 30, false );
-		m_pCastor3D->GetRenderTechniqueManager().GetTechniqueFactory().Register( cuT( "ocean lighting" ), &RenderTechnique::CreateInstance );
+		m_pCastor3D->GetTechniqueFactory().Register( cuT( "ocean lighting" ), &RenderTechnique::CreateInstance );
 
 		if ( l_bReturn )
 		{
-			SceneSPtr l_scene = m_pCastor3D->GetSceneManager().Create( cuT( "DummyScene" ), *m_pCastor3D );
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( cuT( "DummyCameraNode" ), l_scene->GetCameraRootNode() );
-			CameraSPtr l_pCamera = l_scene->GetCameraManager().Create( cuT( "DummyCamera" ), l_node );
-			l_pCamera->GetViewport().SetSize( Size( m_width, m_height ) );
-			l_pCamera->GetViewport() = Viewport::Perspective( *m_pCastor3D, Angle(), 1, 0.1_r, 1000.0_r );
-			RenderTargetSPtr l_target = m_pCastor3D->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
-			l_target->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
+			SceneSPtr l_scene = m_pCastor3D->GetSceneCache().Add( cuT( "DummyScene" ) );
+			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( cuT( "DummyCameraNode" ), l_scene->GetCameraRootNode() );
+			CameraSPtr l_pCamera = l_scene->GetCameraCache().Add( cuT( "DummyCamera" ), l_node, Viewport{ *m_pCastor3D } );
+			l_pCamera->GetViewport().Resize( Size( m_width, m_height ) );
+			l_pCamera->GetViewport().SetPerspective( Angle::from_degrees( 45.0 ), 1, 0.1_r, 1000.0_r );
+			RenderTargetSPtr l_target = m_pCastor3D->GetRenderTargetCache().Add( TargetType::eWindow );
+			l_target->SetPixelFormat( PixelFormat::eA8R8G8B8 );
 			l_target->SetSize( Size( m_width, m_height ) );
 			l_target->SetScene( l_scene );
 			l_target->SetCamera( l_pCamera );
 			Parameters l_params;
-			m_pTechnique = std::static_pointer_cast< OceanLighting::RenderTechnique >( m_pCastor3D->GetRenderTechniqueManager().Create( cuT( "ocean lighting" ), *l_target, m_pCastor3D->GetRenderSystem(), l_params ) );
+			m_pTechnique = std::static_pointer_cast< OceanLighting::RenderTechnique >( m_pCastor3D->GetRenderTechniqueCache().Add( cuT( "ocean lighting" ), cuT( "ocean lighting" ), *l_target, l_params ) );
 			m_pTechnique->SetWidth( m_width );
 			m_pTechnique->SetHeight( m_height );
 			l_target->SetTechnique( m_pTechnique );
-			m_window = m_pCastor3D->GetWindowManager().Create( cuT( "OceanLighting" ) );
+			m_window = l_scene->GetRenderWindowCache().Add( cuT( "OceanLighting" ) );
 			m_window->SetRenderTarget( l_target );
 #if defined( _WIN32 )
 			WindowHandle l_handle( std::make_shared< IMswWindowHandle >( p_parent->GetHandle() ) );

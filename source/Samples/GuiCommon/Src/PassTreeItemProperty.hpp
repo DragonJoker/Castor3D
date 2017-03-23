@@ -1,24 +1,32 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___GUICOMMON_PASS_TREE_ITEM_PROPERTY_H___
 #define ___GUICOMMON_PASS_TREE_ITEM_PROPERTY_H___
 
 #include "TreeItemProperty.hpp"
+
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
 
 namespace GuiCommon
 {
@@ -29,7 +37,7 @@ namespace GuiCommon
 	\~english
 	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scËne, ou la liste de matÈriaux, et PropertiesHolder, pour les gÈomÈtries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de sc√®ne, ou la liste de mat√©riaux, et PropertiesHolder, pour les g√†om√†tries
 	*/
 	class PassTreeItemProperty
 		: public TreeItemProperty
@@ -38,15 +46,17 @@ namespace GuiCommon
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_pass		The target pass
+		 *\brief		Constructor.
+		 *\param[in]	p_editable	Tells if the properties are modifiable.
+		 *\param[in]	p_pass		The target pass.
+		 *\param[in]	p_scene		The scene.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriÈtÈs sont modifiables
-		 *\param[in]	p_pass		La passe cible
+		 *\brief		Constructeur.
+		 *\param[in]	p_editable	Dit si les propri√©t√©s sont modifiables.
+		 *\param[in]	p_pass		La passe cible.
+		 *\param[in]	p_scene		La sc√®ne.
 		 */
-		PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass );
+		PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass, Castor3D::Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -59,12 +69,27 @@ namespace GuiCommon
 		 *\brief		Retrieves the geometry
 		 *\return		The value
 		 *\~french
-		 *\brief		RÈcupËre la gÈomÈtrie
+		 *\brief		R√©cup√®re la g√†om√†trie
 		 *\return		La valeur
 		 */
 		inline Castor3D::PassSPtr GetPass()
 		{
 			return m_pass.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the geometry
+		 *\return		The value
+		 *\~french
+		 *\brief		R√©cup√®re la g√†om√†trie
+		 *\return		La valeur
+		 */
+		template< Castor3D::MaterialType Type >
+		inline std::shared_ptr< typename Castor3D::PassTyper< Type >::Type > GetTypedPass()
+		{
+			auto l_pass = m_pass.lock();
+			REQUIRE( l_pass && l_pass->GetType() == Type );
+			return std::static_pointer_cast< typename Castor3D::PassTyper< Type >::Type >( l_pass );
 		}
 
 	private:
@@ -81,7 +106,7 @@ namespace GuiCommon
 		void OnAmbientColourChange( Castor::Colour const & p_value );
 		void OnDiffuseColourChange( Castor::Colour const & p_value );
 		void OnSpecularColourChange( Castor::Colour const & p_value );
-		void OnEmissiveColourChange( Castor::Colour const & p_value );
+		void OnEmissiveColourChange( Castor::HdrColour const & p_value );
 		void OnExponentChange( double p_value );
 		void OnTwoSidedChange( bool p_value );
 		void OnOpacityChange( double p_value );
@@ -89,6 +114,7 @@ namespace GuiCommon
 
 	private:
 		Castor3D::PassWPtr m_pass;
+		Castor3D::Scene & m_scene;
 	};
 }
 

@@ -1,9 +1,9 @@
 if ( MSVC )
-    project( ComCastor3DTest )
+	project( ComCastor3DTest )
 
-	set( CMCT_VERSION_MAJOR 0 )
-	set( CMCT_VERSION_MINOR 7 )
-	set( CMCT_VERSION_BUILD 0 )
+	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+	set( ${PROJECT_NAME}_VERSION_MINOR	9 )
+	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
@@ -25,7 +25,7 @@ if ( MSVC )
 		VERBATIM
 	)
 
-	set_property( TARGET ComCastor3DTest PROPERTY FOLDER "Interop/ComCastor3D" )
+	set_property( TARGET ComCastor3DTest PROPERTY FOLDER "Test" )
 	add_target_astyle( ComCastor3DTest ".hpp;.inl;.cpp" )
-	set( Build "yes (version ${CMCT_VERSION_MAJOR}.${CMCT_VERSION_MINOR}.${CMCT_VERSION_BUILD})" PARENT_SCOPE )
+	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 endif ()

@@ -1,21 +1,3 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
-
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
-*/
-
 namespace GLSL
 {
 	//*****************************************************************************************
@@ -118,6 +100,106 @@ namespace GLSL
 		l_return.m_value << Castor::String( *this ) << cuT( "++" );
 		return l_return;
 	}
+	//*****************************************************************************************
+
+	UInt::UInt()
+		: Type( cuT( "uint " ) )
+	{
+	}
+
+	UInt::UInt( UInt && p_value )
+		: Type( std::move( p_value ) )
+	{
+	}
+
+	UInt::UInt( UInt const & p_value )
+		: Type( cuT( "uint " ), p_value.m_writer )
+	{
+		m_value << Castor::String( p_value );
+	}
+
+	UInt::UInt( Type const & p_value )
+		: Type( cuT( "uint " ), p_value.m_writer )
+	{
+		m_value << Castor::String( p_value );
+	}
+
+	UInt::UInt( unsigned int p_value )
+		: Type( cuT( "uint " ) )
+	{
+		m_value << p_value;
+	}
+
+	UInt::UInt( float p_value )
+		: Type( cuT( "uint " ) )
+	{
+		m_value << p_value;
+	}
+
+	UInt::UInt( GlslWriter * p_writer, unsigned int p_value )
+		: Type( cuT( "uint " ), p_writer, Castor::String() )
+	{
+		m_value << p_value;
+	}
+
+	UInt::UInt( GlslWriter * p_writer, float p_value )
+		: Type( cuT( "uint " ), p_writer, Castor::String() )
+	{
+		m_value << p_value;
+	}
+
+	UInt::UInt( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( cuT( "uint " ), p_writer, p_name )
+	{
+	}
+
+	UInt & UInt::operator=( UInt const & p_rhs )
+	{
+		if ( m_writer )
+		{
+			m_writer->WriteAssign( *this, p_rhs );
+		}
+		else
+		{
+			Type::operator=( p_rhs );
+			m_writer = p_rhs.m_writer;
+		}
+
+		return *this;
+	}
+
+	template< typename T >
+	UInt & UInt::operator=( T const & p_rhs )
+	{
+		UpdateWriter( p_rhs );
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	template< typename T >
+	UInt & UInt::operator=( unsigned int p_rhs )
+	{
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	UInt::operator uint32_t()
+	{
+		return 0u;
+	}
+
+	UInt & UInt::operator++()
+	{
+		m_value << cuT( "++" ) << Castor::String( *this );
+		return *this;
+	}
+
+	UInt UInt::operator++( int )
+	{
+		UInt l_return;
+		l_return.m_value << Castor::String( *this ) << cuT( "++" );
+		return l_return;
+	}
 
 	//*****************************************************************************************
 
@@ -146,65 +228,66 @@ namespace GLSL
 	Float::Float( int p_value )
 		: Type( cuT( "float " ) )
 	{
-		m_value << p_value << cuT( ".0f" );
+		m_value << p_value << cuT( ".0" );
 	}
 
 	Float::Float( float p_value )
 		: Type( cuT( "float " ) )
 	{
-		m_value << p_value;
-
-		if ( p_value - int( p_value ) <= std::numeric_limits< float >::epsilon() )
+		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< float >::epsilon() )
 		{
-			m_value << cuT( ".0" );
+			m_value << int( p_value ) << cuT( ".0" );
 		}
-
-		m_value << cuT( "f" );
+		else
+		{
+			m_value << p_value;
+		}
 	}
 
 	Float::Float( double p_value )
 		: Type( cuT( "float " ) )
 	{
-		m_value << p_value;
-
-		if ( p_value - int( p_value ) <= std::numeric_limits< double >::epsilon() )
+		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< double >::epsilon() )
 		{
-			m_value << cuT( ".0" );
+			m_value << int( p_value ) << cuT( ".0" );
 		}
-
-		m_value << cuT( "f" );
+		else
+		{
+			m_value << p_value;
+		}
 	}
 
 	Float::Float( GlslWriter * p_writer, int p_value )
 		: Type( cuT( "float " ), p_writer, Castor::String() )
 	{
-		m_value << p_value << cuT( ".0f" );
+		m_value << p_value << cuT( ".0" );
 	}
 
 	Float::Float( GlslWriter * p_writer, float p_value )
 		: Type( cuT( "float " ), p_writer, Castor::String() )
 	{
-		m_value << p_value;
-
-		if ( p_value - int( p_value ) <= std::numeric_limits< float >::epsilon() )
+		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< float >::epsilon() )
 		{
-			m_value << cuT( ".0" );
+			m_value << int( p_value ) << cuT( ".0" );
 		}
-
-		m_value << cuT( "f" );
+		else
+		{
+			m_value << p_value;
+		}
 	}
 
 	Float::Float( GlslWriter * p_writer, double p_value )
 		: Type( cuT( "float " ), p_writer, Castor::String() )
 	{
-		m_value << p_value;
 
-		if ( p_value - int( p_value ) <= std::numeric_limits< double >::epsilon() )
+		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< double >::epsilon() )
 		{
-			m_value << cuT( ".0" );
+			m_value << int( p_value ) << cuT( ".0" );
 		}
-
-		m_value << cuT( "f" );
+		else
+		{
+			m_value << p_value;
+		}
 	}
 
 	Float::Float( GlslWriter * p_writer, Castor::String const & p_name )

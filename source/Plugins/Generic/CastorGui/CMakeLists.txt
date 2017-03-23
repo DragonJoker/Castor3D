@@ -8,7 +8,7 @@ set( CastorBinsDependencies
 
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D GUI creation" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
@@ -17,7 +17,7 @@ include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 add_target(
 	${PROJECT_NAME}
-	api_plugin
+	plugin
 	"Castor3D"
 	"${CastorMinLibraries}"
 	"CastorGuiPch.hpp"

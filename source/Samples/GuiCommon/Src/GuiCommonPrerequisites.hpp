@@ -1,19 +1,24 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___GUICOMMON_PREREQUISITES_H___
 #define ___GUICOMMON_PREREQUISITES_H___
@@ -160,7 +165,7 @@ namespace GuiCommon
 	DECLARE_MAP( uint32_t, wxImage *, ImageId );
 	DECLARE_VECTOR( thread_sptr, ThreadPtr );
 	DECLARE_VECTOR( LanguageInfoPtr, LanguageInfoPtr );
-	DECLARE_MAP( int, Castor3D::FrameVariableWPtr, FrameVariable );
+	DECLARE_MAP( int, Castor3D::UniformWPtr, Uniform );
 	DECLARE_ARRAY( StyleInfoPtr, eSTC_TYPE_COUNT, StyleInfoPtr );
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
@@ -236,7 +241,7 @@ namespace GuiCommon
 	 *\param[in]	p_threaded	Dit si le moteur doit initialiser sa boucle de rendu threadée.
 	 *\return		true si tout s'est bien passé.
 	 */
-	Castor3D::RenderWindowSPtr LoadScene( Castor3D::Engine & p_engine, Castor::String const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
+	Castor3D::RenderWindowSPtr LoadScene( Castor3D::Engine & p_engine, Castor::Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
 	/**
 	 *\~english
 	 *\brief		Loads the eingine plug-ins.
@@ -285,6 +290,17 @@ namespace GuiCommon
 	Castor::String make_String( wxString const & p_value );
 	/**
 	 *\~english
+	 *\brief		Creates a Castor::Path from a wxString
+	 *\param[in]	p_value	The wxString
+	 *\return		The Castor::Path
+	 *\~french
+	 *\brief		Cree un Castor::Path a partir d'un wxString
+	 *\param[in]	p_value	Le wxString
+	 *\return		Le Castor::Path
+	 */
+	Castor::Path make_Path( wxString const & p_value );
+	/**
+	 *\~english
 	 *\brief		Creates a wxString from a Castor::String
 	 *\param[in]	p_value	The Castor::String
 	 *\return		The wxString
@@ -326,7 +342,6 @@ namespace GuiCommon
 #define wxCOMBO_NEW	_( "New..." )
 
 	static const wxString CSCN_WILDCARD = wxT( " (*.cscn)|*.cscn|" );
-	static const wxString CBSN_WILDCARD = wxT( " (*.cbsn)|*.cbsn|" );
 	static const wxString ZIP_WILDCARD = wxT( " (*.zip)|*.zip|" );
 }
 

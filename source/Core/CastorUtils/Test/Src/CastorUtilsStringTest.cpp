@@ -68,12 +68,12 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsStringTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsStringTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsStringTest, StringConversions, p_errCount, p_testCount );
+		DoRegisterTest( "StringConversions", std::bind( &CastorUtilsStringTest::StringConversions, this ) );
 	}
 
-	void CastorUtilsStringTest::StringConversions( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsStringTest::StringConversions()
 	{
 		String l_tstrOut;
 		String l_tstrIn( cuT( "STR : Bonjoir éêèàÉÊÈÀ" ) );
@@ -82,81 +82,40 @@ namespace Testing
 		std::wstring l_wstrOut;
 		std::string l_strOut;
 		l_tstrOut = string::string_cast< xchar >( l_strIn );
-		Logger::LogInfo(	"	Conversion from std::string to String" );
-		Logger::LogInfo(	"		Entry  : " + l_strIn );
-		Logger::LogInfo( cuT(	"		Result : " ) + l_tstrOut );
-		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_tstrOut, l_tstrIn );
+		std::cout << "	Conversion from std::string to String" << std::endl;
+		std::cout << "		Entry  : " << l_strIn << std::endl;
+		std::cout << "		Result : " << l_tstrOut << std::endl;
+		std::cout << std::endl;
+		CT_EQUAL( l_tstrOut, l_tstrIn );
 		l_tstrOut = string::string_cast< xchar >( l_wstrIn );
-		Logger::LogInfo(	"	Conversion from std::wstring to String" );
-		Logger::LogInfo( L"		Entry  : " + l_wstrIn );
-		Logger::LogInfo( cuT(	"		Result : " ) + l_tstrOut );
-		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_tstrOut, l_tstrIn );
+		std::cout << "	Conversion from std::wstring to String" << std::endl;
+		std::wcout << L"		Entry  : " << l_wstrIn << std::endl;
+		std::cout << "		Result : " << l_tstrOut << std::endl;
+		std::cout << std::endl;
+		CT_EQUAL( l_tstrOut, l_tstrIn );
 		l_strOut = string::string_cast< char >( l_tstrIn );
-		Logger::LogInfo(	"	Conversion from String to std::string" );
-		Logger::LogInfo( cuT(	"		Entry  : " ) + l_tstrIn );
-		Logger::LogInfo(	"		Result : " + l_strOut );
-		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_strOut, l_strIn );
+		std::cout << "	Conversion from String to std::string" << std::endl;
+		std::cout << "		Entry  : " << l_tstrIn << std::endl;
+		std::cout << "		Result : " << l_strOut << std::endl;
+		std::cout << std::endl;
+		CT_EQUAL( l_strOut, l_strIn );
 		l_wstrOut = string::string_cast< wchar_t >( l_tstrIn );
-		Logger::LogInfo(	"	Conversion from String to std::wstring" );
-		Logger::LogInfo( cuT(	"		Entry  : " ) + l_tstrIn );
-		Logger::LogInfo( L"		Result : " + l_wstrOut );
-		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_wstrOut, l_wstrIn );
+		std::cout << "	Conversion from String to std::wstring" << std::endl;
+		std::cout << "		Entry  : " << l_tstrIn << std::endl;
+		std::wcout << L"		Result : " << l_wstrOut << std::endl;
+		std::cout << std::endl;
+		CT_EQUAL( l_wstrOut, l_wstrIn );
 		convert( l_strIn, l_wstrOut );
-		Logger::LogInfo(	"	Conversion from std::string to std::wstring" );
-		Logger::LogInfo(	"		Entry  : " + l_strIn );
-		Logger::LogInfo( L"		Result : " + l_wstrOut );
-		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_wstrOut, l_wstrIn );
+		std::cout << "	Conversion from std::string to std::wstring" << std::endl;
+		std::cout << "		Entry  : " << l_strIn << std::endl;
+		std::wcout << L"		Result : " << l_wstrOut << std::endl;
+		std::cout << std::endl;
+		CT_EQUAL( l_wstrOut, l_wstrIn );
 		convert( l_wstrIn, l_strOut );
-		Logger::LogInfo(	"	Conversion from std::wstring to std::string" );
-		Logger::LogInfo( L"		Entry  : " + l_wstrIn );
-		Logger::LogInfo(	"		Result : " + l_strOut );
-		TEST_EQUAL( l_strOut, l_strIn );
-	}
-
-	//*********************************************************************************************
-
-	CastorUtilsStringBench::CastorUtilsStringBench()
-		: BenchCase( "CastorUtilsStringBench" )
-		, m_strIn( "STR : Bonjoir éêèàÉÊÈÀ" )
-		, m_wstrIn( L"STR : Bonjoir éêèàÉÊÈÀ" )
-	{
-	}
-
-	CastorUtilsStringBench::~CastorUtilsStringBench()
-	{
-	}
-
-	void CastorUtilsStringBench::Execute()
-	{
-		BENCHMARK( StrToWStrUsingConvert, NB_TESTS );
-		BENCHMARK( StrToWStrUsingWiden, NB_TESTS );
-		BENCHMARK( WStrToStrUsingConvert, NB_TESTS );
-		BENCHMARK( WStrToStrUsingNarrow, NB_TESTS );
-	}
-
-	void CastorUtilsStringBench::StrToWStrUsingConvert()
-	{
-		convert( m_strIn, m_wstrOut );
-	}
-
-	void CastorUtilsStringBench::StrToWStrUsingWiden()
-	{
-		widen( m_strIn, m_wstrOut );
-	}
-
-	void CastorUtilsStringBench::WStrToStrUsingConvert()
-	{
-		convert( m_wstrIn, m_strOut );
-	}
-
-	void CastorUtilsStringBench::WStrToStrUsingNarrow()
-	{
-		narrow( m_wstrIn, m_strOut );
+		std::cout << "	Conversion from std::wstring to std::string" << std::endl;
+		std::wcout << L"		Entry  : " << l_wstrIn << std::endl;
+		std::cout << "		Result : " << l_strOut << std::endl;
+		CT_EQUAL( l_strOut, l_strIn );
 	}
 
 	//*********************************************************************************************

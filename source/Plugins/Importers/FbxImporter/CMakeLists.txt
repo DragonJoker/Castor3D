@@ -27,7 +27,7 @@ if( FbxSDK_FOUND OR FBXSDK_FOUND )
 
 	set( ${PROJECT_NAME}_DESCRIPTION "Fbx SDK powered importer" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-	set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+	set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 	add_target(
@@ -41,11 +41,7 @@ if( FbxSDK_FOUND OR FBXSDK_FOUND )
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 
-	if ( WIN32 )
-		# Preparing FbxSDK dll installation
-		copy_dll( ${PROJECT_NAME} ${FbxSDK_LIBRARY_RELEASE} Release )
-		copy_dll( ${PROJECT_NAME} ${FbxSDK_LIBRARY_DEBUG} Debug )
-	elseif ( {${CASTOR_PACKAGE_DEB} )
+	if ( ( NOT WIN32 ) AND {${CASTOR_PACKAGE_DEB} )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "libfbxsdk, ${CPACK_DEBIAN_PACKAGE_DEPENDS}" )
 	endif ()
 else()

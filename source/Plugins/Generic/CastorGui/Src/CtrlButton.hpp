@@ -1,19 +1,24 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (At your option ) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___CI_CTRL_BUTTON_H___
 #define ___CI_CTRL_BUTTON_H___
@@ -31,6 +36,11 @@ namespace CastorGui
 	class ButtonCtrl
 		: public Control
 	{
+	public:
+		using OnEventFunction = std::function< void() >;
+		using OnEvent = Castor::Signal< OnEventFunction >;
+		using OnEventConnection = OnEvent::connection;
+
 	public:
 		/** Constructor
 		 *\param[in]	p_engine	The engine
@@ -113,18 +123,9 @@ namespace CastorGui
 		 *\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline uint32_t Connect( eBUTTON_EVENT p_event, std::function< void() > p_function )
+		inline OnEventConnection Connect( ButtonEvent p_event, OnEventFunction p_function )
 		{
-			return m_signals[p_event].Connect( p_function );
-		}
-
-		/** Disconnects a function from a button event
-		 *\param[in]	p_event		The event type
-		 *\param[in]	p_index		The function index
-		 */
-		inline void Disconnect( eBUTTON_EVENT p_event, uint32_t p_index )
-		{
-			m_signals[p_event].Disconnect( p_index );
+			return m_signals[size_t( p_event )].connect( p_function );
 		}
 
 	private:
@@ -159,22 +160,22 @@ namespace CastorGui
 		/** Event when mouse enters the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseEnter( MouseEvent const & p_event );
+		void OnMouseEnter( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse leaves the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLeave( MouseEvent const & p_event );
+		void OnMouseLeave( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is pressed.
 		 *\param[in]	p_event		The mouse event.
 		 */
-		void OnMouseButtonDown( MouseEvent const & p_event );
+		void OnMouseButtonDown( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released.
 		 *\param[in]	p_event		The mouse event.
 		 */
-		void OnMouseButtonUp( MouseEvent const & p_event );
+		void OnMouseButtonUp( Castor3D::MouseEvent const & p_event );
 
 		/** Creates a material with an ambient colour equal to p_material->ambient + p_offset
 		 *\param[in]	p_material	The material.
@@ -203,7 +204,7 @@ namespace CastorGui
 		//! The pushed button foreground material.
 		Castor3D::MaterialWPtr m_pushedForegroundMaterial;
 		//! The button events signals
-		Signal< std::function< void() > > m_signals[eBUTTON_EVENT_COUNT];
+		OnEvent m_signals[size_t( ButtonEvent::eCount )];
 	};
 }
 

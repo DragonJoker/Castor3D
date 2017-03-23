@@ -4,6 +4,59 @@
  *\section intro_sec Change log
  *This page is here to inform about the changes since the earliest versions of the engine.
  *
+ *\section version_0_9_0 Version 0.9.0
+ *\subsection feat_0_9_0 Features
+ *\subsubsection feat_0_9_0_cu CastorUtils
+ *<ul>
+ *<li>Dropped libzip, and added minizip to the source tree.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_c3d Castor3D
+ *<ul>
+ *<li>Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings.\n
+ * It has been done to prepare the arrival of Vulkan, in which the pipeline can't be modified once it has been created, and that is now the case in Castor3D too.</li>
+ *<li>The rendering has been splitted in RenderPasses, that each have one or more RenderQueues, that are updated asynchronously on CPU.\n
+ * This allows the GPU loop to be cleaned of most CPU computations.</li>
+ *<li>Skybox have been added.</li>
+ *<li>Binary export has been completely reviewed, it now uses a chunk data format (like LWO or 3DS).\n
+ * It is used for meshes, and skeletons.</li>
+ *<li>Plug-ins interface's consistency has been improved.</li>
+ *<li>Fog basic implementations (linear, exponential, and squared exponential) have been added.</li>
+ *<li>Morphing (per-vertex) animations are now supported by Castor3D.</li>
+ *<li>Frustum culling has been implemented.</li>
+ *<li>Colour picking has been implemented.</li>
+ *<li>Shadow mapping is implemented, lights can produce shadows, and objects can cast shadows.</li>
+ *<li>Particle system has been implemented, giving to the user the implementation choice (CPU through class override, GPU through Transform Feedback or Compute shaders).</li>
+ *<li>Fixed the lighting in GLSL, to make it behave properly without dirty hacks.</li>
+ *<li>Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers.</li>
+ *<li>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureImage(s), and the TextureStorage per image.\n
+ * It has allowed the creation of cube textures.</li>
+ *<li>Textures transfer to RAM has been fixed.</li>
+ *<li>Billboard rendering no more uses a geometry shader, it now relies on hardware instantiation of a quad, and the positions are given as side attributes.</li>
+ *<li>UniformBuffer (formerly FrameVariableBuffer) no longer depends on ShaderProgram.</li>
+ *<li>A new class, UniformBufferBinding has been created which depends on both UniformBuffer and ShaderProgram.\n
+ * Instances of this class are held by RenderPipeline.</li>
+ *<li>FrameVariable class has been split in two classes: Uniform (for uniform variables contained in a UniformBuffer) and PushUniform (for uniform variables out of a UniformBuffer).</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_gl GlRenderSystem
+ *<ul>
+ *<li>Updated to support the features provided by Castor3D.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_tec Techniques
+ *<ul>
+ *<li>DeferredRenderTechnique and DeferredMsaaRenderTechnique are now real deferred rendering techniques, with a light pass per light, taking care of it's impact area.</li>
+ *<li>DeferredRenderTechnique is now the default render technique, when none is specified.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_pos PostEffects
+ *<ul>
+ *<li>Added GrayScale post effect.</li>
+ *<li>Added FXAA post effect.</li>
+ *</ul>
+ *
+ *
  *\section version_0_8_0 Version 0.8.0
  *\subsection feat_0_8_0 Features
  *\subsubsection feat_0_8_0_gen General
@@ -117,8 +170,8 @@
  *<li>Improved memory occupation, limited overhead of Vertex (152 to 24 bytes) and Face (140 to 16 bytes).</li>
  *<li>Modified Subdivision, now only in Subdivider, no more in Geometry, mesh or Submesh.</li>
  *<li>Implemented Implemented Lights in texture.</li>
- *<li>Added HasParameter and SetParameter functions in ShaderObject, to apply matrices from Pipeline.</li>
- *<li>Removed ApplyXXXMatrix from IPipelineImpl, now the Pipeline applies matrices itself.</li>
+ *<li>Added HasParameter and SetParameter functions in ShaderObject, to apply matrices from RenderPipeline.</li>
+ *<li>Removed ApplyXXXMatrix from IPipelineImpl, now the RenderPipeline applies matrices itself.</li>
  *<li>Added channel for textures (colour, ambient, diffuse, specular, normal, height).</li>
  *<li>Implemented MSAA.</li>
  *<li>Implemented Alpha to Coverage when MSAA is activated.</li>
@@ -131,13 +184,13 @@
  *<li>Created TechniqueParameters class to be able to pass generic parameters instead of, for example, the samples count.</li>
  *<li>Introducing SamplerState class to group calls to SetSamplerState and all relative stuff.</li>
  *<li>Reviewed sizes a bit : Viewport holds the internal size, RenderTarget and RenderWindow hold external size. Modified  SceneFileParser, added &lt;size&gt; directive for viewport.</li>
- *<li>Splitted eBUFFER_MODE in eBUFFER_ACCESS_TYPE and eBUFFER_ACCESS_NATURE.</li>
- *<li>Modified a bit FrameVariable in order to take care of eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.</li>
- *<li>Modified Submesh::AddPoints so it takes a stVERTEX_GROUP structure as a parameter.</li>
- *<li>Introducing FrameVariableBuffer to manage frame variables with OpenGl UBO or DirectX 11 Constants buffer.</li>
+ *<li>Splitted eBUFFER_MODE in BufferAccessType and BufferAccessNature.</li>
+ *<li>Modified a bit Uniform in order to take care of eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.</li>
+ *<li>Modified Submesh::AddUniforms so it takes a stVERTEX_GROUP structure as a parameter.</li>
+ *<li>Introducing Buffer to manage frame variables with OpenGl UBO or DirectX 11 Constants buffer.</li>
  *<li>Implemented initialisation and cleanup of GPU side objects in two events : InitialiseEvent and CleanupEvent.</li>
  *<li>Merged GpuBuffer::Initialise and GpuBuffer::SetShaderProgram functions to ease their use.</li>
- *<li>Removed auto mipmap generation, now if user wants it, he does it with DynamicTexture::GenerateMipmaps function.</li>
+ *<li>Removed auto mipmap generation, now if user wants it, he does it with TextureLayout::GenerateMipmaps function.</li>
  *<li>Added DepthStencilState class to manage those buffers states like Direct3D 11 (who does it well).</li>
  *<li>Added blend state, implemented raster state.</li>
  *<li>Put a BlendState instance in Pass and removed rgb/alpha blending from the pass.</li>
@@ -217,14 +270,14 @@
  *<li>Passes now initialise their shaders in Pass::Initialiser instead of trying to do it at each frame.</li>
  *<li>Changed RenderTarget : now it only holds frame buffer and all needed for that. It is now a Renderable so TargetRenderer has been created.</li>
  *<li>RenderWindow no longer extends RenderTarget, but now it has a RenderTarget as a private class member.</li>
- *<li>Created Texture class, StaticTexture and DynamicTexture to help implementing render targets.</li>
+ *<li>Created Texture class, StaticTexture and TextureLayout to help implementing render targets.</li>
  *<li>RenderTarget now uses RenderTechnique to make its rendering.</li>
  *<li>Created GeometryBuffers class which holds a Vertex buffer and an Index buffer, they are created by the RenderSystem.</li>
  *<li>Moved RenderTechnique basic frame buffer, texture and depth buffer into RenderTarget.</li>
  *<li>Moved TargetRenderer::PostRender code into RenderWindow.</li>
  *<li>Created WindowRenderer::EndScene function to prepare the render of the RenderTarget's frame buffer into the window.</li>
  *<li>Removed calls to ShaderObject in order to make it more internal to Castor3D.</li>
- *<li>Overlays are no more Renderable, there is one instance of OverlayRenderer class in the OverlayManager. All overlays will be rendered through this instance by the OverlayManager.</li>
+ *<li>Overlays are no more Renderable, there is one instance of OverlayRenderer class in the OverlayCache. All overlays will be rendered through this instance by the OverlayCache.</li>
  *<li>Modified Scene, added template functions to add, remove or get an object whatever it's type may be (Light, Geometry, Camera, SceneNode).</li>
  *</ul>
  *\subsubsection misc_0_7_0_gl GlRenderSystem
@@ -332,16 +385,16 @@
  *<ul>
  *<li>Using std or tr1 or boost smart pointers.</li>
  *<li>Created OpenGlCommon for common treatments between GL2RenderSystem and GL3RenderSystem</li>
- *<li>Created class Pipeline which performs the matrix computings and other functions (frustum, perspective, ortho, ...)</li>
+ *<li>Created class RenderPipeline which performs the matrix computings and other functions (frustum, perspective, ortho, ...)</li>
  *</ul>
  *
  *\subsection mods_0_6_1_0 Modifications
  *<ul>
  *<li>Modified MemoryManager, added a template class MemoryTraced which overload new, delete new [] et delete [] operators in order to have better trace of allocations and deallocations. Each Castor class derive from this one and 3 files are created in root folder to log allocations, deallocations : memoryleaks.log, memoryalloc.log and memorydealloc.log</li>
- *<li>TransformationMatrix no longer exists, it is now a collection of functions which computes 4x4 matrix operations</li>
+ *<li>TransformationUniform no longer exists, it is now a collection of functions which computes 4x4 matrix operations</li>
  *<li>Modification SceneNode management : base class NodeBase holds the informations that were in SceneNode, 3 derived classes (GeometryMaterial, CameraMaterial et LightMaterial) take care of each category specificities.</li>
  *<li>MovableObject class now has less features (name and NodeBase), Light and Camera now derive from it</li>
- *<li>Renamed UniformVariable to FrameVariable.</li>
+ *<li>Renamed UniformVariable to .</li>
  *<li>OpenGL 3.x/4.x now fully supported.</li>
  *<li>Modified Vertex class in order to make them include texture coordinates and normals in order to have only 1 vertex buffer instead of 3 in a mesh.</li>
  *</ul>
@@ -412,6 +465,59 @@
  *\mainpage Moteur Castor3D
  *\section intro_sec Suivi de versions
  *Cette page sert à informer des évolutions du moteur depuis les premières versions.
+ *
+ *\section version_0_9_0 Version 0.9.0
+ *\subsection feat_0_9_0 Fonctionnalités
+ *\subsubsection feat_0_9_0_cu CastorUtils
+ *<ul>
+ *<li>Dropped libzip, and added minizip to the source tree.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_c3d Castor3D
+ *<ul>
+ *<li>Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings.\n
+ * It has been done to prepare the arrival of Vulkan, in which the pipeline can't be modified once it has been created, and that is now the case in Castor3D too.</li>
+ *<li>The rendering has been splitted in RenderPasses, that each have one or more RenderQueues, that are updated asynchronously on CPU.\n
+ * This allows the GPU loop to be cleaned of most CPU computations.</li>
+ *<li>Skybox have been added.</li>
+ *<li>Binary export has been completely reviewed, it now uses a chunk data format (like LWO or 3DS).\n
+ * It is used for meshes, and skeletons.</li>
+ *<li>Plug-ins interface's consistency has been improved.</li>
+ *<li>Fog basic implementations (linear, exponential, and squared exponential) have been added.</li>
+ *<li>Morphing (per-vertex) animations are now supported by Castor3D.</li>
+ *<li>Frustum culling has been implemented.</li>
+ *<li>Colour picking has been implemented.</li>
+ *<li>Shadow mapping is implemented, lights can produce shadows, and objects can cast shadows.</li>
+ *<li>Particle system has been implemented, giving to the user the implementation choice (CPU through class override, GPU through Transform Feedback or Compute shaders).</li>
+ *<li>Fixed the lighting in GLSL, to make it behave properly without dirty hacks.</li>
+ *<li>Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers.</li>
+ *<li>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureImage(s), and the TextureStorage per image.\n
+ * It has allowed the creation of cube textures.</li>
+ *<li>Textures transfer to RAM has been fixed.</li>
+ *<li>Billboard rendering no more uses a geometry shader, it now relies on hardware instantiation of a quad, and the positions are given as side attributes.</li>
+ *<li>UniformBuffer (formerly FrameVariableBuffer) no longer depends on ShaderProgram.</li>
+ *<li>A new class, UniformBufferBinding has been created which depends on both UniformBuffer and ShaderProgram.\n
+ * Instances of this class are held by RenderPipeline.</li>
+ *<li>FrameVariable class has been split in two classes: Uniform (for uniform variables contained in a UniformBuffer) and PushUniform (for uniform variables out of a UniformBuffer).</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_gl GlRenderSystem
+ *<ul>
+ *<li>Updated to support the features provided by Castor3D.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_tec Techniques
+ *<ul>
+ *<li>DeferredRenderTechnique and DeferredMsaaRenderTechnique are now real deferred rendering techniques, with a light pass per light, taking care of it's impact area.</li>
+ *<li>DeferredRenderTechnique is now the default render technique, when none is specified.</li>
+ *</ul>
+ *
+ *\subsubsection feat_0_9_0_pos PostEffects
+ *<ul>
+ *<li>Added GrayScale post effect.</li>
+ *<li>Added FXAA post effect.</li>
+ *</ul>
+ *
  *
  *\section version_0_8_0 Version 0.8.0
  *\subsection feat_0_8_0 Modifications
@@ -552,7 +658,7 @@
  *<li>Modifications de Castor::Line3D :
  *<ul>
  *<li>Implémentation de la méthode de calcul d'intersection</li>
- *<li>Cette classe a maintenant deux constructeurs nommés : FromPointAndSlope et FromPoints, pour éviter les confusions.</li>
+ *<li>Cette classe a maintenant deux constructeurs nommés : FromPointAndSlope et FromUniforms, pour éviter les confusions.</li>
  *</ul>
  *</li>
  *<li>Création de deux nouvelles classes : Size et Positionau lieu d'un typedef pour chacune.</li>
@@ -561,37 +667,37 @@
  *
  *\subsubsection mods_0_7_0_c3d Castor3D
  *<ul>
- *<li>Ajout des méthodes HasParameter et SetParameter dans la classe ShaderObject, pour appliquer les matrices de la classe Pipeline.</li>
+ *<li>Ajout des méthodes HasParameter et SetParameter dans la classe ShaderObject, pour appliquer les matrices de la classe RenderPipeline.</li>
  *<li>Ajout de fonctions Begin et End dans la classe Mesh afin de pouvoir itérer sur les submeshes sans passer par les fonctions GetSubmesh et GetSubmeshCount.</li>
  *<li>Ajout de fonctions Begin et End dans la classe Material functions Begin and End.</li>
- *<li>Ajout de la classe FrameVariableBuffer pour gérer les variables uniformes avec les UBO OpenGL ou les Constant buffer de Direct3D 11.</li>
+ *<li>Ajout de la classe Buffer pour gérer les variables uniformes avec les UBO OpenGL ou les Constant buffer de Direct3D 11.</li>
  *<li>Ajout de la classe DepthStencilState pour gérer ces états à la mode Direct3D 11 (qui fait ça bien).</li>
  *<li>De même, ajout des classes BlendState et RasteriserState.</li>
- *<li>Création des classes Texture, StaticTexture et DynamicTexture pour faciliter l'implémentation des cibles de rendu.</li>
+ *<li>Création des classes Texture, StaticTexture et TextureLayout pour faciliter l'implémentation des cibles de rendu.</li>
  *<li>Ajout de canaux pour les textures (couleur, ambiante, diffusion, speculaire, normale, hauteur, brillance).</li>
  *<li>Création de la classe TechniqueParameters pour passer des paramètres spécifiques aux techniques comme, par exemple, le nombre d'échantillons (pour le MSAA).</li>
  *<li>Introduction de la classe SamplerState pour grouper les appels à SetSamplerState et autres.</li>
  *<li>Implémentation des Frame Buffers.</li>
  *<li>Réduction de l'occupation mémoire des tampons de sommets.</li>
  *<li>Modification de BufferElementGroup afin qu'il ne puisse plus contenir son tampon.</li>
- *<li>La classe Overlay n'étend plus Renderable, il n'y a plus qu'une instance de OverlayRenderer, gérée par la classe OverlayManager. Toutes les incrustations sont maintenant rendues via cette instance.</li>
+ *<li>La classe Overlay n'étend plus Renderable, il n'y a plus qu'une instance de OverlayRenderer, gérée par la classe OverlayCache. Toutes les incrustations sont maintenant rendues via cette instance.</li>
  *<li>Amélioration de l'occupation mémoire : diminution drastique de la taille d'un Vertex (de 152 à 24 octets) et d'une Face (de 140 à 16 octets).</li>
  *<li>Modification de Subdivision, elle se trouve maintenant uniquement dans Subdivider et plus dans Geometry, Mesh ou Submesh.</li>
  *<li>Les lumières sont maintenant implémentées dans une texture, passant la limite de 8 à 100 sources.</li>
- *<li>Suppression des méthodes ApplyXXXMatrix de la classe IPipelineImpl, maintenant la classe Pipeline applique les matrices elle-même.</li>
+ *<li>Suppression des méthodes ApplyXXXMatrix de la classe IPipelineImpl, maintenant la classe RenderPipeline applique les matrices elle-même.</li>
  *<li>Implémentation du MSAA.</li>
  *<li>Implémentation de l'Alpha to Coverage lorsque le MSAA est activé.</li>
  *<li>Revue des tailles : Viewport contient la taille interne, RenderTarget et RenderWindow contiennent la taille externe.</li>
- *<li>Découpe de eBUFFER_MODE en eBUFFER_ACCESS_TYPE et eBUFFER_ACCESS_NATURE.</li>
+ *<li>Découpe de eBUFFER_MODE en BufferAccessType et BufferAccessNature.</li>
  *<li>L'initialisation des objets GPU se passe maintenant avec l'utilisation de deux évènements : InitialiseEvent et CleanupEvent.</li>
  *<li>Fusion de GpuBuffer::Initialise et GpuBuffer::SetShaderProgram afin d'en simplifier l'utilisation.</li>
- *<li>Suppression de la génération automatique des mipmaps. Maintenant, si l'utilisateur vuet les générer, il utilise la fonction DynamicTexture::GenerateMipmaps.</li>
+ *<li>Suppression de la génération automatique des mipmaps. Maintenant, si l'utilisateur vuet les générer, il utilise la fonction TextureLayout::GenerateMipmaps.</li>
  *<li>Implémentation de l'instanciation hardware des maillages.</li>
  *<li>Modifications de Castor3D::Submesh :
  *<ul>
  *<li>Les classes Submesh et SmoothingGroup ont été fusionnées.</li>
  *<li>Modification de la méthode ComputeTangents pour prendre en compte les normales des sommets.</li>
- *<li>Ajout d'un overload pour la méthode AddPoints afin de pouvoir lui donner un stVERTEX_GROUP en paramètre.</li>
+ *<li>Ajout d'un overload pour la méthode AddUniforms afin de pouvoir lui donner un stVERTEX_GROUP en paramètre.</li>
  *<li>Modification de la génération des normales.</li>
  *<li>Déplacement des matériaux, de Submesh à Geometry.</li>
  *<li>Modification du compte des instances, pour le rendre spécifique aux matériaux utilisés par les instances du Submesh.</li>
@@ -628,7 +734,7 @@
  *<li>Suppression des appels à ShaderObject afin d'en faire une classe interne à Castor3D.</li>
  *<li>Modification des shaders, ils prennent maintenant en compte le modèle de shader, contiennent tous les fichiers et sources définis par modèle. Le choix du modèle est fait à la compilation, en choisissant le modèle le plus haut supporté.</li>
  *<li>Modification des sources par défaut pour les shaders. Elles sont maitenant générées automatiquement et plus aucun fichier externe n'est nécessaire.</li>
- *<li>Modification de FrameVariable afin de prendre en compte eFRAME_VARIABLE_TYPE.</li>
+ *<li>Modification de  afin de prendre en compte eFRAME_VARIABLE_TYPE.</li>
  *</ul>
  *</li>
  *<li>Modifications de Castor3D::Context
@@ -733,7 +839,7 @@
  *<li>Revue du système de VertexBuffers et IndexBuffers, in troduction de la notion de VertexDeclaration et BufferElementGroup, ainsi on peut créer des VertexBuffers en mettant à peu près ce que l'on veut comme données dedans (parmi vertex, normals, tangents, diffuse, texcoords0,1,2,3) et ordonnées comme on veut.</li>
  *<li>La classe Vertex dérive donc maintenant de BufferElementGroup.</li>
  *<li>Les TextureEnvironment vont disparaitre à la prochaine version, la gestion du multitexturing se faisant maintenant directement au niveau des passes et des texture units.</li>
- *<li>Suppression des fonctions issues de GLU, afin d'avoir une librairie de moins à linker.</li>
+ *<li>Suppression des fonctions issues de GLU, afin d'avoir une bibliothèque de moins à linker.</li>
  *</ul>
  *
  *\subsection bugs_0_6_1_2 Bugs
@@ -776,16 +882,16 @@
  *<ul>
  *<li>Utilisation des smart pointers tr1.</li>
  *<li>Création d'un tronc commun 'OpenGLCommon' pour les 2 renderers OpenGL</li>
- *<li>Création d'une classe de Pipeline qui effectue les calculs matriciels et d'autres petites fonctions (perspective, ortho, ...)</li>
+ *<li>Création d'une classe de RenderPipeline qui effectue les calculs matriciels et d'autres petites fonctions (perspective, ortho, ...)</li>
  *</ul>
  *
  *\subsection mods_0_6_1_0 Modifications
  *<ul>
  *<li>Le MemoryManager (activé uniquement en debug) a été modifié, ajout d'une classe template MemoryTraced qui surcharge les operateurs new, delete new [] et delete [], ce afin d'avoir une meilleure trace des objets créés et détruits. Chaque classe des projets du Castor dérivent maintenant de celle-ci, et 3 fichiers sont donc créés dans le répertoire racine (C:\ sous Windows) : memoryleaks.log, memoryalloc.log et memorydealloc.log</li>
- *<li>La classe TransformationMatrix n'existe plus, il ne s'agit plus que d'une collection de fonctions sur matrices carrées 4x4.</li>
+ *<li>La classe TransformationUniform n'existe plus, il ne s'agit plus que d'une collection de fonctions sur matrices carrées 4x4.</li>
  *<li>Modification de la gestion des SceneNode : Une classe de base NodeBase qui contient les informations qui se trouvaient dans SceneNode, 3 classes dérivées (GeometryMaterial, CameraMaterial et LightMaterial) qui s'occupent des fonctionnalités spécifiques au rendu de chacun des types liés (respectivement Geometry, Camera et Light).</li>
  *<li>La classe MovableObject a maintenant moins de fonctionnalités (en fait elle n'a plus qu'un nom et un NodeBase) et les classes Light et Camera dérivent maintenant de cette classe (pour plus d'uniformité dans les déplacements de ces objets par rapport aux géométries)</li>
- *<li>Renommage des classes UniformVariable en FrameVariable, pour refléter plus ce que c'est et moins lier ce genre de choses à OpenGL.</li>
+ *<li>Renommage des classes UniformVariable en , pour refléter plus ce que c'est et moins lier ce genre de choses à OpenGL.</li>
  *<li>Le module OpenGL 3.x/4.x est achevé.</li>
  *<li>Modifier la structure des vertex de façon à ce qu'ils incluent les coordonnées de texture et les normales directement, de façon à n'avoir qu'1 buffer de vertex par mesh au lieu de 3 actuellement.</li>
  *</ul>

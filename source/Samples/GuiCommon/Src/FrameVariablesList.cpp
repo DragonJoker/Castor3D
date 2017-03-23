@@ -6,10 +6,10 @@
 #include "PropertiesHolder.hpp"
 
 #include <Engine.hpp>
-#include <FrameVariable.hpp>
-#include <FrameVariableBuffer.hpp>
-#include <RenderSystem.hpp>
-#include <ShaderProgram.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Shader/Uniform.hpp>
+#include <Shader/UniformBuffer.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 #include <wx/imaglist.h>
 
@@ -57,7 +57,7 @@ namespace GuiCommon
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto && l_image : l_icons )
+		for ( auto l_image : l_icons )
 		{
 			int l_sizeOrig = l_image->GetWidth();
 
@@ -77,19 +77,14 @@ namespace GuiCommon
 		UnloadVariables();
 	}
 
-	void FrameVariablesList::LoadVariables( eSHADER_TYPE p_type, ShaderProgramSPtr p_program )
+	void FrameVariablesList::LoadVariables( ShaderType p_type, ShaderProgramSPtr p_program )
 	{
 		m_program = p_program;
 		wxTreeItemId l_root = AddRoot( _( "Root" ) );
 
-		if ( p_program->GetObjectStatus( p_type ) != eSHADER_STATUS_DONTEXIST )
+		if ( p_program->GetObjectStatus( p_type ) != ShaderStatus::eDontExist )
 		{
-			for ( auto && l_buffer : p_program->GetFrameVariableBuffers( p_type ) )
-			{
-				DoAddBuffer( l_root, l_buffer );
-			}
-
-			for ( auto && l_variable : p_program->GetFrameVariables( p_type ) )
+			for ( auto l_variable : p_program->GetUniforms( p_type ) )
 			{
 				DoAddVariable( l_root, l_variable, p_type );
 			}
@@ -101,18 +96,18 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id, FrameVariableBufferSPtr p_buffer )
+	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id, UniformBufferSPtr p_buffer )
 	{
 		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine(), m_propertiesHolder->IsEditable(), p_buffer ) );
 		uint32_t l_index = 0;
 
-		for ( auto && l_variable : *p_buffer )
+		for ( auto l_variable : *p_buffer )
 		{
 			DoAddVariable( l_id, l_variable, p_buffer );
 		}
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, FrameVariableSPtr p_variable, FrameVariableBufferSPtr p_buffer )
+	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, UniformSPtr p_variable, UniformBufferSPtr p_buffer )
 	{
 		wxString l_displayName = p_variable->GetName();
 
@@ -124,13 +119,13 @@ namespace GuiCommon
 		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_buffer ) );
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::eSHADER_TYPE p_type )
+	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, PushUniformSPtr p_variable, ShaderType p_type )
 	{
-		wxString l_displayName = p_variable->GetName();
+		wxString l_displayName = p_variable->GetBaseUniform().GetName();
 
-		if ( p_variable->GetOccCount() > 1 )
+		if ( p_variable->GetBaseUniform().GetOccCount() > 1 )
 		{
-			l_displayName << wxT( "[" ) << p_variable->GetOccCount() << wxT( "]" );
+			l_displayName << wxT( "[" ) << p_variable->GetBaseUniform().GetOccCount() << wxT( "]" );
 		}
 
 		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_type ) );

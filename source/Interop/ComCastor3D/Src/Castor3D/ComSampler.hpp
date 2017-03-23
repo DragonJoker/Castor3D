@@ -1,26 +1,31 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef __COMC3D_COM_SAMPLER_H__
 #define __COMC3D_COM_SAMPLER_H__
 
 #include "ComColour.hpp"
 
-#include <Sampler.hpp>
+#include <Texture/Sampler.hpp>
 
 namespace CastorCom
 {
@@ -62,12 +67,12 @@ namespace CastorCom
 			m_sampler = state;
 		}
 
-		COM_PROPERTY( MinFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MIN ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MIN ) );
-		COM_PROPERTY( MagFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MAG ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MAG ) );
-		COM_PROPERTY( MipFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MIP ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MIP ) );
-		COM_PROPERTY( UWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::eTEXTURE_UVW_U ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::eTEXTURE_UVW_U ) );
-		COM_PROPERTY( VWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::eTEXTURE_UVW_V ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::eTEXTURE_UVW_V ) );
-		COM_PROPERTY( WWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::eTEXTURE_UVW_W ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::eTEXTURE_UVW_W ) );
+		COM_PROPERTY( MinFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::InterpolationFilter::eMin ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::InterpolationFilter::eMin ) );
+		COM_PROPERTY( MagFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::InterpolationFilter::eMag ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::InterpolationFilter::eMag ) );
+		COM_PROPERTY( MipFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::InterpolationFilter::eMip ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::InterpolationFilter::eMip ) );
+		COM_PROPERTY( UWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::TextureUVW::eU ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::TextureUVW::eU ) );
+		COM_PROPERTY( VWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::TextureUVW::eV ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::TextureUVW::eV ) );
+		COM_PROPERTY( WWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::TextureUVW::eW ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::TextureUVW::eW ) );
 		COM_PROPERTY( MaxAnisotropy, float, make_getter( m_sampler.get(), &Castor3D::Sampler::GetMaxAnisotropy ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetMaxAnisotropy ) );
 		COM_PROPERTY( MinLod, float, make_getter( m_sampler.get(), &Castor3D::Sampler::GetMinLod ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetMinLod ) );
 		COM_PROPERTY( MaxLod, float, make_getter( m_sampler.get(), &Castor3D::Sampler::GetMaxLod ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetMaxLod ) );

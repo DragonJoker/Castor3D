@@ -22,6 +22,9 @@ namespace Phong
 	{
 	}
 
+	String const Subdivider::Name = cuT( "Phong Divider" );
+	String const Subdivider::Type = cuT( "phong" );
+
 	Subdivider::Subdivider()
 		: Castor3D::Subdivider()
 		, m_occurences( 1 )
@@ -33,15 +36,20 @@ namespace Phong
 		Cleanup();
 	}
 
+	SubdividerUPtr Subdivider::Create()
+	{
+		return std::make_unique< Subdivider >();
+	}
+
 	void Subdivider::Cleanup()
 	{
 		Castor3D::Subdivider::Cleanup();
 	}
 
-	void Subdivider::Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
+	void Subdivider::Subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
 	{
 		m_occurences = p_occurences;
-		m_submesh = p_pSubmesh;
+		m_submesh = p_submesh;
 		m_bGenerateBuffers = p_generateBuffers;
 		m_submesh->ComputeContainers();
 
@@ -66,7 +74,7 @@ namespace Phong
 		std::map< uint32_t, Castor::PlaneEquation< double > > l_posnml;
 		uint32_t i = 0;
 
-		for ( auto && l_point : m_submesh->GetPoints() )
+		for ( auto const & l_point : m_submesh->GetPoints() )
 		{
 			Point3r l_position, l_normal;
 			Castor3D::Vertex::GetPosition( l_point, l_position );

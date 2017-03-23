@@ -2,13 +2,15 @@
 
 #include "ControlsManager.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <Overlay.hpp>
-#include <OverlayManager.hpp>
-#include <PanelOverlay.hpp>
-#include <TextOverlay.hpp>
+#include <Engine.hpp>
+#include <Overlay/Overlay.hpp>
 
-#include <Font.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Texture/TextureUnit.hpp>
+
+#include <Graphics/Font.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -21,26 +23,48 @@ namespace CastorGui
 	}
 
 	EditCtrl::EditCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_EDIT, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eEdit, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 		, m_caretIt( p_caption.end() )
 		, m_active( false )
 		, m_multiLine( false )
 	{
 		m_caretIt = m_caption.end();
-		m_cursor = eMOUSE_CURSOR_TEXT;
+		m_cursor = MouseCursor::eText;
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &EditCtrl::OnMouseLButtonDown, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &EditCtrl::OnMouseLButtonUp, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &EditCtrl::OnKeyDown, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_RELEASED, std::bind( &EditCtrl::OnKeyUp, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_CHAR, std::bind( &EditCtrl::OnChar, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eCONTROL_EVENT_ACTIVATE, std::bind( &EditCtrl::OnActivate, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eCONTROL_EVENT_DEACTIVATE, std::bind( &EditCtrl::OnDeactivate, this, std::placeholders::_1 ) );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		EventHandler::Connect( MouseEventType::ePushed, [this]( MouseEvent const & p_event )
+		{
+			OnMouseLButtonDown( p_event );
+		} );
+		EventHandler::Connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
+		{
+			OnMouseLButtonUp( p_event );
+		} );
+		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
+		{
+			OnKeyDown( p_event );
+		} );
+		EventHandler::Connect( KeyboardEventType::eReleased, [this]( KeyboardEvent const & p_event )
+		{
+			OnKeyUp( p_event );
+		} );
+		EventHandler::Connect( KeyboardEventType::eChar, [this]( KeyboardEvent const & p_event )
+		{
+			OnChar( p_event );
+		} );
+		EventHandler::Connect( HandlerEventType::eActivate, [this]( HandlerEvent const & p_event )
+		{
+			OnActivate( p_event );
+		} );
+		EventHandler::Connect( HandlerEventType::eDeactivate, [this]( HandlerEvent const & p_event )
+		{
+			OnDeactivate( p_event );
+		} );
+
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
-		l_text->SetVAlign( eVALIGN_BOTTOM );
+		l_text->SetVAlign( VAlign::eBottom );
 		l_text->SetVisible( DoIsVisible() );
 		m_text = l_text;
 
@@ -141,7 +165,7 @@ namespace CastorGui
 		{
 			if ( IsMultiLine() )
 			{
-				l_text->SetTextWrappingMode( eTEXT_WRAPPING_MODE_BREAK );
+				l_text->SetTextWrappingMode( TextWrappingMode::eBreak );
 			}
 		}
 	}
@@ -159,13 +183,13 @@ namespace CastorGui
 		return l_caption;
 	}
 
-	void EditCtrl::OnActivate( ControlEvent const & p_event )
+	void EditCtrl::OnActivate( HandlerEvent const & p_event )
 	{
 		m_active = true;
 		DoUpdateCaption();
 	}
 
-	void EditCtrl::OnDeactivate( ControlEvent const & p_event )
+	void EditCtrl::OnDeactivate( HandlerEvent const & p_event )
 	{
 		m_active = false;
 		DoUpdateCaption();
@@ -181,17 +205,19 @@ namespace CastorGui
 
 	void EditCtrl::OnChar( KeyboardEvent const & p_event )
 	{
-		eKEYBOARD_KEY l_code = p_event.GetKey();
+		KeyboardKey l_code = p_event.GetKey();
 
-		if ( l_code >= 0x20 && l_code <= 255 && l_code != eKEY_DELETE )
+		if ( l_code >= KeyboardKey( 0x20 )
+			 && l_code <= KeyboardKey( 0xFF )
+			 && l_code != KeyboardKey::eDelete )
 		{
 			DoAddCharAtCaret( p_event.GetChar() );
-			m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+			m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 		}
-		else if ( l_code == eKEY_RETURN && IsMultiLine() )
+		else if ( l_code == KeyboardKey::eReturn && IsMultiLine() )
 		{
 			DoAddCharAtCaret( cuT( "\n" ) );
-			m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+			m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 		}
 	}
 
@@ -199,34 +225,34 @@ namespace CastorGui
 	{
 		if ( !p_event.IsCtrlDown() && !p_event.IsAltDown() )
 		{
-			eKEYBOARD_KEY l_code = p_event.GetKey();
+			KeyboardKey l_code = p_event.GetKey();
 
-			if ( l_code == eKEY_BACKSPACE )
+			if ( l_code == KeyboardKey::eBackspace )
 			{
 				DoDeleteCharBeforeCaret();
-				m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
-			else if ( l_code == eKEY_DELETE )
+			else if ( l_code == KeyboardKey::eDelete )
 			{
 				DoDeleteCharAtCaret();
-				m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
-			else if ( l_code == eKEY_LEFT && m_caretIt != m_caption.begin() )
+			else if ( l_code == KeyboardKey::eLeft && m_caretIt != m_caption.begin() )
 			{
 				m_caretIt--;
 				DoUpdateCaption();
 			}
-			else if ( l_code == eKEY_RIGHT && m_caretIt != m_caption.end() )
+			else if ( l_code == KeyboardKey::eRight && m_caretIt != m_caption.end() )
 			{
 				m_caretIt++;
 				DoUpdateCaption();
 			}
-			else if ( l_code == eKEY_HOME && m_caretIt != m_caption.begin() )
+			else if ( l_code == KeyboardKey::eHome && m_caretIt != m_caption.begin() )
 			{
 				m_caretIt = m_caption.begin();
 				DoUpdateCaption();
 			}
-			else if ( l_code == eKEY_END && m_caretIt != m_caption.end() )
+			else if ( l_code == KeyboardKey::eEnd && m_caretIt != m_caption.end() )
 			{
 				m_caretIt = m_caption.end();
 				DoUpdateCaption();

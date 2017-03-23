@@ -1,3 +1,8 @@
+#include "ComCastor3DTestPrerequisites.hpp"
+
+#include <tchar.h>
+#include <iostream>
+
 template< typename T >
 void  SafeRelease( T & x )
 {

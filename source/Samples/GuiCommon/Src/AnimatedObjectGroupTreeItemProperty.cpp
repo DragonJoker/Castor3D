@@ -1,7 +1,8 @@
 #include "AnimatedObjectGroupTreeItemProperty.hpp"
 
-#include <AnimatedObjectGroup.hpp>
 #include <Engine.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/Animation/AnimatedObjectGroup.hpp>
 
 #include <wx/propgrid/advprops.h>
 

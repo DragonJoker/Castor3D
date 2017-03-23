@@ -1,37 +1,46 @@
-#include <Engine.hpp>
-#include <RenderSystem.hpp>
+#include <Log/Logger.hpp>
 
-#include <Logger.hpp>
+#include <Engine.hpp>
+#include <Cache/TargetCache.hpp>
+
+#include <Plugin/PostFxPlugin.hpp>
+#include <Render/RenderSystem.hpp>
 
 #include "BloomPostEffect.hpp"
 
-#include <PostFxPlugin.hpp>
+#ifndef CASTOR_PLATFORM_WINDOWS
+#	define C3D_Bloom_API
+#else
+#	ifdef BloomPostEffect_EXPORTS
+#		define C3D_Bloom_API __declspec( dllexport )
+#	else
+#		define C3D_Bloom_API __declspec( dllimport )
+#	endif
+#endif
 
-using namespace Castor3D;
-using namespace Castor;
 using namespace Bloom;
 
-C3D_Bloom_API void GetRequiredVersion( Version & p_version )
+C3D_Bloom_API void GetRequiredVersion( Castor3D::Version & p_version )
 {
-	p_version = Version();
+	p_version = Castor3D::Version();
 }
 
-C3D_Bloom_API ePLUGIN_TYPE GetType()
+C3D_Bloom_API Castor3D::PluginType GetType()
 {
-	return ePLUGIN_TYPE_POSTFX;
+	return Castor3D::PluginType::ePostEffect;
 }
 
-C3D_Bloom_API String GetName()
+C3D_Bloom_API Castor::String GetName()
 {
-	return cuT( "Bloom PostEffect" );
+	return BloomPostEffect::Name;
 }
 
-C3D_Bloom_API String GetPostEffectType()
+C3D_Bloom_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	return cuT( "bloom" );
+	p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( BloomPostEffect::Type, &BloomPostEffect::Create );
 }
 
-C3D_Bloom_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params )
+C3D_Bloom_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	return std::make_shared< BloomPostEffect >( p_renderSystem, p_renderTarget, p_params );
+	p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( BloomPostEffect::Type );
 }

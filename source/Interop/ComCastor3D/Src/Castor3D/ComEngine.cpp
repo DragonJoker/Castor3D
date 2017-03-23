@@ -4,6 +4,7 @@
 #include "ComSampler.hpp"
 #include "ComBlendState.hpp"
 #include "ComDepthStencilState.hpp"
+#include "ComMultisampleState.hpp"
 #include "ComRasteriserState.hpp"
 #include "ComRenderWindow.hpp"
 #include "ComScene.hpp"
@@ -12,19 +13,17 @@
 #undef min
 #undef abs
 
-#include <BlendStateManager.hpp>
-#include <DepthStencilStateManager.hpp>
-#include <FunctorEvent.hpp>
-#include <InitialiseEvent.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <PluginManager.hpp>
-#include <RasteriserStateManager.hpp>
-#include <RenderLoop.hpp>
-#include <SamplerManager.hpp>
-#include <SceneFileParser.hpp>
-#include <SceneManager.hpp>
-#include <WindowManager.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SamplerCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/WindowCache.hpp>
+
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Scene/SceneFileParser.hpp>
 
 #define CASTOR3D_THREADED 0
 
@@ -38,156 +37,6 @@ namespace CastorCom
 {
 	namespace
 	{
-		template< typename TObj, typename TMgr >
-		std::shared_ptr< TObj > CreateObject( Castor3D::Engine & p_engine, TMgr & p_manager )
-		{
-			return p_manager.Create( Castor::String(), p_engine );
-		}
-
-		template<>
-		std::shared_ptr< Castor3D::Sampler > CreateObject< Castor3D::Sampler, Castor3D::SamplerManager >( Castor3D::Engine & p_engine, Castor3D::SamplerManager & p_manager )
-		{
-			return p_manager.Create( Castor::String() );
-		}
-
-		template<>
-		std::shared_ptr< Castor3D::RenderWindow > CreateObject< Castor3D::RenderWindow, Castor3D::WindowManager >( Castor3D::Engine & p_engine, Castor3D::WindowManager & p_manager )
-		{
-			return p_manager.Create( Castor::String() );
-		}
-
-		template< typename TObj >
-		bool DoParse( TObj & p_obj, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser & p_parser )
-		{
-			return p_parser.Parse( p_obj, p_chunk );
-		}
-
-		template< typename TObj, typename TKey >
-		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::ResourceManager< TKey, TObj > & p_manager, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
-		{
-			return DoParse( *CreateObject< TObj >( p_engine, p_manager ), p_chunk, p_parser );
-		}
-
-		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::SamplerManager & p_manager, Castor3D::BinaryChunk & p_chunk, Castor3D::Sampler::BinaryParser p_parser )
-		{
-			return DoParse< Castor3D::Sampler >( *CreateObject< Castor3D::Sampler >( p_engine, p_manager ), p_chunk, p_parser );
-		}
-
-		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::WindowManager & p_manager, Castor3D::BinaryChunk & p_chunk, Castor3D::RenderWindow::BinaryParser p_parser )
-		{
-			return DoParse< Castor3D::RenderWindow >( *CreateObject< Castor3D::RenderWindow >( p_engine, p_manager ), p_chunk, p_parser );
-		}
-
-		bool DoLoadMeshFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
-		{
-			bool l_return = true;
-
-			if ( p_fileName.GetExtension() != cuT( "cbsn" ) && p_fileName.GetExtension() != cuT( "zip" ) )
-			{
-				Castor::Path l_meshFilePath = p_fileName;
-				Castor::string::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
-
-				if ( Castor::File::FileExists( l_meshFilePath ) )
-				{
-					Castor::BinaryFile l_fileMesh( l_meshFilePath, Castor::File::eOPEN_MODE_READ );
-					Castor::Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
-
-					if ( p_engine.GetMeshManager().Load( l_fileMesh ) )
-					{
-						Castor::Logger::LogInfo( cuT( "Meshes read" ) );
-					}
-					else
-					{
-						Castor::Logger::LogError( cuT( "Can't read meshes" ) );
-						l_return = false;
-					}
-				}
-			}
-
-			return l_return;
-		}
-
-		Castor3D::RenderWindowSPtr DoLoadTextSceneFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
-		{
-			Castor3D::RenderWindowSPtr l_return;
-			Castor3D::SceneFileParser l_parser( p_engine );
-
-			if ( l_parser.ParseFile( p_fileName ) )
-			{
-				l_return = l_parser.GetRenderWindow();
-			}
-			else
-			{
-				Castor::Logger::LogWarning( cuT( "Can't read scene file" ) );
-			}
-
-			return l_return;
-		}
-
-		Castor3D::RenderWindowSPtr DoLoadBinarySceneFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
-		{
-			Castor3D::RenderWindowSPtr l_return;
-			bool l_continue = true;
-			Castor::BinaryFile l_file( p_fileName, Castor::File::eOPEN_MODE_READ );
-			Castor3D::BinaryChunk l_chunkFile;
-			Castor3D::RenderWindowSPtr l_window;
-			Castor::Path l_path = l_file.GetFilePath();
-			l_chunkFile.Read( l_file );
-
-			if ( l_chunkFile.GetChunkType() == Castor3D::eCHUNK_TYPE_CBSN_FILE )
-			{
-				while ( l_continue && l_chunkFile.CheckAvailable( 1 ) )
-				{
-					Castor3D::BinaryChunk l_chunk;
-					l_continue = l_chunkFile.GetSubChunk( l_chunk );
-
-					switch ( l_chunk.GetChunkType() )
-					{
-					case Castor3D::eCHUNK_TYPE_SAMPLER:
-						l_continue = DoFillManager( p_engine, p_engine.GetSamplerManager(), l_chunk, Castor3D::Sampler::BinaryParser( l_path ) );
-						break;
-
-					case Castor3D::eCHUNK_TYPE_MATERIAL:
-						l_continue = DoFillManager( p_engine, p_engine.GetMaterialManager(), l_chunk, Castor3D::Material::BinaryParser( l_path, &p_engine ) );
-						break;
-
-					case Castor3D::eCHUNK_TYPE_MESH:
-						l_continue = DoFillManager( p_engine, p_engine.GetMeshManager(), l_chunk, Castor3D::Mesh::BinaryParser( l_path ) );
-						break;
-
-					case Castor3D::eCHUNK_TYPE_SCENE:
-						l_continue = DoFillManager( p_engine, p_engine.GetSceneManager(), l_chunk, Castor3D::Scene::BinaryParser( l_path ) );
-						break;
-
-					case Castor3D::eCHUNK_TYPE_WINDOW:
-						l_continue = DoFillManager( p_engine, p_engine.GetWindowManager(), l_chunk, Castor3D::RenderWindow::BinaryParser( l_path ) );
-						break;
-					}
-
-					if ( !l_continue )
-					{
-						l_chunk.EndParse();
-					}
-				}
-
-				if ( l_continue )
-				{
-					Castor::Logger::LogInfo( cuT( "Import successful" ) );
-				}
-			}
-			else
-			{
-				Castor::Logger::LogWarning( cuT( "The given file is not a valid CBSN file: " ) + l_file.GetFileName() );
-			}
-
-			if ( !l_continue )
-			{
-				Castor::Logger::LogWarning( cuT( "Failed to read the binary scene file: " ) + l_file.GetFileName() );
-			}
-
-			return l_return;
-		}
-
 		Castor3D::RenderWindowSPtr DoLoadSceneFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
 		{
 			Castor3D::RenderWindowSPtr l_return;
@@ -201,22 +50,20 @@ namespace CastorCom
 				{
 					try
 					{
-						l_return = DoLoadTextSceneFile( p_engine, p_fileName );
+						Castor3D::SceneFileParser l_parser( p_engine );
+
+						if ( l_parser.ParseFile( p_fileName ) )
+						{
+							l_return = l_parser.GetRenderWindow();
+						}
+						else
+						{
+							Castor::Logger::LogWarning( cuT( "Can't read scene file" ) );
+						}
 					}
 					catch ( std::exception & exc )
 					{
 						Castor::Logger::LogError( cuT( "Failed to parse the scene file, with following error:" ) + Castor::string::string_cast< xchar >( exc.what() ) );
-					}
-				}
-				else
-				{
-					try
-					{
-						l_return = DoLoadBinarySceneFile( p_engine, p_fileName );
-					}
-					catch ( std::exception & exc )
-					{
-						Castor::Logger::LogError( cuT( "Failed to parse the binary scene file, with following error: " ) + Castor::string::string_cast< xchar >( exc.what() ) );
 					}
 				}
 			}
@@ -322,7 +169,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneManager().Create( FromBstr( name ), *m_internal ) );
+					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneCache().Add( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -340,7 +187,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->GetSceneManager().Clear();
+			m_internal->GetSceneCache().Clear();
 			hr = S_OK;
 		}
 		else
@@ -351,13 +198,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::LoadRenderer( /* [in] */ eRENDERER_TYPE type )
+	STDMETHODIMP CEngine::LoadRenderer( /* [in] */ BSTR type )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->LoadRenderer( Castor3D::eRENDERER_TYPE( type ) );
+			m_internal->LoadRenderer( FromBstr( type ) );
 			hr = S_OK;
 		}
 		else
@@ -391,36 +238,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->GetPluginManager().LoadPlugin( FromBstr( path ) );
+			m_internal->GetPluginCache().LoadPlugin( Castor::Path{ FromBstr( path ) } );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadPlugin" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CEngine::CreateMesh( /* [in] */ eMESH_TYPE type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CMesh::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CMesh * >( *pVal )->SetInternal( m_internal->GetMeshManager().Create( FromBstr( name ), Castor3D::eMESH_TYPE( type ) ) );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateMesh" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -437,30 +260,6 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateOverlay" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CEngine::CreateRenderWindow( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CRenderWindow::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetWindowManager().Create( FromBstr( name ) ) );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -494,7 +293,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSampler * >( *pVal )->SetInternal( m_internal->GetSamplerManager().Create( FromBstr( name ) ) );
+					static_cast< CSampler * >( *pVal )->SetInternal( m_internal->GetSamplerCache().Add( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -515,11 +314,6 @@ namespace CastorCom
 			if ( pVal )
 			{
 				hr = CBlendState::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CBlendState * >( *pVal )->SetInternal( m_internal->GetBlendStateManager().Create( FromBstr( name ) ) );
-				}
 			}
 		}
 		else
@@ -539,11 +333,6 @@ namespace CastorCom
 			if ( pVal )
 			{
 				hr = CDepthStencilState::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CDepthStencilState * >( *pVal )->SetInternal( m_internal->GetDepthStencilStateManager().Create( FromBstr( name ) ) );
-				}
 			}
 		}
 		else
@@ -563,11 +352,25 @@ namespace CastorCom
 			if ( pVal )
 			{
 				hr = CRasteriserState::CreateInstance( pVal );
+			}
+		}
+		else
+		{
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+		}
 
-				if ( hr == S_OK )
-				{
-					static_cast< CRasteriserState * >( *pVal )->SetInternal( m_internal->GetRasteriserStateManager().Create( FromBstr( name ) ) );
-				}
+		return hr;
+	}
+
+	STDMETHODIMP CEngine::CreateMultisampleState( /* [in] */ BSTR name, /* [out, retval] */ IMultisampleState ** pVal )
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			if ( pVal )
+			{
+				hr = CMultisampleState::CreateInstance( pVal );
 			}
 		}
 		else
@@ -584,7 +387,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->GetSceneManager().Remove( FromBstr( name ) );
+			m_internal->GetSceneCache().Remove( FromBstr( name ) );
 		}
 		else
 		{
@@ -602,7 +405,7 @@ namespace CastorCom
 		{
 			if ( window )
 			{
-				Castor::Path fileName = FromBstr( name );
+				Castor::Path fileName{ FromBstr( name ) };
 				Castor3D::RenderWindowSPtr l_return;
 
 				if ( Castor::File::FileExists( fileName ) )
@@ -613,27 +416,24 @@ namespace CastorCom
 					bool l_continue = true;
 					Castor::Logger::LogDebug( cuT( "GuiCommon::LoadSceneFile - Engine cleared" ) );
 
-					if ( DoLoadMeshFile( *m_internal, fileName ) )
+					try
 					{
-						try
-						{
-							m_internal->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
-						}
-						catch ( std::exception & exc )
-						{
-							Castor::Logger::LogError( "Castor initialisation failed with following error: " + std::string( exc.what() ) );
-						}
+						m_internal->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
+					}
+					catch ( std::exception & exc )
+					{
+						Castor::Logger::LogError( "Castor initialisation failed with following error: " + std::string( exc.what() ) );
+					}
 
-						l_return = DoLoadSceneFile( *m_internal, fileName );
+					l_return = DoLoadSceneFile( *m_internal, fileName );
 
-						if ( l_return )
+					if ( l_return )
+					{
+						hr = CRenderWindow::CreateInstance( window );
+
+						if ( hr == S_OK )
 						{
-							hr = CRenderWindow::CreateInstance( window );
-
-							if ( hr == S_OK )
-							{
-								static_cast< CRenderWindow * >( *window )->SetInternal( l_return );
-							}
+							static_cast< CRenderWindow * >( *window )->SetInternal( l_return );
 						}
 					}
 				}

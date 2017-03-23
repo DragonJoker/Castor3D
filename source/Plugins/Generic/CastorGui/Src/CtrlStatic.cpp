@@ -3,12 +3,12 @@
 #include "ControlsManager.hpp"
 
 #include <Engine.hpp>
-#include <Overlay.hpp>
-#include <OverlayManager.hpp>
-#include <BorderPanelOverlay.hpp>
-#include <TextOverlay.hpp>
+#include <Overlay/Overlay.hpp>
 
-#include <Font.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+
+#include <Graphics/Font.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -23,17 +23,17 @@ namespace CastorGui
 	}
 
 	StaticCtrl::StaticCtrl( Engine * p_engine, ControlRPtr p_parent, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_STATIC, p_engine, p_parent, m_count++, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eStatic, p_engine, p_parent, m_count++, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 	{
 		SetBackgroundBorders( Rectangle() );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( cuT( "T_CtrlStatic_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlStatic_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		m_text = l_text;
 		l_text->SetCaption( m_caption );
 		l_text->SetVisible( DoIsVisible() );
-		l_text->SetVAlign( eVALIGN_CENTER );
+		l_text->SetVAlign( VAlign::eCenter );
 		DoUpdateStyle();
 	}
 
@@ -133,30 +133,30 @@ namespace CastorGui
 
 		if ( l_text )
 		{
-			if ( GetStyle() & eSTATIC_STYLE_HALIGN_CENTER )
+			if ( CheckFlag( GetStyle(), StaticStyle::eHAlignCenter ) )
 			{
-				l_text->SetHAlign( eHALIGN_CENTER );
+				l_text->SetHAlign( HAlign::eCenter );
 			}
-			else if ( GetStyle() & eSTATIC_STYLE_HALIGN_RIGHT )
+			else if ( CheckFlag( GetStyle(), StaticStyle::eHAlignRight ) )
 			{
-				l_text->SetHAlign( eHALIGN_RIGHT );
+				l_text->SetHAlign( HAlign::eRight );
 			}
 			else
 			{
-				l_text->SetHAlign( eHALIGN_LEFT );
+				l_text->SetHAlign( HAlign::eLeft );
 			}
 
-			if ( GetStyle() & eSTATIC_STYLE_VALIGN_CENTER )
+			if ( CheckFlag( GetStyle(), StaticStyle::eVAlignCenter ) )
 			{
-				l_text->SetVAlign( eVALIGN_CENTER );
+				l_text->SetVAlign( VAlign::eCenter );
 			}
-			else if ( GetStyle() & eSTATIC_STYLE_VALIGN_BOTTOM )
+			else if ( CheckFlag( GetStyle(), StaticStyle::eVAlignBottom ) )
 			{
-				l_text->SetVAlign( eVALIGN_BOTTOM );
+				l_text->SetVAlign( VAlign::eBottom );
 			}
 			else
 			{
-				l_text->SetVAlign( eVALIGN_TOP );
+				l_text->SetVAlign( VAlign::eTop );
 			}
 		}
 	}

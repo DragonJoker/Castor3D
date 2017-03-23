@@ -3,15 +3,26 @@ option( CASTOR_USE_SSE2 "Use SSE2 instructions for Point4f and Matrix4x4f operat
 project( CastorUtils )
 
 include( Doxygen )
+include( AndroidNdkModules )
 
-find_package( Freetype )
+if ( ANDROID )
+	set( FREETYPE_FOUND TRUE )
+	set( FREETYPE_LIBRARIES FreeType )
+else ()
+	find_package( Freetype )
+endif ()
+
 if ( MSW )
 	find_package( ZLIB 1.2.7 )
 else ()
 	find_package( ZLIB )
 endif ()
-find_package( FreeImage )
-find_package( LibZip )
+
+if ( ANDROID )
+	set( FREEIMAGE_FOUND TRUE )
+else ()
+	find_package( FreeImage )
+endif ()
 
 if( NOT WIN32 )
 	find_package( X11 )
@@ -29,15 +40,42 @@ if( FREEIMAGE_FOUND )
 	message( STATUS "+ Found FreeImage (version ${FreeImage_VERSION_STRING})" )
 endif()
 
-if( LIBZIP_FOUND )
-	message( STATUS "+ Found libzip" )
-endif()
+if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
+	if ( ANDROID )
+		include_directories(
+			${CMAKE_SOURCE_DIR}/Core/FreeType/include
+			${CMAKE_SOURCE_DIR}/Core/FreeType/include/freetype
+			${ANDROID_NDK}/sources
+		)
+		android_ndk_import_module_cpufeatures()
+		set( CastorMinLibraries
+			${CastorMinLibraries}
+			m
+			EGL
+			cpufeatures
+		)
+	else ()
+		# Don't ask me why, in Windows x64 it is different from other builds...
+		if ( ${FREETYPE_INCLUDE_DIR_ft2build} STREQUAL ${FREETYPE_INCLUDE_DIR_freetype2} )
+			set( FREETYPE_INCLUDE_DIR_freetype2 ${FREETYPE_INCLUDE_DIR_freetype2}/freetype CACHE STRING "" FORCE )
+			set( FREETYPE_INCLUDE_DIRS
+				${FREETYPE_INCLUDE_DIRS}
+				${FREETYPE_INCLUDE_DIR_freetype2}
+			)
+		endif ()
 
-if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
-	include_directories( ${FREETYPE_INCLUDE_DIRS} )
-	include_directories( ${FreeImage_INCLUDE_DIR} )
+		include_directories( ${FREETYPE_INCLUDE_DIRS} )
+		include_directories( ${FreeImage_INCLUDE_DIR} )
+	endif ()
+
 	include_directories( ${ZLIB_INCLUDE_DIRS} )
-	include_directories( ${LIBZIP_INCLUDE_DIRS} )
+  
+	set( CASTOR_HAS_XINERAMA 0 )
+	if ( EXISTS "/usr/lib/X11/extensions/Xinerama.h" )
+		set( CASTOR_HAS_XINERAMA 1 )
+	elseif ( EXISTS "/usr/include/X11/extensions/Xinerama.h" )
+		set( CASTOR_HAS_XINERAMA 1 )
+	endif ()
 
 	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
 	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
@@ -72,22 +110,14 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		endif()
 	endforeach()
 
-	#libzip Libs
-	set( LibZipLibraries "")
-	foreach(Lib ${LIBZIP_LIBRARY})
-		if (LibZipLibraries)
-			set(LibZipLibraries "${LibZipLibraries}|${Lib}")
-		else()
-			set(LibZipLibraries "${Lib}")
-		endif()
-	endforeach()
-
 	#X11 Libs
 	set( X11Libraries "" )
 	foreach( Lib ${X11_LIBRARIES} )
 		if( X11Libraries )
 			set( X11Libraries "${X11Libraries}|${Lib}" )
-		else()
+		elseif (${CASTOR_HAS_XINERAMA} EQUAL 1)
+			set( X11Libraries "Xinerama ${Lib}" )
+		else ()
 			set( X11Libraries "${Lib}" )
 		endif()
 	endforeach()
@@ -103,13 +133,12 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		${FreeImageLibraries}
 		${FreeTypeLibraries}
 		${ZlibLibraries}
-		${LibZipLibraries}
 		${X11Libraries}
 	)
 
 	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-	set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+	set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
@@ -162,219 +191,30 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		target_link_libraries( ${PROJECT_NAME} dl )
 	endif ()
 
-	file( GLOB CASTOR_Pool_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.inl
-	)
-	file( GLOB CASTOR_Pool_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.cpp
-	)
-	source_group( "Header Files\\Pool" FILES ${CASTOR_Pool_HEADER_FILES} )
-	source_group( "Source Files\\Pool" FILES ${CASTOR_Pool_SOURCE_FILES} )
-
-	file( GLOB CASTOR_Math_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Coords*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Coords*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Line*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Line*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Matrix*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Matrix*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plane*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plane*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Point*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Point*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Vertex*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Vertex*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Quaternion*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Quaternion*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Math*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Math*.inl
-	)
-	file( GLOB CASTOR_Math_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Coords*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Line*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Matrix*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plane*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Point*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Vertex*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Quaternion*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Math*.cpp
-	)
-	source_group( "Header Files\\Math" FILES ${CASTOR_Math_HEADER_FILES} )
-	source_group( "Source Files\\Math" FILES ${CASTOR_Math_SOURCE_FILES} )
-
-	file( GLOB CASTOR_Design_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Collection*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Collection*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Factory*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Factory*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Named*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Named*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*NonCopyable*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*NonCopyable*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Unique*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Unique*.inl
-	)
-	file( GLOB CASTOR_Design_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Collection*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Factory*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Named*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*NonCopyable*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Unique*.cpp
-	)
-	source_group( "Header Files\\Design" FILES ${CASTOR_Design_HEADER_FILES} )
-	source_group( "Source Files\\Design" FILES ${CASTOR_Design_SOURCE_FILES} )
-
-	file( GLOB CASTOR_Exception_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Exception*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Exception*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Assertion*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Assertion*.inl
-	)
-	file( GLOB CASTOR_Exception_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Exception*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Assertion*.cpp
-	)
-	source_group( "Header Files\\Exception" FILES ${CASTOR_Exception_HEADER_FILES} )
-	source_group( "Source Files\\Exception" FILES ${CASTOR_Exception_SOURCE_FILES} )
-
-	file( GLOB CASTOR_Graphics_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Colour*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Colour*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Image*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Image*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pixel*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pixel*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Size*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Size*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Position*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Position*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Rectangle*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Rectangle*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Box*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Box*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Font*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Font*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Glyph*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Glyph*.inl
-	)
-	file( GLOB CASTOR_Graphics_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Colour*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Image*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pixel*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Size*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Position*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Rectangle*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Box*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Font*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Glyph*.cpp
-	)
-	source_group( "Header Files\\Graphics" FILES ${CASTOR_Graphics_HEADER_FILES} )
-	source_group( "Source Files\\Graphics" FILES ${CASTOR_Graphics_SOURCE_FILES} )
-
-	file( GLOB CASTOR_FileParser_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.inl
-	)
-	file( GLOB CASTOR_FileParser_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.cpp
-	)
-	source_group( "Header Files\\FileParser" FILES ${CASTOR_FileParser_HEADER_FILES} )
-	source_group( "Source Files\\FileParser" FILES ${CASTOR_FileParser_SOURCE_FILES} )
-
-	file( GLOB CASTOR_Data_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Parser*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Parser*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.inl
-	)
-	file( GLOB CASTOR_Data_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Parser*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.cpp
-	)
-	source_group( "Header Files\\Data" FILES ${CASTOR_Data_HEADER_FILES} )
-	source_group( "Source Files\\Data" FILES ${CASTOR_Data_SOURCE_FILES} )
-
-	file( GLOB CASTOR_Stream_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stream*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stream*.inl
-	)
-	file( GLOB CASTOR_Stream_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stream*.cpp
-	)
-	source_group( "Header Files\\Stream" FILES ${CASTOR_Stream_HEADER_FILES} )
-	source_group( "Source Files\\Stream" FILES ${CASTOR_Stream_SOURCE_FILES} )
-
-	file( GLOB CASTOR_Miscellaneous_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Block*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Block*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Console*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Console*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*DynamicLibrary*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*DynamicLibrary*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Logger*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Logger*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*PreciseTimer*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*PreciseTimer*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Resource*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Resource*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*String*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*String*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Templates*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Templates*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/Utils.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/Utils.inl
-	)
-	file( GLOB CASTOR_Miscellaneous_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Block*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Console*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*DynamicLibrary*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Logger*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*PreciseTimer*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Resource*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*String*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Templates*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/Utils.cpp
-	)
-	source_group( "Header Files\\Miscellaneous" FILES ${CASTOR_Miscellaneous_HEADER_FILES} )
-	source_group( "Source Files\\Miscellaneous" FILES ${CASTOR_Miscellaneous_SOURCE_FILES} )
+	parse_subdir_files( Align "Align" )
+	parse_subdir_files( Config "Config" )
+	parse_subdir_files( Data "Data" )
+	parse_subdir_files( Data/MiniZip "Data\\\\MiniZip" )
+	parse_subdir_files( Design "Design" )
+	parse_subdir_files( Exception "Exception" )
+	parse_subdir_files( FileParser "FileParser" )
+	parse_subdir_files( Graphics "Graphics" )
+	parse_subdir_files( Log "Log" )
+	parse_subdir_files( Math "Math" )
+	parse_subdir_files( Miscellaneous "Miscellaneous" )
+	parse_subdir_files( Multithreading "Multithreading" )
+	parse_subdir_files( Pool "Pool" )
+	parse_subdir_files( Stream "Stream" )
+	parse_subdir_files( Platform/Win32 "Platform\\\\Win32" )
+	parse_subdir_files( Platform/Android "Platform\\\\Android" )
+	parse_subdir_files( Platform/Linux "Platform\\\\Linux" )
 
 	file( GLOB CASTOR_Config_HEADER_FILES
 		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.hpp
 		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Config*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Config*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Macros*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Macros*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*SmartPtr*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*SmartPtr*.inl
 	)
 	file( GLOB CASTOR_Config_SOURCE_FILES
 		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Config*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Macros*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*SmartPtr*.cpp
 	)
 	source_group( "Header Files\\Config" FILES ${CASTOR_Config_HEADER_FILES} )
 	source_group( "Source Files\\Config" FILES ${CASTOR_Config_SOURCE_FILES} )
@@ -387,205 +227,26 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 
 	if ( WIN32 )
 		include( InstallRequiredSystemLibraries )
-		# Preparing FreeImage and freetype dlls installation
-		get_filename_component( FreeTypePath ${FREETYPE_LIBRARY} PATH)
-		get_filename_component( FreeTypePath ${FreeTypePath} PATH)
-		get_filename_component( LibZipPath ${LIBZIP_LIBRARY} PATH)
-		get_filename_component( LibZipPath ${LibZipPath} PATH)
-
-		if ( ZLIB_LIBRARY_RELEASE OR ZLIB_LIBRARY_DEBUG )
-			if ( ZLIB_LIBRARY_RELEASE )
-				get_filename_component( ZlibPath ${ZLIB_LIBRARY_RELEASE} PATH)
-				string( FIND ${ZlibPath} "Release" _FOUND )
-
-				if ( ${_FOUND} EQUAL -1 )
-					get_filename_component( ZlibPath ${ZlibPath} PATH)
-				endif ()
-
-				get_filename_component( ZlibPath ${ZlibPath} PATH)
-
-				if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${ZlibPath}/bin/zlib1.dll
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					install(
-						FILES ${ZlibPath}/bin/zlib1.dll
-						DESTINATION bin
-						COMPONENT ${PROJECT_NAME}
-					)
-				elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${ZlibPath}/bin/zlibwapi.dll
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					install(
-						FILES ${ZlibPath}/bin/zlibwapi.dll
-						DESTINATION bin
-						COMPONENT ${PROJECT_NAME}
-					)
-				endif ()
-			endif ()
-			if ( ZLIB_LIBRARY_DEBUG )
-				get_filename_component( ZlibPath ${ZLIB_LIBRARY_DEBUG} PATH)
-				string( FIND ${ZlibPath} "Release" _FOUND )
-
-				if ( ${_FOUND} EQUAL -1 )
-					get_filename_component( ZlibPath ${ZlibPath} PATH)
-				endif ()
-
-				get_filename_component( ZlibPath ${ZlibPath} PATH)
-
-				if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${ZlibPath}/bin/zlib1.dll
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					install(
-						FILES ${ZlibPath}/bin/zlib1.dll
-						DESTINATION bin
-						COMPONENT ${PROJECT_NAME}
-					)
-				elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${ZlibPath}/bin/zlibwapi.dll
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					install(
-						FILES ${ZlibPath}/bin/zlibwapi.dll
-						DESTINATION bin
-						COMPONENT ${PROJECT_NAME}
-					)
-				endif ()
-			endif ()
+		if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
+			get_filename_component( ZLibLibPath ${ZLIB_LIBRARY} PATH )
+			set( ZLibLibPath ${ZLibLibPath}/zlib1.dll )
+			copy_dll( ${PROJECT_NAME} ${ZLibLibPath} ${ZLibLibPath} )
+		elseif ( ZLIB_LIBRARY_RELEASE OR ZLIB_LIBRARY_DEBUG )
+			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY_DEBUG} ${ZLIB_LIBRARY_RELEASE} )
 		else ()
-			get_filename_component( ZlibPath ${ZLIB_LIBRARY} PATH)
-			string( FIND ${ZlibPath} "Release" _FOUND )
-
-			if ( NOT ${_FOUND} EQUAL -1 )
-				get_filename_component( ZlibPath ${ZlibPath} PATH)
-			endif ()
-
-			string( FIND ${ZlibPath} "Debug" _FOUND )
-
-			if ( NOT ${_FOUND} EQUAL -1 )
-				get_filename_component( ZlibPath ${ZlibPath} PATH)
-			endif ()
-
-			get_filename_component( ZlibPath ${ZlibPath} PATH)
-
-			if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
-				add_custom_command(
-					TARGET ${PROJECT_NAME}
-					POST_BUILD
-					COMMAND
-						${CMAKE_COMMAND} -E
-							copy_if_different
-							${ZlibPath}/bin/zlib1.dll
-							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-				)
-				install(
-					FILES ${ZlibPath}/bin/zlib1.dll
-					DESTINATION bin
-					COMPONENT ${PROJECT_NAME}
-				)
-			elseif ( EXISTS ${ZlibPath}/bin/zlib.dll )
-				add_custom_command(
-					TARGET ${PROJECT_NAME}
-					POST_BUILD
-					COMMAND
-						${CMAKE_COMMAND} -E
-							copy_if_different
-							${ZlibPath}/bin/zlib.dll
-							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-				)
-				install(
-					FILES ${ZlibPath}/bin/zlib.dll
-					DESTINATION bin
-					COMPONENT ${PROJECT_NAME}
-				)
-			elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
-				add_custom_command(
-					TARGET ${PROJECT_NAME}
-					POST_BUILD
-					COMMAND
-						${CMAKE_COMMAND} -E
-							copy_if_different
-							${ZlibPath}/bin/zlibwapi.dll
-							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-				)
-				install(
-					FILES ${ZlibPath}/bin/zlibwapi.dll
-					DESTINATION bin
-					COMPONENT ${PROJECT_NAME}
-				)
-			endif ()
+			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} )
 		endif ()
 
-		add_custom_command(
-			TARGET ${PROJECT_NAME}
-			POST_BUILD
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${LibZipPath}/bin/zip.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${FreeImage_LIBRARY_DIR}/FreeImage.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-		)
-		install(
-			FILES
-				${FreeImage_LIBRARY_DIR}/FreeImage.dll
-				${LibZipPath}/bin/zip.dll
-			DESTINATION bin
-			COMPONENT ${PROJECT_NAME}
-		)
-
-		if ( EXISTS ${FreeTypePath}/bin/freetype6.dll )
-			add_custom_command(
-				TARGET ${PROJECT_NAME}
-				POST_BUILD
-				COMMAND
-					${CMAKE_COMMAND} -E
-						copy_if_different
-						${FreeTypePath}/bin/freetype6.dll
-						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-			)
-			install(
-				FILES ${FreeTypePath}/bin/freetype6.dll
-				DESTINATION bin
-				COMPONENT ${PROJECT_NAME}
-			)
+		if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
+			copy_dll( ${PROJECT_NAME} ${FREETYPE_LIBRARY} ${FREETYPE_LIBRARY} 6 )
 		endif ()
+		copy_dll( ${PROJECT_NAME} ${FreeImage_LIBRARIES} ${FreeImage_LIBRARIES} )
 	endif ()
 
-	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core/CastorUtils" )
+	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-	add_target_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
-	add_target_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
+	target_add_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
+	target_add_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
 
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 else ()
@@ -599,9 +260,6 @@ else ()
 	if( NOT ZLIB_FOUND )
 		set( msg "${msg} Zlib" )
 	endif()
-	if( NOT LIBZIP_FOUND )
-		set( msg "${msg} libzip" )
-	endif()
 	set( Build "${msg})" PARENT_SCOPE )
 	set( Error TRUE PARENT_SCOPE )
 endif ()
@@ -612,6 +270,3 @@ set( CastorMinLibraries
 	PARENT_SCOPE
 )
 
-if( ${CASTOR_BUILDGRP_TEST} )
-	add_subdirectory( Test )
-endif()

@@ -1,19 +1,24 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3DCOM_COM_VARIABLE_INDEXED_PUTTER_H___
 #define ___C3DCOM_COM_VARIABLE_INDEXED_PUTTER_H___
@@ -21,7 +26,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComParameterCast.hpp"
 
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
 
 namespace CastorCom
 {
@@ -56,12 +61,51 @@ namespace CastorCom
 		Class * m_instance;
 		Function m_function;
 	};
-
+	
 	template< typename Class, typename Value, typename Index, typename _Class >
 	IndexedVariablePutter< Class, Value, Index >
 	make_indexed_putter( _Class * instance, void ( Class::*function )( Index, Value ) )
 	{
 		return IndexedVariablePutter< Class, Value, Index >( ( Class * )instance, function );
+	}
+
+	template< typename Class, typename Value, typename Index >
+	struct IndexedVariablePutterRev
+	{
+		typedef void ( Class::*Function )( Value, Index );
+		IndexedVariablePutterRev( Class * instance, Function function )
+			: m_instance( instance )
+			, m_function( function )
+		{
+		}
+		template< typename _Index, typename _Value >
+		HRESULT operator()( _Index index, _Value value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( m_instance )
+			{
+				( m_instance->*m_function )( parameter_cast< Value >( value ), parameter_cast< Index >( index ) );
+				hr = S_OK;
+			}
+			else
+			{
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+			}
+
+			return S_OK;
+		}
+
+	private:
+		Class * m_instance;
+		Function m_function;
+	};
+
+	template< typename Class, typename Value, typename Index, typename _Class >
+	IndexedVariablePutterRev< Class, Value, Index >
+	make_indexed_putter_rev( _Class * instance, void ( Class::*function )( Value, Index ) )
+	{
+		return IndexedVariablePutterRev< Class, Value, Index >( ( Class * )instance, function );
 	}
 
 	template< typename Class, typename Value, typename Index >

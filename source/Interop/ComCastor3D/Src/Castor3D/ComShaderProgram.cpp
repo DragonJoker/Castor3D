@@ -22,7 +22,7 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-				*pVal = ToBstr( m_internal->GetFile( Castor3D::eSHADER_TYPE( target ), Castor3D::eSHADER_MODEL( model ) ) );
+				*pVal = ToBstr( m_internal->GetFile( Castor3D::ShaderType( target ), Castor3D::ShaderModel( model ) ) );
 				hr = S_OK;
 			}
 		}
@@ -46,7 +46,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetFile( Castor3D::eSHADER_TYPE( target ), Castor3D::eSHADER_MODEL( model ), FromBstr( val ) );
+			m_internal->SetFile( Castor3D::ShaderType ( target ), Castor3D::ShaderModel( model ), Castor::Path{ FromBstr( val ) } );
 			hr = S_OK;
 		}
 		else
@@ -71,7 +71,7 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-				*pVal = ToBstr( m_internal->GetSource( Castor3D::eSHADER_TYPE( target ), Castor3D::eSHADER_MODEL( model ) ) );
+				*pVal = ToBstr( m_internal->GetSource( Castor3D::ShaderType( target ), Castor3D::ShaderModel( model ) ) );
 				hr = S_OK;
 			}
 		}
@@ -95,7 +95,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetSource( Castor3D::eSHADER_TYPE( target ), Castor3D::eSHADER_MODEL( model ), FromBstr( val ) );
+			m_internal->SetSource( Castor3D::ShaderType( target ), Castor3D::ShaderModel( model ), FromBstr( val ) );
 			hr = S_OK;
 		}
 		else
@@ -164,7 +164,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->CreateObject( Castor3D::eSHADER_TYPE( val ) );
+			m_internal->CreateObject( Castor3D::ShaderType( val ) );
 			hr = S_OK;
 		}
 		else

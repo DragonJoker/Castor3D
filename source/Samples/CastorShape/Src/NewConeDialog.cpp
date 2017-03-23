@@ -14,8 +14,8 @@ namespace CastorShape
 		static wxString CONE_FACES = _( "Face count" );
 	}
 
-	NewConeDialog::NewConeDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id )
-		: NewGeometryDialog( p_engine, parent, p_id, _( "New cone" ) )
+	NewConeDialog::NewConeDialog( Scene & p_scene, wxWindow * parent, wxWindowID p_id )
+		: NewGeometryDialog( p_scene, parent, p_id, _( "New cone" ) )
 	{
 		CONE_RADIUS = _( "Radius" );
 		CONE_HEIGHT = _( "Height" );

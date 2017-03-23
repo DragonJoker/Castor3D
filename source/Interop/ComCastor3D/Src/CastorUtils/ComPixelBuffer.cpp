@@ -67,7 +67,7 @@ namespace CastorCom
 
 		if ( !m_buffer )
 		{
-			m_buffer = Castor::PxBufferBase::create( *static_cast< CSize * >( size ), Castor::ePIXEL_FORMAT( format ) );
+			m_buffer = Castor::PxBufferBase::create( *static_cast< CSize * >( size ), Castor::PixelFormat( format ) );
 			hr = S_OK;
 		}
 		else

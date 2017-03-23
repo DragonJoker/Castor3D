@@ -1,36 +1,31 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_Md3Importer___
 #define ___C3D_Md3Importer___
 
-#include <Importer.hpp>
+#include <Mesh/Importer.hpp>
 
-#ifndef _WIN32
-#	define C3D_Md3_API
-#else
-#	ifdef Md3Importer_EXPORTS
-#		define C3D_Md3_API __declspec(dllexport)
-#	else
-#		define C3D_Md3_API __declspec(dllimport)
-#	endif
-#endif
-
-namespace Castor3D
+namespace C3DMd3
 {
 	//! MD3 file importer
 	/*!
@@ -39,7 +34,7 @@ namespace Castor3D
 	\date 25/08/2010
 	*/
 	class Md3Importer
-		:	public Importer
+		:	public Castor3D::Importer
 	{
 	private:
 		struct Md3Header
@@ -77,15 +72,15 @@ namespace Castor3D
 		{
 			char m_strName[64];
 			Castor::Point3r m_position;
-			real m_rotation[3][3];
+			Castor3D::real m_rotation[3][3];
 		};
 
 		struct Md3Bone
 		{
-			real m_mins[3];
-			real m_maxs[3];
-			real m_position[3];
-			real m_scale;
+			Castor3D::real m_mins[3];
+			Castor3D::real m_maxs[3];
+			Castor3D::real m_position[3];
+			Castor3D::real m_scale;
 			char m_creator[16];
 		};
 
@@ -103,13 +98,37 @@ namespace Castor3D
 
 		struct Md3TexCoord
 		{
-			real m_textureCoord[2];
+			Castor3D::real m_textureCoord[2];
 		};
 
 		struct Md3Skin
 		{
 			char m_strName[68];
 		};
+
+	public:
+		/**
+		 * Constructor
+		 */
+		Md3Importer( Castor3D::Engine & p_engine );
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+
+	private:
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+
+		void DoReadMD3Data( Castor3D::Mesh & p_mesh, Castor3D::LegacyPass & p_pass );
+		void DoConvertDataStructures( Castor3D::Mesh & p_mesh, Md3MeshInfo p_meshHeader );
+		bool DoLoadSkin( Castor3D::Mesh & p_mesh, Castor::Path const & p_strSkin );
+		bool DoLoadShader( Castor3D::Mesh & p_mesh, Castor::Path const & p_strShader );
+		void DoCleanUp();
 
 	public:
 		Md3Header m_header;
@@ -122,25 +141,10 @@ namespace Castor3D
 
 		Md3Tag * m_tags;
 		int m_numOfTags;
-		MeshSPtr * m_links;
-		SubmeshPtrStrMap m_mapSubmeshesByName;
+		Castor3D::MeshSPtr * m_links;
+		Castor3D::SubmeshPtrStrMap m_mapSubmeshesByName;
 
 		Castor::BinaryFile * m_pFile;
-
-	public:
-		/**
-		 * Constructor
-		 */
-		Md3Importer( Engine & p_pEngine );
-
-	private:
-		virtual SceneSPtr DoImportScene();
-		virtual MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
-		void DoReadMD3Data( Castor3D::Scene & p_scene, MeshSPtr p_pMesh, PassSPtr p_pPass );
-		void DoConvertDataStructures( MeshSPtr p_pMesh, Md3MeshInfo p_meshHeader );
-		bool DoLoadSkin( Castor3D::Scene & p_scene, Castor::String const & p_strSkin );
-		bool DoLoadShader( Castor3D::Scene & p_scene, MeshSPtr p_pMesh, Castor::String const & p_strShader );
-		void DoCleanUp();
 	};
 }
 

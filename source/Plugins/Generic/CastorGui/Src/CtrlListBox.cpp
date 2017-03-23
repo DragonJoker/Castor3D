@@ -3,15 +3,22 @@
 #include "ControlsManager.hpp"
 #include "CtrlStatic.hpp"
 
-#include <BorderPanelOverlay.hpp>
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
-#include <MaterialManager.hpp>
-#include <Pass.hpp>
-#include <OverlayManager.hpp>
-#include <TextOverlay.hpp>
+#include <Material/Material.hpp>
+#include <Material/LegacyPass.hpp>
+#include <Overlay/Overlay.hpp>
 
-#include <Font.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Texture/TextureUnit.hpp>
+
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+
+#include <Graphics/Font.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -24,7 +31,7 @@ namespace CastorGui
 	}
 
 	ListBoxCtrl::ListBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_LIST, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eListBox, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_initialValues( p_values )
 		, m_selected( p_selected )
@@ -40,7 +47,7 @@ namespace CastorGui
 		m_selectedItemBackgroundMaterial = p_value;
 		int i = 0;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			if ( i++ == m_selected )
 			{
@@ -54,7 +61,7 @@ namespace CastorGui
 		m_selectedItemForegroundMaterial = p_value;
 		int i = 0;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			if ( i++ == m_selected )
 			{
@@ -70,7 +77,7 @@ namespace CastorGui
 		if ( GetControlsManager() )
 		{
 			StaticCtrlSPtr l_item = DoCreateItemCtrl( p_value );
-			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_item]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_item]()
 			{
 				GetControlsManager()->Create( l_item );
 			} ) );
@@ -106,7 +113,7 @@ namespace CastorGui
 				if ( GetControlsManager() )
 				{
 					ControlSPtr l_control = *l_it;
-					GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_control]()
+					GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_control]()
 					{
 						GetControlsManager()->Destroy( l_control );
 					} ) );
@@ -189,7 +196,7 @@ namespace CastorGui
 	{
 		m_fontName = p_font;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			l_item->SetFont( m_fontName );
 		}
@@ -199,7 +206,7 @@ namespace CastorGui
 	{
 		Position l_position;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			l_item->SetPosition( l_position );
 			l_item->SetSize( Size( GetSize().width(), DEFAULT_HEIGHT ) );
@@ -216,12 +223,25 @@ namespace CastorGui
 
 	StaticCtrlSPtr ListBoxCtrl::DoCreateItemCtrl( String const & p_value )
 	{
-		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), eSTATIC_STYLE_VALIGN_CENTER );
+		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), uint32_t( StaticStyle::eVAlignCenter ) );
 		l_item->SetCatchesMouseEvents( true );
-		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ListBoxCtrl::OnItemMouseEnter, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ListBoxCtrl::OnItemMouseLeave, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ListBoxCtrl::OnItemMouseLButtonUp, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_item->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ListBoxCtrl::OnItemKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
+
+		l_item->ConnectNC( MouseEventType::eEnter, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		{
+			OnItemMouseEnter( p_control, p_event );
+		} );
+		l_item->ConnectNC( MouseEventType::eLeave, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		{
+			OnItemMouseLeave( p_control, p_event );
+		} );
+		l_item->ConnectNC( MouseEventType::eReleased, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		{
+			OnItemMouseLButtonUp( p_control, p_event );
+		} );
+		l_item->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		{
+			OnItemKeyDown( p_control, p_event );
+		} );
 
 		if ( m_fontName.empty() )
 		{
@@ -251,21 +271,21 @@ namespace CastorGui
 
 		if ( !l_material )
 		{
-			SetSelectedItemBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "DarkBlue" ) ) );
+			SetSelectedItemBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "DarkBlue" ) ) );
 		}
 
 		l_material = GetSelectedItemForegroundMaterial();
 
 		if ( !l_material )
 		{
-			SetSelectedItemForegroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "White" ) ) );
+			SetSelectedItemForegroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
 		}
 
 		l_material = GetHighlightedItemBackgroundMaterial();
 
 		if ( !l_material )
 		{
-			Colour l_colour = GetBackgroundMaterial()->GetPass( 0 )->GetAmbient();
+			Colour l_colour = GetBackgroundMaterial()->GetTypedPass< MaterialType::eLegacy >( 0u )->GetAmbient();
 			l_colour.red() = std::min( 1.0f, float( l_colour.red() ) / 2.0f );
 			l_colour.green() = std::min( 1.0f, float( l_colour.green() ) / 2.0f );
 			l_colour.blue() = std::min( 1.0f, float( l_colour.blue() ) / 2.0f );
@@ -275,9 +295,13 @@ namespace CastorGui
 
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		SetSize( Size( GetSize().width(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ListBoxCtrl::OnKeyDown, this, std::placeholders::_1 ) );
 
-		for ( auto && l_value : m_initialValues )
+		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
+		{
+			OnKeyDown( p_event );
+		} );
+
+		for ( auto l_value : m_initialValues )
 		{
 			DoCreateItem( l_value );
 		}
@@ -289,7 +313,7 @@ namespace CastorGui
 
 	void ListBoxCtrl::DoDestroy()
 	{
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			l_item->Destroy();
 		}
@@ -311,7 +335,8 @@ namespace CastorGui
 	void ListBoxCtrl::DoSetBackgroundMaterial( MaterialSPtr p_material )
 	{
 		int i = 0;
-		Colour l_colour = p_material->GetPass( 0 )->GetAmbient();
+		auto l_pass = p_material->GetTypedPass< MaterialType::eLegacy >( 0u );
+		Colour l_colour = l_pass->GetAmbient();
 		SetItemBackgroundMaterial( p_material );
 
 		if ( GetEngine() )
@@ -325,9 +350,9 @@ namespace CastorGui
 		}
 
 		l_colour.alpha() = 0.0;
-		p_material->GetPass( 0 )->SetAmbient( l_colour );
+		l_pass->SetAmbient( l_colour );
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			if ( i++ != m_selected )
 			{
@@ -340,7 +365,7 @@ namespace CastorGui
 	{
 		int i = 0;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			if ( i++ != m_selected )
 			{
@@ -351,7 +376,7 @@ namespace CastorGui
 
 	void ListBoxCtrl::DoSetVisible( bool p_visible )
 	{
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			l_item->SetVisible( p_visible );
 		}
@@ -376,13 +401,13 @@ namespace CastorGui
 
 	void ListBoxCtrl::OnItemMouseLButtonUp( ControlSPtr p_control, MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		if ( p_event.GetButton() == MouseButton::eLeft )
 		{
 			int l_index = -1;
 
 			if ( m_selectedItem.lock() != p_control )
 			{
-				auto && l_it = m_items.begin();
+				auto l_it = m_items.begin();
 				int i = 0;
 
 				while ( l_index == -1 && l_it != m_items.end() )
@@ -397,7 +422,7 @@ namespace CastorGui
 				}
 
 				SetSelected( l_index );
-				m_signals[eLISTBOX_EVENT_SELECTED]( m_selected );
+				m_signals[size_t( ListBoxEvent::eSelected )]( m_selected );
 			}
 			else
 			{
@@ -413,12 +438,12 @@ namespace CastorGui
 			bool l_changed = false;
 			int l_index = m_selected;
 
-			if ( p_event.GetKey() == eKEY_UP )
+			if ( p_event.GetKey() == KeyboardKey::eUp )
 			{
 				l_index--;
 				l_changed = true;
 			}
-			else if ( p_event.GetKey() == eKEY_DOWN )
+			else if ( p_event.GetKey() == KeyboardKey::eDown )
 			{
 				l_index++;
 				l_changed = true;
@@ -428,7 +453,7 @@ namespace CastorGui
 			{
 				l_index = std::max( 0, std::min( l_index, int( m_items.size() - 1 ) ) );
 				SetSelected( l_index );
-				m_signals[eLISTBOX_EVENT_SELECTED]( l_index );
+				m_signals[size_t( ListBoxEvent::eSelected )]( l_index );
 			}
 		}
 	}

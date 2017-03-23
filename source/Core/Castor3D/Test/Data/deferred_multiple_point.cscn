@@ -1,0 +1,202 @@
+debug_overlays true
+
+scene "Scene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	material "Silver"
+	{
+		type legacy
+		pass
+		{
+			ambient 0.0745	0.0745	0.0745 1.0
+			diffuse 0.75164	0.75164	0.75164 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.628281 0.628281 0.628281 1.0
+			shininess 51.2
+		}
+	}
+
+	material "Gold"
+	{
+		type legacy
+		pass
+		{
+			ambient 0.24725 0.1995 0.0745 1.0
+			diffuse 0.75164 0.60648 0.22648 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.628281 0.555802 0.366065 1.0
+			shininess 51.2
+			two_sided true
+		}
+	}
+
+	material "WhiteEmit"
+	{
+		type legacy
+		pass
+		{
+			emissive 1 1 1 1
+			ambient 1 1 1 1
+		}
+	}
+
+	scene_node "PointLightNode1"
+	{
+		position 0 50 0
+	}
+
+	scene_node "PointLightNode2"
+	{
+		position 0 -50 0
+	}
+
+	light "PointLight1"
+	{
+		type point
+		parent "PointLightNode1"
+		colour 1.0 1.0 1.0
+		intensity 0.5 0.8 1.0 1.0
+		attenuation 1.0 0.00001 0.00001
+	}
+
+	light "PointLight2"
+	{
+		type point
+		parent "PointLightNode2"
+		colour 1.0 1.0 1.0
+		intensity 0.5 0.8 1.0 1.0
+		attenuation 1.0 0.00001 0.00001
+	}
+
+	scene_node "Cube"
+	{
+	}
+
+	scene_node "SphereRight"
+	{
+		position 100 0 0
+	}
+
+	scene_node "SphereTop"
+	{
+		position 0 100 0
+	}
+
+	scene_node "SphereFar"
+	{
+		position 0 0 100
+	}
+
+	scene_node "Torus"
+	{
+	}
+
+	object "PointLight1"
+	{
+		parent "PointLightNode1"
+		cast_shadows false
+
+		mesh "LightMesh"
+		{
+			type sphere 20 1
+		}
+
+		material "WhiteEmit"
+	}
+
+	object "PointLight2"
+	{
+		parent "PointLightNode2"
+		cast_shadows false
+		mesh "LightMesh"
+		material "WhiteEmit"
+	}
+
+	object "Cube"
+	{
+		parent "Cube"
+
+		mesh "Cube"
+		{
+			type cube 400 400 400
+		}
+
+		material "Gold"
+	}
+
+	object "SphereRight"
+	{
+		parent "SphereRight"
+
+		mesh "Sphere"
+		{
+			type sphere 20 10
+		}
+
+		material "Silver"
+	}
+
+	object "SphereTop"
+	{
+		parent "SphereTop"
+
+		mesh "Sphere"
+		material "Silver"
+	}
+
+	object "SphereFar"
+	{
+		parent "SphereFar"
+
+		mesh "Sphere"
+		material "Silver"
+	}
+
+	object "Torus"
+	{
+		parent "Torus"
+
+		mesh "Torus"
+		{
+			type torus 30 30 15 30
+		}
+
+		material "Silver"
+	}
+
+	scene_node "MainCameraNode"
+	{
+		position 0.0 80.0 -100.0
+	}
+
+	camera "MainCamera"
+	{
+		parent "MainCameraNode"
+
+		viewport "MainViewport"
+		{
+			type perspective
+			fov_y 45.0
+			aspect_ratio 1.778
+			near 0.1
+			far 20000.0
+		}
+	}
+
+	window "Window"
+	{
+		render_target
+		{
+			format argb32
+			size screen_size
+			scene "Scene"
+			camera "MainCamera"
+			technique "deferred"
+		}
+
+		fullscreen false
+		vsync false
+	}
+}

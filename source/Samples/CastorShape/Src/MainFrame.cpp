@@ -20,22 +20,29 @@
 #include <AuiTabArt.hpp>
 #include <AuiToolBarArt.hpp>
 #include <SplashScreen.hpp>
+#include <SceneExporter.hpp>
 
-#include <DirectionalLight.hpp>
-#include <DividerPlugin.hpp>
-#include <GeometryManager.hpp>
-#include <ImporterPlugin.hpp>
-#include <Importer.hpp>
-#include <LightManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <Pass.hpp>
-#include <PluginManager.hpp>
-#include <RenderLoop.hpp>
-#include <RenderWindow.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
-#include <Subdivider.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/LightCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Importer.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Mesh/Subdivider.hpp>
+#include <Plugin/DividerPlugin.hpp>
+#include <Plugin/ImporterPlugin.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Scene/Light/DirectionalLight.hpp>
+#include <Scene/Light/Light.hpp>
 
 #include <xpms/castor_dark.xpm>
 
@@ -149,7 +156,7 @@ namespace CastorShape
 				MeshSPtr l_mesh = m_selectedGeometry->GetMesh();
 				uint32_t l_index = 0;
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
 					MaterialInfos * l_infos = m_selectedGeometryMaterials[l_index++];
 					m_selectedGeometry->GetMaterial( l_submesh )->GetPass( 0 )->SetAmbient( Colour::from_rgb( l_infos->m_ambient ) );
@@ -165,7 +172,7 @@ namespace CastorShape
 			{
 				MeshSPtr l_mesh = m_selectedGeometry->GetMesh();
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
 					MaterialInfos * l_infos = new MaterialInfos;
 					l_infos->m_ambient[0] = m_selectedGeometry->GetMaterial( l_submesh )->GetPass( 0 )->GetAmbient().red();
@@ -220,7 +227,7 @@ namespace CastorShape
 	{
 		if ( ! p_strFileName.empty() )
 		{
-			m_strFilePath = ( wxChar const * )p_strFileName.c_str();
+			m_strFilePath = Path{ ( wxChar const * )p_strFileName.c_str() };
 		}
 
 		if ( ! m_strFilePath.empty() )
@@ -236,47 +243,23 @@ namespace CastorShape
 			}
 
 			SceneSPtr l_scene;
+			auto l_engine = wxGetApp().GetCastor();
+			auto l_extension = string::lower_case( m_strFilePath.GetExtension() );
 
-			if ( string::lower_case( m_strFilePath.GetExtension() ) == cuT( "cscn" ) || string::lower_case( m_strFilePath.GetExtension() ) == cuT( "cbsn" ) )
+			if ( l_extension == cuT( "cscn" ) )
 			{
-				RenderWindowSPtr l_window = GuiCommon::LoadScene( *wxGetApp().GetCastor(), m_strFilePath, CASTOR_WANTED_FPS, false );
+				RenderWindowSPtr l_window = GuiCommon::LoadScene( *l_engine, m_strFilePath, CASTOR_WANTED_FPS, false );
 
 				if ( l_window )
 				{
 					l_scene = l_window->GetScene();
 				}
 			}
-			else
+			else if ( l_engine->GetImporterFactory().IsRegistered( l_extension ) )
 			{
-				ImporterSPtr l_pImporter;
-				ImporterPlugin::ExtensionArray l_arrayExtensions;
-
-				for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
-				{
-					if ( !l_pImporter )
-					{
-						ImporterPluginSPtr l_plugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
-
-						if ( l_plugin )
-						{
-							l_arrayExtensions = l_plugin->GetExtensions();
-
-							for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
-							{
-								if ( string::lower_case( m_strFilePath.GetExtension() ) == string::lower_case( l_itExt->first ) )
-								{
-									l_pImporter = l_plugin->GetImporter();
-								}
-							}
-						}
-					}
-				}
-
-				if ( l_pImporter )
-				{
-					bool l_return = true;
-					l_scene = l_pImporter->ImportScene( m_strFilePath, Parameters() );
-				}
+				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
+				l_scene = l_engine->GetSceneCache().Add( m_strFilePath.GetFileName() );
+				l_importer->ImportScene( *l_scene, m_strFilePath, Parameters() );
 			}
 
 			if ( l_scene )
@@ -286,7 +269,7 @@ namespace CastorShape
 			}
 
 			m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), l_mainScene );
-			m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+			m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *l_mainScene );
 		}
 	}
 
@@ -338,13 +321,13 @@ namespace CastorShape
 
 		if ( l_scene )
 		{
-			m_3dFrame = new RenderPanel( eVIEWPORT_TYPE_PERSPECTIVE, l_scene, ePROJECTION_DIRECTION_FRONT, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, 0 ), wxSize( l_width - 1, l_height - 1 ) );
+			m_3dFrame = new RenderPanel( ViewportType::Perspective, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, 0 ), wxSize( l_width - 1, l_height - 1 ) );
 
 			if ( m_bMultiFrames )
 			{
-				m_2dFrameHD = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, ePROJECTION_DIRECTION_FRONT, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, 0 ), wxSize( l_width - 1, l_height - 1 ) );
-				m_2dFrameBG = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, ePROJECTION_DIRECTION_LEFT, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
-				m_2dFrameBD = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, ePROJECTION_DIRECTION_TOP, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameHD = new RenderPanel( ViewportType::Ortho, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, 0 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameBG = new RenderPanel( ViewportType::Ortho, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameBD = new RenderPanel( ViewportType::Ortho, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
 				m_separator1 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height - 1 ), wxSize( l_width, 2 ) );
 				m_separator2 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( l_width, l_height - 1 ), wxSize( l_width, 2 ) );
 				m_separator3 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( l_width - 1, 0 ), wxSize( 2, l_height ) );
@@ -374,7 +357,7 @@ namespace CastorShape
 			if ( wxGetApp().GetCastor() )
 			{
 				m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), l_scene );
-				m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+				m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *l_scene );
 			}
 
 			if ( m_timer == NULL )
@@ -400,7 +383,7 @@ namespace CastorShape
 
 			if ( l_return )
 			{
-				SceneSPtr l_scene = wxGetApp().GetCastor()->GetSceneManager().Create( cuT( "MainScene" ), *wxGetApp().GetCastor() );
+				SceneSPtr l_scene = wxGetApp().GetCastor()->GetSceneCache().Add( cuT( "MainScene" ) );
 				m_mainScene = l_scene;
 				l_scene->SetBackgroundColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
 				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
@@ -412,10 +395,10 @@ namespace CastorShape
 
 				if ( m_materialsList )
 				{
-					m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+					m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *m_mainScene.lock() );
 				}
 
-				LightSPtr l_light1 = l_scene->GetLightManager().Create( cuT( "Light1" ), l_scene->GetSceneNodeManager().Create( cuT( "Light1Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light1 = l_scene->GetLightCache().Add( cuT( "Light1" ), l_scene->GetSceneNodeCache().Add( cuT( "Light1Node" ), nullptr ), LightType::Directional );
 
 				if ( l_light1 )
 				{
@@ -425,7 +408,7 @@ namespace CastorShape
 					l_light1->SetEnabled( true );
 				}
 
-				LightSPtr l_light2 = l_scene->GetLightManager().Create( cuT( "Light2" ), l_scene->GetSceneNodeManager().Create( cuT( "Light2Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light2 = l_scene->GetLightCache().Add( cuT( "Light2" ), l_scene->GetSceneNodeCache().Add( cuT( "Light2Node" ), nullptr ), LightType::Directional );
 
 				if ( l_light2 )
 				{
@@ -435,7 +418,7 @@ namespace CastorShape
 					l_light2->SetEnabled( true );
 				}
 
-				LightSPtr l_light3 = l_scene->GetLightManager().Create( cuT( "Light3" ), l_scene->GetSceneNodeManager().Create( cuT( "Light3Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light3 = l_scene->GetLightCache().Add( cuT( "Light3" ), l_scene->GetSceneNodeCache().Add( cuT( "Light3Node" ), nullptr ), LightType::Directional );
 
 				if ( l_light3 )
 				{
@@ -556,7 +539,7 @@ namespace CastorShape
 			p_name << m_iNbGeometries;
 		}
 
-		SceneNodeSPtr l_sceneNode = p_scene->GetSceneNodeManager().Create( cuT( "SN_" ) + p_name, p_scene->GetObjectRootNode() );
+		SceneNodeSPtr l_sceneNode = p_scene->GetSceneNodeCache().Add( cuT( "SN_" ) + p_name, p_scene->GetObjectRootNode() );
 
 		if ( l_sceneNode )
 		{
@@ -569,16 +552,18 @@ namespace CastorShape
 			l_dimensions.push_back( c );
 			StringStream l_stream;
 			l_stream << GuiCommon::make_String( p_baseName ) << cuT( "_" ) << p_meshStrVars.rdbuf();
-			GeometrySPtr l_geometry = p_scene->GetGeometryManager().Create( p_name, l_sceneNode, p_scene->GetEngine()->GetMeshManager().Create( l_stream.str(), p_meshType, l_faces, l_dimensions ) );
+			auto l_mesh = p_scene->GetMeshCache().Add( l_stream.str() );
+			p_scene->GetEngine()->GetMeshFactory().Create( p_meshType )->Generate( *l_mesh, l_faces, l_dimensions );
+			GeometrySPtr l_geometry = p_scene->GetGeometryCache().Add( p_name, l_sceneNode, l_mesh );
 
 			if ( l_geometry )
 			{
 				String l_materialName = p_dialog->GetMaterialName();
 				MeshSPtr l_mesh = l_geometry->GetMesh();
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
-					l_geometry->SetMaterial( l_submesh, wxGetApp().GetCastor()->GetMaterialManager().Find( l_materialName ) );
+					l_geometry->SetMaterial( l_submesh, wxGetApp().GetCastor()->GetMaterialCache().Find( l_materialName ) );
 				}
 
 				l_sceneNode->SetVisible( true );
@@ -607,6 +592,22 @@ namespace CastorShape
 			m_2dFrameHD->SetActionType( p_type );
 			m_2dFrameBG->SetActionType( p_type );
 			m_2dFrameBD->SetActionType( p_type );
+		}
+	}
+
+	void MainFrame::DoSubdivideAll( String const & p_name )
+	{
+		if ( m_selectedGeometry )
+		{
+			if ( wxGetApp().GetCastor()->GetSubdividerFactory().IsRegistered( p_name ) )
+			{
+				auto l_divider = wxGetApp().GetCastor()->GetSubdividerFactory().Create( p_name );
+
+				for ( auto l_submesh : *m_selectedGeometry->GetMesh() )
+				{
+					l_divider->Subdivide( l_submesh, 1, true );
+				}
+			}
 		}
 	}
 
@@ -899,33 +900,12 @@ namespace CastorShape
 
 	void MainFrame::OnSaveScene( wxCommandEvent & p_event )
 	{
-		wxFileDialog * l_fileDialog = new wxFileDialog( this, _( "Save scene" ), wxEmptyString, wxEmptyString, _( "Castor Shape files (*.cscn)|*.cscn" ) );
+		wxFileDialog * l_fileDialog = new wxFileDialog( this, _( "Save scene" ), wxEmptyString, wxEmptyString, _( "Castor 3D Scene" ) + wxT( " (*.cscn)|*.cscn" ) );
 
 		if ( l_fileDialog->ShowModal() == wxID_OK )
 		{
-			BinaryFile l_file( ( char const * )l_fileDialog->GetPath().char_str(), File::eOPEN_MODE_WRITE );
-			Path l_filePath = ( char const * )l_fileDialog->GetPath().c_str();
-			Collection<Scene, String> l_scnManager;
-
-			if ( wxGetApp().GetCastor()->GetMaterialManager().Save( l_file ) )
-			{
-				Logger::LogInfo( cuT( "Materials written" ) );
-			}
-			else
-			{
-				Logger::LogInfo( cuT( "Can't write materials" ) );
-				return;
-			}
-
-			if ( wxGetApp().GetCastor()->GetMeshManager().Save( l_file ) )
-			{
-				Logger::LogInfo( cuT( "Meshes written" ) );
-			}
-			else
-			{
-				Logger::LogInfo( cuT( "Can't write meshes" ) );
-				return;
-			}
+			CscnSceneExporter l_exporter;
+			l_exporter.ExportScene( *m_mainScene.lock(), make_Path( l_fileDialog->GetPath() ) );
 		}
 
 		p_event.Skip();
@@ -937,13 +917,11 @@ namespace CastorShape
 		l_wildcard << wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
 		l_wildcard << _( "Castor3D text scene file" );
 		l_wildcard << CSCN_WILDCARD;
-		l_wildcard << _( "Castor3D binary scene file" );
-		l_wildcard << CBSN_WILDCARD;
 		l_wildcard << _( "Zip archive" );
 		l_wildcard << ZIP_WILDCARD;
 		l_wildcard << wxT( "|" );
 
-		for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
+		for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( PluginType::Importer ) )
 		{
 			for ( auto l_itExt : std::static_pointer_cast< ImporterPlugin >( l_it.second )->GetExtensions() )
 			{
@@ -956,7 +934,7 @@ namespace CastorShape
 
 		if ( l_fileDialog.ShowModal() == wxID_OK )
 		{
-			m_strFilePath = ( wxChar const * )l_fileDialog.GetPath().c_str();
+			m_strFilePath = Path{ ( wxChar const * )l_fileDialog.GetPath().c_str() };
 			LoadScene( m_strFilePath );
 		}
 
@@ -966,7 +944,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewCone( wxCommandEvent & p_event )
 	{
-		NewConeDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewConeDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -992,7 +970,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewCube( wxCommandEvent & p_event )
 	{
-		NewCubeDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewCubeDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1018,7 +996,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewCylinder( wxCommandEvent & p_event )
 	{
-		NewCylinderDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewCylinderDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1044,7 +1022,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewIcosahedron( wxCommandEvent & p_event )
 	{
-		NewIcosahedronDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewIcosahedronDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1069,7 +1047,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewPlane( wxCommandEvent & p_event )
 	{
-		NewPlaneDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewPlaneDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1096,7 +1074,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewSphere( wxCommandEvent & p_event )
 	{
-		NewSphereDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewSphereDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1121,7 +1099,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewTorus( wxCommandEvent & p_event )
 	{
-		NewTorusDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewTorusDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1148,7 +1126,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewProjection( wxCommandEvent & p_event )
 	{
-		NewSphereDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewSphereDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1173,7 +1151,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewMaterial( wxCommandEvent & p_event )
 	{
-		NewMaterialDialog l_dialog( PropertiesHolder::GetButtonEditor(), wxGetApp().GetCastor(), this, wxID_ANY );
+		NewMaterialDialog l_dialog( PropertiesHolder::GetButtonEditor(), *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1305,69 +1283,13 @@ namespace CastorShape
 
 	void MainFrame::OnSubdivideAllPNTriangles( wxCommandEvent & p_event )
 	{
-		if ( m_selectedGeometry )
-		{
-			Subdivider * l_divider = NULL;
-			DividerPluginSPtr l_plugin;
-
-			for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
-			{
-				if ( !l_divider )
-				{
-					l_plugin = std::static_pointer_cast< DividerPlugin >( l_it.second );
-
-					if ( string::lower_case( l_plugin->GetDividerType() ) == cuT( "pn_tri" ) )
-					{
-						l_divider = l_plugin->CreateDivider();
-					}
-				}
-			}
-
-			if ( l_divider )
-			{
-				for ( auto l_submesh : *m_selectedGeometry->GetMesh() )
-				{
-					l_divider->Subdivide( l_submesh, 1, true );
-				}
-
-				l_plugin->DestroyDivider( l_divider );
-			}
-		}
-
+		DoSubdivideAll( cuT( "loop" ) );
 		p_event.Skip();
 	}
 
 	void MainFrame::OnSubdivideAllLoop( wxCommandEvent & p_event )
 	{
-		if ( m_selectedGeometry )
-		{
-			Subdivider * l_divider = NULL;
-			DividerPluginSPtr l_plugin;
-
-			for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
-			{
-				if ( !l_divider )
-				{
-					l_plugin = std::static_pointer_cast< DividerPlugin >( l_it.second );
-
-					if ( string::lower_case( l_plugin->GetDividerType() ) == cuT( "pn_tri" ) )
-					{
-						l_divider = l_plugin->CreateDivider();
-					}
-				}
-			}
-
-			if ( l_divider )
-			{
-				for ( auto l_submesh : *m_selectedGeometry->GetMesh() )
-				{
-					l_divider->Subdivide( l_submesh, 1, true );
-				}
-
-				l_plugin->DestroyDivider( l_divider );
-			}
-		}
-
+		DoSubdivideAll( cuT( "pn_tri" ) );
 		p_event.Skip();
 	}
 

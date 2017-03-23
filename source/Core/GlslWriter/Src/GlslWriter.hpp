@@ -1,53 +1,88 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___GLSL_WRITER_H___
 #define ___GLSL_WRITER_H___
 
-#include "GlslArray.hpp"
+#include "GlslFunction.hpp"
 
-#include <Factory.hpp>
-#include <OwnedBy.hpp>
+#include <Design/Factory.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace GLSL
 {
 	struct Int;
-	struct Vec4;
+	struct UInt;
 	struct SamplerBuffer;
 	struct Sampler1D;
 	struct Sampler2D;
 	struct Sampler2DRect;
 	struct Sampler3D;
+	struct SamplerCube;
 
 	class LightingModel;
-
-	class LightingModelFactory
-		: public Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >
-	{
-	public:
-		GlslWriter_API virtual void Initialise();
-	};
+	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
 
 	struct Endl {};
 	struct Endi {};
 
+	struct InputLayout
+	{
+		typedef enum Layout
+		{
+			ePoints,
+			eLines,
+			eLinesAdjacency,
+			eTriangles,
+			eTrianglesAdjacency
+		}	Layout;
+		InputLayout( Layout p_layout )
+			: m_layout{ p_layout }
+		{
+		}
+		Layout m_layout;
+	};
+
+	struct OutputLayout
+	{
+		typedef enum Layout
+		{
+			ePoints,
+			eLineStrip,
+			eTriangleStrip,
+		}	Layout;
+		OutputLayout( Layout p_layout, uint32_t p_count )
+			: m_layout{ p_layout }
+			, m_count{ p_count }
+		{
+		}
+		Layout m_layout;
+		uint32_t m_count;
+	};
+
 	struct IndentBlock
 	{
 		GlslWriter_API IndentBlock( GlslWriter & p_writter );
+		GlslWriter_API IndentBlock( Castor::StringStream & p_stream );
 		GlslWriter_API ~IndentBlock();
 		Castor::StringStream & m_stream;
 		int m_indent;
@@ -55,13 +90,18 @@ namespace GLSL
 
 	struct Ubo
 	{
-		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name );
+		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name, UboLayout p_layout = UboLayout::eStd140 );
 		GlslWriter_API void End();
 		template< typename T > inline T GetUniform( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Optional< T > GetUniform( Castor::String const & p_name, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		IndentBlock * m_block;
 		GlslWriter & m_writer;
+		Castor::StringStream m_stream;
 		Castor::String m_name;
+		UboLayout m_layout;
+		uint32_t m_count{ 0u };
 	};
 
 	struct Struct
@@ -112,79 +152,189 @@ namespace GLSL
 			return GetShaderLanguageVersion() >= 130;
 		}
 
-		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, uint32_t p_flags );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 
 		GlslWriter_API Castor::String Finalise();
 		GlslWriter_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
 		GlslWriter_API void WriteAssign( Type const & p_lhs, int const & p_rhs );
+		GlslWriter_API void WriteAssign( Type const & p_lhs, unsigned int const & p_rhs );
 		GlslWriter_API void WriteAssign( Type const & p_lhs, float const & p_rhs );
 		GlslWriter_API void For( Type && p_init, Expr const & p_cond, Expr const & p_incr, std::function< void() > p_function );
 		GlslWriter_API GlslWriter & If( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API GlslWriter & ElseIf( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API void Else( std::function< void() > p_function );
 		GlslWriter_API Struct GetStruct( Castor::String const & p_name );
-		GlslWriter_API Ubo GetUbo( Castor::String const & p_name );
 		GlslWriter_API void EmitVertex();
 		GlslWriter_API void EndPrimitive();
 		GlslWriter_API void Discard();
 		GlslWriter_API void InputGeometryLayout( Castor::String const & p_layout );
 		GlslWriter_API void OutputGeometryLayout( Castor::String const & p_layout );
+		GlslWriter_API void OutputGeometryLayout( Castor::String const & p_layout, uint32_t p_count );
 		GlslWriter_API void OutputVertexCount( uint32_t p_count );
-		GlslWriter_API Vec4 Texture1D( Sampler1D const & p_sampler, Type const & p_value );
-		GlslWriter_API Vec4 Texture2D( Sampler2D const & p_sampler, Type const & p_value );
-		GlslWriter_API Vec4 Texture3D( Sampler3D const & p_sampler, Type const & p_value );
+		GlslWriter_API Vec4 Texture( Sampler1D const & p_sampler, Float const & p_value );
+		GlslWriter_API Vec4 Texture( Sampler1D const & p_sampler, Float const & p_value, Float const & p_lod );
+		GlslWriter_API Vec4 Texture( Sampler2D const & p_sampler, Vec2 const & p_value );
+		GlslWriter_API Vec4 Texture( Sampler2D const & p_sampler, Vec2 const & p_value, Float const & p_lod );
+		GlslWriter_API Vec4 Texture( Sampler3D const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Vec4 Texture( Sampler3D const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Vec4 Texture( SamplerCube const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Vec4 Texture( SamplerCube const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Vec4 TextureOffset( Sampler1D const & p_sampler, Float const & p_value, Int const & p_offset );
+		GlslWriter_API Vec4 TextureOffset( Sampler1D const & p_sampler, Float const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Vec4 TextureOffset( Sampler2D const & p_sampler, Vec2 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Vec4 TextureOffset( Sampler2D const & p_sampler, Vec2 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Vec4 TextureOffset( Sampler3D const & p_sampler, Vec3 const & p_value, IVec3 const & p_offset );
+		GlslWriter_API Vec4 TextureOffset( Sampler3D const & p_sampler, Vec3 const & p_value, IVec3 const & p_offset, Float const & p_lod );
+		GlslWriter_API Vec4 TextureLodOffset( Sampler1D const & p_sampler, Float const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Vec4 TextureLodOffset( Sampler2D const & p_sampler, Vec2 const & p_value, Float const & p_lod, IVec2 const & p_offset );
+		GlslWriter_API Vec4 TextureLodOffset( Sampler3D const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec3 const & p_offset );
 		GlslWriter_API Vec4 TexelFetch( SamplerBuffer const & p_sampler, Type const & p_value );
 		GlslWriter_API Vec4 TexelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Vec4 TexelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Vec4 TexelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif );
-		GlslWriter_API Optional< Vec4 > Texture1D( Optional< Sampler1D > const & p_sampler, Type const & p_value );
-		GlslWriter_API Optional< Vec4 > Texture2D( Optional< Sampler2D > const & p_sampler, Type const & p_value );
-		GlslWriter_API Optional< Vec4 > Texture3D( Optional< Sampler3D > const & p_sampler, Type const & p_value );
+		GlslWriter_API Vec4 Texture( Sampler1DArray const & p_sampler, Vec2 const & p_value );
+		GlslWriter_API Vec4 Texture( Sampler1DArray const & p_sampler, Vec2 const & p_value, Float const & p_lod );
+		GlslWriter_API Vec4 Texture( Sampler2DArray const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Vec4 Texture( Sampler2DArray const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Vec4 Texture( SamplerCubeArray const & p_sampler, Vec4 const & p_value );
+		GlslWriter_API Vec4 Texture( SamplerCubeArray const & p_sampler, Vec4 const & p_value, Float const & p_lod );
+		GlslWriter_API Vec4 TextureOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Int const & p_offset );
+		GlslWriter_API Vec4 TextureOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Vec4 TextureOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Vec4 TextureOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Vec4 TextureLodOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Vec4 TextureLodOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset );
+		GlslWriter_API Float Texture( Sampler1DShadow const & p_sampler, Vec2 const & p_value );
+		GlslWriter_API Float Texture( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Float const & p_lod );
+		GlslWriter_API Float Texture( Sampler2DShadow const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Float Texture( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Float Texture( SamplerCubeShadow const & p_sampler, Vec4 const & p_value );
+		GlslWriter_API Float Texture( SamplerCubeShadow const & p_sampler, Vec4 const & p_value, Float const & p_lod );
+		GlslWriter_API Float TextureOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Int const & p_offset );
+		GlslWriter_API Float TextureOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Float TextureOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Float TextureOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Float TextureLodOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Float TextureLodOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset );
+		GlslWriter_API Float Texture( Sampler1DArrayShadow const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Float Texture( Sampler1DArrayShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Float Texture( Sampler2DArrayShadow const & p_sampler, Vec4 const & p_value );
+		GlslWriter_API Float Texture( Sampler2DArrayShadow const & p_sampler, Vec4 const & p_value, Float const & p_lod );
+		GlslWriter_API Float Texture( SamplerCubeArrayShadow const & p_sampler, Vec4 const & p_value, Float const & p_layer );
+		GlslWriter_API Float Texture( SamplerCubeArrayShadow const & p_sampler, Vec4 const & p_value, Float const & p_layer, Float const & p_lod );
+		GlslWriter_API Float TextureOffset( Sampler1DArrayShadow const & p_sampler, Vec3 const & p_value, Int const & p_offset );
+		GlslWriter_API Float TextureOffset( Sampler1DArrayShadow const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Float TextureOffset( Sampler2DArrayShadow const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Float TextureOffset( Sampler2DArrayShadow const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Float TextureLodOffset( Sampler1DArrayShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Float TextureLodOffset( Sampler2DArrayShadow const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const & p_offset );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler1D > const & p_sampler, Float const & p_value );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler1D > const & p_sampler, Float const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler2D > const & p_sampler, Vec2 const & p_value );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler2D > const & p_sampler, Vec2 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler3D > const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler3D > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< SamplerCube > const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< SamplerCube > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler1D > const & p_sampler, Float const & p_value, Int const & p_offset );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler1D > const & p_sampler, Float const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler2D > const & p_sampler, Vec2 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler2D > const & p_sampler, Vec2 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler3D > const & p_sampler, Vec3 const & p_value, IVec3 const & p_offset );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler3D > const & p_sampler, Vec3 const & p_value, IVec3 const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > TextureLodOffset( Optional< Sampler1D > const & p_sampler, Float const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Optional< Vec4 > TextureLodOffset( Optional< Sampler2D > const & p_sampler, Vec2 const & p_value, Float const & p_lod, IVec2 const & p_offset );
+		GlslWriter_API Optional< Vec4 > TextureLodOffset( Optional< Sampler3D > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec3 const & p_offset );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< SamplerBuffer > const & p_sampler, Type const & p_value );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< Sampler1D > const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< Sampler2D > const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< Sampler3D > const & p_sampler, Type const & p_value, Int const & p_modif );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< SamplerCubeArray > const & p_sampler, Vec4 const & p_value );
+		GlslWriter_API Optional< Vec4 > Texture( Optional< SamplerCubeArray > const & p_sampler, Vec4 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Int const & p_offset );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Optional< Vec4 > TextureOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Vec4 > TextureLodOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Optional< Vec4 > TextureLodOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Float > Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec4 const & p_value );
+		GlslWriter_API Optional< Float > Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec4 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Int const & p_offset );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureLodOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Optional< Float > TextureLodOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler1DArrayShadow > const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler1DArrayShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Float > Texture( Optional< SamplerCubeArrayShadow > const & p_sampler, Vec4 const & p_value, Float const & p_layer );
+		GlslWriter_API Optional< Float > Texture( Optional< SamplerCubeArrayShadow > const & p_sampler, Vec4 const & p_value, Float const & p_layer, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler1DArrayShadow > const & p_sampler, Vec3 const & p_value, Int const & p_offset );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler1DArrayShadow > const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureLodOffset( Optional< Sampler1DArrayShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Optional< Float > TextureLodOffset( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const & p_offset );
 
 		template< typename T > void WriteAssign( Type const & p_lhs, Optional< T > const & p_rhs );
-		template< typename RetType, typename FuncType, typename ... Params > inline void ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
+		template< typename RetType, typename FuncType, typename ... Params > inline Function< RetType, Params... > ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
 		template< typename RetType > void Return( RetType const & p_return );
 		template< typename ExprType > ExprType Paren( ExprType const p_expr );
-		template< typename ExprType > ExprType Ternary( Type const & p_condition, Type const & p_left, Type const & p_right );
+		template< typename ExprType > ExprType Ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right );
 		template< typename T > inline T Cast( Type const & p_from );
 		template< typename T > inline T GetAttribute( Castor::String const & p_name );
 		template< typename T > inline T GetOutput( Castor::String const & p_name );
 		template< typename T > inline T GetInput( Castor::String const & p_name );
 		template< typename T > inline T GetLocale( Castor::String const & p_name );
-		template< typename T > inline T GetLocale( Castor::String const & p_name, Expr const & p_rhs );
-		template< typename T > inline T GetLocale( Castor::String const & p_name, Type const & p_rhs );
+		template< typename T > inline T GetLocale( Castor::String const & p_name, T const & p_rhs );
 		template< typename T > inline T GetBuiltin( Castor::String const & p_name );
 		template< typename T > inline T GetUniform( Castor::String const & p_name );
 		template< typename T > inline T GetFragData( Castor::String const & p_name, uint32_t p_index );
 		template< typename T > inline Array< T > GetAttribute( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetOutput( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetInput( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > GetInputArray( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension );
-		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, Expr const & p_rhs );
-		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, Type const & p_rhs );
+		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, T const & p_rhs );
 		template< typename T > inline Array< T > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs );
 		template< typename T > inline Optional< T > GetAttribute( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetOutput( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetInput( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled );
-		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, Expr const & p_rhs );
-		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, Type const & p_rhs );
+		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< T > GetBuiltin( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetUniform( Castor::String const & p_name, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetAttribute( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetOutput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetInput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, T const & p_rhs );
+		template< typename T > inline Optional< Array< T > > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 
 		GlslWriter_API GlslWriter & operator<<( Version const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Attribute const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( In const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Out const & p_rhs );
-		GlslWriter_API GlslWriter & operator<<( StdLayout const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Layout const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Uniform const & p_rhs );
-
+		GlslWriter_API GlslWriter & operator<<( InputLayout const & p_rhs );
+		GlslWriter_API GlslWriter & operator<<( OutputLayout const & p_rhs );
 
 		GlslWriter_API GlslWriter & operator<<( Endl const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Endi const & p_rhs );
@@ -194,12 +344,11 @@ namespace GLSL
 	private:
 		GlslWriterConfig m_config;
 		Castor::String m_uniform;
-		VariablesBase * m_variables;
-		ConstantsBase * m_constants;
 		std::unique_ptr< KeywordsBase > m_keywords;
 		Castor::StringStream m_stream;
-		int m_attributeIndex;
-		int m_layoutIndex;
+		uint32_t m_uniformIndex{ 0u };
+		uint32_t m_attributeIndex{ 0u };
+		uint32_t m_layoutIndex{ 0u };
 		LightingModelFactory m_lightingFactory;
 	};
 
@@ -210,62 +359,20 @@ namespace GLSL
 		( Writer ).For( std::move( Name ), Expr( &( Writer ), Castor::String( Cond ) ), Expr( &( Writer ), Castor::String( Incr ) ), [&]()
 
 #define ROF\
-		);\
+	 );\
 	}
 
 #define IF( Writer, Condition )\
 	( Writer ).If( Expr( &( Writer ), Castor::String( Condition ) ), [&]()
 
 #define ELSE\
-	).Else( [&]()
+ ).Else( [&]()
 
-#define ELSEIF()\
-	).ElseIf( [&]()
+#define ELSEIF( Writer, Condition )\
+ ).ElseIf( Expr( &( Writer ), Castor::String( Condition ) ), [&]()
 
 #define FI\
-	);
-
-#define LOCALE_ASSIGN( Writer, Type, Name, Assign )\
-	auto Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Assign )
-
-#define LOCALE_ASSIGN_ARRAY( Writer, Type, Name, Dimension, Assign )\
-	auto Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension, Assign )
-
-#define UBO_MATRIX( Writer )\
-	Ubo l_matrices = l_writer.GetUbo( cuT( "Matrices" ) );\
-	auto c3d_mtxProjection = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxProjection" ) );\
-	auto c3d_mtxModel = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxModel" ) );\
-	auto c3d_mtxView = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxView" ) );\
-	auto c3d_mtxNormal = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxNormal" ) );\
-	auto c3d_mtxTexture0 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture0" ) );\
-	auto c3d_mtxTexture1 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture1" ) );\
-	auto c3d_mtxTexture2 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture2" ) );\
-	auto c3d_mtxTexture3 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture3" ) );\
-	auto c3d_mtxBones = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxBones" ), 400 );\
-	l_matrices.End()
-
-#define UBO_PASS( Writer )\
-	Ubo l_pass = l_writer.GetUbo( cuT( "Pass" ) );\
-	auto c3d_v4MatAmbient = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatAmbient" ) );\
-	auto c3d_v4MatDiffuse = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatDiffuse" ) );\
-	auto c3d_v4MatEmissive = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatEmissive" ) );\
-	auto c3d_v4MatSpecular = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatSpecular" ) );\
-	auto c3d_fMatShininess = l_pass.GetUniform< Float >( cuT( "c3d_fMatShininess" ) );\
-	auto c3d_fMatOpacity = l_pass.GetUniform< Float >( cuT( "c3d_fMatOpacity" ) );\
-	l_pass.End()
-
-#define UBO_SCENE( Writer )\
-	Ubo l_scene = l_writer.GetUbo( cuT( "Scene" ) );\
-	auto c3d_v4AmbientLight = l_scene.GetUniform< Vec4 >( cuT( "c3d_v4AmbientLight" ) );\
-	auto c3d_v4BackgroundColour = l_scene.GetUniform< Vec4 >( cuT( "c3d_v4BackgroundColour" ) );\
-	auto c3d_iLightsCount = l_scene.GetUniform< IVec4 >( cuT( "c3d_iLightsCount" ) );\
-	auto c3d_v3CameraPosition = l_scene.GetUniform< Vec3 >( cuT( "c3d_v3CameraPosition" ) );\
-	l_scene.End()
-
-#define UBO_BILLBOARD( Writer )\
-	Ubo l_billboard = l_writer.GetUbo( cuT( "Billboard" ) );\
-	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( cuT( "c3d_v2iDimensions" ) );\
-	l_billboard.End();
+ );
 }
 
 #define TERNARY( Writer, ExprType, Condition, Left, Right )\

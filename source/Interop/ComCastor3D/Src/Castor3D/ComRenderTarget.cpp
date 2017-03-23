@@ -1,7 +1,5 @@
 #include "ComRenderTarget.hpp"
 
-#include <PlatformWindowHandle.hpp>
-
 namespace CastorCom
 {
 	static const Castor::String ERROR_UNINITIALISED = cuT( "The render target must be initialised" );

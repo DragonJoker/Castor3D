@@ -1,19 +1,24 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___Gl_PrecompiledHeader___
 #define ___Gl_PrecompiledHeader___
@@ -21,56 +26,72 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	include <Logger.hpp>
-#	include <Pixel.hpp>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
+#include <iomanip>
+#include <iostream>
 
-#	include <Castor3DPrerequisites.hpp>
-#	include <BillboardList.hpp>
-#	include <BlendState.hpp>
-#	include <Buffer.hpp>
-#	include <ColourRenderBuffer.hpp>
-#	include <Context.hpp>
-#	include <DepthStencilRenderBuffer.hpp>
-#	include <DirectionalLight.hpp>
-#	include <Engine.hpp>
-#	include <Face.hpp>
-#	include <Font.hpp>
-#	include <FrameBuffer.hpp>
-#	include <FrameVariable.hpp>
-#	include <Geometry.hpp>
-#	include <Light.hpp>
-#	include <Material.hpp>
-#	include <Mesh.hpp>
-#	include <Overlay.hpp>
-#	include <Pass.hpp>
-#	include <Pipeline.hpp>
-#	include <Plugin.hpp>
-#	include <PointLight.hpp>
-#	include <RenderBufferAttachment.hpp>
-#	include <RenderSystem.hpp>
-#	include <RenderTarget.hpp>
-#	include <RenderTechnique.hpp>
-#	include <RenderWindow.hpp>
-#	include <Sampler.hpp>
-#	include <SceneNode.hpp>
-#	include <Scene.hpp>
-#	include <ShaderManager.hpp>
-#	include <ShaderObject.hpp>
-#	include <ShaderProgram.hpp>
-#	include <SpotLight.hpp>
-#	include <Submesh.hpp>
-#	include <TextureAttachment.hpp>
-#	include <Texture.hpp>
-#	include <TextureUnit.hpp>
-#	include <Version.hpp>
-#	include <Vertex.hpp>
-#	include <Viewport.hpp>
-#	include <WindowHandle.hpp>
+#include <Log/Logger.hpp>
+#include <Graphics/PixelBufferBase.hpp>
+#include <Graphics/PixelFormat.hpp>
+#include <Graphics/Position.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Graphics/Size.hpp>
+#include <Miscellaneous/Utils.hpp>
 
-#	include "GlRenderSystemPrerequisites.hpp"
+#include <GlslSource.hpp>
+
+#include <Engine.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/ShaderCache.hpp>
+#include <FrameBuffer/BackBuffers.hpp>
+#include <FrameBuffer/ColourRenderBuffer.hpp>
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/RenderBuffer.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/IndexBuffer.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Miscellaneous/ComputePipeline.hpp>
+#include <Miscellaneous/GpuInformations.hpp>
+#include <Miscellaneous/GpuQuery.hpp>
+#include <Miscellaneous/TransformFeedback.hpp>
+#include <Render/Context.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Render/RenderPipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/RenderSystemFactory.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Render/Viewport.hpp>
+#include <Shader/AtomicCounterBuffer.hpp>
+#include <Shader/UniformBuffer.hpp>
+#include <Shader/ProgramInputLayout.hpp>
+#include <Shader/ShaderObject.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Shader/ShaderStorageBuffer.hpp>
+#include <Technique/RenderTechnique.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureImage.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureStorage.hpp>
+#include <Texture/TextureUnit.hpp>
+
+#include "GlRenderSystemPrerequisites.hpp"
 
 #endif
 
-#include <StringUtils.hpp>
+#include <Miscellaneous/StringUtils.hpp>
+
+#ifdef None
+#	undef None
+#endif
+
+#ifdef MemoryBarrier
+#	undef MemoryBarrier
+#endif
 
 #endif

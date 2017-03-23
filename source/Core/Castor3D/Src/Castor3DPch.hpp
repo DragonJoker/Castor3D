@@ -1,19 +1,24 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_PRECOMPILED_HEADER_H___
 #define ___C3D_PRECOMPILED_HEADER_H___
@@ -44,47 +49,43 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <RequiredVersion.hpp>
 
 #	include <CastorUtils.hpp>
-#	include <Angle.hpp>
-#	include <BlockTimer.hpp>
-#	include <Collection.hpp>
-#	include <Colour.hpp>
-#	include <CubeBox.hpp>
-#	include <SphereBox.hpp>
-#	include <DynamicLibrary.hpp>
-#	include <Factory.hpp>
-#	include <TextFile.hpp>
-#	include <BinaryFile.hpp>
-#	include <Font.hpp>
-#	include <Image.hpp>
-#	include <Line2D.hpp>
-#	include <Line3D.hpp>
-#	include <BinaryLoader.hpp>
-#	include <TextLoader.hpp>
-#	include <Logger.hpp>
-#	include <Math.hpp>
-#	include <Matrix.hpp>
-#	include <SquareMatrix.hpp>
-#	include <MultiThreadConfig.hpp>
-#	include <Named.hpp>
-#	include <NonCopyable.hpp>
-#	include <Path.hpp>
-#	include <Pixel.hpp>
-#	include <PlaneEquation.hpp>
-#	include <Point.hpp>
-#	include <PreciseTimer.hpp>
-#	include <Quaternion.hpp>
-#	include <Resource.hpp>
-#	include <SphericalVertex.hpp>
-#	include <StringUtils.hpp>
-#	include <Templates.hpp>
-#	include <TransformationMatrix.hpp>
-#	include <Utils.hpp>
-#	include <Unique.hpp>
-#	include <Rectangle.hpp>
-
-#	if defined( __linux__ )
-#		include <GL/glx.h>
-#	endif
+#	include <Config/MultiThreadConfig.hpp>
+#	include <Data/BinaryFile.hpp>
+#	include <Data/BinaryLoader.hpp>
+#	include <Data/Path.hpp>
+#	include <Data/TextFile.hpp>
+#	include <Data/TextLoader.hpp>
+#	include <Design/Collection.hpp>
+#	include <Design/Factory.hpp>
+#	include <Design/Named.hpp>
+#	include <Design/NonCopyable.hpp>
+#	include <Design/Resource.hpp>
+#	include <Design/Templates.hpp>
+#	include <Design/Unique.hpp>
+#	include <Graphics/Colour.hpp>
+#	include <Graphics/CubeBox.hpp>
+#	include <Graphics/Font.hpp>
+#	include <Graphics/Image.hpp>
+#	include <Graphics/Pixel.hpp>
+#	include <Graphics/Rectangle.hpp>
+#	include <Graphics/SphereBox.hpp>
+#	include <Log/Logger.hpp>
+#	include <Math/Angle.hpp>
+#	include <Math/Line2D.hpp>
+#	include <Math/Line3D.hpp>
+#	include <Math/Math.hpp>
+#	include <Math/Matrix.hpp>
+#	include <Math/PlaneEquation.hpp>
+#	include <Math/Point.hpp>
+#	include <Math/Quaternion.hpp>
+#	include <Math/SphericalVertex.hpp>
+#	include <Math/SquareMatrix.hpp>
+#	include <Math/TransformationMatrix.hpp>
+#	include <Miscellaneous/BlockTimer.hpp>
+#	include <Miscellaneous/DynamicLibrary.hpp>
+#	include <Miscellaneous/PreciseTimer.hpp>
+#	include <Miscellaneous/StringUtils.hpp>
+#	include <Miscellaneous/Utils.hpp>
 #endif
 
 #endif

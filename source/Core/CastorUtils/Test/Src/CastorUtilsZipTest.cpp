@@ -1,8 +1,8 @@
 #include "CastorUtilsZipTest.hpp"
 
-#include <ZipArchive.hpp>
-#include <BinaryFile.hpp>
-#include <TextFile.hpp>
+#include <Data/ZipArchive.hpp>
+#include <Data/BinaryFile.hpp>
+#include <Data/TextFile.hpp>
 
 #include <cstring>
 
@@ -19,78 +19,78 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsZipTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsZipTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsZipTest, ZipFile, p_errCount, p_testCount );
+		DoRegisterTest( "ZipFile", std::bind( &CastorUtilsZipTest::ZipFile, this ) );
 	}
 
-	void CastorUtilsZipTest::ZipFile( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsZipTest::ZipFile()
 	{
-		Path l_folder1 = cuT( "test1" );
-		Path l_folder2 = l_folder1 / cuT( "test2" );
+		Path l_folder1{ cuT( "test1" ) };
+		Path l_folder2{ l_folder1 / cuT( "test2" ) };
 
-		Logger::LogInfo( "	First folder creation" );
+		std::cout << "	First folder creation" << std::endl;
 
 		if ( File::DirectoryExists( l_folder1 ) || File::DirectoryCreate( l_folder1 ) )
 		{
-			Logger::LogInfo( "	Second folder creation" );
+			std::cout << "	Second folder creation" << std::endl;
 
 			if ( File::DirectoryExists( l_folder2 ) || File::DirectoryCreate( l_folder2 ) )
 			{
 				Path l_binName = l_folder1 / cuT( "binFile.bin" );
 				Path l_txtName = l_folder2 / cuT( "txtFile.txt" );
-				String l_zipName = cuT( "zipFile.zip" );
+				Path l_zipName{ cuT( "zipFile.zip" ) };
 
 				std::vector< uint8_t > l_inBinData( 1024 );
 				String l_inTxtData( cuT( "Coucou, comment allez-vous?" ) );
 
 				if ( !File::FileExists( l_binName ) )
 				{
-					Logger::LogInfo( "	Binary file creation" );
-					BinaryFile l_binary( l_binName, File::eOPEN_MODE_WRITE );
+					std::cout << "	Binary file creation" << std::endl;
+					BinaryFile l_binary( l_binName, File::OpenMode::eWrite );
 					l_binary.WriteArray( l_inBinData.data(), l_inBinData.size() );
 				}
 
 				if ( !File::FileExists( l_txtName ) )
 				{
-					Logger::LogInfo( "	Text file creation" );
-					TextFile l_text( l_txtName, File::eOPEN_MODE_WRITE );
+					std::cout << "	Text file creation" << std::endl;
+					TextFile l_text( l_txtName, File::OpenMode::eWrite );
 					l_text.WriteText( l_inTxtData );
 				}
 
 				{
-					Logger::LogInfo( "	Deflate the archive" );
-					ZipArchive l_def( l_zipName, File::eOPEN_MODE_WRITE );
+					std::cout << "	Deflate the archive" << std::endl;
+					ZipArchive l_def( l_zipName, File::OpenMode::eWrite );
 					l_def.AddFile( l_binName );
 					l_def.AddFile( l_txtName );
 					l_def.Deflate();
 				}
 
 				{
-					Logger::LogInfo( "	Inflate the archive" );
+					std::cout << "	Inflate the archive" << std::endl;
 					Path l_folder( cuT( "inflated" ) );
 
 					if ( File::DirectoryExists( l_folder ) || File::DirectoryCreate( l_folder ) )
 					{
-						ZipArchive l_inf( l_zipName, File::eOPEN_MODE_READ );
+						ZipArchive l_inf( l_zipName, File::OpenMode::eRead );
 						l_inf.Inflate( l_folder );
 
 						String l_outTxtData;
 
 						{
-							Logger::LogInfo( "	Check binary file content" );
-							BinaryFile l_binary( l_folder / l_binName, File::eOPEN_MODE_READ );
+							std::cout << "	Check binary file content" << std::endl;
+							BinaryFile l_binary( l_folder / l_binName, File::OpenMode::eRead );
 							std::vector< uint8_t > l_outBinData( size_t( l_binary.GetLength() ) );
 							l_binary.ReadArray( l_outBinData.data(), l_outBinData.size() );
-							TEST_EQUAL( l_outBinData.size(), l_inBinData.size() );
-							TEST_CHECK( !std::memcmp( l_outBinData.data(), l_inBinData.data(), std::min( l_outBinData.size(), l_inBinData.size() ) ) );
+							CT_EQUAL( l_outBinData.size(), l_inBinData.size() );
+							CT_CHECK( !std::memcmp( l_outBinData.data(), l_inBinData.data(), std::min( l_outBinData.size(), l_inBinData.size() ) ) );
 						}
 
 						{
-							Logger::LogInfo( "	Check text file content" );
-							TextFile l_text( l_folder / l_txtName, File::eOPEN_MODE_READ );
+							std::cout << "	Check text file content" << std::endl;
+							TextFile l_text( l_folder / l_txtName, File::OpenMode::eRead );
 							l_text.ReadLine( l_outTxtData, l_inTxtData.size() * sizeof( xchar ) );
-							TEST_EQUAL( l_outTxtData, l_inTxtData );
+							CT_EQUAL( l_outTxtData, l_inTxtData );
 						}
 
 						std::remove( string::string_cast< char >( l_folder / l_binName ).c_str() );
@@ -101,7 +101,7 @@ namespace Testing
 					}
 					else
 					{
-						TEST_CHECK( File::DirectoryExists( l_folder ) );
+						CT_CHECK( File::DirectoryExists( l_folder ) );
 					}
 
 					std::remove( string::string_cast< char >( l_binName ).c_str() );
@@ -113,12 +113,12 @@ namespace Testing
 			}
 			else
 			{
-				Logger::LogError( "	Couldn't create second folder" );
+				std::cout << "	Couldn't create second folder" << std::endl;
 			}
 		}
 		else
 		{
-			Logger::LogError( "	Couldn't create first folder" );
+			std::cout << "	Couldn't create first folder" << std::endl;
 		}
 	}
 }

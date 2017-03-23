@@ -2,9 +2,10 @@ project( PyCastor3D )
 
 link_directories( ${BOOST_LIBRARY_DIR} )
 
-set( PYC_VERSION_MAJOR 0 )
-set( PYC_VERSION_MINOR 7 )
-set( PYC_VERSION_BUILD 0 )
+set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Python binding DLL." )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	9 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
@@ -13,8 +14,12 @@ include_directories( ${Boost_INCLUDE_DIR} )
 include_directories( ${PYTHON_INCLUDE_DIR} )
 
 link_directories( ${Boost_LIBRARY_DIR} )
-#link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
-#link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
+link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
+link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
+
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+endif()
 
 add_target( 
 	PyCastor3D
@@ -39,4 +44,4 @@ set_target_properties( PyCastor3D
 )
 
 add_target_astyle( PyCastor3D ".h;.hpp;.inl;.cpp" )
-set( Build "yes (version ${PYC_VERSION_MAJOR}.${PYC_VERSION_MINOR}.${PYC_VERSION_BUILD})" PARENT_SCOPE )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

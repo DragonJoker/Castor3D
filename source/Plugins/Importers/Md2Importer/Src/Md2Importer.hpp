@@ -1,24 +1,29 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_Md2Importer___
 #define ___C3D_Md2Importer___
 
-#include <Importer.hpp>
+#include <Mesh/Importer.hpp>
 
 // These are the needed defines for the max values when loading .MD2 files
 #define MD2_MAX_TRIANGLES		4096
@@ -28,17 +33,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define MD2_MAX_SKINS			32
 #define MD2_MAX_FRAMESIZE		(MD2_MAX_VERTICES * 4 + 128)
 
-#ifndef _WIN32
-#	define C3D_Md2_API
-#else
-#	ifdef Md2Importer_EXPORTS
-#		define C3D_Md2_API __declspec(dllexport)
-#	else
-#		define C3D_Md2_API __declspec(dllimport)
-#	endif
-#endif
-
-namespace Castor3D
+namespace C3DMd2
 {
 	//! MD2 file importer
 	/*!
@@ -47,7 +42,7 @@ namespace Castor3D
 	\date 25/08/2010
 	*/
 	class Md2Importer
-		:	public Importer
+		: public Castor3D::Importer
 	{
 	private:
 		struct Md2Header
@@ -79,8 +74,8 @@ namespace Castor3D
 
 		struct Md2Vertex
 		{
-			real m_coords[3];
-			real m_normal[3];
+			Castor3D::real m_coords[3];
+			Castor3D::real m_normal[3];
 		};
 
 		struct Md2Face
@@ -96,8 +91,8 @@ namespace Castor3D
 
 		struct Md2AliasFrame
 		{
-			real m_scale[3];
-			real m_translate[3];
+			Castor3D::real m_scale[3];
+			Castor3D::real m_translate[3];
 			char m_name[16];
 			Md2AliasTriangle m_aliasVertices[1];
 		};
@@ -110,6 +105,25 @@ namespace Castor3D
 
 		typedef char Md2Skin[64];
 
+	public:
+		Md2Importer( Castor3D::Engine & p_engine, Castor::String const & p_textureName = Castor::cuEmptyString );
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+
+	private:
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+
+		void DoReadMD2Data( Castor3D::Pass & p_pass );
+		void DoConvertDataStructures( Castor3D::Mesh & p_mesh );
+		void DoCleanUp();
+
 	private:
 		Md2Header m_header;
 		Md2Skin * m_skins;
@@ -118,17 +132,6 @@ namespace Castor3D
 		Md2Frame * m_frames;
 		Castor::String m_textureName;
 		Castor::BinaryFile * m_pFile;
-
-	public:
-		Md2Importer( Engine & p_pEngine, Castor::String const & p_textureName = Castor::cuEmptyString );
-
-	private:
-		virtual SceneSPtr DoImportScene();
-		virtual MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
-
-		void DoReadMD2Data( PassSPtr p_pPass );
-		void DoConvertDataStructures( MeshSPtr p_pMesh );
-		void DoCleanUp();
 	};
 }
 

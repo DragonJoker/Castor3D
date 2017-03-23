@@ -21,8 +21,18 @@ namespace GuiCommon
 
 	void AuiDockArt::DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
 	{
+#if wxCHECK_VERSION( 2, 9, 0 )
+
+		p_dc.SetPen( wxPen( PANEL_BACKGROUND_COLOUR, 1, wxPENSTYLE_SOLID ) );
+		p_dc.SetBrush( wxBrush( PANEL_BACKGROUND_COLOUR, wxBRUSHSTYLE_SOLID ) );
+
+#else
+
 		p_dc.SetPen( wxPen( PANEL_BACKGROUND_COLOUR, 1, wxSOLID ) );
 		p_dc.SetBrush( wxBrush( PANEL_BACKGROUND_COLOUR, wxSOLID ) );
+
+#endif
+
 		p_dc.DrawRectangle( p_rect );
 	}
 }

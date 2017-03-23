@@ -1,29 +1,36 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (At your option ) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___CI_CTRL_CONTROL_H___
 #define ___CI_CTRL_CONTROL_H___
 
-#include "EventHandler.hpp"
-#include "Pixel.hpp"
+#include "CastorGuiPrerequisites.hpp"
 
-#include <Position.hpp>
-#include <Rectangle.hpp>
-#include <Size.hpp>
+#include <Event/UserInput/EventHandler.hpp>
+
+#include <Graphics/Pixel.hpp>
+#include <Graphics/Position.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Graphics/Size.hpp>
 
 namespace CastorGui
 {
@@ -32,7 +39,7 @@ namespace CastorGui
 	 *\brief		Description of a contro
 	*/
 	class Control
-		: public EventHandler< Control >
+		: public Castor3D::NonClientEventHandler< Control >
 	{
 	public:
 		/** Constructor.
@@ -45,7 +52,7 @@ namespace CastorGui
 		 *\param[in]	p_style		The style.
 		 *\param[in]	p_visible	Initial visibility status.
 		 */
-		Control( eCONTROL_TYPE p_type, Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		Control( ControlType p_type, Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Destructor.
 		 */
@@ -126,7 +133,7 @@ namespace CastorGui
 		/** Retrieves the type
 		 *\return		The value
 		*/
-		inline eCONTROL_TYPE GetType()const
+		inline ControlType GetType()const
 		{
 			return m_type;
 		}
@@ -204,7 +211,7 @@ namespace CastorGui
 		/** Retrieves the cursor when mouse is over this control
 		 *\return		The main overlay
 		*/
-		inline eMOUSE_CURSOR GetCursor()const
+		inline MouseCursor GetCursor()const
 		{
 			return m_cursor;
 		}
@@ -308,7 +315,7 @@ namespace CastorGui
 		//! The parent control, if any
 		ControlRPtr m_parent;
 		//! The cursor when mouse is over this control
-		eMOUSE_CURSOR m_cursor;
+		MouseCursor m_cursor;
 		//! The background material
 		Castor3D::MaterialWPtr m_backgroundMaterial;
 		//! The foreground material
@@ -318,7 +325,7 @@ namespace CastorGui
 		//! The ID
 		const uint32_t m_id;
 		//! The type
-		const eCONTROL_TYPE m_type;
+		const ControlType m_type;
 		//! The style
 		uint32_t m_style;
 		//! The position
@@ -332,7 +339,7 @@ namespace CastorGui
 		//! The border panel overlay used as a background
 		Castor3D::BorderPanelOverlayWPtr m_background;
 		//! The child controls
-		std::vector< ControlWPtr > m_childs;
+		std::vector< ControlWPtr > m_children;
 		//! The engine
 		Castor3D::Engine * m_engine;
 		//! The controls manager

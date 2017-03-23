@@ -7,14 +7,13 @@
 #include "RenderTargetTreeItemProperty.hpp"
 #include "TextureTreeItemProperty.hpp"
 
-#include <DynamicTexture.hpp>
 #include <Engine.hpp>
-#include <Material.hpp>
-#include <MaterialManager.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <wx/imaglist.h>
 
@@ -61,7 +60,7 @@ namespace GuiCommon
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto && l_image : l_icons )
+		for ( auto l_image : l_icons )
 		{
 			int l_sizeOrig = l_image->GetWidth();
 
@@ -81,13 +80,14 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::LoadMaterials( Castor3D::Engine * p_engine )
+	void MaterialsList::LoadMaterials( Engine * p_engine, Scene & p_scene )
 	{
 		m_engine = p_engine;
+		m_scene = &p_scene;
 		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
-		auto l_lock = Castor::make_unique_lock( m_engine->GetMaterialManager() );
+		auto l_lock = Castor::make_unique_lock( m_engine->GetMaterialCache() );
 
-		for ( auto && l_pair : m_engine->GetMaterialManager() )
+		for ( auto l_pair : m_engine->GetMaterialCache() )
 		{
 			DoAddMaterial( l_root, l_pair.second );
 		}
@@ -103,7 +103,7 @@ namespace GuiCommon
 		wxTreeItemId l_id = AppendItem( p_id, p_material->GetName(), eBMP_MATERIAL - eBMP_MATERIAL, eBMP_MATERIAL_SEL - eBMP_MATERIAL, new MaterialTreeItemProperty( m_propertiesHolder->IsEditable(), p_material ) );
 		uint32_t l_index = 0;
 
-		for ( auto && l_pass : *p_material )
+		for ( auto l_pass : *p_material )
 		{
 			DoAddPass( l_id, l_index++, l_pass );
 		}
@@ -111,23 +111,22 @@ namespace GuiCommon
 
 	void MaterialsList::DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new PassTreeItemProperty( m_propertiesHolder->IsEditable(), p_pass ) );
+		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new PassTreeItemProperty( m_propertiesHolder->IsEditable(), p_pass, *m_scene ) );
 		uint32_t l_index = 0;
 
-		for ( auto && l_pass : *p_pass )
+		for ( auto l_unit : *p_pass )
 		{
-			DoAddTexture( l_id, l_index++, l_pass );
+			DoAddTexture( l_id, l_index++, l_unit );
 		}
 	}
 
 	void MaterialsList::DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture )
 	{
 		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Texture Unit " ) ) << p_index, eBMP_TEXTURE - eBMP_MATERIAL, eBMP_TEXTURE_SEL - eBMP_MATERIAL, new TextureTreeItemProperty( m_propertiesHolder->IsEditable(), p_texture ) );
-		TextureSPtr l_texture = p_texture->GetTexture();
 
-		if ( l_texture && l_texture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC )
+		if ( p_texture->GetRenderTarget() )
 		{
-			RenderTargetSPtr l_target = std::static_pointer_cast< DynamicTexture >( l_texture )->GetRenderTarget();
+			RenderTargetSPtr l_target = p_texture->GetRenderTarget();
 
 			if ( l_target )
 			{
@@ -165,7 +164,7 @@ namespace GuiCommon
 
 	//void MaterialsList::AddItem( String const & p_strMaterialName )
 	//{
-	//	MaterialSPtr l_pMaterial = m_engine->GetMaterialManager().find( p_strMaterialName );
+	//	MaterialSPtr l_pMaterial = m_engine->GetMaterialCache().find( p_strMaterialName );
 	//	int l_iIndex = m_pListImages->GetImageCount();
 	//	wxListItem l_item;
 	//	l_item.SetColumn( 0 );
@@ -190,16 +189,16 @@ namespace GuiCommon
 	//	}
 	//}
 	//
-	//wxImage * MaterialsList::CreateMaterialImage( MaterialSPtr p_pMaterial, uint32_t p_width, uint32_t p_height )
+	//wxImage * MaterialsList::CreateMaterialImage( MaterialSPtr p_material, uint32_t p_width, uint32_t p_height )
 	//{
 	//	wxBitmap l_bmpReturn( p_width, p_height, 32 );
 	//	wxMemoryDC l_dcReturn( l_bmpReturn );
 	//
-	//	if ( p_pMaterial )
+	//	if ( p_material )
 	//	{
-	//		if ( p_pMaterial->GetPassCount() )
+	//		if ( p_material->GetPassCount() )
 	//		{
-	//			wxImage * l_pPassImage = CreatePassImage( p_pMaterial->GetPass( 0 ), p_width, p_height );
+	//			wxImage * l_pPassImage = CreatePassImage( p_material->GetPass( 0 ), p_width, p_height );
 	//			wxBitmap l_bmpPass( *l_pPassImage, 32 );
 	//			l_dcReturn.DrawBitmap( l_bmpPass, 0, 0, true );
 	//			delete l_pPassImage;
@@ -209,11 +208,11 @@ namespace GuiCommon
 	//	return new wxImage( l_bmpReturn.ConvertToImage() );
 	//}
 	//
-	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pPass, uint32_t p_width, uint32_t p_height )
+	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pass, uint32_t p_width, uint32_t p_height )
 	//{
 	//	wxImage * l_return = nullptr;
 	//
-	//	if ( p_pPass )
+	//	if ( p_pass )
 	//	{
 	//		wxBitmap l_bmpReturn( p_width, p_height, 32 );
 	//		wxMemoryDC l_dcReturn( l_bmpReturn );
@@ -243,20 +242,20 @@ namespace GuiCommon
 	//		double l_dStep = l_dMidRadius1;
 	//		double l_dX, l_dY;
 	//		double l_dRadius = 0;
-	//		p_pPass->GetAmbient().red().convert_to( l_byRe );
-	//		p_pPass->GetAmbient().green().convert_to( l_byGe );
-	//		p_pPass->GetAmbient().blue().convert_to( l_byBe );
-	//		p_pPass->GetDiffuse().red().convert_to( l_byRm );
-	//		p_pPass->GetDiffuse().green().convert_to( l_byGm );
-	//		p_pPass->GetDiffuse().blue().convert_to( l_byBm );
-	//		p_pPass->GetSpecular().red().convert_to( l_byRc );
-	//		p_pPass->GetSpecular().green().convert_to( l_byGc );
-	//		p_pPass->GetSpecular().blue().convert_to( l_byBc );
+	//		p_pass->GetAmbient().red().convert_to( l_byRe );
+	//		p_pass->GetAmbient().green().convert_to( l_byGe );
+	//		p_pass->GetAmbient().blue().convert_to( l_byBe );
+	//		p_pass->GetDiffuse().red().convert_to( l_byRm );
+	//		p_pass->GetDiffuse().green().convert_to( l_byGm );
+	//		p_pass->GetDiffuse().blue().convert_to( l_byBm );
+	//		p_pass->GetSpecular().red().convert_to( l_byRc );
+	//		p_pass->GetSpecular().green().convert_to( l_byGc );
+	//		p_pass->GetSpecular().blue().convert_to( l_byBc );
 	//
-	//		if ( p_pPass->GetTextureUnitsCount() )
+	//		if ( p_pass->GetTextureUnitsCount() )
 	//		{
 	//			l_byA = 127;
-	//			wxImage * l_pImage = CreateTextureUnitImage( p_pPass->GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE ), p_width, p_height );
+	//			wxImage * l_pImage = CreateTextureUnitImage( p_pass->GetTextureUnit( TextureChannel::eDiffuse ), p_width, p_height );
 	//
 	//			if ( l_pImage )
 	//			{

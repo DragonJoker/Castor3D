@@ -1,26 +1,31 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef __COMC3D_COM_COLOUR_H__
 #define __COMC3D_COM_COLOUR_H__
 
 #include "ComAtlObject.hpp"
 
-#include <Colour.hpp>
+#include <Graphics/Colour.hpp>
 
 namespace CastorCom
 {
@@ -63,10 +68,10 @@ namespace CastorCom
 			return bgra_float( *this );
 		}
 
-		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_RED ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_RED ) );
-		COM_PROPERTY( G, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_GREEN ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_GREEN ) );
-		COM_PROPERTY( B, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_BLUE ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_BLUE ) );
-		COM_PROPERTY( A, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_ALPHA ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_ALPHA ) );
+		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eRed ), make_putter( this, &Castor::Colour::get, Castor::Colour::Component::eRed ) );
+		COM_PROPERTY( G, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eGreen ), make_putter( this, &Castor::Colour::get, Castor::Colour::Component::eGreen ) );
+		COM_PROPERTY( B, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eBlue ), make_putter( this, &Castor::Colour::get, Castor::Colour::Component::eBlue ) );
+		COM_PROPERTY( A, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eAlpha ), make_putter( this, &Castor::Colour::get, Castor::Colour::Component::eAlpha ) );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Colour ), CColour );

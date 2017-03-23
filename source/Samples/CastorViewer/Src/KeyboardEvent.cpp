@@ -3,8 +3,8 @@
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 
-#include <RenderWindow.hpp>
-#include <Logger.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -12,7 +12,7 @@ using namespace Castor;
 namespace CastorViewer
 {
 	KeyboardEvent::KeyboardEvent( RenderWindowSPtr p_window )
-		: FrameEvent( eEVENT_TYPE_PRE_RENDER )
+		: FrameEvent( EventType::ePreRender )
 		, m_window( p_window )
 	{
 	}
@@ -27,7 +27,6 @@ namespace CastorViewer
 
 		if ( l_pWindow )
 		{
-			wxGetApp().GetMainFrame()->ToggleFullScreen( !l_pWindow->IsFullscreen() );
 			l_pWindow->UpdateFullScreen( !l_pWindow->IsFullscreen() );
 		}
 

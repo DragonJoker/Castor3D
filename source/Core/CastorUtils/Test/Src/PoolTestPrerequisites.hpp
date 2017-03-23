@@ -1,29 +1,34 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___TEST_PREREQUISITES_H___
 #define ___TEST_PREREQUISITES_H___
 
-#include "TestPrerequisites.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
-#include <FixedSizeMemoryData.hpp>
-#include <FixedSizeMarkedMemoryData.hpp>
-#include <FixedGrowingSizeMemoryData.hpp>
-#include <FixedGrowingSizeMarkedMemoryData.hpp>
+#include <Pool/FixedSizeMemoryData.hpp>
+#include <Pool/FixedSizeMarkedMemoryData.hpp>
+#include <Pool/FixedGrowingSizeMemoryData.hpp>
+#include <Pool/FixedGrowingSizeMarkedMemoryData.hpp>
 
 #include <cstdint>
 #include <chrono>
@@ -39,7 +44,7 @@ struct TinyObj
 /** Petit objet, dérivant de TinyObj et contenant en plus un double, et un float
 */
 struct SmallObj
-		: public TinyObj
+	: public TinyObj
 {
 	double valueB;
 	float valueC;
@@ -48,7 +53,7 @@ struct SmallObj
 /** Objet, dérivant de SmallObj et contenant en plus un double, un float, et un tableau de 1 KO
 */
 struct Obj
-		: public SmallObj
+	: public SmallObj
 {
 	double valueD;
 	float valueE;
@@ -58,7 +63,7 @@ struct Obj
 /** Gros objet, dérivant de Obj et contenant en plus un tableau de 1 MO
 */
 struct BigObj
-		: public Obj
+	: public Obj
 {
 	uint8_t valueG[1024 * 1024];
 
@@ -266,7 +271,7 @@ namespace AllocPolicies
 		template< typename type, typename ... Params >
 		static inline type * Allocate( void * mem, Params ... params )
 		{
-			return new ( mem ) type( params... );
+			return new( mem ) type( params... );
 		}
 
 		/** Désalloue un objet

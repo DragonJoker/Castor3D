@@ -1,6 +1,6 @@
 #include "MaterialTreeItemProperty.hpp"
 
-#include <Material.hpp>
+#include <Material/Material.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

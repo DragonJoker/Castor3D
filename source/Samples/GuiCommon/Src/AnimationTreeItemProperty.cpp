@@ -1,8 +1,9 @@
 #include "AnimationTreeItemProperty.hpp"
 
-#include <Animation.hpp>
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
+#include <Animation/Animation.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Scene/Animation/AnimatedObjectGroup.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
@@ -20,20 +21,18 @@ namespace GuiCommon
 		static wxString PROPERTY_ANIMATION_STATE[] = { _( "Play" ), _( "Stop" ), _( "Pause" ) };
 	}
 
-	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * p_engine, bool p_editable, AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, eANIMATION_STATE p_state )
+	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * p_engine, bool p_editable, AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, GroupAnimation const & p_anim )
 		: TreeItemProperty( p_engine, p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_name( p_name )
 		, m_group( p_group )
-		, m_state( p_state )
-		, m_scale( 1.0 )
-		, m_looped( false )
+		, m_groupAnim( p_anim )
 	{
 		PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
 		PROPERTY_ANIMATION_SPEED = _( "Speed" );
 		PROPERTY_ANIMATION_LOOPED = _( "Looped" );
-		PROPERTY_ANIMATION_STATE[eANIMATION_STATE_PLAYING] = _( "Pause" );
-		PROPERTY_ANIMATION_STATE[eANIMATION_STATE_STOPPED] = _( "Play" );
-		PROPERTY_ANIMATION_STATE[eANIMATION_STATE_PAUSED] = _( "Stop" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::ePlaying )] = _( "Pause" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::eStopped )] = _( "Play" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::ePaused )] = _( "Stop" );
 
 		CreateTreeItemMenu();
 	}
@@ -49,9 +48,9 @@ namespace GuiCommon
 		if ( l_group )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATION + make_wxString( m_name ) ) );
-			p_grid->Append( CreateProperty< wxFloatProperty >( PROPERTY_ANIMATION_SPEED, wxVariant( m_scale ), _( "The animation time scale." ) ) );
-			p_grid->Append( CreateProperty< wxBoolProperty >( PROPERTY_ANIMATION_LOOPED, wxVariant( m_looped ), _( "Sets the animation looped or not" ) ) );
-			p_grid->Append( CreateProperty( PROPERTY_ANIMATION_STATE[m_state], PROPERTY_ANIMATION_STATE[m_state], static_cast< ButtonEventMethod >( &AnimationTreeItemProperty::OnStateChange ), this, p_editor ) );
+			p_grid->Append( CreateProperty< wxFloatProperty >( PROPERTY_ANIMATION_SPEED, wxVariant( m_groupAnim.m_scale ), _( "The animation time scale." ) ) );
+			p_grid->Append( CreateProperty< wxBoolProperty >( PROPERTY_ANIMATION_LOOPED, wxVariant( m_groupAnim.m_looped ), _( "Sets the animation looped or not" ) ) );
+			p_grid->Append( CreateProperty( PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )], PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )], static_cast< ButtonEventMethod >( &AnimationTreeItemProperty::OnStateChange ), this, p_editor ) );
 		}
 	}
 
@@ -77,21 +76,21 @@ namespace GuiCommon
 
 	void AnimationTreeItemProperty::OnSpeedChange( double p_value )
 	{
-		m_scale = p_value;
+		m_groupAnim.m_scale = p_value;
 
 		DoApplyChange( [this]()
 		{
-			GetGroup()->SetAnimationScale( m_name, m_scale );
+			GetGroup()->SetAnimationScale( m_name, m_groupAnim.m_scale );
 		} );
 	}
 
 	void AnimationTreeItemProperty::OnLoopedChange( bool p_value )
 	{
-		m_looped = p_value;
+		m_groupAnim.m_looped = p_value;
 
 		DoApplyChange( [this]()
 		{
-			GetGroup()->SetAnimationLooped( m_name, m_looped );
+			GetGroup()->SetAnimationLooped( m_name, m_groupAnim.m_looped );
 		} );
 	}
 
@@ -102,25 +101,25 @@ namespace GuiCommon
 			auto l_group = GetGroup();
 			ButtonData * l_data = reinterpret_cast< ButtonData * >( p_property->GetClientObject() );
 
-			switch ( m_state )
+			switch ( m_groupAnim.m_state )
 			{
-			case eANIMATION_STATE_PLAYING:
+			case AnimationState::ePlaying:
 				l_group->PauseAnimation( m_name );
-				m_state = eANIMATION_STATE_PAUSED;
+				m_groupAnim.m_state = AnimationState::ePaused;
 				break;
 
-			case eANIMATION_STATE_STOPPED:
+			case AnimationState::eStopped:
 				l_group->StartAnimation( m_name );
-				m_state = eANIMATION_STATE_PLAYING;
+				m_groupAnim.m_state = AnimationState::ePlaying;
 				break;
 
-			case eANIMATION_STATE_PAUSED:
+			case AnimationState::ePaused:
 				l_group->StopAnimation( m_name );
-				m_state = eANIMATION_STATE_STOPPED;
+				m_groupAnim.m_state = AnimationState::eStopped;
 				break;
 			}
 
-			p_property->SetLabel( PROPERTY_ANIMATION_STATE[m_state] );
+			p_property->SetLabel( PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )] );
 		} );
 
 		return false;
