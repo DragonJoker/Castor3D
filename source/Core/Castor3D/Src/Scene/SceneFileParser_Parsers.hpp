@@ -174,6 +174,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassReflectionMapping )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassEnd )
 
 	// Texture Unit Parsers

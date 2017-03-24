@@ -493,6 +493,9 @@ namespace Castor3D
 		//!\~english Emissive map
 		//!\~french Map d'émissive
 		eEmissive = 0x040,
+		//!\~english Reflection map
+		//!\~french Map de réflexion
+		eReflection = 0x0080,
 		//!\~english Mask for all the texture channels
 		//!\~french Masque pour les canaux de texture
 		eAll = 0x0FFF,

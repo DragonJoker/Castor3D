@@ -237,6 +237,25 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the reflection mapping status.
+		 *\~french
+		 *\brief		Définit le statut d'utilisation du reflection mapping.
+		 */
+		inline void SetReflectionMapping( bool p_value )
+		{
+			m_reflectionMapping = p_value;
+
+			if ( m_reflectionMapping )
+			{
+				AddFlag( m_textureFlags, TextureChannel::eReflection );
+			}
+			else
+			{
+				RemFlag( m_textureFlags, TextureChannel::eReflection );
+			}
+		}
+		/**
+		 *\~english
 		 *\brief		Sets the alpha blend mode.
 		 *\param[in]	p_value	The new value.
 		 *\~french
@@ -279,6 +298,16 @@ namespace Castor3D
 		inline bool IsTwoSided()const
 		{
 			return m_twoSided;
+		}
+		/**
+		 *\~english
+		 *\return		\p true if reflection mapping is enabled for this pass.
+		 *\~french
+		 *\return		\p true si le reflection mapping est activé sur cette passe.
+		 */
+		inline bool HasReflectionMapping()const
+		{
+			return m_reflectionMapping;
 		}
 		/**
 		 *\~english
@@ -455,6 +484,9 @@ namespace Castor3D
 		//!\~english	Tells the pass shader is an automatically generated one.
 		//!\~french		Dit si le shader de la passe a été généré automatiquement.
 		bool m_automaticShader{ true };
+		//!\~english	Tells the pass has reflection mapping.
+		//!\~french		Dit si la passe a du reflection mapping.
+		bool m_reflectionMapping{ false };
 		//!\~english	The alpha blend mode.
 		//!\~french		Le mode de mélange alpha.
 		BlendMode m_alphaBlendMode{ BlendMode::eNoBlend };

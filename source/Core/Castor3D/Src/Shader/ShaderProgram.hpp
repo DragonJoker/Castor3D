@@ -808,6 +808,9 @@ namespace Castor3D
 		//!\~english	Name of the height texture frame variable.
 		//!\~french		Nom de la frame variable contenant texture de hauteur.
 		C3D_API static const Castor::String MapHeight;
+		//!\~english	Name of the reflection texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de réflexion.
+		C3D_API static const Castor::String MapReflection;
 
 		//@}
 		/**@name Frame Variable Buffers */
