@@ -278,7 +278,7 @@ namespace CastorViewer
 			l_camera->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_cameraNode]()
 			{
 				Quaternion l_orientation{ l_cameraNode->GetOrientation() };
-				l_orientation *= Quaternion{ Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
+				l_orientation *= Quaternion::from_axis_angle( Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) );
 				l_cameraNode->SetOrientation( l_orientation );
 			} ) );
 		}
@@ -295,7 +295,7 @@ namespace CastorViewer
 			l_camera->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_cameraNode]()
 			{
 				Quaternion l_orientation{ l_cameraNode->GetOrientation() };
-				l_orientation *= Quaternion{ Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
+				l_orientation *= Quaternion::from_axis_angle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) );
 				l_cameraNode->SetOrientation( l_orientation );
 			} ) );
 		}

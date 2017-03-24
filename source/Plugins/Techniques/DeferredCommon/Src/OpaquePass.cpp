@@ -16,16 +16,16 @@ using namespace Castor3D;
 
 namespace deferred_common
 {
-	OpaquePass::OpaquePass( RenderTarget & p_renderTarget
-		, Castor3D::RenderTechnique & p_technique )
+	OpaquePass::OpaquePass( Scene & p_scene
+		, Camera * p_camera )
 		: Castor3D::RenderTechniquePass{ cuT( "deferred_opaque" )
-			, p_renderTarget
-			, p_technique
+			, p_scene
+			, p_camera
 			, true
 			, false }
-		, m_directionalShadowMap{ *p_renderTarget.GetEngine() }
-		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
-		, m_pointShadowMap{ *p_renderTarget.GetEngine() }
+		, m_directionalShadowMap{ *p_scene.GetEngine() }
+		, m_spotShadowMap{ *p_scene.GetEngine() }
+		, m_pointShadowMap{ *p_scene.GetEngine() }
 	{
 	}
 
@@ -35,8 +35,7 @@ namespace deferred_common
 
 	bool OpaquePass::InitialiseShadowMaps()
 	{
-		auto & l_scene = *m_target.GetScene();
-		l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
+		m_scene.GetLightCache().ForEach( [this]( Light & p_light )
 		{
 			if ( p_light.IsShadowProducer() )
 			{
@@ -82,9 +81,9 @@ namespace deferred_common
 
 	void OpaquePass::UpdateShadowMaps( RenderQueueArray & p_queues )
 	{
-		m_pointShadowMap.Update( *m_target.GetCamera(), p_queues );
-		m_spotShadowMap.Update( *m_target.GetCamera(), p_queues );
-		m_directionalShadowMap.Update( *m_target.GetCamera(), p_queues );
+		m_pointShadowMap.Update( *m_camera, p_queues );
+		m_spotShadowMap.Update( *m_camera, p_queues );
+		m_directionalShadowMap.Update( *m_camera, p_queues );
 	}
 
 	void OpaquePass::RenderShadowMaps()

@@ -44,21 +44,21 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_name			The technique name.
-		 *\param[in]	p_renderTarget	The render target for this technique.
-		 *\param[in]	p_technique		The parent render technique.
+		 *\param[in]	p_scene			The scene for this technique.
+		 *\param[in]	p_camera		The camera for this technique (may be null).
 		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
 		 *\param[in]	p_multisampling	The multisampling status
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom de la technique.
-		 *\param[in]	p_renderTarget	La render target pour cette technique.
-		 *\param[in]	p_technique		La technique de rendu parente.
+		 *\param[in]	p_scene			La scène pour cette technique.
+		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
 		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
 		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
 		 */
 		C3D_API RenderTechniquePass( Castor::String const & p_name
-			, RenderTarget & p_renderTarget
-			, RenderTechnique & p_technique
+			, Scene & p_scene
+			, Camera * p_camera
 			, bool p_opaque
 			, bool p_multisampling = false );
 		/**
@@ -219,12 +219,12 @@ namespace Castor3D
 			, PipelineFlags const & p_flags )override;
 
 	protected:
-		//!\~english	The parent render target.
-		//!\~french		La cible de rendu parente.
-		RenderTarget & m_target;
-		//!\~english	The parent render technique.
-		//!\~french		La technique de rendu parente.
-		RenderTechnique & m_technique;
+		//!\~english	The rendered scne.
+		//!\~french		La scène rendue.
+		Scene & m_scene;
+		//!\~english	The viewer camera, if any.
+		//!\~french		La caméra, s'il y en a une.
+		Camera * m_camera{ nullptr };
 		//!\~english	The scene render node.
 		//!\~french		Le noeud de rendu de la scène.
 		SceneRenderNode m_sceneNode;

@@ -1645,7 +1645,7 @@ namespace Castor3D
 			float l_fAngle;
 			p_params[0]->Get( l_ptVector );
 			p_params[1]->Get( l_fAngle );
-			l_parsingContext->pSceneNode->SetOrientation( Quaternion( l_ptVector, Angle::from_degrees( l_fAngle ) ) );
+			l_parsingContext->pSceneNode->SetOrientation( Quaternion::from_axis_angle( l_ptVector, Angle::from_degrees( l_fAngle ) ) );
 		}
 	}
 	END_ATTRIBUTE()

@@ -57,13 +57,13 @@ namespace forward_msaa
 			, p_renderTarget
 			, p_renderSystem
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_msaa_opaque" )
-				, p_renderTarget
-				, *this
+				, *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get()
 				, true
 				, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_msaa_transparent" )
-				, p_renderTarget
-				, *this
+				, *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get()
 				, false
 				, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 			, p_params

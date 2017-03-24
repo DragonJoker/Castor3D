@@ -99,10 +99,11 @@ namespace deferred_msaa
 		: Castor3D::RenderTechnique( cuT( "deferred_msaa" )
 			, p_renderTarget
 			, p_renderSystem
-			, std::make_unique< deferred_common::OpaquePass >( p_renderTarget, *this )
+			, std::make_unique< deferred_common::OpaquePass >( *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get() )
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_msaa_transparent" )
-				, p_renderTarget
-				, *this
+				, *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get()
 				, false
 				, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 			, p_params

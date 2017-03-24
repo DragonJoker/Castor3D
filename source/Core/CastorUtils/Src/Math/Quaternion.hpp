@@ -167,28 +167,6 @@ namespace Castor
 		inline QuaternionT( float const * p_values );
 		/**
 		 *\~english
-		 *\brief		Constructor from axis and angle
-		 *\param[in]	p_vector	A point containing the axis values
-		 *\param[in]	p_angle		The angle
-		 *\~french
-		 *\brief		Constructeur à partir d'un axe et d'un angle
-		 *\param[in]	p_vector	Un point contenant les valeurs de l'axe
-		 *\param[in]	p_angle		L'angle
-		 */
-		inline QuaternionT( Point3f const & p_vector, Angle const & p_angle );
-		/**
-		 *\~english
-		 *\brief		Constructor from axis and angle
-		 *\param[in]	p_vector	A point containing the axis values
-		 *\param[in]	p_angle		The angle
-		 *\~french
-		 *\brief		Constructeur à partir d'un axe et d'un angle
-		 *\param[in]	p_vector	Un point contenant les valeurs de l'axe
-		 *\param[in]	p_angle		L'angle
-		 */
-		inline QuaternionT( Point3d const & p_vector, Angle const & p_angle );
-		/**
-		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_values	The quaternion values
 		 *\~french
@@ -291,6 +269,82 @@ namespace Castor
 		inline QuaternionT< T > & operator*=( float p_rhs );
 		/**
 		 *\~english
+		 *\brief		Updates this Quaternion from a rotation matrix
+		 *\param[in]	p_matrix	The rotation matrix
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
+		 *\param[in]	p_matrix	La matrice de rotation
+		 */
+		static inline QuaternionT< T > from_matrix( Matrix4x4f const & p_matrix );
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from a rotation matrix
+		 *\param[in]	p_matrix	The rotation matrix
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
+		 *\param[in]	p_matrix	La matrice de rotation
+		 */
+		static inline QuaternionT< T > from_matrix( Matrix4x4d const & p_matrix );
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from a rotation matrix
+		 *\param[in]	p_matrix	The rotation matrix
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
+		 *\param[in]	p_matrix	La matrice de rotation
+		 */
+		static inline QuaternionT< T > from_matrix( float const * p_matrix );
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from a rotation matrix
+		 *\param[in]	p_matrix	The rotation matrix
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
+		 *\param[in]	p_matrix	La matrice de rotation
+		 */
+		static inline QuaternionT< T > from_matrix( double const * p_matrix );
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from an axis and an angle
+		 *\param[in]	p_vector	The axis
+		 *\param[in]	p_angle		The angle
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir d'un axe et d'un angle
+		 *\param[in]	p_vector	L'axe
+		 *\param[in]	p_angle		L'angle
+		 */
+		static inline QuaternionT< T > from_axis_angle( Point3f const & p_vector, Angle const & p_angle );
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from an axis and an angle
+		 *\param[in]	p_vector	The axis
+		 *\param[in]	p_angle		The angle
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir d'un axe et d'un angle
+		 *\param[in]	p_vector	L'axe
+		 *\param[in]	p_angle		L'angle
+		 */
+		static inline QuaternionT< T > from_axis_angle( Point3d const & p_vector, Angle const & p_angle );
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from 3 axes
+		 *\param[in]	p_x, p_y, p_z	The axes
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir de 3 axes
+		 *\param[in]	p_x, p_y, p_z	Les axes
+		 */
+		static inline QuaternionT< T > from_axes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z );
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from 3 axes
+		 *\param[in]	p_x, p_y, p_z	The axes
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir de 3 axes
+		 *\param[in]	p_x, p_y, p_z	Les axes
+		 */
+		static inline QuaternionT< T > from_axes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z );
+		/**
+		 *\~english
 		 *\brief		Transforms a vector and gives the result
 		 *\param[in]	p_vector	The vector to transform
 		 *\param[out]	p_result	Receives the result
@@ -353,64 +407,6 @@ namespace Castor
 		inline void to_matrix( Matrix4x4d & p_matrix )const;
 		/**
 		 *\~english
-		 *\brief		Updates this Quaternion from a rotation matrix
-		 *\param[in]	p_matrix	The rotation matrix
-		 *\~french
-		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
-		 *\param[in]	p_matrix	La matrice de rotation
-		 */
-		inline void from_matrix( Matrix4x4f const & p_matrix );
-		/**
-		 *\~english
-		 *\brief		Updates this Quaternion from a rotation matrix
-		 *\param[in]	p_matrix	The rotation matrix
-		 *\~french
-		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
-		 *\param[in]	p_matrix	La matrice de rotation
-		 */
-		inline void from_matrix( Matrix4x4d const & p_matrix );
-		/**
-		 *\~english
-		 *\brief		Updates this Quaternion from a rotation matrix
-		 *\param[in]	p_matrix	The rotation matrix
-		 *\~french
-		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
-		 *\param[in]	p_matrix	La matrice de rotation
-		 */
-		inline void from_matrix( float const * p_matrix );
-		/**
-		 *\~english
-		 *\brief		Updates this Quaternion from a rotation matrix
-		 *\param[in]	p_matrix	The rotation matrix
-		 *\~french
-		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
-		 *\param[in]	p_matrix	La matrice de rotation
-		 */
-		inline void from_matrix( double const * p_matrix );
-		/**
-		 *\~english
-		 *\brief		Updates this Quaternion from an axis and an angle
-		 *\param[in]	p_vector	The axis
-		 *\param[in]	p_angle		The angle
-		 *\~french
-		 *\brief		Met à jour ce Quaternion à partir d'un axe et d'un angle
-		 *\param[in]	p_vector	L'axe
-		 *\param[in]	p_angle		L'angle
-		 */
-		inline void from_axis_angle( Point3f const & p_vector, Angle const & p_angle );
-		/**
-		 *\~english
-		 *\brief		Updates this Quaternion from an axis and an angle
-		 *\param[in]	p_vector	The axis
-		 *\param[in]	p_angle		The angle
-		 *\~french
-		 *\brief		Met à jour ce Quaternion à partir d'un axe et d'un angle
-		 *\param[in]	p_vector	L'axe
-		 *\param[in]	p_angle		L'angle
-		 */
-		inline void from_axis_angle( Point3d const & p_vector, Angle const & p_angle );
-		/**
-		 *\~english
 		 *\brief		Gives the axis and the angle from this Quaternion
 		 *\param[out]	p_vector	Receives the axis
 		 *\param[out]	p_angle		Receives the angle
@@ -431,24 +427,6 @@ namespace Castor
 		 *\param[out]	p_angle		Reçoit l'angle
 		 */
 		inline void to_axis_angle( Point3d & p_vector, Angle & p_angle )const;
-		/**
-		 *\~english
-		 *\brief		Updates this Quaternion from 3 axes
-		 *\param[in]	p_x, p_y, p_z	The axes
-		 *\~french
-		 *\brief		Met à jour ce Quaternion à partir de 3 axes
-		 *\param[in]	p_x, p_y, p_z	Les axes
-		 */
-		inline void from_axes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z );
-		/**
-		 *\~english
-		 *\brief		Updates this Quaternion from 3 axes
-		 *\param[in]	p_x, p_y, p_z	The axes
-		 *\~french
-		 *\brief		Met à jour ce Quaternion à partir de 3 axes
-		 *\param[in]	p_x, p_y, p_z	Les axes
-		 */
-		inline void from_axes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z );
 		/**
 		 *\~english
 		 *\brief		Computes 3 axes from this quaternion

@@ -23,12 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_ReflectionMapPass_H___
 #define ___C3D_ReflectionMapPass_H___
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
-#include "Render/RenderTarget.hpp"
-#include "Render/Viewport.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Geometry.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Technique/RenderTechniquePass.hpp"
 
 namespace Castor3D
 {
@@ -42,24 +37,25 @@ namespace Castor3D
 	\brief		Implémentation d'une passe de reflection mapping.
 	*/
 	class ReflectionMapPass
-		: public RenderTarget
+		: Castor::OwnedBy< ReflectionMap >
 	{
 	public:
+		ReflectionMapPass( ReflectionMapPass const & )=delete;
+		ReflectionMapPass & operator=( ReflectionMapPass const & )=delete;
+		ReflectionMapPass( ReflectionMapPass && )= default;
+		ReflectionMapPass & operator=( ReflectionMapPass && )=default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_light		The light source.
-		 *\param[in]	p_shadowMap	The parent shadow map.
+		 *\param[in]	p_reflectionMap	The parent reflection map.
+		 *\param[in]	p_node			The node from which the camera is created.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_light		La source lumineuse.
-		 *\param[in]	p_shadowMap	La shadow map parente.
+		 *\param[in]	p_reflectionMap	Le reflection map parente.
+		 *\param[in]	p_node			Le noeud depuis lequel on crée la caméra.
 		 */
-		C3D_API ReflectionMapPass( Engine & p_engine
-			, SceneNode & p_node
-			, ReflectionMap const & p_reflectionMap );
+		C3D_API ReflectionMapPass( ReflectionMap & p_reflectionMap
+			, SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -70,18 +66,18 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoInitialise
 		 */
-		bool Initialise( Castor::Size const & p_size )override;
+		bool Initialise( Castor::Size const & p_size );
 		/**
 		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
 		 */
-		void Cleanup()override;
+		void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Render function
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
-		C3D_API void Render( uint32_t p_face = 0 );
+		C3D_API void Render();
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
@@ -94,40 +90,21 @@ namespace Castor3D
 		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 *\param[out]	p_index		L'indice de la passe.
 		 */
-		C3D_API void Update( RenderQueueArray & p_queues
-			, int32_t p_index );
+		C3D_API void Update( RenderQueueArray & p_queues );
 
 	private:
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoRender
-		 */
-		void DoRender( uint32_t p_face );
-
-	private:
-		//!\~english	The parent reflection map.
-		//!\~french		La reflection map parente.
-		ReflectionMap const & m_reflectionMap;
-		//!\~english	The node.
-		//!\~french		Le noeud.
-		SceneNode & m_node;
-		//!\~english	Tells if the pass is initialised.
-		//!\~french		Dit si la passe est initialisée.
-		bool m_initialised{ false };
-		//!\~english	The pass index.
-		//!\~french		L'indice de la passe.
-		int32_t m_index{ 0u };
-		//!\~english	The connection to node changed signal.
-		//!\~french		La connexion au signal de changement du noeud.
-		SceneNode::OnChanged::connection m_onNodeChanged;
-		//!\~english	The projection matrix.
-		//!\~french		La matrice de projection.
-		Castor::Matrix4x4r m_projection;
-		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
-		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
-		Viewport m_viewport;
-		//!\~english	The view matrices for the render of each cube face.
-		//!\~french		Les matrices vue pour le dessin de chaque face du cube.
-		std::array< Castor::Matrix4x4r, size_t( CubeMapFace::eCount ) > m_matrices;
+		//!\~english	The camera node.
+		//!\~french		Le noeud de la camera.
+		SceneNodeSPtr m_node;
+		//!\~english	The camera.
+		//!\~french		La camera.
+		CameraSPtr m_camera;
+		//!\~english	The pass used to render opaque nodes.
+		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
+		std::unique_ptr< RenderTechniquePass > m_opaquePass;
+		//!\~english	The pass used to render transparent nodes.
+		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
+		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 	};
 }
 

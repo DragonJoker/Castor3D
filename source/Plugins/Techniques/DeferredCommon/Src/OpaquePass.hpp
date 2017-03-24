@@ -48,15 +48,15 @@ namespace deferred_common
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderTarget	The render target for this technique.
-		 *\param[in]	p_technique		The parent render technique.
+		 *\param[in]	p_scene		The scene for this technique.
+		 *\param[in]	p_camera	The camera for this technique (may be null).
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderTarget	La render target pour cette technique.
-		 *\param[in]	p_technique		La technique de rendu parente.
+		 *\param[in]	p_scene		La scène pour cette technique.
+		 *\param[in]	p_camera	La caméra pour cette technique (peut être nulle).
 		 */
-		OpaquePass( Castor3D::RenderTarget & p_renderTarget
-			, Castor3D::RenderTechnique & p_technique );
+		OpaquePass( Castor3D::Scene & p_scene
+			, Castor3D::Camera * p_camera );
 		/**
 		 *\~english
 		 *\brief		Destructor

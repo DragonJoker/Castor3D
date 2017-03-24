@@ -23,9 +23,10 @@ SOFTWARE.
 #ifndef ___C3D_ReflectionMap_H___
 #define ___C3D_ReflectionMap_H___
 
-#include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Render/Viewport.hpp"
+#include "ReflectionMap/ReflectionMapPass.hpp"
+#include "Scene/SceneNode.hpp"
 #include "Texture/TextureUnit.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -43,19 +44,25 @@ namespace Castor3D
 	class ReflectionMap
 		: public Castor::OwnedBy< Engine >
 	{
-	protected:
-		using ReflectionMapNodeMap = std::map< SceneNode const *, ReflectionMapPassSPtr >;
+	public:
+		using CubeMatrices = std::array< Castor::Matrix4x4r, size_t (CubeMapFace::eCount) >;
+		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t (CubeMapFace::eCount) >;
+		using CubeCameras = std::array< CameraSPtr, size_t (CubeMapFace::eCount) >;
+		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
+		using ReflectionMapPasses = std::array< ReflectionMapPass, size_t (CubeMapFace::eCount) >;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_node		The scene node.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_node		Le noeud de scène.
 		 */
-		C3D_API ReflectionMap( Engine & p_engine );
+		C3D_API ReflectionMap( Engine & p_engine, SceneNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -107,33 +114,35 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\return		The reflection map.
-		 *\param[in]	p_index	The map index.
 		 *\~english
 		 *\return		La map de réflexion.
-		 *\param[in]	p_index	L'indice de la map.
 		 */
-		inline TextureUnit & GetTexture( uint32_t p_index )
+		inline TextureUnit & GetTexture()
 		{
-			REQUIRE( p_index < m_reflectionMaps.size() );
-			return m_reflectionMaps[p_index];
+			return m_reflectionMap;
 		}
 		/**
 		 *\~english
 		 *\return		The reflection map.
-		 *\param[in]	p_index	The map index.
 		 *\~english
 		 *\return		La map de réflexion.
-		 *\param[in]	p_index	L'indice de la map.
 		 */
-		inline TextureUnit const & GetTexture( uint32_t p_index )const
+		inline TextureUnit const & GetTexture()const
 		{
-			REQUIRE( p_index < m_reflectionMaps.size() );
-			return m_reflectionMaps[p_index];
+			return m_reflectionMap;
+		}
+		/**
+		 *\~english
+		 *\return		The reflection map dimensions.
+		 *\~english
+		 *\return		Les dimensions de la map de réflexion.
+		 */
+		inline Castor::Size GetSize()const
+		{
+			return m_reflectionMap.GetTexture()->GetDimensions();
 		}
 
 	private:
-		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
-		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
 		CubeDepthAttachment m_depthAttach;
@@ -142,19 +151,28 @@ namespace Castor3D
 		DepthStencilRenderBufferSPtr m_depthBuffer;
 		//!\~english	The attach between colour buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
-		std::vector< CubeColourAttachment > m_colourAttachs;
-		//!\~english	The shadow map texture.
-		//!\~french		La texture de mappage d'ombres.
-		std::vector< TextureUnit > m_reflectionMaps;
+		CubeColourAttachment m_colourAttachs;
+		//!\~english	The reflection mapping texture.
+		//!\~french		La texture de reflcetion mapping.
+		TextureUnit m_reflectionMap;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The geometry buffer.
-		//!\~french		Les tampons de géométrie.
-		std::set< GeometryBuffersSPtr > m_geometryBuffers;
-		//!\~english	The reflection mapping passes used during the render.
-		//!\~french		Les passes de reflection mapping utilisées pendant le rendu.
-		ReflectionMapNodeMap m_passes;
+		//!\~english	The node.
+		//!\~french		Le noeud.
+		SceneNode & m_node;
+		//!\~english	The connection to node changed signal.
+		//!\~french		La connexion au signal de changement du noeud.
+		SceneNode::OnChanged::connection m_onNodeChanged;
+		//!\~english	The view matrices for the render of each cube face.
+		//!\~french		Les matrices vue pour le dessin de chaque face du cube.
+		CubeMatrices m_matrices;
+		//!\~english	The target size.
+		//!\~french		Les dimensions de la cible.
+		Castor::Size m_size;
+		//!\~english	The render pass for each cube face.
+		//!\~french		La passe de rendu pour chaque face du cube.
+		ReflectionMapPasses m_passes;
 	};
 }
 

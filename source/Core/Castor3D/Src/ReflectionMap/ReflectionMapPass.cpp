@@ -1,12 +1,9 @@
 #include "ReflectionMapPass.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "ReflectionMap/ReflectionMap.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Render/Viewport.hpp"
+#include "Scene/Camera.hpp"
+#include "Technique/ForwardRenderTechniquePass.hpp"
 
 using namespace Castor;
 
@@ -14,32 +11,32 @@ namespace Castor3D
 {
 	namespace
 	{
-		void DoUpdateMatrices( Point3r const & p_position
-			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & p_matrices )
+		CameraSPtr DoCreateCamera( SceneNode & p_node )
 		{
-			p_matrices =
-			{
-				{
-					matrix::look_at( p_position, p_position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
-					matrix::look_at( p_position, p_position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
-					matrix::look_at( p_position, p_position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
-					matrix::look_at( p_position, p_position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
-					matrix::look_at( p_position, p_position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
-					matrix::look_at( p_position, p_position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
-				}
-			};
+			Viewport l_viewport{ *p_node.GetScene()->GetEngine() };
+			return std::make_shared< Camera >( cuT( "ReflectionMap_" ) + p_node.GetName()
+				, *p_node.GetScene()
+				, p_node.shared_from_this()
+				, std::move( l_viewport ) );
 		}
 	}
 
-	ReflectionMapPass::ReflectionMapPass( Engine & p_engine
-		, SceneNode & p_node
-		, ReflectionMap const & p_reflectionMap )
-		: RenderPass{ cuT( "ShadowMap" ), p_engine, true }
-		, m_reflectionMap{ p_reflectionMap }
+	ReflectionMapPass::ReflectionMapPass( ReflectionMap & p_reflectionMap
+		, SceneNodeSPtr p_node )
+		: OwnedBy< ReflectionMap >{ p_reflectionMap }
 		, m_node{ p_node }
-		, m_viewport{ p_engine }
+		, m_camera{ DoCreateCamera( *p_node ) }
+		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "reflection_opaque" )
+			, *p_node->GetScene()
+			, m_camera.get()
+			, true
+			, false ) }
+		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "reflection_transparent" )
+			, *p_node->GetScene()
+			, m_camera.get()
+			, false
+			, false ) }
 	{
-		m_renderQueue.Initialise( *p_node.GetScene() );
 	}
 
 	ReflectionMapPass::~ReflectionMapPass()
@@ -50,40 +47,43 @@ namespace Castor3D
 	{
 		real const l_aspect = real( p_size.width() ) / p_size.height();
 		real const l_near = 1.0_r;
-		real const l_far = 2000.0_r;
-		matrix::perspective( m_projection, Angle::from_degrees( 90.0_r ), l_aspect, l_near, l_far );
-
-		m_viewport.Resize( p_size );
-		m_viewport.Initialise();
-		m_projectionUniform->SetValue( m_projection );
+		real const l_far = 1000.0_r;
+		m_camera->GetViewport().SetPerspective( Angle::from_degrees( 90.0_r )
+			, l_aspect
+			, l_near
+			, l_far );
+		m_camera->Resize( p_size );
+		m_camera->GetViewport().Initialise();
+		m_opaquePass->Initialise( p_size );
+		m_transparentPass->Initialise( p_size );
 		return true;
 	}
 
 	void ReflectionMapPass::Cleanup()
 	{
-		m_viewport.Cleanup();
-		m_matrixUbo.Cleanup();
-		m_onNodeChanged.disconnect();
+		m_opaquePass->Cleanup();
+		m_transparentPass->Cleanup();
+		m_camera->GetViewport().Cleanup();
 	}
 
-	void ReflectionMapPass::DoUpdate( RenderQueueArray & p_queues )
+	void ReflectionMapPass::Update( RenderQueueArray & p_queues )
 	{
-		DoUpdateMatrices( m_node.GetDerivedPosition(), m_matrices );
+		m_camera->Update();
+		m_opaquePass->Update( p_queues );
+		m_transparentPass->Update( p_queues );
 	}
 
-	void ReflectionMapPass::DoRender( uint32_t p_face )
+	void ReflectionMapPass::Render()
 	{
-		if ( m_initialised )
+		auto & l_scene = *m_camera->GetScene();
+		RenderInfo l_info;
+		m_opaquePass->Render( l_info, false );
+		
+		if ( l_scene.GetFog().GetType() == GLSL::FogType::eDisabled )
 		{
-			m_viewport.Apply();
-			m_viewUniform->SetValue( m_matrices[p_face] );
-			m_matrixUbo.Update();
-			auto & l_nodes = m_renderQueue.GetRenderNodes();
-			DoRenderInstancedSubmeshes( l_nodes.m_instancedNodes.m_backCulled );
-			DoRenderStaticSubmeshes( l_nodes.m_staticNodes.m_backCulled );
-			DoRenderSkinningSubmeshes( l_nodes.m_skinningNodes.m_backCulled );
-			DoRenderMorphingSubmeshes( l_nodes.m_morphingNodes.m_backCulled );
-			DoRenderBillboards( l_nodes.m_billboardNodes.m_backCulled );
+			l_scene.RenderBackground( GetOwner()->GetSize(), *m_camera );
 		}
+
+		m_transparentPass->Render( l_info, false );
 	}
 }

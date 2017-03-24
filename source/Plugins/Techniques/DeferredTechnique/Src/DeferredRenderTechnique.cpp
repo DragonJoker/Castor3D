@@ -46,10 +46,11 @@ namespace deferred
 		: Castor3D::RenderTechnique( RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
-			, std::make_unique< deferred_common::OpaquePass >( p_renderTarget, *this )
+			, std::make_unique< deferred_common::OpaquePass >( *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get() )
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_transparent" )
-				, p_renderTarget
-				, *this
+				, *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get()
 				, false
 				, false )
 			, p_params )

@@ -54,46 +54,6 @@ namespace Castor
 		CU_API SphericalVertex( real p_radius = 0, real p_phi = 0, real p_theta = 0 );
 		/**
 		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	p_vertex	The vertex to copy
-		 *\~french
-		 *\brief		Constructeur par recopie
-		 *\param[in]	p_vertex	Le vertex à copier
-		 */
-		CU_API SphericalVertex( SphericalVertex const & p_vertex );
-		/**
-		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	p_vertex	The vertex to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_vertex	Le vertex à déplacer
-		 */
-		CU_API SphericalVertex( SphericalVertex && p_vertex );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_vertex	The vertex to copy
-		 *\return		A reference to this SphericalVertex
-		 *\~french
-		 *\brief		Opérateur d'affectation par recopie
-		 *\param[in]	p_vertex	Le vertex à copier
-		 *\return		Une référence sur ce SphericalVertex
-		 */
-		CU_API SphericalVertex & operator =( SphericalVertex const & p_vertex );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_vertex	The vertex to move
-		 *\return		A reference to this SphericalVertex
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_vertex	Le vertex à déplacer
-		 *\return		Une référence sur ce SphericalVertex
-		 */
-		CU_API SphericalVertex & operator =( SphericalVertex && p_vertex );
-		/**
-		 *\~english
 		 *\brief		Constructor from a cartesian point
 		 *\param[in]	p_vertex	The vertex to convert
 		 *\~french
@@ -111,11 +71,11 @@ namespace Castor
 
 	public:
 		//!\~english The radius (distance to origin)	\~french Rayon (distance à l'origine)
-		real m_rRadius;
+		real m_radius;
 		//!\~english The xy angle	\~french Angle sur le plan XY
-		real m_rPhi;
+		real m_phi;
 		//!\~english The xz angle	\~french Angle sur le plan XZ
-		real m_rTheta;
+		real m_theta;
 	};
 }
 

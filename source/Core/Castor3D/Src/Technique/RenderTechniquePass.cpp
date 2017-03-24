@@ -138,13 +138,13 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	RenderTechniquePass::RenderTechniquePass( String const & p_name
-		, RenderTarget & p_renderTarget
-		, RenderTechnique & p_technique
+		, Scene & p_scene
+		, Camera * p_camera
 		, bool p_opaque
 		, bool p_multisampling )
-		: RenderPass{ p_name, *p_renderTarget.GetEngine(), p_opaque, p_multisampling }
-		, m_target{ p_renderTarget }
-		, m_technique{ p_technique }
+		: RenderPass{ p_name, *m_scene.GetEngine(), p_opaque, p_multisampling }
+		, m_scene{ p_scene }
+		, m_camera{ p_camera }
 		, m_sceneNode{ m_sceneUbo }
 	{
 	}
@@ -156,7 +156,6 @@ namespace Castor3D
 	void RenderTechniquePass::Render( RenderInfo & p_info, bool p_shadows )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes();
-		auto & l_scene = *m_target.GetScene();
 		DepthMapArray l_depthMaps;
 
 		if ( p_shadows )
@@ -164,7 +163,7 @@ namespace Castor3D
 			DoGetDepthMaps( l_depthMaps );
 		}
 
-		DoRenderNodes( l_nodes, *m_target.GetCamera(), l_depthMaps, p_info );
+		DoRenderNodes( l_nodes, *m_camera, l_depthMaps, p_info );
 	}
 
 	void RenderTechniquePass::DoRenderNodes( SceneRenderNodes & p_nodes
@@ -263,16 +262,13 @@ namespace Castor3D
 
 	bool RenderTechniquePass::DoInitialise( Size const & CU_PARAM_UNUSED( p_size ) )
 	{
-		auto & l_scene = *m_target.GetScene();
-		auto l_camera = m_target.GetCamera();
-
-		if ( l_camera )
+		if ( m_camera )
 		{
-			m_renderQueue.Initialise( l_scene, *m_target.GetCamera() );
+			m_renderQueue.Initialise( m_scene, *m_camera );
 		}
 		else
 		{
-			m_renderQueue.Initialise( l_scene );
+			m_renderQueue.Initialise( m_scene );
 		}
 
 		return true;
@@ -425,9 +421,7 @@ namespace Castor3D
 
 	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
-		auto & l_camera = *m_target.GetCamera();
-		auto & l_scene = *l_camera.GetScene();
-		auto & l_fog = l_scene.GetFog();
+		auto & l_fog = m_scene.GetFog();
 		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
 
 		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
@@ -435,17 +429,17 @@ namespace Castor3D
 			m_sceneNode.m_fogDensity.SetValue( l_fog.GetDensity() );
 		}
 
-		m_sceneNode.m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
+		m_sceneNode.m_ambientLight.SetValue( rgba_float( m_scene.GetAmbientLight() ) );
 		{
-			auto & l_cache = l_scene.GetLightCache();
+			auto & l_cache = m_scene.GetLightCache();
 			auto l_lock = make_unique_lock( l_cache );
 			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = l_cache.GetLightsCount( LightType::eSpot );
 			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = l_cache.GetLightsCount( LightType::ePoint );
 			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
 		}
-		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
-		m_sceneNode.m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
-		m_sceneNode.m_cameraFarPlane.SetValue( l_camera.GetViewport().GetFar() );
+		m_sceneNode.m_backgroundColour.SetValue( rgba_float( m_scene.GetBackgroundColour() ) );
+		m_sceneNode.m_cameraPos.SetValue( m_camera->GetParent()->GetDerivedPosition() );
+		m_sceneNode.m_cameraFarPlane.SetValue( m_camera->GetViewport().GetFar() );
 		m_sceneNode.m_sceneUbo.Update();
 	}
 
