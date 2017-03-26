@@ -152,6 +152,7 @@ namespace TestRender
 
 	public:
 		C3D_Test_API static Castor::String Name;
+		C3D_Test_API static Castor::String Type;
 	};
 }
 
