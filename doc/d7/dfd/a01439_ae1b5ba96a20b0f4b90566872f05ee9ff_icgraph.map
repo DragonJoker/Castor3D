@@ -1,0 +1,5 @@
+<map id="Castor3D::BinaryChunk::EndParse" name="Castor3D::BinaryChunk::EndParse">
+<area shape="rect" id="node1" title="Retrieves the chunk data size." alt="" coords="249,39,408,80"/>
+<area shape="rect" id="node2" href="$d6/d65/a01443.html#a1ae6442afc8b5877cd6f3e603e45f3cb" title="Parses the header chunk." alt="" coords="5,5,201,47"/>
+<area shape="rect" id="node3" href="$d6/d65/a01443.html#adfa9c91281bf791d51b67f3027343171" title="From chunk reader function." alt="" coords="9,71,198,112"/>
+</map>

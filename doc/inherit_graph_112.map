@@ -1,5 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,85,57"/>
-<area shape="rect" id="node2" href="$db/db1/a02209.html" title="Plugin loading exception." alt="" coords="137,5,316,32"/>
-<area shape="rect" id="node3" href="$de/d4c/a02641.html" title="Version comparison exception." alt="" coords="133,56,320,83"/>
+<area shape="rect" id="node1" href="$d9/d1f/a02035.html" title="Holds specific members for an overlay category." alt="" coords="5,56,184,83"/>
+<area shape="rect" id="node2" href="$d5/db4/a02011.html" title="A rectangular overlay with a border." alt="" coords="232,5,431,32"/>
+<area shape="rect" id="node3" href="$d2/d8a/a02063.html" title="A simple rectangular overlay." alt="" coords="251,56,411,83"/>
+<area shape="rect" id="node4" href="$d5/d14/a02071.html" title="An overlay with a text." alt="" coords="255,107,407,133"/>
 </map>

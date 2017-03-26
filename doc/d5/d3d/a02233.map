@@ -1,0 +1,21 @@
+<map id="Castor3D::RenderPipeline" name="Castor3D::RenderPipeline">
+<area shape="rect" id="node1" title="The rendering pipeline." alt="" coords="1040,448,1211,475"/>
+<area shape="rect" id="node2" title=" " alt="" coords="265,5,500,32"/>
+<area shape="rect" id="node11" href="$dd/db2/a02563.html" title="Base shader program implementation, used to share functions through the supported shader languages." alt="" coords="720,283,895,309"/>
+<area shape="rect" id="node3" href="$dc/d6a/a02779.html" title="Rasteriser configuration class." alt="" coords="720,349,895,376"/>
+<area shape="rect" id="node4" title=" " alt="" coords="695,400,920,456"/>
+<area shape="rect" id="node5" href="$d4/d72/a02775.html" title="Multisample configurations grouping class." alt="" coords="715,480,900,507"/>
+<area shape="rect" id="node6" href="$da/d8e/a02759.html" title="Blending configurations grouping class." alt="" coords="733,531,881,557"/>
+<area shape="rect" id="node7" title=" " alt="" coords="293,560,472,616"/>
+<area shape="rect" id="node8" href="$d5/d4d/a02763.html" title=" " alt="" coords="5,567,160,609"/>
+<area shape="rect" id="node9" href="$dc/d40/a02767.html" title="Depth and stencil buffers configurations class." alt="" coords="713,581,902,608"/>
+<area shape="rect" id="node10" href="$d0/dbd/a02771.html" title="Stencil function and operations description." alt="" coords="288,641,477,682"/>
+<area shape="rect" id="node12" title=" " alt="" coords="285,57,481,98"/>
+<area shape="rect" id="node13" title=" " alt="" coords="278,123,487,179"/>
+<area shape="rect" id="node14" title=" " alt="" coords="299,203,467,259"/>
+<area shape="rect" id="node15" href="$db/de5/a01759.html" title="Description of all elements in a vertex buffer." alt="" coords="291,283,474,309"/>
+<area shape="rect" id="node16" title=" " alt="" coords="293,333,473,389"/>
+<area shape="rect" id="node17" title=" " alt="" coords="278,413,487,469"/>
+<area shape="rect" id="node18" title=" " alt="" coords="296,494,469,535"/>
+<area shape="rect" id="node19" href="$d0/d89/a02155.html" title="Pipeline flags." alt="" coords="726,632,889,659"/>
+</map>

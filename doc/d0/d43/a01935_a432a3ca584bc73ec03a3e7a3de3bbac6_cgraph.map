@@ -1,0 +1,5 @@
+<map id="Castor3D::Vertex::GetTexCoord" name="Castor3D::Vertex::GetTexCoord">
+<area shape="rect" id="node1" title="Retrieves the group texture coordinates." alt="" coords="5,5,177,47"/>
+<area shape="rect" id="node2" href="$d0/d43/a01935.html#ac4ac2ec4f6e5e0abc5a7e5e9389c52c9" title="Retrieves the vertex texture coordinates." alt="" coords="225,5,397,47"/>
+<area shape="rect" id="node3" href="$d1/dab/a01767.html#a5bb436e893d310f65b464bd746fff5d7" title="Retrieves a pointer on the data buffer." alt="" coords="445,13,668,39"/>
+</map>

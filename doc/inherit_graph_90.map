@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d9/d17/a01937.html" title="Helper structure to get an object type name." alt="" coords="5,5,219,47"/>
+<area shape="rect" id="node1" href="$d2/d8e/a01315.html" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="5,53,153,94"/>
+<area shape="rect" id="node2" href="$d4/d2c/a01327.html" title="Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_LINEAR." alt="" coords="201,5,364,61"/>
+<area shape="rect" id="node3" href="$db/da8/a01323.html" title="Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_NONE." alt="" coords="201,85,364,141"/>
 </map>

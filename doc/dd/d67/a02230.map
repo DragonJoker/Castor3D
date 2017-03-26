@@ -1,0 +1,12 @@
+<map id="Castor3D::RenderPass" name="Castor3D::RenderPass">
+<area shape="rect" id="node1" title="Render pass base class." alt="" coords="241,56,396,83"/>
+<area shape="rect" id="node4" href="$d6/dd6/a01983.html" title="Picking pass, using FBO." alt="" coords="473,5,630,32"/>
+<area shape="rect" id="node5" href="$de/d05/a02795.html" title="Render technique pass base class." alt="" coords="444,56,659,83"/>
+<area shape="rect" id="node7" href="$d6/df4/a02735.html" title="Shadow mapping implementation." alt="" coords="459,132,644,159"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,31,193,57"/>
+<area shape="rect" id="node3" title=" " alt="" coords="68,81,131,108"/>
+<area shape="rect" id="node6" href="$d7/d69/a02783.html" title="Forward render technique pass class." alt="" coords="707,43,967,69"/>
+<area shape="rect" id="node8" href="$d1/d89/a02739.html" title="Shadow mapping implementation for spot lights." alt="" coords="713,93,960,120"/>
+<area shape="rect" id="node9" href="$df/dee/a02743.html" title="Shadow mapping implementation." alt="" coords="729,144,944,171"/>
+<area shape="rect" id="node10" href="$de/d8c/a02747.html" title="Shadow mapping implementation for spot lights." alt="" coords="731,195,943,221"/>
+</map>

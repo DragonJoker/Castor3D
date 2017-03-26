@@ -1,0 +1,6 @@
+<map id="Castor3D::TextureLayout::GetDimensions" name="Castor3D::TextureLayout::GetDimensions">
+<area shape="rect" id="node1" title="Retrieves the texture image dimensions." alt="" coords="5,39,172,80"/>
+<area shape="rect" id="node2" href="$d6/d6c/a02819.html#a708063ef0ebe767ae209b8525d7d3d28" title="Retrieves the texture image height." alt="" coords="220,5,387,47"/>
+<area shape="rect" id="node4" href="$d6/d6c/a02819.html#a994305e5a4b9d43ca7f54e723f57ee8c" title="Retrieves the texture image width." alt="" coords="220,71,387,112"/>
+<area shape="rect" id="node3" href="$d6/d6c/a02819.html#ac1c68555d28ce7bcf3167ef28c0ecada" title="Retrieves the texture depth." alt="" coords="435,5,601,47"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Castor3D::Vertex::GetBitangent" name="Castor3D::Vertex::GetBitangent">
+<area shape="rect" id="node1" title="Retrieves the group bitangent." alt="" coords="5,31,212,57"/>
+<area shape="rect" id="node2" href="$d0/d43/a01935.html#a705713b927f1d1b94352f6c313b2b527" title="Retrieves the vertex bitangent." alt="" coords="260,5,467,32"/>
+<area shape="rect" id="node3" href="$d1/dab/a01767.html#a5bb436e893d310f65b464bd746fff5d7" title="Retrieves a pointer on the data buffer." alt="" coords="515,31,737,57"/>
+</map>

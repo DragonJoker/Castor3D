@@ -1,0 +1,14 @@
+<map id="Castor3D::DoBindPass" name="Castor3D::DoBindPass">
+<area shape="rect" id="node1" title=" " alt="" coords="5,166,161,193"/>
+<area shape="rect" id="node2" href="$d5/db3/a01751.html#a45bc29d48ae6797e45adc7ed60b10a65" title="Binds the pass&#39; textures." alt="" coords="227,65,426,91"/>
+<area shape="rect" id="node3" href="$d4/d8f/a00742.html#a3a0731076bad661e41a76ba2fcc28613" title=" " alt="" coords="215,166,439,193"/>
+<area shape="rect" id="node6" href="$d5/d5b/a02235.html#aea746f76d805e15183a6e186c21c80ec" title=" " alt="" coords="525,5,696,47"/>
+<area shape="rect" id="node11" href="$dc/d15/a02583.html#af875447bebeed571fca184cad4492754" title="Updates the GPU storage." alt="" coords="246,217,407,259"/>
+<area shape="rect" id="node12" href="$d5/db3/a01751.html#a5c3f8485af61de806adf007596638f8c" title="Fills shader variables of given render node." alt="" coords="209,283,444,310"/>
+<area shape="rect" id="node4" href="$d5/d5b/a02235.html#ad1b1a24e91d8875a5e348fa72b8e4ad8" title=" " alt="" coords="525,71,696,112"/>
+<area shape="rect" id="node5" href="$d4/d8f/a00742.html#aeeeb6b24ce2a1d0c1dc4851c62f85aa3" title="Gives the shadow filter type matching the given flags." alt="" coords="521,137,700,163"/>
+<area shape="rect" id="node7" href="$d5/d5b/a02235.html#ac43aac8a3870dd7d384d9620d11b2c41" title=" " alt="" coords="492,188,729,229"/>
+<area shape="rect" id="node8" href="$dc/d6c/a02163.html#a4447da0db97ac7a467c9ec7e4a92279e" title="Defines the value of the variable." alt="" coords="528,253,693,295"/>
+<area shape="rect" id="node9" href="$d5/d5b/a02235.html#a023e1ac033973b6ab441a2d1ddec18ed" title=" " alt="" coords="509,319,712,360"/>
+<area shape="rect" id="node10" href="$d5/d5b/a02235.html#a827f9e4e24ded5cc010dc65475eaebd8" title=" " alt="" coords="507,384,714,425"/>
+</map>

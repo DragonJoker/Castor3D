@@ -1,0 +1,52 @@
+<map id="Castor3D::RenderTechniquePass" name="Castor3D::RenderTechniquePass">
+<area shape="rect" id="node1" title="Render technique pass base class." alt="" coords="2439,926,2653,953"/>
+<area shape="rect" id="node50" title=" " alt="" coords="2723,919,2904,960"/>
+<area shape="rect" id="node2" href="$d7/da1/a02231.html" title="Render pass base class." alt="" coords="2141,713,2296,739"/>
+<area shape="rect" id="node3" title=" " alt="" coords="289,969,477,995"/>
+<area shape="rect" id="node18" href="$d1/d0c/a02251.html" title="The render system representation." alt="" coords="1789,921,1960,947"/>
+<area shape="rect" id="node33" href="$d1/d5d/a02503.html" title="Scene handler class." alt="" coords="613,442,734,469"/>
+<area shape="rect" id="node41" href="$d3/d3a/a02259.html" title="Render target class." alt="" coords="1389,1099,1550,1126"/>
+<area shape="rect" id="node44" href="$d3/df5/a02827.html" title="Texture unit representation." alt="" coords="598,1013,749,1039"/>
+<area shape="rect" id="node47" href="$da/d37/a02787.html" title="Render technique base class." alt="" coords="3067,1109,3251,1135"/>
+<area shape="rect" id="node4" title=" " alt="" coords="352,311,415,338"/>
+<area shape="rect" id="node7" href="$dc/d15/a02583.html" title="Shader variables buffer." alt="" coords="985,359,1147,386"/>
+<area shape="rect" id="node38" href="$df/db6/a02455.html" title="Movable object class." alt="" coords="981,410,1151,437"/>
+<area shape="rect" id="node5" title=" " alt="" coords="1773,364,1976,405"/>
+<area shape="rect" id="node6" href="$dd/d6f/a02207.html" title="Helper structure used link a pass and a shader program." alt="" coords="1377,368,1562,409"/>
+<area shape="rect" id="node46" href="$de/d59/a02219.html" title="Helper structure used to render submeshes." alt="" coords="1373,155,1565,182"/>
+<area shape="rect" id="node8" title=" " alt="" coords="5,145,240,171"/>
+<area shape="rect" id="node10" href="$d5/df4/a01779.html" title=" " alt="" coords="313,173,454,215"/>
+<area shape="rect" id="node9" title=" " alt="" coords="588,173,759,215"/>
+<area shape="rect" id="node11" href="$d4/d9b/a02159.html" title="Shader variable representation with variable type." alt="" coords="999,88,1133,129"/>
+<area shape="rect" id="node12" href="$db/d39/a02575.html" title="Shader variable representation." alt="" coords="609,71,737,98"/>
+<area shape="rect" id="node13" title=" " alt="" coords="334,71,433,98"/>
+<area shape="rect" id="node14" title=" " alt="" coords="610,5,737,47"/>
+<area shape="rect" id="node15" title=" " alt="" coords="965,279,1167,335"/>
+<area shape="rect" id="node16" title=" " alt="" coords="1773,763,1976,819"/>
+<area shape="rect" id="node17" href="$d0/d89/a02155.html" title="Pipeline flags." alt="" coords="1388,763,1551,790"/>
+<area shape="rect" id="node19" href="$dc/da8/a01959.html" title="Holds GPU informations." alt="" coords="1380,814,1559,841"/>
+<area shape="rect" id="node20" title=" " alt="" coords="969,763,1163,790"/>
+<area shape="rect" id="node21" title=" " alt="" coords="981,815,1151,856"/>
+<area shape="rect" id="node22" title=" " alt="" coords="971,881,1161,907"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1396,865,1543,907"/>
+<area shape="rect" id="node24" title=" " alt="" coords="1386,931,1553,958"/>
+<area shape="rect" id="node25" title=" " alt="" coords="1787,844,1962,885"/>
+<area shape="rect" id="node26" href="$df/d71/a02247.html" title="Render technique base class." alt="" coords="1793,614,1956,641"/>
+<area shape="rect" id="node27" title=" " alt="" coords="1360,595,1579,622"/>
+<area shape="rect" id="node28" title=" " alt="" coords="1386,647,1553,688"/>
+<area shape="rect" id="node29" href="$d6/dd2/a02243.html" title="The render nodes for a specific scene." alt="" coords="967,654,1165,681"/>
+<area shape="rect" id="node30" href="$db/d6d/a02239.html" title=" " alt="" coords="545,573,801,629"/>
+<area shape="rect" id="node31" href="$db/d6d/a02239.html" title=" " alt="" coords="547,653,800,709"/>
+<area shape="rect" id="node32" href="$db/d6d/a02239.html" title=" " alt="" coords="555,733,791,789"/>
+<area shape="rect" id="node34" title=" " alt="" coords="312,443,455,484"/>
+<area shape="rect" id="node35" href="$db/d6d/a02239.html" title=" " alt="" coords="547,813,800,869"/>
+<area shape="rect" id="node36" href="$db/d6d/a02239.html" title=" " alt="" coords="562,493,785,549"/>
+<area shape="rect" id="node37" href="$d7/d90/a02391.html" title="Class which represents a Camera." alt="" coords="1405,545,1534,571"/>
+<area shape="rect" id="node39" href="$d2/d68/a01295.html" title="Animable public interface." alt="" coords="604,391,743,418"/>
+<area shape="rect" id="node40" title=" " alt="" coords="291,383,476,410"/>
+<area shape="rect" id="node42" title=" " alt="" coords="975,995,1157,1036"/>
+<area shape="rect" id="node43" title="Internal struct holding a complete frame buffer." alt="" coords="985,1060,1147,1101"/>
+<area shape="rect" id="node45" href="$dd/d4e/a01975.html" title="Configuration parameters." alt="" coords="991,1177,1141,1203"/>
+<area shape="rect" id="node48" title=" " alt="" coords="2759,1278,2868,1305"/>
+<area shape="rect" id="node49" href="$de/dc8/a02791.html" title="Internal struct holding a complete frame buffer." alt="" coords="2721,1329,2905,1371"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="Castor3D::ComputeParticleSystem" name="Castor3D::ComputeParticleSystem">
+<area shape="rect" id="node1" title="Compute shader Particle system implementation." alt="" coords="1196,217,1376,258"/>
+<area shape="rect" id="node2" href="$d1/d50/a02487.html" title="Particle system implementation base class." alt="" coords="827,29,1024,56"/>
+<area shape="rect" id="node3" href="$d7/dc4/a02479.html" title="Particle system implementation." alt="" coords="1199,68,1373,95"/>
+<area shape="rect" id="node4" href="$df/db6/a02455.html" title="Movable object class." alt="" coords="841,108,1010,135"/>
+<area shape="rect" id="node5" href="$d2/d68/a01295.html" title="Animable public interface." alt="" coords="559,108,697,135"/>
+<area shape="rect" id="node6" title=" " alt="" coords="289,108,475,135"/>
+<area shape="rect" id="node7" title=" " alt="" coords="597,161,659,188"/>
+<area shape="rect" id="node9" href="$dc/d15/a02583.html" title="Shader variables buffer." alt="" coords="845,229,1006,256"/>
+<area shape="rect" id="node8" href="$db/de5/a01759.html" title="Description of all elements in a vertex buffer." alt="" coords="834,169,1017,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="5,259,240,285"/>
+<area shape="rect" id="node12" href="$d5/df4/a01779.html" title=" " alt="" coords="311,215,453,257"/>
+<area shape="rect" id="node11" title=" " alt="" coords="543,215,713,257"/>
+<area shape="rect" id="node13" title=" " alt="" coords="838,285,1013,326"/>
+</map>

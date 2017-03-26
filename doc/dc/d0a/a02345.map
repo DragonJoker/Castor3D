@@ -1,0 +1,8 @@
+<map id="Castor3D::AnimatedSkeleton" name="Castor3D::AnimatedSkeleton">
+<area shape="rect" id="node1" title="Represents the animated objects." alt="" coords="105,247,296,273"/>
+<area shape="rect" id="node2" href="$d4/d30/a02335.html" title="Represents the animated objects." alt="" coords="5,157,183,184"/>
+<area shape="rect" id="node3" title=" " alt="" coords="63,81,125,108"/>
+<area shape="rect" id="node4" href="$db/d29/a01895.html" title="The skeleton, holds each bone." alt="" coords="207,157,341,184"/>
+<area shape="rect" id="node5" href="$d2/d68/a01295.html" title="Animable public interface." alt="" coords="205,81,343,108"/>
+<area shape="rect" id="node6" title=" " alt="" coords="181,5,367,32"/>
+</map>

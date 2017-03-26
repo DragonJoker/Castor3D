@@ -1,0 +1,8 @@
+<map id="Castor3D::BufferElementGroup::const_ptr" name="Castor3D::BufferElementGroup::const_ptr">
+<area shape="rect" id="node1" title="Retrieves a constant pointer on the data buffer." alt="" coords="260,99,460,141"/>
+<area shape="rect" id="node2" href="$d0/d43/a01935.html#a5d092bed03a5a35f5af7ad3d48d28ed2" title="Retrieves the vertex bitangent." alt="" coords="5,5,212,32"/>
+<area shape="rect" id="node3" href="$d0/d43/a01935.html#a7764a91b843c11e69feb1676925c2bbd" title="Retrieves the vertex normal." alt="" coords="13,56,205,83"/>
+<area shape="rect" id="node4" href="$d0/d43/a01935.html#af984f28279ac0b14cc83ed0e05edd8f9" title="Retrieves the vertex position." alt="" coords="9,107,208,133"/>
+<area shape="rect" id="node5" href="$d0/d43/a01935.html#a3b3aad6dfb08ca2e49bef2e562535126" title="Retrieves the vertex tangent." alt="" coords="10,157,207,184"/>
+<area shape="rect" id="node6" href="$d0/d43/a01935.html#a8fd072a62718cc09562409333d630dec" title="Retrieves the vertex texture coordinates." alt="" coords="23,209,195,250"/>
+</map>

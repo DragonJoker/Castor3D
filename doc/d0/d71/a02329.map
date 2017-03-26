@@ -1,0 +1,9 @@
+<map id="Castor3D::AnimatedMesh" name="Castor3D::AnimatedMesh">
+<area shape="rect" id="node1" title="Represents the animated submeshes." alt="" coords="109,247,279,273"/>
+<area shape="rect" id="node2" href="$d4/d30/a02335.html" title="Represents the animated objects." alt="" coords="5,157,183,184"/>
+<area shape="rect" id="node3" title=" " alt="" coords="63,81,125,108"/>
+<area shape="rect" id="node4" href="$d2/d3e/a01851.html" title="The mesh representation." alt="" coords="207,157,323,184"/>
+<area shape="rect" id="node5" title=" " alt="" coords="162,81,341,108"/>
+<area shape="rect" id="node6" href="$d2/d68/a01295.html" title="Animable public interface." alt="" coords="365,81,503,108"/>
+<area shape="rect" id="node7" title=" " alt="" coords="341,5,527,32"/>
+</map>

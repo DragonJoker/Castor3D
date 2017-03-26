@@ -1,0 +1,12 @@
+<map id="Castor3D::Animable" name="Castor3D::Animable">
+<area shape="rect" id="node1" title="Animable public interface." alt="" coords="239,107,377,133"/>
+<area shape="rect" id="node3" href="$d2/d3e/a01851.html" title="The mesh representation." alt="" coords="452,56,568,83"/>
+<area shape="rect" id="node4" href="$df/db6/a02455.html" title="Movable object class." alt="" coords="425,107,595,133"/>
+<area shape="rect" id="node10" href="$db/d29/a01895.html" title="The skeleton, holds each bone." alt="" coords="443,157,577,184"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,107,191,133"/>
+<area shape="rect" id="node5" href="$db/dd4/a02383.html" title="Billboards list." alt="" coords="652,5,807,32"/>
+<area shape="rect" id="node6" href="$d7/d90/a02391.html" title="Class which represents a Camera." alt="" coords="665,56,794,83"/>
+<area shape="rect" id="node7" href="$df/d06/a02403.html" title="Geometry handler class." alt="" coords="659,107,800,133"/>
+<area shape="rect" id="node8" href="$d8/d49/a02419.html" title="Light source implementation." alt="" coords="673,157,785,184"/>
+<area shape="rect" id="node9" href="$d7/dc4/a02479.html" title="Particle system implementation." alt="" coords="643,208,816,235"/>
+</map>

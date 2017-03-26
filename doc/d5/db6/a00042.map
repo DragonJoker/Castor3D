@@ -1,20 +1,33 @@
-<map id="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Bone.hpp" name="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Bone.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="753,5,918,61"/>
-<area shape="rect" id="node2" href="$d0/d89/a00071.html" title=" " alt="" coords="1045,109,1223,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="5,191,129,218"/>
-<area shape="rect" id="node3" title=" " alt="" coords="154,191,341,218"/>
-<area shape="rect" id="node4" title=" " alt="" coords="365,191,469,218"/>
-<area shape="rect" id="node5" title=" " alt="" coords="493,191,596,218"/>
-<area shape="rect" id="node6" title=" " alt="" coords="621,191,698,218"/>
-<area shape="rect" id="node8" title=" " alt="" coords="722,191,829,218"/>
-<area shape="rect" id="node9" title=" " alt="" coords="853,191,1034,218"/>
-<area shape="rect" id="node10" href="$db/db6/a00074.html" title=" " alt="" coords="1058,184,1210,225"/>
-<area shape="rect" id="node11" href="$d1/d09/a00077.html" title=" " alt="" coords="1234,184,1386,225"/>
-<area shape="rect" id="node12" href="$da/dec/a00080.html" title=" " alt="" coords="1410,184,1562,225"/>
-<area shape="rect" id="node13" href="$d2/d1f/a00083.html" title=" " alt="" coords="1586,184,1738,225"/>
-<area shape="rect" id="node14" href="$da/d2a/a00086.html" title=" " alt="" coords="1762,184,1914,225"/>
-<area shape="rect" id="node15" href="$db/dab/a00089.html" title=" " alt="" coords="1938,184,2090,225"/>
-<area shape="rect" id="node16" href="$d9/d77/a00095.html" title=" " alt="" coords="2114,184,2266,225"/>
-<area shape="rect" id="node17" href="$d1/d44/a00098.html" title=" " alt="" coords="2290,184,2442,225"/>
-<area shape="rect" id="node18" href="$d1/dc1/a00092.html" title=" " alt="" coords="2466,184,2618,225"/>
+<map id="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Binary/ChunkData.hpp" name="Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Binary/ChunkData.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="2280,5,2460,61"/>
+<area shape="rect" id="node2" href="$df/d95/a00299.html" title=" " alt="" coords="344,363,500,389"/>
+<area shape="rect" id="node3" href="$d1/da8/a00230.html" title=" " alt="" coords="1901,117,2055,143"/>
+<area shape="rect" id="node9" title=" " alt="" coords="27,281,137,307"/>
+<area shape="rect" id="node10" title=" " alt="" coords="161,281,291,307"/>
+<area shape="rect" id="node11" title=" " alt="" coords="315,281,457,307"/>
+<area shape="rect" id="node12" title=" " alt="" coords="4022,281,4179,307"/>
+<area shape="rect" id="node25" title=" " alt="" coords="2721,363,2861,389"/>
+<area shape="rect" id="node26" href="$db/dc3/a00284.html" title=" " alt="" coords="2079,109,2261,151"/>
+<area shape="rect" id="node27" href="$da/d45/a00011.html" title=" " alt="" coords="2285,117,2455,143"/>
+<area shape="rect" id="node28" title=" " alt="" coords="2581,117,2727,143"/>
+<area shape="rect" id="node29" title=" " alt="" coords="2752,117,2873,143"/>
+<area shape="rect" id="node30" title=" " alt="" coords="2897,117,3013,143"/>
+<area shape="rect" id="node31" title=" " alt="" coords="3037,117,3188,143"/>
+<area shape="rect" id="node4" href="$d4/d3e/a00116.html" title=" " alt="" coords="1985,199,2163,225"/>
+<area shape="rect" id="node5" title=" " alt="" coords="1506,281,1687,307"/>
+<area shape="rect" id="node6" title=" " alt="" coords="1712,281,1860,307"/>
+<area shape="rect" id="node7" title=" " alt="" coords="1884,281,2072,307"/>
+<area shape="rect" id="node8" title=" " alt="" coords="2097,281,2243,307"/>
+<area shape="rect" id="node13" title=" " alt="" coords="2267,281,2462,307"/>
+<area shape="rect" id="node14" href="$da/d9c/a00413.html" title=" " alt="" coords="738,273,970,315"/>
+<area shape="rect" id="node15" href="$df/d15/a00416.html" title=" " alt="" coords="2486,273,2718,315"/>
+<area shape="rect" id="node16" href="$db/d43/a00422.html" title=" " alt="" coords="2742,273,2974,315"/>
+<area shape="rect" id="node17" href="$dc/d2f/a00425.html" title=" " alt="" coords="2998,273,3230,315"/>
+<area shape="rect" id="node18" href="$d4/dd3/a00428.html" title=" " alt="" coords="3254,273,3486,315"/>
+<area shape="rect" id="node19" href="$df/d70/a00431.html" title=" " alt="" coords="3510,273,3742,315"/>
+<area shape="rect" id="node20" href="$d4/da8/a00437.html" title=" " alt="" coords="3766,273,3998,315"/>
+<area shape="rect" id="node21" href="$de/df8/a00440.html" title=" " alt="" coords="482,273,714,315"/>
+<area shape="rect" id="node22" href="$d1/d7e/a00434.html" title=" " alt="" coords="994,273,1226,315"/>
+<area shape="rect" id="node24" href="$d3/d29/a00419.html" title=" " alt="" coords="1250,273,1482,315"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1043,363,1177,389"/>
 </map>

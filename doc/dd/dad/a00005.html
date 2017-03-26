@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/AnimatedObject.hpp File Reference</title>
+<title>Castor3D: Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Animation/Animation.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,7 +39,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="../../dir_1f10682fec53f0772108851bfcef2e4d.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_6ad85ca7a90878938acb35a9fc6dd4fb.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_a9f81fd4b86714dde972610ac984a016.html">Src</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="../../dir_1f10682fec53f0772108851bfcef2e4d.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_6ad85ca7a90878938acb35a9fc6dd4fb.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_a9f81fd4b86714dde972610ac984a016.html">Src</a></li><li class="navelem"><a class="el" href="../../dir_6c9477bbe530e119d9b01bcf0d2c7877.html">Animation</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -47,53 +47,103 @@ $(function() {
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
-<div class="title">AnimatedObject.hpp File Reference</div>  </div>
+<div class="title">Animation.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Include dependency graph for AnimatedObject.hpp:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Include dependency graph for Animation.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../de/d21/a00006.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2AnimatedObject_8hpp" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2AnimatedObject_8hpp" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2AnimatedObject_8hpp">
-<area shape="rect"  title=" " alt="" coords="1217,5,1385,61"/>
-<area shape="rect"  href="../../d0/d89/a00071.html" title=" " alt="" coords="1134,109,1311,136"/>
-<area shape="rect"  title=" " alt="" coords="1336,109,1424,136"/>
-<area shape="rect"  title=" " alt="" coords="5,191,192,218"/>
-<area shape="rect"  title=" " alt="" coords="216,191,320,218"/>
-<area shape="rect"  title=" " alt="" coords="345,191,447,218"/>
-<area shape="rect"  title=" " alt="" coords="472,191,549,218"/>
-<area shape="rect"  title=" " alt="" coords="574,191,698,218"/>
-<area shape="rect"  title=" " alt="" coords="723,191,829,218"/>
-<area shape="rect"  title=" " alt="" coords="853,191,1035,218"/>
-<area shape="rect"  href="../../db/db6/a00074.html" title=" " alt="" coords="1059,184,1211,225"/>
-<area shape="rect"  href="../../d1/d09/a00077.html" title=" " alt="" coords="1235,184,1387,225"/>
-<area shape="rect"  href="../../da/dec/a00080.html" title=" " alt="" coords="1411,184,1563,225"/>
-<area shape="rect"  href="../../d2/d1f/a00083.html" title=" " alt="" coords="1587,184,1739,225"/>
-<area shape="rect"  href="../../da/d2a/a00086.html" title=" " alt="" coords="1763,184,1915,225"/>
-<area shape="rect"  href="../../db/dab/a00089.html" title=" " alt="" coords="1939,184,2091,225"/>
-<area shape="rect"  href="../../d9/d77/a00095.html" title=" " alt="" coords="2115,184,2267,225"/>
-<area shape="rect"  href="../../d1/d44/a00098.html" title=" " alt="" coords="2291,184,2443,225"/>
-<area shape="rect"  href="../../d1/dc1/a00092.html" title=" " alt="" coords="2467,184,2619,225"/>
+<div class="center"><img src="../../de/d21/a00006.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Animation_2Animation_8hpp" alt=""/></div>
+<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Animation_2Animation_8hpp" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Animation_2Animation_8hpp">
+<area shape="rect"  title=" " alt="" coords="2766,5,2961,61"/>
+<area shape="rect"  href="../../d4/d8c/a00035.html" title=" " alt="" coords="1285,109,1448,136"/>
+<area shape="rect"  title=" " alt="" coords="4084,579,4230,606"/>
+<area shape="rect"  href="../../d8/d41/a00038.html" title=" " alt="" coords="1550,109,1710,136"/>
+<area shape="rect"  title=" " alt="" coords="4135,109,4267,136"/>
+<area shape="rect"  href="../../d5/df9/a00044.html" title=" " alt="" coords="1226,184,1349,211"/>
+<area shape="rect"  href="../../dc/d87/a00032.html" title=" " alt="" coords="1350,259,1471,285"/>
+<area shape="rect"  href="../../dd/d32/a00041.html" title=" " alt="" coords="764,333,875,360"/>
+<area shape="rect"  href="../../d4/d3e/a00116.html" title=" " alt="" coords="1495,497,1672,524"/>
+<area shape="rect"  title=" " alt="" coords="1512,333,1573,360"/>
+<area shape="rect"  title=" " alt="" coords="3442,579,3624,606"/>
+<area shape="rect"  title=" " alt="" coords="3648,579,3796,606"/>
+<area shape="rect"  title=" " alt="" coords="3820,579,4008,606"/>
+<area shape="rect"  title=" " alt="" coords="27,579,138,606"/>
+<area shape="rect"  title=" " alt="" coords="162,579,291,606"/>
+<area shape="rect"  title=" " alt="" coords="315,579,458,606"/>
+<area shape="rect"  title=" " alt="" coords="482,579,640,606"/>
+<area shape="rect"  title=" " alt="" coords="920,579,1114,606"/>
+<area shape="rect"  href="../../da/d9c/a00413.html" title=" " alt="" coords="3186,572,3418,613"/>
+<area shape="rect"  href="../../df/d15/a00416.html" title=" " alt="" coords="1138,572,1370,613"/>
+<area shape="rect"  href="../../db/d43/a00422.html" title=" " alt="" coords="1394,572,1626,613"/>
+<area shape="rect"  href="../../dc/d2f/a00425.html" title=" " alt="" coords="1650,572,1882,613"/>
+<area shape="rect"  href="../../d4/dd3/a00428.html" title=" " alt="" coords="1906,572,2138,613"/>
+<area shape="rect"  href="../../df/d70/a00431.html" title=" " alt="" coords="2162,572,2394,613"/>
+<area shape="rect"  href="../../d4/da8/a00437.html" title=" " alt="" coords="2674,572,2906,613"/>
+<area shape="rect"  href="../../de/df8/a00440.html" title=" " alt="" coords="2930,572,3162,613"/>
+<area shape="rect"  href="../../d1/d7e/a00434.html" title=" " alt="" coords="2418,572,2650,613"/>
+<area shape="rect"  href="../../d3/d29/a00419.html" title=" " alt="" coords="664,572,896,613"/>
+<area shape="rect"  href="../../df/d95/a00299.html" title=" " alt="" coords="3596,661,3752,688"/>
+<area shape="rect"  title=" " alt="" coords="2467,661,2602,688"/>
+<area shape="rect"  title=" " alt="" coords="314,661,454,688"/>
+<area shape="rect"  href="../../d1/da8/a00230.html" title=" " alt="" coords="883,415,1036,442"/>
+<area shape="rect"  href="../../db/dc3/a00284.html" title=" " alt="" coords="1061,408,1242,449"/>
+<area shape="rect"  href="../../da/d45/a00011.html" title=" " alt="" coords="1267,415,1436,442"/>
+<area shape="rect"  title=" " alt="" coords="48,415,194,442"/>
+<area shape="rect"  title=" " alt="" coords="219,415,340,442"/>
+<area shape="rect"  title=" " alt="" coords="364,415,480,442"/>
+<area shape="rect"  title=" " alt="" coords="504,415,655,442"/>
+<area shape="rect"  href="../../d6/d2d/a00047.html" title=" " alt="" coords="1374,184,1492,211"/>
+<area shape="rect"  href="../../dc/d84/a00338.html" title=" " alt="" coords="1541,184,1720,211"/>
+<area shape="rect"  title=" " alt="" coords="1495,259,1638,285"/>
+</map>
+</div>
+</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../de/d5e/a00007.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Animation_2Animation_8hppdep" alt=""/></div>
+<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Animation_2Animation_8hppdep" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Animation_2Animation_8hppdep">
+<area shape="rect"  title=" " alt="" coords="379,5,574,61"/>
+<area shape="rect"  href="../../d2/de7/a00014.html" title=" " alt="" coords="107,117,369,173"/>
+<area shape="rect"  href="../../db/db2/a00020.html" title=" " alt="" coords="394,109,559,180"/>
+<area shape="rect"  href="../../dc/df9/a00554.html" title=" " alt="" coords="583,109,794,180"/>
+<area shape="rect"  href="../../d8/deb/a00545.html" title=" " alt="" coords="301,235,572,291"/>
+<area shape="rect"  href="../../d8/df0/a00557.html" title=" " alt="" coords="603,347,793,417"/>
+<area shape="rect"  href="../../dc/dae/a00563.html" title=" " alt="" coords="727,228,936,299"/>
+<area shape="rect"  href="../../d0/ddb/a00542.html" title=" " alt="" coords="5,354,271,410"/>
+<area shape="rect"  href="../../d9/d87/a00551.html" title=" " alt="" coords="295,354,579,410"/>
+<area shape="rect"  href="../../d9/d34/a00476.html" title=" " alt="" coords="482,465,653,536"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1c/a01093.html">Castor3D::AnimatedObject</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the animated objects.  <a href="../../de/d1c/a01093.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d38/a01299.html">Castor3D::Animation</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/d38/a01299.html" title="Animation base class.">Animation</a> base class.  <a href="../../d8/d38/a01299.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d07/a01303.html">Castor3D::ChunkTyper&lt; Animation &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper structure to find ChunkType from a type.  <a href="../../d6/d07/a01303.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d4c/a01307.html">Castor3D::BinaryWriter&lt; Animation &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/d38/a01299.html" title="Animation base class.">Animation</a> binary loader.  <a href="../../d2/d4c/a01307.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d69/a01311.html">Castor3D::BinaryParser&lt; Animation &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/d38/a01299.html" title="Animation base class.">Animation</a> binary loader.  <a href="../../de/d69/a01311.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d7/d41/a00532"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></td></tr>
+<tr class="memitem:d4/d8f/a00742"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d8f/a00742.html">Castor3D</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:16:23 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:27:21 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

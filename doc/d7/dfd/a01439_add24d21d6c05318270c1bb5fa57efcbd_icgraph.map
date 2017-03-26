@@ -1,0 +1,4 @@
+<map id="Castor3D::BinaryChunk::Finalise" name="Castor3D::BinaryChunk::Finalise">
+<area shape="rect" id="node1" title="Computes the final data buffer from each one added until this call." alt="" coords="240,5,399,47"/>
+<area shape="rect" id="node2" href="$d3/dbc/a01451.html#aa8086cf1fc0d592c5dcc487b3d33ae1d" title="To chunk writer function." alt="" coords="5,5,192,47"/>
+</map>

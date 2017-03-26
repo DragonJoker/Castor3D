@@ -1,4 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,104,32"/>
-<area shape="rect" id="node2" href="$d0/da6/a02677.html" title="Platform dependant window handle implementation." alt="" coords="152,5,325,32"/>
+<area shape="rect" id="node1" href="$db/dca/a01639.html" title="The interface which represents a frame event." alt="" coords="5,64,159,91"/>
+<area shape="rect" id="node2" href="$dd/d2d/a01635.html" title="Cleaner event." alt="" coords="207,5,401,32"/>
+<area shape="rect" id="node3" href="$d6/df0/a01647.html" title="Functor event." alt="" coords="224,57,384,98"/>
+<area shape="rect" id="node4" href="$d5/de9/a01651.html" title="Initialiser event." alt="" coords="207,123,401,149"/>
 </map>

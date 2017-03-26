@@ -1,0 +1,6 @@
+<map id="Castor3D::Vertex::GetPosition" name="Castor3D::Vertex::GetPosition">
+<area shape="rect" id="node1" title="Retrieves the group position." alt="" coords="5,42,204,69"/>
+<area shape="rect" id="node2" href="$d1/dab/a01767.html#aa161551bdeec990fd4637e8084ceb1ab" title="Retrieves a constant pointer on the data buffer." alt="" coords="252,5,452,47"/>
+<area shape="rect" id="node3" href="$d0/d43/a01935.html#a7454d42b916dd893a34f49c5ce0a610c" title="Retrieves the vertex position." alt="" coords="253,71,451,98"/>
+<area shape="rect" id="node4" href="$d1/dab/a01767.html#a5bb436e893d310f65b464bd746fff5d7" title="Retrieves a pointer on the data buffer." alt="" coords="500,71,723,98"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="Castor3D::Context" name="Castor3D::Context">
+<area shape="rect" id="node1" title="Class which holds the rendering context." alt="" coords="1189,395,1319,421"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,43,240,69"/>
+<area shape="rect" id="node8" href="$dc/d15/a02583.html" title="Shader variables buffer." alt="" coords="833,103,994,129"/>
+<area shape="rect" id="node10" href="$d5/df4/a01779.html" title=" " alt="" coords="289,94,431,135"/>
+<area shape="rect" id="node3" href="$d7/d67/a02323.html" title="Class used to render depth textures." alt="" coords="805,205,1021,232"/>
+<area shape="rect" id="node4" title=" " alt="" coords="499,460,692,487"/>
+<area shape="rect" id="node11" href="$d7/d0c/a02315.html" title="Class used to render a depth cube texture array layer." alt="" coords="818,257,1009,298"/>
+<area shape="rect" id="node12" href="$dc/d52/a02319.html" title="Class used to render a depth texture array&#39;s layer." alt="" coords="818,322,1009,363"/>
+<area shape="rect" id="node13" href="$dd/da4/a02295.html" title="Class used to render a colour cube texture array layer." alt="" coords="816,387,1011,429"/>
+<area shape="rect" id="node14" href="$db/d90/a02299.html" title="Class used to render a colour texture array&#39;s layer." alt="" coords="816,453,1011,494"/>
+<area shape="rect" id="node15" href="$dd/d21/a02311.html" title="Class used to render a depth cube texture." alt="" coords="819,518,1008,559"/>
+<area shape="rect" id="node16" href="$dc/da4/a02303.html" title="Class used to render colour equirectangular textures to cube maps." alt="" coords="810,584,1017,611"/>
+<area shape="rect" id="node17" href="$dd/d3b/a02291.html" title="Class used to render a colour cube texture." alt="" coords="817,635,1009,677"/>
+<area shape="rect" id="node19" href="$d2/d40/a02307.html" title="Class used to render colour textures." alt="" coords="825,701,1001,742"/>
+<area shape="rect" id="node5" href="$df/d39/a02271.html" title="Render window representation." alt="" coords="828,155,999,181"/>
+<area shape="rect" id="node6" title=" " alt="" coords="501,211,689,237"/>
+<area shape="rect" id="node7" title=" " alt="" coords="564,160,627,187"/>
+<area shape="rect" id="node9" title=" " alt="" coords="510,94,681,135"/>
+<area shape="rect" id="node18" title=" " alt="" coords="813,767,1014,793"/>
+</map>

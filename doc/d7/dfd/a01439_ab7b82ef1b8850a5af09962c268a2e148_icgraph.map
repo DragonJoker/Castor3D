@@ -1,0 +1,11 @@
+<map id="Castor3D::BinaryChunk::CheckAvailable" name="Castor3D::BinaryChunk::CheckAvailable">
+<area shape="rect" id="node1" title="Checks that the remaining place can hold the given size." alt="" coords="712,165,871,207"/>
+<area shape="rect" id="node2" href="$d6/d65/a01443.html#ab5702fa201fbdf9a8c29176d6edfa6ad" title="Retrieves a subchunk." alt="" coords="461,5,664,47"/>
+<area shape="rect" id="node3" href="$d6/d65/a01443.html#a1ae6442afc8b5877cd6f3e603e45f3cb" title="Parses the header chunk." alt="" coords="465,71,661,112"/>
+<area shape="rect" id="node4" href="$d6/d65/a01443.html#a4e0e2423d8623959e62a7b992441c0ef" title="From file reader function." alt="" coords="468,136,657,177"/>
+<area shape="rect" id="node5" href="$d6/d3b/a01459.html#ae9778814bd203de2f0467f4b12a95692" title="Retrieves a value array from a chunk." alt="" coords="468,253,657,295"/>
+<area shape="rect" id="node8" href="$df/d5e/a01467.html#a4caf7622a6c828896565a50ea1a9a82b" title="Retrieves a value from a chunk." alt="" coords="245,188,413,229"/>
+<area shape="rect" id="node9" href="$dd/d15/a01471.html#a870a61bbe209bdf638971bcd1c43b1e5" title="Retrieves a value from a chunk." alt="" coords="249,319,410,360"/>
+<area shape="rect" id="node6" href="$d7/d42/a01463.html#aeeef4f0ac3d185d6f4c337aa891d2114" title="Retrieves a value array from a chunk." alt="" coords="250,253,409,295"/>
+<area shape="rect" id="node7" href="$d6/d65/a01443.html#ae0de68a4ae268dc6d22e4b485feadab7" title="Retrieves a value array from a chunk." alt="" coords="5,253,197,295"/>
+</map>

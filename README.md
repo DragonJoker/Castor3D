@@ -41,6 +41,8 @@ Implemented Plug-ins
 
 **PostEffects**
 - Bloom: HDR Bloom implementation.
+- GrayScale.
+- FXAA Antialiasing.
 
 **Generic**
 - CastorGUI: to build GUIs inside Castor3D scenes.
@@ -52,18 +54,20 @@ Implemented Plug-ins
 - ReinhardToneMapping: Reinhard tone mapping.
 
 **Techniques**
-- Direct: Default one, forward rendering.
-- MSAA: Forward rendering with MSAA.
+- Forward: Default one, forward rendering.
+- ForwardMsaa: Forward rendering with MSAA.
 - Deferred: Deferred rendering technique using forward rendering for transparent meshes.
+- DeferredMsaa: Deferred rendering technique using MSAA for transparent meshes.
 
 Links
 -----
 
 - [Building Castor3D](https://dragonjoker.github.com/Castor3D/pages/build)
-- [API Documentation](https://dragonjoker.github.com/Castor3D/doc)
+- [API Documentation](https://dragonjoker.github.com/Castor3D/doc/Castor3D/English)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
 Older Versions
 --------------
 
+- [v0.8.0](https://dragonjoker.github.com/Castor3D/v0.8.0/)
 - [v0.7.0](https://dragonjoker.github.com/Castor3D/v0.7.0/)
