@@ -2,6 +2,7 @@
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Miscellaneous/Parameter.hpp"
 
 using namespace Castor;
 
@@ -24,11 +25,24 @@ namespace Castor3D
 		return std::make_shared< Cylinder >();
 	}
 
-	void Cylinder::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void Cylinder::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		m_nbFaces = p_faces[0];
-		m_radius = p_dimensions[0];
-		m_height = p_dimensions[1];
+		String l_param;
+
+		if ( p_parameters.Get( cuT( "faces" ), l_param ) )
+		{
+			m_nbFaces = string::to_uint( l_param );
+		}
+
+		if ( p_parameters.Get( cuT( "radius" ), l_param ) )
+		{
+			m_radius = string::to_float( l_param );
+		}
+
+		if ( p_parameters.Get( cuT( "height" ), l_param ) )
+		{
+			m_height = string::to_float( l_param );
+		}
 
 		if ( m_nbFaces >= 2 )
 		{

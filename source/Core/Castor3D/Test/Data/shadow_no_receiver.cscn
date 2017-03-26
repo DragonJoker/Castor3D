@@ -93,7 +93,7 @@ scene "Scene"
 
 		mesh "Plane"
 		{
-			type plane 0 0 200 200
+			type "plane" -width_subdiv=0 -depth_subdiv=0 -width=200 -depth=200
 		}
 
 		material "Gold"
@@ -106,7 +106,7 @@ scene "Scene"
 
 		mesh "Plane2"
 		{
-			type plane 0 0 200 200
+			type "plane" -width_subdiv=0 -depth_subdiv=0 -width=200 -depth=200
 		}
 
 		material "Copper"
@@ -118,7 +118,7 @@ scene "Scene"
 
 		mesh "Torus"
 		{
-			type torus 30 30 15 30
+			type "torus" -inner_count=30 -outer_count=30 -inner_size=15 -outer_size=30
 		}
 
 		material "Silver"

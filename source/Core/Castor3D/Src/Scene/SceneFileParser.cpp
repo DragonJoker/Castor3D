@@ -509,7 +509,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eObjectMaterials ), cuT( "material" ), Parser_ObjectMaterialsMaterial, { MakeParameter< ParameterType::eUInt16 >(), MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eObjectMaterials ), cuT( "}" ), Parser_ObjectMaterialsEnd );
 
-	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "type" ), Parser_MeshType, { MakeParameter< ParameterType::eCheckedText >( m_mapMeshTypes ), MakeParameter< ParameterType::eText >() } );
+	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "type" ), Parser_MeshType, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "submesh" ), Parser_MeshSubmesh );
 	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "import" ), Parser_MeshImport, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eMesh ), cuT( "morph_import" ), Parser_MeshMorphImport, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eFloat >(), MakeParameter< ParameterType::eText >() } );

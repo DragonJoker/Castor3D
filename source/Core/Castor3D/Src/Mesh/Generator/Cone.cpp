@@ -2,6 +2,7 @@
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Miscellaneous/Parameter.hpp"
 
 using namespace Castor;
 
@@ -24,11 +25,24 @@ namespace Castor3D
 		return std::make_shared< Cone >();
 	}
 
-	void Cone::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void Cone::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		m_nbFaces = p_faces[0];
-		m_radius = std::abs( p_dimensions[0] );
-		m_height = std::abs( p_dimensions[1] );
+		String l_param;
+
+		if ( p_parameters.Get( cuT( "faces" ), l_param ) )
+		{
+			m_nbFaces = string::to_uint( l_param );
+		}
+
+		if ( p_parameters.Get( cuT( "radius" ), l_param ) )
+		{
+			m_radius = string::to_float( l_param );
+		}
+
+		if ( p_parameters.Get( cuT( "height" ), l_param ) )
+		{
+			m_height = string::to_float( l_param );
+		}
 
 		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< real >::epsilon() && m_radius > std::numeric_limits< real >::epsilon() )
 		{

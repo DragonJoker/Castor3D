@@ -39,7 +39,7 @@ scene "Scene"
 		parent "Torus"
 		mesh "Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 		}
 		material "ShowNormals"
 	}
@@ -53,7 +53,7 @@ scene "Scene"
 		parent "Loop1Torus"
 		mesh "Loop1Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "loop" 1
 		}
 		material "Silver"
@@ -68,7 +68,7 @@ scene "Scene"
 		parent "PnTri1Torus"
 		mesh "PnTri1Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "pn_tri" 1
 		}
 		material "Silver"
@@ -83,7 +83,7 @@ scene "Scene"
 		parent "Phong1Torus"
 		mesh "Phong1Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "phong" 1
 		}
 		material "Silver"
@@ -98,7 +98,7 @@ scene "Scene"
 		parent "Loop2Torus"
 		mesh "Loop2Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "loop" 2
 		}
 		material "Silver"
@@ -113,7 +113,7 @@ scene "Scene"
 		parent "PnTri2Torus"
 		mesh "PnTri2Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "pn_tri" 2
 		}
 		material "Silver"
@@ -128,7 +128,7 @@ scene "Scene"
 		parent "Phong2Torus"
 		mesh "Phong2Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "phong" 2
 		}
 		material "Silver"
@@ -143,7 +143,7 @@ scene "Scene"
 		parent "Loop3Torus"
 		mesh "Loop3Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "loop" 3
 		}
 		material "Silver"
@@ -158,7 +158,7 @@ scene "Scene"
 		parent "PnTri3Torus"
 		mesh "PnTri3Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "pn_tri" 3
 		}
 		material "Silver"
@@ -173,7 +173,7 @@ scene "Scene"
 		parent "Phong3Torus"
 		mesh "Phong3Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "phong" 3
 		}
 		material "Silver"
@@ -188,7 +188,7 @@ scene "Scene"
 		parent "Loop4Torus"
 		mesh "Loop4Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "loop" 4
 		}
 		material "Silver"
@@ -203,7 +203,7 @@ scene "Scene"
 		parent "PnTri4Torus"
 		mesh "PnTri4Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "pn_tri" 4
 		}
 		material "Silver"
@@ -218,7 +218,7 @@ scene "Scene"
 		parent "Phong4Torus"
 		mesh "Phong4Torus"
 		{
-			type torus 4 4 5.0 10.0
+			type "torus" -inner_count=4 -outer_count=4 -inner_size=5 -outer_size=10
 			division "phong" 4
 		}
 		material "Silver"
@@ -233,7 +233,7 @@ scene "Scene"
 		parent "Sphere"
 		mesh "Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 		}
 		material "ShowNormals"
 	}
@@ -247,7 +247,7 @@ scene "Scene"
 		parent "Loop1Sphere"
 		mesh "Loop1Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "loop" 1
 		}
 		material "Silver"
@@ -262,7 +262,7 @@ scene "Scene"
 		parent "PnTri1Sphere"
 		mesh "PnTri1Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "pn_tri" 1
 		}
 		material "Silver"
@@ -277,7 +277,7 @@ scene "Scene"
 		parent "Phong1Sphere"
 		mesh "Phong1Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "phong" 1
 		}
 		material "Silver"
@@ -292,7 +292,7 @@ scene "Scene"
 		parent "Loop2Sphere"
 		mesh "Loop2Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "loop" 2
 		}
 		material "Silver"
@@ -307,7 +307,7 @@ scene "Scene"
 		parent "PnTri2Sphere"
 		mesh "PnTri2Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "pn_tri" 2
 		}
 		material "Silver"
@@ -322,7 +322,7 @@ scene "Scene"
 		parent "Phong2Sphere"
 		mesh "Phong2Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "phong" 2
 		}
 		material "Silver"
@@ -337,7 +337,7 @@ scene "Scene"
 		parent "Loop3Sphere"
 		mesh "Loop3Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "loop" 3
 		}
 		material "Silver"
@@ -352,7 +352,7 @@ scene "Scene"
 		parent "PnTri3Sphere"
 		mesh "PnTri3Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "pn_tri" 3
 		}
 		material "Silver"
@@ -367,7 +367,7 @@ scene "Scene"
 		parent "Phong3Sphere"
 		mesh "Phong3Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "phong" 3
 		}
 		material "Silver"
@@ -382,7 +382,7 @@ scene "Scene"
 		parent "Loop4Sphere"
 		mesh "Loop4Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "loop" 4
 		}
 		material "Silver"
@@ -397,7 +397,7 @@ scene "Scene"
 		parent "PnTri4Sphere"
 		mesh "PnTri4Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "pn_tri" 4
 		}
 		material "Silver"
@@ -412,7 +412,7 @@ scene "Scene"
 		parent "Phong4Sphere"
 		mesh "Phong4Sphere"
 		{
-			type icosahedron 10.0
+			type "icosahedron" -radius=10
 			division "phong" 4
 		}
 		material "Silver"

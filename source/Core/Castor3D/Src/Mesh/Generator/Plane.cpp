@@ -2,6 +2,7 @@
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Miscellaneous/Parameter.hpp"
 
 using namespace Castor3D;
 using namespace Castor;
@@ -24,12 +25,30 @@ MeshGeneratorSPtr Plane::Create()
 	return std::make_shared< Plane >();
 }
 
-void Plane::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Plane::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 {
-	m_subDivisionsW = p_faces[0];
-	m_subDivisionsD = p_faces[1];
-	m_width = std::abs( p_dimensions[0] );
-	m_depth = std::abs( p_dimensions[1] );
+	String l_param;
+
+	if ( p_parameters.Get( cuT( "width_subdiv" ), l_param ) )
+	{
+		m_subDivisionsW = string::to_uint( l_param );
+	}
+
+	if ( p_parameters.Get( cuT( "depth_subdiv" ), l_param ) )
+	{
+		m_subDivisionsD = string::to_uint( l_param );
+	}
+
+	if ( p_parameters.Get( cuT( "width" ), l_param ) )
+	{
+		m_width = string::to_float( l_param );
+	}
+
+	if ( p_parameters.Get( cuT( "depth" ), l_param ) )
+	{
+		m_depth = string::to_float( l_param );
+	}
+
 	uint32_t l_nbVertexW = m_subDivisionsW + 2;
 	uint32_t l_nbVertexH = m_subDivisionsD + 2;
 	real l_offsetW = -m_width / 2;

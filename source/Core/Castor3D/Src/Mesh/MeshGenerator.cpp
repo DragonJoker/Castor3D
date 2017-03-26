@@ -27,9 +27,9 @@ namespace Castor3D
 		return std::make_shared< MeshGenerator >( MeshType::eCustom );
 	}
 
-	void MeshGenerator::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void MeshGenerator::Generate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		DoGenerate( p_mesh, p_faces, p_dimensions );
+		DoGenerate( p_mesh, p_parameters );
 
 		for ( auto l_submesh : p_mesh )
 		{
@@ -45,7 +45,7 @@ namespace Castor3D
 		}
 	}
 
-	void MeshGenerator::DoGenerate( Mesh & CU_PARAM_UNUSED( p_mesh ), UIntArray const & CU_PARAM_UNUSED( p_faces ), RealArray const & CU_PARAM_UNUSED( p_dimensions ) )
+	void MeshGenerator::DoGenerate( Mesh & CU_PARAM_UNUSED( p_mesh ), Parameters const &  CU_PARAM_UNUSED( p_parameters ) )
 	{
 	}
 }

@@ -214,6 +214,7 @@ namespace GLSL
 		}
 		ROF;
 	}
+
 	void LightingModel::ComputeDirectionalLight( DirectionalLight const & p_light
 		, Vec3 const & p_worldEye
 		, Float const & p_shininess

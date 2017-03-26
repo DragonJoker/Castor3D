@@ -51,7 +51,7 @@ scene "Scene"
 
 		mesh "SpotLightMesh"
 		{
-			type cube 1 1 4
+			type "cube" -width=1 -height=1 -depth=4
 		}
 
 		material "WhiteEmit"
@@ -66,7 +66,7 @@ scene "Scene"
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			type torus 40 40 25 50
+			type "torus" -inner_count=40 -outer_count=40 -inner_size=25 -outer_size=50
 		}
 		material "Silver"
 	}

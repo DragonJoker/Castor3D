@@ -40,7 +40,7 @@ scene "Scene"
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			type torus 40 40 25 50
+			type "torus" -inner_count=40 -outer_count=40 -inner_size=25 -outer_size=50
 		}
 		material "Silver"
 	}

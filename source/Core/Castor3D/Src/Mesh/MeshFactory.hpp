@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		La fabrique de maillages
 	*/
 	class MeshFactory
-		: public Castor::Factory< MeshGenerator, MeshType >
+		: public Castor::Factory< MeshGenerator, Castor::String >
 	{
 	public:
 		/**

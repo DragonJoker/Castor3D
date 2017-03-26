@@ -70,7 +70,7 @@ scene "Scene"
 
 		mesh "Plane"
 		{
-			type plane 0 0 1000 1000
+			type "plane" -width_subdiv=0 -depth_subdiv=0 -width=1000 -depth=1000
 		}
 
 		material "Gold"
@@ -86,7 +86,7 @@ scene "Scene"
 
 		mesh "Plane2"
 		{
-			type plane 0 0 1000 1000
+			type "plane" -width_subdiv=0 -depth_subdiv=0 -width=1000 -depth=1000
 		}
 
 		material "Copper"
@@ -100,7 +100,7 @@ scene "Scene"
 		parent "FinalNode0"
 		mesh "Mesh"
 		{
-			type torus 40 40 15.0 35.0
+			type "torus" -inner_count=40 -outer_count=40 -inner_size=15 -outer_size=35
 		}
 		material "Silver"
 	}
@@ -323,7 +323,7 @@ scene "Scene"
 		parent "FinalNode20"
 		mesh "Mesh"
 		{
-			type torus 40 40 25.0 50.0
+			type "torus" -inner_count=40 -outer_count=40 -inner_size=25 -outer_size=50
 		}
 		material "Silver"
 	}

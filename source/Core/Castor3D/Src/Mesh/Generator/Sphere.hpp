@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -84,7 +84,7 @@ namespace Castor3D
 		/**
 		*\copydoc		Castor3D::MeshGenerator::DoGenerate
 		*/
-		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void DoGenerate( Mesh & p_mesh, Parameters const & p_parameters );
 
 	private:
 		real m_radius;

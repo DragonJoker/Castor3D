@@ -1,4 +1,4 @@
-#include "SceneFileParser_Parsers.hpp"
+﻿#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -389,17 +389,7 @@ namespace Castor3D
 			if ( p_params.size() > 1 )
 			{
 				String l_tmp;
-				StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
-
-				for ( auto l_value : l_arrayStrParams )
-				{
-					StringArray l_param = string::split( l_value, cuT( "= " ), 2, false );
-
-					if ( l_param.size() > 1 )
-					{
-						l_parameters.Add( l_param[0], l_param[1] );
-					}
-				}
+				l_parameters.Parse( p_params[1]->Get( l_tmp ) );
 			}
 
 			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
@@ -454,17 +444,7 @@ namespace Castor3D
 			if ( p_params.size() > 1 )
 			{
 				String l_tmp;
-				StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
-
-				for ( auto l_value : l_arrayStrParams )
-				{
-					StringArray l_param = string::split( l_value, cuT( "= " ), 2, false );
-
-					if ( l_param.size() > 1 )
-					{
-						l_parameters.Add( l_param[0], l_param[1] );
-					}
-				}
+				l_parameters.Parse( p_params[1]->Get( l_tmp ) );
 			}
 
 			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
@@ -499,17 +479,7 @@ namespace Castor3D
 			if ( p_params.size() > 1 )
 			{
 				String l_tmp;
-				StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
-
-				for ( auto l_value : l_arrayStrParams )
-				{
-					StringArray l_param = string::split( l_value, cuT( "= " ), 2, false );
-
-					if ( l_param.size() > 1 )
-					{
-						l_parameters.Add( l_param[0], l_param[1] );
-					}
-				}
+				l_parameters.Parse( p_params[1]->Get( l_tmp ) );
 			}
 
 			l_parsingContext->pRenderTarget->SetToneMappingType( l_name, l_parameters );
@@ -1898,71 +1868,22 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		uint32_t l_uiType;
-		p_params[0]->Get( l_uiType );
-		MeshType l_type = MeshType( l_uiType );
-		UIntArray l_arrayFaces;
-		RealArray l_arraySizes;
-		String l_strParams;
-
-		if ( p_params.size() > 1 )
-		{
-			p_params[1]->Get( l_strParams );
-		}
+		String l_type;
+		p_params[0]->Get( l_type );
 
 		if ( !l_parsingContext->pMesh )
 		{
-			StringArray l_arrayMeshInfos = string::split( l_strParams, cuT( " " ) );
-			auto l_it = l_arrayMeshInfos.begin();
-
-			switch ( l_type )
+			Parameters l_parameters;
+			if ( p_params.size() > 1 )
 			{
-			case MeshType::eCube:
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				break;
-
-			case MeshType::eCone:
-				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				break;
-
-			case MeshType::eCylinder:
-				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				break;
-
-			case MeshType::eSphere:
-				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				break;
-
-			case MeshType::eIcosahedron:
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				break;
-
-			case MeshType::ePlane:
-				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
-				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				break;
-
-			case MeshType::eTorus:
-				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
-				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				l_arraySizes.push_back( string::to_real( *l_it++ ) );
-				break;
+				String l_tmp;
+				l_parameters.Parse( p_params[1]->Get( l_tmp ) );
 			}
 
 			if ( l_parsingContext->pScene )
 			{
 				l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshCache().Add( l_parsingContext->strName2 );
-				l_parsingContext->pScene->GetEngine()->GetMeshFactory().Create( l_type )->Generate( *l_parsingContext->pMesh, l_arrayFaces, l_arraySizes );
+				l_parsingContext->pScene->GetEngine()->GetMeshFactory().Create( l_type )->Generate( *l_parsingContext->pMesh, l_parameters );
 			}
 			else
 			{
@@ -2031,8 +1952,7 @@ namespace Castor3D
 						}
 						else if ( l_it->find( cuT( "tangent_space" ) ) == 0 )
 						{
-							bool l_bValue = true;
-							l_parameters.Add( cuT( "tangent_space" ), l_bValue );
+							l_parameters.Add( cuT( "tangent_space" ), true );
 						}
 					}
 				}
@@ -2096,8 +2016,7 @@ namespace Castor3D
 						}
 						else if ( l_it->find( cuT( "tangent_space" ) ) == 0 )
 						{
-							bool l_bValue = true;
-							l_parameters.Add( cuT( "tangent_space" ), l_bValue );
+							l_parameters.Add( cuT( "tangent_space" ), true );
 						}
 					}
 				}

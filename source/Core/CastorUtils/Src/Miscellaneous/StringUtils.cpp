@@ -94,6 +94,54 @@ namespace Castor
 			return l_llReturn;
 		}
 
+		unsigned short to_ushort( String const & p_strToTest, std::locale const & p_locale )
+		{
+			unsigned short l_sReturn = 0;
+
+			if ( !p_strToTest.empty() )
+			{
+				parse( p_strToTest, l_sReturn, p_locale );
+			}
+
+			return l_sReturn;
+		}
+
+		unsigned int to_uint( String const & p_strToTest, std::locale const & p_locale )
+		{
+			unsigned int l_iReturn = 0;
+
+			if ( !p_strToTest.empty() )
+			{
+				parse( p_strToTest, l_iReturn, p_locale );
+			}
+
+			return l_iReturn;
+		}
+
+		unsigned long to_ulong( String const & p_strToTest, std::locale const & p_locale )
+		{
+			unsigned long l_lReturn = 0;
+
+			if ( !p_strToTest.empty() )
+			{
+				parse( p_strToTest, l_lReturn, p_locale );
+			}
+
+			return l_lReturn;
+		}
+
+		unsigned long long to_ulong_long( String const & p_strToTest, std::locale const & p_locale )
+		{
+			unsigned long long l_llReturn = 0;
+
+			if ( !p_strToTest.empty() )
+			{
+				parse( p_strToTest, l_llReturn, p_locale );
+			}
+
+			return l_llReturn;
+		}
+
 		float to_float( String const & p_strToTest, std::locale const & p_locale )
 		{
 			float l_fReturn = 0;
