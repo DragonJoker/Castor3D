@@ -1,4 +1,4 @@
-#include <Engine.hpp>
+﻿#include <Engine.hpp>
 #include <Cache/ListenerCache.hpp>
 
 #include <Render/RenderSystem.hpp>
@@ -127,31 +127,35 @@ namespace CastorGui
 	}
 }
 
-C3D_CGui_API void GetRequiredVersion( Version & p_version )
+extern "C"
 {
-	p_version = Version();
-}
+	C3D_CGui_API void GetRequiredVersion( Castor3D::Version * p_version )
+	{
+		*p_version = Castor3D::Version();
+	}
 
-C3D_CGui_API PluginType GetType()
-{
-	return PluginType::eGeneric;
-}
+	C3D_CGui_API void GetType( Castor3D::PluginType * p_type )
+	{
+		*p_type = Castor3D::PluginType::eGeneric;
+	}
 
-C3D_CGui_API String GetName()
-{
-	return cuT( "Castor GUI" );
-}
+	C3D_CGui_API void GetName( char const ** p_name )
+	{
+		static String const Name = cuT( "Castor GUI" );
+		*p_name = Name.c_str();
+	}
 
-C3D_CGui_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	p_engine->RegisterParsers( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateParsers( p_engine ) ) );
-	p_engine->RegisterSections( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateSections() ) );
-	p_engine->SetUserInputListener( std::make_shared< CastorGui::ControlsManager >( *p_engine ) );
-}
+	C3D_CGui_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	{
+		p_engine->RegisterParsers( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateParsers( p_engine ) ) );
+		p_engine->RegisterSections( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateSections() ) );
+		p_engine->SetUserInputListener( std::make_shared< CastorGui::ControlsManager >( *p_engine ) );
+	}
 
-C3D_CGui_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	p_engine->SetUserInputListener( nullptr );
-	p_engine->UnregisterParsers( CastorGui::PLUGIN_NAME );
-	p_engine->UnregisterSections( CastorGui::PLUGIN_NAME );
+	C3D_CGui_API void OnUnload( Castor3D::Engine * p_engine )
+	{
+		p_engine->SetUserInputListener( nullptr );
+		p_engine->UnregisterParsers( CastorGui::PLUGIN_NAME );
+		p_engine->UnregisterSections( CastorGui::PLUGIN_NAME );
+	}
 }

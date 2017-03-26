@@ -1,4 +1,4 @@
-#include "Plugin.hpp"
+﻿#include "Plugin.hpp"
 
 #include "Miscellaneous/Version.hpp"
 
@@ -8,29 +8,10 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#if defined( CASTOR_COMPILER_MSVC )
-	static const String GetNameFunctionABIName = cuT( "?GetName@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
-#	if defined( _WIN64 )
-	static const String GetRequiredVersionFunctionABIName = cuT( "?GetRequiredVersion@@YAXAEAVVersion@Castor3D@@@Z" );
-	static const String GetOnLoadFunctionABIName = cuT( "?OnLoad@@YAXPEAVEngine@Castor3D@@@Z" );
-	static const String GetOnUnloadFunctionABIName = cuT( "?OnUnload@@YAXPEAVEngine@Castor3D@@@Z" );
-#	else
-	static const String GetRequiredVersionFunctionABIName = cuT( "?GetRequiredVersion@@YAXAAVVersion@Castor3D@@@Z" );
-	static const String GetOnLoadFunctionABIName = cuT( "?OnLoad@@YAXPAVEngine@Castor3D@@@Z" );
-	static const String GetOnUnloadFunctionABIName = cuT( "?OnUnload@@YAXPAVEngine@Castor3D@@@Z" );
-#	endif
-#elif defined( CASTOR_COMPILER_GNUC )
-#	if CASTOR_COMPILER_VERSION >= 50300
-	static const String GetNameFunctionABIName = cuT( "_Z7GetNameB5cxx11v" );
-#	else
-	static const String GetNameFunctionABIName = cuT( "_Z7GetNamev" );
-#	endif
-	static const String GetRequiredVersionFunctionABIName = cuT( "_Z18GetRequiredVersionRN8Castor3D7VersionE" );
-	static const String GetOnLoadFunctionABIName = cuT( "_Z6OnLoadPN8Castor3D6EngineE" );
-	static const String GetOnUnloadFunctionABIName = cuT( "_Z8OnUnloadPN8Castor3D6EngineE" );
-#else
-#	error "Implement ABI names for this compiler"
-#endif
+	static const String GetNameFunctionABIName = cuT( "GetName" );
+	static const String GetRequiredVersionFunctionABIName = cuT( "GetRequiredVersion" );
+	static const String GetOnLoadFunctionABIName = cuT( "OnLoad" );
+	static const String GetOnUnloadFunctionABIName = cuT( "OnUnload" );
 
 	Plugin::Plugin( PluginType p_type, DynamicLibrarySPtr p_library, Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
@@ -52,8 +33,19 @@ namespace Castor3D
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 		}
 
-		p_library->GetFunction( m_pfnOnLoad, GetOnLoadFunctionABIName );
-		p_library->GetFunction( m_pfnOnUnload, GetOnUnloadFunctionABIName );
+		if ( !p_library->GetFunction( m_pfnOnLoad, GetOnLoadFunctionABIName ) )
+		{
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in OnLoad function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
+		}
+
+		if ( !p_library->GetFunction( m_pfnOnUnload, GetOnUnloadFunctionABIName ) )
+		{
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in OnUnload function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
+		}
 	}
 
 	Plugin::~Plugin()
@@ -64,7 +56,7 @@ namespace Castor3D
 	{
 		if ( m_pfnGetRequiredVersion )
 		{
-			m_pfnGetRequiredVersion( p_version );
+			m_pfnGetRequiredVersion( &p_version );
 		}
 	}
 
@@ -74,7 +66,9 @@ namespace Castor3D
 
 		if ( m_pfnGetName )
 		{
-			l_strReturn = m_pfnGetName();
+			char const * l_name;
+			m_pfnGetName( &l_name );
+			l_strReturn = l_name;
 		}
 
 		return l_strReturn;

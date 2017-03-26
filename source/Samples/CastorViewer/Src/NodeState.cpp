@@ -78,7 +78,7 @@ namespace CastorViewer
 		m_angularVelocityY = doUpdateVelocity( m_angularVelocityY );
 		m_translate[0] = m_scalarVelocityX.value();
 		m_translate[1] = m_scalarVelocityY.value();
-		m_translate[1] = m_scalarVelocityZ.value();
+		m_translate[2] = m_scalarVelocityZ.value();
 		m_scalarVelocityX = doUpdateVelocity( m_scalarVelocityX );
 		m_scalarVelocityY = doUpdateVelocity( m_scalarVelocityY );
 		m_scalarVelocityZ = doUpdateVelocity( m_scalarVelocityZ );

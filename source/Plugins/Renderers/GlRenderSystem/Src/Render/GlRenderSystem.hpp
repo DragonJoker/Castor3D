@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -183,6 +183,7 @@ namespace GlRender
 
 	public:
 		C3D_Gl_API static Castor::String Name;
+		C3D_Gl_API static Castor::String Type;
 
 	protected:
 		bool m_useVertexBufferObjects;

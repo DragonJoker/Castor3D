@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -45,15 +45,15 @@ namespace Castor3D
 	{
 	public:
 		/**
-		*\~english
-		*\brief		Constructor.
-		*\param[in]	p_context	The Context.
-		*\param[in]	p_matrixUbo	The UBO containing matrix data.
-		*\~french
-		*\brief		Constructeur.
-		*\param[in]	p_context	Le Context.
-		*\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
-		*/
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_context	The Context.
+		 *\param[in]	p_matrixUbo	The UBO containing matrix data.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_context	Le Context.
+		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
+		 */
 		C3D_API explicit RenderDepthLayerToTexture( Context & p_context
 			, UniformBuffer & p_matrixUbo );
 		/**

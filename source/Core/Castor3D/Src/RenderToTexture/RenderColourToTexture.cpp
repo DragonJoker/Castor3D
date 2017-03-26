@@ -1,4 +1,4 @@
-#include "RenderColourToTexture.hpp"
+﻿#include "RenderColourToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -16,19 +16,20 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderColourToTexture::RenderColourToTexture( Context & p_context
-		, UniformBuffer & p_matrixUbo  )
+		, UniformBuffer & p_matrixUbo
+		, bool p_invertU )
 		: OwnedBy< Context >{ p_context }
 		, m_matrixUbo{ p_matrixUbo }
 		, m_viewport{ *p_context.GetRenderSystem()->GetEngine() }
 		, m_bufferVertex
 		{
 			{
-				0, 0, 0, 0,
-				1, 1, 1, 1,
-				0, 1, 0, 1,
-				0, 0, 0, 0,
-				1, 0, 1, 0,
-				1, 1, 1, 1
+				0, 0, ( p_invertU ? 1.0f : 0.0f ), 0,
+				1, 1, ( p_invertU ? 0.0f : 1.0f ), 1,
+				0, 1, ( p_invertU ? 1.0f : 0.0f ), 1,
+				0, 0, ( p_invertU ? 1.0f : 0.0f ), 0,
+				1, 0, ( p_invertU ? 0.0f : 1.0f ), 0,
+				1, 1, ( p_invertU ? 0.0f : 1.0f ), 1
 			}
 		}
 		, m_declaration

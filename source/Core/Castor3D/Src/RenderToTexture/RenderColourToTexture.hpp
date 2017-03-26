@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -47,15 +47,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context		The Context.
-		 *\param[in]	p_matrixUbo		The UBO containing matrix data.
+		 *\param[in]	p_context	The Context.
+		 *\param[in]	p_matrixUbo	The UBO containing matrix data.
+		 *\param[in]	p_invertU	Tells if the U coordinate of UV must be inverted, thus mirroring the reulting image.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context		Le Context.
-		 *\param[in]	p_matrixUbo		L'UBO contenant les données de matrices.
+		 *\param[in]	p_context	Le Context.
+		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
+		 *\param[in]	p_invertU	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un mirroir de l'image.
 		 */
 		C3D_API explicit RenderColourToTexture( Context & p_context
-			, UniformBuffer & p_matrixUbo );
+			, UniformBuffer & p_matrixUbo
+			, bool p_invertU = false );
 		/**
 		 *\~english
 		 *\brief		Destructor.

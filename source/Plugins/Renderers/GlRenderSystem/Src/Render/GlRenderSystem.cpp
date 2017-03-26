@@ -110,7 +110,8 @@ namespace GlRender
 		}
 	}
 
-	String GlRenderSystem::Name = cuT( "opengl" );
+	String GlRenderSystem::Name = cuT( "OpenGL Renderer" );
+	String GlRenderSystem::Type = cuT( "opengl" );
 
 	GlRenderSystem::GlRenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, Name )

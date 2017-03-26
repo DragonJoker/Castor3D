@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -46,9 +46,6 @@ namespace Castor3D
 	private:
 		friend class Plugin;
 		friend class Engine;
-		typedef ExtensionArray GetExtensionFunction( Engine * p_engine );
-
-		typedef GetExtensionFunction * PGetExtensionFunction;
 
 	public:
 		/**
@@ -77,10 +74,19 @@ namespace Castor3D
 		 *\brief		Récupère le tableau des extensions supportées
 		 *\return		Le tableau d'extensions supportées
 		 */
-		C3D_API ExtensionArray GetExtensions();
+		C3D_API ExtensionArray const & GetExtensions();
+		/**
+		 *\~english
+		 *\brief		Adds a supported extension.
+		 *\param[in]	p_extension	The extension.
+		 *\~french
+		 *\brief		Ajoute une extension supportée.
+		 *\param[in]	p_extension	L'extension.
+		 */
+		C3D_API void AddExtension( Extension const & p_extension );
 
 	private:
-		PGetExtensionFunction m_pfnGetExtension;
+		ExtensionArray m_extensions;
 	};
 }
 

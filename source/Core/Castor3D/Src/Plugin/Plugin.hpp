@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -46,15 +46,15 @@ namespace Castor3D
 	{
 	private:
 		//!< Signature for the plug-in's loading function
-		typedef void OnLoadFunction( Engine * );
+		typedef void OnLoadFunction( Engine *, Plugin * );
 		//!< Signature for the plug-in's unloading function
 		typedef void OnUnloadFunction( Engine * );
 		//!< Signature for the plug-in's type retrieval function
-		typedef PluginType GetTypeFunction();
+		typedef void GetTypeFunction( PluginType * );
 		//!< Signature for the plug-in's version checking function
-		typedef void GetRequiredVersionFunction( Version & p_version );
+		typedef void GetRequiredVersionFunction( Version * p_version );
 		//!< Signature for the plug-in's name retrieval function
-		typedef Castor::String GetNameFunction();
+		typedef void GetNameFunction( char const ** );
 
 	public:
 		typedef OnLoadFunction * POnLoadFunction;

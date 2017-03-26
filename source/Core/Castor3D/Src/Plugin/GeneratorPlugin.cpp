@@ -1,4 +1,4 @@
-﻿#include "GeneratorPlugin.hpp"
+#include "GeneratorPlugin.hpp"
 
 #include <Miscellaneous/DynamicLibrary.hpp>
 
@@ -11,7 +11,7 @@ namespace Castor3D
 	{
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( GetEngine() );
+			m_pfnOnLoad( GetEngine(), this );
 		}
 	}
 
