@@ -27,6 +27,7 @@ using namespace Castor3D;
 namespace TestRender
 {
 	String TestRenderSystem::Name = cuT( "test" );
+	String TestRenderSystem::Type = cuT( "Test Renderer" );
 
 	TestRenderSystem::TestRenderSystem( Engine & p_engine )
 		: RenderSystem{ p_engine, Name }

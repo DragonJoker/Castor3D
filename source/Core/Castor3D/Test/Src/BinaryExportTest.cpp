@@ -52,7 +52,11 @@ namespace Testing
 		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
 		auto l_src = l_scene.GetMeshCache().Add( l_name );
-		m_engine.GetMeshFactory().Create( MeshType::eCube )->Generate( *l_src,  UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
+		Parameters l_parameters;
+		l_parameters.Add( cuT( "width" ), cuT( "1.0" ) );
+		l_parameters.Add( cuT( "height" ), cuT( "1.0" ) );
+		l_parameters.Add( cuT( "depth" ), cuT( "1.0" ) );
+		m_engine.GetMeshFactory().Create( cuT( "cube" ) )->Generate( *l_src, l_parameters );
 
 		for ( auto l_submesh : *l_src )
 		{
@@ -94,7 +98,11 @@ namespace Testing
 		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
 		auto l_src = l_scene.GetMeshCache().Add( l_name );
-		m_engine.GetMeshFactory().Create( MeshType::eCube )->Generate( *l_src, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
+		Parameters l_parameters;
+		l_parameters.Add( cuT( "width" ), cuT( "1.0" ) );
+		l_parameters.Add( cuT( "height" ), cuT( "1.0" ) );
+		l_parameters.Add( cuT( "depth" ), cuT( "1.0" ) );
+		m_engine.GetMeshFactory().Create( cuT( "cube" ) )->Generate( *l_src, l_parameters );
 		{
 			BinaryFile l_file{ m_testDataFolder / l_path, File::OpenMode::eRead };
 			BinaryParser< Mesh > l_parser;

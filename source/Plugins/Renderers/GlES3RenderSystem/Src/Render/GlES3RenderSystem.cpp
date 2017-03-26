@@ -110,7 +110,8 @@ namespace GlES3Render
 		}
 	}
 
-	String GlES3RenderSystem::Name = cuT( "opengles3" );
+	String GlES3RenderSystem::Name = cuT( "OpenGL ES 3.x Renderer" );
+	String GlES3RenderSystem::Type = cuT( "opengles3" );
 
 	GlES3RenderSystem::GlES3RenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, Name )

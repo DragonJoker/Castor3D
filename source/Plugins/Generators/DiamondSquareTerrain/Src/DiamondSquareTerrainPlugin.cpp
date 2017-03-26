@@ -4,7 +4,7 @@
 #include <Log/Logger.hpp>
 
 #ifndef CASTOR_PLATFORM_WINDOWS
-#	define C3D_Phong_API
+#	define C3D_DiamondSquareTerrain_API
 #else
 #	ifdef DiamondSquareTerrain_EXPORTS
 #		define C3D_DiamondSquareTerrain_API __declspec( dllexport )

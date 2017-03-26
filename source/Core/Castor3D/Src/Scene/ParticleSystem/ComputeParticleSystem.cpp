@@ -136,7 +136,12 @@ namespace Castor3D
 		m_generatedCountBuffer->Download( 0u, 1u, &l_particlesCount );
 		m_particlesCount = std::min( l_particlesCount, uint32_t( m_parent.GetMaxParticlesCount() ) );
 
-		m_parent.GetBillboards()->GetVertexBuffer().Copy( m_particlesStorages[m_out]->GetGpuBuffer(), m_particlesCount * m_inputs.stride() );
+		if ( m_particlesCount )
+		{
+			m_parent.GetBillboards()->GetVertexBuffer().Copy( m_particlesStorages[m_out]->GetGpuBuffer()
+				, m_particlesCount * m_inputs.stride());
+		}
+
 		std::swap( m_in, m_out );
 		return m_particlesCount;
 	}

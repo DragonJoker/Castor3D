@@ -96,8 +96,13 @@ namespace Castor3D
 	void ToneMapping::Cleanup()
 	{
 		DoDestroy();
-		m_colour->Cleanup();
-		m_colour.reset();
+
+		if ( m_colour )
+		{
+			m_colour->Cleanup();
+			m_colour.reset();
+		}
+
 		m_exposureVar.reset();
 		m_configUbo.Cleanup();
 		m_matrixUbo.Cleanup();
