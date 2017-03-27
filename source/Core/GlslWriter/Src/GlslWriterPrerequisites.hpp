@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -167,6 +167,9 @@ namespace GLSL
 	using BMat2 = Mat2T< Boolean >;
 	using BMat3 = Mat3T< Boolean >;
 	using BMat4 = Mat4T< Boolean >;
+
+	template< typename RetT, typename ... ParamsT >
+	struct Function;
 
 	constexpr uint32_t SpotShadowMapCount = 10u;
 	constexpr uint32_t PointShadowMapCount = 6u;

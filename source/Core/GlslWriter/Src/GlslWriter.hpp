@@ -163,6 +163,7 @@ namespace GLSL
 		GlslWriter_API void WriteAssign( Type const & p_lhs, unsigned int const & p_rhs );
 		GlslWriter_API void WriteAssign( Type const & p_lhs, float const & p_rhs );
 		GlslWriter_API void For( Type && p_init, Expr const & p_cond, Expr const & p_incr, std::function< void() > p_function );
+		GlslWriter_API void While( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API GlslWriter & If( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API GlslWriter & ElseIf( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API void Else( std::function< void() > p_function );
@@ -319,6 +320,7 @@ namespace GLSL
 		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< T > GetBuiltin( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetUniform( Castor::String const & p_name, bool p_enabled );
+		template< typename T > inline Optional< T > GetUniform( Castor::String const & p_name, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< Array< T > > GetAttribute( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetOutput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetInput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
@@ -326,6 +328,7 @@ namespace GLSL
 		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< Array< T > > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, std::vector< T > const & p_rhs );
 
 		GlslWriter_API GlslWriter & operator<<( Version const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Attribute const & p_rhs );
@@ -359,6 +362,14 @@ namespace GLSL
 		( Writer ).For( std::move( Name ), Expr( &( Writer ), Castor::String( Cond ) ), Expr( &( Writer ), Castor::String( Incr ) ), [&]()
 
 #define ROF\
+	 );\
+	}
+
+#define WHILE( Writer, Cond )\
+	{\
+		( Writer ).While( Expr( &( Writer ), Castor::String( Cond ) ), [&]()
+
+#define ELIHW\
 	 );\
 	}
 

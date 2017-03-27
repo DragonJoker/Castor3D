@@ -37,10 +37,6 @@ namespace Castor
 	\brief		Allows to declare a scoped variable with an action on construction
 				<br />and an action on destruction.
 	\remarks	Useful to force execution of code when an exception is thrown.
-	\~english
-	\brief		Permet de dàclarer une variable de scope, avec un action à la construction
-				<br />et une action à la destruction.
-	\remarks	Utile pour forcer l'exàcution de code, si une exception est lancàe.
 	\b Example
 	@code
 		char * l_buffer = nullptr;
@@ -58,6 +54,27 @@ namespace Castor
 			//
 		}
 	@endcode
+	\~french
+	\brief		Permet de déclarer une variable de scope, avec une action à la construction
+				<br />et une action à la destruction.
+	\remarks	Utile pour forcer l'exécution de code, si une exception est lancée.
+	\b Example
+	@code
+		char * l_buffer = nullptr;
+		{
+			auto l_guard = make_block_guard( [&l_buffer, &l_size]()
+			{
+				l_buffer = new char[l_size + 1];
+			},
+			[&buffer]()
+			{
+				delete [] l_buffer;
+			} );
+			//
+			// ... Code pouvant lancer une exception ...
+			//
+		}
+	@endcode
 	*/
 	template< typename CleanFunc >
 	struct BlockGuard
@@ -70,9 +87,9 @@ namespace Castor
 		 *\param[in]	p_clean	The action executed on destruction.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\remarks		Exàcute l'action d'initialisation.
-		 *\param[in]	p_init	L'action effectuàe à la construction.
-		 *\param[in]	p_clean	L'action effectue lors de la destruction.
+		 *\remarks		Exécute l'action d'initialisation.
+		 *\param[in]	p_init	L'action effectuée à la construction.
+		 *\param[in]	p_clean	L'action effectuée lors de la destruction.
 		*/
 		template< typename InitFunc >
 		BlockGuard( InitFunc p_init, CleanFunc p_clean )
@@ -86,7 +103,7 @@ namespace Castor
 		 *\remarks		Executes the clean action.
 		 *\~french
 		 *\brief		Destructeur.
-		 *\remarks		Exàcute l'action de nettoyage.
+		 *\remarks		Exécute l'action de nettoyage.
 		 */
 		~BlockGuard()
 		{
@@ -106,9 +123,9 @@ namespace Castor
 	 *\return		The block guard.
 	 *\~french
 	 *\brief		fonction d'aide à la construction d'un BlockGuard.
-	 *\param[in]	p_init	L'action effectuàe à la construction.
-	 *\param[in]	p_clean	L'action effectue lors de la destruction.
-	 *\return		La guarde.
+	 *\param[in]	p_init	L'action effectuée à la construction.
+	 *\param[in]	p_clean	L'action effectuée lors de la destruction.
+	 *\return		La garde.
 	*/
 	template< typename InitFunc, typename CleanFunc >
 	BlockGuard< CleanFunc > make_block_guard( InitFunc p_init, CleanFunc p_clean )

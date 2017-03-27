@@ -27,9 +27,9 @@ SOFTWARE.
 
 namespace Castor
 {
-	namespace
+	namespace details
 	{
-		union
+		static union
 		{
 			uint32_t i;
 			char c[4];
@@ -43,7 +43,7 @@ namespace Castor
 	 */
 	inline bool IsBigEndian()noexcept
 	{
-		return BigInt.c[0] == 1;
+		return details::BigInt.c[0] == 1;
 	}
 	/**
 	 *\~english

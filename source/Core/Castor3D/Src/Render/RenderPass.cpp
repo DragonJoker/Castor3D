@@ -976,9 +976,12 @@ namespace Castor3D
 		UBO_MODEL_MATRIX( l_writer );
 		UBO_SKINNING( l_writer, p_programFlags );
 		UBO_MORPHING( l_writer, p_programFlags );
+		UBO_SCENE( l_writer );
 
 		// Outputs
 		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_tangentSpaceFragPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -1045,6 +1048,10 @@ namespace Castor3D
 			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
 			vtx_instance = gl_InstanceID;
 			gl_Position = c3d_mtxProjection * l_v4Vertex;
+
+			auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+			vtx_tangentSpaceFragPosition = l_tbn * vtx_worldSpacePosition;
+			vtx_tangentSpaceViewPosition = l_tbn * c3d_v3CameraPosition;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

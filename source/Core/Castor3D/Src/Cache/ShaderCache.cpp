@@ -141,7 +141,8 @@ namespace Castor3D
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+		if ( CheckFlag( p_textureFlags, TextureChannel::eRelief )
+			|| CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
 		{
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapNormal, ShaderType::ePixel );
 		}

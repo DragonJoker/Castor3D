@@ -50,11 +50,19 @@ namespace Castor3D
 		DoGetTexture( p_pass, p_program, TextureChannel::eAmbient, ShaderProgram::MapAmbient, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eColour, ShaderProgram::MapColour, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, *this );
-		DoGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eEmissive, ShaderProgram::MapEmissive, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eOpacity, ShaderProgram::MapOpacity, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eHeight, ShaderProgram::MapHeight, *this );
+
+		if ( p_pass.GetTextureUnit(  TextureChannel::eRelief ) )
+		{
+			DoGetTexture( p_pass, p_program, TextureChannel::eRelief, ShaderProgram::MapNormal, *this );
+		}
+		else
+		{
+			DoGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
+		}
 	}
 }
