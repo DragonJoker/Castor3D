@@ -487,6 +487,18 @@ namespace GLSL
 	}
 
 	template< typename T >
+	inline Optional< T > GlslWriter::GetUniform( Castor::String const & p_name, bool p_enabled, T const & p_rhs )
+	{
+		if ( p_enabled )
+		{
+			*this << Uniform() << T().m_type << p_name << cuT( " = " );
+			m_stream << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+		}
+
+		return Optional< T >( this, p_name, p_enabled );
+	}
+	
+	template< typename T >
 	inline Optional< Array< T > > GlslWriter::GetAttribute( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
 	{
 		if ( p_enabled )
@@ -496,7 +508,7 @@ namespace GLSL
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
 	}
-
+	
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::GetOutput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
 	{
@@ -553,6 +565,31 @@ namespace GLSL
 		if ( p_enabled )
 		{
 			*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		}
+
+		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
+	}
+
+	template< typename T >
+	inline Optional< Array< T > > GlslWriter::GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, std::vector< T > const & p_rhs )
+	{
+		if ( p_rhs.size() != p_dimension )
+		{
+			CASTOR_EXCEPTION( "Given parameters count doesn't match the array dimensions" );
+		}
+
+		if ( p_enabled )
+		{
+			*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << T().m_type << cuT( "[]( " );
+			Castor::String l_sep;
+
+			for ( auto const & l_value : p_rhs )
+			{
+				*this << l_sep << Castor::String( l_value ) << Endl();
+				l_sep = cuT( "\t, " );
+			}
+
+			*this << cuT( ");" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );

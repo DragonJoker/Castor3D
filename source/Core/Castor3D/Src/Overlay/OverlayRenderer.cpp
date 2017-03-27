@@ -390,6 +390,7 @@ namespace Castor3D
 		RemFlag( p_textureFlags, TextureChannel::eAmbient );
 		RemFlag( p_textureFlags, TextureChannel::eDiffuse );
 		RemFlag( p_textureFlags, TextureChannel::eNormal );
+		RemFlag( p_textureFlags, TextureChannel::eRelief );
 		RemFlag( p_textureFlags, TextureChannel::eSpecular );
 		RemFlag( p_textureFlags, TextureChannel::eGloss );
 		RemFlag( p_textureFlags, TextureChannel::eHeight );
@@ -405,6 +406,7 @@ namespace Castor3D
 		RemFlag( p_textureFlags, TextureChannel::eAmbient );
 		RemFlag( p_textureFlags, TextureChannel::eDiffuse );
 		RemFlag( p_textureFlags, TextureChannel::eNormal );
+		RemFlag( p_textureFlags, TextureChannel::eRelief );
 		RemFlag( p_textureFlags, TextureChannel::eSpecular );
 		RemFlag( p_textureFlags, TextureChannel::eGloss );
 		RemFlag( p_textureFlags, TextureChannel::eHeight );

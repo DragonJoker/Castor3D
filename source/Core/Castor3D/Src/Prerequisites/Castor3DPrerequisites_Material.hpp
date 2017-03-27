@@ -499,6 +499,9 @@ namespace Castor3D
 		//!\~english Emissive map
 		//!\~french Map d'émissive
 		eEmissive = 0x0100,
+		//!\~english Relief normal map.
+		//!\~french Map de normales pour le relief.
+		eRelief = 0x0200,
 		//!\~english Mask for all the texture channels
 		//!\~french Masque pour les canaux de texture
 		eAll = 0x0FFF,

@@ -156,6 +156,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureChannels[cuT( "opacity" )] = uint32_t( TextureChannel::eOpacity );
 	m_mapTextureChannels[cuT( "gloss" )] = uint32_t( TextureChannel::eGloss );
 	m_mapTextureChannels[cuT( "emissive" )] = uint32_t( TextureChannel::eEmissive );
+	m_mapTextureChannels[cuT( "relief" )] = uint32_t( TextureChannel::eRelief );
 
 	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::ePoint );
 	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::eSpot );

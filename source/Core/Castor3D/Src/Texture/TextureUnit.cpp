@@ -134,6 +134,10 @@ namespace Castor3D
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
 						break;
 
+					case TextureChannel::eRelief:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel relief\n" ) ) > 0;
+						break;
+
 					default:
 						break;
 					}

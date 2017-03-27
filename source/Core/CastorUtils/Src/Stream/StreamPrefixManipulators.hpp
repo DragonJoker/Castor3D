@@ -105,71 +105,66 @@ namespace Castor
 		using line_prefix_buffer = basic_prefix_buffer< line_prefix, char >;
 		using wline_prefix_buffer = basic_prefix_buffer< wline_prefix, wchar_t >;
 
-		namespace
+		/**
+		 *\~english
+		 *\brief		Initializes the stream in order to indent it
+		 *\param[in]	stream	The stream
+		 *\~french
+		 *\brief		Initialise le flux afin de pouvoir l'indenter
+		 *\param[in]	stream	Le flux
+		 */
+		template< typename PrefixType, typename CharType, typename BufferType = basic_prefix_buffer< base_prefixer< CharType, PrefixType >, CharType >, typename BufferManagerType = basic_prefix_buffer_manager< base_prefixer< CharType, PrefixType >, CharType > >
+		inline BufferType * install_prefix_buffer( std::basic_ostream< CharType > & stream )
 		{
-			/**
-			 *\~english
-			 *\brief		Initializes the stream in order to indent it
-			 *\param[in]	stream	The stream
-			 *\~french
-			 *\brief		Initialise le flux afin de pouvoir l'indenter
-			 *\param[in]	stream	Le flux
-			 */
-			template< typename PrefixType, typename CharType, typename BufferType = basic_prefix_buffer< base_prefixer< CharType, PrefixType >, CharType >, typename BufferManagerType = basic_prefix_buffer_manager< base_prefixer< CharType, PrefixType >, CharType > >
-			inline BufferType * install_prefix_buffer( std::basic_ostream< CharType > & stream )
+			BufferType * sbuf( new BufferType( stream.rdbuf() ) );
+			BufferManagerType::instance()->insert( stream, sbuf );
+			stream.rdbuf( sbuf );
+			return sbuf;
+		}
+		/**
+		 *\~english
+		 *\brief		The stream events callback
+		 *\~french
+		 *\brief		Le callback des évènements du flux
+		 */
+		template< typename PrefixType, typename CharType >
+		inline void callback( std::ios_base::event ev, std::ios_base & ios, int x )
+		{
+			if ( basic_prefix_buffer_manager< base_prefixer< CharType, PrefixType >, CharType >::instances() )
 			{
-				BufferType * sbuf( new BufferType( stream.rdbuf() ) );
-				BufferManagerType::instance()->insert( stream, sbuf );
-				stream.rdbuf( sbuf );
-				return sbuf;
-			}
-
-			/**
-			 *\~english
-			 *\brief		The stream events callback
-			 *\~french
-			 *\brief		Le callback des évènements du flux
-			 */
-			template< typename PrefixType, typename CharType >
-			inline void callback( std::ios_base::event ev, std::ios_base & ios, int x )
-			{
-				if ( basic_prefix_buffer_manager< base_prefixer< CharType, PrefixType >, CharType >::instances() )
+				if ( ev == std::ios_base::erase_event )
 				{
-					if ( ev == std::ios_base::erase_event )
-					{
-						basic_prefix_buffer_manager< base_prefixer< CharType, PrefixType >, CharType >::instance()->erase( ios );
-					}
-					else if ( ev == std::ios_base::copyfmt_event )
-					{
+					basic_prefix_buffer_manager< base_prefixer< CharType, PrefixType >, CharType >::instance()->erase( ios );
+				}
+				else if ( ev == std::ios_base::copyfmt_event )
+				{
 #if __GNUC__ && ( __GNUC__ < 3 || (__GNUC__ == 3 && __GNUC_MINOR__ < 3 ) )
 #	error Your compiler is too buggy; it is known to miscompile.
 #	error Known good compilers: 3.3
 #else
 
-						if ( std::basic_ostream< CharType > & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
-						{
-							o_s << base_prefixer< CharType, PrefixType >();
-						}
+					if ( std::basic_ostream< CharType > & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
+					{
+						o_s << base_prefixer< CharType, PrefixType >();
+					}
 
 #endif
-					}
 				}
 			}
 		}
 	}
-
 	/**
-	*\~english
-	*\brief		Stream operator.
-	*\remarks		Initializes the stream in order to prefix it.
-	*\param[in]	stream	The stream.
-	*\param[in]	prefix	The prefix.
-	*\~french
-	*\brief		Opérateur de flux.
-	*\remarks		Initialise le flux afin de pouvoir le préfixer.
-	*\param[in]	stream	Le flux.
-	*\param[in]	prefix	Le préfixe.
-	*/
+	 *\~english
+	 *\brief		Stream operator.
+	 *\remarks		Initializes the stream in order to prefix it.
+	 *\param[in]	stream	The stream.
+	 *\param[in]	prefix	The prefix.
+	 *\~french
+	 *\brief		Opérateur de flux.
+	 *\remarks		Initialise le flux afin de pouvoir le préfixer.
+	 *\param[in]	stream	Le flux.
+	 *\param[in]	prefix	Le préfixe.
+	 */
 	template< typename CharType, typename PrefixType >
 	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::base_prefixer< CharType, PrefixType > const & prefix )
 	{

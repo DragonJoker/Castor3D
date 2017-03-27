@@ -316,6 +316,8 @@ namespace Castor3D
 
 		// Fragment Intputs
 		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_tangentSpaceFragPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
 		auto vtx_tangent = l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) );
 		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -334,12 +336,18 @@ namespace Castor3D
 		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::eColour ) ) );
 		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::eAmbient ) ) );
 		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) || CheckFlag( p_textureFlags, TextureChannel::eRelief ) ) );
 		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
 		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
+
+		auto c3d_iLinearSearchSteps( l_writer.GetUniform< Int >( cuT( "c3d_iLinearSearchSteps" ), CheckFlag( p_textureFlags, TextureChannel::eRelief ) ) );
+		auto c3d_iBinarySearchSteps( l_writer.GetUniform< Int >( cuT( "c3d_iBinarySearchSteps" ), CheckFlag( p_textureFlags, TextureChannel::eRelief ) ) );
+		auto c3d_fDepth( l_writer.GetUniform< Float >( cuT( "c3d_fDepth" ), CheckFlag( p_textureFlags, TextureChannel::eRelief ), 0.075_f ) );
+		auto c3d_fTile( l_writer.GetUniform< Float >( cuT( "c3d_fTile" ), CheckFlag( p_textureFlags, TextureChannel::eRelief ), 1.0_f ) );
+		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 1.0_f ) );
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -367,8 +375,7 @@ namespace Castor3D
 			}
 
 			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 0.0f );
-			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
-
+			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), vtx_texture );
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };

@@ -19,6 +19,7 @@ namespace Castor3D
 			{ TextureChannel::eColour, cuT( "Colour" ) },
 			{ TextureChannel::eDiffuse, cuT( "Diffuse" ) },
 			{ TextureChannel::eNormal, cuT( "Normal" ) },
+			{ TextureChannel::eRelief, cuT( "Relief" ) },
 			{ TextureChannel::eOpacity, cuT( "Opacity" ) },
 			{ TextureChannel::eSpecular, cuT( "Specular" ) },
 			{ TextureChannel::eHeight, cuT( "Height" ) },
@@ -225,6 +226,7 @@ namespace Castor3D
 			DoPrepareTexture( TextureChannel::eDiffuse, l_index, l_opacitySource, l_opacityImage );
 
 			DoPrepareTexture( TextureChannel::eNormal, l_index );
+			DoPrepareTexture( TextureChannel::eRelief, l_index );
 			DoPrepareTexture( TextureChannel::eSpecular, l_index );
 			DoPrepareTexture( TextureChannel::eEmissive, l_index );
 			DoPrepareTexture( TextureChannel::eGloss, l_index );
