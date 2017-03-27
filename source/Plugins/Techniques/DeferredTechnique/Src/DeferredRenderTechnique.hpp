@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,12 +23,13 @@ SOFTWARE.
 #ifndef ___C3D_DeferredRenderTechnique_H___
 #define ___C3D_DeferredRenderTechnique_H___
 
+#include <LightPass.hpp>
+#include <SsaoPass.hpp>
+
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
-
-#include <LightPass.hpp>
 
 namespace deferred
 {
@@ -159,6 +160,12 @@ namespace deferred
 		//!\~english	The shader program used to render directional lights.
 		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
 		LightPasses m_lightPassShadow;
+		//!\~english	Tells if SSAO is to be used in lighting pass.
+		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
+		bool m_ssaoEnabled{ false };
+		//!\~english	The SSAO pass.
+		//!\~french		La passe SSAO.
+		std::unique_ptr< deferred_common::SsaoPass > m_ssao;
 	};
 }
 

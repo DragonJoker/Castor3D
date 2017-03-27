@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -61,7 +61,8 @@ namespace deferred_common
 		public:
 			Program( Castor3D::Scene const & p_scene
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl );
+				, Castor::String const & p_pxl
+				, bool p_ssao );
 			virtual ~Program()noexcept;
 			void Initialise( Castor3D::VertexBuffer & p_vbo
 				, Castor3D::IndexBufferSPtr p_ibo
@@ -114,6 +115,7 @@ namespace deferred_common
 			, Castor3D::Light const & p_light
 			, Castor3D::Camera const & p_camera
 			, GLSL::FogType p_fogType
+			, Castor3D::TextureLayout const * p_ssao
 			, bool p_first );
 		virtual uint32_t GetCount()const = 0;
 
@@ -121,6 +123,7 @@ namespace deferred_common
 		LightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
 			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, bool p_ssao
 			, bool p_shadows );
 		void DoInitialise( Castor3D::Scene const & p_scene
 			, Castor3D::LightType p_type
@@ -136,6 +139,7 @@ namespace deferred_common
 			, GeometryPassResult const & p_gp
 			, Castor3D::Light const & p_light
 			, GLSL::FogType p_fogType
+			, Castor3D::TextureLayout const * p_ssao
 			, bool p_first );
 		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
 			, Castor3D::LightType p_type )const;
@@ -148,6 +152,9 @@ namespace deferred_common
 		//!\~english	The engine.
 		//!\~french		Le moteur.
 		Castor3D::Engine & m_engine;
+		//!\~english	Tells if SSAO is enabled.
+		//!\~french		Dit si le SSAO est activé.
+		bool m_ssao;
 		//!\~english	Tells if shadows are enabled.
 		//!\~french		Dit si les ombres sont activées.
 		bool m_shadows;

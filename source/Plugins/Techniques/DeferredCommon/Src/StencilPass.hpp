@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -60,7 +60,7 @@ namespace deferred_common
 		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english	The pipeline used by the light pass.
 		//!\~french		Le pipeline utilisé par la passe lumières.
-		Castor3D::RenderPipelineSPtr m_pipeline;
+		Castor3D::RenderPipelineUPtr m_pipeline;
 	};
 }
 

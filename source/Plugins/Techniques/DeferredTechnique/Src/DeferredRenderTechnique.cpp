@@ -1,4 +1,4 @@
-#include "DeferredRenderTechnique.hpp"
+﻿#include "DeferredRenderTechnique.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -27,6 +27,16 @@ using namespace Castor3D;
 
 namespace deferred
 {
+	namespace
+	{
+		bool DoUsesSsao( Parameters const & p_params )
+		{
+			bool l_ssao{ false };
+			p_params.Get( cuT( "ssao" ), l_ssao );
+			return l_ssao;
+		}
+	}
+
 	String const RenderTechnique::Type = cuT( "deferred" );
 	String const RenderTechnique::Name = cuT( "Deferred Lighting Render Technique" );
 
@@ -44,6 +54,7 @@ namespace deferred
 				, false )
 			, p_params )
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
+		, m_ssaoEnabled{ DoUsesSsao( p_params ) }
 	{
 		UniformBuffer::FillSceneBuffer( m_sceneUbo );
 		m_cameraPos = m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
@@ -71,12 +82,19 @@ namespace deferred
 			l_return = DoInitialiseLightPass();
 		}
 
+		if ( l_return && m_ssaoEnabled )
+		{
+			m_ssao = std::make_unique< deferred_common::SsaoPass >( *m_renderSystem.GetEngine()
+				, m_renderTarget.GetSize() );
+		}
+
 		m_frameBuffer.m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eHighAlphaBlack ) );
 		return l_return;
 	}
 
 	void RenderTechnique::DoCleanup()
 	{
+		m_ssao.reset();
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();
 	}
@@ -107,6 +125,11 @@ namespace deferred
 		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 
+		if ( m_ssaoEnabled )
+		{
+			m_ssao->Render( m_lightPassTextures, *m_renderTarget.GetCamera() );
+		}
+
 #if DEBUG_DEFERRED_BUFFERS
 
 		int l_width = int( m_size.width() );
@@ -125,6 +148,11 @@ namespace deferred
 		l_context.RenderTexture( Position{ l_thirdWidth, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eAmbient )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_thirdWidth, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
+
+		if ( m_ssaoEnabled )
+		{
+			l_context.RenderTexture( Position{ l_twoThirdWidth, 0 }, l_size, m_ssao->GetResult() );
+		}
 
 #else
 
@@ -167,6 +195,14 @@ namespace deferred
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
+
+		//if ( m_ssaoEnabled )
+		//{
+		//	auto & l_context = *m_renderSystem.GetCurrentContext();
+		//	m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		//	l_context.RenderTexture( Position{}, m_size, m_ssao->GetResult() );
+		//	m_frameBuffer.m_frameBuffer->Unbind();
+		//}
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
@@ -239,26 +275,32 @@ namespace deferred
 		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetDirectionalShadowMap() );
 		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetPointShadowMaps() );
 		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetSpotShadowMap() );
 
 		for ( auto & l_lightPass : m_lightPass )
@@ -330,6 +372,7 @@ namespace deferred
 						, *l_light
 						, l_camera
 						, l_fogType
+						, m_ssaoEnabled ? &m_ssao->GetRaw() : nullptr
 						, p_first );
 				}
 				else
@@ -339,6 +382,7 @@ namespace deferred
 						, *l_light
 						, l_camera
 						, l_fogType
+						, m_ssaoEnabled ? &m_ssao->GetRaw() : nullptr
 						, p_first );
 				}
 

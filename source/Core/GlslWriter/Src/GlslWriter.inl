@@ -328,6 +328,14 @@ namespace GLSL
 	}
 
 	template< typename T >
+	inline T GlslWriter::GetUniform( Castor::String const & p_name, T const & p_rhs )
+	{
+		*this << Uniform() << T().m_type << p_name << cuT( " = " );
+		m_stream << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+		return T( this, p_name );
+	}
+
+	template< typename T >
 	inline T GlslWriter::GetFragData( Castor::String const & p_name, uint32_t p_index )
 	{
 		Castor::String l_name;

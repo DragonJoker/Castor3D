@@ -1,4 +1,4 @@
-#include "DeferredMsaaRenderTechnique.hpp"
+﻿#include "DeferredMsaaRenderTechnique.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -80,6 +80,13 @@ namespace deferred_msaa
 			return p_count;
 		}
 
+		bool DoUsesSsao( Parameters const & p_params )
+		{
+			bool l_ssao{ false };
+			p_params.Get( cuT( "ssao" ), l_ssao );
+			return l_ssao;
+		}
+
 		static constexpr uint32_t VertexCount = 6u;
 	}
 
@@ -102,6 +109,7 @@ namespace deferred_msaa
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 		, m_viewport{ *p_renderSystem.GetEngine() }
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
+		, m_ssaoEnabled{ DoUsesSsao( p_params ) }
 	{
 		UniformBuffer::FillSceneBuffer( m_sceneUbo );
 		m_cameraPos = m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
@@ -177,6 +185,11 @@ namespace deferred_msaa
 
 #else
 
+		if ( m_ssaoEnabled )
+		{
+			m_ssao->Render( m_lightPassTextures, *m_renderTarget.GetCamera() );
+		}
+
 		m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer
 			, Rectangle{ Position{}, GetSize() }
 			, BufferComponent::eDepth | BufferComponent::eStencil );
@@ -237,6 +250,12 @@ namespace deferred_msaa
 			l_return = DoInitialiseLightPass();
 		}
 
+		if ( l_return && m_ssaoEnabled )
+		{
+			m_ssao = std::make_unique< deferred_common::SsaoPass >( *m_renderSystem.GetEngine()
+				, m_renderTarget.GetSize() );
+		}
+
 		return l_return;
 	}
 
@@ -293,6 +312,7 @@ namespace deferred_msaa
 
 	void RenderTechnique::DoCleanupDeferred()
 	{
+		m_ssao.reset();
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();
 	}
@@ -381,26 +401,32 @@ namespace deferred_msaa
 		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPass >( *m_renderTarget.GetEngine()
 			, *m_msaaFrameBuffer
 			, *m_msaaDepthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPass >( *m_renderTarget.GetEngine()
 			, *m_msaaFrameBuffer
 			, *m_msaaDepthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPass >( *m_renderTarget.GetEngine()
 			, *m_msaaFrameBuffer
 			, *m_msaaDepthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_msaaFrameBuffer
 			, *m_msaaDepthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetDirectionalShadowMap() );
 		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_msaaFrameBuffer
 			, *m_msaaDepthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetPointShadowMaps() );
 		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_msaaFrameBuffer
 			, *m_msaaDepthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetSpotShadowMap() );
 
 		for ( auto & l_lightPass : m_lightPass )
@@ -472,6 +498,7 @@ namespace deferred_msaa
 						, *l_light
 						, l_camera
 						, l_fogType
+						, m_ssaoEnabled ? &m_ssao->GetResult() : nullptr
 						, p_first );
 				}
 				else
@@ -481,6 +508,7 @@ namespace deferred_msaa
 						, *l_light
 						, l_camera
 						, l_fogType
+						, m_ssaoEnabled ? &m_ssao->GetResult() : nullptr
 						, p_first );
 				}
 

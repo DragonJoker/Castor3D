@@ -11,6 +11,7 @@
 #include <State/DepthStencilState.hpp>
 #include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslLight.hpp>
@@ -137,7 +138,8 @@ namespace deferred_common
 
 	LightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl )
+		, String const & p_pxl
+		, bool p_ssao )
 	{
 		auto & l_engine = *p_scene.GetEngine();
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
@@ -156,6 +158,11 @@ namespace deferred_common
 		for ( int i = 0; i < int( DsTexture::eCount ); i++ )
 		{
 			m_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture( i ) ), ShaderType::ePixel )->SetValue( i );
+		}
+
+		if ( p_ssao )
+		{
+			m_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapSsao" ), ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
 		}
 	}
 
@@ -230,12 +237,14 @@ namespace deferred_common
 	LightPass::LightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
 		, RenderBufferAttachment & p_depthAttach
+		, bool p_ssao
 		, bool p_shadows )
 		: m_engine{ p_engine }
 		, m_shadows{ p_shadows }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 		, m_frameBuffer{ p_frameBuffer }
 		, m_depthAttach{ p_depthAttach }
+		, m_ssao{ p_ssao }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 	}
@@ -245,15 +254,18 @@ namespace deferred_common
 		, Light const & p_light
 		, Camera const & p_camera
 		, GLSL::FogType p_fogType
+		, Castor3D::TextureLayout const * p_ssao
 		, bool p_first )
 	{
 		DoUpdate( p_size
 			, p_light
 			, p_camera );
+
 		DoRender( p_size
 			, p_gp
 			, p_light
 			, p_fogType
+			, p_ssao
 			, p_first );
 	}
 
@@ -296,6 +308,7 @@ namespace deferred_common
 		, GeometryPassResult const & p_gp
 		, Castor3D::Light const & p_light
 		, GLSL::FogType p_fogType
+		, Castor3D::TextureLayout const * p_ssao
 		, bool p_first )
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
@@ -307,11 +320,21 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::eSpecular )]->Bind();
 		p_gp[size_t( DsTexture::eEmissive )]->Bind();
 
+		if ( p_ssao && m_ssao )
+		{
+			p_ssao->Bind( size_t( DsTexture::eCount ) );
+		}
+
 		auto & l_program = *m_programs[uint16_t( p_fogType )];
 		l_program.Render( p_size
 			, p_light
 			, GetCount()
 			, p_first );
+
+		if ( p_ssao && m_ssao )
+		{
+			p_ssao->Unbind( size_t( DsTexture::eCount ) );
+		}
 
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
 		p_gp[size_t( DsTexture::eSpecular )]->Unbind();
@@ -336,6 +359,7 @@ namespace deferred_common
 		auto c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eAmbient ) );
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
 		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		std::unique_ptr< LightingModel > l_lighting;
@@ -401,6 +425,7 @@ namespace deferred_common
 			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), c3d_v3CameraPosition );
 			auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
 			auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
+			auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), m_ssao, texture( c3d_mapSsao, l_texCoord ).r() );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
 
@@ -441,6 +466,11 @@ namespace deferred_common
 						, l_output );
 				}
 				break;
+			}
+
+			if ( m_ssao )
+			{
+				l_v3Ambient *= l_ambientOcclusion;
 			}
 
 			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() )

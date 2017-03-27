@@ -1,0 +1,384 @@
+﻿#include "SsaoPass.hpp"
+
+#include <Engine.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Render/RenderPipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Scene/Camera.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <State/BlendState.hpp>
+#include <State/DepthStencilState.hpp>
+#include <State/MultisampleState.hpp>
+#include <State/RasteriserState.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
+
+#include <GlslSource.hpp>
+#include <GlslLight.hpp>
+#include <GlslShadow.hpp>
+
+#include <random>
+
+using namespace Castor;
+using namespace Castor3D;
+
+namespace deferred_common
+{
+	namespace
+	{
+		float DoLerp( float a, float b, float f )
+		{
+			return a + f * ( b - a );
+		}
+
+		Point3fArray DoGetKernel()
+		{
+			constexpr uint32_t l_size = 64;
+			std::uniform_real_distribution< float > l_distribution( 0.0f, 1.0f );
+			std::default_random_engine l_generator;
+			Point3fArray l_result;
+			l_result.reserve( l_size );
+
+			for ( auto i = 0u; i < l_size; ++i )
+			{
+				auto l_sample = point::get_normalised( Point3f{ l_distribution( l_generator ) * 2.0f - 1.0f
+					, l_distribution( l_generator ) * 2.0f - 1.0f
+					, l_distribution( l_generator ) } );
+				l_sample *= l_distribution( l_generator );
+				auto l_scale = i / float( l_size );
+				l_scale = DoLerp( 0.1f, 1.0f, l_scale * l_scale );
+				l_sample *= l_scale;
+				l_result.push_back( l_sample );
+			}
+
+			return l_result;
+		}
+
+		TextureUnit DoGetNoise( Engine & p_engine )
+		{
+			constexpr uint32_t l_size = 16;
+			std::uniform_real_distribution< float > l_distribution( 0.0f, 1.0f );
+			std::default_random_engine l_generator;
+			Point3fArray l_noise;
+			l_noise.reserve( l_size );
+
+			for ( auto i = 0u; i < l_size; i++ )
+			{
+				l_noise.emplace_back( l_distribution( l_generator ) * 2.0 - 1.0
+					, l_distribution( l_generator ) * 2.0 - 1.0
+					, 0.0f );
+			}
+
+			auto l_buffer = PxBufferBase::create( Size{ 4, 4 }
+				, PixelFormat::eRGB32F
+				, reinterpret_cast< uint8_t const * >( l_noise[0].const_ptr() )
+				, PixelFormat::eRGB32F );
+
+			auto l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+				, AccessType::eNone
+				, AccessType::eRead );
+			l_texture->SetSource( l_buffer );
+
+			SamplerSPtr l_sampler;
+
+			if ( p_engine.GetSamplerCache().Has( cuT( "SSAO_Noise" ) ) )
+			{
+				l_sampler = p_engine.GetSamplerCache().Find( cuT( "SSAO_Noise" ) );
+			}
+			else
+			{
+				l_sampler = p_engine.GetSamplerCache().Add( cuT( "SSAO_Noise" ) );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
+				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eRepeat );
+			}
+
+			TextureUnit l_result{ p_engine };
+			l_result.SetSampler( l_sampler );
+			l_result.SetTexture( l_texture );
+			l_result.Initialise();
+			l_result.SetIndex( 2u );
+			return l_result;
+		}
+
+		String DoGetVertexProgram( Engine & p_engine )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			String l_vtx;
+			{
+				using namespace GLSL;
+				auto l_writer = l_renderSystem.CreateGlslWriter();
+
+				UBO_MATRIX( l_writer );
+
+				// Shader inputs
+				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+
+				// Shader outputs
+				auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+				l_writer.ImplementFunction< void >( cuT( "main" )
+					, [&]()
+					{
+						vtx_texture = texture;
+						gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+					} );
+				l_vtx = l_writer.Finalise();
+			}
+
+			return l_vtx;
+		}
+
+		ShaderProgramSPtr DoGetSsaoProgram( Engine & p_engine )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			String l_pxl;
+			{
+				using namespace GLSL;
+				auto l_writer = l_renderSystem.CreateGlslWriter();
+
+				// Shader inputs
+				UBO_MATRIX( l_writer );
+				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+				auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapPosition" ) );
+				auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
+				auto c3d_mapNoise = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
+
+				Ubo l_ssaoConfig{ l_writer, cuT( "SsaoConfig" ) };
+				auto c3d_kernel = l_ssaoConfig.GetUniform< Vec3 >( cuT( "c3d_kernel" ), 64u );
+				auto c3d_kernelSize = l_ssaoConfig.GetUniform< Int >( cuT( "c3d_kernelSize" ) );
+				auto c3d_radius = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_radius" ) );
+				auto c3d_bias = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_bias" ) );
+				auto c3d_noiseScale = l_ssaoConfig.GetUniform< Vec2 >( cuT( "c3d_noiseScale" ) );
+				l_ssaoConfig.End();
+
+				// Shader outputs
+				auto pxl_fragColor = l_writer.GetFragData< Float >( cuT( "pxl_fragColor" ), 0u );
+
+				l_writer.ImplementFunction< Void >( cuT( "main" )
+					, [&]()
+					{
+						auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), texture( c3d_mapPosition, vtx_texture ).xyz() );
+						l_fragPos = l_writer.Paren( c3d_mtxView * vec4( l_fragPos, 1.0 ) ).xyz();
+						auto l_normal = l_writer.GetLocale( cuT( "l_normal" ), texture( c3d_mapNormal, vtx_texture ).rgb() );
+						auto l_randomVec = l_writer.GetLocale( cuT( "l_randomVec" ), texture( c3d_mapNoise, vtx_texture * c3d_noiseScale ).xyz() );
+						auto l_tangent = l_writer.GetLocale( cuT( "l_tangent" ), normalize( l_randomVec - l_normal * dot( l_randomVec, l_normal ) ) );
+						auto l_bitangent = l_writer.GetLocale( cuT( "l_bitangent" ), cross( l_normal, l_tangent ) );
+						auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), mat3( l_tangent, l_bitangent, l_normal ) );
+						auto l_occlusion = l_writer.GetLocale( cuT( "l_occlusion" ), 0.0_f );
+
+						FOR( l_writer, Int, i, 0, cuT( "i < c3d_kernelSize" ), cuT( "++i" ) )
+						{
+							// get sample position
+							auto l_sample = l_writer.GetLocale( cuT( "l_sample" ), l_tbn * c3d_kernel[i] ); // From tangent to view-space
+							l_sample = l_fragPos + l_sample * c3d_radius;
+							auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec4( l_sample, 1.0 ) );
+							l_offset = c3d_mtxProjection * l_offset;      // from view to clip-space
+							l_offset.xyz() /= l_offset.w();               // perspective divide
+							l_offset.xyz() = l_offset.xyz() * 0.5 + 0.5;  // transform to range 0.0 - 1.0 
+							auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), texture( c3d_mapPosition, l_offset.xy() ).z() );
+							auto l_rangeCheck = l_writer.GetLocale( cuT( "l_rangeCheck" ), smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( l_fragPos.z() - l_sampleDepth ) ) );
+							l_occlusion += l_writer.Ternary( l_sampleDepth >= l_sample.z() + c3d_bias, 1.0_f, 0.0_f ) * l_rangeCheck;
+						}
+						ROF;
+
+						l_occlusion = 1.0_f - ( l_occlusion / c3d_kernelSize );
+						pxl_fragColor = l_occlusion;
+					} );
+				l_pxl = l_writer.Finalise();
+			}
+
+			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
+			l_program->CreateObject( ShaderType::eVertex );
+			l_program->CreateObject( ShaderType::ePixel );
+			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapPosition" ), ShaderType::ePixel )->SetValue( 0 );
+			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->SetValue( 1 );
+			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->SetValue( 2 );
+			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
+			l_program->SetSource( ShaderType::eVertex, l_model, DoGetVertexProgram( p_engine ) );
+			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_program->Initialise();
+			return l_program;
+		}
+
+		ShaderProgramSPtr DoGetBlurProgram( Engine & p_engine )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			String l_vtx = DoGetVertexProgram( p_engine );
+			String l_pxl;
+			{
+				using namespace GLSL;
+				auto l_writer = l_renderSystem.CreateGlslWriter();
+
+				// Shader inputs
+				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+				auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
+
+				// Shader outputs
+				auto pxl_fragColor = l_writer.GetFragData< Float >( cuT( "pxl_fragColor" ), 0u );
+
+				l_writer.ImplementFunction< Void >( cuT( "main" )
+					, [&]()
+					{
+						auto l_texelSize = l_writer.GetLocale( cuT( "l_texelSize" ), vec2( 1.0_f, 1.0_f ) / vec2( textureSize( c3d_mapColour, 0 ) ) );
+						auto l_result = l_writer.GetLocale( cuT( "l_result" ), 0.0_f );
+
+						FOR( l_writer, Int, x, -2, cuT( "x < 2" ), cuT( "++x" ) )
+						{
+							FOR( l_writer, Int, y, -2, cuT( "y < 2" ), cuT( "++y" ) )
+							{
+								auto l_offset = l_writer.GetLocale( cuT( "l_result" ), vec2( l_writer.Cast< Float >( x ), l_writer.Cast< Float >( y ) ) * l_texelSize );
+								l_result += texture( c3d_mapColour, vtx_texture + l_offset ).r();
+							}
+							ROF;
+						}
+						ROF;
+
+						pxl_fragColor = l_result / ( 4.0 * 4.0 );
+					} );
+				l_pxl = l_writer.Finalise();
+			}
+
+			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
+			l_program->CreateObject( ShaderType::eVertex );
+			l_program->CreateObject( ShaderType::ePixel );
+			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->SetValue( 0 );
+			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
+			l_program->SetSource( ShaderType::eVertex, l_model, DoGetVertexProgram( p_engine ) );
+			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_program->Initialise();
+			return l_program;
+		}
+
+		RenderPipelineUPtr DoCreatePipeline( Engine & p_engine
+			, ShaderProgram & p_program )
+		{
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::eZero );
+			RasteriserState l_rsstate;
+			l_rsstate.SetCulledFaces( Culling::eNone );
+			return p_engine.GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate )
+				, std::move( l_rsstate )
+				, BlendState{}
+				, MultisampleState{}
+				, p_program
+				, PipelineFlags{} );
+		}
+	}
+
+	SsaoPass::SsaoPass( Engine & p_engine
+		, Size const & p_size )
+		: m_size{ p_size }
+		, m_matrixUbo{ ShaderProgram::BufferMatrix
+			, *p_engine.GetRenderSystem() }
+		, m_ssaoKernel{ DoGetKernel() }
+		, m_ssaoNoise{ DoGetNoise( p_engine ) }
+		, m_ssaoProgram{ DoGetSsaoProgram( p_engine ) }
+		, m_ssaoConfig{ cuT( "SsaoConfig" )
+			, *p_engine.GetRenderSystem() }
+		, m_blurProgram{ DoGetBlurProgram( p_engine ) }
+	{
+		float const l_wScale = p_size.width() / 4.0f;
+		float const l_hScale = p_size.height() / 4.0f;
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		m_viewMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
+		m_kernelUniform = m_ssaoConfig.CreateUniform< UniformType::eVec3f >( cuT( "c3d_kernel" ), 64u );
+		m_ssaoConfig.CreateUniform< UniformType::eInt >( cuT( "c3d_kernelSize" ) )->SetValue( 64 );
+		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->SetValue( 0.5f );
+		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->SetValue( 0.025f );
+		m_ssaoConfig.CreateUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->SetValue( Point2f( l_wScale, l_hScale ) );
+
+		m_kernelUniform->SetValues( m_ssaoKernel );
+
+		m_fbo = p_engine.GetRenderSystem()->CreateFrameBuffer();
+		m_ssaoResult = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			, AccessType::eNone
+			, AccessType::eRead | AccessType::eWrite );
+		m_ssaoResult->SetSource( PxBufferBase::create( p_size
+			, PixelFormat::eL32F ) );
+		m_ssaoResult->Initialise();
+		m_ssaoResultAttach = m_fbo->CreateAttachment( m_ssaoResult );
+		m_ssaoResultAttach->SetTarget( TextureType::eTwoDimensions );
+		m_ssaoPipeline = DoCreatePipeline( p_engine, *m_ssaoProgram );
+		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo );
+		m_ssaoPipeline->AddUniformBuffer( m_ssaoConfig );
+
+		m_fbo->Create();
+		m_fbo->Initialise( m_size );
+
+		m_blurResult = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			, AccessType::eNone
+			, AccessType::eRead | AccessType::eWrite );
+		m_blurResult->SetSource( PxBufferBase::create( p_size
+			, PixelFormat::eL32F ) );
+		m_blurResult->Initialise();
+		m_blurResultAttach = m_fbo->CreateAttachment( m_blurResult );
+		m_blurResultAttach->SetTarget( TextureType::eTwoDimensions );
+
+		m_blurPipeline = DoCreatePipeline( p_engine, *m_blurProgram );
+		m_blurPipeline->AddUniformBuffer( m_matrixUbo );
+
+		m_colour = std::make_unique< RenderColourToTexture >( *p_engine.GetRenderSystem()->GetMainContext(), m_matrixUbo );
+		m_colour->Initialise();
+	}
+
+	SsaoPass::~SsaoPass()
+	{
+		m_viewMatrix.reset();
+		m_ssaoPipeline->Cleanup();
+		m_ssaoPipeline.reset();
+		m_matrixUbo.Cleanup();
+		m_ssaoConfig.Cleanup();
+		m_ssaoProgram.reset();
+		m_ssaoNoise.Cleanup();
+		m_colour->Cleanup();
+		m_colour.reset();
+		m_fbo->Bind();
+		m_fbo->DetachAll();
+		m_fbo->Unbind();
+		m_fbo->Cleanup();
+		m_fbo->Destroy();
+		m_fbo.reset();
+		m_ssaoResult->Cleanup();
+		m_ssaoResult.reset();
+	}
+
+	void SsaoPass::Render( GeometryPassResult const & p_gp
+		, Camera const & p_camera )
+	{
+		m_fbo->Bind( FrameBufferTarget::eDraw );
+		// Render SSAO
+		m_ssaoResultAttach->Attach( AttachmentPoint::eColour, 0u );
+		m_fbo->SetDrawBuffer( m_ssaoResultAttach );
+		m_fbo->Clear( BufferComponent::eColour );
+		m_viewMatrix->SetValue( p_camera.GetView() );
+		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Bind( 1u );
+		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Bind( 1u );
+		m_ssaoNoise.Bind();
+		m_colour->Render( Position{}
+			, m_size
+			, *p_gp[size_t( DsTexture::ePosition )]->GetTexture()
+			, m_matrixUbo
+			, *m_ssaoPipeline );
+		m_ssaoNoise.Unbind();
+		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Unbind( 1u );
+		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Unbind( 1u );
+
+		// Blur SSAO
+		m_ssaoResultAttach->Attach( AttachmentPoint::eColour, 0u );
+		m_fbo->SetDrawBuffer( m_ssaoResultAttach );
+		m_fbo->Clear( BufferComponent::eColour );
+		m_colour->Render( Position{}
+			, m_size
+			, *m_ssaoResult
+			, m_matrixUbo
+			, *m_blurPipeline );
+		m_fbo->Unbind();
+	}
+}

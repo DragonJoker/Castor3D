@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -29,6 +29,7 @@ SOFTWARE.
 #include <Shader/UniformBuffer.hpp>
 
 #include <LightPass.hpp>
+#include <SsaoPass.hpp>
 
 namespace deferred_msaa
 {
@@ -219,6 +220,12 @@ namespace deferred_msaa
 		//!\~english	The technique blit rectangle.
 		//!\~french		Le rectangle de blit de la technique.
 		Castor::Rectangle m_rect;
+		//!\~english	Tells if SSAO is to be used in lighting pass.
+		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
+		bool m_ssaoEnabled{ false };
+		//!\~english	The SSAO pass.
+		//!\~french		La passe SSAO.
+		std::unique_ptr< deferred_common::SsaoPass > m_ssao;
 	};
 }
 

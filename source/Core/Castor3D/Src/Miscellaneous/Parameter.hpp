@@ -82,13 +82,13 @@ namespace Castor3D
 
 				Castor::StringArray l_paramNameValue = Castor::string::split( l_param, cuT( "=" ), 2, false );
 
-				if ( l_param.size() > 1 )
+				if ( l_paramNameValue.size() > 1 )
 				{
 					Add( l_paramNameValue[0], l_paramNameValue[1] );
 				}
 				else
 				{
-					Add( l_param, cuT( "true" ) );
+					Add( l_param, true );
 				}
 			}
 		}

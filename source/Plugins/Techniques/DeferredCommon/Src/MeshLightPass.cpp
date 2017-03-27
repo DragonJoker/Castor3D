@@ -1,4 +1,4 @@
-#include "MeshLightPass.hpp"
+﻿#include "MeshLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -23,8 +23,9 @@ namespace deferred_common
 
 	MeshLightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl )
-		: LightPass::Program{ p_scene, p_vtx, p_pxl }
+		, String const & p_pxl
+		, bool p_ssao )
+		: LightPass::Program{ p_scene, p_vtx, p_pxl, p_ssao }
 	{
 	}
 
@@ -68,8 +69,9 @@ namespace deferred_common
 		, FrameBuffer & p_frameBuffer
 		, RenderBufferAttachment & p_depthAttach
 		, LightType p_type
+		, bool p_ssao
 		, bool p_shadows )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, p_shadows }
 		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
 		, m_stencilPass{ p_frameBuffer, p_depthAttach, m_matrixUbo, m_modelMatrixUbo }
 		, m_type{ p_type }
