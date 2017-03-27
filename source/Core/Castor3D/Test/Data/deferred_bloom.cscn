@@ -52,7 +52,7 @@ scene "Scene"
 		parent "PointLightNode"
 		mesh "LightMesh"
 		{
-			type sphere 20 1
+			type "sphere" -subdiv=20 -radius=1
 		}
 		material "WhiteEmit"
 	}
@@ -78,7 +78,7 @@ scene "Scene"
 		parent "FinalNode"
 		mesh "FinalMesh"
 		{
-			type cube 25 25 25
+			type "cube" -width=25 -height=25 -depth=25
 		}
 		material "Silver"
 	}

@@ -171,6 +171,6 @@ namespace forward_msaa
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
-		return p_file.WriteText( cuT( " -samples_count " ) + string::to_string( m_samplesCount ) ) > 0;
+		return p_file.WriteText( cuT( " -samples_count=" ) + string::to_string( m_samplesCount ) ) > 0;
 	}
 }

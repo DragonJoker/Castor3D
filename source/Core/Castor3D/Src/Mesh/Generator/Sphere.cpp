@@ -1,7 +1,9 @@
-#include "Sphere.hpp"
+﻿#include "Sphere.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+
+#include "Miscellaneous/Parameter.hpp"
 
 using namespace Castor3D;
 using namespace Castor;
@@ -22,10 +24,19 @@ MeshGeneratorSPtr Sphere::Create()
 	return std::make_shared< Sphere >();
 }
 
-void Sphere::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Sphere::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 {
-	m_nbFaces = p_faces[0];
-	m_radius = std::abs( p_dimensions[0] );
+	String l_param;
+
+	if ( p_parameters.Get( cuT( "subdiv" ), l_param ) )
+	{
+		m_nbFaces = string::to_uint( l_param );
+	}
+
+	if ( p_parameters.Get( cuT( "radius" ), l_param ) )
+	{
+		m_radius = string::to_float( l_param );
+	}
 
 	if ( m_nbFaces >= 3 )
 	{

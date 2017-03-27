@@ -1,4 +1,4 @@
-#include "FbxImporter.hpp"
+﻿#include "FbxImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
@@ -20,44 +20,50 @@ using namespace Castor;
 #	endif
 #endif
 
-C3D_Fbx_API void GetRequiredVersion( Version & p_version )
-{
-	p_version = Version();
-}
-
-C3D_Fbx_API PluginType GetType()
-{
-	return PluginType::eImporter;
-}
-
-C3D_Fbx_API String GetName()
-{
-	return cuT( "FBX Importer" );
-}
-
-C3D_Fbx_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
+Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::ExtensionArray l_extensions;
 	l_extensions.push_back( ImporterPlugin::Extension( cuT( "FBX" ), cuT( "Autodesk FBX" ) ) );
 	return l_extensions;
 }
 
-C3D_Fbx_API void OnLoad( Castor3D::Engine * p_engine )
+extern "C"
 {
-	auto l_extensions = GetExtensions( p_engine );
-
-	for ( auto const & l_extension : l_extensions )
+	C3D_Fbx_API void GetRequiredVersion( Castor3D::Version * p_version )
 	{
-		p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &C3dFbx::FbxSdkImporter::Create );
+		*p_version = Castor3D::Version();
 	}
-}
 
-C3D_Fbx_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	auto l_extensions = GetExtensions( p_engine );
-
-	for ( auto const & l_extension : l_extensions )
+	C3D_Fbx_API void GetType( Castor3D::PluginType * p_type )
 	{
-		p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+		*p_type = Castor3D::PluginType::eImporter;
+	}
+
+	C3D_Fbx_API void GetName( char const ** p_name )
+	{
+		static Castor::String Name = cuT( "FBX Importer" );
+		*p_name = Name.c_str();
+	}
+
+	C3D_Fbx_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	{
+		auto l_plugin = static_cast< Castor3D::ImporterPlugin * >( p_plugin );
+		auto l_extensions = GetExtensions( p_engine );
+
+		for ( auto const & l_extension : l_extensions )
+		{
+			l_plugin->AddExtension( l_extension );
+			p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &C3dFbx::FbxSdkImporter::Create );
+		}
+	}
+
+	C3D_Fbx_API void OnUnload( Castor3D::Engine * p_engine )
+	{
+		auto l_extensions = GetExtensions( p_engine );
+
+		for ( auto const & l_extension : l_extensions )
+		{
+			p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+		}
 	}
 }

@@ -1,7 +1,8 @@
-#include "Icosahedron.hpp"
+﻿#include "Icosahedron.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Miscellaneous/Parameter.hpp"
 
 #include <Math/SphericalVertex.hpp>
 
@@ -24,9 +25,14 @@ MeshGeneratorSPtr Icosahedron::Create()
 	return std::make_shared< Icosahedron >();
 }
 
-void Icosahedron::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Icosahedron::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 {
-	m_radius = p_dimensions[0];
+	String l_param;
+
+	if ( p_parameters.Get( cuT( "radius" ), l_param ) )
+	{
+		m_radius = string::to_float( l_param );
+	}
 
 	if ( m_radius < 0 )
 	{

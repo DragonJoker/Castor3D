@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -646,6 +646,16 @@ namespace Castor3D
 	class RenderLoopSync;
 	class RenderQueue;
 	class ShadowMap;
+	class RenderColourCubeToTexture;
+	class RenderColourCubeLayerToTexture;
+	class RenderColourLayerToTexture;
+	class RenderColourToCube;
+	class RenderColourToTexture;
+	class RenderDepthCubeToTexture;
+	class RenderDepthCubeLayerToTexture;
+	class RenderDepthLayerToTexture;
+	class RenderDepthToCube;
+	class TextureProjection;
 
 	template< typename T >
 	class GpuBuffer;
@@ -680,6 +690,16 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( ShadowMap );
+	DECLARE_SMART_PTR( RenderColourCubeToTexture );
+	DECLARE_SMART_PTR( RenderColourCubeLayerToTexture );
+	DECLARE_SMART_PTR( RenderColourLayerToTexture );
+	DECLARE_SMART_PTR( RenderColourToCube );
+	DECLARE_SMART_PTR( RenderColourToTexture );
+	DECLARE_SMART_PTR( RenderDepthCubeToTexture );
+	DECLARE_SMART_PTR( RenderDepthCubeLayerToTexture );
+	DECLARE_SMART_PTR( RenderDepthLayerToTexture );
+	DECLARE_SMART_PTR( RenderDepthToCube );
+	DECLARE_SMART_PTR( TextureProjection );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );

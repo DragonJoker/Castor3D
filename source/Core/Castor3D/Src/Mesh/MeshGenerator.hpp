@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -48,14 +48,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		explicit MeshGenerator( MeshType p_eMeshType = MeshType::eCustom );
+		C3D_API explicit MeshGenerator( MeshType p_eMeshType = MeshType::eCustom );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~MeshGenerator();
+		C3D_API virtual ~MeshGenerator();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory
@@ -69,15 +69,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Generates the mesh.
 		 *\param[in]	p_mesh			The mesh.
-		 *\param[in]	p_faces			The faces counts.
-		 *\param[in]	p_dimensions	The mesh dimensions.
+		 *\param[in]	p_parameters	The generator parameters.
 		 *\~french
 		 *\brief		Génère le maillage.
 		 *\param[in]	p_mesh			Le maillage.
-		 *\param[in]	p_faces			Les nombres de faces.
-		 *\param[in]	p_dimensions	Les dimensions du maillage.
+		 *\param[in]	p_parameters	Les paramètres du générateur.
 		 */
-		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void Generate( Mesh & p_mesh, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents.
@@ -88,7 +86,7 @@ namespace Castor3D
 		 *\param[in]	p_mesh		Le maillage.
 		 *\param[in]	p_reverted	Dit si l'espace tangent généré doit être inversé.
 		 */
-		virtual void ComputeNormals( Mesh & p_mesh, bool p_reverted = false );
+		C3D_API virtual void ComputeNormals( Mesh & p_mesh, bool p_reverted = false );
 		/**
 		 *\~english
 		 *\brief		Retrieves the mesh type
@@ -107,15 +105,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Generates the mesh.
 		 *\param[in]	p_mesh			The mesh.
-		 *\param[in]	p_faces			The faces counts.
-		 *\param[in]	p_dimensions	The mesh dimensions.
+		 *\param[in]	p_parameters	The generator parameters.
 		 *\~french
 		 *\brief		Génère le maillage.
 		 *\param[in]	p_mesh			Le maillage.
-		 *\param[in]	p_faces			Les nombres de faces.
-		 *\param[in]	p_dimensions	Les dimensions du maillage.
+		 *\param[in]	p_parameters	Les paramètres du générateur.
 		 */
-		virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		virtual void DoGenerate( Mesh & p_mesh, Parameters const & p_parameters );
 
 	private:
 		//!\~english The mesh type	\~french Le type de mesh

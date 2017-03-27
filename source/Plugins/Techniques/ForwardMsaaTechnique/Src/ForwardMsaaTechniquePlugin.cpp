@@ -1,4 +1,4 @@
-#include "ForwardMsaaRenderTechnique.hpp"
+﻿#include "ForwardMsaaRenderTechnique.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
@@ -21,27 +21,31 @@
 #	endif
 #endif
 
-C3D_ForwardMsaaTechnique_API void GetRequiredVersion( Castor3D::Version & p_version )
+extern "C"
 {
-	p_version = Castor3D::Version();
-}
+	C3D_ForwardMsaaTechnique_API void GetRequiredVersion( Castor3D::Version * p_version )
+	{
+		*p_version = Castor3D::Version();
+	}
 
-C3D_ForwardMsaaTechnique_API Castor3D::PluginType GetType()
-{
-	return Castor3D::PluginType::eTechnique;
-}
+	C3D_ForwardMsaaTechnique_API void GetType( Castor3D::PluginType * p_type )
+	{
+		*p_type = Castor3D::PluginType::eTechnique;
+	}
 
-C3D_ForwardMsaaTechnique_API Castor::String GetName()
-{
-	return forward_msaa::RenderTechnique::Name;
-}
+	C3D_ForwardMsaaTechnique_API void GetName( char const ** p_name )
+	{
+		*p_name = forward_msaa::RenderTechnique::Name.c_str();
+	}
 
-C3D_ForwardMsaaTechnique_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	p_engine->GetTechniqueFactory().Register( forward_msaa::RenderTechnique::Type, &forward_msaa::RenderTechnique::CreateInstance );
-}
+	C3D_ForwardMsaaTechnique_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	{
+		p_engine->GetTechniqueFactory().Register( forward_msaa::RenderTechnique::Type
+			, &forward_msaa::RenderTechnique::CreateInstance );
+	}
 
-C3D_ForwardMsaaTechnique_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	p_engine->GetTechniqueFactory().Unregister( forward_msaa::RenderTechnique::Type );
+	C3D_ForwardMsaaTechnique_API void OnUnload( Castor3D::Engine * p_engine )
+	{
+		p_engine->GetTechniqueFactory().Unregister( forward_msaa::RenderTechnique::Type );
+	}
 }

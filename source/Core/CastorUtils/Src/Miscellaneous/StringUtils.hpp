@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -118,6 +118,58 @@ namespace Castor
 		 *\return		Le long long contenu dans le String
 		 */
 		CU_API long long to_long_long( String const & p_str, std::locale const & p_locale = std::locale() );
+		/**
+		 *\~english
+		 *\brief		Retrieves an unsigned short from a given String
+		 *\param[in]	p_str		The String
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The unsigned short contained in the String
+		 *\~french
+		 *\brief		Récupère un unsigned short à partir d'un String
+		 *\param[in]	p_str		Un String
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		L'unsigned short contenu dans le String
+		 */
+		CU_API unsigned short to_ushort( String const & p_str, std::locale const & p_locale = std::locale() );
+		/**
+		 *\~english
+		 *\brief		Retrieves an unsigned int from a given String
+		 *\param[in]	p_str		The String
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The unsigned int contained in the String
+		 *\~french
+		 *\brief		Récupère un unsigned int à partir d'un String
+		 *\param[in]	p_str		Un String
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		L'unsigned int contenu dans le String
+		 */
+		CU_API unsigned int to_uint( String const & p_str, std::locale const & p_locale = std::locale() );
+		/**
+		 *\~english
+		 *\brief		Retrieves an unsigned long from a given String
+		 *\param[in]	p_str		The String
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The unsigned long contained in the String
+		 *\~french
+		 *\brief		Récupère un unsigned long à partir d'un String
+		 *\param[in]	p_str		Un String
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		L'unsigned long contenu dans le String
+		 */
+		CU_API unsigned long to_ulong( String const & p_str, std::locale const & p_locale = std::locale() );
+		/**
+		 *\~english
+		 *\brief		Retrieves an unsigned long long from a given String
+		 *\param[in]	p_str		The String
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The unsigned long long contained in the String
+		 *\~french
+		 *\brief		Récupère un unsigned long long à partir d'un String
+		 *\param[in]	p_str		Un String
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		L'unsigned long long contenu dans le String
+		 */
+		CU_API unsigned long long to_ulong_long( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a float from a given String

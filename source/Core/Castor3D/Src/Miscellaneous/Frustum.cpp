@@ -166,7 +166,7 @@ namespace Castor3D
 			++i;
 		}
 
-		return l_return != Intersection::eOut;
+		return true;// l_return != Intersection::eOut;
 	}
 
 	bool Frustum::IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const
@@ -192,7 +192,7 @@ namespace Castor3D
 			++i;
 		}
 
-		return l_return != Intersection::eOut;
+		return true;// l_return != Intersection::eOut;
 	}
 
 	bool Frustum::IsVisible( Point3r const & p_point )const
@@ -203,6 +203,6 @@ namespace Castor3D
 			return p_plane.Distance( p_point ) < 0;
 		} );
 
-		return l_it == m_planes.end();
+		return true;// l_it == m_planes.end();
 	}
 }

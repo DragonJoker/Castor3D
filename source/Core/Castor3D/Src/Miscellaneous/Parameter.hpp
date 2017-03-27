@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -60,6 +60,37 @@ namespace Castor3D
 		 */
 		C3D_API ~Parameters()
 		{
+		}
+		/**
+		 *\~english
+		 *\brief		Parses the given text into a parameters list.
+		 *\param[in]	p_text	The source text.
+		 *\~french
+		 *\brief		Analyse le texte donné en une liste de paramètres.
+		 *\param[in]	p_text	Le texte source.
+		 */
+		C3D_API void Parse( Castor::String const & p_text )
+		{
+			Castor::StringArray l_params = Castor::string::split( p_text, cuT( " " ), 0xFFFFFFFF, false );
+
+			for ( auto l_param : l_params )
+			{
+				if ( l_param.find( cuT( "-" ) ) != Castor::String::npos )
+				{
+					l_param = l_param.substr( 1 );
+				}
+
+				Castor::StringArray l_paramNameValue = Castor::string::split( l_param, cuT( "=" ), 2, false );
+
+				if ( l_param.size() > 1 )
+				{
+					Add( l_paramNameValue[0], l_paramNameValue[1] );
+				}
+				else
+				{
+					Add( l_param, cuT( "true" ) );
+				}
+			}
 		}
 		/**
 		 *\~english

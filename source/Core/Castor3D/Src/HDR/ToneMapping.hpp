@@ -151,6 +151,9 @@ namespace Castor3D
 		//!\~english	The configuration data UBO.
 		//!\~french		L'UBO de données de configuration.
 		UniformBuffer m_configUbo;
+		//!\~english	The pipeline used to render the tone mapping.
+		//!\~french		Le pipeline utilisé pour le rendu du mappage de tons.
+		RenderColourToTextureUPtr m_colour;
 		//!\~english	The configuration constants buffer name.
 		//!\~french		Le nom du tampon de constantes de configuration.
 		C3D_API static Castor::String const HdrConfig;

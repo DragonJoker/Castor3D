@@ -194,91 +194,98 @@ namespace Castor3D
 
 	void BillboardBase::Update()
 	{
-		m_vertexBuffer->Bind();
-		uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
-		auto l_gpuBuffer = m_vertexBuffer->Lock( 0, m_count * l_stride, AccessType::eRead | AccessType::eWrite );
-
-		if ( l_gpuBuffer )
+		if ( m_count )
 		{
-			struct Element
+			m_vertexBuffer->Bind();
+			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
+			auto l_gpuBuffer = m_vertexBuffer->Lock( 0, m_count * l_stride, AccessType::eRead | AccessType::eWrite );
+
+			if ( l_gpuBuffer )
 			{
-				uint8_t * m_buffer;
-				Coords3r m_position;
-				uint32_t m_stride;
-
-				Element( uint8_t * p_buffer, uint32_t p_offset, uint32_t p_stride )
-					: m_buffer{ p_buffer }
-					, m_position{ reinterpret_cast< real * >( p_buffer + p_offset ) }
-					, m_stride{ p_stride }
+				struct Element
 				{
-				}
+					uint8_t * m_buffer;
+					Coords3r m_position;
+					uint32_t m_stride;
 
-				Element( Element const & p_rhs )
-					: m_buffer{ p_rhs.m_buffer }
-					, m_position{ p_rhs.m_position }
-					, m_stride{ p_rhs.m_stride }
-				{
-				}
-
-				Element( Element && p_rhs )
-					: m_buffer{ p_rhs.m_buffer }
-					, m_position{ std::move( p_rhs.m_position ) }
-					, m_stride{ p_rhs.m_stride }
-				{
-					p_rhs.m_buffer = nullptr;
-				}
-
-				Element & operator=( Element const & p_rhs )
-				{
-					std::memcpy( m_buffer, p_rhs.m_buffer, m_stride );
-					return *this;
-				}
-
-				Element & operator=( Element && p_rhs )
-				{
-					if ( &p_rhs != this )
+					Element( uint8_t * p_buffer
+						, uint32_t p_offset
+						, uint32_t p_stride )
+						: m_buffer{ p_buffer }
+						  , m_position{ reinterpret_cast< real * >( p_buffer + p_offset ) }
+						  , m_stride{ p_stride }
 					{
-						m_buffer = p_rhs.m_buffer;
-						m_position = std::move( p_rhs.m_position );
+					}
+
+					Element( Element const & p_rhs )
+						: m_buffer{ p_rhs.m_buffer }
+						  , m_position{ p_rhs.m_position }
+						  , m_stride{ p_rhs.m_stride }
+					{
+					}
+
+					Element( Element && p_rhs )
+						: m_buffer{ p_rhs.m_buffer }
+						  , m_position{ std::move( p_rhs.m_position ) }
+						  , m_stride{ p_rhs.m_stride }
+					{
 						p_rhs.m_buffer = nullptr;
 					}
-					return *this;
-				}
-			};
 
-			ByteArray l_copy{ l_gpuBuffer, l_gpuBuffer + ( l_stride * m_count ) };
-			std::vector< Element > l_elements;
-			auto l_buffer = l_copy.data();
-			l_elements.reserve( m_count );
+					Element & operator=( Element const & p_rhs )
+					{
+						std::memcpy( m_buffer, p_rhs.m_buffer, m_stride );
+						return *this;
+					}
 
-			for ( uint32_t i = 0u; i < m_count; ++i )
-			{
-				l_elements.emplace_back( l_buffer, m_centerOffset, l_stride );
-				l_buffer += l_stride;
-			}
+					Element & operator=( Element && p_rhs )
+					{
+						if ( &p_rhs != this )
+						{
+							m_buffer = p_rhs.m_buffer;
+							m_position = std::move( p_rhs.m_position );
+							p_rhs.m_buffer = nullptr;
+						}
+						return *this;
+					}
+				};
 
-			try
-			{
-				std::sort( l_elements.begin(), l_elements.end(), [this]( Element const & p_a, Element const & p_b )
+				ByteArray l_copy{ l_gpuBuffer, l_gpuBuffer + ( l_stride * m_count ) };
+				std::vector< Element > l_elements;
+				auto l_buffer = l_copy.data();
+				l_elements.reserve( m_count );
+
+				for ( uint32_t i = 0u; i < m_count; ++i )
 				{
-					return point::length_squared( p_a.m_position - m_cameraPosition ) > point::length_squared( p_b.m_position - m_cameraPosition );
-				} );
-
-				for ( auto & l_element : l_elements )
-				{
-					std::memcpy( l_gpuBuffer, l_element.m_buffer, l_stride );
-					l_gpuBuffer += l_stride;
+					l_elements.emplace_back( l_buffer, m_centerOffset, l_stride );
+					l_buffer += l_stride;
 				}
-			}
-			catch ( Exception const & p_exc )
-			{
-				Logger::LogError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
+
+				try
+				{
+					std::sort( l_elements.begin(), l_elements.end(), [this]( Element const & p_a
+						, Element const & p_b )
+						{
+							return point::length_squared( p_a.m_position - m_cameraPosition )
+								   > point::length_squared( p_b.m_position - m_cameraPosition );
+						} );
+
+					for ( auto & l_element : l_elements )
+					{
+						std::memcpy( l_gpuBuffer, l_element.m_buffer, l_stride );
+						l_gpuBuffer += l_stride;
+					}
+				}
+				catch ( Exception const & p_exc )
+				{
+					Logger::LogError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what());
+				}
+
+				m_vertexBuffer->Unlock();
 			}
 
-			m_vertexBuffer->Unlock();
+			m_vertexBuffer->Unbind();
 		}
-
-		m_vertexBuffer->Unbind();
 	}
 
 	ProgramFlags BillboardBase::GetProgramFlags()const

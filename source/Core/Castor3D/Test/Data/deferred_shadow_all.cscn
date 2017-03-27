@@ -106,7 +106,7 @@ scene "Scene"
 
 		mesh "SpotLightMesh"
 		{
-			type cube 1.0 1.0 4.0
+			type "cube" -width=1 -height=1 -depth=4
 		}
 
 		material "WhiteEmit"
@@ -119,7 +119,7 @@ scene "Scene"
 
 		mesh "PointLightMesh"
 		{
-			type sphere 20 1
+			type "sphere" -subdiv=20 -radius=1
 		}
 
 		material "WhiteEmit"
@@ -131,7 +131,7 @@ scene "Scene"
 
 		mesh "Plane"
 		{
-			type plane 0 0 200 200
+			type "plane" -width_subdiv=0 -depth_subdiv=0 -width=200 -depth=200
 		}
 
 		material "Gold"
@@ -143,7 +143,7 @@ scene "Scene"
 
 		mesh "Torus"
 		{
-			type torus 30 30 15 30
+			type "torus" -inner_count=30 -outer_count=30 -inner_size=15 -outer_size=30
 		}
 
 		material "Silver"

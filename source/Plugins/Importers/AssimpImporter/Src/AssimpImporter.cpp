@@ -300,6 +300,8 @@ namespace C3dAssimp
 
 	//*********************************************************************************************
 
+	Castor::String const AssimpImporter::Name = cuT( "ASSIMP Importer" );
+
 	AssimpImporter::AssimpImporter( Engine & p_engine )
 		: Importer( p_engine )
 		, m_anonymous( 0 )

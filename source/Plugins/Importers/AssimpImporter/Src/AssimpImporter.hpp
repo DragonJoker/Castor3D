@@ -92,6 +92,9 @@ namespace C3dAssimp
 		void DoProcessAnimationNodes( Castor3D::SkeletonAnimation & p_animation, int64_t p_ticksPerMilliSecond, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, Castor3D::SkeletonAnimationObjectSPtr p_object );
 		void DoProcessAnimationMeshes( Castor3D::Mesh & p_mesh, Castor3D::Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim );
 
+	public:
+		static Castor::String const Name;
+
 	private:
 		int m_anonymous;
 		std::map< Castor::String, uint32_t > m_mapBoneByID;

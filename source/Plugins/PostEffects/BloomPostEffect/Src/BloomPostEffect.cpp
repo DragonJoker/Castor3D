@@ -473,7 +473,7 @@ namespace Bloom
 
 	bool BloomPostEffect::DoWriteInto( TextFile & p_file )
 	{
-		return p_file.WriteText( cuT( " -Size " ) + string::to_string( m_size ) ) > 0;
+		return p_file.WriteText( cuT( " -Size=" ) + string::to_string( m_size ) ) > 0;
 	}
 
 	void BloomPostEffect::DoHiPassFilter( TextureLayout const & p_origin )

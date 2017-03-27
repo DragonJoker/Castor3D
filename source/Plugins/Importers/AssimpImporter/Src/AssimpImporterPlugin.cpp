@@ -1,4 +1,4 @@
-#include "AssimpImporter.hpp"
+﻿#include "AssimpImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
@@ -21,22 +21,7 @@
 #	endif
 #endif
 
-C3D_Assimp_API void GetRequiredVersion( Castor3D::Version & p_version )
-{
-	p_version = Castor3D::Version{ CASTOR_VERSION_MAJOR, CASTOR_VERSION_MINOR, CASTOR_VERSION_BUILD };
-}
-
-C3D_Assimp_API Castor3D::PluginType GetType()
-{
-	return Castor3D::PluginType::eImporter;
-}
-
-C3D_Assimp_API Castor::String GetName()
-{
-	return cuT( "ASSIMP Importer" );
-}
-
-C3D_Assimp_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D::Engine * p_engine )
+Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D::Engine * p_engine )
 {
 	static Castor3D::ImporterPlugin::ExtensionArray l_extensions;
 
@@ -99,7 +84,7 @@ C3D_Assimp_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D:
 		{
 			auto const l_importer = std::static_pointer_cast< Castor3D::ImporterPlugin >( l_it.second );
 
-			if ( l_importer->GetName() != GetName() )
+			if ( l_importer->GetName() != C3dAssimp::AssimpImporter::Name )
 			{
 				for ( auto l_extension : l_importer->GetExtensions() )
 				{
@@ -162,23 +147,42 @@ C3D_Assimp_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D:
 	return l_extensions;
 }
 
-C3D_Assimp_API void OnLoad( Castor3D::Engine * p_engine )
+extern "C"
 {
-	auto l_extensions = GetExtensions( p_engine );
-
-	for ( auto const & l_extension : l_extensions )
+	C3D_Assimp_API void GetRequiredVersion( Castor3D::Version * p_version )
 	{
-		p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &C3dAssimp::AssimpImporter::Create );
+		*p_version = Castor3D::Version();
+	}
+
+	C3D_Assimp_API void GetType( Castor3D::PluginType * p_type )
+	{
+		*p_type = Castor3D::PluginType::eImporter;
+	}
+
+	C3D_Assimp_API void GetName( char const ** p_name )
+	{
+		*p_name = C3dAssimp::AssimpImporter::Name.c_str();
+	}
+
+	C3D_Assimp_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	{
+		auto l_plugin = static_cast< Castor3D::ImporterPlugin * >( p_plugin );
+		auto l_extensions = GetExtensions( p_engine );
+
+		for ( auto const & l_extension : l_extensions )
+		{
+			l_plugin->AddExtension( l_extension );
+			p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &C3dAssimp::AssimpImporter::Create );
+		}
+	}
+
+	C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
+	{
+		auto l_extensions = GetExtensions( p_engine );
+
+		for ( auto const & l_extension : l_extensions )
+		{
+			p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+		}
 	}
 }
-
-C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	auto l_extensions = GetExtensions( p_engine );
-
-	for ( auto const & l_extension : l_extensions )
-	{
-		p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
-	}
-}
-

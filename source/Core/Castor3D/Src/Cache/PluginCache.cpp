@@ -1,8 +1,9 @@
-#include "PluginCache.hpp"
+﻿#include "PluginCache.hpp"
 
 #include "Engine.hpp"
 
 #include "Plugin/DividerPlugin.hpp"
+#include "Plugin/GeneratorPlugin.hpp"
 #include "Plugin/GenericPlugin.hpp"
 #include "Plugin/ImporterPlugin.hpp"
 #include "Plugin/ParticlePlugin.hpp"
@@ -19,12 +20,8 @@ using namespace Castor;
 namespace Castor3D
 {
 	template<> const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
+	static const String GetTypeFunctionABIName = cuT( "GetType" );
 
-#if defined( CASTOR_COMPILER_MSVC )
-	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4PluginType@Castor3D@@XZ" );
-#elif defined( CASTOR_COMPILER_GNUC )
-	static const String GetTypeFunctionABIName = cuT( "_Z7GetTypev" );
-#endif
 	PluginCache::Cache( Engine & p_engine
 						, Producer && p_produce
 						, Initialiser && p_initialise
@@ -190,7 +187,8 @@ namespace Castor3D
 				CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 			}
 
-			PluginType l_type = l_pfnGetType();
+			PluginType l_type = PluginType::eCount;
+			l_pfnGetType( &l_type );
 
 			switch ( l_type )
 			{
@@ -224,6 +222,10 @@ namespace Castor3D
 
 			case PluginType::eParticle:
 				l_return = std::make_shared< ParticlePlugin >( l_library, GetEngine() );
+				break;
+
+			case PluginType::eGenerator:
+				l_return = std::make_shared< GeneratorPlugin >( l_library, GetEngine() );
 				break;
 
 			default:

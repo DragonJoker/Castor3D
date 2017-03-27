@@ -11,7 +11,7 @@ namespace Castor3D
 	{
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( GetEngine() );
+			m_pfnOnLoad( GetEngine(), this );
 		}
 	}
 

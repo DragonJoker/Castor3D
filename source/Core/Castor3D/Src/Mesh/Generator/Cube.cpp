@@ -2,6 +2,7 @@
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Miscellaneous/Parameter.hpp"
 
 using namespace Castor;
 
@@ -24,11 +25,25 @@ namespace Castor3D
 		return std::make_shared< Cube >();
 	}
 
-	void Cube::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void Cube::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		m_width = p_dimensions[0];
-		m_height = p_dimensions[1];
-		m_depth = p_dimensions[2];
+		String l_param;
+
+		if ( p_parameters.Get( cuT( "width" ), l_param ) )
+		{
+			m_width = string::to_float( l_param );
+		}
+
+		if ( p_parameters.Get( cuT( "height" ), l_param ) )
+		{
+			m_height = string::to_float( l_param );
+		}
+
+		if ( p_parameters.Get( cuT( "depth" ), l_param ) )
+		{
+			m_depth = string::to_float( l_param );
+		}
+
 		int CptNegatif = 0;
 
 		if ( m_width < 0 )

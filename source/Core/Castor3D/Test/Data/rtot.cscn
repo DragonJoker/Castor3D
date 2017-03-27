@@ -56,7 +56,7 @@ scene "TextureScene"
 		parent "TextureGeometryNode"
 		mesh "TextureMesh"
 		{
-			type torus 40 40 30.0 60.0
+			type "torus" -inner_count=40 -outer_count=40 -inner_size=30 -outer_size=60
 		}
 		material "Gold"
 	}
@@ -154,7 +154,7 @@ scene "FinalScene"
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			type cube 25 25 25
+			type "cube" -width=25 -height=25 -depth=25
 		}
 		material "RToTMaterial"
 	}

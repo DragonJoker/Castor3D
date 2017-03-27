@@ -102,7 +102,7 @@ scene "Scene"
 
 		mesh "LightMesh"
 		{
-			type sphere 20 1
+			type "sphere" -subdiv=20 -radius=1
 		}
 
 		material "WhiteEmit"
@@ -122,7 +122,7 @@ scene "Scene"
 
 		mesh "Cube"
 		{
-			type cube 400 400 400
+			type "cube" -width=400 -height=400 -depth=400
 		}
 
 		material "Gold"
@@ -134,7 +134,7 @@ scene "Scene"
 
 		mesh "Sphere"
 		{
-			type sphere 20 10
+			type "sphere" -subdiv=20 -radius=10
 		}
 
 		material "Silver"
@@ -162,7 +162,7 @@ scene "Scene"
 
 		mesh "Torus"
 		{
-			type torus 30 30 15 30
+			type "torus" -inner_count=30 -outer_count=30 -inner_size=15 -outer_size=30
 		}
 
 		material "Silver"

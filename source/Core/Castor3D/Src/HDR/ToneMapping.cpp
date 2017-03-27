@@ -1,7 +1,8 @@
-﻿#include "ToneMapping.hpp"
+#include "ToneMapping.hpp"
 
 #include "Engine.hpp"
 
+#include "RenderToTexture/RenderColourToTexture.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
 
@@ -84,6 +85,9 @@ namespace Castor3D
 			m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 			m_pipeline->AddUniformBuffer( m_matrixUbo );
 			m_pipeline->AddUniformBuffer( m_configUbo );
+
+			m_colour = std::make_unique< RenderColourToTexture >( *GetEngine()->GetRenderSystem()->GetMainContext(), m_matrixUbo );
+			m_colour->Initialise();
 		}
 
 		return l_return;
@@ -92,6 +96,13 @@ namespace Castor3D
 	void ToneMapping::Cleanup()
 	{
 		DoDestroy();
+
+		if ( m_colour )
+		{
+			m_colour->Cleanup();
+			m_colour.reset();
+		}
+
 		m_exposureVar.reset();
 		m_configUbo.Cleanup();
 		m_matrixUbo.Cleanup();
@@ -105,18 +116,20 @@ namespace Castor3D
 
 	void ToneMapping::Apply( Size const & p_size, TextureLayout const & p_texture )
 	{
+		static Position const l_position;
 		m_exposureVar->SetValue( m_exposure );
 		DoUpdate();
 		m_configUbo.Update();
-		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size
+		m_colour->Render( l_position
+			, p_size
 			, p_texture
-			, *m_pipeline
-			, m_matrixUbo );
+			, m_matrixUbo
+			, *m_pipeline );
 	}
 
 	bool ToneMapping::WriteInto( Castor::TextFile & p_file )
 	{
-		return p_file.WriteText( cuT( " -Exposure " ) + string::to_string( m_exposure ) ) > 0
+		return p_file.WriteText( cuT( " -Exposure=" ) + string::to_string( m_exposure ) ) > 0
 			   && DoWriteInto( p_file );
 	}
 }

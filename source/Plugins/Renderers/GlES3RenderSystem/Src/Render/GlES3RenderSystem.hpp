@@ -183,6 +183,7 @@ namespace GlES3Render
 
 	public:
 		static Castor::String Name;
+		static Castor::String Type;
 
 	protected:
 		bool m_useVertexBufferObjects;

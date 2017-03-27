@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -43,9 +43,6 @@ namespace Castor3D
 		friend class Plugin;
 		friend class Engine;
 
-		typedef Castor::String GetRendererTypeFunction();
-		typedef GetRendererTypeFunction * PGetRendererTypeFunction;
-
 	public:
 		/**
 		 *\~english
@@ -73,10 +70,19 @@ namespace Castor3D
 		 *\brief		Récupère le type de renderer
 		 *\return		Le type
 		 */
-		C3D_API Castor::String GetRendererType();
+		C3D_API Castor::String const & GetRendererType();
+		/**
+		 *\~english
+		 *\brief		Defines the renderer type.
+		 *\param[in]	p_type	The type.
+		 *\~french
+		 *\brief		Définit le type de renderer.
+		 *\param[in]	p_type	Le type.
+		 */
+		C3D_API void SetRendererType( Castor::String const & p_type );
 
 	private:
-		PGetRendererTypeFunction m_pfnGetRendererType;
+		Castor::String m_type;
 	};
 }
 
