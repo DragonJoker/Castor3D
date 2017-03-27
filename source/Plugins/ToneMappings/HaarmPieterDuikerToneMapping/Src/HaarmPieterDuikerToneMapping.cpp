@@ -102,6 +102,6 @@ namespace HaarmPieterDuiker
 
 	bool ToneMapping::DoWriteInto( TextFile & p_file )
 	{
-		return p_file.WriteText( cuT( " -Gamma " ) + string::to_string( m_gamma ) ) > 0;
+		return p_file.WriteText( cuT( " -Gamma=" ) + string::to_string( m_gamma ) ) > 0;
 	}
 }

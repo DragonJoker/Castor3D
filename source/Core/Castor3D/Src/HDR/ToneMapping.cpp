@@ -129,7 +129,7 @@ namespace Castor3D
 
 	bool ToneMapping::WriteInto( Castor::TextFile & p_file )
 	{
-		return p_file.WriteText( cuT( " -Exposure " ) + string::to_string( m_exposure ) ) > 0
+		return p_file.WriteText( cuT( " -Exposure=" ) + string::to_string( m_exposure ) ) > 0
 			   && DoWriteInto( p_file );
 	}
 }

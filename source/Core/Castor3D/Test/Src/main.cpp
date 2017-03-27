@@ -104,7 +104,7 @@ namespace
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( l_return->LoadRenderer( TestRender::TestRenderSystem::Name ) )
+		if ( l_return->LoadRenderer( TestRender::TestRenderSystem::Type ) )
 		{
 			l_return->Initialise( 1, false );
 		}
