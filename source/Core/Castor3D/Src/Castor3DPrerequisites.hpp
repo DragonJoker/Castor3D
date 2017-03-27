@@ -753,6 +753,17 @@ namespace Castor3D
 		TextureChannels const & p_textureFlags,
 		ProgramFlags const & p_programFlags,
 		SceneFlags const & p_sceneFlags );
+
+	using ParallaxFunction = GLSL::Function< GLSL::Vec2, GLSL::InParam< GLSL::Vec2 >, GLSL::InParam< GLSL::Vec3 > >;
+	using ParallaxShadowFunction = GLSL::Function< GLSL::Float, GLSL::InParam< GLSL::Vec3 >, GLSL::InParam< GLSL::Vec2 >, GLSL::InParam< GLSL::Float > >;
+
+	C3D_API ParallaxFunction DeclareParallaxMappingFunc( GLSL::GlslWriter & p_writer
+		, TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags );
+
+	C3D_API ParallaxShadowFunction DeclareParallaxShadowFunc( GLSL::GlslWriter & p_writer
+		, TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags );
 }
 
 DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine )

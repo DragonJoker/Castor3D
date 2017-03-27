@@ -347,7 +347,7 @@ namespace Castor3D
 		auto c3d_iBinarySearchSteps( l_writer.GetUniform< Int >( cuT( "c3d_iBinarySearchSteps" ), CheckFlag( p_textureFlags, TextureChannel::eRelief ) ) );
 		auto c3d_fDepth( l_writer.GetUniform< Float >( cuT( "c3d_fDepth" ), CheckFlag( p_textureFlags, TextureChannel::eRelief ), 0.075_f ) );
 		auto c3d_fTile( l_writer.GetUniform< Float >( cuT( "c3d_fTile" ), CheckFlag( p_textureFlags, TextureChannel::eRelief ), 1.0_f ) );
-		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 1.0_f ) );
+		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -357,6 +357,8 @@ namespace Castor3D
 
 		// Fragment Outputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
+
+		auto l_parallaxMapping = DeclareParallaxMappingFunc( l_writer, p_textureFlags, p_programFlags );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -376,6 +378,14 @@ namespace Castor3D
 
 			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 0.0f );
 			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), vtx_texture );
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
+				&& CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+			{
+				auto l_viewDir = -l_writer.GetLocale( cuT( "l_viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				l_texCoord.xy() = l_parallaxMapping( l_texCoord.xy(), l_viewDir );
+			}
+
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };

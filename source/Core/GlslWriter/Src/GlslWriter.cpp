@@ -1,4 +1,4 @@
-#include "GlslWriter.hpp"
+﻿#include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
 #include "GlslLighting.hpp"
@@ -180,7 +180,18 @@ namespace GLSL
 	void GlslWriter::For( Type && p_init, Expr const & p_cond, Expr const & p_incr, std::function< void() > p_function )
 	{
 		m_stream << std::endl;
-		m_stream << cuT( "for( " ) << Castor::String( p_init ) << cuT( "; " ) << p_cond.m_value.rdbuf() << cuT( "; " ) << p_incr.m_value.rdbuf() << cuT( " )" ) << std::endl;
+		m_stream << cuT( "for ( " ) << Castor::String( p_init ) << cuT( "; " ) << p_cond.m_value.rdbuf() << cuT( "; " ) << p_incr.m_value.rdbuf() << cuT( " )" ) << std::endl;
+		{
+			IndentBlock l_block( *this );
+			p_function();
+		}
+		m_stream << std::endl;
+	}
+
+	void GlslWriter::While( Expr const & p_cond, std::function< void() > p_function )
+	{
+		m_stream << std::endl;
+		m_stream << cuT( "while ( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
 		{
 			IndentBlock l_block( *this );
 			p_function();
@@ -191,7 +202,7 @@ namespace GLSL
 	GlslWriter & GlslWriter::If( Expr const & p_cond, std::function< void() > p_function )
 	{
 		m_stream << std::endl;
-		m_stream << cuT( "if( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
+		m_stream << cuT( "if ( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
 		{
 			IndentBlock l_block( *this );
 			p_function();
@@ -202,7 +213,7 @@ namespace GLSL
 
 	GlslWriter & GlslWriter::ElseIf( Expr const & p_cond, std::function< void() > p_function )
 	{
-		m_stream << cuT( "else if( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
+		m_stream << cuT( "else if ( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
 		{
 			IndentBlock l_block( *this );
 			p_function();

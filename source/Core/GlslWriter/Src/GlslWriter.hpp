@@ -163,6 +163,7 @@ namespace GLSL
 		GlslWriter_API void WriteAssign( Type const & p_lhs, unsigned int const & p_rhs );
 		GlslWriter_API void WriteAssign( Type const & p_lhs, float const & p_rhs );
 		GlslWriter_API void For( Type && p_init, Expr const & p_cond, Expr const & p_incr, std::function< void() > p_function );
+		GlslWriter_API void While( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API GlslWriter & If( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API GlslWriter & ElseIf( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API void Else( std::function< void() > p_function );
@@ -361,6 +362,14 @@ namespace GLSL
 		( Writer ).For( std::move( Name ), Expr( &( Writer ), Castor::String( Cond ) ), Expr( &( Writer ), Castor::String( Incr ) ), [&]()
 
 #define ROF\
+	 );\
+	}
+
+#define WHILE( Writer, Cond )\
+	{\
+		( Writer ).While( Expr( &( Writer ), Castor::String( Cond ) ), [&]()
+
+#define ELIHW\
 	 );\
 	}
 
