@@ -506,8 +506,8 @@ namespace deferred_common
 	{
 		m_ssaoFbo->Bind( FrameBufferTarget::eDraw );
 		m_ssaoFbo->Clear( BufferComponent::eColour );
-		//p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Bind( 0u );
-		//p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Bind( 0u );
+		p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Bind( 0u );
+		p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Bind( 0u );
 		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Bind( 1u );
 		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Bind( 1u );
 		m_ssaoNoise.Bind();
@@ -516,8 +516,8 @@ namespace deferred_common
 		m_ssaoNoise.Unbind();
 		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Unbind( 1u );
-		//p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Unbind( 0u );
-		//p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Unbind( 0u );
+		p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Unbind( 0u );
+		p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Unbind( 0u );
 		m_ssaoFbo->Unbind();
 	}
 

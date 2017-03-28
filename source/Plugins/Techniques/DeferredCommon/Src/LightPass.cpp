@@ -34,7 +34,6 @@ namespace deferred_common
 				cuT( "c3d_mapPosition" ),
 				cuT( "c3d_mapDiffuse" ),
 				cuT( "c3d_mapNormals" ),
-				cuT( "c3d_mapAmbient" ),
 				cuT( "c3d_mapSpecular" ),
 				cuT( "c3d_mapEmissive" ),
 			}
@@ -48,7 +47,6 @@ namespace deferred_common
 		static std::array< PixelFormat, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
@@ -70,7 +68,6 @@ namespace deferred_common
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
 			}
 		};
 
@@ -87,7 +84,6 @@ namespace deferred_common
 				2,
 				3,
 				4,
-				5,
 			}
 		};
 
@@ -318,7 +314,6 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::ePosition )]->Bind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Bind();
 		p_gp[size_t( DsTexture::eNormals )]->Bind();
-		p_gp[size_t( DsTexture::eAmbient )]->Bind();
 		p_gp[size_t( DsTexture::eSpecular )]->Bind();
 		p_gp[size_t( DsTexture::eEmissive )]->Bind();
 
@@ -342,7 +337,6 @@ namespace deferred_common
 
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
 		p_gp[size_t( DsTexture::eSpecular )]->Unbind();
-		p_gp[size_t( DsTexture::eAmbient )]->Unbind();
 		p_gp[size_t( DsTexture::eNormals )]->Unbind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Unbind();
 		p_gp[size_t( DsTexture::ePosition )]->Unbind();
@@ -360,7 +354,6 @@ namespace deferred_common
 		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::ePosition ) );
 		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
 		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormals ) );
-		auto c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eAmbient ) );
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
 		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
@@ -412,12 +405,10 @@ namespace deferred_common
 			auto l_v4Position = l_writer.GetLocale( cuT( "l_v4Position" ), texture( c3d_mapPosition, l_texCoord ) );
 			auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, l_texCoord ) );
 			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
-			auto l_v4Ambient = l_writer.GetLocale( cuT( "l_v4Tangent" ), texture( c3d_mapAmbient, l_texCoord ) );
 			auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
 			auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
 			auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_receiver" ), l_writer.Cast< Int >( l_v4Position.w() ) );
-			auto l_v3MapAmbient = l_writer.GetLocale( cuT( "l_v3MapAmbient" ), l_v4Ambient.xyz() );
 			auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
 			auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
 			auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
@@ -477,7 +468,7 @@ namespace deferred_common
 				l_v3Ambient *= l_ambientOcclusion;
 			}
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient/* * l_v3MapAmbient.xyz()*/ )
+			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient )
 				+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
 				+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
 				+ l_v3MapEmissive ), 1.0 );

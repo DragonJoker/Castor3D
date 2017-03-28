@@ -212,7 +212,14 @@ namespace deferred_common
 			, m_shadowMap{ p_shadowMap }
 			, m_shadowMapTexture{ my_traits::GetTexture( p_shadowMap ) }
 		{
-			m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) + 1 );
+			if ( p_ssao )
+			{
+				m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) + 1 );
+			}
+			else
+			{
+				m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) );
+			}
 		}
 
 		void Render( Castor::Size const & p_size

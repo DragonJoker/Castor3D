@@ -160,6 +160,7 @@ namespace CastorViewer
 			m_sceneObjectsList->UnloadScene();
 			m_pMainCamera.reset();
 			m_sceneNode.reset();
+			wxGetApp().GetCastor()->GetRenderWindowCache().Cleanup();
 			l_scene->Cleanup();
 			wxGetApp().GetCastor()->GetRenderLoop().Cleanup();
 			wxGetApp().GetCastor()->GetSceneCache().Remove( l_scene->GetName() );

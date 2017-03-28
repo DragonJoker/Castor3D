@@ -38,7 +38,6 @@ namespace deferred_common
 		ePosition,
 		eDiffuse,
 		eNormals,
-		eAmbient,
 		eSpecular,
 		eEmissive,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),

@@ -1,4 +1,4 @@
-#include "Engine.hpp"
+﻿#include "Engine.hpp"
 
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/FrameListener.hpp"
@@ -235,6 +235,7 @@ namespace Castor3D
 			}
 
 			m_listenerCache->Cleanup();
+			m_windowCache->Cleanup();
 			m_sceneCache->Cleanup();
 			m_samplerCache->Cleanup();
 			m_overlayCache->Cleanup();

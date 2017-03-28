@@ -20,7 +20,7 @@
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
-#define DEBUG_DEFERRED_BUFFERS 0
+#define DEBUG_DEFERRED_BUFFERS 1
 
 using namespace Castor;
 using namespace Castor3D;
@@ -168,29 +168,24 @@ namespace deferred
 		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
-#if DEBUG_DEFERRED_BUFFERS
+#if DEBUG_DEFERRED_BUFFERS && !defined( NDEBUG )
 
-		int l_width = int( m_size.width() );
-		int l_height = int( m_size.height() );
-		int l_thirdWidth = int( l_width / 3.0f );
-		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
-		int l_thirdHeight = int( l_height / 3.0f );
-		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
-		auto l_size = Size( l_thirdWidth, l_thirdHeight );
+		int l_width = int( m_size.width() ) / 6;
+		int l_height = int( m_size.height() ) / 6;
+		int l_left = int( m_size.width() ) - l_width;
+		auto l_size = Size( l_width, l_height );
 		auto & l_context = *m_renderSystem.GetCurrentContext();
 		m_renderTarget.GetCamera()->Apply();
 		m_frameBuffer.m_frameBuffer->Bind();
-		l_context.RenderTexture( Position{ 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::ePosition )]->GetTexture() );
-		l_context.RenderTexture( Position{ 0, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
-		l_context.RenderTexture( Position{ 0, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormals )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eAmbient )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::ePosition )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 1, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 2, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormals )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 3, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 4, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
 
 		if ( m_ssaoEnabled )
 		{
-			l_context.RenderTexture( Position{ l_twoThirdWidth, 0 }, l_size, m_ssao->GetRaw() );
-			l_context.RenderTexture( Position{ l_twoThirdWidth, l_thirdHeight }, l_size, *m_ssao->GetResult().GetTexture() );
+			l_context.RenderTexture( Position{ l_width * 5, 0 }, l_size, *m_ssao->GetResult().GetTexture() );
 		}
 
 		m_frameBuffer.m_frameBuffer->Unbind();

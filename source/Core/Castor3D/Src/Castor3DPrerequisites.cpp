@@ -119,9 +119,9 @@ namespace Castor3D
 			auto vtx_bitangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 			auto c3d_mapNormal( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
 
-			auto l_tbn = p_writer.GetLocale( cuT( "l_tbn" ), mat3( vtx_tangent, vtx_bitangent, p_normal ) );
+			auto l_tbn = p_writer.GetLocale( cuT( "l_tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
 			auto l_v3MapNormal = p_writer.GetLocale( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, l_texCoord.xy() ).xyz() );
-			l_v3MapNormal = l_v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 );
+			l_v3MapNormal = normalize( l_v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
 			p_normal = normalize( l_tbn * l_v3MapNormal );
 		}
 
