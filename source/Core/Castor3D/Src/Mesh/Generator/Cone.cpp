@@ -1,4 +1,4 @@
-#include "Cone.hpp"
+﻿#include "Cone.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -9,7 +9,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	Cone::Cone()
-		: MeshGenerator( MeshType::eCone )
+		: MeshGenerator( cuT( "cone" ) )
 		, m_nbFaces( 0 )
 		, m_height( 0 )
 		, m_radius( 0 )

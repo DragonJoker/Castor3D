@@ -1,4 +1,4 @@
-#include "MaterialsList.hpp"
+﻿#include "MaterialsList.hpp"
 
 #include "ImagesLoader.hpp"
 #include "MaterialTreeItemProperty.hpp"
@@ -242,9 +242,6 @@ namespace GuiCommon
 	//		double l_dStep = l_dMidRadius1;
 	//		double l_dX, l_dY;
 	//		double l_dRadius = 0;
-	//		p_pass->GetAmbient().red().convert_to( l_byRe );
-	//		p_pass->GetAmbient().green().convert_to( l_byGe );
-	//		p_pass->GetAmbient().blue().convert_to( l_byBe );
 	//		p_pass->GetDiffuse().red().convert_to( l_byRm );
 	//		p_pass->GetDiffuse().green().convert_to( l_byGm );
 	//		p_pass->GetDiffuse().blue().convert_to( l_byBm );

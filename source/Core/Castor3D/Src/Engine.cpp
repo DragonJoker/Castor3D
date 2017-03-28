@@ -125,6 +125,15 @@ namespace Castor3D
 			, l_dummy
 			, l_dummy
 			, l_mergeResource );
+		m_windowCache = MakeCache < RenderWindow, String >(	*this
+			, [this]( Castor::String const & p_name )
+			{
+				return std::make_shared< RenderWindow >( p_name
+					, *this );
+			}
+			, l_dummy
+			, l_eventClean
+			, l_mergeResource );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{
@@ -146,6 +155,7 @@ namespace Castor3D
 		m_overlayCache->Clear();
 		m_fontCache.Clear();
 		m_imageCache.clear();
+		m_windowCache->Clear();
 		m_sceneCache->Clear();
 		m_materialCache->Clear();
 		m_listenerCache->Clear();

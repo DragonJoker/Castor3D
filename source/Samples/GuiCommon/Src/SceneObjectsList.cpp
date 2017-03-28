@@ -1,4 +1,4 @@
-#include "SceneObjectsList.hpp"
+﻿#include "SceneObjectsList.hpp"
 
 #include "AnimatedObjectGroupTreeItemProperty.hpp"
 #include "AnimatedObjectTreeItemProperty.hpp"
@@ -128,14 +128,14 @@ namespace GuiCommon
 		if ( p_scene )
 		{
 			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
-			p_scene->GetRenderWindowCache().lock();
+			p_scene->GetEngine()->GetRenderWindowCache().lock();
 
-			for ( auto l_it : p_scene->GetRenderWindowCache() )
+			for ( auto l_it : p_scene->GetEngine()->GetRenderWindowCache() )
 			{
 				DoAddRenderWindow( l_scene, l_it.second );
 			}
 
-			p_scene->GetRenderWindowCache().unlock();
+			p_scene->GetEngine()->GetRenderWindowCache().unlock();
 			SceneNodeSPtr l_rootNode = p_scene->GetRootNode();
 
 			if ( l_rootNode )

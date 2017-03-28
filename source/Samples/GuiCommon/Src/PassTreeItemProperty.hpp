@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -103,7 +103,6 @@ namespace GuiCommon
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnAmbientColourChange( Castor::Colour const & p_value );
 		void OnDiffuseColourChange( Castor::Colour const & p_value );
 		void OnSpecularColourChange( Castor::Colour const & p_value );
 		void OnEmissiveColourChange( Castor::HdrColour const & p_value );

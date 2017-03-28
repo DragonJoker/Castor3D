@@ -1,4 +1,4 @@
-﻿#include "LightPass.hpp"
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -11,7 +11,9 @@
 #include <State/DepthStencilState.hpp>
 #include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslLight.hpp>
@@ -254,7 +256,7 @@ namespace deferred_common
 		, Light const & p_light
 		, Camera const & p_camera
 		, GLSL::FogType p_fogType
-		, Castor3D::TextureLayout const * p_ssao
+		, Castor3D::TextureUnit const * p_ssao
 		, bool p_first )
 	{
 		DoUpdate( p_size
@@ -308,7 +310,7 @@ namespace deferred_common
 		, GeometryPassResult const & p_gp
 		, Castor3D::Light const & p_light
 		, GLSL::FogType p_fogType
-		, Castor3D::TextureLayout const * p_ssao
+		, Castor3D::TextureUnit const * p_ssao
 		, bool p_first )
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
@@ -322,7 +324,8 @@ namespace deferred_common
 
 		if ( p_ssao && m_ssao )
 		{
-			p_ssao->Bind( size_t( DsTexture::eCount ) );
+			p_ssao->GetTexture()->Bind( size_t( DsTexture::eCount ) );
+			p_ssao->GetSampler()->Bind( size_t( DsTexture::eCount ) );
 		}
 
 		auto & l_program = *m_programs[uint16_t( p_fogType )];
@@ -333,7 +336,8 @@ namespace deferred_common
 
 		if ( p_ssao && m_ssao )
 		{
-			p_ssao->Unbind( size_t( DsTexture::eCount ) );
+			p_ssao->GetSampler()->Unbind( size_t( DsTexture::eCount ) );
+			p_ssao->GetTexture()->Unbind( size_t( DsTexture::eCount ) );
 		}
 
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
@@ -424,7 +428,7 @@ namespace deferred_common
 			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
 			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), c3d_v3CameraPosition );
 			auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
-			auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
+			auto l_z = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
 			auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), m_ssao, texture( c3d_mapSsao, l_texCoord ).r() );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
@@ -473,14 +477,14 @@ namespace deferred_common
 				l_v3Ambient *= l_ambientOcclusion;
 			}
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() )
+			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient/* * l_v3MapAmbient.xyz()*/ )
 				+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
 				+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
 				+ l_v3MapEmissive ), 1.0 );
 
 			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
 			{
-				l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );
+				l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_z );
 			}
 		} );
 

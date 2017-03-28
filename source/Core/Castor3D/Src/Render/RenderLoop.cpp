@@ -155,7 +155,7 @@ namespace Castor3D
 
 		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
 		{
-			p_scene.GetRenderWindowCache().ForEach( []( RenderWindow & p_window )
+			p_scene.GetEngine()->GetRenderWindowCache().ForEach( []( RenderWindow & p_window )
 			{
 				p_window.Render( true );
 			} );

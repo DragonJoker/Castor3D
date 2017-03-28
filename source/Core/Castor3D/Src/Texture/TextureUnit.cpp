@@ -98,10 +98,6 @@ namespace Castor3D
 				{
 					switch ( p_unit.GetChannel() )
 					{
-					case TextureChannel::eColour:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel colour\n" ) ) > 0;
-						break;
-
 					case TextureChannel::eDiffuse:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
 						break;
@@ -126,16 +122,8 @@ namespace Castor3D
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
 						break;
 
-					case TextureChannel::eAmbient:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel ambient\n" ) ) > 0;
-						break;
-
 					case TextureChannel::eGloss:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
-						break;
-
-					case TextureChannel::eRelief:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel relief\n" ) ) > 0;
 						break;
 
 					default:

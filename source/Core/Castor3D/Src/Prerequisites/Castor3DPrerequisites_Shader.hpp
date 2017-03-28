@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -744,7 +744,6 @@ namespace Castor3D
 	auto c3d_mtxTexture1 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
 	auto c3d_mtxTexture2 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
 	auto c3d_mtxTexture3 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
-	auto c3d_v4MatAmbient = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatAmbient );\
 	auto c3d_v4MatDiffuse = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatDiffuse );\
 	auto c3d_v4MatEmissive = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatEmissive );\
 	auto c3d_v4MatSpecular = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatSpecular );\

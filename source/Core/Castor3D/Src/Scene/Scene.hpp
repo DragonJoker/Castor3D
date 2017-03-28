@@ -36,7 +36,6 @@ SOFTWARE.
 #include "Cache/OverlayCache.hpp"
 #include "Cache/ParticleSystemCache.hpp"
 #include "Cache/SamplerCache.hpp"
-#include "Cache/WindowCache.hpp"
 
 #include "RenderToTexture/TextureProjection.hpp"
 #include "Scene/Fog.hpp"
@@ -469,9 +468,6 @@ namespace Castor3D
 		//!\~english	The animated objects groups cache.
 		//!\~french		Le cache de groupes d'objets animés.
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		//!\~english	The render windows cache.
-		//!\~french		Le cache de fenêtres de rendu.
-		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		//!\~english	The overlays view.
 		//!\~french		La vue sur le incrustations de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, EventType::ePreRender );

@@ -124,7 +124,6 @@ namespace Castor3D
 	const String ShaderProgram::FogDensity = cuT( "c3d_fFogDensity" );
 	const String ShaderProgram::LightsCount = cuT( "c3d_iLightsCount" );
 	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
-	const String ShaderProgram::MatAmbient = cuT( "c3d_v4MatAmbient" );
 	const String ShaderProgram::MatDiffuse = cuT( "c3d_v4MatDiffuse" );
 	const String ShaderProgram::MatSpecular = cuT( "c3d_v4MatSpecular" );
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );

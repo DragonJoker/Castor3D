@@ -1,4 +1,4 @@
-#include "PassTreeItemProperty.hpp"
+﻿#include "PassTreeItemProperty.hpp"
 
 #include "ShaderDialog.hpp"
 
@@ -20,7 +20,6 @@ namespace GuiCommon
 	namespace
 	{
 		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
-		static wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
 		static wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
 		static wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
 		static wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
@@ -37,7 +36,6 @@ namespace GuiCommon
 		, m_scene( p_scene )
 	{
 		PROPERTY_CATEGORY_PASS = _( "Pass: " );
-		PROPERTY_PASS_AMBIENT = _( "Ambient" );
 		PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
 		PROPERTY_PASS_SPECULAR = _( "Specular" );
 		PROPERTY_PASS_EMISSIVE = _( "Emissive" );
@@ -65,8 +63,7 @@ namespace GuiCommon
 			if ( l_pass->GetType() == MaterialType::eLegacy )
 			{
 				auto l_legacy = std::static_pointer_cast< LegacyPass >( l_pass );
-				p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetAmbient() ) ) ) );
-				p_grid->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetDiffuse() ) ) ) );
+				p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetDiffuse() ) ) ) );
 				p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetSpecular() ) ) ) );
 				p_grid->Append( new Point4fProperty( GC_HDR_COLOUR, PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( rgba_float( l_legacy->GetEmissive() ) ) );
 				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_legacy->GetShininess() );
@@ -88,11 +85,6 @@ namespace GuiCommon
 			wxColour l_colour;
 
 			if ( l_property->GetName() == PROPERTY_PASS_DIFFUSE )
-			{
-				l_colour << l_property->GetValue();
-				OnAmbientColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
-			}
-			else if ( l_property->GetName() == PROPERTY_PASS_AMBIENT )
 			{
 				l_colour << l_property->GetValue();
 				OnDiffuseColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
@@ -120,16 +112,6 @@ namespace GuiCommon
 				OnOpacityChange( l_property->GetValue() );
 			}
 		}
-	}
-
-	void PassTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
-	{
-		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
-
-		DoApplyChange( [p_value, l_pass]()
-		{
-			l_pass->SetAmbient( p_value );
-		} );
 	}
 
 	void PassTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )

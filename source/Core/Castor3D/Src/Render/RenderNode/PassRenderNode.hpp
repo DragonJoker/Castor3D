@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,9 +42,6 @@ namespace Castor3D
 		//!\~english	The pass UBO.
 		//!\~french		L'UBO de passe.
 		UniformBuffer & m_passUbo;
-		//!\~english	The pass ambient colour.
-		//!\~french		La couleur ambiante de passe.
-		Uniform4r & m_ambient;
 		//!\~english	The pass diffuse colour.
 		//!\~french		La couleur diffuse de passe.
 		Uniform4r & m_diffuse;

@@ -720,9 +720,6 @@ namespace Castor3D
 		/**@name Pass */
 		//@{
 
-		//!\~english	Name of the ambient material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur ambiante du matériau.
-		C3D_API static const Castor::String MatAmbient;
 		//!\~english	Name of the diffuse material colour frame variable.
 		//!\~french		Nom de la frame variable contenant la couleur diffuse du matériau.
 		C3D_API static const Castor::String MatDiffuse;

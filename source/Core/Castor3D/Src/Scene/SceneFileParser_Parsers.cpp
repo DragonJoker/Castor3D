@@ -233,6 +233,30 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eScene )
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootWindow )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			if ( l_parsingContext->pWindow )
+			{
+				PARSING_ERROR( cuT( "Can't create more than one render window" ) );
+			}
+			else
+			{
+				String l_name;
+				p_params[0]->Get( l_name );
+				l_parsingContext->pWindow = l_parsingContext->pScene->GetEngine()->GetRenderWindowCache().Add( l_name );
+			}
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eWindow )
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_WindowRenderTarget )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -994,30 +1018,6 @@ namespace Castor3D
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBillboard )
-
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneWindow )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pScene )
-		{
-			PARSING_ERROR( cuT( "No scene initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			if ( l_parsingContext->pWindow )
-			{
-				PARSING_ERROR( cuT( "Can't create more than one render window" ) );
-			}
-			else
-			{
-				String l_name;
-				p_params[0]->Get( l_name );
-				l_parsingContext->pWindow = l_parsingContext->pScene->GetRenderWindowCache().Add( l_name );
-			}
-		}
-	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eWindow )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneAnimatedObjectGroup )
 	{
@@ -2585,23 +2585,6 @@ namespace Castor3D
 	{
 	}
 	END_ATTRIBUTE_POP()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAmbient )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->legacyPass )
-		{
-			PARSING_ERROR( cuT( "No Pass initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			Colour l_crColour;
-			p_params[0]->Get( l_crColour );
-			l_parsingContext->legacyPass->SetAmbient( l_crColour );
-		}
-	}
-	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDiffuse )
 	{

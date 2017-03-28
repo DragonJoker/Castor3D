@@ -115,7 +115,7 @@ namespace deferred_common
 			, Castor3D::Light const & p_light
 			, Castor3D::Camera const & p_camera
 			, GLSL::FogType p_fogType
-			, Castor3D::TextureLayout const * p_ssao
+			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first );
 		virtual uint32_t GetCount()const = 0;
 
@@ -139,7 +139,7 @@ namespace deferred_common
 			, GeometryPassResult const & p_gp
 			, Castor3D::Light const & p_light
 			, GLSL::FogType p_fogType
-			, Castor3D::TextureLayout const * p_ssao
+			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first );
 		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
 			, Castor3D::LightType p_type )const;

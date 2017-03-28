@@ -472,36 +472,27 @@ namespace Castor3D
 		//!\~english Undefined channel.
 		//!\~french Canal indéfini.
 		eUndefined = 0x0000,
-		//!\~english Colour map
-		//!\~french Map de couleurs
-		eColour = 0x0001,
 		//!\~english Diffuse map
 		//!\~french Map de diffuse
-		eDiffuse = 0x0002,
+		eDiffuse = 0x0001,
 		//!\~english Normal map
 		//!\~french Map de normales
-		eNormal = 0x0004,
+		eNormal = 0x0002,
 		//!\~english Opacity map
 		//!\~french Map d'opacité
-		eOpacity = 0x0008,
+		eOpacity = 0x0004,
 		//!\~english Specular map
 		//!\~french Map de spéculaire
-		eSpecular = 0x0010,
+		eSpecular = 0x0008,
 		//!\~english Height map
 		//!\~french Map de hauteur
-		eHeight = 0x0020,
-		//!\~english Ambient map
-		//!\~french Map d'ambiante
-		eAmbient = 0x0040,
+		eHeight = 0x0010,
 		//!\~english Gloss map
 		//!\~french Map de gloss
-		eGloss = 0x0080,
+		eGloss = 0x0020,
 		//!\~english Emissive map
 		//!\~french Map d'émissive
-		eEmissive = 0x0100,
-		//!\~english Relief normal map.
-		//!\~french Map de normales pour le relief.
-		eRelief = 0x0200,
+		eEmissive = 0x040,
 		//!\~english Mask for all the texture channels
 		//!\~french Masque pour les canaux de texture
 		eAll = 0x0FFF,

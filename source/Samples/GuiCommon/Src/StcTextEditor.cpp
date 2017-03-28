@@ -1,4 +1,4 @@
-#include "StcTextEditor.hpp"
+﻿#include "StcTextEditor.hpp"
 #include "LanguageInfo.hpp"
 #include "StyleInfo.hpp"
 
@@ -127,7 +127,7 @@ StcTextEditor::StcTextEditor( StcContext & p_context, wxWindow * p_parent, wxWin
 	, m_bTabIndents( true )
 	, m_bBackspaceUnindents( true )
 {
-	wxFont l_font( 10, wxMODERN, wxNORMAL, wxNORMAL );
+	wxFont l_font( 10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
 	SetTabWidth( m_iTabSpaces );
 	SetSelAlpha( 127 );
 	SetSelBackground( true, wxColour( 51, 153, 255, 127 ) );
@@ -329,7 +329,7 @@ bool StcTextEditor::InitializePrefs( wxString const & p_name )
 		// default fonts for all styles!
 		for ( int i = 0; i < wxSTC_STYLE_LASTPREDEFINED; i++ )
 		{
-			wxFont l_font( 10, wxMODERN, wxNORMAL, wxNORMAL );
+			wxFont l_font( 10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
 			StyleSetFont( i, l_font );
 		}
 
@@ -374,7 +374,7 @@ bool StcTextEditor::InitializePrefs( wxString const & p_name )
 				eSTC_TYPE l_type = eSTC_TYPE( j );
 				int l_iStyle = l_lexerAssoc[l_type];
 				StyleInfoPtr const & l_stCurType = l_pCurInfo->GetStyle( l_type );
-				wxFont l_font( l_stCurType->GetFontSize(), wxMODERN, wxNORMAL, wxNORMAL, false, l_stCurType->GetFontName() );
+				wxFont l_font( l_stCurType->GetFontSize(), wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, l_stCurType->GetFontName() );
 				StyleSetFont( l_iStyle, l_font );
 
 				if ( !l_stCurType->GetForeground().empty() )

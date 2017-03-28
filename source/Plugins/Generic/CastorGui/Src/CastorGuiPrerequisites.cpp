@@ -1,4 +1,4 @@
-#include "CastorGuiPrerequisites.hpp"
+﻿#include "CastorGuiPrerequisites.hpp"
 
 #include <Engine.hpp>
 #include <Material/Material.hpp>
@@ -34,7 +34,7 @@ namespace CastorGui
 			l_return->CreatePass();
 		}
 
-		l_return->GetTypedPass< MaterialType::eLegacy >( 0u )->SetAmbient( p_colour );
+		l_return->GetTypedPass< MaterialType::eLegacy >( 0u )->SetDiffuse( p_colour );
 		return l_return;
 	}
 

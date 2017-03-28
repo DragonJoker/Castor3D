@@ -1,4 +1,4 @@
-﻿#include "ShaderCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Engine.hpp"
 
@@ -126,23 +126,12 @@ namespace Castor3D
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel );
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eAmbient ) )
-		{
-			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapAmbient, ShaderType::ePixel );
-		}
-
-		if ( CheckFlag( p_textureFlags, TextureChannel::eColour ) )
-		{
-			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapColour, ShaderType::ePixel );
-		}
-
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eRelief )
-			|| CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+		if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
 		{
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapNormal, ShaderType::ePixel );
 		}

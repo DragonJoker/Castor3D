@@ -20,7 +20,6 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
 		static wxString PROPERTY_TEXTURE_IMAGE = _( "Image" );
 		static wxString PROPERTY_CHANNEL = _( "Channel" );
-		static wxString PROPERTY_CHANNEL_COLOUR = _( "Colour" );
 		static wxString PROPERTY_CHANNEL_DIFFUSE = _( "Diffuse" );
 		static wxString PROPERTY_CHANNEL_NORMAL = _( "Normal" );
 		static wxString PROPERTY_CHANNEL_OPACITY = _( "Opacity" );
@@ -29,7 +28,6 @@ namespace GuiCommon
 		static wxString PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
 		static wxString PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 		static wxString PROPERTY_CHANNEL_EMISSIVE = _( "Emissive" );
-		static wxString PROPERTY_CHANNEL_RELIEF = _( "Relief" );
 	}
 
 	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable, TextureUnitSPtr p_texture )
@@ -39,7 +37,6 @@ namespace GuiCommon
 		PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
 		PROPERTY_TEXTURE_IMAGE = _( "Image" );
 		PROPERTY_CHANNEL = _( "Channel" );
-		PROPERTY_CHANNEL_COLOUR = _( "Colour" );
 		PROPERTY_CHANNEL_DIFFUSE = _( "Diffuse" );
 		PROPERTY_CHANNEL_NORMAL = _( "Normal" );
 		PROPERTY_CHANNEL_OPACITY = _( "Opacity" );
@@ -48,7 +45,6 @@ namespace GuiCommon
 		PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
 		PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 		PROPERTY_CHANNEL_EMISSIVE = _( "Emissive" );
-		PROPERTY_CHANNEL_RELIEF = _( "Relief" );
 
 		CreateTreeItemMenu();
 	}
@@ -64,7 +60,6 @@ namespace GuiCommon
 		if ( l_unit )
 		{
 			wxPGChoices l_choices;
-			l_choices.Add( PROPERTY_CHANNEL_COLOUR );
 			l_choices.Add( PROPERTY_CHANNEL_DIFFUSE );
 			l_choices.Add( PROPERTY_CHANNEL_NORMAL );
 			l_choices.Add( PROPERTY_CHANNEL_OPACITY );
@@ -72,15 +67,10 @@ namespace GuiCommon
 			l_choices.Add( PROPERTY_CHANNEL_HEIGHT );
 			l_choices.Add( PROPERTY_CHANNEL_AMBIENT );
 			l_choices.Add( PROPERTY_CHANNEL_GLOSS );
-			l_choices.Add( PROPERTY_CHANNEL_RELIEF );
 			wxString l_selected;
 
 			switch ( l_unit->GetChannel() )
 			{
-			case TextureChannel::eColour:
-				l_selected = PROPERTY_CHANNEL_COLOUR;
-				break;
-
 			case TextureChannel::eDiffuse:
 				l_selected = PROPERTY_CHANNEL_DIFFUSE;
 				break;
@@ -105,16 +95,8 @@ namespace GuiCommon
 				l_selected = PROPERTY_CHANNEL_HEIGHT;
 				break;
 
-			case TextureChannel::eAmbient:
-				l_selected = PROPERTY_CHANNEL_AMBIENT;
-				break;
-
 			case TextureChannel::eGloss:
 				l_selected = PROPERTY_CHANNEL_GLOSS;
-				break;
-
-			case TextureChannel::eRelief:
-				l_selected = PROPERTY_CHANNEL_RELIEF;
 				break;
 			}
 
@@ -138,11 +120,6 @@ namespace GuiCommon
 		{
 			if ( l_property->GetName() == PROPERTY_CHANNEL )
 			{
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_COLOUR )
-				{
-					OnChannelChange( TextureChannel::eColour );
-				}
-
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_DIFFUSE )
 				{
 					OnChannelChange( TextureChannel::eDiffuse );
@@ -173,19 +150,9 @@ namespace GuiCommon
 					OnChannelChange( TextureChannel::eHeight );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_AMBIENT )
-				{
-					OnChannelChange( TextureChannel::eAmbient );
-				}
-
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 				{
 					OnChannelChange( TextureChannel::eGloss );
-				}
-
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_RELIEF )
-				{
-					OnChannelChange( TextureChannel::eRelief );
 				}
 			}
 			else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )

@@ -220,7 +220,7 @@ namespace deferred_common
 			, Castor3D::Light const & p_light
 			, Castor3D::Camera const & p_camera
 			, GLSL::FogType p_fogType
-			, Castor3D::TextureLayout const * p_ssao
+			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first )override
 		{
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );

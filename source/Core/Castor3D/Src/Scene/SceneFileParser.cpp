@@ -1,4 +1,4 @@
-#include "SceneFileParser.hpp"
+﻿#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -147,8 +147,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureAlphaFunctions[cuT( "interpolate" )] = uint32_t( AlphaBlendFunc::eInterpolate );
 	m_mapTextureAlphaFunctions[cuT( "substract" )] = uint32_t( AlphaBlendFunc::eSubtract );
 
-	m_mapTextureChannels[cuT( "colour" )] = uint32_t( TextureChannel::eColour );
-	m_mapTextureChannels[cuT( "ambient" )] = uint32_t( TextureChannel::eAmbient );
 	m_mapTextureChannels[cuT( "diffuse" )] = uint32_t( TextureChannel::eDiffuse );
 	m_mapTextureChannels[cuT( "normal" )] = uint32_t( TextureChannel::eNormal );
 	m_mapTextureChannels[cuT( "specular" )] = uint32_t( TextureChannel::eSpecular );
@@ -156,7 +154,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureChannels[cuT( "opacity" )] = uint32_t( TextureChannel::eOpacity );
 	m_mapTextureChannels[cuT( "gloss" )] = uint32_t( TextureChannel::eGloss );
 	m_mapTextureChannels[cuT( "emissive" )] = uint32_t( TextureChannel::eEmissive );
-	m_mapTextureChannels[cuT( "relief" )] = uint32_t( TextureChannel::eRelief );
 
 	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::ePoint );
 	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::eSpot );
@@ -326,16 +323,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_fogTypes[cuT( "exponential" )] = uint32_t( GLSL::FogType::eExponential );
 	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( GLSL::FogType::eSquaredExponential );
 
-	m_mapMeshTypes[cuT( "custom" )] = uint32_t( MeshType::eCustom );
-	m_mapMeshTypes[cuT( "cone" )] = uint32_t( MeshType::eCone );
-	m_mapMeshTypes[cuT( "cylinder" )] = uint32_t( MeshType::eCylinder );
-	m_mapMeshTypes[cuT( "sphere" )] = uint32_t( MeshType::eSphere );
-	m_mapMeshTypes[cuT( "cube" )] = uint32_t( MeshType::eCube );
-	m_mapMeshTypes[cuT( "torus" )] = uint32_t( MeshType::eTorus );
-	m_mapMeshTypes[cuT( "plane" )] = uint32_t( MeshType::ePlane );
-	m_mapMeshTypes[cuT( "icosahedron" )] = uint32_t( MeshType::eIcosahedron );
-	m_mapMeshTypes[cuT( "projection" )] = uint32_t( MeshType::eProjection );
-
 	m_mapComparisonModes[cuT( "none" )] = uint32_t( ComparisonMode::eNone );
 	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( ComparisonMode::eRefToTexture );
 
@@ -421,6 +408,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "text_overlay" ), Parser_RootTextOverlay, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "sampler" ), Parser_RootSamplerState, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "debug_overlays" ), Parser_RootDebugOverlays, { MakeParameter< ParameterType::eBool >() } );
+	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "window" ), Parser_RootWindow, { MakeParameter< ParameterType::eName >() } );
 
 	AddParser( uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), Parser_WindowRenderTarget );
 	AddParser( uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), Parser_WindowVSync, { MakeParameter< ParameterType::eBool >() } );
@@ -464,7 +452,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "ambient_light" ), Parser_SceneAmbientLight, { MakeParameter< ParameterType::eColour >() } );
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "import" ), Parser_SceneImport, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "billboard" ), Parser_SceneBillboard, { MakeParameter< ParameterType::eName >() } );
-	AddParser( uint32_t( CSCNSection::eScene ), cuT( "window" ), Parser_SceneWindow, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "animated_object_group" ), Parser_SceneAnimatedObjectGroup, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "panel_overlay" ), Parser_ScenePanelOverlay, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "border_panel_overlay" ), Parser_SceneBorderPanelOverlay, { MakeParameter< ParameterType::eName >() } );
@@ -533,7 +520,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), Parser_MaterialPass );
 	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "}" ), Parser_MaterialEnd );
 
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "ambient" ), Parser_PassAmbient, { MakeParameter< ParameterType::eColour >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "diffuse" ), Parser_PassDiffuse, { MakeParameter< ParameterType::eColour >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "specular" ), Parser_PassSpecular, { MakeParameter< ParameterType::eColour >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "emissive" ), Parser_PassEmissive, { MakeParameter< ParameterType::eHdrColour >() } );

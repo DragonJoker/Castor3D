@@ -1,4 +1,4 @@
-﻿#include "DeferredRenderTechnique.hpp"
+#include "DeferredRenderTechnique.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -130,32 +130,6 @@ namespace deferred
 			m_ssao->Render( m_lightPassTextures, *m_renderTarget.GetCamera() );
 		}
 
-#if DEBUG_DEFERRED_BUFFERS
-
-		int l_width = int( m_size.width() );
-		int l_height = int( m_size.height() );
-		int l_thirdWidth = int( l_width / 3.0f );
-		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
-		int l_thirdHeight = int( l_height / 3.0f );
-		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
-		auto l_size = Size( l_thirdWidth, l_thirdHeight );
-		auto & l_context = *m_renderSystem.GetCurrentContext();
-		m_renderTarget.GetCamera()->Apply();
-		m_frameBuffer.m_frameBuffer->Bind();
-		l_context.RenderTexture( Position{ 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::ePosition )]->GetTexture() );
-		l_context.RenderTexture( Position{ 0, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
-		l_context.RenderTexture( Position{ 0, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormals )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eAmbient )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
-
-		if ( m_ssaoEnabled )
-		{
-			l_context.RenderTexture( Position{ l_twoThirdWidth, 0 }, l_size, m_ssao->GetResult() );
-		}
-
-#else
-
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eStencil );
@@ -182,8 +156,6 @@ namespace deferred
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
-
-#endif
 	}
 
 	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
@@ -196,13 +168,34 @@ namespace deferred
 		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
+#if DEBUG_DEFERRED_BUFFERS
+
+		int l_width = int( m_size.width() );
+		int l_height = int( m_size.height() );
+		int l_thirdWidth = int( l_width / 3.0f );
+		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
+		int l_thirdHeight = int( l_height / 3.0f );
+		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
+		auto l_size = Size( l_thirdWidth, l_thirdHeight );
+		auto & l_context = *m_renderSystem.GetCurrentContext();
+		m_renderTarget.GetCamera()->Apply();
+		m_frameBuffer.m_frameBuffer->Bind();
+		l_context.RenderTexture( Position{ 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::ePosition )]->GetTexture() );
+		l_context.RenderTexture( Position{ 0, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
+		l_context.RenderTexture( Position{ 0, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormals )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_thirdWidth, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eAmbient )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_thirdWidth, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
+
 		if ( m_ssaoEnabled )
 		{
-			auto & l_context = *m_renderSystem.GetCurrentContext();
-			m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-			l_context.RenderTexture( Position{}, m_size, m_ssao->GetRaw() );
-			m_frameBuffer.m_frameBuffer->Unbind();
+			l_context.RenderTexture( Position{ l_twoThirdWidth, 0 }, l_size, m_ssao->GetRaw() );
+			l_context.RenderTexture( Position{ l_twoThirdWidth, l_thirdHeight }, l_size, *m_ssao->GetResult().GetTexture() );
 		}
+
+		m_frameBuffer.m_frameBuffer->Unbind();
+
+#endif
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
@@ -372,7 +365,7 @@ namespace deferred
 						, *l_light
 						, l_camera
 						, l_fogType
-						, m_ssaoEnabled ? &m_ssao->GetRaw() : nullptr
+						, m_ssaoEnabled ? &m_ssao->GetResult() : nullptr
 						, p_first );
 				}
 				else
@@ -382,7 +375,7 @@ namespace deferred
 						, *l_light
 						, l_camera
 						, l_fogType
-						, m_ssaoEnabled ? &m_ssao->GetRaw() : nullptr
+						, m_ssaoEnabled ? &m_ssao->GetResult() : nullptr
 						, p_first );
 				}
 

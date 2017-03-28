@@ -70,7 +70,7 @@ namespace diamond_square_terrain
 	String const Generator::Name = cuT( "Diamond Square Terrain Generator" );
 
 	Generator::Generator()
-		: MeshGenerator{}
+		: MeshGenerator{ cuT( "diamond_square_terrain" ) }
 	{
 	}
 
@@ -192,7 +192,7 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 1u; x < l_max; x++ )
 				{
-					l_submesh->AddPoint( x, l_map( x, y ), y );
+					l_submesh->AddPoint( real( x ), l_map( x, y ), real( y ) );
 				}
 			}
 

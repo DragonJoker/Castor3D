@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "LightPass.hpp"
 
-#include <RenderToTexture/RenderColourToTexture.hpp>
+#include <Texture/TextureUnit.hpp>
 
 namespace deferred_common
 {
@@ -38,14 +38,14 @@ namespace deferred_common
 		void Render( GeometryPassResult const & p_gp
 			, Castor3D::Camera const & p_camera );
 
-		inline Castor3D::TextureLayout const & GetResult()
+		inline Castor3D::TextureUnit const & GetResult()
 		{
-			return *m_blurResult;
+			return m_blurResult;
 		}
 
 		inline Castor3D::TextureLayout const & GetRaw()
 		{
-			return *m_ssaoResult;
+			return *m_ssaoResult.GetTexture();
 		}
 
 	private:
@@ -66,27 +66,25 @@ namespace deferred_common
 		Castor3D::Uniform4x4fSPtr m_viewMatrix;
 		Castor3D::Uniform4x4fSPtr m_projectionMatrix;
 		Castor3D::Viewport m_viewport;
-		std::array< Castor::real, 6 * (3 + 2) > m_bufferVertex;
-		Castor3D::BufferDeclaration m_declaration;
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
-		Castor3D::VertexBufferSPtr m_vertexBuffer;
 		// Raw SSAO pass
 		Castor3D::FrameBufferSPtr m_ssaoFbo;
+		Castor3D::VertexBufferSPtr m_ssaoVertexBuffer;
 		Castor3D::GeometryBuffersSPtr m_ssaoGeometryBuffers;
 		Castor3D::RenderPipelineUPtr m_ssaoPipeline;
 		Castor3D::ShaderProgramSPtr m_ssaoProgram;
 		Castor::Point3fArray m_ssaoKernel;
 		Castor3D::TextureUnit m_ssaoNoise;
-		Castor3D::TextureLayoutSPtr m_ssaoResult;
+		Castor3D::TextureUnit m_ssaoResult;
 		Castor3D::TextureAttachmentSPtr m_ssaoResultAttach;
 		Castor3D::UniformBuffer m_ssaoConfig;
 		Castor3D::Uniform3fSPtr m_kernelUniform;
 		// SSAO blur pass
 		Castor3D::FrameBufferSPtr m_blurFbo;
+		Castor3D::VertexBufferSPtr m_blurVertexBuffer;
 		Castor3D::GeometryBuffersSPtr m_blurGeometryBuffers;
 		Castor3D::RenderPipelineUPtr m_blurPipeline;
 		Castor3D::ShaderProgramSPtr m_blurProgram;
-		Castor3D::TextureLayoutSPtr m_blurResult;
+		Castor3D::TextureUnit m_blurResult;
 		Castor3D::TextureAttachmentSPtr m_blurResultAttach;
 
 	};

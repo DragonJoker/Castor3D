@@ -1,4 +1,4 @@
-#include "Castor3DPrerequisites.hpp"
+﻿#include "Castor3DPrerequisites.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Scene.hpp"
@@ -135,7 +135,6 @@ namespace Castor3D
 
 	void ComputePostLightingMapContributions(
 		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_ambient,
 		GLSL::Vec3 & p_diffuse,
 		GLSL::Vec3 & p_specular,
 		GLSL::Vec3 & p_emissive,
@@ -145,20 +144,6 @@ namespace Castor3D
 	{
 		using namespace GLSL;
 		auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
-
-		if ( CheckFlag( p_textureFlags, TextureChannel::eColour ) )
-		{
-			auto c3d_mapColour( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapColour ) );
-
-			p_ambient += texture( c3d_mapColour, l_texCoord.xy() ).xyz();
-		}
-
-		if ( CheckFlag( p_textureFlags, TextureChannel::eAmbient ) )
-		{
-			auto c3d_mapAmbient( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapAmbient ) );
-
-			p_ambient += texture( c3d_mapAmbient, l_texCoord.xy() ).xyz();
-		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{

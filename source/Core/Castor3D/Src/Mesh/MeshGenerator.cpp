@@ -1,4 +1,4 @@
-#include "MeshGenerator.hpp"
+﻿#include "MeshGenerator.hpp"
 
 #include "Engine.hpp"
 
@@ -13,8 +13,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MeshGenerator::MeshGenerator( MeshType p_eMeshType )
-		: m_eMeshType( p_eMeshType )
+	MeshGenerator::MeshGenerator( String const & p_meshType )
+		: m_meshType{ p_meshType }
 	{
 	}
 
@@ -24,7 +24,7 @@ namespace Castor3D
 
 	MeshGeneratorSPtr MeshGenerator::Create()
 	{
-		return std::make_shared< MeshGenerator >( MeshType::eCustom );
+		return std::make_shared< MeshGenerator >( cuT( "custom" ) );
 	}
 
 	void MeshGenerator::Generate( Mesh & p_mesh, Parameters const & p_parameters )

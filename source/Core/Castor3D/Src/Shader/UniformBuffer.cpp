@@ -243,7 +243,6 @@ namespace Castor3D
 			p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
 		}
 
-		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatAmbient );
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatDiffuse );
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatEmissive );
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular );

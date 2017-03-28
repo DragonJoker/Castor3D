@@ -32,7 +32,6 @@ namespace Castor3D
 	}
 	PassRenderNodeUniforms::PassRenderNodeUniforms( UniformBuffer & p_passUbo )
 		: m_passUbo{ p_passUbo }
-		, m_ambient{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatAmbient ) }
 		, m_diffuse{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ) }
 		, m_specular{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ) }
 		, m_emissive{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ) }
@@ -47,22 +46,12 @@ namespace Castor3D
 		: PassRenderNodeUniforms{ p_passUbo }
 		, m_pass{ p_pass }
 	{
-		DoGetTexture( p_pass, p_program, TextureChannel::eAmbient, ShaderProgram::MapAmbient, *this );
-		DoGetTexture( p_pass, p_program, TextureChannel::eColour, ShaderProgram::MapColour, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eEmissive, ShaderProgram::MapEmissive, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eOpacity, ShaderProgram::MapOpacity, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eHeight, ShaderProgram::MapHeight, *this );
-
-		if ( p_pass.GetTextureUnit(  TextureChannel::eRelief ) )
-		{
-			DoGetTexture( p_pass, p_program, TextureChannel::eRelief, ShaderProgram::MapNormal, *this );
-		}
-		else
-		{
-			DoGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
-		}
+		DoGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
 	}
 }

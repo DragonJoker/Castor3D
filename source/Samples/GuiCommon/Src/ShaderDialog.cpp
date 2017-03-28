@@ -1,4 +1,4 @@
-#include "ShaderDialog.hpp"
+﻿#include "ShaderDialog.hpp"
 
 #include "AuiDockArt.hpp"
 #include "AuiTabArt.hpp"
@@ -74,10 +74,10 @@ namespace GuiCommon
 		else
 		{
 			PassSPtr l_pass = m_pPass.lock();
-			auto l_lock = Castor::make_unique_lock( m_scene.GetRenderWindowCache() );
-			auto l_it = m_scene.GetRenderWindowCache().begin();
+			auto l_lock = Castor::make_unique_lock( m_scene.GetEngine()->GetRenderWindowCache() );
+			auto l_it = m_scene.GetEngine()->GetRenderWindowCache().begin();
 
-			if ( l_it != m_scene.GetRenderWindowCache().end() && l_it->second->GetRenderTarget() )
+			if ( l_it != m_scene.GetEngine()->GetRenderWindowCache().end() && l_it->second->GetRenderTarget() )
 			{
 				RenderTechniqueSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
 

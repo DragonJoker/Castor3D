@@ -43,12 +43,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eMeshType	The mesh type
+		 *\param[in]	p_meshType	The mesh type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eMeshType	Le type de maillage
+		 *\param[in]	p_meshType	Le type de maillage
 		 */
-		C3D_API explicit MeshGenerator( MeshType p_eMeshType = MeshType::eCustom );
+		C3D_API explicit MeshGenerator( Castor::String const & p_meshType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -87,18 +87,6 @@ namespace Castor3D
 		 *\param[in]	p_reverted	Dit si l'espace tangent généré doit être inversé.
 		 */
 		C3D_API virtual void ComputeNormals( Mesh & p_mesh, bool p_reverted = false );
-		/**
-		 *\~english
-		 *\brief		Retrieves the mesh type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type de maillage
-		 *\return		La valeur
-		 */
-		inline MeshType GetMeshType()const
-		{
-			return m_eMeshType;
-		}
 
 	private:
 		/**
@@ -114,8 +102,9 @@ namespace Castor3D
 		virtual void DoGenerate( Mesh & p_mesh, Parameters const & p_parameters );
 
 	private:
-		//!\~english The mesh type	\~french Le type de mesh
-		MeshType m_eMeshType;
+		//!\~english	The mesh type.
+		//!\~french		Le type de mesh.
+		Castor::String m_meshType;
 	};
 }
 

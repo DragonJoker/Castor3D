@@ -33,6 +33,7 @@ SOFTWARE.
 #include "Cache/ShaderCache.hpp"
 #include "Cache/TargetCache.hpp"
 #include "Cache/TechniqueCache.hpp"
+#include "Cache/WindowCache.hpp"
 
 #include "Miscellaneous/Version.hpp"
 
@@ -598,6 +599,9 @@ namespace Castor3D
 		//!\~english	The render technique cache.
 		//!\~french		Le cache de techniques de rendu.
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
+		//!\~english	The render windows cache.
+		//!\~french		Le cache de fenêtres de rendu.
+		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		//!\~english	The fonts cache.
 		//!\~french		La cache de polices.
 		Castor::FontCache m_fontCache;
