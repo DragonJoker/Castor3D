@@ -196,13 +196,13 @@ namespace deferred
 		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
-		//if ( m_ssaoEnabled )
-		//{
-		//	auto & l_context = *m_renderSystem.GetCurrentContext();
-		//	m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		//	l_context.RenderTexture( Position{}, m_size, m_ssao->GetResult() );
-		//	m_frameBuffer.m_frameBuffer->Unbind();
-		//}
+		if ( m_ssaoEnabled )
+		{
+			auto & l_context = *m_renderSystem.GetCurrentContext();
+			m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+			l_context.RenderTexture( Position{}, m_size, m_ssao->GetRaw() );
+			m_frameBuffer.m_frameBuffer->Unbind();
+		}
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )

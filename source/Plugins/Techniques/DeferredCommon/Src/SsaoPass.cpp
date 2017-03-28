@@ -3,6 +3,9 @@
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
+#include <Mesh/Buffer/BufferElementGroup.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Camera.hpp>
@@ -158,7 +161,7 @@ namespace deferred_common
 				l_ssaoConfig.End();
 
 				// Shader outputs
-				auto pxl_fragColor = l_writer.GetFragData< Float >( cuT( "pxl_fragColor" ), 0u );
+				auto pxl_fragColor = l_writer.GetOutput< Float >( cuT( "pxl_fragColor" ) );
 
 				l_writer.ImplementFunction< Void >( cuT( "main" )
 					, [&]()
@@ -187,7 +190,7 @@ namespace deferred_common
 						}
 						ROF;
 
-						l_occlusion = 1.0_f - ( l_occlusion / c3d_kernelSize );
+						l_occlusion = 1.0_f - l_writer.Paren( l_occlusion / c3d_kernelSize );
 						pxl_fragColor = l_occlusion;
 					} );
 				l_pxl = l_writer.Finalise();
@@ -220,7 +223,7 @@ namespace deferred_common
 				auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
 
 				// Shader outputs
-				auto pxl_fragColor = l_writer.GetFragData< Float >( cuT( "pxl_fragColor" ), 0u );
+				auto pxl_fragColor = l_writer.GetOutput< Float >( cuT( "pxl_fragColor" ) );
 
 				l_writer.ImplementFunction< Void >( cuT( "main" )
 					, [&]()
@@ -232,14 +235,14 @@ namespace deferred_common
 						{
 							FOR( l_writer, Int, y, -2, cuT( "y < 2" ), cuT( "++y" ) )
 							{
-								auto l_offset = l_writer.GetLocale( cuT( "l_result" ), vec2( l_writer.Cast< Float >( x ), l_writer.Cast< Float >( y ) ) * l_texelSize );
+								auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( l_writer.Cast< Float >( x ), l_writer.Cast< Float >( y ) ) * l_texelSize );
 								l_result += texture( c3d_mapColour, vtx_texture + l_offset ).r();
 							}
 							ROF;
 						}
 						ROF;
 
-						pxl_fragColor = l_result / ( 4.0 * 4.0 );
+						pxl_fragColor = l_result / l_writer.Paren( 4.0_f * 4.0_f );
 					} );
 				l_pxl = l_writer.Finalise();
 			}
@@ -274,7 +277,8 @@ namespace deferred_common
 
 	SsaoPass::SsaoPass( Engine & p_engine
 		, Size const & p_size )
-		: m_size{ p_size }
+		: m_engine{ p_engine }
+		, m_size{ p_size }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix
 			, *p_engine.GetRenderSystem() }
 		, m_ssaoKernel{ DoGetKernel() }
@@ -283,102 +287,218 @@ namespace deferred_common
 		, m_ssaoConfig{ cuT( "SsaoConfig" )
 			, *p_engine.GetRenderSystem() }
 		, m_blurProgram{ DoGetBlurProgram( p_engine ) }
+		, m_viewport{ *p_engine.GetRenderSystem()->GetEngine() }
+		, m_bufferVertex
+		{
+			{
+				0, 0, 0, 0,
+				1, 1, 1, 1,
+				0, 1, 0, 1,
+				0, 0, 0, 0,
+				1, 0, 1, 0,
+				1, 1, 1, 1
+			}
+		}
+		, m_declaration
+		{
+			{
+				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 },
+				BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 }
+			}
+		}
 	{
-		float const l_wScale = p_size.width() / 4.0f;
-		float const l_hScale = p_size.height() / 4.0f;
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-		m_viewMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
-		m_kernelUniform = m_ssaoConfig.CreateUniform< UniformType::eVec3f >( cuT( "c3d_kernel" ), 64u );
-		m_ssaoConfig.CreateUniform< UniformType::eInt >( cuT( "c3d_kernelSize" ) )->SetValue( 64 );
-		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->SetValue( 0.5f );
-		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->SetValue( 0.025f );
-		m_ssaoConfig.CreateUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->SetValue( Point2f( l_wScale, l_hScale ) );
-
-		m_kernelUniform->SetValues( m_ssaoKernel );
-
-		m_fbo = p_engine.GetRenderSystem()->CreateFrameBuffer();
-		m_ssaoResult = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
-			, AccessType::eNone
-			, AccessType::eRead | AccessType::eWrite );
-		m_ssaoResult->SetSource( PxBufferBase::create( p_size
-			, PixelFormat::eL32F ) );
-		m_ssaoResult->Initialise();
-		m_ssaoResultAttach = m_fbo->CreateAttachment( m_ssaoResult );
-		m_ssaoResultAttach->SetTarget( TextureType::eTwoDimensions );
-		m_ssaoPipeline = DoCreatePipeline( p_engine, *m_ssaoProgram );
-		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo );
-		m_ssaoPipeline->AddUniformBuffer( m_ssaoConfig );
-
-		m_fbo->Create();
-		m_fbo->Initialise( m_size );
-
-		m_blurResult = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
-			, AccessType::eNone
-			, AccessType::eRead | AccessType::eWrite );
-		m_blurResult->SetSource( PxBufferBase::create( p_size
-			, PixelFormat::eL32F ) );
-		m_blurResult->Initialise();
-		m_blurResultAttach = m_fbo->CreateAttachment( m_blurResult );
-		m_blurResultAttach->SetTarget( TextureType::eTwoDimensions );
-
-		m_blurPipeline = DoCreatePipeline( p_engine, *m_blurProgram );
-		m_blurPipeline->AddUniformBuffer( m_matrixUbo );
-
-		m_colour = std::make_unique< RenderColourToTexture >( *p_engine.GetRenderSystem()->GetMainContext(), m_matrixUbo );
-		m_colour->Initialise();
+		DoInitialiseQuadRendering();
+		DoInitialiseSsaoPass();
+		DoInitialiseBlurPass();
 	}
 
 	SsaoPass::~SsaoPass()
 	{
-		m_viewMatrix.reset();
-		m_ssaoPipeline->Cleanup();
-		m_ssaoPipeline.reset();
-		m_matrixUbo.Cleanup();
-		m_ssaoConfig.Cleanup();
-		m_ssaoProgram.reset();
-		m_ssaoNoise.Cleanup();
-		m_colour->Cleanup();
-		m_colour.reset();
-		m_fbo->Bind();
-		m_fbo->DetachAll();
-		m_fbo->Unbind();
-		m_fbo->Cleanup();
-		m_fbo->Destroy();
-		m_fbo.reset();
-		m_ssaoResult->Cleanup();
-		m_ssaoResult.reset();
+		DoCleanupBlurPass();
+		DoCleanupSsaoPass();
+		DoCleanupQuadRendering();
 	}
 
 	void SsaoPass::Render( GeometryPassResult const & p_gp
 		, Camera const & p_camera )
 	{
-		m_fbo->Bind( FrameBufferTarget::eDraw );
-		// Render SSAO
-		m_ssaoResultAttach->Attach( AttachmentPoint::eColour, 0u );
-		m_fbo->SetDrawBuffer( m_ssaoResultAttach );
-		m_fbo->Clear( BufferComponent::eColour );
 		m_viewMatrix->SetValue( p_camera.GetView() );
+		m_matrixUbo.Update();
+		m_viewport.Apply();
+		DoRenderSsao( p_gp );
+		DoRenderBlur();
+	}
+
+	void SsaoPass::DoInitialiseQuadRendering()
+	{
+		m_viewport.Initialise();
+		m_viewport.Resize( m_size );
+		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		m_viewMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
+		m_projectionMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
+		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
+		uint32_t i = 0;
+
+		for ( auto & l_vertex : m_arrayVertex )
+		{
+			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+		}
+
+		auto & l_renderSystem = *m_engine.GetRenderSystem();
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *l_renderSystem.GetEngine()
+			, m_declaration );
+		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size()
+			* m_declaration.stride() ) );
+		m_vertexBuffer->LinkCoords( m_arrayVertex.begin()
+			, m_arrayVertex.end() );
+		m_vertexBuffer->Initialise( BufferAccessType::eStatic
+			, BufferAccessNature::eDraw );
+
+	}
+
+	void SsaoPass::DoInitialiseSsaoPass()
+	{
+		auto & l_renderSystem = *m_engine.GetRenderSystem();
+		float const l_wScale = m_size.width() / 4.0f;
+		float const l_hScale = m_size.height() / 4.0f;
+		m_kernelUniform = m_ssaoConfig.CreateUniform< UniformType::eVec3f >( cuT( "c3d_kernel" ), 64u );
+		m_ssaoConfig.CreateUniform< UniformType::eInt >( cuT( "c3d_kernelSize" ) )->SetValue( 64 );
+		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->SetValue( 0.5f );
+		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->SetValue( 0.025f );
+		m_ssaoConfig.CreateUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->SetValue( Point2f( l_wScale, l_hScale ) );
+		m_kernelUniform->SetValues( m_ssaoKernel );
+
+		m_ssaoResult = l_renderSystem.CreateTexture( TextureType::eTwoDimensions
+			, AccessType::eNone
+			, AccessType::eRead | AccessType::eWrite );
+		m_ssaoResult->SetSource( PxBufferBase::create( m_size
+			, PixelFormat::eL32F ) );
+		m_ssaoResult->Initialise();
+
+		m_ssaoFbo = l_renderSystem.CreateFrameBuffer();
+		m_ssaoFbo->Create();
+		m_ssaoFbo->Initialise( m_size );
+
+		m_ssaoResultAttach = m_ssaoFbo->CreateAttachment( m_ssaoResult );
+		m_ssaoFbo->Bind();
+		m_ssaoFbo->Attach( AttachmentPoint::eColour, 0u, m_ssaoResultAttach, TextureType::eTwoDimensions );
+		m_ssaoFbo->SetDrawBuffer( m_ssaoResultAttach );
+		ENSURE( m_ssaoFbo->IsComplete() );
+		m_ssaoFbo->Unbind();
+
+		m_ssaoPipeline = DoCreatePipeline( m_engine, *m_ssaoProgram );
+		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo );
+		m_ssaoPipeline->AddUniformBuffer( m_ssaoConfig );
+
+		m_ssaoGeometryBuffers = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
+			, *m_ssaoProgram );
+		m_ssaoGeometryBuffers->Initialise( { *m_vertexBuffer }
+			, nullptr );
+	}
+
+	void SsaoPass::DoInitialiseBlurPass()
+	{
+		auto & l_renderSystem = *m_engine.GetRenderSystem();
+		m_blurResult = l_renderSystem.CreateTexture( TextureType::eTwoDimensions
+			, AccessType::eNone
+			, AccessType::eRead | AccessType::eWrite );
+		m_blurResult->SetSource( PxBufferBase::create( m_size
+			, PixelFormat::eL32F ) );
+		m_blurResult->Initialise();
+
+		m_blurFbo = l_renderSystem.CreateFrameBuffer();
+		m_blurFbo->Create();
+		m_blurFbo->Initialise( m_size );
+
+		m_blurResultAttach = m_blurFbo->CreateAttachment( m_blurResult );
+		m_blurFbo->Bind();
+		m_blurFbo->Attach( AttachmentPoint::eColour, 0u, m_blurResultAttach, TextureType::eTwoDimensions );
+		m_blurFbo->SetDrawBuffer( m_blurResultAttach );
+		ENSURE( m_ssaoFbo->IsComplete() );
+		m_blurFbo->Unbind();
+
+		m_blurPipeline = DoCreatePipeline( m_engine, *m_blurProgram );
+		m_blurPipeline->AddUniformBuffer( m_matrixUbo );
+		m_blurGeometryBuffers = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
+			, *m_blurProgram );
+		m_blurGeometryBuffers->Initialise( { *m_vertexBuffer }
+			, nullptr );
+	}
+
+	void SsaoPass::DoCleanupQuadRendering()
+	{
+		m_vertexBuffer->Cleanup();
+		m_vertexBuffer.reset();
+		m_viewport.Cleanup();
+		m_viewMatrix.reset();
+		m_matrixUbo.Cleanup();
+	}
+
+	void SsaoPass::DoCleanupSsaoPass()
+	{
+		m_ssaoGeometryBuffers->Cleanup();
+		m_ssaoGeometryBuffers.reset();
+		m_ssaoPipeline->Cleanup();
+		m_ssaoPipeline.reset();
+		m_ssaoConfig.Cleanup();
+		m_ssaoProgram.reset();
+		m_ssaoNoise.Cleanup();
+		m_ssaoFbo->Bind();
+		m_ssaoFbo->DetachAll();
+		m_ssaoFbo->Unbind();
+		m_ssaoFbo->Cleanup();
+		m_ssaoFbo->Destroy();
+		m_ssaoFbo.reset();
+		m_ssaoResultAttach.reset();
+		m_ssaoResult->Cleanup();
+		m_ssaoResult.reset();
+	}
+
+	void SsaoPass::DoCleanupBlurPass()
+	{
+		m_blurGeometryBuffers->Cleanup();
+		m_blurGeometryBuffers.reset();
+		m_blurPipeline->Cleanup();
+		m_blurPipeline.reset();
+		m_blurProgram.reset();
+		m_blurFbo->Bind();
+		m_blurFbo->DetachAll();
+		m_blurFbo->Unbind();
+		m_blurFbo->Cleanup();
+		m_blurFbo->Destroy();
+		m_blurFbo.reset();
+		m_blurResultAttach.reset();
+		m_blurResult->Cleanup();
+		m_blurResult.reset();
+	}
+
+	void SsaoPass::DoRenderSsao( GeometryPassResult const & p_gp )
+	{
+		m_ssaoFbo->Bind( FrameBufferTarget::eDraw );
+		m_ssaoFbo->Clear( BufferComponent::eColour );
+		p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Bind( 0u );
+		p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Bind( 0u );
 		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Bind( 1u );
 		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Bind( 1u );
 		m_ssaoNoise.Bind();
-		m_colour->Render( Position{}
-			, m_size
-			, *p_gp[size_t( DsTexture::ePosition )]->GetTexture()
-			, m_matrixUbo
-			, *m_ssaoPipeline );
+		m_ssaoPipeline->Apply();
+		m_ssaoGeometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 		m_ssaoNoise.Unbind();
 		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Unbind( 1u );
+		p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Unbind( 0u );
+		p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Unbind( 0u );
+		m_ssaoFbo->Unbind();
+	}
 
-		// Blur SSAO
-		m_ssaoResultAttach->Attach( AttachmentPoint::eColour, 0u );
-		m_fbo->SetDrawBuffer( m_ssaoResultAttach );
-		m_fbo->Clear( BufferComponent::eColour );
-		m_colour->Render( Position{}
-			, m_size
-			, *m_ssaoResult
-			, m_matrixUbo
-			, *m_blurPipeline );
-		m_fbo->Unbind();
+	void SsaoPass::DoRenderBlur()
+	{
+		m_blurFbo->Bind( FrameBufferTarget::eDraw );
+		m_blurFbo->Clear( BufferComponent::eColour );
+		m_ssaoResult->Bind( 0u );
+		m_blurPipeline->Apply();
+		m_blurGeometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
+		m_ssaoResult->Unbind( 0u );
+		m_blurFbo->Unbind();
 	}
 }

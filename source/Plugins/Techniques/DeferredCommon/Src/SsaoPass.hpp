@@ -49,12 +49,30 @@ namespace deferred_common
 		}
 
 	private:
+		void DoInitialiseQuadRendering();
+		void DoInitialiseSsaoPass();
+		void DoInitialiseBlurPass();
+		void DoCleanupQuadRendering();
+		void DoCleanupSsaoPass();
+		void DoCleanupBlurPass();
+		void DoRenderSsao( GeometryPassResult const & p_gp );
+		void DoRenderBlur();
+
+	private:
+		Castor3D::Engine & m_engine;
+		// Quad rendering
 		Castor::Size m_size;
 		Castor3D::UniformBuffer m_matrixUbo;
 		Castor3D::Uniform4x4fSPtr m_viewMatrix;
-		Castor3D::RenderColourToTextureUPtr m_colour;
-		Castor3D::FrameBufferSPtr m_fbo;
+		Castor3D::Uniform4x4fSPtr m_projectionMatrix;
+		Castor3D::Viewport m_viewport;
+		std::array< Castor::real, 6 * (3 + 2) > m_bufferVertex;
+		Castor3D::BufferDeclaration m_declaration;
+		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
+		Castor3D::VertexBufferSPtr m_vertexBuffer;
 		// Raw SSAO pass
+		Castor3D::FrameBufferSPtr m_ssaoFbo;
+		Castor3D::GeometryBuffersSPtr m_ssaoGeometryBuffers;
 		Castor3D::RenderPipelineUPtr m_ssaoPipeline;
 		Castor3D::ShaderProgramSPtr m_ssaoProgram;
 		Castor::Point3fArray m_ssaoKernel;
@@ -64,6 +82,8 @@ namespace deferred_common
 		Castor3D::UniformBuffer m_ssaoConfig;
 		Castor3D::Uniform3fSPtr m_kernelUniform;
 		// SSAO blur pass
+		Castor3D::FrameBufferSPtr m_blurFbo;
+		Castor3D::GeometryBuffersSPtr m_blurGeometryBuffers;
 		Castor3D::RenderPipelineUPtr m_blurPipeline;
 		Castor3D::ShaderProgramSPtr m_blurProgram;
 		Castor3D::TextureLayoutSPtr m_blurResult;
