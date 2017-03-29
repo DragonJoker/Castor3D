@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -144,6 +144,7 @@ namespace deferred_common
 		auto out_c3dNormal = l_writer.GetFragData< Vec4 >( cuT( "out_c3dNormal" ), l_index++ );
 		auto out_c3dSpecular = l_writer.GetFragData< Vec4 >( cuT( "out_c3dSpecular" ), l_index++ );
 		auto out_c3dEmissive = l_writer.GetFragData< Vec4 >( cuT( "out_c3dEmissive" ), l_index++ );
+		auto out_c3dDepth = l_writer.GetFragData< Float >( cuT( "out_c3dDepth" ), l_index++ );
 
 		auto l_parallaxMapping = DeclareParallaxMappingFunc( l_writer, p_textureFlags, p_programFlags );
 
@@ -173,6 +174,7 @@ namespace deferred_common
 			out_c3dNormal = vec4( l_v3Normal, 0.0_f );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
 			out_c3dEmissive = vec4( l_v3Emissive, 0.0_f );
+			out_c3dDepth = gl_FragCoord.z();
 		} );
 
 		return l_writer.Finalise();

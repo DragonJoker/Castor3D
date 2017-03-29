@@ -1,4 +1,4 @@
-#include "LightPass.hpp"
+﻿#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -36,6 +36,7 @@ namespace deferred_common
 				cuT( "c3d_mapNormals" ),
 				cuT( "c3d_mapSpecular" ),
 				cuT( "c3d_mapEmissive" ),
+				cuT( "c3d_mapDepth" ),
 			}
 		};
 
@@ -52,6 +53,7 @@ namespace deferred_common
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
+				PixelFormat::eL16F32F,
 			}
 		};
 
@@ -63,6 +65,7 @@ namespace deferred_common
 		static std::array< AttachmentPoint, size_t( DsTexture::eCount ) > Values
 		{
 			{
+				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
@@ -84,6 +87,7 @@ namespace deferred_common
 				2,
 				3,
 				4,
+				5,
 			}
 		};
 
@@ -318,6 +322,7 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::eNormals )]->Bind();
 		p_gp[size_t( DsTexture::eSpecular )]->Bind();
 		p_gp[size_t( DsTexture::eEmissive )]->Bind();
+		p_gp[size_t( DsTexture::eDepth )]->Bind();
 
 		if ( p_ssao && m_ssao )
 		{
@@ -337,6 +342,7 @@ namespace deferred_common
 			p_ssao->GetTexture()->Unbind( size_t( DsTexture::eCount ) );
 		}
 
+		p_gp[size_t( DsTexture::eDepth )]->Unbind();
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
 		p_gp[size_t( DsTexture::eSpecular )]->Unbind();
 		p_gp[size_t( DsTexture::eNormals )]->Unbind();
@@ -359,6 +365,7 @@ namespace deferred_common
 		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormals ) );
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+		auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
 		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
 		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 

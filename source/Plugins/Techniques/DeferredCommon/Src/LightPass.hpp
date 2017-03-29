@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -40,6 +40,7 @@ namespace deferred_common
 		eNormals,
 		eSpecular,
 		eEmissive,
+		eDepth,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
 	};
 	Castor::String GetTextureName( DsTexture p_texture );

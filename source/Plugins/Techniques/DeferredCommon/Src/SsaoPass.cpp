@@ -1,4 +1,4 @@
-﻿#include "SsaoPass.hpp"
+#include "SsaoPass.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -136,7 +136,7 @@ namespace deferred_common
 			return l_result;
 		}
 
-		String DoGetVertexProgram( Engine & p_engine )
+		String DoGetSsaoVertexProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			String l_vtx;
@@ -144,14 +144,18 @@ namespace deferred_common
 				using namespace GLSL;
 				auto l_writer = l_renderSystem.CreateGlslWriter();
 
-				UBO_MATRIX( l_writer );
-
 				// Shader inputs
+				UBO_MATRIX( l_writer );
+				Ubo l_ssaoInfo{ l_writer, cuT( "SsaoInfo" ) };
+				auto c3d_fAspectRatio = l_ssaoInfo.GetUniform< Float >( cuT( "c3d_fAspectRatio" ) );
+				auto c3d_fTanHalfFov = l_ssaoInfo.GetUniform< Float >( cuT( "c3d_fTanHalfFov" ) );
+				l_ssaoInfo.End();
 				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 
 				// Shader outputs
 				auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+				auto vtx_viewRay = l_writer.GetOutput< Vec2 >( cuT( "vtx_viewRay" ) );
 				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" )
@@ -159,81 +163,162 @@ namespace deferred_common
 					{
 						vtx_texture = texture;
 						gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+						vtx_viewRay.x() = position.x() * c3d_fAspectRatio * c3d_fTanHalfFov;
+						vtx_viewRay.y() = position.y() * c3d_fTanHalfFov;
 					} );
 				l_vtx = l_writer.Finalise();
 			}
 
 			return l_vtx;
 		}
+		
+		String DoGetSsaoPixelProgram( Engine & p_engine )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			using namespace GLSL;
+			auto l_writer = l_renderSystem.CreateGlslWriter();
+
+			// Shader inputs
+			UBO_MATRIX( l_writer );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_viewRay = l_writer.GetInput< Vec2 >( cuT( "vtx_viewRay" ) );
+			//auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapPosition" ) );
+			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
+			auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
+			auto c3d_mapNoise = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
+
+			Ubo l_ssaoConfig{ l_writer, cuT( "SsaoConfig" ) };
+			auto c3d_kernel = l_ssaoConfig.GetUniform< Vec3 >( cuT( "c3d_kernel" ), 64u );
+			auto c3d_kernelSize = l_ssaoConfig.GetUniform< Int >( cuT( "c3d_kernelSize" ) );
+			auto c3d_radius = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_radius" ) );
+			auto c3d_bias = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_bias" ) );
+			auto c3d_noiseScale = l_ssaoConfig.GetUniform< Vec2 >( cuT( "c3d_noiseScale" ) );
+			auto c3d_mtxGProjection = l_ssaoConfig.GetUniform< Mat4 >( cuT( "c3d_mtxGProjection" ) );
+			l_ssaoConfig.End();
+
+			// Shader outputs
+			auto pxl_fragColor = l_writer.GetOutput< Float >( cuT( "pxl_fragColor" ) );
+
+			auto l_calViewZ = l_writer.ImplementFunction< Float >( cuT( "CalcViewZ" )
+				, [&]( Vec2 const & p_coords )
+				{
+					auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDepth, p_coords ).x() );
+					l_writer.Return( c3d_mtxGProjection[3][2] / l_writer.Paren( l_depth * 2.0_f - 1.0_f - c3d_mtxGProjection[2][2] ) );
+				}, InParam< Vec2 >{ &l_writer, cuT( "p_coords" ) } );
+
+			l_writer.ImplementFunction< Void >( cuT( "main" )
+				, [&]()
+				{
+					//auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), texture( c3d_mapPosition, vtx_texture ).xyz() );
+					//l_fragPos = l_writer.Paren( c3d_mtxView * vec4( l_fragPos, 1.0_f ) ).xyz();
+					auto l_viewZ = l_writer.GetLocale( cuT( "l_viewZ" ), l_calViewZ( vtx_texture ) );
+					auto l_viewX = l_writer.GetLocale( cuT( "l_viewX" ), vtx_viewRay.x() * l_viewZ );
+					auto l_viewY = l_writer.GetLocale( cuT( "l_viewY" ), vtx_viewRay.y() * l_viewZ );
+					auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), vec3( l_viewX, l_viewY, l_viewZ ) );
+					auto l_normal = l_writer.GetLocale( cuT( "l_normal" ), texture( c3d_mapNormal, vtx_texture ).rgb() );
+					l_normal = normalize( l_writer.Paren( c3d_mtxView * vec4( l_normal, 1.0_f ) ).xyz() );
+					auto l_randomVec = l_writer.GetLocale( cuT( "l_randomVec" ), normalize( texture( c3d_mapNoise, vtx_texture * c3d_noiseScale ).xyz() ) );
+					auto l_tangent = l_writer.GetLocale( cuT( "l_tangent" ), normalize( l_randomVec - l_normal * dot( l_randomVec, l_normal ) ) );
+					auto l_bitangent = l_writer.GetLocale( cuT( "l_bitangent" ), cross( l_normal, l_tangent ) );
+					auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), mat3( l_tangent, l_bitangent, l_normal ) );
+					auto l_occlusion = l_writer.GetLocale( cuT( "l_occlusion" ), 0.0_f );
+
+					FOR( l_writer, Int, i, 0, cuT( "i < c3d_kernelSize" ), cuT( "++i" ) )
+					{
+						// get sample position
+						auto l_sample = l_writer.GetLocale( cuT( "l_sample" ), l_tbn * c3d_kernel[i] ); // From tangent to view-space
+						l_sample = l_fragPos + l_sample * c3d_radius;
+						auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec4( l_sample, 1.0 ) );
+						l_offset = c3d_mtxProjection * l_offset;         // from view to clip-space
+						l_offset.xyz() = l_offset.xyz() / l_offset.w();  // perspective divide
+						l_offset.xyz() = l_offset.xyz() * 0.5 + 0.5;     // transform to range 0.0 - 1.0 
+						//auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), texture( c3d_mapPosition, l_offset.xy() ).z() );
+						auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), l_calViewZ( l_offset.xy() ) );
+						auto l_rangeCheck = l_writer.GetLocale( cuT( "l_rangeCheck" ), smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( l_fragPos.z() - l_sampleDepth ) ) );
+						l_occlusion += l_writer.Ternary( l_sampleDepth >= l_sample.z() + c3d_bias, 1.0_f, 0.0_f ) * l_rangeCheck;
+					}
+					ROF;
+
+					l_occlusion = 1.0_f - l_writer.Paren( l_occlusion / c3d_kernelSize );
+					pxl_fragColor = l_occlusion;
+				} );
+			return l_writer.Finalise();
+		}
+		
+		String DoGetBlurVertexProgram( Engine & p_engine )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			using namespace GLSL;
+			auto l_writer = l_renderSystem.CreateGlslWriter();
+
+			UBO_MATRIX( l_writer );
+
+			// Shader inputs
+			auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+
+			// Shader outputs
+			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+			l_writer.ImplementFunction< void >( cuT( "main" )
+				, [&]()
+				{
+					vtx_texture = texture;
+					gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				} );
+			return l_writer.Finalise();
+		}
+
+		String DoGetBlurPixelProgram( Engine & p_engine )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			using namespace GLSL;
+			auto l_writer = l_renderSystem.CreateGlslWriter();
+
+			// Shader inputs
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
+
+			// Shader outputs
+			auto pxl_fragColor = l_writer.GetOutput< Float >( cuT( "pxl_fragColor" ) );
+
+			l_writer.ImplementFunction< Void >( cuT( "main" )
+				, [&]()
+				{
+					auto l_texelSize = l_writer.GetLocale( cuT( "l_texelSize" ), vec2( 1.0_f, 1.0_f ) / vec2( textureSize( c3d_mapColour, 0 ) ) );
+					auto l_result = l_writer.GetLocale( cuT( "l_result" ), 0.0_f );
+
+					FOR( l_writer, Int, x, -2, cuT( "x < 2" ), cuT( "++x" ) )
+					{
+						FOR( l_writer, Int, y, -2, cuT( "y < 2" ), cuT( "++y" ) )
+						{
+							auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( l_writer.Cast< Float >( x ), l_writer.Cast< Float >( y ) ) * l_texelSize );
+							l_result += texture( c3d_mapColour, vtx_texture + l_offset ).r();
+						}
+						ROF;
+					}
+					ROF;
+
+					pxl_fragColor = l_result / l_writer.Paren( 4.0_f * 4.0_f );
+				} );
+			return l_writer.Finalise();
+		}
 
 		ShaderProgramSPtr DoGetSsaoProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_pxl;
-			{
-				using namespace GLSL;
-				auto l_writer = l_renderSystem.CreateGlslWriter();
-
-				// Shader inputs
-				UBO_MATRIX( l_writer );
-				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
-				auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapPosition" ) );
-				auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
-				auto c3d_mapNoise = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
-
-				Ubo l_ssaoConfig{ l_writer, cuT( "SsaoConfig" ) };
-				auto c3d_kernel = l_ssaoConfig.GetUniform< Vec3 >( cuT( "c3d_kernel" ), 64u );
-				auto c3d_kernelSize = l_ssaoConfig.GetUniform< Int >( cuT( "c3d_kernelSize" ) );
-				auto c3d_radius = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_radius" ) );
-				auto c3d_bias = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_bias" ) );
-				auto c3d_noiseScale = l_ssaoConfig.GetUniform< Vec2 >( cuT( "c3d_noiseScale" ) );
-				l_ssaoConfig.End();
-
-				// Shader outputs
-				auto pxl_fragColor = l_writer.GetOutput< Float >( cuT( "pxl_fragColor" ) );
-
-				l_writer.ImplementFunction< Void >( cuT( "main" )
-					, [&]()
-					{
-						auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), texture( c3d_mapPosition, vtx_texture ).xyz() );
-						l_fragPos = l_writer.Paren( c3d_mtxView * vec4( l_fragPos, 1.0_f ) ).xyz();
-						auto l_normal = l_writer.GetLocale( cuT( "l_normal" ), texture( c3d_mapNormal, vtx_texture ).rgb() );
-						l_normal = normalize( l_writer.Paren( c3d_mtxView * vec4( l_normal, 1.0_f ) ).xyz() );
-						auto l_randomVec = l_writer.GetLocale( cuT( "l_randomVec" ), normalize( texture( c3d_mapNoise, vtx_texture * c3d_noiseScale ).xyz() ) );
-						auto l_tangent = l_writer.GetLocale( cuT( "l_tangent" ), normalize( l_randomVec - l_normal * dot( l_randomVec, l_normal ) ) );
-						auto l_bitangent = l_writer.GetLocale( cuT( "l_bitangent" ), cross( l_normal, l_tangent ) );
-						auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), mat3( l_tangent, l_bitangent, l_normal ) );
-						auto l_occlusion = l_writer.GetLocale( cuT( "l_occlusion" ), 0.0_f );
-
-						FOR( l_writer, Int, i, 0, cuT( "i < c3d_kernelSize" ), cuT( "++i" ) )
-						{
-							// get sample position
-							auto l_sample = l_writer.GetLocale( cuT( "l_sample" ), l_tbn * c3d_kernel[i] ); // From tangent to view-space
-							l_sample = l_fragPos + l_sample * c3d_radius;
-							auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec4( l_sample, 1.0 ) );
-							l_offset = c3d_mtxProjection * l_offset;         // from view to clip-space
-							l_offset.xyz() = l_offset.xyz() / l_offset.w();  // perspective divide
-							l_offset.xyz() = l_offset.xyz() * 0.5 + 0.5;     // transform to range 0.0 - 1.0 
-							auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), texture( c3d_mapPosition, l_offset.xy() ).z() );
-							auto l_rangeCheck = l_writer.GetLocale( cuT( "l_rangeCheck" ), smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( l_fragPos.z() - l_sampleDepth ) ) );
-							l_occlusion += l_writer.Ternary( l_sampleDepth >= l_sample.z() + c3d_bias, 1.0_f, 0.0_f ) * l_rangeCheck;
-						}
-						ROF;
-
-						l_occlusion = 1.0_f - l_writer.Paren( l_occlusion / c3d_kernelSize );
-						pxl_fragColor = l_occlusion;
-					} );
-				l_pxl = l_writer.Finalise();
-			}
-
+			String l_vtx = DoGetSsaoVertexProgram( p_engine );
+			String l_pxl = DoGetSsaoPixelProgram( p_engine );
 			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
-			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapPosition" ), ShaderType::ePixel )->SetValue( 0 );
+			//l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapPosition" ), ShaderType::ePixel )->SetValue( 0 );
+			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->SetValue( 0 );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->SetValue( 1 );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->SetValue( 2 );
 			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, DoGetVertexProgram( p_engine ) );
+			l_program->SetSource( ShaderType::eVertex, l_model, DoGetSsaoVertexProgram( p_engine ) );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 			l_program->Initialise();
 			return l_program;
@@ -242,47 +327,14 @@ namespace deferred_common
 		ShaderProgramSPtr DoGetBlurProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_vtx = DoGetVertexProgram( p_engine );
-			String l_pxl;
-			{
-				using namespace GLSL;
-				auto l_writer = l_renderSystem.CreateGlslWriter();
-
-				// Shader inputs
-				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
-				auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
-
-				// Shader outputs
-				auto pxl_fragColor = l_writer.GetOutput< Float >( cuT( "pxl_fragColor" ) );
-
-				l_writer.ImplementFunction< Void >( cuT( "main" )
-					, [&]()
-					{
-						auto l_texelSize = l_writer.GetLocale( cuT( "l_texelSize" ), vec2( 1.0_f, 1.0_f ) / vec2( textureSize( c3d_mapColour, 0 ) ) );
-						auto l_result = l_writer.GetLocale( cuT( "l_result" ), 0.0_f );
-
-						FOR( l_writer, Int, x, -2, cuT( "x < 2" ), cuT( "++x" ) )
-						{
-							FOR( l_writer, Int, y, -2, cuT( "y < 2" ), cuT( "++y" ) )
-							{
-								auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( l_writer.Cast< Float >( x ), l_writer.Cast< Float >( y ) ) * l_texelSize );
-								l_result += texture( c3d_mapColour, vtx_texture + l_offset ).r();
-							}
-							ROF;
-						}
-						ROF;
-
-						pxl_fragColor = l_result / l_writer.Paren( 4.0_f * 4.0_f );
-					} );
-				l_pxl = l_writer.Finalise();
-			}
-
+			String l_vtx = DoGetBlurVertexProgram( p_engine );
+			String l_pxl = DoGetBlurPixelProgram( p_engine );
 			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->SetValue( 0 );
 			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, DoGetVertexProgram( p_engine ) );
+			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 			l_program->Initialise();
 			return l_program;
@@ -339,6 +391,8 @@ namespace deferred_common
 		m_viewMatrix->SetValue( p_camera.GetView() );
 		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
 		m_matrixUbo.Update();
+		m_gProjectionMatrix->SetValue( p_camera.GetViewport().GetProjection() );
+		m_ssaoConfig.Update();
 		m_viewport.Apply();
 		DoRenderSsao( p_gp );
 		DoRenderBlur();
@@ -386,6 +440,7 @@ namespace deferred_common
 		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->SetValue( 0.5f );
 		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->SetValue( 0.025f );
 		m_ssaoConfig.CreateUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->SetValue( Point2f( l_wScale, l_hScale ) );
+		m_gProjectionMatrix = m_ssaoConfig.CreateUniform< UniformType::eMat4x4f >( cuT( "c3d_mtxGProjection" ) );
 		m_kernelUniform->SetValues( m_ssaoKernel );
 
 		auto l_sampler = DoCreateSampler( m_engine, cuT( "SSAO_Result" ), WrapMode::eClampToEdge );
@@ -506,8 +561,10 @@ namespace deferred_common
 	{
 		m_ssaoFbo->Bind( FrameBufferTarget::eDraw );
 		m_ssaoFbo->Clear( BufferComponent::eColour );
-		p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Bind( 0u );
-		p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Bind( 0u );
+		//p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Bind( 0u );
+		//p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Bind( 0u );
+		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
+		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
 		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Bind( 1u );
 		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Bind( 1u );
 		m_ssaoNoise.Bind();
@@ -516,8 +573,10 @@ namespace deferred_common
 		m_ssaoNoise.Unbind();
 		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Unbind( 1u );
-		p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Unbind( 0u );
-		p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Unbind( 0u );
+		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
+		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
+		//p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Unbind( 0u );
+		//p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Unbind( 0u );
 		m_ssaoFbo->Unbind();
 	}
 
@@ -527,7 +586,6 @@ namespace deferred_common
 		m_blurFbo->Bind( FrameBufferTarget::eDraw );
 		m_blurFbo->Clear( BufferComponent::eColour );
 		m_ssaoResult.Bind();
-		m_matrixUbo.Update();
 		m_blurPipeline->Apply();
 		m_blurGeometryBuffers->Draw( 6u, 0 );
 		m_ssaoResult.Unbind();
