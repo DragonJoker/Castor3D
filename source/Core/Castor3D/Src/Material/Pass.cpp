@@ -219,10 +219,10 @@ namespace Castor3D
 			PxBufferBaseSPtr l_opacityImage;
 
 			DoPrepareTexture( TextureChannel::eDiffuse, l_index, l_opacitySource, l_opacityImage );
+			DoPrepareTexture( TextureChannel::eSpecular, l_index, l_opacitySource, l_opacityImage );
+			DoPrepareTexture( TextureChannel::eEmissive, l_index, l_opacitySource, l_opacityImage );
 
 			DoPrepareTexture( TextureChannel::eNormal, l_index );
-			DoPrepareTexture( TextureChannel::eSpecular, l_index );
-			DoPrepareTexture( TextureChannel::eEmissive, l_index );
 			DoPrepareTexture( TextureChannel::eGloss, l_index );
 			DoPrepareTexture( TextureChannel::eHeight, l_index );
 

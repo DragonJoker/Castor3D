@@ -612,7 +612,7 @@ namespace Castor3D
 			auto vtx_text = l_writer.GetInput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_textureFlags, TextureChannel::eText ) );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
@@ -630,7 +630,7 @@ namespace Castor3D
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 				{
-					l_v4Diffuse = texture( c3d_mapColour, vec2( vtx_texture.x(), vtx_texture.y() ) );
+					l_v4Diffuse = texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) );
 				}
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
@@ -651,7 +651,7 @@ namespace Castor3D
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{
-			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapColour, ShaderType::ePixel );
+			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )

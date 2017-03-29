@@ -127,7 +127,7 @@ namespace Testing
 		CT_REQUIRE( l_dstParser.ParseFile( p_path ) );
 		CT_REQUIRE( l_dstParser.ScenesBegin() != l_dstParser.ScenesEnd() );
 		SceneSPtr l_scene{ l_dstParser.ScenesBegin()->second };
-		auto & l_windows = l_scene->GetRenderWindowCache();
+		auto & l_windows = m_engine.GetRenderWindowCache();
 		RenderWindowSPtr l_window;
 
 		l_windows.lock();

@@ -134,8 +134,6 @@ namespace Castor3D
 	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
 	const String ShaderProgram::WindowSize = cuT( "c3d_v2iWindowSize" );
 	const String ShaderProgram::OvPosition = cuT( "c3d_v2iPosition" );
-	const String ShaderProgram::MapColour = cuT( "c3d_mapColour" );
-	const String ShaderProgram::MapAmbient = cuT( "c3d_mapAmbient" );
 	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
 	const String ShaderProgram::MapSpecular = cuT( "c3d_mapSpecular" );
 	const String ShaderProgram::MapEmissive = cuT( "c3d_mapEmissive" );

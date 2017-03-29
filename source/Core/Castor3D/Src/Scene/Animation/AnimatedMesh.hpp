@@ -156,7 +156,7 @@ namespace Castor3D
 		Mesh & m_mesh;
 		//!\~english	Currently playing animation.
 		//!\~french		L'animation en cours de lecture.
-		MeshAnimationInstanceRPtr m_playingAnimation;
+		MeshAnimationInstanceRPtr m_playingAnimation{ nullptr };
 	};
 }
 

@@ -754,11 +754,11 @@ namespace CastorViewer
 
 		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( MouseButton::eLeft ) )
 		{
-			if ( m_altDown )
-			{
-				auto l_window = GetRenderWindow();
+			auto l_window = GetRenderWindow();
 
-				if ( l_window )
+			if ( l_window )
+			{
+				if ( m_altDown )
 				{
 					auto l_x = m_oldX;
 					auto l_y = m_oldY;
@@ -779,10 +779,10 @@ namespace CastorViewer
 						}
 					} ) );
 				}
-			}
-			else
-			{
-				DoStartTimer( eTIMER_ID_MOUSE );
+				else if ( m_currentState )
+				{
+					DoStartTimer( eTIMER_ID_MOUSE );
+				}
 			}
 		}
 
@@ -910,25 +910,28 @@ namespace CastorViewer
 
 		if ( !l_inputListener || !l_inputListener->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
 		{
-			real l_deltaX = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
-			real l_deltaY = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
+			if ( m_currentState )
+			{
+				real l_deltaX = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
+				real l_deltaY = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
 
-			if ( p_event.ControlDown() )
-			{
-				l_deltaX = 0;
-			}
-			else if ( p_event.ShiftDown() )
-			{
-				l_deltaY = 0;
-			}
+				if ( p_event.ControlDown() )
+				{
+					l_deltaX = 0;
+				}
+				else if ( p_event.ShiftDown() )
+				{
+					l_deltaY = 0;
+				}
 
-			if ( m_mouseLeftDown )
-			{
-				m_currentState->SetAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
-			}
-			else if ( m_mouseRightDown )
-			{
-				m_currentState->SetScalarVelocity( Point3r{ l_deltaX, l_deltaY, 0.0_r } );
+				if ( m_mouseLeftDown )
+				{
+					m_currentState->SetAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
+				}
+				else if ( m_mouseRightDown )
+				{
+					m_currentState->SetScalarVelocity( Point3r{ l_deltaX, l_deltaY, 0.0_r } );
+				}
 			}
 		}
 

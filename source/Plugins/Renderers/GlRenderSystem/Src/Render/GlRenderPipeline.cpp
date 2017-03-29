@@ -225,7 +225,31 @@ namespace GlRender
 		String StateCheck::stack;
 
 #endif
+		
+		template< typename StateType >
+		uint64_t DoEncode( StateType const & p_state );
 
+		template<>
+		uint64_t DoEncode< DepthStencilState >( DepthStencilState const & p_state )
+		{
+			return ( uint64_t( p_state.GetDepthTest() ? 1u : 0u ) << 63 )
+				| ( uint64_t( p_state.GetDepthMask() == WritingMask::eMax ? 1u : 0u ) << 62 )
+				| ( uint64_t( p_state.GetStencilTest() ? 1u : 0u ) << 61 )
+				| ( uint64_t( uint8_t( p_state.GetStencilWriteMask() ) ) << 53 )
+				| ( uint64_t( uint8_t( p_state.GetStencilReadMask() ) ) << 45 )
+				| ( uint64_t( uint8_t( p_state.GetStencilBackFunc() ) ) << 42 )
+				| ( uint64_t( uint8_t( p_state.GetStencilBackRef() ) ) << 34 )
+				| ( uint64_t( uint8_t( p_state.GetStencilBackFailOp() ) ) << 31 )
+				| ( uint64_t( uint8_t( p_state.GetStencilBackDepthFailOp() ) ) << 28 )
+				| ( uint64_t( uint8_t( p_state.GetStencilBackPassOp() ) ) << 25 )
+				| ( uint64_t( uint8_t( p_state.GetStencilFrontFunc() ) ) << 22 )
+				| ( uint64_t( uint8_t( p_state.GetStencilFrontRef() ) ) << 14 )
+				| ( uint64_t( uint8_t( p_state.GetStencilFrontFailOp() ) ) << 11 )
+				| ( uint64_t( uint8_t( p_state.GetStencilFrontDepthFailOp() ) ) << 8 )
+				| ( uint64_t( uint8_t( p_state.GetStencilFrontPassOp() ) ) << 5 );
+			
+		}
+		
 		void DoApply( BlendState const p_state, OpenGl const & p_gl )
 		{
 			bool l_enabled{ false };
@@ -292,31 +316,37 @@ namespace GlRender
 			StateCheck l_check( p_state );
 
 #endif
+			static uint64_t l_save = 0ull;
+			uint64_t l_current = DoEncode( p_state );
 
-			p_gl.DepthMask( p_gl.Get( p_state.GetDepthMask() ) );
+			if ( l_current != l_save )
+			{
+				l_save = l_current;
+				p_gl.DepthMask( p_gl.Get( p_state.GetDepthMask() ) );
 
-			if ( p_state.GetDepthTest() )
-			{
-				p_gl.Enable( GlTweak::eDepthTest );
-				p_gl.DepthFunc( p_gl.Get( p_state.GetDepthFunc() ) );
-			}
-			else
-			{
-				p_gl.Disable( GlTweak::eDepthTest );
-			}
+				if ( p_state.GetDepthTest() )
+				{
+					p_gl.Enable( GlTweak::eDepthTest );
+					p_gl.DepthFunc( p_gl.Get( p_state.GetDepthFunc() ) );
+				}
+				else
+				{
+					p_gl.Disable( GlTweak::eDepthTest );
+				}
 
-			if ( p_state.GetStencilTest() )
-			{
-				p_gl.Enable( GlTweak::eStencilTest );
-				p_gl.StencilMaskSeparate( GlFace::eBoth, p_state.GetStencilWriteMask() );
-				p_gl.StencilFuncSeparate( GlFace::eBack, p_gl.Get( p_state.GetStencilBackFunc() ), p_state.GetStencilBackRef(), p_state.GetStencilReadMask() );
-				p_gl.StencilFuncSeparate( GlFace::eFront, p_gl.Get( p_state.GetStencilFrontFunc() ), p_state.GetStencilFrontRef(), p_state.GetStencilReadMask() );
-				p_gl.StencilOpSeparate( GlFace::eBack, p_gl.Get( p_state.GetStencilBackFailOp() ), p_gl.Get( p_state.GetStencilBackDepthFailOp() ), p_gl.Get( p_state.GetStencilBackPassOp() ) );
-				p_gl.StencilOpSeparate( GlFace::eFront, p_gl.Get( p_state.GetStencilFrontFailOp() ), p_gl.Get( p_state.GetStencilFrontDepthFailOp() ), p_gl.Get( p_state.GetStencilFrontPassOp() ) );
-			}
-			else
-			{
-				p_gl.Disable( GlTweak::eStencilTest );
+				if ( p_state.GetStencilTest() )
+				{
+					p_gl.Enable( GlTweak::eStencilTest );
+					p_gl.StencilMaskSeparate( GlFace::eBoth, p_state.GetStencilWriteMask() );
+					p_gl.StencilFuncSeparate( GlFace::eBack, p_gl.Get( p_state.GetStencilBackFunc() ), p_state.GetStencilBackRef(), p_state.GetStencilReadMask() );
+					p_gl.StencilFuncSeparate( GlFace::eFront, p_gl.Get( p_state.GetStencilFrontFunc() ), p_state.GetStencilFrontRef(), p_state.GetStencilReadMask() );
+					p_gl.StencilOpSeparate( GlFace::eBack, p_gl.Get( p_state.GetStencilBackFailOp() ), p_gl.Get( p_state.GetStencilBackDepthFailOp() ), p_gl.Get( p_state.GetStencilBackPassOp() ) );
+					p_gl.StencilOpSeparate( GlFace::eFront, p_gl.Get( p_state.GetStencilFrontFailOp() ), p_gl.Get( p_state.GetStencilFrontDepthFailOp() ), p_gl.Get( p_state.GetStencilFrontPassOp() ) );
+				}
+				else
+				{
+					p_gl.Disable( GlTweak::eStencilTest );
+				}
 			}
 		}
 

@@ -784,12 +784,6 @@ namespace Castor3D
 		/**@name Textures */
 		//@{
 
-		//!\~english	Name of the colour texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur.
-		C3D_API static const Castor::String MapColour;
-		//!\~english	Name of the ambient texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur ambiante.
-		C3D_API static const Castor::String MapAmbient;
 		//!\~english	Name of the diffuse texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture de couleur diffuse.
 		C3D_API static const Castor::String MapDiffuse;
