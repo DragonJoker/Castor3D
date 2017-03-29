@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -84,9 +84,6 @@ namespace deferred_common
 		//!\~english	The viewport used when rendering is done.
 		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Castor3D::Viewport m_viewport;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform;
 	};
 }
 

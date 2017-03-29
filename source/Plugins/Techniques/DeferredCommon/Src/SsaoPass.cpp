@@ -196,9 +196,10 @@ namespace deferred_common
 					, [&]()
 					{
 						auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), texture( c3d_mapPosition, vtx_texture ).xyz() );
-						//l_fragPos = l_writer.Paren( c3d_mtxView * vec4( l_fragPos, 1.0_f ) ).xyz();
+						l_fragPos = l_writer.Paren( c3d_mtxView * vec4( l_fragPos, 1.0_f ) ).xyz();
 						auto l_normal = l_writer.GetLocale( cuT( "l_normal" ), texture( c3d_mapNormal, vtx_texture ).rgb() );
-						auto l_randomVec = l_writer.GetLocale( cuT( "l_randomVec" ), texture( c3d_mapNoise, vtx_texture * c3d_noiseScale ).xyz() );
+						l_normal = normalize( l_writer.Paren( c3d_mtxView * vec4( l_normal, 1.0_f ) ).xyz() );
+						auto l_randomVec = l_writer.GetLocale( cuT( "l_randomVec" ), normalize( texture( c3d_mapNoise, vtx_texture * c3d_noiseScale ).xyz() ) );
 						auto l_tangent = l_writer.GetLocale( cuT( "l_tangent" ), normalize( l_randomVec - l_normal * dot( l_randomVec, l_normal ) ) );
 						auto l_bitangent = l_writer.GetLocale( cuT( "l_bitangent" ), cross( l_normal, l_tangent ) );
 						auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), mat3( l_tangent, l_bitangent, l_normal ) );
@@ -210,9 +211,9 @@ namespace deferred_common
 							auto l_sample = l_writer.GetLocale( cuT( "l_sample" ), l_tbn * c3d_kernel[i] ); // From tangent to view-space
 							l_sample = l_fragPos + l_sample * c3d_radius;
 							auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec4( l_sample, 1.0 ) );
-							l_offset = c3d_mtxProjection * l_offset;      // from view to clip-space
-							l_offset.xyz() /= l_offset.w();               // perspective divide
-							l_offset.xyz() = l_offset.xyz() * 0.5 + 0.5;  // transform to range 0.0 - 1.0 
+							l_offset = c3d_mtxProjection * l_offset;         // from view to clip-space
+							l_offset.xyz() = l_offset.xyz() / l_offset.w();  // perspective divide
+							l_offset.xyz() = l_offset.xyz() * 0.5 + 0.5;     // transform to range 0.0 - 1.0 
 							auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), texture( c3d_mapPosition, l_offset.xy() ).z() );
 							auto l_rangeCheck = l_writer.GetLocale( cuT( "l_rangeCheck" ), smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( l_fragPos.z() - l_sampleDepth ) ) );
 							l_occlusion += l_writer.Ternary( l_sampleDepth >= l_sample.z() + c3d_bias, 1.0_f, 0.0_f ) * l_rangeCheck;
@@ -221,7 +222,6 @@ namespace deferred_common
 
 						l_occlusion = 1.0_f - l_writer.Paren( l_occlusion / c3d_kernelSize );
 						pxl_fragColor = l_occlusion;
-						//pxl_fragColor = 1.0_f;
 					} );
 				l_pxl = l_writer.Finalise();
 			}

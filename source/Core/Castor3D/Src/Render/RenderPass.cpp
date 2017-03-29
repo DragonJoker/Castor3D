@@ -1,4 +1,4 @@
-﻿#include "RenderPass.hpp"
+#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -979,7 +979,7 @@ namespace Castor3D
 		UBO_SCENE( l_writer );
 
 		// Outputs
-		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
@@ -1030,8 +1030,9 @@ namespace Castor3D
 
 			vtx_texture = l_v3Texture;
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_worldSpacePosition = l_v4Vertex.xyz();
+			vtx_position = l_v4Vertex.xyz();
 			l_v4Vertex = c3d_mtxView * l_v4Vertex;
+			l_mtxModel = transpose( inverse( l_mtxModel ) );
 
 			if ( p_invertNormals )
 			{
@@ -1049,7 +1050,7 @@ namespace Castor3D
 			gl_Position = c3d_mtxProjection * l_v4Vertex;
 
 			auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = l_tbn * vtx_worldSpacePosition;
+			vtx_tangentSpaceFragPosition = l_tbn * vtx_position;
 			vtx_tangentSpaceViewPosition = l_tbn * c3d_v3CameraPosition;
 		};
 

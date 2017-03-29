@@ -191,7 +191,7 @@ namespace deferred_common
 		l_shadowMap.End();
 
 		// Outputs
-		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
 		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		std::function< void() > l_main = [&]()
@@ -228,7 +228,7 @@ namespace deferred_common
 			}
 
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_worldSpacePosition = l_v4Vertex.xyz();
+			vtx_position = l_v4Vertex.xyz();
 			gl_Position = c3d_mtxProjection * c3d_mtxView * l_v4Vertex;
 		};
 
@@ -256,14 +256,14 @@ namespace deferred_common
 		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
 		l_shadowMap.End();
 
-		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
 
 		// Fragment Outputs
 		auto pxl_fFragColor = l_writer.GetFragData< Float >( cuT( "pxl_fFragColor" ), 0u );
 
 		auto l_main = [&]()
 		{
-			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_worldSpacePosition - c3d_v3WordLightPosition ) );
+			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_position - c3d_v3WordLightPosition ) );
 			pxl_fFragColor = l_distance / c3d_fFarPlane;
 		};
 

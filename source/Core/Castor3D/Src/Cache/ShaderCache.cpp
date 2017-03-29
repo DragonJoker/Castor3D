@@ -258,7 +258,7 @@ namespace Castor3D
 				UBO_BILLBOARD( l_writer );
 
 				// Shader outputs
-				auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+				auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
 				auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 				auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 				auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -294,13 +294,13 @@ namespace Castor3D
 						l_height = c3d_v2iDimensions.y() / c3d_v2iWindowSize.y();
 					}
 
-					vtx_worldSpacePosition = l_center
+					vtx_position = l_center
 						+ l_right * position.x() * l_width
 						+ l_up * position.y() * l_height;
 
 					vtx_texture = vec3( texture, 0.0 );
 					vtx_instance = gl_InstanceID;
-					auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
+					auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 					gl_Position = c3d_mtxProjection * vec4( l_wvPosition, 1.0 );
 				} );
 

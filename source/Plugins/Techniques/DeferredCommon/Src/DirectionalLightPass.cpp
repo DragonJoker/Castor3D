@@ -1,9 +1,10 @@
-﻿#include "DirectionalLightPass.hpp"
+#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
 #include <Scene/Light/DirectionalLight.hpp>
 #include <Shader/ShaderProgram.hpp>
@@ -103,7 +104,6 @@ namespace deferred_common
 		uint8_t * l_buffer = m_vertexBuffer->data();
 		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
 		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 		m_viewport.Initialise();
 	}
@@ -128,7 +128,6 @@ namespace deferred_common
 			, nullptr );
 		m_viewport.Update();
 		m_projectionUniform->SetValue( m_viewport.GetProjection() );
-		m_matrixUbo.Update();
 	}
 
 	void DirectionalLightPass::Cleanup()
@@ -146,6 +145,8 @@ namespace deferred_common
 		, Camera const & p_camera )
 	{
 		m_viewport.Resize( p_size );
+		m_viewUniform->SetValue( p_camera.GetView() );
+		m_matrixUbo.Update();
 	}
 
 	String DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const

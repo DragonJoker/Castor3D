@@ -259,7 +259,7 @@ namespace deferred_common
 			, Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const override
 		{
-			return std::make_unique< LightPassShadow::Program >( p_scene, p_vtx, p_pxl, m_ssao );
+			return std::make_unique< LightPassShadow::Program >( p_scene, p_vtx, p_pxl, my_pass_type::m_ssao );
 		}
 
 	private:

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -776,16 +776,6 @@ namespace Castor3D
 	GLSL::Ubo l_overlay{ l_writer, ShaderProgram::BufferOverlay };\
 	auto c3d_v2iPosition = l_overlay.GetUniform< GLSL::IVec2 >( ShaderProgram::OvPosition );\
 	l_overlay.End()
-
-#define STRUCT_VTX_OUTPUT( Writer )\
-	GLSL::Struct VtxOutput{ l_writer, cuT( "VtxOutput" ) };\
-	auto vtx_worldSpacePosition = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_worldSpacePosition" ) );\
-	auto vtx_normal = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_normal" ) );\
-	auto vtx_tangent = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_tangent" ) );\
-	auto vtx_bitangent = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_bitangent" ) );\
-	auto vtx_texture = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_texture" ) );\
-	auto vtx_instance = VtxOutput.GetMember< GLSL::Int >( cuT( "vtx_instance" ) );\
-	VtxOutput.End()
 }
 
 #endif

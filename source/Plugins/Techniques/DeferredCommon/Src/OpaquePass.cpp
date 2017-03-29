@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -117,7 +117,7 @@ namespace deferred_common
 		UBO_MODEL( l_writer );
 
 		// Fragment Inputs
-		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -149,12 +149,12 @@ namespace deferred_common
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vtx_normal ) );
 			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), c3d_v4MatDiffuse.xyz() );
 			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), c3d_v4MatSpecular.xyz() );
 			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
 			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), vtx_worldSpacePosition );
+			auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), vtx_position );
 			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), vtx_texture );
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
@@ -167,12 +167,12 @@ namespace deferred_common
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 			
-			auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
+			auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 			out_c3dPosition = vec4( l_v3Position, l_writer.Cast< Float >( c3d_iShadowReceiver ) );
-			out_c3dDiffuse = vec4( l_v3Diffuse, length( l_wvPosition ) );
+			out_c3dDiffuse = vec4( l_v3Diffuse, 0.0_f );
 			out_c3dNormal = vec4( l_v3Normal, 0.0_f );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
-			out_c3dEmissive = vec4( l_v3Emissive, l_wvPosition.z() );
+			out_c3dEmissive = vec4( l_v3Emissive, 0.0_f );
 		} );
 
 		return l_writer.Finalise();

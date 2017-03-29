@@ -245,6 +245,8 @@ namespace deferred_common
 		, m_ssao{ p_ssao }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
+		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
 	}
 
 	void LightPass::Render( Size const & p_size
@@ -350,6 +352,7 @@ namespace deferred_common
 		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();
 
 		// Shader inputs
+		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::ePosition ) );
 		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
@@ -418,8 +421,6 @@ namespace deferred_common
 			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
 			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), c3d_v3CameraPosition );
-			auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
-			auto l_z = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
 			auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), m_ssao, texture( c3d_mapSsao, l_texCoord ).r() );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
@@ -475,7 +476,9 @@ namespace deferred_common
 
 			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
 			{
-				l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_z );
+				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" )
+					, l_writer.Paren( c3d_mtxView * vec4( l_v3Position, 1.0 ) ).xyz() );
+				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.z() );
 			}
 		} );
 

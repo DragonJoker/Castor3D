@@ -77,8 +77,6 @@ namespace deferred_common
 		, m_type{ p_type }
 	{
 		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
-		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
 		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
 	}
 

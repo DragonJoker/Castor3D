@@ -158,7 +158,7 @@ namespace Castor3D
 		UBO_MORPHING( l_writer, p_programFlags );
 
 		// Outputs
-		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -209,7 +209,7 @@ namespace Castor3D
 
 			vtx_texture = l_v3Texture;
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_worldSpacePosition = l_v4Vertex.xyz();
+			vtx_position = l_v4Vertex.xyz();
 			l_v4Vertex = c3d_mtxView * l_v4Vertex;
 
 			if ( p_invertNormals )

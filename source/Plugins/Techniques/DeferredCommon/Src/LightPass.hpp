@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -169,6 +169,12 @@ namespace deferred_common
 		//!\~english	The light pass' programs.
 		//!\~french		Les programme de la passe de lumière.
 		Programs m_programs;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_projectionUniform;
+		//!\~english	The uniform variable containing view matrix.
+		//!\~french		La variable uniforme contenant la matrice vue.
+		Castor3D::Uniform4x4fSPtr m_viewUniform;
 	};
 }
 

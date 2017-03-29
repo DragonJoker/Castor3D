@@ -1,4 +1,4 @@
-﻿#include "RenderTechniquePass.hpp"
+#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -315,7 +315,7 @@ namespace Castor3D
 		UBO_MODEL( l_writer );
 
 		// Fragment Intputs
-		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -386,7 +386,7 @@ namespace Castor3D
 			l_lighting->ComputeCombinedLighting( l_worldEye
 				, l_fMatShininess
 				, c3d_iShadowReceiver
-				, FragmentInput( vtx_worldSpacePosition, l_v3Normal )
+				, FragmentInput( vtx_position, l_v3Normal )
 				, l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
@@ -415,7 +415,7 @@ namespace Castor3D
 
 			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
 			{
-				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
+				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
 			}
 		} );

@@ -74,12 +74,6 @@ namespace deferred_common
 		//!\~english	The uniform buffer containing the model data.
 		//!\~french		Le tampon d'uniformes contenant les données de modèle.
 		Castor3D::UniformBuffer m_modelMatrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform;
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Castor3D::Uniform4x4fSPtr m_viewUniform;
 		//!\~english	The uniform variable containing model matrix.
 		//!\~french		La variable uniforme contenant la matrice modèle.
 		Castor3D::Uniform4x4fSPtr m_modelUniform;
