@@ -169,7 +169,7 @@ namespace GLSL
 				auto l_dot = m_writer.GetLocale( cuT( "l_dot" ), dot( p_seed, vec4( 12.9898_f, 78.233, 45.164, 94.673 ) ) );
 				m_writer.Return( fract( sin( l_dot ) * 43758.5453 ) );
 			}
-			, InParam< Vec4 >( &m_writer, cuT( "p_seed" ) ) );
+			, InVec4( &m_writer, cuT( "p_seed" ) ) );
 	}
 
 	void Shadow::DoDeclare_FilterDirectional( ShadowType p_type )
@@ -184,8 +184,8 @@ namespace GLSL
 					auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
 					m_writer.Return( texture( c3d_mapShadowDirectional, vec3( p_uv, p_depth ) ) );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		case ShadowType::ePoisson:
@@ -205,8 +205,8 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		case ShadowType::eStratifiedPoisson:
@@ -229,8 +229,8 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		default:
@@ -252,9 +252,9 @@ namespace GLSL
 					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
 					m_writer.Return( texture( c3d_mapShadowSpot, vec4( p_uv, p_index, p_depth ) ) );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) )
+				, InFloat( &m_writer, cuT( "p_index" ) ) );
 			break;
 
 		case ShadowType::ePoisson:
@@ -275,9 +275,9 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) )
+				, InFloat( &m_writer, cuT( "p_index" ) ) );
 			break;
 
 		case ShadowType::eStratifiedPoisson:
@@ -301,9 +301,9 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-				, InParam< Float >( &m_writer, cuT( "p_index" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) )
+				, InFloat( &m_writer, cuT( "p_index" ) ) );
 			break;
 
 		default:
@@ -325,9 +325,9 @@ namespace GLSL
 					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 					m_writer.Return( texture( c3d_mapShadowPoint[p_index], vec4( p_direction, p_depth ) ) );
 				}
-				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-				, InParam< Int >( &m_writer, cuT( "p_index" ) ) );
+				, InVec3( &m_writer, cuT( "p_direction" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) )
+				, InInt( &m_writer, cuT( "p_index" ) ) );
 			break;
 
 		case ShadowType::ePoisson:
@@ -348,9 +348,9 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-				, InParam< Int >( &m_writer, cuT( "p_index" ) ) );
+				, InVec3( &m_writer, cuT( "p_direction" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) )
+				, InInt( &m_writer, cuT( "p_index" ) ) );
 			break;
 
 		case ShadowType::eStratifiedPoisson:
@@ -374,9 +374,9 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) )
-				, InParam< Int >( &m_writer, cuT( "p_index" ) ) );
+				, InVec3( &m_writer, cuT( "p_direction" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) )
+				, InInt( &m_writer, cuT( "p_index" ) ) );
 			break;
 
 		default:
@@ -397,8 +397,8 @@ namespace GLSL
 					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot );
 					m_writer.Return( texture( c3d_mapShadowSpot, vec3( p_uv, p_depth ) ) );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		case ShadowType::ePoisson:
@@ -418,8 +418,8 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		case ShadowType::eStratifiedPoisson:
@@ -442,8 +442,8 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec2 >( &m_writer, cuT( "p_uv" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec2( &m_writer, cuT( "p_uv" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		default:
@@ -464,8 +464,8 @@ namespace GLSL
 					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( MapShadowPoint );
 					m_writer.Return( texture( c3d_mapShadowPoint, vec4( p_direction, p_depth ) ) );
 				}
-				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec3( &m_writer, cuT( "p_direction" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		case ShadowType::ePoisson:
@@ -485,8 +485,8 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec3( &m_writer, cuT( "p_direction" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		case ShadowType::eStratifiedPoisson:
@@ -509,8 +509,8 @@ namespace GLSL
 
 					m_writer.Return( l_visibility );
 				}
-				, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-				, InParam< Float >( &m_writer, cuT( "p_depth" ) ) );
+				, InVec3( &m_writer, cuT( "p_direction" ) )
+				, InFloat( &m_writer, cuT( "p_depth" ) ) );
 			break;
 
 		default:
@@ -530,8 +530,8 @@ namespace GLSL
 				auto l_offsetScaleL = m_writer.GetLocale( cuT( "l_offsetScaleL" ), l_offsetScaleN / l_cosAlpha ); // tan( acos( l_cosAlpha ) )
 				m_writer.Return( vec2( l_offsetScaleN, min( 2.0_f, l_offsetScaleL ) ) );
 			}
-			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_lightDirection" ) ) );
+			, InVec3( &m_writer, cuT( "p_normal" ) )
+			, InVec3( &m_writer, cuT( "p_lightDirection" ) ) );
 	}
 
 	void Shadow::DoDeclare_GetLightSpacePosition()
@@ -554,9 +554,9 @@ namespace GLSL
 				m_writer.Return( l_lightSpacePosition.xyz() );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_lightDirection" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) ) );
+			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
+			, InVec3( &m_writer, cuT( "p_lightDirection" ) )
+			, InVec3( &m_writer, cuT( "p_normal" ) ) );
 	}
 
 	void Shadow::DoDeclare_ComputeDirectionalShadow()
@@ -573,9 +573,9 @@ namespace GLSL
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_lightDirection" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) ) );
+			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
+			, InVec3( &m_writer, cuT( "p_lightDirection" ) )
+			, InVec3( &m_writer, cuT( "p_normal" ) ) );
 	}
 
 	void Shadow::DoDeclare_ComputeSpotShadow()
@@ -594,10 +594,10 @@ namespace GLSL
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_lightDirection" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) )
-			, InParam< Int >( &m_writer, cuT( "p_index" ) ) );
+			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
+			, InVec3( &m_writer, cuT( "p_lightDirection" ) )
+			, InVec3( &m_writer, cuT( "p_normal" ) )
+			, InInt( &m_writer, cuT( "p_index" ) ) );
 	}
 
 	void Shadow::DoDeclare_ComputePointShadow()
@@ -616,10 +616,10 @@ namespace GLSL
 				l_visibility = m_filterPoint( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, p_index );
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_lightPosition" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) )
-			, InParam< Int >( &m_writer, cuT( "p_index" ) ) );
+			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
+			, InVec3( &m_writer, cuT( "p_lightPosition" ) )
+			, InVec3( &m_writer, cuT( "p_normal" ) )
+			, InInt( &m_writer, cuT( "p_index" ) ) );
 	}
 
 	void Shadow::DoDeclare_ComputeOneSpotShadow()
@@ -636,9 +636,9 @@ namespace GLSL
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_lightDirection" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) ) );
+			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
+			, InVec3( &m_writer, cuT( "p_lightDirection" ) )
+			, InVec3( &m_writer, cuT( "p_normal" ) ) );
 	}
 
 	void Shadow::DoDeclare_ComputeOnePointShadow()
@@ -656,8 +656,8 @@ namespace GLSL
 				l_visibility = m_filterOnePoint( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f );
 				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
 			}
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldSpacePosition" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_lightPosition" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_normal" ) ) );
+			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
+			, InVec3( &m_writer, cuT( "p_lightPosition" ) )
+			, InVec3( &m_writer, cuT( "p_normal" ) ) );
 	}
 }

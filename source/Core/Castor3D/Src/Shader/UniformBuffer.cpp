@@ -1,4 +1,4 @@
-#include "UniformBuffer.hpp"
+﻿#include "UniformBuffer.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -232,6 +232,7 @@ namespace Castor3D
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::BackgroundColour );
 		p_ubo.CreateUniform( UniformType::eVec4i, ShaderProgram::LightsCount );
 		p_ubo.CreateUniform( UniformType::eVec3r, ShaderProgram::CameraPos );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::CameraFarPlane );
 		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::FogType );
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::FogDensity );
 	}
@@ -283,9 +284,16 @@ namespace Castor3D
 
 		for ( auto & l_variable : *this )
 		{
-			REQUIRE( l_variable->size() <= m_buffer.size() - ( l_it->m_offset ) );
-			l_variable->link( &m_buffer[l_it->m_offset], l_it->m_stride < 0 ? 0u : uint32_t( l_it->m_stride ) );
-			++l_it;
+			if ( l_it != p_binding.end() )
+			{
+				REQUIRE( l_variable->size() <= m_buffer.size() - ( l_it->m_offset ) );
+				l_variable->link( &m_buffer[l_it->m_offset], l_it->m_stride < 0 ? 0u : uint32_t( l_it->m_stride ) );
+				++l_it;
+			}
+			else
+			{
+				FAILURE( "The variable was not found in the binding." );
+			}
 		}
 
 		if ( !m_storage )

@@ -226,10 +226,19 @@ namespace deferred_common
 			, GeometryPassResult const & p_gp
 			, Castor3D::Light const & p_light
 			, Castor3D::Camera const & p_camera
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj
 			, GLSL::FogType p_fogType
 			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first )override
 		{
+			this->m_invViewProjUniform->SetValue( p_invViewProj );
+			this->m_invViewUniform->SetValue( p_invView );
+			this->m_invProjUniform->SetValue( p_invProj );
+			this->m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
+			this->m_gpInfoUbo.Update();
+
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
 			my_pass_type::DoUpdate( p_size
 				, p_light

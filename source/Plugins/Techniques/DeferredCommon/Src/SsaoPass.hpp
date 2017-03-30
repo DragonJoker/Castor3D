@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -36,7 +36,10 @@ namespace deferred_common
 			, Castor::Size const & p_size );
 		~SsaoPass();
 		void Render( GeometryPassResult const & p_gp
-			, Castor3D::Camera const & p_camera );
+			, Castor3D::Camera const & p_camera
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj );
 
 		inline Castor3D::TextureUnit const & GetResult()
 		{
@@ -78,7 +81,11 @@ namespace deferred_common
 		Castor3D::TextureAttachmentSPtr m_ssaoResultAttach;
 		Castor3D::UniformBuffer m_ssaoConfig;
 		Castor3D::Uniform3fSPtr m_kernelUniform;
-		Castor3D::Uniform4x4fSPtr m_gProjectionMatrix;
+		Castor3D::UniformBuffer m_gpInfoUbo;
+		Castor3D::Uniform4x4fSPtr m_invViewProjUniform;
+		Castor3D::Uniform4x4fSPtr m_invViewUniform;
+		Castor3D::Uniform4x4fSPtr m_invProjUniform;
+		Castor3D::Uniform2fSPtr m_renderSize;
 		// SSAO blur pass
 		Castor3D::FrameBufferSPtr m_blurFbo;
 		Castor3D::VertexBufferSPtr m_blurVertexBuffer;

@@ -20,40 +20,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GLSL_FUNCTION_PARAM_H___
-#define ___GLSL_FUNCTION_PARAM_H___
+#ifndef ___GLSL_Utils_H___
+#define ___GLSL_Utils_H___
 
-#include "GlslPerVertex.hpp"
+#include "GlslFunction.hpp"
 
 namespace GLSL
 {
-	template< typename TypeT >
-	struct InParam
-		: public TypeT
+	class Utils
 	{
-		InParam( GlslWriter * p_writer, Castor::String const & p_name );
-		InParam( TypeT const & p_other );
-	};
+	public:
+		GlslWriter_API Utils( GlslWriter & p_writer );
+		GlslWriter_API void DeclareCalcTexCoord();
+		GlslWriter_API void DeclareCalcVSToWS();
+		GlslWriter_API void DeclareCalcVSPosition();
+		GlslWriter_API Vec2 CalcTexCoord();
+		GlslWriter_API Vec3 CalcVSToWS( Vec3 const & p_vsPosition );
+		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & p_coords );
 
-	template< typename TypeT >
-	struct OutParam
-		: public TypeT
-	{
-		OutParam( GlslWriter * p_writer, Castor::String const & p_name );
-		OutParam( TypeT const & p_other );
-		template< typename T > inline OutParam< TypeT > operator=( T const & p_rhs );
-	};
-
-	template< typename TypeT >
-	struct InOutParam
-		: public TypeT
-	{
-		InOutParam( GlslWriter * p_writer, Castor::String const & p_name );
-		InOutParam( TypeT const & p_other );
-		template< typename T > inline InOutParam< TypeT > operator=( T const & p_rhs );
+	private:
+		GlslWriter & m_writer;
+		Function< Vec2 > m_calcTexCoord;
+		Function< Vec3, InVec3 > m_calcVSToWS;
+		Function< Vec3, InVec2 > m_calcVSPosition;
 	};
 }
-
-#include "GlslFunctionParam.inl"
 
 #endif

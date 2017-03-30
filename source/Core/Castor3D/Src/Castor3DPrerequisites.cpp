@@ -245,9 +245,9 @@ namespace Castor3D
 					FI;
 
 					p_writer.Return( l_shadowMultiplier );
-				}, InParam< Vec3 >{ &p_writer, cuT( "p_lightDir" ) }
-				, InParam< Vec2 >{ &p_writer, cuT( "p_initialTexCoord" ) }
-				, InParam< Float >{ &p_writer, cuT( "p_initialHeight" ) } );
+				}, InVec3{ &p_writer, cuT( "p_lightDir" ) }
+				, InVec2{ &p_writer, cuT( "p_initialTexCoord" ) }
+				, InFloat{ &p_writer, cuT( "p_initialHeight" ) } );
 		}
 
 		return l_result;
@@ -310,8 +310,8 @@ namespace Castor3D
 					auto l_finalTexCoords = p_writer.GetLocale( cuT( "l_finalTexCoords" ), l_prevTexCoords * l_weight + l_currentTexCoords * p_writer.Paren( 1.0_f - l_weight ) );
 
 					p_writer.Return( l_finalTexCoords );
-				}, InParam< Vec2 >{ &p_writer, cuT( "p_texCoords" ) }
-				, InParam< Vec3 >{ &p_writer, cuT( "p_viewDir" ) } );
+				}, InVec2{ &p_writer, cuT( "p_texCoords" ) }
+				, InVec3{ &p_writer, cuT( "p_viewDir" ) } );
 		}
 
 		return l_result;

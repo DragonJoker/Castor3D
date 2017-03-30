@@ -35,13 +35,12 @@ namespace deferred_common
 	enum class DsTexture
 		: uint8_t
 	{
-		ePosition,
+		eDepth,
 		eDiffuse,
 		eNormals,
 		eSpecular,
 		eEmissive,
-		eDepth,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
+		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
 	};
 	Castor::String GetTextureName( DsTexture p_texture );
 	Castor::PixelFormat GetTextureFormat( DsTexture p_texture );
@@ -68,6 +67,7 @@ namespace deferred_common
 				, Castor3D::IndexBufferSPtr p_ibo
 				, Castor3D::UniformBuffer & p_matrixUbo
 				, Castor3D::UniformBuffer & p_sceneUbo
+				, Castor3D::UniformBuffer & p_gpInfoUbo
 				, Castor3D::UniformBuffer * p_modelMatrixUbo );
 			void Cleanup();
 			void Render( Castor::Size const & p_size
@@ -92,9 +92,6 @@ namespace deferred_common
 			//!\~english	The pipeline used by the light pass.
 			//!\~french		Le pipeline utilisé par la passe lumières.
 			Castor3D::RenderPipelineSPtr m_firstPipeline;
-			//!\~english	The shader variable containing the render area size.
-			//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
-			Castor3D::PushUniform2fSPtr m_renderSize;
 			//!\~english	The variable containing the light colour.
 			//!\~french		La variable contenant la couleur de la lumière.
 			Castor3D::PushUniform3fSPtr m_lightColour;
@@ -114,6 +111,9 @@ namespace deferred_common
 			, GeometryPassResult const & p_gp
 			, Castor3D::Light const & p_light
 			, Castor3D::Camera const & p_camera
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj
 			, GLSL::FogType p_fogType
 			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first );
@@ -148,6 +148,13 @@ namespace deferred_common
 			, Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const = 0;
 
+	public:
+		static const Castor::String GPInfo;
+		static const Castor::String InvViewProj;
+		static const Castor::String InvView;
+		static const Castor::String InvProj;
+		static const Castor::String RenderSize;
+
 	protected:
 		//!\~english	The engine.
 		//!\~french		Le moteur.
@@ -176,6 +183,21 @@ namespace deferred_common
 		//!\~english	The uniform variable containing view matrix.
 		//!\~french		La variable uniforme contenant la matrice vue.
 		Castor3D::Uniform4x4fSPtr m_viewUniform;
+		//!\~english	The uniform buffer containing Geometry pass informations.
+		//!\~french		Le tampon d'uniformes contenant les informations de la geometry pass.
+		Castor3D::UniformBuffer m_gpInfoUbo;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_invViewProjUniform;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_invViewUniform;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_invProjUniform;
+		//!\~english	The shader variable containing the render area size.
+		//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
+		Castor3D::Uniform2fSPtr m_renderSize;
 	};
 }
 

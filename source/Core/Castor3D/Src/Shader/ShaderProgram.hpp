@@ -697,6 +697,9 @@ namespace Castor3D
 		//!\~english	Name of the camera position frame variable.
 		//!\~french		Nom de la frame variable contenant la position de la caméra.
 		C3D_API static const Castor::String CameraPos;
+		//!\~english	Name of the camera far plane frame variable.
+		//!\~french		Nom de la frame variable contenant la valeur du plan éloigné de la caméra.
+		C3D_API static const Castor::String CameraFarPlane;
 		//!\~english	Name of the ambient light frame variable.
 		//!\~french		Nom de la frame variable contenant la lumière ambiante.
 		C3D_API static const Castor::String AmbientLight;

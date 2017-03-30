@@ -30,9 +30,9 @@ namespace GLSL
 	struct FragmentInput
 	{
 		GlslWriter_API FragmentInput( GlslWriter & p_writer );
-		GlslWriter_API FragmentInput( InParam< Vec3 > const & p_v3Vertex, InParam< Vec3 > const & p_v3Normal );
-		InParam< Vec3 > m_v3Vertex;
-		InParam< Vec3 > m_v3Normal;
+		GlslWriter_API FragmentInput( InVec3 const & p_v3Vertex, InVec3 const & p_v3Normal );
+		InVec3 m_v3Vertex;
+		InVec3 m_v3Normal;
 	};
 
 	struct OutputComponents
@@ -120,11 +120,11 @@ namespace GLSL
 		ShadowType m_shadows;
 		GlslWriter & m_writer;
 		Shadow m_shadowModel;
-		Function< Void, DirectionalLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeDirectional;
-		Function< Void, PointLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computePoint;
-		Function< Void, SpotLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeSpot;
-		Function< Void, PointLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeOnePoint;
-		Function< Void, SpotLight, InParam< Vec3 >, InParam< Float >, InParam< Int >, FragmentInput, OutputComponents & > m_computeOneSpot;
+		Function< Void, DirectionalLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeDirectional;
+		Function< Void, PointLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computePoint;
+		Function< Void, SpotLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeSpot;
+		Function< Void, PointLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOnePoint;
+		Function< Void, SpotLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOneSpot;
 	};
 
 	class PhongLightingModel

@@ -116,7 +116,11 @@ namespace deferred
 		void DoCleanupGeometryPass();
 		void DoCleanupLightPass();
 		void DoUpdateSceneUbo();
-		void DoRenderLights( Castor3D::LightType p_type, bool & p_first );
+		void DoRenderLights( Castor3D::LightType p_type
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj
+			, bool & p_first );
 
 	public:
 		static Castor::String const Type;
@@ -148,6 +152,9 @@ namespace deferred
 		//!\~english	The shader variable holding the camera position.
 		//!\~french		La variable shader contenant la position de la caméra.
 		Castor3D::Uniform3fSPtr m_cameraPos;
+		//!\~english	The shader variable holding the camera far plane value.
+		//!\~french		La variable shader contenant la valeur du plan éloigné de la caméra.
+		Castor3D::Uniform1fSPtr m_cameraFarPlane;
 		//!\~english	The shader variable holding fog type.
 		//!\~french		La variable shader contenant le type de brouillard.
 		Castor3D::Uniform1iSPtr m_fogType;

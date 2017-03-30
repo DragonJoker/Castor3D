@@ -1,5 +1,7 @@
 #include "SsaoPass.hpp"
 
+#include "LightPass.hpp"
+
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
@@ -21,6 +23,7 @@
 #include <GlslSource.hpp>
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
+#include <GlslUtils.hpp>
 
 #include <random>
 
@@ -146,25 +149,30 @@ namespace deferred_common
 
 				// Shader inputs
 				UBO_MATRIX( l_writer );
-				Ubo l_ssaoInfo{ l_writer, cuT( "SsaoInfo" ) };
-				auto c3d_fAspectRatio = l_ssaoInfo.GetUniform< Float >( cuT( "c3d_fAspectRatio" ) );
-				auto c3d_fTanHalfFov = l_ssaoInfo.GetUniform< Float >( cuT( "c3d_fTanHalfFov" ) );
-				l_ssaoInfo.End();
+				UBO_SCENE( l_writer );
+				Ubo l_gpInfo{ l_writer, LightPass::GPInfo };
+				auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< Mat4 >( LightPass::InvViewProj );
+				auto c3d_mtxInvView = l_gpInfo.GetUniform< Mat4 >( LightPass::InvView );
+				auto c3d_mtxInvProj = l_gpInfo.GetUniform< Mat4 >( LightPass::InvProj );
+				auto c3d_renderSize = l_gpInfo.GetUniform< Vec2 >( LightPass::RenderSize );
+				l_gpInfo.End();
 				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 
 				// Shader outputs
-				auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-				auto vtx_viewRay = l_writer.GetOutput< Vec2 >( cuT( "vtx_viewRay" ) );
+				auto vtx_viewRay = l_writer.GetOutput< Vec3 >( cuT( "vtx_viewRay" ) );
+				auto vtx_distance = l_writer.GetOutput< Float >( cuT( "vtx_distance" ) );
 				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" )
 					, [&]()
 					{
-						vtx_texture = texture;
-						gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
-						vtx_viewRay.x() = position.x() * c3d_fAspectRatio * c3d_fTanHalfFov;
-						vtx_viewRay.y() = position.y() * c3d_fTanHalfFov;
+						auto l_positionOS = l_writer.GetLocale( cuT( "l_positionOS" )
+							, vec4( position, 0.0, 1.0 ) );
+						auto l_positionVS = l_writer.GetLocale( cuT( "l_positionWS" )
+							, c3d_mtxInvProj * l_positionOS );
+						vtx_viewRay = l_writer.Paren( l_positionVS ).xyz();
+						gl_Position = c3d_mtxProjection * l_positionOS;
 					} );
 				l_vtx = l_writer.Finalise();
 			}
@@ -174,15 +182,18 @@ namespace deferred_common
 		
 		String DoGetSsaoPixelProgram( Engine & p_engine )
 		{
+			// https://mynameismjp.wordpress.com/2010/09/05/position-from-depth-3/
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			using namespace GLSL;
 			auto l_writer = l_renderSystem.CreateGlslWriter();
 
 			// Shader inputs
 			UBO_MATRIX( l_writer );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_viewRay = l_writer.GetInput< Vec2 >( cuT( "vtx_viewRay" ) );
-			//auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapPosition" ) );
+			Ubo l_gpInfo{ l_writer, LightPass::GPInfo };
+			auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< Mat4 >( LightPass::InvViewProj );
+			auto c3d_mtxInvView = l_gpInfo.GetUniform< Mat4 >( LightPass::InvView );
+			auto c3d_renderSize = l_gpInfo.GetUniform< Vec2 >( LightPass::RenderSize );
+			l_gpInfo.End();
 			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
 			auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
 			auto c3d_mapNoise = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
@@ -193,35 +204,30 @@ namespace deferred_common
 			auto c3d_radius = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_radius" ) );
 			auto c3d_bias = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_bias" ) );
 			auto c3d_noiseScale = l_ssaoConfig.GetUniform< Vec2 >( cuT( "c3d_noiseScale" ) );
-			auto c3d_mtxGProjection = l_ssaoConfig.GetUniform< Mat4 >( cuT( "c3d_mtxGProjection" ) );
 			l_ssaoConfig.End();
+
+			auto vtx_viewRay = l_writer.GetInput< Vec3 >( cuT( "vtx_viewRay" ) );
+			auto vtx_distance = l_writer.GetInput< Float >( cuT( "vtx_distance" ) );
+
+			GLSL::Utils l_utils{ l_writer };
+			l_utils.DeclareCalcTexCoord();
+			l_utils.DeclareCalcVSPosition();
 
 			// Shader outputs
 			auto pxl_fragColor = l_writer.GetOutput< Float >( cuT( "pxl_fragColor" ) );
-
-			auto l_calViewZ = l_writer.ImplementFunction< Float >( cuT( "CalcViewZ" )
-				, [&]( Vec2 const & p_coords )
-				{
-					auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDepth, p_coords ).x() );
-					l_writer.Return( c3d_mtxGProjection[3][2] / l_writer.Paren( l_depth * 2.0_f - 1.0_f - c3d_mtxGProjection[2][2] ) );
-				}, InParam< Vec2 >{ &l_writer, cuT( "p_coords" ) } );
-
+			
 			l_writer.ImplementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					//auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), texture( c3d_mapPosition, vtx_texture ).xyz() );
-					//l_fragPos = l_writer.Paren( c3d_mtxView * vec4( l_fragPos, 1.0_f ) ).xyz();
-					auto l_viewZ = l_writer.GetLocale( cuT( "l_viewZ" ), l_calViewZ( vtx_texture ) );
-					auto l_viewX = l_writer.GetLocale( cuT( "l_viewX" ), vtx_viewRay.x() * l_viewZ );
-					auto l_viewY = l_writer.GetLocale( cuT( "l_viewY" ), vtx_viewRay.y() * l_viewZ );
-					auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), vec3( l_viewX, l_viewY, l_viewZ ) );
-					auto l_normal = l_writer.GetLocale( cuT( "l_normal" ), texture( c3d_mapNormal, vtx_texture ).rgb() );
-					l_normal = normalize( l_writer.Paren( c3d_mtxView * vec4( l_normal, 1.0_f ) ).xyz() );
-					auto l_randomVec = l_writer.GetLocale( cuT( "l_randomVec" ), normalize( texture( c3d_mapNoise, vtx_texture * c3d_noiseScale ).xyz() ) );
+					auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
+					auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), l_utils.CalcVSPosition( l_texCoord ) );
+					auto l_normal = l_writer.GetLocale( cuT( "l_normal" ), texture( c3d_mapNormal, l_texCoord ).rgb() );
+					auto l_randomVec = l_writer.GetLocale( cuT( "l_randomVec" ), normalize( texture( c3d_mapNoise, l_texCoord * c3d_noiseScale ).xyz() ) );
 					auto l_tangent = l_writer.GetLocale( cuT( "l_tangent" ), normalize( l_randomVec - l_normal * dot( l_randomVec, l_normal ) ) );
 					auto l_bitangent = l_writer.GetLocale( cuT( "l_bitangent" ), cross( l_normal, l_tangent ) );
 					auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), mat3( l_tangent, l_bitangent, l_normal ) );
 					auto l_occlusion = l_writer.GetLocale( cuT( "l_occlusion" ), 0.0_f );
+					auto l_viewRay = l_writer.GetLocale( cuT( "l_viewRay" ), normalize( vtx_viewRay ) );
 
 					FOR( l_writer, Int, i, 0, cuT( "i < c3d_kernelSize" ), cuT( "++i" ) )
 					{
@@ -232,8 +238,8 @@ namespace deferred_common
 						l_offset = c3d_mtxProjection * l_offset;         // from view to clip-space
 						l_offset.xyz() = l_offset.xyz() / l_offset.w();  // perspective divide
 						l_offset.xyz() = l_offset.xyz() * 0.5 + 0.5;     // transform to range 0.0 - 1.0 
-						//auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), texture( c3d_mapPosition, l_offset.xy() ).z() );
-						auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), l_calViewZ( l_offset.xy() ) );
+						auto l_viewDistance = l_writer.GetLocale( cuT( "l_viewDistance" ), texture( c3d_mapDepth, l_texCoord ).r() );
+						auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), l_viewDistance );
 						auto l_rangeCheck = l_writer.GetLocale( cuT( "l_rangeCheck" ), smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( l_fragPos.z() - l_sampleDepth ) ) );
 						l_occlusion += l_writer.Ternary( l_sampleDepth >= l_sample.z() + c3d_bias, 1.0_f, 0.0_f ) * l_rangeCheck;
 					}
@@ -369,6 +375,11 @@ namespace deferred_common
 		, m_ssaoProgram{ DoGetSsaoProgram( p_engine ) }
 		, m_ssaoConfig{ cuT( "SsaoConfig" )
 			, *p_engine.GetRenderSystem() }
+		, m_gpInfoUbo{ LightPass::GPInfo, *p_engine.GetRenderSystem() }
+		, m_invViewProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( LightPass::InvViewProj ) }
+		, m_invViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( LightPass::InvView ) }
+		, m_invProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( LightPass::InvProj ) }
+		, m_renderSize{ m_gpInfoUbo.CreateUniform< UniformType::eVec2f >( LightPass::RenderSize ) }
 		, m_blurProgram{ DoGetBlurProgram( p_engine ) }
 		, m_blurResult{ p_engine }
 		, m_viewport{ *p_engine.GetRenderSystem()->GetEngine() }
@@ -386,13 +397,16 @@ namespace deferred_common
 	}
 
 	void SsaoPass::Render( GeometryPassResult const & p_gp
-		, Camera const & p_camera )
+		, Camera const & p_camera
+		, Matrix4x4r const & p_invViewProj
+		, Matrix4x4r const & p_invView
+		, Matrix4x4r const & p_invProj )
 	{
-		m_viewMatrix->SetValue( p_camera.GetView() );
-		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
-		m_matrixUbo.Update();
-		m_gProjectionMatrix->SetValue( p_camera.GetViewport().GetProjection() );
-		m_ssaoConfig.Update();
+		m_invViewProjUniform->SetValue( p_invViewProj );
+		m_invViewUniform->SetValue( p_invView );
+		m_invProjUniform->SetValue( p_invProj );
+		m_renderSize->SetValue( Point2f( m_size.width(), m_size.height() ) );
+		m_gpInfoUbo.Update();
 		m_viewport.Apply();
 		DoRenderSsao( p_gp );
 		DoRenderBlur();
@@ -440,7 +454,6 @@ namespace deferred_common
 		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->SetValue( 0.5f );
 		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->SetValue( 0.025f );
 		m_ssaoConfig.CreateUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->SetValue( Point2f( l_wScale, l_hScale ) );
-		m_gProjectionMatrix = m_ssaoConfig.CreateUniform< UniformType::eMat4x4f >( cuT( "c3d_mtxGProjection" ) );
 		m_kernelUniform->SetValues( m_ssaoKernel );
 
 		auto l_sampler = DoCreateSampler( m_engine, cuT( "SSAO_Result" ), WrapMode::eClampToEdge );
@@ -453,6 +466,8 @@ namespace deferred_common
 		m_ssaoResult.SetSampler( l_sampler );
 		m_ssaoResult.SetIndex( 0u );
 		m_ssaoResult.Initialise();
+
+		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
 
 		m_ssaoFbo = l_renderSystem.CreateFrameBuffer();
 		m_ssaoFbo->Create();
@@ -468,6 +483,7 @@ namespace deferred_common
 		m_ssaoPipeline = DoCreatePipeline( m_engine, *m_ssaoProgram );
 		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo );
 		m_ssaoPipeline->AddUniformBuffer( m_ssaoConfig );
+		m_ssaoPipeline->AddUniformBuffer( m_gpInfoUbo );
 
 		m_ssaoVertexBuffer = DoCreateVbo( m_engine );
 		m_ssaoGeometryBuffers = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
@@ -561,8 +577,6 @@ namespace deferred_common
 	{
 		m_ssaoFbo->Bind( FrameBufferTarget::eDraw );
 		m_ssaoFbo->Clear( BufferComponent::eColour );
-		//p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Bind( 0u );
-		//p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Bind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
 		p_gp[size_t( DsTexture::eNormals )]->GetTexture()->Bind( 1u );
@@ -575,8 +589,6 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::eNormals )]->GetSampler()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
-		//p_gp[size_t( DsTexture::ePosition )]->GetTexture()->Unbind( 0u );
-		//p_gp[size_t( DsTexture::ePosition )]->GetSampler()->Unbind( 0u );
 		m_ssaoFbo->Unbind();
 	}
 

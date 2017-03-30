@@ -156,14 +156,28 @@ namespace deferred_common
 
 		// Shader inputs
 		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		Ubo l_gpInfo{ l_writer, LightPass::GPInfo };
+		auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< Mat4 >( LightPass::InvViewProj );
+		auto c3d_mtxInvView = l_gpInfo.GetUniform< Mat4 >( LightPass::InvView );
+		auto c3d_mtxInvProj = l_gpInfo.GetUniform< Mat4 >( LightPass::InvProj );
+		auto c3d_renderSize = l_gpInfo.GetUniform< Vec2 >( LightPass::RenderSize );
+		l_gpInfo.End();
 		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 
 		// Shader outputs
+		auto vtx_viewRay = l_writer.GetOutput< Vec3 >( cuT( "vtx_viewRay" ) );
+		auto vtx_distance = l_writer.GetOutput< Float >( cuT( "vtx_distance" ) );
 		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			gl_Position = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
+			auto l_positionOS = l_writer.GetLocale( cuT( "l_positionOS" )
+				, vec4( vertex, 0.0, 1.0 ) );
+			auto l_positionWS = l_writer.GetLocale( cuT( "l_positionWS" )
+				, c3d_mtxInvViewProj * l_positionOS );
+			vtx_viewRay = l_writer.Paren( l_positionWS ).xyz() - c3d_v3CameraPosition;
+			gl_Position = c3d_mtxProjection * l_positionOS;
 		} );
 
 		return l_writer.Finalise();

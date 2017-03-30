@@ -50,8 +50,8 @@ namespace GLSL
 	{
 	}
 
-	FragmentInput::FragmentInput( InParam< Vec3 > const & p_v3Vertex
-		, InParam< Vec3 > const & p_v3Normal )
+	FragmentInput::FragmentInput( InVec3 const & p_v3Vertex
+		, InVec3 const & p_v3Normal )
 		: m_v3Vertex{ p_v3Vertex }
 		, m_v3Normal{ p_v3Normal }
 	{
@@ -630,9 +630,9 @@ namespace GLSL
 				p_output.m_v3Specular += l_output.m_v3Specular;
 			}
 			, DirectionalLight( &m_writer, cuT( "p_light" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
+			, InVec3( &m_writer, cuT( "p_worldEye" ) )
+			, InFloat( &m_writer, cuT( "p_shininess" ) )
+			, InInt( &m_writer, cuT( "p_receivesShadows" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}
@@ -688,9 +688,9 @@ namespace GLSL
 				p_output.m_v3Specular += l_output.m_v3Specular / l_attenuation;
 			}
 			, PointLight( &m_writer, cuT( "p_light" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
+			, InVec3( &m_writer, cuT( "p_worldEye" ) )
+			, InFloat( &m_writer, cuT( "p_shininess" ) )
+			, InInt( &m_writer, cuT( "p_receivesShadows" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}
@@ -754,9 +754,9 @@ namespace GLSL
 				FI;
 			}
 			, SpotLight( &m_writer, cuT( "p_light" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
+			, InVec3( &m_writer, cuT( "p_worldEye" ) )
+			, InFloat( &m_writer, cuT( "p_shininess" ) )
+			, InInt( &m_writer, cuT( "p_receivesShadows" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}
@@ -807,9 +807,9 @@ namespace GLSL
 				p_output.m_v3Specular += l_output.m_v3Specular / l_attenuation;
 			}
 			, PointLight( &m_writer, cuT( "p_light" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
+			, InVec3( &m_writer, cuT( "p_worldEye" ) )
+			, InFloat( &m_writer, cuT( "p_shininess" ) )
+			, InInt( &m_writer, cuT( "p_receivesShadows" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}
@@ -868,9 +868,9 @@ namespace GLSL
 				FI;
 			}
 			, SpotLight( &m_writer, cuT( "p_light" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
+			, InVec3( &m_writer, cuT( "p_worldEye" ) )
+			, InFloat( &m_writer, cuT( "p_shininess" ) )
+			, InInt( &m_writer, cuT( "p_receivesShadows" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}
@@ -902,10 +902,10 @@ namespace GLSL
 		m_writer.ImplementFunction< Void >( cuT( "DoComputeLight" )
 			, l_compute
 			, InParam< Light >( &m_writer, cuT( "p_light" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-			, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-			, InParam< Float >( &m_writer, cuT( "p_shadowFactor" ) )
+			, InVec3( &m_writer, cuT( "p_worldEye" ) )
+			, InVec3( &m_writer, cuT( "p_direction" ) )
+			, InFloat( &m_writer, cuT( "p_shininess" ) )
+			, InFloat( &m_writer, cuT( "p_shadowFactor" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}

@@ -1,4 +1,4 @@
-#include "RenderTechniquePass.hpp"
+﻿#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -445,6 +445,7 @@ namespace Castor3D
 		}
 		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
 		m_sceneNode.m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
+		m_sceneNode.m_cameraFarPlane.SetValue( l_camera.GetViewport().GetFar() );
 		m_sceneNode.m_sceneUbo.Update();
 	}
 

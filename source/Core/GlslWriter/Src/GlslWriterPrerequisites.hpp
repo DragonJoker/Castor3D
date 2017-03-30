@@ -35,6 +35,11 @@ SOFTWARE.
 #	define GlslWriter_API
 #endif
 
+#define DECLARE_GLSL_PARAMETER( TypeName )\
+	using In##TypeName = InParam< TypeName >;\
+	using Out##TypeName = OutParam< TypeName >;\
+	using InOut##TypeName = InOutParam< TypeName >;\
+
 namespace GLSL
 {
 	/*!
@@ -168,11 +173,35 @@ namespace GLSL
 	using BMat3 = Mat3T< Boolean >;
 	using BMat4 = Mat4T< Boolean >;
 
+	DECLARE_GLSL_PARAMETER( Float );
+	DECLARE_GLSL_PARAMETER( Int );
+	DECLARE_GLSL_PARAMETER( Boolean );
+	DECLARE_GLSL_PARAMETER( Vec2 );
+	DECLARE_GLSL_PARAMETER( Vec3 );
+	DECLARE_GLSL_PARAMETER( Vec4 );
+	DECLARE_GLSL_PARAMETER( IVec2 );
+	DECLARE_GLSL_PARAMETER( IVec3 );
+	DECLARE_GLSL_PARAMETER( IVec4 );
+	DECLARE_GLSL_PARAMETER( BVec2 );
+	DECLARE_GLSL_PARAMETER( BVec3 );
+	DECLARE_GLSL_PARAMETER( BVec4 );
+	DECLARE_GLSL_PARAMETER( Mat2 );
+	DECLARE_GLSL_PARAMETER( Mat3 );
+	DECLARE_GLSL_PARAMETER( Mat4 );
+	DECLARE_GLSL_PARAMETER( IMat2 );
+	DECLARE_GLSL_PARAMETER( IMat3 );
+	DECLARE_GLSL_PARAMETER( IMat4 );
+	DECLARE_GLSL_PARAMETER( BMat2 );
+	DECLARE_GLSL_PARAMETER( BMat3 );
+	DECLARE_GLSL_PARAMETER( BMat4 );
+
 	template< typename RetT, typename ... ParamsT >
 	struct Function;
 
 	constexpr uint32_t SpotShadowMapCount = 10u;
 	constexpr uint32_t PointShadowMapCount = 6u;
 }
+
+#undef DECLARE_GLSL_PARAMETER
 
 #endif

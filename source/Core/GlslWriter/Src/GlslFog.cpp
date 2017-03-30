@@ -58,9 +58,9 @@ namespace GLSL
 				}
 			};
 			m_writer.ImplementFunction< Vec4 >( cuT( "ApplyFog" ), l_apply
-												, InParam< Vec4 >( &m_writer, cuT( "p_colour" ) )
-												, InParam< Float >( &m_writer, cuT( "p_dist" ) )
-												, InParam< Float >( &m_writer, cuT( "p_y" ) ) );
+												, InVec4( &m_writer, cuT( "p_colour" ) )
+												, InFloat( &m_writer, cuT( "p_dist" ) )
+												, InFloat( &m_writer, cuT( "p_y" ) ) );
 		}
 	}
 
