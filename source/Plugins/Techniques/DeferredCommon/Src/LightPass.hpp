@@ -201,4 +201,12 @@ namespace deferred_common
 	};
 }
 
+#define UBO_GPINFO( p_writer )\
+	GLSL::Ubo l_gpInfo{ p_writer, LightPass::GPInfo };\
+	auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< GLSL::Mat4 >( LightPass::InvViewProj );\
+	auto c3d_mtxInvView = l_gpInfo.GetUniform< GLSL::Mat4 >( LightPass::InvView );\
+	auto c3d_mtxInvProj = l_gpInfo.GetUniform< GLSL::Mat4 >( LightPass::InvProj );\
+	auto c3d_renderSize = l_gpInfo.GetUniform< GLSL::Vec2 >( LightPass::RenderSize );\
+	l_gpInfo.End()
+
 #endif

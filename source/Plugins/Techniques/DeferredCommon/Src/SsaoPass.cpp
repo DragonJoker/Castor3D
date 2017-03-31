@@ -1,4 +1,4 @@
-#include "SsaoPass.hpp"
+﻿#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -150,18 +150,12 @@ namespace deferred_common
 				// Shader inputs
 				UBO_MATRIX( l_writer );
 				UBO_SCENE( l_writer );
-				Ubo l_gpInfo{ l_writer, LightPass::GPInfo };
-				auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< Mat4 >( LightPass::InvViewProj );
-				auto c3d_mtxInvView = l_gpInfo.GetUniform< Mat4 >( LightPass::InvView );
-				auto c3d_mtxInvProj = l_gpInfo.GetUniform< Mat4 >( LightPass::InvProj );
-				auto c3d_renderSize = l_gpInfo.GetUniform< Vec2 >( LightPass::RenderSize );
-				l_gpInfo.End();
+				UBO_GPINFO( l_writer );
 				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 
 				// Shader outputs
 				auto vtx_viewRay = l_writer.GetOutput< Vec3 >( cuT( "vtx_viewRay" ) );
-				auto vtx_distance = l_writer.GetOutput< Float >( cuT( "vtx_distance" ) );
 				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" )
@@ -189,11 +183,7 @@ namespace deferred_common
 
 			// Shader inputs
 			UBO_MATRIX( l_writer );
-			Ubo l_gpInfo{ l_writer, LightPass::GPInfo };
-			auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< Mat4 >( LightPass::InvViewProj );
-			auto c3d_mtxInvView = l_gpInfo.GetUniform< Mat4 >( LightPass::InvView );
-			auto c3d_renderSize = l_gpInfo.GetUniform< Vec2 >( LightPass::RenderSize );
-			l_gpInfo.End();
+			UBO_GPINFO( l_writer );
 			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
 			auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
 			auto c3d_mapNoise = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
@@ -207,7 +197,6 @@ namespace deferred_common
 			l_ssaoConfig.End();
 
 			auto vtx_viewRay = l_writer.GetInput< Vec3 >( cuT( "vtx_viewRay" ) );
-			auto vtx_distance = l_writer.GetInput< Float >( cuT( "vtx_distance" ) );
 
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcTexCoord();
@@ -222,6 +211,7 @@ namespace deferred_common
 					auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
 					auto l_fragPos = l_writer.GetLocale( cuT( "l_fragPos" ), l_utils.CalcVSPosition( l_texCoord ) );
 					auto l_normal = l_writer.GetLocale( cuT( "l_normal" ), texture( c3d_mapNormal, l_texCoord ).rgb() );
+					l_normal = l_writer.Paren( c3d_mtxInvView * vec4( l_normal, 1.0_f ) ).xyz();
 					auto l_randomVec = l_writer.GetLocale( cuT( "l_randomVec" ), normalize( texture( c3d_mapNoise, l_texCoord * c3d_noiseScale ).xyz() ) );
 					auto l_tangent = l_writer.GetLocale( cuT( "l_tangent" ), normalize( l_randomVec - l_normal * dot( l_randomVec, l_normal ) ) );
 					auto l_bitangent = l_writer.GetLocale( cuT( "l_bitangent" ), cross( l_normal, l_tangent ) );
@@ -238,7 +228,7 @@ namespace deferred_common
 						l_offset = c3d_mtxProjection * l_offset;         // from view to clip-space
 						l_offset.xyz() = l_offset.xyz() / l_offset.w();  // perspective divide
 						l_offset.xyz() = l_offset.xyz() * 0.5 + 0.5;     // transform to range 0.0 - 1.0 
-						auto l_viewDistance = l_writer.GetLocale( cuT( "l_viewDistance" ), texture( c3d_mapDepth, l_texCoord ).r() );
+						auto l_viewDistance = l_writer.GetLocale( cuT( "l_viewDistance" ), texture( c3d_mapDepth, l_offset.xy() ).r() );
 						auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" ), l_viewDistance );
 						auto l_rangeCheck = l_writer.GetLocale( cuT( "l_rangeCheck" ), smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( l_fragPos.z() - l_sampleDepth ) ) );
 						l_occlusion += l_writer.Ternary( l_sampleDepth >= l_sample.z() + c3d_bias, 1.0_f, 0.0_f ) * l_rangeCheck;
@@ -361,6 +351,26 @@ namespace deferred_common
 				, p_program
 				, PipelineFlags{} );
 		}
+
+		SamplerSPtr DoCreateSampler( Engine & p_engine, String const & p_name, WrapMode p_mode )
+		{
+			SamplerSPtr l_sampler;
+
+			if ( p_engine.GetSamplerCache().Has( p_name ) )
+			{
+				l_sampler = p_engine.GetSamplerCache().Find( p_name );
+			}
+			else
+			{
+				l_sampler = p_engine.GetSamplerCache().Add( p_name );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+				l_sampler->SetWrappingMode( TextureUVW::eU, p_mode );
+				l_sampler->SetWrappingMode( TextureUVW::eV, p_mode );
+			}
+
+			return l_sampler;
+		}
 	}
 
 	SsaoPass::SsaoPass( Engine & p_engine
@@ -422,26 +432,6 @@ namespace deferred_common
 		m_projectionMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
 		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
 		m_viewport.Update();
-	}
-
-	SamplerSPtr DoCreateSampler( Engine & p_engine, String const & p_name, WrapMode p_mode )
-	{
-		SamplerSPtr l_sampler;
-
-		if ( p_engine.GetSamplerCache().Has( p_name ) )
-		{
-			l_sampler = p_engine.GetSamplerCache().Find( p_name );
-		}
-		else
-		{
-			l_sampler = p_engine.GetSamplerCache().Add( p_name );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-			l_sampler->SetWrappingMode( TextureUVW::eU, p_mode );
-			l_sampler->SetWrappingMode( TextureUVW::eV, p_mode );
-		}
-
-		return l_sampler;
 	}
 
 	void SsaoPass::DoInitialiseSsaoPass()
@@ -552,6 +542,7 @@ namespace deferred_common
 		m_ssaoFbo.reset();
 		m_ssaoResultAttach.reset();
 		m_ssaoResult.Cleanup();
+		m_gpInfoUbo.Cleanup();
 	}
 
 	void SsaoPass::DoCleanupBlurPass()

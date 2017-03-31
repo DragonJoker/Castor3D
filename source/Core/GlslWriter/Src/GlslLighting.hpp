@@ -38,10 +38,10 @@ namespace GLSL
 	struct OutputComponents
 	{
 		GlslWriter_API OutputComponents( GlslWriter & p_writer );
-		GlslWriter_API OutputComponents( InOutParam< Vec3 > const & p_v3Ambient, InOutParam< Vec3 > const & p_v3Diffuse, InOutParam< Vec3 > const & p_v3Specular );
-		InOutParam< Vec3 > m_v3Ambient;
-		InOutParam< Vec3 > m_v3Diffuse;
-		InOutParam< Vec3 > m_v3Specular;
+		GlslWriter_API OutputComponents( InOutVec3 const & p_v3Ambient, InOutVec3 const & p_v3Diffuse, InOutVec3 const & p_v3Specular );
+		InOutVec3 m_v3Ambient;
+		InOutVec3 m_v3Diffuse;
+		InOutVec3 m_v3Specular;
 	};
 
 	GlslWriter_API Castor::String ParamToString( Castor::String & p_sep, FragmentInput const & p_value );
@@ -85,6 +85,12 @@ namespace GLSL
 			, Int const & p_receivesShadows
 			, FragmentInput const & p_fragmentIn
 			, OutputComponents & p_output );
+		GlslWriter_API void ComputeOneDirectionalLight( DirectionalLight const & p_light
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, Int const & p_receivesShadows
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output );
 		GlslWriter_API void ComputeOnePointLight( PointLight const & p_light
 			, Vec3 const & p_worldEye
 			, Float const & p_shininess
@@ -113,6 +119,7 @@ namespace GLSL
 		virtual void Declare_ComputeDirectionalLight() = 0;
 		virtual void Declare_ComputePointLight() = 0;
 		virtual void Declare_ComputeSpotLight() = 0;
+		virtual void Declare_ComputeOneDirectionalLight() = 0;
 		virtual void Declare_ComputeOnePointLight() = 0;
 		virtual void Declare_ComputeOneSpotLight() = 0;
 
@@ -123,6 +130,7 @@ namespace GLSL
 		Function< Void, DirectionalLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeDirectional;
 		Function< Void, PointLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computePoint;
 		Function< Void, SpotLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeSpot;
+		Function< Void, DirectionalLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOneDirectional;
 		Function< Void, PointLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOnePoint;
 		Function< Void, SpotLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOneSpot;
 	};
@@ -139,12 +147,14 @@ namespace GLSL
 		void Declare_ComputeDirectionalLight()override;
 		void Declare_ComputePointLight()override;
 		void Declare_ComputeSpotLight()override;
+		void Declare_ComputeOneDirectionalLight()override;
 		void Declare_ComputeOnePointLight()override;
 		void Declare_ComputeOneSpotLight()override;
 
 		void DoComputeLight( Light const & p_light
 			, Vec3 const & p_worldEye
-			, Vec3 const & p_direction
+			, Vec3 const & p_directionDiffuse
+			, Vec3 const & p_directionSpecular
 			, Float const & p_shininess
 			, Float const & p_shadowFactor
 			, FragmentInput const & p_fragmentIn
@@ -153,6 +163,7 @@ namespace GLSL
 
 	public:
 		GlslWriter_API static const Castor::String Name;
+		Function< Void, InLight, InVec3, InVec3, InVec3, InFloat, InFloat, FragmentInput, OutputComponents & > m_computeLight;
 	};
 }
 
