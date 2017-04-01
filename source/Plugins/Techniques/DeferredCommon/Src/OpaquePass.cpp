@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -135,7 +135,6 @@ namespace deferred_common
 		UBO_SCENE( l_writer );
 
 		// Outputs
-		auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
@@ -186,7 +185,7 @@ namespace deferred_common
 
 			vtx_texture = l_v3Texture;
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_position = l_v4Vertex.xyz();
+			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_v4Vertex.xyz() );
 			l_v4Vertex = c3d_mtxView * l_v4Vertex;
 			auto l_mtxNormal = l_writer.GetLocale( cuT( "l_mtxNormal" )
 				, transpose( inverse( mat3( l_mtxModel ) ) ) );
@@ -207,9 +206,8 @@ namespace deferred_common
 			gl_Position = c3d_mtxProjection * l_v4Vertex;
 
 			auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = l_tbn * vtx_position;
+			vtx_tangentSpaceFragPosition = l_tbn * l_wsPosition;
 			vtx_tangentSpaceViewPosition = l_tbn * c3d_v3CameraPosition;
-			vtx_position = l_v4Vertex.xyz();
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
@@ -230,7 +228,6 @@ namespace deferred_common
 		UBO_MODEL( l_writer );
 
 		// Fragment Inputs
-		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -252,9 +249,8 @@ namespace deferred_common
 
 		// Fragment Outputs
 		uint32_t l_index = 0;
-		auto out_c3dDepth = l_writer.GetFragData< Float >( cuT( "out_c3dDepth" ), l_index++ );
-		auto out_c3dDiffuse = l_writer.GetFragData< Vec4 >( cuT( "out_c3dDiffuse" ), l_index++ );
 		auto out_c3dNormal = l_writer.GetFragData< Vec4 >( cuT( "out_c3dNormal" ), l_index++ );
+		auto out_c3dDiffuse = l_writer.GetFragData< Vec4 >( cuT( "out_c3dDiffuse" ), l_index++ );
 		auto out_c3dSpecular = l_writer.GetFragData< Vec4 >( cuT( "out_c3dSpecular" ), l_index++ );
 		auto out_c3dEmissive = l_writer.GetFragData< Vec4 >( cuT( "out_c3dEmissive" ), l_index++ );
 
@@ -279,9 +275,8 @@ namespace deferred_common
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 			
-			out_c3dDepth = length( vtx_position );
-			out_c3dDiffuse = vec4( l_v3Diffuse, l_writer.Cast< Float >( c3d_iShadowReceiver ) );
 			out_c3dNormal = vec4( l_v3Normal, 0.0_f );
+			out_c3dDiffuse = vec4( l_v3Diffuse, l_writer.Cast< Float >( c3d_iShadowReceiver ) );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
 			out_c3dEmissive = vec4( l_v3Emissive, 0.0_f );
 		} );

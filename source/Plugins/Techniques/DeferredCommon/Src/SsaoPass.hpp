@@ -81,11 +81,7 @@ namespace deferred_common
 		Castor3D::TextureAttachmentSPtr m_ssaoResultAttach;
 		Castor3D::UniformBuffer m_ssaoConfig;
 		Castor3D::Uniform3fSPtr m_kernelUniform;
-		Castor3D::UniformBuffer m_gpInfoUbo;
-		Castor3D::Uniform4x4fSPtr m_invViewProjUniform;
-		Castor3D::Uniform4x4fSPtr m_invViewUniform;
-		Castor3D::Uniform4x4fSPtr m_invProjUniform;
-		Castor3D::Uniform2fSPtr m_renderSize;
+		std::unique_ptr< GpInfo > m_gpInfo;
 		// SSAO blur pass
 		Castor3D::FrameBufferSPtr m_blurFbo;
 		Castor3D::VertexBufferSPtr m_blurVertexBuffer;

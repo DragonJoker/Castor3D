@@ -59,7 +59,7 @@ namespace GlRender
 					p_gl.GetActiveUniformsiv( p_program, 1, &l_index, GlUniformValue::eOffset, &l_offset );
 					int l_stride = 0;
 					p_gl.GetActiveUniformsiv( p_program, 1, &l_index, GlUniformValue::eArrayStride, &l_stride );
-					p_infos.push_back( { uint32_t( l_offset ), uint32_t( l_stride ) } );
+					p_infos.push_back( { l_variable->GetName(), uint32_t( l_offset ), uint32_t( l_stride ) } );
 				}
 			}
 		}

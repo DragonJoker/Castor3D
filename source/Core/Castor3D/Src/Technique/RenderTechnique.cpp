@@ -40,7 +40,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
+			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24S8 );
 			l_return = m_depthBuffer->Create();
 		}
 

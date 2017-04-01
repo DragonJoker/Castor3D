@@ -1,4 +1,4 @@
-#include "GlslLighting.hpp"
+﻿#include "GlslLighting.hpp"
 
 #include "GlslShadow.hpp"
 
@@ -812,7 +812,7 @@ namespace GLSL
 				DoComputeLight( p_light.m_lightBase()
 					, p_worldEye
 					, -l_lightDirection
-					, -l_lightDirection
+					, l_lightDirection
 					, p_shininess
 					, l_shadowFactor
 					, p_fragmentIn

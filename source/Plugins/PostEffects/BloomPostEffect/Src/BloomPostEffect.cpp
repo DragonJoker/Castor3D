@@ -70,15 +70,23 @@ namespace Bloom
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
+				pxl_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
+				auto l_max = l_writer.GetLocale( cuT( "l_max" ), GLSL::max( pxl_v4FragColor.r(), pxl_v4FragColor.g() ) );
+				l_max = GLSL::max( l_max, pxl_v4FragColor.b() );
 
-				plx_v4FragColor.x() = TERNARY( l_writer, Float, plx_v4FragColor.x() > 1.0, 1.0_f, 0.0_f );
-				plx_v4FragColor.y() = TERNARY( l_writer, Float, plx_v4FragColor.y() > 1.0, 1.0_f, 0.0_f );
-				plx_v4FragColor.z() = TERNARY( l_writer, Float, plx_v4FragColor.z() > 1.0, 1.0_f, 0.0_f );
+				IF( l_writer, l_max > 1.0_f )
+				{
+					pxl_v4FragColor.xyz() /= l_max;
+				}
+				ELSE
+				{
+					pxl_v4FragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
+				}
+				FI;
 			} );
 			return l_writer.Finalise();
 		}

@@ -1,4 +1,4 @@
-#include "MeshLightPass.hpp"
+﻿#include "MeshLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -167,17 +167,11 @@ namespace deferred_common
 		auto vertex = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
 
 		// Shader outputs
-		auto vtx_viewRay = l_writer.GetOutput< Vec3 >( cuT( "vtx_viewRay" ) );
 		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_positionOS = l_writer.GetLocale( cuT( "l_positionOS" )
-				, vec4( vertex, 1.0 ) );
-			auto l_positionWS = l_writer.GetLocale( cuT( "l_positionWS" )
-				, c3d_mtxModel * l_positionOS );
-			vtx_viewRay = l_positionWS.xyz() - c3d_v3CameraPosition;
-			gl_Position = c3d_mtxProjection * c3d_mtxView * l_positionWS;
+			gl_Position = c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( vertex, 1.0_f );
 		} );
 
 		return l_writer.Finalise();

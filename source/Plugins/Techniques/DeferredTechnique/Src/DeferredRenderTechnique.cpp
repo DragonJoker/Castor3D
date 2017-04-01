@@ -126,7 +126,6 @@ namespace deferred
 		auto l_invViewProj = ( l_camera.GetViewport().GetProjection() * l_camera.GetView() ).get_inverse();
 		l_camera.Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
@@ -139,6 +138,9 @@ namespace deferred
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eStencil );
+		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
+			, Rectangle{ Position{}, m_size }
+			, BufferComponent::eDepth );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
 		DoUpdateSceneUbo();
@@ -185,13 +187,13 @@ namespace deferred
 		m_frameBuffer.m_frameBuffer->Bind();
 		l_context.RenderDepth( Position{ l_width * 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDepth )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_width * 1, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * 2, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormals )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 2, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormal )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_width * 3, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_width * 4, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
 
 		if ( m_ssaoEnabled )
 		{
-			l_context.RenderTexture( Position{ l_width * 5, 0 }, l_size, *m_ssao->GetResult().GetTexture() );
+			l_context.RenderTexture( Position{ l_width * 5, 0 }, l_size, m_ssao->GetRaw() );
 		}
 
 		m_frameBuffer.m_frameBuffer->Unbind();
@@ -208,14 +210,7 @@ namespace deferred
 	{
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
-		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 		bool l_return = m_geometryPassFrameBuffer->Create();
-
-		if ( l_return )
-		{
-			l_return = m_lightPassDepthBuffer->Create();
-		}
 
 		if ( l_return )
 		{
@@ -243,7 +238,6 @@ namespace deferred
 				p_index++;
 			}
 
-			m_lightPassDepthBuffer->Initialise( m_size );
 			m_geometryPassFrameBuffer->Bind();
 
 			for ( int i = 0; i < size_t( deferred_common::DsTexture::eCount ) && l_return; i++ )
@@ -316,8 +310,6 @@ namespace deferred
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();
-		m_lightPassDepthBuffer->Destroy();
-		m_lightPassDepthBuffer.reset();
 		m_geometryPassFrameBuffer->Destroy();
 		m_geometryPassFrameBuffer.reset();
 	}

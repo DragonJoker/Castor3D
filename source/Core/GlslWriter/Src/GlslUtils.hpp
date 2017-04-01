@@ -32,17 +32,17 @@ namespace GLSL
 	public:
 		GlslWriter_API Utils( GlslWriter & p_writer );
 		GlslWriter_API void DeclareCalcTexCoord();
-		GlslWriter_API void DeclareCalcVSToWS();
 		GlslWriter_API void DeclareCalcVSPosition();
+		GlslWriter_API void DeclareCalcWSPosition();
 		GlslWriter_API Vec2 CalcTexCoord();
-		GlslWriter_API Vec3 CalcVSToWS( Vec3 const & p_vsPosition );
-		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & p_coords );
+		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & p_uv );
+		GlslWriter_API Vec3 CalcWSPosition( Vec2 const & p_uv );
 
 	private:
 		GlslWriter & m_writer;
 		Function< Vec2 > m_calcTexCoord;
-		Function< Vec3, InVec3 > m_calcVSToWS;
 		Function< Vec3, InVec2 > m_calcVSPosition;
+		Function< Vec3, InVec2 > m_calcWSPosition;
 	};
 }
 

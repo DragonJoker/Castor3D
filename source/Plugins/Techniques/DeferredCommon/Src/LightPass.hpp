@@ -36,8 +36,8 @@ namespace deferred_common
 		: uint8_t
 	{
 		eDepth,
+		eNormal,
 		eDiffuse,
-		eNormals,
 		eSpecular,
 		eEmissive,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
@@ -49,6 +49,55 @@ namespace deferred_common
 	float GetMaxDistance( Castor3D::LightCategory const & p_light
 		, Castor::Point3f const & p_attenuation
 		, float p_max );
+
+	class GpInfo
+	{
+	public:
+		GpInfo( Castor3D::Engine & p_engine );
+		~GpInfo();
+		void Update( Castor::Size const & p_size
+			, Castor3D::Camera const & p_camera
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj );
+
+		inline Castor3D::UniformBuffer & GetUbo()
+		{
+			return m_gpInfoUbo;
+		}
+
+	public:
+		static const Castor::String GPInfo;
+		static const Castor::String InvViewProj;
+		static const Castor::String InvView;
+		static const Castor::String InvProj;
+		static const Castor::String View;
+		static const Castor::String Proj;
+		static const Castor::String RenderSize;
+
+	private:
+		//!\~english	The uniform buffer containing Geometry pass informations.
+		//!\~french		Le tampon d'uniformes contenant les informations de la geometry pass.
+		Castor3D::UniformBuffer m_gpInfoUbo;
+		//!\~english	The uniform variable containing inverted projection-view matrix.
+		//!\~french		La variable uniforme contenant la matrice projection-vue inversée.
+		Castor3D::Uniform4x4fSPtr m_invViewProjUniform;
+		//!\~english	The uniform variable containing inverted view matrix.
+		//!\~french		La variable uniforme contenant la matrice vue inversée.
+		Castor3D::Uniform4x4fSPtr m_invViewUniform;
+		//!\~english	The uniform variable containing inverted projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection inversés.
+		Castor3D::Uniform4x4fSPtr m_invProjUniform;
+		//!\~english	The uniform variable containing view matrix.
+		//!\~french		La variable uniforme contenant la matrice vue.
+		Castor3D::Uniform4x4fSPtr m_gViewUniform;
+		//!\~english	The uniform variable containing projection matrix.
+		//!\~french		La variable uniforme contenant la matrice projection.
+		Castor3D::Uniform4x4fSPtr m_gProjUniform;
+		//!\~english	The shader variable containing the render area size.
+		//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
+		Castor3D::Uniform2fSPtr m_renderSize;
+	};
 
 	using GeometryPassResult = std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) >;
 
@@ -148,13 +197,6 @@ namespace deferred_common
 			, Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const = 0;
 
-	public:
-		static const Castor::String GPInfo;
-		static const Castor::String InvViewProj;
-		static const Castor::String InvView;
-		static const Castor::String InvProj;
-		static const Castor::String RenderSize;
-
 	protected:
 		//!\~english	The engine.
 		//!\~french		Le moteur.
@@ -183,30 +225,20 @@ namespace deferred_common
 		//!\~english	The uniform variable containing view matrix.
 		//!\~french		La variable uniforme contenant la matrice vue.
 		Castor3D::Uniform4x4fSPtr m_viewUniform;
-		//!\~english	The uniform buffer containing Geometry pass informations.
-		//!\~french		Le tampon d'uniformes contenant les informations de la geometry pass.
-		Castor3D::UniformBuffer m_gpInfoUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_invViewProjUniform;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_invViewUniform;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_invProjUniform;
-		//!\~english	The shader variable containing the render area size.
-		//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
-		Castor3D::Uniform2fSPtr m_renderSize;
+		//!\~english	The geometry pass informations.
+		//!\~french		Les informations de la passe de géométrie.
+		std::unique_ptr< GpInfo > m_gpInfo;
 	};
 }
 
 #define UBO_GPINFO( p_writer )\
-	GLSL::Ubo l_gpInfo{ p_writer, LightPass::GPInfo };\
-	auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< GLSL::Mat4 >( LightPass::InvViewProj );\
-	auto c3d_mtxInvView = l_gpInfo.GetUniform< GLSL::Mat4 >( LightPass::InvView );\
-	auto c3d_mtxInvProj = l_gpInfo.GetUniform< GLSL::Mat4 >( LightPass::InvProj );\
-	auto c3d_renderSize = l_gpInfo.GetUniform< GLSL::Vec2 >( LightPass::RenderSize );\
+	GLSL::Ubo l_gpInfo{ p_writer, GpInfo::GPInfo };\
+	auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfo::InvViewProj );\
+	auto c3d_mtxInvView = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfo::InvView );\
+	auto c3d_mtxInvProj = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfo::InvProj );\
+	auto c3d_mtxGView = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfo::View );\
+	auto c3d_mtxGProj = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfo::Proj );\
+	auto c3d_renderSize = l_gpInfo.GetUniform< GLSL::Vec2 >( GpInfo::RenderSize );\
 	l_gpInfo.End()
 
 #endif

@@ -1,4 +1,4 @@
-﻿#include "GlslUtils.hpp"
+#include "GlslUtils.hpp"
 
 #include "GlslIntrinsics.hpp"
 
@@ -22,33 +22,40 @@ namespace GLSL
 			} );
 	}
 
-	void Utils::DeclareCalcVSToWS()
-	{
-		m_calcVSToWS = m_writer.ImplementFunction< Vec3 >( cuT( "CalcVSToWS" )
-			, [&]( Vec3 const & p_vsPosition )
-			{
-				auto c3d_mtxInvView = m_writer.GetBuiltin< Mat4 >( cuT( "c3d_mtxInvView" ) );
-				// Transform by the inverse view matrix
-				m_writer.Return( m_writer.GetLocale( cuT( "l_vsPosition" )
-					, c3d_mtxInvView * vec4( p_vsPosition, 1.0_f ) ).xyz() );
-			}, InVec3{ &m_writer, cuT( "p_vsPosition" ) } );
-	}
-
 	void Utils::DeclareCalcVSPosition()
 	{
-		m_calcVSPosition = m_writer.ImplementFunction< Vec3 >( cuT( "CalcWSPosition" )
-			, [&]( Vec2 const & p_coords )
+		m_calcVSPosition = m_writer.ImplementFunction< Vec3 >( cuT( "CalcVSPosition" )
+			, [&]( Vec2 const & p_uv )
+			{
+				auto c3d_mapDepth = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapDepth" ) );
+				auto c3d_mtxInvProj = m_writer.GetBuiltin< Mat4 >( cuT( "c3d_mtxInvProj" ) );
+				auto l_depth = m_writer.GetLocale( cuT( "l_texCoord" )
+					, texture( c3d_mapDepth, p_uv, 0.0_f ).x() );
+				auto l_csPosition = m_writer.GetLocale( cuT( "l_psPosition" )
+					, vec3( p_uv * 2.0f - 1.0f, l_depth * 2.0 - 1.0 ) );
+				auto l_vsPosition = m_writer.GetLocale( cuT( "l_vsPosition" )
+					, c3d_mtxInvProj * vec4( l_csPosition, 1.0 ) );
+				l_vsPosition.xyz() /= l_vsPosition.w();
+				m_writer.Return( l_vsPosition.xyz() );
+			}, InVec2{ &m_writer, cuT( "p_uv" ) } );
+	}
+
+	void Utils::DeclareCalcWSPosition()
+	{
+		m_calcWSPosition = m_writer.ImplementFunction< Vec3 >( cuT( "CalcWSPosition" )
+			, [&]( Vec2 const & p_uv )
 			{
 				auto c3d_mapDepth = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapDepth" ) );
 				auto c3d_mtxInvViewProj = m_writer.GetBuiltin< Mat4 >( cuT( "c3d_mtxInvViewProj" ) );
-				// Get the depth value for this pixel
-				auto l_z = m_writer.GetLocale( cuT( "l_z" )
-					, texture( c3d_mapDepth, p_coords ).x() );
-				// Get x/w and y/w from the viewport position
-				auto l_xy = m_writer.GetLocale( cuT( "l_xy" )
-					, p_coords * 2 - 1 );
-				m_writer.Return( vec3( l_xy, l_z ) );
-			}, InVec2{ &m_writer, cuT( "p_coords" ) } );
+				auto l_depth = m_writer.GetLocale( cuT( "l_texCoord" )
+					, texture( c3d_mapDepth, p_uv, 0.0_f ).x() );
+				auto l_csPosition = m_writer.GetLocale( cuT( "l_psPosition" )
+					, vec3( p_uv * 2.0f - 1.0f, l_depth * 2.0 - 1.0 ) );
+				auto l_wsPosition = m_writer.GetLocale( cuT( "l_wsPosition" )
+					, c3d_mtxInvViewProj * vec4( l_csPosition, 1.0 ) );
+				l_wsPosition.xyz() /= l_wsPosition.w();
+				m_writer.Return( l_wsPosition.xyz() );
+			}, InVec2{ &m_writer, cuT( "p_uv" ) } );
 	}
 
 	Vec2 Utils::CalcTexCoord()
@@ -56,13 +63,13 @@ namespace GLSL
 		return m_calcTexCoord();
 	}
 
-	Vec3 Utils::CalcVSToWS( Vec3 const & p_vsPosition )
+	Vec3 Utils::CalcVSPosition( Vec2 const & p_uv )
 	{
-		return m_calcVSToWS( p_vsPosition );
+		return m_calcVSPosition( p_uv );
 	}
 
-	Vec3 Utils::CalcVSPosition( Vec2 const & p_coords )
+	Vec3 Utils::CalcWSPosition( Vec2 const & p_uv )
 	{
-		return m_calcVSPosition( p_coords );
+		return m_calcWSPosition( p_uv );
 	}
 }

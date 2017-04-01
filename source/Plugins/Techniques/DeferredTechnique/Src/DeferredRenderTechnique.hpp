@@ -134,18 +134,12 @@ namespace deferred
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
 		GeometryBufferTextures m_lightPassTextures;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;
 		//!\~english	The deferred shading frame buffer.
 		//!\~french		Le tampon d'image pour le deferred shading.
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english	The attachments between textures and deferred shading frame buffer.
 		//!\~french		Les attaches entre les textures et le tampon deferred shading.
 		GeometryBufferAttachs m_geometryPassTexAttachs;
-		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
-		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		Castor3D::UniformBuffer m_sceneUbo;

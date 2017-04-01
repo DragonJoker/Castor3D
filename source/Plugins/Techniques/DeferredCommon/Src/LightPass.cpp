@@ -95,7 +95,7 @@ namespace deferred_common
 		static std::array< PixelFormat, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				PixelFormat::eL16F32F,
+				PixelFormat::eD24S8,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
@@ -111,7 +111,7 @@ namespace deferred_common
 		static std::array< AttachmentPoint, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				AttachmentPoint::eColour,
+				AttachmentPoint::eDepthStencil,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
@@ -128,10 +128,10 @@ namespace deferred_common
 		{
 			{
 				0,
+				0,
 				1,
 				2,
 				3,
-				4,
 			}
 		};
 
@@ -182,11 +182,46 @@ namespace deferred_common
 
 	//************************************************************************************************
 
-	const String LightPass::GPInfo = cuT( "GPInfo" );
-	const String LightPass::InvViewProj = cuT( "c3d_mtxInvViewProj" );
-	const String LightPass::InvView = cuT( "c3d_mtxInvView" );
-	const String LightPass::InvProj = cuT( "c3d_mtxInvProj" );
-	const String LightPass::RenderSize = cuT( "c3d_renderSize" );
+	const String GpInfo::GPInfo = cuT( "GPInfo" );
+	const String GpInfo::InvViewProj = cuT( "c3d_mtxInvViewProj" );
+	const String GpInfo::InvView = cuT( "c3d_mtxInvView" );
+	const String GpInfo::InvProj = cuT( "c3d_mtxInvProj" );
+	const String GpInfo::View = cuT( "c3d_mtxGView" );
+	const String GpInfo::Proj = cuT( "c3d_mtxGProj" );
+	const String GpInfo::RenderSize = cuT( "c3d_renderSize" );
+
+	GpInfo::GpInfo( Engine & p_engine )
+		: m_gpInfoUbo{ GpInfo::GPInfo, *p_engine.GetRenderSystem() }
+		, m_invViewProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::InvViewProj ) }
+		, m_invViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::InvView ) }
+		, m_invProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::InvProj ) }
+		, m_gViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::View ) }
+		, m_gProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::Proj ) }
+		, m_renderSize{ m_gpInfoUbo.CreateUniform< UniformType::eVec2f >( GpInfo::RenderSize ) }
+	{
+	}
+
+	GpInfo::~GpInfo()
+	{
+		m_gpInfoUbo.Cleanup();
+	}
+
+	void GpInfo::Update( Size const & p_size
+		, Camera const & p_camera
+		, Matrix4x4r const & p_invViewProj
+		, Matrix4x4r const & p_invView
+		, Matrix4x4r const & p_invProj )
+	{
+		m_invViewProjUniform->SetValue( p_invViewProj );
+		m_invViewUniform->SetValue( p_invView );
+		m_invProjUniform->SetValue( p_invProj );
+		m_gViewUniform->SetValue( p_camera.GetView() );
+		m_gProjUniform->SetValue( p_camera.GetViewport().GetProjection() );
+		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
+		m_gpInfoUbo.Update();
+	}
+
+	//************************************************************************************************
 
 	LightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
@@ -299,11 +334,6 @@ namespace deferred_common
 		, m_frameBuffer{ p_frameBuffer }
 		, m_depthAttach{ p_depthAttach }
 		, m_ssao{ p_ssao }
-		, m_gpInfoUbo{ LightPass::GPInfo, *p_engine.GetRenderSystem() }
-		, m_invViewProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( LightPass::InvViewProj ) }
-		, m_invViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( LightPass::InvView ) }
-		, m_invProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( LightPass::InvProj ) }
-		, m_renderSize{ m_gpInfoUbo.CreateUniform< UniformType::eVec2f >( LightPass::RenderSize ) }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
@@ -321,11 +351,11 @@ namespace deferred_common
 		, Castor3D::TextureUnit const * p_ssao
 		, bool p_first )
 	{
-		m_invViewProjUniform->SetValue( p_invViewProj );
-		m_invViewUniform->SetValue( p_invView );
-		m_invProjUniform->SetValue( p_invProj );
-		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
-		m_gpInfoUbo.Update();
+		m_gpInfo->Update( p_size
+			, p_camera
+			, p_invViewProj
+			, p_invView
+			, p_invProj );
 
 		DoUpdate( p_size
 			, p_light
@@ -346,6 +376,7 @@ namespace deferred_common
 		, UniformBuffer & p_sceneUbo
 		, UniformBuffer * p_modelMatrixUbo )
 	{
+		m_gpInfo = std::make_unique< GpInfo >( m_engine );
 		uint16_t l_fogType{ 0u };
 
 		for ( auto & l_program : m_programs )
@@ -360,7 +391,7 @@ namespace deferred_common
 				, p_ibo
 				, m_matrixUbo
 				, p_sceneUbo
-				, m_gpInfoUbo
+				, m_gpInfo->GetUbo()
 				, p_modelMatrixUbo );
 			l_fogType++;
 		}
@@ -374,7 +405,7 @@ namespace deferred_common
 			l_program.reset();
 		}
 
-		m_gpInfoUbo.Cleanup();
+		m_gpInfo.reset();
 		m_matrixUbo.Cleanup();
 	}
 
@@ -388,8 +419,8 @@ namespace deferred_common
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.SetDrawBuffers();
 		p_gp[size_t( DsTexture::eDepth )]->Bind();
+		p_gp[size_t( DsTexture::eNormal )]->Bind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Bind();
-		p_gp[size_t( DsTexture::eNormals )]->Bind();
 		p_gp[size_t( DsTexture::eSpecular )]->Bind();
 		p_gp[size_t( DsTexture::eEmissive )]->Bind();
 
@@ -413,8 +444,8 @@ namespace deferred_common
 
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
 		p_gp[size_t( DsTexture::eSpecular )]->Unbind();
-		p_gp[size_t( DsTexture::eNormals )]->Unbind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Unbind();
+		p_gp[size_t( DsTexture::eNormal )]->Unbind();
 		p_gp[size_t( DsTexture::eDepth )]->Unbind();
 		m_frameBuffer.Unbind();
 	}
@@ -430,12 +461,11 @@ namespace deferred_common
 		UBO_SCENE( l_writer );
 		UBO_GPINFO( l_writer );
 		auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
+		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
 		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormals ) );
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
 		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
-		auto vtx_viewRay = l_writer.GetInput< Vec3 >( cuT( "vtx_viewRay" ) );
 		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		// Shader outputs
@@ -448,8 +478,7 @@ namespace deferred_common
 		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
 		GLSL::Utils l_utils{ l_writer };
 		l_utils.DeclareCalcTexCoord();
-		l_utils.DeclareCalcVSPosition();
-		l_utils.DeclareCalcVSToWS();
+		l_utils.DeclareCalcWSPosition();
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -469,9 +498,7 @@ namespace deferred_common
 			auto l_eye = l_writer.GetLocale( cuT( "l_eye" ), c3d_v3CameraPosition );
 			auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), m_ssao, texture( c3d_mapSsao, l_texCoord ).r() );
 
-			auto l_viewRay = l_writer.GetLocale( cuT( "l_viewRay" ), normalize( vtx_viewRay ) );
-			auto l_viewDistance = l_writer.GetLocale( cuT( "l_viewDistance" ), texture( c3d_mapDepth, l_texCoord ).r() );
-			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), c3d_v3CameraPosition + l_viewRay * l_viewDistance );
+			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord ) );
 			auto l_wsNormal = l_writer.GetLocale( cuT( "l_wsNormal" ), l_v4Normal.xyz() );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };

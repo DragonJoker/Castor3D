@@ -233,11 +233,11 @@ namespace deferred_common
 			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first )override
 		{
-			this->m_invViewProjUniform->SetValue( p_invViewProj );
-			this->m_invViewUniform->SetValue( p_invView );
-			this->m_invProjUniform->SetValue( p_invProj );
-			this->m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
-			this->m_gpInfoUbo.Update();
+			my_pass_type::m_gpInfo->Update( p_size
+				, p_camera
+				, p_invViewProj
+				, p_invView
+				, p_invProj );
 
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
 			my_pass_type::DoUpdate( p_size

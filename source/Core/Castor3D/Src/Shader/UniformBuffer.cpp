@@ -280,10 +280,16 @@ namespace Castor3D
 	void UniformBuffer::DoInitialise( UniformBufferBinding const & p_binding )
 	{
 		m_buffer.resize( p_binding.GetSize() );
-		auto l_it = p_binding.begin();
 
 		for ( auto & l_variable : *this )
 		{
+			auto l_it = std::find_if( p_binding.begin()
+				, p_binding.end()
+				, [&l_variable]( auto & p_info )
+				{
+					return l_variable->GetName() == p_info.m_name;
+				} );
+
 			if ( l_it != p_binding.end() )
 			{
 				REQUIRE( l_variable->size() <= m_buffer.size() - ( l_it->m_offset ) );
@@ -292,7 +298,7 @@ namespace Castor3D
 			}
 			else
 			{
-				FAILURE( "The variable was not found in the binding." );
+				Logger::LogWarning( cuT( "The variable [" ) + l_variable->GetName() + cuT( "]was not found in the binding." ) );
 			}
 		}
 

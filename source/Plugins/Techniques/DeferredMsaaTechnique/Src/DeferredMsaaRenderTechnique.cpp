@@ -171,26 +171,6 @@ namespace deferred_msaa
 		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 
-#if DEBUG_DEFERRED_BUFFERS
-
-		int l_width = int( m_size.width() );
-		int l_height = int( m_size.height() );
-		int l_thirdWidth = int( l_width / 3.0f );
-		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
-		int l_thirdHeight = int( l_height / 3.0f );
-		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
-		auto l_size = Size( l_thirdWidth, l_thirdHeight );
-		auto & l_context = *m_renderSystem.GetCurrentContext();
-		m_frameBuffer.m_frameBuffer->Bind();
-		l_context.RenderTexture( Position{ 0, 0 }, l_size, *m_lightPassTextures[size_t( DsTexture::ePosition )]->GetTexture() );
-		l_context.RenderTexture( Position{ 0, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( DsTexture::eDiffuse )]->GetTexture() );
-		l_context.RenderTexture( Position{ 0, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( DsTexture::eNormals )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, 0 }, l_size, *m_lightPassTextures[size_t( DsTexture::eTangent )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( DsTexture::eSpecular )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( DsTexture::eEmissive )]->GetTexture() );
-
-#else
-
 		if ( m_ssaoEnabled )
 		{
 			m_ssao->Render( m_lightPassTextures, *m_renderTarget.GetCamera(), l_invViewProj, l_invView, l_invProj );
@@ -228,8 +208,6 @@ namespace deferred_msaa
 
 		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msaaFrameBuffer->SetDrawBuffers();
-
-#endif
 	}
 
 	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
@@ -242,6 +220,30 @@ namespace deferred_msaa
 		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_msaaFrameBuffer->Unbind();
 		m_msaaFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::eColour | BufferComponent::eDepth );
+
+#if DEBUG_DEFERRED_BUFFERS && !defined( NDEBUG )
+
+		int l_width = int( m_size.width() ) / 6;
+		int l_height = int( m_size.height() ) / 6;
+		int l_left = int( m_size.width() ) - l_width;
+		auto l_size = Size( l_width, l_height );
+		auto & l_context = *m_renderSystem.GetCurrentContext();
+		m_renderTarget.GetCamera()->Apply();
+		m_frameBuffer.m_frameBuffer->Bind();
+		l_context.RenderDepth( Position{ l_width * 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDepth )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 1, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 2, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormal )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 3, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 4, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
+
+		if ( m_ssaoEnabled )
+		{
+			l_context.RenderTexture( Position{ l_width * 5, 0 }, l_size, m_ssao->GetRaw() );
+		}
+
+		m_frameBuffer.m_frameBuffer->Unbind();
+
+#endif
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
@@ -272,7 +274,7 @@ namespace deferred_msaa
 		m_rect = Castor::Rectangle( Position(), m_size );
 		m_msaaFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_msaaColorBuffer = m_msaaFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
-		m_msaaDepthBuffer = m_msaaFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
+		m_msaaDepthBuffer = m_msaaFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24S8 );
 		m_msaaColorAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaColorBuffer );
 		m_msaaDepthAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaDepthBuffer );
 
@@ -347,7 +349,7 @@ namespace deferred_msaa
 	{
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
+		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24S8 );
 		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 		bool l_return = m_geometryPassFrameBuffer->Create();
 

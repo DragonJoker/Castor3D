@@ -12,6 +12,7 @@
 #include <GlslSource.hpp>
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
+#include <GlslUtils.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -161,17 +162,11 @@ namespace deferred_common
 		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 
 		// Shader outputs
-		auto vtx_viewRay = l_writer.GetOutput< Vec3 >( cuT( "vtx_viewRay" ) );
 		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_positionOS = l_writer.GetLocale( cuT( "l_positionOS" )
-				, vec4( vertex, 0.0, 1.0 ) );
-			auto l_positionWS = l_writer.GetLocale( cuT( "l_positionWS" )
-				, c3d_mtxInvViewProj * l_positionOS );
-			vtx_viewRay = l_positionWS.xyz() - c3d_v3CameraPosition;
-			gl_Position = c3d_mtxProjection * l_positionOS;
+			gl_Position = c3d_mtxProjection * vec4( vertex, 0.0, 1.0 );
 		} );
 
 		return l_writer.Finalise();
