@@ -48,7 +48,7 @@ namespace deferred_common
 	public:
 		MeshLightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::FrameBufferAttachment & p_depthAttach
 			, Castor3D::LightType p_type
 			, bool p_ssao
 			, bool p_shadows );

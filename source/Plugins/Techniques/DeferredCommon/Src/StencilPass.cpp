@@ -1,4 +1,4 @@
-#include "StencilPass.hpp"
+﻿#include "StencilPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -62,7 +62,7 @@ namespace deferred_common
 	//*********************************************************************************************
 
 	StencilPass::StencilPass( FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach
+		, FrameBufferAttachment & p_depthAttach
 		, UniformBuffer & p_matrixUbo
 		, UniformBuffer & p_modelMatrixUbo )
 		: m_frameBuffer{ p_frameBuffer }

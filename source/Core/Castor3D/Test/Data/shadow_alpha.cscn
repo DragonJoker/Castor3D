@@ -68,7 +68,7 @@ scene "Scene"
 			type "torus" -inner_count=30 -outer_count=30 -inner_size=15 -outer_size=30
 		}
 
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "MainCameraNode"

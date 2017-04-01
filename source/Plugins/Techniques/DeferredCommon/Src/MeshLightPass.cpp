@@ -1,4 +1,4 @@
-﻿#include "MeshLightPass.hpp"
+#include "MeshLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -67,7 +67,7 @@ namespace deferred_common
 
 	MeshLightPass::MeshLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach
+		, FrameBufferAttachment & p_depthAttach
 		, LightType p_type
 		, bool p_ssao
 		, bool p_shadows )

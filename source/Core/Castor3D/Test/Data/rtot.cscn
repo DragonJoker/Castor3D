@@ -85,7 +85,6 @@ scene "FinalScene"
 		type legacy
 		pass
 		{
-			ambient 0.0 0.0 0.0 1.0
 			diffuse 1.0 1.0 1.0 1.0
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.0 0.0 0.0 1.0
@@ -99,6 +98,7 @@ scene "FinalScene"
 					size 1024 1024
 					scene "TextureScene"
 					camera "TextureCamera"
+					technique "forward"
 				}
 				colour 1.0 1.0 1.0 1.0
 				channel diffuse

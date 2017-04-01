@@ -57,28 +57,6 @@ namespace Castor3D
 
 	void FrameBuffer::Unbind()const
 	{
-#if DEBUG_BUFFERS
-
-		if ( !m_attaches.empty() )
-		{
-			for ( auto l_attach : m_attaches )
-			{
-				if ( l_attach->GetAttachmentPoint() == AttachmentPoint::eColour )
-				{
-					PxBufferBaseSPtr l_buffer = l_attach->GetBuffer();
-
-					if ( l_buffer && DownloadBuffer( l_attach->GetAttachmentPoint(), l_attach->GetAttachmentIndex(), l_buffer ) )
-					{
-						StringStream l_name;
-						l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )l_buffer.get() << cuT( "_FBA_Unbind.png" );
-						Image::BinaryLoader()( Image( cuT( "tmp" ), *l_buffer ), l_name.str() );
-					}
-				}
-			}
-		}
-
-#endif
-
 		DoUnbind();
 	}
 

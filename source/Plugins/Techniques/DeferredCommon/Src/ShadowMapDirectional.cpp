@@ -146,22 +146,18 @@ namespace deferred_common
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			Float l_fAlpha;
-
 			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 			{
-				l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				auto l_alpha = l_writer.GetLocale( cuT( "l_alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
 
-				IF( l_writer, l_fAlpha < 1.0_f )
+				IF( l_writer, l_alpha < 0.2_f )
 				{
 					l_writer.Discard();
 				}
 				FI;
 			}
-			else
-			{
-				pxl_fFragDepth = gl_FragCoord.z();
-			}
+
+			pxl_fFragDepth = gl_FragCoord.z();
 		} );
 
 		return l_writer.Finalise();

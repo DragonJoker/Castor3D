@@ -24,6 +24,8 @@
 #include <Graphics/Image.hpp>
 #include <Log/Logger.hpp>
 
+#define DEBUG_BUFFERS 1
+
 using namespace Castor;
 using namespace Castor3D;
 
@@ -68,7 +70,7 @@ namespace forward
 		m_renderTarget.GetCamera()->Apply();
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
-		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
+		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 	}
 
@@ -81,22 +83,17 @@ namespace forward
 		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
-#if DEBUG_BUFFERS
+#if DEBUG_BUFFERS && !defined( NDEBUG )
 
-		uint8_t * l_buffer = m_frameBuffer.m_colourTexture->Lock( 0u, eACCESS_TYPE_READ );
-
-		if ( l_buffer )
-		{
-			Path l_name{ Engine::GetEngineDirectory() };
-			l_name /= cuT( "ColourBuffer_Technique_Unbind.png" );
-			Image::BinaryWriter()( Image{ cuT( "tmp" )
-				, m_frameBuffer.m_colourTexture->GetImage().GetDimensions()
-				, PixelFormat::eR8G8B8
-				, l_buffer
-				, m_frameBuffer.m_colourTexture->GetImage().GetPixelFormat() }
-			, l_name );
-			m_frameBuffer.m_colourTexture->Unlock( 0u, false );
-		}
+		int l_width = int( m_size.width() ) / 6;
+		int l_height = int( m_size.height() ) / 6;
+		int l_left = int( m_size.width() ) - l_width;
+		auto l_size = Size( l_width, l_height );
+		auto & l_context = *m_renderSystem.GetCurrentContext();
+		m_renderTarget.GetCamera()->Apply();
+		m_frameBuffer.m_frameBuffer->Bind();
+		l_context.RenderDepth( Position{ l_width * 0, 0 }, l_size, *m_frameBuffer.m_depthBuffer );
+		m_frameBuffer.m_frameBuffer->Unbind();
 
 #endif
 	}

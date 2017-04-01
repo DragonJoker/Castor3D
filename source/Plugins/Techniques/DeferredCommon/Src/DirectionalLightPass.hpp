@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -57,7 +57,7 @@ namespace deferred_common
 	public:
 		DirectionalLightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::FrameBufferAttachment & p_depthAttach
 			, bool p_ssao
 			, bool p_shadows );
 		~DirectionalLightPass();

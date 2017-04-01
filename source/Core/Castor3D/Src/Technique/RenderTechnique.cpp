@@ -31,7 +31,11 @@ namespace Castor3D
 
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGBA16F32F, p_size );
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			, AccessType::eRead
+			, AccessType::eRead | AccessType::eWrite
+			, PixelFormat::eRGBA16F32F
+			, p_size );
 		m_colourTexture->GetImage().InitialiseSource();
 		p_size = m_colourTexture->GetDimensions();
 
@@ -40,18 +44,13 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24S8 );
-			l_return = m_depthBuffer->Create();
-		}
-
-		if ( l_return )
-		{
-			l_return = m_depthBuffer->Initialise( p_size );
-
-			if ( !l_return )
-			{
-				m_depthBuffer->Destroy();
-			}
+			m_depthBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+				, AccessType::eNone
+				, AccessType::eRead | AccessType::eWrite
+				, PixelFormat::eD24S8
+				, p_size );
+			m_colourTexture->GetImage().InitialiseSource();
+			l_return = m_depthBuffer->Initialise();
 		}
 
 		if ( l_return )
@@ -69,7 +68,7 @@ namespace Castor3D
 			{
 				m_frameBuffer->Bind();
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
-				m_frameBuffer->Attach( AttachmentPoint::eDepthStencil, m_depthAttach );
+				m_frameBuffer->Attach( AttachmentPoint::eDepthStencil, m_depthAttach, m_depthBuffer->GetType() );
 				m_frameBuffer->SetDrawBuffer( m_colourAttach );
 				l_return = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
@@ -94,7 +93,6 @@ namespace Castor3D
 			m_colourTexture->Cleanup();
 			m_depthBuffer->Cleanup();
 
-			m_depthBuffer->Destroy();
 			m_frameBuffer->Destroy();
 
 			m_depthAttach.reset();

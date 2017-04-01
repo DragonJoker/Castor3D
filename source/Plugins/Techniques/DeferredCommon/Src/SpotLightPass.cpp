@@ -75,7 +75,7 @@ namespace deferred_common
 
 	SpotLightPass::SpotLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach
+		, FrameBufferAttachment & p_depthAttach
 		, bool p_ssao
 		, bool p_shadows )
 		: MeshLightPass{ p_engine

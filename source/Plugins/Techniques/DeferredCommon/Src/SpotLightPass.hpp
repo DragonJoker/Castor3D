@@ -68,7 +68,7 @@ namespace deferred_common
 	public:
 		SpotLightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::FrameBufferAttachment & p_depthAttach
 			, bool p_ssao
 			, bool p_shadows );
 		~SpotLightPass();

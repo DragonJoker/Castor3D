@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -171,7 +171,7 @@ namespace deferred_common
 	protected:
 		LightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::FrameBufferAttachment & p_depthAttach
 			, bool p_ssao
 			, bool p_shadows );
 		void DoInitialise( Castor3D::Scene const & p_scene
@@ -215,7 +215,7 @@ namespace deferred_common
 		Castor3D::FrameBuffer & m_frameBuffer;
 		//!\~english	The target RBO attach.
 		//!\~french		L'attache de RBO cible.
-		Castor3D::RenderBufferAttachment & m_depthAttach;
+		Castor3D::FrameBufferAttachment & m_depthAttach;
 		//!\~english	The light pass' programs.
 		//!\~french		Les programme de la passe de lumière.
 		Programs m_programs;

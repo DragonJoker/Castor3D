@@ -7,6 +7,7 @@
 #include <Render/RenderSystem.hpp>
 #include <Scene/Light/Light.hpp>
 #include <Scene/Light/SpotLight.hpp>
+#include <Shader/ShaderProgram.hpp>
 #include <ShadowMap/ShadowMapPassSpot.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureImage.hpp>
@@ -157,6 +158,8 @@ namespace deferred_common
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Fragment Intputs
+		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
@@ -164,6 +167,17 @@ namespace deferred_common
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
+			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+			{
+				auto l_alpha = l_writer.GetLocale( cuT( "l_alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+
+				IF( l_writer, l_alpha < 0.2_f )
+				{
+					l_writer.Discard();
+				}
+				FI;
+			}
+
 			pxl_fFragDepth = gl_FragCoord.z();
 		} );
 

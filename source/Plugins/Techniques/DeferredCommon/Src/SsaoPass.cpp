@@ -170,7 +170,6 @@ namespace deferred_common
 		
 		String DoGetSsaoPixelProgram( Engine & p_engine )
 		{
-			// https://mynameismjp.wordpress.com/2010/09/05/position-from-depth-3/
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			using namespace GLSL;
 			auto l_writer = l_renderSystem.CreateGlslWriter();

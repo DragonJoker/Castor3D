@@ -1,4 +1,4 @@
-﻿#include "DirectionalLightPass.hpp"
+#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -78,7 +78,7 @@ namespace deferred_common
 
 	DirectionalLightPass::DirectionalLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach
+		, FrameBufferAttachment & p_depthAttach
 		, bool p_ssao
 		, bool p_shadows )
 		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, p_shadows }

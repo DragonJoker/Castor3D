@@ -31,7 +31,7 @@ namespace deferred_common
 	{
 	public:
 		StencilPass( Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::FrameBufferAttachment & p_depthAttach
 			, Castor3D::UniformBuffer & p_matrixUbo
 			, Castor3D::UniformBuffer & p_modelMatrixUbo );
 		void Initialise( Castor3D::VertexBuffer & p_vbo
@@ -45,7 +45,7 @@ namespace deferred_common
 		Castor3D::FrameBuffer & m_frameBuffer;
 		//!\~english	The target RBO attach.
 		//!\~french		L'attache de RBO cible.
-		Castor3D::RenderBufferAttachment & m_depthAttach;
+		Castor3D::FrameBufferAttachment & m_depthAttach;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		Castor3D::UniformBuffer & m_matrixUbo;
