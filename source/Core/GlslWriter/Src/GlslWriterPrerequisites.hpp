@@ -38,7 +38,7 @@ SOFTWARE.
 #define DECLARE_GLSL_PARAMETER( TypeName )\
 	using In##TypeName = InParam< TypeName >;\
 	using Out##TypeName = OutParam< TypeName >;\
-	using InOut##TypeName = InOutParam< TypeName >;\
+	using InOut##TypeName = InOutParam< TypeName >\
 
 namespace GLSL
 {

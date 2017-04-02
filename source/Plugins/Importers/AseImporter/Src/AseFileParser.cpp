@@ -123,7 +123,6 @@ namespace Ase
 		AddParser( uint32_t( ASESection::eMaterials ), cuT( "}" ), AseParser_MaterialsEnd );
 		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_NAME" ), AseParser_MaterialName );
 		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_CLASS" ), AseParser_MaterialClass );
-		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_AMBIENT" ), AseParser_MaterialAmbient );
 		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_DIFFUSE" ), AseParser_MaterialDiffuse );
 		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SPECULAR" ), AseParser_MaterialSpecular );
 		AddParser( uint32_t( ASESection::eMaterial ), cuT( "*MATERIAL_SHINE" ), AseParser_MaterialShine );
@@ -140,7 +139,6 @@ namespace Ase
 		AddParser( uint32_t( ASESection::eMaterial ), cuT( "}" ), AseParser_MaterialEnd );
 		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_NAME" ), AseParser_SubMaterialName );
 		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_CLASS" ), AseParser_MaterialClass );
-		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_AMBIENT" ), AseParser_MaterialAmbient );
 		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_DIFFUSE" ), AseParser_MaterialDiffuse );
 		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SPECULAR" ), AseParser_MaterialSpecular );
 		AddParser( uint32_t( ASESection::eSubmat ), cuT( "*MATERIAL_SHINE" ), AseParser_MaterialShine );
@@ -452,17 +450,6 @@ namespace Ase
 
 	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialClass )
 	{
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialAmbient )
-	{
-		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		Colour l_colour;
-		Point3f l_ptColour;
-		p_params[0]->Get( l_ptColour );
-		l_colour.from_rgb( l_ptColour );
-		l_pContext->pPass->SetAmbient( l_colour );
 	}
 	END_ATTRIBUTE()
 

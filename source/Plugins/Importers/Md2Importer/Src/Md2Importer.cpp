@@ -88,7 +88,6 @@ namespace C3DMd2
 
 			REQUIRE( l_material->GetType() == MaterialType::eLegacy );
 			auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0 );
-			l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
 			l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 			l_pass->SetShininess( 64.0f );
 			DoReadMD2Data( *l_pass );

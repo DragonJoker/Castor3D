@@ -324,7 +324,6 @@ namespace C3dSMax
 			
 			REQUIRE( l_pMaterial->GetType() == MaterialType::eLegacy );
 			auto l_pass = l_pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
-			l_pass->SetAmbient( l_crAmbient );
 			l_pass->SetDiffuse( l_crDiffuse );
 			l_pass->SetSpecular( l_crSpecular );
 			l_pass->SetTwoSided( l_bTwoSided );
