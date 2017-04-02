@@ -1,4 +1,4 @@
-#include "Cylinder.hpp"
+﻿#include "Cylinder.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -9,7 +9,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	Cylinder::Cylinder()
-		: MeshGenerator( MeshType::eCylinder )
+		: MeshGenerator( cuT( "cylinder" ) )
 		, m_height( 0 )
 		, m_radius( 0 )
 		, m_nbFaces( 0 )

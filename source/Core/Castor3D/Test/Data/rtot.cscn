@@ -3,21 +3,7 @@ debug_overlays true
 scene "TextureScene"
 {
 	background_colour 0.5 0.0 0.0 1.0
-	ambient_light 0.5 0 0 1
-
-	material "Gold"
-	{
-		type legacy
-		pass
-		{
-			ambient 0.24725	0.1995	0.0745 1.0
-			diffuse 0.75164	0.60648	0.22648 1.0
-			emissive 0.0 0.0 0.0 1.0
-			specular 0.628281 0.555802 0.366065 1.0
-			shininess 51.2
-			two_sided true
-		}
-	}
+	include "common_materials.cscn"
 
 	camera_node "TextureCameraNode"
 	{
@@ -99,7 +85,6 @@ scene "FinalScene"
 		type legacy
 		pass
 		{
-			ambient 0.0 0.0 0.0 1.0
 			diffuse 1.0 1.0 1.0 1.0
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.0 0.0 0.0 1.0
@@ -113,6 +98,7 @@ scene "FinalScene"
 					size 1024 1024
 					scene "TextureScene"
 					camera "TextureCamera"
+					technique "forward"
 				}
 				colour 1.0 1.0 1.0 1.0
 				channel diffuse
@@ -176,18 +162,18 @@ scene "FinalScene"
 			far 20000.0
 		}
 	}
+}
 
-	window "MyWindow"
+window "MyWindow"
+{
+	render_target
 	{
-		render_target
-		{
-			format argb32
-			size 1125 600
-			scene "FinalScene"
-			camera "MainCamera"
-			technique "forward"
-		}
-		fullscreen false
-		vsync false
+		format argb32
+		size 1125 600
+		scene "FinalScene"
+		camera "MainCamera"
+		technique "forward"
 	}
+	fullscreen false
+	vsync false
 }

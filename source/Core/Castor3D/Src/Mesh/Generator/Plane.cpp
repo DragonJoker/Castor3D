@@ -1,4 +1,4 @@
-#include "Plane.hpp"
+﻿#include "Plane.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -8,7 +8,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 Plane::Plane()
-	: MeshGenerator( MeshType::ePlane )
+	: MeshGenerator( cuT( "plane" ) )
 	, m_depth( 0 )
 	, m_width( 0 )
 	, m_subDivisionsW( 0 )

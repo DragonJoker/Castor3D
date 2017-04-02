@@ -16,14 +16,11 @@ namespace Castor3D
 	{
 		std::map< TextureChannel, String > TEXTURE_CHANNEL_NAME =
 		{
-			{ TextureChannel::eColour, cuT( "Colour" ) },
 			{ TextureChannel::eDiffuse, cuT( "Diffuse" ) },
 			{ TextureChannel::eNormal, cuT( "Normal" ) },
-			{ TextureChannel::eRelief, cuT( "Relief" ) },
 			{ TextureChannel::eOpacity, cuT( "Opacity" ) },
 			{ TextureChannel::eSpecular, cuT( "Specular" ) },
 			{ TextureChannel::eHeight, cuT( "Height" ) },
-			{ TextureChannel::eAmbient, cuT( "Ambient" ) },
 			{ TextureChannel::eGloss, cuT( "Gloss" ) },
 			{ TextureChannel::eEmissive, cuT( "Emissive" ) },
 		};
@@ -221,14 +218,11 @@ namespace Castor3D
 			TextureUnitSPtr l_opacitySource;
 			PxBufferBaseSPtr l_opacityImage;
 
-			DoPrepareTexture( TextureChannel::eAmbient, l_index, l_opacitySource, l_opacityImage );
-			DoPrepareTexture( TextureChannel::eColour, l_index, l_opacitySource, l_opacityImage );
 			DoPrepareTexture( TextureChannel::eDiffuse, l_index, l_opacitySource, l_opacityImage );
+			DoPrepareTexture( TextureChannel::eSpecular, l_index, l_opacitySource, l_opacityImage );
+			DoPrepareTexture( TextureChannel::eEmissive, l_index, l_opacitySource, l_opacityImage );
 
 			DoPrepareTexture( TextureChannel::eNormal, l_index );
-			DoPrepareTexture( TextureChannel::eRelief, l_index );
-			DoPrepareTexture( TextureChannel::eSpecular, l_index );
-			DoPrepareTexture( TextureChannel::eEmissive, l_index );
 			DoPrepareTexture( TextureChannel::eGloss, l_index );
 			DoPrepareTexture( TextureChannel::eHeight, l_index );
 

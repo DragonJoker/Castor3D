@@ -8,7 +8,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 Torus::Torus()
-	: MeshGenerator( MeshType::eTorus )
+	: MeshGenerator( cuT( "torus" ) )
 	, m_internalRadius( 0 )
 	, m_externalRadius( 0 )
 	, m_internalNbFaces( 0 )

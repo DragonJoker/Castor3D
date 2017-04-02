@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -54,6 +54,9 @@ namespace Castor3D
 		//!\~english	The camera position.
 		//!\~french		La position de la caméra.
 		Uniform3f & m_cameraPos;
+		//!\~english	The camera far plane value.
+		//!\~french		La valeur du plan éloigné de la caméra.
+		Uniform1f & m_cameraFarPlane;
 		//!\~english	The fog type.
 		//!\~french		Le type de brouillard.
 		Uniform1i & m_fogType;

@@ -3,20 +3,7 @@ debug_overlays true
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0 0 0 1
-
-	material "Silver"
-	{
-		type legacy
-		pass
-		{
-			ambient 0.0745 0.0745 0.0745 1.0
-			diffuse 0.75164 0.75164 0.75164 1.0
-			emissive 0.0 0.0 0.0 1.0
-			specular 0.628281 0.628281 0.628281 1.0
-			shininess 51.2
-		}
-	}
+	include "common_materials.cscn"
 
 	scene_node "SunLightNode1"
 	{
@@ -61,19 +48,19 @@ scene "Scene"
 			far 20000.0
 		}
 	}
+}
 
-	window "Window"
+window "Window"
+{
+	render_target
 	{
-		render_target
-		{
-			format argb32
-			size screen_size
-			scene "Scene"
-			camera "MainCamera"
-			technique "forward"
-			postfx "fxaa"
-		}
-		fullscreen false
-		vsync false
+		format argb32
+		size screen_size
+		scene "Scene"
+		camera "MainCamera"
+		technique "forward"
+		postfx "fxaa"
 	}
+	fullscreen false
+	vsync false
 }

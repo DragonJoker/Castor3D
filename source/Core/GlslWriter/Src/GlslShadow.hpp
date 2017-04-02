@@ -63,19 +63,19 @@ namespace GLSL
 
 	private:
 		GlslWriter & m_writer;
-		Function< Float, InParam< Vec4 > > m_getRandom;
-		Function< Vec2, InParam< Vec3 >, InParam< Vec3 > > m_getShadowOffset;
-		Function< Vec3, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_getLightSpacePosition;
-		Function< Float, InParam< Vec2 >, InParam< Float > > m_filterDirectional;
-		Function< Float, InParam< Vec2 >, InParam< Float >, InParam< Float > > m_filterSpot;
-		Function< Float, InParam< Vec3 >, InParam< Float >, InParam< Int > > m_filterPoint;
-		Function< Float, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_computeDirectional;
-		Function< Float, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Int > > m_computeSpot;
-		Function< Float, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Int > > m_computePoint;
-		Function< Float, InParam< Vec2 >, InParam< Float > > m_filterOneSpot;
-		Function< Float, InParam< Vec3 >, InParam< Float > > m_filterOnePoint;
-		Function< Float, InParam< Mat4 >, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_computeOneSpot;
-		Function< Float, InParam< Vec3 >, InParam< Vec3 >, InParam< Vec3 > > m_computeOnePoint;
+		Function< Float, InVec4 > m_getRandom;
+		Function< Vec2, InVec3, InVec3 > m_getShadowOffset;
+		Function< Vec3, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_getLightSpacePosition;
+		Function< Float, InVec2, InFloat > m_filterDirectional;
+		Function< Float, InVec2, InFloat, InFloat > m_filterSpot;
+		Function< Float, InVec3, InFloat, InInt > m_filterPoint;
+		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_computeDirectional;
+		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3, InInt > m_computeSpot;
+		Function< Float, InVec3, InVec3, InVec3, InInt > m_computePoint;
+		Function< Float, InVec2, InFloat > m_filterOneSpot;
+		Function< Float, InVec3, InFloat > m_filterOnePoint;
+		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_computeOneSpot;
+		Function< Float, InVec3, InVec3, InVec3 > m_computeOnePoint;
 	};
 }
 

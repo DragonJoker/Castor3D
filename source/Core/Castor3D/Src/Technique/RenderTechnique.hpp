@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -30,12 +30,6 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Rectangle.hpp>
-
-#if !defined( NDEBUG )
-#	define DEBUG_BUFFERS 0
-#else
-#	define DEBUG_BUFFERS 0
-#endif
 
 #if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( push )
@@ -84,7 +78,7 @@ namespace Castor3D
 			TextureLayoutSPtr m_colourTexture;
 			//!\~english	The buffer receiving the depth render.
 			//!\~french		Le tampon recevant le rendu profondeur.
-			DepthStencilRenderBufferSPtr m_depthBuffer;
+			TextureLayoutSPtr m_depthBuffer;
 			//!\~english	The frame buffer.
 			//!\~french		Le tampon d'image.
 			FrameBufferSPtr m_frameBuffer;
@@ -93,7 +87,7 @@ namespace Castor3D
 			TextureAttachmentSPtr m_colourAttach;
 			//!\~english	The attach between depth buffer and main frame buffer.
 			//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-			RenderBufferAttachmentSPtr m_depthAttach;
+			TextureAttachmentSPtr m_depthAttach;
 
 		private:
 			RenderTechnique & m_technique;

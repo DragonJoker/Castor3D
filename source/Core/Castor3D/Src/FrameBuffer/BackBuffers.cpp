@@ -30,15 +30,5 @@ namespace Castor3D
 
 	void BackBuffers::DoUnbind()const
 	{
-#if DEBUG_BUFFERS
-
-		if ( m_buffer && DownloadBuffer( AttachmentPoint::eColour, 0, m_buffer ) )
-		{
-			StringStream l_name;
-			l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )m_buffer.get() << cuT( "_BACK.png" );
-			Image::BinaryLoader()( Image( cuT( "tmp" ), *m_buffer ), l_name.str() );
-		}
-
-#endif
 	}
 }

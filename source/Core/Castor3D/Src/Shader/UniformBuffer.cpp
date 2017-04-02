@@ -1,4 +1,4 @@
-#include "UniformBuffer.hpp"
+﻿#include "UniformBuffer.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -232,6 +232,7 @@ namespace Castor3D
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::BackgroundColour );
 		p_ubo.CreateUniform( UniformType::eVec4i, ShaderProgram::LightsCount );
 		p_ubo.CreateUniform( UniformType::eVec3r, ShaderProgram::CameraPos );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::CameraFarPlane );
 		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::FogType );
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::FogDensity );
 	}
@@ -243,7 +244,6 @@ namespace Castor3D
 			p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
 		}
 
-		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatAmbient );
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatDiffuse );
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatEmissive );
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular );
@@ -280,13 +280,26 @@ namespace Castor3D
 	void UniformBuffer::DoInitialise( UniformBufferBinding const & p_binding )
 	{
 		m_buffer.resize( p_binding.GetSize() );
-		auto l_it = p_binding.begin();
 
 		for ( auto & l_variable : *this )
 		{
-			REQUIRE( l_variable->size() <= m_buffer.size() - ( l_it->m_offset ) );
-			l_variable->link( &m_buffer[l_it->m_offset], l_it->m_stride < 0 ? 0u : uint32_t( l_it->m_stride ) );
-			++l_it;
+			auto l_it = std::find_if( p_binding.begin()
+				, p_binding.end()
+				, [&l_variable]( auto & p_info )
+				{
+					return l_variable->GetName() == p_info.m_name;
+				} );
+
+			if ( l_it != p_binding.end() )
+			{
+				REQUIRE( l_variable->size() <= m_buffer.size() - ( l_it->m_offset ) );
+				l_variable->link( &m_buffer[l_it->m_offset], l_it->m_stride < 0 ? 0u : uint32_t( l_it->m_stride ) );
+				++l_it;
+			}
+			else
+			{
+				Logger::LogWarning( cuT( "The variable [" ) + l_variable->GetName() + cuT( "]was not found in the binding." ) );
+			}
 		}
 
 		if ( !m_storage )

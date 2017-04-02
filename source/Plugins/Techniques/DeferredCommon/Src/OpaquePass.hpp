@@ -123,6 +123,13 @@ namespace deferred_common
 			, Castor3D::ProgramFlags & p_programFlags
 			, Castor3D::SceneFlags & p_sceneFlags )const override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
+		 */
+		Castor::String DoGetVertexShaderSource( Castor3D::TextureChannels const & p_textureFlags
+			, Castor3D::ProgramFlags const & p_programFlags
+			, Castor3D::SceneFlags const & p_sceneFlags
+			, bool p_invertNormals )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
 		Castor::String DoGetPixelShaderSource( Castor3D::TextureChannels const & p_textureFlags

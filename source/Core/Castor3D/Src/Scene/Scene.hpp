@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -36,7 +36,6 @@ SOFTWARE.
 #include "Cache/OverlayCache.hpp"
 #include "Cache/ParticleSystemCache.hpp"
 #include "Cache/SamplerCache.hpp"
-#include "Cache/WindowCache.hpp"
 
 #include "RenderToTexture/TextureProjection.hpp"
 #include "Scene/Fog.hpp"
@@ -429,6 +428,16 @@ namespace Castor3D
 			REQUIRE( !m_listener.expired() );
 			return *m_listener.lock();
 		}
+		/**
+		 *\~english
+		 *\return		\p true if the scene is initialised.
+		 *\~french
+		 *\return		\p true si la scène est initialisée.
+		 */
+		inline bool IsInitialised()const
+		{
+			return m_initialised;
+		}
 
 	public:
 		//!\~english	The signal raised when the scene has changed.
@@ -436,6 +445,9 @@ namespace Castor3D
 		OnChanged onChanged;
 
 	private:
+		//!\~english	Tells if the scene is initialised.
+		//!\~french		Dit si la scène est initialisée.
+		bool m_initialised{ false };
 		//!\~english	The root node
 		//!\~french		Le noeud père de tous les noeuds de la scène
 		SceneNodeSPtr m_rootNode;
@@ -469,9 +481,6 @@ namespace Castor3D
 		//!\~english	The animated objects groups cache.
 		//!\~french		Le cache de groupes d'objets animés.
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		//!\~english	The render windows cache.
-		//!\~french		Le cache de fenêtres de rendu.
-		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		//!\~english	The overlays view.
 		//!\~french		La vue sur le incrustations de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, EventType::ePreRender );

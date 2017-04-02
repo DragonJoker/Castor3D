@@ -624,14 +624,11 @@ namespace C3dFbx
 		{
 			auto l_lambert = static_cast< FbxSurfaceLambert * >( p_lambert );
 			//p_pass.SetAlpha( float( l_lambert->TransparencyFactor ) );
-			FbxDouble3 l_ambient = l_lambert->Ambient;
-			p_pass.SetAmbient( Colour::from_rgb( { float( l_ambient[0] ), float( l_ambient[1] ), float( l_ambient[2] ) } ) * l_lambert->AmbientFactor );
 			FbxDouble3 l_diffuse = l_lambert->Diffuse;
 			p_pass.SetDiffuse( Colour::from_rgb( { float( l_diffuse[0] ), float( l_diffuse[1] ), float( l_diffuse[2] ) } ) * l_lambert->DiffuseFactor );
 			FbxDouble3 l_emissive = l_lambert->Emissive;
 			p_pass.SetEmissive( HdrColour::from_rgb( { float( l_emissive[0] ), float( l_emissive[1] ), float( l_emissive[2] ) } ) * l_lambert->EmissiveFactor );
 
-			DoLoadTexture( p_scene, l_lambert->Ambient, p_pass, TextureChannel::eAmbient );
 			DoLoadTexture( p_scene, l_lambert->Diffuse, p_pass, TextureChannel::eDiffuse );
 			DoLoadTexture( p_scene, l_lambert->Emissive, p_pass, TextureChannel::eEmissive );
 			DoLoadTexture( p_scene, l_lambert->NormalMap, p_pass, TextureChannel::eNormal );
@@ -797,13 +794,11 @@ namespace C3dFbx
 
 	std::map< TextureChannel, String > TEXTURE_CHANNEL_NAME =
 	{
-		{ TextureChannel::eColour, cuT( "Colour" ) },
 		{ TextureChannel::eDiffuse, cuT( "Diffuse" ) },
 		{ TextureChannel::eNormal, cuT( "Normal" ) },
 		{ TextureChannel::eOpacity, cuT( "Opacity" ) },
 		{ TextureChannel::eSpecular, cuT( "Specular" ) },
 		{ TextureChannel::eHeight, cuT( "Height" ) },
-		{ TextureChannel::eAmbient, cuT( "Ambient" ) },
 		{ TextureChannel::eGloss, cuT( "Gloss" ) },
 		{ TextureChannel::eEmissive, cuT( "Emissive" ) },
 	};

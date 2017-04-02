@@ -1,4 +1,4 @@
-#include "Cube.hpp"
+﻿#include "Cube.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -9,7 +9,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	Cube::Cube()
-		: MeshGenerator( MeshType::eCube )
+		: MeshGenerator( cuT( "cube" ) )
 		, m_width( 0 )
 		, m_height( 0 )
 		, m_depth( 0 )

@@ -1,4 +1,4 @@
-#include "GlslType.hpp"
+﻿#include "GlslType.hpp"
 
 #include "GlslWriter.hpp"
 
@@ -76,97 +76,97 @@ namespace GLSL
 
 	Type & Type::operator+=( Type const & p_type )
 	{
-		*m_writer << m_name << cuT( " += " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " += " ) << String( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator-=( Type const & p_type )
 	{
-		*m_writer << m_name << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator*=( Type const & p_type )
 	{
-		*m_writer << m_name << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator/=( Type const & p_type )
 	{
-		*m_writer << m_name << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator+=( Optional< Type > const & p_type )
 	{
-		*m_writer << m_name << cuT( " += " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " += " ) << String( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator-=( Optional< Type > const & p_type )
 	{
-		*m_writer << m_name << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator*=( Optional< Type > const & p_type )
 	{
-		*m_writer << m_name << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator/=( Optional< Type > const & p_type )
 	{
-		*m_writer << m_name << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator+=( float p_type )
 	{
-		*m_writer << m_name << cuT( " += " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " += " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator-=( float p_type )
 	{
-		*m_writer << m_name << cuT( " -= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " -= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator*=( float p_type )
 	{
-		*m_writer << m_name << cuT( " *= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " *= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator/=( float p_type )
 	{
-		*m_writer << m_name << cuT( " /= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " /= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator+=( int p_type )
 	{
-		*m_writer << m_name << cuT( " += " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " += " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator-=( int p_type )
 	{
-		*m_writer << m_name << cuT( " -= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " -= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator*=( int p_type )
 	{
-		*m_writer << m_name << cuT( " *= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " *= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
 	Type & Type::operator/=( int p_type )
 	{
-		*m_writer << m_name << cuT( " /= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << Castor::String{ *this } << cuT( " /= " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 

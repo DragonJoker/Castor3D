@@ -1,4 +1,4 @@
-#include "Common/OpenGl.hpp"
+﻿#include "Common/OpenGl.hpp"
 
 #include "Render/GlRenderSystem.hpp"
 
@@ -335,7 +335,7 @@ namespace GlRender
 		RboStorages[uint32_t( Castor::PixelFormat::eYUY2 )] = GlInternal( 0 );
 		RboStorages[uint32_t( Castor::PixelFormat::eD16 )] = GlInternal::eD16;
 		RboStorages[uint32_t( Castor::PixelFormat::eD24 )] = GlInternal::eD24;
-		RboStorages[uint32_t( Castor::PixelFormat::eD24S8 )] = GlInternal::eD24;
+		RboStorages[uint32_t( Castor::PixelFormat::eD24S8 )] = GlInternal::eD24S8;
 		RboStorages[uint32_t( Castor::PixelFormat::eD32 )] = GlInternal::eD32;
 		RboStorages[uint32_t( Castor::PixelFormat::eD32F )] = GlInternal::eD32F;
 		RboStorages[uint32_t( Castor::PixelFormat::eD32FS8 )] = GlInternal::eD32FS8;

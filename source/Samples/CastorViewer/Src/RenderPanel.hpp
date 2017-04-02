@@ -149,7 +149,7 @@ namespace CastorViewer
 
 		using NodeStatePtr = std::unique_ptr< NodeState >;
 		std::map< Castor::String, NodeStatePtr > m_nodesStates;
-		NodeState * m_currentState;
+		NodeState * m_currentState{ nullptr };
 	};
 }
 

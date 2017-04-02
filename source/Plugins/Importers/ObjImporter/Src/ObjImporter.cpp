@@ -551,13 +551,6 @@ namespace Obj
 					{
 						// Illumination description
 					}
-					else if ( l_section == cuT( "ka" ) )
-					{
-						// Ambient colour
-						StringStream l_stream( l_value );
-						l_stream >> l_components[0] >> l_components[1] >> l_components[2];
-						l_pass->SetAmbient( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
-					}
 					else if ( l_section == cuT( "kd" ) )
 					{
 						// Diffuse colour
@@ -609,11 +602,6 @@ namespace Obj
 					{
 						// Specular map
 						DoAddTexture( l_value, *l_pass, TextureChannel::eSpecular );
-					}
-					else if ( l_section == cuT( "map_ka" ) )
-					{
-						// Ambient map
-						DoAddTexture( l_value, *l_pass, TextureChannel::eAmbient );
 					}
 					else if ( l_section == cuT( "map_ns" ) )
 					{

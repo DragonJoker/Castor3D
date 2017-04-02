@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -303,6 +303,7 @@ namespace GLSL
 		template< typename T > inline T GetLocale( Castor::String const & p_name, T const & p_rhs );
 		template< typename T > inline T GetBuiltin( Castor::String const & p_name );
 		template< typename T > inline T GetUniform( Castor::String const & p_name );
+		template< typename T > inline T GetUniform( Castor::String const & p_name, T const & p_rhs );
 		template< typename T > inline T GetFragData( Castor::String const & p_name, uint32_t p_index );
 		template< typename T > inline Array< T > GetAttribute( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetOutput( Castor::String const & p_name, uint32_t p_dimension );

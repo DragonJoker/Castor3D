@@ -1,4 +1,4 @@
-#include "AssimpImporter.hpp"
+﻿#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -220,7 +220,6 @@ namespace C3dAssimp
 
 			p_pass.SetOpacity( l_opacity );
 			p_pass.SetTwoSided( l_twoSided != 0 );
-			p_pass.SetAmbient( Colour::from_components( l_ambient.r, l_ambient.g, l_ambient.b, 1 ) );
 			p_pass.SetDiffuse( Colour::from_components( l_diffuse.r, l_diffuse.g, l_diffuse.b, 1 ) );
 			p_pass.SetSpecular( Colour::from_components( l_specular.r * l_shininessStrength, l_specular.g * l_shininessStrength, l_specular.b * l_shininessStrength, 1 ) );
 			p_pass.SetEmissive( HdrColour::from_components( l_emissive.r, l_emissive.g, l_emissive.b, 1 ) );
@@ -274,7 +273,6 @@ namespace C3dAssimp
 			}
 			else
 			{
-				DoLoadTexture( l_ambTexName, p_pass, TextureChannel::eAmbient, p_importer );
 				DoLoadTexture( l_difTexName, p_pass, TextureChannel::eDiffuse, p_importer );
 				DoLoadTexture( l_spcTexName, p_pass, TextureChannel::eSpecular, p_importer );
 				DoLoadTexture( l_emiTexName, p_pass, TextureChannel::eEmissive, p_importer );

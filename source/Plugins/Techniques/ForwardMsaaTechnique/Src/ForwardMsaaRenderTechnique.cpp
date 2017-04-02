@@ -71,7 +71,7 @@ namespace forward_msaa
 	{
 		m_msFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_msColourBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
-		m_msDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
+		m_msDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24S8 );
 		m_msColourAttach = m_msFrameBuffer->CreateAttachment( m_msColourBuffer );
 		m_msDepthAttach = m_msFrameBuffer->CreateAttachment( m_msDepthBuffer );
 

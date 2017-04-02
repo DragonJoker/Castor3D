@@ -181,46 +181,77 @@ namespace deferred_common
 		public:
 			Program( Castor3D::Scene const & p_scene
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl )
-				: my_program_type( p_scene, p_vtx, p_pxl )
+				, Castor::String const & p_pxl
+				, bool p_ssao )
+				: my_program_type( p_scene, p_vtx, p_pxl, p_ssao )
 			{
-				this->m_program->template CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
-					, Castor3D::ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
+				if ( p_ssao )
+				{
+					this->m_program->template CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
+						, Castor3D::ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) + 1 );
+				}
+				else
+				{
+					this->m_program->template CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
+						, Castor3D::ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
+				}
 			}
 		};
 
 	public:
 		LightPassShadow( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::FrameBufferAttachment & p_depthAttach
+			, bool p_ssao
 			, my_shadow_map_type & p_shadowMap )
 			: my_pass_type{ p_engine
 				, p_frameBuffer
 				, p_depthAttach
+				, p_ssao
 				, true }
 			, m_shadowMap{ p_shadowMap }
 			, m_shadowMapTexture{ my_traits::GetTexture( p_shadowMap ) }
 		{
-			m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) );
+			if ( p_ssao )
+			{
+				m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) + 1 );
+			}
+			else
+			{
+				m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) );
+			}
 		}
 
 		void Render( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp
 			, Castor3D::Light const & p_light
 			, Castor3D::Camera const & p_camera
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj
 			, GLSL::FogType p_fogType
+			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first )override
 		{
+			my_pass_type::m_gpInfo->Update( p_size
+				, p_camera
+				, p_invViewProj
+				, p_invView
+				, p_invProj );
+
 			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
 			my_pass_type::DoUpdate( p_size
 				, p_light
 				, p_camera );
 			m_shadowMapTexture.Bind();
+
 			my_pass_type::DoRender( p_size
 				, p_gp
 				, p_light
 				, p_fogType
+				, p_ssao
 				, p_first );
+
 			m_shadowMapTexture.Unbind();
 
 #if 0//!defined( NDEBUG )
@@ -237,7 +268,7 @@ namespace deferred_common
 			, Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const override
 		{
-			return std::make_unique< LightPassShadow::Program >( p_scene, p_vtx, p_pxl );
+			return std::make_unique< LightPassShadow::Program >( p_scene, p_vtx, p_pxl, my_pass_type::m_ssao );
 		}
 
 	private:

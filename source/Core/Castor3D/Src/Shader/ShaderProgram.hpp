@@ -697,6 +697,9 @@ namespace Castor3D
 		//!\~english	Name of the camera position frame variable.
 		//!\~french		Nom de la frame variable contenant la position de la caméra.
 		C3D_API static const Castor::String CameraPos;
+		//!\~english	Name of the camera far plane frame variable.
+		//!\~french		Nom de la frame variable contenant la valeur du plan éloigné de la caméra.
+		C3D_API static const Castor::String CameraFarPlane;
 		//!\~english	Name of the ambient light frame variable.
 		//!\~french		Nom de la frame variable contenant la lumière ambiante.
 		C3D_API static const Castor::String AmbientLight;
@@ -720,9 +723,6 @@ namespace Castor3D
 		/**@name Pass */
 		//@{
 
-		//!\~english	Name of the ambient material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur ambiante du matériau.
-		C3D_API static const Castor::String MatAmbient;
 		//!\~english	Name of the diffuse material colour frame variable.
 		//!\~french		Nom de la frame variable contenant la couleur diffuse du matériau.
 		C3D_API static const Castor::String MatDiffuse;
@@ -787,12 +787,6 @@ namespace Castor3D
 		/**@name Textures */
 		//@{
 
-		//!\~english	Name of the colour texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur.
-		C3D_API static const Castor::String MapColour;
-		//!\~english	Name of the ambient texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur ambiante.
-		C3D_API static const Castor::String MapAmbient;
 		//!\~english	Name of the diffuse texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture de couleur diffuse.
 		C3D_API static const Castor::String MapDiffuse;

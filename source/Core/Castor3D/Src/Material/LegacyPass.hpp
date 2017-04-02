@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -108,18 +108,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the ambient colour.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la couleur ambiante.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetAmbient( Castor::Colour const & p_value)
-		{
-			m_ambient = p_value;
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the specular colour.
 		 *\param[in]	p_value	The new value.
 		 *\~french
@@ -176,16 +164,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The ambient colour.
-		 *\~french
-		 *\return		La couleur ambiante.
-		 */
-		inline Castor::Colour const & GetAmbient()const
-		{
-			return m_ambient;
-		}
-		/**
-		 *\~english
 		 *\return		The specular colour.
 		 *\~french
 		 *\return		La couleur spéculaire.
@@ -213,16 +191,6 @@ namespace Castor3D
 		inline Castor::Colour & GetDiffuse()
 		{
 			return m_diffuse;
-		}
-		/**
-		 *\~english
-		 *\return		The ambient colour.
-		 *\~french
-		 *\return		La couleur ambiante.
-		 */
-		inline Castor::Colour & GetAmbient()
-		{
-			return m_ambient;
 		}
 		/**
 		 *\~english
@@ -267,9 +235,6 @@ namespace Castor3D
 		//!\~english	Diffuse material colour.
 		//!\~french		La couleur diffuse
 		Castor::Colour m_diffuse;
-		//!\~english	Ambient material colour.
-		//!\~french		La couleur ambiante.
-		Castor::Colour m_ambient;
 		//!\~english	Specular material colour.
 		//!\~french		La couleur spéculaire.
 		Castor::Colour m_specular;

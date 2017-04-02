@@ -38,6 +38,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootBorderPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootTextOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootDebugOverlays )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootWindow )
 
 	//Window parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_WindowRenderTarget )
@@ -85,7 +86,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneAmbientLight )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneImport )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBillboard )
-	DECLARE_ATTRIBUTE_PARSER( Parser_SceneWindow )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneAnimatedObjectGroup )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ScenePanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBorderPanelOverlay )
@@ -164,7 +164,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_MaterialEnd )
 
 	// Pass Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_PassAmbient )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassDiffuse )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassSpecular )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassEmissive )

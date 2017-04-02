@@ -1,4 +1,4 @@
-#include "CtrlListBox.hpp"
+﻿#include "CtrlListBox.hpp"
 
 #include "ControlsManager.hpp"
 #include "CtrlStatic.hpp"
@@ -285,7 +285,7 @@ namespace CastorGui
 
 		if ( !l_material )
 		{
-			Colour l_colour = GetBackgroundMaterial()->GetTypedPass< MaterialType::eLegacy >( 0u )->GetAmbient();
+			Colour l_colour = GetBackgroundMaterial()->GetTypedPass< MaterialType::eLegacy >( 0u )->GetDiffuse();
 			l_colour.red() = std::min( 1.0f, float( l_colour.red() ) / 2.0f );
 			l_colour.green() = std::min( 1.0f, float( l_colour.green() ) / 2.0f );
 			l_colour.blue() = std::min( 1.0f, float( l_colour.blue() ) / 2.0f );
@@ -336,7 +336,7 @@ namespace CastorGui
 	{
 		int i = 0;
 		auto l_pass = p_material->GetTypedPass< MaterialType::eLegacy >( 0u );
-		Colour l_colour = l_pass->GetAmbient();
+		Colour l_colour = l_pass->GetDiffuse();
 		SetItemBackgroundMaterial( p_material );
 
 		if ( GetEngine() )
@@ -350,7 +350,7 @@ namespace CastorGui
 		}
 
 		l_colour.alpha() = 0.0;
-		l_pass->SetAmbient( l_colour );
+		l_pass->SetDiffuse( l_colour );
 
 		for ( auto l_item : m_items )
 		{

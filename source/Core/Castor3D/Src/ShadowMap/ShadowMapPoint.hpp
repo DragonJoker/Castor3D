@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -148,19 +148,6 @@ namespace Castor3D
 		void DoUpdateFlags( TextureChannels & p_textureFlags
 			, ProgramFlags & p_programFlags
 			, SceneFlags & p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetVertexShaderSource
-		 */
-		Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, bool p_invertNormals )const override;
-		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetGeometryShaderSource
-		 */
-		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
 		 */

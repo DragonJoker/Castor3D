@@ -118,13 +118,13 @@ namespace Castor3D
 	const String ShaderProgram::Transform = cuT( "transform" );
 
 	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
+	const String ShaderProgram::CameraFarPlane = cuT( "c3d_fCameraFarPlane" );
 	const String ShaderProgram::AmbientLight = cuT( "c3d_v4AmbientLight" );
 	const String ShaderProgram::BackgroundColour = cuT( "c3d_v4BackgroundColour" );
 	const String ShaderProgram::FogType = cuT( "c3d_iFogType" );
 	const String ShaderProgram::FogDensity = cuT( "c3d_fFogDensity" );
 	const String ShaderProgram::LightsCount = cuT( "c3d_iLightsCount" );
 	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
-	const String ShaderProgram::MatAmbient = cuT( "c3d_v4MatAmbient" );
 	const String ShaderProgram::MatDiffuse = cuT( "c3d_v4MatDiffuse" );
 	const String ShaderProgram::MatSpecular = cuT( "c3d_v4MatSpecular" );
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
@@ -135,8 +135,6 @@ namespace Castor3D
 	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
 	const String ShaderProgram::WindowSize = cuT( "c3d_v2iWindowSize" );
 	const String ShaderProgram::OvPosition = cuT( "c3d_v2iPosition" );
-	const String ShaderProgram::MapColour = cuT( "c3d_mapColour" );
-	const String ShaderProgram::MapAmbient = cuT( "c3d_mapAmbient" );
 	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
 	const String ShaderProgram::MapSpecular = cuT( "c3d_mapSpecular" );
 	const String ShaderProgram::MapEmissive = cuT( "c3d_mapEmissive" );

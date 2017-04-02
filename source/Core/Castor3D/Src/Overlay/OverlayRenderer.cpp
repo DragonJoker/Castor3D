@@ -133,7 +133,7 @@ namespace Castor3D
 				m_panelGeometryBuffers.m_noTexture->Initialise( { *m_panelVertexBuffer }, nullptr );
 			}
 			{
-				auto & l_pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::eColour ) );
+				auto & l_pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::eDiffuse ) );
 				m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, l_pipeline.GetProgram() );
 				m_panelGeometryBuffers.m_textured->Initialise( { *m_panelVertexBuffer }, nullptr );
 			}
@@ -161,7 +161,7 @@ namespace Castor3D
 				m_borderGeometryBuffers.m_noTexture->Initialise( { *m_borderVertexBuffer }, nullptr );
 			}
 			{
-				auto & l_pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::eColour ) );
+				auto & l_pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::eDiffuse ) );
 				m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, l_pipeline.GetProgram() );
 				m_borderGeometryBuffers.m_textured->Initialise( { *m_borderVertexBuffer }, nullptr );
 			}
@@ -298,7 +298,7 @@ namespace Castor3D
 
 				for ( auto l_pass : *l_material )
 				{
-					if ( CheckFlag( l_pass->GetTextureFlags(), TextureChannel::eColour ) )
+					if ( CheckFlag( l_pass->GetTextureFlags(), TextureChannel::eDiffuse ) )
 					{
 						for ( auto l_geoBuffers : l_geometryBuffers )
 						{
@@ -387,10 +387,7 @@ namespace Castor3D
 	RenderPipeline & OverlayRenderer::DoGetPanelPipeline( TextureChannels p_textureFlags )
 	{
 		// Remove unwanted flags
-		RemFlag( p_textureFlags, TextureChannel::eAmbient );
-		RemFlag( p_textureFlags, TextureChannel::eDiffuse );
 		RemFlag( p_textureFlags, TextureChannel::eNormal );
-		RemFlag( p_textureFlags, TextureChannel::eRelief );
 		RemFlag( p_textureFlags, TextureChannel::eSpecular );
 		RemFlag( p_textureFlags, TextureChannel::eGloss );
 		RemFlag( p_textureFlags, TextureChannel::eHeight );
@@ -403,10 +400,7 @@ namespace Castor3D
 	RenderPipeline & OverlayRenderer::DoGetTextPipeline( TextureChannels p_textureFlags )
 	{
 		// Remove unwanted flags
-		RemFlag( p_textureFlags, TextureChannel::eAmbient );
-		RemFlag( p_textureFlags, TextureChannel::eDiffuse );
 		RemFlag( p_textureFlags, TextureChannel::eNormal );
-		RemFlag( p_textureFlags, TextureChannel::eRelief );
 		RemFlag( p_textureFlags, TextureChannel::eSpecular );
 		RemFlag( p_textureFlags, TextureChannel::eGloss );
 		RemFlag( p_textureFlags, TextureChannel::eHeight );
@@ -473,7 +467,7 @@ namespace Castor3D
 			l_geometryBuffers.m_noTexture->Initialise( { *l_vertexBuffer }, nullptr );
 		}
 		{
-			auto & l_pipeline = DoGetTextPipeline( uint32_t( TextureChannel::eColour ) );
+			auto & l_pipeline = DoGetTextPipeline( uint32_t( TextureChannel::eDiffuse ) );
 			l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, l_pipeline.GetProgram() );
 			l_geometryBuffers.m_textured->Initialise( { *l_vertexBuffer }, nullptr );
 		}
@@ -524,7 +518,7 @@ namespace Castor3D
 	{
 		for ( auto l_pass : p_material )
 		{
-			if ( CheckFlag( l_pass->GetTextureFlags(), TextureChannel::eColour ) )
+			if ( CheckFlag( l_pass->GetTextureFlags(), TextureChannel::eDiffuse ) )
 			{
 				DoDrawItem( *l_pass, *p_geometryBuffers.m_textured, p_count );
 			}
@@ -582,11 +576,11 @@ namespace Castor3D
 			// Shader inputs
 			auto position = l_writer.GetAttribute< IVec2 >( ShaderProgram::Position );
 			auto text = l_writer.GetAttribute< Vec2 >( ShaderProgram::Text, CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture, CheckFlag( p_textureFlags, TextureChannel::eColour ) );
+			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
 
 			// Shader outputs
 			auto vtx_text = l_writer.GetOutput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::eColour ) );
+			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
 			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
@@ -596,7 +590,7 @@ namespace Castor3D
 					vtx_text = text;
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eColour ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 				{
 					vtx_texture = texture;
 				}
@@ -616,9 +610,9 @@ namespace Castor3D
 
 			// Shader inputs
 			auto vtx_text = l_writer.GetInput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::eColour ) );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::eColour ) );
+			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
@@ -626,7 +620,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_v4Ambient = l_writer.GetLocale( cuT( "l_v4Ambient" ), c3d_v4MatAmbient );
+				auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), c3d_v4MatDiffuse );
 				auto l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), c3d_fMatOpacity );
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eText ) )
@@ -634,9 +628,9 @@ namespace Castor3D
 					l_fAlpha *= texture( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).r();
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eColour ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 				{
-					l_v4Ambient = texture( c3d_mapColour, vec2( vtx_texture.x(), vtx_texture.y() ) );
+					l_v4Diffuse = texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) );
 				}
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
@@ -644,7 +638,7 @@ namespace Castor3D
 					l_fAlpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r();
 				}
 
-				pxl_v4FragColor = vec4( l_v4Ambient.xyz(), l_fAlpha );
+				pxl_v4FragColor = vec4( l_v4Diffuse.xyz(), l_fAlpha );
 			} );
 
 			l_strPs = l_writer.Finalise();
@@ -655,9 +649,9 @@ namespace Castor3D
 			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapText, ShaderType::ePixel );
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eColour ) )
+		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{
-			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapColour, ShaderType::ePixel );
+			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )

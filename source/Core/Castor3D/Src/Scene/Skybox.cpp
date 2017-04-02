@@ -250,6 +250,7 @@ namespace Castor3D
 	{
 		DepthStencilState l_dsState;
 		l_dsState.SetDepthTest( true );
+		l_dsState.SetDepthMask( WritingMask::eZero );
 		l_dsState.SetDepthFunc( DepthFunc::eLEqual );
 
 		RasteriserState l_rsState;

@@ -1,20 +1,26 @@
-﻿#include "LightPass.hpp"
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <Render/RenderPipeline.hpp>
+#include <Render/Viewport.hpp>
+#include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/DepthStencilState.hpp>
 #include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
+#include <GlslUtils.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -23,15 +29,59 @@ namespace deferred_common
 {
 	//************************************************************************************************
 
+	namespace
+	{
+		std::unique_ptr< GLSL::LightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+			, LightType p_light
+			, GLSL::ShadowType p_shadows )
+		{
+			std::unique_ptr< GLSL::LightingModel > l_result;
+
+			switch ( p_light )
+			{
+			case LightType::eDirectional:
+				{
+					l_result = p_writer.CreateDirectionalLightingModel( GLSL::PhongLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.GetUniform< GLSL::DirectionalLight >( cuT( "light" ) );
+				}
+				break;
+
+			case LightType::ePoint:
+				{
+					l_result = p_writer.CreatePointLightingModel( GLSL::PhongLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.GetUniform< GLSL::PointLight >( cuT( "light" ) );
+				}
+				break;
+
+			case LightType::eSpot:
+				{
+					l_result = p_writer.CreateSpotLightingModel( GLSL::PhongLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.GetUniform< GLSL::SpotLight >( cuT( "light" ) );
+				}
+				break;
+
+			default:
+				FAILURE( "Invalid light type" );
+				break;
+			}
+
+			return l_result;
+		}
+	}
+
+	//************************************************************************************************
+
 	String GetTextureName( DsTexture p_texture )
 	{
 		static std::array< String, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				cuT( "c3d_mapPosition" ),
+				cuT( "c3d_mapDepth" ),
 				cuT( "c3d_mapDiffuse" ),
 				cuT( "c3d_mapNormals" ),
-				cuT( "c3d_mapAmbient" ),
 				cuT( "c3d_mapSpecular" ),
 				cuT( "c3d_mapEmissive" ),
 			}
@@ -45,8 +95,7 @@ namespace deferred_common
 		static std::array< PixelFormat, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
+				PixelFormat::eD24S8,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
@@ -62,8 +111,7 @@ namespace deferred_common
 		static std::array< AttachmentPoint, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
+				AttachmentPoint::eDepthStencil,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
 				AttachmentPoint::eColour,
@@ -80,11 +128,10 @@ namespace deferred_common
 		{
 			{
 				0,
+				0,
 				1,
 				2,
 				3,
-				4,
-				5,
 			}
 		};
 
@@ -135,9 +182,51 @@ namespace deferred_common
 
 	//************************************************************************************************
 
+	const String GpInfo::GPInfo = cuT( "GPInfo" );
+	const String GpInfo::InvViewProj = cuT( "c3d_mtxInvViewProj" );
+	const String GpInfo::InvView = cuT( "c3d_mtxInvView" );
+	const String GpInfo::InvProj = cuT( "c3d_mtxInvProj" );
+	const String GpInfo::View = cuT( "c3d_mtxGView" );
+	const String GpInfo::Proj = cuT( "c3d_mtxGProj" );
+	const String GpInfo::RenderSize = cuT( "c3d_renderSize" );
+
+	GpInfo::GpInfo( Engine & p_engine )
+		: m_gpInfoUbo{ GpInfo::GPInfo, *p_engine.GetRenderSystem() }
+		, m_invViewProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::InvViewProj ) }
+		, m_invViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::InvView ) }
+		, m_invProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::InvProj ) }
+		, m_gViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::View ) }
+		, m_gProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfo::Proj ) }
+		, m_renderSize{ m_gpInfoUbo.CreateUniform< UniformType::eVec2f >( GpInfo::RenderSize ) }
+	{
+	}
+
+	GpInfo::~GpInfo()
+	{
+		m_gpInfoUbo.Cleanup();
+	}
+
+	void GpInfo::Update( Size const & p_size
+		, Camera const & p_camera
+		, Matrix4x4r const & p_invViewProj
+		, Matrix4x4r const & p_invView
+		, Matrix4x4r const & p_invProj )
+	{
+		m_invViewProjUniform->SetValue( p_invViewProj );
+		m_invViewUniform->SetValue( p_invView );
+		m_invProjUniform->SetValue( p_invProj );
+		m_gViewUniform->SetValue( p_camera.GetView() );
+		m_gProjUniform->SetValue( p_camera.GetViewport().GetProjection() );
+		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
+		m_gpInfoUbo.Update();
+	}
+
+	//************************************************************************************************
+
 	LightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl )
+		, String const & p_pxl
+		, bool p_ssao )
 	{
 		auto & l_engine = *p_scene.GetEngine();
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
@@ -149,13 +238,17 @@ namespace deferred_common
 		m_program->SetSource( ShaderType::eVertex, l_model, p_vtx );
 		m_program->SetSource( ShaderType::ePixel, l_model, p_pxl );
 
-		m_renderSize = m_program->CreateUniform< UniformType::eVec2f >( cuT( "c3d_renderSize" ), ShaderType::ePixel );
 		m_lightColour = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_v3Colour" ), ShaderType::ePixel );
 		m_lightIntensity = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_v3Intensity" ), ShaderType::ePixel );
 
 		for ( int i = 0; i < int( DsTexture::eCount ); i++ )
 		{
 			m_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture( i ) ), ShaderType::ePixel )->SetValue( i );
+		}
+
+		if ( p_ssao )
+		{
+			m_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapSsao" ), ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
 		}
 	}
 
@@ -168,7 +261,6 @@ namespace deferred_common
 		m_geometryBuffers.reset();
 		m_lightColour = nullptr;
 		m_lightIntensity = nullptr;
-		m_renderSize = nullptr;
 		m_program.reset();
 	}
 
@@ -176,15 +268,20 @@ namespace deferred_common
 		, IndexBufferSPtr p_ibo
 		, UniformBuffer & p_matrixUbo
 		, UniformBuffer & p_sceneUbo
+		, UniformBuffer & p_gpInfoUbo
 		, UniformBuffer * p_modelMatrixUbo )
 	{
 		m_program->Initialise();
+
 		m_firstPipeline = DoCreatePipeline( false );
-		m_blendPipeline = DoCreatePipeline( true );
 		m_firstPipeline->AddUniformBuffer( p_matrixUbo );
 		m_firstPipeline->AddUniformBuffer( p_sceneUbo );
+		m_firstPipeline->AddUniformBuffer( p_gpInfoUbo );
+
+		m_blendPipeline = DoCreatePipeline( true );
 		m_blendPipeline->AddUniformBuffer( p_matrixUbo );
 		m_blendPipeline->AddUniformBuffer( p_sceneUbo );
+		m_blendPipeline->AddUniformBuffer( p_gpInfoUbo );
 
 		if ( p_modelMatrixUbo )
 		{
@@ -208,7 +305,6 @@ namespace deferred_common
 		, uint32_t p_count
 		, bool p_first )
 	{
-		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
 		m_lightColour->SetValue( p_light.GetColour() );
 		m_lightIntensity->SetValue( p_light.GetIntensity() );
 		DoBind( p_light );
@@ -229,31 +325,47 @@ namespace deferred_common
 
 	LightPass::LightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach
+		, FrameBufferAttachment & p_depthAttach
+		, bool p_ssao
 		, bool p_shadows )
 		: m_engine{ p_engine }
 		, m_shadows{ p_shadows }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 		, m_frameBuffer{ p_frameBuffer }
 		, m_depthAttach{ p_depthAttach }
+		, m_ssao{ p_ssao }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
+		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
+		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
 	}
 
 	void LightPass::Render( Size const & p_size
 		, GeometryPassResult const & p_gp
 		, Light const & p_light
 		, Camera const & p_camera
+		, Matrix4x4r const & p_invViewProj
+		, Castor::Matrix4x4r const & p_invView
+		, Castor::Matrix4x4r const & p_invProj
 		, GLSL::FogType p_fogType
+		, Castor3D::TextureUnit const * p_ssao
 		, bool p_first )
 	{
+		m_gpInfo->Update( p_size
+			, p_camera
+			, p_invViewProj
+			, p_invView
+			, p_invProj );
+
 		DoUpdate( p_size
 			, p_light
 			, p_camera );
+
 		DoRender( p_size
 			, p_gp
 			, p_light
 			, p_fogType
+			, p_ssao
 			, p_first );
 	}
 
@@ -264,6 +376,7 @@ namespace deferred_common
 		, UniformBuffer & p_sceneUbo
 		, UniformBuffer * p_modelMatrixUbo )
 	{
+		m_gpInfo = std::make_unique< GpInfo >( m_engine );
 		uint16_t l_fogType{ 0u };
 
 		for ( auto & l_program : m_programs )
@@ -278,6 +391,7 @@ namespace deferred_common
 				, p_ibo
 				, m_matrixUbo
 				, p_sceneUbo
+				, m_gpInfo->GetUbo()
 				, p_modelMatrixUbo );
 			l_fogType++;
 		}
@@ -290,22 +404,31 @@ namespace deferred_common
 			l_program->Cleanup();
 			l_program.reset();
 		}
+
+		m_gpInfo.reset();
+		m_matrixUbo.Cleanup();
 	}
 
 	void LightPass::DoRender( Castor::Size const & p_size
 		, GeometryPassResult const & p_gp
 		, Castor3D::Light const & p_light
 		, GLSL::FogType p_fogType
+		, Castor3D::TextureUnit const * p_ssao
 		, bool p_first )
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.SetDrawBuffers();
-		p_gp[size_t( DsTexture::ePosition )]->Bind();
+		p_gp[size_t( DsTexture::eDepth )]->Bind();
+		p_gp[size_t( DsTexture::eNormal )]->Bind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Bind();
-		p_gp[size_t( DsTexture::eNormals )]->Bind();
-		p_gp[size_t( DsTexture::eAmbient )]->Bind();
 		p_gp[size_t( DsTexture::eSpecular )]->Bind();
 		p_gp[size_t( DsTexture::eEmissive )]->Bind();
+
+		if ( p_ssao && m_ssao )
+		{
+			p_ssao->GetTexture()->Bind( size_t( DsTexture::eCount ) );
+			p_ssao->GetSampler()->Bind( size_t( DsTexture::eCount ) );
+		}
 
 		auto & l_program = *m_programs[uint16_t( p_fogType )];
 		l_program.Render( p_size
@@ -313,15 +436,20 @@ namespace deferred_common
 			, GetCount()
 			, p_first );
 
+		if ( p_ssao && m_ssao )
+		{
+			p_ssao->GetSampler()->Unbind( size_t( DsTexture::eCount ) );
+			p_ssao->GetTexture()->Unbind( size_t( DsTexture::eCount ) );
+		}
+
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
 		p_gp[size_t( DsTexture::eSpecular )]->Unbind();
-		p_gp[size_t( DsTexture::eAmbient )]->Unbind();
-		p_gp[size_t( DsTexture::eNormals )]->Unbind();
 		p_gp[size_t( DsTexture::eDiffuse )]->Unbind();
-		p_gp[size_t( DsTexture::ePosition )]->Unbind();
+		p_gp[size_t( DsTexture::eNormal )]->Unbind();
+		p_gp[size_t( DsTexture::eDepth )]->Unbind();
 		m_frameBuffer.Unbind();
 	}
-
+	
 	String LightPass::DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
 		, LightType p_type )const
 	{
@@ -329,78 +457,49 @@ namespace deferred_common
 		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();
 
 		// Shader inputs
+		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
-		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::ePosition ) );
+		UBO_GPINFO( l_writer );
+		auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
+		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
 		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormals ) );
-		auto c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eAmbient ) );
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
 		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
-
-		std::unique_ptr< LightingModel > l_lighting;
-
-		switch ( p_type )
-		{
-		case LightType::eDirectional:
-			{
-				l_lighting = l_writer.CreateDirectionalLightingModel( PhongLightingModel::Name
-					, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
-				auto light = l_writer.GetUniform< GLSL::DirectionalLight >( cuT( "light" ) );
-			}
-			break;
-
-		case LightType::ePoint:
-			{
-				l_lighting = l_writer.CreatePointLightingModel( PhongLightingModel::Name
-					, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
-				auto light = l_writer.GetUniform< GLSL::PointLight >( cuT( "light" ) );
-			}
-			break;
-
-		case LightType::eSpot:
-			{
-				l_lighting = l_writer.CreateSpotLightingModel( PhongLightingModel::Name
-					, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
-				auto light = l_writer.GetUniform< GLSL::SpotLight >( cuT( "light" ) );
-			}
-			break;
-		}
-
-		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
-		auto c3d_renderSize = l_writer.GetUniform< Vec2 >( cuT( "c3d_renderSize" ) );
 
 		// Shader outputs
 		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
-		auto l_calcTexCoord = l_writer.ImplementFunction< Vec2 >( cuT( "CalcTexCoord" ), [&]()
-		{
-			l_writer.Return( gl_FragCoord.xy() / c3d_renderSize );
-		} );
+		// Utility functions
+		auto l_lighting = CreateLightingModel( l_writer
+			, p_type
+			, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
+		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
+		GLSL::Utils l_utils{ l_writer };
+		l_utils.DeclareCalcTexCoord();
+		l_utils.DeclareCalcWSPosition();
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_calcTexCoord() );
-			auto l_v4Position = l_writer.GetLocale( cuT( "l_v4Position" ), texture( c3d_mapPosition, l_texCoord ) );
+			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
 			auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, l_texCoord ) );
 			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
-			auto l_v4Ambient = l_writer.GetLocale( cuT( "l_v4Tangent" ), texture( c3d_mapAmbient, l_texCoord ) );
 			auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
 			auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
-			auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_receiver" ), l_writer.Cast< Int >( l_v4Position.w() ) );
-			auto l_v3MapAmbient = l_writer.GetLocale( cuT( "l_v3MapAmbient" ), l_v4Ambient.xyz() );
+			auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_receiver" ), l_writer.Cast< Int >( l_v4Diffuse.w() ) );
 			auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
 			auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
 			auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
 			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
-			auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
 			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), c3d_v3CameraPosition );
-			auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
-			auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
+			auto l_eye = l_writer.GetLocale( cuT( "l_eye" ), c3d_v3CameraPosition );
+			auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), m_ssao, texture( c3d_mapSsao, l_texCoord ).r() );
+
+			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord ) );
+			auto l_wsNormal = l_writer.GetLocale( cuT( "l_wsNormal" ), l_v4Normal.xyz() );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
 
@@ -409,11 +508,11 @@ namespace deferred_common
 			case LightType::eDirectional:
 				{
 					auto light = l_writer.GetBuiltin< GLSL::DirectionalLight >( cuT( "light" ) );
-					l_lighting->ComputeDirectionalLight( light
-						, l_worldEye
+					l_lighting->ComputeOneDirectionalLight( light
+						, l_eye
 						, l_fMatShininess
 						, l_iShadowReceiver
-						, FragmentInput( l_v3Position, l_v3Normal )
+						, FragmentInput( l_wsPosition, l_wsNormal )
 						, l_output );
 				}
 				break;
@@ -422,10 +521,10 @@ namespace deferred_common
 				{
 				auto light = l_writer.GetBuiltin< GLSL::PointLight >( cuT( "light" ) );
 					l_lighting->ComputeOnePointLight( light
-						, l_worldEye
+						, l_eye
 						, l_fMatShininess
 						, l_iShadowReceiver
-						, FragmentInput( l_v3Position, l_v3Normal )
+						, FragmentInput( l_wsPosition, l_wsNormal )
 						, l_output );
 				}
 				break;
@@ -434,23 +533,29 @@ namespace deferred_common
 				{
 				auto light = l_writer.GetBuiltin< GLSL::SpotLight >( cuT( "light" ) );
 					l_lighting->ComputeOneSpotLight( light
-						, l_worldEye
+						, l_eye
 						, l_fMatShininess
 						, l_iShadowReceiver
-						, FragmentInput( l_v3Position, l_v3Normal )
+						, FragmentInput( l_wsPosition, l_wsNormal )
 						, l_output );
 				}
 				break;
 			}
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() )
+			if ( m_ssao )
+			{
+				l_v3Ambient *= l_ambientOcclusion;
+			}
+
+			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapDiffuse.xyz() )
 				+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
 				+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
 				+ l_v3MapEmissive ), 1.0 );
 
 			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
 			{
-				l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );
+				auto l_vsPosition = l_writer.GetLocale( cuT( "l_vsPosition" ), l_writer.Paren( c3d_mtxInvView * vec4( l_wsPosition, 1.0_f ) ).xyz() );
+				l_fog.ApplyFog( pxl_v4FragColor, length( l_vsPosition ), l_vsPosition.z() );
 			}
 		} );
 

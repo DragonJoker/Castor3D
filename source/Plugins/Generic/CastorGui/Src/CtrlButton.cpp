@@ -1,4 +1,4 @@
-#include "CtrlButton.hpp"
+﻿#include "CtrlButton.hpp"
 
 #include "ControlsManager.hpp"
 
@@ -286,7 +286,7 @@ namespace CastorGui
 
 	MaterialSPtr ButtonCtrl::DoCreateMaterial( MaterialSPtr p_material, float p_offset )
 	{
-		Colour l_colour = p_material->GetTypedPass< MaterialType::eLegacy >( 0u )->GetAmbient();
+		Colour l_colour = p_material->GetTypedPass< MaterialType::eLegacy >( 0u )->GetDiffuse();
 		l_colour.red() = float( l_colour.red() ) + p_offset;
 		l_colour.green() = float( l_colour.green() ) + p_offset;
 		l_colour.blue() = float( l_colour.blue() ) + p_offset;

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -734,6 +734,7 @@ namespace Castor3D
 	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
 	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
 	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
+	auto c3d_v3CameraFarPlane = l_scene.GetUniform< GLSL::Float >( ShaderProgram::CameraFarPlane );\
 	auto c3d_iFogType = l_scene.GetUniform< GLSL::Int >( ShaderProgram::FogType );\
 	auto c3d_fFogDensity = l_scene.GetUniform< GLSL::Float >( ShaderProgram::FogDensity );\
 	l_scene.End()
@@ -744,7 +745,6 @@ namespace Castor3D
 	auto c3d_mtxTexture1 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
 	auto c3d_mtxTexture2 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
 	auto c3d_mtxTexture3 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
-	auto c3d_v4MatAmbient = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatAmbient );\
 	auto c3d_v4MatDiffuse = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatDiffuse );\
 	auto c3d_v4MatEmissive = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatEmissive );\
 	auto c3d_v4MatSpecular = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatSpecular );\
@@ -777,16 +777,6 @@ namespace Castor3D
 	GLSL::Ubo l_overlay{ l_writer, ShaderProgram::BufferOverlay };\
 	auto c3d_v2iPosition = l_overlay.GetUniform< GLSL::IVec2 >( ShaderProgram::OvPosition );\
 	l_overlay.End()
-
-#define STRUCT_VTX_OUTPUT( Writer )\
-	GLSL::Struct VtxOutput{ l_writer, cuT( "VtxOutput" ) };\
-	auto vtx_worldSpacePosition = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_worldSpacePosition" ) );\
-	auto vtx_normal = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_normal" ) );\
-	auto vtx_tangent = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_tangent" ) );\
-	auto vtx_bitangent = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_bitangent" ) );\
-	auto vtx_texture = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_texture" ) );\
-	auto vtx_instance = VtxOutput.GetMember< GLSL::Int >( cuT( "vtx_instance" ) );\
-	VtxOutput.End()
 }
 
 #endif

@@ -259,7 +259,7 @@ namespace GLSL
 	ExprType GlslWriter::Ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right )
 	{
 		ExprType l_return( this );
-		l_return.m_value << cuT( "( " ) << ToString( p_condition ) << cuT( " ) ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right );
+		l_return.m_value << cuT( "( ( " ) << ToString( p_condition ) << cuT( " ) ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right ) << cuT( " )" );
 		return l_return;
 	}
 
@@ -324,6 +324,14 @@ namespace GLSL
 	inline T GlslWriter::GetUniform( Castor::String const & p_name )
 	{
 		*this << Uniform() << T().m_type << p_name << cuT( ";" ) << Endl();
+		return T( this, p_name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::GetUniform( Castor::String const & p_name, T const & p_rhs )
+	{
+		*this << Uniform() << T().m_type << p_name << cuT( " = " );
+		m_stream << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		return T( this, p_name );
 	}
 

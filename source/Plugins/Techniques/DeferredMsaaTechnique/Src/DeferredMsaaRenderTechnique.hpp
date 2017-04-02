@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -29,6 +29,7 @@ SOFTWARE.
 #include <Shader/UniformBuffer.hpp>
 
 #include <LightPass.hpp>
+#include <SsaoPass.hpp>
 
 namespace deferred_msaa
 {
@@ -145,7 +146,11 @@ namespace deferred_msaa
 		void DoCleanupGeometryPass();
 		void DoCleanupLightPass();
 		void DoUpdateSceneUbo();
-		void DoRenderLights( Castor3D::LightType p_type, bool & p_first );
+		void DoRenderLights( Castor3D::LightType p_type
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj
+			, bool & p_first );
 
 	public:
 		static Castor::String const Type;
@@ -177,6 +182,9 @@ namespace deferred_msaa
 		//!\~english	The shader variable holding the camera position.
 		//!\~french		La variable shader contenant la position de la caméra.
 		Castor3D::Uniform3fSPtr m_cameraPos;
+		//!\~english	The shader variable holding the camera far plane value.
+		//!\~french		La variable shader contenant la valeur du plan éloigné de la caméra.
+		Castor3D::Uniform1fSPtr m_cameraFarPlane;
 		//!\~english	The shader variable holding fog type.
 		//!\~french		La variable shader contenant le type de brouillard.
 		Castor3D::Uniform1iSPtr m_fogType;
@@ -219,6 +227,12 @@ namespace deferred_msaa
 		//!\~english	The technique blit rectangle.
 		//!\~french		Le rectangle de blit de la technique.
 		Castor::Rectangle m_rect;
+		//!\~english	Tells if SSAO is to be used in lighting pass.
+		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
+		bool m_ssaoEnabled{ false };
+		//!\~english	The SSAO pass.
+		//!\~french		La passe SSAO.
+		std::unique_ptr< deferred_common::SsaoPass > m_ssao;
 	};
 }
 

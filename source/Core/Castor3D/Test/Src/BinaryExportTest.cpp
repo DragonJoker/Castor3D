@@ -187,7 +187,7 @@ namespace Testing
 		l_scene->Cleanup();
 		l_sceneDst.Cleanup();
 		m_engine.GetSceneCache().Remove( l_scene->GetName() );
-		m_engine.GetRenderLoop().RenderSyncFrame();
+		m_engine.GetRenderWindowCache().Clear();
 		l_src.reset();
 		l_dst.reset();
 		l_scene.reset();

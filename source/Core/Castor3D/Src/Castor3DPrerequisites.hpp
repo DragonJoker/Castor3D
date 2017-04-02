@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -746,7 +746,6 @@ namespace Castor3D
 
 	C3D_API void ComputePostLightingMapContributions(
 		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_ambient,
 		GLSL::Vec3 & p_diffuse,
 		GLSL::Vec3 & p_specular,
 		GLSL::Vec3 & p_emissive,

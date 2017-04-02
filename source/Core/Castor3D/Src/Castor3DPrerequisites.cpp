@@ -1,4 +1,4 @@
-#include "Castor3DPrerequisites.hpp"
+﻿#include "Castor3DPrerequisites.hpp"
 
 #include "Engine.hpp"
 #include "Scene/Scene.hpp"
@@ -119,9 +119,9 @@ namespace Castor3D
 			auto vtx_bitangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 			auto c3d_mapNormal( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
 
-			auto l_tbn = p_writer.GetLocale( cuT( "l_tbn" ), mat3( vtx_tangent, vtx_bitangent, p_normal ) );
+			auto l_tbn = p_writer.GetLocale( cuT( "l_tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
 			auto l_v3MapNormal = p_writer.GetLocale( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, l_texCoord.xy() ).xyz() );
-			l_v3MapNormal = l_v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 );
+			l_v3MapNormal = normalize( l_v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
 			p_normal = normalize( l_tbn * l_v3MapNormal );
 		}
 
@@ -135,7 +135,6 @@ namespace Castor3D
 
 	void ComputePostLightingMapContributions(
 		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_ambient,
 		GLSL::Vec3 & p_diffuse,
 		GLSL::Vec3 & p_specular,
 		GLSL::Vec3 & p_emissive,
@@ -145,20 +144,6 @@ namespace Castor3D
 	{
 		using namespace GLSL;
 		auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
-
-		if ( CheckFlag( p_textureFlags, TextureChannel::eColour ) )
-		{
-			auto c3d_mapColour( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapColour ) );
-
-			p_ambient += texture( c3d_mapColour, l_texCoord.xy() ).xyz();
-		}
-
-		if ( CheckFlag( p_textureFlags, TextureChannel::eAmbient ) )
-		{
-			auto c3d_mapAmbient( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapAmbient ) );
-
-			p_ambient += texture( c3d_mapAmbient, l_texCoord.xy() ).xyz();
-		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{
@@ -260,9 +245,9 @@ namespace Castor3D
 					FI;
 
 					p_writer.Return( l_shadowMultiplier );
-				}, InParam< Vec3 >{ &p_writer, cuT( "p_lightDir" ) }
-				, InParam< Vec2 >{ &p_writer, cuT( "p_initialTexCoord" ) }
-				, InParam< Float >{ &p_writer, cuT( "p_initialHeight" ) } );
+				}, InVec3{ &p_writer, cuT( "p_lightDir" ) }
+				, InVec2{ &p_writer, cuT( "p_initialTexCoord" ) }
+				, InFloat{ &p_writer, cuT( "p_initialHeight" ) } );
 		}
 
 		return l_result;
@@ -325,8 +310,8 @@ namespace Castor3D
 					auto l_finalTexCoords = p_writer.GetLocale( cuT( "l_finalTexCoords" ), l_prevTexCoords * l_weight + l_currentTexCoords * p_writer.Paren( 1.0_f - l_weight ) );
 
 					p_writer.Return( l_finalTexCoords );
-				}, InParam< Vec2 >{ &p_writer, cuT( "p_texCoords" ) }
-				, InParam< Vec3 >{ &p_writer, cuT( "p_viewDir" ) } );
+				}, InVec2{ &p_writer, cuT( "p_texCoords" ) }
+				, InVec3{ &p_writer, cuT( "p_viewDir" ) } );
 		}
 
 		return l_result;

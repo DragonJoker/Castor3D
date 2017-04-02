@@ -1,3 +1,4 @@
+/.vscode
 /binaries
 /build
 /setup
@@ -38,6 +39,7 @@
 /source/Core/Castor3D/Test/Data/ReinhardToneMapping
 /source/Core/Castor3D/Test/Data/Sampler
 /source/Core/Castor3D/Test/Data/Skybox
+/source/Core/Castor3D/Test/Data/Ssao
 /source/Core/Castor3D/Test/Data/Test
 /source/Core/Castor3D/Test/Data/Texturing
 /source/Samples/CastorDvpTD/Data/Data

@@ -208,85 +208,6 @@ namespace Castor3D
 		AddFlag( p_programFlags, ProgramFlag::eShadowMapPoint );
 	}
 
-	String ShadowMapPoint::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
-	{
-		using namespace GLSL;
-		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
-
-		// Vertex inputs
-		auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
-		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-
-		UBO_MATRIX( l_writer );
-		UBO_MODEL_MATRIX( l_writer );
-		UBO_SKINNING( l_writer, p_programFlags );
-		UBO_MORPHING( l_writer, p_programFlags );
-		Ubo l_shadowMap{ l_writer, ShadowMapUbo };
-		auto c3d_v3WordLightPosition( l_shadowMap.GetUniform< Vec3 >( WorldLightPosition ) );
-		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
-		l_shadowMap.End();
-
-		// Outputs
-		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-		std::function< void() > l_main = [&]()
-		{
-			auto l_v4Vertex = l_writer.GetLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
-
-			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
-			{
-				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
-				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
-				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
-			}
-			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
-			{
-				l_mtxModel = transform;
-			}
-			else
-			{
-				l_mtxModel = c3d_mtxModel;
-			}
-
-			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
-			{
-				auto l_time = l_writer.GetLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
-			}
-
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_worldSpacePosition = l_v4Vertex.xyz();
-			gl_Position = c3d_mtxProjection * c3d_mtxView * l_v4Vertex;
-		};
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
-	}
-
-	String ShadowMapPoint::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
-	{
-		return String{};
-	}
-
 	String ShadowMapPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
@@ -300,14 +221,27 @@ namespace Castor3D
 		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
 		l_shadowMap.End();
 
-		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
+		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
 
 		// Fragment Outputs
 		auto pxl_fFragColor = l_writer.GetFragData< Float >( cuT( "pxl_fFragColor" ), 0u );
 
 		auto l_main = [&]()
 		{
-			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_worldSpacePosition - c3d_v3WordLightPosition ) );
+			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+			{
+				auto l_alpha = l_writer.GetLocale( cuT( "l_alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+
+				IF( l_writer, l_alpha < 0.2_f )
+				{
+					l_writer.Discard();
+				}
+				FI;
+			}
+
+			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_position - c3d_v3WordLightPosition ) );
 			pxl_fFragColor = l_distance / c3d_fFarPlane;
 		};
 

@@ -1,4 +1,4 @@
-﻿namespace GLSL
+namespace GLSL
 {
 	//***********************************************************************************************
 
@@ -334,6 +334,12 @@
 	inline Value abs( Value const & p_value )
 	{
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "abs" ), p_value );
+	}
+
+	template< typename ValueA, typename ValueB >
+	ValueB smoothstep( ValueA const & p_edge0, ValueA const & p_edge1, ValueB const & x )
+	{
+		return WriteFunctionCall< ValueB >( x.m_writer, cuT( "smoothstep" ), p_edge0, p_edge1,x );
 	}
 
 	template< typename Value >

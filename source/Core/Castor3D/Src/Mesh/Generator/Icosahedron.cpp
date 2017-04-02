@@ -10,7 +10,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 Icosahedron::Icosahedron()
-	: MeshGenerator( MeshType::eIcosahedron )
+	: MeshGenerator( cuT( "icosahedron" ) )
 	, m_radius( 0 )
 	, m_nbFaces( 0 )
 {

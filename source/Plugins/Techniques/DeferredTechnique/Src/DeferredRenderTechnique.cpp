@@ -1,4 +1,4 @@
-#include "DeferredRenderTechnique.hpp"
+﻿#include "DeferredRenderTechnique.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -20,13 +20,23 @@
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
-#define DEBUG_DEFERRED_BUFFERS 0
+#define DEBUG_DEFERRED_BUFFERS 1
 
 using namespace Castor;
 using namespace Castor3D;
 
 namespace deferred
 {
+	namespace
+	{
+		bool DoUsesSsao( Parameters const & p_params )
+		{
+			bool l_ssao{ false };
+			p_params.Get( cuT( "ssao" ), l_ssao );
+			return l_ssao;
+		}
+	}
+
 	String const RenderTechnique::Type = cuT( "deferred" );
 	String const RenderTechnique::Name = cuT( "Deferred Lighting Render Technique" );
 
@@ -44,9 +54,11 @@ namespace deferred
 				, false )
 			, p_params )
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
+		, m_ssaoEnabled{ DoUsesSsao( p_params ) }
 	{
 		UniformBuffer::FillSceneBuffer( m_sceneUbo );
 		m_cameraPos = m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
+		m_cameraFarPlane = m_sceneUbo.GetUniform< UniformType::eFloat >( ShaderProgram::CameraFarPlane );
 		m_fogType = m_sceneUbo.GetUniform< UniformType::eInt >( ShaderProgram::FogType );
 		m_fogDensity = m_sceneUbo.GetUniform< UniformType::eFloat >( ShaderProgram::FogDensity );
 		Logger::LogInfo( cuT( "Using deferred rendering" ) );
@@ -71,12 +83,19 @@ namespace deferred
 			l_return = DoInitialiseLightPass();
 		}
 
+		if ( l_return && m_ssaoEnabled )
+		{
+			m_ssao = std::make_unique< deferred_common::SsaoPass >( *m_renderSystem.GetEngine()
+				, m_renderTarget.GetSize() );
+		}
+
 		m_frameBuffer.m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eHighAlphaBlack ) );
 		return l_return;
 	}
 
 	void RenderTechnique::DoCleanup()
 	{
+		m_ssao.reset();
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();
 	}
@@ -94,43 +113,34 @@ namespace deferred
 		}
 
 		m_cameraPos->SetValue( m_renderTarget.GetCamera()->GetParent()->GetDerivedPosition() );
+		m_cameraFarPlane->SetValue( m_renderTarget.GetCamera()->GetViewport().GetFar() );
 		m_sceneUbo.Update();
 	}
 
 	void RenderTechnique::DoRenderOpaque( RenderInfo & p_info )
 	{
 		GetEngine()->SetPerObjectLighting( false );
-		m_renderTarget.GetCamera()->Apply();
+		auto & l_camera = *m_renderTarget.GetCamera();
+		auto l_invView = l_camera.GetView().get_inverse().get_transposed();
+		auto l_invProj = l_camera.GetViewport().GetProjection().get_inverse();
+		auto l_invViewProj = ( l_camera.GetViewport().GetProjection() * l_camera.GetView() ).get_inverse();
+		l_camera.Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_geometryPassFrameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 
-#if DEBUG_DEFERRED_BUFFERS
-
-		int l_width = int( m_size.width() );
-		int l_height = int( m_size.height() );
-		int l_thirdWidth = int( l_width / 3.0f );
-		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
-		int l_thirdHeight = int( l_height / 3.0f );
-		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
-		auto l_size = Size( l_thirdWidth, l_thirdHeight );
-		auto & l_context = *m_renderSystem.GetCurrentContext();
-		m_renderTarget.GetCamera()->Apply();
-		m_frameBuffer.m_frameBuffer->Bind();
-		l_context.RenderTexture( Position{ 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::ePosition )]->GetTexture() );
-		l_context.RenderTexture( Position{ 0, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
-		l_context.RenderTexture( Position{ 0, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormals )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eAmbient )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, l_thirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_thirdWidth, l_twothirdHeight }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
-
-#else
+		if ( m_ssaoEnabled )
+		{
+			m_ssao->Render( m_lightPassTextures, *m_renderTarget.GetCamera(), l_invViewProj, l_invView, l_invProj );
+		}
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_depthAttach->Attach( AttachmentPoint::eDepthStencil );
 		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eStencil );
+		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer
+			, Rectangle{ Position{}, m_size }
+			, BufferComponent::eDepth );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
 		DoUpdateSceneUbo();
@@ -147,15 +157,13 @@ namespace deferred
 
 			auto l_lock = make_unique_lock( l_cache );
 			bool l_first{ true };
-			DoRenderLights( LightType::eDirectional, l_first );
-			DoRenderLights( LightType::ePoint, l_first );
-			DoRenderLights( LightType::eSpot, l_first );
+			DoRenderLights( LightType::eDirectional, l_invViewProj, l_invView, l_invProj, l_first );
+			DoRenderLights( LightType::ePoint, l_invViewProj, l_invView, l_invProj, l_first );
+			DoRenderLights( LightType::eSpot, l_invViewProj, l_invView, l_invProj, l_first );
 		}
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
-
-#endif
 	}
 
 	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
@@ -167,6 +175,30 @@ namespace deferred
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
+
+#if DEBUG_DEFERRED_BUFFERS && !defined( NDEBUG )
+
+		int l_width = int( m_size.width() ) / 6;
+		int l_height = int( m_size.height() ) / 6;
+		int l_left = int( m_size.width() ) - l_width;
+		auto l_size = Size( l_width, l_height );
+		auto & l_context = *m_renderSystem.GetCurrentContext();
+		m_renderTarget.GetCamera()->Apply();
+		m_frameBuffer.m_frameBuffer->Bind();
+		l_context.RenderDepth( Position{ l_width * 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDepth )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 1, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 2, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormal )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 3, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 4, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
+
+		if ( m_ssaoEnabled )
+		{
+			l_context.RenderTexture( Position{ l_width * 5, 0 }, l_size, m_ssao->GetRaw() );
+		}
+
+		m_frameBuffer.m_frameBuffer->Unbind();
+
+#endif
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
@@ -178,14 +210,7 @@ namespace deferred
 	{
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
-		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 		bool l_return = m_geometryPassFrameBuffer->Create();
-
-		if ( l_return )
-		{
-			l_return = m_lightPassDepthBuffer->Create();
-		}
 
 		if ( l_return )
 		{
@@ -213,7 +238,6 @@ namespace deferred
 				p_index++;
 			}
 
-			m_lightPassDepthBuffer->Initialise( m_size );
 			m_geometryPassFrameBuffer->Bind();
 
 			for ( int i = 0; i < size_t( deferred_common::DsTexture::eCount ) && l_return; i++ )
@@ -239,26 +263,32 @@ namespace deferred
 		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPass >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, false );
 		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< deferred_common::DirectionalLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetDirectionalShadowMap() );
 		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< deferred_common::PointLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetPointShadowMaps() );
 		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< deferred_common::SpotLightPassShadow >( *m_renderTarget.GetEngine()
 			, *m_frameBuffer.m_frameBuffer
 			, *m_frameBuffer.m_depthAttach
+			, m_ssaoEnabled
 			, l_opaquePass.GetSpotShadowMap() );
 
 		for ( auto & l_lightPass : m_lightPass )
@@ -280,8 +310,6 @@ namespace deferred
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();
-		m_lightPassDepthBuffer->Destroy();
-		m_lightPassDepthBuffer.reset();
 		m_geometryPassFrameBuffer->Destroy();
 		m_geometryPassFrameBuffer.reset();
 	}
@@ -309,7 +337,11 @@ namespace deferred
 		m_sceneUbo.Cleanup();
 	}
 
-	void RenderTechnique::DoRenderLights( LightType p_type, bool & p_first )
+	void RenderTechnique::DoRenderLights( LightType p_type
+		, Matrix4x4r const & p_invViewProj
+		, Matrix4x4r const & p_invView
+		, Matrix4x4r const & p_invProj
+		, bool & p_first )
 	{
 		auto & l_scene = *m_renderTarget.GetScene();
 		auto & l_cache = l_scene.GetLightCache();
@@ -329,7 +361,11 @@ namespace deferred
 						, m_lightPassTextures
 						, *l_light
 						, l_camera
+						, p_invViewProj
+						, p_invView
+						, p_invProj
 						, l_fogType
+						, m_ssaoEnabled ? &m_ssao->GetResult() : nullptr
 						, p_first );
 				}
 				else
@@ -338,7 +374,11 @@ namespace deferred
 						, m_lightPassTextures
 						, *l_light
 						, l_camera
+						, p_invViewProj
+						, p_invView
+						, p_invProj
 						, l_fogType
+						, m_ssaoEnabled ? &m_ssao->GetResult() : nullptr
 						, p_first );
 				}
 

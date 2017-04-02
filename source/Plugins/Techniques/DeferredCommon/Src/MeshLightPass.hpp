@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -37,7 +37,8 @@ namespace deferred_common
 		public:
 			Program( Castor3D::Scene const & p_scene
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl );
+				, Castor::String const & p_pxl
+				, bool p_ssao );
 			virtual ~Program();
 
 		private:
@@ -47,8 +48,9 @@ namespace deferred_common
 	public:
 		MeshLightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::RenderBufferAttachment & p_depthAttach
+			, Castor3D::FrameBufferAttachment & p_depthAttach
 			, Castor3D::LightType p_type
+			, bool p_ssao
 			, bool p_shadows );
 		~MeshLightPass();
 		void Initialise( Castor3D::Scene const & p_scene
@@ -72,12 +74,6 @@ namespace deferred_common
 		//!\~english	The uniform buffer containing the model data.
 		//!\~french		Le tampon d'uniformes contenant les données de modèle.
 		Castor3D::UniformBuffer m_modelMatrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform;
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Castor3D::Uniform4x4fSPtr m_viewUniform;
 		//!\~english	The uniform variable containing model matrix.
 		//!\~french		La variable uniforme contenant la matrice modèle.
 		Castor3D::Uniform4x4fSPtr m_modelUniform;

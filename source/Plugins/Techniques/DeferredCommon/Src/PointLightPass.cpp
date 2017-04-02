@@ -1,4 +1,4 @@
-#include "PointLightPass.hpp"
+﻿#include "PointLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -36,8 +36,9 @@ namespace deferred_common
 
 	PointLightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl )
-		: MeshLightPass::Program{ p_scene, p_vtx, p_pxl }
+		, String const & p_pxl
+		, bool p_ssao )
+		: MeshLightPass::Program{ p_scene, p_vtx, p_pxl, p_ssao }
 	{
 		m_lightPosition = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Position" ), ShaderType::ePixel );
 		m_lightAttenuation = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Attenuation" ), ShaderType::ePixel );
@@ -60,12 +61,14 @@ namespace deferred_common
 
 	PointLightPass::PointLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach
+		, FrameBufferAttachment & p_depthAttach
+		, bool p_ssao
 		, bool p_shadows )
 		: MeshLightPass{ p_engine
 			, p_frameBuffer
 			, p_depthAttach
 			, LightType::ePoint
+			, p_ssao
 			, p_shadows }
 	{
 	}
@@ -180,7 +183,7 @@ namespace deferred_common
 		, Castor::String const & p_vtx
 		, Castor::String const & p_pxl )const
 	{
-		return std::make_unique< Program >( p_scene, p_vtx, p_pxl );
+		return std::make_unique< Program >( p_scene, p_vtx, p_pxl, m_ssao );
 	}
 
 	//*********************************************************************************************

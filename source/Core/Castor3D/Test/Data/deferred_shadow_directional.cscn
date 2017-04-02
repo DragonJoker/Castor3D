@@ -3,59 +3,7 @@ debug_overlays true
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0.5 0.5 0.5 1.0
-
-	material "Silver"
-	{
-		type legacy
-		pass
-		{
-			ambient 0.0745	0.0745	0.0745 1.0
-			diffuse 0.75164	0.75164	0.75164 1.0
-			emissive 0.0 0.0 0.0 1.0
-			specular 0.628281 0.628281 0.628281 1.0
-			shininess 51.2
-			two_sided true
-		}
-	}
-
-	material "Gold"
-	{
-		type legacy
-		pass
-		{
-			ambient 0.24725 0.1995 0.0745 1.0
-			diffuse 0.75164 0.60648 0.22648 1.0
-			emissive 0.0 0.0 0.0 1.0
-			specular 0.628281 0.555802 0.366065 1.0
-			shininess 51.2
-			two_sided true
-		}
-	}
-
-	material "Copper"
-	{
-		type legacy
-		pass
-		{
-			ambient 0.19125 0.0735 0.0225 1.0
-			diffuse 0.7038 0.27048 0.0828 1.0
-			emissive 0.0 0.0 0.0 1.0
-			specular 0.256777 0.137622 0.086014 1.0
-			shininess 51.2
-			two_sided true
-		}
-	}
-
-	material "WhiteEmit"
-	{
-		type legacy
-		pass
-		{
-			emissive 1 1 1 1
-			ambient 1 1 1 1
-		}
-	}
+	include "common_materials.cscn"
 
 	scene_node "LightNode"
 	{
@@ -67,7 +15,7 @@ scene "Scene"
 		type directional
 		parent "LightNode"
 		colour 1.0 1.0 1.0
-		intensity 0.5 0.8 1.0 1.0
+		intensity 0.0 0.8 1.0 1.0
 		shadow_producer true
 	}
 
@@ -142,19 +90,19 @@ scene "Scene"
 			far 20000.0
 		}
 	}
+}
 
-	window "Window"
+window "Window"
+{
+	render_target
 	{
-		render_target
-		{
-			format argb32
-			size screen_size
-			scene "Scene"
-			camera "MainCamera"
-			technique "deferred"
-		}
-
-		fullscreen false
-		vsync false
+		format argb32
+		size screen_size
+		scene "Scene"
+		camera "MainCamera"
+		technique "deferred"
 	}
+
+	fullscreen false
+	vsync false
 }

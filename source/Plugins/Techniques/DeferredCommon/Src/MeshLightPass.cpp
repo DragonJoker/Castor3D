@@ -23,8 +23,9 @@ namespace deferred_common
 
 	MeshLightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl )
-		: LightPass::Program{ p_scene, p_vtx, p_pxl }
+		, String const & p_pxl
+		, bool p_ssao )
+		: LightPass::Program{ p_scene, p_vtx, p_pxl, p_ssao }
 	{
 	}
 
@@ -66,17 +67,16 @@ namespace deferred_common
 
 	MeshLightPass::MeshLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach
+		, FrameBufferAttachment & p_depthAttach
 		, LightType p_type
+		, bool p_ssao
 		, bool p_shadows )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, p_shadows }
 		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
 		, m_stencilPass{ p_frameBuffer, p_depthAttach, m_matrixUbo, m_modelMatrixUbo }
 		, m_type{ p_type }
 	{
 		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
-		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
 		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
 	}
 
@@ -162,6 +162,8 @@ namespace deferred_common
 		// Shader inputs
 		UBO_MATRIX( l_writer );
 		UBO_MODEL_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_GPINFO( l_writer );
 		auto vertex = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
 
 		// Shader outputs
@@ -169,7 +171,7 @@ namespace deferred_common
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			gl_Position = c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( vertex, 1.0 );
+			gl_Position = c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( vertex, 1.0_f );
 		} );
 
 		return l_writer.Finalise();

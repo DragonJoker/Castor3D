@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -160,6 +160,7 @@ namespace GLSL
 	template< typename Value > inline Value transpose( Value const & p_value );
 	template< typename Value > inline Value inverse( Value const & p_value );
 	template< typename Value > inline Value abs( Value const & p_value );
+	template< typename ValueA, typename ValueB > ValueB smoothstep( ValueA const & p_edge0, ValueA const & p_edge1, ValueB const & x );
 	GlslWriter_API Int textureSize( Sampler1D const & p_sampler, Int const p_lod );
 	GlslWriter_API IVec2 textureSize( Sampler2D const & p_sampler, Int const & p_lod );
 	GlslWriter_API IVec3 textureSize( Sampler3D const & p_sampler, Int const & p_lod );

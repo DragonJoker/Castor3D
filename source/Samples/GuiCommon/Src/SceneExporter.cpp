@@ -1,4 +1,4 @@
-#include "SceneExporter.hpp"
+﻿#include "SceneExporter.hpp"
 
 #include <Engine.hpp>
 #include <Cache/CacheView.hpp>
@@ -148,8 +148,6 @@ namespace GuiCommon
 			if ( l_pass )
 			{
 				l_strReturn << cuT( "newmtl " ) << p_material.GetName() << cuT( "\n" );
-				auto l_ambient = l_pass->GetAmbient();
-				l_strReturn << cuT( "	Ka " ) << l_ambient.red().value() << cuT( " " ) << l_ambient.green().value() << cuT( " " ) << l_ambient.blue().value() << cuT( "\n" );
 				auto l_diffuse = l_pass->GetDiffuse();
 				l_strReturn << cuT( "	Kd " ) << l_diffuse.red().value() << cuT( " " ) << l_diffuse.green().value() << cuT( " " ) << l_diffuse.blue().value() << cuT( "\n" );
 				auto l_specular = l_pass->GetSpecular();
@@ -157,7 +155,6 @@ namespace GuiCommon
 				l_strReturn << cuT( "	Ns " ) << l_pass->GetShininess() << cuT( "\n" );
 				l_strReturn << cuT( "	d " ) << l_pass->GetOpacity() << cuT( "\n" );
 
-				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ka" ), l_pass->GetTextureUnit( TextureChannel::eAmbient ) );
 				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Kd" ), l_pass->GetTextureUnit( TextureChannel::eDiffuse ) );
 				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Bump" ), l_pass->GetTextureUnit( TextureChannel::eNormal ) );
 				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_d" ), l_pass->GetTextureUnit( TextureChannel::eOpacity ) );

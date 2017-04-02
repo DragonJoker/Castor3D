@@ -35,6 +35,11 @@ SOFTWARE.
 #	define GlslWriter_API
 #endif
 
+#define DECLARE_GLSL_PARAMETER( TypeName )\
+	using In##TypeName = InParam< TypeName >;\
+	using Out##TypeName = OutParam< TypeName >;\
+	using InOut##TypeName = InOutParam< TypeName >\
+
 namespace GLSL
 {
 	/*!
@@ -44,7 +49,7 @@ namespace GLSL
 	\~english
 	\brief		Shadow filter types enumeration.
 	\~french
-	\brief		Enum�ration des types de filtrage des ombres.
+	\brief		Enumération des types de filtrage des ombres.
 	*/
 	enum class ShadowType
 	{
@@ -58,7 +63,7 @@ namespace GLSL
 		//!\~french		Filtrage poisson.
 		ePoisson,
 		//!\~english	Stratified poisson filtering.
-		//!\~french		Filtrage poisson stratifi�.
+		//!\~french		Filtrage poisson stratifié.
 		eStratifiedPoisson,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
@@ -69,7 +74,7 @@ namespace GLSL
 	\~english
 	\brief		Fog types enumeration.
 	\~french
-	\brief		Enum�ration des types de brouillard.
+	\brief		Enumération des types de brouillard.
 	*/
 	enum class FogType
 	{
@@ -77,14 +82,14 @@ namespace GLSL
 		//!\~french		Pas de brouillard
 		eDisabled,
 		//!\~english	Fog intensity increases linearly with distance to camera.
-		//!\~french		L'intensit� du brouillard augmente lin�airement avec la distance � la cam�ra.
+		//!\~french		L'intensité du brouillard augmente lin�airement avec la distance à la caméra.
 		eLinear,
 		//!\~english	Fog intensity increases exponentially with distance to camera.
-		//!\~french		L'intensit� du brouillard augmente exponentiellement avec la distance � la cam�ra.
+		//!\~french		L'intensité du brouillard augmente exponentiellement avec la distance à la caméra.
 		//!\~french		
 		eExponential,
 		//!\~english	Fog intensity increases even more with distance to camera.
-		//!\~french		L'intensit� du brouillard augmente encore plus avec la distance � la cam�ra.
+		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
 		eSquaredExponential,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
 	};
@@ -168,11 +173,36 @@ namespace GLSL
 	using BMat3 = Mat3T< Boolean >;
 	using BMat4 = Mat4T< Boolean >;
 
+	DECLARE_GLSL_PARAMETER( Light );
+	DECLARE_GLSL_PARAMETER( Float );
+	DECLARE_GLSL_PARAMETER( Int );
+	DECLARE_GLSL_PARAMETER( Boolean );
+	DECLARE_GLSL_PARAMETER( Vec2 );
+	DECLARE_GLSL_PARAMETER( Vec3 );
+	DECLARE_GLSL_PARAMETER( Vec4 );
+	DECLARE_GLSL_PARAMETER( IVec2 );
+	DECLARE_GLSL_PARAMETER( IVec3 );
+	DECLARE_GLSL_PARAMETER( IVec4 );
+	DECLARE_GLSL_PARAMETER( BVec2 );
+	DECLARE_GLSL_PARAMETER( BVec3 );
+	DECLARE_GLSL_PARAMETER( BVec4 );
+	DECLARE_GLSL_PARAMETER( Mat2 );
+	DECLARE_GLSL_PARAMETER( Mat3 );
+	DECLARE_GLSL_PARAMETER( Mat4 );
+	DECLARE_GLSL_PARAMETER( IMat2 );
+	DECLARE_GLSL_PARAMETER( IMat3 );
+	DECLARE_GLSL_PARAMETER( IMat4 );
+	DECLARE_GLSL_PARAMETER( BMat2 );
+	DECLARE_GLSL_PARAMETER( BMat3 );
+	DECLARE_GLSL_PARAMETER( BMat4 );
+
 	template< typename RetT, typename ... ParamsT >
 	struct Function;
 
 	constexpr uint32_t SpotShadowMapCount = 10u;
 	constexpr uint32_t PointShadowMapCount = 6u;
 }
+
+#undef DECLARE_GLSL_PARAMETER
 
 #endif

@@ -3,30 +3,7 @@ debug_overlays true
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0 0 0 1
-
-	material "WhiteEmit"
-	{
-		type legacy
-		pass
-		{
-			emissive 1.1 1.1 1.1 1.1
-			ambient 1 1 1 1
-		}
-	}
-
-	material "Silver"
-	{
-		type legacy
-		pass
-		{
-			ambient 0.0745	0.0745	0.0745 1.0
-			diffuse 0.75164	0.75164	0.75164 1.0
-			emissive 0.0 0.0 0.0 1.0
-			specular 0.628281 0.628281 0.628281 1.0
-			shininess 50.0
-		}
-	}
+	include "common_materials.cscn"
 
 	scene_node "PointLightsNode"
 	{
@@ -101,19 +78,19 @@ scene "Scene"
 			far 20000.0
 		}
 	}
+}
 
-	window "Window"
+window "Window"
+{
+	render_target
 	{
-		render_target
-		{
-			format argb16
-			size screen_size
-			scene "Scene"
-			camera "MainCamera"
-			postfx "bloom"
-			technique "deferred"
-		}
-		fullscreen false
-		vsync false
+		format argb16
+		size screen_size
+		scene "Scene"
+		camera "MainCamera"
+		postfx "bloom"
+		technique "deferred"
 	}
+	fullscreen false
+	vsync false
 }

@@ -1,4 +1,4 @@
-#include "RenderTarget.hpp"
+﻿#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -218,7 +218,7 @@ namespace Castor3D
 
 		if ( l_scene )
 		{
-			if ( m_initialised )
+			if ( m_initialised && l_scene->IsInitialised() )
 			{
 				CameraSPtr l_pCamera = GetCamera();
 
@@ -274,7 +274,7 @@ namespace Castor3D
 	{
 		m_techniqueName = p_name;
 		m_techniqueParameters = p_parameters;
-		m_bMultisampling = p_name == cuT( "msaa" );
+		m_bMultisampling = p_name.find( cuT( "msaa" ) ) != String::npos;
 	}
 
 	void RenderTarget::DoRender( RenderInfo & p_info, RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera )

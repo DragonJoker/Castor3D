@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -134,6 +134,9 @@ namespace Castor3D
 	public:
 		struct UniformInfo
 		{
+			//!\~english	The variable name.
+			//!\~french		Le nom de la variable.
+			Castor::String m_name;
 			//!\~english	The variable offset into the buffer.
 			//!\~french		L'offset de la variable dans le tampon.
 			uint32_t m_offset;

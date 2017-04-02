@@ -197,7 +197,7 @@ namespace Castor3D
 				uv *= vec2( 0.1591_f, 0.3183_f );
 				uv += 0.5_f;
 				l_writer.Return( uv );
-			}, InParam< Vec3 >( &l_writer, cuT( "v" ) ) );
+			}, InVec3( &l_writer, cuT( "v" ) ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{

@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+﻿#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -12,6 +12,7 @@
 #include "Mesh/Mesh.hpp"
 #include "ParticleSystem/ParticleSystem.hpp"
 #include "Render/RenderLoop.hpp"
+#include "Render/RenderTarget.hpp"
 #include "Render/RenderWindow.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
@@ -289,18 +290,22 @@ namespace Castor3D
 			}
 		}
 
+		p_file.WriteText( cuT( "}\n" ) );
+
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Windows" ) );
-			auto l_lock = make_unique_lock( p_scene.GetRenderWindowCache() );
+			auto l_lock = make_unique_lock( p_scene.GetEngine()->GetRenderWindowCache() );
 
-			for ( auto const & l_it : p_scene.GetRenderWindowCache() )
+			for ( auto const & l_it : p_scene.GetEngine()->GetRenderWindowCache() )
 			{
-				l_return &= RenderWindow::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				if ( l_it.second->GetRenderTarget()->GetScene()->GetName() == p_scene.GetName() )
+				{
+					l_return &= RenderWindow::TextWriter( m_tabs )( *l_it.second, p_file );
+				}
 			}
 		}
 
-		p_file.WriteText( cuT( "}\n" ) );
 		return l_return;
 	}
 
@@ -563,15 +568,6 @@ namespace Castor3D
 			, l_dummy
 			, l_eventClean
 			, l_mergeResource );
-		m_windowCache = MakeCache < RenderWindow, String >(	p_engine
-			, [this]( Castor::String const & p_name )
-			{
-				return std::make_shared< RenderWindow >( p_name
-					, *GetEngine() );
-			}
-			, l_dummy
-			, l_eventClean
-			, l_mergeResource );
 
 		m_materialCacheView = MakeCacheView< Material, EventType::ePreRender >( GetName()
 			, l_eventInitialise
@@ -612,7 +608,6 @@ namespace Castor3D
 		m_onParticleSystemChanged.disconnect();
 
 		m_meshCache->Clear();
-		m_windowCache->Clear();
 
 		m_skybox.reset();
 		m_animatedObjectGroupCache.reset();
@@ -639,7 +634,6 @@ namespace Castor3D
 		m_meshCache.reset();
 		m_materialCacheView.reset();
 		m_samplerCacheView.reset();
-		m_windowCache.reset();
 		m_overlayCacheView.reset();
 		m_fontCacheView.reset();
 
@@ -661,10 +655,13 @@ namespace Castor3D
 			m_colour = std::make_unique< TextureProjection >( *GetEngine()->GetRenderSystem()->GetCurrentContext() );
 			m_colour->Initialise();
 		} ) );
+
+		m_initialised = true;
 	}
 
 	void Scene::Cleanup()
 	{
+		m_initialised = false;
 		m_animatedObjectGroupCache->Cleanup();
 		m_cameraCache->Cleanup();
 		m_billboardCache->Cleanup();
@@ -680,7 +677,6 @@ namespace Castor3D
 
 		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->Cleanup();
-		m_windowCache->Cleanup();
 
 		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{

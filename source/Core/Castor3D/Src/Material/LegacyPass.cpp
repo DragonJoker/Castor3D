@@ -24,14 +24,6 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tambient " ), m_tabs.c_str() ) > 0
-					   && Colour::TextWriter( String() )( p_pass.GetAmbient(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( l_return, "LegacyPass ambient colour" );
-		}
-
-		if ( l_return )
-		{
 			l_return = p_file.Print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
 					   && Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
@@ -79,7 +71,6 @@ namespace Castor3D
 		: Pass{ p_parent }
 		, m_shininess{ 50.0 }
 		, m_diffuse{ Colour::from_rgba( 0xFFFFFFFF ) }
-		, m_ambient{ Colour::from_rgba( 0x000000FF ) }
 		, m_specular{ Colour::from_rgba( 0xFFFFFFFF ) }
 		, m_emissive{ HdrColour::from_rgba( 0x000000FF ) }
 	{
@@ -99,7 +90,6 @@ namespace Castor3D
 
 	void LegacyPass::DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const
 	{
-		p_node.m_ambient.SetValue( rgba_float( GetAmbient() ) );
 		p_node.m_diffuse.SetValue( rgba_float( GetDiffuse() ) );
 		p_node.m_specular.SetValue( rgba_float( GetSpecular() ) );
 		p_node.m_emissive.SetValue( rgba_float( GetEmissive() ) );
@@ -109,7 +99,6 @@ namespace Castor3D
 	void LegacyPass::DoSetOpacity( float p_value )
 	{
 		m_diffuse.alpha() = p_value;
-		m_ambient.alpha() = p_value;
 		m_specular.alpha() = p_value;
 		m_emissive.alpha() = p_value;
 	}

@@ -15,7 +15,7 @@ namespace TestRender
 		for ( auto & l_variable : p_ubo )
 		{
 			auto l_stride = l_variable->size();
-			m_variables.push_back( { l_size, 0u } );
+			m_variables.push_back( { l_variable->GetName(), l_size, 0u } );
 			l_size += l_stride;
 		}
 

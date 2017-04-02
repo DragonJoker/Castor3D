@@ -4,6 +4,7 @@
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
 #include <Scene/Light/DirectionalLight.hpp>
 #include <Shader/ShaderProgram.hpp>
@@ -11,6 +12,7 @@
 #include <GlslSource.hpp>
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
+#include <GlslUtils.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -28,8 +30,9 @@ namespace deferred_common
 
 	DirectionalLightPass::Program::Program( Scene const & p_scene
 		, String const & p_vtx
-		, String const & p_pxl )
-		: LightPass::Program{ p_scene, p_vtx, p_pxl }
+		, String const & p_pxl
+		, bool p_ssao )
+		: LightPass::Program{ p_scene, p_vtx, p_pxl, p_ssao }
 	{
 		m_lightDirection = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Direction" ), ShaderType::ePixel );
 		m_lightTransform = m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_mtxLightSpace" ), ShaderType::ePixel );
@@ -75,9 +78,10 @@ namespace deferred_common
 
 	DirectionalLightPass::DirectionalLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, RenderBufferAttachment & p_depthAttach
+		, FrameBufferAttachment & p_depthAttach
+		, bool p_ssao
 		, bool p_shadows )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, p_shadows }
 		, m_viewport{ p_engine }
 	{
 		auto l_declaration = BufferDeclaration(
@@ -101,7 +105,6 @@ namespace deferred_common
 		uint8_t * l_buffer = m_vertexBuffer->data();
 		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
 		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 		m_viewport.Initialise();
 	}
@@ -126,7 +129,6 @@ namespace deferred_common
 			, nullptr );
 		m_viewport.Update();
 		m_projectionUniform->SetValue( m_viewport.GetProjection() );
-		m_matrixUbo.Update();
 	}
 
 	void DirectionalLightPass::Cleanup()
@@ -144,6 +146,8 @@ namespace deferred_common
 		, Camera const & p_camera )
 	{
 		m_viewport.Resize( p_size );
+		m_viewUniform->SetValue( p_camera.GetView() );
+		m_matrixUbo.Update();
 	}
 
 	String DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
@@ -153,6 +157,8 @@ namespace deferred_common
 
 		// Shader inputs
 		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_GPINFO( l_writer );
 		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 
 		// Shader outputs
@@ -160,7 +166,7 @@ namespace deferred_common
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			gl_Position = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
+			gl_Position = c3d_mtxProjection * vec4( vertex, 0.0, 1.0 );
 		} );
 
 		return l_writer.Finalise();
@@ -170,6 +176,6 @@ namespace deferred_common
 		, String const & p_vtx
 		, String const & p_pxl )const
 	{
-		return std::make_unique< Program >( p_scene, p_vtx, p_pxl );
+		return std::make_unique< Program >( p_scene, p_vtx, p_pxl, m_ssao );
 	}
 }
