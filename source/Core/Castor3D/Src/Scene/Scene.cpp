@@ -655,10 +655,13 @@ namespace Castor3D
 			m_colour = std::make_unique< TextureProjection >( *GetEngine()->GetRenderSystem()->GetCurrentContext() );
 			m_colour->Initialise();
 		} ) );
+
+		m_initialised = true;
 	}
 
 	void Scene::Cleanup()
 	{
+		m_initialised = false;
 		m_animatedObjectGroupCache->Cleanup();
 		m_cameraCache->Cleanup();
 		m_billboardCache->Cleanup();

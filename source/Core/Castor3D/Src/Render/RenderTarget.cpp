@@ -1,4 +1,4 @@
-#include "RenderTarget.hpp"
+﻿#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -218,7 +218,7 @@ namespace Castor3D
 
 		if ( l_scene )
 		{
-			if ( m_initialised )
+			if ( m_initialised && l_scene->IsInitialised() )
 			{
 				CameraSPtr l_pCamera = GetCamera();
 

@@ -59,30 +59,26 @@ namespace Testing
 
 	bool C3DTestCase::compare( Scene const & p_a, Scene const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
+		auto l_lockA = make_unique_lock( p_a.GetSceneNodeCache() );
+		auto l_lockB = make_unique_lock( p_b.GetSceneNodeCache() );
+		auto l_itA = p_a.GetSceneNodeCache().begin();
+		auto l_endItA =  p_a.GetSceneNodeCache().end();
+		auto l_itB = p_b.GetSceneNodeCache().begin();
+		auto l_endItB = p_b.GetSceneNodeCache().end();
+		bool l_return = true;
 
-		if ( l_return )
+		while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 		{
-			auto l_lockA = make_unique_lock( p_a.GetSceneNodeCache() );
-			auto l_lockB = make_unique_lock( p_b.GetSceneNodeCache() );
-			auto l_itA = p_a.GetSceneNodeCache().begin();
-			auto l_endItA =  p_a.GetSceneNodeCache().end();
-			auto l_itB = p_b.GetSceneNodeCache().begin();
-			auto l_endItB = p_b.GetSceneNodeCache().end();
-
-			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
+			if ( l_return
+					&& l_itA->first.find( cuT( "_REye" ) ) == String::npos
+					&& l_itA->first.find( cuT( "_LEye" ) ) == String::npos )
 			{
-				if ( l_return
-					 && l_itA->first.find( cuT( "_REye" ) ) == String::npos
-					 && l_itA->first.find( cuT( "_LEye" ) ) == String::npos )
-				{
-					l_return = CT_EQUAL( l_itA->first, l_itB->first );
-					l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
-				}
-
-				++l_itA;
-				++l_itB;
+				l_return = CT_EQUAL( l_itA->first, l_itB->first );
+				l_return &= CT_EQUAL( *l_itA->second, *l_itB->second );
 			}
+
+			++l_itA;
+			++l_itB;
 		}
 
 		if ( l_return )

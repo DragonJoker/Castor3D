@@ -1,4 +1,4 @@
-#include "RenderWindow.hpp"
+﻿#include "RenderWindow.hpp"
 
 #include "FrameBuffer/BackBuffers.hpp"
 #include "Render/RenderLoop.hpp"
@@ -51,7 +51,7 @@ namespace Castor3D
 		: OwnedBy< Engine >{ p_engine }
 		, Named{ p_name }
 		, m_index{ s_nbRenderWindows++ }
-		, m_wpListener{ p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) }
+		, m_wpListener{ p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( m_index ) ) }
 		, m_backBuffers{ p_engine.GetRenderSystem()->CreateBackBuffers() }
 		, m_pickingPass{ std::make_unique< PickingPass >( p_engine ) }
 	{
