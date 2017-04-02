@@ -163,7 +163,9 @@ namespace Testing
 		l_src->Cleanup();
 		m_engine.GetRenderLoop().RenderSyncFrame();
 		l_dst->Cleanup();
+		m_engine.GetRenderWindowCache().Cleanup();
 		m_engine.GetRenderLoop().RenderSyncFrame();
+		m_engine.GetRenderWindowCache().Clear();
 		m_engine.GetSceneCache().Remove( l_name + cuT( "_exp" ) );
 		m_engine.GetSceneCache().Remove( l_name );
 		l_src.reset();

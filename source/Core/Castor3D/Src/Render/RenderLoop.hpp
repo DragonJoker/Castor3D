@@ -105,6 +105,13 @@ namespace Castor3D
 		C3D_API virtual void UpdateVSync( bool p_enable );
 		/**
 		 *\~english
+		 *\brief		Flushs all events of all frame listeners.
+		 *\~french
+		 *\brief		Vide tous les évènements de tous les frame listeners.
+		 */
+		C3D_API void FlushEvents();
+		/**
+		 *\~english
 		 *\brief		Starts threaded render loop.
 		 *\~french
 		 *\brief		Commence le rendu threadé.

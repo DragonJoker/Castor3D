@@ -50,9 +50,6 @@ namespace Castor3D
 			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 			{
 				p_listener.FlushEvents( EventType::ePreRender );
-			} );
-			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
-			{
 				p_listener.FlushEvents( EventType::eQueueRender );
 			} );
 		}
@@ -82,6 +79,16 @@ namespace Castor3D
 
 	void RenderLoop::UpdateVSync( bool p_enable )
 	{
+	}
+
+	void RenderLoop::FlushEvents()
+	{
+		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
+		{
+			p_listener.FlushEvents( EventType::ePreRender );
+			p_listener.FlushEvents( EventType::eQueueRender );
+			p_listener.FlushEvents( EventType::ePostRender );
+		} );
 	}
 
 	ContextSPtr RenderLoop::DoCreateContext( RenderWindow & p_window )
