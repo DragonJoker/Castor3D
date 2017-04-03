@@ -70,6 +70,20 @@ namespace CastorCom
 	typedef std::basic_string< TCHAR > tstring;
 
 	static const Castor::String ERROR_UNINITIALISED_INSTANCE = cuT( "The instance must be initialised" );
+
+	template< typename T, typename FuncT >
+	HRESULT RetrieveValue( T * pVal, FuncT p_func )
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( *pVal )
+		{
+			*pVal = p_func();
+			hr = S_OK;
+		}
+
+		return hr;
+	}
 }
 
 #include "ComCastorUtils.hpp"

@@ -71,7 +71,7 @@ namespace CastorCom
 		COM_PROPERTY( CulledFaces, eFACE, make_getter( m_state.get(), &Castor3D::RasteriserState::GetCulledFaces ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetCulledFaces ) );
 		COM_PROPERTY( FrontCCW, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetFrontCCW ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetFrontCCW ) );
 		COM_PROPERTY( AntialiasedLines, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetAntialiasedLines ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetAntialiasedLines ) );
-		COM_PROPERTY( DepthBiasUnit, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBiasUnit ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBiasUnit ) );
+		COM_PROPERTY( DepthBiasUnits, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBiasUnits ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBiasUnits ) );
 		COM_PROPERTY( DepthBiasFactor, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBiasFactor ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBiasFactor ) );
 		COM_PROPERTY( DepthClipping, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthClipping ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthClipping ) );
 		COM_PROPERTY( Scissor, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetScissor ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetScissor ) );

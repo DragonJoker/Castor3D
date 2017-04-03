@@ -12,41 +12,50 @@ namespace CastorCom
 
 	STDMETHODIMP CAngle::Cos( /* [out, retval] */ float * pVal )
 	{
-		HRESULT hr = E_POINTER;
-
-		if ( *pVal )
+		return RetrieveValue( pVal, [this]()
 		{
-			*pVal = float( Castor::Angle::cos() );
-			hr = S_OK;
-		}
-
-		return hr;
+			return float( Castor::Angle::cos() );
+		} );
 	}
 
 	STDMETHODIMP CAngle::Sin( /* [out, retval] */ float * pVal )
 	{
-		HRESULT hr = E_POINTER;
-
-		if ( *pVal )
+		return RetrieveValue( pVal, [this]()
 		{
-			*pVal = float( Castor::Angle::sin() );
-			hr = S_OK;
-		}
-
-		return hr;
+			return float( Castor::Angle::sin() );
+		} );
 	}
 
 	STDMETHODIMP CAngle::Tan( /* [out, retval] */ float * pVal )
 	{
-		HRESULT hr = E_POINTER;
-
-		if ( *pVal )
+		return RetrieveValue( pVal, [this]()
 		{
-			*pVal = float( Castor::Angle::tan() );
-			hr = S_OK;
-		}
+			return float( Castor::Angle::tan() );
+		} );
+	}
 
-		return hr;
+	STDMETHODIMP CAngle::Cosh( /* [out, retval] */ float * pVal )
+	{
+		return RetrieveValue( pVal, [this]()
+		{
+			return float( Castor::Angle::cosh() );
+		} );
+	}
+
+	STDMETHODIMP CAngle::Sinh( /* [out, retval] */ float * pVal )
+	{
+		return RetrieveValue( pVal, [this]()
+		{
+			return float( Castor::Angle::sinh() );
+		} );
+	}
+
+	STDMETHODIMP CAngle::Tanh( /* [out, retval] */ float * pVal )
+	{
+		return RetrieveValue( pVal, [this]()
+		{
+			return float( Castor::Angle::tanh() );
+		} );
 	}
 
 	STDMETHODIMP CAngle::ACos( /* [in] */ float val )
@@ -65,44 +74,5 @@ namespace CastorCom
 	{
 		Castor::Angle::atan( val );
 		return S_OK;
-	}
-
-	STDMETHODIMP CAngle::Cosh( /* [out, retval] */ float * pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( *pVal )
-		{
-			*pVal = float( Castor::Angle::cosh() );
-			hr = S_OK;
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CAngle::Sinh( /* [out, retval] */ float * pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( *pVal )
-		{
-			*pVal = float( Castor::Angle::sinh() );
-			hr = S_OK;
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CAngle::Tanh( /* [out, retval] */ float * pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( *pVal )
-		{
-			*pVal = float( Castor::Angle::tanh() );
-			hr = S_OK;
-		}
-
-		return hr;
 	}
 }

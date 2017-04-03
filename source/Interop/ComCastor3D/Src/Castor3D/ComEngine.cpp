@@ -265,12 +265,37 @@ namespace CastorCom
 		return hr;
 	}
 
+	STDMETHODIMP CEngine::CreateRenderWindow( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal )
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			if ( pVal )
+			{
+				hr = CRenderWindow::CreateInstance( pVal );
+
+				if ( hr == S_OK )
+				{
+					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetRenderWindowCache().Add( FromBstr( name ) ) );
+				}
+			}
+		}
+		else
+		{
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+		}
+
+		return hr;
+	}
+
 	STDMETHODIMP CEngine::RemoveWindow( /* [in] */ IRenderWindow * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
+			//m_internal->GetRenderWindowCache().Remove(  static_cast< CRenderWindow * >( val )->GetName() );
 			hr = S_OK;
 		}
 		else

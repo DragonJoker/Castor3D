@@ -68,9 +68,6 @@ namespace CastorCom
 		STDMETHOD( FromAxisAngle )( /* [in] */ IVector3D * axis, /* [in] */ IAngle * angle );
 		STDMETHOD( ToAxes )( /* [out] */ IVector3D ** pX, /* [out] */ IVector3D ** pY, /* [out] */ IVector3D ** pZ );
 		STDMETHOD( FromAxes )( /* [in] */ IVector3D * x, /* [in] */ IVector3D * y, /* [in] */ IVector3D * z );
-		STDMETHOD( GetYaw )( /* [out, retval] */ IAngle ** pVal );
-		STDMETHOD( GetPitch )( /* [out, retval] */ IAngle ** pVal );
-		STDMETHOD( GetRoll )( /* [out, retval] */ IAngle ** pVal );
 		STDMETHOD( GetMagnitude )( /* [out, retval] */ float * pVal );
 		STDMETHOD( Conjugate )();
 		STDMETHOD( Slerp )( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat );

@@ -70,12 +70,9 @@ namespace CastorCom
 
 		COM_PROPERTY_GET( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &Castor3D::TextureImage::GetBuffer ) );
 
-		STDMETHOD( Initialise )( /* [in] */ eTEXTURE_TYPE p_type, /* [in] */ unsigned int p_cpuAccess, /* [in] */ unsigned int p_gpuAccess );
-		STDMETHOD( Cleanup )();
 		STDMETHOD( Resize2D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h );
 		STDMETHOD( Resize3D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d );
-		STDMETHOD( Static2DSource )( /* [in] */ IPixelBuffer * val );
-		STDMETHOD( Static3DSource )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d, /* [in] */ IPixelBuffer * val );
+		STDMETHOD( StaticSource )( /* [in] */ IPixelBuffer * val );
 		STDMETHOD( Dynamic2DSource )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ ePIXEL_FORMAT format );
 		STDMETHOD( Dynamic3DSource )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d, /* [in] */ ePIXEL_FORMAT format );
 

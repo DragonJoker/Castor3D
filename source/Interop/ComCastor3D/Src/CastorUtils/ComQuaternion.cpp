@@ -93,57 +93,6 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CQuaternion::GetYaw( /* [out, retval] */ IAngle ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CAngle::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_yaw();
-			}
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CQuaternion::GetPitch( /* [out, retval] */ IAngle ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CAngle::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_pitch();
-			}
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CQuaternion::GetRoll( /* [out, retval] */ IAngle ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CAngle::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_roll();
-			}
-		}
-
-		return hr;
-	}
-
 	STDMETHODIMP CQuaternion::GetMagnitude( /* [out, retval] */ float * pVal )
 	{
 		HRESULT hr = E_POINTER;

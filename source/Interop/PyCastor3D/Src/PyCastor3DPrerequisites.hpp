@@ -54,7 +54,7 @@ SOFTWARE.
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Mesh/MeshAnimation.hpp>
 #include <Material/Material.hpp>
-#include <Material/Pass.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Overlay/BorderPanelOverlay.hpp>
@@ -271,7 +271,7 @@ namespace cpy
 	{
 		void operator()( Castor::Point3r * p_arg )
 		{
-			Castor::point::distance( *p_arg );
+			Castor::point::length( *p_arg );
 		}
 	};
 
@@ -341,7 +341,7 @@ namespace cpy
 
 	struct LightCacheElementProducer
 	{
-		Castor3D::LightSPtr operator()( Castor3D::LightCache * p_cache, Castor::String const & p_key, Castor3D::SceneNodeSPtr p_node, Castor3D::eLIGHT_TYPE p_type )
+		Castor3D::LightSPtr operator()( Castor3D::LightCache * p_cache, Castor::String const & p_key, Castor3D::SceneNodeSPtr p_node, Castor3D::LightType p_type )
 		{
 			return p_cache->Add( p_key, p_node, p_type );
 		}
@@ -357,7 +357,7 @@ namespace cpy
 
 	struct OverlayCacheElementProducer
 	{
-		Castor3D::OverlaySPtr operator()( Castor3D::OverlayCache * p_cache, Castor::String const & p_key, Castor3D::eOVERLAY_TYPE p_type, Castor3D::SceneSPtr p_scene, Castor3D::OverlaySPtr p_parent )
+		Castor3D::OverlaySPtr operator()( Castor3D::OverlayCache * p_cache, Castor::String const & p_key, Castor3D::OverlayType p_type, Castor3D::SceneSPtr p_scene, Castor3D::OverlaySPtr p_parent )
 		{
 			return p_cache->Add( p_key, p_type, p_scene, p_parent );
 		}
@@ -498,30 +498,25 @@ namespace boost
 			{
 				return boost::mpl::vector< Castor3D::PluginSPtr, Castor3D::Engine *, Castor::Path const & >();
 			}
-			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const & >
-			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor3D::eMESH_TYPE, Castor::String const & ), void * = 0 )
+			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor::String const &, Castor::String const & >
+			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor::String const &, Castor::String const & ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const & >();
+				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor::String const &, Castor::String const & >();
 			}
-			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const & >
-			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const & ), void * = 0 )
+			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor::String const &, Castor::String const &, Castor3D::Parameters const & >
+			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor::String const &, Castor::String const &, Castor3D::Parameters const & ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const & >();
-			}
-			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const &, Castor3D::RealArray const & >
-			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const &, Castor3D::RealArray const & ), void * = 0 )
-			{
-				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const &, Castor3D::RealArray const & >();
+				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor::String const &, Castor::String const &, Castor3D::Parameters const & >();
 			}
 			inline boost::mpl::vector< bool, Castor3D::Engine *, Castor3D::RenderWindowSPtr >
 			get_signature( bool ( Castor3D::Engine::* )( Castor3D::RenderWindowSPtr ), void * = 0 )
 			{
 				return boost::mpl::vector< bool, Castor3D::Engine *, Castor3D::RenderWindowSPtr >();
 			}
-			inline boost::mpl::vector< Castor3D::OverlaySPtr, Castor3D::Engine *, Castor3D::eOVERLAY_TYPE, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr >
-			get_signature( Castor3D::OverlaySPtr( Castor3D::Engine::* )( Castor3D::eOVERLAY_TYPE, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr ), void * = 0 )
+			inline boost::mpl::vector< Castor3D::OverlaySPtr, Castor3D::Engine *, Castor3D::OverlayType, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr >
+			get_signature( Castor3D::OverlaySPtr( Castor3D::Engine::* )( Castor3D::OverlayType, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::OverlaySPtr, Castor3D::Engine *, Castor3D::eOVERLAY_TYPE, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr >();
+				return boost::mpl::vector< Castor3D::OverlaySPtr, Castor3D::Engine *, Castor3D::OverlayType, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr >();
 			}
 			inline boost::mpl::vector< Castor3D::RenderWindowSPtr, Castor3D::Engine * >
 			get_signature( Castor3D::RenderWindowSPtr( Castor3D::Engine::* )(), void * = 0 )
@@ -575,20 +570,20 @@ namespace boost
 			{
 				return boost::mpl::vector< Castor3D::GeometrySPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::MeshSPtr >();
 			}
-			inline boost::mpl::vector< Castor3D::LightSPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::eLIGHT_TYPE >
+			inline boost::mpl::vector< Castor3D::LightSPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::LightType >
 			get_signature( cpy::LightCacheElementProducer, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::LightSPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::eLIGHT_TYPE >();
+				return boost::mpl::vector< Castor3D::LightSPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::LightType >();
 			}
-			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor::String const &, Castor3D::eMESH_TYPE, Castor3D::UIntArray, Castor3D::RealArray >
+			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor::String const &, Castor::String const &, Castor3D::Parameters const & >
 			get_signature( cpy::MeshCacheElementProducer, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::MeshSPtr, Castor::String const &, Castor3D::eMESH_TYPE, Castor3D::UIntArray, Castor3D::RealArray >();
+				return boost::mpl::vector< Castor3D::MeshSPtr, Castor::String const &, Castor::String const &, Castor3D::Parameters const & >();
 			}
-			inline boost::mpl::vector< Castor3D::OverlaySPtr, Castor::String const &, Castor3D::eOVERLAY_TYPE, Castor3D::SceneSPtr, Castor3D::OverlaySPtr >
+			inline boost::mpl::vector< Castor3D::OverlaySPtr, Castor::String const &, Castor3D::OverlayType, Castor3D::SceneSPtr, Castor3D::OverlaySPtr >
 			get_signature( cpy::OverlayCacheElementProducer, void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::OverlaySPtr, Castor::String const &, Castor3D::eOVERLAY_TYPE, Castor3D::SceneSPtr, Castor3D::OverlaySPtr >();
+				return boost::mpl::vector< Castor3D::OverlaySPtr, Castor::String const &, Castor3D::OverlayType, Castor3D::SceneSPtr, Castor3D::OverlaySPtr >();
 			}
 		}
 	}

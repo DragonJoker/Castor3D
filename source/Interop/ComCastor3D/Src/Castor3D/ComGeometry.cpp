@@ -73,7 +73,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CMaterial * >( *pVal )->SetInternal( m_internal->GetMaterial( static_cast< CSubmesh * >( submesh )->GetInternal() ) );
+					static_cast< CMaterial * >( *pVal )->SetInternal( m_internal->GetMaterial( *static_cast< CSubmesh * >( submesh )->GetInternal() ) );
 				}
 			}
 		}
@@ -97,7 +97,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetMaterial( static_cast< CSubmesh * >( submesh )->GetInternal(), static_cast< CMaterial * >( val )->GetInternal() );
+			m_internal->SetMaterial( *static_cast< CSubmesh * >( submesh )->GetInternal(), static_cast< CMaterial * >( val )->GetInternal() );
 			hr = S_OK;
 		}
 		else

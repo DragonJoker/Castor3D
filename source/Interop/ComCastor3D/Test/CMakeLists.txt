@@ -6,6 +6,7 @@ if ( MSVC )
 	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/.. )
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src/Win32 )
 

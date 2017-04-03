@@ -12,6 +12,7 @@
 #include <Cache/SceneNodeCache.hpp>
 #include <Cache/MeshCache.hpp>
 #include <Cache/WindowCache.hpp>
+#include <Miscellaneous/Parameter.hpp>
 
 #include <Render/Viewport.hpp>
 
@@ -149,7 +150,9 @@ namespace CastorCom
 					Castor3D::Viewport l_viewport{ *GetInternal()->GetEngine() };
 					l_viewport.SetPerspective( Castor::Angle::from_degrees( 120 ), 4.0_r / 3.0_r, 0.1_r, 1000.0_r );
 					l_viewport.Resize( Castor::Size( ww, wh ) );
-					auto l_camera = m_internal->GetCameraCache().Add( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr, l_viewport );
+					auto l_camera = m_internal->GetCameraCache().Add( FromBstr( name )
+						, node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr
+						, std::move( l_viewport ) );
 					static_cast< CCamera * >( *pVal )->SetInternal( l_camera );
 				}
 			}
@@ -198,7 +201,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateMesh( /* [in] */ eMESH_TYPE type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )
+	STDMETHODIMP CScene::CreateMesh( /* [in] */ BSTR type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -211,7 +214,7 @@ namespace CastorCom
 				if ( hr == S_OK )
 				{
 					auto l_mesh = m_internal->GetMeshCache().Add( FromBstr( name ) );
-					m_internal->GetEngine()->GetMeshFactory().Create( Castor3D::eMeshType( type ) )->Generate( *l_mesh, Castor3D::UIntArray{}, Castor3D::RealArray{} );
+					m_internal->GetEngine()->GetMeshFactory().Create( FromBstr( name ) )->Generate( *l_mesh, Castor3D::Parameters{} );
 					static_cast< CMesh * >( *pVal )->SetInternal( l_mesh );
 				}
 			}
@@ -219,30 +222,6 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateMesh" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CScene::CreateRenderWindow( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CRenderWindow::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetRenderWindowCache().Add( FromBstr( name ) ) );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;

@@ -70,7 +70,7 @@ namespace CastorCom
 
 		COM_PROPERTY( Texture, ITextureLayout *, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetTexture ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetTexture ) );
 		COM_PROPERTY( Sampler, ISampler *, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetSampler ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetSampler ) );
-		COM_PROPERTY( AlphaFunc, eALPHA_FUNC, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlphaFunc ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlphaFunc ) );
+		COM_PROPERTY( AlphaFunc, eCOMPARISON_FUNC, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlphaFunc ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlphaFunc ) );
 		COM_PROPERTY( AlphaValue, float, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlphaValue ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlphaValue ) );
 		COM_PROPERTY( AlpFunction, eALPHA_BLEND_FUNC, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlpFunction ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlpFunction ) );
 		COM_PROPERTY( RgbFunction, eRGB_BLEND_FUNC, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetRgbFunction ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetRgbFunction ) );

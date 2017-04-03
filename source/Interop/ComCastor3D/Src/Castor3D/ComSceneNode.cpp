@@ -22,7 +22,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->AttachObject( static_cast< CMovableObject * >( val )->GetInternal() );
+			m_internal->AttachObject( *static_cast< CMovableObject * >( val )->GetInternal() );
 			hr = S_OK;
 		}
 		else
@@ -39,7 +39,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->DetachObject( static_cast< CMovableObject * >( val )->GetInternal() );
+			m_internal->DetachObject( *static_cast< CMovableObject * >( val )->GetInternal() );
 			hr = S_OK;
 		}
 		else

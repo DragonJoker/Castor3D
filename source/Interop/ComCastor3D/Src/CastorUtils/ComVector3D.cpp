@@ -61,7 +61,7 @@ namespace CastorCom
 
 		if ( pVal && pVal )
 		{
-			*pVal = FLOAT( Castor::point::distance( *this ) );
+			*pVal = FLOAT( Castor::point::length( *this ) );
 			hr = S_OK;
 		}
 

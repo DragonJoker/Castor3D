@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef __COMC3D_COM_COLOUR_H__
-#define __COMC3D_COM_COLOUR_H__
+#ifndef __COMC3D_COM_HDRCOLOUR_H__
+#define __COMC3D_COM_HDRCOLOUR_H__
 
 #include "ComAtlObject.hpp"
 
@@ -34,13 +34,13 @@ namespace CastorCom
 	\version	0.7.0
 	\date		10/09/2014
 	\~english
-	\brief		This class defines a CColour object accessible from COM.
+	\brief		This class defines a HdrColour object accessible from COM.
 	\~french
-	\brief		Cette classe définit un CColour accessible depuis COM
+	\brief		Cette classe définit un HdrColour accessible depuis COM
 	*/
-	class ATL_NO_VTABLE CColour
-		: COM_ATL_OBJECT( Colour )
-		, public Castor::Colour
+	class ATL_NO_VTABLE CHdrColour
+		: COM_ATL_OBJECT( HdrColour )
+		, public Castor::HdrColour
 	{
 	public:
 		/**
@@ -49,14 +49,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		CColour();
+		CHdrColour();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~CColour();
+		virtual ~CHdrColour();
 		/**
 		*\~english
 		*\brief		Implicit conversion operator, to Castor::Point4f.
@@ -68,17 +68,17 @@ namespace CastorCom
 			return bgra_float( *this );
 		}
 
-		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eRed ), make_putter( this, &Castor::Colour::get, Castor::Component::eRed ) );
-		COM_PROPERTY( G, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eGreen ), make_putter( this, &Castor::Colour::get, Castor::Component::eGreen ) );
-		COM_PROPERTY( B, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eBlue ), make_putter( this, &Castor::Colour::get, Castor::Component::eBlue ) );
-		COM_PROPERTY( A, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eAlpha ), make_putter( this, &Castor::Colour::get, Castor::Component::eAlpha ) );
+		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::HdrColour::get, Castor::Component::eRed ), make_putter( this, &Castor::HdrColour::get, Castor::Component::eRed ) );
+		COM_PROPERTY( G, FLOAT, make_getter( this, &Castor::HdrColour::get, Castor::Component::eGreen ), make_putter( this, &Castor::HdrColour::get, Castor::Component::eGreen ) );
+		COM_PROPERTY( B, FLOAT, make_getter( this, &Castor::HdrColour::get, Castor::Component::eBlue ), make_putter( this, &Castor::HdrColour::get, Castor::Component::eBlue ) );
+		COM_PROPERTY( A, FLOAT, make_getter( this, &Castor::HdrColour::get, Castor::Component::eAlpha ), make_putter( this, &Castor::HdrColour::get, Castor::Component::eAlpha ) );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Colour ), CColour );
+	OBJECT_ENTRY_AUTO( __uuidof( HdrColour ), CHdrColour );
 
-	DECLARE_VARIABLE_REF_GETTER( Colour, Castor, Colour );
-	DECLARE_VARIABLE_REF_PUTTER( Colour, Castor, Colour );
-
+	DECLARE_VARIABLE_REF_GETTER( HdrColour, Castor, HdrColour );
+	DECLARE_VARIABLE_REF_PUTTER( HdrColour, Castor, HdrColour );
+/*
 	template< typename Class >
 	struct VariableRefGetter< Class, Castor::Point4f >
 	{
@@ -89,7 +89,7 @@ namespace CastorCom
 			, m_function( function )
 		{
 		}
-		HRESULT operator()( IColour ** value )
+		HRESULT operator()( IHdrColour ** value )
 		{
 			HRESULT hr = E_POINTER;
 
@@ -97,18 +97,18 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					hr = CColour::CreateInstance( value );
+					hr = CHdrColour::CreateInstance( value );
 
 					if ( hr == S_OK )
 					{
-						Castor::Colour * l_colour = static_cast< Castor::Colour * >( static_cast< CColour * >( *value ) );
+						Castor::Colour * l_colour = static_cast< Castor::HdrColour * >( static_cast< CHdrColour * >( *value ) );
 						l_colour->from_bgra( ( m_instance->*m_function )() );
 					}
 				}
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, IID_IColour, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, IID_IHdrColour, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -128,7 +128,7 @@ namespace CastorCom
 			, m_function( function )
 		{
 		}
-		HRESULT operator()( IColour * value )
+		HRESULT operator()( IHdrColour * value )
 		{
 			HRESULT hr = E_POINTER;
 
@@ -136,13 +136,13 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					( m_instance->*m_function )( *static_cast< CColour * >( value ) );
+					( m_instance->*m_function )( *static_cast< CHdrColour * >( value ) );
 					hr = S_OK;
 				}
 			}
 			else
 			{
-				hr = CComError::DispatchError( E_FAIL, IID_IColour, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+				hr = CComError::DispatchError( E_FAIL, IID_IHdrColour, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -152,6 +152,7 @@ namespace CastorCom
 		Class * m_instance;
 		Function m_function;
 	};
+*/
 }
 
 #endif

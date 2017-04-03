@@ -1,4 +1,4 @@
-#include "ComPass.hpp"
+#include "ComLegacyPass.hpp"
 #include "ComLogger.hpp"
 #include "ComSize.hpp"
 
@@ -6,15 +6,15 @@ namespace CastorCom
 {
 	static const Castor::String ERROR_UNINITIALISED = cuT( "The pass must be initialised" );
 
-	CPass::CPass()
+	CLegacyPass::CLegacyPass()
 	{
 	}
 
-	CPass::~CPass()
+	CLegacyPass::~CLegacyPass()
 	{
 	}
 
-	STDMETHODIMP CPass::CreateTextureUnit( /* [out, retval] */ ITextureUnit ** pVal )
+	STDMETHODIMP CLegacyPass::CreateTextureUnit( /* [out, retval] */ ITextureUnit ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -35,7 +35,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CPass::GetTextureUnitByIndex( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal )
+	STDMETHODIMP CLegacyPass::GetTextureUnitByIndex( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -56,7 +56,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CPass::DestroyTextureUnit( /* [in] */ ITextureUnit * val )
+	STDMETHODIMP CLegacyPass::DestroyTextureUnit( /* [in] */ ITextureUnit * val )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -77,7 +77,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CPass::GetTextureUnitByChannel( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal )
+	STDMETHODIMP CLegacyPass::GetTextureUnitByChannel( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 

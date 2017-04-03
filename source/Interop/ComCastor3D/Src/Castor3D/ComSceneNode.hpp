@@ -51,10 +51,11 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					m_instance->GetScene()->GetEngine()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::EventType::PreRender, [this, value]
-					{
-						( m_instance->*m_function )( parameter_cast< Value >( value ) );
-					} ) );
+					m_instance->GetScene()->GetEngine()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::EventType::ePreRender
+						, [this, value]
+						{
+							( m_instance->*m_function )( parameter_cast< Value >( value ) );
+						} ) );
 					hr = S_OK;
 				}
 			}

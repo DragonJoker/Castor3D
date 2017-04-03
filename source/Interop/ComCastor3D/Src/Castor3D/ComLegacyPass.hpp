@@ -20,13 +20,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef __COMC3D_COM_PASS_H__
-#define __COMC3D_COM_PASS_H__
+#ifndef __COMC3D_COM_LEGACY_PASS_H__
+#define __COMC3D_COM_LEGACY_PASS_H__
 
 #include "ComColour.hpp"
+#include "ComHdrColour.hpp"
 #include "ComShaderProgram.hpp"
 
-#include <Material/Pass.hpp>
+#include <Material/LegacyPass.hpp>
 
 namespace CastorCom
 {
@@ -35,12 +36,12 @@ namespace CastorCom
 	\version	0.7.0
 	\date		10/09/2014
 	\~english
-	\brief		This class defines a CPass object accessible from COM.
+	\brief		This class defines a LegacyPass object accessible from COM.
 	\~french
-	\brief		Cette classe définit un CPass accessible depuis COM.
+	\brief		Cette classe définit un LegacyPass accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CPass
-		:	COM_ATL_OBJECT( Pass )
+	class ATL_NO_VTABLE CLegacyPass
+		:	COM_ATL_OBJECT( LegacyPass )
 	{
 	public:
 		/**
@@ -49,29 +50,33 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		CPass();
+		CLegacyPass();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~CPass();
+		virtual ~CLegacyPass();
 
-		inline Castor3D::PassSPtr GetInternal()const
+		inline Castor3D::LegacyPassSPtr GetInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::PassSPtr pass )
+		inline void SetInternal( Castor3D::LegacyPassSPtr pass )
 		{
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( TwoSided, boolean, make_getter( m_internal.get(), &Castor3D::Pass::IsTwoSided ), make_putter( m_internal.get(), &Castor3D::Pass::SetTwoSided ) );
-		COM_PROPERTY( Opacity, float, make_getter( m_internal.get(), &Castor3D::Pass::GetOpacity ), make_putter( m_internal.get(), &Castor3D::Pass::SetOpacity ) );
+		COM_PROPERTY( Diffuse, IColour *, make_getter( m_internal.get(), &Castor3D::LegacyPass::GetDiffuse ), make_putter( m_internal.get(), &Castor3D::LegacyPass::SetDiffuse ) );
+		COM_PROPERTY( Specular, IColour *, make_getter( m_internal.get(), &Castor3D::LegacyPass::GetSpecular ), make_putter( m_internal.get(), &Castor3D::LegacyPass::SetSpecular ) );
+		COM_PROPERTY( Emissive, IHdrColour *, make_getter( m_internal.get(), &Castor3D::LegacyPass::GetEmissive ), make_putter( m_internal.get(), &Castor3D::LegacyPass::SetEmissive ) );
+		COM_PROPERTY( Shininess, float, make_getter( m_internal.get(), &Castor3D::LegacyPass::GetShininess ), make_putter( m_internal.get(), &Castor3D::LegacyPass::SetShininess ) );
+		COM_PROPERTY( TwoSided, boolean, make_getter( m_internal.get(), &Castor3D::LegacyPass::IsTwoSided ), make_putter( m_internal.get(), &Castor3D::LegacyPass::SetTwoSided ) );
+		COM_PROPERTY( Opacity, float, make_getter( m_internal.get(), &Castor3D::LegacyPass::GetOpacity ), make_putter( m_internal.get(), &Castor3D::LegacyPass::SetOpacity ) );
 
-		COM_PROPERTY_GET( TextureUnitCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Pass::GetTextureUnitsCount ) );
+		COM_PROPERTY_GET( TextureUnitCount, unsigned int, make_getter( m_internal.get(), &Castor3D::LegacyPass::GetTextureUnitsCount ) );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );
 		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
@@ -79,13 +84,13 @@ namespace CastorCom
 		STDMETHOD( GetTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
 
 	private:
-		Castor3D::PassSPtr m_internal;
+		Castor3D::LegacyPassSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Pass ), CPass );
+	OBJECT_ENTRY_AUTO( __uuidof( LegacyPass ), CLegacyPass );
 
-	DECLARE_VARIABLE_PTR_GETTER( Pass, Castor3D, Pass );
-	DECLARE_VARIABLE_PTR_PUTTER( Pass, Castor3D, Pass );
+	DECLARE_VARIABLE_PTR_GETTER( LegacyPass, Castor3D, LegacyPass );
+	DECLARE_VARIABLE_PTR_PUTTER( LegacyPass, Castor3D, LegacyPass );
 }
 
 #endif

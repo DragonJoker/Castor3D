@@ -13,51 +13,6 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CTextureImage::Initialise( /* [in] */ eTEXTURE_TYPE p_type, /* [in] */ unsigned int p_cpuAccess, /* [in] */ unsigned int p_gpuAccess )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			hr = m_internal->Initialise( Castor3D::TextureType( p_type ), Castor3D::AccessType( p_cpuAccess ), Castor3D::AccessType( p_gpuAccess ) ) ? S_OK : E_FAIL;
-		}
-		else
-		{
-			hr = CComError::DispatchError(
-				E_FAIL,							// This represents the error
-				IID_ITextureImage,				// This is the GUID of component throwing error
-				cuT( "Initialise" ),			// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
-				NULL );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CTextureImage::Cleanup()
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			m_internal->Cleanup();
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::DispatchError(
-				E_FAIL,							// This represents the error
-				IID_ITextureImage,				// This is the GUID of component throwing error
-				cuT( "Cleanup" ),				// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
-				NULL );
-		}
-
-		return hr;
-	}
-
 	STDMETHODIMP CTextureImage::Resize2D( /* [in] */ unsigned int w, /* [in] */ unsigned int h )
 	{
 		HRESULT hr = E_POINTER;
@@ -104,36 +59,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CTextureImage::Static2DSource( /* [in] */ IPixelBuffer * val )
+	STDMETHODIMP CTextureImage::StaticSource( /* [in] */ IPixelBuffer * val )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->SetSource( static_cast< CPixelBuffer * >( val )->GetInternal() );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::DispatchError(
-				E_FAIL,							// This represents the error
-				IID_ITextureImage,				// This is the GUID of component throwing error
-				cuT( "Cleanup" ),				// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
-				NULL );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CTextureImage::Static3DSource( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d, /* [in] */ IPixelBuffer * val )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			m_internal->SetSource( Castor::Point3ui{ w, h, d }, static_cast< CPixelBuffer * >( val )->GetInternal() );
+			m_internal->InitialiseSource( static_cast< CPixelBuffer * >( val )->GetInternal() );
 			hr = S_OK;
 		}
 		else
@@ -156,7 +88,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetSource( Castor::Size{ w, h }, Castor::PixelFormat( format ) );
+			m_internal->InitialiseSource( Castor::PxBufferBase::create( Castor::Size{ w, h }, Castor::PixelFormat( format ) ) );
 			hr = S_OK;
 		}
 		else
@@ -179,7 +111,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetSource( Castor::Point3ui{ w, h, d }, Castor::PixelFormat( format ) );
+			m_internal->InitialiseSource( Castor::PxBufferBase::create( Castor::Size{ w, h * d }, Castor::PixelFormat( format ) ) );
 			hr = S_OK;
 		}
 		else
