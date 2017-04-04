@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,6 +28,11 @@ SOFTWARE.
 
 namespace Castor3D
 {
+	namespace details
+	{
+		SceneNode & GetParentNode( Geometry & p_instance );
+		SceneNode & GetParentNode( BillboardBase & p_instance );
+	}
 	/*!
 	\author 	Sylvain DOREMUS
 	\date
@@ -53,6 +58,13 @@ namespace Castor3D
 		 *\return		Le noeud de rendu de passe.
 		 */
 		C3D_API virtual PassRenderNode & GetPassNode() = 0;
+		/**
+		 *\~english
+		 *\return		The instance's scene node.
+		 *\~french
+		 *\return		Le noeud de scène de l'instance.
+		 */
+		C3D_API virtual SceneNode & GetSceneNode() = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the node.
@@ -90,6 +102,16 @@ namespace Castor3D
 		inline PassRenderNode & GetPassNode()override
 		{
 			return m_node.m_passNode;
+		}
+		/**
+		 *\~english
+		 *\return		The instance's scene node.
+		 *\~french
+		 *\return		Le noeud de scène de l'instance.
+		 */
+		inline SceneNode & GetSceneNode()
+		{
+			return details::GetParentNode( m_node.m_instance );
 		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::Render

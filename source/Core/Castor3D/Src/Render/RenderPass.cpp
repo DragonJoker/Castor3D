@@ -1,4 +1,4 @@
-#include "RenderPass.hpp"
+﻿#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -69,6 +69,7 @@ namespace Castor3D
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
 						DoBindPass( l_itSubmeshes.second[0].m_passNode
+							, details::GetParentNode( l_itSubmeshes.second[0].m_instance )
 							, *l_itPass.first
 							, p_scene
 							, *l_itPipelines.first
@@ -80,6 +81,7 @@ namespace Castor3D
 							, l_itSubmeshes.second );
 
 						DoUnbindPass( l_itSubmeshes.second[0].m_passNode
+							, details::GetParentNode( l_itSubmeshes.second[0].m_instance )
 							, *l_itPass.first
 							, p_scene
 							, *l_itPipelines.first
@@ -138,6 +140,7 @@ namespace Castor3D
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
 						DoBindPass( l_itSubmeshes.second[0].m_passNode
+							, details::GetParentNode( l_itSubmeshes.second[0].m_instance )
 							, *l_itPass.first
 							, p_scene
 							, *l_itPipelines.first
@@ -149,6 +152,7 @@ namespace Castor3D
 							, l_itSubmeshes.second );
 
 						DoUnbindPass( l_itSubmeshes.second[0].m_passNode
+							, details::GetParentNode( l_itSubmeshes.second[0].m_instance )
 							, *l_itPass.first
 							, p_scene
 							, *l_itPipelines.first
@@ -193,6 +197,7 @@ namespace Castor3D
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
 					DoBindPass( l_renderNode.m_passNode
+						, details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -201,6 +206,7 @@ namespace Castor3D
 					DoRenderNode( l_renderNode );
 
 					DoUnbindPass( l_renderNode.m_passNode
+						, details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -248,6 +254,7 @@ namespace Castor3D
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
 					DoBindPass( l_renderNode.m_passNode
+						, details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -256,6 +263,7 @@ namespace Castor3D
 					DoRenderNode( l_renderNode );
 
 					DoUnbindPass( l_renderNode.m_passNode
+						, details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -281,6 +289,7 @@ namespace Castor3D
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
 					DoBindPass( l_renderNode.m_passNode
+						, details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
@@ -290,6 +299,7 @@ namespace Castor3D
 					++p_info.m_drawCalls;
 
 					DoUnbindPass( l_renderNode.m_passNode
+						, details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first

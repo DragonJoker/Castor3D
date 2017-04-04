@@ -2755,23 +2755,6 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassReflectionMapping )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pass )
-		{
-			PARSING_ERROR( cuT( "No Pass initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			bool l_enable = 0;
-			p_params[0]->Get( l_enable );
-			l_parsingContext->pass->SetReflectionMapping( l_enable );
-		}
-	}
-	END_ATTRIBUTE()
-
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEnd )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2917,6 +2900,11 @@ namespace Castor3D
 			uint32_t l_uiChannel;
 			p_params[0]->Get( l_uiChannel );
 			l_parsingContext->pTextureUnit->SetChannel( TextureChannel( l_uiChannel ) );
+
+			if ( l_uiChannel == uint32_t( TextureChannel::eReflection ) )
+			{
+				l_parsingContext->pass->SetReflectionMapping( true );
+			}
 		}
 	}
 	END_ATTRIBUTE()

@@ -1,4 +1,4 @@
-#include "ReflectionMap.hpp"
+﻿#include "ReflectionMap.hpp"
 
 #include "Engine.hpp"
 
@@ -112,7 +112,7 @@ namespace Castor3D
 	}
 
 	ReflectionMap::ReflectionMap( Engine & p_engine
-		, SceneNode & p_node )
+		, SceneNode  & p_node )
 		: OwnedBy< Engine >{ p_engine }
 		, m_reflectionMap{ DoInitialisePoint( p_engine, MapSize ) }
 		, m_node{ p_node }
@@ -165,6 +165,11 @@ namespace Castor3D
 			m_frameBuffer->Bind();
 			m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
 			m_frameBuffer->Unbind();
+
+			for ( auto & l_pass : m_passes )
+			{
+				l_pass.Initialise( MapSize );
+			}
 		}
 
 		return l_return;
@@ -174,6 +179,11 @@ namespace Castor3D
 	{
 		if ( m_frameBuffer )
 		{
+			for ( auto & l_pass : m_passes )
+			{
+				l_pass.Cleanup();
+			}
+
 			m_frameBuffer->Bind();
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();

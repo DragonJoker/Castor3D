@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -189,6 +189,13 @@ namespace Castor3D
 		*\return		\p true si toutes les passes ont besoin d'alpha blending.
 		*/
 		C3D_API bool HasAlphaBlending()const;
+		/**
+		*\~english
+		*\return		\p true if at least one pass needs a reflection map.
+		*\~french
+		*\return		\p true si au moins une passe a besoin d'une reflection map.
+		*/
+		C3D_API bool HasReflectionMapping()const;
 		/**
 		 *\~english
 		 *\return		The passes count.

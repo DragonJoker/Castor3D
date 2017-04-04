@@ -160,7 +160,7 @@ namespace Castor3D
 		FrameBufferSPtr m_frameBuffer;
 		//!\~english	The node.
 		//!\~french		Le noeud.
-		SceneNode & m_node;
+		SceneNode const & m_node;
 		//!\~english	The connection to node changed signal.
 		//!\~french		La connexion au signal de changement du noeud.
 		SceneNode::OnChanged::connection m_onNodeChanged;

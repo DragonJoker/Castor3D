@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -174,7 +174,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
-	DECLARE_ATTRIBUTE_PARSER( Parser_PassReflectionMapping )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassEnd )
 
 	// Texture Unit Parsers

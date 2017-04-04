@@ -286,8 +286,7 @@ namespace deferred_common
 
 	void OpaquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
-		auto & l_camera = *m_target.GetCamera();
-		auto & l_scene = *l_camera.GetScene();
+		auto & l_scene = *m_camera->GetScene();
 		auto & l_fog = l_scene.GetFog();
 		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
 
@@ -298,8 +297,8 @@ namespace deferred_common
 
 		m_sceneNode.m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
 		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
-		m_sceneNode.m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
-		m_sceneNode.m_cameraFarPlane.SetValue( l_camera.GetViewport().GetFar() );
+		m_sceneNode.m_cameraPos.SetValue( m_camera->GetParent()->GetDerivedPosition() );
+		m_sceneNode.m_cameraFarPlane.SetValue( m_camera->GetViewport().GetFar() );
 		m_sceneNode.m_sceneUbo.Update();
 	}
 }

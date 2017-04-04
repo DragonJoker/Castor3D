@@ -133,14 +133,21 @@ namespace Castor3D
 
 	bool Material::HasAlphaBlending()const
 	{
-		bool l_return = true;
-		uint32_t l_count = GetPassCount();
+		return m_passes.end() == std::find_if( m_passes.begin()
+			, m_passes.end()
+			, []( PassSPtr p_pass )
+			{
+				return !p_pass->HasAlphaBlending();
+			} );
+	}
 
-		for ( uint32_t i = 0; i < l_count && l_return; i++ )
-		{
-			l_return = m_passes[i]->HasAlphaBlending();
-		}
-
-		return l_return;
+	bool Material::HasReflectionMapping()const
+	{
+		return m_passes.end() != std::find_if( m_passes.begin()
+			, m_passes.end()
+			, []( PassSPtr p_pass )
+			{
+				return p_pass->HasReflectionMapping();
+			} );
 	}
 }

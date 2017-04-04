@@ -154,6 +154,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureChannels[cuT( "opacity" )] = uint32_t( TextureChannel::eOpacity );
 	m_mapTextureChannels[cuT( "gloss" )] = uint32_t( TextureChannel::eGloss );
 	m_mapTextureChannels[cuT( "emissive" )] = uint32_t( TextureChannel::eEmissive );
+	m_mapTextureChannels[cuT( "reflection" )] = uint32_t( TextureChannel::eReflection );
 
 	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::ePoint );
 	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::eSpot );
@@ -530,7 +531,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), Parser_PassShader );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, { MakeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, { MakeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "reflection_mapping" ), Parser_PassReflectionMapping, { MakeParameter< ParameterType::eBool >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), Parser_PassEnd );
 
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), Parser_UnitImage, { MakeParameter< ParameterType::ePath >() } );

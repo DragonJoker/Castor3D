@@ -1,4 +1,4 @@
-﻿#include "RenderTechniquePass.hpp"
+#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -43,6 +43,7 @@ namespace Castor3D
 		}
 
 		inline void DoUpdateProgram( ShaderProgram & p_program
+			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )
 		{
@@ -52,6 +53,12 @@ namespace Castor3D
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel, 6u );
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
+				&& !p_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapReflection, ShaderType::ePixel ) )
+			{
+				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapReflection, ShaderType::ePixel );
 			}
 		}
 
@@ -142,7 +149,7 @@ namespace Castor3D
 		, Camera * p_camera
 		, bool p_opaque
 		, bool p_multisampling )
-		: RenderPass{ p_name, *m_scene.GetEngine(), p_opaque, p_multisampling }
+		: RenderPass{ p_name, *p_scene.GetEngine(), p_opaque, p_multisampling }
 		, m_scene{ p_scene }
 		, m_camera{ p_camera }
 		, m_sceneNode{ m_sceneUbo }
@@ -235,6 +242,7 @@ namespace Castor3D
 			UpdatePipeline( l_it.second->GetPipeline() );
 
 			DoBindPass( l_it.second->GetPassNode()
+				, l_it.second->GetSceneNode()
 				, l_it.second->GetPassNode().m_pass
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
@@ -243,6 +251,7 @@ namespace Castor3D
 			l_it.second->Render();
 
 			DoUnbindPass( l_it.second->GetPassNode()
+				, l_it.second->GetSceneNode()
 				, l_it.second->GetPassNode().m_pass
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
@@ -452,6 +461,7 @@ namespace Castor3D
 		if ( l_it == m_frontPipelines.end() )
 		{
 			DoUpdateProgram( p_program
+				, p_flags.m_textureFlags
 				, p_flags.m_programFlags
 				, p_flags.m_sceneFlags );
 			DepthStencilState l_dsState;
@@ -509,6 +519,7 @@ namespace Castor3D
 		if ( l_it == m_backPipelines.end() )
 		{
 			DoUpdateProgram( p_program
+				, p_flags.m_textureFlags
 				, p_flags.m_programFlags
 				, p_flags.m_sceneFlags );
 			DepthStencilState l_dsState;
