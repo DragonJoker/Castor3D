@@ -52,7 +52,7 @@ namespace Castor3D
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eL32F
+				, PixelFormat::eA8R8G8B8
 				, p_size );
 			TextureUnit l_unit{ p_engine };
 			l_unit.SetTexture( l_texture );
@@ -80,19 +80,18 @@ namespace Castor3D
 			};
 			std::array< Quaternion, size_t( CubeMapFace::eCount ) > l_orients
 			{
-				Quaternion::from_axis_angle( Point3r{ 1, 0, 0 }, Angle::from_degrees( 0.0 ) ),
-				Quaternion::from_axis_angle( Point3r{ 1, 0, 0 }, Angle::from_degrees( 180.0 ) ),
-				Quaternion::from_axis_angle( Point3r{ 0, 1, 0 }, Angle::from_degrees( 0.0 ) ),
-				Quaternion::from_axis_angle( Point3r{ 0, 1, 0 }, Angle::from_degrees( 180.0 ) ),
-				Quaternion::from_axis_angle( Point3r{ 0, 0, 1 }, Angle::from_degrees( 0.0 ) ),
-				Quaternion::from_axis_angle( Point3r{ 0, 0, 1 }, Angle::from_degrees( 180.0 ) ),
+				Quaternion::from_axes( Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 }, Point3r{ +1, +0, +0 } ),
+				Quaternion::from_axes( Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 }, Point3r{ -1, +0, +0 } ),
+				Quaternion::from_axes( Point3r{ +1, +0, +0 }, Point3r{ +0, +0, +1 }, Point3r{ +0, +1, +0 } ),
+				Quaternion::from_axes( Point3r{ -1, +0, +0 }, Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),
+				Quaternion::from_axes( Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, +1 } ),
+				Quaternion::from_axes( Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),
 			};
 
 			auto i = 0u;
 
 			for ( auto & l_node : l_nodes )
 			{
-				l_node->AttachTo( p_node.shared_from_this() );
 				l_node->SetOrientation( l_orients[i] );
 				++i;
 			}
@@ -208,7 +207,7 @@ namespace Castor3D
 	{
 		for ( auto & l_pass : m_passes )
 		{
-			l_pass.Update( p_queues );
+			l_pass.Update( m_node, p_queues );
 		}
 	}
 

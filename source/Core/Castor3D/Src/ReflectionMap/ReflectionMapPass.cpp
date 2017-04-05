@@ -66,8 +66,9 @@ namespace Castor3D
 		m_camera->GetViewport().Cleanup();
 	}
 
-	void ReflectionMapPass::Update( RenderQueueArray & p_queues )
+	void ReflectionMapPass::Update( SceneNode const & p_node, RenderQueueArray & p_queues )
 	{
+		m_camera->GetParent()->SetPosition( p_node.GetDerivedPosition() );
 		m_camera->Update();
 		m_opaquePass->Update( p_queues );
 		m_transparentPass->Update( p_queues );
@@ -77,6 +78,7 @@ namespace Castor3D
 	{
 		auto & l_scene = *m_camera->GetScene();
 		RenderInfo l_info;
+		m_camera->Apply();
 		m_opaquePass->Render( l_info, false );
 		
 		if ( l_scene.GetFog().GetType() == GLSL::FogType::eDisabled )

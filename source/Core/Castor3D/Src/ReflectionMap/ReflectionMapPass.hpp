@@ -73,24 +73,24 @@ namespace Castor3D
 		void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Render function
+		 *\brief		Updates the render pass.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[in]	p_node		The base node.
+		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\~french
+		 *\brief		Met à jour la passe de rendu.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[in]	p_node		Le noeud de base.
+		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 */
+		C3D_API void Update( SceneNode const & p_node, RenderQueueArray & p_queues );
+		/**
+		 *\~english
+		 *\brief		Render function.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
 		C3D_API void Render();
-		/**
-		 *\~english
-		 *\brief		Updates the render pass.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
-		 *\param[out]	p_index		The pass index.
-		 *\~french
-		 *\brief		Met à jour la passe de rendu.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
-		 *\param[out]	p_index		L'indice de la passe.
-		 */
-		C3D_API void Update( RenderQueueArray & p_queues );
 
 	private:
 		//!\~english	The camera node.
