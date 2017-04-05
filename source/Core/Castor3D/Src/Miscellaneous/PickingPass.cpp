@@ -1,4 +1,4 @@
-#include "PickingPass.hpp"
+﻿#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -181,7 +181,7 @@ namespace Castor3D
 	}
 
 	PickingPass::PickingPass( Engine & p_engine )
-		: RenderPass{ cuT( "Picking" ), p_engine, true }
+		: RenderPass{ cuT( "Picking" ), p_engine, true, false, nullptr }
 		, m_pickingUbo{ Picking, *p_engine.GetRenderSystem() }
 	{
 		m_pickingUbo.CreateUniform( UniformType::eUInt, DrawIndex );
@@ -195,7 +195,7 @@ namespace Castor3D
 	void PickingPass::AddScene( Scene & p_scene, Camera & p_camera )
 	{
 		auto l_itScn = m_scenes.emplace( &p_scene, CameraQueueMap{} ).first;
-		auto l_itCam = l_itScn->second.emplace( &p_camera, RenderQueue{ *this, m_opaque } ).first;
+		auto l_itCam = l_itScn->second.emplace( &p_camera, RenderQueue{ *this, m_opaque, nullptr } ).first;
 		l_itCam->second.Initialise( p_scene, p_camera );
 	}
 

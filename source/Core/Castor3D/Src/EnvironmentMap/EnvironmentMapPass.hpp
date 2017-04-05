@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_ReflectionMapPass_H___
-#define ___C3D_ReflectionMapPass_H___
+#ifndef ___C3D_EnvironmentMapPass_H___
+#define ___C3D_EnvironmentMapPass_H___
 
 #include "Technique/RenderTechniquePass.hpp"
 
@@ -36,14 +36,14 @@ namespace Castor3D
 	\~french
 	\brief		Implémentation d'une passe de reflection mapping.
 	*/
-	class ReflectionMapPass
-		: Castor::OwnedBy< ReflectionMap >
+	class EnvironmentMapPass
+		: Castor::OwnedBy< EnvironmentMap >
 	{
 	public:
-		ReflectionMapPass( ReflectionMapPass const & )=delete;
-		ReflectionMapPass & operator=( ReflectionMapPass const & )=delete;
-		ReflectionMapPass( ReflectionMapPass && )= default;
-		ReflectionMapPass & operator=( ReflectionMapPass && )=default;
+		EnvironmentMapPass( EnvironmentMapPass const & )=delete;
+		EnvironmentMapPass & operator=( EnvironmentMapPass const & )=delete;
+		EnvironmentMapPass( EnvironmentMapPass && )= default;
+		EnvironmentMapPass & operator=( EnvironmentMapPass && )=default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	p_reflectionMap	Le reflection map parente.
 		 *\param[in]	p_node			Le noeud depuis lequel on crée la caméra.
 		 */
-		C3D_API ReflectionMapPass( ReflectionMap & p_reflectionMap
+		C3D_API EnvironmentMapPass( EnvironmentMap & p_reflectionMap
 			, SceneNodeSPtr p_node );
 		/**
 		 *\~english
@@ -62,7 +62,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ReflectionMapPass();
+		C3D_API ~EnvironmentMapPass();
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoInitialise
 		 */

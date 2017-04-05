@@ -53,7 +53,8 @@ namespace deferred
 				, p_renderTarget.GetCamera().get()
 				, false
 				, false
-				, false )
+				, false
+				, nullptr )
 			, p_params )
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
 		, m_ssaoEnabled{ DoUsesSsao( p_params ) }

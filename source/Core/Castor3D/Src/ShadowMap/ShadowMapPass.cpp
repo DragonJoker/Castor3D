@@ -15,7 +15,7 @@ namespace Castor3D
 	ShadowMapPass::ShadowMapPass( Engine & p_engine
 		, Light & p_light
 		, ShadowMap const & p_shadowMap )
-		: RenderPass{ cuT( "ShadowMap" ), p_engine, true }
+		: RenderPass{ cuT( "ShadowMap" ), p_engine, true, false, nullptr }
 		, m_shadowMap{ p_shadowMap }
 		, m_light{ p_light }
 	{

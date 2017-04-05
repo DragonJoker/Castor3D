@@ -236,7 +236,7 @@ namespace Castor3D
 		 *\return		Crée une reflection map pour le noeud donné.
 		 *\param[in]	p_node	Le noeud de scène depuis lequel la reflection map est générée.
 		 */
-		C3D_API void CreateReflectionMap( SceneNode & p_node );
+		C3D_API void CreateEnvironmentMap( SceneNode & p_node );
 		/**
 		 *\~english
 		 *\return		Tells if there is a reflection map for given node.
@@ -245,25 +245,25 @@ namespace Castor3D
 		 *\return		Dit s'il y a une reflection map pour le noeud donné.
 		 *\param[in]	p_node	Le noeud de scène.
 		 */
-		C3D_API bool HasReflectionMap( SceneNode const & p_node );
+		C3D_API bool HasEnvironmentMap( SceneNode const & p_node );
 		/**
 		 *\~english
-		 *\remarks		Call HasReflectionMap before calling this function (since this one returns a reference to an existing ReflectionMap).
+		 *\remarks		Call HasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
 		 *\return		Retrieves the reflection map for given node.
 		 *\param[in]	p_node	The scene node.
 		 *\~french
-		 *\remarks		Appelez HasReflectionMap avant d'appeler cette fonction (celle-ci retournant une référence sur une ReflectionMap existante)
+		 *\remarks		Appelez HasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
 		 *\return		Récupère la reflection map pour le noeud donné.
 		 *\param[in]	p_node	Le noeud de scène.
 		 */
-		C3D_API ReflectionMap & GetReflectionMap( SceneNode const & p_node );
+		C3D_API EnvironmentMap & GetEnvironmentMap( SceneNode const & p_node );
 		/**
 		 *\~english
 		 *\return		The reflection maps list.
 		 *\~french
 		 *\return		La liste des reflection maps.
 		 */
-		C3D_API std::vector< std::reference_wrapper< ReflectionMap > > & GetReflectionMaps();
+		C3D_API std::vector< std::reference_wrapper< EnvironmentMap > > & GetEnvironmentMaps();
 		/**
 		 *\~english
 		 *\brief		Sets the background colour
@@ -561,10 +561,10 @@ namespace Castor3D
 		FrameListenerWPtr m_listener;
 		//!\~english	The scene's reflection maps.
 		//!\~french		Les reflection maps de la scène.
-		std::map< SceneNode const *, std::unique_ptr< ReflectionMap > > m_reflectionMaps;
+		std::map< SceneNode const *, std::unique_ptr< EnvironmentMap > > m_reflectionMaps;
 		//!\~english	The scene's reflection maps.
 		//!\~french		Les reflection maps de la scène.
-		std::vector< std::reference_wrapper< ReflectionMap > > m_reflectionMapsArray;
+		std::vector< std::reference_wrapper< EnvironmentMap > > m_reflectionMapsArray;
 
 	public:
 		//!\~english	The cameras root node name.

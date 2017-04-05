@@ -201,7 +201,7 @@ namespace Castor3D
 
 				if ( p_material->HasReflectionMapping() )
 				{
-					GetScene()->CreateReflectionMap( *GetParent() );
+					GetScene()->CreateEnvironmentMap( *GetParent() );
 				}
 			}
 			else

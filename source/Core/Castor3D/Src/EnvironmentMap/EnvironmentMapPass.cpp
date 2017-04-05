@@ -1,6 +1,6 @@
-#include "ReflectionMapPass.hpp"
+﻿#include "EnvironmentMapPass.hpp"
 
-#include "ReflectionMap/ReflectionMap.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Technique/ForwardRenderTechniquePass.hpp"
@@ -14,38 +14,40 @@ namespace Castor3D
 		CameraSPtr DoCreateCamera( SceneNode & p_node )
 		{
 			Viewport l_viewport{ *p_node.GetScene()->GetEngine() };
-			return std::make_shared< Camera >( cuT( "ReflectionMap_" ) + p_node.GetName()
+			return std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + p_node.GetName()
 				, *p_node.GetScene()
 				, p_node.shared_from_this()
 				, std::move( l_viewport ) );
 		}
 	}
 
-	ReflectionMapPass::ReflectionMapPass( ReflectionMap & p_reflectionMap
+	EnvironmentMapPass::EnvironmentMapPass( EnvironmentMap & p_reflectionMap
 		, SceneNodeSPtr p_node )
-		: OwnedBy< ReflectionMap >{ p_reflectionMap }
+		: OwnedBy< EnvironmentMap >{ p_reflectionMap }
 		, m_node{ p_node }
 		, m_camera{ DoCreateCamera( *p_node ) }
-		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "reflection_opaque" )
+		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
 			, *p_node->GetScene()
 			, m_camera.get()
 			, true
 			, false
-			, true ) }
-		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "reflection_transparent" )
+			, true
+			, p_node.get() ) }
+		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
 			, *p_node->GetScene()
 			, m_camera.get()
 			, false
 			, false
-			, true ) }
+			, true
+			, p_node.get() ) }
 	{
 	}
 
-	ReflectionMapPass::~ReflectionMapPass()
+	EnvironmentMapPass::~EnvironmentMapPass()
 	{
 	}
 
-	bool ReflectionMapPass::Initialise( Size const & p_size )
+	bool EnvironmentMapPass::Initialise( Size const & p_size )
 	{
 		real const l_aspect = real( p_size.width() ) / p_size.height();
 		real const l_near = 1.0_r;
@@ -61,14 +63,14 @@ namespace Castor3D
 		return true;
 	}
 
-	void ReflectionMapPass::Cleanup()
+	void EnvironmentMapPass::Cleanup()
 	{
 		m_opaquePass->Cleanup();
 		m_transparentPass->Cleanup();
 		m_camera->GetViewport().Cleanup();
 	}
 
-	void ReflectionMapPass::Update( SceneNode const & p_node, RenderQueueArray & p_queues )
+	void EnvironmentMapPass::Update( SceneNode const & p_node, RenderQueueArray & p_queues )
 	{
 		m_camera->GetParent()->SetPosition( p_node.GetDerivedPosition() );
 		m_camera->Update();
@@ -76,7 +78,7 @@ namespace Castor3D
 		m_transparentPass->Update( p_queues );
 	}
 
-	void ReflectionMapPass::Render()
+	void EnvironmentMapPass::Render()
 	{
 		auto & l_scene = *m_camera->GetScene();
 		RenderInfo l_info;

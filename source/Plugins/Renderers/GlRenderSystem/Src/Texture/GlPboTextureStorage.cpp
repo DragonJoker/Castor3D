@@ -1,4 +1,4 @@
-#include "Texture/GlPboTextureStorage.hpp"
+﻿#include "Texture/GlPboTextureStorage.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Texture/GlDownloadPixelBuffer.hpp"
@@ -22,7 +22,7 @@ namespace GlRender
 
 		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eWrite ) )
 		{
-			m_uploadBuffer = std::make_unique< GlUploadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer );
+			m_uploadBuffer = std::make_unique< GlUploadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer->size() );
 			l_return = m_uploadBuffer != nullptr;
 
 			if ( l_return )
@@ -38,7 +38,7 @@ namespace GlRender
 
 		if ( l_return && CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead ) )
 		{
-			m_downloadBuffer  = std::make_unique< GlDownloadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer );
+			m_downloadBuffer  = std::make_unique< GlDownloadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer->size() );
 			l_return = m_downloadBuffer != nullptr;
 
 			if ( l_return )

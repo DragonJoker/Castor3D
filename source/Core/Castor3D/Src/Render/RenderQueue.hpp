@@ -135,12 +135,16 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_renderPass	The parent render pass.
 		 *\param[in]	p_opaque		Tells if this render queue is for opaque nodes.
+		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_renderPass	La passe de rendu parente.
 		 *\param[in]	p_opaque		Dit si cette file de rendu est pour les noeuds opaques.
+		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderQueue( RenderPass & p_renderPass, bool p_opaque );
+		C3D_API RenderQueue( RenderPass & p_renderPass
+			, bool p_opaque
+			, SceneNode const * p_ignored );
 		/**
 		 *\~english
 		 *\brief		Plugs the render queue to given scene and camera.
@@ -224,6 +228,9 @@ namespace Castor3D
 		//!\~english	Tells if this queue is for opaque nodes.
 		//!\~french		Dit si cette file est pour les noeuds opaques.
 		bool m_opaque;
+		//!\~english	The geometries attached to this node will be ignored in the render.
+		//!\~french		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		SceneNode const * m_ignored{ nullptr };
 		//!\~english	The render nodes.
 		//!\~french		Les noeuds de rendu.
 		std::unique_ptr< SceneRenderNodes > m_renderNodes;

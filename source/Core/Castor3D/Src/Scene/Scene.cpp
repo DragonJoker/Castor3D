@@ -1,4 +1,4 @@
-﻿#include "Scene.hpp"
+#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -11,7 +11,7 @@
 #include "Material/Material.hpp"
 #include "Mesh/Mesh.hpp"
 #include "ParticleSystem/ParticleSystem.hpp"
-#include "ReflectionMap/ReflectionMap.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderWindow.hpp"
@@ -915,11 +915,11 @@ namespace Castor3D
 		} );
 	}
 
-	void Scene::CreateReflectionMap( SceneNode & p_node )
+	void Scene::CreateEnvironmentMap( SceneNode & p_node )
 	{
-		if ( !HasReflectionMap( p_node ) )
+		if ( !HasEnvironmentMap( p_node ) )
 		{
-			auto l_it = m_reflectionMaps.emplace( &p_node, std::make_unique< ReflectionMap >( *GetEngine(), p_node ) ).first;
+			auto l_it = m_reflectionMaps.emplace( &p_node, std::make_unique< EnvironmentMap >( *GetEngine(), p_node ) ).first;
 			auto & l_pass = *l_it->second;
 			m_reflectionMapsArray.emplace_back( l_pass );
 
@@ -931,18 +931,18 @@ namespace Castor3D
 		}
 	}
 
-	bool Scene::HasReflectionMap( SceneNode const & p_node )
+	bool Scene::HasEnvironmentMap( SceneNode const & p_node )
 	{
 		return m_reflectionMaps.end() != m_reflectionMaps.find( &p_node );
 	}
 
-	ReflectionMap & Scene::GetReflectionMap( SceneNode const & p_node )
+	EnvironmentMap & Scene::GetEnvironmentMap( SceneNode const & p_node )
 	{
-		REQUIRE( HasReflectionMap( p_node ) );
+		REQUIRE( HasEnvironmentMap( p_node ) );
 		return *m_reflectionMaps.find( &p_node )->second;
 	}
 
-	std::vector< std::reference_wrapper< ReflectionMap > > & Scene::GetReflectionMaps()
+	std::vector< std::reference_wrapper< EnvironmentMap > > & Scene::GetEnvironmentMaps()
 	{
 		return m_reflectionMapsArray;
 	}

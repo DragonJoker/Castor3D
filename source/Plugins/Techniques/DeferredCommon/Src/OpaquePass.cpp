@@ -23,7 +23,8 @@ namespace deferred_common
 			, p_camera
 			, true
 			, false
-			, false }
+			, false
+			, nullptr }
 		, m_directionalShadowMap{ *p_scene.GetEngine() }
 		, m_spotShadowMap{ *p_scene.GetEngine() }
 		, m_pointShadowMap{ *p_scene.GetEngine() }
@@ -135,6 +136,7 @@ namespace deferred_common
 		UBO_SCENE( l_writer );
 
 		// Outputs
+		auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
@@ -185,7 +187,7 @@ namespace deferred_common
 
 			vtx_texture = l_v3Texture;
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_v4Vertex.xyz() );
+			vtx_position = l_v4Vertex.xyz();
 			l_v4Vertex = c3d_mtxView * l_v4Vertex;
 			auto l_mtxNormal = l_writer.GetLocale( cuT( "l_mtxNormal" )
 				, transpose( inverse( mat3( l_mtxModel ) ) ) );
@@ -206,7 +208,7 @@ namespace deferred_common
 			gl_Position = c3d_mtxProjection * l_v4Vertex;
 
 			auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = l_tbn * l_wsPosition;
+			vtx_tangentSpaceFragPosition = l_tbn * vtx_position;
 			vtx_tangentSpaceViewPosition = l_tbn * c3d_v3CameraPosition;
 		};
 
@@ -228,6 +230,7 @@ namespace deferred_common
 		UBO_MODEL( l_writer );
 
 		// Fragment Inputs
+		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -242,7 +245,7 @@ namespace deferred_common
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapReflection( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapReflection, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ) );
+		auto c3d_mapEnvironment( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ) );
 
 		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -274,6 +277,14 @@ namespace deferred_common
 			}
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) )
+			{
+				auto l_i = l_writer.GetLocale( cuT( "l_i" ), vtx_position - c3d_v3CameraPosition );
+				auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_v3Normal ) );
+				l_v3Diffuse += texture( c3d_mapEnvironment, l_r ).xyz();
+			}
+
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 			
 			out_c3dNormal = vec4( l_v3Normal, 0.0_f );

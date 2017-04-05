@@ -1,4 +1,4 @@
-﻿#include "RenderPass.hpp"
+#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -311,12 +311,16 @@ namespace Castor3D
 		}
 	}
 
-	RenderPass::RenderPass( String const & p_name, Engine & p_engine, bool p_opaque, bool p_multisampling )
+	RenderPass::RenderPass( String const & p_name
+		, Engine & p_engine
+		, bool p_opaque
+		, bool p_multisampling
+		, SceneNode const * p_ignored )
 		: OwnedBy< Engine >{ p_engine }
 		, Named{ p_name }
 		, m_renderSystem{ *p_engine.GetRenderSystem() }
 		, m_multisampling{ p_multisampling }
-		, m_renderQueue{ *this, p_opaque }
+		, m_renderQueue{ *this, p_opaque, p_ignored }
 		, m_opaque{ p_opaque }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }

@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_ReflectionMap_H___
-#define ___C3D_ReflectionMap_H___
+#ifndef ___C3D_EnvironmentMap_H___
+#define ___C3D_EnvironmentMap_H___
 
-#include "ReflectionMap/ReflectionMapPass.hpp"
+#include "EnvironmentMap/EnvironmentMapPass.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -41,7 +41,7 @@ namespace Castor3D
 	\~french
 	\brief		Implémentation du reflection mapping.
 	*/
-	class ReflectionMap
+	class EnvironmentMap
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
@@ -49,7 +49,7 @@ namespace Castor3D
 		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t (CubeMapFace::eCount) >;
 		using CubeCameras = std::array< CameraSPtr, size_t (CubeMapFace::eCount) >;
 		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
-		using ReflectionMapPasses = std::array< ReflectionMapPass, size_t (CubeMapFace::eCount) >;
+		using EnvironmentMapPasses = std::array< EnvironmentMapPass, size_t (CubeMapFace::eCount) >;
 
 	public:
 		/**
@@ -62,14 +62,14 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur.
 		 *\param[in]	p_node		Le noeud de scène.
 		 */
-		C3D_API ReflectionMap( Engine & p_engine, SceneNode & p_node );
+		C3D_API EnvironmentMap( Engine & p_engine, SceneNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ReflectionMap();
+		C3D_API ~EnvironmentMap();
 		/**
 		 *\~english
 		 *\brief		Initialises the frame buffer.
@@ -119,7 +119,7 @@ namespace Castor3D
 		 */
 		inline TextureUnit & GetTexture()
 		{
-			return m_reflectionMap;
+			return m_environmentMap;
 		}
 		/**
 		 *\~english
@@ -129,7 +129,7 @@ namespace Castor3D
 		 */
 		inline TextureUnit const & GetTexture()const
 		{
-			return m_reflectionMap;
+			return m_environmentMap;
 		}
 		/**
 		 *\~english
@@ -139,7 +139,7 @@ namespace Castor3D
 		 */
 		inline Castor::Size GetSize()const
 		{
-			return m_reflectionMap.GetTexture()->GetDimensions();
+			return m_environmentMap.GetTexture()->GetDimensions();
 		}
 
 	private:
@@ -154,7 +154,7 @@ namespace Castor3D
 		CubeColourAttachment m_colourAttachs;
 		//!\~english	The reflection mapping texture.
 		//!\~french		La texture de reflcetion mapping.
-		TextureUnit m_reflectionMap;
+		TextureUnit m_environmentMap;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;
@@ -172,7 +172,7 @@ namespace Castor3D
 		Castor::Size m_size;
 		//!\~english	The render pass for each cube face.
 		//!\~french		La passe de rendu pour chaque face du cube.
-		ReflectionMapPasses m_passes;
+		EnvironmentMapPasses m_passes;
 	};
 }
 

@@ -49,6 +49,7 @@ namespace Castor3D
 		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
 		 *\param[in]	p_multisampling	The multisampling status.
 		 *\param[in]	p_environment	Pass used for an environment map rendering.
+		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom de la technique.
@@ -57,13 +58,15 @@ namespace Castor3D
 		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
 		 *\param[in]	p_multisampling	Le statut de multi-échantillonnage.
 		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderTechniquePass( Castor::String const & p_name
 			, Scene & p_scene
 			, Camera * p_camera
 			, bool p_opaque
 			, bool p_multisampling
-			, bool p_environment );
+			, bool p_environment
+			, SceneNode const * p_ignored );
 		/**
 		 *\~english
 		 *\brief		Destructor

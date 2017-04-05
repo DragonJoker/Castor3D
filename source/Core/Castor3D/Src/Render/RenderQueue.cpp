@@ -291,6 +291,7 @@ namespace Castor3D
 
 		void DoSortRenderNodes( RenderPass & p_renderPass
 			, bool p_opaque
+			, SceneNode const * p_ignored
 			, Scene & p_scene
 			, SceneRenderNodes::StaticNodesMap & p_static
 			, SceneRenderNodes::InstancedNodesMap & p_instanced
@@ -312,108 +313,111 @@ namespace Castor3D
 
 			for ( auto l_primitive : p_scene.GetGeometryCache() )
 			{
-				MeshSPtr l_mesh = l_primitive.second->GetMesh();
-				REQUIRE( l_mesh );
-
-				for ( auto l_submesh : *l_mesh )
+				if ( p_ignored != l_primitive.second->GetParent().get() )
 				{
-					MaterialSPtr l_material( l_primitive.second->GetMaterial( *l_submesh ) );
-					REQUIRE( l_material );
+					MeshSPtr l_mesh = l_primitive.second->GetMesh();
+					REQUIRE( l_mesh );
 
-					for ( auto l_pass : *l_material )
+					for ( auto l_submesh : *l_mesh )
 					{
-						auto l_programFlags = l_submesh->GetProgramFlags();
-						auto l_sceneFlags = p_scene.GetFlags();
-						RemFlag( l_programFlags, ProgramFlag::eSkinning );
-						RemFlag( l_programFlags, ProgramFlag::eMorphing );
-						auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
-						auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
+						MaterialSPtr l_material( l_primitive.second->GetMaterial( *l_submesh ) );
+						REQUIRE( l_material );
 
-						if ( l_skeleton )
+						for ( auto l_pass : *l_material )
 						{
-							AddFlag( l_programFlags, ProgramFlag::eSkinning );
-						}
+							auto l_programFlags = l_submesh->GetProgramFlags();
+							auto l_sceneFlags = p_scene.GetFlags();
+							RemFlag( l_programFlags, ProgramFlag::eSkinning );
+							RemFlag( l_programFlags, ProgramFlag::eMorphing );
+							auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
+							auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
 
-						if ( l_mesh )
-						{
-							AddFlag( l_programFlags, ProgramFlag::eMorphing );
-						}
+							if ( l_skeleton )
+							{
+								AddFlag( l_programFlags, ProgramFlag::eSkinning );
+							}
 
-						if ( !l_shadows
-							|| !l_primitive.second->IsShadowReceiver() )
-						{
-							RemFlag( l_sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
-						}
+							if ( l_mesh )
+							{
+								AddFlag( l_programFlags, ProgramFlag::eMorphing );
+							}
 
-						l_pass->PrepareTextures();
+							if ( !l_shadows
+								|| !l_primitive.second->IsShadowReceiver() )
+							{
+								RemFlag( l_sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
+							}
 
-						if ( l_submesh->GetRefCount( l_material ) > 1
+							l_pass->PrepareTextures();
+
+							if ( l_submesh->GetRefCount( l_material ) > 1
 								&& !l_mesh
 								&& !l_skeleton
 								&& ( !l_pass->HasAlphaBlending()
-									 || p_renderPass.IsMultisampling() )
+									|| p_renderPass.IsMultisampling() )
 								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
-						{
-							AddFlag( l_programFlags, ProgramFlag::eInstantiation );
-						}
-						else
-						{
-							RemFlag( l_programFlags, ProgramFlag::eInstantiation );
-						}
-
-						if ( l_pass->HasAlphaBlending() )
-						{
-							AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
-						}
-
-						auto l_textureFlags = l_pass->GetTextureFlags();
-						p_renderPass.PreparePipeline( l_pass->GetColourBlendMode()
-							, l_pass->GetAlphaBlendMode()
-							, l_textureFlags
-							, l_programFlags
-							, l_sceneFlags
-							, l_pass->IsTwoSided() );
-
-						if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
-						{
-							if ( !IsShadowMapProgram( l_programFlags )
-								|| l_primitive.second->IsShadowCaster() )
 							{
-								if ( CheckFlag( l_programFlags, ProgramFlag::eSkinning ) )
+								AddFlag( l_programFlags, ProgramFlag::eInstantiation );
+							}
+							else
+							{
+								RemFlag( l_programFlags, ProgramFlag::eInstantiation );
+							}
+
+							if ( l_pass->HasAlphaBlending() )
+							{
+								AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
+							}
+
+							auto l_textureFlags = l_pass->GetTextureFlags();
+							p_renderPass.PreparePipeline( l_pass->GetColourBlendMode()
+								, l_pass->GetAlphaBlendMode()
+								, l_textureFlags
+								, l_programFlags
+								, l_sceneFlags
+								, l_pass->IsTwoSided() );
+
+							if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
+							{
+								if ( !IsShadowMapProgram( l_programFlags )
+									|| l_primitive.second->IsShadowCaster() )
 								{
-									DoAddSkinningNode( p_renderPass
-										, l_textureFlags
-										, l_programFlags
-										, l_sceneFlags
-										, *l_pass
-										, *l_submesh
-										, *l_primitive.second
-										, *l_skeleton
-										, p_skinning );
-								}
-								else if ( CheckFlag( l_programFlags, ProgramFlag::eMorphing ) )
-								{
-									DoAddMorphingNode( p_renderPass
-										, l_textureFlags
-										, l_programFlags
-										, l_sceneFlags
-										, *l_pass
-										, *l_submesh
-										, *l_primitive.second
-										, *l_mesh
-										, p_morphing );
-								}
-								else
-								{
-									DoAddStaticNode( p_renderPass
-										, l_textureFlags
-										, l_programFlags
-										, l_sceneFlags
-										, *l_pass
-										, *l_submesh
-										, *l_primitive.second
-										, p_static
-										, p_instanced );
+									if ( CheckFlag( l_programFlags, ProgramFlag::eSkinning ) )
+									{
+										DoAddSkinningNode( p_renderPass
+											, l_textureFlags
+											, l_programFlags
+											, l_sceneFlags
+											, *l_pass
+											, *l_submesh
+											, *l_primitive.second
+											, *l_skeleton
+											, p_skinning );
+									}
+									else if ( CheckFlag( l_programFlags, ProgramFlag::eMorphing ) )
+									{
+										DoAddMorphingNode( p_renderPass
+											, l_textureFlags
+											, l_programFlags
+											, l_sceneFlags
+											, *l_pass
+											, *l_submesh
+											, *l_primitive.second
+											, *l_mesh
+											, p_morphing );
+									}
+									else
+									{
+										DoAddStaticNode( p_renderPass
+											, l_textureFlags
+											, l_programFlags
+											, l_sceneFlags
+											, *l_pass
+											, *l_submesh
+											, *l_primitive.second
+											, p_static
+											, p_instanced );
+									}
 								}
 							}
 						}
@@ -559,9 +563,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	RenderQueue::RenderQueue( RenderPass & p_renderPass, bool p_opaque )
+	RenderQueue::RenderQueue( RenderPass & p_renderPass
+		, bool p_opaque
+		, SceneNode const * p_ignored )
 		: OwnedBy< RenderPass >{ p_renderPass }
 		, m_opaque{ p_opaque }
+		, m_ignored{ p_ignored }
 	{
 	}
 
@@ -674,6 +681,7 @@ namespace Castor3D
 	{
 		Castor3D::DoSortRenderNodes( *GetOwner()
 			, m_opaque
+			, m_ignored
 			, m_renderNodes->m_scene
 			, m_renderNodes->m_staticNodes
 			, m_renderNodes->m_instancedNodes

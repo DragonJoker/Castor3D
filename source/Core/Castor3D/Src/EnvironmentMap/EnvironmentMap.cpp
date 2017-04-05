@@ -1,4 +1,4 @@
-#include "ReflectionMap.hpp"
+﻿#include "EnvironmentMap.hpp"
 
 #include "Engine.hpp"
 
@@ -10,7 +10,6 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "ReflectionMap/ReflectionMapPass.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -22,11 +21,11 @@ namespace Castor3D
 {
 	namespace
 	{
-		static Size const MapSize{ 512, 512 };
+		static Size const MapSize{ 1024, 1024 };
 
 		TextureUnit DoInitialisePoint( Engine & p_engine, Size const & p_size )
 		{
-			String const l_name = cuT( "ReflectionMap" );
+			String const l_name = cuT( "EnvironmentMap" );
 
 			SamplerSPtr l_sampler;
 
@@ -66,27 +65,27 @@ namespace Castor3D
 			return l_unit;
 		}
 
-		ReflectionMap::ReflectionMapPasses DoCreatePasses( ReflectionMap & p_map
+		EnvironmentMap::EnvironmentMapPasses DoCreatePasses( EnvironmentMap & p_map
 			, SceneNode & p_node )
 		{
 			static Point3r const l_position;
 			std::array< SceneNodeSPtr, size_t( CubeMapFace::eCount ) > l_nodes
 			{
-				std::make_shared< SceneNode >( cuT( "ReflectionMap_PosX" ), *p_node.GetScene() ),
-				std::make_shared< SceneNode >( cuT( "ReflectionMap_NegX" ), *p_node.GetScene() ),
-				std::make_shared< SceneNode >( cuT( "ReflectionMap_PosY" ), *p_node.GetScene() ),
-				std::make_shared< SceneNode >( cuT( "ReflectionMap_NegY" ), *p_node.GetScene() ),
-				std::make_shared< SceneNode >( cuT( "ReflectionMap_PosZ" ), *p_node.GetScene() ),
-				std::make_shared< SceneNode >( cuT( "ReflectionMap_NegZ" ), *p_node.GetScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosX" ), *p_node.GetScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegX" ), *p_node.GetScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosY" ), *p_node.GetScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegY" ), *p_node.GetScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosZ" ), *p_node.GetScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegZ" ), *p_node.GetScene() ),
 			};
 			std::array< Quaternion, size_t( CubeMapFace::eCount ) > l_orients
 			{
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Positive X
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Negative X
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ) ),// Positive Y
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ) ),// Negative Y
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ) ),// Positive Z
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ) ),// Negative Z
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Positive X
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Negative X
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, +1 } ) ),// Positive Y
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +1, +0 }, Point3r{ +0, +0, -1 } ) ),// Negative Y
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ) ),// Positive Z
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ) ),// Negative Z
 			};
 
 			auto i = 0u;
@@ -97,34 +96,34 @@ namespace Castor3D
 				++i;
 			}
 
-			return ReflectionMap::ReflectionMapPasses
+			return EnvironmentMap::EnvironmentMapPasses
 			{
 				{
-					ReflectionMapPass{ p_map, l_nodes[0] },
-					ReflectionMapPass{ p_map, l_nodes[1] },
-					ReflectionMapPass{ p_map, l_nodes[2] },
-					ReflectionMapPass{ p_map, l_nodes[3] },
-					ReflectionMapPass{ p_map, l_nodes[4] },
-					ReflectionMapPass{ p_map, l_nodes[5] },
+					EnvironmentMapPass{ p_map, l_nodes[0] },
+					EnvironmentMapPass{ p_map, l_nodes[1] },
+					EnvironmentMapPass{ p_map, l_nodes[2] },
+					EnvironmentMapPass{ p_map, l_nodes[3] },
+					EnvironmentMapPass{ p_map, l_nodes[4] },
+					EnvironmentMapPass{ p_map, l_nodes[5] },
 				}
 			};
 		}
 	}
 
-	ReflectionMap::ReflectionMap( Engine & p_engine
+	EnvironmentMap::EnvironmentMap( Engine & p_engine
 		, SceneNode  & p_node )
 		: OwnedBy< Engine >{ p_engine }
-		, m_reflectionMap{ DoInitialisePoint( p_engine, MapSize ) }
+		, m_environmentMap{ DoInitialisePoint( p_engine, MapSize ) }
 		, m_node{ p_node }
 		, m_passes{ DoCreatePasses( *this, p_node ) }
 	{
 	}
 
-	ReflectionMap::~ReflectionMap()
+	EnvironmentMap::~EnvironmentMap()
 	{
 	}
 
-	bool ReflectionMap::Initialise()
+	bool EnvironmentMap::Initialise()
 	{
 		bool l_return = true;
 
@@ -142,7 +141,7 @@ namespace Castor3D
 			{
 				constexpr float l_component = std::numeric_limits< float >::max();
 				m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
-				auto l_texture = m_reflectionMap.GetTexture();
+				auto l_texture = m_environmentMap.GetTexture();
 				l_texture->Initialise();
 				uint32_t i = 0;
 
@@ -175,7 +174,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ReflectionMap::Cleanup()
+	void EnvironmentMap::Cleanup()
 	{
 		if ( m_frameBuffer )
 		{
@@ -197,14 +196,14 @@ namespace Castor3D
 			m_depthBuffer->Cleanup();
 			m_depthBuffer->Destroy();
 			m_depthBuffer.reset();
-			m_reflectionMap.Cleanup();
+			m_environmentMap.Cleanup();
 			m_frameBuffer->Cleanup();
 			m_frameBuffer->Destroy();
 			m_frameBuffer.reset();
 		}
 	}
 	
-	void ReflectionMap::Update( RenderQueueArray & p_queues )
+	void EnvironmentMap::Update( RenderQueueArray & p_queues )
 	{
 		for ( auto & l_pass : m_passes )
 		{
@@ -212,7 +211,7 @@ namespace Castor3D
 		}
 	}
 
-	void ReflectionMap::Render()
+	void EnvironmentMap::Render()
 	{
 		uint32_t l_face = 0;
 

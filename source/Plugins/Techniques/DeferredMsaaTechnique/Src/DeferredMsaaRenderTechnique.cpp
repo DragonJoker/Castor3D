@@ -106,7 +106,8 @@ namespace deferred_msaa
 				, p_renderTarget.GetCamera().get()
 				, false
 				, GetSamplesCountParam( p_params, m_samplesCount ) > 1
-				, false )
+				, false
+				, nullptr )
 			, p_params
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 		, m_viewport{ *p_renderSystem.GetEngine() }

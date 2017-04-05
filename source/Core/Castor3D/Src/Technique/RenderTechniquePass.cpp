@@ -56,9 +56,9 @@ namespace Castor3D
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
-				&& !p_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapReflection, ShaderType::ePixel ) )
+				&& !p_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel ) )
 			{
-				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapReflection, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 			}
 		}
 
@@ -149,8 +149,9 @@ namespace Castor3D
 		, Camera * p_camera
 		, bool p_opaque
 		, bool p_multisampling
-		, bool p_environment )
-		: RenderPass{ p_name, *p_scene.GetEngine(), p_opaque, p_multisampling }
+		, bool p_environment
+		, SceneNode const * p_ignored )
+		: RenderPass{ p_name, *p_scene.GetEngine(), p_opaque, p_multisampling, p_ignored }
 		, m_scene{ p_scene }
 		, m_camera{ p_camera }
 		, m_sceneNode{ m_sceneUbo }
@@ -352,7 +353,7 @@ namespace Castor3D
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapReflection( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapReflection, CheckFlag( p_textureFlags, TextureChannel::eReflection ) && !m_environment ) );
+		auto c3d_mapEnvironment( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ) );
 
 		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -395,11 +396,11 @@ namespace Castor3D
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) && !m_environment )
+			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) )
 			{
 				auto l_i = l_writer.GetLocale( cuT( "l_i" ), vtx_position - c3d_v3CameraPosition );
 				auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_v3Normal ) );
-				l_v3Diffuse += texture( c3d_mapReflection, l_r ).xyz();
+				l_v3Diffuse += texture( c3d_mapEnvironment, l_r ).xyz();
 			}
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };

@@ -65,7 +65,7 @@ namespace Castor3D
 			m_directionalShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
 			m_spotShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
 			m_pointShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
-			m_reflectionMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapReflection, ShaderType::ePixel );
+			m_environmentMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 		}
 	}
 

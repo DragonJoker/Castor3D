@@ -1,8 +1,8 @@
-﻿#include "RenderNode.hpp"
+#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
-#include "ReflectionMap/ReflectionMap.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Geometry.hpp"
@@ -87,11 +87,10 @@ namespace Castor3D
 			l_depthMap.get().Bind();
 		}
 
-		if ( p_pass.HasReflectionMapping()
-			&& !CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eEnvironmentMapping ) )
+		if ( p_pass.HasReflectionMapping() )
 		{
-			p_pipeline.GetReflectionMapVariable().SetValue( l_index );
-			auto & l_map = p_scene.GetReflectionMap( p_sceneNode );
+			p_pipeline.GetEnvironmentMapVariable().SetValue( l_index );
+			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
 			l_map.GetTexture().SetIndex( l_index );
 			l_map.GetTexture().Bind();
 		}
@@ -106,7 +105,7 @@ namespace Castor3D
 	{
 		if ( p_pass.HasReflectionMapping() )
 		{
-			auto & l_map = p_scene.GetReflectionMap( p_sceneNode );
+			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
 			l_map.GetTexture().Unbind();
 		}
 

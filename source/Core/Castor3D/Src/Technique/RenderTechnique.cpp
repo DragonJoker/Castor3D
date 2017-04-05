@@ -8,7 +8,7 @@
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
-#include "ReflectionMap/ReflectionMap.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
@@ -33,7 +33,7 @@ namespace Castor3D
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
 		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
-			, AccessType::eRead
+			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite
 			, PixelFormat::eRGBA16F32F
 			, p_size );
@@ -180,7 +180,7 @@ namespace Castor3D
 		m_transparentPass->Update( p_queues );
 		m_opaquePass->UpdateShadowMaps( p_queues );
 		m_transparentPass->UpdateShadowMaps( p_queues );
-		auto & l_maps = m_renderTarget.GetScene()->GetReflectionMaps();
+		auto & l_maps = m_renderTarget.GetScene()->GetEnvironmentMaps();
 
 		for ( auto & l_map : l_maps )
 		{
@@ -195,7 +195,7 @@ namespace Castor3D
 		m_renderSystem.PushScene( &l_scene );
 		bool l_shadows = l_scene.HasShadows();
 
-		auto & l_maps = m_renderTarget.GetScene()->GetReflectionMaps();
+		auto & l_maps = m_renderTarget.GetScene()->GetEnvironmentMaps();
 
 		for ( auto & l_map : l_maps )
 		{

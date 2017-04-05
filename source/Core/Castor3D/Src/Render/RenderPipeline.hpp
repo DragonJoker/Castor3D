@@ -377,10 +377,10 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader de la reflection map.
 		 */
-		inline PushUniform1s & GetReflectionMapVariable()
+		inline PushUniform1s & GetEnvironmentMapVariable()
 		{
-			REQUIRE( m_reflectionMap );
-			return *m_reflectionMap;
+			REQUIRE( m_environmentMap );
+			return *m_environmentMap;
 		}
 
 	private:
@@ -436,9 +436,9 @@ namespace Castor3D
 		//!\~english	The point lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières ponctuelles.
 		PushUniform1sSPtr m_pointShadowMaps;
-		//!\~english	The reflection map frame variable.
-		//!\~french		La variable shader pour la reflection map.
-		PushUniform1sSPtr m_reflectionMap;
+		//!\~english	The environment map frame variable.
+		//!\~french		La variable shader pour la texture d'environnement.
+		PushUniform1sSPtr m_environmentMap;
 		//!\~english	The creation flags.
 		//!\~french		Les indicateurs de création.
 		PipelineFlags m_flags;

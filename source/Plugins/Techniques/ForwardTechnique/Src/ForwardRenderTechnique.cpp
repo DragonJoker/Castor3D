@@ -45,13 +45,15 @@ namespace forward
 				, p_renderTarget.GetCamera().get()
 				, true
 				, false
-				, false )
+				, false
+				, nullptr )
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_transparent" )
 				, *p_renderTarget.GetScene()
 				, p_renderTarget.GetCamera().get()
 				, false
 				, false
-				, false )
+				, false
+				, nullptr )
 			, p_params }
 	{
 		Logger::LogInfo( "Using Forward rendering" );

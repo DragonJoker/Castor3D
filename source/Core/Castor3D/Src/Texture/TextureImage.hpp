@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -47,10 +47,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tampon de la texture.
 		 */
-		inline Castor::PxBufferBaseSPtr GetBuffer()const
-		{
-			return m_buffer;
-		}
+		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the texture buffer.
@@ -59,11 +56,7 @@ namespace Castor3D
 		 *\brief		Définit le tampon de la texture.
 		 *\param[in]	p_buffer	Le tampon de la texture.
 		 */
-		inline void SetBuffer( Castor::PxBufferBaseSPtr p_buffer )
-		{
-			m_buffer = p_buffer;
-		}
-
+		C3D_API virtual void SetBuffer( Castor::PxBufferBaseSPtr p_buffer ) = 0;
 		/**
 		 *\~english
 		 *\return		The static source status.
@@ -107,11 +100,6 @@ namespace Castor3D
 		 *\return			\p true si les dimensions ont changé.
 		 */
 		bool DoAdjustDimensions( Castor::Size & p_size, uint32_t & p_depth );
-
-	protected:
-		//!\~english	The texture buffer.
-		//!\~french		Le tampon de la texture.
-		Castor::PxBufferBaseSPtr m_buffer;
 	};
 	/*!
 	\author		Sylvain DOREMUS
