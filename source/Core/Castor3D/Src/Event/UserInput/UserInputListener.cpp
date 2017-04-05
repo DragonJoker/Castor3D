@@ -67,6 +67,99 @@ namespace Castor3D
 		}
 	}
 
+	void UserInputListener::RegisterClickAction( String const & p_handler
+		, OnClickActionFunction p_function )
+	{
+		auto l_it = m_onClickActions.find( p_handler );
+
+		if ( l_it == m_onClickActions.end() )
+		{
+			m_onClickActions.emplace( p_handler, p_function );
+		}
+	}
+
+	void UserInputListener::RegisterSelectAction( String const & p_handler
+		, OnSelectActionFunction p_function )
+	{
+		auto l_it = m_onSelectActions.find( p_handler );
+
+		if ( l_it == m_onSelectActions.end() )
+		{
+			m_onSelectActions.emplace( p_handler, p_function );
+		}
+	}
+
+	void UserInputListener::RegisterTextAction( String const & p_handler
+		, OnTextActionFunction p_function )
+	{
+		auto l_it = m_onTextActions.find( p_handler );
+
+		if ( l_it == m_onTextActions.end() )
+		{
+			m_onTextActions.emplace( p_handler, p_function );
+		}
+	}
+
+	void UserInputListener::UnregisterClickAction( String const & p_handler )
+	{
+		auto l_it = m_onClickActions.find( p_handler );
+
+		if ( l_it != m_onClickActions.end() )
+		{
+			m_onClickActions.erase( l_it );
+		}
+	}
+
+	void UserInputListener::UnregisterSelectAction( String const & p_handler )
+	{
+		auto l_it = m_onSelectActions.find( p_handler );
+
+		if ( l_it != m_onSelectActions.end() )
+		{
+			m_onSelectActions.erase( l_it );
+		}
+	}
+
+	void UserInputListener::UnregisterTextAction( String const & p_handler )
+	{
+		auto l_it = m_onTextActions.find( p_handler );
+
+		if ( l_it != m_onTextActions.end() )
+		{
+			m_onTextActions.erase( l_it );
+		}
+	}
+
+	void UserInputListener::OnClickAction( String const & p_handler )
+	{
+		auto l_it = m_onClickActions.find( p_handler );
+
+		if ( l_it != m_onClickActions.end() )
+		{
+			l_it->second();
+		}
+	}
+
+	void UserInputListener::OnSelectAction( String const & p_handler, int p_index )
+	{
+		auto l_it = m_onSelectActions.find( p_handler );
+
+		if ( l_it != m_onSelectActions.end() )
+		{
+			l_it->second( p_index );
+		}
+	}
+
+	void UserInputListener::OnTextAction( String const & p_handler, Castor::String const & p_text )
+	{
+		auto l_it = m_onTextActions.find( p_handler );
+
+		if ( l_it != m_onTextActions.end() )
+		{
+			l_it->second( p_text );
+		}
+	}
+
 	bool UserInputListener::FireMouseMove( Position const & p_position )
 	{
 		bool l_return = false;

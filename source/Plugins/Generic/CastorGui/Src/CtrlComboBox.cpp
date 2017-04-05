@@ -17,24 +17,71 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	ComboBoxCtrl::ComboBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
-		: ComboBoxCtrl( p_engine, p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
+	ComboBoxCtrl::ComboBoxCtrl( String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id )
+		: ComboBoxCtrl( p_name
+			, p_engine
+			, p_parent
+			, p_id
+			, StringArray()
+			, -1
+			, Position()
+			, Size()
+			, 0
+			, true )
 	{
 	}
 
-	ComboBoxCtrl::ComboBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( ControlType::eComboBox, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	ComboBoxCtrl::ComboBoxCtrl( String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id
+		, StringArray const & p_values
+		, int p_selected
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
+		: Control( ControlType::eComboBox
+			, p_name
+			, p_engine
+			, p_parent
+			, p_id
+			, p_position
+			, p_size
+			, p_style
+			, p_visible )
 		, m_values( p_values )
 		, m_selected( p_selected )
 	{
-		m_expand = std::make_shared< ButtonCtrl >( p_engine, this, GetId() << 12, cuT( "+" ), Position( p_size.width() - p_size.height(), 0 ), Size( p_size.height(), p_size.height() ) );
+		m_expand = std::make_shared< ButtonCtrl >( p_name + cuT( "_Expand" )
+			, p_engine
+			, this
+			, GetId() << 12
+			, cuT( "+" )
+			, Position( p_size.width() - p_size.height(), 0 )
+			, Size( p_size.height(), p_size.height() ) );
 		m_expand->SetVisible( DoIsVisible() );
 		m_expandClickedConnection = m_expand->Connect( ButtonEvent::eClicked, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
 
-		m_choices = std::make_shared< ListBoxCtrl >( p_engine, this, ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, p_size.height() ), Size( p_size.width() - p_size.height(), -1 ), 0, false );
+		m_choices = std::make_shared< ListBoxCtrl >( p_name + cuT( "_Choices" )
+			, p_engine
+			, this
+			, ( GetId() << 12 ) + 1
+			, m_values
+			, m_selected
+			, Position( 0, p_size.height() )
+			, Size( p_size.width() - p_size.height(), -1 )
+			, 0
+			, false );
 		m_choicesSelectedConnection = m_choices->Connect( ListBoxEvent::eSelected, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine().GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() )
+			, OverlayType::eText
+			, nullptr
+			, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
 		l_text->SetVAlign( VAlign::eCenter );
 		m_text = l_text;
@@ -138,6 +185,8 @@ namespace CastorGui
 
 	void ComboBoxCtrl::DoCreate()
 	{
+		REQUIRE( GetControlsManager() );
+		auto & l_manager = *GetControlsManager();
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 
 		m_expand->SetForegroundMaterial( GetForegroundMaterial() );
@@ -158,14 +207,13 @@ namespace CastorGui
 			OnNcKeyDown( p_control, p_event );
 		} );
 
-		ControlsManagerSPtr l_cache = GetControlsManager();
 		TextOverlaySPtr l_text = m_text.lock();
 		l_text->SetMaterial( GetForegroundMaterial() );
 		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
 
 		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
 		{
-			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
+			l_text->SetFont(l_manager.GetDefaultFont()->GetName() );
 		}
 
 		int l_sel = GetSelected();
@@ -175,23 +223,25 @@ namespace CastorGui
 			l_text->SetCaption( GetItems()[l_sel] );
 		}
 
-		if ( l_cache )
-		{
-			l_cache->Create( m_expand );
-			l_cache->Create( m_choices );
-		}
+		l_manager.Create( m_expand );
+		l_manager.Create( m_choices );
+		l_manager.ConnectEvents( *this );
 	}
 
 	void ComboBoxCtrl::DoDestroy()
 	{
+		REQUIRE( GetControlsManager() );
+		auto & l_manager = *GetControlsManager();
+		GetControlsManager()->DisconnectEvents( *this );
+
 		if ( m_expand )
 		{
-			m_expand->Destroy();
+			l_manager.Destroy( m_expand );
 		}
 
 		if ( m_choices )
 		{
-			m_choices->Destroy();
+			l_manager.Destroy( m_choices );
 		}
 	}
 

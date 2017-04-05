@@ -18,8 +18,17 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	Control::Control( ControlType p_type, Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	Control::Control( ControlType p_type
+		, String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
 		: NonClientEventHandler< Control >( p_type != ControlType::eStatic )
+		, Named( p_name )
 		, m_type( p_type )
 		, m_id( p_id )
 		, m_position( p_position )
@@ -39,7 +48,7 @@ namespace CastorGui
 			l_parentOv = l_parent->GetBackground()->GetOverlay().shared_from_this();
 		}
 
-		OverlaySPtr l_overlay = GetEngine()->GetOverlayCache().Add( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), OverlayType::eBorderPanel, nullptr, l_parentOv );
+		OverlaySPtr l_overlay = GetEngine().GetOverlayCache().Add( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), OverlayType::eBorderPanel, nullptr, l_parentOv );
 		l_overlay->SetPixelPosition( GetPosition() );
 		l_overlay->SetPixelSize( GetSize() );
 		BorderPanelOverlaySPtr l_panel = l_overlay->GetBorderPanelOverlay();

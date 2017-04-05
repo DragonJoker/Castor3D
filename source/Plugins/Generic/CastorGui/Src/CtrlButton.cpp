@@ -19,13 +19,40 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	ButtonCtrl::ButtonCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
-		: ButtonCtrl( p_engine, p_parent, p_id, cuT( "" ), Position(), Size(), 0, true )
+	ButtonCtrl::ButtonCtrl( String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id )
+		: ButtonCtrl( p_name
+			, p_engine
+			, p_parent
+			, p_id
+			, cuT( "" )
+			, Position()
+			, Size()
+			, 0
+			, true )
 	{
 	}
 
-	ButtonCtrl::ButtonCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( ControlType::eButton, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	ButtonCtrl::ButtonCtrl( String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id
+		, String const & p_caption
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
+		: Control( ControlType::eButton
+			, p_name
+			, p_engine
+			, p_parent
+			, p_id
+			, p_position
+			, p_size
+			, p_style
+			, p_visible )
 		, m_caption( p_caption )
 	{
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
@@ -46,7 +73,10 @@ namespace CastorGui
 			OnMouseButtonUp( p_event );
 		} );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine().GetOverlayCache().Add( cuT( "T_CtrlButton_" ) + string::to_string( GetId() )
+			, OverlayType::eText
+			, nullptr
+			, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		l_text->SetHAlign( HAlign::eCenter );
 		l_text->SetVAlign( VAlign::eCenter );
@@ -121,12 +151,12 @@ namespace CastorGui
 
 		if ( !GetBackgroundMaterial() )
 		{
-			SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "Black" ) ) );
+			SetBackgroundMaterial( GetEngine().GetMaterialCache().Find( cuT( "Black" ) ) );
 		}
 
 		if ( !GetForegroundMaterial() )
 		{
-			SetForegroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
+			SetForegroundMaterial( GetEngine().GetMaterialCache().Find( cuT( "White" ) ) );
 		}
 
 		if ( m_textMaterial.expired() )
@@ -171,10 +201,13 @@ namespace CastorGui
 		{
 			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
 		}
+
+		GetControlsManager()->ConnectEvents( *this );
 	}
 
 	void ButtonCtrl::DoDestroy()
 	{
+		GetControlsManager()->DisconnectEvents( *this );
 	}
 
 	void ButtonCtrl::DoSetPosition( Position const & p_value )
@@ -200,18 +233,12 @@ namespace CastorGui
 
 	void ButtonCtrl::DoSetBackgroundMaterial( MaterialSPtr p_material )
 	{
-		if ( GetEngine() )
-		{
-			m_highlightedBackgroundMaterial = DoCreateMaterial( p_material, 0.1f );
-		}
+		m_highlightedBackgroundMaterial = DoCreateMaterial( p_material, 0.1f );
 	}
 
 	void ButtonCtrl::DoSetForegroundMaterial( MaterialSPtr p_material )
 	{
-		if ( GetEngine() )
-		{
-			m_highlightedForegroundMaterial = DoCreateMaterial( p_material, -0.1f );
-		}
+		m_highlightedForegroundMaterial = DoCreateMaterial( p_material, -0.1f );
 	}
 
 	void ButtonCtrl::DoSetVisible( bool p_visible )

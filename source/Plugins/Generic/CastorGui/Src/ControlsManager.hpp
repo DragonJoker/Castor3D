@@ -42,29 +42,43 @@ namespace CastorGui
 		: public std::enable_shared_from_this< ControlsManager >
 		, public Castor3D::UserInputListener
 	{
+		friend class ButtonCtrl;
+		friend class ComboBoxCtrl;
+		friend class EditCtrl;
+		friend class ListBoxCtrl;
+		friend class SliderCtrl;
+
 	public:
 		/**@name General */
 		//@{
 
-		/** Constructor
-		 *\param[in]	p_engine		The engine
+		/**
+		*\brief
+		*	Constructor
+		*\param[in] p_engine
+		*	The engine
 		*/
 		C3D_CGui_API ControlsManager( Castor3D::Engine & p_engine );
-
-		/** Destructor
+		/**
+		*\brief
+		*	Destructor
 		*/
 		C3D_CGui_API virtual ~ControlsManager();
-
-		/** Retrieves the default font used by controls
-		 *\return		The font
+		/**
+		*\brief
+		*	Retrieves the default font used by controls
+		*\return
+		*	The font
 		*/
 		Castor::FontSPtr GetDefaultFont()const
 		{
 			return m_defaultFont.lock();
 		}
-
-		/** Sets the default font used by controls
-		 *\param[in]	p_font	The font
+		/**
+		*\brief
+		*	Sets the default font used by controls
+		*\param[in] p_font
+		*	The font
 		*/
 		void SetDefaultFont( Castor::FontSPtr p_font )
 		{
@@ -75,55 +89,148 @@ namespace CastorGui
 		/**@name Controls management */
 		//@{
 
-		/** Creates the given control's overlays and binds its callbacks to appropriate events
-		 *\param[in]	p_control		The control
+		/**
+		*\brief
+		*	Creates the given control's overlays and binds its callbacks to appropriate events
+		*\param[in] p_control
+		*	The control
 		*/
 		C3D_CGui_API void Create( ControlSPtr p_control );
-
-		/** Destroys the given control's overlays and unbinds its callbacks from appropriate events.
-		 *\param[in]	p_control		The control.
+		/**
+		*\brief
+		*	Destroys the given control's overlays and unbinds its callbacks from appropriate events.
+		*\param[in] p_control
+		*	The control.
 		*/
 		C3D_CGui_API void Destroy( ControlSPtr p_control );
-
-		/** Adds a control that can an event target
-		 *\param[in]	p_control		The control
+		/**
+		*\brief
+		*	Adds a control that can an event target
+		*\param[in] p_control
+		*	The control
 		*/
 		C3D_CGui_API void AddControl( ControlSPtr p_control );
-
-		/** Removes a control
-		 *\param[in]	p_id		The control ID
+		/**
+		*\brief
+		*	Removes a control
+		*\param[in] p_id
+		*	The control ID
 		*/
 		C3D_CGui_API void RemoveControl( uint32_t p_id );
-
-		/** Retrieves a control
-		 *\param[in]	p_id		The control ID
-		 *\return		The contro
+		/**
+		*\brief
+		*	Retrieves a control
+		*\param[in] p_id
+		*	The control ID
+		*\return
+		*	The contro
 		*/
 		C3D_CGui_API ControlSPtr GetControl( uint32_t p_id );
 
 		//@}
 
 	private:
-		/** Initialises the base materials.
-		*\return		true, hopefully :P
+		/**
+		*\brief
+		*	Connects the manager to given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void ConnectEvents( ButtonCtrl & p_control );
+		/**
+		*\brief
+		*	Connects the manager to given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void ConnectEvents( ComboBoxCtrl & p_control );
+		/**
+		*\brief
+		*	Connects the manager to given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void ConnectEvents( EditCtrl & p_control );
+		/**
+		*\brief
+		*	Connects the manager to given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void ConnectEvents( ListBoxCtrl & p_control );
+		/**
+		*\brief
+		*	Connects the manager to given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void ConnectEvents( SliderCtrl & p_control );
+		/**
+		*\brief
+		*	Disconnects the manager from given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void DisconnectEvents( ButtonCtrl & p_control );
+		/**
+		*\brief
+		*	Disconnects the manager from given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void DisconnectEvents( ComboBoxCtrl & p_control );
+		/**
+		*\brief
+		*	Disconnects the manager from given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void DisconnectEvents( EditCtrl & p_control );
+		/**
+		*\brief
+		*	Disconnects the manager from given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void DisconnectEvents( ListBoxCtrl & p_control );
+		/**
+		*\brief
+		*	Disconnects the manager from given control's events.
+		*\param[in] p_control
+		*	The control.
+		*/
+		void DisconnectEvents( SliderCtrl & p_control );
+
+	private:
+		/**
+		*\brief
+		*	Initialises the base materials.
+		*\return
+		*	\p true, hopefully :P
 		*/
 		bool DoInitialise();
-
-		/** Cleans up the manager.
+		/**
+		*\brief
+		*	Cleans up the manager.
 		*/
 		void DoCleanup();
-
-		/** Retrieves the first handler which can be targeted by mouse, at its position
-		 *\param[in]	p_position		The mouse position
+		/**
+		*\brief
+		*	Retrieves the first handler which can be targeted by mouse, at its position
+		*\param[in] p_position
+		*	The mouse position
 		*/
 		Castor3D::EventHandlerSPtr DoGetMouseTargetableHandler( Castor::Position const & p_position )const;
-
-		/** Updates the z-index ordered controls array
+		/**
+		*\brief
+		*	Updates the z-index ordered controls array
 		*/
 		void DoUpdate()const;
-
-		/** Removes a control
-		 *\param[in]	p_id		The control ID
+		/**
+		*\brief
+		*	Removes a control
+		*\param[in] p_id
+		*	The control ID
 		*/
 		void DoRemoveControl( uint32_t p_id );
 		/**
@@ -132,7 +239,7 @@ namespace CastorGui
 		virtual void DoFlush();
 
 	private:
-		//!\~english  The mutex used to protect the controls array.	\~french Le mutex de protection du tableau de contrôles.
+		//! The mutex used to protect the controls array.
 		mutable std::mutex m_mutexControls;
 		//! The controls array
 		mutable std::vector< ControlSPtr > m_controlsByZIndex;
@@ -142,6 +249,18 @@ namespace CastorGui
 		bool m_changed;
 		//! The default font used by controls
 		Castor::FontWPtr m_defaultFont;
+		//! The button click event connections.
+		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
+		//! The combo-box item selected event connections.
+		std::map< Control const *, OnComboEventConnection > m_onComboSelects;
+		//! The text updated event connections.
+		std::map< Control const *, OnEditEventConnection > m_onEditUpdates;
+		//! The list-box item selected event connections.
+		std::map< Control const *, OnListEventConnection > m_onListSelects;
+		//! The slider thumb track event connections.
+		std::map< Control const *, OnSliderEventConnection > m_onSliderTracks;
+		//! The slider thumb release event connections.
+		std::map< Control const *, OnSliderEventConnection > m_onSliderReleases;
 	};
 }
 
