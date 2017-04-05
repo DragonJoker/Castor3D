@@ -29,25 +29,23 @@ SOFTWARE.
 namespace CastorGui
 {
 	/*!
-	 *\author		Sylvain DOREMU
-	 *\version		0.1.
-	 *\brief		ComboBox contro
+	 *\author		Sylvain DOREMUS
+	 *\version		0.1.0
+	 *\brief		ComboBox control.
 	*/
 	class ComboBoxCtrl
 		: public Control
 	{
-	public:
-		using OnEventFunction = std::function< void( int ) >;
-		using OnEvent = Castor::Signal< OnEventFunction >;
-		using OnEventConnection = OnEvent::connection;
-
 	public:
 		/** Constructor
 		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		ComboBoxCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id );
+		ComboBoxCtrl( Castor::String const & p_name
+			, Castor3D::Engine & p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id );
 
 		/** Constructor
 		 *\param[in]	p_engine	The engine
@@ -60,7 +58,16 @@ namespace CastorGui
 		 *\param[in]	p_style		The style
 		 *\param[in]	p_visible	Initial visibility status
 		 */
-		ComboBoxCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		ComboBoxCtrl( Castor::String const & p_name
+			, Castor3D::Engine & p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id
+			, Castor::StringArray const & p_values
+			, int p_selected
+			, Castor::Position const & p_position
+			, Castor::Size const & p_size
+			, uint32_t p_style = 0
+			, bool p_visible = true );
 
 		/** Constructor
 		*\param[in]	p_parent		The parent control, if an
@@ -174,7 +181,7 @@ namespace CastorGui
 		*\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		*/
-		inline OnEventConnection Connect( ComboBoxEvent p_event, OnEventFunction p_function )
+		inline OnComboEventConnection Connect( ComboBoxEvent p_event, OnComboEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
 		}
@@ -243,11 +250,11 @@ namespace CastorGui
 		//! Teh selected value index
 		int m_selected;
 		//! The combobox events signals
-		OnEvent m_signals[size_t( ComboBoxEvent::eCount )];
+		OnComboEvent m_signals[size_t( ComboBoxEvent::eCount )];
 		//| The connection to the mouse clicked event for the expand button.
-		ButtonCtrl::OnEventConnection m_expandClickedConnection;
+		OnButtonEventConnection m_expandClickedConnection;
 		//| The connection to the selected item of the choices list.
-		ListBoxCtrl::OnEventConnection m_choicesSelectedConnection;
+		OnListEventConnection m_choicesSelectedConnection;
 	};
 }
 

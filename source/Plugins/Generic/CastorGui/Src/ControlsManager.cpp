@@ -88,6 +88,113 @@ namespace CastorGui
 		return l_it->second.lock();
 	}
 
+	void ControlsManager::ConnectEvents( ButtonCtrl & p_control )
+	{
+		m_onButtonClicks.emplace( &p_control, p_control.Connect( ButtonEvent::eClicked
+			, [this, &p_control]()
+			{
+				OnClickAction( p_control.GetName() );
+			} ) );
+	}
+
+	void ControlsManager::ConnectEvents( ComboBoxCtrl & p_control )
+	{
+		m_onComboSelects.emplace( &p_control, p_control.Connect( ComboBoxEvent::eSelected
+			, [this, &p_control]( int p_index )
+			{
+				OnSelectAction( p_control.GetName(), p_index );
+			} ) );
+	}
+
+	void ControlsManager::ConnectEvents( EditCtrl & p_control )
+	{
+		m_onEditUpdates.emplace( &p_control, p_control.Connect( EditEvent::eUpdated
+			, [this, &p_control]( String const & p_text )
+			{
+				OnTextAction( p_control.GetName(), p_text );
+			} ) );
+	}
+
+	void ControlsManager::ConnectEvents( ListBoxCtrl & p_control )
+	{
+		m_onListSelects.emplace( &p_control, p_control.Connect( ListBoxEvent::eSelected
+			, [this, &p_control]( int p_index )
+			{
+				OnSelectAction( p_control.GetName(), p_index );
+			} ) );
+	}
+
+	void ControlsManager::ConnectEvents( SliderCtrl & p_control )
+	{
+		m_onSliderTracks.emplace( &p_control, p_control.Connect( SliderEvent::eThumbTrack
+			, [this, &p_control]( int p_index )
+			{
+				OnSelectAction( p_control.GetName(), p_index );
+			} ) );
+		m_onSliderReleases.emplace( &p_control, p_control.Connect( SliderEvent::eThumbTrack
+			, [this, &p_control]( int p_index )
+			{
+				OnSelectAction( p_control.GetName(), p_index );
+			} ) );
+	}
+
+	void ControlsManager::DisconnectEvents( ButtonCtrl & p_control )
+	{
+		auto l_it = m_onButtonClicks.find( &p_control );
+
+		if ( l_it != m_onButtonClicks.end() )
+		{
+			m_onButtonClicks.erase( l_it );
+		}
+	}
+
+	void ControlsManager::DisconnectEvents( ComboBoxCtrl & p_control )
+	{
+		auto l_it = m_onComboSelects.find( &p_control );
+
+		if ( l_it != m_onComboSelects.end() )
+		{
+			m_onComboSelects.erase( l_it );
+		}
+	}
+
+	void ControlsManager::DisconnectEvents( EditCtrl & p_control )
+	{
+		auto l_it = m_onEditUpdates.find( &p_control );
+
+		if ( l_it != m_onEditUpdates.end() )
+		{
+			m_onEditUpdates.erase( l_it );
+		}
+	}
+
+	void ControlsManager::DisconnectEvents( ListBoxCtrl & p_control )
+	{
+		auto l_it = m_onListSelects.find( &p_control );
+
+		if ( l_it != m_onListSelects.end() )
+		{
+			m_onListSelects.erase( l_it );
+		}
+	}
+
+	void ControlsManager::DisconnectEvents( SliderCtrl & p_control )
+	{
+		auto l_it = m_onSliderTracks.find( &p_control );
+
+		if ( l_it != m_onSliderTracks.end() )
+		{
+			m_onSliderTracks.erase( l_it );
+		}
+
+		l_it = m_onSliderReleases.find( &p_control );
+
+		if ( l_it != m_onSliderReleases.end() )
+		{
+			m_onSliderReleases.erase( l_it );
+		}
+	}
+
 	EventHandlerSPtr ControlsManager::DoGetMouseTargetableHandler( Position const & p_position )const
 	{
 		if ( m_changed )

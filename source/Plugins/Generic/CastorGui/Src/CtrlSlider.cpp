@@ -14,10 +14,12 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	SliderCtrl::SliderCtrl( Engine * p_engine
+	SliderCtrl::SliderCtrl( String const & p_name
+		, Engine & p_engine
 		, ControlRPtr p_parent
 		, uint32_t p_id )
-		: SliderCtrl{ p_engine
+		: SliderCtrl{ p_name
+			, p_engine
 			, p_parent
 			, p_id
 			, makeRangedValue( 0, 0, 100 )
@@ -28,7 +30,8 @@ namespace CastorGui
 	{
 	}
 
-	SliderCtrl::SliderCtrl( Engine * p_engine
+	SliderCtrl::SliderCtrl( String const & p_name
+		, Engine & p_engine
 		, ControlRPtr p_parent
 		, uint32_t p_id
 		, RangedValue< int32_t > const & p_value
@@ -37,6 +40,7 @@ namespace CastorGui
 		, uint32_t p_style
 		, bool p_visible )
 		: Control{ ControlType::eSlider
+			, p_name
 			, p_engine
 			, p_parent
 			, p_id
@@ -66,7 +70,12 @@ namespace CastorGui
 			OnKeyDown( p_event );
 		} );
 
-		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( p_engine, this, cuT( "" ), Position(), Size() );
+		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( p_name + cuT( "_Line" )
+			, p_engine
+			, this
+			, cuT( "" )
+			, Position()
+			, Size() );
 		l_line->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		l_line->SetVisible( DoIsVisible() );
 		l_line->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
@@ -75,7 +84,12 @@ namespace CastorGui
 		} );
 		m_line = l_line;
 
-		StaticCtrlSPtr l_tick = std::make_shared< StaticCtrl >( p_engine, this, cuT( "" ), Position(), Size() );
+		StaticCtrlSPtr l_tick = std::make_shared< StaticCtrl >( p_name + cuT( "_Tick" )
+			, p_engine
+			, this
+			, cuT( "" )
+			, Position()
+			, Size() );
 		l_tick->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		l_tick->SetVisible( DoIsVisible() );
 		l_tick->SetCatchesMouseEvents( true );
@@ -165,25 +179,32 @@ namespace CastorGui
 
 	void SliderCtrl::DoCreate()
 	{
+		REQUIRE( GetControlsManager() );
+		auto & l_manager = *GetControlsManager();
 		StaticCtrlSPtr l_line = m_line.lock();
-		l_line->SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "Gray" ) ) );
+		l_line->SetBackgroundMaterial( GetEngine().GetMaterialCache().Find( cuT( "Gray" ) ) );
 		l_line->SetForegroundMaterial( GetForegroundMaterial() );
-		GetControlsManager()->Create( l_line );
+		l_manager.Create( l_line );
 
 		StaticCtrlSPtr l_tick = m_tick.lock();
-		l_tick->SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
+		l_tick->SetBackgroundMaterial( GetEngine().GetMaterialCache().Find( cuT( "White" ) ) );
 		l_tick->SetForegroundMaterial( GetForegroundMaterial() );
-		GetControlsManager()->Create( l_tick );
+		l_manager.Create( l_tick );
 		DoUpdateLineAndTick();
+		
+		l_manager.ConnectEvents( *this );
 	}
 
 	void SliderCtrl::DoDestroy()
 	{
+		REQUIRE( GetControlsManager() );
+		auto & l_manager = *GetControlsManager();
+		l_manager.DisconnectEvents( *this );
 		StaticCtrlSPtr l_line = m_line.lock();
 
 		if ( l_line )
 		{
-			l_line->Destroy();
+			l_manager.Destroy( l_line );
 			m_line.reset();
 		}
 
@@ -191,7 +212,7 @@ namespace CastorGui
 
 		if ( l_tick )
 		{
-			l_tick->Destroy();
+			l_manager.Destroy( l_tick );
 			m_tick.reset();
 		}
 	}

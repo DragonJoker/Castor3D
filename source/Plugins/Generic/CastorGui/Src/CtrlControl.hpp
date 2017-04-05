@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <Event/UserInput/EventHandler.hpp>
 
+#include <Design/Named.hpp>
 #include <Graphics/Pixel.hpp>
 #include <Graphics/Position.hpp>
 #include <Graphics/Rectangle.hpp>
@@ -40,9 +41,13 @@ namespace CastorGui
 	*/
 	class Control
 		: public Castor3D::NonClientEventHandler< Control >
+		, public Castor::Named
 	{
+		friend class ControlsManager;
+
 	public:
 		/** Constructor.
+		 *\param[in]	p_name		The control name.
 		 *\param[in]	p_type		The type.
 		 *\param[in]	p_engine	The engine.
 		 *\param[in]	p_parent	The parent control, if any.
@@ -52,20 +57,19 @@ namespace CastorGui
 		 *\param[in]	p_style		The style.
 		 *\param[in]	p_visible	Initial visibility status.
 		 */
-		Control( ControlType p_type, Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		Control( ControlType p_type
+			, Castor::String const & p_name
+			, Castor3D::Engine & p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id
+			, Castor::Position const & p_position
+			, Castor::Size const & p_size
+			, uint32_t p_style = 0
+			, bool p_visible = true );
 
 		/** Destructor.
 		 */
 		virtual ~Control();
-
-		/** Creates the control's overlays.
-		 *\param[in]	p_ctrlManager	The controls manager.
-		 */
-		void Create( ControlsManagerSPtr p_ctrlManager );
-
-		/** Destroys the control's overlays.
-		 */
-		void Destroy();
 
 		/** Sets the position.
 		 *\param[in]	p_value		The new value.
@@ -219,7 +223,15 @@ namespace CastorGui
 		/** Retrieves the engine.
 		 *\return		The engine
 		*/
-		inline Castor3D::Engine * GetEngine()const
+		inline Castor3D::Engine const & GetEngine()const
+		{
+			return m_engine;
+		}
+
+		/** Retrieves the engine.
+		 *\return		The engine
+		*/
+		inline Castor3D::Engine & GetEngine()
 		{
 			return m_engine;
 		}
@@ -233,6 +245,15 @@ namespace CastorGui
 		}
 
 	protected:
+		/** Creates the control's overlays.
+		 *\param[in]	p_ctrlManager	The controls manager.
+		 */
+		void Create( ControlsManagerSPtr p_ctrlManager );
+
+		/** Destroys the control's overlays.
+		 */
+		void Destroy();
+
 		/** Retrieves the visibility status
 		 *\return		The value
 		*/
@@ -341,7 +362,7 @@ namespace CastorGui
 		//! The child controls
 		std::vector< ControlWPtr > m_children;
 		//! The engine
-		Castor3D::Engine * m_engine;
+		Castor3D::Engine & m_engine;
 		//! The controls manager
 		ControlsManagerWPtr m_ctrlManager;
 	};

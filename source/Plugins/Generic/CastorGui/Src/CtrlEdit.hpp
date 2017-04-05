@@ -37,17 +37,15 @@ namespace CastorGui
 		: public Control
 	{
 	public:
-		using OnEventFunction = std::function< void( Castor::String const & ) >;
-		using OnEvent = Castor::Signal< OnEventFunction >;
-		using OnEventConnection = OnEvent::connection;
-
-	public:
 		/** Constructor
 		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		EditCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id );
+		EditCtrl( Castor::String const & p_name
+			, Castor3D::Engine & p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id );
 
 		/** Constructor
 		 *\param[in]	p_engine	The engine
@@ -59,7 +57,15 @@ namespace CastorGui
 		 *\param[in]	p_style		The style
 		 *\param[in]	p_visible	Initial visibility status
 		 */
-		EditCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		EditCtrl( Castor::String const & p_name
+			, Castor3D::Engine & p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id
+			, Castor::String const & p_caption
+			, Castor::Position const & p_position
+			, Castor::Size const & p_size
+			, uint32_t p_style = 0
+			, bool p_visible = true );
 
 		/** Destructor
 		 */
@@ -96,7 +102,7 @@ namespace CastorGui
 		 *\param[in]	p_function	The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline OnEventConnection Connect( EditEvent p_event, OnEventFunction p_function )
+		inline OnEditEventConnection Connect( EditEvent p_event, OnEditEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
 		}
@@ -208,7 +214,7 @@ namespace CastorGui
 		//! The text overlay used to display the caption
 		Castor3D::TextOverlayWPtr m_text;
 		//! The edit events signals
-		OnEvent m_signals[size_t( EditEvent::eCount )];
+		OnEditEvent m_signals[size_t( EditEvent::eCount )];
 		//! Tells if the Edit is a multiline one.
 		bool m_multiLine;
 	};

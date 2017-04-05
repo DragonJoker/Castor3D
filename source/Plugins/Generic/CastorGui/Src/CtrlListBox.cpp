@@ -25,13 +25,42 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	ListBoxCtrl::ListBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
-		: ListBoxCtrl( p_engine, p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
+	ListBoxCtrl::ListBoxCtrl( String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id )
+		: ListBoxCtrl( p_name
+			, p_engine
+			, p_parent
+			, p_id
+			, StringArray()
+			, -1
+			, Position()
+			, Size()
+			, 0
+			, true )
 	{
 	}
 
-	ListBoxCtrl::ListBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( ControlType::eListBox, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	ListBoxCtrl::ListBoxCtrl( String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id
+		, StringArray const & p_values
+		, int p_selected
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
+		: Control( ControlType::eListBox
+			, p_name
+			, p_engine
+			, p_parent
+			, p_id
+			, p_position
+			, p_size
+			, p_style
+			, p_visible )
 		, m_values( p_values )
 		, m_initialValues( p_values )
 		, m_selected( p_selected )
@@ -77,7 +106,7 @@ namespace CastorGui
 		if ( GetControlsManager() )
 		{
 			StaticCtrlSPtr l_item = DoCreateItemCtrl( p_value );
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_item]()
+			GetEngine().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_item]()
 			{
 				GetControlsManager()->Create( l_item );
 			} ) );
@@ -113,7 +142,7 @@ namespace CastorGui
 				if ( GetControlsManager() )
 				{
 					ControlSPtr l_control = *l_it;
-					GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_control]()
+					GetEngine().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_control]()
 					{
 						GetControlsManager()->Destroy( l_control );
 					} ) );
@@ -223,7 +252,7 @@ namespace CastorGui
 
 	StaticCtrlSPtr ListBoxCtrl::DoCreateItemCtrl( String const & p_value )
 	{
-		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), uint32_t( StaticStyle::eVAlignCenter ) );
+		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetName() + cuT( "_Item" ), GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), uint32_t( StaticStyle::eVAlignCenter ) );
 		l_item->SetCatchesMouseEvents( true );
 
 		l_item->ConnectNC( MouseEventType::eEnter, [this]( ControlSPtr p_control, MouseEvent const & p_event )
@@ -271,14 +300,14 @@ namespace CastorGui
 
 		if ( !l_material )
 		{
-			SetSelectedItemBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "DarkBlue" ) ) );
+			SetSelectedItemBackgroundMaterial( GetEngine().GetMaterialCache().Find( cuT( "DarkBlue" ) ) );
 		}
 
 		l_material = GetSelectedItemForegroundMaterial();
 
 		if ( !l_material )
 		{
-			SetSelectedItemForegroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
+			SetSelectedItemForegroundMaterial( GetEngine().GetMaterialCache().Find( cuT( "White" ) ) );
 		}
 
 		l_material = GetHighlightedItemBackgroundMaterial();
@@ -309,13 +338,18 @@ namespace CastorGui
 		m_initialValues.clear();
 		DoUpdateItems();
 		SetSelected( m_selected );
+		GetControlsManager()->ConnectEvents( *this );
 	}
 
 	void ListBoxCtrl::DoDestroy()
 	{
+		REQUIRE( GetControlsManager() );
+		auto & l_manager = *GetControlsManager();
+		l_manager.DisconnectEvents( *this );
+
 		for ( auto l_item : m_items )
 		{
-			l_item->Destroy();
+			l_manager.Destroy( l_item );
 		}
 
 		m_items.clear();
@@ -338,16 +372,11 @@ namespace CastorGui
 		auto l_pass = p_material->GetTypedPass< MaterialType::eLegacy >( 0u );
 		Colour l_colour = l_pass->GetDiffuse();
 		SetItemBackgroundMaterial( p_material );
-
-		if ( GetEngine() )
-		{
-			Colour l_colour;
-			l_colour.red() = std::min( 1.0f, l_colour.red() / 2.0f );
-			l_colour.green() = std::min( 1.0f, l_colour.green() / 2.0f );
-			l_colour.blue() = std::min( 1.0f, l_colour.blue() / 2.0f );
-			l_colour.alpha() = 1.0f;
-			SetHighlightedItemBackgroundMaterial( CreateMaterial( GetEngine(), GetBackgroundMaterial()->GetName() + cuT( "_Highlight" ), l_colour ) );
-		}
+		l_colour.red() = std::min( 1.0f, l_colour.red() / 2.0f );
+		l_colour.green() = std::min( 1.0f, l_colour.green() / 2.0f );
+		l_colour.blue() = std::min( 1.0f, l_colour.blue() / 2.0f );
+		l_colour.alpha() = 1.0f;
+		SetHighlightedItemBackgroundMaterial( CreateMaterial( GetEngine(), GetBackgroundMaterial()->GetName() + cuT( "_Highlight" ), l_colour ) );
 
 		l_colour.alpha() = 0.0;
 		l_pass->SetDiffuse( l_colour );

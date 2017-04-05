@@ -28,26 +28,24 @@ SOFTWARE.
 namespace CastorGui
 {
 	/*!
-	 *\author		Sylvain DOREMU
-	 *\date		16/02/201
-	 *\version		0.1.
-	 *\brief		Button contro
+	\author		Sylvain DOREMU
+	\date		16/02/201
+	\version	0.10.0
+	\brief		Button control
 	*/
 	class ButtonCtrl
 		: public Control
 	{
-	public:
-		using OnEventFunction = std::function< void() >;
-		using OnEvent = Castor::Signal< OnEventFunction >;
-		using OnEventConnection = OnEvent::connection;
-
 	public:
 		/** Constructor
 		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		ButtonCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id );
+		ButtonCtrl( Castor::String const & p_name
+			, Castor3D::Engine & p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id );
 
 		/** Constructor
 		 *\param[in]	p_engine		The engine
@@ -59,7 +57,15 @@ namespace CastorGui
 		 *\param[in]	p_style			The style
 		 *\param[in]	p_visible		Initial visibility status
 		 */
-		ButtonCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		ButtonCtrl( Castor::String const & p_name
+			, Castor3D::Engine & p_engine
+			, ControlRPtr p_parent
+			, uint32_t p_id
+			, Castor::String const & p_caption
+			, Castor::Position const & p_position
+			, Castor::Size const & p_size
+			, uint32_t p_style = 0
+			, bool p_visible = true );
 
 		/** Destructor
 		*/
@@ -123,7 +129,7 @@ namespace CastorGui
 		 *\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline OnEventConnection Connect( ButtonEvent p_event, OnEventFunction p_function )
+		inline OnButtonEventConnection Connect( ButtonEvent p_event, OnButtonEventFunction p_function )
 		{
 			return m_signals[size_t( p_event )].connect( p_function );
 		}
@@ -204,7 +210,7 @@ namespace CastorGui
 		//! The pushed button foreground material.
 		Castor3D::MaterialWPtr m_pushedForegroundMaterial;
 		//! The button events signals
-		OnEvent m_signals[size_t( ButtonEvent::eCount )];
+		OnButtonEvent m_signals[size_t( ButtonEvent::eCount )];
 	};
 }
 

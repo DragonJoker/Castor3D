@@ -46,6 +46,11 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
+		using OnClickActionFunction = std::function< void() >;
+		using OnSelectActionFunction = std::function< void( int ) >;
+		using OnTextActionFunction = std::function< void( Castor::String const & ) >;
+
+	public:
 		/**@name General */
 		//@{
 
@@ -100,25 +105,131 @@ namespace Castor3D
 		{
 			return m_mouse.m_position;
 		}
-
-		/** Retrieves the active control
-		*\return		The control
-		*/
+		/**
+		 *\~english
+		 *\return		The active control.
+		 *\~french
+		 *\return		Le contrôle actif.
+		 */
 		inline EventHandlerSPtr GetActiveControl()const
 		{
 			return m_activeHandler.lock();
 		}
 
-		/** Retrieves the focused control
-		*\return		The control
-		*/
+		/**
+		 *\~english
+		 *\return		The focused control.
+		 *\~french
+		 *\return		Le contrôle ayant le focus.
+		 */
 		inline EventHandlerSPtr GetFocusedControl()const
 		{
 			return m_lastMouseTarget.lock();
 		}
 
 		//@}
-		/**@name Mouse events */
+		/**@name Output events */
+		//@{
+		
+		/**
+		 *\~english
+		 *\~brief		Registers an event raised by the handler when it is clicked, if it supports clicking.
+		 *\param[in]	p_handler	The clicked handler.
+		 *\~french
+		 *\~brief		Enregistre un évènement lancé par le handler s'il est cliqué et qu'il le supporte.
+		 *\param[in]	p_handler	Le handler cliqué.
+		 */
+		C3D_API void RegisterClickAction( Castor::String const & p_handler
+			, OnClickActionFunction p_function );
+		/**
+		 *\~english
+		 *\~brief		Registers an event raised by the handler when one of its sub elements is selected.
+		 *\param[in]	p_handler	The handler.
+		 *\param[in]	p_index		The selection index.
+		 *\~french
+		 *\~brief		Enregistre un évènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
+		 *\param[in]	p_handler	Le handler.
+		 *\param[in]	p_index		L'indice de la sélection.
+		 */
+		C3D_API void RegisterSelectAction( Castor::String const & p_handler
+			, OnSelectActionFunction p_function );
+		/**
+		 *\~english
+		 *\~brief		Registers an event raised by the handler when its caption has changed.
+		 *\param[in]	p_handler	The handler.
+		 *\param[in]	p_text		The new text.
+		 *\~french
+		 *\~brief		Enregistre un évènement lancé par le handler lorsque son texte a changé.
+		 *\param[in]	p_handler	Le handler.
+		 *\param[in]	p_text		Le nouveau texte.
+		 */
+		C3D_API void RegisterTextAction( Castor::String const & p_handler
+			, OnTextActionFunction p_function );
+		/**
+		 *\~english
+		 *\~brief		Unregisters an event raised by the handler when it is clicked, if it supports clicking.
+		 *\param[in]	p_handler	The clicked handler.
+		 *\~french
+		 *\~brief		Désenregistre un évènement lancé par le handler s'il est cliqué et qu'il le supporte.
+		 *\param[in]	p_handler	Le handler cliqué.
+		 */
+		C3D_API void UnregisterClickAction( Castor::String const & p_handler );
+		/**
+		 *\~english
+		 *\~brief		Unregisters an event raised by the handler when one of its sub elements is selected.
+		 *\param[in]	p_handler	The handler.
+		 *\param[in]	p_index		The selection index.
+		 *\~french
+		 *\~brief		Désenregistre un évènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
+		 *\param[in]	p_handler	Le handler.
+		 *\param[in]	p_index		L'indice de la sélection.
+		 */
+		C3D_API void UnregisterSelectAction( Castor::String const & p_handler );
+		/**
+		 *\~english
+		 *\~brief		Unregisters an event raised by the handler when its caption has changed.
+		 *\param[in]	p_handler	The handler.
+		 *\param[in]	p_text		The new text.
+		 *\~french
+		 *\~brief		Désenregistre un évènement lancé par le handler lorsque son texte a changé.
+		 *\param[in]	p_handler	Le handler.
+		 *\param[in]	p_text		Le nouveau texte.
+		 */
+		C3D_API void UnregisterTextAction( Castor::String const & p_handler );
+		/**
+		 *\~english
+		 *\~brief		Event raised by the handler when it is clicked, if it supports clicking.
+		 *\param[in]	p_handler	The clicked handler.
+		 *\~french
+		 *\~brief		Evènement lancé par le handler s'il est cliqué et qu'il le supporte.
+		 *\param[in]	p_handler	Le handler cliqué.
+		 */
+		C3D_API void OnClickAction( Castor::String const & p_handler );
+		/**
+		 *\~english
+		 *\~brief		Event raised by the handler when one of its sub elements is selected.
+		 *\param[in]	p_handler	The handler.
+		 *\param[in]	p_index		The selection index.
+		 *\~french
+		 *\~brief		Evènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
+		 *\param[in]	p_handler	Le handler.
+		 *\param[in]	p_index		L'indice de la sélection.
+		 */
+		C3D_API void OnSelectAction( Castor::String const & p_handler, int p_index );
+		/**
+		 *\~english
+		 *\~brief		Event raised by the handler when its caption has changed.
+		 *\param[in]	p_handler	The handler.
+		 *\param[in]	p_text		The new text.
+		 *\~french
+		 *\~brief		Evènement lancé par le handler lorsque son texte a changé.
+		 *\param[in]	p_handler	Le handler.
+		 *\param[in]	p_text		Le nouveau texte.
+		 */
+		C3D_API void OnTextAction( Castor::String const & p_handler, Castor::String const & p_text );
+
+		//@}
+		/**@name Mouse input events */
 		//@{
 
 		/**
@@ -167,7 +278,7 @@ namespace Castor3D
 		C3D_API bool FireMouseWheel( Castor::Position const & p_offsets );
 
 		//@}
-		/**@name Keyboard events */
+		/**@name Keyboard input events */
 		//@{
 
 		/**
@@ -305,18 +416,33 @@ namespace Castor3D
 		std::vector< EventHandlerSPtr > m_handlers;
 
 	private:
-		//!\~english The current mouse state.	\~french L'état courant de la souris.
+		//!\~english	The current mouse state.
+		//!\~french		L'état courant de la souris.
 		MouseState m_mouse;
-		//!\~english The current keyboard state.	\~french L'état courant du clavier.
+		//!\~english	The current keyboard state.
+		//!\~french		L'état courant du clavier.
 		KeyboardState m_keyboard;
-		//!\~english Tells if the listener needs to be refreshed or not.	\~french Dit si le listener doit être mis à jour.
+		//!\~english	Tells if the listener needs to be refreshed or not.
+		//!\~french		Dit si le listener doit être mis à jour.
 		bool m_enabled;
-		//!\~english The associated frame listener.	\~french Le frame listener associé.
+		//!\~english	The associated frame listener.
+		//!\~french		Le frame listener associé.
 		FrameListenerSPtr m_frameListener;
-		//!\~english The currently active handler.	\~french Le gestionnaire actif.
+		//!\~english	The currently active handler.
+		//!\~french		Le gestionnaire actif.
 		EventHandlerWPtr m_activeHandler;
-		//!\~english The last mouse target handler.	\~french Le dernier gestionnaire cible de la souris.
+		//!\~english	The last mouse target handler.
+		//!\~french		Le dernier gestionnaire cible de la souris.
 		EventHandlerWPtr m_lastMouseTarget;
+		//!\~english	The registered handler clicked event actions.
+		//!\~french		Les actions enregistrées pour l'évènement handler cliqué.
+		std::map< Castor::String, OnClickActionFunction > m_onClickActions;
+		//!\~english	The registered handler sub element selected event actions.
+		//!\~french		Les actions enregistrées pour l'évènement sous élément de handler sélectionné.
+		std::map< Castor::String, OnSelectActionFunction > m_onSelectActions;
+		//!\~english	The registered handler caption changed event actions.
+		//!\~french		Les actions enregistrées pour l'évènement caption du handler changé.
+		std::map< Castor::String, OnTextActionFunction > m_onTextActions;
 	};
 }
 

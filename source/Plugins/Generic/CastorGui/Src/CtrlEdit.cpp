@@ -17,13 +17,40 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	EditCtrl::EditCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
-		: EditCtrl( p_engine, p_parent, p_id, String(), Position(), Size(), 0, true )
+	EditCtrl::EditCtrl( String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id )
+		: EditCtrl( p_name
+			, p_engine
+			, p_parent
+			, p_id
+			, String()
+			, Position()
+			, Size()
+			, 0
+			, true )
 	{
 	}
 
-	EditCtrl::EditCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( ControlType::eEdit, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	EditCtrl::EditCtrl( String const & p_name
+		, Engine & p_engine
+		, ControlRPtr p_parent
+		, uint32_t p_id
+		, String const & p_caption
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
+		: Control( ControlType::eEdit
+			, p_name
+			, p_engine
+			, p_parent
+			, p_id
+			, p_position
+			, p_size
+			, p_style
+			, p_visible )
 		, m_caption( p_caption )
 		, m_caretIt( p_caption.end() )
 		, m_active( false )
@@ -62,7 +89,10 @@ namespace CastorGui
 			OnDeactivate( p_event );
 		} );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine().GetOverlayCache().Add( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() )
+			, OverlayType::eText
+			, nullptr
+			, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		l_text->SetVAlign( VAlign::eBottom );
 		l_text->SetVisible( DoIsVisible() );
@@ -103,10 +133,12 @@ namespace CastorGui
 		}
 
 		DoUpdateCaption();
+		GetControlsManager()->ConnectEvents( *this );
 	}
 
 	void EditCtrl::DoDestroy()
 	{
+		GetControlsManager()->DisconnectEvents( *this );
 	}
 
 	void EditCtrl::DoSetPosition( Position const & p_value )

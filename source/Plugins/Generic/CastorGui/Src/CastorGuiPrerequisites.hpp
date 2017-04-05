@@ -23,9 +23,9 @@ SOFTWARE.
 #ifndef ___CI_CASTOR_GUI_PREREQUISITES_H___
 #define ___CI_CASTOR_GUI_PREREQUISITES_H___
 
-#include <Castor3DPrerequisites.hpp>
 #include <Plugin/GenericPlugin.hpp>
 
+#include <Design/Signal.hpp>
 #include <Graphics/Colour.hpp>
 
 #ifndef CASTOR_PLATFORM_WINDOWS
@@ -248,6 +248,25 @@ namespace CastorGui
 	class SliderCtrl;
 	class StaticCtrl;
 
+	using OnButtonEventFunction = std::function< void() >;
+	using OnButtonEvent = Castor::Signal< OnButtonEventFunction >;
+	using OnButtonEventConnection = OnButtonEvent::connection;
+
+	using OnComboEventFunction = std::function< void( int ) >;
+	using OnComboEvent = Castor::Signal< OnComboEventFunction >;
+	using OnComboEventConnection = OnComboEvent::connection;
+
+	using OnEditEventFunction = std::function< void( Castor::String const & ) >;
+	using OnEditEvent = Castor::Signal< OnEditEventFunction >;
+	using OnEditEventConnection = OnEditEvent::connection;
+
+	using OnListEventFunction = std::function< void( int ) >;
+	using OnListEvent = Castor::Signal< OnListEventFunction >;
+	using OnListEventConnection = OnListEvent::connection;
+
+	using OnSliderEventFunction = std::function< void( int ) >;
+	using OnSliderEvent = Castor::Signal< OnSliderEventFunction >;
+	using OnSliderEventConnection = OnSliderEvent::connection;
 
 	DECLARE_SMART_PTR( ControlsManager );
 	DECLARE_SMART_PTR( Control );
@@ -266,7 +285,7 @@ namespace CastorGui
 	 *\param[in]	p_colour	The material colour.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Colour const & p_colour );
+	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine & p_engine, Castor::String const & p_name, Castor::Colour const & p_colour );
 
 	/** Creates a texture material.
 	 *\param[in]	p_engine	The engine.
@@ -274,7 +293,7 @@ namespace CastorGui
 	 *\param[in]	p_texture	The material texture.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor3D::TextureLayoutSPtr p_texture );
+	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine & p_engine, Castor::String const & p_name, Castor3D::TextureLayoutSPtr p_texture );
 }
 
 #endif

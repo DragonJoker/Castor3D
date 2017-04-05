@@ -103,9 +103,9 @@ namespace CastorGui
 	}
 
 	template< typename T >
-	std::shared_ptr< T > CreateControl( ParserContext & p_context, std::shared_ptr< T > & p_control )
+	std::shared_ptr< T > CreateControl( ParserContext & p_context, String const & p_name, std::shared_ptr< T > & p_control )
 	{
-		p_control = std::make_shared< T >( p_context.m_engine, p_context.GetTop(), p_context.m_ctrlId++ );
+		p_control = std::make_shared< T >( p_name, *p_context.m_engine, p_context.GetTop(), p_context.m_ctrlId++ );
 		p_control->AddStyle( p_context.m_flags );
 		p_context.m_parents.push( p_control );
 		p_context.m_flags = 0;
@@ -157,8 +157,11 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Button )
 	{
+		ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
 		ParserContext & l_context = GetParserContext( p_context );
-		CreateControl( l_context, l_context.m_button );
+		String l_name;
+		p_params[0]->Get( l_name );
+		CreateControl( l_context, l_name, l_context.m_button );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eButton )
 
@@ -397,8 +400,11 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBox )
 	{
+		ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
 		ParserContext & l_context = GetParserContext( p_context );
-		CreateControl( l_context, l_context.m_combo );
+		String l_name;
+		p_params[0]->Get( l_name );
+		CreateControl( l_context, l_name, l_context.m_combo );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eComboBox )
 
@@ -529,8 +535,11 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Edit )
 	{
+		ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
 		ParserContext & l_context = GetParserContext( p_context );
-		CreateControl( l_context, l_context.m_edit );
+		String l_name;
+		p_params[0]->Get( l_name );
+		CreateControl( l_context, l_name, l_context.m_edit );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eEdit )
 
@@ -600,8 +609,11 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBox )
 	{
+		ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
 		ParserContext & l_context = GetParserContext( p_context );
-		CreateControl( l_context, l_context.m_listbox );
+		String l_name;
+		p_params[0]->Get( l_name );
+		CreateControl( l_context, l_name, l_context.m_listbox );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eListBox )
 
@@ -732,8 +744,11 @@ namespace CastorGui
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Slider )
 	{
+		ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
 		ParserContext & l_context = GetParserContext( p_context );
-		CreateControl( l_context, l_context.m_slider );
+		String l_name;
+		p_params[0]->Get( l_name );
+		CreateControl( l_context, l_name, l_context.m_slider );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eSlider )
 
@@ -748,7 +763,9 @@ namespace CastorGui
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_Static )
 	{
 		ParserContext & l_context = GetParserContext( p_context );
-		CreateControl( l_context, l_context.m_static );
+		String l_name;
+		p_params[0]->Get( l_name );
+		CreateControl( l_context, l_name, l_context.m_static );
 	}
 	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eStatic )
 
