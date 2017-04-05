@@ -51,7 +51,8 @@ namespace Castor3D
 		 *\param[in]	p_scene			The scene for this technique.
 		 *\param[in]	p_camera		The camera for this technique (may be null).
 		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
-		 *\param[in]	p_multisampling	The multisampling status
+		 *\param[in]	p_multisampling	The multisampling status.
+		 *\param[in]	p_environment	Pass used for an environment map rendering.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom de la technique.
@@ -59,12 +60,14 @@ namespace Castor3D
 		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
 		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
 		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
+		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
 		 */
 		C3D_API ForwardRenderTechniquePass( Castor::String const & p_name
 			, Scene & p_scene
 			, Camera * p_camera
 			, bool p_opaque
-			, bool p_multisampling = false );
+			, bool p_multisampling
+			, bool p_environment );
 		/**
 		 *\~english
 		 *\brief		Destructor

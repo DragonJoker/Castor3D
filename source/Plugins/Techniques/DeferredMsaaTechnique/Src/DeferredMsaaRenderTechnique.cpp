@@ -1,4 +1,4 @@
-﻿#include "DeferredMsaaRenderTechnique.hpp"
+#include "DeferredMsaaRenderTechnique.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -105,7 +105,8 @@ namespace deferred_msaa
 				, *p_renderTarget.GetScene()
 				, p_renderTarget.GetCamera().get()
 				, false
-				, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+				, GetSamplesCountParam( p_params, m_samplesCount ) > 1
+				, false )
 			, p_params
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 		, m_viewport{ *p_renderSystem.GetEngine() }

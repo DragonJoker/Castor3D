@@ -1,4 +1,4 @@
-﻿#include "DeferredRenderTechnique.hpp"
+#include "DeferredRenderTechnique.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -51,6 +51,7 @@ namespace deferred
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_transparent" )
 				, *p_renderTarget.GetScene()
 				, p_renderTarget.GetCamera().get()
+				, false
 				, false
 				, false )
 			, p_params )

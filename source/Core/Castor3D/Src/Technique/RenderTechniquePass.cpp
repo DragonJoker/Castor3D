@@ -148,11 +148,13 @@ namespace Castor3D
 		, Scene & p_scene
 		, Camera * p_camera
 		, bool p_opaque
-		, bool p_multisampling )
+		, bool p_multisampling
+		, bool p_environment )
 		: RenderPass{ p_name, *p_scene.GetEngine(), p_opaque, p_multisampling }
 		, m_scene{ p_scene }
 		, m_camera{ p_camera }
 		, m_sceneNode{ m_sceneUbo }
+		, m_environment{ p_environment }
 	{
 	}
 
@@ -297,6 +299,11 @@ namespace Castor3D
 		, SceneFlags & p_sceneFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::eLighting );
+
+		if ( m_environment )
+		{
+			AddFlag( p_programFlags, ProgramFlag::eEnvironmentMapping );
+		}
 	}
 
 	String RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
@@ -345,7 +352,7 @@ namespace Castor3D
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapReflection( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapReflection, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ) );
+		auto c3d_mapReflection( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapReflection, CheckFlag( p_textureFlags, TextureChannel::eReflection ) && !m_environment ) );
 
 		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -388,7 +395,7 @@ namespace Castor3D
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) )
+			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) && !m_environment )
 			{
 				auto l_i = l_writer.GetLocale( cuT( "l_i" ), vtx_position - c3d_v3CameraPosition );
 				auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_v3Normal ) );

@@ -22,6 +22,7 @@ namespace deferred_common
 			, p_scene
 			, p_camera
 			, true
+			, false
 			, false }
 		, m_directionalShadowMap{ *p_scene.GetEngine() }
 		, m_spotShadowMap{ *p_scene.GetEngine() }

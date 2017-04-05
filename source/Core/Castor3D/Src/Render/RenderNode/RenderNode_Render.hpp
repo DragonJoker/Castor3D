@@ -87,7 +87,8 @@ namespace Castor3D
 			l_depthMap.get().Bind();
 		}
 
-		if ( p_pass.HasReflectionMapping() )
+		if ( p_pass.HasReflectionMapping()
+			&& !CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eEnvironmentMapping ) )
 		{
 			p_pipeline.GetReflectionMapVariable().SetValue( l_index );
 			auto & l_map = p_scene.GetReflectionMap( p_sceneNode );

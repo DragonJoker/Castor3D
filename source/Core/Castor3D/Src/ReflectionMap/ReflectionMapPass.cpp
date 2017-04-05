@@ -30,12 +30,14 @@ namespace Castor3D
 			, *p_node->GetScene()
 			, m_camera.get()
 			, true
-			, false ) }
+			, false
+			, true ) }
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "reflection_transparent" )
 			, *p_node->GetScene()
 			, m_camera.get()
 			, false
-			, false ) }
+			, false
+			, true ) }
 	{
 	}
 

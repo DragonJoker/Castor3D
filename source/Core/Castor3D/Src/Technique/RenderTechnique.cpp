@@ -225,13 +225,6 @@ namespace Castor3D
 		{
 			l_effect->Apply( *m_frameBuffer.m_frameBuffer );
 		}
-		
-		if ( !l_maps.empty() )
-		{
-			m_frameBuffer.m_frameBuffer->Bind();
-			m_renderSystem.GetCurrentContext()->RenderTextureCube( Size{ 128, 128 }, *l_maps.front().get().GetTexture().GetTexture() );
-			m_frameBuffer.m_frameBuffer->Unbind();
-		}
 
 		m_renderSystem.PopScene();
 	}

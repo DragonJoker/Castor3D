@@ -1,4 +1,4 @@
-﻿#include "ReflectionMap.hpp"
+#include "ReflectionMap.hpp"
 
 #include "Engine.hpp"
 
@@ -69,6 +69,7 @@ namespace Castor3D
 		ReflectionMap::ReflectionMapPasses DoCreatePasses( ReflectionMap & p_map
 			, SceneNode & p_node )
 		{
+			static Point3r const l_position;
 			std::array< SceneNodeSPtr, size_t( CubeMapFace::eCount ) > l_nodes
 			{
 				std::make_shared< SceneNode >( cuT( "ReflectionMap_PosX" ), *p_node.GetScene() ),
@@ -80,12 +81,12 @@ namespace Castor3D
 			};
 			std::array< Quaternion, size_t( CubeMapFace::eCount ) > l_orients
 			{
-				Quaternion::from_axes( Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 }, Point3r{ +1, +0, +0 } ),
-				Quaternion::from_axes( Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 }, Point3r{ -1, +0, +0 } ),
-				Quaternion::from_axes( Point3r{ +1, +0, +0 }, Point3r{ +0, +0, +1 }, Point3r{ +0, +1, +0 } ),
-				Quaternion::from_axes( Point3r{ -1, +0, +0 }, Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),
-				Quaternion::from_axes( Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, +1 } ),
-				Quaternion::from_axes( Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Positive X
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Negative X
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ) ),// Positive Y
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ) ),// Negative Y
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ) ),// Positive Z
+				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ) ),// Negative Z
 			};
 
 			auto i = 0u;
@@ -223,6 +224,7 @@ namespace Castor3D
 			m_frameBuffer->Clear( BufferComponent::eDepth | BufferComponent::eColour );
 			m_passes[l_face].Render();
 			m_frameBuffer->Unbind();
+			l_face++;
 		}
 	}
 }
