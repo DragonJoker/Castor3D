@@ -130,6 +130,7 @@ namespace Castor3D
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
 	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
 	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
+	const String ShaderProgram::MatEnvironmentIndex = cuT( "c3d_iMatEnvironmentIndex" );
 	const String ShaderProgram::Time = cuT( "c3d_fTime" );
 	const String ShaderProgram::Bones = cuT( "c3d_mtxBones" );
 	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );

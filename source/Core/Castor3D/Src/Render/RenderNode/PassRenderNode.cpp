@@ -35,8 +35,9 @@ namespace Castor3D
 		, m_diffuse{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ) }
 		, m_specular{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ) }
 		, m_emissive{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ) }
-		, m_opacity{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ) }
 		, m_shininess{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ) }
+		, m_opacity{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ) }
+		, m_environmentIndex{ *p_passUbo.GetUniform< UniformType::eInt >( ShaderProgram::MatEnvironmentIndex ) }
 	{
 	}
 

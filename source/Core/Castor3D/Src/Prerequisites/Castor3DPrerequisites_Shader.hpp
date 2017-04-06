@@ -753,6 +753,7 @@ namespace Castor3D
 	auto c3d_v4MatSpecular = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatSpecular );\
 	auto c3d_fMatShininess = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatShininess );\
 	auto c3d_fMatOpacity = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatOpacity );\
+	auto c3d_iMatEnvironmentIndex = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatEnvironmentIndex );\
 	l_pass.End()
 
 #define UBO_MODEL( Writer )\

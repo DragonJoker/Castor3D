@@ -86,6 +86,12 @@ namespace deferred
 			l_return = DoInitialiseLightPass();
 		}
 
+		if ( l_return )
+		{
+			m_environment = std::make_unique< deferred_common::EnvironmentMapPass >( *m_renderSystem.GetEngine()
+				, m_renderTarget.GetSize() );
+		}
+
 		if ( l_return && m_ssaoEnabled )
 		{
 			m_ssao = std::make_unique< deferred_common::SsaoPass >( *m_renderSystem.GetEngine()
@@ -99,6 +105,7 @@ namespace deferred
 	void RenderTechnique::DoCleanup()
 	{
 		m_ssao.reset();
+		m_environment.reset();
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();
 	}

@@ -23,6 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_DeferredRenderTechnique_H___
 #define ___C3D_DeferredRenderTechnique_H___
 
+#include <EnvironmentMapPass.hpp>
 #include <LightPass.hpp>
 #include <SsaoPass.hpp>
 
@@ -164,6 +165,9 @@ namespace deferred
 		//!\~english	Tells if SSAO is to be used in lighting pass.
 		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
 		bool m_ssaoEnabled{ false };
+		//!\~english	The SSAO pass.
+		//!\~french		La passe SSAO.
+		std::unique_ptr< deferred_common::EnvironmentMapPass > m_environment;
 		//!\~english	The SSAO pass.
 		//!\~french		La passe SSAO.
 		std::unique_ptr< deferred_common::SsaoPass > m_ssao;

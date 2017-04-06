@@ -57,6 +57,9 @@ namespace Castor3D
 		//!\~english	The pass opacity.
 		//!\~french		L'opacité de passe.
 		Uniform1f & m_opacity;
+		//!\~english	The pass environment map index.
+		//!\~french		L'indice de la texture d'environnement de la passe.
+		Uniform1i & m_environmentIndex;
 		//!\~english	The pass textures.
 		//!\~french		Les textures de la passe.
 		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;

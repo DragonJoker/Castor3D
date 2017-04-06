@@ -287,7 +287,7 @@ namespace deferred_common
 
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 			
-			out_c3dNormal = vec4( l_v3Normal, 0.0_f );
+			out_c3dNormal = vec4( l_v3Normal, l_writer.Cast< Float >( c3d_iMatEnvironmentIndex ) );
 			out_c3dDiffuse = vec4( l_v3Diffuse, l_writer.Cast< Float >( c3d_iShadowReceiver ) );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
 			out_c3dEmissive = vec4( l_v3Emissive, 0.0_f );

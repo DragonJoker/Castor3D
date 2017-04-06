@@ -62,7 +62,8 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur.
 		 *\param[in]	p_node		Le noeud de scène.
 		 */
-		C3D_API EnvironmentMap( Engine & p_engine, SceneNode & p_node );
+		C3D_API EnvironmentMap( Engine & p_engine
+			, SceneNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -97,25 +98,16 @@ namespace Castor3D
 		C3D_API void Update( RenderQueueArray & p_queues );
 		/**
 		 *\~english
-		 *\brief		Renders the selected lights shadow map.
+		 *\brief		Renders the environment map.
 		 *\~french
-		 *\brief		Dessine les shadow maps des lumières sélectionnées.
+		 *\brief		Dessine la texture d'environnement.
 		 */
 		C3D_API void Render();
 		/**
 		 *\~english
-		 *\brief		Adds a reflection source, creating a reflection map pass for it.
-		 *\param[in]	p_node	The source node.
-		 *\~french
-		 *\brief		Ajoute une source de réflexion, créant une passe de reflection mapping pour elle.
-		 *\param[in]	p_node	Le noeud de la source.
-		 */
-		C3D_API void AddSource( SceneNode & p_node );
-		/**
-		 *\~english
 		 *\return		The reflection map.
 		 *\~english
-		 *\return		La map de réflexion.
+		 *\return		La texture d'environnement.
 		 */
 		inline TextureUnit & GetTexture()
 		{
@@ -125,7 +117,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		The reflection map.
 		 *\~english
-		 *\return		La map de réflexion.
+		 *\return		La texture d'environnement.
 		 */
 		inline TextureUnit const & GetTexture()const
 		{
@@ -135,14 +127,27 @@ namespace Castor3D
 		 *\~english
 		 *\return		The reflection map dimensions.
 		 *\~english
-		 *\return		Les dimensions de la map de réflexion.
+		 *\return		Les dimensions de la texture d'environnement.
 		 */
 		inline Castor::Size GetSize()const
 		{
 			return m_environmentMap.GetTexture()->GetDimensions();
 		}
+		/**
+		 *\~english
+		 *\return		The reflection map index.
+		 *\~english
+		 *\return		L'indice de la texture d'environnement.
+		 */
+		inline uint32_t GetIndex()const
+		{
+			return m_index;
+		}
 
 	private:
+		//!\~english	The target size.
+		//!\~french		Les dimensions de la cible.
+		static uint32_t m_count;
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
 		CubeDepthAttachment m_depthAttach;
@@ -170,6 +175,9 @@ namespace Castor3D
 		//!\~english	The target size.
 		//!\~french		Les dimensions de la cible.
 		Castor::Size m_size;
+		//!\~english	The target size.
+		//!\~french		Les dimensions de la cible.
+		uint32_t m_index{ 0u };
 		//!\~english	The render pass for each cube face.
 		//!\~french		La passe de rendu pour chaque face du cube.
 		EnvironmentMapPasses m_passes;

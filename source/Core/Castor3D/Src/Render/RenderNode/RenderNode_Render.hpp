@@ -93,6 +93,11 @@ namespace Castor3D
 			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
 			l_map.GetTexture().SetIndex( l_index );
 			l_map.GetTexture().Bind();
+			p_node.m_environmentIndex.SetValue( l_map.GetIndex() );
+		}
+		else
+		{
+			p_node.m_environmentIndex.SetValue( 0 );
 		}
 	}
 
