@@ -195,7 +195,7 @@ namespace Castor3D
 		m_renderSystem.PushScene( &l_scene );
 		bool l_shadows = l_scene.HasShadows();
 
-		auto & l_maps = m_renderTarget.GetScene()->GetEnvironmentMaps();
+		auto & l_maps = l_scene.GetEnvironmentMaps();
 
 		for ( auto & l_map : l_maps )
 		{
