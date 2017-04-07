@@ -205,6 +205,13 @@ namespace Castor3D
 		C3D_API void SetOpacity( float p_value );
 		/**
 		 *\~english
+		 *\return		The program flags combination.
+		 *\~french
+		 *\return		La combinaison d'indicateurs de programme.
+		 */
+		C3D_API ProgramFlags GetProgramFlags()const;
+		/**
+		 *\~english
 		 *\return		The texture channels flags combination.
 		 *\~french
 		 *\return		La combinaison d'indicateurs de canal de texture.

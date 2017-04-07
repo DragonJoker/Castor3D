@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -52,7 +52,9 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_buffer	Le tampon cible
 		 */
-		FrameVariableBufferTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::UniformBufferSPtr p_buffer );
+		FrameVariableBufferTreeItemProperty( Castor3D::Engine * p_engine
+			, bool p_editable
+			, Castor3D::UniformBuffer & p_buffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -68,9 +70,9 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::UniformBufferSPtr GetBuffer()
+		inline Castor3D::UniformBuffer const & GetBuffer()const
 		{
-			return m_buffer.lock();
+			return m_buffer;
 		}
 
 	private:
@@ -84,7 +86,7 @@ namespace GuiCommon
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		Castor3D::UniformBufferWPtr m_buffer;
+		Castor3D::UniformBuffer & m_buffer;
 	};
 }
 

@@ -1,18 +1,36 @@
-#include "ShaderEditorPage.hpp"
+﻿#include "ShaderEditorPage.hpp"
 
 #include "AuiDockArt.hpp"
 #include "StcTextEditor.hpp"
 #include "FrameVariablesList.hpp"
 #include "PropertiesHolder.hpp"
 
+#include <Engine.hpp>
+#include <Cache/WindowCache.hpp>
+#include <Cache/ShaderCache.hpp>
+#include <Material/Pass.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Render/RenderTarget.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/Scene.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Technique/RenderTechnique.hpp>
+#include <Technique/RenderTechniquePass.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
+
 namespace GuiCommon
 {
-	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::ShaderType p_type, wxWindow * p_parent, wxPoint const & p_position, const wxSize p_size )
+	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit
+		, StcContext & p_stcContext
+		, ShaderProgramSPtr p_shader
+		, ShaderType p_type
+		, Pass const & p_pass
+		, Scene const & p_scene
+		, wxWindow * p_parent
+		, wxPoint const & p_position
+		, const wxSize p_size )
 		: wxPanel( p_parent, wxID_ANY, p_position, p_size )
 		, m_shaderProgram( p_shader )
 		, m_stcContext( p_stcContext )
@@ -30,7 +48,24 @@ namespace GuiCommon
 		if ( m_shaderModel != ShaderModel::eCount )
 		{
 			DoInitialiseLayout();
-			DoLoadPage();
+
+			auto & l_engine = *p_shader->GetRenderSystem()->GetEngine();
+			auto l_lock = Castor::make_unique_lock( l_engine.GetRenderWindowCache() );
+			auto l_it = l_engine.GetRenderWindowCache().begin();
+
+			if ( l_it != l_engine.GetRenderWindowCache().end() )
+			{
+				auto & l_technique = *l_it->second->GetRenderTarget()->GetTechnique();
+				auto l_textureFlags = p_pass.GetTextureFlags();
+				auto l_programFlags = p_pass.GetProgramFlags();
+				auto l_sceneFlags = p_scene.GetFlags();
+				l_technique.GetOpaquePass().UpdateFlags( l_textureFlags, l_programFlags, l_sceneFlags );
+				DoLoadPage( *l_technique.GetOpaquePass().GetPipelineBack( p_pass.GetColourBlendMode()
+					, p_pass.GetAlphaBlendMode()
+					, l_textureFlags
+					, l_programFlags
+					, l_sceneFlags ) );
+			}
 		}
 	}
 
@@ -118,7 +153,7 @@ namespace GuiCommon
 		m_auiManager.Update();
 	}
 
-	void ShaderEditorPage::DoLoadPage()
+	void ShaderEditorPage::DoLoadPage( RenderPipeline & p_pipeline )
 	{
 		ShaderProgramSPtr l_program = m_shaderProgram.lock();
 		wxString l_extension = wxT( ".glsl" );
@@ -164,7 +199,9 @@ namespace GuiCommon
 		m_editor->InitializePrefs( m_editor->DeterminePrefs( l_extension ) );
 
 		// Load frame variables list
-		m_frameVariablesList->LoadVariables( m_shaderType, l_program );
+		m_frameVariablesList->LoadVariables( m_shaderType
+			, l_program
+			, p_pipeline );
 	}
 
 	BEGIN_EVENT_TABLE( ShaderEditorPage, wxPanel )

@@ -1,4 +1,4 @@
-#include "GlslIntrinsics.hpp"
+﻿#include "GlslIntrinsics.hpp"
 
 using namespace Castor;
 
@@ -470,6 +470,11 @@ namespace GLSL
 	Float length( Type const & p_value )
 	{
 		return WriteFunctionCall< Float >( p_value.m_writer, cuT( "length" ), p_value );
+	}
+
+	Float distance( Type const & p_a, Type const & p_b )
+	{
+		return WriteFunctionCall< Float >( p_a.m_writer, cuT( "distance" ), p_a, p_b );
 	}
 
 	Float radians( Type const & p_value )

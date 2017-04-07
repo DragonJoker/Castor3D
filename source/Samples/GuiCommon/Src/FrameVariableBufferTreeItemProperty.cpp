@@ -1,4 +1,4 @@
-#include "FrameVariableBufferTreeItemProperty.hpp"
+﻿#include "FrameVariableBufferTreeItemProperty.hpp"
 
 #include <Shader/UniformBuffer.hpp>
 
@@ -16,7 +16,9 @@ namespace GuiCommon
 		static wxString PROPERTY_NAME = _( "Name" );
 	}
 
-	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * p_engine, bool p_editable, UniformBufferSPtr p_buffer )
+	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * p_engine
+		, bool p_editable
+		, UniformBuffer & p_buffer )
 		: TreeItemProperty( p_engine, p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_buffer( p_buffer )
 	{
@@ -30,23 +32,18 @@ namespace GuiCommon
 	{
 	}
 
-	void FrameVariableBufferTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void FrameVariableBufferTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor
+		, wxPropertyGrid * p_grid )
 	{
-		UniformBufferSPtr l_buffer = GetBuffer();
-
-		if ( l_buffer )
-		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER + l_buffer->GetName() ) );
-			p_grid->Append( new wxStringProperty( PROPERTY_NAME ) )->SetValue( l_buffer->GetName() );
-		}
+		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER + m_buffer.GetName() ) );
+		p_grid->Append( new wxStringProperty( PROPERTY_NAME ) )->SetValue( m_buffer.GetName() );
 	}
 
 	void FrameVariableBufferTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
-		UniformBufferSPtr l_buffer = GetBuffer();
 
-		if ( l_property && l_buffer )
+		if ( l_property )
 		{
 		}
 	}

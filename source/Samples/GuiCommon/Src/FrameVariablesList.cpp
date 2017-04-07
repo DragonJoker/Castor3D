@@ -1,4 +1,4 @@
-#include "FrameVariablesList.hpp"
+﻿#include "FrameVariablesList.hpp"
 
 #include "ImagesLoader.hpp"
 #include "FrameVariableBufferTreeItemProperty.hpp"
@@ -6,9 +6,11 @@
 #include "PropertiesHolder.hpp"
 
 #include <Engine.hpp>
+#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/Uniform.hpp>
 #include <Shader/UniformBuffer.hpp>
+#include <Shader/UniformBufferBinding.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <wx/imaglist.h>
@@ -36,7 +38,10 @@ namespace GuiCommon
 		eID_FRAME_VARIABLE_BUFFER_SEL,
 	}	eID;
 
-	FrameVariablesList::FrameVariablesList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
+	FrameVariablesList::FrameVariablesList( PropertiesHolder * p_propertiesHolder
+		, wxWindow * p_parent
+		, wxPoint const & p_ptPos
+		, wxSize const & p_size )
 		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
@@ -77,10 +82,17 @@ namespace GuiCommon
 		UnloadVariables();
 	}
 
-	void FrameVariablesList::LoadVariables( ShaderType p_type, ShaderProgramSPtr p_program )
+	void FrameVariablesList::LoadVariables( ShaderType p_type
+		, ShaderProgramSPtr p_program
+		, RenderPipeline & p_pipeline )
 	{
 		m_program = p_program;
 		wxTreeItemId l_root = AddRoot( _( "Root" ) );
+
+		for ( auto & l_binding : p_pipeline.GetBindings() )
+		{
+			DoAddBuffer( l_root, *l_binding.get().GetOwner() );
+		}
 
 		if ( p_program->GetObjectStatus( p_type ) != ShaderStatus::eDontExist )
 		{
@@ -96,18 +108,26 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id, UniformBufferSPtr p_buffer )
+	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id
+		, UniformBuffer & p_buffer )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine(), m_propertiesHolder->IsEditable(), p_buffer ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_buffer.GetName()
+			, eID_FRAME_VARIABLE_BUFFER
+			, eID_FRAME_VARIABLE_BUFFER_SEL
+			, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine()
+				, m_propertiesHolder->IsEditable()
+				, p_buffer ) );
 		uint32_t l_index = 0;
 
-		for ( auto l_variable : *p_buffer )
+		for ( auto l_variable : p_buffer )
 		{
 			DoAddVariable( l_id, l_variable, p_buffer );
 		}
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, UniformSPtr p_variable, UniformBufferSPtr p_buffer )
+	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id
+		, UniformSPtr p_variable
+		, UniformBuffer & p_buffer )
 	{
 		wxString l_displayName = p_variable->GetName();
 
@@ -116,10 +136,18 @@ namespace GuiCommon
 			l_displayName << wxT( "[" ) << p_variable->GetOccCount() << wxT( "]" );
 		}
 
-		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_buffer ) );
+		AppendItem( p_id
+			, l_displayName
+			, eID_FRAME_VARIABLE
+			, eID_FRAME_VARIABLE_SEL
+			, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable()
+				, p_variable
+				, p_buffer ) );
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, PushUniformSPtr p_variable, ShaderType p_type )
+	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id
+		, PushUniformSPtr p_variable
+		, ShaderType p_type )
 	{
 		wxString l_displayName = p_variable->GetBaseUniform().GetName();
 
@@ -128,7 +156,13 @@ namespace GuiCommon
 			l_displayName << wxT( "[" ) << p_variable->GetBaseUniform().GetOccCount() << wxT( "]" );
 		}
 
-		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_type ) );
+		AppendItem( p_id
+			, l_displayName
+			, eID_FRAME_VARIABLE
+			, eID_FRAME_VARIABLE_SEL
+			, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable()
+				, p_variable
+				, p_type ) );
 	}
 
 	BEGIN_EVENT_TABLE( FrameVariablesList, wxTreeCtrl )
@@ -139,7 +173,7 @@ namespace GuiCommon
 
 	void FrameVariablesList::OnClose( wxCloseEvent & p_event )
 	{
-		DeleteAllItems();
+		UnloadVariables();
 		p_event.Skip();
 	}
 

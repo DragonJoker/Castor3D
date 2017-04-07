@@ -36,9 +36,14 @@ namespace GuiCommon
 		eID_MENU_PREFS,
 	}	eID;
 
-	ShaderDialog::ShaderDialog( Scene & p_scene, bool p_bCanEdit, wxWindow * p_parent, PassSPtr p_pass, wxPoint const & p_position, const wxSize p_size )
+	ShaderDialog::ShaderDialog( Scene & p_scene
+		, bool p_bCanEdit
+		, wxWindow * p_parent
+		, Pass & p_pass
+		, wxPoint const & p_position
+		, const wxSize p_size )
 		: wxFrame( p_parent, wxID_ANY, _( "Shaders" ), p_position, p_size, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
-		, m_pPass( p_pass )
+		, m_pass( p_pass )
 		, m_bCompiled( true )
 		, m_bOwnShader( true )
 		, m_pStcContext( std::make_unique< StcContext >() )
@@ -65,15 +70,12 @@ namespace GuiCommon
 
 	void ShaderDialog::DoInitialiseShaderLanguage()
 	{
-		//m_shaderProgram = m_pPass.lock()->GetShader();
-
 		if ( m_shaderProgram.lock() )
 		{
 			m_bOwnShader = false;
 		}
 		else
 		{
-			PassSPtr l_pass = m_pPass.lock();
 			auto l_lock = Castor::make_unique_lock( m_scene.GetEngine()->GetRenderWindowCache() );
 			auto l_it = m_scene.GetEngine()->GetRenderWindowCache().begin();
 
@@ -83,7 +85,11 @@ namespace GuiCommon
 
 				if ( l_technique )
 				{
-					m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( l_technique->GetOpaquePass(), l_pass->GetTextureFlags(), 0u, 0u, false );
+					m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( l_technique->GetOpaquePass()
+						, m_pass.GetTextureFlags()
+						, m_pass.GetProgramFlags()
+						, m_scene.GetFlags()
+						, false );
 					m_bOwnShader = true;
 				}
 			}
@@ -131,7 +137,13 @@ namespace GuiCommon
 				l_arrayChoices.push_back( wxCOMBO_NEW );
 
 				// The editor page
-				m_pEditorPages[i] = new ShaderEditorPage( m_bCanEdit, *m_pStcContext, l_program, ShaderType( i ), m_pNotebookEditors );
+				m_pEditorPages[i] = new ShaderEditorPage( m_bCanEdit
+					, *m_pStcContext
+					, l_program
+					, ShaderType( i )
+					, m_pass
+					, m_scene
+					, m_pNotebookEditors );
 				m_pEditorPages[i]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 				m_pEditorPages[i]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 				m_pNotebookEditors->AddPage( m_pEditorPages[i], l_arrayTexts[i], true );
@@ -169,7 +181,6 @@ namespace GuiCommon
 
 		if ( m_bOwnShader && !m_shaderProgram.expired() )
 		{
-			//m_pPass.lock()->SetShader( nullptr );
 			m_shaderProgram.reset();
 		}
 	}
@@ -209,7 +220,6 @@ namespace GuiCommon
 				}
 			}
 
-			//m_pPass.lock()->SetShader( m_shaderProgram.lock() );
 			m_bCompiled = true;
 		}
 	}

@@ -1,4 +1,4 @@
-#include "FrameVariableTreeItemProperty.hpp"
+﻿#include "FrameVariableTreeItemProperty.hpp"
 
 #include <Render/RenderSystem.hpp>
 #include <Shader/UniformBuffer.hpp>
@@ -57,7 +57,8 @@ namespace GuiCommon
 		static wxString PROPERTY_TYPE_DMAT4 = wxT( "dmat4x4" );
 		static wxString PROPERTY_TYPE_SAMPLER = wxT( "sampler" );
 
-		wxPGProperty * DoBuildValueProperty( wxString const & p_name, UniformSPtr p_variable )
+		wxPGProperty * DoBuildValueProperty( wxString const & p_name
+			, UniformSPtr p_variable )
 		{
 			wxPGProperty * l_return = nullptr;
 
@@ -290,11 +291,13 @@ namespace GuiCommon
 		}
 	}
 
-	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::UniformSPtr p_variable, UniformBufferSPtr p_buffer )
-		: TreeItemProperty( p_buffer->GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable
+		, UniformSPtr p_variable
+		, UniformBuffer & p_buffer )
+		: TreeItemProperty( p_buffer.GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_variable( p_variable )
 		, m_type( ShaderType::eCount )
-		, m_buffer( p_buffer )
+		, m_buffer( &p_buffer )
 	{
 		PROPERTY_CATEGORY_VARIABLE = _( "Frame Variable: " );
 		PROPERTY_NAME = _( "Name" );
@@ -340,11 +343,53 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::PushUniformSPtr p_variable, ShaderType p_type )
+	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable
+		, PushUniformSPtr p_variable
+		, ShaderType p_type )
 		: TreeItemProperty( p_variable->GetProgram().GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_pushVariable( p_variable )
 		, m_type( p_type )
 	{
+		PROPERTY_CATEGORY_VARIABLE = _( "Frame Variable: " );
+		PROPERTY_NAME = _( "Name" );
+		PROPERTY_VALUE = _( "Value" );
+		PROPERTY_TYPE = _( "Type" );
+		PROPERTY_OCCURENCES = _( "Occurences" );
+		PROPERTY_TYPE_BOOL = wxT( "bool" );
+		PROPERTY_TYPE_INT = wxT( "int" );
+		PROPERTY_TYPE_FLOAT = wxT( "float" );
+		PROPERTY_TYPE_DOUBLE = wxT( "double" );
+		PROPERTY_TYPE_BVEC2 = wxT( "bvec2" );
+		PROPERTY_TYPE_BVEC3 = wxT( "bvec3" );
+		PROPERTY_TYPE_BVEC4 = wxT( "bvec4" );
+		PROPERTY_TYPE_IVEC2 = wxT( "ivec2" );
+		PROPERTY_TYPE_IVEC3 = wxT( "ivec3" );
+		PROPERTY_TYPE_IVEC4 = wxT( "ivec4" );
+		PROPERTY_TYPE_UIVEC2 = wxT( "uivec2" );
+		PROPERTY_TYPE_UIVEC3 = wxT( "uivec3" );
+		PROPERTY_TYPE_UIVEC4 = wxT( "uivec4" );
+		PROPERTY_TYPE_VEC2 = wxT( "vec2" );
+		PROPERTY_TYPE_VEC3 = wxT( "vec3" );
+		PROPERTY_TYPE_VEC4 = wxT( "vec4" );
+		PROPERTY_TYPE_DVEC2 = wxT( "dvec2" );
+		PROPERTY_TYPE_DVEC3 = wxT( "dvec3" );
+		PROPERTY_TYPE_DVEC4 = wxT( "dvec4" );
+		PROPERTY_TYPE_BMAT2 = wxT( "bmat2x2" );
+		PROPERTY_TYPE_BMAT3 = wxT( "bmat3x3" );
+		PROPERTY_TYPE_BMAT4 = wxT( "bmat4x4" );
+		PROPERTY_TYPE_IMAT2 = wxT( "imat2x2" );
+		PROPERTY_TYPE_IMAT3 = wxT( "imat3x3" );
+		PROPERTY_TYPE_IMAT4 = wxT( "imat4x4" );
+		PROPERTY_TYPE_UIMAT2 = wxT( "uimat2x2" );
+		PROPERTY_TYPE_UIMAT3 = wxT( "uimat3x3" );
+		PROPERTY_TYPE_UIMAT4 = wxT( "uimat4x4" );
+		PROPERTY_TYPE_MAT2 = wxT( "mat2x2" );
+		PROPERTY_TYPE_MAT3 = wxT( "mat3x3" );
+		PROPERTY_TYPE_MAT4 = wxT( "mat4x4" );
+		PROPERTY_TYPE_DMAT2 = wxT( "dmat2x2" );
+		PROPERTY_TYPE_DMAT3 = wxT( "dmat3x3" );
+		PROPERTY_TYPE_DMAT4 = wxT( "dmat4x4" );
+		PROPERTY_TYPE_SAMPLER = wxT( "sampler" );
 	}
 
 	FrameVariableTreeItemProperty::~FrameVariableTreeItemProperty()
@@ -396,7 +441,7 @@ namespace GuiCommon
 			l_choices.push_back( PROPERTY_TYPE_SAMPLER );
 			wxString l_selected = make_wxString( l_variable->GetFullTypeName() );
 			wxEnumProperty * l_type = new wxEnumProperty( PROPERTY_TYPE, PROPERTY_TYPE, l_choices );
-			l_type->Enable( !m_buffer.expired() );
+			l_type->Enable( m_buffer != nullptr );
 			l_type->SetValue( l_selected );
 			p_grid->Append( l_type );
 
@@ -532,8 +577,8 @@ namespace GuiCommon
 
 	void FrameVariableTreeItemProperty::OnTypeChange( UniformType p_value )
 	{
-		UniformSPtr l_variable = GetVariable();
-		UniformBufferSPtr l_buffer = GetBuffer();
+		auto l_variable = GetVariable();
+		auto l_buffer = GetBuffer();
 
 		if ( l_buffer )
 		{
@@ -547,8 +592,8 @@ namespace GuiCommon
 
 	void FrameVariableTreeItemProperty::OnNameChange( String const & p_value )
 	{
-		UniformSPtr l_variable = GetVariable();
-		UniformBufferSPtr l_buffer = GetBuffer();
+		auto l_variable = GetVariable();
+		auto l_buffer = GetBuffer();
 
 		if ( l_buffer )
 		{

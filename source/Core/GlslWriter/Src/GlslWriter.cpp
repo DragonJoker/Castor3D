@@ -84,6 +84,14 @@ namespace GLSL
 		m_block = new IndentBlock( m_writer );
 	}
 
+	Struct::Struct( GlslWriter & p_writer, Castor::String const & p_name, Castor::String const & p_instName )
+		: m_writer( p_writer )
+		, m_name( p_name )
+		, m_instName( p_instName )
+		, m_block( nullptr )
+	{
+	}
+
 	void Struct::End()
 	{
 		delete m_block;

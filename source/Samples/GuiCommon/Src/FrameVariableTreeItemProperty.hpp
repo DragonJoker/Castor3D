@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -52,7 +52,9 @@ namespace GuiCommon
 		 *\param[in]	p_variable	La variable cible
 		 *\param[in]	p_buffer	Le tampon de variables contenant celle donnàe
 		 */
-		FrameVariableTreeItemProperty( bool p_editable, Castor3D::UniformSPtr p_variable, Castor3D::UniformBufferSPtr p_buffer );
+		FrameVariableTreeItemProperty( bool p_editable
+			, Castor3D::UniformSPtr p_variable
+			, Castor3D::UniformBuffer & p_buffer );
 		/**
 		 *\~english
 		 *\brief		Constructor, allows creation of sampler frame variables only
@@ -65,7 +67,9 @@ namespace GuiCommon
 		 *\param[in]	p_variable	La variable cible
 		 *\param[in]	p_type		Le tampon de variables contenant celle donnàe
 		 */
-		FrameVariableTreeItemProperty( bool p_editable, Castor3D::PushUniformSPtr p_variable, Castor3D::ShaderType p_type );
+		FrameVariableTreeItemProperty( bool p_editable
+			, Castor3D::PushUniformSPtr p_variable
+			, Castor3D::ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -93,9 +97,9 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline Castor3D::UniformBufferSPtr GetBuffer()
+		inline Castor3D::UniformBufferRPtr GetBuffer()
 		{
-			return m_buffer.lock();
+			return m_buffer;
 		}
 
 	private:
@@ -116,7 +120,7 @@ namespace GuiCommon
 	private:
 		Castor3D::UniformWPtr m_variable;
 		Castor3D::PushUniformWPtr m_pushVariable;
-		Castor3D::UniformBufferWPtr m_buffer;
+		Castor3D::UniformBufferRPtr m_buffer{ nullptr };
 		Castor3D::ShaderType m_type;
 	};
 }

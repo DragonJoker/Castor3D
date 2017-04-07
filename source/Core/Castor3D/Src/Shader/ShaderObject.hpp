@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -220,11 +220,9 @@ namespace Castor3D
 		C3D_API virtual void FlushUniforms();
 		/**
 		 *\~english
-		 *\brief		Retrieves the frame variables bound to this shader
-		 *\return		The list
+		 *\return		The frame variables bound to this shader.
 		 *\~french
-		 *\brief		Récupère les variables de frame liées à ce shader
-		 *\return		La liste
+		 *\return		Les variables de frame liées à ce shader.
 		 */
 		inline PushUniformList & GetUniforms()
 		{
@@ -232,10 +230,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the frame variables bound to this shader
-		 *\return		The list
+		 *\return		The frame variables bound to this shader.
 		 *\~french
-		 *\brief		Récupère les variables de frame liées à ce shader
+		 *\return		Les variables de frame liées à ce shader.
 		 *\return		La liste
 		 */
 		inline PushUniformList const & GetUniforms()const
@@ -258,11 +255,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the compiled shader source
-		 *\return		The source code
+		 *\return		The compiled shader source code.
 		 *\~french
-		 *\brief		Récupère la source du shader compilé
-		 *\return		Le code de la source
+		 *\return		Le code source du shader compilé.
 		 */
 		inline Castor::String const & GetLoadedSource()const
 		{
@@ -284,11 +279,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the shader file for current model
-		 *\return		The file name
+		 *\return		The file name for current model.
 		 *\~french
-		 *\brief		Récupère le fichier du shader pour le modèle courant
-		 *\return		Le nom du fichier
+		 *\return		Le nom du fichier pour le modèle courant.
 		 */
 		inline Castor::Path const & GetCurrentFile()const
 		{
@@ -296,11 +289,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the name of this object type
-		 *\return		The type name
+		 *\return		The shader type name.
 		 *\~french
-		 *\brief		Récupère le nom du type de cet objet
-		 *\return		Le nom du type
+		 *\return		Le nom du type de shader.
 		 */
 		inline Castor::String GetStrType()const
 		{
@@ -308,11 +299,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the this object type
-		 *\return		The type
+		 *\return		The shader type.
 		 *\~french
-		 *\brief		Récupère le type de cet objet
-		 *\return		Le type
+		 *\return		Le type de shader.
 		 */
 		inline ShaderType GetType()const
 		{
@@ -328,19 +317,17 @@ namespace Castor3D
 		 */
 		inline void SetInputType( Topology p_topology )
 		{
-			m_eInputType = p_topology;
+			m_inputType = p_topology;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the intput primitives type
-		 *\return		The primitives type
+		 *\return		The intput primitives type.
 		 *\~french
-		 *\brief		Récupère le type des primitives en entrée
-		 *\return		Le type des primitives
+		 *\return		Le type des primitives en entrée.
 		 */
 		inline Topology GetInputType()const
 		{
-			return m_eInputType;
+			return m_inputType;
 		}
 		/**
 		 *\~english
@@ -352,19 +339,17 @@ namespace Castor3D
 		 */
 		inline void SetOutputType( Topology p_topology )
 		{
-			m_eOutputType = p_topology;
+			m_outputType = p_topology;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the output primitives type
-		 *\return		The primitives type
+		 *\return		The output primitives type.
 		 *\~french
-		 *\brief		Récupère le type des primitives en sortie
-		 *\return		Le type des primitives
+		 *\return		Le type des primitives en sortie.
 		 */
 		inline Topology GetOutputType()const
 		{
-			return m_eOutputType;
+			return m_outputType;
 		}
 		/**
 		 *\~english
@@ -376,19 +361,17 @@ namespace Castor3D
 		 */
 		void SetOutputVtxCount( uint8_t p_count )
 		{
-			m_uiOutputVtxCount = p_count;
+			m_outputVtxCount = p_count;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the output vertex count
-		 *\return		The count
+		 *\return		The output vertex count.
 		 *\~french
-		 *\brief		Récupère le nombre de vertices générés
-		 *\return		Le compte
+		 *\return		Le nombre de sommets générés.
 		 */
 		uint8_t GetOutputVtxCount()const
 		{
-			return m_uiOutputVtxCount;
+			return m_outputVtxCount;
 		}
 		/**
 		 *\~english
@@ -445,13 +428,13 @@ namespace Castor3D
 		ShaderStatus m_status{ ShaderStatus::eNotCompiled };
 		//!\~english	The input primitive type (for geometry shaders).
 		//!\~french		Le type de primitives en entrée (pour les geometry shaders).
-		Topology m_eInputType{ Topology::eTriangles };
+		Topology m_inputType{ Topology::eTriangles };
 		//!\~english	The output primitive type (for geometry shaders).
 		//!\~french		Le type de primitives en sortie (pour les geometry shaders).
-		Topology m_eOutputType{ Topology::eTriangles };
+		Topology m_outputType{ Topology::eTriangles };
 		//!\~english	The output vertex count (for geometry shaders)..
 		//!\~french		Le nombre de vertex générés (pour les geometry shaders).
-		uint8_t m_uiOutputVtxCount{ 3 };
+		uint8_t m_outputVtxCount{ 3 };
 		//!\~english	The current shader model.
 		//!\~french		Le modèle de shader actuel.
 		ShaderModel m_eShaderModel{ ShaderModel::eModel1 };

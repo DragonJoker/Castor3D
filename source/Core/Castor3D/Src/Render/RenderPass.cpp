@@ -1,4 +1,4 @@
-#include "RenderPass.hpp"
+﻿#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -450,7 +450,7 @@ namespace Castor3D
 		, BlendMode p_alphaBlendMode
 		, TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )
+		, SceneFlags const & p_sceneFlags )const
 	{
 		if ( m_opaque )
 		{
@@ -472,7 +472,7 @@ namespace Castor3D
 		, BlendMode p_alphaBlendMode
 		, TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )
+		, SceneFlags const & p_sceneFlags )const
 	{
 		if ( m_opaque )
 		{
@@ -582,6 +582,13 @@ namespace Castor3D
 	void RenderPass::UpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 		DoUpdatePipeline( p_pipeline );
+	}
+
+	void RenderPass::UpdateFlags( TextureChannels & p_textureFlags
+		, ProgramFlags & p_programFlags
+		, SceneFlags & p_sceneFlags )const
+	{
+		DoUpdateFlags( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
 	PassRenderNode RenderPass::DoCreatePassRenderNode( Pass & p_pass

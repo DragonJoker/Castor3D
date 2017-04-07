@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -53,8 +53,9 @@ namespace Castor3D
 		: public Castor::OwnedBy< RenderSystem >
 	{
 	private:
-		typedef std::stack< Castor::Matrix4x4r > MatrixStack;
-		typedef std::set< ShaderObjectSPtr > ShaderObjectSet;
+		using MatrixStack = std::stack< Castor::Matrix4x4r >;
+		using ShaderObjectSet = std::set< ShaderObjectSPtr >;
+		using BindingArray = std::vector< std::reference_wrapper< UniformBufferBinding > >;
 
 	public:
 		/**
@@ -320,6 +321,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The uniform buffer bindings.
+		 *\~french
+		 *\return		Les bindings des tampons de variables uniformes.
+		 */
+		inline BindingArray const & GetBindings()const
+		{
+			return m_bindings;
+		}
+		/**
+		 *\~english
 		 *\return		The creation flags.
 		 *\~french
 		 *\return		Les indicateurs de création.
@@ -447,7 +458,7 @@ namespace Castor3D
 		uint32_t m_textureCount{ 0u };
 		//!\~english	The uniform buffer bindings.
 		//!\~french		Les bindings de tampons d'uniformes.
-		std::vector< std::reference_wrapper< UniformBufferBinding > > m_bindings;
+		BindingArray m_bindings;
 	};
 }
 

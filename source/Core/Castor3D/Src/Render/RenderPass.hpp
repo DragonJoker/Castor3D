@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -216,7 +216,7 @@ namespace Castor3D
 			, BlendMode p_alphaBlendMode
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags );
+			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for back face culling.
@@ -239,7 +239,7 @@ namespace Castor3D
 			, BlendMode p_alphaBlendMode
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags );
+			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
@@ -332,6 +332,21 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
 		C3D_API void UpdatePipeline( RenderPipeline & p_pipeline )const;
+		/**
+		 *\~english
+		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in,out]	p_sceneFlags	A combination of SceneFlag.
+		 *\~french
+		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in,out]	p_sceneFlags	Une combinaison de SceneFlag.
+		 */
+		C3D_API void UpdateFlags( TextureChannels & p_textureFlags
+			, ProgramFlags & p_programFlags
+			, SceneFlags & p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\return		The multsampling status.
@@ -782,21 +797,6 @@ namespace Castor3D
 		C3D_API virtual void DoUpdate( RenderQueueArray & p_queues ) = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
-		 */
-		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const = 0;
-		/**
-		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
@@ -826,6 +826,21 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
 		C3D_API virtual Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux indicateurs donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 */
+		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const = 0;
 		/**

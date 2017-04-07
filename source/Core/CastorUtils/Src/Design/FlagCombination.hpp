@@ -395,6 +395,25 @@ namespace Castor
 	}
 	/**
 	 *\~english
+	 *\brief			Adds a flag combination to the given value.
+	 *\param[in,out]	p_value	The value.
+	 *\param[in]		p_flags	The flag combination to add.
+	 *\return			The value.
+	 *\~french
+	 *\brief			Ajoute une combinaison d'indicateurs à la valeur donnée.
+	 *\param[in,out]	p_value	La valeur.
+	 *\param[in]		p_flags	La combinaison d'indicateurs à ajouter.
+	 *\return			La valeur.
+	 */
+	template< typename FlagType, typename Type >
+	inline FlagCombination< FlagType, Type > & AddFlags( FlagCombination< FlagType, Type > & p_value, FlagCombination< FlagType, Type > const & p_flags )noexcept
+	{
+		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't add flags for different size parameters" );
+		p_value |= p_flags;
+		return p_value;
+	}
+	/**
+	 *\~english
 	 *\brief			Removes a flag from the given value.
 	 *\param[in,out]	p_value	The value.
 	 *\param[in]		p_flag	The flag to remove.

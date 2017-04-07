@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -34,7 +34,12 @@ namespace GuiCommon
 		: public wxFrame
 	{
 	public:
-		ShaderDialog( Castor3D::Scene & p_scene, bool p_bCanEdit, wxWindow * p_parent, Castor3D::PassSPtr p_pass, wxPoint const & p_position = wxDefaultPosition, const wxSize p_size = wxSize( 800, 600 ) );
+		ShaderDialog( Castor3D::Scene & p_scene
+			, bool p_bCanEdit
+			, wxWindow * p_parent
+			, Castor3D::Pass & p_pass
+			, wxPoint const & p_position = wxDefaultPosition
+			, const wxSize p_size = wxSize( 800, 600 ) );
 		~ShaderDialog();
 
 	private:
@@ -64,7 +69,7 @@ namespace GuiCommon
 		std::unique_ptr< StcContext > m_pStcContext;
 		ShaderEditorPage * m_pEditorPages[size_t( Castor3D::ShaderType::eCount )];
 		Castor3D::ShaderProgramWPtr m_shaderProgram;
-		Castor3D::PassWPtr m_pPass;
+		Castor3D::Pass & m_pass;
 		bool m_bCompiled;
 		bool m_bOwnShader;
 		bool m_bCanEdit;

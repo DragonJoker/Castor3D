@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -33,16 +33,26 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		FrameVariablesList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		FrameVariablesList( PropertiesHolder * p_propertiesHolder
+			, wxWindow * p_parent
+			, wxPoint const & p_ptPos = wxDefaultPosition
+			, wxSize const & p_size = wxDefaultSize );
 		~FrameVariablesList();
 
-		void LoadVariables( Castor3D::ShaderType p_type, Castor3D::ShaderProgramSPtr p_program );
+		void LoadVariables( Castor3D::ShaderType p_type
+			, Castor3D::ShaderProgramSPtr p_program
+			, Castor3D::RenderPipeline & p_pipeline );
 		void UnloadVariables();
 
 	private:
-		void DoAddBuffer( wxTreeItemId p_id, Castor3D::UniformBufferSPtr p_buffer );
-		void DoAddVariable( wxTreeItemId p_id, Castor3D::UniformSPtr p_variable, Castor3D::UniformBufferSPtr p_buffer );
-		void DoAddVariable( wxTreeItemId p_id, Castor3D::PushUniformSPtr p_variable, Castor3D::ShaderType p_type );
+		void DoAddBuffer( wxTreeItemId p_id
+			, Castor3D::UniformBuffer & p_buffer );
+		void DoAddVariable( wxTreeItemId p_id
+			, Castor3D::UniformSPtr p_variable
+			, Castor3D::UniformBuffer & p_buffer );
+		void DoAddVariable( wxTreeItemId p_id
+			, Castor3D::PushUniformSPtr p_variable
+			, Castor3D::ShaderType p_type );
 
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );

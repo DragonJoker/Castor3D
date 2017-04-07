@@ -1,4 +1,4 @@
-#include "LanguageFileParser.hpp"
+﻿#include "LanguageFileParser.hpp"
 #include "LanguageFileContext.hpp"
 #include "LanguageInfo.hpp"
 #include "StyleInfo.hpp"
@@ -30,8 +30,8 @@ namespace GuiCommon
 		AddParser( uint32_t( LANGSection::eLanguage ), cuT( "section" ), Language_Section );
 		AddParser( uint32_t( LANGSection::eLanguage ), cuT( "style" ), Language_Style );
 		AddParser( uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { MakeParameter< ParameterType::eCheckedText>( l_pContext->mapTypes ) } );
-		AddParser( uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { MakeParameter< ParameterType::eColour >() } );
-		AddParser( uint32_t( LANGSection::eStyle ), cuT( "bg_colour" ), Style_BgColour, { MakeParameter< ParameterType::eColour >() } );
+		AddParser( uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { MakeParameter< ParameterType::eText >() } );
+		AddParser( uint32_t( LANGSection::eStyle ), cuT( "bg_colour" ), Style_BgColour, { MakeParameter< ParameterType::eText >() } );
 		AddParser( uint32_t( LANGSection::eStyle ), cuT( "font_name" ), Style_FontName, { MakeParameter< ParameterType::eText >() } );
 		AddParser( uint32_t( LANGSection::eStyle ), cuT( "font_style" ), Style_FontStyle, { MakeParameter< ParameterType::eText >() } );
 		AddParser( uint32_t( LANGSection::eStyle ), cuT( "font_size" ), Style_FontSize, { MakeParameter< ParameterType::eInt32 >() } );

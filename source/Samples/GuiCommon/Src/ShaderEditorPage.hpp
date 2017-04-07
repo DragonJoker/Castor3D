@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -34,7 +34,15 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::ShaderType p_type, wxWindow * p_parent, wxPoint const & p_position = wxDefaultPosition, const wxSize p_size = wxSize( 800, 600 ) );
+		ShaderEditorPage( bool p_bCanEdit
+			, StcContext & p_stcContext
+			, Castor3D::ShaderProgramSPtr p_shader
+			, Castor3D::ShaderType p_type
+			, Castor3D::Pass const & p_pass
+			, Castor3D::Scene const & p_scene
+			, wxWindow * p_parent
+			, wxPoint const & p_position = wxDefaultPosition
+			, const wxSize p_size = wxSize( 800, 600 ) );
 		~ShaderEditorPage();
 
 		bool LoadFile( wxString const & p_file );
@@ -58,7 +66,7 @@ namespace GuiCommon
 	private:
 		void DoInitialiseShaderLanguage();
 		void DoInitialiseLayout();
-		void DoLoadPage();
+		void DoLoadPage( Castor3D::RenderPipeline & p_pipeline );
 		void DoCleanup();
 
 		DECLARE_EVENT_TABLE()
