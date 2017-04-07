@@ -154,6 +154,31 @@ namespace Testing
 		return l_scene;
 	}
 
+	RenderWindowSPtr GetWindow( Engine & p_engine, String const & p_sceneName )
+	{
+		auto & l_windows = p_engine.GetRenderWindowCache();
+		l_windows.lock();
+		auto l_it = std::find_if( l_windows.begin()
+			, l_windows.end()
+			, [p_sceneName]( auto & p_pair )
+		{
+			return p_pair.second->GetScene()->GetName() == p_sceneName;
+		} );
+
+		RenderWindowSPtr l_window;
+
+		if ( l_it != l_windows.end() )
+		{
+			l_window = l_it->second;
+			l_window->SetName( l_it->first + cuT( "_exp" ) );
+			l_windows.Remove( l_it->first );
+			l_windows.Add( l_window->GetName(), l_window );
+		}
+
+		l_windows.unlock();
+		return l_window;
+	}
+
 	void SceneExportTest::DoTestScene( String const & p_name )
 	{
 		SceneSPtr l_src{ DoParseScene( m_testDataFolder / p_name ) };
@@ -164,39 +189,25 @@ namespace Testing
 		m_engine.GetSceneCache().Remove( l_name );
 		l_src->SetName( l_name + cuT( "_exp" ) );
 		m_engine.GetSceneCache().Add( l_src->GetName(), l_src );
-
-		auto & l_windows = m_engine.GetRenderWindowCache();
-		l_windows.lock();
-		auto l_it = std::find_if( l_windows.begin()
-			, l_windows.end()
-			, [l_src]( auto & p_pair )
-		{
-			return p_pair.second->GetScene()->GetName() == l_src->GetName();
-		} );
-
-		if ( l_it != l_windows.end() )
-		{
-			auto l_window = l_it->second;
-			l_window->SetName( l_it->first + cuT( "_exp" ) );
-			l_windows.Remove( l_it->first );
-			l_windows.Add( l_window->GetName(), l_window );
-		}
-
-		l_windows.unlock();
+		auto l_srcWindow = GetWindow( m_engine, l_src->GetName() );
+		CT_CHECK( l_srcWindow != nullptr );
 
 		SceneSPtr l_dst{ DoParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
 		CT_EQUAL( *l_src, *l_dst );
+		auto l_dstWindow = GetWindow( m_engine, l_dst->GetName() );
+		CT_CHECK( l_dstWindow != nullptr );
 		File::DirectoryDelete( Path{ cuT( "TestScene" ) } );
 		l_src->Cleanup();
+		l_srcWindow->Cleanup();
 		m_engine.GetRenderLoop().RenderSyncFrame();
 		m_engine.GetSceneCache().Remove( l_name + cuT( "_exp" ) );
+		m_engine.GetRenderWindowCache().Remove( l_srcWindow->GetName() + cuT( "_exp" ) );
 		l_src.reset();
 		l_dst->Cleanup();
+		l_dstWindow->Cleanup();
 		m_engine.GetRenderLoop().RenderSyncFrame();
 		m_engine.GetSceneCache().Remove( l_name );
+		m_engine.GetRenderWindowCache().Remove( l_dstWindow->GetName() );
 		l_dst.reset();
-		m_engine.GetRenderWindowCache().Cleanup();
-		m_engine.GetRenderLoop().RenderSyncFrame();
-		m_engine.GetRenderWindowCache().Clear();
 	}
 }
