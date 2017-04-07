@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -263,7 +263,20 @@ namespace Castor3D
 		 *\~french
 		 *\return		La liste des reflection maps.
 		 */
-		C3D_API std::vector< std::reference_wrapper< EnvironmentMap > > & GetEnvironmentMaps();
+		inline std::vector< std::reference_wrapper< EnvironmentMap > > & GetEnvironmentMaps()
+		{
+			return m_reflectionMapsArray;
+		}
+		/**
+		 *\~english
+		 *\return		The reflection maps list.
+		 *\~french
+		 *\return		La liste des reflection maps.
+		 */
+		inline std::vector< std::reference_wrapper< EnvironmentMap > > const & GetEnvironmentMaps()const
+		{
+			return m_reflectionMapsArray;
+		}
 		/**
 		 *\~english
 		 *\brief		Sets the background colour
@@ -272,7 +285,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur du fond
 		 *\param[in]	p_clrNew	La nouvelle couleur
 		 */
-		void SetBackgroundColour( Castor::Colour const & p_clrNew )
+		inline void SetBackgroundColour( Castor::Colour const & p_clrNew )
 		{
 			m_backgroundColour = p_clrNew;
 		}
@@ -284,7 +297,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur du fond
 		 *\return		La couleur
 		 */
-		Castor::Colour const & GetBackgroundColour()const
+		inline Castor::Colour const & GetBackgroundColour()const
 		{
 			return m_backgroundColour;
 		}

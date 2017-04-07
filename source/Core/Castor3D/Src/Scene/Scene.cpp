@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+﻿#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -940,10 +940,5 @@ namespace Castor3D
 	{
 		REQUIRE( HasEnvironmentMap( p_node ) );
 		return *m_reflectionMaps.find( &p_node )->second;
-	}
-
-	std::vector< std::reference_wrapper< EnvironmentMap > > & Scene::GetEnvironmentMaps()
-	{
-		return m_reflectionMapsArray;
 	}
 }

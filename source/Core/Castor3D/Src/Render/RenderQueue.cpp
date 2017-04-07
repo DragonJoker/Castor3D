@@ -1,4 +1,4 @@
-#if defined( CASTOR_COMPILER_MSVC )
+﻿#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -353,9 +353,9 @@ namespace Castor3D
 							if ( l_submesh->GetRefCount( l_material ) > 1
 								&& !l_mesh
 								&& !l_skeleton
-								&& ( !l_pass->HasAlphaBlending()
-									|| p_renderPass.IsMultisampling() )
-								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
+								&& ( !l_pass->HasAlphaBlending() || p_renderPass.IsMultisampling() )
+								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing()
+								&& !l_pass->HasReflectionMapping() )
 							{
 								AddFlag( l_programFlags, ProgramFlag::eInstantiation );
 							}

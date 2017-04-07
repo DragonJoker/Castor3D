@@ -4,6 +4,8 @@
 
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Scene.hpp>
@@ -25,43 +27,44 @@ namespace deferred_common
 {
 	namespace
 	{
-		TextureUnit DoCreateResult( Engine & p_engine
-			, Size const & p_size )
+		VertexBufferSPtr DoCreateVbo( Engine & p_engine )
 		{
-			SamplerSPtr l_sampler;
-			String const l_name = cuT( "EnvironmentMapPassResult" );
-
-			if ( p_engine.GetSamplerCache().Has( l_name ) )
+			auto l_declaration = BufferDeclaration(
 			{
-				l_sampler = p_engine.GetSamplerCache().Find( l_name );
-			}
-			else
+				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 ),
+				BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 },
+			} );
+
+			float l_data[] =
 			{
-				l_sampler = p_engine.GetSamplerCache().Add( l_name );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-				l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-				l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			}
+				0, 0, 0, 0,
+				1, 1, 1, 1,
+				0, 1, 0, 1,
+				0, 0, 0, 0,
+				1, 0, 1, 0,
+				1, 1, 1, 1
+			};
 
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
-				TextureType::eTwoDimensions,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eRGBA32F, p_size );
-			TextureUnit l_unit{ p_engine };
-			l_unit.SetTexture( l_texture );
-			l_unit.SetSampler( l_sampler );
-			l_unit.SetIndex( 2u );
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			auto l_vertexBuffer = std::make_shared< VertexBuffer >( p_engine, l_declaration );
+			uint32_t l_stride = l_declaration.stride();
+			l_vertexBuffer->Resize( uint32_t( sizeof( l_data ) ) );
+			uint8_t * l_buffer = l_vertexBuffer->data();
+			std::memcpy( l_buffer, l_data, sizeof( l_data ) );
+			l_vertexBuffer->Initialise( BufferAccessType::eStatic
+				, BufferAccessNature::eDraw );
+			return l_vertexBuffer;
+		}
 
-			for ( auto & l_image : *l_texture )
-			{
-				l_image->InitialiseSource();
-			}
-
-			l_unit.Initialise();
-			return l_unit;
+		GeometryBuffersSPtr DoCreateVao( Engine & p_engine
+			, ShaderProgram & p_program
+			, VertexBuffer & p_vbo )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			auto l_result = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
+				, p_program );
+			l_result->Initialise( { p_vbo }, nullptr );
+			return l_result;
 		}
 
 		String DoCreateVertexProgram( RenderSystem & p_renderSystem )
@@ -80,10 +83,10 @@ namespace deferred_common
 
 			l_writer.ImplementFunction< void >( cuT( "main" )
 				, [&]()
-				{
-					vtx_texture = texture;
-					gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
-				} );
+			{
+				vtx_texture = texture;
+				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+			} );
 			return l_writer.Finalise();
 		}
 
@@ -94,8 +97,9 @@ namespace deferred_common
 
 			// Shader inputs
 			UBO_SCENE( l_writer );
+			UBO_GPINFO( l_writer );
 			auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
-			auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
+			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
 			auto c3d_mapEnvironment = l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, 32u );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -103,29 +107,27 @@ namespace deferred_common
 			auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 			GLSL::Utils l_utils{ l_writer };
-			l_utils.DeclareCalcTexCoord();
 			l_utils.DeclareCalcWSPosition();
 
 			l_writer.ImplementFunction< void >( cuT( "main" )
 				, [&]()
+			{
+				auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormal, vtx_texture ) );
+				auto l_index = l_writer.GetLocale( cuT( "l_index" ), l_v4Normal.w() );
+
+				IF( l_writer, l_index < 1.0_f )
 				{
-					auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
-					auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
-					auto l_index = l_writer.GetLocale( cuT( "l_index" ), l_writer.Cast< Int >( l_v4Normal.z() ) );
+					l_writer.Discard();
+				}
+				FI;
 
-					IF( l_writer, l_index <= 0 )
-					{
-						l_writer.Discard();
-					}
-					FI;
+				auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+				auto l_wsNormal = l_writer.GetLocale( cuT( "l_wsNormal" ), l_v4Normal.xyz() );
 
-					auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord ) );
-					auto l_wsNormal = l_writer.GetLocale( cuT( "l_wsNormal" ), l_v4Normal.xyz() );
-
-					auto l_i = l_writer.GetLocale( cuT( "l_i" ), l_wsPosition - c3d_v3CameraPosition );
-					auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_wsNormal ) );
-					pxl_v4FragColor = vec4( texture( c3d_mapEnvironment[l_index], l_r ).xyz(), 1.0_f );
-				} );
+				auto l_i = l_writer.GetLocale( cuT( "l_i" ), l_wsPosition - c3d_v3CameraPosition );
+				auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_wsNormal ) );
+				pxl_v4FragColor = vec4( texture( c3d_mapEnvironment[l_writer.Cast< Int >( l_index ) - 1], l_r ).xyz(), 1.0_f );
+			} );
 			return l_writer.Finalise();
 		}
 
@@ -142,9 +144,9 @@ namespace deferred_common
 			l_result->SetSource( ShaderType::ePixel, l_model, l_pxl );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDepth ), ShaderType::ePixel )->SetValue( 0u );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel )->SetValue( 1u );
-			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel, 32u )->SetValues(
+			l_result->CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, 32u )->SetValues(
 			{
-				 2u,  3u,  4u,  5u,  6u,  7u,  8u,  9u,
+				2u, 3u, 4u, 5u, 6u, 7u, 8u, 9u,
 				10u, 11u, 12u, 13u, 14u, 15u, 16u, 17u,
 				18u, 19u, 20u, 21u, 22u, 23u, 24u, 25u,
 				26u, 27u, 28u, 29u, 30u, 31u, 32u, 33u,
@@ -155,21 +157,29 @@ namespace deferred_common
 
 		RenderPipelineUPtr DoCreateRenderPipeline( Engine & p_engine
 			, ShaderProgram & p_program
-			, UniformBuffer & p_matrixUbo )
+			, UniformBuffer & p_matrixUbo
+			, UniformBuffer & p_sceneUbo
+			, UniformBuffer & p_gpInfoUbo )
 		{
 			UniformBuffer::FillMatrixBuffer( p_matrixUbo );
+			UniformBuffer::FillSceneBuffer( p_sceneUbo );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eBack );
+			l_rsState.SetCulledFaces( Culling::eNone );
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
 			l_dsState.SetDepthMask( WritingMask::eZero );
+			BlendState l_blState;
+			l_blState.EnableBlend( true );
+			l_blState.SetRgbBlend( BlendOperation::eAdd, BlendOperand::eDstColour, BlendOperand::eSrcColour );
 			auto l_result = p_engine.GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
 				, std::move( l_rsState )
-				, BlendState{}
+				, std::move( l_blState )
 				, MultisampleState{}
 				, p_program
 				, PipelineFlags{} );
 			l_result->AddUniformBuffer( p_matrixUbo );
+			l_result->AddUniformBuffer( p_sceneUbo );
+			l_result->AddUniformBuffer( p_gpInfoUbo );
 			return l_result;
 		}
 	}
@@ -177,49 +187,61 @@ namespace deferred_common
 	EnvironmentMapPass::EnvironmentMapPass( Engine & p_engine
 		, Size const & p_size )
 		: OwnedBy< Engine >{ p_engine }
-		, m_frameBuffer{ p_engine.GetRenderSystem()->CreateFrameBuffer() }
-		, m_result{ DoCreateResult( p_engine, p_size ) }
-		, m_colourAttach{ m_frameBuffer->CreateAttachment( m_result.GetTexture() ) }
+		, m_size{ p_size }
+		, m_viewport{ p_engine }
+		, m_vertexBuffer{ DoCreateVbo( p_engine ) }
 		, m_program{ DoCreateProgram( p_engine ) }
+		, m_geometryBuffers{ DoCreateVao( p_engine, *m_program, *m_vertexBuffer ) }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
-		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, m_matrixUbo ) }
+		, m_sceneUbo{ ShaderProgram::BufferScene, *p_engine.GetRenderSystem() }
+		, m_gpInfo{ p_engine }
+		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, m_matrixUbo, m_sceneUbo, m_gpInfo.GetUbo() ) }
 		, m_projectionUniform{ m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection ) }
 		, m_viewUniform{ m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView ) }
+		, m_cameraPosUniform{ m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos ) }
 	{
-		m_frameBuffer->Create();
-		m_frameBuffer->Initialise( p_size );
-		m_frameBuffer->Bind();
-		m_frameBuffer->Attach( AttachmentPoint::eColour, 0u, m_colourAttach, TextureType::eTwoDimensions );
-		ENSURE( m_frameBuffer->IsComplete() );
-		m_frameBuffer->Unbind();
+		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
+		m_viewport.Initialise();
+		m_viewport.Resize( m_size );
+		m_viewport.Update();
+		m_projectionUniform->SetValue( m_viewport.GetProjection() );
+		m_matrixUbo.Update();
 	}
 
 	EnvironmentMapPass::~EnvironmentMapPass()
 	{
 		m_viewUniform.reset();
 		m_projectionUniform.reset();
+		m_sceneUbo.Cleanup();
 		m_matrixUbo.Cleanup();
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
+		m_geometryBuffers->Cleanup();
+		m_geometryBuffers.reset();
+		m_vertexBuffer->Cleanup();
+		m_geometryBuffers.reset();
 		m_program.reset();
-		m_frameBuffer->Bind();
-		m_frameBuffer->DetachAll();
-		m_frameBuffer->Unbind();
-		m_frameBuffer->Cleanup();
-		m_frameBuffer->Destroy();
-		m_frameBuffer.reset();
-		m_colourAttach.reset();
-		m_result.Cleanup();
 	}
 
 	void EnvironmentMapPass::Render( GeometryPassResult & p_gp
-		, Scene & p_scene )
+		, Scene const & p_scene
+		, Camera const & p_camera
+		, Matrix4x4r const & p_invViewProj
+		, Matrix4x4r const & p_invView
+		, Matrix4x4r const & p_invProj )
 	{
+		m_gpInfo.Update( m_size
+			, p_camera
+			, p_invViewProj
+			, p_invView
+			, p_invProj );
+		m_cameraPosUniform->SetValue( p_camera.GetParent()->GetDerivedPosition() );
+		m_sceneUbo.Update();
 		auto & l_maps = p_scene.GetEnvironmentMaps();
-		auto & l_result = *m_result.GetTexture();
-		m_frameBuffer->Bind();
-		p_gp[size_t( DsTexture::eDepth )]->Bind();
-		p_gp[size_t( DsTexture::eNormal )]->Bind();
+		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
+		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
+		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Bind( 1u );
+		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Bind( 1u );
 		auto l_index = 2u;
 
 		for ( auto & l_map : l_maps )
@@ -229,8 +251,8 @@ namespace deferred_common
 			++l_index;
 		}
 
-		GetEngine()->GetRenderSystem()->GetMainContext()->RenderTexture( l_result.GetDimensions()
-			, l_result );
+		m_pipeline->Apply();
+		m_geometryBuffers->Draw( 6u, 0 );
 		l_index = 2u;
 
 		for ( auto & l_map : l_maps )
@@ -240,8 +262,9 @@ namespace deferred_common
 			++l_index;
 		}
 
-		p_gp[size_t( DsTexture::eNormal )]->Unbind();
-		p_gp[size_t( DsTexture::eDepth )]->Unbind();
-		m_frameBuffer->Unbind();
+		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Unbind( 1u );
+		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Unbind( 1u );
+		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
+		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
 	}
 }

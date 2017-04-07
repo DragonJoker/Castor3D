@@ -1,4 +1,4 @@
-#include "LightPass.hpp"
+﻿#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -80,8 +80,8 @@ namespace deferred_common
 		{
 			{
 				cuT( "c3d_mapDepth" ),
+				cuT( "c3d_mapNormal" ),
 				cuT( "c3d_mapDiffuse" ),
-				cuT( "c3d_mapNormals" ),
 				cuT( "c3d_mapSpecular" ),
 				cuT( "c3d_mapEmissive" ),
 			}
@@ -498,7 +498,7 @@ namespace deferred_common
 			auto l_eye = l_writer.GetLocale( cuT( "l_eye" ), c3d_v3CameraPosition );
 			auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), m_ssao, texture( c3d_mapSsao, l_texCoord ).r() );
 
-			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord ) );
+			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord, c3d_mtxInvViewProj ) );
 			auto l_wsNormal = l_writer.GetLocale( cuT( "l_wsNormal" ), l_v4Normal.xyz() );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };

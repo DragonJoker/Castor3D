@@ -1,4 +1,4 @@
-#include "RenderNode.hpp"
+﻿#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -79,7 +79,6 @@ namespace Castor3D
 		auto l_index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 
 		p_pass.UpdateRenderNode( p_node );
-		p_node.m_passUbo.Update();
 		p_pass.BindTextures();
 
 		for ( auto & l_depthMap : p_depthMaps )
@@ -89,16 +88,25 @@ namespace Castor3D
 
 		if ( p_pass.HasReflectionMapping() )
 		{
-			p_pipeline.GetEnvironmentMapVariable().SetValue( l_index );
 			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
-			l_map.GetTexture().SetIndex( l_index );
-			l_map.GetTexture().Bind();
-			p_node.m_environmentIndex.SetValue( l_map.GetIndex() );
+
+			if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+			{
+				p_pipeline.GetEnvironmentMapVariable().SetValue( l_index );
+				l_map.GetTexture().SetIndex( l_index );
+				l_map.GetTexture().Bind();
+			}
+			else
+			{
+				p_node.m_environmentIndex.SetValue( float( l_map.GetIndex() ) );
+			}
 		}
 		else
 		{
 			p_node.m_environmentIndex.SetValue( 0 );
 		}
+
+		p_node.m_passUbo.Update();
 	}
 
 	inline void DoUnbindPass( PassRenderNodeUniforms & p_node
@@ -108,7 +116,8 @@ namespace Castor3D
 		, RenderPipeline & p_pipeline
 		, DepthMapArray const & p_depthMaps )
 	{
-		if ( p_pass.HasReflectionMapping() )
+		if ( p_pass.HasReflectionMapping()
+			&& CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
 			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
 			l_map.GetTexture().Unbind();

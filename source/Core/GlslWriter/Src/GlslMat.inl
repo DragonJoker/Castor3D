@@ -1,4 +1,4 @@
-namespace GLSL
+﻿namespace GLSL
 {
 	//*****************************************************************************************
 
@@ -149,14 +149,14 @@ namespace GLSL
 
 	template< typename ValueT >
 	template< typename IndexT >
-	Vec2T< ValueT > Mat2T< ValueT >::operator[]( IndexT const & p_rhs )
+	Vec2T< ValueT > Mat2T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
 		Vec2T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 
 	template< typename ValueT >
-	Vec2T< ValueT > Mat2T< ValueT >::operator[]( int const & p_rhs )
+	Vec2T< ValueT > Mat2T< ValueT >::operator[]( int const & p_rhs )const
 	{
 		Vec2T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
 		return l_return;
@@ -203,14 +203,14 @@ namespace GLSL
 
 	template< typename ValueT >
 	template< typename IndexT >
-	Vec3T< ValueT > Mat3T< ValueT >::operator[]( IndexT const & p_rhs )
+	Vec3T< ValueT > Mat3T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
 		Vec3T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 
 	template< typename ValueT >
-	Vec3T< ValueT > Mat3T< ValueT >::operator[]( int const & p_rhs )
+	Vec3T< ValueT > Mat3T< ValueT >::operator[]( int const & p_rhs )const
 	{
 		Vec3T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
 		return l_return;
@@ -257,14 +257,14 @@ namespace GLSL
 
 	template< typename ValueT >
 	template< typename IndexT >
-	Vec4T< ValueT > Mat4T< ValueT >::operator[]( IndexT const & p_rhs )
+	Vec4T< ValueT > Mat4T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
 		Vec4T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
 		return l_return;
 	}
 
 	template< typename ValueT >
-	Vec4T< ValueT > Mat4T< ValueT >::operator[]( int const & p_rhs )
+	Vec4T< ValueT > Mat4T< ValueT >::operator[]( int const & p_rhs )const
 	{
 		Vec4T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
 		return l_return;

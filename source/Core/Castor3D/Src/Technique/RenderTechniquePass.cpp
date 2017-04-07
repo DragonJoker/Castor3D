@@ -1,4 +1,4 @@
-#include "RenderTechniquePass.hpp"
+﻿#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -377,6 +377,8 @@ namespace Castor3D
 			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
 			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
 			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			auto l_envAmbient = l_writer.GetLocale( cuT( "l_envAmbient" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
+			auto l_envDiffuse = l_writer.GetLocale( cuT( "l_envDiffuse" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
 			Float l_fAlpha;
 
 			if ( !m_opaque )
@@ -400,7 +402,9 @@ namespace Castor3D
 			{
 				auto l_i = l_writer.GetLocale( cuT( "l_i" ), vtx_position - c3d_v3CameraPosition );
 				auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_v3Normal ) );
-				l_v3Diffuse += texture( c3d_mapEnvironment, l_r ).xyz();
+				auto l_environment = l_writer.GetLocale( cuT( "l_environment" ), texture( c3d_mapEnvironment, l_r ).xyz() );
+				l_envAmbient = l_environment * 1.4;
+				l_envDiffuse = l_environment * 2.0;
 			}
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
@@ -417,21 +421,18 @@ namespace Castor3D
 				l_fAlpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
 
+			pxl_v4FragColor.xyz() = l_v3Ambient * l_envAmbient
+				+ l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() * l_envDiffuse )
+				+ l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() )
+				+ l_v3Emissive;
+
 			if ( m_opaque )
 			{
-				pxl_v4FragColor = vec4( l_v3Ambient
-						+ l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() )
-						+ l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() )
-						+ l_v3Emissive
-					, 1.0_f );
+				pxl_v4FragColor.a() = 1.0_f;
 			}
 			else
 			{
-				pxl_v4FragColor = vec4( l_v3Ambient
-						+ l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() )
-						+ l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() )
-						+ l_v3Emissive
-					, l_fAlpha );
+				pxl_v4FragColor.a() = l_fAlpha;
 			}
 
 			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )

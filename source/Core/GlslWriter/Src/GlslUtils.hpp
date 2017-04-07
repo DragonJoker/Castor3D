@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -33,16 +33,22 @@ namespace GLSL
 		GlslWriter_API Utils( GlslWriter & p_writer );
 		GlslWriter_API void DeclareCalcTexCoord();
 		GlslWriter_API void DeclareCalcVSPosition();
+		GlslWriter_API void DeclareCalcVSDepth();
 		GlslWriter_API void DeclareCalcWSPosition();
 		GlslWriter_API Vec2 CalcTexCoord();
-		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & p_uv );
-		GlslWriter_API Vec3 CalcWSPosition( Vec2 const & p_uv );
+		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & p_uv
+			, Mat4 const & p_invProj );
+		GlslWriter_API Float CalcVSDepth( Vec2 const & p_uv
+			, Mat4 const & p_proj );
+		GlslWriter_API Vec3 CalcWSPosition( Vec2 const & p_uv
+			, Mat4 const & p_invViewProj );
 
 	private:
 		GlslWriter & m_writer;
 		Function< Vec2 > m_calcTexCoord;
-		Function< Vec3, InVec2 > m_calcVSPosition;
-		Function< Vec3, InVec2 > m_calcWSPosition;
+		Function< Vec3, InVec2, InMat4 > m_calcVSPosition;
+		Function< Float, InVec2, InMat4 > m_calcVSDepth;
+		Function< Vec3, InVec2, InMat4 > m_calcWSPosition;
 	};
 }
 

@@ -277,17 +277,9 @@ namespace deferred_common
 			}
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) )
-			{
-				auto l_i = l_writer.GetLocale( cuT( "l_i" ), vtx_position - c3d_v3CameraPosition );
-				auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_v3Normal ) );
-				l_v3Diffuse += texture( c3d_mapEnvironment, l_r ).xyz();
-			}
-
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 			
-			out_c3dNormal = vec4( l_v3Normal, l_writer.Cast< Float >( c3d_iMatEnvironmentIndex ) );
+			out_c3dNormal = vec4( l_v3Normal, c3d_iMatEnvironmentIndex );
 			out_c3dDiffuse = vec4( l_v3Diffuse, l_writer.Cast< Float >( c3d_iShadowReceiver ) );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
 			out_c3dEmissive = vec4( l_v3Emissive, 0.0_f );

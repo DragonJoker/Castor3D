@@ -1,4 +1,4 @@
-#include "TextureImage.hpp"
+﻿#include "TextureImage.hpp"
 
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
@@ -201,7 +201,12 @@ namespace Castor3D
 
 			inline PxBufferBaseSPtr GetBuffer()const
 			{
-				return PxBufferBase::create( m_size, m_format );
+				if ( !m_buffer || m_buffer->dimensions() != m_size )
+				{
+					m_buffer = PxBufferBase::create( m_size, m_format );
+				}
+
+				return m_buffer;
 			}
 
 			inline void SetBuffer( PxBufferBaseSPtr p_buffer )
@@ -211,6 +216,7 @@ namespace Castor3D
 			}
 
 		protected:
+			mutable PxBufferBaseSPtr m_buffer;
 			PixelFormat m_format;
 			Size m_size;
 		};

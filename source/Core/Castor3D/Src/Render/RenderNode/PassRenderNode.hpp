@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -59,7 +59,7 @@ namespace Castor3D
 		Uniform1f & m_opacity;
 		//!\~english	The pass environment map index.
 		//!\~french		L'indice de la texture d'environnement de la passe.
-		Uniform1i & m_environmentIndex;
+		Uniform1f & m_environmentIndex;
 		//!\~english	The pass textures.
 		//!\~french		Les textures de la passe.
 		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;
