@@ -127,6 +127,8 @@ namespace Castor3D
 
 	RenderTechnique::~RenderTechnique()
 	{
+		m_transparentPass.reset();
+		m_opaquePass.reset();
 	}
 
 	bool RenderTechnique::Initialise( uint32_t & p_index )

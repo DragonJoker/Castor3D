@@ -89,6 +89,7 @@ namespace Testing
 		m_engine.GetRenderLoop().RenderSyncFrame();
 		l_src.reset();
 		l_dst.reset();
+		DeCleanupEngine();
 	}
 
 	void BinaryExportTest::ImportExport()
@@ -140,6 +141,7 @@ namespace Testing
 		m_engine.GetRenderLoop().RenderSyncFrame();
 		l_src.reset();
 		l_dst.reset();
+		DeCleanupEngine();
 	}
 
 	void BinaryExportTest::AnimatedMesh()
@@ -191,6 +193,7 @@ namespace Testing
 		l_src.reset();
 		l_dst.reset();
 		l_scene.reset();
+		DeCleanupEngine();
 	}
 
 	//*********************************************************************************************

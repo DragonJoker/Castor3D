@@ -279,6 +279,7 @@ namespace Testing
 		C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine );
 
 	protected:
+		void DeCleanupEngine();
 		using TestCase::compare;
 		bool compare( Castor::Angle const & p_a, Castor::Angle const & p_b );
 		bool compare( Castor::Quaternion const & p_a, Castor::Quaternion const & p_b );
