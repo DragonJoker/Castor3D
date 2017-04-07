@@ -86,8 +86,8 @@ namespace CastorViewer
 		m_listener.PostEvent( MakeFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
-				Quaternion l_x{ Point3r{ 1.0, 0.0, 0.0 }, m_angles[0] };
-				Quaternion l_y{ Point3r{ 0.0, 1.0, 0.0 }, m_angles[1] };
+				Quaternion l_x{ Quaternion::from_axis_angle( Point3r{ 1.0, 0.0, 0.0 }, m_angles[0] ) };
+				Quaternion l_y{ Quaternion::from_axis_angle( Point3r{ 0.0, 1.0, 0.0 }, m_angles[1] ) };
 				m_node->SetOrientation( m_originalOrientation * l_y * l_x );
 				m_node->Translate( m_translate );
 			} ) );

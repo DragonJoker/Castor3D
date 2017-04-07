@@ -11,6 +11,7 @@
 #include "Material/Material.hpp"
 #include "Mesh/Mesh.hpp"
 #include "ParticleSystem/ParticleSystem.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderWindow.hpp"
@@ -609,6 +610,9 @@ namespace Castor3D
 
 		m_meshCache->Clear();
 
+		m_reflectionMapsArray.clear();
+		m_reflectionMaps.clear();
+
 		m_skybox.reset();
 		m_animatedObjectGroupCache.reset();
 		m_billboardCache.reset();
@@ -669,6 +673,15 @@ namespace Castor3D
 		m_geometryCache->Cleanup();
 		m_lightCache->Cleanup();
 		m_sceneNodeCache->Cleanup();
+
+		for ( auto & l_pass : m_reflectionMapsArray )
+		{
+			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender
+				, [&l_pass]()
+				{
+					l_pass.get().Cleanup();
+				} ) );
+		}
 
 		m_materialCacheView->Clear();
 		m_samplerCacheView->Clear();
@@ -900,5 +913,32 @@ namespace Castor3D
 		{
 			return p_it.second->IsShadowProducer();
 		} );
+	}
+
+	void Scene::CreateEnvironmentMap( SceneNode & p_node )
+	{
+		if ( !HasEnvironmentMap( p_node ) )
+		{
+			auto l_it = m_reflectionMaps.emplace( &p_node, std::make_unique< EnvironmentMap >( *GetEngine(), p_node ) ).first;
+			auto & l_pass = *l_it->second;
+			m_reflectionMapsArray.emplace_back( l_pass );
+
+			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender
+				, [&l_pass]()
+				{
+					l_pass.Initialise();
+				} ) );
+		}
+	}
+
+	bool Scene::HasEnvironmentMap( SceneNode const & p_node )
+	{
+		return m_reflectionMaps.end() != m_reflectionMaps.find( &p_node );
+	}
+
+	EnvironmentMap & Scene::GetEnvironmentMap( SceneNode const & p_node )
+	{
+		REQUIRE( HasEnvironmentMap( p_node ) );
+		return *m_reflectionMaps.find( &p_node )->second;
 	}
 }

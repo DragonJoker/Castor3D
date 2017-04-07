@@ -14,18 +14,22 @@ using namespace Castor;
 namespace Castor3D
 {
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & p_name
-		, RenderTarget & p_renderTarget
-		, RenderTechnique & p_technique
+		, Scene & p_scene
+		, Camera * p_camera
 		, bool p_opaque
-		, bool p_multisampling )
+		, bool p_multisampling
+		, bool p_environment
+		, SceneNode const * p_ignored )
 		: RenderTechniquePass{ p_name
-			, p_renderTarget
-			, p_technique
+			, p_scene
+			, p_camera
 			, p_opaque
-			, p_multisampling }
-		, m_directionalShadowMap{ *p_renderTarget.GetEngine() }
-		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
-		, m_pointShadowMap{ *p_renderTarget.GetEngine() }
+			, p_multisampling
+			, p_environment
+			, p_ignored }
+		, m_directionalShadowMap{ *p_scene.GetEngine() }
+		, m_spotShadowMap{ *p_scene.GetEngine() }
+		, m_pointShadowMap{ *p_scene.GetEngine() }
 	{
 	}
 
@@ -35,8 +39,7 @@ namespace Castor3D
 
 	bool ForwardRenderTechniquePass::InitialiseShadowMaps()
 	{
-		auto & l_scene = *m_target.GetScene();
-		l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
+		m_scene.GetLightCache().ForEach( [this]( Light & p_light )
 		{
 			if ( p_light.IsShadowProducer() )
 			{
@@ -82,9 +85,9 @@ namespace Castor3D
 
 	void ForwardRenderTechniquePass::UpdateShadowMaps( RenderQueueArray & p_queues )
 	{
-		m_pointShadowMap.Update( *m_target.GetCamera(), p_queues );
-		m_spotShadowMap.Update( *m_target.GetCamera(), p_queues );
-		m_directionalShadowMap.Update( *m_target.GetCamera(), p_queues );
+		m_pointShadowMap.Update( *m_camera, p_queues );
+		m_spotShadowMap.Update( *m_camera, p_queues );
+		m_directionalShadowMap.Update( *m_camera, p_queues );
 	}
 
 	void ForwardRenderTechniquePass::RenderShadowMaps()

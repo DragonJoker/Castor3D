@@ -16,16 +16,18 @@ using namespace Castor3D;
 
 namespace deferred_common
 {
-	OpaquePass::OpaquePass( RenderTarget & p_renderTarget
-		, Castor3D::RenderTechnique & p_technique )
+	OpaquePass::OpaquePass( Scene & p_scene
+		, Camera * p_camera )
 		: Castor3D::RenderTechniquePass{ cuT( "deferred_opaque" )
-			, p_renderTarget
-			, p_technique
+			, p_scene
+			, p_camera
 			, true
-			, false }
-		, m_directionalShadowMap{ *p_renderTarget.GetEngine() }
-		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
-		, m_pointShadowMap{ *p_renderTarget.GetEngine() }
+			, false
+			, false
+			, nullptr }
+		, m_directionalShadowMap{ *p_scene.GetEngine() }
+		, m_spotShadowMap{ *p_scene.GetEngine() }
+		, m_pointShadowMap{ *p_scene.GetEngine() }
 	{
 	}
 
@@ -35,8 +37,7 @@ namespace deferred_common
 
 	bool OpaquePass::InitialiseShadowMaps()
 	{
-		auto & l_scene = *m_target.GetScene();
-		l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
+		m_scene.GetLightCache().ForEach( [this]( Light & p_light )
 		{
 			if ( p_light.IsShadowProducer() )
 			{
@@ -82,9 +83,9 @@ namespace deferred_common
 
 	void OpaquePass::UpdateShadowMaps( RenderQueueArray & p_queues )
 	{
-		m_pointShadowMap.Update( *m_target.GetCamera(), p_queues );
-		m_spotShadowMap.Update( *m_target.GetCamera(), p_queues );
-		m_directionalShadowMap.Update( *m_target.GetCamera(), p_queues );
+		m_pointShadowMap.Update( *m_camera, p_queues );
+		m_spotShadowMap.Update( *m_camera, p_queues );
+		m_directionalShadowMap.Update( *m_camera, p_queues );
 	}
 
 	void OpaquePass::RenderShadowMaps()
@@ -135,6 +136,7 @@ namespace deferred_common
 		UBO_SCENE( l_writer );
 
 		// Outputs
+		auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
@@ -185,7 +187,7 @@ namespace deferred_common
 
 			vtx_texture = l_v3Texture;
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_v4Vertex.xyz() );
+			vtx_position = l_v4Vertex.xyz();
 			l_v4Vertex = c3d_mtxView * l_v4Vertex;
 			auto l_mtxNormal = l_writer.GetLocale( cuT( "l_mtxNormal" )
 				, transpose( inverse( mat3( l_mtxModel ) ) ) );
@@ -206,7 +208,7 @@ namespace deferred_common
 			gl_Position = c3d_mtxProjection * l_v4Vertex;
 
 			auto l_tbn = l_writer.GetLocale( cuT( "l_tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = l_tbn * l_wsPosition;
+			vtx_tangentSpaceFragPosition = l_tbn * vtx_position;
 			vtx_tangentSpaceViewPosition = l_tbn * c3d_v3CameraPosition;
 		};
 
@@ -228,6 +230,7 @@ namespace deferred_common
 		UBO_MODEL( l_writer );
 
 		// Fragment Inputs
+		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
 		auto vtx_tangentSpaceViewPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
 		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
@@ -242,6 +245,7 @@ namespace deferred_common
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
+		auto c3d_mapEnvironment( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ) );
 
 		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -275,7 +279,7 @@ namespace deferred_common
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 			
-			out_c3dNormal = vec4( l_v3Normal, 0.0_f );
+			out_c3dNormal = vec4( l_v3Normal, c3d_iMatEnvironmentIndex );
 			out_c3dDiffuse = vec4( l_v3Diffuse, l_writer.Cast< Float >( c3d_iShadowReceiver ) );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
 			out_c3dEmissive = vec4( l_v3Emissive, 0.0_f );
@@ -286,8 +290,7 @@ namespace deferred_common
 
 	void OpaquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
-		auto & l_camera = *m_target.GetCamera();
-		auto & l_scene = *l_camera.GetScene();
+		auto & l_scene = *m_camera->GetScene();
 		auto & l_fog = l_scene.GetFog();
 		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
 
@@ -298,8 +301,8 @@ namespace deferred_common
 
 		m_sceneNode.m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
 		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
-		m_sceneNode.m_cameraPos.SetValue( l_camera.GetParent()->GetDerivedPosition() );
-		m_sceneNode.m_cameraFarPlane.SetValue( l_camera.GetViewport().GetFar() );
+		m_sceneNode.m_cameraPos.SetValue( m_camera->GetParent()->GetDerivedPosition() );
+		m_sceneNode.m_cameraFarPlane.SetValue( m_camera->GetViewport().GetFar() );
 		m_sceneNode.m_sceneUbo.Update();
 	}
 }

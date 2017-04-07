@@ -61,7 +61,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Quaternion( Point3r( 1, 0, 0 ), Angle::from_degrees( r ) ) );
+			matrix::rotate( l_mtx, Quaternion::from_axis_angle( Point3r( 1, 0, 0 ), Angle::from_degrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 1, 0, 0 ) );
 			CT_EQUAL( l_mtx, l_mat );
@@ -72,7 +72,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Quaternion( Point3r( 0, 1, 0 ), Angle::from_degrees( r ) ) );
+			matrix::rotate( l_mtx, Quaternion::from_axis_angle( Point3r( 0, 1, 0 ), Angle::from_degrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 0, 1, 0 ) );
 			CT_EQUAL( l_mtx, l_mat );
@@ -83,7 +83,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Quaternion( Point3r( 0, 0, 1 ), Angle::from_degrees( r ) ) );
+			matrix::rotate( l_mtx, Quaternion::from_axis_angle( Point3r( 0, 0, 1 ), Angle::from_degrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 0, 0, 1 ) );
 			CT_EQUAL( l_mtx, l_mat );
@@ -94,7 +94,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Quaternion( Point3r( 1, 1, 1 ), Angle::from_degrees( r ) ) );
+			matrix::rotate( l_mtx, Quaternion::from_axis_angle( Point3r( 1, 1, 1 ), Angle::from_degrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 1, 1, 1 ) );
 			CT_EQUAL( l_mtx, l_mat );
@@ -109,7 +109,7 @@ namespace Testing
 			Angle l_angle( Angle::from_degrees( r ) );
 			glm::mat4 l_glm = glm::mat4_cast( glm::normalize( glm::angleAxis( float( l_angle.radians() ), glm::normalize( glm::vec3( 1.0f, 1.0f, 1.0f ) ) ) ) );
 			Matrix4x4r l_mtx;
-			Quaternion( Point3r( 1.0_r, 1.0_r, 1.0_r ), l_angle ).to_matrix( l_mtx );
+			Quaternion::from_axis_angle( Point3r( 1.0_r, 1.0_r, 1.0_r ), l_angle ).to_matrix( l_mtx );
 			CT_EQUAL( l_mtx, l_glm );
 		}
 
@@ -119,7 +119,7 @@ namespace Testing
 		{
 			Matrix4x4r l_mtx( 1 );
 			Angle l_angle( Angle::from_degrees( r ) );
-			matrix::set_transform( l_mtx, Point3r( r, r, -r ), Point3r( 0.3_r, 0.6_r, 1.0_r ), Quaternion( Point3r( 1.0_r, 1.0_r, 1.0_r ), l_angle ) );
+			matrix::set_transform( l_mtx, Point3r( r, r, -r ), Point3r( 0.3_r, 0.6_r, 1.0_r ), Quaternion::from_axis_angle( Point3r( 1.0_r, 1.0_r, 1.0_r ), l_angle ) );
 			glm::mat4 l_mat( 1 );
 			{
 				// Compute transformation matrix with glm

@@ -48,23 +48,29 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_name			The technique name.
-		 *\param[in]	p_renderTarget	The render target for this technique.
-		 *\param[in]	p_technique		The parent render technique.
+		 *\param[in]	p_scene			The scene for this technique.
+		 *\param[in]	p_camera		The camera for this technique (may be null).
 		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
-		 *\param[in]	p_multisampling	The multisampling status
+		 *\param[in]	p_multisampling	The multisampling status.
+		 *\param[in]	p_environment	Pass used for an environment map rendering.
+		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom de la technique.
-		 *\param[in]	p_renderTarget	La render target pour cette technique.
-		 *\param[in]	p_technique		La technique de rendu parente.
+		 *\param[in]	p_scene			La scène pour cette technique.
+		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
 		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
 		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
+		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API ForwardRenderTechniquePass( Castor::String const & p_name
-			, RenderTarget & p_renderTarget
-			, RenderTechnique & p_technique
+			, Scene & p_scene
+			, Camera * p_camera
 			, bool p_opaque
-			, bool p_multisampling = false );
+			, bool p_multisampling
+			, bool p_environment
+			, SceneNode const * p_ignored );
 		/**
 		 *\~english
 		 *\brief		Destructor

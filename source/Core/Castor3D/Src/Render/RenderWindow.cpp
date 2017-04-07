@@ -144,7 +144,7 @@ namespace Castor3D
 				m_context->Cleanup();
 			}
 
-			if ( l_context != m_context.get() )
+			if ( l_context && l_context != m_context.get() )
 			{
 				l_context->SetCurrent();
 			}

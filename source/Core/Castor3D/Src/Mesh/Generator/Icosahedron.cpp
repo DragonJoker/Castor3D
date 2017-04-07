@@ -149,7 +149,7 @@ void Icosahedron::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 		Point3r l_ptNml;
 		Vertex::GetNormal( l_vertex, l_ptNml );
 		SphericalVertex l_vsVertex1( l_ptNml );
-		Vertex::SetTexCoord( l_vertex, l_vsVertex1.m_rPhi, l_vsVertex1.m_rTheta );
+		Vertex::SetTexCoord( l_vertex, l_vsVertex1.m_phi, l_vsVertex1.m_theta );
 	}
 
 	l_submesh->ComputeTangentsFromNormals();

@@ -1645,7 +1645,7 @@ namespace Castor3D
 			float l_fAngle;
 			p_params[0]->Get( l_ptVector );
 			p_params[1]->Get( l_fAngle );
-			l_parsingContext->pSceneNode->SetOrientation( Quaternion( l_ptVector, Angle::from_degrees( l_fAngle ) ) );
+			l_parsingContext->pSceneNode->SetOrientation( Quaternion::from_axis_angle( l_ptVector, Angle::from_degrees( l_fAngle ) ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2900,6 +2900,11 @@ namespace Castor3D
 			uint32_t l_uiChannel;
 			p_params[0]->Get( l_uiChannel );
 			l_parsingContext->pTextureUnit->SetChannel( TextureChannel( l_uiChannel ) );
+
+			if ( l_uiChannel == uint32_t( TextureChannel::eReflection ) )
+			{
+				l_parsingContext->pass->SetReflectionMapping( true );
+			}
 		}
 	}
 	END_ATTRIBUTE()

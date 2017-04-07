@@ -62,7 +62,7 @@ namespace castortd
 			l_baseNode->SetPosition( p_game.Convert( Point2i{ l_cell.m_x, l_cell.m_y - 1 } ) + Point3r{ 0, p_game.GetCellHeight(), 0 } );
 			l_baseNode->AttachTo( p_game.GetMapNode() );
 			auto l_node = p_game.GetScene().GetSceneNodeCache().Add( l_name );
-			l_node->SetOrientation( Quaternion{ Point3r{ 1, 0, 1 }, Angle::from_degrees( 45 ) } );
+			l_node->SetOrientation( Quaternion::from_axis_angle( Point3r{ 1, 0, 1 }, Angle::from_degrees( 45 ) ) );
 			l_node->AttachTo( l_baseNode );
 			auto l_geometry = p_game.GetScene().GetGeometryCache().Add( l_name, l_node, p_game.GetEnemyMesh() );
 

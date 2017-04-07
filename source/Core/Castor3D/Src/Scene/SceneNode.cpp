@@ -269,17 +269,17 @@ namespace Castor3D
 
 	void SceneNode::Yaw( Angle const & p_angle )
 	{
-		Rotate( Quaternion( Point3d( 0.0, 1.0, 0.0 ), p_angle ) );
+		Rotate( Quaternion::from_axis_angle( Point3d( 0.0, 1.0, 0.0 ), p_angle ) );
 	}
 
 	void SceneNode::Pitch( Angle const & p_angle )
 	{
-		Rotate( Quaternion( Point3d( 1.0, 0.0, 0.0 ), p_angle ) );
+		Rotate( Quaternion::from_axis_angle( Point3d( 1.0, 0.0, 0.0 ), p_angle ) );
 	}
 
 	void SceneNode::Roll( Angle const & p_angle )
 	{
-		Rotate( Quaternion( Point3d( 0.0, 0.0, 1.0 ), p_angle ) );
+		Rotate( Quaternion::from_axis_angle( Point3d( 0.0, 0.0, 1.0 ), p_angle ) );
 	}
 
 	void SceneNode::Rotate( Quaternion const & p_orientation )

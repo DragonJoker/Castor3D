@@ -70,17 +70,20 @@ namespace Castor3D
 		 *\param[in]	p_engine		The engine.
 		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
 		 *\param[in]	p_multisampling	The multisampling status.
+		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			Le nom de la passe.
 		 *\param[in]	p_engine		Le moteur.
 		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
 		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
+		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderPass( Castor::String const & p_name
 			, Engine & p_engine
 			, bool p_opaque
-			, bool p_multisampling = false );
+			, bool p_multisampling
+			, SceneNode const * p_ignored );
 
 	public:
 		/**

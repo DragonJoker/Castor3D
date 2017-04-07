@@ -1,7 +1,8 @@
-#include "RenderNode.hpp"
+﻿#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Geometry.hpp"
@@ -21,12 +22,13 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	inline void DoFillShaderDepthMaps( RenderPipeline & p_pipeline
+	inline uint32_t DoFillShaderDepthMaps( RenderPipeline & p_pipeline
 		, DepthMapArray & p_depthMaps )
 	{
+		uint32_t l_index = p_pipeline.GetTexturesCount() + 1;
+
 		if ( !p_depthMaps.empty() )
 		{
-			auto l_index = p_pipeline.GetTexturesCount() + 1;
 			auto l_layer = 0u;
 
 			if ( GetShadowType( p_pipeline.GetFlags().m_sceneFlags ) != GLSL::ShadowType::eNone )
@@ -58,11 +60,14 @@ namespace Castor3D
 				}
 			}
 		}
+
+		return l_index;
 	}
 
 	inline void DoBindPass( PassRenderNodeUniforms & p_node
+		, SceneNode & p_sceneNode
 		, Pass & p_pass
-		, Scene const & p_scene
+		, Scene & p_scene
 		, RenderPipeline & p_pipeline
 		, DepthMapArray & p_depthMaps )
 	{
@@ -71,23 +76,53 @@ namespace Castor3D
 			p_scene.GetLightCache().BindLights();
 		}
 
-		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
+		auto l_index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
+
 		p_pass.UpdateRenderNode( p_node );
-		p_node.m_passUbo.Update();
 		p_pass.BindTextures();
 
 		for ( auto & l_depthMap : p_depthMaps )
 		{
 			l_depthMap.get().Bind();
 		}
+
+		if ( p_pass.HasReflectionMapping() )
+		{
+			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
+
+			if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+			{
+				p_pipeline.GetEnvironmentMapVariable().SetValue( l_index );
+				l_map.GetTexture().SetIndex( l_index );
+				l_map.GetTexture().Bind();
+			}
+			else
+			{
+				p_node.m_environmentIndex.SetValue( float( l_map.GetIndex() ) );
+			}
+		}
+		else
+		{
+			p_node.m_environmentIndex.SetValue( 0 );
+		}
+
+		p_node.m_passUbo.Update();
 	}
 
 	inline void DoUnbindPass( PassRenderNodeUniforms & p_node
+		, SceneNode & p_sceneNode
 		, Pass & p_pass
-		, Scene const & p_scene
+		, Scene & p_scene
 		, RenderPipeline & p_pipeline
 		, DepthMapArray const & p_depthMaps )
 	{
+		if ( p_pass.HasReflectionMapping()
+			&& CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+		{
+			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
+			l_map.GetTexture().Unbind();
+		}
+
 		for ( auto & l_depthMap : p_depthMaps )
 		{
 			l_depthMap.get().Unbind();

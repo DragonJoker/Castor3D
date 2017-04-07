@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -176,6 +176,9 @@ namespace Castor3D
 		//!\~english	Shader used to render a shadow map for point light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
 		eShadowMapPoint = 0x0800,
+		//!\~english	Shader used to render an environment map.
+		//\~french		Shader utilisé pour dessiner une texture d'environnement.
+		eEnvironmentMapping = 0x1000,
 	};
 	IMPLEMENT_FLAGS( ProgramFlag )
 	/**
@@ -750,6 +753,7 @@ namespace Castor3D
 	auto c3d_v4MatSpecular = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatSpecular );\
 	auto c3d_fMatShininess = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatShininess );\
 	auto c3d_fMatOpacity = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatOpacity );\
+	auto c3d_iMatEnvironmentIndex = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatEnvironmentIndex );\
 	l_pass.End()
 
 #define UBO_MODEL( Writer )\

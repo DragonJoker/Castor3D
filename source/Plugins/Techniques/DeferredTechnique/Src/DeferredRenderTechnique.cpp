@@ -1,8 +1,8 @@
-﻿#include "DeferredRenderTechnique.hpp"
+#include "DeferredRenderTechnique.hpp"
 
-#include "DirectionalLightPass.hpp"
-#include "LightPassShadow.hpp"
-
+#include <DirectionalLightPass.hpp>
+#include <EnvironmentMapPass.hpp>
+#include <LightPassShadow.hpp>
 #include <OpaquePass.hpp>
 
 #include <FrameBuffer/ColourRenderBuffer.hpp>
@@ -46,12 +46,15 @@ namespace deferred
 		: Castor3D::RenderTechnique( RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
-			, std::make_unique< deferred_common::OpaquePass >( p_renderTarget, *this )
+			, std::make_unique< deferred_common::OpaquePass >( *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get() )
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_transparent" )
-				, p_renderTarget
-				, *this
+				, *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get()
 				, false
-				, false )
+				, false
+				, false
+				, nullptr )
 			, p_params )
 		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
 		, m_ssaoEnabled{ DoUsesSsao( p_params ) }
@@ -83,19 +86,26 @@ namespace deferred
 			l_return = DoInitialiseLightPass();
 		}
 
+		if ( l_return )
+		{
+			m_environment = std::make_unique< deferred_common::EnvironmentMapPass >( *m_renderSystem.GetEngine()
+				, m_renderTarget.GetSize() );
+		}
+
 		if ( l_return && m_ssaoEnabled )
 		{
 			m_ssao = std::make_unique< deferred_common::SsaoPass >( *m_renderSystem.GetEngine()
 				, m_renderTarget.GetSize() );
 		}
 
-		m_frameBuffer.m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eHighAlphaBlack ) );
+		m_frameBuffer.m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 		return l_return;
 	}
 
 	void RenderTechnique::DoCleanup()
 	{
 		m_ssao.reset();
+		m_environment.reset();
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();
 	}
@@ -120,6 +130,7 @@ namespace deferred
 	void RenderTechnique::DoRenderOpaque( RenderInfo & p_info )
 	{
 		GetEngine()->SetPerObjectLighting( false );
+		auto & l_scene = *m_renderTarget.GetScene();
 		auto & l_camera = *m_renderTarget.GetCamera();
 		auto l_invView = l_camera.GetView().get_inverse().get_transposed();
 		auto l_invProj = l_camera.GetViewport().GetProjection().get_inverse();
@@ -164,6 +175,12 @@ namespace deferred
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
+		m_environment->Render( m_lightPassTextures
+			, l_scene
+			, l_camera
+			, l_invViewProj
+			, l_invView
+			, l_invProj );
 	}
 
 	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
@@ -178,16 +195,17 @@ namespace deferred
 
 #if DEBUG_DEFERRED_BUFFERS && !defined( NDEBUG )
 
-		int l_width = int( m_size.width() ) / 6;
-		int l_height = int( m_size.height() ) / 6;
+		auto l_count = 5 + ( m_ssaoEnabled ? 1 : 0 );
+		int l_width = int( m_size.width() ) / l_count;
+		int l_height = int( m_size.height() ) / l_count;
 		int l_left = int( m_size.width() ) - l_width;
 		auto l_size = Size( l_width, l_height );
 		auto & l_context = *m_renderSystem.GetCurrentContext();
 		m_renderTarget.GetCamera()->Apply();
 		m_frameBuffer.m_frameBuffer->Bind();
 		l_context.RenderDepth( Position{ l_width * 0, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDepth )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * 1, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * 2, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormal )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 1, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eNormal )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * 2, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eDiffuse )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_width * 3, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eSpecular )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_width * 4, 0 }, l_size, *m_lightPassTextures[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
 
@@ -209,7 +227,7 @@ namespace deferred
 	bool RenderTechnique::DoInitialiseGeometryPass( uint32_t & p_index )
 	{
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
+		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eTransparentBlack ) );
 		bool l_return = m_geometryPassFrameBuffer->Create();
 
 		if ( l_return )

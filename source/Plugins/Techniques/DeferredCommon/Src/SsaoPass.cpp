@@ -1,4 +1,4 @@
-#include "SsaoPass.hpp"
+﻿#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -194,14 +194,7 @@ namespace deferred_common
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcTexCoord();
 			l_utils.DeclareCalcVSPosition();
-
-			auto l_getVSDepth = l_writer.ImplementFunction< Float >( cuT( "GetVSDepth" )
-				, [&]( Vec2 const & p_uv )
-			{
-				auto l_depth = l_writer.GetLocale( cuT( "l_depth" )
-					, texture( c3d_mapDepth, p_uv ).r() );
-				l_writer.Return( c3d_mtxGProj[3][2] / l_writer.Paren( l_depth * 2.0_f - 1.0_f - c3d_mtxGProj[2][2] ) );
-			}, InVec2{ &l_writer, cuT( "p_uv" ) } );
+			l_utils.DeclareCalcVSDepth();
 
 			// Shader outputs
 			auto pxl_fragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_fragColor" ) );
@@ -212,7 +205,7 @@ namespace deferred_common
 					auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
 
 					auto l_vsPosition = l_writer.GetLocale( cuT( "l_vsPosition" )
-						, l_utils.CalcVSPosition( l_texCoord ) );
+						, l_utils.CalcVSPosition( l_texCoord, c3d_mtxInvProj ) );
 					auto l_vsNormal = l_writer.GetLocale( cuT( "l_vsNormal" )
 						, normalize( l_writer.Paren( c3d_mtxInvView * vec4( texture( c3d_mapNormal, l_texCoord ).xyz(), 1.0_f ) ).xyz() ) );
 
@@ -238,7 +231,7 @@ namespace deferred_common
 						l_offset.xyz() = l_offset.xyz() / l_offset.w();      // perspective divide
 						l_offset.xyz() = l_offset.xyz() * 0.5 + 0.5;         // transform to range 0.0 - 1.0 
 						auto l_sampleDepth = l_writer.GetLocale( cuT( "l_sampleDepth" )
-							, l_getVSDepth( l_offset.xy() ) );
+							, l_utils.CalcVSDepth( l_offset.xy(), c3d_mtxGProj ) );
 						auto l_rangeCheck = l_writer.GetLocale( cuT( "l_rangeCheck" )
 							, smoothstep( 0.0_f, 1.0_f, c3d_radius / GLSL::abs( l_vsPosition.z() - l_sampleDepth ) ) );
 						l_occlusion += l_writer.Ternary( l_sampleDepth >= l_sample.z() + c3d_bias, 1.0_f, 0.0_f ) * l_rangeCheck;
@@ -397,7 +390,7 @@ namespace deferred_common
 			, *p_engine.GetRenderSystem() }
 		, m_blurProgram{ DoGetBlurProgram( p_engine ) }
 		, m_blurResult{ p_engine }
-		, m_viewport{ *p_engine.GetRenderSystem()->GetEngine() }
+		, m_viewport{ p_engine }
 	{
 		DoInitialiseQuadRendering();
 		DoInitialiseSsaoPass();
@@ -434,8 +427,8 @@ namespace deferred_common
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		m_viewMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
 		m_projectionMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
-		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
 		m_viewport.Update();
+		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
 	}
 
 	void SsaoPass::DoInitialiseSsaoPass()

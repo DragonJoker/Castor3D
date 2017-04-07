@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,7 +31,7 @@ namespace GlRender
 		: public GlBufferBase< uint8_t >
 	{
 	public:
-		GlGpuIoBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pixels, uint32_t p_pixelsSize, GlBufferTarget p_packMode, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
+		GlGpuIoBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint32_t p_pixelsSize, GlBufferTarget p_packMode, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
 		virtual ~GlGpuIoBuffer();
 		bool Initialise();
 
@@ -41,7 +41,6 @@ namespace GlRender
 	protected:
 		Castor3D::BufferAccessType m_accessType;
 		Castor3D::BufferAccessNature m_accessNature;
-		uint8_t	* m_pixels;
 		uint32_t m_pixelsSize;
 		GlRenderSystem * m_renderSystem;
 	};

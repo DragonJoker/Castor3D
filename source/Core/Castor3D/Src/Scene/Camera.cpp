@@ -123,10 +123,10 @@ namespace Castor3D
 				auto const & l_orientation = l_node->GetDerivedOrientation();
 				Point3r l_right{ 1.0_r, 0.0_r, 0.0_r };
 				Point3r l_up{ 0.0_r, 1.0_r, 0.0_r };
-				Point3r l_front{ 0.0_r, 0.0_r, 1.0_r };
 				l_orientation.transform( l_right, l_right );
 				l_orientation.transform( l_up, l_up );
-				l_orientation.transform( l_front, l_front );
+				Point3r l_front{ l_right ^ l_up };
+				l_up = l_front ^ l_right;
 
 				m_frustum.Update( l_position, l_right, l_up, l_front );
 

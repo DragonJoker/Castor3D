@@ -629,6 +629,7 @@ namespace Castor3D
 	class MultisampleState;
 	class ToneMapping;
 	class PostEffect;
+	class EnvironmentMapPass;
 	class ShadowMapPass;
 	struct PassRenderNodeUniforms;
 	struct PassRenderNode;
@@ -645,6 +646,7 @@ namespace Castor3D
 	class RenderLoopAsync;
 	class RenderLoopSync;
 	class RenderQueue;
+	class EnvironmentMap;
 	class ShadowMap;
 	class RenderColourCubeToTexture;
 	class RenderColourCubeLayerToTexture;
@@ -684,11 +686,13 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderPipeline );
 	DECLARE_SMART_PTR( ToneMapping );
 	DECLARE_SMART_PTR( PostEffect );
+	DECLARE_SMART_PTR( EnvironmentMapPass );
 	DECLARE_SMART_PTR( ShadowMapPass );
 	DECLARE_SMART_PTR( RenderTechnique );
 	DECLARE_SMART_PTR( RenderWindow );
 	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( RenderTarget );
+	DECLARE_SMART_PTR( EnvironmentMap );
 	DECLARE_SMART_PTR( ShadowMap );
 	DECLARE_SMART_PTR( RenderColourCubeToTexture );
 	DECLARE_SMART_PTR( RenderColourCubeLayerToTexture );

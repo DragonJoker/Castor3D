@@ -207,10 +207,15 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The lights sorted byt light type	\~french Les lumières, triées par type de lumière.
+		//!\~english	The lights sorted by light type.
+		//!\~french		Les lumières, triées par type de lumière.
 		LightsMap m_typeSortedLights;
-		//!\~english The lights texture	\~french La texture contenant les lumières
+		//!\~english	The lights texture.
+		//!\~french		La texture contenant les lumières.
 		TextureUnitSPtr m_lightsTexture;
+		//!\~english	The lights texture buffer.
+		//!\~french		Le tampon de la texture contenant les lumières.
+		Castor::PxBufferBaseSPtr m_lightsBuffer;
 	};
 	using LightCache = ObjectCache< Light, Castor::String >;
 	DECLARE_SMART_PTR( LightCache );

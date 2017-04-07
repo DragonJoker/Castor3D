@@ -230,13 +230,62 @@ namespace Castor3D
 		C3D_API bool HasShadows()const;
 		/**
 		 *\~english
+		 *\return		Creates a reflection map for given node.
+		 *\param[in]	p_node	The scene node from which the reflection map is generated.
+		 *\~french
+		 *\return		Crée une reflection map pour le noeud donné.
+		 *\param[in]	p_node	Le noeud de scène depuis lequel la reflection map est générée.
+		 */
+		C3D_API void CreateEnvironmentMap( SceneNode & p_node );
+		/**
+		 *\~english
+		 *\return		Tells if there is a reflection map for given node.
+		 *\param[in]	p_node	The scene node.
+		 *\~french
+		 *\return		Dit s'il y a une reflection map pour le noeud donné.
+		 *\param[in]	p_node	Le noeud de scène.
+		 */
+		C3D_API bool HasEnvironmentMap( SceneNode const & p_node );
+		/**
+		 *\~english
+		 *\remarks		Call HasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
+		 *\return		Retrieves the reflection map for given node.
+		 *\param[in]	p_node	The scene node.
+		 *\~french
+		 *\remarks		Appelez HasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
+		 *\return		Récupère la reflection map pour le noeud donné.
+		 *\param[in]	p_node	Le noeud de scène.
+		 */
+		C3D_API EnvironmentMap & GetEnvironmentMap( SceneNode const & p_node );
+		/**
+		 *\~english
+		 *\return		The reflection maps list.
+		 *\~french
+		 *\return		La liste des reflection maps.
+		 */
+		inline std::vector< std::reference_wrapper< EnvironmentMap > > & GetEnvironmentMaps()
+		{
+			return m_reflectionMapsArray;
+		}
+		/**
+		 *\~english
+		 *\return		The reflection maps list.
+		 *\~french
+		 *\return		La liste des reflection maps.
+		 */
+		inline std::vector< std::reference_wrapper< EnvironmentMap > > const & GetEnvironmentMaps()const
+		{
+			return m_reflectionMapsArray;
+		}
+		/**
+		 *\~english
 		 *\brief		Sets the background colour
 		 *\param[in]	p_clrNew	The new colour
 		 *\~french
 		 *\brief		Définit la couleur du fond
 		 *\param[in]	p_clrNew	La nouvelle couleur
 		 */
-		void SetBackgroundColour( Castor::Colour const & p_clrNew )
+		inline void SetBackgroundColour( Castor::Colour const & p_clrNew )
 		{
 			m_backgroundColour = p_clrNew;
 		}
@@ -248,7 +297,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur du fond
 		 *\return		La couleur
 		 */
-		Castor::Colour const & GetBackgroundColour()const
+		inline Castor::Colour const & GetBackgroundColour()const
 		{
 			return m_backgroundColour;
 		}
@@ -523,6 +572,12 @@ namespace Castor3D
 		//!\~english	The frame listener for the scene.
 		//!\~french		Le frame listener pour la scène.
 		FrameListenerWPtr m_listener;
+		//!\~english	The scene's reflection maps.
+		//!\~french		Les reflection maps de la scène.
+		std::map< SceneNode const *, std::unique_ptr< EnvironmentMap > > m_reflectionMaps;
+		//!\~english	The scene's reflection maps.
+		//!\~french		Les reflection maps de la scène.
+		std::vector< std::reference_wrapper< EnvironmentMap > > m_reflectionMapsArray;
 
 	public:
 		//!\~english	The cameras root node name.

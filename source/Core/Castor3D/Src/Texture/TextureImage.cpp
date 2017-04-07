@@ -1,4 +1,4 @@
-#include "TextureImage.hpp"
+﻿#include "TextureImage.hpp"
 
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
@@ -26,6 +26,19 @@ namespace Castor3D
 				FAILURE( "Can't call Resize on a static texture source." );
 				return false;
 			}
+
+			inline PxBufferBaseSPtr GetBuffer()const
+			{
+				return m_buffer;
+			}
+
+			inline void SetBuffer( PxBufferBaseSPtr p_buffer )
+			{
+				m_buffer = p_buffer;
+			}
+
+		protected:
+			PxBufferBaseSPtr m_buffer;
 		};
 
 		//*********************************************************************************************
@@ -161,6 +174,12 @@ namespace Castor3D
 			: public TextureSource
 		{
 		public:
+			DynamicTextureSource( Size const & p_dimensions, PixelFormat p_format )
+				: m_format{ p_format }
+				, m_size{ p_dimensions }
+			{
+			}
+
 			virtual bool IsStatic()const
 			{
 				return false;
@@ -170,15 +189,36 @@ namespace Castor3D
 			{
 				Size l_size{ p_size };
 				DoAdjustDimensions( l_size, p_depth );
-				bool l_return = m_buffer && m_buffer->dimensions() != p_size;
+				bool l_return = m_size != p_size;
 
 				if ( l_return )
 				{
-					m_buffer = PxBufferBase::create( p_size, m_buffer->format() );
+					m_size = p_size;
 				}
 
 				return l_return;
 			}
+
+			inline PxBufferBaseSPtr GetBuffer()const
+			{
+				if ( !m_buffer || m_buffer->dimensions() != m_size )
+				{
+					m_buffer = PxBufferBase::create( m_size, m_format );
+				}
+
+				return m_buffer;
+			}
+
+			inline void SetBuffer( PxBufferBaseSPtr p_buffer )
+			{
+				m_size = p_buffer->dimensions();
+				m_format = p_buffer->format();
+			}
+
+		protected:
+			mutable PxBufferBaseSPtr m_buffer;
+			PixelFormat m_format;
+			Size m_size;
 		};
 
 		//*********************************************************************************************
@@ -188,11 +228,10 @@ namespace Castor3D
 		{
 		public:
 			Dynamic2DTextureSource( Size const & p_dimensions, PixelFormat p_format )
+				: DynamicTextureSource{ p_dimensions, p_format }
 			{
-				Size l_size{ p_dimensions };
 				uint32_t l_depth{ 1u };
-				DoAdjustDimensions( l_size, l_depth );
-				m_buffer = PxBufferBase::create( l_size, p_format );
+				DoAdjustDimensions( m_size, l_depth );
 			}
 
 			virtual uint32_t GetDepth()const
@@ -202,7 +241,8 @@ namespace Castor3D
 
 			virtual String ToString()const
 			{
-				return string::to_string( m_buffer->dimensions().width() ) + cuT( "x" ) + string::to_string( m_buffer->dimensions().height() );
+				return string::to_string( m_size.width() )
+					+ cuT( "x" ) + string::to_string( m_size.height() );
 			}
 		};
 
@@ -213,11 +253,10 @@ namespace Castor3D
 		{
 		public:
 			Dynamic3DTextureSource( Point3ui const & p_dimensions, PixelFormat p_format )
+				: DynamicTextureSource{ Size{ p_dimensions[0], p_dimensions[1] }, p_format }
 			{
 				m_depth = p_dimensions[2];
-				Size l_size{ p_dimensions[0], p_dimensions[1] };
-				DoAdjustDimensions( l_size, m_depth );
-				m_buffer = PxBufferBase::create( l_size, p_format );
+				DoAdjustDimensions( m_size, m_depth );
 			}
 
 			virtual uint32_t GetDepth()const
@@ -227,7 +266,9 @@ namespace Castor3D
 
 			virtual String ToString()const
 			{
-				return string::to_string( m_buffer->dimensions().width() ) + cuT( "x" ) + string::to_string( m_buffer->dimensions().height() ) + cuT( "x" ) + string::to_string( m_depth );
+				return string::to_string( m_size.width() )
+					+ cuT( "x" ) + string::to_string( m_size.height() )
+					+ cuT( "x" ) + string::to_string( m_depth );
 			}
 
 		private:

@@ -537,7 +537,7 @@ namespace castortd
 		l_baseNode->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1] * 3.0_r / 2, 0 } );
 		l_baseNode->AttachTo( m_mapNode );
 		auto l_node = m_scene.GetSceneNodeCache().Add( l_name );
-		l_node->SetOrientation( Quaternion{ Point3r{ 1, 0, 1 }, Angle::from_degrees( 45 ) } );
+		l_node->SetOrientation( Quaternion::from_axis_angle( Point3r{ 1, 0, 1 }, Angle::from_degrees( 45 ) ) );
 		l_node->AttachTo( l_baseNode );
 
 		auto l_geometry = m_scene.GetGeometryCache().Add( l_name, l_node, m_towerCubeMesh );

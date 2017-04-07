@@ -34,12 +34,26 @@ namespace forward
 	String const RenderTechnique::Type = cuT( "forward" );
 	String const RenderTechnique::Name = cuT( "Forward Render Technique" );
 
-	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
+	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget
+		, RenderSystem & p_renderSystem
+		, Parameters const & p_params )
 		: Castor3D::RenderTechnique{ RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
-		, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_opaque" ), p_renderTarget, *this, true, false )
-		, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_transparent" ), p_renderTarget, *this, false, false )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_opaque" )
+				, *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get()
+				, true
+				, false
+				, false
+				, nullptr )
+			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_transparent" )
+				, *p_renderTarget.GetScene()
+				, p_renderTarget.GetCamera().get()
+				, false
+				, false
+				, false
+				, nullptr )
 			, p_params }
 	{
 		Logger::LogInfo( "Using Forward rendering" );
