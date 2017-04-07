@@ -82,6 +82,44 @@ namespace Testing
 
 			return l_result;
 		}
+
+		template< typename ObjT, typename CacheT >
+		void RenameObject( ObjT p_object, CacheT & p_cache )
+		{
+			auto l_name = p_object->GetName();
+			p_object->SetName( l_name + cuT( "_ren" ) );
+			p_cache.Remove( l_name );
+			p_cache.Add( p_object->GetName(), p_object );
+		}
+
+		RenderWindowSPtr GetWindow( Engine & p_engine
+			, String const & p_sceneName
+			, bool p_rename )
+		{
+			auto & l_windows = p_engine.GetRenderWindowCache();
+			l_windows.lock();
+			auto l_it = std::find_if( l_windows.begin()
+				, l_windows.end()
+				, [p_sceneName]( auto & p_pair )
+			{
+				return p_pair.second->GetScene()->GetName() == p_sceneName;
+			} );
+
+			RenderWindowSPtr l_window;
+
+			if ( l_it != l_windows.end() )
+			{
+				l_window = l_it->second;
+
+				if ( p_rename )
+				{
+					RenameObject( l_window, l_windows );
+				}
+			}
+
+			l_windows.unlock();
+			return l_window;
+		}
 	}
 
 	SceneExportTest::SceneExportTest( Engine & p_engine )
@@ -128,22 +166,7 @@ namespace Testing
 		CT_REQUIRE( l_dstParser.ScenesBegin() != l_dstParser.ScenesEnd() );
 		SceneSPtr l_scene{ l_dstParser.ScenesBegin()->second };
 		auto & l_windows = m_engine.GetRenderWindowCache();
-		RenderWindowSPtr l_window;
-
-		l_windows.lock();
-		auto l_it = std::find_if( l_windows.begin()
-			, l_windows.end()
-			, [l_scene]( auto & p_pair )
-			{
-				return p_pair.second->GetScene()->GetName() == l_scene->GetName();
-			} );
-
-		if ( l_it != l_windows.end() )
-		{
-			l_window = l_it->second;
-		}
-
-		l_windows.unlock();
+		auto l_window = GetWindow( m_engine, l_scene->GetName(), false );
 
 		if ( l_window )
 		{
@@ -154,60 +177,34 @@ namespace Testing
 		return l_scene;
 	}
 
-	RenderWindowSPtr GetWindow( Engine & p_engine, String const & p_sceneName )
-	{
-		auto & l_windows = p_engine.GetRenderWindowCache();
-		l_windows.lock();
-		auto l_it = std::find_if( l_windows.begin()
-			, l_windows.end()
-			, [p_sceneName]( auto & p_pair )
-		{
-			return p_pair.second->GetScene()->GetName() == p_sceneName;
-		} );
-
-		RenderWindowSPtr l_window;
-
-		if ( l_it != l_windows.end() )
-		{
-			l_window = l_it->second;
-			l_window->SetName( l_it->first + cuT( "_exp" ) );
-			l_windows.Remove( l_it->first );
-			l_windows.Add( l_window->GetName(), l_window );
-		}
-
-		l_windows.unlock();
-		return l_window;
-	}
-
 	void SceneExportTest::DoTestScene( String const & p_name )
 	{
 		SceneSPtr l_src{ DoParseScene( m_testDataFolder / p_name ) };
 		Path l_path{ cuT( "TestScene.cscn" ) };
 		CT_CHECK( ExportScene( *l_src, l_path ) );
-
-		auto l_name = l_src->GetName();
-		m_engine.GetSceneCache().Remove( l_name );
-		l_src->SetName( l_name + cuT( "_exp" ) );
-		m_engine.GetSceneCache().Add( l_src->GetName(), l_src );
-		auto l_srcWindow = GetWindow( m_engine, l_src->GetName() );
+		
+		RenameObject( l_src, m_engine.GetSceneCache() );
+		auto l_srcWindow = GetWindow( m_engine, l_src->GetName(), true );
 		CT_CHECK( l_srcWindow != nullptr );
 
 		SceneSPtr l_dst{ DoParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
 		CT_EQUAL( *l_src, *l_dst );
-		auto l_dstWindow = GetWindow( m_engine, l_dst->GetName() );
+		auto l_dstWindow = GetWindow( m_engine, l_dst->GetName(), false );
 		CT_CHECK( l_dstWindow != nullptr );
 		File::DirectoryDelete( Path{ cuT( "TestScene" ) } );
 		l_src->Cleanup();
 		l_srcWindow->Cleanup();
 		m_engine.GetRenderLoop().RenderSyncFrame();
-		m_engine.GetSceneCache().Remove( l_name + cuT( "_exp" ) );
-		m_engine.GetRenderWindowCache().Remove( l_srcWindow->GetName() + cuT( "_exp" ) );
+		m_engine.GetSceneCache().Remove( l_src->GetName() );
+		m_engine.GetRenderWindowCache().Remove( l_srcWindow->GetName() );
+		l_srcWindow.reset();
 		l_src.reset();
 		l_dst->Cleanup();
 		l_dstWindow->Cleanup();
 		m_engine.GetRenderLoop().RenderSyncFrame();
-		m_engine.GetSceneCache().Remove( l_name );
+		m_engine.GetSceneCache().Remove( l_dst->GetName() );
 		m_engine.GetRenderWindowCache().Remove( l_dstWindow->GetName() );
+		l_dstWindow.reset();
 		l_dst.reset();
 	}
 }
