@@ -40,6 +40,12 @@ namespace Testing
 	{
 	}
 
+	void C3DTestCase::DeCleanupEngine()
+	{
+		m_engine.Cleanup();
+		m_engine.Initialise( 1, false );
+	}
+
 	bool C3DTestCase::compare( Angle const & p_a, Angle const & p_b )
 	{
 		return p_a.radians() == p_b.radians();

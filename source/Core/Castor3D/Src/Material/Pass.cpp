@@ -257,6 +257,18 @@ namespace Castor3D
 		DoSetOpacity( p_value );
 	}
 
+	ProgramFlags Pass::GetProgramFlags()const
+	{
+		ProgramFlags l_result;
+
+		if ( HasAlphaBlending() )
+		{
+			AddFlag( l_result, ProgramFlag::eAlphaBlending );
+		}
+
+		return l_result;
+	}
+
 	bool Pass::DoPrepareTexture( TextureChannel p_channel, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, PxBufferBaseSPtr & p_opacity )
 	{
 		PxBufferBaseSPtr l_opacity = DoPrepareTexture( p_channel, p_index );

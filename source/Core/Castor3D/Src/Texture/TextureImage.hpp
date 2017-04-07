@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -47,6 +47,15 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tampon de la texture.
 		 */
+		C3D_API virtual ~TextureSource()
+		{
+		}
+		/**
+		 *\~english
+		 *\return		The texture buffer.
+		 *\~french
+		 *\return		Le tampon de la texture.
+		 */
 		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const = 0;
 		/**
 		 *\~english
@@ -85,6 +94,26 @@ namespace Castor3D
 		 *\return		La source en chaîne de caractères.
 		 */
 		C3D_API virtual Castor::String ToString()const = 0;
+		/**
+		 *\~english
+		 *\return		The source's dimensions.
+		 *\~french
+		 *\return		Les dimensions de la source.
+		 */
+		inline Castor::Size GetDimensions()const
+		{
+			return m_size;
+		}
+		/**
+		 *\~english
+		 *\return		The source's pixel format.
+		 *\~french
+		 *\return		Le format des pixels de la source.
+		 */
+		inline Castor::PixelFormat GetPixelFormat()const
+		{
+			return m_format;
+		}
 
 	protected:
 		/**
@@ -100,6 +129,14 @@ namespace Castor3D
 		 *\return			\p true si les dimensions ont changé.
 		 */
 		bool DoAdjustDimensions( Castor::Size & p_size, uint32_t & p_depth );
+
+	protected:
+		//!\~english	The source's pixel format.
+		//!\~french		Le format des pixels de la source.
+		Castor::PixelFormat m_format;
+		//!\~english	The source's dimensions.
+		//!\~french		Les dimensions de la source.
+		Castor::Size m_size;
 	};
 	/*!
 	\author		Sylvain DOREMUS

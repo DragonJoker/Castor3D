@@ -265,6 +265,10 @@ namespace Testing
 					throw TestFailed( p_conditionName, p_file, p_function, p_line );
 				}
 			}
+			catch ( std::exception & p_exc )
+			{
+				throw TestFailed( p_conditionName, p_file, p_function, p_line );
+			}
 			catch ( ... )
 			{
 				throw TestFailed( p_conditionName, p_file, p_function, p_line );

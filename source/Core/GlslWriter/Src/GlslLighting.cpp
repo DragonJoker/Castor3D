@@ -1,4 +1,4 @@
-﻿#include "GlslLighting.hpp"
+#include "GlslLighting.hpp"
 
 #include "GlslShadow.hpp"
 
@@ -314,41 +314,41 @@ namespace GLSL
 	void LightingModel::Declare_Light()
 	{
 		Struct l_lightDecl = m_writer.GetStruct( cuT( "Light" ) );
-		l_lightDecl.GetMember< Vec3 >( cuT( "m_v3Colour" ) );
-		l_lightDecl.GetMember< Vec3 >( cuT( "m_v3Intensity" ) );
+		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_v3Colour" ) );
+		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_v3Intensity" ) );
 		l_lightDecl.End();
 	}
 
 	void LightingModel::Declare_DirectionalLight()
 	{
 		Struct l_lightDecl = m_writer.GetStruct( cuT( "DirectionalLight" ) );
-		l_lightDecl.GetMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.GetMember< Vec3 >( cuT( "m_v3Direction" ) );
-		l_lightDecl.GetMember< Mat4 >( cuT( "m_mtxLightSpace" ) );
+		l_lightDecl.DeclareMember< Light >( cuT( "m_lightBase" ) );
+		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_v3Direction" ) );
+		l_lightDecl.DeclareMember< Mat4 >( cuT( "m_mtxLightSpace" ) );
 		l_lightDecl.End();
 	}
 
 	void LightingModel::Declare_PointLight()
 	{
 		Struct l_lightDecl = m_writer.GetStruct( cuT( "PointLight" ) );
-		l_lightDecl.GetMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.GetMember< Vec3 >( cuT( "m_v3Position" ) );
-		l_lightDecl.GetMember< Vec3 >( cuT( "m_v3Attenuation" ) );
-		l_lightDecl.GetMember< Int >( cuT( "m_iIndex" ) );
+		l_lightDecl.DeclareMember< Light >( cuT( "m_lightBase" ) );
+		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_v3Position" ) );
+		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_v3Attenuation" ) );
+		l_lightDecl.DeclareMember< Int >( cuT( "m_iIndex" ) );
 		l_lightDecl.End();
 	}
 
 	void LightingModel::Declare_SpotLight()
 	{
 		Struct l_lightDecl = m_writer.GetStruct( cuT( "SpotLight" ) );
-		l_lightDecl.GetMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.GetMember< Vec3 >( cuT( "m_v3Position" ) );
-		l_lightDecl.GetMember< Vec3 >( cuT( "m_v3Attenuation" ) );
-		l_lightDecl.GetMember< Int >( cuT( "m_iIndex" ) );
-		l_lightDecl.GetMember< Vec3 >( cuT( "m_v3Direction" ) );
-		l_lightDecl.GetMember< Float >( cuT( "m_fExponent" ) );
-		l_lightDecl.GetMember< Float >( cuT( "m_fCutOff" ) );
-		l_lightDecl.GetMember< Mat4 >( cuT( "m_mtxLightSpace" ) );
+		l_lightDecl.DeclareMember< Light >( cuT( "m_lightBase" ) );
+		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_v3Position" ) );
+		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_v3Attenuation" ) );
+		l_lightDecl.DeclareMember< Int >( cuT( "m_iIndex" ) );
+		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_v3Direction" ) );
+		l_lightDecl.DeclareMember< Float >( cuT( "m_fExponent" ) );
+		l_lightDecl.DeclareMember< Float >( cuT( "m_fCutOff" ) );
+		l_lightDecl.DeclareMember< Mat4 >( cuT( "m_mtxLightSpace" ) );
 		l_lightDecl.End();
 	}
 

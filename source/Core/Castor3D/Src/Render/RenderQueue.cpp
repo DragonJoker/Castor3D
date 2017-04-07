@@ -1,4 +1,4 @@
-﻿#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -364,10 +364,7 @@ namespace Castor3D
 								RemFlag( l_programFlags, ProgramFlag::eInstantiation );
 							}
 
-							if ( l_pass->HasAlphaBlending() )
-							{
-								AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
-							}
+							AddFlags( l_programFlags, l_pass->GetProgramFlags() );
 
 							auto l_textureFlags = l_pass->GetTextureFlags();
 							p_renderPass.PreparePipeline( l_pass->GetColourBlendMode()

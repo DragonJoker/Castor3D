@@ -1,4 +1,4 @@
-﻿#include "TextureImage.hpp"
+#include "TextureImage.hpp"
 
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
@@ -61,6 +61,9 @@ namespace Castor3D
 				{
 					m_buffer = p_buffer;
 				}
+
+				m_format = m_buffer->format();
+				m_size = m_buffer->dimensions();
 			}
 
 			virtual uint32_t GetDepth()const
@@ -115,6 +118,9 @@ namespace Castor3D
 				{
 					CASTOR_EXCEPTION( cuT( "TextureImage::SetSource - Couldn't load image " ) + p_relative );
 				}
+
+				m_format = m_buffer->format();
+				m_size = m_buffer->dimensions();
 			}
 
 			virtual uint32_t GetDepth()const
@@ -152,6 +158,9 @@ namespace Castor3D
 				{
 					m_buffer = p_buffer;
 				}
+
+				m_format = m_buffer->format();
+				m_size = l_size;
 			}
 
 			virtual uint32_t GetDepth()const
@@ -175,9 +184,9 @@ namespace Castor3D
 		{
 		public:
 			DynamicTextureSource( Size const & p_dimensions, PixelFormat p_format )
-				: m_format{ p_format }
-				, m_size{ p_dimensions }
 			{
+				m_format = p_format;
+				m_size = p_dimensions;
 			}
 
 			virtual bool IsStatic()const
@@ -217,8 +226,6 @@ namespace Castor3D
 
 		protected:
 			mutable PxBufferBaseSPtr m_buffer;
-			PixelFormat m_format;
-			Size m_size;
 		};
 
 		//*********************************************************************************************
@@ -318,12 +325,7 @@ namespace Castor3D
 	void TextureImage::InitialiseSource( Path const & p_folder, Path const & p_relative )
 	{
 		m_source = std::make_unique< StaticFileTextureSource >( p_folder, p_relative );
-		auto l_buffer = m_source->GetBuffer();
-
-		if ( l_buffer )
-		{
-			GetOwner()->DoUpdateFromFirstImage( l_buffer->dimensions(), l_buffer->format() );
-		}
+		GetOwner()->DoUpdateFromFirstImage( m_source->GetDimensions(), m_source->GetPixelFormat() );
 	}
 
 	void TextureImage::InitialiseSource( PxBufferBaseSPtr p_buffer )
@@ -337,23 +339,13 @@ namespace Castor3D
 			m_source = std::make_unique< Static2DTextureSource >( p_buffer );
 		}
 
-		auto l_buffer = m_source->GetBuffer();
-
-		if ( l_buffer )
-		{
-			GetOwner()->DoUpdateFromFirstImage( l_buffer->dimensions(), l_buffer->format() );
-		}
+		GetOwner()->DoUpdateFromFirstImage( m_source->GetDimensions(), m_source->GetPixelFormat() );
 	}
 
 	void TextureImage::InitialiseSource()
 	{
 		m_source = std::make_unique< Dynamic2DTextureSource >( Size{ GetOwner()->GetWidth(), GetOwner()->GetHeight() }, GetOwner()->GetPixelFormat() );
-		auto l_buffer = m_source->GetBuffer();
-
-		if ( l_buffer )
-		{
-			GetOwner()->DoUpdateFromFirstImage( l_buffer->dimensions(), l_buffer->format() );
-		}
+		GetOwner()->DoUpdateFromFirstImage( m_source->GetDimensions(), m_source->GetPixelFormat() );
 	}
 
 	void TextureImage::Resize( Size const & p_size )

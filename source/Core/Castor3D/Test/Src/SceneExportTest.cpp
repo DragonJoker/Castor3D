@@ -206,5 +206,6 @@ namespace Testing
 		m_engine.GetRenderWindowCache().Remove( l_dstWindow->GetName() );
 		l_dstWindow.reset();
 		l_dst.reset();
+		DeCleanupEngine();
 	}
 }

@@ -107,12 +107,16 @@ namespace GLSL
 	struct Struct
 	{
 		GlslWriter_API Struct( GlslWriter & p_writer, Castor::String const & p_name );
+		GlslWriter_API Struct( GlslWriter & p_writer, Castor::String const & p_name, Castor::String const & p_instName );
 		GlslWriter_API void End();
+		template< typename T > inline void DeclareMember( Castor::String const & p_name );
+		template< typename T > inline void DeclareMember( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline T GetMember( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetMember( Castor::String const & p_name, uint32_t p_dimension );
 		IndentBlock * m_block;
 		GlslWriter & m_writer;
 		Castor::String m_name;
+		Castor::String m_instName;
 	};
 
 	struct GlslWriterConfig
@@ -307,6 +311,7 @@ namespace GLSL
 		template< typename T > inline T GetFragData( Castor::String const & p_name, uint32_t p_index );
 		template< typename T > inline Array< T > GetAttribute( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetOutput( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > GetOutputArray( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetInput( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetInputArray( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension );

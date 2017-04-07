@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -235,6 +235,7 @@ namespace GLSL
 	GlslWriter_API Vec3 reflect( Vec3 const & p_a, Type const & p_b );
 	GlslWriter_API Vec4 reflect( Vec4 const & p_a, Type const & p_b );
 	GlslWriter_API Float length( Type const & p_value );
+	GlslWriter_API Float distance( Type const & p_a, Type const & p_b );
 	GlslWriter_API Float radians( Type const & p_value );
 	GlslWriter_API Float cos( Type const & p_value );
 	GlslWriter_API Float sin( Type const & p_value );

@@ -1,4 +1,4 @@
-#include "Skybox.hpp"
+﻿#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -53,7 +53,7 @@ namespace Castor3D
 				Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( i ) ) ).ToString() }
 					, p_file.GetFilePath()
 					, l_subfolder );
-				l_return = p_file.WriteText( m_tabs + cuT( "\t" ) + l_faces[i] + cuT( "\"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\t" ) + l_faces[i] + cuT( " \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 				Castor::TextWriter< Skybox >::CheckError( l_return, ( "Skybox " + l_faces[i] ).c_str() );
 			}
 
