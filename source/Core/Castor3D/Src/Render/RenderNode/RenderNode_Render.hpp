@@ -1,4 +1,4 @@
-﻿#include "RenderNode.hpp"
+#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -86,7 +86,7 @@ namespace Castor3D
 			l_depthMap.get().Bind();
 		}
 
-		if ( p_pass.HasReflectionMapping() )
+		if ( p_pass.HasEnvironmentMapping() )
 		{
 			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
 
@@ -106,6 +106,7 @@ namespace Castor3D
 			p_node.m_environmentIndex.SetValue( 0 );
 		}
 
+		p_node.m_refractionRatio.SetValue( p_pass.GetRefractionRatio() );
 		p_node.m_passUbo.Update();
 	}
 
@@ -116,7 +117,7 @@ namespace Castor3D
 		, RenderPipeline & p_pipeline
 		, DepthMapArray const & p_depthMaps )
 	{
-		if ( p_pass.HasReflectionMapping()
+		if ( p_pass.HasEnvironmentMapping()
 			&& CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
 			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );

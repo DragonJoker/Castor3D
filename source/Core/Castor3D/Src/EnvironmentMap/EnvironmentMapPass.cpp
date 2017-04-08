@@ -1,4 +1,4 @@
-﻿#include "EnvironmentMapPass.hpp"
+#include "EnvironmentMapPass.hpp"
 
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/Viewport.hpp"
@@ -22,7 +22,8 @@ namespace Castor3D
 	}
 
 	EnvironmentMapPass::EnvironmentMapPass( EnvironmentMap & p_reflectionMap
-		, SceneNodeSPtr p_node )
+		, SceneNodeSPtr p_node
+		, SceneNode const & p_objectNode )
 		: OwnedBy< EnvironmentMap >{ p_reflectionMap }
 		, m_node{ p_node }
 		, m_camera{ DoCreateCamera( *p_node ) }
@@ -32,14 +33,14 @@ namespace Castor3D
 			, true
 			, false
 			, true
-			, p_node.get() ) }
+			, &p_objectNode ) }
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
 			, *p_node->GetScene()
 			, m_camera.get()
 			, false
 			, false
 			, true
-			, p_node.get() ) }
+			, &p_objectNode ) }
 	{
 	}
 

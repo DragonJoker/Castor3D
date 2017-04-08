@@ -60,6 +60,9 @@ namespace Castor3D
 		//!\~english	The pass environment map index.
 		//!\~french		L'indice de la texture d'environnement de la passe.
 		Uniform1f & m_environmentIndex;
+		//!\~english	The pass refraction ratio.
+		//!\~french		Le ratio de réfraction de la passe.
+		Uniform1f & m_refractionRatio;
 		//!\~english	The pass textures.
 		//!\~french		Les textures de la passe.
 		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;

@@ -49,13 +49,16 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_reflectionMap	The parent reflection map.
 		 *\param[in]	p_node			The node from which the camera is created.
+		 *\param[in]	p_objectNode	The node to which the object is attached.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_reflectionMap	Le reflection map parente.
 		 *\param[in]	p_node			Le noeud depuis lequel on crée la caméra.
+		 *\param[in]	p_objectNode	Le noeud auquel l'objet est attaché.
 		 */
 		C3D_API EnvironmentMapPass( EnvironmentMap & p_reflectionMap
-			, SceneNodeSPtr p_node );
+			, SceneNodeSPtr p_node
+			, SceneNode const & p_objectNode );
 		/**
 		 *\~english
 		 *\brief		Destructor.

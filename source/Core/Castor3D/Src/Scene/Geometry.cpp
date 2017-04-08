@@ -1,4 +1,4 @@
-#include "Geometry.hpp"
+﻿#include "Geometry.hpp"
 
 #include "Engine.hpp"
 
@@ -186,6 +186,7 @@ namespace Castor3D
 						GetScene()->SetChanged();
 						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::eQueueRender, [this, &p_submesh]()
 						{
+							// TODO: Find a better way, since this forbids the suppression of RAM storage of the VBO data.
 							p_submesh.ResetGpuBuffers();
 						} ) );
 					}
@@ -199,7 +200,7 @@ namespace Castor3D
 					}
 				}
 
-				if ( p_material->HasReflectionMapping() )
+				if ( p_material->HasEnvironmentMapping() )
 				{
 					GetScene()->CreateEnvironmentMap( *GetParent() );
 				}

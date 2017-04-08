@@ -54,12 +54,6 @@ namespace Castor3D
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel, 6u );
 			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
-				&& !p_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel ) )
-			{
-				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
-			}
 		}
 
 		inline BlendState DoCreateBlendState( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
@@ -353,7 +347,9 @@ namespace Castor3D
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapEnvironment( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ) );
+		auto c3d_mapEnvironment( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment
+			, CheckFlag( p_textureFlags, TextureChannel::eReflection )
+			|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ) );
 
 		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -370,7 +366,7 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vtx_normal ) );
 			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
 			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
@@ -397,14 +393,20 @@ namespace Castor3D
 			}
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
+			Vec3 l_i;
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
+				|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
+			{
+				l_i = l_writer.GetLocale( cuT( "l_i" ), normalize( vtx_position - c3d_v3CameraPosition ) );
+			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) )
 			{
-				auto l_i = l_writer.GetLocale( cuT( "l_i" ), vtx_position - c3d_v3CameraPosition );
-				auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_v3Normal ) );
-				auto l_environment = l_writer.GetLocale( cuT( "l_environment" ), texture( c3d_mapEnvironment, l_r ).xyz() );
-				l_envAmbient = l_environment * 1.4;
-				l_envDiffuse = l_environment * 2.0;
+				auto l_reflect = l_writer.GetLocale( cuT( "l_reflect" ), reflect( l_i, l_v3Normal ) );
+				auto l_reflection = l_writer.GetLocale( cuT( "l_reflection" ), texture( c3d_mapEnvironment, l_reflect ).xyz() );
+				l_envAmbient = l_reflection * 1.4;
+				l_envDiffuse = l_reflection * 2.0;
 			}
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
@@ -415,6 +417,13 @@ namespace Castor3D
 				, l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
+			{
+				auto l_refract = l_writer.GetLocale( cuT( "l_refract" ), refract( l_i, l_v3Normal, c3d_fMatRefractionRatio ) );
+				auto l_refraction = l_writer.GetLocale( cuT( "l_refraction" ), texture( c3d_mapEnvironment, l_refract ).xyz() );
+				l_v3Ambient += l_refraction;
+			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque )
 			{

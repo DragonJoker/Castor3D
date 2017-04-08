@@ -38,6 +38,7 @@ namespace Castor3D
 		, m_shininess{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ) }
 		, m_opacity{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ) }
 		, m_environmentIndex{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatEnvironmentIndex ) }
+		, m_refractionRatio{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatRefractionRatio ) }
 	{
 	}
 

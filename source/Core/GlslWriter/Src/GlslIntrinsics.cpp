@@ -452,19 +452,34 @@ namespace GLSL
 		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
 	}
 
-	Vec2 reflect( Vec2 const & p_a, Type const & p_b )
+	Vec2 reflect( Vec2 const & p_a, Vec2 const & p_b )
 	{
 		return WriteFunctionCall< Vec2 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
 	}
 
-	Vec3 reflect( Vec3 const & p_a, Type const & p_b )
+	Vec3 reflect( Vec3 const & p_a, Vec3 const & p_b )
 	{
 		return WriteFunctionCall< Vec3 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
 	}
 
-	Vec4 reflect( Vec4 const & p_a, Type const & p_b )
+	Vec4 reflect( Vec4 const & p_a, Vec4 const & p_b )
 	{
 		return WriteFunctionCall< Vec4 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+	}
+
+	Vec2 refract( Vec2 const & p_a, Vec2 const & p_b, Float const & p_r )
+	{
+		return WriteFunctionCall< Vec2 >( p_a.m_writer, cuT( "refract" ), p_a, p_b, p_r );
+	}
+
+	Vec3 refract( Vec3 const & p_a, Vec3 const & p_b, Float const & p_r )
+	{
+		return WriteFunctionCall< Vec3 >( p_a.m_writer, cuT( "refract" ), p_a, p_b, p_r );
+	}
+
+	Vec4 refract( Vec4 const & p_a, Vec4 const & p_b, Float const & p_r )
+	{
+		return WriteFunctionCall< Vec4 >( p_a.m_writer, cuT( "refract" ), p_a, p_b, p_r );
 	}
 
 	Float length( Type const & p_value )

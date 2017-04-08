@@ -1,4 +1,4 @@
-#include "Pass.hpp"
+﻿#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -261,7 +261,8 @@ namespace Castor3D
 	{
 		ProgramFlags l_result;
 
-		if ( HasAlphaBlending() )
+		if ( HasAlphaBlending()
+			&& !CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) )
 		{
 			AddFlag( l_result, ProgramFlag::eAlphaBlending );
 		}

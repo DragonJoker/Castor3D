@@ -1,4 +1,4 @@
-#if defined( CASTOR_COMPILER_MSVC )
+﻿#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -355,7 +355,7 @@ namespace Castor3D
 								&& !l_skeleton
 								&& ( !l_pass->HasAlphaBlending() || p_renderPass.IsMultisampling() )
 								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing()
-								&& !l_pass->HasReflectionMapping() )
+								&& !l_pass->HasEnvironmentMapping() )
 							{
 								AddFlag( l_programFlags, ProgramFlag::eInstantiation );
 							}

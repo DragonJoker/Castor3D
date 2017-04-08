@@ -2,7 +2,7 @@ namespace GLSL
 {
 	//*****************************************************************************************
 
-	Int::Int( )
+	Int::Int()
 		: Type( cuT( "int " ) )
 	{
 	}
@@ -100,6 +100,33 @@ namespace GLSL
 		l_return.m_value << Castor::String( *this ) << cuT( "++" );
 		return l_return;
 	}
+
+	inline Int & Int::operator<<=( int i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int & Int::operator>>=( int i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int operator<<( Int const & p_value, int i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " << " << ToString( i );
+		return l_return;
+	}
+
+	inline Int operator>>( Int const & p_value, int i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " >> " << ToString( i );
+		return l_return;
+	}
+
 	//*****************************************************************************************
 
 	UInt::UInt()

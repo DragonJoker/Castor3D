@@ -1,4 +1,6 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
+
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -259,6 +261,7 @@ namespace deferred_common
 		auto out_c3dEmissive = l_writer.GetFragData< Vec4 >( cuT( "out_c3dEmissive" ), l_index++ );
 
 		auto l_parallaxMapping = DeclareParallaxMappingFunc( l_writer, p_textureFlags, p_programFlags );
+		Declare_EncodeMaterial( l_writer );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -278,11 +281,18 @@ namespace deferred_common
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
-			
-			out_c3dNormal = vec4( l_v3Normal, c3d_iMatEnvironmentIndex );
-			out_c3dDiffuse = vec4( l_v3Diffuse, l_writer.Cast< Float >( c3d_iShadowReceiver ) );
+			auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), 0.0_f );
+			EncodeMaterial( l_writer
+				, c3d_iShadowReceiver
+				, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
+				, CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
+				, l_writer.Cast< Int >( c3d_fMatEnvironmentIndex )
+				, l_flags );
+
+			out_c3dNormal = vec4( l_v3Normal, l_flags );
+			out_c3dDiffuse = vec4( l_v3Diffuse, 0.0_f );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
-			out_c3dEmissive = vec4( l_v3Emissive, 0.0_f );
+			out_c3dEmissive = vec4( l_v3Emissive, c3d_fMatRefractionRatio );
 		} );
 
 		return l_writer.Finalise();

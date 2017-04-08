@@ -1,7 +1,6 @@
 #include "DeferredRenderTechnique.hpp"
 
 #include <DirectionalLightPass.hpp>
-#include <EnvironmentMapPass.hpp>
 #include <LightPassShadow.hpp>
 #include <OpaquePass.hpp>
 
@@ -88,7 +87,9 @@ namespace deferred
 
 		if ( l_return )
 		{
-			m_environment = std::make_unique< deferred_common::EnvironmentMapPass >( *m_renderSystem.GetEngine()
+			m_reflection = std::make_unique< deferred_common::ReflectionPass >( *m_renderSystem.GetEngine()
+				, m_renderTarget.GetSize() );
+			m_refraction = std::make_unique< deferred_common::RefractionPass >( *m_renderSystem.GetEngine()
 				, m_renderTarget.GetSize() );
 		}
 
@@ -105,7 +106,8 @@ namespace deferred
 	void RenderTechnique::DoCleanup()
 	{
 		m_ssao.reset();
-		m_environment.reset();
+		m_refraction.reset();
+		m_reflection.reset();
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();
 	}
@@ -175,7 +177,13 @@ namespace deferred
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
-		m_environment->Render( m_lightPassTextures
+		m_reflection->Render( m_lightPassTextures
+			, l_scene
+			, l_camera
+			, l_invViewProj
+			, l_invView
+			, l_invProj );
+		m_refraction->Render( m_lightPassTextures
 			, l_scene
 			, l_camera
 			, l_invViewProj

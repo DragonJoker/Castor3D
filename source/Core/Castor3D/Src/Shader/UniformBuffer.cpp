@@ -250,6 +250,7 @@ namespace Castor3D
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatShininess );
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity );
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatEnvironmentIndex );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatRefractionRatio );
 	}
 
 	void UniformBuffer::FillModelBuffer( UniformBuffer & p_ubo )

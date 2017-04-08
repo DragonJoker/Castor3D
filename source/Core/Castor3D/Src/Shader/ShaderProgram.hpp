@@ -741,6 +741,9 @@ namespace Castor3D
 		//!\~english	Name of the material environment index frame variable.
 		//!\~french		Nom de la frame variable contenant l'indice de la map d'environnement du matériau.
 		C3D_API static const Castor::String MatEnvironmentIndex;
+		//!\~english	Name of the material refraction ratio frame variable.
+		//!\~french		Nom de la frame variable contenant le ratio de réfraction du matériau.
+		C3D_API static const Castor::String MatRefractionRatio;
 		//!\~english	Name of the shadow map image frame variable.
 		//!\~french		Nom de la frame variable contenant l'image de shadow map.
 		C3D_API static const Castor::String MapShadow;

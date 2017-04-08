@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -244,22 +244,15 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the reflection mapping status.
+		 *\brief		Sets the refraction ratio.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit le statut d'utilisation du reflection mapping.
+		 *\brief		Définit le ratio de réfraction.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetReflectionMapping( bool p_value )
+		inline void SetRefractionRatio( float p_value )
 		{
-			m_reflectionMapping = p_value;
-
-			if ( m_reflectionMapping )
-			{
-				AddFlag( m_textureFlags, TextureChannel::eReflection );
-			}
-			else
-			{
-				RemFlag( m_textureFlags, TextureChannel::eReflection );
-			}
+			m_refractionRatio = p_value;
 		}
 		/**
 		 *\~english
@@ -308,13 +301,14 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		\p true if reflection mapping is enabled for this pass.
+		 *\return		\p true if environment mapping is enabled for this pass.
 		 *\~french
-		 *\return		\p true si le reflection mapping est activé sur cette passe.
+		 *\return		\p true si l'environment mapping est activé sur cette passe.
 		 */
-		inline bool HasReflectionMapping()const
+		inline bool HasEnvironmentMapping()const
 		{
-			return m_reflectionMapping;
+			return CheckFlag( GetTextureFlags(), TextureChannel::eReflection )
+				|| CheckFlag( GetTextureFlags(), TextureChannel::eRefraction );
 		}
 		/**
 		 *\~english
@@ -325,6 +319,16 @@ namespace Castor3D
 		inline float GetOpacity()const
 		{
 			return m_opacity;
+		}
+		/**
+		 *\~english
+		 *\return		The refraction ratio.
+		 *\~french
+		 *\return		Le ration de réfraction.
+		 */
+		inline float GetRefractionRatio()const
+		{
+			return m_refractionRatio;
 		}
 		/**
 		 *\~english
@@ -485,15 +489,15 @@ namespace Castor3D
 		//!\~english	The opacity value.
 		//!\~french		La valeur d'opacité.
 		float m_opacity{ 1.0f };
+		//!\~english	The refraction ratio.
+		//!\~french		Le ratio de réfraction.
+		float m_refractionRatio{ 0.0f };
 		//!\~english	Tells if the pass is two sided.
 		//!\~french		Dit si la passe s'applique sur les deux faces.
 		bool m_twoSided{ false };
 		//!\~english	Tells the pass shader is an automatically generated one.
 		//!\~french		Dit si le shader de la passe a été généré automatiquement.
 		bool m_automaticShader{ true };
-		//!\~english	Tells the pass has reflection mapping.
-		//!\~french		Dit si la passe a du reflection mapping.
-		bool m_reflectionMapping{ false };
 		//!\~english	The alpha blend mode.
 		//!\~french		Le mode de mélange alpha.
 		BlendMode m_alphaBlendMode{ BlendMode::eNoBlend };

@@ -23,8 +23,9 @@ SOFTWARE.
 #ifndef ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 #define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 
-#include <EnvironmentMapPass.hpp>
 #include <LightPass.hpp>
+#include <ReflectionPass.hpp>
+#include <RefractionPass.hpp>
 #include <SsaoPass.hpp>
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
@@ -231,9 +232,12 @@ namespace deferred_msaa
 		//!\~english	Tells if SSAO is to be used in lighting pass.
 		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
 		bool m_ssaoEnabled{ false };
-		//!\~english	The SSAO pass.
-		//!\~french		La passe SSAO.
-		std::unique_ptr< deferred_common::EnvironmentMapPass > m_environment;
+		//!\~english	The refraction pass.
+		//!\~french		La passe de réfraxion.
+		std::unique_ptr< deferred_common::RefractionPass > m_refraction;
+		//!\~english	The reflection pass.
+		//!\~french		La passe de réflexion.
+		std::unique_ptr< deferred_common::ReflectionPass > m_reflection;
 		//!\~english	The SSAO pass.
 		//!\~french		La passe SSAO.
 		std::unique_ptr< deferred_common::SsaoPass > m_ssao;

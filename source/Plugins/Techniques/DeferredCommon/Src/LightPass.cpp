@@ -180,6 +180,116 @@ namespace deferred_common
 		return std::min( p_max, l_result );
 	}
 
+	void Declare_EncodeMaterial( GLSL::GlslWriter & p_writer )
+	{
+		using namespace GLSL;
+		using GLSL::operator<<;
+		auto l_encodeMaterial = p_writer.ImplementFunction< Void >( cuT( "EncodeMaterial" )
+			, [&]( Int const & p_receiver
+				, Int const & p_reflection
+				, Int const & p_refraction
+				, Int const & p_envMapIndex
+				, Float & p_encoded )
+			{
+				auto l_flags = p_writer.GetLocale( cuT( "l_flags" )
+					, p_writer.Paren( p_receiver << 7 )
+						+ p_writer.Paren( p_refraction << 6 )
+						+ p_writer.Paren( p_reflection << 5 )
+						+ p_writer.Paren( p_envMapIndex ) );
+				p_encoded = p_writer.Cast< Float >( l_flags );
+			}, InInt{ &p_writer, cuT( "p_receiver" ) }
+			, InInt{ &p_writer, cuT( "p_reflection" ) }
+			, InInt{ &p_writer, cuT( "p_refraction" ) }
+			, InInt{ &p_writer, cuT( "p_envMapIndex" ) }
+			, OutFloat{ &p_writer, cuT( "p_encoded" ) } );
+	}
+	
+	void Declare_DecodeMaterial( GLSL::GlslWriter & p_writer )
+	{
+		using namespace GLSL;
+		auto l_decodeMaterial = p_writer.ImplementFunction< Void >( cuT( "DecodeMaterial" )
+			, [&]( Float const & p_encoded
+				, Int & p_receiver
+				, Int & p_reflection
+				, Int & p_refraction
+				, Int & p_envMapIndex )
+			{
+				auto l_flags = p_writer.GetLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
+				p_receiver = l_flags >> 7;
+				l_flags -= p_writer.Paren( p_receiver << 7 );
+				p_refraction = l_flags >> 6;
+				l_flags -= p_writer.Paren( p_refraction << 6 );
+				p_reflection = l_flags >> 5;
+				l_flags -= p_writer.Paren( p_reflection << 5 );
+				p_envMapIndex = l_flags;
+			}, InFloat{ &p_writer, cuT( "p_encoded" ) }
+			, OutInt{ &p_writer, cuT( "p_receiver" ) }
+			, OutInt{ &p_writer, cuT( "p_reflection" ) }
+			, OutInt{ &p_writer, cuT( "p_refraction" ) }
+			, OutInt{ &p_writer, cuT( "p_envMapIndex" ) } );
+	}
+
+	void Declare_DecodeReceiver( GLSL::GlslWriter & p_writer )
+	{
+		using namespace GLSL;
+		auto l_decodeReceiver = p_writer.ImplementFunction< Void >( cuT( "DecodeReceiver" )
+			, [&]( Float const & p_encoded
+				, Int & p_receiver )
+			{
+				auto l_flags = p_writer.GetLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
+				p_receiver = l_flags >> 7;
+			}, InFloat{ &p_writer, cuT( "p_encoded" ) }
+			, OutInt{ &p_writer, cuT( "p_receiver" ) } );
+	}
+
+	void EncodeMaterial( GLSL::GlslWriter & p_writer
+		, GLSL::Int const & p_receiver
+		, GLSL::Int const & p_reflection
+		, GLSL::Int const & p_refraction
+		, GLSL::Int const & p_envMapIndex
+		, GLSL::Float & p_encoded )
+	{
+		using namespace GLSL;
+		p_writer << WriteFunctionCall< Void >( &p_writer
+			, cuT( "EncodeMaterial" )
+			, InInt{ p_receiver }
+		, InInt{ p_reflection }
+		, InInt{ p_refraction }
+		, InInt{ p_envMapIndex }
+		, OutFloat{ p_encoded } );
+		p_writer << Endi{};
+	}
+
+	void DecodeMaterial( GLSL::GlslWriter & p_writer
+		, GLSL::Float & p_encoded
+		, GLSL::Int & p_receiver
+		, GLSL::Int & p_reflection
+		, GLSL::Int & p_refraction
+		, GLSL::Int & p_envMapIndex )
+	{
+		using namespace GLSL;
+		p_writer << WriteFunctionCall< Void >( &p_writer
+			, cuT( "DecodeMaterial" )
+			, InFloat{ p_encoded }
+			, OutInt{ p_receiver }
+			, OutInt{ p_reflection }
+			, OutInt{ p_refraction }
+			, OutInt{ p_envMapIndex } );
+		p_writer << Endi{};
+	}
+
+	void DecodeReceiver( GLSL::GlslWriter & p_writer
+		, GLSL::Float const & p_encoded
+		, GLSL::Int & p_receiver )
+	{
+		using namespace GLSL;
+		p_writer << WriteFunctionCall< Void >( &p_writer
+			, cuT( "DecodeReceiver" )
+			, InFloat{ p_encoded }
+			, OutInt{ p_receiver } );
+		p_writer << Endi{};
+	}
+
 	//************************************************************************************************
 
 	const String GpInfo::GPInfo = cuT( "GPInfo" );
@@ -479,6 +589,7 @@ namespace deferred_common
 		GLSL::Utils l_utils{ l_writer };
 		l_utils.DeclareCalcTexCoord();
 		l_utils.DeclareCalcWSPosition();
+		Declare_DecodeReceiver( l_writer );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -487,7 +598,9 @@ namespace deferred_common
 			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
 			auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
 			auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
-			auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_receiver" ), l_writer.Cast< Int >( l_v4Diffuse.w() ) );
+			auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), l_writer.Cast< Int >( l_v4Diffuse.w() ) );
+			auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_iShadowReceiver" ), 0_i );
+			DecodeReceiver( l_writer, l_flags, l_iShadowReceiver );
 			auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
 			auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
 			auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );

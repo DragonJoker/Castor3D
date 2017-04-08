@@ -49,6 +49,24 @@ namespace deferred_common
 	float GetMaxDistance( Castor3D::LightCategory const & p_light
 		, Castor::Point3f const & p_attenuation
 		, float p_max );
+	void Declare_EncodeMaterial( GLSL::GlslWriter & p_writer );
+	void Declare_DecodeMaterial( GLSL::GlslWriter & p_writer );
+	void Declare_DecodeReceiver( GLSL::GlslWriter & p_writer );
+	void EncodeMaterial( GLSL::GlslWriter & p_writer
+		, GLSL::Int const & p_receiver
+		, GLSL::Int const & p_reflection
+		, GLSL::Int const & p_refraction
+		, GLSL::Int const & p_envMapIndex
+		, GLSL::Float & p_encoded );
+	void DecodeMaterial( GLSL::GlslWriter & p_writer
+		, GLSL::Float & p_encoded
+		, GLSL::Int & p_receiver
+		, GLSL::Int & p_reflection
+		, GLSL::Int & p_refraction
+		, GLSL::Int & p_envMapIndex );
+	void DecodeReceiver( GLSL::GlslWriter & p_writer
+		, GLSL::Float & p_encoded
+		, GLSL::Int & p_receiver );
 
 	class GpInfo
 	{

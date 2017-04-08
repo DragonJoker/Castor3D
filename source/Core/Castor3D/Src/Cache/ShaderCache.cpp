@@ -160,6 +160,12 @@ namespace Castor3D
 		{
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapHeight, ShaderType::ePixel );
 		}
+
+		if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
+			|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
+		{
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+		}
 	}
 
 	void ShaderProgramCache::DoAddProgram( ShaderProgramSPtr p_program, bool p_initialise )
