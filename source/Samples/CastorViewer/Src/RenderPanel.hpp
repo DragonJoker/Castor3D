@@ -45,6 +45,7 @@ namespace CastorViewer
 		eTIMER_ID_UP,
 		eTIMER_ID_DOWN,
 		eTIMER_ID_MOUSE,
+		eTIMER_ID_MOVEMENT,
 		eTIMER_ID_COUNT,
 	}	eTIMER_ID;
 
@@ -59,6 +60,27 @@ namespace CastorViewer
 	class RenderPanel
 		: public wxPanel
 	{
+	public:
+		struct SelectedSubmesh
+		{
+			SelectedSubmesh( Castor3D::SubmeshSPtr p_submesh
+				, Castor3D::MaterialSPtr p_originalMaterial )
+				: m_submesh{ p_submesh }
+				, m_originalMaterial{ p_originalMaterial }
+			{
+			}
+			Castor3D::SubmeshSPtr m_submesh;
+			Castor3D::MaterialSPtr m_originalMaterial;
+			Castor3D::MaterialSPtr m_selectedMaterial;
+		};
+
+		struct SelectedGeometry
+		{
+			std::vector< SelectedSubmesh > m_submeshes;
+			Castor3D::GeometrySPtr m_geometry;
+		};
+
+
 	public:
 		RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE );
 		virtual ~RenderPanel();
@@ -76,7 +98,9 @@ namespace CastorViewer
 
 	private:
 		void DoResetTimers();
+		void DoStartMovement();
 		void DoStartTimer( int p_iId );
+		void DoStopMovement();
 		void DoStopTimer( int p_iId );
 		void DoResetNode();
 		void DoTurnCameraHoriz();
@@ -96,8 +120,9 @@ namespace CastorViewer
 		void OnTimerLft( wxTimerEvent & p_event );
 		void OnTimerRgt( wxTimerEvent & p_event );
 		void OnTimerUp( wxTimerEvent & p_event );
-		void OnTimerDwn( wxTimerEvent &	p_event );
-		void OnTimerMouse( wxTimerEvent &	p_event );
+		void OnTimerDwn( wxTimerEvent & p_event );
+		void OnTimerMouse( wxTimerEvent & p_event );
+		void OnTimerMovement( wxTimerEvent & p_event );
 		void OnSize( wxSizeEvent & p_event );
 		void OnMove( wxMoveEvent & p_event );
 		void OnPaint( wxPaintEvent & p_event );
@@ -129,15 +154,12 @@ namespace CastorViewer
 		bool m_mouseLeftDown{ false };
 		bool m_mouseRightDown{ false };
 		bool m_mouseMiddleDown{ false };
+		std::atomic_bool m_movementStarted{ false };
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::CameraWPtr m_camera;
 		Castor3D::SceneWPtr m_scene;
 		Castor3D::FrameListenerSPtr m_listener;
-		Castor3D::GeometryWPtr m_selectedGeometry;
-		Castor3D::SubmeshWPtr m_selectedSubmesh;
-		Castor3D::MaterialSPtr m_selectedSubmeshMaterialOrig;
-		Castor3D::MaterialSPtr m_selectedSubmeshMaterialClone;
 		wxCursor * m_pCursorArrow;
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;
@@ -150,6 +172,8 @@ namespace CastorViewer
 		using NodeStatePtr = std::unique_ptr< NodeState >;
 		std::map< Castor::String, NodeStatePtr > m_nodesStates;
 		NodeState * m_currentState{ nullptr };
+		SelectedGeometry m_selectedGeometry;
+		SelectedSubmesh * m_selectedSubmesh{ nullptr };
 	};
 }
 

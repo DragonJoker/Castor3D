@@ -540,8 +540,7 @@ namespace Castor3D
 			, m_rootObjectNode
 			, [this]( String const & p_name )
 			{
-				return std::make_shared< SceneNode >( p_name
-					, *this );
+				return std::make_shared< SceneNode >( p_name, *this );
 			}
 			, l_dummy
 			, l_dummy
@@ -554,8 +553,7 @@ namespace Castor3D
 		m_animatedObjectGroupCache = MakeCache< AnimatedObjectGroup, String >( p_engine
 			, [this]( Castor::String const & p_name )
 			{
-				return std::make_shared< AnimatedObjectGroup >( p_name
-					, *this );
+				return std::make_shared< AnimatedObjectGroup >( p_name, *this );
 			}
 			, l_dummy
 			, l_dummy
@@ -719,14 +717,17 @@ namespace Castor3D
 
 	void Scene::RenderBackground( Size const & p_size, Camera const & p_camera )
 	{
-		if ( m_backgroundImage && m_backgroundImage->IsInitialised() )
+		if ( m_fog.GetType() == GLSL::FogType::eDisabled )
 		{
-			m_colour->Render( *m_backgroundImage
-				, p_camera );
-		}
-		else if ( m_skybox )
-		{
-			m_skybox->Render( p_camera );
+			if ( m_backgroundImage && m_backgroundImage->IsInitialised())
+			{
+				m_colour->Render( *m_backgroundImage
+					, p_camera );
+			}
+			else if ( m_skybox )
+			{
+				m_skybox->Render( p_camera );
+			}
 		}
 	}
 

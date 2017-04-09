@@ -574,7 +574,6 @@ namespace Castor3D
 		Initialise( p_scene );
 		m_cameraChanged = p_camera.onChanged.connect( std::bind( &RenderQueue::OnCameraChanged, this, std::placeholders::_1 ) );
 		OnCameraChanged( p_camera );
-		m_camera = &p_camera;
 		m_preparedRenderNodes = std::make_unique< SceneRenderNodes >( p_scene );
 	}
 
@@ -587,10 +586,15 @@ namespace Castor3D
 
 	void RenderQueue::Update()
 	{
-		if ( m_changed )
+		if ( m_isSceneChanged )
 		{
 			DoSortRenderNodes();
+			m_isSceneChanged = false;
+			m_changed = true;
+		}
 
+		if ( m_changed )
+		{
 			if ( m_camera )
 			{
 				DoPrepareRenderNodes();
@@ -692,7 +696,7 @@ namespace Castor3D
 
 	void RenderQueue::OnSceneChanged( Scene const & p_scene )
 	{
-		m_changed = true;
+		m_isSceneChanged = true;
 	}
 
 	void RenderQueue::OnCameraChanged( Camera const & p_camera )

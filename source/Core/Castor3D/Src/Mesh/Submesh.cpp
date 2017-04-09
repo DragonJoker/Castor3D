@@ -891,6 +891,17 @@ namespace Castor3D
 		return l_return;
 	}
 
+	uint32_t Submesh::GetMaxRefCount()const
+	{
+		return uint32_t( std::accumulate( m_instanceCount.begin()
+			, m_instanceCount.end()
+			, 0u
+			, []( uint32_t p_value, auto const & p_pair )
+		{
+			return std::max( p_value, p_pair.second );
+		} ) );
+	}
+
 	Topology Submesh::GetTopology()const
 	{
 		Topology l_return = Topology::eCount;

@@ -26,7 +26,7 @@ namespace CastorViewer
 	namespace
 	{
 		static const real MAX_CAM_SPEED = 10.0_r;
-		static const real DEF_CAM_SPEED = 2.0_r;
+		static const real DEF_CAM_SPEED = 1.0_r;
 		static const real MIN_CAM_SPEED = 0.1_r;
 		static const real CAM_SPEED_INC = 0.9_r;
 	}
@@ -110,6 +110,7 @@ namespace CastorViewer
 			}
 			
 			l_clone->SetOpacity( p_source.GetOpacity() );
+			l_clone->SetRefractionRatio( p_source.GetRefractionRatio() );
 			l_clone->SetTwoSided( p_source.IsTwoSided() );
 			l_clone->SetAlphaBlendMode( p_source.GetAlphaBlendMode() );
 			l_clone->SetColourBlendMode( p_source.GetColourBlendMode() );
@@ -131,13 +132,71 @@ namespace CastorViewer
 
 			return l_clone;
 		}
+
+		void Restore( RenderPanel::SelectedSubmesh & p_selected
+			, GeometrySPtr p_geometry )
+		{
+			p_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender
+				, [p_selected, p_geometry]()
+				{
+					p_geometry->SetMaterial( *p_selected.m_submesh, p_selected.m_originalMaterial );
+				} ) );
+		}
+
+		void Restore( RenderPanel::SelectedGeometry & p_selected )
+		{
+			auto l_geometry = p_selected.m_geometry;
+
+			for ( auto & l_submesh : p_selected.m_submeshes )
+			{
+				Restore( l_submesh, l_geometry );
+			}
+
+			p_selected.m_geometry.reset();
+			p_selected.m_submeshes.clear();
+		}
+
+		void Save( RenderPanel::SelectedGeometry & p_selected
+			, GeometrySPtr p_geometry )
+		{
+			auto l_geometry = p_selected.m_geometry;
+			p_selected.m_submeshes.reserve(( p_geometry->GetMesh()->GetSubmeshCount() ) );
+
+			for ( auto & l_submesh : *p_geometry->GetMesh() )
+			{
+				p_selected.m_submeshes.emplace_back( l_submesh, p_geometry->GetMaterial( *l_submesh ) );
+			}
+
+			p_selected.m_geometry = p_geometry;
+		}
+
+		void Select( RenderPanel::SelectedSubmesh & p_selected
+			, GeometrySPtr p_geometry )
+		{
+			p_selected.m_selectedMaterial = DoCloneMaterial( *p_selected.m_originalMaterial );
+
+			if ( p_selected.m_selectedMaterial->GetType() == MaterialType::eLegacy )
+			{
+				auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
+				l_pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+				l_pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+			}
+
+			p_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender
+				, [p_selected, p_geometry]()
+				{
+					p_geometry->SetMaterial( *p_selected.m_submesh, p_selected.m_selectedMaterial );
+				} ) );
+		}
 	}
 
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 		: wxPanel( parent, p_id, pos, size, style )
 		, m_camSpeed( DEF_CAM_SPEED )
 	{
-		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
+		m_pTimer[0] = nullptr;
+
+		for ( int i = 1; i < eTIMER_ID_COUNT; i++ )
 		{
 			m_pTimer[i] = new wxTimer( this, i );
 		}
@@ -153,7 +212,7 @@ namespace CastorViewer
 		delete m_pCursorHand;
 		delete m_pCursorNone;
 
-		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
+		for ( int i = 1; i <= eTIMER_ID_MOVEMENT; i++ )
 		{
 			delete m_pTimer[i];
 			m_pTimer[i] = nullptr;
@@ -176,6 +235,7 @@ namespace CastorViewer
 	void RenderPanel::SetRenderWindow( RenderWindowSPtr p_window )
 	{
 		m_renderWindow.reset();
+		DoStopMovement();
 		Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
 
 		if ( p_window && p_window->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
@@ -220,6 +280,7 @@ namespace CastorViewer
 					}
 
 					m_camera = l_camera;
+					DoStartMovement();
 				}
 
 				m_scene = l_scene;
@@ -241,6 +302,24 @@ namespace CastorViewer
 		m_oldY = 0.0_r;
 	}
 
+	void RenderPanel::DoStartMovement()
+	{
+		if ( !m_movementStarted )
+		{
+			m_pTimer[eTIMER_ID_MOVEMENT]->Start( 30 );
+			m_movementStarted = true;
+		}
+	}
+
+	void RenderPanel::DoStopMovement()
+	{
+		if ( m_movementStarted )
+		{
+			m_movementStarted = false;
+			m_pTimer[eTIMER_ID_MOVEMENT]->Stop();
+		}
+	}
+
 	void RenderPanel::DoStartTimer( int p_id )
 	{
 		m_pTimer[p_id]->Start( 10 );
@@ -254,7 +333,7 @@ namespace CastorViewer
 		}
 		else
 		{
-			for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
+			for ( int i = 1; i < eTIMER_ID_MOVEMENT; i++ )
 			{
 				m_pTimer[i]->Stop();
 			}
@@ -377,42 +456,68 @@ namespace CastorViewer
 		return l_result;
 	}
 
-	void RenderPanel::DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry, Castor3D::SubmeshSPtr p_submesh )
+	void RenderPanel::DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry
+		, Castor3D::SubmeshSPtr p_submesh )
 	{
-		auto l_submesh = m_selectedSubmesh.lock();
-		auto l_geometry = m_selectedGeometry.lock();
+		SelectedGeometry l_selected;
+		auto l_submesh = m_selectedSubmesh ? m_selectedSubmesh->m_submesh : nullptr;
+		auto l_oldGeometry = m_selectedGeometry.m_geometry;
+		bool l_changed = false;
+		SceneRPtr l_scene = p_geometry ? p_geometry->GetScene() : nullptr;
 
-		if ( p_submesh != l_submesh || p_geometry != l_geometry )
+		if ( l_oldGeometry != p_geometry )
 		{
-			if ( l_submesh && l_geometry )
+			l_changed = true;
+			m_selectedSubmesh = nullptr;
+
+			if ( l_oldGeometry )
 			{
-				auto l_material = m_selectedSubmeshMaterialOrig;
-				l_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, l_geometry, l_submesh, l_material]()
-				{
-					l_geometry->SetMaterial( *l_submesh, l_material );
-					l_geometry->GetScene()->SetChanged();
-				} ) );
+				l_scene = l_oldGeometry->GetScene();
+				Restore( m_selectedGeometry );
 			}
 
-			if ( p_submesh && p_geometry )
+			if ( p_geometry )
 			{
-				m_selectedSubmeshMaterialOrig = p_geometry->GetMaterial( *p_submesh );
-				m_selectedSubmeshMaterialClone = DoCloneMaterial( *m_selectedSubmeshMaterialOrig );
+				Save( m_selectedGeometry, p_geometry );
+			}
+		}
 
-				if (m_selectedSubmeshMaterialClone->GetType() == MaterialType::eLegacy )
-				{
-					auto l_pass = m_selectedSubmeshMaterialClone->GetTypedPass< MaterialType::eLegacy >( 0u );
-					l_pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
-					l_pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
-				}
+		if ( l_submesh != p_submesh )
+		{
+			if ( m_selectedSubmesh )
+			{
+				Restore( *m_selectedSubmesh, l_oldGeometry );
+			}
 
-				p_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry, p_submesh]()
+			if ( p_submesh )
+			{
+				auto l_it = std::find_if( m_selectedGeometry.m_submeshes.begin()
+					, m_selectedGeometry.m_submeshes.end()
+					, [&p_submesh]( auto & l_selectedSubmesh )
+					{
+						return l_selectedSubmesh.m_submesh == p_submesh;
+					} );
+				REQUIRE( l_it != m_selectedGeometry.m_submeshes.end());
+				m_selectedSubmesh = &( *l_it );
+				Select( *m_selectedSubmesh
+					, p_geometry );
+			}
+			l_changed = true;
+		}
+
+		if ( l_changed )
+		{
+			l_scene->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender
+				, [l_scene]()
 				{
-					p_geometry->SetMaterial( *p_submesh, m_selectedSubmeshMaterialClone );
-					p_geometry->GetScene()->SetChanged();
+					l_scene->SetChanged();
 				} ) );
+		}
 
-				m_currentNode = p_geometry->GetParent();
+		{
+			if ( p_geometry )
+			{
+				m_currentNode = m_selectedGeometry.m_geometry->GetParent();
 			}
 			else
 			{
@@ -420,8 +525,6 @@ namespace CastorViewer
 			}
 
 			m_currentState = &DoAddNodeState( m_currentNode );
-			m_selectedSubmesh = p_submesh;
-			m_selectedGeometry = p_geometry;
 		}
 	}
 
@@ -446,6 +549,7 @@ namespace CastorViewer
 		EVT_TIMER( eTIMER_ID_UP, RenderPanel::OnTimerUp )
 		EVT_TIMER( eTIMER_ID_DOWN, RenderPanel::OnTimerDwn )
 		EVT_TIMER( eTIMER_ID_MOUSE, RenderPanel::OnTimerMouse )
+		EVT_TIMER( eTIMER_ID_MOVEMENT, RenderPanel::OnTimerMovement )
 		EVT_SIZE( RenderPanel::OnSize )
 		EVT_MOVE( RenderPanel::OnMove )
 		EVT_PAINT( RenderPanel::OnPaint )
@@ -471,43 +575,52 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_camSpeed ) );
+		m_currentState->AddScalarVelocity( Point3r{ 0.0_r, 0.0_r, m_camSpeed } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_camSpeed ) );
+		m_currentState->AddScalarVelocity( Point3r{ 0.0_r, 0.0_r, -m_camSpeed } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, m_camSpeed, 0.0_r, 0.0_r ) );
+		m_currentState->AddScalarVelocity( Point3r{ m_camSpeed, 0.0_r, 0.0_r } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, -m_camSpeed, 0.0_r, 0.0_r ) );
+		m_currentState->AddScalarVelocity( Point3r{ -m_camSpeed, 0.0_r, 0.0_r } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, m_camSpeed, 0.0_r ) );
+		m_currentState->AddScalarVelocity( Point3r{ 0.0_r, m_camSpeed, 0.0_r } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_camSpeed, 0.0_r ) );
+		m_currentState->AddScalarVelocity( Point3r{ 0.0_r, -m_camSpeed, 0.0_r } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerMouse( wxTimerEvent & p_event )
 	{
-		m_currentState->Update();
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnTimerMovement( wxTimerEvent & p_event )
+	{
+		if ( m_currentState )
+		{
+			m_currentState->Update();
+		}
+
 		p_event.Skip();
 	}
 
@@ -912,8 +1025,9 @@ namespace CastorViewer
 		{
 			if ( m_currentState )
 			{
-				real l_deltaX = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
-				real l_deltaY = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
+				static real constexpr l_mult = 4.0_r;
+				real l_deltaX = std::min( m_camSpeed / l_mult, 1.0_r ) * ( m_oldX - m_x ) / l_mult;
+				real l_deltaY = std::min( m_camSpeed / l_mult, 1.0_r ) * ( m_oldY - m_y ) / l_mult;
 
 				if ( p_event.ControlDown() )
 				{
@@ -926,11 +1040,11 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_currentState->SetAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
+					m_currentState->AddAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_currentState->SetScalarVelocity( Point3r{ l_deltaX, l_deltaY, 0.0_r } );
+					m_currentState->AddScalarVelocity( Point3r{ l_deltaX, l_deltaY, 0.0_r } );
 				}
 			}
 		}

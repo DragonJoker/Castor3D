@@ -57,16 +57,16 @@ namespace deferred_common
 		, GLSL::Int const & p_reflection
 		, GLSL::Int const & p_refraction
 		, GLSL::Int const & p_envMapIndex
-		, GLSL::Float & p_encoded );
+		, GLSL::Float const & p_encoded );
 	void DecodeMaterial( GLSL::GlslWriter & p_writer
-		, GLSL::Float & p_encoded
-		, GLSL::Int & p_receiver
-		, GLSL::Int & p_reflection
-		, GLSL::Int & p_refraction
-		, GLSL::Int & p_envMapIndex );
+		, GLSL::Float const & p_encoded
+		, GLSL::Int const & p_receiver
+		, GLSL::Int const & p_reflection
+		, GLSL::Int const & p_refraction
+		, GLSL::Int const & p_envMapIndex );
 	void DecodeReceiver( GLSL::GlslWriter & p_writer
 		, GLSL::Float & p_encoded
-		, GLSL::Int & p_receiver );
+		, GLSL::Int const & p_receiver );
 
 	class GpInfo
 	{

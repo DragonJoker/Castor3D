@@ -189,7 +189,7 @@ namespace deferred_common
 				, Int const & p_reflection
 				, Int const & p_refraction
 				, Int const & p_envMapIndex
-				, Float & p_encoded )
+				, Float p_encoded )
 			{
 				auto l_flags = p_writer.GetLocale( cuT( "l_flags" )
 					, p_writer.Paren( p_receiver << 7 )
@@ -209,10 +209,10 @@ namespace deferred_common
 		using namespace GLSL;
 		auto l_decodeMaterial = p_writer.ImplementFunction< Void >( cuT( "DecodeMaterial" )
 			, [&]( Float const & p_encoded
-				, Int & p_receiver
-				, Int & p_reflection
-				, Int & p_refraction
-				, Int & p_envMapIndex )
+				, Int p_receiver
+				, Int p_reflection
+				, Int p_refraction
+				, Int p_envMapIndex )
 			{
 				auto l_flags = p_writer.GetLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
 				p_receiver = l_flags >> 7;
@@ -234,7 +234,7 @@ namespace deferred_common
 		using namespace GLSL;
 		auto l_decodeReceiver = p_writer.ImplementFunction< Void >( cuT( "DecodeReceiver" )
 			, [&]( Float const & p_encoded
-				, Int & p_receiver )
+				, Int p_receiver )
 			{
 				auto l_flags = p_writer.GetLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
 				p_receiver = l_flags >> 7;
@@ -247,7 +247,7 @@ namespace deferred_common
 		, GLSL::Int const & p_reflection
 		, GLSL::Int const & p_refraction
 		, GLSL::Int const & p_envMapIndex
-		, GLSL::Float & p_encoded )
+		, GLSL::Float const & p_encoded )
 	{
 		using namespace GLSL;
 		p_writer << WriteFunctionCall< Void >( &p_writer
@@ -261,11 +261,11 @@ namespace deferred_common
 	}
 
 	void DecodeMaterial( GLSL::GlslWriter & p_writer
-		, GLSL::Float & p_encoded
-		, GLSL::Int & p_receiver
-		, GLSL::Int & p_reflection
-		, GLSL::Int & p_refraction
-		, GLSL::Int & p_envMapIndex )
+		, GLSL::Float const & p_encoded
+		, GLSL::Int const & p_receiver
+		, GLSL::Int const & p_reflection
+		, GLSL::Int const & p_refraction
+		, GLSL::Int const & p_envMapIndex )
 	{
 		using namespace GLSL;
 		p_writer << WriteFunctionCall< Void >( &p_writer
@@ -280,7 +280,7 @@ namespace deferred_common
 
 	void DecodeReceiver( GLSL::GlslWriter & p_writer
 		, GLSL::Float const & p_encoded
-		, GLSL::Int & p_receiver )
+		, GLSL::Int const & p_receiver )
 	{
 		using namespace GLSL;
 		p_writer << WriteFunctionCall< Void >( &p_writer
