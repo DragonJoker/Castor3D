@@ -1,4 +1,4 @@
-﻿#include "LinearToneMapping.hpp"
+#include "LinearToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -30,6 +30,7 @@ namespace Linear
 		{
 			m_config.SetGamma( string::to_float( l_param ) );
 		}
+		m_config.SetGamma( 1.0f );
 	}
 
 	ToneMapping::~ToneMapping()

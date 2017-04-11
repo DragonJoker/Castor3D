@@ -598,7 +598,7 @@ namespace deferred_common
 			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
 			auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
 			auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
-			auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), l_writer.Cast< Int >( l_v4Diffuse.w() ) );
+			auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), l_writer.Cast< Int >( l_v4Normal.w() ) );
 			auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_iShadowReceiver" ), 0_i );
 			DecodeReceiver( l_writer, l_flags, l_iShadowReceiver );
 			auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );

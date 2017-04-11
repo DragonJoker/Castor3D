@@ -1,4 +1,4 @@
-﻿#include "Scene.hpp"
+#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
