@@ -12,6 +12,7 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
+#include <GlslUtils.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -262,6 +263,8 @@ namespace deferred_common
 
 		auto l_parallaxMapping = DeclareParallaxMappingFunc( l_writer, p_textureFlags, p_programFlags );
 		Declare_EncodeMaterial( l_writer );
+		GLSL::Utils l_utils{ l_writer };
+		l_utils.DeclareRemoveGamma();
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{

@@ -1,4 +1,4 @@
-#include "GlslUtils.hpp"
+﻿#include "GlslUtils.hpp"
 
 #include "GlslIntrinsics.hpp"
 
@@ -74,6 +74,28 @@ namespace GLSL
 			, InMat4{ &m_writer, cuT( "p_invViewProj" ) } );
 	}
 
+	void Utils::DeclareApplyGamma()
+	{
+		m_applyGamma = m_writer.ImplementFunction< Vec3 >( cuT( "ApplyGamma" )
+			, [&]( Float const & p_gamma
+				, Vec3 const & p_HDR )
+			{
+				m_writer.Return( pow( p_HDR, vec3( 1.0_f / p_gamma ) ) );
+			}, InFloat{ &m_writer, cuT( "p_gamma" ) }
+			, InVec3{ &m_writer, cuT( "p_HDR" ) } );
+	}
+
+	void Utils::DeclareRemoveGamma()
+	{
+		m_removeGamma = m_writer.ImplementFunction< Vec3 >( cuT( "RemoveGamma" )
+			, [&]( Float const & p_gamma
+				, Vec3 const & p_sRGB )
+			{
+				m_writer.Return( pow( p_sRGB, vec3( p_gamma ) ) );
+			}, InFloat{ &m_writer, cuT( "p_gamma" ) }
+			, InVec3{ &m_writer, cuT( "p_sRGB" ) } );
+	}
+
 	Vec2 Utils::CalcTexCoord()
 	{
 		return m_calcTexCoord();
@@ -95,5 +117,17 @@ namespace GLSL
 		, Mat4 const & p_invViewProj )
 	{
 		return m_calcWSPosition( p_uv, p_invViewProj );
+	}
+
+	Vec3 Utils::ApplyGamma( Float const & p_gamma
+		, Vec3 const & p_HDR )
+	{
+		return m_applyGamma( p_gamma, p_HDR );
+	}
+
+	Vec3 Utils::RemoveGamma( Float const & p_gamma
+		, Vec3 const & p_sRGB )
+	{
+		return m_removeGamma( p_gamma, p_sRGB );
 	}
 }

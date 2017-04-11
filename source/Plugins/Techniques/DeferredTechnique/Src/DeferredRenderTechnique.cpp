@@ -1,4 +1,4 @@
-#include "DeferredRenderTechnique.hpp"
+﻿#include "DeferredRenderTechnique.hpp"
 
 #include <DirectionalLightPass.hpp>
 #include <LightPassShadow.hpp>
@@ -89,8 +89,6 @@ namespace deferred
 		{
 			m_reflection = std::make_unique< deferred_common::ReflectionPass >( *m_renderSystem.GetEngine()
 				, m_renderTarget.GetSize() );
-			m_refraction = std::make_unique< deferred_common::RefractionPass >( *m_renderSystem.GetEngine()
-				, m_renderTarget.GetSize() );
 		}
 
 		if ( l_return && m_ssaoEnabled )
@@ -106,7 +104,6 @@ namespace deferred
 	void RenderTechnique::DoCleanup()
 	{
 		m_ssao.reset();
-		m_refraction.reset();
 		m_reflection.reset();
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();
@@ -160,6 +157,8 @@ namespace deferred
 
 		auto & l_cache = m_renderTarget.GetScene()->GetLightCache();
 
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+
 		if ( !l_cache.IsEmpty() )
 		{
 #if !defined( NDEBUG )
@@ -178,12 +177,7 @@ namespace deferred
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
 		m_reflection->Render( m_lightPassTextures
-			, l_scene
-			, l_camera
-			, l_invViewProj
-			, l_invView
-			, l_invProj );
-		m_refraction->Render( m_lightPassTextures
+			, *m_frameBuffer.m_colourTexture
 			, l_scene
 			, l_camera
 			, l_invViewProj

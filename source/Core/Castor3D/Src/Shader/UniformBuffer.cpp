@@ -1,4 +1,4 @@
-#include "UniformBuffer.hpp"
+﻿#include "UniformBuffer.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -251,6 +251,8 @@ namespace Castor3D
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity );
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatEnvironmentIndex );
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatRefractionRatio );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Gamma );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Exposure );
 	}
 
 	void UniformBuffer::FillModelBuffer( UniformBuffer & p_ubo )

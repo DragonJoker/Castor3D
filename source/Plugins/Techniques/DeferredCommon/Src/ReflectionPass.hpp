@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -65,6 +65,7 @@ namespace deferred_common
 		 *\brief		Dessine le mapping de réflexion.
 		 */
 		void Render( GeometryPassResult & p_gp
+			, Castor3D::TextureLayout const & p_lp
 			, Castor3D::Scene const & p_scene
 			, Castor3D::Camera const & p_camera
 			, Castor::Matrix4x4r const & p_invViewProj
@@ -96,6 +97,9 @@ namespace deferred_common
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		GpInfo m_gpInfo;
+		//!\~english	The HDR configuration.
+		//!\~french		La configuration HDR.
+		Castor3D::UniformBuffer m_configUbo;
 		//!\~english	The render pipeline.
 		//!\~french		Le pipeline de rendu.
 		Castor3D::RenderPipelineUPtr m_pipeline;
@@ -108,6 +112,12 @@ namespace deferred_common
 		//!\~english	The uniform variable containing the camera position.
 		//!\~french		La variable uniforme contenant la position de la caméra.
 		Castor3D::Uniform3fSPtr m_cameraPosUniform{ nullptr };
+		//!\~english	The exposure shader variable.
+		//!\~french		La variable shader pour l'exposition.
+		Castor3D::Uniform1fSPtr m_exposureUniform;
+		//!\~english	The gamma correction shader variable.
+		//!\~french		La variable shader pour la correction gamma.
+		Castor3D::Uniform1fSPtr m_gammaUniform;
 	};
 }
 

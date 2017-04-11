@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -90,14 +90,6 @@ namespace HaarmPieterDuiker
 
 	public:
 		static Castor::String Name;
-
-	private:
-		//!\~english	The gamma correction value.
-		//!\~french		La valeur de correction gamma.
-		float m_gamma;
-		//!\~english	The gamma correction shader variable.
-		//!\~french		La variable shader pour la correction gamma.
-		Castor3D::Uniform1fSPtr m_gammaVar;
 	};
 }
 

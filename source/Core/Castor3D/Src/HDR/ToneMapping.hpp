@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -98,6 +98,25 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier.
 		 */
 		C3D_API bool WriteInto( Castor::TextFile & p_file );
+		/**
+		 *\~english
+		 *\brief		Sets the HDR config for the tone mapping.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la configuration HDR pour le mappage de tons.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		C3D_API void SetConfig( HdrConfig const & p_config );
+		/**
+		 *\~english
+		 *\return		The HDR configuration.
+		 *\~french
+		 *\return		La configuration HDR.
+		 */
+		inline HdrConfig const & GetConfig()const
+		{
+			return m_config;
+		}
 
 	private:
 		/**
@@ -136,15 +155,18 @@ namespace Castor3D
 		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
-		//!\~english	The tone mapping shader program.
-		//!\~french		Le shader de mappage de ton.
-		RenderPipelineUPtr m_pipeline;
-		//!\~english	The exposure value.
-		//!\~french		La valeur d'exposition.
-		float m_exposure;
+		//!\~english	The HDR configuration.
+		//!\~french		La configuration HDR.
+		HdrConfig m_config;
 		//!\~english	The exposure shader variable.
 		//!\~french		La variable shader pour l'exposition.
 		Uniform1fSPtr m_exposureVar;
+		//!\~english	The gamma correction shader variable.
+		//!\~french		La variable shader pour la correction gamma.
+		Uniform1fSPtr m_gammaVar;
+		//!\~english	The tone mapping shader program.
+		//!\~french		Le shader de mappage de ton.
+		RenderPipelineUPtr m_pipeline;
 		//!\~english	The matrix data UBO.
 		//!\~french		L'UBO de données de matrices.
 		UniformBuffer m_matrixUbo;
@@ -156,10 +178,7 @@ namespace Castor3D
 		RenderColourToTextureUPtr m_colour;
 		//!\~english	The configuration constants buffer name.
 		//!\~french		Le nom du tampon de constantes de configuration.
-		C3D_API static Castor::String const HdrConfig;
-		//!\~english	The exposure constant name.
-		//!\~french		Le nom de la constante d'exposition.
-		C3D_API static Castor::String const Exposure;
+		C3D_API static Castor::String const HdrConfigUbo;
 	};
 }
 

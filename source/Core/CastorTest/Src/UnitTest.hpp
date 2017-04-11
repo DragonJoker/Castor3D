@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -241,6 +241,12 @@ namespace Testing
 					l_return = true;
 				}
 			}
+			catch ( std::exception & p_exc )
+			{
+				std::cerr << "Uncaught Exception: " << p_exc.what() << std::endl;
+				ReportFailure();
+				std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << "(Unexpected exception)" << std::endl;
+			}
 			catch ( ... )
 			{
 				ReportFailure();
@@ -267,6 +273,7 @@ namespace Testing
 			}
 			catch ( std::exception & p_exc )
 			{
+				std::cerr << "Uncaught Exception: " << p_exc.what() << std::endl;
 				throw TestFailed( p_conditionName, p_file, p_function, p_line );
 			}
 			catch ( ... )
@@ -308,6 +315,12 @@ namespace Testing
 				p_condition();
 				l_return = true;
 			}
+			catch ( std::exception & p_exc )
+			{
+				std::cerr << "Uncaught Exception: " << p_exc.what() << std::endl;
+				ReportFailure();
+				std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
+			}
 			catch ( ... )
 			{
 				ReportFailure();
@@ -334,6 +347,12 @@ namespace Testing
 					ReportFailure();
 					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << " (" << ::Testing::to_string( l_lhs ) << " != " << ::Testing::to_string( l_rhs ) << ")" << std::endl;
 				}
+			}
+			catch ( std::exception & p_exc )
+			{
+				std::cerr << "Uncaught Exception: " << p_exc.what() << std::endl;
+				ReportFailure();
+				std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << "(Unexpected exception)" << std::endl;
 			}
 			catch ( ... )
 			{

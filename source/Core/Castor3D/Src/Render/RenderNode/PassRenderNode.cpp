@@ -1,4 +1,4 @@
-#include "PassRenderNode.hpp"
+﻿#include "PassRenderNode.hpp"
 
 #include "Material/Pass.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -39,6 +39,8 @@ namespace Castor3D
 		, m_opacity{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ) }
 		, m_environmentIndex{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatEnvironmentIndex ) }
 		, m_refractionRatio{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatRefractionRatio ) }
+		, m_gamma{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Gamma ) }
+		, m_exposure{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Exposure ) }
 	{
 	}
 

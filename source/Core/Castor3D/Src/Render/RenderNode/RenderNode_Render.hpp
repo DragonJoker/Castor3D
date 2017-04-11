@@ -1,4 +1,4 @@
-#include "RenderNode.hpp"
+﻿#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -107,6 +107,17 @@ namespace Castor3D
 		}
 
 		p_node.m_refractionRatio.SetValue( p_pass.GetRefractionRatio() );
+
+		if ( p_pass.NeedsGammaCorrection() )
+		{
+			p_node.m_gamma.SetValue( p_scene.GetHdrConfig().GetGamma() );
+		}
+		else
+		{
+			p_node.m_gamma.SetValue( 1.0f );
+		}
+
+		p_node.m_exposure.SetValue( p_scene.GetHdrConfig().GetExposure() );
 		p_node.m_passUbo.Update();
 	}
 

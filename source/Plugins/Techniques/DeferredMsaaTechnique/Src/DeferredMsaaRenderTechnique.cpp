@@ -1,4 +1,4 @@
-#include "DeferredMsaaRenderTechnique.hpp"
+﻿#include "DeferredMsaaRenderTechnique.hpp"
 
 #include <DirectionalLightPass.hpp>
 #include <LightPassShadow.hpp>
@@ -212,13 +212,8 @@ namespace deferred_msaa
 
 		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_msaaFrameBuffer->SetDrawBuffers();
-		m_refraction->Render( m_lightPassTextures
-			, l_scene
-			, l_camera
-			, l_invViewProj
-			, l_invView
-			, l_invProj );
 		m_reflection->Render( m_lightPassTextures
+			, *m_frameBuffer.m_colourTexture
 			, l_scene
 			, l_camera
 			, l_invViewProj
@@ -280,8 +275,6 @@ namespace deferred_msaa
 		if ( l_return )
 		{
 			m_reflection = std::make_unique< deferred_common::ReflectionPass >( *m_renderSystem.GetEngine()
-				, m_renderTarget.GetSize() );
-			m_refraction = std::make_unique< deferred_common::RefractionPass >( *m_renderSystem.GetEngine()
 				, m_renderTarget.GetSize() );
 		}
 
@@ -348,7 +341,6 @@ namespace deferred_msaa
 	void RenderTechnique::DoCleanupDeferred()
 	{
 		m_ssao.reset();
-		m_refraction.reset();
 		m_reflection.reset();
 		DoCleanupGeometryPass();
 		DoCleanupLightPass();

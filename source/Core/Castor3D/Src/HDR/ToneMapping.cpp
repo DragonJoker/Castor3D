@@ -1,4 +1,4 @@
-#include "ToneMapping.hpp"
+﻿#include "ToneMapping.hpp"
 
 #include "Engine.hpp"
 
@@ -13,24 +13,22 @@ using namespace GLSL;
 
 namespace Castor3D
 {
-	String const ToneMapping::HdrConfig = cuT( "HdrConfig" );
-	String const ToneMapping::Exposure = cuT( "c3d_exposure" );
+	String const ToneMapping::HdrConfigUbo = cuT( "HdrConfig" );
 
 	ToneMapping::ToneMapping( Castor::String const & p_name, Engine & p_engine, Parameters const & p_parameters )
 		: OwnedBy< Engine >{ p_engine }
 		, Named{ p_name }
-		, m_exposure{ 1.0f }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
-		, m_configUbo{ ToneMapping::HdrConfig, *p_engine.GetRenderSystem() }
+		, m_configUbo{ ToneMapping::HdrConfigUbo, *p_engine.GetRenderSystem() }
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-		m_exposureVar = m_configUbo.CreateUniform < UniformType::eFloat > (ToneMapping::Exposure);
+		m_exposureVar = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 		
 		String l_param;
 
 		if ( p_parameters.Get( cuT( "Exposure" ), l_param ) )
 		{
-			m_exposure = string::to_float( l_param );
+			m_config.SetExposure( string::to_float( l_param ) );
 		}
 	}
 
@@ -117,7 +115,7 @@ namespace Castor3D
 	void ToneMapping::Apply( Size const & p_size, TextureLayout const & p_texture )
 	{
 		static Position const l_position;
-		m_exposureVar->SetValue( m_exposure );
+		m_exposureVar->SetValue( m_config.GetExposure() );
 		DoUpdate();
 		m_configUbo.Update();
 		m_colour->Render( l_position
@@ -129,7 +127,12 @@ namespace Castor3D
 
 	bool ToneMapping::WriteInto( Castor::TextFile & p_file )
 	{
-		return p_file.WriteText( cuT( " -Exposure=" ) + string::to_string( m_exposure ) ) > 0
+		return p_file.WriteText( cuT( " -Exposure=" ) + string::to_string( m_config.GetExposure() ) ) > 0
 			   && DoWriteInto( p_file );
+	}
+
+	void ToneMapping::SetConfig( HdrConfig const & p_config )
+	{
+		m_config = p_config;
 	}
 }

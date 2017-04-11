@@ -12,6 +12,7 @@
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslUtils.hpp>
 
 using namespace Castor;
 using namespace GLSL;
@@ -73,6 +74,7 @@ namespace Castor3D
 		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eRead ) }
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
+		, m_configUbo{ ShaderProgram::BufferHdrConfig, *p_engine.GetRenderSystem() }
 		, m_declaration
 		{
 			{
@@ -82,6 +84,8 @@ namespace Castor3D
 	{
 		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
+		m_gammaUniform = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma );
+		m_exposureUniform = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 
 		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
 		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
@@ -149,6 +153,9 @@ namespace Castor3D
 		m_vertexBuffer.reset();
 		m_matrixUbo.Cleanup();
 		m_modelMatrixUbo.Cleanup();
+		m_exposureUniform.reset();
+		m_gammaUniform.reset();
+		m_configUbo.Cleanup();
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
 	}
@@ -161,6 +168,7 @@ namespace Castor3D
 		if ( l_sampler )
 		{
 			p_camera.Apply();
+			auto & l_scene = *p_camera.GetScene();
 			auto l_node = p_camera.GetParent();
 			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
 			m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
@@ -168,6 +176,9 @@ namespace Castor3D
 			m_matrixUbo.Update();
 			m_modelUniform->SetValue( m_mtxModel );
 			m_modelMatrixUbo.Update();
+			m_exposureUniform->SetValue( l_scene.GetHdrConfig().GetExposure() );
+			m_gammaUniform->SetValue( l_scene.GetHdrConfig().GetGamma() );
+			m_configUbo.Update();
 			m_pipeline->Apply();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
@@ -209,15 +220,23 @@ namespace Castor3D
 			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
 
 			// Inputs
+			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig };
+			auto c3d_fExposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
+			auto c3d_fGamma = l_config.GetUniform< Float >( ShaderProgram::Gamma );
+			l_config.End();
 			auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
 			auto skybox = l_writer.GetUniform< SamplerCube >( cuT( "skybox" ) );
+			GLSL::Utils l_utils{ l_writer };
+			l_utils.DeclareRemoveGamma();
 
 			// Outputs
 			auto pxl_FragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			std::function< void() > l_main = [&]()
 			{
-				pxl_FragColor = texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) );
+				auto l_skybox = l_writer.GetLocale( cuT( "l_skybox" )
+					, texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) ) );
+				pxl_FragColor = vec4( l_utils.RemoveGamma( c3d_fGamma, l_skybox.xyz() ), l_skybox.w() );
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
@@ -259,6 +278,7 @@ namespace Castor3D
 		m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo );
 		m_pipeline->AddUniformBuffer( m_modelMatrixUbo );
+		m_pipeline->AddUniformBuffer( m_configUbo );
 		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, m_pipeline->GetProgram() );
 		return m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 	}

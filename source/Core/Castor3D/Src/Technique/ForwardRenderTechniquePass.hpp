@@ -100,6 +100,12 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderTechniquePass::DoGetDepthMaps
 		 */
 		C3D_API void DoGetDepthMaps( DepthMapArray & p_depthMaps )override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
+		 */
+		C3D_API Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags )const override;
 
 	private:
 		//!\~english	The shadow map used for directional lights.

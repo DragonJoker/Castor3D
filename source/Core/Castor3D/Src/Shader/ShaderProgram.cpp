@@ -1,4 +1,4 @@
-#include "ShaderProgram.hpp"
+﻿#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -125,6 +125,8 @@ namespace Castor3D
 	const String ShaderProgram::FogDensity = cuT( "c3d_fFogDensity" );
 	const String ShaderProgram::LightsCount = cuT( "c3d_iLightsCount" );
 	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
+	const String ShaderProgram::Exposure = cuT( "c3d_fExposure" );
+	const String ShaderProgram::Gamma = cuT( "c3d_fGamma" );
 	const String ShaderProgram::MatDiffuse = cuT( "c3d_v4MatDiffuse" );
 	const String ShaderProgram::MatSpecular = cuT( "c3d_v4MatSpecular" );
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
@@ -151,6 +153,7 @@ namespace Castor3D
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
 	const String ShaderProgram::BufferModelMatrix = cuT( "ModelMatrices" );
+	const String ShaderProgram::BufferHdrConfig = cuT( "HdrConfig" );
 	const String ShaderProgram::BufferScene = cuT( "Scene" );
 	const String ShaderProgram::BufferPass = cuT( "Pass" );
 	const String ShaderProgram::BufferModel = cuT( "Model" );

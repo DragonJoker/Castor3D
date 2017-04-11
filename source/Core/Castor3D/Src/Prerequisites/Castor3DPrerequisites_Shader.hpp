@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -755,6 +755,8 @@ namespace Castor3D
 	auto c3d_fMatOpacity = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatOpacity );\
 	auto c3d_fMatEnvironmentIndex = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatEnvironmentIndex );\
 	auto c3d_fMatRefractionRatio = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatRefractionRatio );\
+	auto c3d_fGamma = l_pass.GetUniform< GLSL::Float >( ShaderProgram::Gamma );\
+	auto c3d_fExposure = l_pass.GetUniform< GLSL::Float >( ShaderProgram::Exposure );\
 	l_pass.End()
 
 #define UBO_MODEL( Writer )\

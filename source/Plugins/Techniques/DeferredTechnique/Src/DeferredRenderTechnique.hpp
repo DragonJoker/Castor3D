@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,7 +25,6 @@ SOFTWARE.
 
 #include <LightPass.hpp>
 #include <ReflectionPass.hpp>
-#include <RefractionPass.hpp>
 #include <SsaoPass.hpp>
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
@@ -166,9 +165,6 @@ namespace deferred
 		//!\~english	Tells if SSAO is to be used in lighting pass.
 		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
 		bool m_ssaoEnabled{ false };
-		//!\~english	The refraction pass.
-		//!\~french		La passe de réfraxion.
-		std::unique_ptr< deferred_common::RefractionPass > m_refraction;
 		//!\~english	The reflection pass.
 		//!\~french		La passe de réflexion.
 		std::unique_ptr< deferred_common::ReflectionPass > m_reflection;

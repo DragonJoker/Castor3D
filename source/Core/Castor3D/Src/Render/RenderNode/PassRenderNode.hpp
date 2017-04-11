@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -63,6 +63,12 @@ namespace Castor3D
 		//!\~english	The pass refraction ratio.
 		//!\~french		Le ratio de réfraction de la passe.
 		Uniform1f & m_refractionRatio;
+		//!\~english	The gamma correction.
+		//!\~french		La correction gamma.
+		Uniform1f & m_gamma;
+		//!\~english	The exposure.
+		//!\~french		L'exposition.
+		Uniform1f & m_exposure;
 		//!\~english	The pass textures.
 		//!\~french		Les textures de la passe.
 		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;

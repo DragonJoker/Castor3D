@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -718,6 +718,12 @@ namespace Castor3D
 		//!\~english	Name of the lights frame variable.
 		//!\~french		Nom de la frame variable contenant les lumières.
 		C3D_API static const Castor::String Lights;
+		//!\~english	Name of the exposure frame variable.
+		//!\~french		Nom de la frame variable contenant l'exposition.
+		C3D_API static const Castor::String Exposure;
+		//!\~english	Name of the gamma correction frame variable.
+		//!\~french		Nom de la frame variable contenant la correction gamma.
+		C3D_API static const Castor::String Gamma;
 
 		//@}
 		/**@name Pass */
@@ -831,6 +837,9 @@ namespace Castor3D
 		//!\~english	Name of the scene frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de scène.
 		C3D_API static const Castor::String BufferScene;
+		//!\~english	Name of the HDR configuration frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant la configuration du HDR.
+		C3D_API static const Castor::String BufferHdrConfig;
 		//!\~english	Name of the pass frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de passe.
 		C3D_API static const Castor::String BufferPass;

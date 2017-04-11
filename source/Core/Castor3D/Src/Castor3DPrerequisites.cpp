@@ -144,12 +144,14 @@ namespace Castor3D
 	{
 		using namespace GLSL;
 		auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
+		auto c3d_fGamma( p_writer.GetBuiltin< Vec3 >( cuT( "c3d_fGamma" ) ) );
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{
 			auto c3d_mapDiffuse( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
-
-			p_diffuse *= texture( c3d_mapDiffuse, l_texCoord.xy() ).xyz();
+			p_diffuse *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+				, c3d_fGamma
+				, texture( c3d_mapDiffuse, l_texCoord.xy() ).xyz() );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eSpecular ) )
@@ -162,8 +164,9 @@ namespace Castor3D
 		if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
 		{
 			auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
-
-			p_emissive = texture( c3d_mapEmissive, l_texCoord.xy() ).xyz();
+			p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+				, c3d_fGamma
+				, texture( c3d_mapEmissive, l_texCoord.xy() ).xyz() );
 		}
 	}
 

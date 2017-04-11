@@ -27,6 +27,8 @@ namespace deferred_common
 {
 	namespace
 	{
+		static uint32_t constexpr c_environmentStart = 5u;
+
 		VertexBufferSPtr DoCreateVbo( Engine & p_engine )
 		{
 			auto l_declaration = BufferDeclaration(
@@ -98,11 +100,19 @@ namespace deferred_common
 			// Shader inputs
 			UBO_SCENE( l_writer );
 			UBO_GPINFO( l_writer );
+			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig };
+			auto c3d_fExposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
+			auto c3d_fGamma = l_config.GetUniform< Float >( ShaderProgram::Gamma );
+			l_config.End();
 			auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
 			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
 			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
 			auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+			auto c3d_mapPostLight = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapPostLight" ) );
 			auto c3d_mapEnvironment = l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, 32u );
+			auto c3d_fresnelBias = l_writer.GetUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
+			auto c3d_fresnelScale = l_writer.GetUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
+			auto c3d_fresnelPower = l_writer.GetUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -127,23 +137,59 @@ namespace deferred_common
 					, l_reflection
 					, l_refraction
 					, l_envMapIndex );
+				auto l_postLight = l_writer.GetLocale( cuT( "l_postLight" ), texture( c3d_mapPostLight, vtx_texture ).xyz() );
 
 				IF( l_writer, l_envMapIndex < 1_i )
 				{
-					l_writer.Discard();
+					pxl_v4FragColor = vec4( l_postLight, 1.0_f );
 				}
-				FI;
-
-				pxl_v4FragColor = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
-
-				IF( l_writer, l_reflection != 0_i )
+				ELSEIF( l_writer, cuT( "l_reflection == 0 && l_refraction == 0" ) )
 				{
-					auto l_position = l_writer.GetLocale( cuT( "l_position" ), l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
-					auto l_normal = l_writer.GetLocale( cuT( "l_normal" ), normalize( l_v4Normal.xyz() ) );
-					auto l_incident = l_writer.GetLocale( cuT( "l_incident" ), normalize( l_position - c3d_v3CameraPosition ) );
+					pxl_v4FragColor = vec4( l_postLight, 1.0_f );
+				}
+				ELSE
+				{
+					pxl_v4FragColor = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
+					auto l_position = l_writer.GetLocale( cuT( "l_position" )
+						, l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+					auto l_normal = l_writer.GetLocale( cuT( "l_normal" )
+						, normalize( l_v4Normal.xyz() ) );
+					auto l_incident = l_writer.GetLocale( cuT( "l_incident" )
+						, normalize( l_position - c3d_v3CameraPosition ) );
 					l_envMapIndex = l_envMapIndex - 1_i;
-					auto l_reflect = l_writer.GetLocale( cuT( "l_reflect" ), reflect( l_incident, l_normal ) );
-					pxl_v4FragColor.xyz() += texture( c3d_mapEnvironment[l_envMapIndex], l_reflect ).xyz();
+					auto l_diffuse = l_writer.GetLocale( cuT( "l_diffuse" ), texture( c3d_mapDiffuse, vtx_texture ).xyz() );
+					auto l_reflectedColour = l_writer.GetLocale( cuT( "l_reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
+					auto l_refractedColour = l_writer.GetLocale( cuT( "l_refractedColour" ), l_diffuse / 2.0 );
+
+					IF( l_writer, l_reflection != 0_i )
+					{
+						auto l_reflect = l_writer.GetLocale( cuT( "l_reflect" )
+							, reflect( l_incident, l_normal ) );
+						l_reflectedColour = texture( c3d_mapEnvironment[l_envMapIndex], l_reflect ).xyz() * length( l_postLight.xyz() );
+					}
+					FI;
+
+					IF( l_writer, l_refraction != 0_i )
+					{
+						auto l_ratio = l_writer.GetLocale( cuT( "l_ratio" )
+							, texture( c3d_mapEmissive, vtx_texture ).w() );
+						auto l_refract = l_writer.GetLocale( cuT( "l_refract" )
+							, refract( l_incident, l_normal, l_ratio ) );
+						l_refractedColour = texture( c3d_mapEnvironment[l_envMapIndex], l_refract ).xyz() * l_diffuse / length( l_diffuse );
+					}
+					FI;
+
+					IF( l_writer, cuT( "l_reflection != 0 && l_refraction == 0" ) )
+					{
+						pxl_v4FragColor.xyz() = l_reflectedColour * l_diffuse / length( l_diffuse );
+					}
+					ELSE
+					{
+						auto l_refFactor = l_writer.GetLocale( cuT( "l_refFactor" )
+						, clamp( c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_normal ), c3d_fresnelPower ), 0.0_f, 1.0_f ) );
+						pxl_v4FragColor.xyz() = mix( l_refractedColour, l_reflectedColour, l_refFactor );
+					}
+					FI;
 				}
 				FI;
 			} );
@@ -165,12 +211,14 @@ namespace deferred_common
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel )->SetValue( 1u );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDiffuse ), ShaderType::ePixel )->SetValue( 2u );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eEmissive ), ShaderType::ePixel )->SetValue( 3u );
+			l_result->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->SetValue( 4u );
+			int const c = int( c_environmentStart );
 			l_result->CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, 32u )->SetValues(
 			{
-				4u, 5u, 6u, 7u, 8u, 9u, 10u, 11u,
-				12u, 13u, 14u, 15u, 16u, 17u, 18u, 19u,
-				20u, 21u, 22u, 23u, 24u, 25u, 26u, 27u,
-				28u, 29u, 30u, 31u, 32u, 33u, 34u, 35u,
+				c + 0, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6, c + 7,
+				c + 8, c + 9, c + 10, c + 11, c + 12, c + 13, c + 14, c + 15,
+				c + 16, c + 17, c + 18, c + 19, c + 20, c + 21, c + 22, c + 23,
+				c + 24, c + 25, c + 26, c + 27, c + 28, c + 29, c + 30, c + 31,
 			} );
 			l_result->Initialise();
 			return l_result;
@@ -180,18 +228,21 @@ namespace deferred_common
 			, ShaderProgram & p_program
 			, UniformBuffer & p_matrixUbo
 			, UniformBuffer & p_sceneUbo
-			, UniformBuffer & p_gpInfoUbo )
+			, UniformBuffer & p_gpInfoUbo
+			, UniformBuffer & p_configUbo )
 		{
 			UniformBuffer::FillMatrixBuffer( p_matrixUbo );
 			UniformBuffer::FillSceneBuffer( p_sceneUbo );
+			p_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma );
+			p_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
 			l_dsState.SetDepthMask( WritingMask::eZero );
 			BlendState l_blState;
-			l_blState.EnableBlend( true );
-			l_blState.SetRgbBlend( BlendOperation::eAdd, BlendOperand::eDstColour, BlendOperand::eSrcColour );
+			//l_blState.EnableBlend( true );
+			//l_blState.SetRgbBlend( BlendOperation::eAdd, BlendOperand::eSrcColour, BlendOperand::eDstColour );
 			auto l_result = p_engine.GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
 				, std::move( l_rsState )
 				, std::move( l_blState )
@@ -201,6 +252,7 @@ namespace deferred_common
 			l_result->AddUniformBuffer( p_matrixUbo );
 			l_result->AddUniformBuffer( p_sceneUbo );
 			l_result->AddUniformBuffer( p_gpInfoUbo );
+			l_result->AddUniformBuffer( p_configUbo );
 			return l_result;
 		}
 	}
@@ -216,10 +268,13 @@ namespace deferred_common
 		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 		, m_sceneUbo{ ShaderProgram::BufferScene, *p_engine.GetRenderSystem() }
 		, m_gpInfo{ p_engine }
-		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, m_matrixUbo, m_sceneUbo, m_gpInfo.GetUbo() ) }
+		, m_configUbo{ ShaderProgram::BufferHdrConfig, *p_engine.GetRenderSystem() }
+		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, m_matrixUbo, m_sceneUbo, m_gpInfo.GetUbo(), m_configUbo ) }
 		, m_projectionUniform{ m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection ) }
 		, m_viewUniform{ m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView ) }
 		, m_cameraPosUniform{ m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos ) }
+		, m_gammaUniform{ m_configUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Gamma ) }
+		, m_exposureUniform{ m_configUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Exposure ) }
 	{
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.Initialise();
@@ -231,6 +286,9 @@ namespace deferred_common
 
 	ReflectionPass::~ReflectionPass()
 	{
+		m_exposureUniform.reset();
+		m_gammaUniform.reset();
+		m_configUbo.Cleanup();
 		m_viewUniform.reset();
 		m_projectionUniform.reset();
 		m_sceneUbo.Cleanup();
@@ -245,13 +303,13 @@ namespace deferred_common
 	}
 
 	void ReflectionPass::Render( GeometryPassResult & p_gp
+		, Castor3D::TextureLayout const & p_lp
 		, Scene const & p_scene
 		, Camera const & p_camera
 		, Matrix4x4r const & p_invViewProj
 		, Matrix4x4r const & p_invView
 		, Matrix4x4r const & p_invProj )
 	{
-		static uint32_t constexpr l_environmentStart = 4u;
 		m_gpInfo.Update( m_size
 			, p_camera
 			, p_invViewProj
@@ -259,6 +317,9 @@ namespace deferred_common
 			, p_invProj );
 		m_cameraPosUniform->SetValue( p_camera.GetParent()->GetDerivedPosition() );
 		m_sceneUbo.Update();
+		m_exposureUniform->SetValue( p_scene.GetHdrConfig().GetExposure() );
+		m_gammaUniform->SetValue( p_scene.GetHdrConfig().GetGamma() );
+		m_configUbo.Update();
 		auto & l_maps = p_scene.GetEnvironmentMaps();
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
@@ -268,7 +329,9 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::eDiffuse )]->GetSampler()->Bind( 2u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Bind( 3u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Bind( 3u );
-		auto l_index = l_environmentStart;
+		p_lp.Bind( 4u );
+		p_gp[size_t( DsTexture::eSpecular )]->GetSampler()->Bind( 4u );
+		auto l_index = c_environmentStart;
 
 		for ( auto & l_map : l_maps )
 		{
@@ -279,7 +342,7 @@ namespace deferred_common
 
 		m_pipeline->Apply();
 		m_geometryBuffers->Draw( 6u, 0 );
-		l_index = l_environmentStart;
+		l_index = c_environmentStart;
 
 		for ( auto & l_map : l_maps )
 		{
@@ -288,6 +351,8 @@ namespace deferred_common
 			++l_index;
 		}
 
+		p_gp[size_t( DsTexture::eSpecular )]->GetTexture()->Unbind( 4u );
+		p_lp.Unbind( 4u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Unbind( 3u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Unbind( 3u );
 		p_gp[size_t( DsTexture::eDiffuse )]->GetTexture()->Unbind( 2u );

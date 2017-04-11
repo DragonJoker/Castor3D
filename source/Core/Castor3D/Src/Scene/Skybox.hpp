@@ -178,6 +178,15 @@ namespace Castor3D
 		//!\~english	The uniform variable containing modeal matrix.
 		//!\~french		La variable uniforme contenant la matrice modèle.
 		Uniform4x4fSPtr m_modelUniform{ nullptr };
+		//!\~english	The HDR configuration.
+		//!\~french		La configuration HDR.
+		UniformBuffer m_configUbo;
+		//!\~english	The exposure shader variable.
+		//!\~french		La variable shader pour l'exposition.
+		Uniform1fSPtr m_exposureUniform;
+		//!\~english	The gamma correction shader variable.
+		//!\~french		La variable shader pour la correction gamma.
+		Uniform1fSPtr m_gammaUniform;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer{ nullptr };

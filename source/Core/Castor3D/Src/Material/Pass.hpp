@@ -390,6 +390,16 @@ namespace Castor3D
 		{
 			return m_textureUnits.end();
 		}
+		/**
+		 *\~english
+		 *\return		\p true if gamma correction is needed for this pass.
+		 *\~french
+		 *\return		\pt true si la correction gamma doit être appliquée à cette passe.
+		 */
+		inline bool NeedsGammaCorrection()const
+		{
+			return m_needsGammaCorrection;
+		}
 
 	protected:
 		/**
@@ -507,6 +517,9 @@ namespace Castor3D
 		//!\~english	Tells if the pass' textures are reduced.
 		//!\~french		Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced{ false };
+		//!\~english	Tells if the pass' diffuse needs gamma correction.
+		//!\~french		Dit si la diffuse de la passe a besoin de correction gamma.
+		bool m_needsGammaCorrection{ false };
 	};
 }
 
