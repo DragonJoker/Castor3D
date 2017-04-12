@@ -8,6 +8,8 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
+#include <Shader/ModelMatrixUbo.hpp>
+#include <Shader/SceneUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/DepthStencilState.hpp>
@@ -376,27 +378,27 @@ namespace deferred_common
 
 	void LightPass::Program::Initialise( VertexBuffer & p_vbo
 		, IndexBufferSPtr p_ibo
-		, UniformBuffer & p_matrixUbo
-		, UniformBuffer & p_sceneUbo
+		, MatrixUbo & p_matrixUbo
+		, SceneUbo & p_sceneUbo
 		, UniformBuffer & p_gpInfoUbo
-		, UniformBuffer * p_modelMatrixUbo )
+		, ModelMatrixUbo * p_modelMatrixUbo )
 	{
 		m_program->Initialise();
 
 		m_firstPipeline = DoCreatePipeline( false );
-		m_firstPipeline->AddUniformBuffer( p_matrixUbo );
-		m_firstPipeline->AddUniformBuffer( p_sceneUbo );
+		m_firstPipeline->AddUniformBuffer( p_matrixUbo.GetUbo() );
+		m_firstPipeline->AddUniformBuffer( p_sceneUbo.GetUbo() );
 		m_firstPipeline->AddUniformBuffer( p_gpInfoUbo );
 
 		m_blendPipeline = DoCreatePipeline( true );
-		m_blendPipeline->AddUniformBuffer( p_matrixUbo );
-		m_blendPipeline->AddUniformBuffer( p_sceneUbo );
+		m_blendPipeline->AddUniformBuffer( p_matrixUbo.GetUbo() );
+		m_blendPipeline->AddUniformBuffer( p_sceneUbo.GetUbo() );
 		m_blendPipeline->AddUniformBuffer( p_gpInfoUbo );
 
 		if ( p_modelMatrixUbo )
 		{
-			m_firstPipeline->AddUniformBuffer( *p_modelMatrixUbo );
-			m_blendPipeline->AddUniformBuffer( *p_modelMatrixUbo );
+			m_firstPipeline->AddUniformBuffer( p_modelMatrixUbo->GetUbo() );
+			m_blendPipeline->AddUniformBuffer( p_modelMatrixUbo->GetUbo() );
 		}
 
 		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
@@ -440,14 +442,11 @@ namespace deferred_common
 		, bool p_shadows )
 		: m_engine{ p_engine }
 		, m_shadows{ p_shadows }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
+		, m_matrixUbo{ p_engine }
 		, m_frameBuffer{ p_frameBuffer }
 		, m_depthAttach{ p_depthAttach }
 		, m_ssao{ p_ssao }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
-		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
 	}
 
 	void LightPass::Render( Size const & p_size
@@ -483,8 +482,8 @@ namespace deferred_common
 		, LightType p_type
 		, VertexBuffer & p_vbo
 		, IndexBufferSPtr p_ibo
-		, UniformBuffer & p_sceneUbo
-		, UniformBuffer * p_modelMatrixUbo )
+		, SceneUbo & p_sceneUbo
+		, ModelMatrixUbo * p_modelMatrixUbo )
 	{
 		m_gpInfo = std::make_unique< GpInfo >( m_engine );
 		uint16_t l_fogType{ 0u };
@@ -516,7 +515,7 @@ namespace deferred_common
 		}
 
 		m_gpInfo.reset();
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 	}
 
 	void LightPass::DoRender( Castor::Size const & p_size

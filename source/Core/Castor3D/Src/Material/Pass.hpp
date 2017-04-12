@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 #include <Design/OwnedBy.hpp>
+#include <Design/Signal.hpp>
 
 namespace Castor3D
 {
@@ -41,6 +42,11 @@ namespace Castor3D
 	class Pass
 		: public Castor::OwnedBy< Material >
 	{
+	public:
+		using Changed = std::function< void( Pass const & ) >;
+		using OnChanged = Castor::Signal< Changed >;
+		using OnChangedConnection = OnChanged::connection;
+
 	public:
 		/*!
 		\author Sylvain DOREMUS
@@ -251,6 +257,7 @@ namespace Castor3D
 		inline void SetTwoSided( bool p_value )
 		{
 			m_twoSided = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -263,6 +270,7 @@ namespace Castor3D
 		inline void SetRefractionRatio( float p_value )
 		{
 			m_refractionRatio = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -275,6 +283,7 @@ namespace Castor3D
 		inline void SetAlphaBlendMode( BlendMode p_value )
 		{
 			m_alphaBlendMode = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -287,6 +296,7 @@ namespace Castor3D
 		inline void SetColourBlendMode( BlendMode p_value )
 		{
 			m_colourBlendMode = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -523,6 +533,14 @@ namespace Castor3D
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
 		virtual void DoSetOpacity( float p_value ) = 0;
+
+	public:
+		static uint32_t constexpr PassBufferIndex = 0u;
+		static uint32_t constexpr LightBufferIndex = 1u;
+		static uint32_t constexpr MinTextureIndex = 2u;
+
+	public:
+		OnChanged onChanged;
 
 	private:
 		//!\~english	Texture units.

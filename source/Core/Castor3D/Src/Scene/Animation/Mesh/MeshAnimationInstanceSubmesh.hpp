@@ -102,13 +102,14 @@ namespace Castor3D
 		C3D_API void Update( std::chrono::milliseconds const & p_time );
 		/**
 		 *\~english
-		 *\brief		Fills a shader variable with this object's skeleton transforms.
-		 *\param[out]	p_variable	Receives the transforms.
+		 *\brief		The current factor.
 		 *\~french
-		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
-		 *\param[out]	p_variable	Reçoit les transformations.
+		 *\brief		Le facteur courant.
 		 */
-		C3D_API void FillShader( Uniform1f & p_variable )const;
+		inline float GetCurrentFactor()const
+		{
+			return m_currentFactor;
+		}
 
 	protected:
 		//!\~english	The animation object.

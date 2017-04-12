@@ -1,4 +1,4 @@
-﻿#include "RenderTarget.hpp"
+#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -7,6 +7,7 @@
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
+#include "Shader/PassBuffer.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -296,7 +297,9 @@ namespace Castor3D
 			m_toneMapping->SetConfig( l_scene->GetHdrConfig() );
 			m_toneMapping->Apply( GetSize(), m_renderTechnique->GetResult() );
 			// We also render overlays.
+			m_renderTechnique->GetPassBuffer().Bind();
 			GetEngine()->GetOverlayCache().Render( *l_scene, m_size );
+			m_renderTechnique->GetPassBuffer().Unbind();
 			p_fb.m_frameBuffer->Unbind();
 		}
 

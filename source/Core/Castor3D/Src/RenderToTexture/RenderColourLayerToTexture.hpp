@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -56,7 +56,7 @@ namespace Castor3D
 		 *\param[in]	p_matrixUbo	L'UBO contenant les données de matrices.
 		 */
 		C3D_API explicit RenderColourLayerToTexture( Context & p_context
-			, UniformBuffer & p_matrixUbo );
+			, MatrixUbo & p_matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -99,7 +99,7 @@ namespace Castor3D
 		C3D_API void Render( Castor::Position const & p_position
 			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
-			, UniformBuffer & p_matrixUbo
+			, MatrixUbo & p_matrixUbo
 			, RenderPipeline & p_pipeline
 			, uint32_t p_layer );
 		/**
@@ -146,7 +146,7 @@ namespace Castor3D
 			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo
+			, MatrixUbo & p_matrixUbo
 			, GeometryBuffers const & p_geometryBuffers
 			, uint32_t p_layer );
 		/**
@@ -162,7 +162,7 @@ namespace Castor3D
 	private:
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer & m_matrixUbo;
+		MatrixUbo & m_matrixUbo;
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;

@@ -1,4 +1,4 @@
-﻿#include "MatrixUbo.hpp"
+#include "MatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -20,10 +20,16 @@ namespace Castor3D
 	{
 	}
 
-	void MatrixUbo::Update( Castor::Matrix4x4r const & p_view
-		, Castor::Matrix4x4r const & p_projection )const
+	void MatrixUbo::Update( Matrix4x4r const & p_view
+		, Matrix4x4r const & p_projection )const
 	{
 		m_view.SetValue( p_view );
+		m_projection.SetValue( p_projection );
+		m_ubo.Update();
+	}
+
+	void MatrixUbo::Update( Matrix4x4r const & p_projection )const
+	{
 		m_projection.SetValue( p_projection );
 		m_ubo.Update();
 	}

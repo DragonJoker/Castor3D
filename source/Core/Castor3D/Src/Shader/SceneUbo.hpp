@@ -79,6 +79,19 @@ namespace Castor3D
 		 *\param[in]	p_materialIndex		L'indice du matériau.
 		 *\param[in]	p_lights			Les sources lumineuses sont mises à jour elles aussi.
 		 */
+		C3D_API void UpdateCameraPosition( Camera const & p_camera )const;
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	p_shadowReceiver	Tells if the model receives shadows.
+		 *\param[in]	p_materialIndex		The material index.
+		 *\param[in]	p_lights			The lights are updated too.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	p_shadowReceiver	Dit si le modèle reçoit les ombres.
+		 *\param[in]	p_materialIndex		L'indice du matériau.
+		 *\param[in]	p_lights			Les sources lumineuses sont mises à jour elles aussi.
+		 */
 		C3D_API void Update( Scene const & p_scene
 			, Camera const & p_camera
 			, bool p_lights = true )const;
@@ -126,5 +139,16 @@ namespace Castor3D
 		Uniform1f & m_fogDensity;
 	};
 }
+
+#define UBO_SCENE( Writer )\
+	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
+	auto c3d_v4AmbientLight = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
+	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
+	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
+	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
+	auto c3d_v3CameraFarPlane = l_scene.GetUniform< GLSL::Float >( ShaderProgram::CameraFarPlane );\
+	auto c3d_iFogType = l_scene.GetUniform< GLSL::Int >( ShaderProgram::FogType );\
+	auto c3d_fFogDensity = l_scene.GetUniform< GLSL::Float >( ShaderProgram::FogDensity );\
+	l_scene.End()
 
 #endif

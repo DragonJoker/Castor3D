@@ -79,6 +79,17 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~ForwardRenderTechniquePass();
 		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[out]	p_info		Receives the render informations.
+		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[out]	p_info		Reçoit les informations de rendu.
+		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
+		 */
+		C3D_API void Render( RenderInfo & p_info, bool p_shadows )override;
+		/**
 		 *\copydoc		Castor3D::RenderTechniquePass::InitialiseShadowMaps
 		 */
 		C3D_API bool InitialiseShadowMaps()override;

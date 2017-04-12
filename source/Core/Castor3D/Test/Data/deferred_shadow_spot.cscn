@@ -99,7 +99,7 @@ window "Window"
 		size screen_size
 		scene "Scene"
 		camera "MainCamera"
-		technique "deferred"
+		technique "forward"
 	}
 
 	fullscreen false

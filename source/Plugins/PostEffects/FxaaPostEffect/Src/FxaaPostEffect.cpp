@@ -20,6 +20,7 @@
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/UniformBuffer.hpp>
+#include <Shader/MatrixUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/RasteriserState.hpp>
@@ -176,10 +177,9 @@ namespace Fxaa
 	FxaaPostEffect::FxaaPostEffect( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
 		: PostEffect{ FxaaPostEffect::Type, p_renderTarget, p_renderSystem, p_param }
 		, m_surface{ *p_renderSystem.GetEngine() }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
+		, m_matrixUbo{ *p_renderSystem.GetEngine() }
 		, m_fxaaUbo{ FxaaUbo, p_renderSystem }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		m_uniformSubpixShift = m_fxaaUbo.CreateUniform< UniformType::eFloat >( SubpixShift );
 		m_uniformSpanMax = m_fxaaUbo.CreateUniform< UniformType::eFloat >( SpanMax );
 		m_uniformReduceMul = m_fxaaUbo.CreateUniform< UniformType::eFloat >( ReduceMul );
@@ -244,7 +244,7 @@ namespace Fxaa
 			RasteriserState l_rsstate;
 			l_rsstate.SetCulledFaces( Culling::eBack );
 			m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-			m_pipeline->AddUniformBuffer( m_matrixUbo );
+			m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 			m_pipeline->AddUniformBuffer( m_fxaaUbo );
 		}
 
@@ -253,7 +253,7 @@ namespace Fxaa
 
 	void FxaaPostEffect::Cleanup()
 	{
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 		m_fxaaUbo.Cleanup();
 		m_mapDiffuse.reset();
 		m_surface.Cleanup();

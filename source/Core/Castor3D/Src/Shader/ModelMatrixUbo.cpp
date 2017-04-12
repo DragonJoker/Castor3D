@@ -1,4 +1,4 @@
-﻿#include "ModelMatrixUbo.hpp"
+#include "ModelMatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -18,6 +18,12 @@ namespace Castor3D
 
 	ModelMatrixUbo::~ModelMatrixUbo()
 	{
+	}
+
+	void ModelMatrixUbo::Update( Castor::Matrix4x4r const & p_model  )const
+	{
+		m_model.SetValue( p_model );
+		m_ubo.Update();
 	}
 
 	void ModelMatrixUbo::Update( Castor::Matrix4x4r const & p_model

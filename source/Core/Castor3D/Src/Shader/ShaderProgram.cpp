@@ -1,4 +1,4 @@
-#include "ShaderProgram.hpp"
+﻿#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -132,8 +132,7 @@ namespace Castor3D
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
 	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
 	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
-	const String ShaderProgram::MatEnvironmentIndex = cuT( "c3d_fMatEnvironmentIndex" );
-	const String ShaderProgram::MatRefractionRatio = cuT( "c3d_fMatRefractionRatio" );
+	const String ShaderProgram::MatRefractionRatio = cuT( "c3d_refractionRatio" );
 	const String ShaderProgram::Time = cuT( "c3d_fTime" );
 	const String ShaderProgram::Bones = cuT( "c3d_mtxBones" );
 	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
@@ -151,6 +150,7 @@ namespace Castor3D
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
 	const String ShaderProgram::ShadowReceiver = cuT( "c3d_shadowReceiver" );
 	const String ShaderProgram::MaterialIndex = cuT( "c3d_materialIndex" );
+	const String ShaderProgram::EnvironmentIndex = cuT( "c3d_envMapIndex" );
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
 	const String ShaderProgram::BufferModelMatrix = cuT( "ModelMatrices" );

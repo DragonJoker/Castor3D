@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Render/RenderNode/PassRenderNode.hpp"
+#include "Shader/MatrixUbo.hpp"
+#include "Shader/OverlayUbo.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "TextOverlay.hpp"
 
@@ -148,7 +150,7 @@ namespace Castor3D
 		{
 			RenderPipeline & m_pipeline;
 			PassRenderNode m_passNode;
-			UniformBuffer & m_overlayUbo;
+			OverlayUbo & m_overlayUbo;
 		};
 		/*!
 		\author 	Sylvain DOREMUS
@@ -363,25 +365,10 @@ namespace Castor3D
 		bool m_sizeChanged{ true };
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_matrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Uniform4x4fSPtr m_projectionUniform{ nullptr };
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Uniform4x4fSPtr m_viewUniform{ nullptr };
+		MatrixUbo m_matrixUbo;
 		//!\~english	The uniform buffer containing overlay data.
 		//!\~french		Le tampon d'uniformes contenant les données d'incrustation.
-		UniformBuffer m_overlayUbo;
-		//!\~english	The uniform variable containing overlay position.
-		//!\~french		La variable uniforme contenant la position de l'incrustation.
-		Uniform2iSPtr m_overlayPosition{ nullptr };
-		//!\~english	The uniform variable containing overlay's material index.
-		//!\~french		La variable uniforme contenant l'indice du matériau de l'incrustation.
-		Uniform1iSPtr m_overlayMaterial{ nullptr };
-		//!\~english	The uniform buffer containing pass data.
-		//!\~french		Le tampon d'uniformes contenant les données de passe.
-		UniformBuffer m_passUbo;
+		OverlayUbo m_overlayUbo;
 	};
 }
 

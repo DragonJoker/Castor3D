@@ -47,17 +47,14 @@ namespace Castor3D
 			, DataType & p_data
 			, InstanceType & p_instance
 			, AnimatedSkeleton & p_skeleton
-			, UniformBuffer & p_skinningUbo );
+			, SkinningUbo & p_skinningUbo );
 
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.
 		AnimatedSkeleton & m_skeleton;
 		//!\~english	The animation UBO.
 		//!\~french		L'UBO d'animation.
-		UniformBuffer & m_skinningUbo;
-		//!\~english	The bones matrices uniform variable.
-		//!\~french		Le variable uniforme contenant les matrices des os.
-		Uniform4x4f & m_bonesMatrix;
+		SkinningUbo & m_skinningUbo;
 	};
 }
 

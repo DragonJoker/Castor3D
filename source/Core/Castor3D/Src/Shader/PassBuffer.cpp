@@ -31,6 +31,7 @@ namespace Castor3D
 		m_texture.SetAutoMipmaps( false );
 		m_texture.SetSampler( l_sampler );
 		m_texture.SetTexture( l_texture );
+		m_texture.SetIndex( Pass::PassBufferIndex );
 		m_buffer = l_texture->GetImage().GetBuffer();
 		m_texture.Initialise();
 	}
@@ -42,17 +43,69 @@ namespace Castor3D
 
 	uint32_t PassBuffer::AddPass( Pass & p_pass )
 	{
+		REQUIRE( p_pass.GetId() == 0u );
+		REQUIRE( m_passes.size() < GLSL::MaxMaterialsCount );
 		m_passes.emplace_back( &p_pass );
 		p_pass.SetId( m_passID++ );
+		m_connections.emplace_back( p_pass.onChanged.connect( [this]( Pass const & p_pass )
+		{
+			m_dirty.emplace_back( &p_pass );
+		} ) );
+		m_dirty.emplace_back( &p_pass );
 		return p_pass.GetId();
+	}
+
+	void PassBuffer::RemovePass( Pass & p_pass )
+	{
+		auto l_id = p_pass.GetId() - 1u;
+		REQUIRE( l_id < m_passes.size() );
+		REQUIRE( &p_pass == m_passes[l_id] );
+		auto l_it = m_passes.erase( m_passes.begin() + l_id );
+
+		for ( l_it; l_it != m_passes.end(); ++l_it )
+		{
+			( *l_it )->SetId( l_id );
+			++l_id;
+		}
+
+		m_connections.erase( m_connections.begin() + l_id );
+		p_pass.SetId( 0u );
+		m_passID--;
 	}
 
 	void PassBuffer::Update( Scene & p_scene )
 	{
-		for ( auto & l_pass : m_passes )
+		if ( !m_dirty.empty() )
 		{
-			l_pass->Update( *this, p_scene );
+			std::vector< Pass const * > l_dirty;
+			std::swap( m_dirty, l_dirty );
+			auto l_end = std::unique( l_dirty.begin(), l_dirty.end() );
+
+			std::for_each( l_dirty.begin(), l_end, [this, &p_scene]( Pass const * p_pass )
+			{
+				p_pass->Update( *this, p_scene );
+			} );
+
+			auto l_layout = m_texture.GetTexture();
+			auto l_locked = l_layout->Lock( AccessType::eWrite );
+
+			if ( l_locked )
+			{
+				memcpy( l_locked, m_buffer->const_ptr(), m_buffer->size() );
+			}
+
+			l_layout->Unlock( true );
 		}
+	}
+
+	void PassBuffer::Bind()const
+	{
+		m_texture.Bind();
+	}
+
+	void PassBuffer::Unbind()const
+	{
+		m_texture.Unbind();
 	}
 
 	void PassBuffer::SetComponents( uint32_t p_index
@@ -62,6 +115,7 @@ namespace Castor3D
 		, float p_b
 		, float p_a )
 	{
+		REQUIRE( p_components < m_passSize );
 		auto l_buffer = reinterpret_cast< float * >( m_buffer->ptr() ) + ( p_components + p_index * m_passSize ) * 4u;
 		*l_buffer++ = p_r;
 		*l_buffer++ = p_g;

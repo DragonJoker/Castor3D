@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_TONE_MAPPING_H___
 
 #include "Shader/UniformBuffer.hpp"
+#include "Shader/MatrixUbo.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
@@ -169,7 +170,7 @@ namespace Castor3D
 		RenderPipelineUPtr m_pipeline;
 		//!\~english	The matrix data UBO.
 		//!\~french		L'UBO de données de matrices.
-		UniformBuffer m_matrixUbo;
+		MatrixUbo m_matrixUbo;
 		//!\~english	The configuration data UBO.
 		//!\~french		L'UBO de données de configuration.
 		UniformBuffer m_configUbo;

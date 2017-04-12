@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -24,7 +24,8 @@ SOFTWARE.
 #define ___C3D_TextureProjection_H___
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Shader/MatrixUbo.hpp"
+#include "Shader/ModelMatrixUbo.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -94,19 +95,10 @@ namespace Castor3D
 	private:
 		//!\~english	The shader matrices constants buffer.
 		//!\~french		Le tampon de constantes de shader contenant les matrices.
-		UniformBuffer m_matrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Uniform4x4fSPtr m_projectionUniform{ nullptr };
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Uniform4x4fSPtr m_viewUniform{ nullptr };
+		MatrixUbo m_matrixUbo;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_modelMatrixUbo;
-		//!\~english	The uniform variable containing modeal matrix.
-		//!\~french		La variable uniforme contenant la matrice modèle.
-		Uniform4x4fSPtr m_modelUniform{ nullptr };
+		ModelMatrixUbo m_modelMatrixUbo;
 		//!\~english	The uniform variable containing render target size.
 		//!\~french		La variable uniforme contenant la taille de la cible du rendu.
 		PushUniform2fSPtr m_sizeUniform{ nullptr };

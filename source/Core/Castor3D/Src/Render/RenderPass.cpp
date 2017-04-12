@@ -67,11 +67,14 @@ namespace Castor3D
 				{
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
+						EnvironmentMap * l_envMap = nullptr;
 						DoBindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
 							, *l_itPass.first
 							, p_scene
 							, *l_itPipelines.first
-							, p_depthMaps );
+							, p_depthMaps
+							, l_itSubmeshes.second[0].m_modelUbo
+							, l_envMap );
 
 						p_function( *l_itPipelines.first
 							, *l_itPass.first
@@ -82,7 +85,8 @@ namespace Castor3D
 							, *l_itPass.first
 							, p_scene
 							, *l_itPipelines.first
-							, p_depthMaps );
+							, p_depthMaps
+							, l_envMap );
 					}
 				}
 			}
@@ -135,11 +139,14 @@ namespace Castor3D
 				{
 					for ( auto l_itSubmeshes : l_itPass.second )
 					{
+						EnvironmentMap * l_envMap = nullptr;
 						DoBindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
 							, *l_itPass.first
 							, p_scene
 							, *l_itPipelines.first
-							, p_depthMaps );
+							, p_depthMaps
+							, l_itSubmeshes.second[0].m_modelUbo
+							, l_envMap );
 
 						p_function( *l_itPipelines.first
 							, *l_itPass.first
@@ -150,7 +157,8 @@ namespace Castor3D
 							, *l_itPass.first
 							, p_scene
 							, *l_itPipelines.first
-							, p_depthMaps );
+							, p_depthMaps
+							, l_envMap );
 					}
 				}
 			}
@@ -189,11 +197,14 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
+					EnvironmentMap * l_envMap = nullptr;
 					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
-						, p_depthMaps );
+						, p_depthMaps
+						, l_renderNode.m_modelUbo
+						, l_envMap );
 
 					DoRenderNode( l_renderNode );
 
@@ -201,7 +212,8 @@ namespace Castor3D
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
-						, p_depthMaps );
+						, p_depthMaps
+						, l_envMap );
 				}
 			}
 		}
@@ -243,11 +255,14 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
+					EnvironmentMap * l_envMap = nullptr;
 					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
-						, p_depthMaps );
+						, p_depthMaps
+						, l_renderNode.m_modelUbo
+						, l_envMap );
 
 					DoRenderNode( l_renderNode );
 
@@ -255,7 +270,8 @@ namespace Castor3D
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
-						, p_depthMaps );
+						, p_depthMaps
+						, l_envMap );
 				}
 			}
 		}
@@ -275,11 +291,14 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
+					EnvironmentMap * l_envMap = nullptr;
 					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
-						, p_depthMaps );
+						, p_depthMaps
+						, l_renderNode.m_modelUbo
+						, l_envMap );
 
 					DoRenderNode( l_renderNode );
 					++p_info.m_drawCalls;
@@ -288,7 +307,8 @@ namespace Castor3D
 						, l_renderNode.m_passNode.m_pass
 						, p_scene
 						, *l_itPipelines.first
-						, p_depthMaps );
+						, p_depthMaps
+						, l_envMap );
 
 					++p_info.m_visibleObjectsCount;
 				}
@@ -312,11 +332,9 @@ namespace Castor3D
 		, m_sceneUbo{ p_engine }
 		, m_modelUbo{ p_engine }
 		, m_billboardUbo{ p_engine }
-		, m_skinningUbo{ ShaderProgram::BufferSkinning, *p_engine.GetRenderSystem() }
-		, m_morphingUbo{ ShaderProgram::BufferMorphing, *p_engine.GetRenderSystem() }
+		, m_skinningUbo{ p_engine }
+		, m_morphingUbo{ p_engine }
 	{
-		UniformBuffer::FillSkinningBuffer( m_skinningUbo );
-		UniformBuffer::FillMorphingBuffer( m_morphingUbo );
 	}
 
 	RenderPass::~RenderPass()
@@ -330,8 +348,8 @@ namespace Castor3D
 
 	void RenderPass::Cleanup()
 	{
-		m_skinningUbo.Cleanup();
-		m_morphingUbo.Cleanup();
+		m_skinningUbo.GetUbo().Cleanup();
+		m_morphingUbo.GetUbo().Cleanup();
 		m_billboardUbo.GetUbo().Cleanup();
 		m_modelUbo.GetUbo().Cleanup();
 		m_modelMatrixUbo.GetUbo().Cleanup();

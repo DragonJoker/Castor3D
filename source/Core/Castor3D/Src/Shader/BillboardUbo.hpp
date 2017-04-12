@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -116,5 +116,11 @@ namespace Castor3D
 		Uniform2i & m_windowSize;
 	};
 }
+
+#define UBO_BILLBOARD( Writer )\
+	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards };\
+	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( ShaderProgram::Dimensions );\
+	auto c3d_v2iWindowSize = l_billboard.GetUniform< IVec2 >( ShaderProgram::WindowSize );\
+	l_billboard.End()
 
 #endif

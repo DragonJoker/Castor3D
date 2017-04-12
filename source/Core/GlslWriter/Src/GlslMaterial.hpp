@@ -28,17 +28,13 @@ SOFTWARE.
 namespace GLSL
 {
 	static uint32_t constexpr MaxMaterialsCount = 2000u;
+	Castor::String const PassBufferName = cuT( "c3d_materials" );
 
 	class Materials
 	{
 	protected:
-		GlslWriter_API Materials( GlslWriter & p_writer
-			, int p_offsetRR, int p_indexRR
-			, int p_offsetRF, int p_indexRF
-			, int p_offsetRL, int p_indexRL
-			, int p_offsetOP, int p_indexOP
-			, int p_offsetGM, int p_indexGM
-			, int p_offsetEX, int p_indexEX );
+		GlslWriter_API Materials( GlslWriter & p_writer );
+		GlslWriter_API virtual void Declare() = 0;
 
 	public:
 		GlslWriter_API Float GetRefractionRatio( Int const & p_index )const;
@@ -47,6 +43,14 @@ namespace GLSL
 		GlslWriter_API Int GetReflection( Int const & p_index )const;
 		GlslWriter_API Float GetGamma( Int const & p_index )const;
 		GlslWriter_API Float GetExposure( Int const & p_index )const;
+
+	protected:
+		GlslWriter_API void DoDeclare( int p_offsetRR, int p_indexRR
+			, int p_offsetRF, int p_indexRF
+			, int p_offsetRL, int p_indexRL
+			, int p_offsetOP, int p_indexOP
+			, int p_offsetGM, int p_indexGM
+			, int p_offsetEX, int p_indexEX );
 
 	private:
 		// Materials are aligned on vec4, so the size of a material
@@ -73,6 +77,7 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API LegacyMaterials( GlslWriter & p_writer );
+		GlslWriter_API void Declare()override;
 		GlslWriter_API Vec3 GetDiffuse( Int const & p_index )const;
 		GlslWriter_API Vec3 GetSpecular( Int const & p_index )const;
 		GlslWriter_API Float GetAmbient( Int const & p_index )const;

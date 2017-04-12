@@ -1,4 +1,4 @@
-﻿#include "StencilPass.hpp"
+#include "StencilPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -10,6 +10,8 @@
 #include <Scene/Scene.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Light/PointLight.hpp>
+#include <Shader/MatrixUbo.hpp>
+#include <Shader/ModelMatrixUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
@@ -63,8 +65,8 @@ namespace deferred_common
 
 	StencilPass::StencilPass( FrameBuffer & p_frameBuffer
 		, FrameBufferAttachment & p_depthAttach
-		, UniformBuffer & p_matrixUbo
-		, UniformBuffer & p_modelMatrixUbo )
+		, MatrixUbo & p_matrixUbo
+		, ModelMatrixUbo & p_modelMatrixUbo )
 		: m_frameBuffer{ p_frameBuffer }
 		, m_depthAttach{ p_depthAttach }
 		, m_matrixUbo{ p_matrixUbo }
@@ -106,8 +108,8 @@ namespace deferred_common
 			, MultisampleState{}
 			, *m_program
 			, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo );
-		m_pipeline->AddUniformBuffer( m_modelMatrixUbo );
+		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
+		m_pipeline->AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
 	}
 
 	void StencilPass::Cleanup()

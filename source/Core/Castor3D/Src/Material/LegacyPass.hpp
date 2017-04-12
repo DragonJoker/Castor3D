@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -117,6 +117,7 @@ namespace Castor3D
 		inline void SetDiffuse( Castor::Colour const & p_value)
 		{
 			m_diffuse = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -129,6 +130,7 @@ namespace Castor3D
 		inline void SetSpecular( Castor::Colour const & p_value)
 		{
 			m_specular = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -141,6 +143,7 @@ namespace Castor3D
 		inline void SetAmbient( float const & p_value )
 		{
 			m_ambient = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -153,6 +156,7 @@ namespace Castor3D
 		inline void SetEmissive( float const & p_value )
 		{
 			m_emissive = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -165,6 +169,7 @@ namespace Castor3D
 		inline void SetShininess( float p_value )
 		{
 			m_shininess = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english

@@ -1,4 +1,4 @@
-﻿#include "SsaoPass.hpp"
+#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -380,8 +380,7 @@ namespace deferred_common
 		, Size const & p_size )
 		: m_engine{ p_engine }
 		, m_size{ p_size }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix
-			, *p_engine.GetRenderSystem() }
+		, m_matrixUbo{ p_engine }
 		, m_ssaoKernel{ DoGetKernel() }
 		, m_ssaoNoise{ DoGetNoise( p_engine ) }
 		, m_ssaoResult{ p_engine }
@@ -424,11 +423,8 @@ namespace deferred_common
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.Initialise();
 		m_viewport.Resize( m_size );
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-		m_viewMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
-		m_projectionMatrix = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
 		m_viewport.Update();
-		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
+		m_matrixUbo.Update( m_viewport.GetProjection() );
 	}
 
 	void SsaoPass::DoInitialiseSsaoPass()
@@ -454,8 +450,6 @@ namespace deferred_common
 		m_ssaoResult.SetIndex( 0u );
 		m_ssaoResult.Initialise();
 
-		m_projectionMatrix->SetValue( m_viewport.GetProjection() );
-
 		m_ssaoFbo = l_renderSystem.CreateFrameBuffer();
 		m_ssaoFbo->Create();
 		m_ssaoFbo->Initialise( m_size );
@@ -470,7 +464,7 @@ namespace deferred_common
 		m_gpInfo = std::make_unique< GpInfo >( m_engine );
 
 		m_ssaoPipeline = DoCreatePipeline( m_engine, *m_ssaoProgram );
-		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo );
+		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		m_ssaoPipeline->AddUniformBuffer( m_ssaoConfig );
 		m_ssaoPipeline->AddUniformBuffer( m_gpInfo->GetUbo() );
 
@@ -506,7 +500,7 @@ namespace deferred_common
 		m_blurFbo->Unbind();
 
 		m_blurPipeline = DoCreatePipeline( m_engine, *m_blurProgram );
-		m_blurPipeline->AddUniformBuffer( m_matrixUbo );
+		m_blurPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 
 		m_blurVertexBuffer = DoCreateVbo( m_engine );
 		m_blurGeometryBuffers = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
@@ -518,8 +512,7 @@ namespace deferred_common
 	void SsaoPass::DoCleanupQuadRendering()
 	{
 		m_viewport.Cleanup();
-		m_viewMatrix.reset();
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 	}
 
 	void SsaoPass::DoCleanupSsaoPass()

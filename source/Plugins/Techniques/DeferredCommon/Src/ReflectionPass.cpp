@@ -9,6 +9,8 @@
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Scene.hpp>
+#include <Shader/MatrixUbo.hpp>
+#include <Shader/SceneUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Shader/UniformBuffer.hpp>
 #include <Texture/Sampler.hpp>
@@ -226,13 +228,11 @@ namespace deferred_common
 
 		RenderPipelineUPtr DoCreateRenderPipeline( Engine & p_engine
 			, ShaderProgram & p_program
-			, UniformBuffer & p_matrixUbo
-			, UniformBuffer & p_sceneUbo
+			, MatrixUbo & p_matrixUbo
+			, SceneUbo & p_sceneUbo
 			, UniformBuffer & p_gpInfoUbo
 			, UniformBuffer & p_configUbo )
 		{
-			UniformBuffer::FillMatrixBuffer( p_matrixUbo );
-			UniformBuffer::FillSceneBuffer( p_sceneUbo );
 			p_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma );
 			p_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 			RasteriserState l_rsState;
@@ -247,8 +247,8 @@ namespace deferred_common
 				, MultisampleState{}
 				, p_program
 				, PipelineFlags{} );
-			l_result->AddUniformBuffer( p_matrixUbo );
-			l_result->AddUniformBuffer( p_sceneUbo );
+			l_result->AddUniformBuffer( p_matrixUbo.GetUbo() );
+			l_result->AddUniformBuffer( p_sceneUbo.GetUbo() );
 			l_result->AddUniformBuffer( p_gpInfoUbo );
 			l_result->AddUniformBuffer( p_configUbo );
 			return l_result;
@@ -263,14 +263,11 @@ namespace deferred_common
 		, m_vertexBuffer{ DoCreateVbo( p_engine ) }
 		, m_program{ DoCreateProgram( p_engine ) }
 		, m_geometryBuffers{ DoCreateVao( p_engine, *m_program, *m_vertexBuffer ) }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
-		, m_sceneUbo{ ShaderProgram::BufferScene, *p_engine.GetRenderSystem() }
+		, m_matrixUbo{ p_engine }
+		, m_sceneUbo{ p_engine }
 		, m_gpInfo{ p_engine }
 		, m_configUbo{ ShaderProgram::BufferHdrConfig, *p_engine.GetRenderSystem() }
 		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, m_matrixUbo, m_sceneUbo, m_gpInfo.GetUbo(), m_configUbo ) }
-		, m_projectionUniform{ m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection ) }
-		, m_viewUniform{ m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView ) }
-		, m_cameraPosUniform{ m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos ) }
 		, m_gammaUniform{ m_configUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Gamma ) }
 		, m_exposureUniform{ m_configUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Exposure ) }
 	{
@@ -278,8 +275,7 @@ namespace deferred_common
 		m_viewport.Initialise();
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
-		m_projectionUniform->SetValue( m_viewport.GetProjection() );
-		m_matrixUbo.Update();
+		m_matrixUbo.Update( m_viewport.GetProjection() );
 	}
 
 	ReflectionPass::~ReflectionPass()
@@ -287,10 +283,8 @@ namespace deferred_common
 		m_exposureUniform.reset();
 		m_gammaUniform.reset();
 		m_configUbo.Cleanup();
-		m_viewUniform.reset();
-		m_projectionUniform.reset();
-		m_sceneUbo.Cleanup();
-		m_matrixUbo.Cleanup();
+		m_sceneUbo.GetUbo().Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
 		m_geometryBuffers->Cleanup();
@@ -313,8 +307,7 @@ namespace deferred_common
 			, p_invViewProj
 			, p_invView
 			, p_invProj );
-		m_cameraPosUniform->SetValue( p_camera.GetParent()->GetDerivedPosition() );
-		m_sceneUbo.Update();
+		m_sceneUbo.UpdateCameraPosition( p_camera );
 		m_exposureUniform->SetValue( p_scene.GetHdrConfig().GetExposure() );
 		m_gammaUniform->SetValue( p_scene.GetHdrConfig().GetGamma() );
 		m_configUbo.Update();

@@ -1,4 +1,4 @@
-﻿#include "Pass.hpp"
+#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -202,8 +202,7 @@ namespace Castor3D
 				l_unit->SetIndex( 0u );
 			}
 
-			// Lights texture is at index 0, so start at index 1
-			uint32_t l_index = 1u;
+			uint32_t l_index = MinTextureIndex;
 			TextureUnitSPtr l_opacitySource;
 			PxBufferBaseSPtr l_opacityImage;
 
@@ -261,6 +260,7 @@ namespace Castor3D
 		}
 
 		DoSetOpacity( p_value );
+		onChanged( *this );
 	}
 
 	ProgramFlags Pass::GetProgramFlags()const

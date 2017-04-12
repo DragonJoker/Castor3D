@@ -47,17 +47,14 @@ namespace Castor3D
 			, DataType & p_data
 			, InstanceType & p_instance
 			, AnimatedMesh & p_mesh
-			, UniformBuffer & p_morphingUbo );
+			, MorphingUbo & p_morphingUbo );
 
 		//!\~english	The animated mesh.
 		//!\~french		Le maillage animé.
 		AnimatedMesh & m_mesh;
 		//!\~english	The morphing UBO.
 		//!\~french		L'UBO de morphing.
-		UniformBuffer & m_morphingUbo;
-		//!\~english	The time uniform variable.
-		//!\~french		La variable uniforme contenant le temps.
-		Uniform1f & m_time;
+		MorphingUbo & m_morphingUbo;
 	};
 }
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_MatrixUbo_H___
-#define ___C3D_MatrixUbo_H___
+#ifndef ___C3D_MorphingUbo_H___
+#define ___C3D_MorphingUbo_H___
 
 #include "UniformBuffer.hpp"
 
@@ -36,7 +36,7 @@ namespace Castor3D
 	\~french
 	\brief		Gestion du tampon de variables uniformes pour les matrices.
 	*/
-	class MatrixUbo
+	class MorphingUbo
 	{
 	public:
 		/**
@@ -46,10 +46,10 @@ namespace Castor3D
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API MatrixUbo( MatrixUbo const & ) = delete;
-		C3D_API MatrixUbo & operator=( MatrixUbo const & ) = delete;
-		C3D_API MatrixUbo( MatrixUbo && ) = default;
-		C3D_API MatrixUbo & operator=( MatrixUbo && ) = default;
+		C3D_API MorphingUbo( MorphingUbo const & ) = delete;
+		C3D_API MorphingUbo & operator=( MorphingUbo const & ) = delete;
+		C3D_API MorphingUbo( MorphingUbo && ) = default;
+		C3D_API MorphingUbo & operator=( MorphingUbo && ) = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -59,37 +59,23 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API MatrixUbo( Engine & p_engine );
+		C3D_API MorphingUbo( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~MatrixUbo();
+		C3D_API ~MorphingUbo();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_view			The new view matrix.
-		 *\param[in]	p_projection	The new projection matrix.
+		 *\param[in]	p_time	The current time index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_view			La nouvelle matrice de vue.
-		 *\param[in]	p_projection	La nouvelle matrice de projection.
+		 *\param[in]	p_time	L'indice de temps courant.
 		 */
-		C3D_API void Update( Castor::Matrix4x4r const & p_view
-			, Castor::Matrix4x4r const & p_projection )const;
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\remarks		View matrix won't be updated.
-		 *\param[in]	p_projection	The new projection matrix.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\remarks		La matrice de vue ne sera pas mise à jour.
-		 *\param[in]	p_projection	La nouvelle matrice de projection.
-		 */
-		C3D_API void Update( Castor::Matrix4x4r const & p_projection )const;
+		C3D_API void Update( float p_time )const;
 		/**
 		 *\~english
 		 *\name			Getters.
@@ -111,19 +97,15 @@ namespace Castor3D
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
 		UniformBuffer m_ubo;
-		//!\~english	The view matrix variable.
-		//!\~french		La variable de la matrice vue.
-		Uniform4x4f & m_view;
-		//!\~english	The projection matrix variable.
-		//!\~french		La variable de la matrice projection.
-		Uniform4x4f & m_projection;
+		//!\~english	The time uniform variable.
+		//!\~french		La variable uniforme contenant le temps.
+		Uniform1f & m_time;
 	};
 }
 
-#define UBO_MATRIX( Writer )\
-	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix };\
-	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxProjection );\
-	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxView );\
-	l_matrices.End()
+#define UBO_MORPHING( Writer, Flags )\
+	GLSL::Ubo l_morphing{ l_writer, ShaderProgram::BufferMorphing };\
+	auto c3d_fTime = l_morphing.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
+	l_morphing.End()
 
 #endif

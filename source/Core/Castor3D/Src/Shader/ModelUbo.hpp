@@ -81,10 +81,20 @@ namespace Castor3D
 			, uint32_t p_materialIndex )const;
 		/**
 		 *\~english
+		 *\brief		Sets the environment map index value.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur de l'indice de la texture d'environnement.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		C3D_API void SetEnvMapIndex( uint32_t p_value );
+		/**
+		 *\~english
 		 *\name			Getters.
 		 *\~french
 		 *\name			Getters.
 		 */
+		/**@{*/
 		inline UniformBuffer & GetUbo()
 		{
 			return m_ubo;
@@ -106,7 +116,17 @@ namespace Castor3D
 		//!\~english	The material index matrix variable.
 		//!\~french		La variable de l'indice du matériau.
 		Uniform1i & m_materialIndex;
+		//!\~english	The environment map index matrix variable.
+		//!\~french		La variable de l'indice de la texture d'environnement.
+		Uniform1i & m_environmentIndex;
 	};
 }
+
+#define UBO_MODEL( Writer )\
+	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel };\
+	auto c3d_shadowReceiver = l_model.GetUniform< GLSL::Int >( ShaderProgram::ShadowReceiver );\
+	auto c3d_materialIndex = l_model.GetUniform< GLSL::Int >( ShaderProgram::MaterialIndex );\
+	auto c3d_envMapIndex = l_model.GetUniform< GLSL::Int >( ShaderProgram::EnvironmentIndex );\
+	l_model.End()
 
 #endif

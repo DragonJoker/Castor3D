@@ -1,4 +1,4 @@
-#include "ShadowMapPassPoint.hpp"
+﻿#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -137,12 +137,12 @@ namespace Castor3D
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
 				{
-					l_pipeline.AddUniformBuffer( m_skinningUbo );
+					l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 				}
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 				{
-					l_pipeline.AddUniformBuffer( m_morphingUbo );
+					l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 				}
 
 				m_initialised = true;

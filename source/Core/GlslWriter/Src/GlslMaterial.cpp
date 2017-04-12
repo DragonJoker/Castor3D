@@ -8,22 +8,25 @@ namespace GLSL
 {
 	//*********************************************************************************************
 
-	Materials::Materials( GlslWriter & p_writer
-		, int p_offsetRR, int p_indexRR
+	Materials::Materials( GlslWriter & p_writer )
+		: m_writer{ p_writer }
+	{
+	}
+
+	void Materials::DoDeclare( int p_offsetRR, int p_indexRR
 		, int p_offsetRF, int p_indexRF
 		, int p_offsetRL, int p_indexRL
 		, int p_offsetOP, int p_indexOP
 		, int p_offsetGM, int p_indexGM
 		, int p_offsetEX, int p_indexEX )
-		: m_writer{ p_writer }
 	{
-		auto c3d_materials = m_writer.GetUniform< SamplerBuffer >( cuT( "c3d_materials" ) );
+		auto c3d_materials = m_writer.GetUniform< SamplerBuffer >( PassBufferName );
 		
 		m_int = m_writer.ImplementFunction< Int >( cuT( "Mat_GetInt" )
 			, [this]( Int const & p_index, Int const & p_offset, Int const & p_id )
 			{
-				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_materials" ) );
-				m_writer.Return( Int( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset )[p_index] ) );
+				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( PassBufferName );
+				m_writer.Return( m_writer.Cast< Int >( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset )[p_index] ) );
 			}, InInt{ &m_writer, cuT( "p_index" ) }
 			, InInt{ &m_writer, cuT( "p_offset" ) }
 			, InInt{ &m_writer, cuT( "p_id" ) } );
@@ -31,7 +34,7 @@ namespace GLSL
 		m_float = m_writer.ImplementFunction< Float >( cuT( "Mat_GetFloat" )
 			, [this]( Int const & p_index, Int const & p_offset, Int const & p_id )
 			{
-				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_materials" ) );
+				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( PassBufferName );
 				m_writer.Return( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset )[p_index] );
 			}, InInt{ &m_writer, cuT( "p_index" ) }
 			, InInt{ &m_writer, cuT( "p_offset" ) }
@@ -40,7 +43,7 @@ namespace GLSL
 		m_vec3 = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetVec3" )
 			, [this]( Int const & p_index, Int const & p_offset, Int const & p_id )
 			{
-				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_materials" ) );
+				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( PassBufferName );
 				IF( m_writer, p_id == 0_i )
 				{
 					m_writer.Return( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset ).xyz() );
@@ -124,15 +127,19 @@ namespace GLSL
 	//*********************************************************************************************
 
 	LegacyMaterials::LegacyMaterials( GlslWriter & p_writer )
-		: Materials{ p_writer
-			, 0, 0
+		: Materials{ p_writer }
+	{
+	}
+
+	void LegacyMaterials::Declare()
+	{
+		DoDeclare( 0, 0
 			, 0, 1
 			, 0, 2
 			, 0, 3
 			, 3, 1
 			, 3, 2
-		}
-	{
+		);
 		m_diffuse = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetDiffuse" )
 			, [this]( Int const & p_index )
 			{

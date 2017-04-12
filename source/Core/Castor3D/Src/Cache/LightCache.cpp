@@ -5,6 +5,7 @@
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
+#include "Material/Pass.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/UniformBuffer.hpp"
@@ -91,13 +92,12 @@ namespace Castor3D
 			, std::move( p_merge )
 			, std::move( p_attach )
 			, std::move( p_detach ) )
-		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
+		, m_lightsTexture{ *GetEngine() }
 	{
 	}
 
 	ObjectCache< Light, Castor::String >::~ObjectCache()
 	{
-		m_lightsTexture.reset();
 	}
 
 	void ObjectCache< Light, Castor::String >::Initialise()
@@ -109,22 +109,23 @@ namespace Castor3D
 			, Size( 1000, 1 ) );
 		l_texture->GetImage().InitialiseSource();
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
-		m_lightsTexture->SetAutoMipmaps( false );
-		m_lightsTexture->SetSampler( l_sampler );
-		m_lightsTexture->SetTexture( l_texture );
-		m_scene.GetListener().PostEvent( MakeInitialiseEvent( *m_lightsTexture ) );
+		m_lightsTexture.SetAutoMipmaps( false );
+		m_lightsTexture.SetSampler( l_sampler );
+		m_lightsTexture.SetTexture( l_texture );
+		m_lightsTexture.SetIndex( Pass::LightBufferIndex );
+		m_scene.GetListener().PostEvent( MakeInitialiseEvent( m_lightsTexture ) );
 		m_lightsBuffer = l_texture->GetImage().GetBuffer();
 	}
 
 	void ObjectCache< Light, Castor::String >::Cleanup()
 	{
-		m_scene.GetListener().PostEvent( MakeCleanupEvent( *m_lightsTexture ) );
+		m_scene.GetListener().PostEvent( MakeCleanupEvent( m_lightsTexture ) );
 		MyObjectCache::Cleanup();
 	}
 
 	void ObjectCache< Light, Castor::String >::UpdateLights()const
 	{
-		auto l_layout = m_lightsTexture->GetTexture();
+		auto l_layout = m_lightsTexture.GetTexture();
 
 		if ( l_layout )
 		{
@@ -152,11 +153,11 @@ namespace Castor3D
 
 	void ObjectCache< Light, Castor::String >::BindLights()const
 	{
-		m_lightsTexture->Bind();
+		m_lightsTexture.Bind();
 	}
 
 	void ObjectCache< Light, Castor::String >::UnbindLights()const
 	{
-		m_lightsTexture->Unbind();
+		m_lightsTexture.Unbind();
 	}
 }

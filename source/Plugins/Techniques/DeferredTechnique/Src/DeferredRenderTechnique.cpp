@@ -1,4 +1,4 @@
-﻿#include "DeferredRenderTechnique.hpp"
+#include "DeferredRenderTechnique.hpp"
 
 #include <DirectionalLightPass.hpp>
 #include <LightPassShadow.hpp>
@@ -55,14 +55,9 @@ namespace deferred
 				, false
 				, nullptr )
 			, p_params )
-		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
+		, m_sceneUbo{ *p_renderSystem.GetEngine() }
 		, m_ssaoEnabled{ DoUsesSsao( p_params ) }
 	{
-		UniformBuffer::FillSceneBuffer( m_sceneUbo );
-		m_cameraPos = m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
-		m_cameraFarPlane = m_sceneUbo.GetUniform< UniformType::eFloat >( ShaderProgram::CameraFarPlane );
-		m_fogType = m_sceneUbo.GetUniform< UniformType::eInt >( ShaderProgram::FogType );
-		m_fogDensity = m_sceneUbo.GetUniform< UniformType::eFloat >( ShaderProgram::FogDensity );
 		Logger::LogInfo( cuT( "Using deferred rendering" ) );
 	}
 
@@ -111,19 +106,7 @@ namespace deferred
 
 	void RenderTechnique::DoUpdateSceneUbo()
 	{
-		auto & l_fog = m_renderTarget.GetScene()->GetFog();
-		auto l_fogType = l_fog.GetType();
-
-		m_fogType->SetValue( int( l_fog.GetType() ) );
-
-		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
-		{
-			m_fogDensity->SetValue( l_fog.GetDensity() );
-		}
-
-		m_cameraPos->SetValue( m_renderTarget.GetCamera()->GetParent()->GetDerivedPosition() );
-		m_cameraFarPlane->SetValue( m_renderTarget.GetCamera()->GetViewport().GetFar() );
-		m_sceneUbo.Update();
+		m_sceneUbo.Update( *m_renderTarget.GetScene(), *m_renderTarget.GetCamera(), false );
 	}
 
 	void RenderTechnique::DoRenderOpaque( RenderInfo & p_info )
@@ -354,7 +337,7 @@ namespace deferred
 			l_lightPass.reset();
 		}
 
-		m_sceneUbo.Cleanup();
+		m_sceneUbo.GetUbo().Cleanup();
 	}
 
 	void RenderTechnique::DoRenderLights( LightType p_type

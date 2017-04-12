@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -62,7 +62,7 @@ namespace deferred_common
 			, bool p_shadows );
 		~DirectionalLightPass();
 		void Initialise( Castor3D::Scene const & p_scene
-			, Castor3D::UniformBuffer & p_sceneUbo )override;
+			, Castor3D::SceneUbo & p_sceneUbo )override;
 		void Cleanup()override;
 		uint32_t GetCount()const override;
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,7 +27,7 @@ SOFTWARE.
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/UniformBuffer.hpp>
+#include <Shader/MatrixUbo.hpp>
 
 namespace GrayScale
 {
@@ -68,7 +68,7 @@ namespace GrayScale
 		Castor3D::PushUniform1sSPtr m_mapDiffuse;
 		Castor3D::SamplerSPtr m_sampler;
 		Castor3D::RenderPipelineSPtr m_pipeline;
-		Castor3D::UniformBuffer m_matrixUbo;
+		Castor3D::MatrixUbo m_matrixUbo;
 		PostEffectSurface m_surface;
 	};
 }

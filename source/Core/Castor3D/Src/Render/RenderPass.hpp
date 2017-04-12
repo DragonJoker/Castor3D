@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -32,7 +32,9 @@ SOFTWARE.
 #include "Shader/MatrixUbo.hpp"
 #include "Shader/ModelMatrixUbo.hpp"
 #include "Shader/ModelUbo.hpp"
+#include "Shader/MorphingUbo.hpp"
 #include "Shader/SceneUbo.hpp"
+#include "Shader/SkinningUbo.hpp"
 
 #include <unordered_map>
 
@@ -927,10 +929,10 @@ namespace Castor3D
 		BillboardUbo m_billboardUbo;
 		//!\~english	The uniform buffer containing skinning animation data.
 		//!\~french		Le tampon d'uniformes contenant les données d'animation de skinning.
-		UniformBuffer m_skinningUbo;
+		SkinningUbo m_skinningUbo;
 		//!\~english	The uniform buffer containing morphing animation data.
 		//!\~french		Le tampon d'uniformes contenant les données d'animation de morphing.
-		UniformBuffer m_morphingUbo;
+		MorphingUbo m_morphingUbo;
 	};
 }
 

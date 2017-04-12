@@ -1,4 +1,4 @@
-﻿#include "ModelUbo.hpp"
+#include "ModelUbo.hpp"
 
 #include "Engine.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -11,11 +11,17 @@ namespace Castor3D
 		: m_ubo{ ShaderProgram::BufferModel, *p_engine.GetRenderSystem() }
 		, m_shadowReceiver{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::ShadowReceiver ) }
 		, m_materialIndex{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::MaterialIndex ) }
+		, m_environmentIndex{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::EnvironmentIndex ) }
 	{
 	}
 
 	ModelUbo::~ModelUbo()
 	{
+	}
+
+	void ModelUbo::SetEnvMapIndex( uint32_t p_value )
+	{
+		m_environmentIndex.SetValue( int( p_value ) );
 	}
 
 	void ModelUbo::Update( bool p_shadowReceiver

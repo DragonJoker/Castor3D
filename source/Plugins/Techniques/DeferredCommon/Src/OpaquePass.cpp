@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -37,6 +37,11 @@ namespace deferred_common
 
 	OpaquePass::~OpaquePass()
 	{
+	}
+
+	void OpaquePass::Render( RenderInfo & p_info, bool p_shadows )
+	{
+		DoRender( p_info, p_shadows );
 	}
 
 	bool OpaquePass::InitialiseShadowMaps()
@@ -243,6 +248,7 @@ namespace deferred_common
 		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
 
 		LegacyMaterials l_materials{ l_writer };
+		l_materials.Declare();
 
 		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
 		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );

@@ -20,7 +20,7 @@ namespace Castor3D
 		, DataType & p_data
 		, InstanceType & p_instance
 		, AnimatedMesh & p_mesh
-		, UniformBuffer & p_morphingUbo )
+		, MorphingUbo & p_morphingUbo )
 		: SubmeshRenderNode{ p_pipeline
 			, std::move( p_passNode )
 			, p_modelMatrixBuffer
@@ -31,7 +31,6 @@ namespace Castor3D
 			, p_instance }
 		, m_mesh{ p_mesh }
 		, m_morphingUbo{ p_morphingUbo }
-		, m_time{ *p_morphingUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Time ) }
 	{
 	}
 }

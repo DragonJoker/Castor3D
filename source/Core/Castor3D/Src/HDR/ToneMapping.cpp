@@ -1,4 +1,4 @@
-﻿#include "ToneMapping.hpp"
+#include "ToneMapping.hpp"
 
 #include "Engine.hpp"
 
@@ -18,10 +18,9 @@ namespace Castor3D
 	ToneMapping::ToneMapping( Castor::String const & p_name, Engine & p_engine, Parameters const & p_parameters )
 		: OwnedBy< Engine >{ p_engine }
 		, Named{ p_name }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
+		, m_matrixUbo{ p_engine }
 		, m_configUbo{ ToneMapping::HdrConfigUbo, *p_engine.GetRenderSystem() }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		m_exposureVar = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 		
 		String l_param;
@@ -81,7 +80,7 @@ namespace Castor3D
 			l_dsState.SetDepthTest( false );
 			l_dsState.SetDepthMask( WritingMask::eZero );
 			m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-			m_pipeline->AddUniformBuffer( m_matrixUbo );
+			m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 			m_pipeline->AddUniformBuffer( m_configUbo );
 
 			m_colour = std::make_unique< RenderColourToTexture >( *GetEngine()->GetRenderSystem()->GetMainContext(), m_matrixUbo );
@@ -103,7 +102,7 @@ namespace Castor3D
 
 		m_exposureVar.reset();
 		m_configUbo.Cleanup();
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 
 		if ( m_pipeline )
 		{

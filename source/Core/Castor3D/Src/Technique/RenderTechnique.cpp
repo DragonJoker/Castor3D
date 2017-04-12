@@ -1,4 +1,4 @@
-﻿#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -13,11 +13,13 @@
 #include "Scene/Camera.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
+#include "Shader/PassBuffer.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
 #include "Technique/RenderTechniquePass.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslMaterial.hpp>
 
 using namespace Castor;
 
@@ -159,6 +161,11 @@ namespace Castor3D
 				m_initialised = DoInitialise( p_index );
 			}
 
+			if ( m_initialised )
+			{
+				m_passBuffer = std::make_unique< PassBuffer >( *GetEngine(), GLSL::LegacyMaterials::Size );
+			}
+
 			ENSURE( m_initialised );
 		}
 
@@ -168,6 +175,7 @@ namespace Castor3D
 	void RenderTechnique::Cleanup()
 	{
 		DoCleanup();
+		m_passBuffer.reset();
 		m_transparentPass->CleanupShadowMaps();
 		m_opaquePass->CleanupShadowMaps();
 		m_transparentPass->Cleanup();
@@ -206,17 +214,22 @@ namespace Castor3D
 		l_camera.Resize( m_size );
 		l_camera.Update();
 
+		m_passBuffer->Update( l_scene );
+		m_passBuffer->Bind();
 		DoRenderOpaque( p_info );
 		l_scene.RenderBackground( GetSize(), l_camera );
 
+		m_passBuffer->Bind();
 		l_scene.GetParticleSystemCache().ForEach( [this, &p_info]( ParticleSystem & p_particleSystem )
 		{
 			p_particleSystem.Update();
 			p_info.m_particlesCount += p_particleSystem.GetParticlesCount();
 		} );
 
+		m_passBuffer->Bind();
 		DoRenderTransparent( p_info );
 
+		m_passBuffer->Bind();
 		for ( auto l_effect : m_renderTarget.GetPostEffects() )
 		{
 			l_effect->Apply( *m_frameBuffer.m_frameBuffer );

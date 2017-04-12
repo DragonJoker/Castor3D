@@ -132,10 +132,10 @@ namespace deferred_common
 			virtual ~Program()noexcept;
 			void Initialise( Castor3D::VertexBuffer & p_vbo
 				, Castor3D::IndexBufferSPtr p_ibo
-				, Castor3D::UniformBuffer & p_matrixUbo
-				, Castor3D::UniformBuffer & p_sceneUbo
+				, Castor3D::MatrixUbo & p_matrixUbo
+				, Castor3D::SceneUbo & p_sceneUbo
 				, Castor3D::UniformBuffer & p_gpInfoUbo
-				, Castor3D::UniformBuffer * p_modelMatrixUbo );
+				, Castor3D::ModelMatrixUbo * p_modelMatrixUbo );
 			void Cleanup();
 			void Render( Castor::Size const & p_size
 				, Castor3D::Light const & p_light
@@ -172,7 +172,7 @@ namespace deferred_common
 	public:
 		virtual ~LightPass() = default;
 		virtual void Initialise( Castor3D::Scene const & p_scene
-			, Castor3D::UniformBuffer & p_sceneUbo ) = 0;
+			, Castor3D::SceneUbo & p_sceneUbo ) = 0;
 		virtual void Cleanup() = 0;
 		virtual void Render( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp
@@ -196,8 +196,8 @@ namespace deferred_common
 			, Castor3D::LightType p_type
 			, Castor3D::VertexBuffer & p_vbo
 			, Castor3D::IndexBufferSPtr p_ibo
-			, Castor3D::UniformBuffer & p_sceneUbo
-			, Castor3D::UniformBuffer * p_modelMatrixUbo );
+			, Castor3D::SceneUbo & p_sceneUbo
+			, Castor3D::ModelMatrixUbo * p_modelMatrixUbo );
 		void DoCleanup();
 		virtual void DoUpdate( Castor::Size const & p_size
 			, Castor3D::Light const & p_light
@@ -227,7 +227,7 @@ namespace deferred_common
 		bool m_shadows;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		Castor3D::UniformBuffer m_matrixUbo;
+		Castor3D::MatrixUbo m_matrixUbo;
 		//!\~english	The target FBO.
 		//!\~french		Le FBO cible.
 		Castor3D::FrameBuffer & m_frameBuffer;
@@ -237,12 +237,6 @@ namespace deferred_common
 		//!\~english	The light pass' programs.
 		//!\~french		Les programme de la passe de lumière.
 		Programs m_programs;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform;
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Castor3D::Uniform4x4fSPtr m_viewUniform;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		std::unique_ptr< GpInfo > m_gpInfo;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -90,10 +90,10 @@ namespace deferred_common
 		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english	The matrices uniform buffer.
 		//!\~french		Le tampon d'uniformes contenant les matrices.
-		Castor3D::UniformBuffer m_matrixUbo;
+		Castor3D::MatrixUbo m_matrixUbo;
 		//!\~english	The scene uniform buffer.
 		//!\~french		Le tampon d'uniformes contenant les informations de la scène.
-		Castor3D::UniformBuffer m_sceneUbo;
+		Castor3D::SceneUbo m_sceneUbo;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		GpInfo m_gpInfo;
@@ -103,15 +103,6 @@ namespace deferred_common
 		//!\~english	The render pipeline.
 		//!\~french		Le pipeline de rendu.
 		Castor3D::RenderPipelineUPtr m_pipeline;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform{ nullptr };
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Castor3D::Uniform4x4fSPtr m_viewUniform{ nullptr };
-		//!\~english	The uniform variable containing the camera position.
-		//!\~french		La variable uniforme contenant la position de la caméra.
-		Castor3D::Uniform3fSPtr m_cameraPosUniform{ nullptr };
 		//!\~english	The exposure shader variable.
 		//!\~french		La variable shader pour l'exposition.
 		Castor3D::Uniform1fSPtr m_exposureUniform;

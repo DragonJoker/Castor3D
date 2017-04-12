@@ -114,12 +114,11 @@ namespace deferred_common
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer.reset();
 		m_viewport.Cleanup();
-		m_projectionUniform = nullptr;
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 	}
 
 	void DirectionalLightPass::Initialise( Scene const & p_scene
-		, UniformBuffer & p_sceneUbo )
+		, SceneUbo & p_sceneUbo )
 	{
 		DoInitialise( p_scene
 			, LightType::eDirectional
@@ -128,7 +127,6 @@ namespace deferred_common
 			, p_sceneUbo
 			, nullptr );
 		m_viewport.Update();
-		m_projectionUniform->SetValue( m_viewport.GetProjection() );
 	}
 
 	void DirectionalLightPass::Cleanup()
@@ -146,8 +144,7 @@ namespace deferred_common
 		, Camera const & p_camera )
 	{
 		m_viewport.Resize( p_size );
-		m_viewUniform->SetValue( p_camera.GetView() );
-		m_matrixUbo.Update();
+		m_matrixUbo.Update( p_camera.GetView(), m_viewport.GetProjection() );
 	}
 
 	String DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
@@ -157,7 +154,6 @@ namespace deferred_common
 
 		// Shader inputs
 		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
 		UBO_GPINFO( l_writer );
 		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 

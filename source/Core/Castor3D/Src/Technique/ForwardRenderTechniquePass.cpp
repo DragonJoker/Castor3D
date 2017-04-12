@@ -1,4 +1,4 @@
-#include "ForwardRenderTechniquePass.hpp"
+﻿#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -8,6 +8,7 @@
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
 
 using namespace Castor;
@@ -36,6 +37,13 @@ namespace Castor3D
 
 	ForwardRenderTechniquePass::~ForwardRenderTechniquePass()
 	{
+	}
+
+	void ForwardRenderTechniquePass::Render( RenderInfo & p_info, bool p_shadows )
+	{
+		m_scene.GetLightCache().BindLights();
+		DoRender( p_info, p_shadows );
+		m_scene.GetLightCache().UnbindLights();
 	}
 
 	bool ForwardRenderTechniquePass::InitialiseShadowMaps()
@@ -119,7 +127,6 @@ namespace Castor3D
 		// UBOs
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
 		UBO_MODEL( l_writer );
 
 		// Fragment Intputs
@@ -131,6 +138,9 @@ namespace Castor3D
 		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
 		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
+
+		LegacyMaterials l_materials{ l_writer };
+		l_materials.Declare();
 
 		if ( l_writer.HasTextureBuffers() )
 		{
@@ -183,8 +193,9 @@ namespace Castor3D
 			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
 			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
+			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_materials.GetShininess( c3d_materialIndex ) );
+			auto l_diffuse = l_writer.GetLocale( cuT( "l_diffuse" ), l_utils.RemoveGamma( l_materials.GetGamma( c3d_materialIndex ), l_materials.GetDiffuse( c3d_materialIndex ) ) );
+			auto l_emissive = l_writer.GetLocale( cuT( "l_emissive" ), l_diffuse * l_materials.GetEmissive( c3d_materialIndex ) );
 			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 			auto l_envAmbient = l_writer.GetLocale( cuT( "l_envAmbient" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
 			auto l_envDiffuse = l_writer.GetLocale( cuT( "l_envDiffuse" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
@@ -206,13 +217,12 @@ namespace Castor3D
 				, c3d_shadowReceiver
 				, FragmentInput( vtx_position, l_v3Normal )
 				, l_output );
-			auto l_diffuse = l_writer.GetLocale( cuT( "l_diffuse" ), l_utils.RemoveGamma( c3d_fGamma, c3d_v4MatDiffuse.xyz() ) );
-			ComputePostLightingMapContributions( l_writer, l_diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
+			ComputePostLightingMapContributions( l_writer, l_diffuse, l_v3Specular, l_emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			pxl_v4FragColor.xyz() = l_v3Ambient * l_diffuse
 				+ l_writer.Paren( l_v3Diffuse * l_diffuse )
-				+ l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() )
-				+ l_v3Emissive;
+				+ l_writer.Paren( l_v3Specular * l_materials.GetSpecular( c3d_materialIndex ) )
+				+ l_diffuse * l_emissive;
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
 				|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
@@ -230,7 +240,7 @@ namespace Castor3D
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
 				{
-					auto l_refract = l_writer.GetLocale( cuT( "l_refract" ), refract( l_incident, l_v3Normal, c3d_fMatRefractionRatio ) );
+					auto l_refract = l_writer.GetLocale( cuT( "l_refract" ), refract( l_incident, l_v3Normal, l_materials.GetRefractionRatio( c3d_materialIndex ) ) );
 					l_refractedColour = texture( c3d_mapEnvironment, l_refract ).xyz() * l_diffuse / length( l_diffuse );
 				}
 
@@ -249,7 +259,7 @@ namespace Castor3D
 
 			if ( !m_opaque )
 			{
-				auto l_alpha = l_writer.GetLocale( cuT( "l_alpha" ), c3d_fMatOpacity );
+				auto l_alpha = l_writer.GetLocale( cuT( "l_alpha" ), l_materials.GetOpacity( c3d_materialIndex ) );
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 				{

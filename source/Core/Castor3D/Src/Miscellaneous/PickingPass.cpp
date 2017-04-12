@@ -462,11 +462,6 @@ namespace Castor3D
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
 
 		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
-		UBO_MODEL( l_writer );
-
 		Ubo l_uboPicking{ l_writer, Picking };
 		auto c3d_iDrawIndex( l_uboPicking.GetUniform< UInt >( DrawIndex ) );
 		auto c3d_iNodeIndex( l_uboPicking.GetUniform< UInt >( NodeIndex ) );
@@ -534,12 +529,12 @@ namespace Castor3D
 
 			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
 			{
-				l_pipeline.AddUniformBuffer( m_skinningUbo );
+				l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 			}
 
 			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 			{
-				l_pipeline.AddUniformBuffer( m_morphingUbo );
+				l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 			}
 
 			l_pipeline.AddUniformBuffer( m_pickingUbo );

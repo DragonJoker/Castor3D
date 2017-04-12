@@ -20,7 +20,7 @@ namespace Castor3D
 		, Submesh & p_data
 		, Geometry & p_instance
 		, AnimatedSkeleton & p_skeleton
-		, UniformBuffer & p_skinningUbo )
+		, SkinningUbo & p_skinningUbo )
 		: SubmeshRenderNode{ p_pipeline
 			, std::move( p_passNode )
 			, p_modelMatrixBuffer
@@ -31,7 +31,6 @@ namespace Castor3D
 			, p_instance }
 		, m_skeleton{ p_skeleton }
 		, m_skinningUbo{ p_skinningUbo }
-		, m_bonesMatrix{ *p_skinningUbo.GetUniform< UniformType::eMat4x4f >( ShaderProgram::Bones ) }
 	{
 	}
 }

@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "LightPass.hpp"
 
+#include <Shader/MatrixUbo.hpp>
 #include <Texture/TextureUnit.hpp>
 
 namespace deferred_common
@@ -65,9 +66,7 @@ namespace deferred_common
 		Castor3D::Engine & m_engine;
 		// Quad rendering
 		Castor::Size m_size;
-		Castor3D::UniformBuffer m_matrixUbo;
-		Castor3D::Uniform4x4fSPtr m_viewMatrix;
-		Castor3D::Uniform4x4fSPtr m_projectionMatrix;
+		Castor3D::MatrixUbo m_matrixUbo;
 		Castor3D::Viewport m_viewport;
 		// Raw SSAO pass
 		Castor3D::FrameBufferSPtr m_ssaoFbo;

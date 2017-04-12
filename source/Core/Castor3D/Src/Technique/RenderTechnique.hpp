@@ -220,6 +220,17 @@ namespace Castor3D
 			REQUIRE( m_transparentPass );
 			return *m_transparentPass;
 		}
+		/**
+		 *\~english
+		 *\return		The pass buffer.
+		 *\~french
+		 *\return		Le tampon de passes.
+		 */
+		inline PassBuffer const & GetPassBuffer()const
+		{
+			REQUIRE( m_passBuffer );
+			return *m_passBuffer;
+		}
 
 	private:
 		/**
@@ -284,6 +295,9 @@ namespace Castor3D
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
+		//!\~english	The HDR frame buffer.
+		//!\~french		Le tampon d'image HDR.
+		std::unique_ptr< PassBuffer > m_passBuffer;
 		//!\~english	The pass used to render opaque nodes.
 		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;

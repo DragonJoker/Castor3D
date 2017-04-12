@@ -27,7 +27,7 @@ SOFTWARE.
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/UniformBuffer.hpp>
+#include <Shader/MatrixUbo.hpp>
 
 namespace Bloom
 {
@@ -107,7 +107,7 @@ namespace Bloom
 		Castor3D::Uniform1uiSPtr m_blurYCoeffCount;
 		Castor3D::Uniform1fSPtr m_blurYCoeffs;
 
-		Castor3D::UniformBuffer m_matrixUbo;
+		Castor3D::MatrixUbo m_matrixUbo;
 		Castor3D::RenderPipelineUPtr m_combinePipeline;
 
 		Castor3D::Viewport m_viewport;

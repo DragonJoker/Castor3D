@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,6 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_PqssBuffer_H___
 #define ___C3D_PqssBuffer_H___
 
+#include "Material/Pass.hpp"
 #include "Texture/TextureUnit.hpp"
 
 namespace Castor3D
@@ -58,11 +59,22 @@ namespace Castor3D
 		C3D_API ~PassBuffer();
 		/**
 		 *\~english
-		 *\brief		Initialises the pass and all it's dependencies.
+		 *\brief		Adds a pass to the buffer.
+		 *\remarks		Sets the pass' ID.
+		 *\param[in]	p_pass	The pass.
 		 *\~french
-		 *\brief		Initialise la passe et toutes ses dépendances.
+		 *\brief		Ajoute une passe au tampon.
+		 *\remarks		Définit l'ID de la passe.
+		 *\param[in]	p_pass	La passe.
 		 */
 		C3D_API uint32_t AddPass( Pass & p_pass );
+		/**
+		 *\~english
+		 *\brief		Removes a pass from the buffer.
+		 *\~french
+		 *\brief		Supprime une pass du tampon.
+		 */
+		C3D_API void RemovePass( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Updates the passes buffer.
@@ -70,6 +82,20 @@ namespace Castor3D
 		 *\brief		Met à jour le tampon de passes.
 		 */
 		C3D_API void Update( Scene & p_scene );
+		/**
+		 *\~english
+		 *\brief		Binds the texture buffer.
+		 *\~french
+		 *\brief		Active le tampon de texture.
+		 */
+		C3D_API void Bind()const;
+		/**
+		 *\~english
+		 *\brief		Unbinds the texture buffer.
+		 *\~french
+		 *\brief		Désactive le tampon de texture.
+		 */
+		C3D_API void Unbind()const;
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass and all it's dependencies.
@@ -108,8 +134,14 @@ namespace Castor3D
 		//!\~french		La texture contenant les matériaux.
 		TextureUnit m_texture;
 		//!\~english	The current passes.
-		//!\~french		Les passes acutelles.
-		std::vector< Pass const * > m_passes;
+		//!\~french		Les passes actuelles.
+		std::vector< Pass * > m_passes;
+		//!\~english	The current passes.
+		//!\~french		Les passes actuelles.
+		std::vector< Pass const * > m_dirty;
+		//!\~english	The connections to change signal for current passes.
+		//!\~french		Les connexions aux signaux de changement des passes actuelles.
+		std::vector< Pass::OnChangedConnection > m_connections;
 		//!\~english	The pass size.
 		//!\~french		La taille d'une passe.
 		uint32_t m_passSize;

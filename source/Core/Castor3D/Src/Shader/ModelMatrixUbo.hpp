@@ -71,6 +71,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	p_model			The new model matrix.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	p_model			La nouvelle matrice modèle.
+		 */
+		C3D_API void Update( Castor::Matrix4x4r const & p_model )const;
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	p_model			The new model matrix.
 		 *\param[in]	p_projection	The new normal matrix.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
@@ -108,5 +117,11 @@ namespace Castor3D
 		Uniform4x4f & m_normal;
 	};
 }
+
+#define UBO_MODEL_MATRIX( Writer )\
+	GLSL::Ubo l_modelMatrices{ l_writer, ShaderProgram::BufferModelMatrix };\
+	auto c3d_mtxModel = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxModel );\
+	auto c3d_mtxNormal = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
+	l_modelMatrices.End()
 
 #endif

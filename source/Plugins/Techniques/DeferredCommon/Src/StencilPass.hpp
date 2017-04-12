@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -32,8 +32,8 @@ namespace deferred_common
 	public:
 		StencilPass( Castor3D::FrameBuffer & p_frameBuffer
 			, Castor3D::FrameBufferAttachment & p_depthAttach
-			, Castor3D::UniformBuffer & p_matrixUbo
-			, Castor3D::UniformBuffer & p_modelMatrixUbo );
+			, Castor3D::MatrixUbo & p_matrixUbo
+			, Castor3D::ModelMatrixUbo & p_modelMatrixUbo );
 		void Initialise( Castor3D::VertexBuffer & p_vbo
 			, Castor3D::IndexBufferSPtr p_ibo );
 		void Cleanup();
@@ -48,10 +48,10 @@ namespace deferred_common
 		Castor3D::FrameBufferAttachment & m_depthAttach;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		Castor3D::UniformBuffer & m_matrixUbo;
+		Castor3D::MatrixUbo & m_matrixUbo;
 		//!\~english	The uniform buffer containing the model data.
 		//!\~french		Le tampon d'uniformes contenant les données de modèle.
-		Castor3D::UniformBuffer & m_modelMatrixUbo;
+		Castor3D::ModelMatrixUbo & m_modelMatrixUbo;
 		//!\~english	The shader program used to render lights.
 		//!\~french		Le shader utilisé pour rendre les lumières.
 		Castor3D::ShaderProgramSPtr m_program;

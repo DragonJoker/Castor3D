@@ -1,4 +1,4 @@
-﻿#include "RenderColourToTexture.hpp"
+#include "RenderColourToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -16,7 +16,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderColourToTexture::RenderColourToTexture( Context & p_context
-		, UniformBuffer & p_matrixUbo
+		, MatrixUbo & p_matrixUbo
 		, bool p_invertU )
 		: OwnedBy< Context >{ p_context }
 		, m_matrixUbo{ p_matrixUbo }
@@ -84,7 +84,7 @@ namespace Castor3D
 			, MultisampleState{}
 			, l_program
 			, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo );
+		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 
 		m_sampler = GetOwner()->GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "RenderColourToTexture" ) );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
@@ -110,7 +110,7 @@ namespace Castor3D
 	void RenderColourToTexture::Render( Position const & p_position
 		, Size const & p_size
 		, TextureLayout const & p_texture
-		, UniformBuffer & p_matrixUbo
+		, MatrixUbo & p_matrixUbo
 		, RenderPipeline & p_pipeline )
 	{
 		DoRender( p_position
@@ -137,16 +137,14 @@ namespace Castor3D
 		, Size const & p_size
 		, TextureLayout const & p_texture
 		, RenderPipeline & p_pipeline
-		, UniformBuffer & p_matrixUbo
+		, MatrixUbo & p_matrixUbo
 		, GeometryBuffers const & p_geometryBuffers )
 	{
 		m_viewport.SetPosition( p_position );
 		m_viewport.Resize( p_size );
 		m_viewport.Apply();
-		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
-		
-		p_pipeline.ApplyProjection( p_matrixUbo );
-		p_matrixUbo.Update();
+
+		p_matrixUbo.Update( m_viewport.GetProjection() );
 		p_pipeline.Apply();
 
 		p_texture.Bind( 0u );

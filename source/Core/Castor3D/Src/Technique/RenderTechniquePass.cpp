@@ -27,9 +27,6 @@ namespace Castor3D
 		{
 			for ( auto & l_itPipelines : p_input )
 			{
-				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
-
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
 					Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
@@ -157,7 +154,7 @@ namespace Castor3D
 	{
 	}
 
-	void RenderTechniquePass::Render( RenderInfo & p_info, bool p_shadows )
+	void RenderTechniquePass::DoRender( RenderInfo & p_info, bool p_shadows )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes();
 		DepthMapArray l_depthMaps;
@@ -237,11 +234,14 @@ namespace Castor3D
 			l_it.second->GetPipeline().Apply();
 			UpdatePipeline( l_it.second->GetPipeline() );
 
+			EnvironmentMap * l_envMap = nullptr;
 			DoBindPass( l_it.second->GetSceneNode()
 				, l_it.second->GetPassNode().m_pass
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
-				, p_depthMaps );
+				, p_depthMaps
+				, l_it.second->GetModelUbo()
+				, l_envMap );
 
 			l_it.second->Render();
 
@@ -249,7 +249,8 @@ namespace Castor3D
 				, l_it.second->GetPassNode().m_pass
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
-				, p_depthMaps );
+				, p_depthMaps
+				, l_envMap );
 		}
 	}
 
@@ -357,12 +358,12 @@ namespace Castor3D
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
 					{
-						l_pipeline.AddUniformBuffer( m_skinningUbo );
+						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
-						l_pipeline.AddUniformBuffer( m_morphingUbo );
+						l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 					}
 				} ) );
 		}
@@ -414,12 +415,12 @@ namespace Castor3D
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
 					{
-						l_pipeline.AddUniformBuffer( m_skinningUbo );
+						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
-						l_pipeline.AddUniformBuffer( m_morphingUbo );
+						l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 					}
 				} ) );
 		}

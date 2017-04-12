@@ -30,7 +30,7 @@ namespace Castor3D
 	inline uint32_t DoFillShaderDepthMaps( RenderPipeline & p_pipeline
 		, DepthMapArray & p_depthMaps )
 	{
-		uint32_t l_index = p_pipeline.GetTexturesCount() + 1;
+		uint32_t l_index = p_pipeline.GetTexturesCount() + Pass::MinTextureIndex;
 
 		if ( !p_depthMaps.empty() )
 		{
@@ -73,16 +73,12 @@ namespace Castor3D
 		, Pass & p_pass
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps
+		, ModelUbo & p_model
+		, EnvironmentMap *& p_envMap )
 	{
-		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
-		{
-			p_scene.GetLightCache().BindLights();
-		}
-
 		auto l_index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 
-		//p_pass.UpdateRenderNode( p_node );
 		p_pass.BindTextures();
 
 		for ( auto & l_depthMap : p_depthMaps )
@@ -92,50 +88,36 @@ namespace Castor3D
 
 		if ( p_pass.HasEnvironmentMapping() )
 		{
-			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
+			p_envMap = &p_scene.GetEnvironmentMap( p_sceneNode );
 
 			if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 			{
 				p_pipeline.GetEnvironmentMapVariable().SetValue( l_index );
-				l_map.GetTexture().SetIndex( l_index );
-				l_map.GetTexture().Bind();
+				p_envMap->GetTexture().SetIndex( l_index );
+				p_envMap->GetTexture().Bind();
 			}
-			//else
-			//{
-			//	p_node.m_environmentIndex.SetValue( float( l_map.GetIndex() ) );
-			//}
+			else
+			{
+				p_model.SetEnvMapIndex( p_envMap->GetIndex() );
+			}
 		}
-		//else
-		//{
-		//	p_node.m_environmentIndex.SetValue( 0 );
-		//}
-
-		//p_node.m_refractionRatio.SetValue( p_pass.GetRefractionRatio() );
-
-		//if ( p_pass.NeedsGammaCorrection() )
-		//{
-		//	p_node.m_gamma.SetValue( p_scene.GetHdrConfig().GetGamma() );
-		//}
-		//else
-		//{
-		//	p_node.m_gamma.SetValue( 1.0f );
-		//}
-
-		//p_node.m_exposure.SetValue( p_scene.GetHdrConfig().GetExposure() );
-		//p_node.m_passUbo.Update();
+		else
+		{
+			p_model.SetEnvMapIndex( 0 );
+			p_envMap = nullptr;
+		}
 	}
 
 	inline void DoUnbindPass( SceneNode & p_sceneNode
 		, Pass & p_pass
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
-		, DepthMapArray const & p_depthMaps )
+		, DepthMapArray const & p_depthMaps
+		, EnvironmentMap * p_envMap )
 	{
-		if ( p_pass.HasEnvironmentMapping()
-			&& CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+		if ( p_envMap )
 		{
-			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
-			l_map.GetTexture().Unbind();
+			p_envMap->GetTexture().Unbind();
 		}
 
 		for ( auto & l_depthMap : p_depthMaps )
@@ -180,9 +162,7 @@ namespace Castor3D
 	inline void DoRenderObjectNode( ObjectRenderNode< DataType, InstanceType > & p_node )
 	{
 		auto & l_model = p_node.m_sceneNode.GetDerivedTransformationMatrix();
-		auto & l_view = p_node.m_pipeline.GetViewMatrix();
-		p_node.m_modelMatrixUbo.Update( l_model
-			, Matrix4x4r{ ( l_model * l_view ).get_minor( 3, 3 ).invert().get_transposed() } );
+		p_node.m_modelMatrixUbo.Update( l_model );
 		p_node.m_data.Draw( p_node.m_buffers );
 	}
 
@@ -205,22 +185,24 @@ namespace Castor3D
 
 			if ( l_submesh )
 			{
-				l_submesh->FillShader( p_node.m_time );
+				p_node.m_morphingUbo.Update( l_submesh->GetCurrentFactor() );
+			}
+			else
+			{
+				p_node.m_morphingUbo.Update( 1.0f );
 			}
 		}
 		else
 		{
-			p_node.m_time.SetValue( 1.0f );
+			p_node.m_morphingUbo.Update( 1.0f );
 		}
 
-		p_node.m_morphingUbo.Update();
 		DoRenderObjectNode( p_node );
 	}
 
 	inline void DoRenderNodeNoPass( SkinningRenderNode & p_node )
 	{
-		p_node.m_skeleton.FillShader( p_node.m_bonesMatrix );
-		p_node.m_skinningUbo.Update();
+		p_node.m_skinningUbo.Update( p_node.m_skeleton );
 		DoRenderObjectNode( p_node );
 	}
 

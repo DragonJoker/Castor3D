@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -67,6 +67,13 @@ namespace Castor3D
 		C3D_API virtual SceneNode & GetSceneNode() = 0;
 		/**
 		 *\~english
+		 *\return		The instance's model UBO.
+		 *\~french
+		 *\return		L'UBO de modèle de l'instance.
+		 */
+		C3D_API virtual ModelUbo & GetModelUbo() = 0;
+		/**
+		 *\~english
 		 *\brief		Renders the node.
 		 *\~french
 		 *\brief		Dessine le noeud.
@@ -109,9 +116,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le noeud de scène de l'instance.
 		 */
-		inline SceneNode & GetSceneNode()
+		inline SceneNode & GetSceneNode()override
 		{
 			return details::GetParentNode( m_node.m_instance );
+		}
+		/**
+		 *\~english
+		 *\return		The instance's model UBO.
+		 *\~french
+		 *\return		L'UBO de modèle de l'instance.
+		 */
+		inline ModelUbo & GetModelUbo()override
+		{
+			return m_node.m_modelUbo;
 		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::Render

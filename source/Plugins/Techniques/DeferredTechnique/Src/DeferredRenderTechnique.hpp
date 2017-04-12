@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -143,19 +143,7 @@ namespace deferred
 		GeometryBufferAttachs m_geometryPassTexAttachs;
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		Castor3D::UniformBuffer m_sceneUbo;
-		//!\~english	The shader variable holding the camera position.
-		//!\~french		La variable shader contenant la position de la caméra.
-		Castor3D::Uniform3fSPtr m_cameraPos;
-		//!\~english	The shader variable holding the camera far plane value.
-		//!\~french		La variable shader contenant la valeur du plan éloigné de la caméra.
-		Castor3D::Uniform1fSPtr m_cameraFarPlane;
-		//!\~english	The shader variable holding fog type.
-		//!\~french		La variable shader contenant le type de brouillard.
-		Castor3D::Uniform1iSPtr m_fogType;
-		//!\~english	The shader variable holding fog density.
-		//!\~french		La variable shader contenant la densité du brouillard.
-		Castor3D::Uniform1fSPtr m_fogDensity;
+		Castor3D::SceneUbo m_sceneUbo;
 		//!\~english	The shader program used to render directional lights.
 		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
 		LightPasses m_lightPass;

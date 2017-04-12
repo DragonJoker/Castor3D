@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -84,7 +84,7 @@ namespace Castor3D
 		 *\param[out]	p_info		Reçoit les informations de rendu.
 		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		C3D_API void Render( RenderInfo & p_info, bool p_shadows );
+		C3D_API virtual void Render( RenderInfo & p_info, bool p_shadows ) = 0;
 		/**
 		 *\~english
 		 *\return		Initialises the shadow maps.
@@ -117,6 +117,19 @@ namespace Castor3D
 		 *\brief		Dessine les maps d'ombres.
 		 */
 		C3D_API virtual void RenderShadowMaps() = 0;
+
+	protected:
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[out]	p_info		Receives the render informations.
+		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[out]	p_info		Reçoit les informations de rendu.
+		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
+		 */
+		C3D_API void DoRender( RenderInfo & p_info, bool p_shadows );
 
 	private:
 		/**

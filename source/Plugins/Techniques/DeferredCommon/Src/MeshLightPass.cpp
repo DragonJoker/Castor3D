@@ -72,30 +72,25 @@ namespace deferred_common
 		, bool p_ssao
 		, bool p_shadows )
 		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, p_shadows }
-		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
+		, m_modelMatrixUbo{ p_engine }
 		, m_stencilPass{ p_frameBuffer, p_depthAttach, m_matrixUbo, m_modelMatrixUbo }
 		, m_type{ p_type }
 	{
-		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
-		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
 	}
 
 	MeshLightPass::~MeshLightPass()
 	{
-		m_modelUniform = nullptr;
-		m_viewUniform = nullptr;
-		m_projectionUniform = nullptr;
 		m_stencilPass.Cleanup();
 		m_indexBuffer->Cleanup();
 		m_vertexBuffer->Cleanup();
-		m_modelMatrixUbo.Cleanup();
-		m_matrixUbo.Cleanup();
+		m_modelMatrixUbo.GetUbo().Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
 	}
 
 	void MeshLightPass::Initialise( Scene const & p_scene
-		, UniformBuffer & p_sceneUbo )
+		, SceneUbo & p_sceneUbo )
 	{
 		auto l_declaration = BufferDeclaration(
 		{
@@ -145,11 +140,8 @@ namespace deferred_common
 		, Camera const & p_camera )
 	{
 		auto l_model = DoComputeModelMatrix( p_light, p_camera );
-		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-		m_viewUniform->SetValue( p_camera.GetView() );
-		m_modelUniform->SetValue( l_model );
-		m_matrixUbo.Update();
-		m_modelMatrixUbo.Update();
+		m_matrixUbo.Update( p_camera.GetView(), p_camera.GetViewport().GetProjection() );
+		m_modelMatrixUbo.Update( l_model );
 		p_camera.Apply();
 		m_stencilPass.Render( m_indexBuffer->GetSize() );
 	}
@@ -162,7 +154,6 @@ namespace deferred_common
 		// Shader inputs
 		UBO_MATRIX( l_writer );
 		UBO_MODEL_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
 		UBO_GPINFO( l_writer );
 		auto vertex = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -744,9 +744,6 @@ namespace Castor3D
 		//!\~english	Name of the material opacity frame variable.
 		//!\~french		Nom de la frame variable contenant l'opacité du matériau.
 		C3D_API static const Castor::String MatOpacity;
-		//!\~english	Name of the material environment index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice de la map d'environnement du matériau.
-		C3D_API static const Castor::String MatEnvironmentIndex;
 		//!\~english	Name of the material refraction ratio frame variable.
 		//!\~french		Nom de la frame variable contenant le ratio de réfraction du matériau.
 		C3D_API static const Castor::String MatRefractionRatio;
@@ -767,6 +764,9 @@ namespace Castor3D
 		//!\~english	Name of the material index frame variable.
 		//!\~french		Nom de la frame variable contenant l'indice du matériau.
 		C3D_API static const Castor::String MaterialIndex;
+		//!\~english	Name of the material environment index frame variable.
+		//!\~french		Nom de la frame variable contenant l'indice de la map d'environnement du matériau.
+		C3D_API static const Castor::String EnvironmentIndex;
 
 		//@}
 		/**@name Animation */

@@ -1,4 +1,4 @@
-﻿#include "DeferredMsaaRenderTechnique.hpp"
+#include "DeferredMsaaRenderTechnique.hpp"
 
 #include <DirectionalLightPass.hpp>
 #include <LightPassShadow.hpp>
@@ -111,14 +111,9 @@ namespace deferred_msaa
 			, p_params
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 		, m_viewport{ *p_renderSystem.GetEngine() }
-		, m_sceneUbo{ ShaderProgram::BufferScene, p_renderSystem }
+		, m_sceneUbo{ *p_renderSystem.GetEngine() }
 		, m_ssaoEnabled{ DoUsesSsao( p_params ) }
 	{
-		UniformBuffer::FillSceneBuffer( m_sceneUbo );
-		m_cameraPos = m_sceneUbo.GetUniform< UniformType::eVec3f >( ShaderProgram::CameraPos );
-		m_cameraFarPlane = m_sceneUbo.GetUniform< UniformType::eFloat >( ShaderProgram::CameraFarPlane );
-		m_fogType = m_sceneUbo.GetUniform< UniformType::eInt >( ShaderProgram::FogType );
-		m_fogDensity = m_sceneUbo.GetUniform< UniformType::eFloat >( ShaderProgram::FogDensity );
 		Logger::LogInfo( StringStream() << cuT( "Using Deferred MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 	}
 
@@ -146,19 +141,7 @@ namespace deferred_msaa
 
 	void RenderTechnique::DoUpdateSceneUbo()
 	{
-		auto & l_fog = m_renderTarget.GetScene()->GetFog();
-		auto l_fogType = l_fog.GetType();
-
-		m_fogType->SetValue( int( l_fog.GetType() ) );
-
-		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
-		{
-			m_fogDensity->SetValue( l_fog.GetDensity() );
-		}
-
-		m_cameraPos->SetValue( m_renderTarget.GetCamera()->GetParent()->GetDerivedPosition() );
-		m_cameraFarPlane->SetValue( m_renderTarget.GetCamera()->GetViewport().GetFar() );
-		m_sceneUbo.Update();
+		m_sceneUbo.Update( *m_renderTarget.GetScene(), *m_renderTarget.GetCamera() );
 	}
 
 	void RenderTechnique::DoRenderOpaque( RenderInfo & p_info )
@@ -503,7 +486,7 @@ namespace deferred_msaa
 			l_lightPass.reset();
 		}
 
-		m_sceneUbo.Cleanup();
+		m_sceneUbo.GetUbo().Cleanup();
 	}
 
 	void RenderTechnique::DoRenderLights( LightType p_type

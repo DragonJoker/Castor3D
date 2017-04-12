@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -64,6 +64,17 @@ namespace deferred_common
 		 *\brief		Destructeur
 		 */
 		virtual ~OpaquePass();
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[out]	p_info		Receives the render informations.
+		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[out]	p_info		Reçoit les informations de rendu.
+		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
+		 */
+		void Render( Castor3D::RenderInfo & p_info, bool p_shadows )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::InitialiseShadowMaps
 		 */

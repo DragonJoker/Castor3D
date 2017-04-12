@@ -28,6 +28,12 @@ namespace Castor3D
 	{
 	}
 
+	void SceneUbo::UpdateCameraPosition( Camera const & p_camera )const
+	{
+		m_cameraPos.SetValue( p_camera.GetParent()->GetDerivedPosition() );
+		m_ubo.Update();
+	}
+
 	void SceneUbo::Update( Scene const & p_scene
 		, Camera const & p_camera
 		, bool p_lights )const
@@ -51,8 +57,7 @@ namespace Castor3D
 
 		m_ambientLight.SetValue( rgba_float( p_scene.GetAmbientLight() ) );
 		m_backgroundColour.SetValue( rgba_float( p_scene.GetBackgroundColour() ) );
-		m_cameraPos.SetValue( p_camera.GetParent()->GetDerivedPosition() );
 		m_cameraFarPlane.SetValue( p_camera.GetViewport().GetFar() );
-		m_ubo.Update();
+		UpdateCameraPosition( p_camera );
 	}
 }
