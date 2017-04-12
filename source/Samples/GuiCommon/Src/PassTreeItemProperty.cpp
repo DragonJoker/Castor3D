@@ -22,6 +22,7 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
 		static wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
 		static wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
+		static wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
 		static wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
 		static wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
 		static wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
@@ -38,6 +39,7 @@ namespace GuiCommon
 		PROPERTY_CATEGORY_PASS = _( "Pass: " );
 		PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
 		PROPERTY_PASS_SPECULAR = _( "Specular" );
+		PROPERTY_PASS_AMBIENT = _( "Ambient" );
 		PROPERTY_PASS_EMISSIVE = _( "Emissive" );
 		PROPERTY_PASS_EXPONENT = _( "Exponent" );
 		PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
@@ -65,7 +67,8 @@ namespace GuiCommon
 				auto l_legacy = std::static_pointer_cast< LegacyPass >( l_pass );
 				p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetDiffuse() ) ) ) );
 				p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetSpecular() ) ) ) );
-				p_grid->Append( new Point4fProperty( GC_HDR_COLOUR, PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( rgba_float( l_legacy->GetEmissive() ) ) );
+				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( l_legacy->GetAmbient() );
+				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( l_legacy->GetEmissive() );
 				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_legacy->GetShininess() );
 			}
 
@@ -94,10 +97,13 @@ namespace GuiCommon
 				l_colour << l_property->GetValue();
 				OnSpecularColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
 			}
+			else if ( l_property->GetName() == PROPERTY_PASS_AMBIENT )
+			{
+				OnAmbientChange( l_property->GetValue() );
+			}
 			else if ( l_property->GetName() == PROPERTY_PASS_EMISSIVE )
 			{
-				Point4f l_value = PointRefFromVariant< float, 4 >( l_property->GetValue() );
-				OnEmissiveColourChange( HdrColour::from_rgba( l_value ) );
+				OnEmissiveChange( l_property->GetValue() );
 			}
 			else if ( l_property->GetName() == PROPERTY_PASS_EXPONENT )
 			{
@@ -134,13 +140,23 @@ namespace GuiCommon
 		} );
 	}
 
-	void PassTreeItemProperty::OnEmissiveColourChange( HdrColour const & p_value )
+	void PassTreeItemProperty::OnAmbientChange (double p_value)
 	{
 		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetEmissive( p_value );
+			l_pass->SetAmbient( float( p_value ) );
+		} );
+	}
+
+	void PassTreeItemProperty::OnEmissiveChange( double p_value )
+	{
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
+
+		DoApplyChange( [p_value, l_pass]()
+		{
+			l_pass->SetEmissive( float( p_value ) );
 		} );
 	}
 
