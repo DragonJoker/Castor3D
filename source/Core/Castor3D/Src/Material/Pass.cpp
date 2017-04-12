@@ -116,6 +116,12 @@ namespace Castor3D
 		}
 	}
 
+	void Pass::Update( PassBuffer & p_passes
+		, Scene const & p_scene )const
+	{
+		DoUpdate( p_passes, p_scene );
+	}
+
 	void Pass::BindTextures()
 	{
 		for ( auto l_it : m_textureUnits )
@@ -185,23 +191,6 @@ namespace Castor3D
 	bool Pass::HasAlphaBlending()const
 	{
 		return CheckFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f;
-	}
-
-	void Pass::UpdateRenderNode( PassRenderNodeUniforms & p_node )const
-	{
-		for ( auto l_pair : p_node.m_textures )
-		{
-			auto l_texture = l_pair.first;
-			auto & l_variable = l_pair.second;
-
-			if ( l_texture )
-			{
-				l_variable.get().SetValue( l_texture );
-			}
-		}
-
-		p_node.m_opacity.SetValue( GetOpacity() );
-		DoUpdateRenderNode( p_node );
 	}
 
 	void Pass::PrepareTextures()

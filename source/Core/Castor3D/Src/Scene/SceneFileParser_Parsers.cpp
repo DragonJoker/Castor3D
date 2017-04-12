@@ -2620,6 +2620,23 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAmbient )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->legacyPass )
+		{
+			PARSING_ERROR( cuT( "No Pass initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			float l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->legacyPass->SetAmbient( l_value );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEmissive )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2630,9 +2647,9 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			HdrColour l_crColour;
-			p_params[0]->Get( l_crColour );
-			l_parsingContext->legacyPass->SetEmissive( l_crColour );
+			float l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->legacyPass->SetEmissive( l_value );
 		}
 	}
 	END_ATTRIBUTE()

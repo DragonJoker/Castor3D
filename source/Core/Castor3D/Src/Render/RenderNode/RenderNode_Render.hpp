@@ -12,6 +12,11 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
+#include "Shader/BillboardUbo.hpp"
+#include "Shader/MatrixUbo.hpp"
+#include "Shader/ModelMatrixUbo.hpp"
+#include "Shader/ModelUbo.hpp"
+#include "Shader/SceneUbo.hpp"
 #include "Shader/PushUniform.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Texture/Sampler.hpp"
@@ -64,8 +69,7 @@ namespace Castor3D
 		return l_index;
 	}
 
-	inline void DoBindPass( PassRenderNodeUniforms & p_node
-		, SceneNode & p_sceneNode
+	inline void DoBindPass( SceneNode & p_sceneNode
 		, Pass & p_pass
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
@@ -78,7 +82,7 @@ namespace Castor3D
 
 		auto l_index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 
-		p_pass.UpdateRenderNode( p_node );
+		//p_pass.UpdateRenderNode( p_node );
 		p_pass.BindTextures();
 
 		for ( auto & l_depthMap : p_depthMaps )
@@ -96,33 +100,32 @@ namespace Castor3D
 				l_map.GetTexture().SetIndex( l_index );
 				l_map.GetTexture().Bind();
 			}
-			else
-			{
-				p_node.m_environmentIndex.SetValue( float( l_map.GetIndex() ) );
-			}
+			//else
+			//{
+			//	p_node.m_environmentIndex.SetValue( float( l_map.GetIndex() ) );
+			//}
 		}
-		else
-		{
-			p_node.m_environmentIndex.SetValue( 0 );
-		}
+		//else
+		//{
+		//	p_node.m_environmentIndex.SetValue( 0 );
+		//}
 
-		p_node.m_refractionRatio.SetValue( p_pass.GetRefractionRatio() );
+		//p_node.m_refractionRatio.SetValue( p_pass.GetRefractionRatio() );
 
-		if ( p_pass.NeedsGammaCorrection() )
-		{
-			p_node.m_gamma.SetValue( p_scene.GetHdrConfig().GetGamma() );
-		}
-		else
-		{
-			p_node.m_gamma.SetValue( 1.0f );
-		}
+		//if ( p_pass.NeedsGammaCorrection() )
+		//{
+		//	p_node.m_gamma.SetValue( p_scene.GetHdrConfig().GetGamma() );
+		//}
+		//else
+		//{
+		//	p_node.m_gamma.SetValue( 1.0f );
+		//}
 
-		p_node.m_exposure.SetValue( p_scene.GetHdrConfig().GetExposure() );
-		p_node.m_passUbo.Update();
+		//p_node.m_exposure.SetValue( p_scene.GetHdrConfig().GetExposure() );
+		//p_node.m_passUbo.Update();
 	}
 
-	inline void DoUnbindPass( PassRenderNodeUniforms & p_node
-		, SceneNode & p_sceneNode
+	inline void DoUnbindPass( SceneNode & p_sceneNode
 		, Pass & p_pass
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
@@ -148,7 +151,7 @@ namespace Castor3D
 		}
 	}
 
-	inline void DoBindPassOpacityMap( PassRenderNodeUniforms & p_node
+	inline void DoBindPassOpacityMap( PassRenderNode & p_node
 		, Pass & p_pass )
 	{
 		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
@@ -161,7 +164,7 @@ namespace Castor3D
 		}
 	}
 
-	inline void DoUnbindPassOpacityMap( PassRenderNodeUniforms & p_node
+	inline void DoUnbindPassOpacityMap( PassRenderNode & p_node
 		, Pass & p_pass )
 	{
 		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
@@ -178,9 +181,8 @@ namespace Castor3D
 	{
 		auto & l_model = p_node.m_sceneNode.GetDerivedTransformationMatrix();
 		auto & l_view = p_node.m_pipeline.GetViewMatrix();
-		p_node.m_modelMatrix.SetValue( l_model );
-		p_node.m_normalMatrix.SetValue( Matrix4x4r{ ( l_model * l_view ).get_minor( 3, 3 ).invert().get_transposed() } );
-		p_node.m_modelMatrixUbo.Update();
+		p_node.m_modelMatrixUbo.Update( l_model
+			, Matrix4x4r{ ( l_model * l_view ).get_minor( 3, 3 ).invert().get_transposed() } );
 		p_node.m_data.Draw( p_node.m_buffers );
 	}
 
@@ -191,9 +193,7 @@ namespace Castor3D
 
 	inline void DoRenderNodeNoPass( BillboardRenderNode & p_node )
 	{
-		auto const & l_dimensions = p_node.m_data.GetDimensions();
-		p_node.m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
-		p_node.m_billboardUbo.Update();
+		p_node.m_billboardUbo.Update( p_node.m_instance.GetDimensions() );
 		DoRenderObjectNode( p_node );
 	}
 
@@ -227,8 +227,8 @@ namespace Castor3D
 	template< typename NodeType >
 	inline void DoRenderNode( NodeType & p_node )
 	{
-		p_node.m_shadowReceiver.SetValue( p_node.m_instance.IsShadowReceiver() ? 1 : 0 );
-		p_node.m_modelUbo.Update();
+		p_node.m_modelUbo.Update( p_node.m_instance.IsShadowReceiver()
+			, p_node.m_passNode.m_pass.GetId() );
 		DoRenderNodeNoPass( p_node );
 	}
 }

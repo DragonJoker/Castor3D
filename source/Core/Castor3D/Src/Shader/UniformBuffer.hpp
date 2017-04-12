@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 #include "Uniform.hpp"
+#include "UniformBufferBinding.hpp"
 #include "Mesh/Buffer/GpuBuffer.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -124,7 +125,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met à jour le stockage GPU.
 		 */
-		C3D_API void Update();
+		C3D_API void Update()const;
 		/**
 		 *\~english
 		 *\brief		Creates a binding of this unifor buffer to given program.

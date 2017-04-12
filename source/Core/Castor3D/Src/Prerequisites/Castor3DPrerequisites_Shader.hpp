@@ -366,6 +366,12 @@ namespace Castor3D
 	class UniformBufferBinding;
 	class ShaderStorageBuffer;
 	class AtomicCounterBuffer;
+	class PassBuffer;
+	class BillboardUbo;
+	class MatrixUbo;
+	class ModelUbo;
+	class ModelMatrixUbo;
+	class SceneUbo;
 	template< UniformType Type >
 	class TUniform;
 	template< UniformType Type >
@@ -763,6 +769,7 @@ namespace Castor3D
 	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel };\
 	auto c3d_shadowReceiver = l_model.GetUniform< GLSL::Int >( ShaderProgram::ShadowReceiver );\
 	auto c3d_materialIndex = l_model.GetUniform< GLSL::Int >( ShaderProgram::MaterialIndex );\
+	auto c3d_envMapIndex = l_model.GetUniform< GLSL::Int >( ShaderProgram::MatEnvironmentIndex );\
 	l_model.End()
 
 #define UBO_BILLBOARD( Writer )\

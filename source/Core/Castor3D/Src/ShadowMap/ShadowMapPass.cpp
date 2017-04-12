@@ -85,13 +85,13 @@ namespace Castor3D
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
 				, [this, &l_pipeline, p_flags]()
 				{
-					l_pipeline.AddUniformBuffer( m_matrixUbo );
-					l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-					l_pipeline.AddUniformBuffer( m_sceneUbo );
+					l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
-						l_pipeline.AddUniformBuffer( m_billboardUbo );
+						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )

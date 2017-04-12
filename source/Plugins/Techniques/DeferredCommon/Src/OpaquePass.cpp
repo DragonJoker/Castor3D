@@ -291,7 +291,7 @@ namespace deferred_common
 				, c3d_shadowReceiver
 				, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
 				, CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
-				, l_materials.GetEnvMapIndex( c3d_materialIndex )
+				, c3d_envMapIndex
 				, l_flags );
 
 			out_c3dNormal = vec4( l_v3Normal, l_flags );
@@ -306,18 +306,6 @@ namespace deferred_common
 	void OpaquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
 		auto & l_scene = *m_camera->GetScene();
-		auto & l_fog = l_scene.GetFog();
-		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
-
-		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
-		{
-			m_sceneNode.m_fogDensity.SetValue( l_fog.GetDensity() );
-		}
-
-		m_sceneNode.m_ambientLight.SetValue( rgba_float( l_scene.GetAmbientLight() ) );
-		m_sceneNode.m_backgroundColour.SetValue( rgba_float( l_scene.GetBackgroundColour() ) );
-		m_sceneNode.m_cameraPos.SetValue( m_camera->GetParent()->GetDerivedPosition() );
-		m_sceneNode.m_cameraFarPlane.SetValue( m_camera->GetViewport().GetFar() );
-		m_sceneNode.m_sceneUbo.Update();
+		m_sceneUbo.Update( l_scene, *m_camera, false );
 	}
 }

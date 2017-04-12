@@ -39,9 +39,9 @@ namespace Castor3D
 		: public SubmeshRenderNode
 	{
 		C3D_API StaticRenderNode( RenderPipeline & p_pipeline
-			, PassRenderNode && p_pass
-			, UniformBuffer & p_modelMatrixBuffer
-			, UniformBuffer & p_modelBuffer
+			, PassRenderNode && p_passNode
+			, ModelMatrixUbo & p_modelMatrixBuffer
+			, ModelUbo & p_modelBuffer
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
 			, Submesh & p_data

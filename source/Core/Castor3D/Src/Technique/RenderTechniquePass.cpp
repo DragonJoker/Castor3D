@@ -148,7 +148,7 @@ namespace Castor3D
 		: RenderPass{ p_name, *p_scene.GetEngine(), p_opaque, p_multisampling, p_ignored }
 		, m_scene{ p_scene }
 		, m_camera{ p_camera }
-		, m_sceneNode{ m_sceneUbo }
+		, m_sceneNode{}
 		, m_environment{ p_environment }
 	{
 	}
@@ -181,9 +181,8 @@ namespace Castor3D
 			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
 			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
-			m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-			m_viewUniform->SetValue( p_camera.GetView() );
-			m_matrixUbo.Update();
+			m_matrixUbo.Update( p_camera.GetView()
+				, p_camera.GetViewport().GetProjection() );
 
 			if ( m_opaque || m_multisampling )
 			{
@@ -238,8 +237,7 @@ namespace Castor3D
 			l_it.second->GetPipeline().Apply();
 			UpdatePipeline( l_it.second->GetPipeline() );
 
-			DoBindPass( l_it.second->GetPassNode()
-				, l_it.second->GetSceneNode()
+			DoBindPass( l_it.second->GetSceneNode()
 				, l_it.second->GetPassNode().m_pass
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
@@ -247,8 +245,7 @@ namespace Castor3D
 
 			l_it.second->Render();
 
-			DoUnbindPass( l_it.second->GetPassNode()
-				, l_it.second->GetSceneNode()
+			DoUnbindPass( l_it.second->GetSceneNode()
 				, l_it.second->GetPassNode().m_pass
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
@@ -310,26 +307,7 @@ namespace Castor3D
 
 	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
-		auto & l_fog = m_scene.GetFog();
-		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
-
-		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
-		{
-			m_sceneNode.m_fogDensity.SetValue( l_fog.GetDensity() );
-		}
-
-		m_sceneNode.m_ambientLight.SetValue( rgba_float( m_scene.GetAmbientLight() ) );
-		{
-			auto & l_cache = m_scene.GetLightCache();
-			auto l_lock = make_unique_lock( l_cache );
-			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = l_cache.GetLightsCount( LightType::eSpot );
-			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = l_cache.GetLightsCount( LightType::ePoint );
-			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
-		}
-		m_sceneNode.m_backgroundColour.SetValue( rgba_float( m_scene.GetBackgroundColour() ) );
-		m_sceneNode.m_cameraPos.SetValue( m_camera->GetParent()->GetDerivedPosition() );
-		m_sceneNode.m_cameraFarPlane.SetValue( m_camera->GetViewport().GetFar() );
-		m_sceneNode.m_sceneUbo.Update();
+		m_sceneUbo.Update( m_scene, *m_camera );
 	}
 
 	void RenderTechniquePass::DoPrepareFrontPipeline( ShaderProgram & p_program
@@ -367,15 +345,14 @@ namespace Castor3D
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
 				, [this, &l_pipeline, p_flags]()
 				{
-					l_pipeline.AddUniformBuffer( m_matrixUbo );
-					l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-					l_pipeline.AddUniformBuffer( m_sceneUbo );
-					l_pipeline.AddUniformBuffer( m_passUbo );
-					l_pipeline.AddUniformBuffer( m_modelUbo );
+					l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelUbo.GetUbo() );
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
-						l_pipeline.AddUniformBuffer( m_billboardUbo );
+						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
@@ -425,15 +402,14 @@ namespace Castor3D
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
 				, [this, &l_pipeline, p_flags]()
 				{
-					l_pipeline.AddUniformBuffer( m_matrixUbo );
-					l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-					l_pipeline.AddUniformBuffer( m_sceneUbo );
-					l_pipeline.AddUniformBuffer( m_passUbo );
-					l_pipeline.AddUniformBuffer( m_modelUbo );
+					l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelUbo.GetUbo() );
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
-						l_pipeline.AddUniformBuffer( m_billboardUbo );
+						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )

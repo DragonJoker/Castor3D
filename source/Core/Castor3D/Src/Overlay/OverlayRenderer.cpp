@@ -94,6 +94,7 @@ namespace Castor3D
 		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
 		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
 		m_overlayPosition = m_overlayUbo.GetUniform< UniformType::eVec2i >( ShaderProgram::OvPosition );
+		m_overlayMaterial = m_overlayUbo.GetUniform< UniformType::eInt >( ShaderProgram::MaterialIndex );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -351,7 +352,6 @@ namespace Castor3D
 					{
 						p_pass,
 						l_pipeline.GetProgram(),
-						m_passUbo,
 					},
 					m_overlayUbo,
 				}
@@ -374,7 +374,6 @@ namespace Castor3D
 					{
 						p_pass,
 						l_pipeline.GetProgram(),
-						m_passUbo,
 					},
 					m_overlayUbo,
 				}
@@ -480,7 +479,7 @@ namespace Castor3D
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
 		auto & l_node = DoGetPanelNode( p_pass );
-		p_pass.UpdateRenderNode( l_node.m_passNode );
+		m_overlayMaterial->SetValue( p_pass.GetId() );
 		m_passUbo.Update();
 		m_overlayUbo.Update();
 		l_node.m_pipeline.Apply();
@@ -500,8 +499,8 @@ namespace Castor3D
 			l_textureVariable->SetValue( 0 );
 		}
 
-		p_pass.UpdateRenderNode( l_node.m_passNode );
 		m_passUbo.Update();
+		m_overlayMaterial->SetValue( p_pass.GetId() );
 		m_overlayUbo.Update();
 		l_node.m_pipeline.Apply();
 		p_pass.BindTextures();

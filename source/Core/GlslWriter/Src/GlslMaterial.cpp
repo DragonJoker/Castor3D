@@ -10,10 +10,11 @@ namespace GLSL
 
 	Materials::Materials( GlslWriter & p_writer
 		, int p_offsetRR, int p_indexRR
-		, int p_offsetEM, int p_indexEM
 		, int p_offsetRF, int p_indexRF
 		, int p_offsetRL, int p_indexRL
-		, int p_offsetOP, int p_indexOP )
+		, int p_offsetOP, int p_indexOP
+		, int p_offsetGM, int p_indexGM
+		, int p_offsetEX, int p_indexEX )
 		: m_writer{ p_writer }
 	{
 		auto c3d_materials = m_writer.GetUniform< SamplerBuffer >( cuT( "c3d_materials" ) );
@@ -40,7 +41,15 @@ namespace GLSL
 			, [this]( Int const & p_index, Int const & p_offset, Int const & p_id )
 			{
 				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_materials" ) );
-				m_writer.Return( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset ).xyz() );
+				IF( m_writer, p_id == 0_i )
+				{
+					m_writer.Return( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset ).xyz() );
+				}
+				ELSE
+				{
+					m_writer.Return( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset ).yzw() );
+				}
+				FI;
 			}, InInt{ &m_writer, cuT( "p_index" ) }
 			, InInt{ &m_writer, cuT( "p_offset" ) }
 			, InInt{ &m_writer, cuT( "p_id" ) } );
@@ -57,16 +66,10 @@ namespace GLSL
 				m_writer.Return( m_int( p_index, Int( p_offsetRF ), Int( p_indexRF ) ) );
 			}, InInt{ &m_writer, cuT( "p_index" ) } );
 
-		m_reflection = m_writer.ImplementFunction< Int >( cuT( "Mat_GetReleaction" )
+		m_reflection = m_writer.ImplementFunction< Int >( cuT( "Mat_GetReflection" )
 			, [this, p_offsetRL, p_indexRL]( Int const & p_index )
 			{
 				m_writer.Return( m_int( p_index, Int( p_offsetRL ), Int( p_indexRL ) ) );
-			}, InInt{ &m_writer, cuT( "p_index" ) } );
-
-		m_envMapIndex = m_writer.ImplementFunction< Int >( cuT( "Mat_GetEnvMapIndex" )
-			, [this, p_offsetEM, p_indexEM]( Int const & p_index )
-			{
-				m_writer.Return( m_int( p_index, Int( p_offsetEM ), Int( p_indexEM ) ) );
 			}, InInt{ &m_writer, cuT( "p_index" ) } );
 
 		m_opacity = m_writer.ImplementFunction< Float >( cuT( "Mat_GetOpacity" )
@@ -74,16 +77,23 @@ namespace GLSL
 			{
 				m_writer.Return( m_float( p_index, Int( p_offsetOP ), Int( p_indexOP ) ) );
 			}, InInt{ &m_writer, cuT( "p_index" ) } );
+
+		m_gamma = m_writer.ImplementFunction< Float >( cuT( "Mat_GetGamma" )
+			, [this, p_offsetGM, p_indexGM]( Int const & p_index )
+			{
+				m_writer.Return( m_float( p_index, Int( p_offsetGM ), Int( p_indexGM ) ) );
+			}, InInt{ &m_writer, cuT( "p_index" ) } );
+
+		m_exposure = m_writer.ImplementFunction< Float >( cuT( "Mat_GetExposure" )
+			, [this, p_offsetEX, p_indexEX]( Int const & p_index )
+			{
+				m_writer.Return( m_float( p_index, Int( p_offsetEX ), Int( p_indexEX ) ) );
+			}, InInt{ &m_writer, cuT( "p_index" ) } );
 	}
 
 	Float Materials::GetRefractionRatio( Int const & p_index )const
 	{
 		return m_refractionRatio( p_index );
-	}
-
-	Float Materials::GetOpacity( Int const & p_index )const
-	{
-		return m_opacity( p_index );
 	}
 
 	Int Materials::GetRefraction( Int const & p_index )const
@@ -96,9 +106,19 @@ namespace GLSL
 		return m_reflection( p_index );
 	}
 
-	Int Materials::GetEnvMapIndex( Int const & p_index )const
+	Float Materials::GetOpacity( Int const & p_index )const
 	{
-		return m_envMapIndex( p_index );
+		return m_opacity( p_index );
+	}
+
+	Float Materials::GetGamma( Int const & p_index )const
+	{
+		return m_gamma( p_index );
+	}
+
+	Float Materials::GetExposure( Int const & p_index )const
+	{
+		return m_exposure( p_index );
 	}
 
 	//*********************************************************************************************
@@ -110,6 +130,7 @@ namespace GLSL
 			, 0, 2
 			, 0, 3
 			, 3, 1
+			, 3, 2
 		}
 	{
 		m_diffuse = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetDiffuse" )

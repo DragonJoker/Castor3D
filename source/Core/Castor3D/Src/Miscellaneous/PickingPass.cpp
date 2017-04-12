@@ -228,9 +228,8 @@ namespace Castor3D
 	void PickingPass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera )
 	{
-		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-		m_viewUniform->SetValue( p_camera.GetView() );
-		m_matrixUbo.Update();
+		m_matrixUbo.Update( p_camera.GetView()
+			, p_camera.GetViewport().GetProjection() );
 		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_nodes.m_instancedNodes.m_backCulled );
 		DoRenderStaticSubmeshes( p_nodes.m_scene, p_nodes.m_staticNodes.m_backCulled );
 		DoRenderSkinningSubmeshes( p_nodes.m_scene, p_nodes.m_skinningNodes.m_backCulled );
@@ -524,13 +523,13 @@ namespace Castor3D
 					, MultisampleState{}
 					, p_program
 					, p_flags ) ).first->second;
-			l_pipeline.AddUniformBuffer( m_matrixUbo );
-			l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-			l_pipeline.AddUniformBuffer( m_sceneUbo );
+			l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+			l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+			l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
 
 			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 			{
-				l_pipeline.AddUniformBuffer( m_billboardUbo );
+				l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 			}
 
 			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )

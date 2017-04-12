@@ -2,7 +2,10 @@
 
 #include "Engine.hpp"
 
+#include "Material/Material.hpp"
 #include "Render/RenderNode/RenderNode.hpp"
+#include "Scene/Scene.hpp"
+#include "Shader/PassBuffer.hpp"
 #include "Texture/TextureLayout.hpp"
 
 using namespace Castor;
@@ -32,18 +35,22 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\temissive " ), m_tabs.c_str() ) > 0
-					   && HdrColour::TextWriter( String() )( p_pass.GetEmissive(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( l_return, "LegacyPass emissive colour" );
-		}
-
-		if ( l_return )
-		{
 			l_return = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
 					   && Colour::TextWriter( String() )( p_pass.GetSpecular(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< LegacyPass >::CheckError( l_return, "LegacyPass specular colour" );
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\tambient " ) + string::to_string( p_pass.GetAmbient() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< LegacyPass >::CheckError( l_return, "LegacyPass ambient" );
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\temissive " ) + string::to_string( p_pass.GetEmissive() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< LegacyPass >::CheckError( l_return, "LegacyPass emissive" );
 		}
 
 		if ( l_return )
@@ -72,7 +79,8 @@ namespace Castor3D
 		, m_shininess{ 50.0 }
 		, m_diffuse{ Colour::from_rgba( 0xFFFFFFFF ) }
 		, m_specular{ Colour::from_rgba( 0xFFFFFFFF ) }
-		, m_emissive{ HdrColour::from_rgba( 0x000000FF ) }
+		, m_ambient{ 0.0f }
+		, m_emissive{ 0.0f }
 	{
 	}
 
@@ -88,18 +96,37 @@ namespace Castor3D
 	{
 	}
 
-	void LegacyPass::DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const
+	void LegacyPass::DoUpdate( PassBuffer & p_buffer
+		, Scene const & p_scene )const
 	{
-		p_node.m_diffuse.SetValue( rgba_float( GetDiffuse() ) );
-		p_node.m_specular.SetValue( rgba_float( GetSpecular() ) );
-		p_node.m_emissive.SetValue( rgba_float( GetEmissive() ) );
-		p_node.m_shininess.SetValue( GetShininess() );
+		p_buffer.SetComponents( GetId()
+			, 0u
+			, GetRefractionRatio()
+			, CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f
+			, CheckFlag( GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f
+			, GetOpacity() );
+
+		p_buffer.SetComponents( GetId()
+			, 1u
+			, GetDiffuse()
+			, GetAmbient() );
+
+		p_buffer.SetComponents( GetId()
+			, 2u
+			, GetSpecular()
+			, GetEmissive() );
+
+		p_buffer.SetComponents( GetId()
+			, 3u
+			, GetShininess()
+			, NeedsGammaCorrection() ? p_scene.GetHdrConfig().GetGamma() : 1.0f
+			, p_scene.GetHdrConfig().GetExposure()
+			, 0.0f );
 	}
 
 	void LegacyPass::DoSetOpacity( float p_value )
 	{
 		m_diffuse.alpha() = p_value;
 		m_specular.alpha() = p_value;
-		m_emissive.alpha() = p_value;
 	}
 }

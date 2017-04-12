@@ -39,23 +39,17 @@ namespace Castor3D
 		: public BillboardListRenderNode
 	{
 		C3D_API BillboardRenderNode( RenderPipeline & p_pipeline
-			, PassRenderNode && p_pass
-			, UniformBuffer & p_modelMatrixBuffer
-			, UniformBuffer & p_modelBuffer
+			, PassRenderNode && p_passNode
+			, ModelMatrixUbo & p_modelMatrixBuffer
+			, ModelUbo & p_modelBuffer
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
 			, BillboardBase & p_data
-			, UniformBuffer & p_billboardUbo );
+			, BillboardUbo & p_billboardUbo );
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
-		UniformBuffer & m_billboardUbo;
-		//!\~english	The dimensions uniform variable.
-		//!\~french		La variable uniforme des dimensions.
-		Uniform2i & m_dimensions;
-		//!\~english	The window dimensions uniform variable.
-		//!\~french		La variable uniforme des dimensions de la fenêtre.
-		Uniform2i & m_windowSize;
+		BillboardUbo & m_billboardUbo;
 	};
 }
 

@@ -34,17 +34,19 @@ namespace GLSL
 	protected:
 		GlslWriter_API Materials( GlslWriter & p_writer
 			, int p_offsetRR, int p_indexRR
-			, int p_offsetEM, int p_indexEM
 			, int p_offsetRF, int p_indexRF
 			, int p_offsetRL, int p_indexRL
-			, int p_offsetOP, int p_indexOP );
+			, int p_offsetOP, int p_indexOP
+			, int p_offsetGM, int p_indexGM
+			, int p_offsetEX, int p_indexEX );
 
 	public:
 		GlslWriter_API Float GetRefractionRatio( Int const & p_index )const;
 		GlslWriter_API Float GetOpacity( Int const & p_index )const;
 		GlslWriter_API Int GetRefraction( Int const & p_index )const;
 		GlslWriter_API Int GetReflection( Int const & p_index )const;
-		GlslWriter_API Int GetEnvMapIndex( Int const & p_index )const;
+		GlslWriter_API Float GetGamma( Int const & p_index )const;
+		GlslWriter_API Float GetExposure( Int const & p_index )const;
 
 	private:
 		// Materials are aligned on vec4, so the size of a material
@@ -59,10 +61,11 @@ namespace GLSL
 
 	private:
 		Function< Float, InInt > m_refractionRatio;
-		Function< Float, InInt > m_opacity;
-		Function< Int, InInt > m_envMapIndex;
 		Function< Int, InInt > m_refraction;
 		Function< Int, InInt > m_reflection;
+		Function< Float, InInt > m_opacity;
+		Function< Float, InInt > m_gamma;
+		Function< Float, InInt > m_exposure;
 	};
 
 	class LegacyMaterials

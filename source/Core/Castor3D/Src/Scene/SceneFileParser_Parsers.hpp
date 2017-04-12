@@ -166,6 +166,7 @@ namespace Castor3D
 	// Pass Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassDiffuse )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassSpecular )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassAmbient )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassEmissive )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassShininess )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlpha )

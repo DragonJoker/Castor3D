@@ -524,7 +524,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "diffuse" ), Parser_PassDiffuse, { MakeParameter< ParameterType::eColour >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "specular" ), Parser_PassSpecular, { MakeParameter< ParameterType::eColour >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "emissive" ), Parser_PassEmissive, { MakeParameter< ParameterType::eHdrColour >() } );
+	AddParser( uint32_t( CSCNSection::ePass ), cuT( "ambient" ), Parser_PassAmbient, { MakeParameter< ParameterType::eFloat >() } );
+	AddParser( uint32_t( CSCNSection::ePass ), cuT( "emissive" ), Parser_PassEmissive, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "shininess" ), Parser_PassShininess, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "alpha" ), Parser_PassAlpha, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), Parser_PassDoubleFace, { MakeParameter< ParameterType::eBool >() } );

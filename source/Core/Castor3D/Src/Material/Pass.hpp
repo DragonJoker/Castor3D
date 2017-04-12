@@ -110,6 +110,14 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Fills shader variables of given render node.
+		 *\~french
+		 *\brief		Remplit les variables de shader du noeud de rendu donné.
+		 */
+		C3D_API void Update( PassBuffer & p_passes
+			, Scene const & p_scene )const;
+		/**
+		 *\~english
 		 *\brief		Binds the pass' textures.
 		 *\~french
 		 *\brief		Active les textures de la passe.
@@ -175,13 +183,6 @@ namespace Castor3D
 		C3D_API bool HasAlphaBlending()const;
 		/**
 		 *\~english
-		 *\brief		Fills shader variables of given render node.
-		 *\~french
-		 *\brief		Remplit les variables de shader du noeud de rendu donné.
-		 */
-		C3D_API void UpdateRenderNode( PassRenderNodeUniforms & p_node )const;
-		/**
-		 *\~english
 		 *\brief		Reduces the textures.
 		 *\~french
 		 *\brief		Réduit les textures.
@@ -210,6 +211,15 @@ namespace Castor3D
 		 *\return		La combinaison d'indicateurs de programme.
 		 */
 		C3D_API ProgramFlags GetProgramFlags()const;
+		/**
+		 *\~english
+		 *\remarks	Passes are aligned on float[4], so the size of a pass
+		 *			is the number of float[4] needed to contain it.
+		 *\~french
+		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
+		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
+		 */
+		GlslWriter_API virtual uint32_t GetPassSize()const = 0;
 		/**
 		 *\~english
 		 *\return		The texture channels flags combination.
@@ -400,6 +410,30 @@ namespace Castor3D
 		{
 			return m_needsGammaCorrection;
 		}
+		/**
+		 *\~english
+		 *\return		The pass ID.
+		 *\~french
+		 *\brief
+		 *\return		L'ID de la passe
+		 */
+		inline uint32_t GetId()const
+		{
+			return m_id;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the pass ID.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief
+		 *\brief		Définit l'ID de la passe
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetId( uint32_t p_value )
+		{
+			m_id = p_value;
+		}
 
 	protected:
 		/**
@@ -478,7 +512,8 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader du noeud de rendu donné.
 		 */
-		virtual void DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const = 0;
+		virtual void DoUpdate( PassBuffer & p_buffer
+			, Scene const & p_scene )const = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the global alpha value.
@@ -496,6 +531,9 @@ namespace Castor3D
 		//!\~english	Bitwise ORed TextureChannel.
 		//!\~french		Combinaison des TextureChannel affectés à une texture pour cette passe.
 		TextureChannels m_textureFlags;
+		//!\~english	The pass ID.
+		//!\~french		L'ID de la passe.
+		uint32_t m_id{ 0u };
 		//!\~english	The opacity value.
 		//!\~french		La valeur d'opacité.
 		float m_opacity{ 1.0f };

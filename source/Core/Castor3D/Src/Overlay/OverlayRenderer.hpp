@@ -376,6 +376,9 @@ namespace Castor3D
 		//!\~english	The uniform variable containing overlay position.
 		//!\~french		La variable uniforme contenant la position de l'incrustation.
 		Uniform2iSPtr m_overlayPosition{ nullptr };
+		//!\~english	The uniform variable containing overlay's material index.
+		//!\~french		La variable uniforme contenant l'indice du matériau de l'incrustation.
+		Uniform1iSPtr m_overlayMaterial{ nullptr };
 		//!\~english	The uniform buffer containing pass data.
 		//!\~french		Le tampon d'uniformes contenant les données de passe.
 		UniformBuffer m_passUbo;
