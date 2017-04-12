@@ -1,4 +1,4 @@
-﻿#include "ForwardRenderTechniquePass.hpp"
+#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -203,7 +203,7 @@ namespace Castor3D
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
 			l_lighting->ComputeCombinedLighting( l_worldEye
 				, l_fMatShininess
-				, c3d_iShadowReceiver
+				, c3d_shadowReceiver
 				, FragmentInput( vtx_position, l_v3Normal )
 				, l_output );
 			auto l_diffuse = l_writer.GetLocale( cuT( "l_diffuse" ), l_utils.RemoveGamma( c3d_fGamma, c3d_v4MatDiffuse.xyz() ) );

@@ -1,4 +1,4 @@
-﻿#include "ShaderProgram.hpp"
+#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -149,7 +149,8 @@ namespace Castor3D
 	const String ShaderProgram::MapEnvironment = cuT( "c3d_mapEnvironment" );
 	const String ShaderProgram::MapShadow = cuT( "c3d_mapShadow" );
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
-	const String ShaderProgram::ShadowReceiver = cuT( "c3d_iShadowReceiver" );
+	const String ShaderProgram::ShadowReceiver = cuT( "c3d_shadowReceiver" );
+	const String ShaderProgram::MaterialIndex = cuT( "c3d_materialIndex" );
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
 	const String ShaderProgram::BufferModelMatrix = cuT( "ModelMatrices" );

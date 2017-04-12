@@ -12,6 +12,7 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
+#include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
 
 using namespace Castor;
@@ -229,7 +230,6 @@ namespace deferred_common
 		// UBOs
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
 		UBO_MODEL( l_writer );
 
 		// Fragment Inputs
@@ -241,6 +241,8 @@ namespace deferred_common
 		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
 		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
+
+		LegacyMaterials l_materials{ l_writer };
 
 		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
 		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
@@ -269,10 +271,10 @@ namespace deferred_common
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vtx_normal ) );
-			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), c3d_v4MatDiffuse.xyz() );
-			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), c3d_v4MatSpecular.xyz() );
-			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
+			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), l_materials.GetDiffuse( c3d_materialIndex ) );
+			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), l_materials.GetSpecular( c3d_materialIndex ) );
+			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_materials.GetShininess( c3d_materialIndex ) );
+			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), l_v3Diffuse * l_materials.GetEmissive( c3d_materialIndex ) );
 			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), vtx_texture );
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
@@ -286,16 +288,16 @@ namespace deferred_common
 			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 			auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), 0.0_f );
 			EncodeMaterial( l_writer
-				, c3d_iShadowReceiver
+				, c3d_shadowReceiver
 				, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
 				, CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
-				, l_writer.Cast< Int >( c3d_fMatEnvironmentIndex )
+				, l_materials.GetEnvMapIndex( c3d_materialIndex )
 				, l_flags );
 
 			out_c3dNormal = vec4( l_v3Normal, l_flags );
 			out_c3dDiffuse = vec4( l_v3Diffuse, 0.0_f );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
-			out_c3dEmissive = vec4( l_v3Emissive, c3d_fMatRefractionRatio );
+			out_c3dEmissive = vec4( l_v3Emissive, l_materials.GetRefractionRatio( c3d_materialIndex ) );
 		} );
 
 		return l_writer.Finalise();

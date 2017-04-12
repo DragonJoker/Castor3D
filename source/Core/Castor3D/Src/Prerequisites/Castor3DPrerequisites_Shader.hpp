@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -761,7 +761,8 @@ namespace Castor3D
 
 #define UBO_MODEL( Writer )\
 	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel };\
-	auto c3d_iShadowReceiver = l_model.GetUniform< GLSL::Int >( ShaderProgram::ShadowReceiver );\
+	auto c3d_shadowReceiver = l_model.GetUniform< GLSL::Int >( ShaderProgram::ShadowReceiver );\
+	auto c3d_materialIndex = l_model.GetUniform< GLSL::Int >( ShaderProgram::MaterialIndex );\
 	l_model.End()
 
 #define UBO_BILLBOARD( Writer )\

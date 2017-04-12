@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -764,6 +764,9 @@ namespace Castor3D
 		//!\~english	Name of the shadow receiver status frame variable.
 		//!\~french		Nom de la frame variable contenant le statut de réception d'ombres.
 		C3D_API static const Castor::String ShadowReceiver;
+		//!\~english	Name of the material index frame variable.
+		//!\~french		Nom de la frame variable contenant l'indice du matériau.
+		C3D_API static const Castor::String MaterialIndex;
 
 		//@}
 		/**@name Animation */

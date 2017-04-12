@@ -1,5 +1,6 @@
 #include "GlslLighting.hpp"
 
+#include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
 
 using namespace Castor;
