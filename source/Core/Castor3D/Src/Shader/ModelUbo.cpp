@@ -28,7 +28,7 @@ namespace Castor3D
 		, uint32_t p_materialIndex )const
 	{
 		m_shadowReceiver.SetValue( p_shadowReceiver ? 1 : 0 );
-		m_materialIndex.SetValue( p_materialIndex );
+		m_materialIndex.SetValue( p_materialIndex - 1 );
 		m_ubo.Update();
 	}
 }

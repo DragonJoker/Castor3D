@@ -26,7 +26,7 @@ namespace Castor3D
 
 	void OverlayUbo::Update( int p_materialIndex )const
 	{
-		m_material.SetValue( p_materialIndex );
+		m_material.SetValue( p_materialIndex - 1 );
 		m_ubo.Update();
 	}
 }

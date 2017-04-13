@@ -99,24 +99,24 @@ namespace Castor3D
 	void LegacyPass::DoUpdate( PassBuffer & p_buffer
 		, Scene const & p_scene )const
 	{
-		p_buffer.SetComponents( GetId()
+		p_buffer.SetComponents( GetId() - 1
 			, 0u
 			, GetRefractionRatio()
 			, CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f
 			, CheckFlag( GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f
 			, GetOpacity() );
 
-		p_buffer.SetComponents( GetId()
+		p_buffer.SetComponents( GetId() - 1
 			, 1u
 			, GetDiffuse()
 			, GetAmbient() );
 
-		p_buffer.SetComponents( GetId()
+		p_buffer.SetComponents( GetId() - 1
 			, 2u
 			, GetSpecular()
 			, GetEmissive() );
 
-		p_buffer.SetComponents( GetId()
+		p_buffer.SetComponents( GetId() - 1
 			, 3u
 			, GetShininess()
 			, NeedsGammaCorrection() ? p_scene.GetHdrConfig().GetGamma() : 1.0f

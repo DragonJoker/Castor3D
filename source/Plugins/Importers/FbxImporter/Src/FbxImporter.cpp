@@ -627,7 +627,7 @@ namespace C3dFbx
 			FbxDouble3 l_diffuse = l_lambert->Diffuse;
 			p_pass.SetDiffuse( Colour::from_rgb( { float( l_diffuse[0] ), float( l_diffuse[1] ), float( l_diffuse[2] ) } ) * l_lambert->DiffuseFactor );
 			FbxDouble3 l_emissive = l_lambert->Emissive;
-			p_pass.SetEmissive( point::length( Point3f{ float( l_emissive[0] ), float( l_emissive[1] ), float( l_emissive[2] ) } ) * l_lambert->EmissiveFactor );
+			p_pass.SetEmissive( float( point::length( Point3f{ float( l_emissive[0] ), float( l_emissive[1] ), float( l_emissive[2] ) } ) * l_lambert->EmissiveFactor ) );
 
 			DoLoadTexture( p_scene, l_lambert->Diffuse, p_pass, TextureChannel::eDiffuse );
 			DoLoadTexture( p_scene, l_lambert->Emissive, p_pass, TextureChannel::eEmissive );

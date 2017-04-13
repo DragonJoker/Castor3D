@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_SKYBOX_H___
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/HdrConfigUbo.hpp"
 #include "Shader/MatrixUbo.hpp"
 #include "Shader/ModelMatrixUbo.hpp"
 
@@ -172,13 +173,7 @@ namespace Castor3D
 		ModelMatrixUbo m_modelMatrixUbo;
 		//!\~english	The HDR configuration.
 		//!\~french		La configuration HDR.
-		UniformBuffer m_configUbo;
-		//!\~english	The exposure shader variable.
-		//!\~french		La variable shader pour l'exposition.
-		Uniform1fSPtr m_exposureUniform;
-		//!\~english	The gamma correction shader variable.
-		//!\~french		La variable shader pour la correction gamma.
-		Uniform1fSPtr m_gammaUniform;
+		HdrConfigUbo m_configUbo;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer{ nullptr };

@@ -74,7 +74,7 @@ namespace Castor3D
 		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eRead ) }
 		, m_matrixUbo{ p_engine }
 		, m_modelMatrixUbo{ p_engine }
-		, m_configUbo{ ShaderProgram::BufferHdrConfig, *p_engine.GetRenderSystem() }
+		, m_configUbo{ p_engine }
 		, m_declaration
 		{
 			{
@@ -82,8 +82,6 @@ namespace Castor3D
 			}
 		}
 	{
-		m_gammaUniform = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma );
-		m_exposureUniform = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 		String const l_skybox = cuT( "Skybox" );
 
 		if ( GetEngine()->GetSamplerCache().Has( l_skybox ) )
@@ -147,9 +145,7 @@ namespace Castor3D
 		m_vertexBuffer.reset();
 		m_matrixUbo.GetUbo().Cleanup();
 		m_modelMatrixUbo.GetUbo().Cleanup();
-		m_exposureUniform.reset();
-		m_gammaUniform.reset();
-		m_configUbo.Cleanup();
+		m_configUbo.GetUbo().Cleanup();
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
 	}
@@ -167,10 +163,8 @@ namespace Castor3D
 			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
 			m_matrixUbo.Update( p_camera.GetView()
 				, p_camera.GetViewport().GetProjection() );
-			m_modelMatrixUbo.Update( m_mtxModel, m_mtxModel );
-			m_exposureUniform->SetValue( l_scene.GetHdrConfig().GetExposure() );
-			m_gammaUniform->SetValue( l_scene.GetHdrConfig().GetGamma() );
-			m_configUbo.Update();
+			m_modelMatrixUbo.Update( m_mtxModel );
+			m_configUbo.Update( l_scene.GetHdrConfig() );
 			m_pipeline->Apply();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
@@ -212,10 +206,7 @@ namespace Castor3D
 			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
 
 			// Inputs
-			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig };
-			auto c3d_fExposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
-			auto c3d_fGamma = l_config.GetUniform< Float >( ShaderProgram::Gamma );
-			l_config.End();
+			UBO_HDR_CONFIG( l_writer );
 			auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
 			auto skybox = l_writer.GetUniform< SamplerCube >( cuT( "skybox" ) );
 			GLSL::Utils l_utils{ l_writer };
@@ -228,7 +219,7 @@ namespace Castor3D
 			{
 				auto l_skybox = l_writer.GetLocale( cuT( "l_skybox" )
 					, texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) ) );
-				pxl_FragColor = vec4( l_utils.RemoveGamma( c3d_fGamma, l_skybox.xyz() ), l_skybox.w() );
+				pxl_FragColor = vec4( l_utils.RemoveGamma( c3d_gamma, l_skybox.xyz() ), l_skybox.w() );
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
@@ -270,7 +261,7 @@ namespace Castor3D
 		m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		m_pipeline->AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
-		m_pipeline->AddUniformBuffer( m_configUbo );
+		m_pipeline->AddUniformBuffer( m_configUbo.GetUbo() );
 		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, m_pipeline->GetProgram() );
 		return m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 	}

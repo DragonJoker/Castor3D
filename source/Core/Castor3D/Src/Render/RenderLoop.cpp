@@ -178,7 +178,7 @@ namespace Castor3D
 		{
 			p_scene.Update();
 		} );
-		RenderQueueArray l_queues;
+		TechniquesQueues l_queues;
 		GetEngine()->GetRenderTechniqueCache().ForEach( [&l_queues]( RenderTechnique & p_technique )
 		{
 			p_technique.Update( l_queues );
@@ -188,25 +188,31 @@ namespace Castor3D
 		m_debugOverlays->EndCpuTask();
 	}
 
-	void RenderLoop::DoUpdateQueues( RenderQueueArray & p_queues )
+	void RenderLoop::DoUpdateQueues( TechniquesQueues & p_queues )
 	{
 		if ( p_queues.size() > m_queueUpdater.GetCount() )
 		{
-			for ( auto & l_queue : p_queues )
+			for ( auto & l_queues : p_queues )
 			{
-				m_queueUpdater.PushJob( [&l_queue]()
+				for ( auto & l_queue : l_queues.second )
 				{
-					l_queue.get().Update();
-				} );
+					m_queueUpdater.PushJob( [&l_queues, &l_queue]()
+					{
+						l_queue.get().Update( l_queues.first );
+					} );
+				}
 			}
 
 			m_queueUpdater.WaitAll( std::chrono::milliseconds::max() );
 		}
 		else
 		{
-			for ( auto & l_queue : p_queues )
+			for ( auto & l_queues : p_queues )
 			{
-				l_queue.get().Update();
+				for ( auto & l_queue : l_queues.second )
+				{
+					l_queue.get().Update( l_queues.first );
+				}
 			}
 		}
 	}

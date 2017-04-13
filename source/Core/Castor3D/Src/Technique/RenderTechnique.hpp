@@ -158,7 +158,7 @@ namespace Castor3D
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( RenderQueueArray & p_queues );
+		C3D_API void Update( TechniquesQueues & p_queues );
 		/**
 		 *\~english
 		 *\brief		Render function

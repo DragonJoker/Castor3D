@@ -26,7 +26,7 @@ namespace GLSL
 			, [this]( Int const & p_index, Int const & p_offset, Int const & p_id )
 			{
 				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( PassBufferName );
-				m_writer.Return( m_writer.Cast< Int >( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset )[p_index] ) );
+				m_writer.Return( m_writer.Cast< Int >( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset )[p_id] ) );
 			}, InInt{ &m_writer, cuT( "p_index" ) }
 			, InInt{ &m_writer, cuT( "p_offset" ) }
 			, InInt{ &m_writer, cuT( "p_id" ) } );
@@ -35,7 +35,7 @@ namespace GLSL
 			, [this]( Int const & p_index, Int const & p_offset, Int const & p_id )
 			{
 				auto c3d_materials = m_writer.GetBuiltin< SamplerBuffer >( PassBufferName );
-				m_writer.Return( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset )[p_index] );
+				m_writer.Return( texelFetch( c3d_materials, p_index * DoGetMaterialSize() + p_offset )[p_id] );
 			}, InInt{ &m_writer, cuT( "p_index" ) }
 			, InInt{ &m_writer, cuT( "p_offset" ) }
 			, InInt{ &m_writer, cuT( "p_id" ) } );

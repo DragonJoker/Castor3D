@@ -184,25 +184,30 @@ namespace Castor3D
 		m_frameBuffer.Cleanup();
 	}
 
-	void RenderTechnique::Update( RenderQueueArray & p_queues )
+	void RenderTechnique::Update( TechniquesQueues & p_queues )
 	{
-		m_opaquePass->Update( p_queues );
-		m_transparentPass->Update( p_queues );
-		m_opaquePass->UpdateShadowMaps( p_queues );
-		m_transparentPass->UpdateShadowMaps( p_queues );
+		RenderQueueArray l_queues;
+		m_opaquePass->Update( l_queues );
+		m_transparentPass->Update( l_queues );
+		m_opaquePass->UpdateShadowMaps( l_queues );
+		m_transparentPass->UpdateShadowMaps( l_queues );
 		auto & l_maps = m_renderTarget.GetScene()->GetEnvironmentMaps();
 
 		for ( auto & l_map : l_maps )
 		{
-			l_map.get().Update( p_queues );
+			l_map.get().Update( l_queues );
 		}
+
+		p_queues.emplace_back( m_passBuffer.get(), l_queues );
 	}
 
 	void RenderTechnique::Render( RenderInfo & p_info )
 	{
 		auto & l_scene = *m_renderTarget.GetScene();
+		m_passBuffer->Update (l_scene);
 		l_scene.GetLightCache().UpdateLights();
 		m_renderSystem.PushScene( &l_scene );
+		m_passBuffer->Bind ();
 		auto & l_maps = l_scene.GetEnvironmentMaps();
 
 		for ( auto & l_map : l_maps )
@@ -214,8 +219,6 @@ namespace Castor3D
 		l_camera.Resize( m_size );
 		l_camera.Update();
 
-		m_passBuffer->Update( l_scene );
-		m_passBuffer->Bind();
 		DoRenderOpaque( p_info );
 		l_scene.RenderBackground( GetSize(), l_camera );
 

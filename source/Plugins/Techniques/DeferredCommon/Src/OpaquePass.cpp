@@ -281,6 +281,7 @@ namespace deferred_common
 			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), l_materials.GetSpecular( c3d_materialIndex ) );
 			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_materials.GetShininess( c3d_materialIndex ) );
 			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), l_v3Diffuse * l_materials.GetEmissive( c3d_materialIndex ) );
+			auto l_gamma = l_writer.GetLocale( cuT( "l_gamma" ), l_materials.GetGamma( c3d_materialIndex ) );
 			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), vtx_texture );
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
@@ -290,8 +291,20 @@ namespace deferred_common
 				l_texCoord.xy() = l_parallaxMapping( l_texCoord.xy(), l_viewDir );
 			}
 
-			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
-			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
+			ComputePreLightingMapContributions( l_writer
+				, l_v3Normal
+				, l_fMatShininess
+				, p_textureFlags
+				, p_programFlags
+				, p_sceneFlags );
+			ComputePostLightingMapContributions( l_writer
+				, l_v3Diffuse
+				, l_v3Specular
+				, l_v3Emissive
+				, l_gamma
+				, p_textureFlags
+				, p_programFlags
+				, p_sceneFlags );
 			auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), 0.0_f );
 			EncodeMaterial( l_writer
 				, c3d_shadowReceiver

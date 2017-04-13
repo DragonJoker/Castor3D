@@ -194,7 +194,8 @@ namespace Castor3D
 			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_materials.GetShininess( c3d_materialIndex ) );
-			auto l_diffuse = l_writer.GetLocale( cuT( "l_diffuse" ), l_utils.RemoveGamma( l_materials.GetGamma( c3d_materialIndex ), l_materials.GetDiffuse( c3d_materialIndex ) ) );
+			auto l_gamma = l_writer.GetLocale( cuT( "l_gamma" ), l_materials.GetGamma( c3d_materialIndex ) );
+			auto l_diffuse = l_writer.GetLocale( cuT( "l_diffuse" ), l_utils.RemoveGamma(l_gamma, l_materials.GetDiffuse( c3d_materialIndex ) ) );
 			auto l_emissive = l_writer.GetLocale( cuT( "l_emissive" ), l_diffuse * l_materials.GetEmissive( c3d_materialIndex ) );
 			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 			auto l_envAmbient = l_writer.GetLocale( cuT( "l_envAmbient" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
@@ -210,14 +211,26 @@ namespace Castor3D
 				l_texCoord.xy() = l_parallaxMapping( l_texCoord.xy(), l_viewDir );
 			}
 
-			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
+			ComputePreLightingMapContributions( l_writer
+				, l_v3Normal
+				, l_fMatShininess
+				, p_textureFlags
+				, p_programFlags
+				, p_sceneFlags );
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
 			l_lighting->ComputeCombinedLighting( l_worldEye
 				, l_fMatShininess
 				, c3d_shadowReceiver
 				, FragmentInput( vtx_position, l_v3Normal )
 				, l_output );
-			ComputePostLightingMapContributions( l_writer, l_diffuse, l_v3Specular, l_emissive, p_textureFlags, p_programFlags, p_sceneFlags );
+			ComputePostLightingMapContributions( l_writer
+				, l_diffuse
+				, l_v3Specular
+				, l_emissive
+				, l_gamma
+				, p_textureFlags
+				, p_programFlags
+				, p_sceneFlags );
 
 			pxl_v4FragColor.xyz() = l_v3Ambient * l_diffuse
 				+ l_writer.Paren( l_v3Diffuse * l_diffuse )
