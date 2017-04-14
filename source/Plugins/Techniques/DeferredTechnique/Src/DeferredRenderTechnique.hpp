@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,7 +23,8 @@ SOFTWARE.
 #ifndef ___C3D_DeferredRenderTechnique_H___
 #define ___C3D_DeferredRenderTechnique_H___
 
-#include <LightPass.hpp>
+#include <AmbientLightPass.hpp>
+#include <FogPass.hpp>
 #include <ReflectionPass.hpp>
 #include <SsaoPass.hpp>
 
@@ -134,7 +135,7 @@ namespace deferred
 
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
-		GeometryBufferTextures m_lightPassTextures;
+		GeometryBufferTextures m_geometryPassResult;
 		//!\~english	The deferred shading frame buffer.
 		//!\~french		Le tampon d'image pour le deferred shading.
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
@@ -144,12 +145,27 @@ namespace deferred
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		Castor3D::SceneUbo m_sceneUbo;
-		//!\~english	The shader program used to render directional lights.
-		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
+		//!\~english	The light pass output.
+		//!\~french		La sortie de la passe de lumières.
+		Castor3D::TextureUnit m_lightPassResult;
+		//!\~english	The deferred shading frame buffer.
+		//!\~french		Le tampon d'image pour le deferred shading.
+		Castor3D::FrameBufferSPtr m_lightPassFrameBuffer;
+		//!\~english	The attachments between textures and deferred shading frame buffer.
+		//!\~french		Les attaches entre les textures et le tampon deferred shading.
+		Castor3D::TextureAttachmentSPtr m_lightPassTexAttach;
+		//!\~english	The light passes.
+		//!\~french		Les passes de lumière.
 		LightPasses m_lightPass;
-		//!\~english	The shader program used to render directional lights.
-		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
+		//!\~english	The light passes, with shadows.
+		//!\~french		Les passes de lumière, avec ombres.
 		LightPasses m_lightPassShadow;
+		//!\~english	The ambient light pass.
+		//!\~french		La passe de lumière ambiante.
+		std::unique_ptr< deferred_common::AmbientLightPass > m_ambientPass;
+		//!\~english	The fog pass.
+		//!\~french		La passe de brouillard.
+		std::unique_ptr< deferred_common::FogPass > m_fogPass;
 		//!\~english	Tells if SSAO is to be used in lighting pass.
 		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
 		bool m_ssaoEnabled{ false };

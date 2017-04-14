@@ -1,4 +1,4 @@
-#include "PointLight.hpp"
+﻿#include "PointLight.hpp"
 
 #include "Render/Viewport.hpp"
 
@@ -64,8 +64,8 @@ namespace Castor3D
 	{
 		auto l_pos = GetLight().GetParent()->GetDerivedPosition();
 		Point4r l_position{ l_pos[0], l_pos[1], l_pos[2], float( m_shadowMapIndex ) };
-		DoBindComponent( l_position, p_index, p_offset, p_texture );
-		DoBindComponent( GetAttenuation(), p_index, p_offset, p_texture );
+		DoCopyComponent( l_position, p_index, p_offset, p_texture );
+		DoCopyComponent( m_attenuation, p_index, p_offset, p_texture );
 	}
 
 	void PointLight::SetAttenuation( Point3f const & p_attenuation )

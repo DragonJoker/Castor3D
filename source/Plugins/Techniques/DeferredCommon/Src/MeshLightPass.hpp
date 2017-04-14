@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -37,7 +37,7 @@ namespace deferred_common
 			: public LightPass::Program
 		{
 		public:
-			Program( Castor3D::Scene const & p_scene
+			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, bool p_ssao );
@@ -45,6 +45,11 @@ namespace deferred_common
 
 		private:
 			Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend )override;
+
+		protected:
+			//!\~english	The variable containing the light intensities.
+			//!\~french		La variable contenant les intensités de la lumière.
+			Castor3D::PushUniform2fSPtr m_lightIntensity;
 		};
 
 	public:

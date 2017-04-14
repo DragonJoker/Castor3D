@@ -70,27 +70,35 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_shadowReceiver	Tells if the model receives shadows.
-		 *\param[in]	p_materialIndex		The material index.
-		 *\param[in]	p_lights			The lights are updated too.
+		 *\param[in]	p_camera	The current camera.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_shadowReceiver	Dit si le modèle reçoit les ombres.
-		 *\param[in]	p_materialIndex		L'indice du matériau.
-		 *\param[in]	p_lights			Les sources lumineuses sont mises à jour elles aussi.
+		 *\param[in]	p_camera	La camera actuelle.
 		 */
 		C3D_API void UpdateCameraPosition( Camera const & p_camera )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_shadowReceiver	Tells if the model receives shadows.
-		 *\param[in]	p_materialIndex		The material index.
-		 *\param[in]	p_lights			The lights are updated too.
+		 *\param[in]	p_camera	The current camera.
+		 *\param[in]	p_fog		The fog configuration.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_shadowReceiver	Dit si le modèle reçoit les ombres.
-		 *\param[in]	p_materialIndex		L'indice du matériau.
-		 *\param[in]	p_lights			Les sources lumineuses sont mises à jour elles aussi.
+		 *\param[in]	p_camera	La camera actuelle.
+		 *\param[in]	p_fog		La configuration du brouillard.
+		 */
+		C3D_API void Update( Camera const & p_camera
+			, Fog const & p_fog )const;
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The current camera.
+		 *\param[in]	p_lights	The lights are updated too.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	p_scene		La scène dessinée.
+		 *\param[in]	p_camera	La camera actuelle.
+		 *\param[in]	p_lights	Les sources lumineuses sont mises à jour elles aussi.
 		 */
 		C3D_API void Update( Scene const & p_scene
 			, Camera const & p_camera

@@ -2,6 +2,7 @@ debug_overlays true
 
 scene "TextureScene"
 {
+	ambient_light 0.2 0.2 0.2
 	background_colour 0.5 0.0 0.0 1.0
 	include "common_materials.cscn"
 
@@ -19,7 +20,7 @@ scene "TextureScene"
 		parent "TextureSunLightNode"
 		type directional
 		colour 1.0 1.0 1.0
-		intensity 0.2 0.8 1.0
+		intensity 0.8 1.0
 	}
 
 	scene_node "TextureSunLightNode2"
@@ -31,7 +32,7 @@ scene "TextureScene"
 		parent "TextureSunLightNode2"
 		type directional
 		colour 1.0 1.0 1.0
-		intensity 0.2 0.8 1.0
+		intensity 0.8 1.0
 	}
 
 	scene_node "TextureGeometryNode"
@@ -64,6 +65,7 @@ scene "TextureScene"
 
 scene "FinalScene"
 {
+	ambient_light 0.2 0.2 0.2
 	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0 0 0 1
 
@@ -116,7 +118,7 @@ scene "FinalScene"
 		parent "SunLightNode1"
 		type directional
 		colour 1 1 1
-		intensity 0.2 0.8 1.0
+		intensity 0.8 1.0
 	}
 
 	scene_node "SunLightNode2"
@@ -128,7 +130,7 @@ scene "FinalScene"
 		parent "SunLightNode2"
 		type directional
 		colour 1 1 1
-		intensity 0.2 0.8 1.0
+		intensity 0.8 1.0
 	}
 
 	scene_node "FinalNode"

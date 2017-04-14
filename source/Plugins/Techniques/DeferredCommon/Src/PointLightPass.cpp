@@ -34,25 +34,24 @@ namespace deferred_common
 
 	//*********************************************************************************************
 
-	PointLightPass::Program::Program( Scene const & p_scene
+	PointLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
 		, String const & p_pxl
 		, bool p_ssao )
-		: MeshLightPass::Program{ p_scene, p_vtx, p_pxl, p_ssao }
+		: MeshLightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
+		, m_lightPosition{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
+		, m_lightAttenuation{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
 	{
-		m_lightPosition = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Position" ), ShaderType::ePixel );
-		m_lightAttenuation = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Attenuation" ), ShaderType::ePixel );
 	}
 
 	PointLightPass::Program::~Program()
 	{
-		m_lightAttenuation = nullptr;
-		m_lightPosition = nullptr;
 	}
 
 	void PointLightPass::Program::DoBind( Light const & p_light )
 	{
 		auto & l_light = *p_light.GetPointLight();
+		m_lightIntensity->SetValue( l_light.GetIntensity() );
 		m_lightAttenuation->SetValue( l_light.GetAttenuation() );
 		m_lightPosition->SetValue( p_light.GetParent()->GetDerivedPosition() );
 	}
@@ -179,11 +178,10 @@ namespace deferred_common
 		return l_model;
 	}
 
-	LightPass::ProgramPtr PointLightPass::DoCreateProgram( Castor3D::Scene const & p_scene
-		, Castor::String const & p_vtx
+	LightPass::ProgramPtr PointLightPass::DoCreateProgram( Castor::String const & p_vtx
 		, Castor::String const & p_pxl )const
 	{
-		return std::make_unique< Program >( p_scene, p_vtx, p_pxl, m_ssao );
+		return std::make_unique< Program >( m_engine, p_vtx, p_pxl, m_ssao );
 	}
 
 	//*********************************************************************************************

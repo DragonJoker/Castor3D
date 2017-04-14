@@ -1,4 +1,4 @@
-﻿#include "GlslUtils.hpp"
+#include "GlslUtils.hpp"
 
 #include "GlslIntrinsics.hpp"
 
@@ -43,7 +43,7 @@ namespace GLSL
 
 	void Utils::DeclareCalcVSDepth()
 	{
-		m_calcVSDepth = m_writer.ImplementFunction< Float >( cuT( "CalcVSPosition" )
+		m_calcVSDepth = m_writer.ImplementFunction< Float >( cuT( "CalcVSDepth" )
 			, [&]( Vec2 const & p_uv
 				, Mat4 const & p_projection )
 			{

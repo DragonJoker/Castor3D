@@ -1,4 +1,4 @@
-#include "LightTreeItemProperty.hpp"
+﻿#include "LightTreeItemProperty.hpp"
 
 #include <Engine.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
@@ -52,7 +52,7 @@ namespace GuiCommon
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( m_light.GetName() ) ) );
 		p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( bgr_packed( Colour::from_rgb( m_light.GetColour() ) ) ) ) );
-		p_grid->Append( new Point3fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( m_light.GetIntensity() ) );
+		p_grid->Append( new Point2fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( m_light.GetIntensity() ) );
 
 		switch ( m_light.GetLightType() )
 		{
@@ -85,7 +85,7 @@ namespace GuiCommon
 			}
 			else if ( l_property->GetName() == PROPERTY_LIGHT_INTENSITY )
 			{
-				OnIntensityChange( Point3fRefFromVariant( l_property->GetValue() ) );
+				OnIntensityChange( Point2fRefFromVariant( l_property->GetValue() ) );
 			}
 			else if ( m_light.GetLightType() != LightType::eDirectional )
 			{
@@ -134,15 +134,14 @@ namespace GuiCommon
 		} );
 	}
 
-	void LightTreeItemProperty::OnIntensityChange( Point3f const & p_value )
+	void LightTreeItemProperty::OnIntensityChange( Point2f const & p_value )
 	{
-		float a = p_value[0];
-		float d = p_value[1];
-		float s = p_value[2];
+		float d = p_value[0];
+		float s = p_value[1];
 
-		DoApplyChange( [a, d, s, this]()
+		DoApplyChange( [d, s, this]()
 		{
-			m_light.SetIntensity( a, d, s );
+			m_light.SetIntensity( d, s );
 		} );
 	}
 

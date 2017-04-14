@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser.hpp"
+#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -477,7 +477,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eLight ), cuT( "parent" ), Parser_LightParent, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eLight ), cuT( "type" ), Parser_LightType, { MakeParameter< ParameterType::eCheckedText >( m_mapLightTypes ) } );
 	AddParser( uint32_t( CSCNSection::eLight ), cuT( "colour" ), Parser_LightColour, { MakeParameter< ParameterType::ePoint3F >() } );
-	AddParser( uint32_t( CSCNSection::eLight ), cuT( "intensity" ), Parser_LightIntensity, { MakeParameter< ParameterType::ePoint3F >() } );
+	AddParser( uint32_t( CSCNSection::eLight ), cuT( "intensity" ), Parser_LightIntensity, { MakeParameter< ParameterType::ePoint2F >() } );
 	AddParser( uint32_t( CSCNSection::eLight ), cuT( "attenuation" ), Parser_LightAttenuation, { MakeParameter< ParameterType::ePoint3F >() } );
 	AddParser( uint32_t( CSCNSection::eLight ), cuT( "cut_off" ), Parser_LightCutOff, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::eLight ), cuT( "exponent" ), Parser_LightExponent, { MakeParameter< ParameterType::eFloat >() } );

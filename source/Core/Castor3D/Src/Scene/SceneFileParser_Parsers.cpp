@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser_Parsers.hpp"
+#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -1451,9 +1451,9 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->pLight->SetColour( l_vVector.ptr() );
+			Point3f l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pLight->SetColour( l_value.ptr() );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1468,9 +1468,9 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->pLight->SetIntensity( l_vVector.ptr() );
+			Point2f l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pLight->SetIntensity( l_value.ptr() );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1485,16 +1485,16 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_vVector;
-			p_params[0]->Get( l_vVector );
+			Point3f l_value;
+			p_params[0]->Get( l_value );
 
 			if ( l_parsingContext->eLightType == LightType::ePoint )
 			{
-				l_parsingContext->pLight->GetPointLight()->SetAttenuation( l_vVector );
+				l_parsingContext->pLight->GetPointLight()->SetAttenuation( l_value );
 			}
 			else if ( l_parsingContext->eLightType == LightType::eSpot )
 			{
-				l_parsingContext->pLight->GetSpotLight()->SetAttenuation( l_vVector );
+				l_parsingContext->pLight->GetSpotLight()->SetAttenuation( l_value );
 			}
 			else
 			{
@@ -1624,9 +1624,9 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->pSceneNode->SetPosition( l_vVector );
+			Point3f l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pSceneNode->SetPosition( l_value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1641,11 +1641,11 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3r l_ptVector;
-			float l_fAngle;
-			p_params[0]->Get( l_ptVector );
-			p_params[1]->Get( l_fAngle );
-			l_parsingContext->pSceneNode->SetOrientation( Quaternion::from_axis_angle( l_ptVector, Angle::from_degrees( l_fAngle ) ) );
+			Point3r l_axis;
+			float l_angle;
+			p_params[0]->Get( l_axis );
+			p_params[1]->Get( l_angle );
+			l_parsingContext->pSceneNode->SetOrientation( Quaternion::from_axis_angle( l_axis, Angle::from_degrees( l_angle ) ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1660,9 +1660,9 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3r l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->pSceneNode->SetScale( l_vVector );
+			Point3r l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pSceneNode->SetScale( l_value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2137,11 +2137,11 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->vertexPos.push_back( l_vVector[0] );
-			l_parsingContext->vertexPos.push_back( l_vVector[1] );
-			l_parsingContext->vertexPos.push_back( l_vVector[2] );
+			Point3f l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->vertexPos.push_back( l_value[0] );
+			l_parsingContext->vertexPos.push_back( l_value[1] );
+			l_parsingContext->vertexPos.push_back( l_value[2] );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2156,10 +2156,10 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point2f l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->vertexTex.push_back( l_vVector[0] );
-			l_parsingContext->vertexTex.push_back( l_vVector[1] );
+			Point2f l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->vertexTex.push_back( l_value[0] );
+			l_parsingContext->vertexTex.push_back( l_value[1] );
 			l_parsingContext->vertexTex.push_back( 0.0 );
 		}
 	}
@@ -2175,11 +2175,11 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->vertexTex.push_back( l_vVector[0] );
-			l_parsingContext->vertexTex.push_back( l_vVector[1] );
-			l_parsingContext->vertexTex.push_back( l_vVector[2] );
+			Point3f l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->vertexTex.push_back( l_value[0] );
+			l_parsingContext->vertexTex.push_back( l_value[1] );
+			l_parsingContext->vertexTex.push_back( l_value[2] );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2194,11 +2194,11 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->vertexNml.push_back( l_vVector[0] );
-			l_parsingContext->vertexNml.push_back( l_vVector[1] );
-			l_parsingContext->vertexNml.push_back( l_vVector[2] );
+			Point3f l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->vertexNml.push_back( l_value[0] );
+			l_parsingContext->vertexNml.push_back( l_value[1] );
+			l_parsingContext->vertexNml.push_back( l_value[2] );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2213,11 +2213,11 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_vVector;
-			p_params[0]->Get( l_vVector );
-			l_parsingContext->vertexTan.push_back( l_vVector[0] );
-			l_parsingContext->vertexTan.push_back( l_vVector[1] );
-			l_parsingContext->vertexTan.push_back( l_vVector[2] );
+			Point3f l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->vertexTan.push_back( l_value[0] );
+			l_parsingContext->vertexTan.push_back( l_value[1] );
+			l_parsingContext->vertexTan.push_back( l_value[2] );
 		}
 	}
 	END_ATTRIBUTE()

@@ -2,6 +2,7 @@ debug_overlays true
 
 scene "Scene"
 {
+	ambient_light 0.2 0.2 0.2
 	background_colour 0.5 0.5 0.5 1.0
 	include "common_materials.cscn"
 
@@ -20,7 +21,7 @@ scene "Scene"
 		type point
 		parent "PointLightNode1"
 		colour 1.0 1.0 1.0
-		intensity 0.2 0.8 1.0 1.0
+		intensity 0.8 1.0
 		attenuation 1.0 0.00001 0.00001
 		shadow_producer true
 	}
@@ -30,7 +31,7 @@ scene "Scene"
 		type point
 		parent "PointLightNode2"
 		colour 1.0 1.0 1.0
-		intensity 0.2 0.8 1.0 1.0
+		intensity 0.8 1.0
 		attenuation 1.0 0.00001 0.00001
 		shadow_producer true
 	}

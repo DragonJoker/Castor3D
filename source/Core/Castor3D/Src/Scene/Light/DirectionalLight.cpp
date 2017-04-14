@@ -1,4 +1,4 @@
-#include "DirectionalLight.hpp"
+﻿#include "DirectionalLight.hpp"
 
 #include "Render/Viewport.hpp"
 
@@ -67,7 +67,7 @@ namespace Castor3D
 
 	void DirectionalLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		DoBindComponent( m_direction, p_index, p_offset, p_texture );
-		DoBindComponent( m_lightSpace, p_index, p_offset, p_texture );
+		DoCopyComponent( m_direction, p_index, p_offset, p_texture );
+		DoCopyComponent( m_lightSpace, p_index, p_offset, p_texture );
 	}
 }

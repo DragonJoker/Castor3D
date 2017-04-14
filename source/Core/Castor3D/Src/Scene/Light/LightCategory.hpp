@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\brief		Définit les valeurs d'intensité.
 		 *\param[in]	p_intensity	Les nouvelles valeurs.
 		 */
-		inline void SetIntensity( Castor::Point3f const & p_intensity )
+		inline void SetIntensity( Castor::Point2f const & p_intensity )
 		{
 			m_intensity = p_intensity;
 		}
@@ -176,21 +176,9 @@ namespace Castor3D
 		 *\brief		Définit l'intensité diffuse
 		 *\param[in]	p_intensity	La nouvelle valeur
 		 */
-		inline void SetAmbientIntensity( float p_intensity )
-		{
-			m_intensity[0] = p_intensity;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's diffuse intensity
-		 *\param[in]	p_intensity	The new value
-		 *\~french
-		 *\brief		Définit l'intensité diffuse
-		 *\param[in]	p_intensity	La nouvelle valeur
-		 */
 		inline void SetDiffuseIntensity( float p_intensity )
 		{
-			m_intensity[1] = p_intensity;
+			m_intensity[0] = p_intensity;
 		}
 		/**
 		 *\~english
@@ -202,7 +190,7 @@ namespace Castor3D
 		 */
 		inline void SetSpecularIntensity( float p_intensity )
 		{
-			m_intensity[2] = p_intensity;
+			m_intensity[1] = p_intensity;
 		}
 		/**
 		 *\~english
@@ -218,18 +206,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the ambient colour
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la couleur ambiante
-		 *\return		La valeur
-		 */
-		inline float GetAmbientIntensity()const
-		{
-			return m_intensity[0];
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the diffuse colour
 		 *\return		The value
 		 *\~french
@@ -238,7 +214,7 @@ namespace Castor3D
 		 */
 		inline float GetDiffuseIntensity()const
 		{
-			return m_intensity[1];
+			return m_intensity[0];
 		}
 		/**
 		 *\~english
@@ -250,7 +226,7 @@ namespace Castor3D
 		 */
 		inline float GetSpecularIntensity()const
 		{
-			return m_intensity[2];
+			return m_intensity[1];
 		}
 		/**
 		 *\~english
@@ -258,7 +234,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les valeurs d'intensité
 		 */
-		inline Castor::Point3f const & GetIntensity()const
+		inline Castor::Point2f const & GetIntensity()const
 		{
 			return m_intensity;
 		}
@@ -268,7 +244,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les valeurs d'intensité
 		 */
-		inline Castor::Point3f & GetIntensity()
+		inline Castor::Point2f & GetIntensity()
 		{
 			return m_intensity;
 		}
@@ -329,12 +305,132 @@ namespace Castor3D
 		C3D_API virtual void UpdateNode( SceneNode const & p_node ) = 0;
 
 	protected:
-		void DoBindComponent( Castor::Point3f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::ConstCoords4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::Matrix4x4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( int32_t const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light component values into the buffer.
+		 *\param[in]	p_component	The component.
+		 *\param[in]	p_index		The light index.
+		 *\param[in]	p_offset	The component offset.
+		 *\param[out]	p_data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	p_component	La composante.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[in]	p_offset	Le décalage de la composante.
+		 *\param[in]	p_data		Le tampon de destination.
+		 */
+		void DoCopyComponent( Castor::Point2f const & p_component
+			, uint32_t p_index
+			, uint32_t & p_offset
+			, Castor::PxBufferBase & p_data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light component values into the buffer.
+		 *\param[in]	p_component	The component.
+		 *\param[in]	p_index		The light index.
+		 *\param[in]	p_offset	The component offset.
+		 *\param[out]	p_data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	p_component	La composante.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[in]	p_offset	Le décalage de la composante.
+		 *\param[in]	p_data		Le tampon de destination.
+		 */
+		void DoCopyComponent( Castor::Point3f const & p_component
+			, uint32_t p_index
+			, uint32_t & p_offset
+			, Castor::PxBufferBase & p_data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light component values into the buffer.
+		 *\param[in]	p_component	The component.
+		 *\param[in]	p_index		The light index.
+		 *\param[in]	p_offset	The component offset.
+		 *\param[out]	p_data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	p_component	La composante.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[in]	p_offset	Le décalage de la composante.
+		 *\param[in]	p_data		Le tampon de destination.
+		 */
+		void DoCopyComponent( Castor::Point4f const & p_component
+			, uint32_t p_index
+			, uint32_t & p_offset
+			, Castor::PxBufferBase & p_data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light component values into the buffer.
+		 *\param[in]	p_component	The component.
+		 *\param[in]	p_index		The light index.
+		 *\param[in]	p_offset	The component offset.
+		 *\param[out]	p_data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	p_component	La composante.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[in]	p_offset	Le décalage de la composante.
+		 *\param[in]	p_data		Le tampon de destination.
+		 */
+		void DoCopyComponent( Castor::ConstCoords4f const & p_component
+			, uint32_t p_index
+			, uint32_t & p_offset
+			, Castor::PxBufferBase & p_data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light component values into the buffer.
+		 *\param[in]	p_component	The component.
+		 *\param[in]	p_index		The light index.
+		 *\param[in]	p_offset	The component offset.
+		 *\param[out]	p_data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	p_component	La composante.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[in]	p_offset	Le décalage de la composante.
+		 *\param[in]	p_data		Le tampon de destination.
+		 */
+		void DoCopyComponent( Castor::Coords4f const & p_component
+			, uint32_t p_index
+			, uint32_t & p_offset
+			, Castor::PxBufferBase & p_data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light component values into the buffer.
+		 *\param[in]	p_component	The component.
+		 *\param[in]	p_index		The light index.
+		 *\param[in]	p_offset	The component offset.
+		 *\param[out]	p_data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	p_component	La composante.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[in]	p_offset	Le décalage de la composante.
+		 *\param[in]	p_data		Le tampon de destination.
+		 */
+		void DoCopyComponent( Castor::Matrix4x4f const & p_component
+			, uint32_t p_index
+			, uint32_t & p_offset
+			, Castor::PxBufferBase & p_data )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light component values into the buffer.
+		 *\param[in]	p_component	The component.
+		 *\param[in]	p_index		The light index.
+		 *\param[in]	p_offset	The component offset.
+		 *\param[out]	p_data		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	p_component	La composante.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[in]	p_offset	Le décalage de la composante.
+		 *\param[in]	p_data		Le tampon de destination.
+		 */
+		void DoCopyComponent( int32_t const & p_component
+			, uint32_t p_index
+			, uint32_t & p_offset
+			, Castor::PxBufferBase & p_data )const;
 
 	private:
 		/**
@@ -363,7 +459,7 @@ namespace Castor3D
 		Castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
 		//!\~english	The intensity values.
 		//!\~french		Les valeurs d'intensité.
-		Castor::Point3f m_intensity{ 0.0, 1.0, 1.0 };
+		Castor::Point2f m_intensity{ 1.0, 1.0 };
 	};
 }
 

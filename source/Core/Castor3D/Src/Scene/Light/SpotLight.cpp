@@ -88,11 +88,11 @@ namespace Castor3D
 	{
 		auto l_pos = GetLight().GetParent()->GetDerivedPosition();
 		Point4r l_position{ l_pos[0], l_pos[1], l_pos[2], float( m_shadowMapIndex ) };
-		DoBindComponent( l_position, p_index, p_offset, p_texture );
-		DoBindComponent( GetAttenuation(), p_index, p_offset, p_texture );
-		DoBindComponent( m_direction, p_index, p_offset, p_texture );
-		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, p_offset, p_texture );
-		DoBindComponent( m_lightSpace, p_index, p_offset, p_texture );
+		DoCopyComponent( l_position, p_index, p_offset, p_texture );
+		DoCopyComponent( m_attenuation, p_index, p_offset, p_texture );
+		DoCopyComponent( m_direction, p_index, p_offset, p_texture );
+		DoCopyComponent( Point2f{ m_exponent, m_cutOff.cos() }, p_index, p_offset, p_texture );
+		DoCopyComponent( m_lightSpace, p_index, p_offset, p_texture );
 	}
 
 	void SpotLight::SetAttenuation( Point3f const & p_attenuation )

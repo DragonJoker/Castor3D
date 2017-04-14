@@ -35,7 +35,7 @@ namespace deferred_common
 			: public MeshLightPass::Program
 		{
 		public:
-			Program( Castor3D::Scene const & p_scene
+			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, bool p_ssao );
@@ -62,8 +62,7 @@ namespace deferred_common
 		~PointLightPass();
 
 	private:
-		LightPass::ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
-			, Castor::String const & p_vtx
+		LightPass::ProgramPtr DoCreateProgram( Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const override;
 		Castor::Point3fArray DoGenerateVertices()const override;
 		Castor3D::UIntArray DoGenerateFaces()const override;

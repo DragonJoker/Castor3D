@@ -1,4 +1,4 @@
-#include "DeferredMsaaRenderTechnique.hpp"
+﻿#include "DeferredMsaaRenderTechnique.hpp"
 
 #include <DirectionalLightPass.hpp>
 #include <LightPassShadow.hpp>
@@ -516,7 +516,6 @@ namespace deferred_msaa
 						, p_invViewProj
 						, p_invView
 						, p_invProj
-						, l_fogType
 						, m_ssaoEnabled ? &m_ssao->GetResult() : nullptr
 						, p_first );
 				}
@@ -529,7 +528,6 @@ namespace deferred_msaa
 						, p_invViewProj
 						, p_invView
 						, p_invProj
-						, l_fogType
 						, m_ssaoEnabled ? &m_ssao->GetResult() : nullptr
 						, p_first );
 				}

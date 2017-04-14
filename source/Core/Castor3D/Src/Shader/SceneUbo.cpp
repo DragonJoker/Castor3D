@@ -34,18 +34,26 @@ namespace Castor3D
 		m_ubo.Update();
 	}
 
+	void SceneUbo::Update( Camera const & p_camera
+		, Fog const & p_fog )const
+	{
+		m_fogType.SetValue( int( p_fog.GetType() ) );
+
+		if ( p_fog.GetType() != GLSL::FogType::eDisabled )
+		{
+			m_fogDensity.SetValue( p_fog.GetDensity() );
+		}
+
+		m_ambientLight.SetValue( rgba_float( p_camera.GetScene()->GetAmbientLight() ) );
+		m_backgroundColour.SetValue( rgba_float( p_camera.GetScene()->GetBackgroundColour() ) );
+		m_cameraFarPlane.SetValue( p_camera.GetViewport().GetFar() );
+		UpdateCameraPosition( p_camera );
+	}
+
 	void SceneUbo::Update( Scene const & p_scene
 		, Camera const & p_camera
 		, bool p_lights )const
 	{
-		auto & l_fog = p_scene.GetFog();
-		m_fogType.SetValue( int( l_fog.GetType() ) );
-
-		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
-		{
-			m_fogDensity.SetValue( l_fog.GetDensity() );
-		}
-
 		if ( p_lights )
 		{
 			auto & l_cache = p_scene.GetLightCache();
@@ -55,9 +63,6 @@ namespace Castor3D
 			m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
 		}
 
-		m_ambientLight.SetValue( rgba_float( p_scene.GetAmbientLight() ) );
-		m_backgroundColour.SetValue( rgba_float( p_scene.GetBackgroundColour() ) );
-		m_cameraFarPlane.SetValue( p_camera.GetViewport().GetFar() );
-		UpdateCameraPosition( p_camera );
+		Update( p_camera, p_scene.GetFog() );
 	}
 }

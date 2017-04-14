@@ -20,19 +20,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_SpotLightPass_H___
-#define ___C3D_SpotLightPass_H___
+#ifndef ___C3D_AmbientLightPass_H___
+#define ___C3D_AmbientLightPass_H___
 
-#include "MeshLightPass.hpp"
+#include "LightPass.hpp"
 
 namespace deferred_common
 {
-	class SpotLightPass
-		: public MeshLightPass
+	class AmbientLightPass
+		: public LightPass
 	{
 	protected:
 		struct Program
-			: public MeshLightPass::Program
+			: public LightPass::Program
 		{
 		public:
 			Program( Castor3D::Engine & p_engine
@@ -42,44 +42,48 @@ namespace deferred_common
 			virtual ~Program();
 
 		private:
+			virtual Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend )override;
 			void DoBind( Castor3D::Light const & p_light )override;
-
-		private:
-			//!\~english	The variable containing the light position.
-			//!\~french		La variable contenant la position de la lumière.
-			Castor3D::PushUniform3fSPtr m_lightPosition;
-			//!\~english	The variable containing the light attenuation.
-			//!\~french		La variable contenant l'atténuation de la lumière.
-			Castor3D::PushUniform3fSPtr m_lightAttenuation;
-			//!\~english	The variable containing the light direction.
-			//!\~french		La variable contenant la direction de la lumière.
-			Castor3D::PushUniform3fSPtr m_lightDirection;
-			//!\~english	The variable containing the light exponent.
-			//!\~french		La variable contenant l'exposant de la lumière.
-			Castor3D::PushUniform1fSPtr m_lightExponent;
-			//!\~english	The variable containing the light cut off.
-			//!\~french		La variable contenant l'angle du cône de la lumière.
-			Castor3D::PushUniform1fSPtr m_lightCutOff;
-			//!\~english	The variable containing the light space transformation matrix.
-			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			Castor3D::PushUniform4x4fSPtr m_lightTransform;
 		};
 
 	public:
-		SpotLightPass( Castor3D::Engine & p_engine
+		AmbientLightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
 			, Castor3D::FrameBufferAttachment & p_depthAttach
-			, bool p_ssao
-			, bool p_shadows );
-		~SpotLightPass();
+			, bool p_ssao );
+		~AmbientLightPass();
+		void Initialise( Castor3D::Scene const & p_scene
+			, Castor3D::SceneUbo & p_sceneUbo )override;
+		void Cleanup()override;
+		virtual void Render( Castor::Size const & p_size
+			, GeometryPassResult const & p_gp
+			, Castor3D::Camera const & p_camera
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj
+			, Castor3D::TextureUnit const * p_ssao
+			, bool p_first );
+		uint32_t GetCount()const override;
+
+	protected:
+		void DoUpdate( Castor::Size const & p_size
+			, Castor3D::Light const & p_light
+			, Castor3D::Camera const & p_camera )override;
 
 	private:
+		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
+			, Castor3D::LightType p_type )const override;
+		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const override;
 		LightPass::ProgramPtr DoCreateProgram( Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const override;
-		Castor::Point3fArray DoGenerateVertices()const override;
-		Castor3D::UIntArray DoGenerateFaces()const override;
-		Castor::Matrix4x4r DoComputeModelMatrix( Castor3D::Light const & p_light
-			, Castor3D::Camera const & p_camera )const override;
+
+	private:
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		Castor3D::VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The viewport used when rendering is done.
+		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
+		Castor3D::Viewport m_viewport;
 	};
 }
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -38,8 +38,8 @@ namespace GLSL
 		inline Light( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline Light & operator=( Light const & p_rhs );
 		template< typename T > inline Light & operator=( T const & p_rhs );
-		inline Vec3 m_v3Colour()const;
-		inline Vec3 m_v3Intensity()const;
+		inline Vec3 m_colour()const;
+		inline Vec2 m_intensity()const;
 	};
 
 	struct DirectionalLight
@@ -50,8 +50,8 @@ namespace GLSL
 		inline DirectionalLight & operator=( DirectionalLight const & p_rhs );
 		template< typename T > inline DirectionalLight & operator=( T const & p_rhs );
 		inline Light m_lightBase()const;
-		inline Vec3 m_v3Direction()const;
-		inline Mat4 m_mtxLightSpace()const;
+		inline Vec3 m_direction()const;
+		inline Mat4 m_transform()const;
 	};
 
 	struct PointLight
@@ -62,9 +62,9 @@ namespace GLSL
 		inline PointLight & operator=( PointLight const & p_rhs );
 		template< typename T > inline PointLight & operator=( T const & p_rhs );
 		inline Light m_lightBase()const;
-		inline Vec3 m_v3Position()const;
-		inline Vec3 m_v3Attenuation()const;
-		inline Int m_iIndex()const;
+		inline Vec3 m_position()const;
+		inline Vec3 m_attenuation()const;
+		inline Int m_index()const;
 	};
 
 	struct SpotLight
@@ -75,13 +75,13 @@ namespace GLSL
 		inline SpotLight & operator=( SpotLight const & p_rhs );
 		template< typename T > inline SpotLight & operator=( T const & p_rhs );
 		inline Light m_lightBase()const;
-		inline Vec3 m_v3Position()const;
-		inline Vec3 m_v3Attenuation()const;
-		inline Vec3 m_v3Direction()const;
-		inline Float m_fExponent()const;
-		inline Float m_fCutOff()const;
-		inline Mat4 m_mtxLightSpace()const;
-		inline Int m_iIndex()const;
+		inline Vec3 m_position()const;
+		inline Vec3 m_attenuation()const;
+		inline Vec3 m_direction()const;
+		inline Float m_exponent()const;
+		inline Float m_cutOff()const;
+		inline Mat4 m_transform()const;
+		inline Int m_index()const;
 	};
 }
 

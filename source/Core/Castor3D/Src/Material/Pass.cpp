@@ -219,17 +219,24 @@ namespace Castor3D
 
 			if ( l_unit )
 			{
-				auto l_format = l_unit->GetTexture()->GetPixelFormat();
-				m_needsGammaCorrection = l_format != PixelFormat::eL16F32F
-					&& l_format != PixelFormat::eL32F
-					&& l_format != PixelFormat::eAL16F32F
-					&& l_format != PixelFormat::eAL32F
-					&& l_format != PixelFormat::eRGB16F
-					&& l_format != PixelFormat::eRGB16F32F
-					&& l_format != PixelFormat::eRGB32F
-					&& l_format != PixelFormat::eRGBA16F
-					&& l_format != PixelFormat::eRGBA16F32F
-					&& l_format != PixelFormat::eRGBA32F;
+				if ( l_unit->GetRenderTarget() )
+				{
+					m_needsGammaCorrection = false;
+				}
+				else
+				{
+					auto l_format = l_unit->GetTexture()->GetPixelFormat();
+					m_needsGammaCorrection = l_format != PixelFormat::eL16F32F
+						&& l_format != PixelFormat::eL32F
+						&& l_format != PixelFormat::eAL16F32F
+						&& l_format != PixelFormat::eAL32F
+						&& l_format != PixelFormat::eRGB16F
+						&& l_format != PixelFormat::eRGB16F32F
+						&& l_format != PixelFormat::eRGB32F
+						&& l_format != PixelFormat::eRGBA16F
+						&& l_format != PixelFormat::eRGBA16F32F
+						&& l_format != PixelFormat::eRGBA32F;
+				}
 			}
 
 			for ( auto l_unit : m_textureUnits )

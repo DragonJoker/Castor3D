@@ -50,7 +50,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0
-					   && Point3f::TextWriter( String{} )( p_light.GetIntensity(), p_file )
+					   && Point2f::TextWriter( String{} )( p_light.GetIntensity(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory intensity" );
 		}
@@ -79,44 +79,50 @@ namespace Castor3D
 	void LightCategory::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
 	{
 		uint32_t l_offset = 0u;
-		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
-		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
+		DoCopyComponent( GetColour(), p_index, l_offset, p_texture );
+		DoCopyComponent( GetIntensity(), p_index, l_offset, p_texture );
 		DoBind( p_texture, p_index, l_offset );
 	}
 
-	void LightCategory::DoBindComponent( Point3f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	void LightCategory::DoCopyComponent( Point2f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	{
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
+		std::memcpy( l_pDst, p_component.const_ptr(), 2 * sizeof( float ) );
+	}
+
+	void LightCategory::DoCopyComponent( Point3f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
 		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 3 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	void LightCategory::DoCopyComponent( Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
 		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( ConstCoords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	void LightCategory::DoCopyComponent( ConstCoords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
 		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	void LightCategory::DoCopyComponent( Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
 		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Castor::Matrix4x4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const
+	void LightCategory::DoCopyComponent( Castor::Matrix4x4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const
 	{
-		DoBindComponent( p_component[0], p_index, p_offset, p_data );
-		DoBindComponent( p_component[1], p_index, p_offset, p_data );
-		DoBindComponent( p_component[2], p_index, p_offset, p_data );
-		DoBindComponent( p_component[3], p_index, p_offset, p_data );
+		DoCopyComponent( p_component[0], p_index, p_offset, p_data );
+		DoCopyComponent( p_component[1], p_index, p_offset, p_data );
+		DoCopyComponent( p_component[2], p_index, p_offset, p_data );
+		DoCopyComponent( p_component[3], p_index, p_offset, p_data );
 	}
 
-	void LightCategory::DoBindComponent( int32_t const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const
+	void LightCategory::DoCopyComponent( int32_t const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const
 	{
 		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( l_pDst, &p_component, sizeof( int32_t ) );

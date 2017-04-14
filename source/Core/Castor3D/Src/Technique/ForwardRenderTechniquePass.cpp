@@ -335,7 +335,7 @@ namespace Castor3D
 				, p_textureFlags
 				, p_programFlags
 				, p_sceneFlags );
-			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+			OutputComponents l_output{ l_v3Diffuse, l_v3Specular };
 			l_lighting->ComputeCombinedLighting( l_worldEye
 				, l_fMatShininess
 				, c3d_shadowReceiver
@@ -350,10 +350,8 @@ namespace Castor3D
 				, p_programFlags
 				, p_sceneFlags );
 
-			pxl_v4FragColor.xyz() = l_v3Ambient * l_diffuse
-				+ l_writer.Paren( l_v3Diffuse * l_diffuse )
-				+ l_writer.Paren( l_v3Specular * l_materials.GetSpecular( vtx_material ) )
-				+ l_diffuse * l_emissive;
+			pxl_v4FragColor.xyz() = l_writer.Paren( l_v3Ambient + l_v3Diffuse + l_emissive ) * l_diffuse
+				+ l_v3Specular * l_materials.GetSpecular( vtx_material );
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
 				|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )

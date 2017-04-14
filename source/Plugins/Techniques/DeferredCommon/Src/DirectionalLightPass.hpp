@@ -35,7 +35,7 @@ namespace deferred_common
 			: public LightPass::Program
 		{
 		public:
-			Program( Castor3D::Scene const & p_scene
+			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, bool p_ssao );
@@ -46,6 +46,9 @@ namespace deferred_common
 			void DoBind( Castor3D::Light const & p_light )override;
 
 		private:
+			//!\~english	The variable containing the light intensities.
+			//!\~french		La variable contenant les intensités de la lumière.
+			Castor3D::PushUniform2fSPtr m_lightIntensity;
 			//!\~english	The variable containing the light direction.
 			//!\~french		La variable contenant la direction de la lumière.
 			Castor3D::PushUniform3fSPtr m_lightDirection;
@@ -73,8 +76,7 @@ namespace deferred_common
 
 	private:
 		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const override;
-		LightPass::ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
-			, Castor::String const & p_vtx
+		LightPass::ProgramPtr DoCreateProgram( Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const override;
 
 	private:

@@ -1,13 +1,18 @@
-﻿#include "DirectionalLightPass.hpp"
+﻿#include "AmbientLightPass.hpp"
 
 #include <Engine.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
 #include <Scene/Light/DirectionalLight.hpp>
+#include <Shader/SceneUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslLight.hpp>
@@ -28,22 +33,19 @@ namespace deferred_common
 
 	//*********************************************************************************************
 
-	DirectionalLightPass::Program::Program( Engine & p_engine
+	AmbientLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
 		, String const & p_pxl
 		, bool p_ssao )
 		: LightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
-		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
-		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
-		, m_lightTransform{ m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
 	{
 	}
 
-	DirectionalLightPass::Program::~Program()
+	AmbientLightPass::Program::~Program()
 	{
 	}
 
-	RenderPipelineUPtr DirectionalLightPass::Program::DoCreatePipeline( bool p_blend )
+	RenderPipelineUPtr AmbientLightPass::Program::DoCreatePipeline( bool p_blend )
 	{
 		DepthStencilState l_dsstate;
 		l_dsstate.SetDepthTest( false );
@@ -66,22 +68,17 @@ namespace deferred_common
 			, PipelineFlags{} );
 	}
 
-	void DirectionalLightPass::Program::DoBind( Light const & p_light )
+	void AmbientLightPass::Program::DoBind( Light const & p_light )
 	{
-		auto & l_light = *p_light.GetDirectionalLight();
-		m_lightIntensity->SetValue( l_light.GetIntensity() );
-		m_lightDirection->SetValue( l_light.GetDirection() );
-		m_lightTransform->SetValue( l_light.GetLightSpaceTransform() );
 	}
 
 	//*********************************************************************************************
 
-	DirectionalLightPass::DirectionalLightPass( Engine & p_engine
+	AmbientLightPass::AmbientLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
 		, FrameBufferAttachment & p_depthAttach
-		, bool p_ssao
-		, bool p_shadows )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, p_shadows }
+		, bool p_ssao )
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, false }
 		, m_viewport{ p_engine }
 	{
 		auto l_declaration = BufferDeclaration(
@@ -109,7 +106,7 @@ namespace deferred_common
 		m_viewport.Initialise();
 	}
 
-	DirectionalLightPass::~DirectionalLightPass()
+	AmbientLightPass::~AmbientLightPass()
 	{
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer.reset();
@@ -117,7 +114,7 @@ namespace deferred_common
 		m_matrixUbo.GetUbo().Cleanup();
 	}
 
-	void DirectionalLightPass::Initialise( Scene const & p_scene
+	void AmbientLightPass::Initialise( Scene const & p_scene
 		, SceneUbo & p_sceneUbo )
 	{
 		DoInitialise( p_scene
@@ -129,25 +126,48 @@ namespace deferred_common
 		m_viewport.Update();
 	}
 
-	void DirectionalLightPass::Cleanup()
+	void AmbientLightPass::Cleanup()
 	{
 		DoCleanup();
 	}
 
-	uint32_t DirectionalLightPass::GetCount()const
+	void AmbientLightPass::Render( Size const & p_size
+		, GeometryPassResult const & p_gp
+		, Camera const & p_camera
+		, Matrix4x4r const & p_invViewProj
+		, Castor::Matrix4x4r const & p_invView
+		, Castor::Matrix4x4r const & p_invProj
+		, Castor3D::TextureUnit const * p_ssao
+		, bool p_first )
+	{
+		m_gpInfo->Update( p_size
+			, p_camera
+			, p_invViewProj
+			, p_invView
+			, p_invProj );
+
+		m_viewport.Resize( p_size );
+		m_matrixUbo.Update( p_camera.GetView(), m_viewport.GetProjection() );
+
+		DoRender( p_size
+			, p_gp
+			, rgb_float( p_camera.GetScene()->GetAmbientLight() )
+			, p_ssao
+			, p_first );
+	}
+
+	uint32_t AmbientLightPass::GetCount()const
 	{
 		return VertexCount;
 	}
 
-	void DirectionalLightPass::DoUpdate( Size const & p_size
+	void AmbientLightPass::DoUpdate( Size const & p_size
 		, Light const & p_light
 		, Camera const & p_camera )
 	{
-		m_viewport.Resize( p_size );
-		m_matrixUbo.Update( p_camera.GetView(), m_viewport.GetProjection() );
 	}
 
-	String DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
+	String AmbientLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();
@@ -168,7 +188,47 @@ namespace deferred_common
 		return l_writer.Finalise();
 	}
 
-	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( String const & p_vtx
+	String AmbientLightPass::DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
+		, LightType p_type )const
+	{
+		using namespace GLSL;
+		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();
+
+		// Shader inputs
+		UBO_SCENE( l_writer );
+		UBO_GPINFO( l_writer );
+		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
+		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
+		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+
+		// Shader outputs
+		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+
+		// Utility functions
+		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
+		GLSL::Utils l_utils{ l_writer };
+		l_utils.DeclareCalcTexCoord();
+
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		{
+			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
+			auto l_colour = l_writer.GetLocale( cuT( "l_colour" ), texture( c3d_mapDiffuse, l_texCoord ).xyz() );
+			auto l_ambient = l_writer.GetLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_emissive = l_writer.GetLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, l_texCoord ).xyz() );
+
+			if ( m_ssao )
+			{
+				l_ambient *= texture( c3d_mapSsao, l_texCoord ).r();
+			}
+
+			pxl_v4FragColor = vec4( l_colour * l_ambient, 1.0 );
+		} );
+
+		return l_writer.Finalise();
+	}
+
+	LightPass::ProgramPtr AmbientLightPass::DoCreateProgram( String const & p_vtx
 		, String const & p_pxl )const
 	{
 		return std::make_unique< Program >( m_engine, p_vtx, p_pxl, m_ssao );
