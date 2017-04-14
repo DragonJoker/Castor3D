@@ -504,17 +504,17 @@ namespace Castor3D
 
 		if ( l_textureVariable )
 		{
-			l_textureVariable->SetValue( 0 );
+			l_textureVariable->SetValue( Pass::LightBufferIndex );
 		}
 
 		m_overlayUbo.Update( p_pass.GetId() );
 		l_node.m_pipeline.Apply();
 		p_pass.BindTextures();
-		p_texture.Bind( 1u );
-		p_sampler.Bind( 1u );
+		p_texture.Bind( Pass::LightBufferIndex );
+		p_sampler.Bind( Pass::LightBufferIndex );
 		p_geometryBuffers.Draw( p_count, 0 );
-		p_sampler.Unbind( 1u );
-		p_texture.Unbind( 1u );
+		p_sampler.Unbind( Pass::LightBufferIndex );
+		p_texture.Unbind( Pass::LightBufferIndex );
 		p_pass.UnbindTextures();
 	}
 
@@ -652,17 +652,19 @@ namespace Castor3D
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eText ) )
 		{
-			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapText, ShaderType::ePixel );
+			l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->SetValue( Pass::LightBufferIndex );
 		}
+
+		auto l_index = Pass::MinTextureIndex;
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{
-			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapDiffuse, ShaderType::ePixel );
+			l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->SetValue( l_index++ );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 		{
-			l_program->CreateUniform( UniformType::eSampler, ShaderProgram::MapOpacity, ShaderType::ePixel );
+			l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel )->SetValue( l_index++ );
 		}
 
 		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();

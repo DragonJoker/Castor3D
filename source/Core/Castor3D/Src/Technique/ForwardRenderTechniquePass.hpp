@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -111,6 +111,13 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderTechniquePass::DoGetDepthMaps
 		 */
 		C3D_API void DoGetDepthMaps( DepthMapArray & p_depthMaps )override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
+		 */
+		C3D_API Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, bool p_invertNormals )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */

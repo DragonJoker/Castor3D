@@ -1,4 +1,4 @@
-﻿#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -20,7 +20,6 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Shader/PassBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -291,7 +290,6 @@ namespace Castor3D
 		}
 
 		void DoSortRenderNodes( RenderPass & p_renderPass
-			, PassBuffer * p_passBuffer
 			, bool p_opaque
 			, SceneNode const * p_ignored
 			, Scene & p_scene
@@ -327,11 +325,6 @@ namespace Castor3D
 
 						for ( auto l_pass : *l_material )
 						{
-							if ( p_passBuffer && l_pass->GetId() == 0 )
-							{
-								p_passBuffer->AddPass( *l_pass );
-							}
-
 							auto l_programFlags = l_submesh->GetProgramFlags();
 							auto l_sceneFlags = p_scene.GetFlags();
 							RemFlag( l_programFlags, ProgramFlag::eSkinning );
@@ -431,7 +424,6 @@ namespace Castor3D
 		}
 
 		void DoSortRenderNodes( RenderPass & p_renderPass
-			, PassBuffer * p_passBuffer
 			, bool p_opaque
 			, Scene & p_scene
 			, RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & p_nodes )
@@ -490,11 +482,6 @@ namespace Castor3D
 
 					for ( auto l_pass : *l_material )
 					{
-						if ( p_passBuffer && l_pass->GetId() == 0 )
-						{
-							p_passBuffer->AddPass( *l_pass );
-						}
-
 						l_addNode( *l_pass, *l_billboard.second );
 					}
 				}
@@ -509,11 +496,6 @@ namespace Castor3D
 
 					for ( auto l_pass : *l_material )
 					{
-						if ( p_passBuffer && l_pass->GetId() == 0 )
-						{
-							p_passBuffer->AddPass( *l_pass );
-						}
-
 						l_addNode( *l_pass, *l_particleSystem.second->GetBillboards() );
 					}
 				}
@@ -602,11 +584,11 @@ namespace Castor3D
 		m_renderNodes = std::make_unique< SceneRenderNodes >( p_scene );
 	}
 
-	void RenderQueue::Update( PassBuffer * p_passBuffer )
+	void RenderQueue::Update()
 	{
 		if ( m_isSceneChanged )
 		{
-			DoSortRenderNodes( p_passBuffer );
+			DoSortRenderNodes();
 			m_isSceneChanged = false;
 			m_changed = true;
 		}
@@ -696,10 +678,9 @@ namespace Castor3D
 			, m_preparedRenderNodes->m_billboardNodes.m_backCulled );
 	}
 
-	void RenderQueue::DoSortRenderNodes( PassBuffer * p_passBuffer )
+	void RenderQueue::DoSortRenderNodes()
 	{
 		Castor3D::DoSortRenderNodes( *GetOwner()
-			, p_passBuffer
 			, m_opaque
 			, m_ignored
 			, m_renderNodes->m_scene
@@ -708,7 +689,6 @@ namespace Castor3D
 			, m_renderNodes->m_skinningNodes
 			, m_renderNodes->m_morphingNodes );
 		Castor3D::DoSortRenderNodes( *GetOwner()
-			, p_passBuffer
 			, m_opaque
 			, m_renderNodes->m_scene
 			, m_renderNodes->m_billboardNodes );

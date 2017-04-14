@@ -96,8 +96,7 @@ namespace Castor3D
 	{
 	}
 
-	void LegacyPass::DoUpdate( PassBuffer & p_buffer
-		, Scene const & p_scene )const
+	void LegacyPass::DoUpdate( PassBuffer & p_buffer )const
 	{
 		p_buffer.SetComponents( GetId() - 1
 			, 0u
@@ -119,8 +118,9 @@ namespace Castor3D
 		p_buffer.SetComponents( GetId() - 1
 			, 3u
 			, GetShininess()
-			, NeedsGammaCorrection() ? p_scene.GetHdrConfig().GetGamma() : 1.0f
-			, p_scene.GetHdrConfig().GetExposure()
+			// TODO: store gamma correction and exposure per pass ? or remove from pass
+			, NeedsGammaCorrection() ? 2.2f : 1.0f //gamma correction
+			, 1.0f //exposure
 			, 0.0f );
 	}
 

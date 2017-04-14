@@ -70,7 +70,7 @@ namespace Castor3D
 	}
 
 	inline void DoBindPass( SceneNode & p_sceneNode
-		, Pass & p_pass
+		, PassRenderNode & p_node
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
 		, DepthMapArray & p_depthMaps
@@ -79,14 +79,25 @@ namespace Castor3D
 	{
 		auto l_index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 
-		p_pass.BindTextures();
+		p_node.m_pass.BindTextures();
+
+		for ( auto l_pair : p_node.m_textures )
+		{
+			auto l_texture = l_pair.first;
+			auto & l_variable = l_pair.second;
+
+			if ( l_texture )
+			{
+				l_variable.get().SetValue( l_texture );
+			}
+		}
 
 		for ( auto & l_depthMap : p_depthMaps )
 		{
 			l_depthMap.get().Bind();
 		}
 
-		if ( p_pass.HasEnvironmentMapping() )
+		if ( p_node.m_pass.HasEnvironmentMapping() )
 		{
 			p_envMap = &p_scene.GetEnvironmentMap( p_sceneNode );
 
@@ -109,7 +120,7 @@ namespace Castor3D
 	}
 
 	inline void DoUnbindPass( SceneNode & p_sceneNode
-		, Pass & p_pass
+		, PassRenderNode & p_node
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
 		, DepthMapArray const & p_depthMaps
@@ -125,12 +136,7 @@ namespace Castor3D
 			l_depthMap.get().Unbind();
 		}
 
-		p_pass.UnbindTextures();
-
-		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
-		{
-			p_scene.GetLightCache().UnbindLights();
-		}
+		p_node.m_pass.UnbindTextures();
 	}
 
 	inline void DoBindPassOpacityMap( PassRenderNode & p_node

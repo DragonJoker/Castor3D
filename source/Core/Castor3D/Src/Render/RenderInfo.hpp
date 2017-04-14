@@ -28,8 +28,6 @@ SOFTWARE.
 
 namespace Castor3D
 {
-	using TechniqueQueues = std::pair< PassBuffer *, RenderQueueArray >;
-	using TechniquesQueues = std::vector< TechniqueQueues >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0

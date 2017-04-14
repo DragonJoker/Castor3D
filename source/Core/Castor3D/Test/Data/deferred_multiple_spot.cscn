@@ -22,7 +22,7 @@ scene "Scene"
 		type spot
 		parent "SpotLightNode1"
 		colour 1.0 0.0 1.0
-		intensity 0.0 0.8 1.0 1.0
+		intensity 0.2 0.8 1.0 1.0
 		attenuation 1.0 0.0001 0.0001
 		cut_off 20
 	}
@@ -32,7 +32,7 @@ scene "Scene"
 		type spot
 		parent "SpotLightNode2"
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
+		intensity 0.2 0.8 1.0 1.0
 		attenuation 1.0 0.0001 0.0001
 		cut_off 20
 	}

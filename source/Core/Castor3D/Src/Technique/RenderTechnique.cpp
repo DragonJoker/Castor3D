@@ -161,11 +161,6 @@ namespace Castor3D
 				m_initialised = DoInitialise( p_index );
 			}
 
-			if ( m_initialised )
-			{
-				m_passBuffer = std::make_unique< PassBuffer >( *GetEngine(), GLSL::LegacyMaterials::Size );
-			}
-
 			ENSURE( m_initialised );
 		}
 
@@ -175,7 +170,6 @@ namespace Castor3D
 	void RenderTechnique::Cleanup()
 	{
 		DoCleanup();
-		m_passBuffer.reset();
 		m_transparentPass->CleanupShadowMaps();
 		m_opaquePass->CleanupShadowMaps();
 		m_transparentPass->Cleanup();
@@ -184,30 +178,26 @@ namespace Castor3D
 		m_frameBuffer.Cleanup();
 	}
 
-	void RenderTechnique::Update( TechniquesQueues & p_queues )
+	void RenderTechnique::Update( RenderQueueArray & p_queues )
 	{
-		RenderQueueArray l_queues;
-		m_opaquePass->Update( l_queues );
-		m_transparentPass->Update( l_queues );
-		m_opaquePass->UpdateShadowMaps( l_queues );
-		m_transparentPass->UpdateShadowMaps( l_queues );
+		m_opaquePass->Update( p_queues );
+		m_transparentPass->Update( p_queues );
+		m_opaquePass->UpdateShadowMaps( p_queues );
+		m_transparentPass->UpdateShadowMaps( p_queues );
 		auto & l_maps = m_renderTarget.GetScene()->GetEnvironmentMaps();
 
 		for ( auto & l_map : l_maps )
 		{
-			l_map.get().Update( l_queues );
+			l_map.get().Update( p_queues );
 		}
-
-		p_queues.emplace_back( m_passBuffer.get(), l_queues );
 	}
 
 	void RenderTechnique::Render( RenderInfo & p_info )
 	{
 		auto & l_scene = *m_renderTarget.GetScene();
-		m_passBuffer->Update (l_scene);
 		l_scene.GetLightCache().UpdateLights();
 		m_renderSystem.PushScene( &l_scene );
-		m_passBuffer->Bind ();
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		auto & l_maps = l_scene.GetEnvironmentMaps();
 
 		for ( auto & l_map : l_maps )
@@ -222,17 +212,17 @@ namespace Castor3D
 		DoRenderOpaque( p_info );
 		l_scene.RenderBackground( GetSize(), l_camera );
 
-		m_passBuffer->Bind();
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		l_scene.GetParticleSystemCache().ForEach( [this, &p_info]( ParticleSystem & p_particleSystem )
 		{
 			p_particleSystem.Update();
 			p_info.m_particlesCount += p_particleSystem.GetParticlesCount();
 		} );
 
-		m_passBuffer->Bind();
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		DoRenderTransparent( p_info );
 
-		m_passBuffer->Bind();
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		for ( auto l_effect : m_renderTarget.GetPostEffects() )
 		{
 			l_effect->Apply( *m_frameBuffer.m_frameBuffer );

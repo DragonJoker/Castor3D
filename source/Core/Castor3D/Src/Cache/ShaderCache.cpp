@@ -1,9 +1,10 @@
-#include "ShaderCache.hpp"
+﻿#include "ShaderCache.hpp"
 
 #include "Engine.hpp"
 
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "Material/Pass.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderPass.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -123,7 +124,7 @@ namespace Castor3D
 	{
 		if ( CheckFlag( p_programFlags, ProgramFlag::eLighting ) )
 		{
-			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel );
+			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel )->SetValue( Pass::LightBufferIndex );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
@@ -270,6 +271,7 @@ namespace Castor3D
 				auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
 				auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
 				auto vtx_instance = l_writer.GetOutput< Int >( cuT( "vtx_instance" ) );
+				auto vtx_material = l_writer.GetOutput< Int >( cuT( "vtx_material" ) );
 				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
@@ -287,6 +289,7 @@ namespace Castor3D
 						l_up = vec3( 0.0_f, 1.0f, 0.0f );
 					}
 
+					vtx_material = c3d_materialIndex;
 					vtx_normal = l_toCamera;
 					vtx_tangent = l_up;
 					vtx_bitangent = l_right;

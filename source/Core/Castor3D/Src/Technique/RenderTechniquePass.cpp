@@ -236,7 +236,7 @@ namespace Castor3D
 
 			EnvironmentMap * l_envMap = nullptr;
 			DoBindPass( l_it.second->GetSceneNode()
-				, l_it.second->GetPassNode().m_pass
+				, l_it.second->GetPassNode()
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
 				, p_depthMaps
@@ -246,7 +246,7 @@ namespace Castor3D
 			l_it.second->Render();
 
 			DoUnbindPass( l_it.second->GetSceneNode()
-				, l_it.second->GetPassNode().m_pass
+				, l_it.second->GetPassNode()
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
 				, p_depthMaps

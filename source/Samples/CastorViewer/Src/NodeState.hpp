@@ -57,6 +57,11 @@ namespace CastorViewer
 		void Reset( float p_speed );
 		/**
 		*\brief
+		*	Met à jour la vitesse maximale (de rotation et translation).
+		*/
+		void SetMaxSpeed( float p_speed );
+		/**
+		*\brief
 		*	Met à jour l'angle et le zoom en fonction des vitesses.
 		*\return
 		 * 	\p true s'il y a eu du mouvement.

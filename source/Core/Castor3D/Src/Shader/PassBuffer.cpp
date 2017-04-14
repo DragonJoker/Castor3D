@@ -73,7 +73,7 @@ namespace Castor3D
 		m_passID--;
 	}
 
-	void PassBuffer::Update( Scene & p_scene )
+	void PassBuffer::Update()
 	{
 		if ( !m_dirty.empty() )
 		{
@@ -81,9 +81,9 @@ namespace Castor3D
 			std::swap( m_dirty, l_dirty );
 			auto l_end = std::unique( l_dirty.begin(), l_dirty.end() );
 
-			std::for_each( l_dirty.begin(), l_end, [this, &p_scene]( Pass const * p_pass )
+			std::for_each( l_dirty.begin(), l_end, [this]( Pass const * p_pass )
 			{
-				p_pass->Update( *this, p_scene );
+				p_pass->Update( *this );
 			} );
 
 			auto l_layout = m_texture.GetTexture();

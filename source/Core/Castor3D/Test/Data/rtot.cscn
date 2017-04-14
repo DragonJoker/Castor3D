@@ -19,7 +19,7 @@ scene "TextureScene"
 		parent "TextureSunLightNode"
 		type directional
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0
+		intensity 0.2 0.8 1.0
 	}
 
 	scene_node "TextureSunLightNode2"
@@ -31,7 +31,7 @@ scene "TextureScene"
 		parent "TextureSunLightNode2"
 		type directional
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0
+		intensity 0.2 0.8 1.0
 	}
 
 	scene_node "TextureGeometryNode"
@@ -116,7 +116,7 @@ scene "FinalScene"
 		parent "SunLightNode1"
 		type directional
 		colour 1 1 1
-		intensity 0.0 0.8 1.0
+		intensity 0.2 0.8 1.0
 	}
 
 	scene_node "SunLightNode2"
@@ -128,7 +128,7 @@ scene "FinalScene"
 		parent "SunLightNode2"
 		type directional
 		colour 1 1 1
-		intensity 0.0 0.8 1.0
+		intensity 0.2 0.8 1.0
 	}
 
 	scene_node "FinalNode"

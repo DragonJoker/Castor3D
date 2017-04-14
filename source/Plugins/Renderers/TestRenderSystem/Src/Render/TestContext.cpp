@@ -10,6 +10,7 @@ namespace TestRender
 	TestContext::TestContext( TestRenderSystem & p_renderSystem )
 		: Context{ p_renderSystem }
 	{
+		p_renderSystem.GetEngine()->GetMaterialCache().Initialise();
 	}
 
 	TestContext::~TestContext()

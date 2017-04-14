@@ -32,7 +32,7 @@ scene "Scene"
 		type point
 		parent "PointLightNode1"
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
+		intensity 0.2 0.8 1.0 1.0
 		attenuation 1.0 0.02 0.0
 		shadow_producer true
 	}
@@ -42,7 +42,7 @@ scene "Scene"
 		type point
 		parent "PointLightNode2"
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
+		intensity 0.2 0.8 1.0 1.0
 		attenuation 1.0 0.02 0.0
 		shadow_producer true
 	}
@@ -52,7 +52,7 @@ scene "Scene"
 		type spot
 		parent "SpotLightNode1"
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
+		intensity 0.2 0.8 1.0 1.0
 		attenuation 1.0 0.0 0.0
 		cut_off 20
 		shadow_producer true
@@ -63,7 +63,7 @@ scene "Scene"
 		type spot
 		parent "SpotLightNode2"
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0 1.0
+		intensity 0.2 0.8 1.0 1.0
 		attenuation 1.0 0.0 0.0
 		cut_off 20
 		shadow_producer true

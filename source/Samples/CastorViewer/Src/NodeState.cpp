@@ -1,4 +1,4 @@
-#include "NodeState.hpp"
+﻿#include "NodeState.hpp"
 
 #include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
@@ -47,13 +47,7 @@ namespace CastorViewer
 
 	void NodeState::Reset( float p_speed )
 	{
-		m_angularVelocityX.update_range( make_range( Angle::from_degrees( -p_speed )
-			, Angle::from_degrees( p_speed ) ) );
-		m_angularVelocityY.update_range( make_range( Angle::from_degrees( -p_speed )
-			, Angle::from_degrees( p_speed ) ) );
-		m_scalarVelocityX.update_range( make_range( -p_speed, p_speed ) );
-		m_scalarVelocityY.update_range( make_range( -p_speed, p_speed ) );
-		m_scalarVelocityZ.update_range( make_range( -p_speed, p_speed ) );
+		SetMaxSpeed( p_speed );
 		m_angularVelocityX = 0.0_degrees;
 		m_angularVelocityY = 0.0_degrees;
 		m_angles = Angles{ { 0.0_radians, 0.0_radians } };
@@ -67,6 +61,17 @@ namespace CastorViewer
 				m_node->SetOrientation( m_originalOrientation );
 				m_node->SetPosition( m_originalPosition );
 			} ) );
+	}
+
+	void NodeState::SetMaxSpeed( float p_speed )
+	{
+		m_angularVelocityX.update_range( make_range( Angle::from_degrees( -p_speed * 2 )
+			, Angle::from_degrees( p_speed * 2 ) ) );
+		m_angularVelocityY.update_range( make_range( Angle::from_degrees( -p_speed * 2 )
+			, Angle::from_degrees( p_speed * 2 ) ) );
+		m_scalarVelocityX.update_range( make_range( -p_speed, p_speed ) );
+		m_scalarVelocityY.update_range( make_range( -p_speed, p_speed ) );
+		m_scalarVelocityZ.update_range( make_range( -p_speed, p_speed ) );
 	}
 
 	bool NodeState::Update()

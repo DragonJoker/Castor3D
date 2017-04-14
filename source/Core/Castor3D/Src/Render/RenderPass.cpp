@@ -69,7 +69,7 @@ namespace Castor3D
 					{
 						EnvironmentMap * l_envMap = nullptr;
 						DoBindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
-							, *l_itPass.first
+							, l_itSubmeshes.second[0].m_passNode
 							, p_scene
 							, *l_itPipelines.first
 							, p_depthMaps
@@ -82,7 +82,7 @@ namespace Castor3D
 							, l_itSubmeshes.second );
 
 						DoUnbindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
-							, *l_itPass.first
+							, l_itSubmeshes.second[0].m_passNode
 							, p_scene
 							, *l_itPipelines.first
 							, p_depthMaps
@@ -141,7 +141,7 @@ namespace Castor3D
 					{
 						EnvironmentMap * l_envMap = nullptr;
 						DoBindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
-							, *l_itPass.first
+							, l_itSubmeshes.second[0].m_passNode
 							, p_scene
 							, *l_itPipelines.first
 							, p_depthMaps
@@ -154,7 +154,7 @@ namespace Castor3D
 							, l_itSubmeshes.second );
 
 						DoUnbindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
-							, *l_itPass.first
+							, l_itSubmeshes.second[0].m_passNode
 							, p_scene
 							, *l_itPipelines.first
 							, p_depthMaps
@@ -199,7 +199,7 @@ namespace Castor3D
 				{
 					EnvironmentMap * l_envMap = nullptr;
 					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode.m_pass
+						, l_renderNode.m_passNode
 						, p_scene
 						, *l_itPipelines.first
 						, p_depthMaps
@@ -209,7 +209,7 @@ namespace Castor3D
 					DoRenderNode( l_renderNode );
 
 					DoUnbindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode.m_pass
+						, l_renderNode.m_passNode
 						, p_scene
 						, *l_itPipelines.first
 						, p_depthMaps
@@ -257,7 +257,7 @@ namespace Castor3D
 				{
 					EnvironmentMap * l_envMap = nullptr;
 					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode.m_pass
+						, l_renderNode.m_passNode
 						, p_scene
 						, *l_itPipelines.first
 						, p_depthMaps
@@ -267,7 +267,7 @@ namespace Castor3D
 					DoRenderNode( l_renderNode );
 
 					DoUnbindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode.m_pass
+						, l_renderNode.m_passNode
 						, p_scene
 						, *l_itPipelines.first
 						, p_depthMaps
@@ -293,7 +293,7 @@ namespace Castor3D
 				{
 					EnvironmentMap * l_envMap = nullptr;
 					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode.m_pass
+						, l_renderNode.m_passNode
 						, p_scene
 						, *l_itPipelines.first
 						, p_depthMaps
@@ -304,7 +304,7 @@ namespace Castor3D
 					++p_info.m_drawCalls;
 
 					DoUnbindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode.m_pass
+						, l_renderNode.m_passNode
 						, p_scene
 						, *l_itPipelines.first
 						, p_depthMaps
@@ -608,15 +608,19 @@ namespace Castor3D
 	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
 		, VertexBuffer & p_matrixBuffer )
 	{
-		constexpr uint32_t l_stride = 16 * sizeof( real );
+		auto const l_mtxSize = sizeof( float ) * 16;
+		auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
 		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
+		REQUIRE( l_count == p_renderNodes.size() );
 		auto l_buffer = p_matrixBuffer.data();
 		auto l_it = p_renderNodes.begin();
 		auto i = 0u;
 
 		while ( i < l_count )
 		{
-			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_mtxSize );
+			auto l_id = l_it->m_passNode.m_pass.GetId() - 1;
+			std::memcpy( l_buffer + l_mtxSize, &l_id, sizeof( int ) );
 			l_buffer += l_stride;
 			++i;
 			++l_it;
@@ -630,15 +634,19 @@ namespace Castor3D
 		, VertexBuffer & p_matrixBuffer
 		, RenderInfo & p_info )
 	{
-		constexpr uint32_t l_stride = 16 * sizeof( real );
+		auto const l_mtxSize = sizeof( float ) * 16;
+		auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
 		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
+		REQUIRE( l_count == p_renderNodes.size() );
 		auto l_buffer = p_matrixBuffer.data();
 		auto l_it = p_renderNodes.begin();
 		auto i = 0u;
 
 		while ( i < l_count )
 		{
-			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_mtxSize );
+			auto l_id = l_it->m_passNode.m_pass.GetId() - 1;
+			std::memcpy( l_buffer + l_mtxSize, &l_id, sizeof( int ) );
 			++p_info.m_visibleObjectsCount;
 			l_buffer += l_stride;
 			++i;

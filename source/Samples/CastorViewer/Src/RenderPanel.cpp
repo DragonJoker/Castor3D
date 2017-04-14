@@ -1,4 +1,4 @@
-﻿#include "RenderPanel.hpp"
+#include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 #include "RotateNodeEvent.hpp"
@@ -538,6 +538,7 @@ namespace CastorViewer
 				, std::make_unique< NodeState >( *m_listener, p_node ) ).first;
 		}
 
+		l_it->second->SetMaxSpeed( m_camSpeed );
 		return *l_it->second;
 	}
 
@@ -1072,6 +1073,7 @@ namespace CastorViewer
 			}
 
 			clamp( m_camSpeed, MIN_CAM_SPEED, MAX_CAM_SPEED );
+			m_currentState->SetMaxSpeed( m_camSpeed );
 		}
 
 		p_event.Skip();

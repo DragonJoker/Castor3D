@@ -250,6 +250,7 @@ namespace CastorViewer
 					m_toolBar->EnableTool( eID_TOOL_RECORD, true );
 
 #endif
+					SetTitle( wxT( "CastorViewer - " ) + m_strFilePath.GetFileName( true ) );
 				}
 
 				if ( wxGetApp().GetCastor()->IsThreaded() )

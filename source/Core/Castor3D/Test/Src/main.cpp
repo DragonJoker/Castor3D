@@ -1,4 +1,4 @@
-#include "Castor3DTestPrerequisites.hpp"
+﻿#include "Castor3DTestPrerequisites.hpp"
 
 #include <Log/Logger.hpp>
 #include <Data/File.hpp>
@@ -138,7 +138,7 @@ int main( int argc, char const * argv[] )
 		std::unique_ptr< Engine > l_engine = DoInitialiseCastor();
 
 		// Test cases.
-		//Testing::Register( std::make_unique< Testing::BinaryExportTest >( *l_engine ) );
+		Testing::Register( std::make_unique< Testing::BinaryExportTest >( *l_engine ) );
 		Testing::Register( std::make_unique< Testing::SceneExportTest >( *l_engine ) );
 
 		// Tests loop.

@@ -1,4 +1,4 @@
-#include "Pass.hpp"
+﻿#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -116,10 +116,9 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::Update( PassBuffer & p_passes
-		, Scene const & p_scene )const
+	void Pass::Update( PassBuffer & p_passes )const
 	{
-		DoUpdate( p_passes, p_scene );
+		DoUpdate( p_passes );
 	}
 
 	void Pass::BindTextures()

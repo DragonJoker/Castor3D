@@ -426,6 +426,8 @@ namespace Castor3D
 		eBoneWeights1 = 0x200,
 		//! Instantiation matrix
 		eTransform = 0x400,
+		//! Instantiation material index
+		eMatIndex = 0x800,
 	};
 	IMPLEMENT_FLAGS( ElementUsage )
 	/*!

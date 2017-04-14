@@ -171,7 +171,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met à jour les noeuds de rendu.
 		 */
-		C3D_API void Update( PassBuffer * p_passBuffer );
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Retrieves a scene's nodes from a camera viewpoint.
@@ -204,7 +204,7 @@ namespace Castor3D
 		 *\brief			Trie les noeuds de rendu de scène.
 		 *\param[in,out]	p_nodes	Les noeuds.
 		 */
-		void DoSortRenderNodes( PassBuffer * p_passBuffer );
+		void DoSortRenderNodes();
 		/**
 		 *\~english
 		 *\brief		Notification that the scene has changed.

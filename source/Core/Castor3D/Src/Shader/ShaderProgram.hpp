@@ -687,8 +687,11 @@ namespace Castor3D
 		//!\~french		Nom du second attribut de poids des bones.
 		C3D_API static const Castor::String Weights1;
 		//!\~english	Name of the instance transform attribute.
-		//!\~french		Nom de l'attribut de transformation d'instance.
+		//!\~french		Nom de l'attribut d'instance de transformation.
 		C3D_API static const Castor::String Transform;
+		//!\~english	Name of the instance material index attribute.
+		//!\~french		Nom de l'attribut d'instance d'indice de matériau.
+		C3D_API static const Castor::String Material;
 
 		//@}
 		/**@name Scene */

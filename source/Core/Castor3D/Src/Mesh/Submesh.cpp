@@ -1,4 +1,4 @@
-#include "Submesh.hpp"
+﻿#include "Submesh.hpp"
 
 #include "Engine.hpp"
 
@@ -1011,6 +1011,7 @@ namespace Castor3D
 				{
 					{
 						BufferElementDeclaration{ ShaderProgram::Transform, uint32_t( ElementUsage::eTransform ), ElementType::eMat4, 0, 1 },
+						BufferElementDeclaration{ ShaderProgram::Material, uint32_t( ElementUsage::eMatIndex ), ElementType::eInt, 64, 1 },
 					}
 				} );
 			}
@@ -1211,11 +1212,11 @@ namespace Castor3D
 			if ( p_count )
 			{
 				VertexBuffer & l_matrixBuffer = *m_matrixBuffer;
-				uint32_t l_uiSize = p_count * 16 * sizeof( real );
+				uint32_t l_size = p_count * l_matrixBuffer.GetDeclaration().stride();
 
-				if ( l_matrixBuffer.GetSize() != l_uiSize )
+				if ( l_matrixBuffer.GetSize() != l_size )
 				{
-					l_matrixBuffer.Resize( l_uiSize );
+					l_matrixBuffer.Resize( l_size );
 				}
 			}
 			else

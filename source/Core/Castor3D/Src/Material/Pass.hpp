@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -120,8 +120,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader du noeud de rendu donné.
 		 */
-		C3D_API void Update( PassBuffer & p_passes
-			, Scene const & p_scene )const;
+		C3D_API void Update( PassBuffer & p_passes )const;
 		/**
 		 *\~english
 		 *\brief		Binds the pass' textures.
@@ -522,8 +521,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader du noeud de rendu donné.
 		 */
-		virtual void DoUpdate( PassBuffer & p_buffer
-			, Scene const & p_scene )const = 0;
+		virtual void DoUpdate( PassBuffer & p_buffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the global alpha value.

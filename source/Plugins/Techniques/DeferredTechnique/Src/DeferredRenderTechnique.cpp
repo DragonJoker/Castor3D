@@ -1,4 +1,4 @@
-#include "DeferredRenderTechnique.hpp"
+﻿#include "DeferredRenderTechnique.hpp"
 
 #include <DirectionalLightPass.hpp>
 #include <LightPassShadow.hpp>
@@ -159,13 +159,17 @@ namespace deferred
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
-		m_reflection->Render( m_lightPassTextures
-			, *m_frameBuffer.m_colourTexture
-			, l_scene
-			, l_camera
-			, l_invViewProj
-			, l_invView
-			, l_invProj );
+
+		if ( !m_renderTarget.GetScene()->GetEnvironmentMaps().empty() )
+		{
+			m_reflection->Render( m_lightPassTextures
+				, *m_frameBuffer.m_colourTexture
+				, l_scene
+				, l_camera
+				, l_invViewProj
+				, l_invView
+				, l_invProj );
+		}
 	}
 
 	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )

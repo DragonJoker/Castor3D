@@ -16,7 +16,7 @@ scene "Scene"
 		parent "SunLightNode1"
 		type directional
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0
+		intensity 0.2 0.8 1.0
 	}
 
 	scene_node "FinalNode"

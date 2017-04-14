@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -215,7 +215,7 @@ namespace Castor3D
 
 			if ( l_itCam != l_itScn->second.end() )
 			{
-				l_itCam->second.Update( nullptr );
+				l_itCam->second.Update();
 				auto & l_nodes = l_itCam->second.GetRenderNodes();
 				auto l_pixel = DoFboPick( p_position, p_camera, l_nodes );
 				l_return = DoPick( l_pixel, l_nodes );

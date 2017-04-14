@@ -211,7 +211,7 @@ namespace Castor3D
 		void DoProcessEvents( EventType p_eventType );
 		void DoGpuStep( RenderInfo & p_info );
 		void DoCpuStep();
-		void DoUpdateQueues( TechniquesQueues & p_queues );
+		void DoUpdateQueues( RenderQueueArray & p_queues );
 
 	protected:
 		//!\~english	The current RenderSystem.
