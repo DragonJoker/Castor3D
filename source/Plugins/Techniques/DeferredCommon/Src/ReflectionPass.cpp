@@ -259,6 +259,8 @@ namespace deferred_common
 		, Size const & p_size )
 		: OwnedBy< Engine >{ p_engine }
 		, m_size{ p_size }
+		, m_result{ p_engine }
+		, m_frameBuffer{ p_engine.GetRenderSystem()->CreateFrameBuffer() }
 		, m_viewport{ p_engine }
 		, m_vertexBuffer{ DoCreateVbo( p_engine ) }
 		, m_program{ DoCreateProgram( p_engine ) }
@@ -276,10 +278,51 @@ namespace deferred_common
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
 		m_matrixUbo.Update( m_viewport.GetProjection() );
+
+		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eTransparentBlack ) );
+		bool l_return = m_frameBuffer->Create();
+
+		if ( l_return )
+		{
+			l_return = m_frameBuffer->Initialise( p_size );
+		}
+
+		if ( l_return )
+		{
+			auto l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+				, AccessType::eNone
+				, AccessType::eRead | AccessType::eWrite
+				, PixelFormat::eRGBA16F32F
+				, p_size );
+			l_texture->GetImage().InitialiseSource();
+
+			m_result.SetIndex( 0u );
+			m_result.SetTexture( l_texture );
+			m_result.SetSampler( p_engine.GetLightsSampler() );
+			m_result.Initialise();
+
+			m_resultAttach = m_frameBuffer->CreateAttachment( l_texture );
+
+			m_frameBuffer->Bind();
+			m_frameBuffer->Attach( AttachmentPoint::eColour
+				, m_resultAttach
+				, l_texture->GetType() );
+			ENSURE( m_frameBuffer->IsComplete() );
+			m_frameBuffer->SetDrawBuffers();
+			m_frameBuffer->Unbind();
+		}
 	}
 
 	ReflectionPass::~ReflectionPass()
 	{
+		m_frameBuffer->Bind();
+		m_frameBuffer->DetachAll();
+		m_frameBuffer->Unbind();
+		m_frameBuffer->Cleanup();
+		m_frameBuffer->Destroy();
+		m_resultAttach.reset();
+		m_result.Cleanup();
+
 		m_exposureUniform.reset();
 		m_gammaUniform.reset();
 		m_configUbo.Cleanup();
@@ -302,6 +345,8 @@ namespace deferred_common
 		, Matrix4x4r const & p_invView
 		, Matrix4x4r const & p_invProj )
 	{
+		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer->Clear( BufferComponent::eColour );
 		m_gpInfo.Update( m_size
 			, p_camera
 			, p_invViewProj
@@ -352,5 +397,6 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
+		m_frameBuffer->Unbind();
 	}
 }

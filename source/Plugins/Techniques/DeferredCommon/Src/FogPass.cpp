@@ -120,10 +120,12 @@ namespace deferred_common
 			auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
 			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
 			auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcVSPosition();
+			Declare_DecodeMaterial( l_writer );
 
 			GLSL::Fog l_fog{ p_fogType, l_writer };
 
@@ -137,11 +139,30 @@ namespace deferred_common
 					auto l_diffuse = l_writer.GetLocale( cuT( "l_diffuse" ), texture( c3d_mapDiffuse, vtx_texture ).xyz() );
 					auto l_ambient = l_writer.GetLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
 					auto l_emissive = l_writer.GetLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, vtx_texture ).xyz() );
+					auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), texture( c3d_mapNormal, vtx_texture ).w() );
+					auto l_envMapIndex = l_writer.GetLocale( cuT( "l_envMapIndex" ), 0_i );
+					auto l_receiver = l_writer.GetLocale( cuT( "l_receiver" ), 0_i );
+					auto l_reflection = l_writer.GetLocale( cuT( "l_reflection" ), 0_i );
+					auto l_refraction = l_writer.GetLocale( cuT( "l_refraction" ), 0_i );
+					DecodeMaterial( l_writer
+						, l_flags
+						, l_receiver
+						, l_reflection
+						, l_refraction
+						, l_envMapIndex );
 
-					//if ( m_ssao )
-					//{
-					//	l_ambient *= texture( c3d_mapSsao, l_texCoord ).r();
-					//}
+					IF( l_writer, cuT( "l_envMapIndex < 1 || ( l_reflection == 0 && l_refraction == 0 )" ) )
+					{
+						//if ( m_ssao )
+						//{
+						//	l_ambient *= texture( c3d_mapSsao, l_texCoord ).r();
+						//}
+					}
+					ELSE
+					{
+						l_ambient = vec3( 0.0_f );
+					}
+					FI;
 
 					pxl_fragColor = vec4( l_colour + l_emissive + l_diffuse * l_ambient, 1.0 );
 
@@ -166,6 +187,7 @@ namespace deferred_common
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDepth ), ShaderType::ePixel )->SetValue( 1u );
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDiffuse ), ShaderType::ePixel )->SetValue( 2u );
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eEmissive ), ShaderType::ePixel )->SetValue( 3u );
+			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel )->SetValue( 4u );
 			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
@@ -284,7 +306,11 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::eDiffuse )]->GetSampler()->Bind( 2u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Bind( 3u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Bind( 3u );
+		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Bind( 4u );
+		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Bind( 4u );
 		m_programs[size_t( p_fog.GetType() )].Render();
+		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Unbind( 4u );
+		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Unbind( 4u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Unbind( 3u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Unbind( 3u );
 		p_gp[size_t( DsTexture::eDiffuse )]->GetTexture()->Unbind( 2u );

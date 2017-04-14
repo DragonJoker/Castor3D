@@ -23,10 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_DeferredRenderTechnique_H___
 #define ___C3D_DeferredRenderTechnique_H___
 
-#include <AmbientLightPass.hpp>
-#include <FogPass.hpp>
-#include <ReflectionPass.hpp>
-#include <SsaoPass.hpp>
+#include <LightingPass.hpp>
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <Technique/RenderTechnique.hpp>
@@ -114,15 +111,8 @@ namespace deferred
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
 		bool DoInitialiseGeometryPass( uint32_t & p_index );
-		bool DoInitialiseLightPass();
 		void DoCleanupGeometryPass();
-		void DoCleanupLightPass();
 		void DoUpdateSceneUbo();
-		void DoRenderLights( Castor3D::LightType p_type
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj
-			, bool & p_first );
 
 	public:
 		static Castor::String const Type;
@@ -131,7 +121,6 @@ namespace deferred
 	private:
 		using GeometryBufferTextures = std::array< Castor3D::TextureUnitUPtr, size_t( deferred_common::DsTexture::eCount ) >;
 		using GeometryBufferAttachs = std::array< Castor3D::TextureAttachmentSPtr, size_t( deferred_common::DsTexture::eCount ) >;
-		using LightPasses = std::array< std::unique_ptr< deferred_common::LightPass >, size_t( Castor3D::LightType::eCount ) >;
 
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
@@ -145,36 +134,18 @@ namespace deferred
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		Castor3D::SceneUbo m_sceneUbo;
-		//!\~english	The light pass output.
-		//!\~french		La sortie de la passe de lumières.
-		Castor3D::TextureUnit m_lightPassResult;
-		//!\~english	The deferred shading frame buffer.
-		//!\~french		Le tampon d'image pour le deferred shading.
-		Castor3D::FrameBufferSPtr m_lightPassFrameBuffer;
-		//!\~english	The attachments between textures and deferred shading frame buffer.
-		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		Castor3D::TextureAttachmentSPtr m_lightPassTexAttach;
-		//!\~english	The light passes.
-		//!\~french		Les passes de lumière.
-		LightPasses m_lightPass;
-		//!\~english	The light passes, with shadows.
-		//!\~french		Les passes de lumière, avec ombres.
-		LightPasses m_lightPassShadow;
-		//!\~english	The ambient light pass.
-		//!\~french		La passe de lumière ambiante.
-		std::unique_ptr< deferred_common::AmbientLightPass > m_ambientPass;
+		//!\~english	The fog pass.
+		//!\~french		La passe de brouillard.
+		std::unique_ptr< deferred_common::LightingPass > m_lightingPass;
 		//!\~english	The fog pass.
 		//!\~french		La passe de brouillard.
 		std::unique_ptr< deferred_common::FogPass > m_fogPass;
-		//!\~english	Tells if SSAO is to be used in lighting pass.
-		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
-		bool m_ssaoEnabled{ false };
 		//!\~english	The reflection pass.
 		//!\~french		La passe de réflexion.
 		std::unique_ptr< deferred_common::ReflectionPass > m_reflection;
-		//!\~english	The SSAO pass.
-		//!\~french		La passe SSAO.
-		std::unique_ptr< deferred_common::SsaoPass > m_ssao;
+		//!\~english	Tells if SSAO is to be used in lighting pass.
+		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
+		bool m_ssaoEnabled{ false };
 	};
 }
 

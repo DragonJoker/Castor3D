@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -72,10 +72,24 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj );
 
+		inline Castor3D::TextureUnit const & GetResult()const
+		{
+			return m_result;
+		}
+
 	private:
 		//!\~english	The render size.
 		//!\~french		La taille du rendu.
 		Castor::Size m_size;
+		//!\~english	The light pass output.
+		//!\~french		La sortie de la passe de lumières.
+		Castor3D::TextureUnit m_result;
+		//!\~english	The target FBO.
+		//!\~french		Le FBO cible.
+		Castor3D::FrameBufferSPtr m_frameBuffer;
+		//!\~english	The attachments between textures and deferred shading frame buffer.
+		//!\~french		Les attaches entre les textures et le tampon deferred shading.
+		Castor3D::TextureAttachmentSPtr m_resultAttach;
 		//!\~english	The render viewport.
 		//!\~french		La viewport du rendu.
 		Castor3D::Viewport m_viewport;

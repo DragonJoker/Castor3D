@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,12 +42,12 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj );
 
-		inline Castor3D::TextureUnit const & GetResult()
+		inline Castor3D::TextureUnit const & GetResult()const
 		{
 			return m_blurResult;
 		}
 
-		inline Castor3D::TextureLayout const & GetRaw()
+		inline Castor3D::TextureLayout const & GetRaw()const
 		{
 			return *m_ssaoResult.GetTexture();
 		}

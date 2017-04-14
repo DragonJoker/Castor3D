@@ -1,4 +1,4 @@
-#include "SsaoPass.hpp"
+﻿#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -424,7 +424,6 @@ namespace deferred_common
 		m_viewport.Initialise();
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
-		m_matrixUbo.Update( m_viewport.GetProjection() );
 	}
 
 	void SsaoPass::DoInitialiseSsaoPass()
@@ -473,6 +472,7 @@ namespace deferred_common
 			, *m_ssaoProgram );
 		m_ssaoGeometryBuffers->Initialise( { *m_ssaoVertexBuffer }
 			, nullptr );
+		m_matrixUbo.Update( m_viewport.GetProjection() );
 	}
 
 	void SsaoPass::DoInitialiseBlurPass()

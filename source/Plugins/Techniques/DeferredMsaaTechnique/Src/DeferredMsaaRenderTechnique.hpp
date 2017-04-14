@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,9 +23,9 @@ SOFTWARE.
 #ifndef ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 #define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 
-#include <LightPass.hpp>
+#include <FogPass.hpp>
+#include <LightingPass.hpp>
 #include <ReflectionPass.hpp>
-#include <SsaoPass.hpp>
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <Technique/RenderTechnique.hpp>
@@ -143,9 +143,7 @@ namespace deferred_msaa
 		 */
 		void DoCleanupMsaa();
 		bool DoInitialiseGeometryPass( uint32_t & p_index );
-		bool DoInitialiseLightPass();
 		void DoCleanupGeometryPass();
-		void DoCleanupLightPass();
 		void DoUpdateSceneUbo();
 		void DoRenderLights( Castor3D::LightType p_type
 			, Castor::Matrix4x4r const & p_invViewProj
@@ -164,7 +162,7 @@ namespace deferred_msaa
 
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
-		GeometryBufferTextures m_lightPassTextures;
+		GeometryBufferTextures m_geometryPassResult;
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
 		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;
@@ -180,12 +178,15 @@ namespace deferred_msaa
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		Castor3D::SceneUbo m_sceneUbo;
-		//!\~english	The shader program used to render directional lights.
-		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
-		LightPasses m_lightPass;
-		//!\~english	The shader program used to render directional lights.
-		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
-		LightPasses m_lightPassShadow;
+		//!\~english	The fog pass.
+		//!\~french		La passe de brouillard.
+		std::unique_ptr< deferred_common::LightingPass > m_lightingPass;
+		//!\~english	The fog pass.
+		//!\~french		La passe de brouillard.
+		std::unique_ptr< deferred_common::FogPass > m_fogPass;
+		//!\~english	The reflection pass.
+		//!\~french		La passe de réflexion.
+		std::unique_ptr< deferred_common::ReflectionPass > m_reflection;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;
@@ -219,12 +220,6 @@ namespace deferred_msaa
 		//!\~english	Tells if SSAO is to be used in lighting pass.
 		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
 		bool m_ssaoEnabled{ false };
-		//!\~english	The reflection pass.
-		//!\~french		La passe de réflexion.
-		std::unique_ptr< deferred_common::ReflectionPass > m_reflection;
-		//!\~english	The SSAO pass.
-		//!\~french		La passe SSAO.
-		std::unique_ptr< deferred_common::SsaoPass > m_ssao;
 	};
 }
 
