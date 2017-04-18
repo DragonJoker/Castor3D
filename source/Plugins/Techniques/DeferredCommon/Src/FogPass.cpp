@@ -1,4 +1,4 @@
-﻿#include "FogPass.hpp"
+#include "FogPass.hpp"
 
 #include "LightPass.hpp"
 

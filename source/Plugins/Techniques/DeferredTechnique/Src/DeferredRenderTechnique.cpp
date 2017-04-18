@@ -147,7 +147,7 @@ namespace deferred
 				, l_invViewProj
 				, l_invView
 				, l_invProj );
-			l_result = &m_lightingPass->GetResult();
+			l_result = &m_reflection->GetResult();
 		}
 
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );

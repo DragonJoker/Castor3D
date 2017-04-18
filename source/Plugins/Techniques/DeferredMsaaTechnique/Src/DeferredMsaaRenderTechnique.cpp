@@ -49,7 +49,7 @@
 #include <GlslLight.hpp>
 #include <GlslShadow.hpp>
 
-#define DEBUG_DEFERRED_BUFFERS 0
+#define DEBUG_DEFERRED_BUFFERS 1
 
 using namespace Castor;
 using namespace Castor3D;
@@ -180,11 +180,11 @@ namespace deferred_msaa
 				, l_invViewProj
 				, l_invView
 				, l_invProj );
-			l_result = &m_lightingPass->GetResult();
+			l_result = &m_reflection->GetResult();
 		}
 
-		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
+		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_msaaFrameBuffer->SetDrawBuffers();
 
 		m_fogPass->Render( m_geometryPassResult
 			, *l_result
@@ -250,7 +250,7 @@ namespace deferred_msaa
 				, *m_renderTarget.GetScene()
 				, static_cast< deferred_common::OpaquePass & >( *m_opaquePass )
 				, m_ssaoEnabled
-				, *m_msaaDepthAttach
+				, *m_frameBuffer.m_depthAttach
 				, m_sceneUbo );
 			m_reflection = std::make_unique< deferred_common::ReflectionPass >( *m_renderSystem.GetEngine()
 				, m_renderTarget.GetSize() );

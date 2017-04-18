@@ -38,6 +38,20 @@ material "Gold"
 	}
 }
 
+material "AlphaGold"
+{
+	type legacy
+	pass
+	{
+		diffuse 0.75164 0.60648 0.22648 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.628281 0.555802 0.366065 1.0
+		shininess 51.2
+		two_sided true
+		alpha 0.5
+	}
+}
+
 material "Copper"
 {
 	type legacy

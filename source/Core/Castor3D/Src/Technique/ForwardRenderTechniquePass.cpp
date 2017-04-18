@@ -1,4 +1,4 @@
-﻿#include "ForwardRenderTechniquePass.hpp"
+#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -234,6 +234,7 @@ namespace Castor3D
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
+
 	String ForwardRenderTechniquePass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const

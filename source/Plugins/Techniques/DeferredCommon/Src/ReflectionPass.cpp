@@ -1,4 +1,4 @@
-﻿#include "ReflectionPass.hpp"
+#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -111,7 +111,7 @@ namespace deferred_common
 			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
 			auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
 			auto c3d_mapPostLight = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapPostLight" ) );
-			auto c3d_mapEnvironment = l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, 32u );
+			auto c3d_mapEnvironment = l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, 16u );
 			auto c3d_fresnelBias = l_writer.GetUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
 			auto c3d_fresnelScale = l_writer.GetUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
 			auto c3d_fresnelPower = l_writer.GetUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
@@ -215,12 +215,10 @@ namespace deferred_common
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eEmissive ), ShaderType::ePixel )->SetValue( 3u );
 			l_result->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->SetValue( 4u );
 			int const c = int( c_environmentStart );
-			l_result->CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, 32u )->SetValues(
+			l_result->CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, 16u )->SetValues(
 			{
 				c + 0, c + 1, c + 2, c + 3, c + 4, c + 5, c + 6, c + 7,
 				c + 8, c + 9, c + 10, c + 11, c + 12, c + 13, c + 14, c + 15,
-				c + 16, c + 17, c + 18, c + 19, c + 20, c + 21, c + 22, c + 23,
-				c + 24, c + 25, c + 26, c + 27, c + 28, c + 29, c + 30, c + 31,
 			} );
 			l_result->Initialise();
 			return l_result;
