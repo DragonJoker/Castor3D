@@ -35,8 +35,8 @@ namespace GLSL
 		GlslWriter_API void DeclareCalcVSPosition();
 		GlslWriter_API void DeclareCalcVSDepth();
 		GlslWriter_API void DeclareCalcWSPosition();
-		GlslWriter_API void Utils::DeclareApplyGamma();
-		GlslWriter_API void Utils::DeclareRemoveGamma();
+		GlslWriter_API void DeclareApplyGamma();
+		GlslWriter_API void DeclareRemoveGamma();
 		GlslWriter_API Vec2 CalcTexCoord();
 		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & p_uv
 			, Mat4 const & p_invProj );
