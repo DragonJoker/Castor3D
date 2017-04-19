@@ -2,6 +2,8 @@
 
 #include "Render/TestRenderSystem.hpp"
 
+#include <Engine.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
