@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -35,53 +35,17 @@ namespace Castor3D
 	\~french
 	\brief		Structure d'aide utilisée pour lier une passe et un programme shader.
 	*/
-	struct PassRenderNodeUniforms
-	{
-		C3D_API PassRenderNodeUniforms( UniformBuffer & p_passUbo );
-
-		//!\~english	The pass UBO.
-		//!\~french		L'UBO de passe.
-		UniformBuffer & m_passUbo;
-		//!\~english	The pass diffuse colour.
-		//!\~french		La couleur diffuse de passe.
-		Uniform4r & m_diffuse;
-		//!\~english	The pass specular colour.
-		//!\~french		La couleur spéculaire de passe.
-		Uniform4r & m_specular;
-		//!\~english	The pass emissive colour.
-		//!\~french		La couleur émissive de passe.
-		Uniform4r & m_emissive;
-		//!\~english	The pass shininess.
-		//!\~french		L'exposante de passe.
-		Uniform1f & m_shininess;
-		//!\~english	The pass opacity.
-		//!\~french		L'opacité de passe.
-		Uniform1f & m_opacity;
-		//!\~english	The pass environment map index.
-		//!\~french		L'indice de la texture d'environnement de la passe.
-		Uniform1f & m_environmentIndex;
-		//!\~english	The pass textures.
-		//!\~french		Les textures de la passe.
-		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date
-	\~english
-	\brief		Helper structure used link a pass and a shader program.
-	\~french
-	\brief		Structure d'aide utilisée pour lier une passe et un programme shader.
-	*/
 	struct PassRenderNode
-		: public PassRenderNodeUniforms
 	{
 		C3D_API PassRenderNode( Pass & p_pass
-			, ShaderProgram const & p_program
-			, UniformBuffer & p_passUbo );
+			, ShaderProgram const & p_program );
 
 		//!\~english	The pass.
 		//!\~french		La passe.
 		Pass & m_pass;
+		//!\~english	The pass textures.
+		//!\~french		Les textures de la passe.
+		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;
 	};
 }
 

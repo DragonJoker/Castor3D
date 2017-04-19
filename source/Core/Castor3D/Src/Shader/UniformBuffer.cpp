@@ -1,4 +1,4 @@
-#include "UniformBuffer.hpp"
+﻿#include "UniformBuffer.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -195,7 +195,7 @@ namespace Castor3D
 		return *m_bindings.find( &p_program )->second;
 	}
 
-	void UniformBuffer::Update()
+	void UniformBuffer::Update()const
 	{
 		REQUIRE( m_storage );
 		bool l_changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( UniformSPtr p_variable )
@@ -249,7 +249,10 @@ namespace Castor3D
 		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular );
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatShininess );
 		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatEnvironmentIndex );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::EnvironmentIndex );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatRefractionRatio );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Gamma );
+		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Exposure );
 	}
 
 	void UniformBuffer::FillModelBuffer( UniformBuffer & p_ubo )
@@ -276,6 +279,7 @@ namespace Castor3D
 	void UniformBuffer::FillOverlayBuffer( UniformBuffer & p_ubo )
 	{
 		p_ubo.CreateUniform( UniformType::eVec2i, ShaderProgram::OvPosition );
+		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::MaterialIndex );
 	}
 
 	void UniformBuffer::DoInitialise( UniformBufferBinding const & p_binding )

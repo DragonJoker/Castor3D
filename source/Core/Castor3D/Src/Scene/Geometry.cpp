@@ -1,4 +1,4 @@
-#include "Geometry.hpp"
+﻿#include "Geometry.hpp"
 
 #include "Engine.hpp"
 
@@ -168,38 +168,53 @@ namespace Castor3D
 
 			if ( l_it != l_mesh->end() )
 			{
-				auto l_pair = m_submeshesMaterials.insert( { &p_submesh, p_material } );
+				auto l_itSubMat = m_submeshesMaterials.find( &p_submesh );
+				MaterialSPtr l_oldMaterial;
+				auto l_oldCount = p_submesh.GetMaxRefCount();
 
-				if ( !l_pair.second && l_pair.first->second.lock() != p_submesh.GetDefaultMaterial() )
+				if ( l_itSubMat != m_submeshesMaterials.end() )
 				{
-					p_submesh.UnRef( p_material );
+					l_oldMaterial = l_itSubMat->second.lock();
+
+					if ( l_oldMaterial != p_submesh.GetDefaultMaterial() )
+					{
+						p_submesh.UnRef( l_oldMaterial );
+					}
+
+					l_itSubMat->second = p_material;
+				}
+				else if ( p_material )
+				{
+					m_submeshesMaterials.emplace( &p_submesh, p_material );
 				}
 
-				l_pair.first->second = p_material;
-				auto l_count = p_submesh.Ref( p_material );
+				auto l_count = p_submesh.Ref( p_material ) + 1;
 
-				if ( l_count >= 1 )
+				if ( l_count > l_oldCount )
 				{
-					if ( !p_submesh.HasMatrixBuffer() && l_count == 1 )
+					if ( l_count == 1 )
+					{
+						// We need to update the matrix buffers only.
+						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender
+							, [this, &p_submesh]()
+							{
+								p_submesh.ResetMatrixBuffers();
+							} ) );
+					}
+					else
 					{
 						// We need to update the render nodes afterwards (since the submesh's geometry buffers are now invalid).
 						GetScene()->SetChanged();
-						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::eQueueRender, [this, &p_submesh]()
-						{
-							p_submesh.ResetGpuBuffers();
-						} ) );
-					}
-					else if ( p_submesh.HasMatrixBuffer() && l_count > 1 )
-					{
-						// We need to update the matrix buffers only.
-						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, &p_submesh]()
-						{
-							p_submesh.ResetMatrixBuffers();
-						} ) );
+						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::eQueueRender
+							, [this, &p_submesh]()
+							{
+								// TODO: Find a better way, since this forbids the suppression of RAM storage of the VBO data.
+								p_submesh.ResetGpuBuffers();
+							} ) );
 					}
 				}
 
-				if ( p_material->HasReflectionMapping() )
+				if ( p_material->HasEnvironmentMapping() )
 				{
 					GetScene()->CreateEnvironmentMap( *GetParent() );
 				}

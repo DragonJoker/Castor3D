@@ -11,15 +11,15 @@ using namespace Castor;
 namespace Castor3D
 {
 	BillboardRenderNode::BillboardRenderNode( RenderPipeline & p_pipeline
-		, PassRenderNode && p_pass
-		, UniformBuffer & p_modelMatrixBuffer
-		, UniformBuffer & p_modelBuffer
+		, PassRenderNode && p_passNode
+		, ModelMatrixUbo & p_modelMatrixBuffer
+		, ModelUbo & p_modelBuffer
 		, GeometryBuffers & p_buffers
 		, SceneNode & p_sceneNode
 		, BillboardBase & p_data
-		, UniformBuffer & p_billboardUbo )
+		, BillboardUbo & p_billboardUbo )
 		: BillboardListRenderNode{ p_pipeline
-			, std::move( p_pass )
+			, std::move( p_passNode )
 			, p_modelMatrixBuffer
 			, p_modelBuffer
 			, p_buffers
@@ -27,8 +27,6 @@ namespace Castor3D
 			, p_data
 			, p_data }
 		, m_billboardUbo{ p_billboardUbo }
-		, m_dimensions{ *p_billboardUbo.GetUniform< UniformType::eVec2i >( ShaderProgram::Dimensions ) }
-		, m_windowSize{ *p_billboardUbo.GetUniform< UniformType::eVec2i >( ShaderProgram::WindowSize ) }
 	{
 	}
 }

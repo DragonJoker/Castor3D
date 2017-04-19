@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "StencilPass.hpp"
 
+#include <Shader/ModelMatrixUbo.hpp>
+
 namespace deferred_common
 {
 	class MeshLightPass
@@ -35,7 +37,7 @@ namespace deferred_common
 			: public LightPass::Program
 		{
 		public:
-			Program( Castor3D::Scene const & p_scene
+			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, bool p_ssao );
@@ -43,6 +45,11 @@ namespace deferred_common
 
 		private:
 			Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend )override;
+
+		protected:
+			//!\~english	The variable containing the light intensities.
+			//!\~french		La variable contenant les intensités de la lumière.
+			Castor3D::PushUniform2fSPtr m_lightIntensity;
 		};
 
 	public:
@@ -54,7 +61,7 @@ namespace deferred_common
 			, bool p_shadows );
 		~MeshLightPass();
 		void Initialise( Castor3D::Scene const & p_scene
-			, Castor3D::UniformBuffer & p_sceneUbo )override;
+			, Castor3D::SceneUbo & p_sceneUbo )override;
 		void Cleanup()override;
 		uint32_t GetCount()const override;
 
@@ -73,10 +80,7 @@ namespace deferred_common
 	private:
 		//!\~english	The uniform buffer containing the model data.
 		//!\~french		Le tampon d'uniformes contenant les données de modèle.
-		Castor3D::UniformBuffer m_modelMatrixUbo;
-		//!\~english	The uniform variable containing model matrix.
-		//!\~french		La variable uniforme contenant la matrice modèle.
-		Castor3D::Uniform4x4fSPtr m_modelUniform;
+		Castor3D::ModelMatrixUbo m_modelMatrixUbo;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		Castor3D::VertexBufferSPtr m_vertexBuffer;

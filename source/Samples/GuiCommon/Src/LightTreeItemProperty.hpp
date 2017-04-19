@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -86,7 +86,7 @@ namespace GuiCommon
 		void DoCreatePointLightProperties( wxPropertyGrid * p_grid, Castor3D::PointLightSPtr p_light );
 		void DoCreateSpotLightProperties( wxPropertyGrid * p_grid, Castor3D::SpotLightSPtr p_light );
 		void OnColourChange( Castor::Colour const & p_value );
-		void OnIntensityChange( Castor::Point3f const & p_value );
+		void OnIntensityChange( Castor::Point2f const & p_value );
 		void OnAttenuationChange( Castor::Point3f const & p_value );
 		void OnCutOffChange( double p_value );
 		void OnExponentChange( double p_value );

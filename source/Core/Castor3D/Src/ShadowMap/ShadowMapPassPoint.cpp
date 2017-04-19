@@ -1,4 +1,4 @@
-#include "ShadowMapPassPoint.hpp"
+﻿#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -71,14 +71,13 @@ namespace Castor3D
 
 		m_viewport.Resize( p_size );
 		m_viewport.Initialise();
-		m_projectionUniform->SetValue( m_projection );
 		return true;
 	}
 
 	void ShadowMapPassPoint::DoCleanup()
 	{
 		m_viewport.Cleanup();
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 		m_shadowConfig.Cleanup();
 		m_onNodeChanged.disconnect();
 	}
@@ -101,8 +100,7 @@ namespace Castor3D
 		{
 			m_shadowConfig.Update();
 			m_viewport.Apply();
-			m_viewUniform->SetValue( m_matrices[p_face] );
-			m_matrixUbo.Update();
+			m_matrixUbo.Update( m_matrices[p_face], m_projection );
 			DoRenderNodes( m_renderQueue.GetRenderNodes() );
 		}
 	}
@@ -127,24 +125,24 @@ namespace Castor3D
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
 				, [this, &l_pipeline, p_flags]()
 			{
-				l_pipeline.AddUniformBuffer( m_matrixUbo );
-				l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-				l_pipeline.AddUniformBuffer( m_sceneUbo );
+				l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+				l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+				l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
 				l_pipeline.AddUniformBuffer( m_shadowConfig );
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 				{
-					l_pipeline.AddUniformBuffer( m_billboardUbo );
+					l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 				}
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
 				{
-					l_pipeline.AddUniformBuffer( m_skinningUbo );
+					l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 				}
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 				{
-					l_pipeline.AddUniformBuffer( m_morphingUbo );
+					l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 				}
 
 				m_initialised = true;

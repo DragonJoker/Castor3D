@@ -33,7 +33,7 @@ SOFTWARE.
 #include "RenderToTexture/RenderDepthLayerToTexture.hpp"
 #include "RenderToTexture/RenderDepthToTexture.hpp"
 
-#include "Shader/UniformBuffer.hpp"
+#include "Shader/MatrixUbo.hpp"
 
 namespace Castor3D
 {
@@ -167,7 +167,7 @@ namespace Castor3D
 			, Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo );
+			, MatrixUbo & p_matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture to the currently draw-bound frame buffer.
@@ -284,7 +284,7 @@ namespace Castor3D
 		inline void RenderTexture( Castor::Size const & p_size
 			, TextureLayout const & p_texture
 			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo )
+			, MatrixUbo & p_matrixUbo )
 		{
 			static Castor::Position const l_position;
 			RenderTexture( l_position
@@ -492,7 +492,7 @@ namespace Castor3D
 			, TextureLayout const & p_texture
 			, CubeMapFace p_face
 			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo
+			, MatrixUbo & p_matrixUbo
 			, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
@@ -521,7 +521,7 @@ namespace Castor3D
 			, TextureLayout const & p_texture
 			, CubeMapFace p_face
 			, RenderPipeline & p_pipeline
-			, UniformBuffer & p_matrixUbo
+			, MatrixUbo & p_matrixUbo
 			, GeometryBuffers const & p_geometryBuffers
 			, uint32_t p_index );
 		/**
@@ -586,7 +586,7 @@ namespace Castor3D
 		uint32_t m_queryIndex = 0;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_matrixUbo;
+		MatrixUbo m_matrixUbo;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
 		RenderColourToTexture m_colour;

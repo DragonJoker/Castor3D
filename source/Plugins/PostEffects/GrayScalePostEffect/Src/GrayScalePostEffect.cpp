@@ -1,4 +1,4 @@
-#include "GrayScalePostEffect.hpp"
+﻿#include "GrayScalePostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -90,9 +90,8 @@ namespace GrayScale
 	GrayScalePostEffect::GrayScalePostEffect( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
 		: PostEffect{ GrayScalePostEffect::Type, p_renderTarget, p_renderSystem, p_param }
 		, m_surface{ *p_renderSystem.GetEngine() }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
+		, m_matrixUbo{ *p_renderSystem.GetEngine() }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 		String l_name = cuT( "GrayScale" );
 
 		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( l_name ) )
@@ -145,7 +144,7 @@ namespace GrayScale
 			RasteriserState l_rsstate;
 			l_rsstate.SetCulledFaces( Culling::eBack );
 			m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-			m_pipeline->AddUniformBuffer( m_matrixUbo );
+			m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		}
 
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );

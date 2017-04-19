@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si le cache est vide.
 		 */
-		inline bool IsEmpty()
+		inline bool IsEmpty()const
 		{
 			return m_elements.empty();
 		}

@@ -33,6 +33,9 @@ namespace TestRender
 		: RenderSystem{ p_engine, Name }
 	{
 		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eNonPowerOfTwoTextures );
+		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eTextureBuffers );
+		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eConstantsBuffers );
+		RenderSystem::m_gpuInformations.SetShaderLanguageVersion( 450 );
 	}
 
 	TestRenderSystem::~TestRenderSystem()

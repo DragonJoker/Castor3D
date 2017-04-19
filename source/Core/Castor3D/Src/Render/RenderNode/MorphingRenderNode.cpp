@@ -12,17 +12,17 @@ using namespace Castor;
 namespace Castor3D
 {
 	MorphingRenderNode::MorphingRenderNode( RenderPipeline & p_pipeline
-		, PassRenderNode && p_pass
-		, UniformBuffer & p_modelMatrixBuffer
-		, UniformBuffer & p_modelBuffer
+		, PassRenderNode && p_passNode
+		, ModelMatrixUbo & p_modelMatrixBuffer
+		, ModelUbo & p_modelBuffer
 		, GeometryBuffers & p_buffers
 		, SceneNode & p_sceneNode
 		, DataType & p_data
 		, InstanceType & p_instance
 		, AnimatedMesh & p_mesh
-		, UniformBuffer & p_morphingUbo )
+		, MorphingUbo & p_morphingUbo )
 		: SubmeshRenderNode{ p_pipeline
-			, std::move( p_pass )
+			, std::move( p_passNode )
 			, p_modelMatrixBuffer
 			, p_modelBuffer
 			, p_buffers
@@ -31,7 +31,6 @@ namespace Castor3D
 			, p_instance }
 		, m_mesh{ p_mesh }
 		, m_morphingUbo{ p_morphingUbo }
-		, m_time{ *p_morphingUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Time ) }
 	{
 	}
 }

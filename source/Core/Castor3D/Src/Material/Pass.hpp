@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 #include <Design/OwnedBy.hpp>
+#include <Design/Signal.hpp>
 
 namespace Castor3D
 {
@@ -41,6 +42,11 @@ namespace Castor3D
 	class Pass
 		: public Castor::OwnedBy< Material >
 	{
+	public:
+		using Changed = std::function< void( Pass const & ) >;
+		using OnChanged = Castor::Signal< Changed >;
+		using OnChangedConnection = OnChanged::connection;
+
 	public:
 		/*!
 		\author Sylvain DOREMUS
@@ -110,6 +116,13 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Fills shader variables of given render node.
+		 *\~french
+		 *\brief		Remplit les variables de shader du noeud de rendu donné.
+		 */
+		C3D_API void Update( PassBuffer & p_passes )const;
+		/**
+		 *\~english
 		 *\brief		Binds the pass' textures.
 		 *\~french
 		 *\brief		Active les textures de la passe.
@@ -175,13 +188,6 @@ namespace Castor3D
 		C3D_API bool HasAlphaBlending()const;
 		/**
 		 *\~english
-		 *\brief		Fills shader variables of given render node.
-		 *\~french
-		 *\brief		Remplit les variables de shader du noeud de rendu donné.
-		 */
-		C3D_API void UpdateRenderNode( PassRenderNodeUniforms & p_node )const;
-		/**
-		 *\~english
 		 *\brief		Reduces the textures.
 		 *\~french
 		 *\brief		Réduit les textures.
@@ -210,6 +216,15 @@ namespace Castor3D
 		 *\return		La combinaison d'indicateurs de programme.
 		 */
 		C3D_API ProgramFlags GetProgramFlags()const;
+		/**
+		 *\~english
+		 *\remarks	Passes are aligned on float[4], so the size of a pass
+		 *			is the number of float[4] needed to contain it.
+		 *\~french
+		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
+		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
+		 */
+		GlslWriter_API virtual uint32_t GetPassSize()const = 0;
 		/**
 		 *\~english
 		 *\return		The texture channels flags combination.
@@ -241,25 +256,20 @@ namespace Castor3D
 		inline void SetTwoSided( bool p_value )
 		{
 			m_twoSided = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the reflection mapping status.
+		 *\brief		Sets the refraction ratio.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit le statut d'utilisation du reflection mapping.
+		 *\brief		Définit le ratio de réfraction.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetReflectionMapping( bool p_value )
+		inline void SetRefractionRatio( float p_value )
 		{
-			m_reflectionMapping = p_value;
-
-			if ( m_reflectionMapping )
-			{
-				AddFlag( m_textureFlags, TextureChannel::eReflection );
-			}
-			else
-			{
-				RemFlag( m_textureFlags, TextureChannel::eReflection );
-			}
+			m_refractionRatio = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -272,6 +282,7 @@ namespace Castor3D
 		inline void SetAlphaBlendMode( BlendMode p_value )
 		{
 			m_alphaBlendMode = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -284,6 +295,7 @@ namespace Castor3D
 		inline void SetColourBlendMode( BlendMode p_value )
 		{
 			m_colourBlendMode = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -308,13 +320,14 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		\p true if reflection mapping is enabled for this pass.
+		 *\return		\p true if environment mapping is enabled for this pass.
 		 *\~french
-		 *\return		\p true si le reflection mapping est activé sur cette passe.
+		 *\return		\p true si l'environment mapping est activé sur cette passe.
 		 */
-		inline bool HasReflectionMapping()const
+		inline bool HasEnvironmentMapping()const
 		{
-			return m_reflectionMapping;
+			return CheckFlag( GetTextureFlags(), TextureChannel::eReflection )
+				|| CheckFlag( GetTextureFlags(), TextureChannel::eRefraction );
 		}
 		/**
 		 *\~english
@@ -325,6 +338,16 @@ namespace Castor3D
 		inline float GetOpacity()const
 		{
 			return m_opacity;
+		}
+		/**
+		 *\~english
+		 *\return		The refraction ratio.
+		 *\~french
+		 *\return		Le ration de réfraction.
+		 */
+		inline float GetRefractionRatio()const
+		{
+			return m_refractionRatio;
 		}
 		/**
 		 *\~english
@@ -385,6 +408,40 @@ namespace Castor3D
 		inline auto end()
 		{
 			return m_textureUnits.end();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if gamma correction is needed for this pass.
+		 *\~french
+		 *\return		\pt true si la correction gamma doit être appliquée à cette passe.
+		 */
+		inline bool NeedsGammaCorrection()const
+		{
+			return m_needsGammaCorrection;
+		}
+		/**
+		 *\~english
+		 *\return		The pass ID.
+		 *\~french
+		 *\brief
+		 *\return		L'ID de la passe
+		 */
+		inline uint32_t GetId()const
+		{
+			return m_id;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the pass ID.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief
+		 *\brief		Définit l'ID de la passe
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetId( uint32_t p_value )
+		{
+			m_id = p_value;
 		}
 
 	protected:
@@ -464,7 +521,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader du noeud de rendu donné.
 		 */
-		virtual void DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const = 0;
+		virtual void DoUpdate( PassBuffer & p_buffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the global alpha value.
@@ -475,6 +532,14 @@ namespace Castor3D
 		 */
 		virtual void DoSetOpacity( float p_value ) = 0;
 
+	public:
+		static uint32_t constexpr PassBufferIndex = 0u;
+		static uint32_t constexpr LightBufferIndex = 1u;
+		static uint32_t constexpr MinTextureIndex = 2u;
+
+	public:
+		OnChanged onChanged;
+
 	private:
 		//!\~english	Texture units.
 		//!\~french		Les textures.
@@ -482,18 +547,21 @@ namespace Castor3D
 		//!\~english	Bitwise ORed TextureChannel.
 		//!\~french		Combinaison des TextureChannel affectés à une texture pour cette passe.
 		TextureChannels m_textureFlags;
+		//!\~english	The pass ID.
+		//!\~french		L'ID de la passe.
+		uint32_t m_id{ 0u };
 		//!\~english	The opacity value.
 		//!\~french		La valeur d'opacité.
 		float m_opacity{ 1.0f };
+		//!\~english	The refraction ratio.
+		//!\~french		Le ratio de réfraction.
+		float m_refractionRatio{ 0.0f };
 		//!\~english	Tells if the pass is two sided.
 		//!\~french		Dit si la passe s'applique sur les deux faces.
 		bool m_twoSided{ false };
 		//!\~english	Tells the pass shader is an automatically generated one.
 		//!\~french		Dit si le shader de la passe a été généré automatiquement.
 		bool m_automaticShader{ true };
-		//!\~english	Tells the pass has reflection mapping.
-		//!\~french		Dit si la passe a du reflection mapping.
-		bool m_reflectionMapping{ false };
 		//!\~english	The alpha blend mode.
 		//!\~french		Le mode de mélange alpha.
 		BlendMode m_alphaBlendMode{ BlendMode::eNoBlend };
@@ -503,6 +571,9 @@ namespace Castor3D
 		//!\~english	Tells if the pass' textures are reduced.
 		//!\~french		Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced{ false };
+		//!\~english	Tells if the pass' diffuse needs gamma correction.
+		//!\~french		Dit si la diffuse de la passe a besoin de correction gamma.
+		bool m_needsGammaCorrection{ false };
 	};
 }
 

@@ -96,6 +96,18 @@ namespace Castor3D
 		C3D_API ~LegacyPass();
 		/**
 		 *\~english
+		 *\remarks	Passes are aligned on float[4], so the size of a pass
+		 *			is the number of float[4] needed to contain it.
+		 *\~french
+		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
+		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
+		 */
+		inline uint32_t GetPassSize()const override
+		{
+			return 4u;
+		}
+		/**
+		 *\~english
 		 *\brief		Sets the diffuse colour.
 		 *\param[in]	p_value	The new value.
 		 *\~french
@@ -105,6 +117,7 @@ namespace Castor3D
 		inline void SetDiffuse( Castor::Colour const & p_value)
 		{
 			m_diffuse = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -117,18 +130,33 @@ namespace Castor3D
 		inline void SetSpecular( Castor::Colour const & p_value)
 		{
 			m_specular = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the emissive colour.
+		 *\brief		Sets the ambient factor.
 		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit la couleur émissive.
+		 *\brief		Définit le facteur d'ambiante.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetEmissive( Castor::HdrColour const & p_value)
+		inline void SetAmbient( float const & p_value )
+		{
+			m_ambient = p_value;
+			onChanged( *this );
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the emissive factor.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit le facteur d'émission.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetEmissive( float const & p_value )
 		{
 			m_emissive = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -141,6 +169,7 @@ namespace Castor3D
 		inline void SetShininess( float p_value )
 		{
 			m_shininess = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -174,11 +203,21 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The emissive colour.
+		 *\return		The ambient factor.
 		 *\~french
-		 *\return		La couleur émissive.
+		 *\return		Le facteur d'ambiante.
 		 */
-		inline Castor::HdrColour const & GetEmissive()const
+		inline float GetAmbient()const
+		{
+			return m_ambient;
+		}
+		/**
+		 *\~english
+		 *\return		The emissive factor.
+		 *\~french
+		 *\return		Le facteur émission.
+		 */
+		inline float GetEmissive()const
 		{
 			return m_emissive;
 		}
@@ -202,16 +241,6 @@ namespace Castor3D
 		{
 			return m_specular;
 		}
-		/**
-		 *\~english
-		 *\return		The emissive colour.
-		 *\~french
-		 *\return		La couleur émissive.
-		 */
-		inline Castor::HdrColour & GetEmissive()
-		{
-			return m_emissive;
-		}
 
 	private:
 		/**
@@ -223,9 +252,9 @@ namespace Castor3D
 		 */
 		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoUpdateRenderNode
+		 *\copydoc		Castor3D::Pass::DoUpdate
 		 */
-		void DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const override;
+		void DoUpdate( PassBuffer & p_buffer )const override;
 		/**
 		 *\copydoc		Castor3D::Pass::DoSetOpacity
 		 */
@@ -238,9 +267,12 @@ namespace Castor3D
 		//!\~english	Specular material colour.
 		//!\~french		La couleur spéculaire.
 		Castor::Colour m_specular;
-		//!\~english	Emissive material colour.
-		//!\~french		La couleur émissive.
-		Castor::HdrColour m_emissive;
+		//!\~english	The ambient contribution factor.
+		//!\~french		Le facteur de contribution a l'ambiente.
+		float m_ambient;
+		//!\~english	The emission factor.
+		//!\~french		Le facteur d'émission.
+		float m_emissive;
 		//!\~english	The shininess value.
 		//!\~french		La valeur d'exposant.
 		float m_shininess{ 50.0f };

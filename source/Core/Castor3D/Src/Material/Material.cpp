@@ -141,13 +141,13 @@ namespace Castor3D
 			} );
 	}
 
-	bool Material::HasReflectionMapping()const
+	bool Material::HasEnvironmentMapping()const
 	{
 		return m_passes.end() != std::find_if( m_passes.begin()
 			, m_passes.end()
 			, []( PassSPtr p_pass )
 			{
-				return p_pass->HasReflectionMapping();
+				return p_pass->HasEnvironmentMapping();
 			} );
 	}
 }

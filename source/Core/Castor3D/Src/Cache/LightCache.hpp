@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "Scene/Light/LightFactory.hpp"
 #include "Cache/ObjectCache.hpp"
+#include "Texture/TextureUnit.hpp"
 
 namespace Castor3D
 {
@@ -212,7 +213,7 @@ namespace Castor3D
 		LightsMap m_typeSortedLights;
 		//!\~english	The lights texture.
 		//!\~french		La texture contenant les lumières.
-		TextureUnitSPtr m_lightsTexture;
+		TextureUnit m_lightsTexture;
 		//!\~english	The lights texture buffer.
 		//!\~french		Le tampon de la texture contenant les lumières.
 		Castor::PxBufferBaseSPtr m_lightsBuffer;

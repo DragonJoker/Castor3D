@@ -27,9 +27,6 @@ namespace Castor3D
 		{
 			for ( auto & l_itPipelines : p_input )
 			{
-				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
-
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
 					Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
@@ -53,12 +50,6 @@ namespace Castor3D
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
 				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel, 6u );
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
-				&& !p_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel ) )
-			{
-				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 			}
 		}
 
@@ -154,7 +145,7 @@ namespace Castor3D
 		: RenderPass{ p_name, *p_scene.GetEngine(), p_opaque, p_multisampling, p_ignored }
 		, m_scene{ p_scene }
 		, m_camera{ p_camera }
-		, m_sceneNode{ m_sceneUbo }
+		, m_sceneNode{}
 		, m_environment{ p_environment }
 	{
 	}
@@ -163,7 +154,7 @@ namespace Castor3D
 	{
 	}
 
-	void RenderTechniquePass::Render( RenderInfo & p_info, bool p_shadows )
+	void RenderTechniquePass::DoRender( RenderInfo & p_info, bool p_shadows )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes();
 		DepthMapArray l_depthMaps;
@@ -175,7 +166,7 @@ namespace Castor3D
 
 		DoRenderNodes( l_nodes, *m_camera, l_depthMaps, p_info );
 	}
-
+	
 	void RenderTechniquePass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
@@ -187,9 +178,8 @@ namespace Castor3D
 			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
 			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
-			m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-			m_viewUniform->SetValue( p_camera.GetView() );
-			m_matrixUbo.Update();
+			m_matrixUbo.Update( p_camera.GetView()
+				, p_camera.GetViewport().GetProjection() );
 
 			if ( m_opaque || m_multisampling )
 			{
@@ -244,21 +234,23 @@ namespace Castor3D
 			l_it.second->GetPipeline().Apply();
 			UpdatePipeline( l_it.second->GetPipeline() );
 
-			DoBindPass( l_it.second->GetPassNode()
-				, l_it.second->GetSceneNode()
-				, l_it.second->GetPassNode().m_pass
+			EnvironmentMap * l_envMap = nullptr;
+			DoBindPass( l_it.second->GetSceneNode()
+				, l_it.second->GetPassNode()
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
-				, p_depthMaps );
+				, p_depthMaps
+				, l_it.second->GetModelUbo()
+				, l_envMap );
 
 			l_it.second->Render();
 
-			DoUnbindPass( l_it.second->GetPassNode()
-				, l_it.second->GetSceneNode()
-				, l_it.second->GetPassNode().m_pass
+			DoUnbindPass( l_it.second->GetSceneNode()
+				, l_it.second->GetPassNode()
 				, *p_camera.GetScene()
 				, l_it.second->GetPipeline()
-				, p_depthMaps );
+				, p_depthMaps
+				, l_envMap );
 		}
 	}
 
@@ -314,159 +306,9 @@ namespace Castor3D
 		return String{};
 	}
 
-	String RenderTechniquePass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
-
-		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
-		UBO_MODEL( l_writer );
-
-		// Fragment Intputs
-		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_tangentSpaceFragPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = l_writer.GetInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
-
-		if ( l_writer.HasTextureBuffers() )
-		{
-			auto c3d_sLights = l_writer.GetUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
-		}
-		else
-		{
-			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
-		}
-
-		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
-		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapEnvironment( l_writer.GetUniform< SamplerCube >( ShaderProgram::MapEnvironment, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ) );
-
-		auto c3d_fheightScale( l_writer.GetUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
-
-		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
-
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name
-			, GetShadowType( p_sceneFlags ) );
-		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
-
-		// Fragment Outputs
-		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
-
-		auto l_parallaxMapping = DeclareParallaxMappingFunc( l_writer, p_textureFlags, p_programFlags );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-			auto l_envAmbient = l_writer.GetLocale( cuT( "l_envAmbient" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
-			auto l_envDiffuse = l_writer.GetLocale( cuT( "l_envDiffuse" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
-			Float l_fAlpha;
-
-			if ( !m_opaque )
-			{
-				l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), c3d_fMatOpacity );
-			}
-
-			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 0.0f );
-			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), vtx_texture );
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
-				&& CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
-			{
-				auto l_viewDir = -l_writer.GetLocale( cuT( "l_viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
-				l_texCoord.xy() = l_parallaxMapping( l_texCoord.xy(), l_viewDir );
-			}
-
-			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) )
-			{
-				auto l_i = l_writer.GetLocale( cuT( "l_i" ), vtx_position - c3d_v3CameraPosition );
-				auto l_r = l_writer.GetLocale( cuT( "l_r" ), reflect( l_i, l_v3Normal ) );
-				auto l_environment = l_writer.GetLocale( cuT( "l_environment" ), texture( c3d_mapEnvironment, l_r ).xyz() );
-				l_envAmbient = l_environment * 1.4;
-				l_envDiffuse = l_environment * 2.0;
-			}
-
-			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-			l_lighting->ComputeCombinedLighting( l_worldEye
-				, l_fMatShininess
-				, c3d_iShadowReceiver
-				, FragmentInput( vtx_position, l_v3Normal )
-				, l_output );
-
-			ComputePostLightingMapContributions( l_writer, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque )
-			{
-				l_fAlpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
-			}
-
-			pxl_v4FragColor.xyz() = l_v3Ambient * l_envAmbient
-				+ l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() * l_envDiffuse )
-				+ l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() )
-				+ l_v3Emissive;
-
-			if ( m_opaque )
-			{
-				pxl_v4FragColor.a() = 1.0_f;
-			}
-			else
-			{
-				pxl_v4FragColor.a() = l_fAlpha;
-			}
-
-			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
-			{
-				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
-				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
-			}
-		} );
-
-		return l_writer.Finalise();
-	}
-
 	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
 	{
-		auto & l_fog = m_scene.GetFog();
-		m_sceneNode.m_fogType.SetValue( int( l_fog.GetType() ) );
-
-		if ( l_fog.GetType() != GLSL::FogType::eDisabled )
-		{
-			m_sceneNode.m_fogDensity.SetValue( l_fog.GetDensity() );
-		}
-
-		m_sceneNode.m_ambientLight.SetValue( rgba_float( m_scene.GetAmbientLight() ) );
-		{
-			auto & l_cache = m_scene.GetLightCache();
-			auto l_lock = make_unique_lock( l_cache );
-			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = l_cache.GetLightsCount( LightType::eSpot );
-			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = l_cache.GetLightsCount( LightType::ePoint );
-			m_sceneNode.m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
-		}
-		m_sceneNode.m_backgroundColour.SetValue( rgba_float( m_scene.GetBackgroundColour() ) );
-		m_sceneNode.m_cameraPos.SetValue( m_camera->GetParent()->GetDerivedPosition() );
-		m_sceneNode.m_cameraFarPlane.SetValue( m_camera->GetViewport().GetFar() );
-		m_sceneNode.m_sceneUbo.Update();
+		m_sceneUbo.Update( m_scene, *m_camera );
 	}
 
 	void RenderTechniquePass::DoPrepareFrontPipeline( ShaderProgram & p_program
@@ -504,25 +346,24 @@ namespace Castor3D
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
 				, [this, &l_pipeline, p_flags]()
 				{
-					l_pipeline.AddUniformBuffer( m_matrixUbo );
-					l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-					l_pipeline.AddUniformBuffer( m_sceneUbo );
-					l_pipeline.AddUniformBuffer( m_passUbo );
-					l_pipeline.AddUniformBuffer( m_modelUbo );
+					l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelUbo.GetUbo() );
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
-						l_pipeline.AddUniformBuffer( m_billboardUbo );
+						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
 					{
-						l_pipeline.AddUniformBuffer( m_skinningUbo );
+						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
-						l_pipeline.AddUniformBuffer( m_morphingUbo );
+						l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 					}
 				} ) );
 		}
@@ -562,25 +403,24 @@ namespace Castor3D
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
 				, [this, &l_pipeline, p_flags]()
 				{
-					l_pipeline.AddUniformBuffer( m_matrixUbo );
-					l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-					l_pipeline.AddUniformBuffer( m_sceneUbo );
-					l_pipeline.AddUniformBuffer( m_passUbo );
-					l_pipeline.AddUniformBuffer( m_modelUbo );
+					l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelUbo.GetUbo() );
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
-						l_pipeline.AddUniformBuffer( m_billboardUbo );
+						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
 					{
-						l_pipeline.AddUniformBuffer( m_skinningUbo );
+						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
-						l_pipeline.AddUniformBuffer( m_morphingUbo );
+						l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 					}
 				} ) );
 		}

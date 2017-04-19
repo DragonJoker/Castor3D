@@ -206,19 +206,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les valeurs d'intensité.
 		 */
-		inline Castor::Point3f const & GetIntensity()const
+		inline Castor::Point2f const & GetIntensity()const
 		{
 			return m_category->GetIntensity();
-		}
-		/**
-		 *\~english
-		 *\return		The ambient intensity.
-		 *\~french
-		 *\return		L'intensité ambiante.
-		 */
-		inline float GetAmbientIntensity()const
-		{
-			return m_category->GetAmbientIntensity();
 		}
 		/**
 		 *\~english
@@ -298,7 +288,7 @@ namespace Castor3D
 		 */
 		inline void SetIntensity( float * p_values )
 		{
-			m_category->SetIntensity( Castor::Point3f( p_values[0], p_values[1], p_values[2] ) );
+			m_category->SetIntensity( Castor::Point2f( p_values[0], p_values[1], p_values[2] ) );
 		}
 		/**
 		 *\~english
@@ -308,9 +298,9 @@ namespace Castor3D
 		 *\brief		Définit les valeurs d'intensité.
 		 *\param[in]	a, d, s	Les nouvelles valeurs.
 		 */
-		inline void SetIntensity( float a, float d, float s )
+		inline void SetIntensity( float d, float s )
 		{
-			m_category->SetIntensity( Castor::Point3f( a, d, s ) );
+			m_category->SetIntensity( Castor::Point2f( d, s ) );
 		}
 		/**
 		 *\~english
@@ -320,21 +310,9 @@ namespace Castor3D
 		 *\brief		Définit les valeurs d'intensité.
 		 *\param[in]	p_intensity	Les nouvelles valeurs.
 		 */
-		inline void SetIntensity( Castor::Point3f const & p_intensity )
+		inline void SetIntensity( Castor::Point2f const & p_intensity )
 		{
 			m_category->SetIntensity( p_intensity );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the ambient intensity.
-		 *\param[in]	p_intensity	The new value.
-		 *\~french
-		 *\brief		Définit l'intensité ambiante.
-		 *\param[in]	p_intensity	La nouvelle valeur.
-		 */
-		inline void SetAmbientIntensity( float p_intensity )
-		{
-			m_category->SetAmbientIntensity( p_intensity );
 		}
 		/**
 		 *\~english

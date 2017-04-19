@@ -229,7 +229,7 @@ namespace Bloom
 			, p_param )
 		, m_viewport{ *p_renderSystem.GetEngine() }
 		, m_size( 5u )
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
+		, m_matrixUbo{ *p_renderSystem.GetEngine() }
 		, m_blurXUbo{ BloomPostEffect::FilterConfig, p_renderSystem }
 		, m_blurYUbo{ BloomPostEffect::FilterConfig, p_renderSystem }
 		, m_declaration(
@@ -257,8 +257,6 @@ namespace Bloom
 			}
 		} )
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-
 		m_blurXCoeffs = m_blurXUbo.CreateUniform< UniformType::eFloat >( BloomPostEffect::FilterConfigCoefficients
 			, BloomPostEffect::MaxCoefficients );
 		m_blurXCoeffCount = m_blurXUbo.CreateUniform< UniformType::eUInt >( BloomPostEffect::FilterConfigCoefficientsCount );
@@ -379,7 +377,7 @@ namespace Bloom
 
 	void BloomPostEffect::Cleanup()
 	{
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 		m_blurXUbo.Cleanup();
 		m_blurYUbo.Cleanup();
 
@@ -543,15 +541,12 @@ namespace Bloom
 		m_viewport.Resize( p_origin.GetDimensions() );
 		m_viewport.Update();
 		m_viewport.Apply();
-		m_combinePipeline->SetProjectionMatrix( m_viewport.GetProjection() );
-		m_combinePipeline->Apply();
 
 		auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
 		auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
 		auto const & l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
 		auto const & l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
-		m_combinePipeline->ApplyProjection( m_matrixUbo );
-		m_matrixUbo.Update();
+		m_matrixUbo.Update( m_viewport.GetProjection() );
 		m_combinePipeline->Apply();
 
 		l_texture0.Bind();
@@ -639,7 +634,7 @@ namespace Bloom
 				, MultisampleState{}
 				, *l_program
 				, PipelineFlags{} );
-			m_hiPassPipeline->AddUniformBuffer( m_matrixUbo );
+			m_hiPassPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		}
 
 		return l_return;
@@ -675,7 +670,7 @@ namespace Bloom
 				, MultisampleState{}
 				, *l_program
 				, PipelineFlags{} );
-			m_blurXPipeline->AddUniformBuffer( m_matrixUbo );
+			m_blurXPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 			m_blurXPipeline->AddUniformBuffer( m_blurXUbo );
 		}
 
@@ -712,7 +707,7 @@ namespace Bloom
 				, MultisampleState{}
 				, *l_program
 				, PipelineFlags{} );
-			m_blurYPipeline->AddUniformBuffer( m_matrixUbo );
+			m_blurYPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 			m_blurYPipeline->AddUniformBuffer( m_blurYUbo );
 		}
 
@@ -767,7 +762,7 @@ namespace Bloom
 				, MultisampleState{}
 				, *l_program
 				, PipelineFlags{} );
-			m_combinePipeline->AddUniformBuffer( m_matrixUbo );
+			m_combinePipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		}
 
 		return l_return;

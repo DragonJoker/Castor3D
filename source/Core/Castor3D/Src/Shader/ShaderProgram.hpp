@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -687,8 +687,11 @@ namespace Castor3D
 		//!\~french		Nom du second attribut de poids des bones.
 		C3D_API static const Castor::String Weights1;
 		//!\~english	Name of the instance transform attribute.
-		//!\~french		Nom de l'attribut de transformation d'instance.
+		//!\~french		Nom de l'attribut d'instance de transformation.
 		C3D_API static const Castor::String Transform;
+		//!\~english	Name of the instance material index attribute.
+		//!\~french		Nom de l'attribut d'instance d'indice de matériau.
+		C3D_API static const Castor::String Material;
 
 		//@}
 		/**@name Scene */
@@ -718,6 +721,12 @@ namespace Castor3D
 		//!\~english	Name of the lights frame variable.
 		//!\~french		Nom de la frame variable contenant les lumières.
 		C3D_API static const Castor::String Lights;
+		//!\~english	Name of the exposure frame variable.
+		//!\~french		Nom de la frame variable contenant l'exposition.
+		C3D_API static const Castor::String Exposure;
+		//!\~english	Name of the gamma correction frame variable.
+		//!\~french		Nom de la frame variable contenant la correction gamma.
+		C3D_API static const Castor::String Gamma;
 
 		//@}
 		/**@name Pass */
@@ -738,9 +747,9 @@ namespace Castor3D
 		//!\~english	Name of the material opacity frame variable.
 		//!\~french		Nom de la frame variable contenant l'opacité du matériau.
 		C3D_API static const Castor::String MatOpacity;
-		//!\~english	Name of the material environment index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice de la map d'environnement du matériau.
-		C3D_API static const Castor::String MatEnvironmentIndex;
+		//!\~english	Name of the material refraction ratio frame variable.
+		//!\~french		Nom de la frame variable contenant le ratio de réfraction du matériau.
+		C3D_API static const Castor::String MatRefractionRatio;
 		//!\~english	Name of the shadow map image frame variable.
 		//!\~french		Nom de la frame variable contenant l'image de shadow map.
 		C3D_API static const Castor::String MapShadow;
@@ -755,6 +764,12 @@ namespace Castor3D
 		//!\~english	Name of the shadow receiver status frame variable.
 		//!\~french		Nom de la frame variable contenant le statut de réception d'ombres.
 		C3D_API static const Castor::String ShadowReceiver;
+		//!\~english	Name of the material index frame variable.
+		//!\~french		Nom de la frame variable contenant l'indice du matériau.
+		C3D_API static const Castor::String MaterialIndex;
+		//!\~english	Name of the material environment index frame variable.
+		//!\~french		Nom de la frame variable contenant l'indice de la map d'environnement du matériau.
+		C3D_API static const Castor::String EnvironmentIndex;
 
 		//@}
 		/**@name Animation */
@@ -828,6 +843,9 @@ namespace Castor3D
 		//!\~english	Name of the scene frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de scène.
 		C3D_API static const Castor::String BufferScene;
+		//!\~english	Name of the HDR configuration frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant la configuration du HDR.
+		C3D_API static const Castor::String BufferHdrConfig;
 		//!\~english	Name of the pass frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de passe.
 		C3D_API static const Castor::String BufferPass;

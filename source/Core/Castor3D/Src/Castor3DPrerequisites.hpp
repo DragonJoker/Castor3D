@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -736,22 +736,21 @@ namespace Castor3D
 	private:\
 		std::unique_ptr< CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > > m_##memberName##CacheView
 
-	C3D_API void ComputePreLightingMapContributions(
-		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_normal,
-		GLSL::Float & p_shininess,
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags );
+	C3D_API void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
+		, GLSL::Vec3 & p_normal
+		, GLSL::Float & p_shininess
+		, TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags );
 
-	C3D_API void ComputePostLightingMapContributions(
-		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_diffuse,
-		GLSL::Vec3 & p_specular,
-		GLSL::Vec3 & p_emissive,
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags );
+	C3D_API void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
+		, GLSL::Vec3 & p_diffuse
+		, GLSL::Vec3 & p_specular
+		, GLSL::Vec3 & p_emissive
+		, GLSL::Float const & p_gamma
+		, TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags );
 
 	using ParallaxFunction = GLSL::Function< GLSL::Vec2, GLSL::InParam< GLSL::Vec2 >, GLSL::InParam< GLSL::Vec3 > >;
 	using ParallaxShadowFunction = GLSL::Function< GLSL::Float, GLSL::InParam< GLSL::Vec3 >, GLSL::InParam< GLSL::Vec2 >, GLSL::InParam< GLSL::Float > >;

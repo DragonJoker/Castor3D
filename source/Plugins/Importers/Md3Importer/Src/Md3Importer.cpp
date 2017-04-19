@@ -90,7 +90,6 @@ namespace C3DMd3
 			
 			REQUIRE( l_material->GetType() == MaterialType::eLegacy );
 			auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
-			l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 			l_pass->SetShininess( 64.0f );
 			DoReadMD3Data( p_mesh, *l_pass );
 
@@ -291,7 +290,6 @@ namespace C3DMd3
 					
 					REQUIRE( l_material->GetType() == MaterialType::eLegacy );
 					auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
-					l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 
 					if ( !l_strImage.empty() )
 					{
@@ -336,7 +334,6 @@ namespace C3DMd3
 				
 				REQUIRE( l_material->GetType() == MaterialType::eLegacy );
 				auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
-				l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 				l_pass->SetTwoSided( true );
 
 				if ( !l_strLine.empty() )

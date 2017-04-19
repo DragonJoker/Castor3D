@@ -108,10 +108,18 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Materials initialisation function.
-		 *\remarks		Intialises the default material, a renderer must have been loaded.
+		 *\brief		Intialises the default material.
+		 *\~french
+		 *\brief		Initialise le matériau par défaut.
 		 */
 		C3D_API void Initialise();
+		/**
+		 *\~english
+		 *\brief		Sets all the elements to be cleaned up.
+		 *\~french
+		 *\brief		Met tous les éléments à nettoyer.
+		 */
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Deletes the default material, flush the collection
@@ -119,6 +127,37 @@ namespace Castor3D
 		 *\brief		Supprime le matériau par défaut, vide la collection
 		 */
 		C3D_API void Clear();
+		/**
+		 *\~english
+		 *\brief		Updates the pass buffer.
+		 *\~french
+		 *\brief		Met à jour le tampon de passes.
+		 */
+		C3D_API void Update();
+		/**
+		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	p_name		The element name.
+		 *\param[in]	p_element	The element.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	p_name		Le nom d'élément.
+		 *\param[in]	p_element	L'élément.
+		 */
+		C3D_API MaterialSPtr Add( Key const & p_name, MaterialSPtr p_element );
+		/**
+		 *\~english
+		 *\brief		Creates an element.
+		 *\param[in]	p_name			The element name.
+		 *\param[in]	p_parameters	The other constructor parameters.
+		 *\return		The created object.
+		 *\~french
+		 *\brief		Crée un élément.
+		 *\param[in]	p_name			Le nom d'élément.
+		 *\param[in]	p_parameters	Les autres paramètres de construction.
+		 *\return		L'élément créé.
+		 */
+		C3D_API MaterialSPtr Add( Key const & p_name, MaterialType p_type );
 		/**
 		 *\~english
 		 *\brief		Puts all the materials names in the given array
@@ -160,11 +199,25 @@ namespace Castor3D
 		{
 			return m_defaultMaterial;
 		}
+		/**
+		 *\~english
+		 *\return		The pass buffer.
+		 *\~french
+		 *\return		Le tampon de passes.
+		 */
+		inline PassBuffer const & GetPassBuffer()const
+		{
+			REQUIRE( m_passBuffer );
+			return *m_passBuffer;
+		}
 
 	protected:
 		//!\~english	The default material.
 		//!\~french		Le matériau par défaut
 		MaterialSPtr m_defaultMaterial;
+		//!\~english	The passes buffer.
+		//!\~french		Le tampon de passes.
+		std::shared_ptr< PassBuffer > m_passBuffer;
 	};
 	using MaterialCache = Cache< Material, Castor::String >;
 	DECLARE_SMART_PTR( MaterialCache );

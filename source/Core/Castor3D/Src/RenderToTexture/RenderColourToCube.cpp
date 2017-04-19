@@ -18,7 +18,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderColourToCube::RenderColourToCube( Context & p_context
-		, UniformBuffer & p_matrixUbo )
+		, MatrixUbo & p_matrixUbo )
 		: OwnedBy< Context >{ p_context }
 		, m_matrixUbo{ p_matrixUbo }
 		, m_viewport{ *p_context.GetRenderSystem()->GetEngine() }
@@ -89,7 +89,7 @@ namespace Castor3D
 			, MultisampleState{}
 			, l_program
 			, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo );
+		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 
 		m_sampler = l_renderSystem.GetEngine()->GetSamplerCache().Add( cuT( "RenderColourToCube" ) );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
@@ -129,7 +129,6 @@ namespace Castor3D
 			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
 		};
 
-		m_pipeline->SetProjectionMatrix( l_projection );
 		m_viewport.Resize( p_size );
 		m_viewport.Apply();
 		p_fbo->Bind( FrameBufferTarget::eDraw );
@@ -138,11 +137,9 @@ namespace Castor3D
 
 		for ( uint32_t i = 0; i < 6; ++i )
 		{
-			m_pipeline->SetViewMatrix( l_views[i] );
 			p_attachs[i]->Attach( AttachmentPoint::eColour, 0u );
 			p_fbo->SetDrawBuffer( p_attachs[i] );
-			m_pipeline->ApplyMatrices( m_matrixUbo, ~0u );
-			m_matrixUbo.Update();
+			m_matrixUbo.Update( l_views[i], l_projection );
 			m_pipeline->Apply();
 
 			m_sampler->Bind( 0u );

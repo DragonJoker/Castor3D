@@ -99,12 +99,12 @@ namespace Castor3D
 			return EnvironmentMap::EnvironmentMapPasses
 			{
 				{
-					EnvironmentMapPass{ p_map, l_nodes[0] },
-					EnvironmentMapPass{ p_map, l_nodes[1] },
-					EnvironmentMapPass{ p_map, l_nodes[2] },
-					EnvironmentMapPass{ p_map, l_nodes[3] },
-					EnvironmentMapPass{ p_map, l_nodes[4] },
-					EnvironmentMapPass{ p_map, l_nodes[5] },
+					EnvironmentMapPass{ p_map, l_nodes[0], p_node },
+					EnvironmentMapPass{ p_map, l_nodes[1], p_node },
+					EnvironmentMapPass{ p_map, l_nodes[2], p_node },
+					EnvironmentMapPass{ p_map, l_nodes[3], p_node },
+					EnvironmentMapPass{ p_map, l_nodes[4], p_node },
+					EnvironmentMapPass{ p_map, l_nodes[5], p_node },
 				}
 			};
 		}

@@ -155,6 +155,7 @@ namespace Castor3D
 					m_renderSystem.GetMainContext()->EndCurrent();
 				} );
 			DoProcessEvents( EventType::ePreRender );
+			GetEngine()->GetMaterialCache().Update();
 			GetEngine()->GetOverlayCache().UpdateRenderer();
 			GetEngine()->GetRenderTargetCache().Render( p_info );
 			DoProcessEvents( EventType::eQueueRender );

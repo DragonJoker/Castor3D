@@ -43,9 +43,9 @@ namespace Castor3D
 		using InstanceType = InstanceTypeT;
 
 		C3D_API ObjectRenderNode( RenderPipeline & p_pipeline
-			, PassRenderNode && p_pass
-			, UniformBuffer & p_modelMatrixBuffer
-			, UniformBuffer & p_modelBuffer
+			, PassRenderNode && p_passNode
+			, ModelMatrixUbo & p_modelMatrixBuffer
+			, ModelUbo & p_modelBuffer
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
 			, DataType & p_data
@@ -54,24 +54,15 @@ namespace Castor3D
 		//!\~english	The pipeline.
 		//!\~french		Le pipeline.
 		RenderPipeline & m_pipeline;
-		//!\~english	The pass render node.
-		//!\~french		Le noeud de rendu de passe.
+		//!\~english	The pipeline.
+		//!\~french		Le pipeline.
 		PassRenderNode m_passNode;
 		//!\~english	The model matrices UBO.
 		//!\~french		L'UBO de matrices modèle.
-		UniformBuffer & m_modelMatrixUbo;
-		//!\~english	The model matrix uniform variable.
-		//!\~french		La variable uniforme contenant la matrice modèle.
-		Uniform4x4r & m_modelMatrix;
-		//!\~english	The normal matrix uniform variable.
-		//!\~french		La variable uniforme contenant la matrice normales.
-		Uniform4x4r & m_normalMatrix;
+		ModelMatrixUbo & m_modelMatrixUbo;
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
-		UniformBuffer & m_modelUbo;
-		//!\~english	The model shadow receiver status uniform variable.
-		//!\~french		La variable uniforme contenant le statut de réception d'ombres du modèle.
-		Uniform1i & m_shadowReceiver;
+		ModelUbo & m_modelUbo;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers & m_buffers;

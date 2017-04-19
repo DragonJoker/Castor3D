@@ -1,4 +1,4 @@
-#include "ShaderProgram.hpp"
+﻿#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -116,6 +116,7 @@ namespace Castor3D
 	const String ShaderProgram::Weights0 = cuT( "weights0" );
 	const String ShaderProgram::Weights1 = cuT( "weights1" );
 	const String ShaderProgram::Transform = cuT( "transform" );
+	const String ShaderProgram::Material = cuT( "material" );
 
 	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
 	const String ShaderProgram::CameraFarPlane = cuT( "c3d_fCameraFarPlane" );
@@ -125,12 +126,14 @@ namespace Castor3D
 	const String ShaderProgram::FogDensity = cuT( "c3d_fFogDensity" );
 	const String ShaderProgram::LightsCount = cuT( "c3d_iLightsCount" );
 	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
+	const String ShaderProgram::Exposure = cuT( "c3d_fExposure" );
+	const String ShaderProgram::Gamma = cuT( "c3d_fGamma" );
 	const String ShaderProgram::MatDiffuse = cuT( "c3d_v4MatDiffuse" );
 	const String ShaderProgram::MatSpecular = cuT( "c3d_v4MatSpecular" );
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
 	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
 	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
-	const String ShaderProgram::MatEnvironmentIndex = cuT( "c3d_iMatEnvironmentIndex" );
+	const String ShaderProgram::MatRefractionRatio = cuT( "c3d_refractionRatio" );
 	const String ShaderProgram::Time = cuT( "c3d_fTime" );
 	const String ShaderProgram::Bones = cuT( "c3d_mtxBones" );
 	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
@@ -146,10 +149,13 @@ namespace Castor3D
 	const String ShaderProgram::MapEnvironment = cuT( "c3d_mapEnvironment" );
 	const String ShaderProgram::MapShadow = cuT( "c3d_mapShadow" );
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
-	const String ShaderProgram::ShadowReceiver = cuT( "c3d_iShadowReceiver" );
+	const String ShaderProgram::ShadowReceiver = cuT( "c3d_shadowReceiver" );
+	const String ShaderProgram::MaterialIndex = cuT( "c3d_materialIndex" );
+	const String ShaderProgram::EnvironmentIndex = cuT( "c3d_envMapIndex" );
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
 	const String ShaderProgram::BufferModelMatrix = cuT( "ModelMatrices" );
+	const String ShaderProgram::BufferHdrConfig = cuT( "HdrConfig" );
 	const String ShaderProgram::BufferScene = cuT( "Scene" );
 	const String ShaderProgram::BufferPass = cuT( "Pass" );
 	const String ShaderProgram::BufferModel = cuT( "Model" );

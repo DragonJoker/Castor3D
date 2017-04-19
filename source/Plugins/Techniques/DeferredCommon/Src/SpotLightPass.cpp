@@ -21,7 +21,7 @@ namespace deferred_common
 
 	namespace
 	{
-		static uint32_t constexpr FaceCount = 20;
+		static uint32_t constexpr FaceCount = 40;
 
 		Point2f DoCalcSpotLightBCone( const Castor3D::SpotLight & p_light
 			, float p_max )
@@ -29,40 +29,35 @@ namespace deferred_common
 			auto l_length = GetMaxDistance( p_light
 				, p_light.GetAttenuation()
 				, p_max );
-			auto l_width = p_light.GetCutOff().radians() / Angle::from_degrees( 22.5f ).radians();
+			auto l_width = p_light.GetCutOff().degrees() / 22.5f;
 			return Point2f{ l_length * l_width, l_length };
 		}
 	}
 
 	//*********************************************************************************************
 	
-	SpotLightPass::Program::Program( Scene const & p_scene
+	SpotLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
 		, String const & p_pxl
 		, bool p_ssao )
-		: MeshLightPass::Program{ p_scene, p_vtx, p_pxl, p_ssao }
+		: MeshLightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
+		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
+		, m_lightTransform{ m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
+		, m_lightPosition{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
+		, m_lightAttenuation{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
+		, m_lightExponent{ m_program->CreateUniform< UniformType::eFloat >( cuT( "light.m_exponent" ), ShaderType::ePixel ) }
+		, m_lightCutOff{ m_program->CreateUniform< UniformType::eFloat >( cuT( "light.m_cutOff" ), ShaderType::ePixel ) }
 	{
-		m_lightDirection = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Direction" ), ShaderType::ePixel );
-		m_lightTransform = m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_mtxLightSpace" ), ShaderType::ePixel );
-		m_lightPosition = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Position" ), ShaderType::ePixel );
-		m_lightAttenuation = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Attenuation" ), ShaderType::ePixel );
-		m_lightExponent = m_program->CreateUniform< UniformType::eFloat >( cuT( "light.m_fExponent" ), ShaderType::ePixel );
-		m_lightCutOff = m_program->CreateUniform< UniformType::eFloat >( cuT( "light.m_fCutOff" ), ShaderType::ePixel );
 	}
 
 	SpotLightPass::Program::~Program()
 	{
-		m_lightDirection = nullptr;
-		m_lightTransform = nullptr;
-		m_lightAttenuation = nullptr;
-		m_lightPosition = nullptr;
-		m_lightExponent = nullptr;
-		m_lightCutOff = nullptr;
 	}
 
 	void SpotLightPass::Program::DoBind( Light const & p_light )
 	{
 		auto & l_light = *p_light.GetSpotLight();
+		m_lightIntensity->SetValue( l_light.GetIntensity() );
 		m_lightAttenuation->SetValue( l_light.GetAttenuation() );
 		m_lightPosition->SetValue( l_light.GetLight().GetParent()->GetDerivedPosition() );
 		m_lightExponent->SetValue( l_light.GetExponent() );
@@ -183,11 +178,10 @@ namespace deferred_common
 		return l_model;
 	}
 
-	LightPass::ProgramPtr SpotLightPass::DoCreateProgram( Castor3D::Scene const & p_scene
-		, Castor::String const & p_vtx
+	LightPass::ProgramPtr SpotLightPass::DoCreateProgram( Castor::String const & p_vtx
 		, Castor::String const & p_pxl )const
 	{
-		return std::make_unique< Program >( p_scene, p_vtx, p_pxl, m_ssao );
+		return std::make_unique< Program >( m_engine, p_vtx, p_pxl, m_ssao );
 	}
 
 	//*********************************************************************************************

@@ -57,10 +57,16 @@ namespace CastorViewer
 		void Reset( float p_speed );
 		/**
 		*\brief
-		*	Met à jour l'angle et le zoom en fonction des vitesses.
-		*	
+		*	Met à jour la vitesse maximale (de rotation et translation).
 		*/
-		void Update();
+		void SetMaxSpeed( float p_speed );
+		/**
+		*\brief
+		*	Met à jour l'angle et le zoom en fonction des vitesses.
+		*\return
+		 * 	\p true s'il y a eu du mouvement.
+		*/
+		bool Update();
 		/**
 		*\brief
 		*	Définit la vitesse de rotation du noeud.
@@ -75,6 +81,20 @@ namespace CastorViewer
 		*	La nouvelle valeur.
 		*/
 		void SetScalarVelocity( Castor::Point3r const & p_value )noexcept;
+		/**
+		*\brief
+		*	Définit la vitesse de rotation du noeud.
+		*param[in] p_value
+		*	La nouvelle valeur.
+		*/
+		void AddAngularVelocity( Castor::Point2r const & p_value )noexcept;
+		/**
+		*\brief
+		*	Définit la vitesse de translation du noeud.
+		*param[in] p_value
+		*	La nouvelle valeur.
+		*/
+		void AddScalarVelocity( Castor::Point3r const & p_value )noexcept;
 
 	private:
 		//! Le listener qui recevra les évènements de déplacement / rotation.
@@ -99,8 +119,6 @@ namespace CastorViewer
 			0.0_degrees,
 			Castor::make_range( -5.0_degrees, 5.0_degrees )
 		};
-		//! La translation.
-		Castor::Point3r m_translate;
 		//! La vitesse de translation sur l'axe X.
 		Castor::RangedValue< float > m_scalarVelocityX
 		{

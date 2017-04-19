@@ -426,6 +426,8 @@ namespace Castor3D
 		eBoneWeights1 = 0x200,
 		//! Instantiation matrix
 		eTransform = 0x400,
+		//! Instantiation material index
+		eMatIndex = 0x800,
 	};
 	IMPLEMENT_FLAGS( ElementUsage )
 	/*!
@@ -614,6 +616,71 @@ namespace Castor3D
 		TextureChannels m_textureFlags;
 		ProgramFlags m_programFlags;
 		SceneFlags m_sceneFlags;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.10.0
+	\date		09/04/2017
+	\~english
+	\brief		HDR configuration (expsure and gamma correction).
+	\~french
+	\brief		Configuration HDR (exposition et correction gamma).
+	*/
+	class HdrConfig
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Sets the exposure value.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur de l'exposition.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetExposure( float p_value )
+		{
+			m_exposure = p_value;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the gamma correction value.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur de la correction gamma.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetGamma( float p_value )
+		{
+			m_gamma = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The exposure value.
+		 *\~french
+		 *\return		La valeur de l'exposition.
+		 */
+		inline float GetExposure()const
+		{
+			return m_exposure;
+		}
+		/**
+		 *\~english
+		 *\return		The gamma correction value.
+		 *\~french
+		 *\return		La valeur de la correction gamma.
+		 */
+		inline float GetGamma()const
+		{
+			return m_gamma;
+		}
+
+	private:
+		//!\~english	The exposure value.
+		//!\~french		La valeur d'exposition.
+		float m_exposure{ 1.0f };
+		//!\~english	The gamma correction value.
+		//!\~french		La valeur de correction gamma.
+		float m_gamma{ 2.2f };
 	};
 
 	class GpuInformations;

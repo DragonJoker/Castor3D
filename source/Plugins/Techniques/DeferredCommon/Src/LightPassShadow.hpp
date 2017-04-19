@@ -179,11 +179,11 @@ namespace deferred_common
 			using my_program_type = typename my_pass_type::Program;
 
 		public:
-			Program( Castor3D::Scene const & p_scene
+			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, bool p_ssao )
-				: my_program_type( p_scene, p_vtx, p_pxl, p_ssao )
+				: my_program_type( p_engine, p_vtx, p_pxl, p_ssao )
 			{
 				if ( p_ssao )
 				{
@@ -229,11 +229,10 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj
-			, GLSL::FogType p_fogType
 			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first )override
 		{
-			my_pass_type::m_gpInfo->Update( p_size
+			this->m_gpInfo->Update( p_size
 				, p_camera
 				, p_invViewProj
 				, p_invView
@@ -244,11 +243,10 @@ namespace deferred_common
 				, p_light
 				, p_camera );
 			m_shadowMapTexture.Bind();
-
+			this->m_program->Bind( p_light );
 			my_pass_type::DoRender( p_size
 				, p_gp
-				, p_light
-				, p_fogType
+				, p_light.GetColour()
 				, p_ssao
 				, p_first );
 
@@ -264,11 +262,13 @@ namespace deferred_common
 		}
 
 	private:
-		typename LightPass::ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
-			, Castor::String const & p_vtx
+		typename LightPass::ProgramPtr DoCreateProgram( Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const override
 		{
-			return std::make_unique< LightPassShadow::Program >( p_scene, p_vtx, p_pxl, my_pass_type::m_ssao );
+			return std::make_unique< LightPassShadow::Program >( this->m_engine
+				, p_vtx
+				, p_pxl
+				, this->m_ssao );
 		}
 
 	private:

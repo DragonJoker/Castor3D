@@ -1,4 +1,4 @@
-#include "RenderTarget.hpp"
+﻿#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -7,6 +7,7 @@
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
+#include "Shader/PassBuffer.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -293,8 +294,10 @@ namespace Castor3D
 			// Then draw the render's result to the RenderTarget's frame buffer.
 			p_fb.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 			p_fb.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-			GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
+			m_toneMapping->SetConfig( l_scene->GetHdrConfig() );
+			m_toneMapping->Apply( GetSize(), m_renderTechnique->GetResult() );
 			// We also render overlays.
+			GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 			GetEngine()->GetOverlayCache().Render( *l_scene, m_size );
 			p_fb.m_frameBuffer->Unbind();
 		}

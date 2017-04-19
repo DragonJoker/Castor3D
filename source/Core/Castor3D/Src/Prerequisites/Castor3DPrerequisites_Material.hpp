@@ -496,6 +496,9 @@ namespace Castor3D
 		//!\~english Reflection map
 		//!\~french Map de réflexion
 		eReflection = 0x0080,
+		//!\~english Refraction map
+		//!\~french Map de réfraction
+		eRefraction = 0x0100,
 		//!\~english Mask for all the texture channels
 		//!\~french Masque pour les canaux de texture
 		eAll = 0x0FFF,

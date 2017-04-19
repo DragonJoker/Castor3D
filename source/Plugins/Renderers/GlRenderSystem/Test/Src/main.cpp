@@ -118,7 +118,7 @@ namespace
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( l_return->LoadRenderer( GlRender::GlRenderSystem::Name ) )
+		if ( l_return->LoadRenderer( GlRender::GlRenderSystem::Type ) )
 		{
 			l_return->Initialise( 1, false );
 			auto l_context = l_return->GetRenderSystem()->CreateContext();

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -35,7 +35,7 @@ namespace deferred_common
 			: public LightPass::Program
 		{
 		public:
-			Program( Castor3D::Scene const & p_scene
+			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, bool p_ssao );
@@ -46,6 +46,9 @@ namespace deferred_common
 			void DoBind( Castor3D::Light const & p_light )override;
 
 		private:
+			//!\~english	The variable containing the light intensities.
+			//!\~french		La variable contenant les intensités de la lumière.
+			Castor3D::PushUniform2fSPtr m_lightIntensity;
 			//!\~english	The variable containing the light direction.
 			//!\~french		La variable contenant la direction de la lumière.
 			Castor3D::PushUniform3fSPtr m_lightDirection;
@@ -62,7 +65,7 @@ namespace deferred_common
 			, bool p_shadows );
 		~DirectionalLightPass();
 		void Initialise( Castor3D::Scene const & p_scene
-			, Castor3D::UniformBuffer & p_sceneUbo )override;
+			, Castor3D::SceneUbo & p_sceneUbo )override;
 		void Cleanup()override;
 		uint32_t GetCount()const override;
 
@@ -73,8 +76,7 @@ namespace deferred_common
 
 	private:
 		Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const override;
-		LightPass::ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
-			, Castor::String const & p_vtx
+		LightPass::ProgramPtr DoCreateProgram( Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const override;
 
 	private:

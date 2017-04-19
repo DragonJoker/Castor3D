@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -45,7 +45,12 @@ namespace GLSL
 		inline explicit operator uint32_t();
 		inline Int & operator++();
 		inline Int operator++( int );
+		inline Int & operator<<=( int i );
+		inline Int & operator>>=( int i );
 	};
+
+	inline Int operator<<( Int const & p_value, int i );
+	inline Int operator>>( Int const & p_value, int i );
 
 	inline Int operator "" _i( unsigned long long p_value )
 	{

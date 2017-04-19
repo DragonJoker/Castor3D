@@ -12,6 +12,11 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
+#include "Shader/BillboardUbo.hpp"
+#include "Shader/MatrixUbo.hpp"
+#include "Shader/ModelMatrixUbo.hpp"
+#include "Shader/ModelUbo.hpp"
+#include "Shader/SceneUbo.hpp"
 #include "Shader/PushUniform.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Texture/Sampler.hpp"
@@ -25,7 +30,7 @@ namespace Castor3D
 	inline uint32_t DoFillShaderDepthMaps( RenderPipeline & p_pipeline
 		, DepthMapArray & p_depthMaps )
 	{
-		uint32_t l_index = p_pipeline.GetTexturesCount() + 1;
+		uint32_t l_index = p_pipeline.GetTexturesCount() + Pass::MinTextureIndex;
 
 		if ( !p_depthMaps.empty() )
 		{
@@ -64,63 +69,66 @@ namespace Castor3D
 		return l_index;
 	}
 
-	inline void DoBindPass( PassRenderNodeUniforms & p_node
-		, SceneNode & p_sceneNode
-		, Pass & p_pass
+	inline void DoBindPass( SceneNode & p_sceneNode
+		, PassRenderNode & p_node
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps
+		, ModelUbo & p_model
+		, EnvironmentMap *& p_envMap )
 	{
-		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
-		{
-			p_scene.GetLightCache().BindLights();
-		}
-
 		auto l_index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 
-		p_pass.UpdateRenderNode( p_node );
-		p_pass.BindTextures();
+		p_node.m_pass.BindTextures();
+
+		for ( auto l_pair : p_node.m_textures )
+		{
+			auto l_texture = l_pair.first;
+			auto & l_variable = l_pair.second;
+
+			if ( l_texture )
+			{
+				l_variable.get().SetValue( l_texture );
+			}
+		}
 
 		for ( auto & l_depthMap : p_depthMaps )
 		{
 			l_depthMap.get().Bind();
 		}
 
-		if ( p_pass.HasReflectionMapping() )
+		if ( p_node.m_pass.HasEnvironmentMapping() )
 		{
-			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
+			p_envMap = &p_scene.GetEnvironmentMap( p_sceneNode );
 
 			if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 			{
 				p_pipeline.GetEnvironmentMapVariable().SetValue( l_index );
-				l_map.GetTexture().SetIndex( l_index );
-				l_map.GetTexture().Bind();
+				p_envMap->GetTexture().SetIndex( l_index );
+				p_envMap->GetTexture().Bind();
 			}
 			else
 			{
-				p_node.m_environmentIndex.SetValue( float( l_map.GetIndex() ) );
+				p_model.SetEnvMapIndex( p_envMap->GetIndex() );
 			}
 		}
 		else
 		{
-			p_node.m_environmentIndex.SetValue( 0 );
+			p_model.SetEnvMapIndex( 0 );
+			p_envMap = nullptr;
 		}
-
-		p_node.m_passUbo.Update();
 	}
 
-	inline void DoUnbindPass( PassRenderNodeUniforms & p_node
-		, SceneNode & p_sceneNode
-		, Pass & p_pass
+	inline void DoUnbindPass( SceneNode & p_sceneNode
+		, PassRenderNode & p_node
 		, Scene & p_scene
 		, RenderPipeline & p_pipeline
-		, DepthMapArray const & p_depthMaps )
+		, DepthMapArray const & p_depthMaps
+		, EnvironmentMap * p_envMap )
 	{
-		if ( p_pass.HasReflectionMapping()
-			&& CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+		if ( p_envMap )
 		{
-			auto & l_map = p_scene.GetEnvironmentMap( p_sceneNode );
-			l_map.GetTexture().Unbind();
+			p_envMap->GetTexture().Unbind();
 		}
 
 		for ( auto & l_depthMap : p_depthMaps )
@@ -128,15 +136,10 @@ namespace Castor3D
 			l_depthMap.get().Unbind();
 		}
 
-		p_pass.UnbindTextures();
-
-		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
-		{
-			p_scene.GetLightCache().UnbindLights();
-		}
+		p_node.m_pass.UnbindTextures();
 	}
 
-	inline void DoBindPassOpacityMap( PassRenderNodeUniforms & p_node
+	inline void DoBindPassOpacityMap( PassRenderNode & p_node
 		, Pass & p_pass )
 	{
 		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
@@ -149,7 +152,7 @@ namespace Castor3D
 		}
 	}
 
-	inline void DoUnbindPassOpacityMap( PassRenderNodeUniforms & p_node
+	inline void DoUnbindPassOpacityMap( PassRenderNode & p_node
 		, Pass & p_pass )
 	{
 		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
@@ -165,10 +168,7 @@ namespace Castor3D
 	inline void DoRenderObjectNode( ObjectRenderNode< DataType, InstanceType > & p_node )
 	{
 		auto & l_model = p_node.m_sceneNode.GetDerivedTransformationMatrix();
-		auto & l_view = p_node.m_pipeline.GetViewMatrix();
-		p_node.m_modelMatrix.SetValue( l_model );
-		p_node.m_normalMatrix.SetValue( Matrix4x4r{ ( l_model * l_view ).get_minor( 3, 3 ).invert().get_transposed() } );
-		p_node.m_modelMatrixUbo.Update();
+		p_node.m_modelMatrixUbo.Update( l_model );
 		p_node.m_data.Draw( p_node.m_buffers );
 	}
 
@@ -179,9 +179,7 @@ namespace Castor3D
 
 	inline void DoRenderNodeNoPass( BillboardRenderNode & p_node )
 	{
-		auto const & l_dimensions = p_node.m_data.GetDimensions();
-		p_node.m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
-		p_node.m_billboardUbo.Update();
+		p_node.m_billboardUbo.Update( p_node.m_instance.GetDimensions() );
 		DoRenderObjectNode( p_node );
 	}
 
@@ -193,30 +191,32 @@ namespace Castor3D
 
 			if ( l_submesh )
 			{
-				l_submesh->FillShader( p_node.m_time );
+				p_node.m_morphingUbo.Update( l_submesh->GetCurrentFactor() );
+			}
+			else
+			{
+				p_node.m_morphingUbo.Update( 1.0f );
 			}
 		}
 		else
 		{
-			p_node.m_time.SetValue( 1.0f );
+			p_node.m_morphingUbo.Update( 1.0f );
 		}
 
-		p_node.m_morphingUbo.Update();
 		DoRenderObjectNode( p_node );
 	}
 
 	inline void DoRenderNodeNoPass( SkinningRenderNode & p_node )
 	{
-		p_node.m_skeleton.FillShader( p_node.m_bonesMatrix );
-		p_node.m_skinningUbo.Update();
+		p_node.m_skinningUbo.Update( p_node.m_skeleton );
 		DoRenderObjectNode( p_node );
 	}
 
 	template< typename NodeType >
 	inline void DoRenderNode( NodeType & p_node )
 	{
-		p_node.m_shadowReceiver.SetValue( p_node.m_instance.IsShadowReceiver() ? 1 : 0 );
-		p_node.m_modelUbo.Update();
+		p_node.m_modelUbo.Update( p_node.m_instance.IsShadowReceiver()
+			, p_node.m_passNode.m_pass.GetId() );
 		DoRenderNodeNoPass( p_node );
 	}
 }

@@ -28,6 +28,8 @@ namespace GuiCommon
 		static wxString PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
 		static wxString PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 		static wxString PROPERTY_CHANNEL_EMISSIVE = _( "Emissive" );
+		static wxString PROPERTY_CHANNEL_REFLECTION = _( "Reflection" );
+		static wxString PROPERTY_CHANNEL_REFRACTION = _( "Refraction" );
 	}
 
 	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable, TextureUnitSPtr p_texture )
@@ -42,9 +44,10 @@ namespace GuiCommon
 		PROPERTY_CHANNEL_OPACITY = _( "Opacity" );
 		PROPERTY_CHANNEL_SPECULAR = _( "Specular" );
 		PROPERTY_CHANNEL_HEIGHT = _( "Height" );
-		PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
 		PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 		PROPERTY_CHANNEL_EMISSIVE = _( "Emissive" );
+		PROPERTY_CHANNEL_REFLECTION = _( "Reflection" );
+		PROPERTY_CHANNEL_REFRACTION = _( "Refraction" );
 
 		CreateTreeItemMenu();
 	}
@@ -64,9 +67,11 @@ namespace GuiCommon
 			l_choices.Add( PROPERTY_CHANNEL_NORMAL );
 			l_choices.Add( PROPERTY_CHANNEL_OPACITY );
 			l_choices.Add( PROPERTY_CHANNEL_SPECULAR );
+			l_choices.Add( PROPERTY_CHANNEL_EMISSIVE );
 			l_choices.Add( PROPERTY_CHANNEL_HEIGHT );
-			l_choices.Add( PROPERTY_CHANNEL_AMBIENT );
 			l_choices.Add( PROPERTY_CHANNEL_GLOSS );
+			l_choices.Add( PROPERTY_CHANNEL_REFLECTION );
+			l_choices.Add( PROPERTY_CHANNEL_REFRACTION );
 			wxString l_selected;
 
 			switch ( l_unit->GetChannel() )
@@ -98,15 +103,27 @@ namespace GuiCommon
 			case TextureChannel::eGloss:
 				l_selected = PROPERTY_CHANNEL_GLOSS;
 				break;
+
+			case TextureChannel::eReflection:
+				l_selected = PROPERTY_CHANNEL_REFLECTION;
+				break;
+
+			case TextureChannel::eRefraction:
+				l_selected = PROPERTY_CHANNEL_REFRACTION;
+				break;
 			}
 
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXTURE ) );
 			p_grid->Append( new wxEnumProperty( PROPERTY_CHANNEL, PROPERTY_CHANNEL, l_choices ) )->SetValue( l_selected );
 
-			if ( l_unit->GetTexture()->GetImage().IsStaticSource() )
+			if ( l_unit->GetChannel() != TextureChannel::eReflection
+				&& l_unit->GetChannel() != TextureChannel::eRefraction )
 			{
-				Path l_path{ l_unit->GetTexture()->GetImage().ToString() };
-				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_path );
+				if ( l_unit->GetTexture()->GetImage().IsStaticSource() )
+				{
+					Path l_path{ l_unit->GetTexture()->GetImage().ToString() };
+					p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_path );
+				}
 			}
 		}
 	}
@@ -153,6 +170,16 @@ namespace GuiCommon
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 				{
 					OnChannelChange( TextureChannel::eGloss );
+				}
+
+				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_REFLECTION )
+				{
+					OnChannelChange( TextureChannel::eReflection );
+				}
+
+				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_REFRACTION )
+				{
+					OnChannelChange( TextureChannel::eRefraction );
 				}
 			}
 			else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )

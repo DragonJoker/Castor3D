@@ -1,4 +1,4 @@
-﻿namespace GLSL
+namespace GLSL
 {
 	//***********************************************************************************************
 
@@ -285,6 +285,12 @@
 	inline T GlslWriter::GetAttribute( Castor::String const & p_name )
 	{
 		*this << Attribute() << T().m_type << p_name << cuT( ";" ) << Endl();
+
+		if ( std::is_same< T, Mat4 >::value )
+		{
+			m_attributeIndex += 3;
+		}
+
 		return T( this, p_name );
 	}
 
@@ -374,6 +380,12 @@
 	inline Array< T > GlslWriter::GetAttribute( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		*this << Attribute() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+
+		if ( std::is_same< T, Mat4 >::value )
+		{
+			m_attributeIndex += 3;
+		}
+
 		return Array< T >( this, p_name, p_dimension );
 	}
 
@@ -445,6 +457,11 @@
 		if ( p_enabled )
 		{
 			*this << Attribute() << T().m_type << p_name << cuT( ";" ) << Endl();
+
+			if ( std::is_same< T, Mat4 >::value )
+			{
+				m_attributeIndex += 3;
+			}
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -529,6 +546,11 @@
 		if ( p_enabled )
 		{
 			*this << Attribute() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+
+			if ( std::is_same< T, Mat4 >::value )
+			{
+				m_attributeIndex += 3;
+			}
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );

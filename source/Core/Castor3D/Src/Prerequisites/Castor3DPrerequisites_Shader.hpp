@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -366,6 +366,14 @@ namespace Castor3D
 	class UniformBufferBinding;
 	class ShaderStorageBuffer;
 	class AtomicCounterBuffer;
+	class PassBuffer;
+	class BillboardUbo;
+	class MatrixUbo;
+	class ModelUbo;
+	class ModelMatrixUbo;
+	class MorphingUbo;
+	class SceneUbo;
+	class SkinningUbo;
 	template< UniformType Type >
 	class TUniform;
 	template< UniformType Type >
@@ -718,69 +726,6 @@ namespace Castor3D
 	DECLARE_MAP( ShaderType, AtomicCounterBufferWPtr, AtomicCounterBufferPtrShader );
 
 	//@}
-
-#define UBO_MATRIX( Writer )\
-	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix };\
-	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxProjection );\
-	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxView );\
-	l_matrices.End()
-
-#define UBO_MODEL_MATRIX( Writer )\
-	GLSL::Ubo l_modelMatrices{ l_writer, ShaderProgram::BufferModelMatrix };\
-	auto c3d_mtxModel = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxModel );\
-	auto c3d_mtxNormal = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
-	l_modelMatrices.End()
-
-#define UBO_SCENE( Writer )\
-	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
-	auto c3d_v4AmbientLight = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
-	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
-	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
-	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
-	auto c3d_v3CameraFarPlane = l_scene.GetUniform< GLSL::Float >( ShaderProgram::CameraFarPlane );\
-	auto c3d_iFogType = l_scene.GetUniform< GLSL::Int >( ShaderProgram::FogType );\
-	auto c3d_fFogDensity = l_scene.GetUniform< GLSL::Float >( ShaderProgram::FogDensity );\
-	l_scene.End()
-
-#define UBO_PASS( Writer )\
-	GLSL::Ubo l_pass{ l_writer, ShaderProgram::BufferPass };\
-	auto c3d_mtxTexture0 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[0] );\
-	auto c3d_mtxTexture1 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
-	auto c3d_mtxTexture2 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
-	auto c3d_mtxTexture3 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
-	auto c3d_v4MatDiffuse = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatDiffuse );\
-	auto c3d_v4MatEmissive = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatEmissive );\
-	auto c3d_v4MatSpecular = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatSpecular );\
-	auto c3d_fMatShininess = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatShininess );\
-	auto c3d_fMatOpacity = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatOpacity );\
-	auto c3d_iMatEnvironmentIndex = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatEnvironmentIndex );\
-	l_pass.End()
-
-#define UBO_MODEL( Writer )\
-	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel };\
-	auto c3d_iShadowReceiver = l_model.GetUniform< GLSL::Int >( ShaderProgram::ShadowReceiver );\
-	l_model.End()
-
-#define UBO_BILLBOARD( Writer )\
-	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards };\
-	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( ShaderProgram::Dimensions );\
-	auto c3d_v2iWindowSize = l_billboard.GetUniform< IVec2 >( ShaderProgram::WindowSize );\
-	l_billboard.End()
-
-#define UBO_SKINNING( Writer, Flags )\
-	GLSL::Ubo l_skinning{ l_writer, ShaderProgram::BufferSkinning };\
-	auto c3d_mtxBones = l_skinning.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
-	l_skinning.End()
-
-#define UBO_MORPHING( Writer, Flags )\
-	GLSL::Ubo l_morphing{ l_writer, ShaderProgram::BufferMorphing };\
-	auto c3d_fTime = l_morphing.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
-	l_morphing.End()
-
-#define UBO_OVERLAY( Writer )\
-	GLSL::Ubo l_overlay{ l_writer, ShaderProgram::BufferOverlay };\
-	auto c3d_v2iPosition = l_overlay.GetUniform< GLSL::IVec2 >( ShaderProgram::OvPosition );\
-	l_overlay.End()
 }
 
 #endif

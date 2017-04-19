@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -79,6 +79,17 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~ForwardRenderTechniquePass();
 		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[out]	p_info		Receives the render informations.
+		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[out]	p_info		Reçoit les informations de rendu.
+		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
+		 */
+		C3D_API void Render( RenderInfo & p_info, bool p_shadows )override;
+		/**
 		 *\copydoc		Castor3D::RenderTechniquePass::InitialiseShadowMaps
 		 */
 		C3D_API bool InitialiseShadowMaps()override;
@@ -100,6 +111,19 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderTechniquePass::DoGetDepthMaps
 		 */
 		C3D_API void DoGetDepthMaps( DepthMapArray & p_depthMaps )override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
+		 */
+		C3D_API Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, bool p_invertNormals )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
+		 */
+		C3D_API Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags )const override;
 
 	private:
 		//!\~english	The shadow map used for directional lights.

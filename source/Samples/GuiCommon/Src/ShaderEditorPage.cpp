@@ -59,12 +59,35 @@ namespace GuiCommon
 				auto l_textureFlags = p_pass.GetTextureFlags();
 				auto l_programFlags = p_pass.GetProgramFlags();
 				auto l_sceneFlags = p_scene.GetFlags();
-				l_technique.GetOpaquePass().UpdateFlags( l_textureFlags, l_programFlags, l_sceneFlags );
-				DoLoadPage( *l_technique.GetOpaquePass().GetPipelineBack( p_pass.GetColourBlendMode()
-					, p_pass.GetAlphaBlendMode()
-					, l_textureFlags
-					, l_programFlags
-					, l_sceneFlags ) );
+				RenderPipelineRPtr l_pipeline;
+
+				if ( p_pass.HasAlphaBlending())
+				{
+					l_technique.GetTransparentPass().UpdateFlags( l_textureFlags, l_programFlags, l_sceneFlags );
+					l_pipeline = l_technique.GetTransparentPass().GetPipelineBack( p_pass.GetColourBlendMode()
+						, p_pass.GetAlphaBlendMode()
+						, l_textureFlags
+						, l_programFlags
+						, l_sceneFlags );
+				}
+				else
+				{
+					l_technique.GetOpaquePass().UpdateFlags( l_textureFlags, l_programFlags, l_sceneFlags );
+					l_pipeline = l_technique.GetOpaquePass().GetPipelineBack( p_pass.GetColourBlendMode()
+						, p_pass.GetAlphaBlendMode()
+						, l_textureFlags
+						, l_programFlags
+						, l_sceneFlags );
+				}
+
+				if ( l_pipeline )
+				{
+					DoLoadPage( *l_pipeline );
+				}
+				else
+				{
+					Logger::LogWarning( cuT( "Pipeline not found." ) );
+				}
 			}
 		}
 	}

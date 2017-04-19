@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "LightPass.hpp"
 
+#include <Shader/MatrixUbo.hpp>
 #include <Texture/TextureUnit.hpp>
 
 namespace deferred_common
@@ -41,12 +42,12 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj );
 
-		inline Castor3D::TextureUnit const & GetResult()
+		inline Castor3D::TextureUnit const & GetResult()const
 		{
 			return m_blurResult;
 		}
 
-		inline Castor3D::TextureLayout const & GetRaw()
+		inline Castor3D::TextureLayout const & GetRaw()const
 		{
 			return *m_ssaoResult.GetTexture();
 		}
@@ -65,9 +66,7 @@ namespace deferred_common
 		Castor3D::Engine & m_engine;
 		// Quad rendering
 		Castor::Size m_size;
-		Castor3D::UniformBuffer m_matrixUbo;
-		Castor3D::Uniform4x4fSPtr m_viewMatrix;
-		Castor3D::Uniform4x4fSPtr m_projectionMatrix;
+		Castor3D::MatrixUbo m_matrixUbo;
 		Castor3D::Viewport m_viewport;
 		// Raw SSAO pass
 		Castor3D::FrameBufferSPtr m_ssaoFbo;

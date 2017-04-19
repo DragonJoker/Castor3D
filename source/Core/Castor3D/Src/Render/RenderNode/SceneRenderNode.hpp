@@ -37,32 +37,7 @@ namespace Castor3D
 	*/
 	struct SceneRenderNode
 	{
-		C3D_API SceneRenderNode( UniformBuffer & p_sceneUbo );
-
-		//!\~english	The scene UBO.
-		//!\~french		L'UBO de scène.
-		UniformBuffer & m_sceneUbo;
-		//!\~english	The ambient light.
-		//!\~french		La luminosité ambiante.
-		Uniform4f & m_ambientLight;
-		//!\~english	The background colour.
-		//!\~french		La couleur de fond.
-		Uniform4f & m_backgroundColour;
-		//!\~english	The lights counts.
-		//!\~french		Les comptes des lumières.
-		Uniform4i & m_lightsCount;
-		//!\~english	The camera position.
-		//!\~french		La position de la caméra.
-		Uniform3f & m_cameraPos;
-		//!\~english	The camera far plane value.
-		//!\~french		La valeur du plan éloigné de la caméra.
-		Uniform1f & m_cameraFarPlane;
-		//!\~english	The fog type.
-		//!\~french		Le type de brouillard.
-		Uniform1i & m_fogType;
-		//!\~english	The fog density.
-		//!\~french		La densité du brouillard.
-		Uniform1f & m_fogDensity;
+		C3D_API SceneRenderNode();
 	};
 }
 

@@ -23,6 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_RenderInfo_H___
 #define ___C3D_RenderInfo_H___
 
+#include "Castor3DPrerequisites.hpp"
 #include <cstdint>
 
 namespace Castor3D

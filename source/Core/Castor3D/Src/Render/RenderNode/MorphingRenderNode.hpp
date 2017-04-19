@@ -39,25 +39,22 @@ namespace Castor3D
 		: public SubmeshRenderNode
 	{
 		C3D_API MorphingRenderNode( RenderPipeline & p_pipeline
-			, PassRenderNode && p_pass
-			, UniformBuffer & p_modelMatrixBuffer
-			, UniformBuffer & p_modelBuffer
+			, PassRenderNode && p_passNode
+			, ModelMatrixUbo & p_modelMatrixBuffer
+			, ModelUbo & p_modelBuffer
 			, GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
 			, DataType & p_data
 			, InstanceType & p_instance
 			, AnimatedMesh & p_mesh
-			, UniformBuffer & p_morphingUbo );
+			, MorphingUbo & p_morphingUbo );
 
 		//!\~english	The animated mesh.
 		//!\~french		Le maillage animé.
 		AnimatedMesh & m_mesh;
 		//!\~english	The morphing UBO.
 		//!\~french		L'UBO de morphing.
-		UniformBuffer & m_morphingUbo;
-		//!\~english	The time uniform variable.
-		//!\~french		La variable uniforme contenant le temps.
-		Uniform1f & m_time;
+		MorphingUbo & m_morphingUbo;
 	};
 }
 

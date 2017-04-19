@@ -5,6 +5,7 @@
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslMaterial.hpp>
 
 IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::Engine, Engine )
 IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::RenderSystem, RenderSystem )
@@ -101,13 +102,12 @@ namespace Castor3D
 		return 0;
 	}
 
-	void ComputePreLightingMapContributions(
-		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_normal,
-		GLSL::Float & p_shininess,
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags )
+	void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
+		, GLSL::Vec3 & p_normal
+		, GLSL::Float & p_shininess
+		, TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags )
 	{
 		using namespace GLSL;
 		auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
@@ -133,14 +133,14 @@ namespace Castor3D
 		}
 	}
 
-	void ComputePostLightingMapContributions(
-		GLSL::GlslWriter & p_writer,
-		GLSL::Vec3 & p_diffuse,
-		GLSL::Vec3 & p_specular,
-		GLSL::Vec3 & p_emissive,
-		TextureChannels const & p_textureFlags,
-		ProgramFlags const & p_programFlags,
-		SceneFlags const & p_sceneFlags )
+	void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
+		, GLSL::Vec3 & p_diffuse
+		, GLSL::Vec3 & p_specular
+		, GLSL::Vec3 & p_emissive
+		, GLSL::Float const & p_gamma
+		, TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags )
 	{
 		using namespace GLSL;
 		auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
@@ -148,8 +148,9 @@ namespace Castor3D
 		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
 		{
 			auto c3d_mapDiffuse( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
-
-			p_diffuse *= texture( c3d_mapDiffuse, l_texCoord.xy() ).xyz();
+			p_diffuse *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+				, p_gamma
+				, texture( c3d_mapDiffuse, l_texCoord.xy() ).xyz() );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eSpecular ) )
@@ -162,8 +163,9 @@ namespace Castor3D
 		if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
 		{
 			auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
-
-			p_emissive = texture( c3d_mapEmissive, l_texCoord.xy() ).xyz();
+			p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+				, p_gamma
+				, texture( c3d_mapEmissive, l_texCoord.xy() ).xyz() );
 		}
 	}
 

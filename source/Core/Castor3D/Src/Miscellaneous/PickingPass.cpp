@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -228,9 +228,8 @@ namespace Castor3D
 	void PickingPass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera )
 	{
-		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-		m_viewUniform->SetValue( p_camera.GetView() );
-		m_matrixUbo.Update();
+		m_matrixUbo.Update( p_camera.GetView()
+			, p_camera.GetViewport().GetProjection() );
 		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_nodes.m_instancedNodes.m_backCulled );
 		DoRenderStaticSubmeshes( p_nodes.m_scene, p_nodes.m_staticNodes.m_backCulled );
 		DoRenderSkinningSubmeshes( p_nodes.m_scene, p_nodes.m_skinningNodes.m_backCulled );
@@ -463,11 +462,6 @@ namespace Castor3D
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
 
 		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
-		UBO_MODEL( l_writer );
-
 		Ubo l_uboPicking{ l_writer, Picking };
 		auto c3d_iDrawIndex( l_uboPicking.GetUniform< UInt >( DrawIndex ) );
 		auto c3d_iNodeIndex( l_uboPicking.GetUniform< UInt >( NodeIndex ) );
@@ -524,23 +518,23 @@ namespace Castor3D
 					, MultisampleState{}
 					, p_program
 					, p_flags ) ).first->second;
-			l_pipeline.AddUniformBuffer( m_matrixUbo );
-			l_pipeline.AddUniformBuffer( m_modelMatrixUbo );
-			l_pipeline.AddUniformBuffer( m_sceneUbo );
+			l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+			l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+			l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
 
 			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 			{
-				l_pipeline.AddUniformBuffer( m_billboardUbo );
+				l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 			}
 
 			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
 			{
-				l_pipeline.AddUniformBuffer( m_skinningUbo );
+				l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 			}
 
 			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 			{
-				l_pipeline.AddUniformBuffer( m_morphingUbo );
+				l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 			}
 
 			l_pipeline.AddUniformBuffer( m_pickingUbo );

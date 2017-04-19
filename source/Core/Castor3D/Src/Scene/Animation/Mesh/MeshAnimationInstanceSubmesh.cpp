@@ -59,11 +59,6 @@ namespace Castor3D
 	{
 	}
 
-	void MeshAnimationInstanceSubmesh::FillShader( Uniform1f & p_variable )const
-	{
-		p_variable.SetValue( m_currentFactor );
-	}
-
 	void MeshAnimationInstanceSubmesh::Update( std::chrono::milliseconds const & p_time )
 	{
 		m_currentFactor = 0.0f;

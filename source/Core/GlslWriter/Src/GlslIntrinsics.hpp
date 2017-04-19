@@ -231,9 +231,12 @@ namespace GLSL
 	GlslWriter_API Float textureOffset( Sampler2DArrayShadow const & p_sampler, Vec4 const & p_value, IVec2 const p_offset, Float const & p_lod );
 	GlslWriter_API Float textureLodOffset( Sampler1DArrayShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const p_offset );
 	GlslWriter_API Float textureLodOffset( Sampler2DArrayShadow const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const p_offset );
-	GlslWriter_API Vec2 reflect( Vec2 const & p_a, Type const & p_b );
-	GlslWriter_API Vec3 reflect( Vec3 const & p_a, Type const & p_b );
-	GlslWriter_API Vec4 reflect( Vec4 const & p_a, Type const & p_b );
+	GlslWriter_API Vec2 reflect( Vec2 const & p_a, Vec2 const & p_b );
+	GlslWriter_API Vec3 reflect( Vec3 const & p_a, Vec3 const & p_b );
+	GlslWriter_API Vec4 reflect( Vec4 const & p_a, Vec4 const & p_b );
+	GlslWriter_API Vec2 refract( Vec2 const & p_a, Vec2 const & p_b, Float const & p_r );
+	GlslWriter_API Vec3 refract( Vec3 const & p_a, Vec3 const & p_b, Float const & p_r );
+	GlslWriter_API Vec4 refract( Vec4 const & p_a, Vec4 const & p_b, Float const & p_r );
 	GlslWriter_API Float length( Type const & p_value );
 	GlslWriter_API Float distance( Type const & p_a, Type const & p_b );
 	GlslWriter_API Float radians( Type const & p_value );

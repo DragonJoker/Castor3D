@@ -18,8 +18,8 @@ namespace Castor3D
 {
 	TextureProjection::TextureProjection( Context & p_context )
 		: OwnedBy< Context >{ p_context }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_context.GetRenderSystem() }
-		, m_modelMatrixUbo{ ShaderProgram::BufferModelMatrix, *p_context.GetRenderSystem() }
+		, m_matrixUbo{ *p_context.GetRenderSystem()->GetEngine() }
+		, m_modelMatrixUbo{ *p_context.GetRenderSystem()->GetEngine() }
 		, m_bufferVertex
 		{
 			{
@@ -38,12 +38,6 @@ namespace Castor3D
 			}
 		}
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-		UniformBuffer::FillModelMatrixBuffer( m_modelMatrixUbo );
-		m_projectionUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxProjection );
-		m_viewUniform = m_matrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxView );
-		m_modelUniform = m_modelMatrixUbo.GetUniform< UniformType::eMat4x4f >( RenderPipeline::MtxModel );
-
 		uint32_t i = 0;
 
 		for ( auto & l_vertex : m_arrayVertex )
@@ -77,8 +71,8 @@ namespace Castor3D
 
 	void TextureProjection::Cleanup()
 	{
-		m_matrixUbo.Cleanup();
-		m_modelMatrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
+		m_modelMatrixUbo.GetUbo().Cleanup();
 		m_sampler.reset();
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
@@ -91,13 +85,12 @@ namespace Castor3D
 	void TextureProjection::Render( TextureLayout const & p_texture
 		, Camera const & p_camera )
 	{
+		static Matrix4x4r const Identity{ 1.0f };
 		auto l_node = p_camera.GetParent();
 		matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
-		m_projectionUniform->SetValue( p_camera.GetViewport().GetProjection() );
-		m_viewUniform->SetValue( p_camera.GetView() );
-		m_matrixUbo.Update();
-		m_modelUniform->SetValue( m_mtxModel );
-		m_modelMatrixUbo.Update();
+		m_matrixUbo.Update( p_camera.GetView()
+			, p_camera.GetViewport().GetProjection() );
+		m_modelMatrixUbo.Update( m_mtxModel, Identity );
 		m_sizeUniform->SetValue( Point2f{ p_camera.GetViewport().GetWidth()
 			, p_camera.GetViewport().GetHeight() } );
 		p_camera.Apply();
@@ -191,8 +184,8 @@ namespace Castor3D
 			, MultisampleState{}
 			, p_program
 			, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo );
-		m_pipeline->AddUniformBuffer( m_modelMatrixUbo );
+		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
+		m_pipeline->AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
 		m_geometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles
 			, m_pipeline->GetProgram() );
 		return m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );

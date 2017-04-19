@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -195,7 +195,7 @@ namespace Castor3D
 		*\~french
 		*\return		\p true si au moins une passe a besoin d'une reflection map.
 		*/
-		C3D_API bool HasReflectionMapping()const;
+		C3D_API bool HasEnvironmentMapping()const;
 		/**
 		 *\~english
 		 *\return		The passes count.

@@ -13,11 +13,13 @@
 #include "Scene/Camera.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
+#include "Shader/PassBuffer.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
 #include "Technique/RenderTechniquePass.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslMaterial.hpp>
 
 using namespace Castor;
 
@@ -50,7 +52,7 @@ namespace Castor3D
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eD24S8
 				, p_size );
-			m_colourTexture->GetImage().InitialiseSource();
+			m_depthBuffer->GetImage().InitialiseSource();
 			l_return = m_depthBuffer->Initialise();
 		}
 
@@ -195,8 +197,7 @@ namespace Castor3D
 		auto & l_scene = *m_renderTarget.GetScene();
 		l_scene.GetLightCache().UpdateLights();
 		m_renderSystem.PushScene( &l_scene );
-		bool l_shadows = l_scene.HasShadows();
-
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		auto & l_maps = l_scene.GetEnvironmentMaps();
 
 		for ( auto & l_map : l_maps )
@@ -209,20 +210,19 @@ namespace Castor3D
 		l_camera.Update();
 
 		DoRenderOpaque( p_info );
+		l_scene.RenderBackground( GetSize(), l_camera );
 
-		if ( l_scene.GetFog().GetType() == GLSL::FogType::eDisabled )
-		{
-			l_scene.RenderBackground( GetSize(), l_camera );
-		}
-
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		l_scene.GetParticleSystemCache().ForEach( [this, &p_info]( ParticleSystem & p_particleSystem )
 		{
 			p_particleSystem.Update();
 			p_info.m_particlesCount += p_particleSystem.GetParticlesCount();
 		} );
 
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		DoRenderTransparent( p_info );
 
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		for ( auto l_effect : m_renderTarget.GetPostEffects() )
 		{
 			l_effect->Apply( *m_frameBuffer.m_frameBuffer );

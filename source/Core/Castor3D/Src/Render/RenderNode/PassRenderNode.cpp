@@ -1,4 +1,4 @@
-#include "PassRenderNode.hpp"
+﻿#include "PassRenderNode.hpp"
 
 #include "Material/Pass.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -15,7 +15,7 @@ namespace Castor3D
 			, ShaderProgram const & p_program
 			, TextureChannel p_channel
 			, String const & p_name
-			, PassRenderNodeUniforms & p_node )
+			, PassRenderNode & p_node )
 		{
 			TextureUnitSPtr l_unit = p_pass.GetTextureUnit( p_channel );
 
@@ -30,22 +30,10 @@ namespace Castor3D
 			}
 		}
 	}
-	PassRenderNodeUniforms::PassRenderNodeUniforms( UniformBuffer & p_passUbo )
-		: m_passUbo{ p_passUbo }
-		, m_diffuse{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatDiffuse ) }
-		, m_specular{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatSpecular ) }
-		, m_emissive{ *p_passUbo.GetUniform< UniformType::eVec4f >( ShaderProgram::MatEmissive ) }
-		, m_shininess{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatShininess ) }
-		, m_opacity{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatOpacity ) }
-		, m_environmentIndex{ *p_passUbo.GetUniform< UniformType::eFloat >( ShaderProgram::MatEnvironmentIndex ) }
-	{
-	}
 
 	PassRenderNode::PassRenderNode( Pass & p_pass
-		, ShaderProgram const & p_program
-		, UniformBuffer & p_passUbo )
-		: PassRenderNodeUniforms{ p_passUbo }
-		, m_pass{ p_pass }
+		, ShaderProgram const & p_program )
+		: m_pass{ p_pass }
 	{
 		DoGetTexture( p_pass, p_program, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );

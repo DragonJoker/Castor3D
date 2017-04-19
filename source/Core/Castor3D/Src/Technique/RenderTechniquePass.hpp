@@ -84,7 +84,7 @@ namespace Castor3D
 		 *\param[out]	p_info		Reçoit les informations de rendu.
 		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		C3D_API void Render( RenderInfo & p_info, bool p_shadows );
+		C3D_API virtual void Render( RenderInfo & p_info, bool p_shadows ) = 0;
 		/**
 		 *\~english
 		 *\return		Initialises the shadow maps.
@@ -117,6 +117,19 @@ namespace Castor3D
 		 *\brief		Dessine les maps d'ombres.
 		 */
 		C3D_API virtual void RenderShadowMaps() = 0;
+
+	protected:
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[out]	p_info		Receives the render informations.
+		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[out]	p_info		Reçoit les informations de rendu.
+		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
+		 */
+		C3D_API void DoRender( RenderInfo & p_info, bool p_shadows );
 
 	private:
 		/**
@@ -201,12 +214,6 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
 		C3D_API Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
-		 */
-		C3D_API Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const override;
 		/**

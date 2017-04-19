@@ -109,6 +109,7 @@ namespace GLSL
 	class PhongLightingModel;
 	class DeferredPhongLightingModel;
 	struct Light;
+	class Materials;
 
 	template< typename T >
 	struct Array;

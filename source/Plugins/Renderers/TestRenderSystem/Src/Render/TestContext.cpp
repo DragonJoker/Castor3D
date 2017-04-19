@@ -2,6 +2,8 @@
 
 #include "Render/TestRenderSystem.hpp"
 
+#include <Engine.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
@@ -10,6 +12,7 @@ namespace TestRender
 	TestContext::TestContext( TestRenderSystem & p_renderSystem )
 		: Context{ p_renderSystem }
 	{
+		p_renderSystem.GetEngine()->GetMaterialCache().Initialise();
 	}
 
 	TestContext::~TestContext()

@@ -386,6 +386,13 @@ namespace Castor3D
 		C3D_API uint32_t GetRefCount( MaterialSPtr p_material )const;
 		/**
 		 *\~english
+		 *\return		The maximum instances count, amongst all materials.
+		 *\~french
+		 *\return		Le nombre moximum d'instances, tous matériaux confondus,
+		 */
+		C3D_API uint32_t GetMaxRefCount()const;
+		/**
+		 *\~english
 		 *\return		The topology.
 		 *\~french
 		 *\return		La topologie.

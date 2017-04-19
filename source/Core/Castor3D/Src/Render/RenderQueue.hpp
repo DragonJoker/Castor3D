@@ -237,9 +237,12 @@ namespace Castor3D
 		//!\~english	The prepared render nodes.
 		//!\~french		Les noeuds de rendu préparés.
 		std::unique_ptr< SceneRenderNodes > m_preparedRenderNodes;
-		//!\~english	Tells if the scene or the camera have changed.
-		//!\~french		Dit si la caméra ou la scène a changé.
+		//!\~english	Tells if the camera has changed.
+		//!\~french		Dit si la caméra a changé.
 		bool m_changed{ true };
+		//!\~english	Tells if the scene has changed.
+		//!\~french		Dit si la scène a changé.
+		bool m_isSceneChanged{ true };
 		//!\~english	The connection to the scene change notification.
 		//!\~french		Les conenction à la notification de scène changée.
 		Scene::OnChanged::connection m_sceneChanged;

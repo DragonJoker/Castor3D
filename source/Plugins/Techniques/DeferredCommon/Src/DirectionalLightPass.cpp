@@ -1,4 +1,4 @@
-#include "DirectionalLightPass.hpp"
+﻿#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -28,20 +28,19 @@ namespace deferred_common
 
 	//*********************************************************************************************
 
-	DirectionalLightPass::Program::Program( Scene const & p_scene
+	DirectionalLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
 		, String const & p_pxl
 		, bool p_ssao )
-		: LightPass::Program{ p_scene, p_vtx, p_pxl, p_ssao }
+		: LightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
+		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
+		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
+		, m_lightTransform{ m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
 	{
-		m_lightDirection = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_v3Direction" ), ShaderType::ePixel );
-		m_lightTransform = m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_mtxLightSpace" ), ShaderType::ePixel );
 	}
 
 	DirectionalLightPass::Program::~Program()
 	{
-		m_lightDirection = nullptr;
-		m_lightTransform = nullptr;
 	}
 
 	RenderPipelineUPtr DirectionalLightPass::Program::DoCreatePipeline( bool p_blend )
@@ -70,6 +69,7 @@ namespace deferred_common
 	void DirectionalLightPass::Program::DoBind( Light const & p_light )
 	{
 		auto & l_light = *p_light.GetDirectionalLight();
+		m_lightIntensity->SetValue( l_light.GetIntensity() );
 		m_lightDirection->SetValue( l_light.GetDirection() );
 		m_lightTransform->SetValue( l_light.GetLightSpaceTransform() );
 	}
@@ -114,12 +114,11 @@ namespace deferred_common
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer.reset();
 		m_viewport.Cleanup();
-		m_projectionUniform = nullptr;
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 	}
 
 	void DirectionalLightPass::Initialise( Scene const & p_scene
-		, UniformBuffer & p_sceneUbo )
+		, SceneUbo & p_sceneUbo )
 	{
 		DoInitialise( p_scene
 			, LightType::eDirectional
@@ -128,7 +127,6 @@ namespace deferred_common
 			, p_sceneUbo
 			, nullptr );
 		m_viewport.Update();
-		m_projectionUniform->SetValue( m_viewport.GetProjection() );
 	}
 
 	void DirectionalLightPass::Cleanup()
@@ -146,8 +144,7 @@ namespace deferred_common
 		, Camera const & p_camera )
 	{
 		m_viewport.Resize( p_size );
-		m_viewUniform->SetValue( p_camera.GetView() );
-		m_matrixUbo.Update();
+		m_matrixUbo.Update( p_camera.GetView(), m_viewport.GetProjection() );
 	}
 
 	String DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
@@ -157,7 +154,6 @@ namespace deferred_common
 
 		// Shader inputs
 		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
 		UBO_GPINFO( l_writer );
 		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 
@@ -172,10 +168,9 @@ namespace deferred_common
 		return l_writer.Finalise();
 	}
 
-	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( Scene const & p_scene
-		, String const & p_vtx
+	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( String const & p_vtx
 		, String const & p_pxl )const
 	{
-		return std::make_unique< Program >( p_scene, p_vtx, p_pxl, m_ssao );
+		return std::make_unique< Program >( m_engine, p_vtx, p_pxl, m_ssao );
 	}
 }

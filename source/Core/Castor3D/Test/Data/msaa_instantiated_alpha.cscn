@@ -2,6 +2,7 @@ debug_overlays true
 
 scene "Scene"
 {
+	ambient_light 0.2 0.2 0.2
 	background_colour 0.5 0.5 0.5 1.0
 	include "common_materials.cscn"
 
@@ -14,7 +15,7 @@ scene "Scene"
 		parent "SunLightNode1"
 		type directional
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0
+		intensity 0.8 1.0
 	}
 
 	scene_node "FinalNode0"
@@ -27,7 +28,7 @@ scene "Scene"
 		{
 			type "torus" -inner_count=40 -outer_count=40 -inner_size=15 -outer_size=35
 		}
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode1"
@@ -38,7 +39,7 @@ scene "Scene"
 	{
 		parent "FinalNode1"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode2"
@@ -49,7 +50,7 @@ scene "Scene"
 	{
 		parent "FinalNode2"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode3"
@@ -60,7 +61,7 @@ scene "Scene"
 	{
 		parent "FinalNode3"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode4"
@@ -71,7 +72,7 @@ scene "Scene"
 	{
 		parent "FinalNode4"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode5"
@@ -82,7 +83,7 @@ scene "Scene"
 	{
 		parent "FinalNode5"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode6"
@@ -93,7 +94,7 @@ scene "Scene"
 	{
 		parent "FinalNode6"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode7"
@@ -104,7 +105,7 @@ scene "Scene"
 	{
 		parent "FinalNode7"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode8"
@@ -115,7 +116,7 @@ scene "Scene"
 	{
 		parent "FinalNode8"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode9"
@@ -126,7 +127,7 @@ scene "Scene"
 	{
 		parent "FinalNode9"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode10"
@@ -137,7 +138,7 @@ scene "Scene"
 	{
 		parent "FinalNode10"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode11"
@@ -148,7 +149,7 @@ scene "Scene"
 	{
 		parent "FinalNode11"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode12"
@@ -159,7 +160,7 @@ scene "Scene"
 	{
 		parent "FinalNode12"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode13"
@@ -170,7 +171,7 @@ scene "Scene"
 	{
 		parent "FinalNode13"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode14"
@@ -181,7 +182,7 @@ scene "Scene"
 	{
 		parent "FinalNode14"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode15"
@@ -192,7 +193,7 @@ scene "Scene"
 	{
 		parent "FinalNode15"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode16"
@@ -203,7 +204,7 @@ scene "Scene"
 	{
 		parent "FinalNode16"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode17"
@@ -214,7 +215,7 @@ scene "Scene"
 	{
 		parent "FinalNode17"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode18"
@@ -225,7 +226,7 @@ scene "Scene"
 	{
 		parent "FinalNode18"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode19"
@@ -236,7 +237,7 @@ scene "Scene"
 	{
 		parent "FinalNode19"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode20"
@@ -250,7 +251,7 @@ scene "Scene"
 		{
 			type "torus" -inner_count=40 -outer_count=40 -inner_size=25 -outer_size=50
 		}
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode21"
@@ -261,7 +262,7 @@ scene "Scene"
 	{
 		parent "FinalNode21"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode22"
@@ -272,7 +273,7 @@ scene "Scene"
 	{
 		parent "FinalNode22"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode23"
@@ -283,7 +284,7 @@ scene "Scene"
 	{
 		parent "FinalNode23"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode24"
@@ -294,7 +295,7 @@ scene "Scene"
 	{
 		parent "FinalNode24"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode25"
@@ -305,7 +306,7 @@ scene "Scene"
 	{
 		parent "FinalNode25"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode26"
@@ -316,7 +317,7 @@ scene "Scene"
 	{
 		parent "FinalNode26"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode27"
@@ -327,7 +328,7 @@ scene "Scene"
 	{
 		parent "FinalNode27"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode28"
@@ -338,7 +339,7 @@ scene "Scene"
 	{
 		parent "FinalNode28"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode29"
@@ -349,7 +350,7 @@ scene "Scene"
 	{
 		parent "FinalNode29"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode30"
@@ -360,7 +361,7 @@ scene "Scene"
 	{
 		parent "FinalNode30"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode31"
@@ -371,7 +372,7 @@ scene "Scene"
 	{
 		parent "FinalNode31"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode32"
@@ -382,7 +383,7 @@ scene "Scene"
 	{
 		parent "FinalNode32"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode33"
@@ -393,7 +394,7 @@ scene "Scene"
 	{
 		parent "FinalNode33"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode34"
@@ -404,7 +405,7 @@ scene "Scene"
 	{
 		parent "FinalNode34"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode35"
@@ -415,7 +416,7 @@ scene "Scene"
 	{
 		parent "FinalNode35"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode36"
@@ -426,7 +427,7 @@ scene "Scene"
 	{
 		parent "FinalNode36"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode37"
@@ -437,7 +438,7 @@ scene "Scene"
 	{
 		parent "FinalNode37"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "FinalNode38"
@@ -448,7 +449,7 @@ scene "Scene"
 	{
 		parent "FinalNode38"
 		mesh "Mesh"
-		material "Silver"
+		material "AlphaSilver"
 	}
 
 	scene_node "FinalNode39"
@@ -459,7 +460,7 @@ scene "Scene"
 	{
 		parent "FinalNode39"
 		mesh "Mesh"
-		material "Gold"
+		material "AlphaGold"
 	}
 
 	scene_node "MainCameraNode"

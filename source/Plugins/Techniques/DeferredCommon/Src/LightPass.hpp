@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -49,6 +49,24 @@ namespace deferred_common
 	float GetMaxDistance( Castor3D::LightCategory const & p_light
 		, Castor::Point3f const & p_attenuation
 		, float p_max );
+	void Declare_EncodeMaterial( GLSL::GlslWriter & p_writer );
+	void Declare_DecodeMaterial( GLSL::GlslWriter & p_writer );
+	void Declare_DecodeReceiver( GLSL::GlslWriter & p_writer );
+	void EncodeMaterial( GLSL::GlslWriter & p_writer
+		, GLSL::Int const & p_receiver
+		, GLSL::Int const & p_reflection
+		, GLSL::Int const & p_refraction
+		, GLSL::Int const & p_envMapIndex
+		, GLSL::Float const & p_encoded );
+	void DecodeMaterial( GLSL::GlslWriter & p_writer
+		, GLSL::Float const & p_encoded
+		, GLSL::Int const & p_receiver
+		, GLSL::Int const & p_reflection
+		, GLSL::Int const & p_refraction
+		, GLSL::Int const & p_envMapIndex );
+	void DecodeReceiver( GLSL::GlslWriter & p_writer
+		, GLSL::Float & p_encoded
+		, GLSL::Int const & p_receiver );
 
 	class GpInfo
 	{
@@ -107,22 +125,23 @@ namespace deferred_common
 		struct Program
 		{
 		public:
-			Program( Castor3D::Scene const & p_scene
+			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
 				, Castor::String const & p_pxl
 				, bool p_ssao );
 			virtual ~Program()noexcept;
 			void Initialise( Castor3D::VertexBuffer & p_vbo
 				, Castor3D::IndexBufferSPtr p_ibo
-				, Castor3D::UniformBuffer & p_matrixUbo
-				, Castor3D::UniformBuffer & p_sceneUbo
+				, Castor3D::MatrixUbo & p_matrixUbo
+				, Castor3D::SceneUbo & p_sceneUbo
 				, Castor3D::UniformBuffer & p_gpInfoUbo
-				, Castor3D::UniformBuffer * p_modelMatrixUbo );
+				, Castor3D::ModelMatrixUbo * p_modelMatrixUbo );
 			void Cleanup();
+			void Bind( Castor3D::Light const & p_light );
 			void Render( Castor::Size const & p_size
-				, Castor3D::Light const & p_light
+				, Castor::Point3f const & p_colour
 				, uint32_t p_count
-				, bool p_first );
+				, bool p_first )const;
 
 		private:
 			virtual Castor3D::RenderPipelineUPtr DoCreatePipeline( bool p_blend ) = 0;
@@ -144,17 +163,13 @@ namespace deferred_common
 			//!\~english	The variable containing the light colour.
 			//!\~french		La variable contenant la couleur de la lumière.
 			Castor3D::PushUniform3fSPtr m_lightColour;
-			//!\~english	The variable containing the light intensities.
-			//!\~french		La variable contenant les intensités de la lumière.
-			Castor3D::PushUniform3fSPtr m_lightIntensity;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
-		using Programs = std::array< ProgramPtr, size_t( GLSL::FogType::eCount ) >;
 
 	public:
 		virtual ~LightPass() = default;
 		virtual void Initialise( Castor3D::Scene const & p_scene
-			, Castor3D::UniformBuffer & p_sceneUbo ) = 0;
+			, Castor3D::SceneUbo & p_sceneUbo ) = 0;
 		virtual void Cleanup() = 0;
 		virtual void Render( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp
@@ -163,7 +178,6 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj
-			, GLSL::FogType p_fogType
 			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first );
 		virtual uint32_t GetCount()const = 0;
@@ -178,23 +192,21 @@ namespace deferred_common
 			, Castor3D::LightType p_type
 			, Castor3D::VertexBuffer & p_vbo
 			, Castor3D::IndexBufferSPtr p_ibo
-			, Castor3D::UniformBuffer & p_sceneUbo
-			, Castor3D::UniformBuffer * p_modelMatrixUbo );
+			, Castor3D::SceneUbo & p_sceneUbo
+			, Castor3D::ModelMatrixUbo * p_modelMatrixUbo );
 		void DoCleanup();
 		virtual void DoUpdate( Castor::Size const & p_size
 			, Castor3D::Light const & p_light
 			, Castor3D::Camera const & p_camera ) = 0;
 		void DoRender( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp
-			, Castor3D::Light const & p_light
-			, GLSL::FogType p_fogType
+			, Castor::Point3f const & p_colour
 			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first );
-		Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
+		virtual Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
 			, Castor3D::LightType p_type )const;
 		virtual Castor::String DoGetVertexShaderSource( Castor3D::SceneFlags const & p_sceneFlags )const = 0;
-		virtual ProgramPtr DoCreateProgram( Castor3D::Scene const & p_scene
-			, Castor::String const & p_vtx
+		virtual ProgramPtr DoCreateProgram( Castor::String const & p_vtx
 			, Castor::String const & p_pxl )const = 0;
 
 	protected:
@@ -209,22 +221,16 @@ namespace deferred_common
 		bool m_shadows;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		Castor3D::UniformBuffer m_matrixUbo;
+		Castor3D::MatrixUbo m_matrixUbo;
 		//!\~english	The target FBO.
 		//!\~french		Le FBO cible.
 		Castor3D::FrameBuffer & m_frameBuffer;
 		//!\~english	The target RBO attach.
 		//!\~french		L'attache de RBO cible.
 		Castor3D::FrameBufferAttachment & m_depthAttach;
-		//!\~english	The light pass' programs.
-		//!\~french		Les programme de la passe de lumière.
-		Programs m_programs;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Castor3D::Uniform4x4fSPtr m_projectionUniform;
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Castor3D::Uniform4x4fSPtr m_viewUniform;
+		//!\~english	The light pass program.
+		//!\~french		Le programme de la passe de lumière.
+		ProgramPtr m_program;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		std::unique_ptr< GpInfo > m_gpInfo;

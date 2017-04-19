@@ -30,7 +30,7 @@ namespace Castor3D
 		}
 	}
 
-	void AnimatedSkeleton::FillShader( Uniform4x4r & p_variable )
+	void AnimatedSkeleton::FillShader( Uniform4x4r & p_variable )const
 	{
 		Skeleton & l_skeleton = m_skeleton;
 

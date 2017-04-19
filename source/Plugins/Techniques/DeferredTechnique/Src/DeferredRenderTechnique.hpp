@@ -23,9 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_DeferredRenderTechnique_H___
 #define ___C3D_DeferredRenderTechnique_H___
 
-#include <EnvironmentMapPass.hpp>
-#include <LightPass.hpp>
-#include <SsaoPass.hpp>
+#include <LightingPass.hpp>
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <Technique/RenderTechnique.hpp>
@@ -113,15 +111,8 @@ namespace deferred
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
 		bool DoInitialiseGeometryPass( uint32_t & p_index );
-		bool DoInitialiseLightPass();
 		void DoCleanupGeometryPass();
-		void DoCleanupLightPass();
 		void DoUpdateSceneUbo();
-		void DoRenderLights( Castor3D::LightType p_type
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj
-			, bool & p_first );
 
 	public:
 		static Castor::String const Type;
@@ -130,11 +121,10 @@ namespace deferred
 	private:
 		using GeometryBufferTextures = std::array< Castor3D::TextureUnitUPtr, size_t( deferred_common::DsTexture::eCount ) >;
 		using GeometryBufferAttachs = std::array< Castor3D::TextureAttachmentSPtr, size_t( deferred_common::DsTexture::eCount ) >;
-		using LightPasses = std::array< std::unique_ptr< deferred_common::LightPass >, size_t( Castor3D::LightType::eCount ) >;
 
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
-		GeometryBufferTextures m_lightPassTextures;
+		GeometryBufferTextures m_geometryPassResult;
 		//!\~english	The deferred shading frame buffer.
 		//!\~french		Le tampon d'image pour le deferred shading.
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
@@ -143,34 +133,19 @@ namespace deferred
 		GeometryBufferAttachs m_geometryPassTexAttachs;
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		Castor3D::UniformBuffer m_sceneUbo;
-		//!\~english	The shader variable holding the camera position.
-		//!\~french		La variable shader contenant la position de la caméra.
-		Castor3D::Uniform3fSPtr m_cameraPos;
-		//!\~english	The shader variable holding the camera far plane value.
-		//!\~french		La variable shader contenant la valeur du plan éloigné de la caméra.
-		Castor3D::Uniform1fSPtr m_cameraFarPlane;
-		//!\~english	The shader variable holding fog type.
-		//!\~french		La variable shader contenant le type de brouillard.
-		Castor3D::Uniform1iSPtr m_fogType;
-		//!\~english	The shader variable holding fog density.
-		//!\~french		La variable shader contenant la densité du brouillard.
-		Castor3D::Uniform1fSPtr m_fogDensity;
-		//!\~english	The shader program used to render directional lights.
-		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
-		LightPasses m_lightPass;
-		//!\~english	The shader program used to render directional lights.
-		//!\~french		Le shader utilisé pour rendre les lumières directionnelles.
-		LightPasses m_lightPassShadow;
+		Castor3D::SceneUbo m_sceneUbo;
+		//!\~english	The fog pass.
+		//!\~french		La passe de brouillard.
+		std::unique_ptr< deferred_common::LightingPass > m_lightingPass;
+		//!\~english	The fog pass.
+		//!\~french		La passe de brouillard.
+		std::unique_ptr< deferred_common::FogPass > m_fogPass;
+		//!\~english	The reflection pass.
+		//!\~french		La passe de réflexion.
+		std::unique_ptr< deferred_common::ReflectionPass > m_reflection;
 		//!\~english	Tells if SSAO is to be used in lighting pass.
 		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
 		bool m_ssaoEnabled{ false };
-		//!\~english	The SSAO pass.
-		//!\~french		La passe SSAO.
-		std::unique_ptr< deferred_common::EnvironmentMapPass > m_environment;
-		//!\~english	The SSAO pass.
-		//!\~french		La passe SSAO.
-		std::unique_ptr< deferred_common::SsaoPass > m_ssao;
 	};
 }
 

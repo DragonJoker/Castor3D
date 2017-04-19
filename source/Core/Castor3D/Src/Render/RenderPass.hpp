@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -28,7 +28,13 @@ SOFTWARE.
 
 #include "Render/RenderInfo.hpp"
 #include "Render/RenderQueue.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Shader/BillboardUbo.hpp"
+#include "Shader/MatrixUbo.hpp"
+#include "Shader/ModelMatrixUbo.hpp"
+#include "Shader/ModelUbo.hpp"
+#include "Shader/MorphingUbo.hpp"
+#include "Shader/SceneUbo.hpp"
+#include "Shader/SkinningUbo.hpp"
 
 #include <unordered_map>
 
@@ -908,37 +914,25 @@ namespace Castor3D
 		bool m_multisampling{ false };
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		UniformBuffer m_sceneUbo;
+		SceneUbo m_sceneUbo;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_matrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Uniform4x4fSPtr m_projectionUniform{ nullptr };
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Uniform4x4fSPtr m_viewUniform{ nullptr };
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_modelMatrixUbo;
-		//!\~english	The uniform buffer containing pass data.
-		//!\~french		Le tampon d'uniformes contenant les données de passe.
-		UniformBuffer m_passUbo;
-		//!\~english	The pass render node.
-		//!\~french		Le noeud de rendu de passe.
-		std::unique_ptr< PassRenderNodeUniforms > m_passNode;
+		MatrixUbo m_matrixUbo;
 		//!\~english	The uniform buffer containing model data.
 		//!\~french		Le tampon d'uniformes contenant les données du modèle.
-		UniformBuffer m_modelUbo;
+		ModelUbo m_modelUbo;
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		ModelMatrixUbo m_modelMatrixUbo;
 		//!\~english	The uniform buffer containing billboard data.
 		//!\~french		Le tampon d'uniformes contenant les données de billboard.
-		UniformBuffer m_billboardUbo;
+		BillboardUbo m_billboardUbo;
 		//!\~english	The uniform buffer containing skinning animation data.
 		//!\~french		Le tampon d'uniformes contenant les données d'animation de skinning.
-		UniformBuffer m_skinningUbo;
+		SkinningUbo m_skinningUbo;
 		//!\~english	The uniform buffer containing morphing animation data.
 		//!\~french		Le tampon d'uniformes contenant les données d'animation de morphing.
-		UniformBuffer m_morphingUbo;
+		MorphingUbo m_morphingUbo;
 	};
 }
 

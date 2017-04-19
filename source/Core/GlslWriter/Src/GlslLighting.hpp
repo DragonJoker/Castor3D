@@ -38,8 +38,7 @@ namespace GLSL
 	struct OutputComponents
 	{
 		GlslWriter_API OutputComponents( GlslWriter & p_writer );
-		GlslWriter_API OutputComponents( InOutVec3 const & p_v3Ambient, InOutVec3 const & p_v3Diffuse, InOutVec3 const & p_v3Specular );
-		InOutVec3 m_v3Ambient;
+		GlslWriter_API OutputComponents( InOutVec3 const & p_v3Diffuse, InOutVec3 const & p_v3Specular );
 		InOutVec3 m_v3Diffuse;
 		InOutVec3 m_v3Specular;
 	};

@@ -1,4 +1,4 @@
-#include "Pass.hpp"
+﻿#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -116,6 +116,11 @@ namespace Castor3D
 		}
 	}
 
+	void Pass::Update( PassBuffer & p_passes )const
+	{
+		DoUpdate( p_passes );
+	}
+
 	void Pass::BindTextures()
 	{
 		for ( auto l_it : m_textureUnits )
@@ -187,23 +192,6 @@ namespace Castor3D
 		return CheckFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f;
 	}
 
-	void Pass::UpdateRenderNode( PassRenderNodeUniforms & p_node )const
-	{
-		for ( auto l_pair : p_node.m_textures )
-		{
-			auto l_texture = l_pair.first;
-			auto & l_variable = l_pair.second;
-
-			if ( l_texture )
-			{
-				l_variable.get().SetValue( l_texture );
-			}
-		}
-
-		p_node.m_opacity.SetValue( GetOpacity() );
-		DoUpdateRenderNode( p_node );
-	}
-
 	void Pass::PrepareTextures()
 	{
 		if ( !m_texturesReduced )
@@ -213,8 +201,7 @@ namespace Castor3D
 				l_unit->SetIndex( 0u );
 			}
 
-			// Lights texture is at index 0, so start at index 1
-			uint32_t l_index = 1u;
+			uint32_t l_index = MinTextureIndex;
 			TextureUnitSPtr l_opacitySource;
 			PxBufferBaseSPtr l_opacityImage;
 
@@ -227,6 +214,30 @@ namespace Castor3D
 			DoPrepareTexture( TextureChannel::eHeight, l_index );
 
 			DoPrepareOpacity( l_opacitySource, l_opacityImage, l_index );
+
+			auto l_unit = GetTextureUnit( TextureChannel::eDiffuse );
+
+			if ( l_unit )
+			{
+				if ( l_unit->GetRenderTarget() )
+				{
+					m_needsGammaCorrection = false;
+				}
+				else
+				{
+					auto l_format = l_unit->GetTexture()->GetPixelFormat();
+					m_needsGammaCorrection = l_format != PixelFormat::eL16F32F
+						&& l_format != PixelFormat::eL32F
+						&& l_format != PixelFormat::eAL16F32F
+						&& l_format != PixelFormat::eAL32F
+						&& l_format != PixelFormat::eRGB16F
+						&& l_format != PixelFormat::eRGB16F32F
+						&& l_format != PixelFormat::eRGB32F
+						&& l_format != PixelFormat::eRGBA16F
+						&& l_format != PixelFormat::eRGBA16F32F
+						&& l_format != PixelFormat::eRGBA32F;
+				}
+			}
 
 			for ( auto l_unit : m_textureUnits )
 			{
@@ -255,13 +266,15 @@ namespace Castor3D
 		}
 
 		DoSetOpacity( p_value );
+		onChanged( *this );
 	}
 
 	ProgramFlags Pass::GetProgramFlags()const
 	{
 		ProgramFlags l_result;
 
-		if ( HasAlphaBlending() )
+		if ( HasAlphaBlending()
+			&& !CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) )
 		{
 			AddFlag( l_result, ProgramFlag::eAlphaBlending );
 		}

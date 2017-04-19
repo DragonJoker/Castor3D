@@ -24,7 +24,7 @@ namespace Castor3D
 		, m_window{ nullptr }
 		, m_initialised{ false }
 		, m_bMultiSampling{ false }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, p_renderSystem }
+		, m_matrixUbo{ *p_renderSystem.GetEngine() }
 		, m_colour{ *this, m_matrixUbo }
 		, m_colourCube{ *this, m_matrixUbo }
 		, m_colourLayer{ *this, m_matrixUbo }
@@ -35,7 +35,6 @@ namespace Castor3D
 		, m_depthLayerCube{ *this, m_matrixUbo }
 		, m_cube{ *this, m_matrixUbo }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
 	}
 
 	Context::~Context()
@@ -99,7 +98,7 @@ namespace Castor3D
 		m_timerQuery[0].reset();
 		m_timerQuery[1].reset();
 		m_window = nullptr;
-		m_matrixUbo.Cleanup();
+		m_matrixUbo.GetUbo().Cleanup();
 	}
 
 	void Context::SetCurrent()
@@ -213,7 +212,7 @@ namespace Castor3D
 		, Size const & p_size
 		, TextureLayout const & p_texture
 		, RenderPipeline & p_pipeline
-		, UniformBuffer & p_matrixUbo )
+		, MatrixUbo & p_matrixUbo )
 	{
 		m_colour.Render( p_position
 			, p_size

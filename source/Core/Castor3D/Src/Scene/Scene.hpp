@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -487,6 +487,40 @@ namespace Castor3D
 		{
 			return m_initialised;
 		}
+		/**
+		 *\~english
+		 *\brief		Sets the exposure value.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur de l'exposition.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetExposure( float p_value )
+		{
+			m_config.SetExposure( p_value );
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the gamma correction value.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur de la correction gamma.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetGamma( float p_value )
+		{
+			m_config.SetGamma( p_value );
+		}
+		/**
+		 *\~english
+		 *\return		The HDR configuration.
+		 *\~french
+		 *\return		La configuration HDR.
+		 */
+		inline HdrConfig const & GetHdrConfig()const
+		{
+			return m_config;
+		}
 
 	public:
 		//!\~english	The signal raised when the scene has changed.
@@ -578,6 +612,9 @@ namespace Castor3D
 		//!\~english	The scene's reflection maps.
 		//!\~french		Les reflection maps de la scène.
 		std::vector< std::reference_wrapper< EnvironmentMap > > m_reflectionMapsArray;
+		//!\~english	The HDR configuration.
+		//!\~french		La configuration HDR.
+		HdrConfig m_config;
 
 	public:
 		//!\~english	The cameras root node name.

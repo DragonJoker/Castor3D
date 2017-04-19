@@ -1,10 +1,11 @@
-#include "RenderColourLayerToTexture.hpp"
+﻿#include "RenderColourLayerToTexture.hpp"
 
 #include "Engine.hpp"
 
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"
+#include "Shader/MatrixUbo.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -16,7 +17,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderColourLayerToTexture::RenderColourLayerToTexture( Context & p_context
-		, UniformBuffer & p_matrixUbo )
+		, MatrixUbo & p_matrixUbo )
 		: OwnedBy< Context >{ p_context }
 		, m_matrixUbo{ p_matrixUbo }
 		, m_viewport{ *p_context.GetRenderSystem()->GetEngine() }
@@ -77,7 +78,7 @@ namespace Castor3D
 			, MultisampleState{}
 			, l_program
 			, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo );
+		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 
 		m_sampler = GetOwner()->GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "RenderColourLayerToTexture" ) );
 		m_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
@@ -102,7 +103,7 @@ namespace Castor3D
 	void RenderColourLayerToTexture::Render( Position const & p_position
 		, Size const & p_size
 		, TextureLayout const & p_texture
-		, UniformBuffer & p_matrixUbo
+		, MatrixUbo & p_matrixUbo
 		, RenderPipeline & p_pipeline
 		, uint32_t p_layer )
 	{
@@ -133,7 +134,7 @@ namespace Castor3D
 		, Size const & p_size
 		, TextureLayout const & p_texture
 		, RenderPipeline & p_pipeline
-		, UniformBuffer & p_matrixUbo
+		, MatrixUbo & p_matrixUbo
 		, GeometryBuffers const & p_geometryBuffers
 		, uint32_t p_layer )
 	{
@@ -142,13 +143,11 @@ namespace Castor3D
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
 		m_viewport.Apply();
-		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 
 		REQUIRE( m_layerIndexUniform );
 		m_layerIndexUniform->SetValue( p_layer );
 
-		p_pipeline.ApplyProjection( p_matrixUbo );
-		p_matrixUbo.Update();
+		p_matrixUbo.Update( m_viewport.GetProjection() );
 		p_pipeline.Apply();
 		m_layerIndexUniform->Update();
 

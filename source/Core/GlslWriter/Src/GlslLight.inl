@@ -1,4 +1,4 @@
-namespace GLSL
+﻿namespace GLSL
 {
 	//*********************************************************************************************
 
@@ -35,14 +35,14 @@ namespace GLSL
 		return *this;
 	}
 
-	Vec3 Light::m_v3Colour()const
+	Vec3 Light::m_colour()const
 	{
-		return Vec3( m_writer, m_name + cuT( ".m_v3Colour" ) );
+		return Vec3( m_writer, m_name + cuT( ".m_colour" ) );
 	}
 
-	Vec3 Light::m_v3Intensity()const
+	Vec2 Light::m_intensity()const
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Intensity" ) );
+		return Vec2( m_writer, Castor::String( *this ) + cuT( ".m_intensity" ) );
 	}
 
 	//*********************************************************************************************
@@ -85,14 +85,14 @@ namespace GLSL
 		return Light( m_writer, m_name + cuT( ".m_lightBase" ) );
 	}
 
-	Vec3 DirectionalLight::m_v3Direction()const
+	Vec3 DirectionalLight::m_direction()const
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Direction" ) );
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_direction" ) );
 	}
 
-	Mat4 DirectionalLight::m_mtxLightSpace()const
+	Mat4 DirectionalLight::m_transform()const
 	{
-		return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_mtxLightSpace" ) );
+		return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_transform" ) );
 	}
 
 	//*********************************************************************************************
@@ -135,19 +135,19 @@ namespace GLSL
 		return Light( m_writer, m_name + cuT( ".m_lightBase" ) );
 	}
 
-	Vec3 PointLight::m_v3Position()const
+	Vec3 PointLight::m_position()const
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Position" ) );
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_position" ) );
 	}
 
-	Vec3 PointLight::m_v3Attenuation()const
+	Vec3 PointLight::m_attenuation()const
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_attenuation" ) );
 	}
 
-	Int PointLight::m_iIndex()const
+	Int PointLight::m_index()const
 	{
-		return Int( m_writer, Castor::String( *this ) + cuT( ".m_iIndex" ) );
+		return Int( m_writer, Castor::String( *this ) + cuT( ".m_index" ) );
 	}
 
 	//*********************************************************************************************
@@ -190,39 +190,39 @@ namespace GLSL
 		return Light( m_writer, m_name + cuT( ".m_lightBase" ) );
 	}
 
-	Vec3 SpotLight::m_v3Position()const
+	Vec3 SpotLight::m_position()const
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Position" ) );
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_position" ) );
 	}
 
-	Vec3 SpotLight::m_v3Attenuation()const
+	Vec3 SpotLight::m_attenuation()const
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_attenuation" ) );
 	}
 
-	Vec3 SpotLight::m_v3Direction()const
+	Vec3 SpotLight::m_direction()const
 	{
-		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Direction" ) );
+		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_direction" ) );
 	}
 
-	Float SpotLight::m_fExponent()const
+	Float SpotLight::m_exponent()const
 	{
-		return Float( m_writer, Castor::String( *this ) + cuT( ".m_fExponent" ) );
+		return Float( m_writer, Castor::String( *this ) + cuT( ".m_exponent" ) );
 	}
 
-	Float SpotLight::m_fCutOff()const
+	Float SpotLight::m_cutOff()const
 	{
-		return Float( m_writer, Castor::String( *this ) + cuT( ".m_fCutOff" ) );
+		return Float( m_writer, Castor::String( *this ) + cuT( ".m_cutOff" ) );
 	}
 
-	Mat4 SpotLight::m_mtxLightSpace()const
+	Mat4 SpotLight::m_transform()const
 	{
-		return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_mtxLightSpace" ) );
+		return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_transform" ) );
 	}
 
-	Int SpotLight::m_iIndex()const
+	Int SpotLight::m_index()const
 	{
-		return Int( m_writer, Castor::String( *this ) + cuT( ".m_iIndex" ) );
+		return Int( m_writer, Castor::String( *this ) + cuT( ".m_index" ) );
 	}
 
 	//*********************************************************************************************
