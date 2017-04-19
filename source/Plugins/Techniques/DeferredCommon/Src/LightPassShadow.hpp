@@ -232,7 +232,7 @@ namespace deferred_common
 			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first )override
 		{
-			my_pass_type::m_gpInfo->Update( p_size
+			this->m_gpInfo->Update( p_size
 				, p_camera
 				, p_invViewProj
 				, p_invView
@@ -243,7 +243,7 @@ namespace deferred_common
 				, p_light
 				, p_camera );
 			m_shadowMapTexture.Bind();
-			m_program->Bind( p_light );
+			this->m_program->Bind( p_light );
 			my_pass_type::DoRender( p_size
 				, p_gp
 				, p_light.GetColour()
@@ -268,7 +268,7 @@ namespace deferred_common
 			return std::make_unique< LightPassShadow::Program >( this->m_engine
 				, p_vtx
 				, p_pxl
-				, my_pass_type::m_ssao );
+				, this->m_ssao );
 		}
 
 	private:
