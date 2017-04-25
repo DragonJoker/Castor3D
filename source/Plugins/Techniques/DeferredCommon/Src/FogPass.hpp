@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -20,30 +20,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_FogPass_H___
-#define ___C3D_FogPass_H___
+#ifndef ___C3D_CombinePass_H___
+#define ___C3D_CombinePass_H___
 
 #include "LightPass.hpp"
+#include "SsaoPass.hpp"
 
 #include <Shader/MatrixUbo.hpp>
 #include <Shader/SceneUbo.hpp>
 
 namespace deferred_common
 {
-	struct FogProgram
+	struct CombineProgram
 	{
-		FogProgram( FogProgram const & p_rhs ) = delete;
-		FogProgram & operator=( FogProgram const & p_rhs ) = delete;
-		FogProgram( FogProgram && p_rhs ) = default;
-		FogProgram & operator=( FogProgram && p_rhs ) = default;
+		CombineProgram( CombineProgram const & p_rhs ) = delete;
+		CombineProgram & operator=( CombineProgram const & p_rhs ) = delete;
+		CombineProgram( CombineProgram && p_rhs ) = default;
+		CombineProgram & operator=( CombineProgram && p_rhs ) = default;
 
-		FogProgram( Castor3D::Engine & p_engine
+		CombineProgram( Castor3D::Engine & p_engine
 			, Castor3D::VertexBuffer & p_vbo
 			, Castor3D::MatrixUbo & p_matrixUbo
 			, Castor3D::SceneUbo & p_sceneUbo
 			, GpInfo & p_gpInfo
+			, bool p_ssao
 			, GLSL::FogType p_fogType );
-		~FogProgram();
+		~CombineProgram();
+
 		void Render()const;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
@@ -56,21 +59,28 @@ namespace deferred_common
 		Castor3D::RenderPipelineUPtr m_pipeline;
 	};
 
-	using FogPrograms = std::array< FogProgram, size_t( GLSL::FogType::eCount ) >;
+	using CombinePrograms = std::array< CombineProgram, size_t( GLSL::FogType::eCount ) >;
 
-	class FogPass
+	class CombinePass
 	{
 	public:
-		FogPass( Castor3D::Engine & p_engine
-			, Castor::Size const & p_size );
-		~FogPass();
+		CombinePass( Castor3D::Engine & p_engine
+			, Castor::Size const & p_size
+			, bool p_ssao );
+		~CombinePass();
 		void Render( GeometryPassResult const & p_gp
 			, Castor3D::TextureUnit const & p_lp
 			, Castor3D::Camera const & p_camera
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj
-			, Castor3D::Fog const & p_fog );
+			, Castor3D::Fog const & p_fog
+			, Castor3D::FrameBuffer const & p_frameBuffer );
+
+		inline Castor3D::TextureLayout const & GetSsao()const
+		{
+			return m_ssao.GetRaw();
+		}
 
 	private:
 		//!\~english	The render size.
@@ -93,8 +103,13 @@ namespace deferred_common
 		GpInfo m_gpInfo;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
-		FogPrograms m_programs;
-
+		CombinePrograms m_programs;
+		//!\~english	Tells if SSAO is to be used in lighting pass.
+		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
+		bool m_ssaoEnabled{ false };
+		//!\~english	The SSAO pass.
+		//!\~french		La passe SSAO.
+		SsaoPass m_ssao;
 	};
 }
 

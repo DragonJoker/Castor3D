@@ -1,4 +1,4 @@
-﻿#include "LightPass.hpp"
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -337,8 +337,7 @@ namespace deferred_common
 
 	LightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
-		, String const & p_pxl
-		, bool p_ssao )
+		, String const & p_pxl )
 	{
 		auto & l_renderSystem = *p_engine.GetRenderSystem();
 		ShaderModel l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
@@ -354,11 +353,6 @@ namespace deferred_common
 		for ( int i = 0; i < int( DsTexture::eCount ); i++ )
 		{
 			m_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture( i ) ), ShaderType::ePixel )->SetValue( i );
-		}
-
-		if ( p_ssao )
-		{
-			m_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapSsao" ), ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
 		}
 	}
 
@@ -438,14 +432,12 @@ namespace deferred_common
 	LightPass::LightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
 		, FrameBufferAttachment & p_depthAttach
-		, bool p_ssao
 		, bool p_shadows )
 		: m_engine{ p_engine }
 		, m_shadows{ p_shadows }
 		, m_matrixUbo{ p_engine }
 		, m_frameBuffer{ p_frameBuffer }
 		, m_depthAttach{ p_depthAttach }
-		, m_ssao{ p_ssao }
 	{
 	}
 
@@ -456,7 +448,6 @@ namespace deferred_common
 		, Matrix4x4r const & p_invViewProj
 		, Castor::Matrix4x4r const & p_invView
 		, Castor::Matrix4x4r const & p_invProj
-		, Castor3D::TextureUnit const * p_ssao
 		, bool p_first )
 	{
 		m_gpInfo->Update( p_size
@@ -474,7 +465,6 @@ namespace deferred_common
 		DoRender( p_size
 			, p_gp
 			, p_light.GetColour()
-			, p_ssao
 			, p_first );
 	}
 
@@ -508,7 +498,6 @@ namespace deferred_common
 	void LightPass::DoRender( Castor::Size const & p_size
 		, GeometryPassResult const & p_gp
 		, Point3f const & p_colour
-		, TextureUnit const * p_ssao
 		, bool p_first )
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
@@ -520,22 +509,10 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::eSpecular )]->Bind();
 		p_gp[size_t( DsTexture::eEmissive )]->Bind();
 
-		if ( p_ssao && m_ssao )
-		{
-			p_ssao->GetTexture()->Bind( size_t( DsTexture::eCount ) );
-			p_ssao->GetSampler()->Bind( size_t( DsTexture::eCount ) );
-		}
-
 		m_program->Render( p_size
 			, p_colour
 			, GetCount()
 			, p_first );
-
-		if ( p_ssao && m_ssao )
-		{
-			p_ssao->GetSampler()->Unbind( size_t( DsTexture::eCount ) );
-			p_ssao->GetTexture()->Unbind( size_t( DsTexture::eCount ) );
-		}
 
 		p_gp[size_t( DsTexture::eEmissive )]->Unbind();
 		p_gp[size_t( DsTexture::eSpecular )]->Unbind();
@@ -560,7 +537,6 @@ namespace deferred_common
 		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
 		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		// Shader outputs
@@ -592,7 +568,6 @@ namespace deferred_common
 			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_eye = l_writer.GetLocale( cuT( "l_eye" ), c3d_v3CameraPosition );
-			auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), m_ssao, texture( c3d_mapSsao, l_texCoord ).r() );
 
 			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord, c3d_mtxInvViewProj ) );
 			auto l_wsNormal = l_writer.GetLocale( cuT( "l_wsNormal" ), l_v4Normal.xyz() );

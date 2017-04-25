@@ -1,4 +1,4 @@
-﻿#include "SpotLightPass.hpp"
+#include "SpotLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -38,9 +38,8 @@ namespace deferred_common
 	
 	SpotLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
-		, String const & p_pxl
-		, bool p_ssao )
-		: MeshLightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
+		, String const & p_pxl )
+		: MeshLightPass::Program{ p_engine, p_vtx, p_pxl }
 		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
 		, m_lightTransform{ m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
 		, m_lightPosition{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
@@ -71,13 +70,11 @@ namespace deferred_common
 	SpotLightPass::SpotLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
 		, FrameBufferAttachment & p_depthAttach
-		, bool p_ssao
 		, bool p_shadows )
 		: MeshLightPass{ p_engine
 			, p_frameBuffer
 			, p_depthAttach
 			, LightType::eSpot
-			, p_ssao
 			, p_shadows }
 	{
 	}
@@ -181,7 +178,7 @@ namespace deferred_common
 	LightPass::ProgramPtr SpotLightPass::DoCreateProgram( Castor::String const & p_vtx
 		, Castor::String const & p_pxl )const
 	{
-		return std::make_unique< Program >( m_engine, p_vtx, p_pxl, m_ssao );
+		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
 	}
 
 	//*********************************************************************************************

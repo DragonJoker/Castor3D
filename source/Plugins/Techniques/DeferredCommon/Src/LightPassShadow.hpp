@@ -181,20 +181,11 @@ namespace deferred_common
 		public:
 			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl
-				, bool p_ssao )
-				: my_program_type( p_engine, p_vtx, p_pxl, p_ssao )
+				, Castor::String const & p_pxl )
+				: my_program_type( p_engine, p_vtx, p_pxl )
 			{
-				if ( p_ssao )
-				{
-					this->m_program->template CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
-						, Castor3D::ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) + 1 );
-				}
-				else
-				{
-					this->m_program->template CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
-						, Castor3D::ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
-				}
+				this->m_program->template CreateUniform< Castor3D::UniformType::eSampler >( my_traits::GetName()
+					, Castor3D::ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
 			}
 		};
 
@@ -202,24 +193,15 @@ namespace deferred_common
 		LightPassShadow( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
 			, Castor3D::FrameBufferAttachment & p_depthAttach
-			, bool p_ssao
 			, my_shadow_map_type & p_shadowMap )
 			: my_pass_type{ p_engine
 				, p_frameBuffer
 				, p_depthAttach
-				, p_ssao
 				, true }
 			, m_shadowMap{ p_shadowMap }
 			, m_shadowMapTexture{ my_traits::GetTexture( p_shadowMap ) }
 		{
-			if ( p_ssao )
-			{
-				m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) + 1 );
-			}
-			else
-			{
-				m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) );
-			}
+			m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) );
 		}
 
 		void Render( Castor::Size const & p_size
@@ -229,7 +211,6 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj
-			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first )override
 		{
 			this->m_gpInfo->Update( p_size
@@ -247,7 +228,6 @@ namespace deferred_common
 			my_pass_type::DoRender( p_size
 				, p_gp
 				, p_light.GetColour()
-				, p_ssao
 				, p_first );
 
 			m_shadowMapTexture.Unbind();
@@ -267,8 +247,7 @@ namespace deferred_common
 		{
 			return std::make_unique< LightPassShadow::Program >( this->m_engine
 				, p_vtx
-				, p_pxl
-				, this->m_ssao );
+				, p_pxl );
 		}
 
 	private:

@@ -1,4 +1,4 @@
-﻿#include "SsaoPass.hpp"
+#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -154,7 +154,6 @@ namespace deferred_common
 				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 
 				// Shader outputs
-				auto vtx_viewRay = l_writer.GetOutput< Vec2 >( cuT( "vtx_viewRay" ) );
 				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" )
@@ -177,8 +176,8 @@ namespace deferred_common
 			// Shader inputs
 			UBO_MATRIX( l_writer );
 			UBO_GPINFO( l_writer );
-			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
 			auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
+			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
 			auto c3d_mapNoise = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
 
 			Ubo l_ssaoConfig{ l_writer, cuT( "SsaoConfig" ) };
@@ -188,8 +187,6 @@ namespace deferred_common
 			auto c3d_bias = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_bias" ) );
 			auto c3d_noiseScale = l_ssaoConfig.GetUniform< Vec2 >( cuT( "c3d_noiseScale" ) );
 			l_ssaoConfig.End();
-
-			auto vtx_viewRay = l_writer.GetInput< Vec2 >( cuT( "vtx_viewRay" ) );
 
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcTexCoord();
@@ -239,7 +236,8 @@ namespace deferred_common
 					ROF;
 
 					l_occlusion = 1.0_f - l_writer.Paren( l_occlusion / c3d_kernelSize );
-					pxl_fragColor = vec4( l_occlusion, l_occlusion, l_occlusion, 1.0_f );
+					pxl_fragColor = vec4( vec3( l_occlusion ), 1.0 );
+					pxl_fragColor.xyz() = l_tangent;
 			} );
 			return l_writer.Finalise();
 		}
@@ -300,7 +298,7 @@ namespace deferred_common
 					ROF;
 
 					l_result /= l_writer.Paren( 4.0_f * 4.0_f );
-					pxl_fragColor = vec4( l_result, l_result, l_result, 1.0_f );
+					pxl_fragColor = vec4( vec3( l_result ), 1.0 );
 				} );
 			return l_writer.Finalise();
 		}
@@ -317,7 +315,7 @@ namespace deferred_common
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->SetValue( 1 );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->SetValue( 2 );
 			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, DoGetSsaoVertexProgram( p_engine ) );
+			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 			l_program->Initialise();
 			return l_program;
@@ -374,6 +372,47 @@ namespace deferred_common
 
 			return l_sampler;
 		}
+
+		TextureUnit DoCreateTexture( Engine & p_engine
+			, Size const & p_size
+			, String const & p_name )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			auto l_sampler = DoCreateSampler( p_engine, p_name, WrapMode::eClampToEdge );
+			auto l_ssaoResult = l_renderSystem.CreateTexture( TextureType::eTwoDimensions
+				, AccessType::eNone
+				, AccessType::eRead | AccessType::eWrite );
+			l_ssaoResult->SetSource( PxBufferBase::create( p_size
+				, PixelFormat::eL32F ) );
+			TextureUnit l_unit{ p_engine };
+			l_unit.SetTexture( l_ssaoResult );
+			l_unit.SetSampler( l_sampler );
+			l_unit.SetIndex( 0u );
+			l_unit.Initialise();
+			return l_unit;
+		}
+
+		FrameBufferSPtr DoCreateFbo( Engine & p_engine
+			, Size const & p_size )
+		{
+			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			auto l_fbo = l_renderSystem.CreateFrameBuffer();
+			l_fbo->Create();
+			l_fbo->Initialise( p_size );
+			return l_fbo;
+		}
+
+		TextureAttachmentSPtr DoCreateAttach( FrameBuffer & p_fbo
+			, TextureUnit const & p_unit )
+		{
+			auto l_attach = p_fbo.CreateAttachment( p_unit.GetTexture() );
+			p_fbo.Bind();
+			p_fbo.Attach( AttachmentPoint::eColour, 0u, l_attach, p_unit.GetTexture()->GetType() );
+			p_fbo.SetDrawBuffer( l_attach );
+			ENSURE( p_fbo.IsComplete() );
+			p_fbo.Unbind();
+			return l_attach;
+		}
 	}
 
 	SsaoPass::SsaoPass( Engine & p_engine
@@ -384,11 +423,17 @@ namespace deferred_common
 		, m_ssaoKernel{ DoGetKernel() }
 		, m_ssaoNoise{ DoGetNoise( p_engine ) }
 		, m_ssaoResult{ p_engine }
+		//, m_ssaoResult{ DoCreateTexture( p_engine, p_size, cuT( "SSAO_Result" ) ) }
+		//, m_ssaoFbo{ DoCreateFbo( p_engine, p_size ) }
+		//, m_ssaoResultAttach{ DoCreateAttach( *m_ssaoFbo, m_ssaoResult ) }
 		, m_ssaoProgram{ DoGetSsaoProgram( p_engine ) }
 		, m_ssaoConfig{ cuT( "SsaoConfig" )
 			, *p_engine.GetRenderSystem() }
 		, m_blurProgram{ DoGetBlurProgram( p_engine ) }
 		, m_blurResult{ p_engine }
+		//, m_blurResult{ DoCreateTexture( p_engine, p_size, cuT( "SSAO_Blurred" ) ) }
+		//, m_blurFbo{ DoCreateFbo( p_engine, p_size ) }
+		//, m_blurResultAttach{ DoCreateAttach( *m_blurFbo, m_blurResult ) }
 		, m_viewport{ p_engine }
 	{
 		DoInitialiseQuadRendering();

@@ -1,4 +1,4 @@
-﻿#include "DirectionalLightPass.hpp"
+#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -30,9 +30,8 @@ namespace deferred_common
 
 	DirectionalLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
-		, String const & p_pxl
-		, bool p_ssao )
-		: LightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
+		, String const & p_pxl )
+		: LightPass::Program{ p_engine, p_vtx, p_pxl }
 		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
 		, m_lightTransform{ m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
@@ -79,9 +78,8 @@ namespace deferred_common
 	DirectionalLightPass::DirectionalLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
 		, FrameBufferAttachment & p_depthAttach
-		, bool p_ssao
 		, bool p_shadows )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, p_shadows }
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
 		, m_viewport{ p_engine }
 	{
 		auto l_declaration = BufferDeclaration(
@@ -171,6 +169,6 @@ namespace deferred_common
 	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( String const & p_vtx
 		, String const & p_pxl )const
 	{
-		return std::make_unique< Program >( m_engine, p_vtx, p_pxl, m_ssao );
+		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
 	}
 }

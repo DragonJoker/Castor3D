@@ -107,7 +107,9 @@ namespace deferred_common
 			return l_vtx;
 		}
 		
-		String DoGetPixelProgram( Engine & p_engine, GLSL::FogType p_fogType )
+		String DoGetPixelProgram( Engine & p_engine
+			, GLSL::FogType p_fogType
+			, bool p_ssao )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			using namespace GLSL;
@@ -121,6 +123,7 @@ namespace deferred_common
 			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
 			auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
 			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
+			auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), p_ssao );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			GLSL::Utils l_utils{ l_writer };
@@ -144,6 +147,7 @@ namespace deferred_common
 					auto l_receiver = l_writer.GetLocale( cuT( "l_receiver" ), 0_i );
 					auto l_reflection = l_writer.GetLocale( cuT( "l_reflection" ), 0_i );
 					auto l_refraction = l_writer.GetLocale( cuT( "l_refraction" ), 0_i );
+					auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), p_ssao, texture( c3d_mapSsao, vtx_texture ).r() );
 					DecodeMaterial( l_writer
 						, l_flags
 						, l_receiver
@@ -153,10 +157,10 @@ namespace deferred_common
 
 					IF( l_writer, cuT( "l_envMapIndex < 1 || ( l_reflection == 0 && l_refraction == 0 )" ) )
 					{
-						//if ( m_ssao )
-						//{
-						//	l_ambient *= texture( c3d_mapSsao, l_texCoord ).r();
-						//}
+						if ( p_ssao )
+						{
+							l_ambient *= texture( c3d_mapSsao, vtx_texture ).r();
+						}
 					}
 					ELSE
 					{
@@ -175,11 +179,13 @@ namespace deferred_common
 			return l_writer.Finalise();
 		}
 		
-		ShaderProgramSPtr DoCreateProgram( Engine & p_engine, GLSL::FogType p_fogType )
+		ShaderProgramSPtr DoCreateProgram( Engine & p_engine
+			, GLSL::FogType p_fogType
+			, bool p_ssao )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			String l_vtx = DoGetVertexProgram( p_engine );
-			String l_pxl = DoGetPixelProgram( p_engine, p_fogType );
+			String l_pxl = DoGetPixelProgram( p_engine, p_fogType, p_ssao );
 			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
@@ -188,6 +194,12 @@ namespace deferred_common
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDiffuse ), ShaderType::ePixel )->SetValue( 2u );
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eEmissive ), ShaderType::ePixel )->SetValue( 3u );
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel )->SetValue( 4u );
+
+			if ( p_ssao )
+			{
+				l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapSsao" ), ShaderType::ePixel )->SetValue( 5u );
+			}
+
 			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
@@ -222,19 +234,20 @@ namespace deferred_common
 
 	//*********************************************************************************************
 
-	FogProgram::FogProgram( Engine & p_engine
+	CombineProgram::CombineProgram( Engine & p_engine
 		, VertexBuffer & p_vbo
 		, MatrixUbo & p_matrixUbo
 		, SceneUbo & p_sceneUbo
 		, GpInfo & p_gpInfo
+		, bool p_ssao
 		, GLSL::FogType p_fogType )
-		: m_program{ DoCreateProgram( p_engine, p_fogType ) }
+		: m_program{ DoCreateProgram( p_engine, p_fogType, p_ssao ) }
 		, m_geometryBuffers{ DoCreateVao( p_engine, *m_program, p_vbo ) }
 		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, p_matrixUbo, p_sceneUbo, p_gpInfo ) }
 	{
 	}
 
-	FogProgram::~FogProgram()
+	CombineProgram::~CombineProgram()
 	{
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
@@ -244,7 +257,7 @@ namespace deferred_common
 		m_program.reset();
 	}
 
-	void FogProgram::Render()const
+	void CombineProgram::Render()const
 	{
 		m_pipeline->Apply();
 		m_geometryBuffers->Draw( 6u, 0 );
@@ -252,8 +265,9 @@ namespace deferred_common
 
 	//*********************************************************************************************
 
-	FogPass::FogPass( Engine & p_engine
-		, Size const & p_size )
+	CombinePass::CombinePass( Engine & p_engine
+		, Size const & p_size
+		, bool p_ssao )
 		: m_size{ p_size }
 		, m_viewport{ p_engine }
 		, m_vertexBuffer{ DoCreateVbo( p_engine ) }
@@ -263,12 +277,14 @@ namespace deferred_common
 		, m_programs
 		{
 			{
-				FogProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eDisabled },
-				FogProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eLinear },
-				FogProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eExponential },
-				FogProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eSquaredExponential }
+				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_ssao, GLSL::FogType::eDisabled },
+				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_ssao, GLSL::FogType::eLinear },
+				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_ssao, GLSL::FogType::eExponential },
+				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_ssao, GLSL::FogType::eSquaredExponential }
 			}
 		}
+		, m_ssaoEnabled{ p_ssao }
+		, m_ssao{ p_engine, p_size }
 	{
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.Initialise();
@@ -277,21 +293,37 @@ namespace deferred_common
 		m_matrixUbo.Update( m_viewport.GetProjection() );
 	}
 
-	FogPass::~FogPass()
+	CombinePass::~CombinePass()
 	{
 		m_sceneUbo.GetUbo().Cleanup();
 		m_matrixUbo.GetUbo().Cleanup();
 		m_vertexBuffer->Cleanup();
 	}
 
-	void FogPass::Render( GeometryPassResult const & p_gp
+	void CombinePass::Render( GeometryPassResult const & p_gp
 		, TextureUnit const & p_lp
 		, Camera const & p_camera
 		, Matrix4x4r const & p_invViewProj
 		, Matrix4x4r const & p_invView
 		, Matrix4x4r const & p_invProj
-		, Fog const & p_fog )
+		, Fog const & p_fog
+		, FrameBuffer const & p_frameBuffer )
 	{
+		TextureUnit const * l_ssao = nullptr;
+
+		if ( m_ssaoEnabled )
+		{
+			m_ssao.Render( p_gp
+				, p_camera
+				, p_invViewProj
+				, p_invView
+				, p_invProj );
+			l_ssao = &m_ssao.GetResult();
+		}
+
+		p_frameBuffer.Bind( FrameBufferTarget::eDraw );
+		p_frameBuffer.SetDrawBuffers();
+
 		m_viewport.Apply();
 		m_gpInfo.Update( m_size
 			, p_camera
@@ -308,7 +340,21 @@ namespace deferred_common
 		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Bind( 3u );
 		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Bind( 4u );
 		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Bind( 4u );
+
+		if ( m_ssaoEnabled )
+		{
+			l_ssao->GetSampler()->Bind( 5u );
+			l_ssao->GetTexture()->Bind( 5u );
+		}
+
 		m_programs[size_t( p_fog.GetType() )].Render();
+
+		if ( m_ssaoEnabled )
+		{
+			l_ssao->GetSampler()->Unbind( 5u );
+			l_ssao->GetTexture()->Unbind( 5u );
+		}
+
 		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Unbind( 4u );
 		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Unbind( 4u );
 		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Unbind( 3u );

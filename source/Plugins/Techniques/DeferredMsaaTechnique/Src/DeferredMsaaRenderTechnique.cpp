@@ -183,16 +183,14 @@ namespace deferred_msaa
 			l_result = &m_reflection->GetResult();
 		}
 
-		m_msaaFrameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_msaaFrameBuffer->SetDrawBuffers();
-
-		m_fogPass->Render( m_geometryPassResult
+		m_combinePass->Render( m_geometryPassResult
 			, *l_result
 			, l_camera
 			, l_invViewProj
 			, l_invView
 			, l_invProj
-			, l_scene.GetFog() );
+			, l_scene.GetFog()
+			, *m_msaaFrameBuffer );
 	}
 
 	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
@@ -226,7 +224,7 @@ namespace deferred_msaa
 
 		if ( m_ssaoEnabled )
 		{
-			l_context.RenderTexture( Position{ l_width * ( l_index++ ), 0 }, l_size, m_lightingPass->GetSsao() );
+			l_context.RenderTexture( Position{ l_width * ( l_index++ ), 0 }, l_size, m_combinePass->GetSsao() );
 		}
 
 		m_frameBuffer.m_frameBuffer->Unbind();
@@ -249,13 +247,13 @@ namespace deferred_msaa
 				, m_renderTarget.GetSize()
 				, *m_renderTarget.GetScene()
 				, static_cast< deferred_common::OpaquePass & >( *m_opaquePass )
-				, m_ssaoEnabled
 				, *m_frameBuffer.m_depthAttach
 				, m_sceneUbo );
 			m_reflection = std::make_unique< deferred_common::ReflectionPass >( *m_renderSystem.GetEngine()
 				, m_renderTarget.GetSize() );
-			m_fogPass = std::make_unique< deferred_common::FogPass >( *m_renderSystem.GetEngine()
-				, m_renderTarget.GetSize() );
+			m_combinePass = std::make_unique< deferred_common::CombinePass >( *m_renderSystem.GetEngine()
+				, m_renderTarget.GetSize()
+				, m_ssaoEnabled );
 		}
 
 		return l_return;
@@ -315,7 +313,7 @@ namespace deferred_msaa
 	void RenderTechnique::DoCleanupDeferred()
 	{
 		DoCleanupGeometryPass();
-		m_fogPass.reset();
+		m_combinePass.reset();
 		m_reflection.reset();
 		m_lightingPass.reset();
 		m_sceneUbo.GetUbo().Cleanup();

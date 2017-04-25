@@ -1,4 +1,4 @@
-﻿#include "LightingPass.hpp"
+#include "LightingPass.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -36,14 +36,11 @@ namespace deferred_common
 		, Size const & p_size
 		, Scene const & p_scene
 		, OpaquePass & p_opaque
-		, bool p_ssao
 		, FrameBufferAttachment & p_depthAttach
 		, SceneUbo & p_sceneUbo )
 		: m_size{ p_size }
 		, m_result{ p_engine }
 		, m_frameBuffer{ p_engine.GetRenderSystem()->CreateFrameBuffer() }
-		, m_ssaoEnabled{ p_ssao }
-		, m_ssao{ p_engine, p_size }
 	{
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eTransparentBlack ) );
 		bool l_return = m_frameBuffer->Create();
@@ -80,32 +77,26 @@ namespace deferred_common
 			m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( p_engine
 				, *m_frameBuffer
 				, p_depthAttach
-				, m_ssaoEnabled
 				, false );
 			m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( p_engine
 				, *m_frameBuffer
 				, p_depthAttach
-				, m_ssaoEnabled
 				, false );
 			m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( p_engine
 				, *m_frameBuffer
 				, p_depthAttach
-				, m_ssaoEnabled
 				, false );
 			m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( p_engine
 				, *m_frameBuffer
 				, p_depthAttach
-				, m_ssaoEnabled
 				, p_opaque.GetDirectionalShadowMap() );
 			m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( p_engine
 				, *m_frameBuffer
 				, p_depthAttach
-				, m_ssaoEnabled
 				, p_opaque.GetPointShadowMaps() );
 			m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( p_engine
 				, *m_frameBuffer
 				, p_depthAttach
-				, m_ssaoEnabled
 				, p_opaque.GetSpotShadowMap() );
 
 			for ( auto & l_lightPass : m_lightPass )
@@ -150,18 +141,6 @@ namespace deferred_common
 		, Matrix4x4r const & p_invView
 		, Matrix4x4r const & p_invProj )
 	{
-		TextureUnit const * l_ssao = nullptr;
-
-		if ( m_ssaoEnabled )
-		{
-			m_ssao.Render( p_gp
-				, p_camera
-				, p_invViewProj
-				, p_invView
-				, p_invProj );
-			l_ssao = &m_ssao.GetResult();
-		}
-
 		auto & l_cache = p_scene.GetLightCache();
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eColour );
@@ -184,7 +163,6 @@ namespace deferred_common
 				, p_invViewProj
 				, p_invView
 				, p_invProj
-				, l_ssao
 				, l_first );
 			DoRenderLights( p_scene
 				, p_camera
@@ -193,7 +171,6 @@ namespace deferred_common
 				, p_invViewProj
 				, p_invView
 				, p_invProj
-				, l_ssao
 				, l_first );
 			DoRenderLights( p_scene
 				, p_camera
@@ -202,7 +179,6 @@ namespace deferred_common
 				, p_invViewProj
 				, p_invView
 				, p_invProj
-				, l_ssao
 				, l_first );
 			l_first = false;
 		}
@@ -217,7 +193,6 @@ namespace deferred_common
 		, Matrix4x4r const & p_invViewProj
 		, Matrix4x4r const & p_invView
 		, Matrix4x4r const & p_invProj
-		, TextureUnit const * p_ssao
 		, bool & p_first )
 	{
 		auto & l_cache = p_scene.GetLightCache();
@@ -238,7 +213,6 @@ namespace deferred_common
 						, p_invViewProj
 						, p_invView
 						, p_invProj
-						, p_ssao
 						, p_first );
 				}
 				else
@@ -250,7 +224,6 @@ namespace deferred_common
 						, p_invViewProj
 						, p_invView
 						, p_invProj
-						, p_ssao
 						, p_first );
 				}
 

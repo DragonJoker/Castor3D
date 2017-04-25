@@ -1,4 +1,4 @@
-﻿#include "AmbientLightPass.hpp"
+#include "AmbientLightPass.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -35,9 +35,8 @@ namespace deferred_common
 
 	AmbientLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
-		, String const & p_pxl
-		, bool p_ssao )
-		: LightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
+		, String const & p_pxl )
+		: LightPass::Program{ p_engine, p_vtx, p_pxl }
 	{
 	}
 
@@ -76,9 +75,8 @@ namespace deferred_common
 
 	AmbientLightPass::AmbientLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, FrameBufferAttachment & p_depthAttach
-		, bool p_ssao )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, false }
+		, FrameBufferAttachment & p_depthAttach )
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, false }
 		, m_viewport{ p_engine }
 	{
 		auto l_declaration = BufferDeclaration(
@@ -137,7 +135,6 @@ namespace deferred_common
 		, Matrix4x4r const & p_invViewProj
 		, Castor::Matrix4x4r const & p_invView
 		, Castor::Matrix4x4r const & p_invProj
-		, Castor3D::TextureUnit const * p_ssao
 		, bool p_first )
 	{
 		m_gpInfo->Update( p_size
@@ -152,7 +149,6 @@ namespace deferred_common
 		DoRender( p_size
 			, p_gp
 			, rgb_float( p_camera.GetScene()->GetAmbientLight() )
-			, p_ssao
 			, p_first );
 	}
 
@@ -199,7 +195,6 @@ namespace deferred_common
 		UBO_GPINFO( l_writer );
 		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
 		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		// Shader outputs
@@ -217,11 +212,6 @@ namespace deferred_common
 			auto l_ambient = l_writer.GetLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
 			auto l_emissive = l_writer.GetLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, l_texCoord ).xyz() );
 
-			if ( m_ssao )
-			{
-				l_ambient *= texture( c3d_mapSsao, l_texCoord ).r();
-			}
-
 			pxl_v4FragColor = vec4( l_colour * l_ambient, 1.0 );
 		} );
 
@@ -231,6 +221,6 @@ namespace deferred_common
 	LightPass::ProgramPtr AmbientLightPass::DoCreateProgram( String const & p_vtx
 		, String const & p_pxl )const
 	{
-		return std::make_unique< Program >( m_engine, p_vtx, p_pxl, m_ssao );
+		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
 	}
 }
