@@ -2850,7 +2850,8 @@ namespace Castor3D
 					}
 					else if ( l_channels == cuT( "a" ) )
 					{
-						l_buffer = PF::ExtractAlpha( l_texture->GetImage().GetBuffer() );
+						auto l_tmp = PF::ExtractAlpha( l_buffer );
+						l_buffer = l_tmp;
 					}
 
 					l_texture->SetSource( l_buffer );
