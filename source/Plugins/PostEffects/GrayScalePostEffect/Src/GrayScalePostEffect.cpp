@@ -46,11 +46,11 @@ namespace GrayScale
 			UBO_MATRIX( l_writer );
 
 			// Shader inputs
-			Vec2 position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+			Vec2 position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
 
 			// Shader outputs
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -66,16 +66,16 @@ namespace GrayScale
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_colour = l_writer.GetLocale( cuT( "l_colour" ), texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
-				auto l_average = l_writer.GetLocale( cuT( "l_average" ), Float( 0.2126f ) * l_colour.r() + 0.7152f * l_colour.g() + 0.0722f * l_colour.b() );
+				auto l_colour = l_writer.DeclLocale( cuT( "l_colour" ), texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
+				auto l_average = l_writer.DeclLocale( cuT( "l_average" ), Float( 0.2126f ) * l_colour.r() + 0.7152f * l_colour.g() + 0.0722f * l_colour.b() );
 				plx_v4FragColor = vec4( l_average, l_average, l_average, 1.0 );
 			} );
 			return l_writer.Finalise();

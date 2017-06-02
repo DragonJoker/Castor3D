@@ -234,7 +234,10 @@ namespace deferred_msaa
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
-		return p_file.WriteText( cuT( " -samples_count=" ) + string::to_string( m_samplesCount ) ) > 0;
+		return p_file.WriteText( cuT( " -samples_count=" ) + string::to_string( m_samplesCount ) ) > 0
+			&& m_ssaoEnabled
+				? p_file.WriteText( cuT( " ssao" ) ) > 0
+				: true;
 	}
 
 	bool RenderTechnique::DoInitialiseDeferred( uint32_t & p_index )

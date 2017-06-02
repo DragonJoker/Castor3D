@@ -171,10 +171,10 @@ namespace deferred_common
 		// Shader inputs
 		UBO_MATRIX( l_writer );
 		UBO_GPINFO( l_writer );
-		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+		auto vertex = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
 
 		// Shader outputs
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -193,12 +193,12 @@ namespace deferred_common
 		// Shader inputs
 		UBO_SCENE( l_writer );
 		UBO_GPINFO( l_writer );
-		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+		auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
+		auto c3d_mapEmissive = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+		auto gl_FragCoord = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		// Shader outputs
-		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+		auto pxl_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
 		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
@@ -207,10 +207,10 @@ namespace deferred_common
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
-			auto l_colour = l_writer.GetLocale( cuT( "l_colour" ), texture( c3d_mapDiffuse, l_texCoord ).xyz() );
-			auto l_ambient = l_writer.GetLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_emissive = l_writer.GetLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, l_texCoord ).xyz() );
+			auto l_texCoord = l_writer.DeclLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
+			auto l_colour = l_writer.DeclLocale( cuT( "l_colour" ), texture( c3d_mapDiffuse, l_texCoord ).xyz() );
+			auto l_ambient = l_writer.DeclLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_emissive = l_writer.DeclLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, l_texCoord ).xyz() );
 
 			pxl_v4FragColor = vec4( l_colour * l_ambient, 1.0 );
 		} );

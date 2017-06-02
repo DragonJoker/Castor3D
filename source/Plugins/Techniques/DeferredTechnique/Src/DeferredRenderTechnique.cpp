@@ -200,7 +200,9 @@ namespace deferred
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
-		return true;
+		return m_ssaoEnabled
+			? p_file.WriteText( cuT( " ssao" ) ) > 0
+			: true;;
 	}
 
 	bool RenderTechnique::DoInitialiseGeometryPass( uint32_t & p_index )

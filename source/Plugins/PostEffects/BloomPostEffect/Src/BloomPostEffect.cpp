@@ -1,4 +1,4 @@
-#include "BloomPostEffect.hpp"
+﻿#include "BloomPostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -46,11 +46,11 @@ namespace Bloom
 			UBO_MATRIX( l_writer );
 
 			// Shader inputs
-			Vec2 position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+			Vec2 position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
 
 			// Shader outputs
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -66,16 +66,16 @@ namespace Bloom
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+			auto pxl_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				pxl_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
-				auto l_max = l_writer.GetLocale( cuT( "l_max" ), GLSL::max( pxl_v4FragColor.r(), pxl_v4FragColor.g() ) );
+				auto l_max = l_writer.DeclLocale( cuT( "l_max" ), GLSL::max( pxl_v4FragColor.r(), pxl_v4FragColor.g() ) );
 				l_max = GLSL::max( l_max, pxl_v4FragColor.b() );
 
 				IF( l_writer, l_max > 1.0_f )
@@ -101,16 +101,16 @@ namespace Bloom
 			auto c3d_fCoefficients = l_config.GetUniform< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
 			auto c3d_fCoefficientsCount = l_config.GetUniform< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 			l_config.End();
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_base = l_writer.GetLocale( cuT( "l_base" ), vec2( 1.0_f, 0 ) / textureSize( c3d_mapDiffuse, 0 ) );
-				auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( 0.0_f, 0 ) );
+				auto l_base = l_writer.DeclLocale( cuT( "l_base" ), vec2( 1.0_f, 0 ) / textureSize( c3d_mapDiffuse, 0 ) );
+				auto l_offset = l_writer.DeclLocale( cuT( "l_offset" ), vec2( 0.0_f, 0 ) );
 				plx_v4FragColor = c3d_fCoefficients[0] * texture( c3d_mapDiffuse, vtx_texture );
 
 				FOR( l_writer, Int, i, 1, cuT( "i < c3d_fCoefficientsCount" ), cuT( "++i" ) )
@@ -134,16 +134,16 @@ namespace Bloom
 			auto c3d_fCoefficients = l_config.GetUniform< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
 			auto c3d_fCoefficientsCount = l_config.GetUniform< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 			l_config.End();
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_base = l_writer.GetLocale( cuT( "l_base" ), vec2( 0.0_f, 1 ) / textureSize( c3d_mapDiffuse, 0 ) );
-				auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( 0.0_f, 0 ) );
+				auto l_base = l_writer.DeclLocale( cuT( "l_base" ), vec2( 0.0_f, 1 ) / textureSize( c3d_mapDiffuse, 0 ) );
+				auto l_offset = l_writer.DeclLocale( cuT( "l_offset" ), vec2( 0.0_f, 0 ) );
 				plx_v4FragColor = c3d_fCoefficients[0] * texture( c3d_mapDiffuse, vtx_texture );
 
 				FOR( l_writer, Int, i, 1, cuT( "i < c3d_fCoefficientsCount" ), cuT( "++i" ) )
@@ -163,15 +163,15 @@ namespace Bloom
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapPass0 = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapPass0 );
-			auto c3d_mapPass1 = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapPass1 );
-			auto c3d_mapPass2 = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapPass2 );
-			auto c3d_mapPass3 = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapPass3 );
-			auto c3d_mapScene = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapScene );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapPass0 = l_writer.DeclUniform< Sampler2D >( BloomPostEffect::CombineMapPass0 );
+			auto c3d_mapPass1 = l_writer.DeclUniform< Sampler2D >( BloomPostEffect::CombineMapPass1 );
+			auto c3d_mapPass2 = l_writer.DeclUniform< Sampler2D >( BloomPostEffect::CombineMapPass2 );
+			auto c3d_mapPass3 = l_writer.DeclUniform< Sampler2D >( BloomPostEffect::CombineMapPass3 );
+			auto c3d_mapScene = l_writer.DeclUniform< Sampler2D >( BloomPostEffect::CombineMapScene );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{

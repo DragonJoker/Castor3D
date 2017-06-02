@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 #define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 
-#include <FogPass.hpp>
+#include <CombinePass.hpp>
 #include <LightingPass.hpp>
 #include <ReflectionPass.hpp>
 

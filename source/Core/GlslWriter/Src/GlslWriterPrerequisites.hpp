@@ -109,7 +109,54 @@ namespace GLSL
 	class PhongLightingModel;
 	class DeferredPhongLightingModel;
 	struct Light;
+	struct DirectionalLight;
+	struct PointLight;
+	struct SpotLight;
 	class Materials;
+
+	enum class TypeName
+	{
+		eBool,
+		eInt,
+		eUInt,
+		eFloat,
+		eVec2B,
+		eVec3B,
+		eVec4B,
+		eVec2I,
+		eVec3I,
+		eVec4I,
+		eVec2F,
+		eVec3F,
+		eVec4F,
+		eMat2x2B,
+		eMat3x3B,
+		eMat4x4B,
+		eMat2x2I,
+		eMat3x3I,
+		eMat4x4I,
+		eMat2x2F,
+		eMat3x3F,
+		eMat4x4F,
+		eSamplerBuffer,
+		eSampler1D,
+		eSampler2D,
+		eSampler3D,
+		eSamplerCube,
+		eSampler1DArray,
+		eSampler2DArray,
+		eSamplerCubeArray,
+		eSampler1DShadow,
+		eSampler2DShadow,
+		eSamplerCubeShadow,
+		eSampler1DArrayShadow,
+		eSampler2DArrayShadow,
+		eSamplerCubeArrayShadow,
+		eLight,
+		eDirectionalLight,
+		ePointLight,
+		eSpotLight,
+	};
 
 	template< typename T >
 	struct Array;
@@ -139,6 +186,7 @@ namespace GLSL
 	struct Void;
 	struct Boolean;
 	struct Int;
+	struct UInt;
 	struct Float;
 	struct SamplerBuffer;
 	struct Sampler1D;
@@ -202,8 +250,13 @@ namespace GLSL
 
 	constexpr uint32_t SpotShadowMapCount = 10u;
 	constexpr uint32_t PointShadowMapCount = 6u;
+
+	template< typename T >
+	struct name_of;
 }
 
 #undef DECLARE_GLSL_PARAMETER
+
+#include "GlslWriterPrerequisites.inl"
 
 #endif

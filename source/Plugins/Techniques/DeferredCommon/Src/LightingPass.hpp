@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_LightingPass_H___
 #define ___C3D_LightingPass_H___
 
-#include "FogPass.hpp"
+#include "CombinePass.hpp"
 #include "ReflectionPass.hpp"
 
 namespace deferred_common

@@ -1,4 +1,4 @@
-﻿#include "HejlBurgessDawsonToneMapping.hpp"
+#include "HejlBurgessDawsonToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -44,17 +44,17 @@ namespace HejlBurgessDawson
 			Ubo l_config{ l_writer, ToneMapping::HdrConfigUbo };
 			auto c3d_exposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
 			l_config.End();
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_hdrColor = l_writer.GetLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				auto l_hdrColor = l_writer.DeclLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				l_hdrColor *= vec3( c3d_exposure );
-				auto x = l_writer.GetLocale( cuT( "x" ), max( l_hdrColor - 0.004_f, 0.0_f ) );
+				auto x = l_writer.DeclLocale( cuT( "x" ), max( l_hdrColor - 0.004_f, 0.0_f ) );
 				plx_v4FragColor = vec4( l_writer.Paren( x * l_writer.Paren( 6.2f * x + 0.5f ) )
 					/ l_writer.Paren( x * l_writer.Paren( 6.2f * x + 1.7f ) + 0.06f ), 1.0 );
 			} );

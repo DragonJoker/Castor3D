@@ -45,7 +45,7 @@ namespace deferred_common
 				{
 					l_result = p_writer.CreateDirectionalLightingModel( GLSL::PhongLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.GetUniform< GLSL::DirectionalLight >( cuT( "light" ) );
+					auto light = p_writer.DeclUniform< GLSL::DirectionalLight >( cuT( "light" ) );
 				}
 				break;
 
@@ -53,7 +53,7 @@ namespace deferred_common
 				{
 					l_result = p_writer.CreatePointLightingModel( GLSL::PhongLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.GetUniform< GLSL::PointLight >( cuT( "light" ) );
+					auto light = p_writer.DeclUniform< GLSL::PointLight >( cuT( "light" ) );
 				}
 				break;
 
@@ -61,7 +61,7 @@ namespace deferred_common
 				{
 					l_result = p_writer.CreateSpotLightingModel( GLSL::PhongLightingModel::Name
 						, p_shadows );
-					auto light = p_writer.GetUniform< GLSL::SpotLight >( cuT( "light" ) );
+					auto light = p_writer.DeclUniform< GLSL::SpotLight >( cuT( "light" ) );
 				}
 				break;
 
@@ -193,7 +193,7 @@ namespace deferred_common
 				, Int const & p_envMapIndex
 				, Float p_encoded )
 			{
-				auto l_flags = p_writer.GetLocale( cuT( "l_flags" )
+				auto l_flags = p_writer.DeclLocale( cuT( "l_flags" )
 					, p_writer.Paren( p_receiver << 7 )
 						+ p_writer.Paren( p_refraction << 6 )
 						+ p_writer.Paren( p_reflection << 5 )
@@ -216,7 +216,7 @@ namespace deferred_common
 				, Int p_refraction
 				, Int p_envMapIndex )
 			{
-				auto l_flags = p_writer.GetLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
+				auto l_flags = p_writer.DeclLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
 				p_receiver = l_flags >> 7;
 				l_flags -= p_writer.Paren( p_receiver << 7 );
 				p_refraction = l_flags >> 6;
@@ -238,7 +238,7 @@ namespace deferred_common
 			, [&]( Float const & p_encoded
 				, Int p_receiver )
 			{
-				auto l_flags = p_writer.GetLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
+				auto l_flags = p_writer.DeclLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
 				p_receiver = l_flags >> 7;
 			}, InFloat{ &p_writer, cuT( "p_encoded" ) }
 			, OutInt{ &p_writer, cuT( "p_receiver" ) } );
@@ -532,15 +532,15 @@ namespace deferred_common
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_GPINFO( l_writer );
-		auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
-		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
-		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
-		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+		auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
+		auto c3d_mapNormals = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
+		auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
+		auto c3d_mapSpecular = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
+		auto c3d_mapEmissive = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+		auto gl_FragCoord = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		// Shader outputs
-		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+		auto pxl_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
 		auto l_lighting = CreateLightingModel( l_writer
@@ -554,23 +554,23 @@ namespace deferred_common
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
-			auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, l_texCoord ) );
-			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
-			auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
-			auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
-			auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), l_writer.Cast< Int >( l_v4Normal.w() ) );
-			auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_iShadowReceiver" ), 0_i );
+			auto l_texCoord = l_writer.DeclLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
+			auto l_v4Diffuse = l_writer.DeclLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, l_texCoord ) );
+			auto l_v4Normal = l_writer.DeclLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, l_texCoord ) );
+			auto l_v4Specular = l_writer.DeclLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, l_texCoord ) );
+			auto l_v4Emissive = l_writer.DeclLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, l_texCoord ) );
+			auto l_flags = l_writer.DeclLocale( cuT( "l_flags" ), l_writer.Cast< Int >( l_v4Normal.w() ) );
+			auto l_iShadowReceiver = l_writer.DeclLocale( cuT( "l_iShadowReceiver" ), 0_i );
 			DecodeReceiver( l_writer, l_flags, l_iShadowReceiver );
-			auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
-			auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
-			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
-			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_eye = l_writer.GetLocale( cuT( "l_eye" ), c3d_v3CameraPosition );
+			auto l_v3MapDiffuse = l_writer.DeclLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
+			auto l_v3MapSpecular = l_writer.DeclLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
+			auto l_fMatShininess = l_writer.DeclLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
+			auto l_v3Specular = l_writer.DeclLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
+			auto l_v3Diffuse = l_writer.DeclLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
+			auto l_eye = l_writer.DeclLocale( cuT( "l_eye" ), c3d_v3CameraPosition );
 
-			auto l_wsPosition = l_writer.GetLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord, c3d_mtxInvViewProj ) );
-			auto l_wsNormal = l_writer.GetLocale( cuT( "l_wsNormal" ), l_v4Normal.xyz() );
+			auto l_wsPosition = l_writer.DeclLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord, c3d_mtxInvViewProj ) );
+			auto l_wsNormal = l_writer.DeclLocale( cuT( "l_wsNormal" ), l_v4Normal.xyz() );
 
 			OutputComponents l_output{ l_v3Diffuse, l_v3Specular };
 

@@ -1,4 +1,4 @@
-#include "RenderColourToTexture.hpp"
+﻿#include "RenderColourToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -165,12 +165,12 @@ namespace Castor3D
 			UBO_MATRIX( l_writer );
 
 			// Shader inputs
-			auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
 
 			// Shader outputs
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -186,11 +186,11 @@ namespace Castor3D
 			auto l_writer = l_renderSystem.CreateGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{

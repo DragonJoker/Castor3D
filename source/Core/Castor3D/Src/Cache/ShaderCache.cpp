@@ -253,11 +253,11 @@ namespace Castor3D
 				auto l_writer = l_renderSystem.CreateGlslWriter();
 
 				// Shader inputs
-				auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
-				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
-				auto center = l_writer.GetAttribute< Vec3 >( cuT( "center" ) );
-				auto gl_InstanceID( l_writer.GetBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
-				auto gl_VertexID( l_writer.GetBuiltin< Int >( cuT( "gl_VertexID" ) ) );
+				auto position = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
+				auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
+				auto center = l_writer.DeclAttribute< Vec3 >( cuT( "center" ) );
+				auto gl_InstanceID( l_writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+				auto gl_VertexID( l_writer.DeclBuiltin< Int >( cuT( "gl_VertexID" ) ) );
 				UBO_MATRIX( l_writer );
 				UBO_MODEL_MATRIX( l_writer );
 				UBO_SCENE( l_writer );
@@ -265,23 +265,23 @@ namespace Castor3D
 				UBO_BILLBOARD( l_writer );
 
 				// Shader outputs
-				auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
-				auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
-				auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
-				auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-				auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-				auto vtx_instance = l_writer.GetOutput< Int >( cuT( "vtx_instance" ) );
-				auto vtx_material = l_writer.GetOutput< Int >( cuT( "vtx_material" ) );
-				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+				auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
+				auto vtx_normal = l_writer.DeclOutput< Vec3 >( cuT( "vtx_normal" ) );
+				auto vtx_tangent = l_writer.DeclOutput< Vec3 >( cuT( "vtx_tangent" ) );
+				auto vtx_bitangent = l_writer.DeclOutput< Vec3 >( cuT( "vtx_bitangent" ) );
+				auto vtx_texture = l_writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
+				auto vtx_instance = l_writer.DeclOutput< Int >( cuT( "vtx_instance" ) );
+				auto vtx_material = l_writer.DeclOutput< Int >( cuT( "vtx_material" ) );
+				auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
-					auto l_center = l_writer.GetLocale( cuT( "l_center" ), l_writer.Paren( c3d_mtxModel * vec4( center, 1.0 ) ).xyz() );
-					auto l_toCamera = l_writer.GetLocale( cuT( "l_toCamera" ), c3d_v3CameraPosition - l_center );
+					auto l_center = l_writer.DeclLocale( cuT( "l_center" ), l_writer.Paren( c3d_mtxModel * vec4( center, 1.0 ) ).xyz() );
+					auto l_toCamera = l_writer.DeclLocale( cuT( "l_toCamera" ), c3d_v3CameraPosition - l_center );
 					l_toCamera.y() = 0.0_f;
 					l_toCamera = normalize( l_toCamera );
-					auto l_right = l_writer.GetLocale( cuT( "l_right" ), vec3( c3d_mtxView[0][0], c3d_mtxView[1][0], c3d_mtxView[2][0] ) );
-					auto l_up = l_writer.GetLocale( cuT( "l_up" ), vec3( c3d_mtxView[0][1], c3d_mtxView[1][1], c3d_mtxView[2][1] ) );
+					auto l_right = l_writer.DeclLocale( cuT( "l_right" ), vec3( c3d_mtxView[0][0], c3d_mtxView[1][0], c3d_mtxView[2][0] ) );
+					auto l_up = l_writer.DeclLocale( cuT( "l_up" ), vec3( c3d_mtxView[0][1], c3d_mtxView[1][1], c3d_mtxView[2][1] ) );
 
 					if ( !CheckFlag( p_programFlags, ProgramFlag::eSpherical ) )
 					{
@@ -294,8 +294,8 @@ namespace Castor3D
 					vtx_tangent = l_up;
 					vtx_bitangent = l_right;
 
-					auto l_width = l_writer.GetLocale( cuT( "l_width" ), c3d_v2iDimensions.x() );
-					auto l_height = l_writer.GetLocale( cuT( "l_height" ), c3d_v2iDimensions.y() );
+					auto l_width = l_writer.DeclLocale( cuT( "l_width" ), c3d_v2iDimensions.x() );
+					auto l_height = l_writer.DeclLocale( cuT( "l_height" ), c3d_v2iDimensions.y() );
 
 					if ( CheckFlag( p_programFlags, ProgramFlag::eFixedSize ) )
 					{
@@ -309,7 +309,7 @@ namespace Castor3D
 
 					vtx_texture = vec3( texture, 0.0 );
 					vtx_instance = gl_InstanceID;
-					auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+					auto l_wvPosition = l_writer.DeclLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
 					gl_Position = c3d_mtxProjection * vec4( l_wvPosition, 1.0 );
 				} );
 

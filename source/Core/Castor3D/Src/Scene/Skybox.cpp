@@ -1,4 +1,4 @@
-﻿#include "Skybox.hpp"
+#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -183,13 +183,13 @@ namespace Castor3D
 			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
 
 			// Inputs
-			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
+			auto position = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
 			UBO_MATRIX( l_writer );
 			UBO_MODEL_MATRIX( l_writer );
 
 			// Outputs
-			auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = l_writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			std::function< void() > l_main = [&]()
 			{
@@ -207,17 +207,17 @@ namespace Castor3D
 
 			// Inputs
 			UBO_HDR_CONFIG( l_writer );
-			auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
-			auto skybox = l_writer.GetUniform< SamplerCube >( cuT( "skybox" ) );
+			auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+			auto skybox = l_writer.DeclUniform< SamplerCube >( cuT( "skybox" ) );
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareRemoveGamma();
 
 			// Outputs
-			auto pxl_FragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_FragColor = l_writer.DeclOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			std::function< void() > l_main = [&]()
 			{
-				auto l_skybox = l_writer.GetLocale( cuT( "l_skybox" )
+				auto l_skybox = l_writer.DeclLocale( cuT( "l_skybox" )
 					, texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) ) );
 				pxl_FragColor = vec4( l_utils.RemoveGamma( c3d_gamma, l_skybox.xyz() ), l_skybox.w() );
 			};

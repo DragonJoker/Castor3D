@@ -137,18 +137,18 @@ namespace deferred_common
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Fragment Intputs
-		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
-		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
+		auto gl_FragCoord( l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		auto pxl_fFragDepth( l_writer.GetFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
+		auto pxl_fFragDepth( l_writer.DeclFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 			{
-				auto l_alpha = l_writer.GetLocale( cuT( "l_alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				auto l_alpha = l_writer.DeclLocale( cuT( "l_alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
 
 				IF( l_writer, l_alpha < 0.2_f )
 				{

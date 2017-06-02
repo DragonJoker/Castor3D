@@ -1,4 +1,4 @@
-#include "GlslUtils.hpp"
+﻿#include "GlslUtils.hpp"
 
 #include "GlslIntrinsics.hpp"
 
@@ -16,7 +16,7 @@ namespace GLSL
 		m_calcTexCoord = m_writer.ImplementFunction< Vec2 >( cuT( "CalcTexCoord" )
 			, [&]()
 			{
-				auto gl_FragCoord = m_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+				auto gl_FragCoord = m_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 				auto c3d_renderSize = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_renderSize" ) );
 				m_writer.Return( gl_FragCoord.xy() / c3d_renderSize );
 			} );
@@ -29,11 +29,11 @@ namespace GLSL
 				, Mat4 const & p_invProj )
 			{
 				auto c3d_mapDepth = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapDepth" ) );
-				auto l_depth = m_writer.GetLocale( cuT( "l_texCoord" )
+				auto l_depth = m_writer.DeclLocale( cuT( "l_texCoord" )
 					, texture( c3d_mapDepth, p_uv, 0.0_f ).x() );
-				auto l_csPosition = m_writer.GetLocale( cuT( "l_psPosition" )
+				auto l_csPosition = m_writer.DeclLocale( cuT( "l_psPosition" )
 					, vec3( p_uv * 2.0f - 1.0f, l_depth * 2.0 - 1.0 ) );
-				auto l_vsPosition = m_writer.GetLocale( cuT( "l_vsPosition" )
+				auto l_vsPosition = m_writer.DeclLocale( cuT( "l_vsPosition" )
 					, p_invProj * vec4( l_csPosition, 1.0 ) );
 				l_vsPosition.xyz() /= l_vsPosition.w();
 				m_writer.Return( l_vsPosition.xyz() );
@@ -48,7 +48,7 @@ namespace GLSL
 				, Mat4 const & p_projection )
 			{
 				auto c3d_mapDepth = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapDepth" ) );
-				auto l_depth = m_writer.GetLocale( cuT( "l_depth" )
+				auto l_depth = m_writer.DeclLocale( cuT( "l_depth" )
 					, texture( c3d_mapDepth, p_uv ).r() );
 				m_writer.Return( p_projection[3][2] / m_writer.Paren( l_depth * 2.0_f - 1.0_f - p_projection[2][2] ) );
 			}, InVec2{ &m_writer, cuT( "p_uv" ) }
@@ -62,11 +62,11 @@ namespace GLSL
 				, Mat4 const & p_invViewProj )
 			{
 				auto c3d_mapDepth = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapDepth" ) );
-				auto l_depth = m_writer.GetLocale( cuT( "l_texCoord" )
+				auto l_depth = m_writer.DeclLocale( cuT( "l_texCoord" )
 					, texture( c3d_mapDepth, p_uv, 0.0_f ).x() );
-				auto l_csPosition = m_writer.GetLocale( cuT( "l_psPosition" )
+				auto l_csPosition = m_writer.DeclLocale( cuT( "l_psPosition" )
 					, vec3( p_uv * 2.0f - 1.0f, l_depth * 2.0 - 1.0 ) );
-				auto l_wsPosition = m_writer.GetLocale( cuT( "l_wsPosition" )
+				auto l_wsPosition = m_writer.DeclLocale( cuT( "l_wsPosition" )
 					, p_invViewProj * vec4( l_csPosition, 1.0 ) );
 				l_wsPosition.xyz() /= l_wsPosition.w();
 				m_writer.Return( l_wsPosition.xyz() );

@@ -1,4 +1,4 @@
-#include "PickingPass.hpp"
+﻿#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -468,11 +468,11 @@ namespace Castor3D
 		l_uboPicking.End();
 
 		// Fragment Intputs
-		auto gl_PrimitiveID( l_writer.GetBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
-		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
+		auto gl_PrimitiveID( l_writer.DeclBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
+		auto vtx_instance = l_writer.DeclInput< Int >( cuT( "vtx_instance" ) );
 
 		// Fragment Outputs
-		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
+		auto pxl_v4FragColor( l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{

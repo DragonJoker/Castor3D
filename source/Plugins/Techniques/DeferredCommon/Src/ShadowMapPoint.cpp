@@ -177,18 +177,18 @@ namespace deferred_common
 		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
 		l_shadowMap.End();
 
-		auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
+		auto vtx_position = l_writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
 
 		// Fragment Outputs
-		auto pxl_fFragColor = l_writer.GetFragData< Float >( cuT( "pxl_fFragColor" ), 0u );
+		auto pxl_fFragColor = l_writer.DeclFragData< Float >( cuT( "pxl_fFragColor" ), 0u );
 
 		auto l_main = [&]()
 		{
 			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 			{
-				auto l_alpha = l_writer.GetLocale( cuT( "l_alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				auto l_alpha = l_writer.DeclLocale( cuT( "l_alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
 
 				IF( l_writer, l_alpha < 0.2_f )
 				{
@@ -197,7 +197,7 @@ namespace deferred_common
 				FI;
 			}
 
-			auto l_distance = l_writer.GetLocale( cuT( "l_distance" ), length( vtx_position - c3d_v3WordLightPosition ) );
+			auto l_distance = l_writer.DeclLocale( cuT( "l_distance" ), length( vtx_position - c3d_v3WordLightPosition ) );
 			pxl_fFragColor = l_distance / c3d_fFarPlane;
 		};
 

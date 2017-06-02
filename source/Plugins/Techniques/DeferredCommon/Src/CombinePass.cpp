@@ -1,4 +1,4 @@
-#include "FogPass.hpp"
+﻿#include "CombinePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -88,12 +88,12 @@ namespace deferred_common
 				// Shader inputs
 				UBO_MATRIX( l_writer );
 				UBO_GPINFO( l_writer );
-				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
-				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+				auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+				auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
 
 				// Shader outputs
-				auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+				auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+				auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" )
 					, [&]()
@@ -118,13 +118,13 @@ namespace deferred_common
 			// Shader inputs
 			UBO_SCENE( l_writer );
 			UBO_GPINFO( l_writer );
-			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
-			auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-			auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-			auto c3d_mapNormal = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
-			auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), p_ssao );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapColour = l_writer.DeclUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
+			auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
+			auto c3d_mapEmissive = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+			auto c3d_mapNormal = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
+			auto c3d_mapSsao = l_writer.DeclUniform< Sampler2D >( cuT( "c3d_mapSsao" ), p_ssao );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcVSPosition();
@@ -133,21 +133,21 @@ namespace deferred_common
 			GLSL::Fog l_fog{ p_fogType, l_writer };
 
 			// Shader outputs
-			auto pxl_fragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = l_writer.DeclOutput< Vec4 >( cuT( "pxl_fragColor" ) );
 
 			l_writer.ImplementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					auto l_colour = l_writer.GetLocale( cuT( "l_colour" ), texture( c3d_mapColour, vtx_texture ).xyz() );
-					auto l_diffuse = l_writer.GetLocale( cuT( "l_diffuse" ), texture( c3d_mapDiffuse, vtx_texture ).xyz() );
-					auto l_ambient = l_writer.GetLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
-					auto l_emissive = l_writer.GetLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, vtx_texture ).xyz() );
-					auto l_flags = l_writer.GetLocale( cuT( "l_flags" ), texture( c3d_mapNormal, vtx_texture ).w() );
-					auto l_envMapIndex = l_writer.GetLocale( cuT( "l_envMapIndex" ), 0_i );
-					auto l_receiver = l_writer.GetLocale( cuT( "l_receiver" ), 0_i );
-					auto l_reflection = l_writer.GetLocale( cuT( "l_reflection" ), 0_i );
-					auto l_refraction = l_writer.GetLocale( cuT( "l_refraction" ), 0_i );
-					auto l_ambientOcclusion = l_writer.GetLocale( cuT( "l_ambientOcclusion" ), p_ssao, texture( c3d_mapSsao, vtx_texture ).r() );
+					auto l_colour = l_writer.DeclLocale( cuT( "l_colour" ), texture( c3d_mapColour, vtx_texture ).xyz() );
+					auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), texture( c3d_mapDiffuse, vtx_texture ).xyz() );
+					auto l_ambient = l_writer.DeclLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
+					auto l_emissive = l_writer.DeclLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, vtx_texture ).xyz() );
+					auto l_flags = l_writer.DeclLocale( cuT( "l_flags" ), texture( c3d_mapNormal, vtx_texture ).w() );
+					auto l_envMapIndex = l_writer.DeclLocale( cuT( "l_envMapIndex" ), 0_i );
+					auto l_receiver = l_writer.DeclLocale( cuT( "l_receiver" ), 0_i );
+					auto l_reflection = l_writer.DeclLocale( cuT( "l_reflection" ), 0_i );
+					auto l_refraction = l_writer.DeclLocale( cuT( "l_refraction" ), 0_i );
+					auto l_ambientOcclusion = l_writer.DeclLocale( cuT( "l_ambientOcclusion" ), p_ssao, texture( c3d_mapSsao, vtx_texture ).r() );
 					DecodeMaterial( l_writer
 						, l_flags
 						, l_receiver
@@ -172,7 +172,7 @@ namespace deferred_common
 
 					if ( p_fogType != FogType::eDisabled )
 					{
-						auto l_position = l_writer.GetLocale( cuT( "l_position" ), l_utils.CalcVSPosition( vtx_texture, c3d_mtxInvProj ) );
+						auto l_position = l_writer.DeclLocale( cuT( "l_position" ), l_utils.CalcVSPosition( vtx_texture, c3d_mtxInvProj ) );
 						l_fog.ApplyFog( pxl_fragColor, length( l_position ), l_position.z() );
 					}
 				} );
