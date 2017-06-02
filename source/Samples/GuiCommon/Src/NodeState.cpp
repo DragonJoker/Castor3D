@@ -7,7 +7,7 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace CastorViewer
+namespace GuiCommon
 {
 	namespace
 	{

@@ -611,7 +611,7 @@ namespace Castor3D
 		auto const l_mtxSize = sizeof( float ) * 16;
 		auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
 		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-		REQUIRE( l_count == p_renderNodes.size() );
+		REQUIRE( l_count <= p_renderNodes.size() );
 		auto l_buffer = p_matrixBuffer.data();
 		auto l_it = p_renderNodes.begin();
 		auto i = 0u;
@@ -634,26 +634,8 @@ namespace Castor3D
 		, VertexBuffer & p_matrixBuffer
 		, RenderInfo & p_info )
 	{
-		auto const l_mtxSize = sizeof( float ) * 16;
-		auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
-		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-		REQUIRE( l_count == p_renderNodes.size() );
-		auto l_buffer = p_matrixBuffer.data();
-		auto l_it = p_renderNodes.begin();
-		auto i = 0u;
-
-		while ( i < l_count )
-		{
-			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_mtxSize );
-			auto l_id = l_it->m_passNode.m_pass.GetId() - 1;
-			std::memcpy( l_buffer + l_mtxSize, &l_id, sizeof( int ) );
-			++p_info.m_visibleObjectsCount;
-			l_buffer += l_stride;
-			++i;
-			++l_it;
-		}
-
-		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
+		auto l_count = DoCopyNodesMatrices( p_renderNodes, p_matrixBuffer );
+		p_info.m_visibleObjectsCount += l_count;
 		return l_count;
 	}
 

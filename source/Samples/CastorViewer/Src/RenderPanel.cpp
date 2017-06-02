@@ -1,4 +1,4 @@
-#include "RenderPanel.hpp"
+﻿#include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 #include "RotateNodeEvent.hpp"
@@ -528,14 +528,14 @@ namespace CastorViewer
 		}
 	}
 
-	NodeState & RenderPanel::DoAddNodeState( SceneNodeSPtr p_node )
+	GuiCommon::NodeState & RenderPanel::DoAddNodeState( SceneNodeSPtr p_node )
 	{
 		auto l_it = m_nodesStates.find( p_node->GetName() );
 
 		if ( l_it == m_nodesStates.end() )
 		{
 			l_it = m_nodesStates.emplace( p_node->GetName()
-				, std::make_unique< NodeState >( *m_listener, p_node ) ).first;
+				, std::make_unique< GuiCommon::NodeState >( *m_listener, p_node ) ).first;
 		}
 
 		l_it->second->SetMaxSpeed( m_camSpeed );

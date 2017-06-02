@@ -1,4 +1,4 @@
-#include "SceneFileParser.hpp"
+﻿#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -373,12 +373,26 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 			{
 				auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
 				{
-					return p_path.GetExtension() == cuT( "cscn" );
+					auto l_fileName = p_path.GetFileName( true );
+					return l_fileName == cuT( "main.cscn" )
+						|| l_fileName == cuT( "scene.cscn" );
 				} );
 
 				if ( l_it != l_files.end() )
 				{
 					l_path = *l_it;
+				}
+				else
+				{
+					auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
+					{
+						return p_path.GetExtension() == cuT( "cscn" );
+					} );
+
+					if ( l_it != l_files.end() )
+					{
+						l_path = *l_it;
+					}
 				}
 			}
 		}
@@ -536,7 +550,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "refraction_ratio" ), Parser_PassRefractionRatio, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), Parser_PassEnd );
 
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), Parser_UnitImage, { MakeParameter< ParameterType::ePath >(), MakeParameter< ParameterType::eText >() } );
+	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), Parser_UnitImage, { MakeParameter< ParameterType::ePath >() } );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), Parser_UnitRenderTarget );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureRgbFunctions ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ) } );

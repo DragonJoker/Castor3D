@@ -1,4 +1,4 @@
-#include "RenderPanel.hpp"
+﻿#include "RenderPanel.hpp"
 
 #include "CastorDvpTD.hpp"
 #include "Game.hpp"
@@ -35,11 +35,13 @@ namespace castortd
 	RenderPanel::RenderPanel( wxWindow * p_parent, wxSize const & p_size, Game & p_game )
 		: wxPanel{ p_parent, wxID_ANY, wxDefaultPosition, p_size }
 		, m_game{ p_game }
+		, m_mouseTimer{ new wxTimer( this, 1 ) }
 	{
 	}
 
 	RenderPanel::~RenderPanel()
 	{
+		delete m_mouseTimer;
 	}
 
 	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_window )
@@ -67,7 +69,10 @@ namespace castortd
 				if ( p_window )
 				{
 					auto l_lock = make_unique_lock( l_scene->GetCameraCache() );
-					p_window->GetPickingPass().AddScene( *l_scene, *( l_scene->GetCameraCache().begin()->second ) );
+					auto l_camera = l_scene->GetCameraCache().begin()->second;
+					p_window->GetPickingPass().AddScene( *l_scene, *l_camera );
+					m_cameraState = std::make_unique< GuiCommon::NodeState >( l_scene->GetListener(), l_camera->GetParent() );
+					m_mouseTimer->Start( 30 );
 				}
 			}
 		}
@@ -235,8 +240,11 @@ namespace castortd
 		EVT_MOVE( RenderPanel::OnMove )
 		EVT_PAINT( RenderPanel::OnPaint )
 		EVT_KEY_UP( RenderPanel::OnKeyUp )
+		EVT_LEFT_DOWN( RenderPanel::OnMouseLDown )
 		EVT_LEFT_UP( RenderPanel::OnMouseLUp )
 		EVT_RIGHT_UP( RenderPanel::OnMouseRUp )
+		EVT_MOTION( RenderPanel::OnMouseMove )
+		EVT_TIMER( 1, RenderPanel::OnMouseTimer )
 		EVT_MENU( eMENU_ID_NEW_LR_TOWER, RenderPanel::OnNewLongRangeTower )
 		EVT_MENU( eMENU_ID_NEW_SR_TOWER, RenderPanel::OnNewShortRangeTower )
 		EVT_MENU( eMENU_ID_UPGRADE_SPEED, RenderPanel::OnUpgradeTowerSpeed )
@@ -304,7 +312,7 @@ namespace castortd
 			break;
 
 		case WXK_NUMPAD2:
-		case '�':
+		case 'é':
 		case '2':
 			DoUpgradeTowerRange();
 			break;
@@ -362,21 +370,41 @@ namespace castortd
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseLUp( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseLDown( wxMouseEvent & p_event )
 	{
+		m_mouseLeftDown = true;
 		auto l_window = GetRenderWindow();
 
 		if ( l_window )
 		{
 			if ( m_game.IsRunning() )
 			{
-				auto l_x = DoTransformX( p_event.GetX() );
-				auto l_y = DoTransformY( p_event.GetY() );
-				m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_window, l_x, l_y]()
+				m_x = DoTransformX( p_event.GetX() );
+				m_y = DoTransformY( p_event.GetY() );
+				m_oldX = m_x;
+				m_oldY = m_y;
+			}
+		}
+	}
+
+	void RenderPanel::OnMouseLUp( wxMouseEvent & p_event )
+	{
+		m_mouseLeftDown = false;
+		auto l_window = GetRenderWindow();
+
+		if ( l_window )
+		{
+			if ( m_game.IsRunning() )
+			{
+				m_x = DoTransformX( p_event.GetX() );
+				m_y = DoTransformY( p_event.GetY() );
+				m_oldX = m_x;
+				m_oldY = m_y;
+				m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_window]()
 				{
 					Camera & l_camera = *l_window->GetCamera();
 					l_camera.Update();
-					auto l_type = l_window->GetPickingPass().Pick( Position{ int( l_x ), int( l_y ) }, l_camera );
+					auto l_type = l_window->GetPickingPass().Pick( Position{ int( m_x ), int( m_y ) }, l_camera );
 
 					if ( l_type != PickingPass::NodeType::eNone
 						&& l_type != PickingPass::NodeType::eBillboard )
@@ -448,6 +476,51 @@ namespace castortd
 				l_menu.Enable( eMENU_ID_NEW_SR_TOWER, m_game.CanAfford( m_shortRange.GetTowerCost() ) );
 				PopupMenu( &l_menu, p_event.GetPosition() );
 			}
+		}
+
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnMouseMove( wxMouseEvent & p_event )
+	{
+		m_x = DoTransformX( p_event.GetX() );
+		m_y = DoTransformY( p_event.GetY() );
+		auto l_window = GetRenderWindow();
+
+		if ( l_window )
+		{
+			if ( m_game.IsRunning() )
+			{
+				static real constexpr l_mult = 4.0_r;
+				real l_deltaX = std::min( 1.0_r / l_mult, 1.0_r ) * ( m_oldX - m_x ) / l_mult;
+				real l_deltaY = std::min( 1.0_r / l_mult, 1.0_r ) * ( m_oldY - m_y ) / l_mult;
+
+				if ( p_event.ControlDown() )
+				{
+					l_deltaX = 0;
+				}
+				else if ( p_event.ShiftDown() )
+				{
+					l_deltaY = 0;
+				}
+
+				if ( m_mouseLeftDown )
+				{
+					m_cameraState->AddAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
+				}
+			}
+		}
+
+		m_oldX = m_x;
+		m_oldY = m_y;
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnMouseTimer( wxTimerEvent & p_event )
+	{
+		if ( m_game.IsRunning() && m_cameraState )
+		{
+			m_cameraState->Update();
 		}
 
 		p_event.Skip();

@@ -60,6 +60,7 @@ namespace Castor
 	{
 		push_back( Separator );
 		append( p_path );
+		DoNormalise();
 		return *this;
 	}
 

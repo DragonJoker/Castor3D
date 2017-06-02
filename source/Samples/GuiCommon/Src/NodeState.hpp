@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___CV_CameraState_HPP___
-#define ___CV_CameraState_HPP___
+#ifndef ___GC_CameraState_HPP___
+#define ___GC_CameraState_HPP___
 #pragma once
 
 #include <Castor3DPrerequisites.hpp>
@@ -30,7 +30,7 @@ SOFTWARE.
 #include <Math/Quaternion.hpp>
 #include <Math/RangedValue.hpp>
 
-namespace CastorViewer
+namespace GuiCommon
 {
 	using Angles = std::array< Castor::Angle, 2u >;
 	/**
@@ -138,6 +138,7 @@ namespace CastorViewer
 			Castor::make_range( -5.0f, 5.0f )
 		};
 	};
+	using NodeStatePtr = std::unique_ptr< NodeState >;
 }
 
 #endif
