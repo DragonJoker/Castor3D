@@ -198,6 +198,7 @@ namespace Castor3D
 
 	void SkeletonAnimationObject::AddChild( SkeletonAnimationObjectSPtr p_object )
 	{
+		REQUIRE( p_object.get() != this );
 		p_object->m_parent = shared_from_this();
 		m_children.push_back( p_object );
 	}

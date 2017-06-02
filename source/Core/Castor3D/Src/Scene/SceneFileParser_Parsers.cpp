@@ -2834,6 +2834,28 @@ namespace Castor3D
 				l_parsingContext->pTextureUnit->SetAutoMipmaps( true );
 				auto l_texture = l_parsingContext->m_pParser->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
 				l_texture->SetSource( l_folder, l_relative );
+
+				if ( p_params.size() >= 2 )
+				{
+					String l_channels;
+					p_params[1]->Get( l_channels );
+					auto l_buffer = l_texture->GetImage().GetBuffer();
+
+					if ( l_channels == cuT( "rgb" ) )
+					{
+						l_buffer = PxBufferBase::create( l_buffer->dimensions()
+							, PF::GetPFWithoutAlpha( l_buffer->format() )
+							, l_buffer->const_ptr()
+							, l_buffer->format() );
+					}
+					else if ( l_channels == cuT( "a" ) )
+					{
+						l_buffer = PF::ExtractAlpha( l_texture->GetImage().GetBuffer() );
+					}
+
+					l_texture->SetSource( l_buffer );
+				}
+
 				l_parsingContext->pTextureUnit->SetTexture( l_texture );
 			}
 		}
@@ -4148,13 +4170,13 @@ namespace Castor3D
 						l_parsingContext->pAnimMesh = l_parsingContext->pAnimGroup->AddObject( *l_mesh, l_geometry->GetName() + cuT( "_Mesh" ) );
 					}
 
-					if ( l_mesh->GetSkeleton() )
-					{
-						auto l_skeleton = l_mesh->GetSkeleton();
+					auto l_skeleton = l_mesh->GetSkeleton();
 
+					if ( l_skeleton )
+					{
 						if ( !l_skeleton->GetAnimations().empty() )
 						{
-							l_parsingContext->pAnimSkeleton = l_parsingContext->pAnimGroup->AddObject( *l_mesh->GetSkeleton(), l_geometry->GetName() + cuT( "_Skeleton" ) );
+							l_parsingContext->pAnimSkeleton = l_parsingContext->pAnimGroup->AddObject( *l_skeleton, l_geometry->GetName() + cuT( "_Skeleton" ) );
 						}
 					}
 				}

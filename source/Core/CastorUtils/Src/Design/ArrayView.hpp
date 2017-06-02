@@ -152,6 +152,24 @@ namespace Castor
 		pointer m_begin;
 		pointer m_end;
 	};
+
+	template< typename T >
+	ArrayView< T > make_array_view( T * p_begin, size_t p_size )
+	{
+		return ArrayView< T >( p_begin, p_begin + p_size );
+	}
+
+	template< typename T >
+	ArrayView< T > make_array_view( T * p_begin, T * p_end )
+	{
+		return ArrayView< T >( p_begin, p_end );
+	}
+
+	template< typename T, size_t N >
+	ArrayView< T > make_array_view( T ( & p_buffer )[N] )
+	{
+		return ArrayView< T >( p_buffer );
+	}
 }
 
 #endif

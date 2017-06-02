@@ -89,9 +89,12 @@ namespace Castor3D
 		Animable::CleanupAnimations();
 	}
 
-	void Skeleton::AddBone( BoneSPtr p_bone )
+	BoneSPtr Skeleton::CreateBone( String const & p_name )
 	{
-		m_bones.push_back( p_bone );
+		auto l_bone = std::make_shared< Bone >( *this );
+		l_bone->SetName( p_name );
+		m_bones.push_back( l_bone );
+		return l_bone;
 	}
 
 	BoneSPtr Skeleton::FindBone( Castor::String const & p_name )const

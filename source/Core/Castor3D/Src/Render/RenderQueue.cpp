@@ -332,7 +332,7 @@ namespace Castor3D
 							auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
 							auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
 
-							if ( l_skeleton )
+							if ( l_skeleton && l_submesh->HasBoneData() )
 							{
 								AddFlag( l_programFlags, ProgramFlag::eSkinning );
 							}

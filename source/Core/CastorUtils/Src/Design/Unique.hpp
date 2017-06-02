@@ -43,25 +43,6 @@ namespace Castor
 	class Unique
 		: private NonCopyable
 	{
-	public:
-		/**
-		 *\~english
-		 *\remarks		Throws an exception if instance is not initialised.
-		 *\return		The unique instance.
-		 *\~french
-		 *\remarks		Lance une exception si l'instance n'est pas initialisée.
-		 *\return		L'instance unique.
-		 */
-		static inline T & GetInstance()
-		{
-			if ( !DoGetInstance() )
-			{
-				UNICITY_ERROR( UnicityError::eNoInstance, typeid( T ).name() );
-			}
-
-			return *DoGetInstance();
-		}
-
 	protected:
 		/**
 		 *\~english

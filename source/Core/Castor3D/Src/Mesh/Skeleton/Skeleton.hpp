@@ -88,13 +88,13 @@ namespace Castor3D
 		C3D_API Skeleton & operator=( Skeleton const & p_rhs ) = delete;
 		/**
 		 *\~english
-		 *\brief		Adds a bone to the skeleton
-		 *\param[in]	p_bone	The bone.
+		 *\brief		Creates a bone.
+		 *\param[in]	p_name	The bone name.
 		 *\~french
-		 *\brief		Ajoute un os au squelette
-		 *\param[in]	p_bone	L'os.
+		 *\brief		Crée un os.
+		 *\param[in]	p_name	Le nom de l'os.
 		 */
-		C3D_API void AddBone( BoneSPtr p_bone );
+		C3D_API BoneSPtr CreateBone( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Finds a bone from a name.

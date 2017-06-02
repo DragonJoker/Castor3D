@@ -14,16 +14,46 @@ namespace Castor3D
 
 	namespace
 	{
-		std::map< TextureChannel, String > TEXTURE_CHANNEL_NAME =
+		String GetName( TextureChannel p_channel )
 		{
-			{ TextureChannel::eDiffuse, cuT( "Diffuse" ) },
-			{ TextureChannel::eNormal, cuT( "Normal" ) },
-			{ TextureChannel::eOpacity, cuT( "Opacity" ) },
-			{ TextureChannel::eSpecular, cuT( "Specular" ) },
-			{ TextureChannel::eHeight, cuT( "Height" ) },
-			{ TextureChannel::eGloss, cuT( "Gloss" ) },
-			{ TextureChannel::eEmissive, cuT( "Emissive" ) },
-		};
+			StringStream l_result;
+
+			switch ( p_channel )
+			{
+			case TextureChannel::eDiffuse:
+				l_result << cuT( "Diffuse" );
+				break;
+
+			case TextureChannel::eNormal:
+				l_result << cuT( "Normal" );
+				break;
+
+			case TextureChannel::eOpacity:
+				l_result << cuT( "Opacity" );
+				break;
+
+			case TextureChannel::eSpecular:
+				l_result << cuT( "Specular" );
+				break;
+
+			case TextureChannel::eHeight:
+				l_result << cuT( "Height" );
+				break;
+
+			case TextureChannel::eGloss:
+				l_result << cuT( "Gloss" );
+				break;
+
+			case TextureChannel::eEmissive:
+				l_result << cuT( "Emissive" );
+				break;
+
+			default:
+				break;
+			}
+
+			return l_result.str();
+		}
 	}
 
 	//*********************************************************************************************
@@ -146,19 +176,18 @@ namespace Castor3D
 
 	TextureUnitSPtr Pass::GetTextureUnit( TextureChannel p_channel )const
 	{
-		TextureUnitSPtr l_return;
-		auto l_it = m_textureUnits.begin();
+		auto l_it = std::find_if( m_textureUnits.begin()
+			, m_textureUnits.end()
+			, [p_channel]( TextureUnitSPtr p_unit )
+			{
+				return p_unit->GetChannel() == p_channel;
+			} );
 
-		while ( l_it != m_textureUnits.end() && !l_return )
+		TextureUnitSPtr l_return;
+
+		if ( l_it != m_textureUnits.end() )
 		{
-			if ( ( *l_it )->GetChannel() == p_channel )
-			{
-				l_return = *l_it;
-			}
-			else
-			{
-				++l_it;
-			}
+			l_return = *l_it;
 		}
 
 		return l_return;
@@ -317,7 +346,7 @@ namespace Castor3D
 			}
 
 			l_unit->SetIndex( p_index++ );
-			Logger::LogDebug( cuT( "	" ) + TEXTURE_CHANNEL_NAME[p_channel] + cuT( " map at index " ) + string::to_string( l_unit->GetIndex() ) );
+			Logger::LogDebug( cuT( "	" ) + GetName( p_channel ) + cuT( " map at index " ) + string::to_string( l_unit->GetIndex() ) );
 		}
 
 		return l_return;
