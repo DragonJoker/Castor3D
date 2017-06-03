@@ -1,4 +1,4 @@
-﻿#include "MeshLightPass.hpp"
+#include "MeshLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -23,9 +23,8 @@ namespace deferred_common
 
 	MeshLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
-		, String const & p_pxl
-		, bool p_ssao )
-		: LightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
+		, String const & p_pxl )
+		: LightPass::Program{ p_engine, p_vtx, p_pxl }
 		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 	{
 	}
@@ -70,9 +69,8 @@ namespace deferred_common
 		, FrameBuffer & p_frameBuffer
 		, FrameBufferAttachment & p_depthAttach
 		, LightType p_type
-		, bool p_ssao
 		, bool p_shadows )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, p_shadows }
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
 		, m_modelMatrixUbo{ p_engine }
 		, m_stencilPass{ p_frameBuffer, p_depthAttach, m_matrixUbo, m_modelMatrixUbo }
 		, m_type{ p_type }
@@ -156,10 +154,10 @@ namespace deferred_common
 		UBO_MATRIX( l_writer );
 		UBO_MODEL_MATRIX( l_writer );
 		UBO_GPINFO( l_writer );
-		auto vertex = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
+		auto vertex = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
 
 		// Shader outputs
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{

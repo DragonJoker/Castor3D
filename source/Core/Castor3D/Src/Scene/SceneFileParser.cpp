@@ -1,4 +1,4 @@
-#include "SceneFileParser.hpp"
+﻿#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -373,12 +373,26 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 			{
 				auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
 				{
-					return p_path.GetExtension() == cuT( "cscn" );
+					auto l_fileName = p_path.GetFileName( true );
+					return l_fileName == cuT( "main.cscn" )
+						|| l_fileName == cuT( "scene.cscn" );
 				} );
 
 				if ( l_it != l_files.end() )
 				{
 					l_path = *l_it;
+				}
+				else
+				{
+					auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
+					{
+						return p_path.GetExtension() == cuT( "cscn" );
+					} );
+
+					if ( l_it != l_files.end() )
+					{
+						l_path = *l_it;
+					}
 				}
 			}
 		}

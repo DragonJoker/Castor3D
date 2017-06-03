@@ -79,13 +79,13 @@ namespace deferred
 				, m_renderTarget.GetSize()
 				, *m_renderTarget.GetScene()
 				, static_cast< deferred_common::OpaquePass & >( *m_opaquePass )
-				, m_ssaoEnabled
 				, *m_frameBuffer.m_depthAttach
 				, m_sceneUbo );
 			m_reflection = std::make_unique< deferred_common::ReflectionPass >( *m_renderSystem.GetEngine()
 				, m_renderTarget.GetSize() );
-			m_fogPass = std::make_unique< deferred_common::FogPass >( *m_renderSystem.GetEngine()
-				, m_renderTarget.GetSize() );
+			m_combinePass = std::make_unique< deferred_common::CombinePass >( *m_renderSystem.GetEngine()
+				, m_renderTarget.GetSize()
+				, m_ssaoEnabled );
 		}
 
 		m_frameBuffer.m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
@@ -95,7 +95,7 @@ namespace deferred
 	void RenderTechnique::DoCleanup()
 	{
 		DoCleanupGeometryPass();
-		m_fogPass.reset();
+		m_combinePass.reset();
 		m_reflection.reset();
 		m_lightingPass.reset();
 		m_sceneUbo.GetUbo().Cleanup();
@@ -150,16 +150,14 @@ namespace deferred
 			l_result = &m_reflection->GetResult();
 		}
 
-		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
-
-		m_fogPass->Render( m_geometryPassResult
+		m_combinePass->Render( m_geometryPassResult
 			, *l_result
 			, l_camera
 			, l_invViewProj
 			, l_invView
 			, l_invProj
-			, l_scene.GetFog() );
+			, l_scene.GetFog()
+			, *m_frameBuffer.m_frameBuffer );
 	}
 
 	void RenderTechnique::DoRenderTransparent( RenderInfo & p_info )
@@ -192,7 +190,7 @@ namespace deferred
 
 		if ( m_ssaoEnabled )
 		{
-			l_context.RenderTexture( Position{ l_width * ( l_index++ ), 0 }, l_size, m_lightingPass->GetSsao() );
+			l_context.RenderTexture( Position{ l_width * ( l_index++ ), 0 }, l_size, m_combinePass->GetSsao() );
 		}
 
 		m_frameBuffer.m_frameBuffer->Unbind();
@@ -202,7 +200,9 @@ namespace deferred
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
-		return true;
+		return m_ssaoEnabled
+			? p_file.WriteText( cuT( " ssao" ) ) > 0
+			: true;;
 	}
 
 	bool RenderTechnique::DoInitialiseGeometryPass( uint32_t & p_index )

@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
-#include "NodeState.hpp"
+#include <NodeState.hpp>
 
 #include <Engine.hpp>
 
@@ -112,7 +112,7 @@ namespace CastorViewer
 		int DoTransformX( Castor::real x );
 		int DoTransformY( Castor::real y );
 		void DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry, Castor3D::SubmeshSPtr p_submesh );
-		NodeState & DoAddNodeState( Castor3D::SceneNodeSPtr p_node );
+		GuiCommon::NodeState & DoAddNodeState( Castor3D::SceneNodeSPtr p_node );
 
 		DECLARE_EVENT_TABLE()
 		void OnTimerFwd( wxTimerEvent & p_event );
@@ -169,9 +169,8 @@ namespace CastorViewer
 		KeyboardEventUPtr m_keyboardEvent;
 		Castor::real m_camSpeed;
 
-		using NodeStatePtr = std::unique_ptr< NodeState >;
-		std::map< Castor::String, NodeStatePtr > m_nodesStates;
-		NodeState * m_currentState{ nullptr };
+		std::map< Castor::String, GuiCommon::NodeStatePtr > m_nodesStates;
+		GuiCommon::NodeState * m_currentState{ nullptr };
 		SelectedGeometry m_selectedGeometry;
 		SelectedSubmesh * m_selectedSubmesh{ nullptr };
 	};

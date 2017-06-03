@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Bullet.hpp"
 #include "EnemySpawner.hpp"
@@ -138,6 +138,7 @@ namespace castortd
 		void DoPrepareGrid();
 		void DoAddMapCube( Cell & p_cell );
 		void DoAddTarget( Cell & p_cell );
+		Castor3D::MeshSPtr DoSelectMesh( Tower::Category & p_category );
 		void DoAddTower( Cell & p_cell, Tower::CategoryPtr && p_category );
 		void DoUpdateTowers();
 		void DoUpdateEnemies();
@@ -154,7 +155,8 @@ namespace castortd
 		Castor3D::SceneNodeSPtr m_targetNode;
 		Castor3D::MeshSPtr m_mapCubeMesh;
 		Castor3D::MaterialSPtr m_mapCubeMaterial;
-		Castor3D::MeshSPtr m_towerCubeMesh;
+		Castor3D::MeshSPtr m_shortRangeTowerMesh;
+		Castor3D::MeshSPtr m_longRangeTowerMesh;
 		Castor3D::MeshSPtr m_enemyCubeMesh;
 		Castor3D::MaterialSPtr m_enemyCubeMaterial;
 		Castor3D::MeshSPtr m_bulletMesh;
@@ -176,5 +178,6 @@ namespace castortd
 		bool m_paused{ false };
 		bool m_ended{ false };
 		TowerWPtr m_selectedTower;
+		Castor3D::GeometrySPtr m_lastMapCube;
 	};
 }

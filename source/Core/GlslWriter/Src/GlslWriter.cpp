@@ -3,6 +3,8 @@
 #include "GlslVec.hpp"
 #include "GlslLighting.hpp"
 
+#include <Log/Logger.hpp>
+
 namespace GLSL
 {
 	using Castor::operator<<;
@@ -130,6 +132,32 @@ namespace GLSL
 		m_config = p_rhs.m_config;
 		m_stream << p_rhs.m_stream.str();
 		return *this;
+	}
+
+	void GlslWriter::RegisterName( Castor::String const & p_name, TypeName p_type )
+	{
+		auto l_it = m_registered.find( p_name );
+
+		//if ( l_it != m_registered.end() )
+		//{
+		//	std::stringstream l_text;
+		//	l_text << "A variable with the name [" << p_name << "] is already registered.";
+		//	Castor::Logger::LogWarning( l_text );
+		//}
+
+		m_registered.emplace( p_name, p_type );
+	}
+
+	void GlslWriter::CheckNameExists( Castor::String const & p_name, TypeName p_type )
+	{
+		auto l_it = m_registered.find( p_name );
+
+		if ( l_it == m_registered.end() )
+		{
+			std::stringstream l_text;
+			l_text << "No registered variable with the name [" << p_name << "].";
+			CASTOR_EXCEPTION( l_text.str() );
+		}
 	}
 
 	std::unique_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows )

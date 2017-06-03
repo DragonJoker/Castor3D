@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -127,8 +127,7 @@ namespace deferred_common
 		public:
 			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl
-				, bool p_ssao );
+				, Castor::String const & p_pxl );
 			virtual ~Program()noexcept;
 			void Initialise( Castor3D::VertexBuffer & p_vbo
 				, Castor3D::IndexBufferSPtr p_ibo
@@ -178,7 +177,6 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj
-			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first );
 		virtual uint32_t GetCount()const = 0;
 
@@ -186,7 +184,6 @@ namespace deferred_common
 		LightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
 			, Castor3D::FrameBufferAttachment & p_depthAttach
-			, bool p_ssao
 			, bool p_shadows );
 		void DoInitialise( Castor3D::Scene const & p_scene
 			, Castor3D::LightType p_type
@@ -201,7 +198,6 @@ namespace deferred_common
 		void DoRender( Castor::Size const & p_size
 			, GeometryPassResult const & p_gp
 			, Castor::Point3f const & p_colour
-			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first );
 		virtual Castor::String DoGetPixelShaderSource( Castor3D::SceneFlags const & p_sceneFlags
 			, Castor3D::LightType p_type )const;
@@ -213,9 +209,6 @@ namespace deferred_common
 		//!\~english	The engine.
 		//!\~french		Le moteur.
 		Castor3D::Engine & m_engine;
-		//!\~english	Tells if SSAO is enabled.
-		//!\~french		Dit si le SSAO est activé.
-		bool m_ssao;
 		//!\~english	Tells if shadows are enabled.
 		//!\~french		Dit si les ombres sont activées.
 		bool m_shadows;

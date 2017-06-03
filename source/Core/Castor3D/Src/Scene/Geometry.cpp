@@ -1,4 +1,4 @@
-﻿#include "Geometry.hpp"
+#include "Geometry.hpp"
 
 #include "Engine.hpp"
 
@@ -155,7 +155,7 @@ namespace Castor3D
 		}
 	}
 
-	void Geometry::SetMaterial( Submesh & p_submesh, MaterialSPtr p_material )
+	void Geometry::SetMaterial( Submesh & p_submesh, MaterialSPtr p_material, bool p_updateSubmesh )
 	{
 		MeshSPtr l_mesh = GetMesh();
 
@@ -190,7 +190,7 @@ namespace Castor3D
 
 				auto l_count = p_submesh.Ref( p_material ) + 1;
 
-				if ( l_count > l_oldCount )
+				if ( l_count > l_oldCount && p_updateSubmesh )
 				{
 					if ( l_count == 1 )
 					{

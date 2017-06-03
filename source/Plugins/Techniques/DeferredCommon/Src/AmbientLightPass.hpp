@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -37,8 +37,7 @@ namespace deferred_common
 		public:
 			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl
-				, bool p_ssao );
+				, Castor::String const & p_pxl );
 			virtual ~Program();
 
 		private:
@@ -49,8 +48,7 @@ namespace deferred_common
 	public:
 		AmbientLightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
-			, Castor3D::FrameBufferAttachment & p_depthAttach
-			, bool p_ssao );
+			, Castor3D::FrameBufferAttachment & p_depthAttach );
 		~AmbientLightPass();
 		void Initialise( Castor3D::Scene const & p_scene
 			, Castor3D::SceneUbo & p_sceneUbo )override;
@@ -61,7 +59,6 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj
-			, Castor3D::TextureUnit const * p_ssao
 			, bool p_first );
 		uint32_t GetCount()const override;
 

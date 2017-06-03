@@ -1,4 +1,4 @@
-#include "TextureProjection.hpp"
+﻿#include "TextureProjection.hpp"
 
 #include "Engine.hpp"
 
@@ -111,12 +111,12 @@ namespace Castor3D
 			GlslWriter l_writer{ l_renderSystem.CreateGlslWriter() };
 
 			// Inputs
-			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
+			auto position = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
 			UBO_MATRIX( l_writer );
 			UBO_MODEL_MATRIX( l_writer );
 
 			// Outputs
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -132,12 +132,12 @@ namespace Castor3D
 			GlslWriter l_writer{ l_renderSystem.CreateGlslWriter() };
 
 			// Inputs
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto c3d_size = l_writer.GetUniform< Vec2 >( cuT( "c3d_size" ) );
-			auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto c3d_size = l_writer.DeclUniform< Vec2 >( cuT( "c3d_size" ) );
+			auto gl_FragCoord = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Outputs
-			auto pxl_FragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_FragColor = l_writer.DeclOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{

@@ -1,4 +1,4 @@
-﻿#include "GlslMaterial.hpp"
+#include "GlslMaterial.hpp"
 
 #include "GlslSource.hpp"
 
@@ -20,7 +20,7 @@ namespace GLSL
 		, int p_offsetGM, int p_indexGM
 		, int p_offsetEX, int p_indexEX )
 	{
-		auto c3d_materials = m_writer.GetUniform< SamplerBuffer >( PassBufferName );
+		auto c3d_materials = m_writer.DeclUniform< SamplerBuffer >( PassBufferName );
 		
 		m_int = m_writer.ImplementFunction< Int >( cuT( "Mat_GetInt" )
 			, [this]( Int const & p_index, Int const & p_offset, Int const & p_id )

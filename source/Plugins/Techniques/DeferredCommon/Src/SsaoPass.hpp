@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -69,7 +69,6 @@ namespace deferred_common
 		Castor3D::MatrixUbo m_matrixUbo;
 		Castor3D::Viewport m_viewport;
 		// Raw SSAO pass
-		Castor3D::FrameBufferSPtr m_ssaoFbo;
 		Castor3D::VertexBufferSPtr m_ssaoVertexBuffer;
 		Castor3D::GeometryBuffersSPtr m_ssaoGeometryBuffers;
 		Castor3D::RenderPipelineUPtr m_ssaoPipeline;
@@ -77,17 +76,18 @@ namespace deferred_common
 		Castor::Point3fArray m_ssaoKernel;
 		Castor3D::TextureUnit m_ssaoNoise;
 		Castor3D::TextureUnit m_ssaoResult;
+		Castor3D::FrameBufferSPtr m_ssaoFbo;
 		Castor3D::TextureAttachmentSPtr m_ssaoResultAttach;
 		Castor3D::UniformBuffer m_ssaoConfig;
 		Castor3D::Uniform3fSPtr m_kernelUniform;
 		std::unique_ptr< GpInfo > m_gpInfo;
 		// SSAO blur pass
-		Castor3D::FrameBufferSPtr m_blurFbo;
 		Castor3D::VertexBufferSPtr m_blurVertexBuffer;
 		Castor3D::GeometryBuffersSPtr m_blurGeometryBuffers;
 		Castor3D::RenderPipelineUPtr m_blurPipeline;
 		Castor3D::ShaderProgramSPtr m_blurProgram;
 		Castor3D::TextureUnit m_blurResult;
+		Castor3D::FrameBufferSPtr m_blurFbo;
 		Castor3D::TextureAttachmentSPtr m_blurResultAttach;
 
 	};

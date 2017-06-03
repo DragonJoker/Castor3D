@@ -1,4 +1,4 @@
-﻿#include "AmbientLightPass.hpp"
+#include "AmbientLightPass.hpp"
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -35,9 +35,8 @@ namespace deferred_common
 
 	AmbientLightPass::Program::Program( Engine & p_engine
 		, String const & p_vtx
-		, String const & p_pxl
-		, bool p_ssao )
-		: LightPass::Program{ p_engine, p_vtx, p_pxl, p_ssao }
+		, String const & p_pxl )
+		: LightPass::Program{ p_engine, p_vtx, p_pxl }
 	{
 	}
 
@@ -76,9 +75,8 @@ namespace deferred_common
 
 	AmbientLightPass::AmbientLightPass( Engine & p_engine
 		, FrameBuffer & p_frameBuffer
-		, FrameBufferAttachment & p_depthAttach
-		, bool p_ssao )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_ssao, false }
+		, FrameBufferAttachment & p_depthAttach )
+		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, false }
 		, m_viewport{ p_engine }
 	{
 		auto l_declaration = BufferDeclaration(
@@ -137,7 +135,6 @@ namespace deferred_common
 		, Matrix4x4r const & p_invViewProj
 		, Castor::Matrix4x4r const & p_invView
 		, Castor::Matrix4x4r const & p_invProj
-		, Castor3D::TextureUnit const * p_ssao
 		, bool p_first )
 	{
 		m_gpInfo->Update( p_size
@@ -152,7 +149,6 @@ namespace deferred_common
 		DoRender( p_size
 			, p_gp
 			, rgb_float( p_camera.GetScene()->GetAmbientLight() )
-			, p_ssao
 			, p_first );
 	}
 
@@ -175,10 +171,10 @@ namespace deferred_common
 		// Shader inputs
 		UBO_MATRIX( l_writer );
 		UBO_GPINFO( l_writer );
-		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+		auto vertex = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
 
 		// Shader outputs
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -197,13 +193,12 @@ namespace deferred_common
 		// Shader inputs
 		UBO_SCENE( l_writer );
 		UBO_GPINFO( l_writer );
-		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-		auto c3d_mapSsao = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSsao" ), m_ssao );
-		auto gl_FragCoord = l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+		auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
+		auto c3d_mapEmissive = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+		auto gl_FragCoord = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		// Shader outputs
-		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+		auto pxl_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
 		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
@@ -212,15 +207,10 @@ namespace deferred_common
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_texCoord = l_writer.GetLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
-			auto l_colour = l_writer.GetLocale( cuT( "l_colour" ), texture( c3d_mapDiffuse, l_texCoord ).xyz() );
-			auto l_ambient = l_writer.GetLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_emissive = l_writer.GetLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, l_texCoord ).xyz() );
-
-			if ( m_ssao )
-			{
-				l_ambient *= texture( c3d_mapSsao, l_texCoord ).r();
-			}
+			auto l_texCoord = l_writer.DeclLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
+			auto l_colour = l_writer.DeclLocale( cuT( "l_colour" ), texture( c3d_mapDiffuse, l_texCoord ).xyz() );
+			auto l_ambient = l_writer.DeclLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_emissive = l_writer.DeclLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, l_texCoord ).xyz() );
 
 			pxl_v4FragColor = vec4( l_colour * l_ambient, 1.0 );
 		} );
@@ -231,6 +221,6 @@ namespace deferred_common
 	LightPass::ProgramPtr AmbientLightPass::DoCreateProgram( String const & p_vtx
 		, String const & p_pxl )const
 	{
-		return std::make_unique< Program >( m_engine, p_vtx, p_pxl, m_ssao );
+		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
 	}
 }

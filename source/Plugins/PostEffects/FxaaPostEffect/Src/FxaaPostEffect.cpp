@@ -1,4 +1,4 @@
-#include "FxaaPostEffect.hpp"
+﻿#include "FxaaPostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -61,19 +61,19 @@ namespace Fxaa
 			auto c3d_fRenderTargetWidth = l_fxaa.GetUniform< Float >( RenderTargetWidth );
 			auto c3d_fRenderTargetHeight = l_fxaa.GetUniform< Float >( RenderTargetHeight );
 			l_fxaa.End();
-			auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+			auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
 
 			// Shader outputs
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_posPos = l_writer.GetOutput< Vec4 >( PosPos );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_posPos = l_writer.DeclOutput< Vec4 >( PosPos );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					vtx_texture = position;
 					gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
-					auto l_rcpFrame = l_writer.GetLocale( cuT( "l_rcpFrame" ), vec2( 1.0 / c3d_fRenderTargetWidth, 1.0 / c3d_fRenderTargetHeight ) );
+					auto l_rcpFrame = l_writer.DeclLocale( cuT( "l_rcpFrame" ), vec2( 1.0 / c3d_fRenderTargetWidth, 1.0 / c3d_fRenderTargetHeight ) );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - l_writer.Paren( l_rcpFrame * l_writer.Paren( 0.5 + c3d_fSubpixShift ) );
 				} );
@@ -86,9 +86,9 @@ namespace Fxaa
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_posPos = l_writer.GetInput< Vec4 >( PosPos );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_posPos = l_writer.DeclInput< Vec4 >( PosPos );
 
 			Ubo l_fxaa{ l_writer, FxaaUbo };
 			auto c3d_fSubpixShift = l_fxaa.GetUniform< Float >( SubpixShift );
@@ -99,67 +99,67 @@ namespace Fxaa
 			l_fxaa.End();
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 #define FXAA_REDUCE_MIN	( 1.0 / 128.0 )
 
 			l_writer.ImplementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					auto l_invTargetSize = l_writer.GetLocale( cuT( "l_invTargetSize" )
+					auto l_invTargetSize = l_writer.DeclLocale( cuT( "l_invTargetSize" )
 						, vec2( Float( 1.0f ) / c3d_fRenderTargetWidth, Float( 1.0f ) / c3d_fRenderTargetHeight ) );
 
-					auto l_rgbNW = l_writer.GetLocale( cuT( "l_rgbNW" )
+					auto l_rgbNW = l_writer.DeclLocale( cuT( "l_rgbNW" )
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
-					auto l_rgbNE = l_writer.GetLocale( cuT( "l_rgbNE" )
+					auto l_rgbNE = l_writer.DeclLocale( cuT( "l_rgbNE" )
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( 1_i, -1_i ) ).rgb() );
-					auto l_rgbSW = l_writer.GetLocale( cuT( "l_rgbSW" )
+					auto l_rgbSW = l_writer.DeclLocale( cuT( "l_rgbSW" )
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( -1_i, 1_i ) ).rgb() );
-					auto l_rgbSE = l_writer.GetLocale( cuT( "l_rgbSE" )
+					auto l_rgbSE = l_writer.DeclLocale( cuT( "l_rgbSE" )
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( 1_i, 1_i ) ).rgb() );
-					auto l_rgbM = l_writer.GetLocale( cuT( "l_rgbM" )
+					auto l_rgbM = l_writer.DeclLocale( cuT( "l_rgbM" )
 						, texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).rgb() );
 
-					auto l_luma = l_writer.GetLocale( cuT( "l_luma" )
+					auto l_luma = l_writer.DeclLocale( cuT( "l_luma" )
 						, vec3( 0.299_f, 0.587_f, 0.114_f ) );
-					auto l_lumaNW = l_writer.GetLocale( cuT( "l_lumaNW" )
+					auto l_lumaNW = l_writer.DeclLocale( cuT( "l_lumaNW" )
 						, dot( l_rgbNW, l_luma ) );
-					auto l_lumaNE = l_writer.GetLocale( cuT( "l_lumaNE" )
+					auto l_lumaNE = l_writer.DeclLocale( cuT( "l_lumaNE" )
 						, dot( l_rgbNE, l_luma ) );
-					auto l_lumaSW = l_writer.GetLocale( cuT( "l_lumaSW" )
+					auto l_lumaSW = l_writer.DeclLocale( cuT( "l_lumaSW" )
 						, dot( l_rgbSW, l_luma ) );
-					auto l_lumaSE = l_writer.GetLocale( cuT( "l_lumaSE" )
+					auto l_lumaSE = l_writer.DeclLocale( cuT( "l_lumaSE" )
 						, dot( l_rgbSE, l_luma ) );
-					auto l_lumaM = l_writer.GetLocale( cuT( "l_lumaM" )
+					auto l_lumaM = l_writer.DeclLocale( cuT( "l_lumaM" )
 						, dot( l_rgbM, l_luma ) );
 
-					auto l_lumaMin = l_writer.GetLocale( cuT( "l_lumaMin" )
+					auto l_lumaMin = l_writer.DeclLocale( cuT( "l_lumaMin" )
 						, min( l_lumaM, min( min( l_lumaNW, l_lumaNE ), min( l_lumaSW, l_lumaSE ) ) ) );
-					auto l_lumaMax = l_writer.GetLocale( cuT( "l_lumaMax" )
+					auto l_lumaMax = l_writer.DeclLocale( cuT( "l_lumaMax" )
 						, max( l_lumaM, max( max( l_lumaNW, l_lumaNE ), max( l_lumaSW, l_lumaSE ) ) ) );
 
-					auto l_dir = l_writer.GetLocale( cuT( "l_dir" )
+					auto l_dir = l_writer.DeclLocale( cuT( "l_dir" )
 						, vec2( -l_writer.Paren( l_writer.Paren( l_lumaNW + l_lumaNE ) - l_writer.Paren( l_lumaSW + l_lumaSE ) )
 							, ( l_writer.Paren( l_lumaNW + l_lumaSW ) - l_writer.Paren( l_lumaNE + l_lumaSE ) ) ) );
 
-					auto l_dirReduce = l_writer.GetLocale( cuT( "l_dirReduce" )
+					auto l_dirReduce = l_writer.DeclLocale( cuT( "l_dirReduce" )
 						, max( l_writer.Paren( l_lumaNW + l_lumaNE + l_lumaSW + l_lumaSE ) * l_writer.Paren( 0.25_f * c3d_fReduceMul ), FXAA_REDUCE_MIN ) );
-					auto l_rcpDirMin = l_writer.GetLocale( cuT( "l_rcpDirMin" )
+					auto l_rcpDirMin = l_writer.DeclLocale( cuT( "l_rcpDirMin" )
 						, 1.0 / ( min( GLSL::abs( l_dir.x() ), GLSL::abs( l_dir.y() ) ) + l_dirReduce ) );
 					l_dir = min( vec2( c3d_fSpanMax, c3d_fSpanMax )
 						, max( vec2( -c3d_fSpanMax, -c3d_fSpanMax )
 							, l_dir * l_rcpDirMin ) ) * l_invTargetSize;
 
-					auto l_rgbA = l_writer.GetLocale( cuT( "l_rgbA" )
+					auto l_rgbA = l_writer.DeclLocale( cuT( "l_rgbA" )
 						, l_writer.Paren( texture( c3d_mapDiffuse, vtx_texture + l_dir * l_writer.Paren( 1.0_f / 3.0_f - 0.5_f ), 0.0_f ).rgb()
 								+ texture( c3d_mapDiffuse, vtx_texture + l_dir * l_writer.Paren( 2.0_f / 3.0_f - 0.5_f ), 0.0_f ).rgb() )
 							* l_writer.Paren( 1.0_f / 2.0_f ) );
-					auto l_rgbB = l_writer.GetLocale( cuT( "l_rgbB" )
+					auto l_rgbB = l_writer.DeclLocale( cuT( "l_rgbB" )
 						, l_writer.Paren( l_rgbA * 1.0_f / 2.0_f )
 							+ l_writer.Paren( texture( c3d_mapDiffuse, vtx_texture + l_dir * l_writer.Paren( 0.0_f / 3.0_f - 0.5_f ), 0.0_f ).rgb()
 									+ texture( c3d_mapDiffuse, vtx_texture + l_dir * l_writer.Paren( 3.0_f / 3.0_f - 0.5_f ), 0.0_f ).rgb() )
 								* l_writer.Paren( 1.0_f / 4.0_f ) );
-					auto l_lumaB = l_writer.GetLocale( cuT( "l_lumaB" )
+					auto l_lumaB = l_writer.DeclLocale( cuT( "l_lumaB" )
 						, dot( l_rgbB, l_luma ) );
 
 					plx_v4FragColor = vec4( l_writer.Ternary( Type{ cuT( "l_lumaB < l_lumaMin || l_lumaB > l_lumaMax" ) }, l_rgbA, l_rgbB ), 1.0_f );

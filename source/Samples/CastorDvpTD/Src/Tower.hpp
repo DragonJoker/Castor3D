@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Ability.hpp"
 
@@ -11,6 +11,17 @@ namespace castortd
 	public:
 		struct Category
 		{
+			enum class Kind
+			{
+				eShortRange,
+				eLongRange
+			};
+
+			Category( Kind p_kind )
+				: m_kind{ p_kind }
+			{
+			}
+
 			inline void UpgradeDamage()
 			{
 				m_damage.Upgrade();
@@ -91,7 +102,13 @@ namespace castortd
 				return m_colour;
 			}
 
+			inline Kind const & GetKind()const
+			{
+				return m_kind;
+			}
+
 		protected:
+			Kind m_kind;
 			PaidAbility< uint32_t > m_damage;
 			PaidAbility< std::chrono::milliseconds > m_cooldown;
 			PaidAbility< float > m_range;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -37,8 +37,7 @@ namespace deferred_common
 		public:
 			Program( Castor3D::Engine & p_engine
 				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl
-				, bool p_ssao );
+				, Castor::String const & p_pxl );
 			virtual ~Program();
 
 		private:
@@ -57,7 +56,6 @@ namespace deferred_common
 		PointLightPass( Castor3D::Engine & p_engine
 			, Castor3D::FrameBuffer & p_frameBuffer
 			, Castor3D::FrameBufferAttachment & p_depthAttach
-			, bool p_ssao
 			, bool p_shadows );
 		~PointLightPass();
 

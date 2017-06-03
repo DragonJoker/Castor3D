@@ -16,6 +16,11 @@ namespace Castor3D
 			: public TextureSource
 		{
 		public:
+			StaticTextureSource( Engine & p_engine )
+				: TextureSource{ p_engine }
+			{
+			}
+
 			virtual bool IsStatic()const
 			{
 				return true;
@@ -47,7 +52,8 @@ namespace Castor3D
 			: public StaticTextureSource
 		{
 		public:
-			explicit Static2DTextureSource( PxBufferBaseSPtr p_buffer )
+			explicit Static2DTextureSource( Engine & p_engine, PxBufferBaseSPtr p_buffer )
+				: StaticTextureSource{ p_engine }
 			{
 				Size l_size{ p_buffer->dimensions() };
 				uint32_t l_depth{ 1u };
@@ -83,22 +89,23 @@ namespace Castor3D
 			: public StaticTextureSource
 		{
 		public:
-			StaticFileTextureSource( Path const & p_folder, Path const & p_relative )
-				: m_folder{ p_folder }
+			StaticFileTextureSource( Engine & p_engine, Path const & p_folder, Path const & p_relative )
+				: StaticTextureSource{ p_engine }
+				, m_folder{ p_folder }
 				, m_relative{ p_relative }
 			{
 				if ( File::FileExists( p_folder / p_relative ) )
 				{
 					String l_name{ p_relative.GetFileName() };
 
-					if ( Engine::GetInstance().GetImageCache().has( l_name ) )
+					if ( m_engine.GetImageCache().has( l_name ) )
 					{
-						auto l_image = Engine::GetInstance().GetImageCache().find( l_name );
+						auto l_image = m_engine.GetImageCache().find( l_name );
 						m_buffer = l_image->GetPixels();
 					}
 					else
 					{
-						auto l_image = Engine::GetInstance().GetImageCache().Add( l_name, p_folder / p_relative );
+						auto l_image = m_engine.GetImageCache().Add( l_name, p_folder / p_relative );
 						auto l_buffer = l_image->GetPixels();
 						Size l_size{ l_buffer->dimensions() };
 						uint32_t l_depth{ 1u };
@@ -144,7 +151,8 @@ namespace Castor3D
 			: public StaticTextureSource
 		{
 		public:
-			Static3DTextureSource( Point3ui const & p_dimensions, PxBufferBaseSPtr p_buffer )
+			Static3DTextureSource( Engine & p_engine, Point3ui const & p_dimensions, PxBufferBaseSPtr p_buffer )
+				: StaticTextureSource{ p_engine }
 			{
 				m_depth = p_dimensions[2];
 				Size l_size{ p_dimensions[0], p_dimensions[1] };
@@ -183,7 +191,8 @@ namespace Castor3D
 			: public TextureSource
 		{
 		public:
-			DynamicTextureSource( Size const & p_dimensions, PixelFormat p_format )
+			DynamicTextureSource( Engine & p_engine, Size const & p_dimensions, PixelFormat p_format )
+				: TextureSource{ p_engine }
 			{
 				m_format = p_format;
 				m_size = p_dimensions;
@@ -234,8 +243,8 @@ namespace Castor3D
 			: public DynamicTextureSource
 		{
 		public:
-			Dynamic2DTextureSource( Size const & p_dimensions, PixelFormat p_format )
-				: DynamicTextureSource{ p_dimensions, p_format }
+			Dynamic2DTextureSource( Engine & p_engine, Size const & p_dimensions, PixelFormat p_format )
+				: DynamicTextureSource{ p_engine, p_dimensions, p_format }
 			{
 				uint32_t l_depth{ 1u };
 				DoAdjustDimensions( m_size, l_depth );
@@ -259,8 +268,8 @@ namespace Castor3D
 			: public DynamicTextureSource
 		{
 		public:
-			Dynamic3DTextureSource( Point3ui const & p_dimensions, PixelFormat p_format )
-				: DynamicTextureSource{ Size{ p_dimensions[0], p_dimensions[1] }, p_format }
+			Dynamic3DTextureSource( Engine & p_engine, Point3ui const & p_dimensions, PixelFormat p_format )
+				: DynamicTextureSource{ p_engine, Size{ p_dimensions[0], p_dimensions[1] }, p_format }
 			{
 				m_depth = p_dimensions[2];
 				DoAdjustDimensions( m_size, m_depth );
@@ -289,7 +298,7 @@ namespace Castor3D
 	{
 		bool l_return = false;
 
-		if ( !Engine::GetInstance().GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
+		if ( !m_engine.GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 		{
 			uint32_t l_depth{ GetNext2Pow( p_depth ) };
 			l_return = p_depth != l_depth;
@@ -324,7 +333,9 @@ namespace Castor3D
 
 	void TextureImage::InitialiseSource( Path const & p_folder, Path const & p_relative )
 	{
-		m_source = std::make_unique< StaticFileTextureSource >( p_folder, p_relative );
+		m_source = std::make_unique< StaticFileTextureSource >( *GetOwner()->GetRenderSystem()->GetEngine()
+			, p_folder
+			, p_relative );
 		GetOwner()->DoUpdateFromFirstImage( m_source->GetDimensions(), m_source->GetPixelFormat() );
 	}
 
@@ -332,11 +343,16 @@ namespace Castor3D
 	{
 		if ( GetOwner()->GetDepth() > 1 )
 		{
-			m_source = std::make_unique< Static3DTextureSource >( Point3ui{ GetOwner()->GetWidth(), GetOwner()->GetHeight(), GetOwner()->GetDepth() }, p_buffer );
+			m_source = std::make_unique< Static3DTextureSource >( *GetOwner()->GetRenderSystem()->GetEngine()
+				, Point3ui{ GetOwner()->GetWidth()
+					, GetOwner()->GetHeight()
+					, GetOwner()->GetDepth() }
+				, p_buffer );
 		}
 		else
 		{
-			m_source = std::make_unique< Static2DTextureSource >( p_buffer );
+			m_source = std::make_unique< Static2DTextureSource >( *GetOwner()->GetRenderSystem()->GetEngine()
+				, p_buffer );
 		}
 
 		GetOwner()->DoUpdateFromFirstImage( m_source->GetDimensions(), m_source->GetPixelFormat() );
@@ -344,7 +360,9 @@ namespace Castor3D
 
 	void TextureImage::InitialiseSource()
 	{
-		m_source = std::make_unique< Dynamic2DTextureSource >( Size{ GetOwner()->GetWidth(), GetOwner()->GetHeight() }, GetOwner()->GetPixelFormat() );
+		m_source = std::make_unique< Dynamic2DTextureSource >( *GetOwner()->GetRenderSystem()->GetEngine()
+			, Size{ GetOwner()->GetWidth(), GetOwner()->GetHeight() }
+			, GetOwner()->GetPixelFormat() );
 		GetOwner()->DoUpdateFromFirstImage( m_source->GetDimensions(), m_source->GetPixelFormat() );
 	}
 

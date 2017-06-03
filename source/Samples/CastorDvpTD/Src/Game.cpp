@@ -1,4 +1,4 @@
-#include "Game.hpp"
+﻿#include "Game.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Mesh.hpp>
@@ -58,6 +58,28 @@ namespace castortd
 
 			p_grid( p_cur.m_y, p_cur.m_x ).m_state = Cell::State::Target;
 		}
+
+		void DoUpdateMaterials( Geometry & p_geometry
+			, Tower::Category::Kind p_kind
+			, CacheView< Material, MaterialCache, EventType::ePreRender > const & p_materials )
+		{
+			auto & l_mesh = *p_geometry.GetMesh();
+
+			switch ( p_kind )
+			{
+			case Tower::Category::Kind::eLongRange:
+				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 0u ), p_materials.Find( cuT( "splash_accessories" ) ) );
+				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 1u ), p_materials.Find( cuT( "splash_accessories" ) ) );
+				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 2u ), p_materials.Find( cuT( "splash_body" ) ) );
+				break;
+
+			case Tower::Category::Kind::eShortRange:
+				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 0u ), p_materials.Find( cuT( "short_range_accessories" ) ) );
+				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 1u ), p_materials.Find( cuT( "short_range_accessories" ) ) );
+				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 2u ), p_materials.Find( cuT( "short_range_body" ) ) );
+				break;
+			}
+		}
 	}
 
 	Game::Game( Scene & p_scene )
@@ -84,7 +106,8 @@ namespace castortd
 		m_mapNode = m_scene.GetSceneNodeCache().Find( cuT( "MapBase" ) );
 		m_mapCubeMesh = m_scene.GetMeshCache().Find( cuT( "MapCube" ) );
 		m_mapCubeMaterial = m_scene.GetMaterialView().Find( cuT( "MapCube" ) );
-		m_towerCubeMesh = m_scene.GetMeshCache().Find( cuT( "TowerCube" ) );
+		m_shortRangeTowerMesh = m_scene.GetMeshCache().Find( cuT( "ShortRange" ) );
+		m_longRangeTowerMesh = m_scene.GetMeshCache().Find( cuT( "HeavySplash" ) );
 		m_enemyCubeMesh = m_scene.GetMeshCache().Find( cuT( "EnemyCube" ) );
 		m_enemyCubeMaterial = m_scene.GetMaterialView().Find( cuT( "EnemyCube" ) );
 		m_bulletMesh = m_scene.GetMeshCache().Find( cuT( "Bullet" ) );
@@ -150,6 +173,18 @@ namespace castortd
 			{
 				DoAddMapCube( l_cell );
 			}
+		}
+
+		for ( auto l_submesh : *m_lastMapCube->GetMesh() )
+		{
+			// We need to update the render nodes (since the submesh's geometry buffers are now invalid).
+			m_scene.SetChanged();
+			m_scene.GetListener().PostEvent( MakeFunctorEvent( EventType::eQueueRender
+				, [this, l_submesh]()
+			{
+				// TODO: Find a better way, since this forbids the suppression of RAM storage of the VBO data.
+				l_submesh->ResetGpuBuffers();
+			} ) );
 		}
 
 		auto & l_node = *m_path.rbegin();
@@ -270,14 +305,14 @@ namespace castortd
 	Point3r Game::Convert( Castor::Point2i const & p_position )const
 	{
 		return Point3r( ( p_position[0] - int( m_grid.GetWidth() ) / 2 ) * m_cellDimensions[0]
-						, 0
-						, ( p_position[1] - int( m_grid.GetHeight() ) / 2 ) * m_cellDimensions[2] );
+			, 0
+			, ( p_position[1] - int( m_grid.GetHeight() ) / 2 ) * m_cellDimensions[2] );
 	}
 
 	Point2i Game::Convert( Castor::Point3r const & p_position )const
 	{
 		return Point2i( p_position[0] / m_cellDimensions[0] + m_grid.GetWidth() / 2
-						, p_position[2] / m_cellDimensions[2] + m_grid.GetHeight() / 2 );
+			, p_position[2] / m_cellDimensions[2] + m_grid.GetHeight() / 2 );
 	}
 
 	void Game::EmitBullet( float p_speed, uint32_t p_damage, Castor::Point3r const & p_origin, Enemy & p_target )
@@ -342,11 +377,13 @@ namespace castortd
 
 		if ( p_cell.m_state == Cell::State::Tower )
 		{
-			auto l_it = std::find_if( m_towers.begin(), m_towers.end(), [&p_cell]( TowerPtr p_tower )
-			{
-				return p_tower->GetCell().m_x == p_cell.m_x
-					   && p_tower->GetCell().m_y == p_cell.m_y;
-			} );
+			auto l_it = std::find_if( m_towers.begin()
+				, m_towers.end()
+				, [&p_cell]( TowerPtr p_tower )
+				{
+					return p_tower->GetCell().m_x == p_cell.m_x
+						&& p_tower->GetCell().m_y == p_cell.m_y;
+				} );
 
 			if ( l_it != m_towers.end() )
 			{
@@ -518,9 +555,10 @@ namespace castortd
 
 		for ( auto l_submesh : *l_geometry->GetMesh() )
 		{
-			l_geometry->SetMaterial( *l_submesh, m_mapCubeMaterial );
+			l_geometry->SetMaterial( *l_submesh, m_mapCubeMaterial, false );
 		}
 
+		m_lastMapCube = l_geometry;
 		p_cell.m_state = Cell::State::Empty;
 	}
 
@@ -530,29 +568,35 @@ namespace castortd
 		p_cell.m_state = Cell::State::Target;
 	}
 
-	void Game::DoAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
+	MeshSPtr Game::DoSelectMesh( Tower::Category & p_category )
 	{
-		String l_name = cuT( "TowerCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto l_baseNode = m_scene.GetSceneNodeCache().Add( l_name + cuT( "_Base" ) );
-		l_baseNode->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1] * 3.0_r / 2, 0 } );
-		l_baseNode->AttachTo( m_mapNode );
-		auto l_node = m_scene.GetSceneNodeCache().Add( l_name );
-		l_node->SetOrientation( Quaternion::from_axis_angle( Point3r{ 1, 0, 1 }, Angle::from_degrees( 45 ) ) );
-		l_node->AttachTo( l_baseNode );
+		MeshSPtr l_result;
 
-		auto l_geometry = m_scene.GetGeometryCache().Add( l_name, l_node, m_towerCubeMesh );
-		auto l_material = m_scene.GetMaterialView().Find( p_category->GetMaterialName() );
-
-		for ( auto l_submesh : *l_geometry->GetMesh() )
+		switch ( p_category.GetKind() )
 		{
-			l_geometry->SetMaterial( *l_submesh, l_material );
+		case Tower::Category::Kind::eLongRange:
+			l_result = m_longRangeTowerMesh;
+			break;
+
+		case Tower::Category::Kind::eShortRange:
+			l_result = m_shortRangeTowerMesh;
+			break;
 		}
 
-		auto l_light = m_scene.GetLightCache().Add( l_name, l_node, LightType::ePoint );
-		l_light->SetColour( p_category->GetColour() );
-		l_light->SetIntensity( 0.8f, 1.0f );
-		l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.1f } );
-		m_towers.push_back( std::make_shared< Tower >( std::move( p_category ), *l_baseNode, p_cell ) );
+		return l_result;
+	}
+
+	void Game::DoAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
+	{
+		String l_name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
+		auto l_node = m_scene.GetSceneNodeCache().Add( l_name );
+		l_node->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1] * 3.0_r / 2, 0 } );
+		l_node->AttachTo( m_mapNode );
+		MeshSPtr l_mesh = DoSelectMesh( *p_category );
+		auto l_tower = m_scene.GetGeometryCache().Add( l_name, l_node, l_mesh );
+		DoUpdateMaterials( *l_tower
+			, p_category->GetKind()
+			, m_scene.GetMaterialView() );
 		p_cell.m_state = Cell::State::Tower;
 	}
 

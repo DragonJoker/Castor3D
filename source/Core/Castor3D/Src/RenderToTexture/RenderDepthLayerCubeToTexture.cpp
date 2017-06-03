@@ -207,12 +207,12 @@ namespace Castor3D
 			UBO_MATRIX( l_writer );
 
 			// Shader inputs
-			auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
 
 			// Shader outputs
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -228,25 +228,25 @@ namespace Castor3D
 			auto l_writer = l_renderSystem.CreateGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = l_writer.GetUniform< SamplerCubeArray >( ShaderProgram::MapDiffuse );
-			auto c3d_v3Face = l_writer.GetUniform< Vec3 >( cuT( "c3d_v3Face" ) );
-			auto c3d_v2UvMult = l_writer.GetUniform< Vec2 >( cuT( "c3d_v2UvMult" ) );
-			auto c3d_iIndex = l_writer.GetUniform< Int >( cuT( "c3d_iIndex" ) );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< SamplerCubeArray >( ShaderProgram::MapDiffuse );
+			auto c3d_v3Face = l_writer.DeclUniform< Vec3 >( cuT( "c3d_v3Face" ) );
+			auto c3d_v2UvMult = l_writer.DeclUniform< Vec2 >( cuT( "c3d_v2UvMult" ) );
+			auto c3d_iIndex = l_writer.DeclUniform< Int >( cuT( "c3d_iIndex" ) );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_mapCoord = l_writer.GetLocale( cuT( "l_mapCoord" ), vtx_texture * 2.0_f - 1.0_f );
-				auto l_uv = l_writer.GetLocale< Vec3 >( cuT( "l_uv" )
+				auto l_mapCoord = l_writer.DeclLocale( cuT( "l_mapCoord" ), vtx_texture * 2.0_f - 1.0_f );
+				auto l_uv = l_writer.DeclLocale< Vec3 >( cuT( "l_uv" )
 					, l_writer.Ternary( c3d_v3Face.x() != 0.0_f
 						, vec3( c3d_v3Face.x(), l_mapCoord )
 						, l_writer.Ternary( c3d_v3Face.y() != 0.0_f
 							, vec3( l_mapCoord.x(), c3d_v3Face.y(), l_mapCoord.y() )
 							, vec3( l_mapCoord, c3d_v3Face.z() ) ) ) );
-				auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec4( l_uv, l_writer.Cast< Float >( c3d_iIndex ) ) ).x() );
+				auto l_depth = l_writer.DeclLocale( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec4( l_uv, l_writer.Cast< Float >( c3d_iIndex ) ) ).x() );
 				plx_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 			} );
 			l_pxl = l_writer.Finalise();

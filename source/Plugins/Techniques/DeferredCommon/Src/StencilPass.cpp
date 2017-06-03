@@ -1,4 +1,4 @@
-#include "StencilPass.hpp"
+﻿#include "StencilPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -35,10 +35,10 @@ namespace deferred_common
 			// Shader inputs
 			UBO_MATRIX( l_writer );
 			UBO_MODEL_MATRIX( l_writer );
-			auto vertex = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
+			auto vertex = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
 
 			// Shader outputs
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{

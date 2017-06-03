@@ -1,4 +1,4 @@
-﻿#include "HaarmPieterDuikerToneMapping.hpp"
+#include "HaarmPieterDuikerToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -53,11 +53,11 @@ namespace HaarmPieterDuiker
 			auto c3d_fExposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
 			auto c3d_fGamma = l_config.GetUniform< Float >( ShaderProgram::Gamma );
 			l_config.End();
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			auto log10 = l_writer.ImplementFunction< Vec3 >( cuT( "log10" )
 				, [&]( Vec3 const & p_in )
@@ -67,20 +67,20 @@ namespace HaarmPieterDuiker
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_hdrColor = l_writer.GetLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				auto l_hdrColor = l_writer.DeclLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				l_hdrColor *= c3d_fExposure;
-				auto ld = l_writer.GetLocale( cuT( "ld" ), vec3( 0.002_f ) );
-				auto linReference = l_writer.GetLocale( cuT( "linReference" ), 0.18_f );
-				auto logReference = l_writer.GetLocale( cuT( "logReference" ), 444.0_f );
-				auto logGamma = l_writer.GetLocale( cuT( "logGamma" ), 1.0_f / c3d_fGamma );
+				auto ld = l_writer.DeclLocale( cuT( "ld" ), vec3( 0.002_f ) );
+				auto linReference = l_writer.DeclLocale( cuT( "linReference" ), 0.18_f );
+				auto logReference = l_writer.DeclLocale( cuT( "logReference" ), 444.0_f );
+				auto logGamma = l_writer.DeclLocale( cuT( "logGamma" ), 1.0_f / c3d_fGamma );
 
-				auto l_logColor = l_writer.GetLocale( cuT( "LogColor" )
+				auto l_logColor = l_writer.DeclLocale( cuT( "LogColor" )
 					, l_writer.Paren( log10( vec3( 0.4_f ) * l_hdrColor.rgb() / linReference )
 						/ ld * logGamma + 444.0_f ) / 1023.0f );
 				l_logColor = clamp( l_logColor, 0.0, 1.0 );
 
-				auto l_filmLutWidth = l_writer.GetLocale( cuT( "FilmLutWidth" ), Float( 256 ) );
-				auto l_padding = l_writer.GetLocale( cuT( "Padding" ), Float( 0.5 ) / l_filmLutWidth );
+				auto l_filmLutWidth = l_writer.DeclLocale( cuT( "FilmLutWidth" ), Float( 256 ) );
+				auto l_padding = l_writer.DeclLocale( cuT( "Padding" ), Float( 0.5 ) / l_filmLutWidth );
 
 				//  apply response lookup and color grading for target display
 				plx_v4FragColor.r() = mix( l_padding, 1.0f - l_padding, l_logColor.r() );

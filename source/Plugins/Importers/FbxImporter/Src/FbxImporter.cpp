@@ -21,16 +21,20 @@
 #include <Plugin/ImporterPlugin.hpp>
 #include <Texture/Sampler.hpp>
 
+#include <Design/BlockGuard.hpp>
 #include <Log/Logger.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
 
+#define DEBUG_NODES_TRAVERSAL 1
+
 namespace C3dFbx
 {
 	namespace
 	{
-		void DoInitializeSdkObjects( FbxManager *& p_fbxManager, FbxScene *& p_fbxScene )
+		void DoInitializeSdkObjects( FbxManager *& p_fbxManager
+			, FbxScene *& p_fbxScene )
 		{
 			//The first thing to do is to create the FBX Manager which is the object allocator for almost all the classes in the SDK
 			p_fbxManager = FbxManager::Create();
@@ -68,7 +72,11 @@ namespace C3dFbx
 			}
 		}
 
-		bool DoLoadScene( FbxManager * p_fbxManager, FbxDocument * p_fbxScene, Path const & p_fileName )
+		static int const FBX_AUTODETECT_FILE_FORMAT = -1;
+
+		bool DoLoadScene( FbxManager * p_fbxManager
+			, FbxDocument * p_fbxScene
+			, Path const & p_fileName )
 		{
 			int lFileMajor, lFileMinor, lFileRevision;
 			int lSDKMajor, lSDKMinor, lSDKRevision;
@@ -78,25 +86,39 @@ namespace C3dFbx
 			FbxManager::GetFileFormatVersion( lSDKMajor, lSDKMinor, lSDKRevision );
 
 			// Create an importer.
-			FbxImporter * l_fbxImporter = FbxImporter::Create( p_fbxManager, "" );
+			FbxImporter * l_fbxImporter = nullptr;
+			auto l_guard = make_block_guard( [&l_fbxImporter, &p_fbxManager]()
+				{
+					l_fbxImporter = FbxImporter::Create( p_fbxManager, "" );
+				},
+				[&l_fbxImporter]()
+				{
+					// Destroy the importer.
+					l_fbxImporter->Destroy();
+				} );
 
 			// Initialize the importer by providing a filename.
-			const bool lImportStatus = l_fbxImporter->Initialize( l_fileName.c_str(), -1, p_fbxManager->GetIOSettings() );
-			l_fbxImporter->GetFileVersion( lFileMajor, lFileMinor, lFileRevision );
+			const bool lImportStatus = l_fbxImporter->Initialize( l_fileName.c_str()
+				, FBX_AUTODETECT_FILE_FORMAT
+				, p_fbxManager->GetIOSettings() );
+			l_fbxImporter->GetFileVersion( lFileMajor
+				, lFileMinor
+				, lFileRevision );
 
 			if ( !lImportStatus )
 			{
 				FbxString error = l_fbxImporter->GetStatus().GetErrorString();
-				Logger::LogError( "Call to FbxImporter::Initialize() failed." );
-				Logger::LogError( std::stringstream() << "Error returned: " << error.Buffer() << "\n" );
+				StringStream l_stream;
+				l_stream << "Call to FbxImporter::Initialize() failed.\n";
+				l_stream << "Error returned: " << error.Buffer() << "\n";
 
 				if ( l_fbxImporter->GetStatus().GetCode() == FbxStatus::eInvalidFileVersion )
 				{
-					Logger::LogError( std::stringstream() << "FBX file format version for this FBX SDK is " << lSDKMajor << "." << lSDKMinor << "." << lSDKRevision );
-					Logger::LogError( std::stringstream() << "FBX file format version for file " << l_fileName << " is " << lFileMajor << "." << lFileMinor << "." << lFileRevision << "\n" );
+					l_stream << "FBX file format version for this FBX SDK is " << lSDKMajor << "." << lSDKMinor << "." << lSDKRevision << "\n";
+					l_stream << "FBX file format version for file " << l_fileName << " is " << lFileMajor << "." << lFileMinor << "." << lFileRevision << "\n";
 				}
 
-				return false;
+				CASTOR_EXCEPTION( l_stream.str() );
 			}
 
 			Logger::LogDebug( std::stringstream() << "FBX file format version for this FBX SDK is " << lSDKMajor << "." << lSDKMinor << "." << lSDKRevision );
@@ -107,7 +129,6 @@ namespace C3dFbx
 
 				// From this point, it is possible to access animation stack information without
 				// the expense of loading the entire file.
-
 				Logger::LogDebug( "Animation Stack Information" );
 
 				int lAnimStackCount = l_fbxImporter->GetAnimStackCount();
@@ -134,19 +155,20 @@ namespace C3dFbx
 
 				// Set the import states. By default, the import states are always set to
 				// true. The code below shows how to change these states.
-				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_MATERIAL, true );
-				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_TEXTURE, true );
-				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_LINK, true );
-				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_SHAPE, true );
-				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_GOBO, true );
-				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_ANIMATION, true );
-				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_GLOBAL_SETTINGS, true );
+				auto & l_ioSettings = *p_fbxManager->GetIOSettings();
+				l_ioSettings.SetBoolProp( IMP_FBX_MATERIAL, true );
+				l_ioSettings.SetBoolProp( IMP_FBX_TEXTURE, true );
+				l_ioSettings.SetBoolProp( IMP_FBX_LINK, true );
+				l_ioSettings.SetBoolProp( IMP_FBX_SHAPE, true );
+				l_ioSettings.SetBoolProp( IMP_FBX_GOBO, true );
+				l_ioSettings.SetBoolProp( IMP_FBX_ANIMATION, true );
+				l_ioSettings.SetBoolProp( IMP_FBX_GLOBAL_SETTINGS, true );
 			}
 
 			// Import the scene.
-			int l_status = l_fbxImporter->Import( p_fbxScene );
+			auto l_status = l_fbxImporter->Import( p_fbxScene );
 
-			if ( l_status == false && l_fbxImporter->GetStatus().GetCode() == FbxStatus::ePasswordError )
+			if ( !l_status && l_fbxImporter->GetStatus().GetCode() == FbxStatus::ePasswordError )
 			{
 				Logger::LogInfo( "Please enter password: " );
 
@@ -163,26 +185,29 @@ namespace C3dFbx
 
 				l_status = l_fbxImporter->Import( p_fbxScene );
 
-				if ( l_status == false && l_fbxImporter->GetStatus().GetCode() == FbxStatus::ePasswordError )
+				if ( !l_status && l_fbxImporter->GetStatus().GetCode() == FbxStatus::ePasswordError )
 				{
 					CASTOR_EXCEPTION( cuT( "\nPassword is wrong, import aborted.\n" ) );
 				}
 			}
 
-			// Destroy the importer.
-			l_fbxImporter->Destroy();
-
-			return l_status != 0;;
+			return l_status;
 		}
 
-		inline uint32_t DoGetIndex( FbxMesh * p_mesh, uint32_t p_poly, uint32_t p_vertex )
+		inline uint32_t DoGetIndex( FbxMesh * p_mesh
+			, uint32_t p_poly
+			, uint32_t p_vertex )
 		{
 			uint32_t l_return = p_mesh->GetPolygonVertex( p_poly, p_vertex );
 			assert( l_return != 0xFFFFFFFF && "Index is out of range" );
 			return l_return;
 		}
 
-		inline FaceIndices DoGetFace( FbxMesh * p_fbxMesh, uint32_t p_poly, uint32_t a, uint32_t b, uint32_t c )
+		inline FaceIndices DoGetFace( FbxMesh * p_fbxMesh
+			, uint32_t p_poly
+			, uint32_t a
+			, uint32_t b
+			, uint32_t c )
 		{
 			auto l_a = DoGetIndex( p_fbxMesh, p_poly, a );
 			auto l_b = DoGetIndex( p_fbxMesh, p_poly, b );
@@ -197,7 +222,8 @@ namespace C3dFbx
 		}
 
 		template<>
-		inline void DoFillBufferFromValue< FbxVector4 >( FbxVector4 const & p_value, real *& p_buffer )
+		inline void DoFillBufferFromValue< FbxVector4 >( FbxVector4 const & p_value
+			, real *& p_buffer )
 		{
 			*p_buffer++ = real( p_value[0] );
 			*p_buffer++ = real( p_value[1] );
@@ -205,7 +231,8 @@ namespace C3dFbx
 		}
 
 		template<>
-		inline void DoFillBufferFromValue< FbxVector2 >( FbxVector2 const & p_value, real *& p_buffer )
+		inline void DoFillBufferFromValue< FbxVector2 >( FbxVector2 const & p_value
+			, real *& p_buffer )
 		{
 			*p_buffer++ = real( p_value[0] );
 			*p_buffer++ = real( p_value[1] );
@@ -213,7 +240,10 @@ namespace C3dFbx
 		}
 
 		template< typename T >
-		inline bool DoRetrieveMeshValues( String const & p_name, FbxMesh * p_mesh, FbxLayerElementTemplate< T > * p_fbxValues, std::vector< real > & p_values )
+		inline bool DoRetrieveMeshValues( String const & p_name
+			, FbxMesh * p_mesh
+			, FbxLayerElementTemplate< T > * p_fbxValues
+			, std::vector< real > & p_values )
 		{
 			bool l_return = false;
 
@@ -232,7 +262,8 @@ namespace C3dFbx
 
 						for ( auto i = 0u; i < l_count; ++i )
 						{
-							DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( p_fbxValues->GetIndexArray().GetAt( i ) ), l_buffer );
+							DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( p_fbxValues->GetIndexArray().GetAt( i ) )
+								, l_buffer );
 						}
 					}
 					else
@@ -241,7 +272,8 @@ namespace C3dFbx
 
 						for ( auto i = 0u; i < l_count; ++i )
 						{
-							DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( i ), l_buffer );
+							DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( i )
+								, l_buffer );
 						}
 					}
 
@@ -258,7 +290,8 @@ namespace C3dFbx
 							{
 								int l_cpIndex = p_mesh->GetPolygonVertex( i, j );
 								auto l_buffer = p_values.data() + ( l_cpIndex * 3 );
-								DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( p_fbxValues->GetIndexArray().GetAt( l_vertexIndex ) ), l_buffer );
+								DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( p_fbxValues->GetIndexArray().GetAt( l_vertexIndex ) )
+									, l_buffer );
 								++l_vertexIndex;
 							}
 						}
@@ -273,7 +306,8 @@ namespace C3dFbx
 							{
 								int l_cpIndex = p_mesh->GetPolygonVertex( i, j );
 								auto l_buffer = p_values.data() + ( l_cpIndex * 3 );
-								DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( l_vertexIndex ), l_buffer );
+								DoFillBufferFromValue( p_fbxValues->GetDirectArray().GetAt( l_vertexIndex )
+									, l_buffer );
 								++l_vertexIndex;
 							}
 						}
@@ -306,12 +340,15 @@ namespace C3dFbx
 			return FbxAMatrix( l_translate, l_rotate, l_scale );
 		}
 
-		uint32_t DoFindBoneIndex( String const & p_name, Skeleton const & p_skeleton )
+		uint32_t DoFindBoneIndex( String const & p_name
+			, Skeleton const & p_skeleton )
 		{
-			auto l_it = std::find_if( p_skeleton.begin(), p_skeleton.end(), [&]( BoneSPtr p_bone )
-			{
-				return p_bone->GetName() == p_name;
-			} );
+			auto l_it = std::find_if( p_skeleton.begin()
+				, p_skeleton.end()
+				, [&]( BoneSPtr p_bone )
+				{
+					return p_bone->GetName() == p_name;
+				} );
 
 			uint32_t l_return = 0xFFFFFFFF;
 
@@ -327,14 +364,63 @@ namespace C3dFbx
 			return l_return;
 		}
 
+		void PrintNode( FbxNode const & p_node )
+		{
+			StringStream l_stream;
+			l_stream << "Node " << p_node.GetName();
+
+			if ( p_node.GetNodeAttribute() )
+			{
+				static String const TypeName[]
+				{
+					cuT( "Unknown" ),
+					cuT( "Null" ),
+					cuT( "Marker" ),
+					cuT( "Skeleton" ),
+					cuT( "Mesh" ),
+					cuT( "Nurbs" ),
+					cuT( "Patch" ),
+					cuT( "Camera" ),
+					cuT( "CameraStereo" ),
+					cuT( "CameraSwitcher" ),
+					cuT( "Light" ),
+					cuT( "OpticalReference" ),
+					cuT( "OpticalMarker" ),
+					cuT( "NurbsCurve" ),
+					cuT( "TrimNurbsSurface" ),
+					cuT( "Boundary" ),
+					cuT( "NurbsSurface" ),
+					cuT( "Shape" ),
+					cuT( "LODGroup" ),
+					cuT( "SubDiv" ),
+					cuT( "CachedEffect" ),
+					cuT( "Line" )
+				};
+
+				l_stream << ", type " << TypeName[p_node.GetNodeAttribute()->GetAttributeType()];
+			}
+
+			Logger::LogDebug( l_stream );
+		}
+
 		template< typename FbxType >
-		void DoTraverseDepthFirst( FbxNode * p_fbxNode, FbxNodeAttribute::EType p_type, std::function< void( FbxNode *, FbxType * ) > p_function )
+		using TraverseFunction = std::function< void( FbxNode *, FbxType * ) >;
+
+		template< typename FbxType >
+		void DoTraverseDepthFirst( FbxNode * p_fbxNode
+			, FbxNodeAttribute::EType p_type
+			, TraverseFunction< FbxType > p_function )
 		{
 			if ( p_fbxNode )
 			{
+#if DEBUG_NODES_TRAVERSAL
+				PrintNode( *p_fbxNode );
+#endif
 				if ( p_fbxNode->GetNodeAttribute() )
 				{
-					if ( p_fbxNode->GetNodeAttribute()->GetAttributeType() == p_type )
+					auto l_type = p_fbxNode->GetNodeAttribute()->GetAttributeType();
+
+					if ( l_type == p_type )
 					{
 						p_function( p_fbxNode, reinterpret_cast< FbxType * >( p_fbxNode->GetNodeAttribute() ) );
 					}
@@ -345,6 +431,48 @@ namespace C3dFbx
 					DoTraverseDepthFirst( p_fbxNode->GetChild( i ), p_type, p_function );
 				}
 			}
+		}
+
+		Point3r MakePoint3r( FbxDouble3 const p_point )
+		{
+			return Point3r{ p_point[0], p_point[1], p_point[2] };
+		}
+
+		template< typename T, typename U >
+		SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
+		{
+			SquareMatrix< T, 4 > l_rotate;
+			auto const qxx( p_quat.quat.x * p_quat.quat.x );
+			auto const qyy( p_quat.quat.y * p_quat.quat.y );
+			auto const qzz( p_quat.quat.z * p_quat.quat.z );
+			auto const qxz( p_quat.quat.x * p_quat.quat.z );
+			auto const qxy( p_quat.quat.x * p_quat.quat.y );
+			auto const qyz( p_quat.quat.y * p_quat.quat.z );
+			auto const qwx( p_quat.quat.w * p_quat.quat.x );
+			auto const qwy( p_quat.quat.w * p_quat.quat.y );
+			auto const qwz( p_quat.quat.w * p_quat.quat.z );
+
+			l_rotate[0][0] = T( 1 - 2 * ( qyy + qzz ) );
+			l_rotate[0][1] = T( 2 * ( qxy - qwz ) );
+			l_rotate[0][2] = T( 2 * ( qxz + qwy ) );
+			l_rotate[0][3] = T( 0 );
+
+			l_rotate[1][0] = T( 2 * ( qxy + qwz ) );
+			l_rotate[1][1] = T( 1 - 2 * ( qxx + qzz ) );
+			l_rotate[1][2] = T( 2 * ( qyz - qwx ) );
+			l_rotate[1][3] = T( 0 );
+
+			l_rotate[2][0] = T( 2 * ( qxz - qwy ) );
+			l_rotate[2][1] = T( 2 * ( qyz + qwx ) );
+			l_rotate[2][2] = T( 1 - 2 * ( qxx + qyy ) );
+			l_rotate[3][3] = T( 0 );
+
+			l_rotate[3][0] = T( 0 );
+			l_rotate[3][1] = T( 0 );
+			l_rotate[3][2] = T( 0 );
+			l_rotate[3][3] = T( 1 );
+
+			return p_matrix *= l_rotate;
 		}
 	}
 
@@ -420,7 +548,19 @@ namespace C3dFbx
 	{
 		DoTraverseDepthFirst< FbxMesh >( p_fbxNode, FbxNodeAttribute::eMesh, [this, &p_scene, &p_mesh]( FbxNode * p_fbxNode, FbxMesh * p_fbxMesh )
 		{
-			SubmeshSPtr l_submesh = DoProcessMesh( p_mesh, p_fbxMesh );
+#if DEBUG_NODES_TRAVERSAL
+			Logger::LogDebug( StringStream{} << cuT( "  Mesh " ) << p_fbxMesh->GetName() );
+#endif
+			Point3r l_translate = Point3r{ ( p_fbxNode->EvaluateLocalTranslation() ).Buffer() };
+			Quaternion l_rotate = Quaternion{ ( p_fbxNode->EvaluateLocalRotation() ).Buffer() };
+			Point3r l_scale = Point3r{ ( p_fbxNode->EvaluateLocalScaling() ).Buffer() };
+			Matrix4x4r l_transform{ 1.0_r };
+			matrix::translate( l_transform, l_translate );
+			rotate( l_transform, l_rotate );
+			matrix::scale( l_transform, l_scale );
+			SubmeshSPtr l_submesh = DoProcessMesh( p_mesh
+				, p_fbxMesh
+				, l_transform );
 			auto l_material = p_fbxNode->GetMaterial( 0 );
 
 			if ( l_material )
@@ -550,11 +690,9 @@ namespace C3dFbx
 
 			if ( m_mapBoneByID.find( l_name ) == m_mapBoneByID.end() )
 			{
-				l_bone = std::make_shared< Bone >( p_skeleton );
-				l_bone->SetName( l_name );
+				l_bone = p_skeleton.CreateBone( l_name );
 				m_arrayBones.push_back( l_bone );
 				m_mapBoneByID[l_name] = uint32_t( m_mapBoneByID.size() );
-				p_skeleton.AddBone( l_bone );
 
 				if ( p_parent )
 				{
@@ -643,6 +781,7 @@ namespace C3dFbx
 			{
 				auto l_material = l_cache.Add( l_fbxMaterial->GetName(), MaterialType::eLegacy );
 				REQUIRE( l_material->GetType() == MaterialType::eLegacy );
+				l_material->CreatePass();
 				auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
 				Logger::LogDebug( StringStream() << "Material: " << l_fbxMaterial->GetName() );
 				String l_model = string::string_cast< xchar >( l_fbxMaterial->ShadingModel.Get().Buffer() );
@@ -666,7 +805,9 @@ namespace C3dFbx
 		}
 	}
 
-	SubmeshSPtr FbxSdkImporter::DoProcessMesh( Mesh & p_mesh, FbxMesh * p_fbxMesh )
+	SubmeshSPtr FbxSdkImporter::DoProcessMesh( Mesh & p_mesh
+		, FbxMesh * p_fbxMesh
+		, Matrix4x4r const & p_transform )
 	{
 		p_fbxMesh->GenerateNormals();
 		auto l_submesh = p_mesh.CreateSubmesh();
@@ -676,87 +817,95 @@ namespace C3dFbx
 		Logger::LogDebug( StringStream() << "Mesh: " << p_fbxMesh->GetName() );
 		Logger::LogDebug( StringStream() << "    Points: " << p_fbxMesh->GetControlPointsCount() );
 		Logger::LogDebug( StringStream() << "    Polygons: " << p_fbxMesh->GetPolygonCount() );
+		Logger::LogDebug( StringStream() << "    Transform:\n" << p_transform );
 
 		// Vertex
 		uint32_t l_pointsCount = p_fbxMesh->GetControlPointsCount();
+		auto l_layerCount = p_fbxMesh->GetLayerCount();
 		std::vector< real > l_vtx( l_pointsCount * 3 );
-		std::vector< real > l_nml( l_pointsCount * 3 );
-		std::vector< real > l_tan( l_pointsCount * 3 );
-		std::vector< real > l_bit( l_pointsCount * 3 );
-		std::vector< real > l_tex( l_pointsCount * 3 );
+		std::vector< real > l_nml( l_layerCount * l_pointsCount * 3 );
+		std::vector< real > l_tan( l_layerCount * l_pointsCount * 3 );
+		std::vector< real > l_bit( l_layerCount * l_pointsCount * 3 );
+		std::vector< real > l_tex( l_layerCount * l_pointsCount * 3 );
 		std::vector< InterleavedVertex > l_vertices{ l_pointsCount };
 		uint32_t l_index{ 0u };
 
 		// Positions
 		for ( auto & l_vertex : l_vertices )
 		{
-			FbxVector4 l_fbxVertex = p_fbxMesh->GetControlPointAt( l_index++ );
+			auto l_fbxVertex = Point3r{ p_fbxMesh->GetControlPointAt( l_index++ ).Buffer() };
+			l_fbxVertex = p_transform * l_fbxVertex;
 			l_vertex.m_pos[0] = real( l_fbxVertex[0] );
 			l_vertex.m_pos[1] = real( l_fbxVertex[1] );
 			l_vertex.m_pos[2] = real( l_fbxVertex[2] );
 		}
 
-		// Normals
-		auto l_normals = p_fbxMesh->GetLayer( 0 )->GetNormals();
-
-		if ( DoRetrieveMeshValues( cuT( "Normals" ), p_fbxMesh, l_normals, l_nml ) )
+		for ( auto i = 0u; i < l_layerCount; ++i )
 		{
-			l_index = 0u;
-			real * l_buffer{ l_nml.data() };
+			auto & l_layer = *p_fbxMesh->GetLayer( i );
+			// Normals
+			auto l_normals = l_layer.GetNormals();
 
-			for ( auto & l_vertex : l_vertices )
-			{
-				std::memcpy( l_vertex.m_nml.data(), l_buffer, sizeof( l_vertex.m_nml ) );
-				l_buffer += 3;
-			}
-		}
-
-		// Texture UVs
-		auto l_uvs = p_fbxMesh->GetLayer( 0 )->GetUVs();
-
-		if ( DoRetrieveMeshValues( cuT( "Texture UVs" ), p_fbxMesh, l_uvs, l_tex ) )
-		{
-			l_index = 0u;
-			real * l_buffer{ l_tex.data() };
-
-			for ( auto & l_vertex : l_vertices )
-			{
-				std::memcpy( l_vertex.m_tex.data(), l_buffer, sizeof( l_vertex.m_tex ) );
-				l_buffer += 3;
-			}
-		}
-
-		if ( m_parameters.Get( cuT( "tangent_space" ), l_tangentSpace ) && l_tangentSpace )
-		{
-			p_fbxMesh->GenerateTangentsData( 0 );
-
-			// Tangents
-			auto l_tangents = p_fbxMesh->GetLayer( 0 )->GetTangents();
-
-			if ( DoRetrieveMeshValues( cuT( "Tangents" ), p_fbxMesh, l_tangents, l_tan ) )
+			if ( DoRetrieveMeshValues( cuT( "Normals" ), p_fbxMesh, l_normals, l_nml ) )
 			{
 				l_index = 0u;
-				real * l_buffer{ l_tan.data() };
+				real * l_buffer{ l_nml.data() };
 
 				for ( auto & l_vertex : l_vertices )
 				{
-					std::memcpy( l_vertex.m_tan.data(), l_buffer, sizeof( l_vertex.m_tan ) );
+					std::memcpy( l_vertex.m_nml.data(), l_buffer, sizeof( l_vertex.m_nml ) );
 					l_buffer += 3;
 				}
 			}
 
-			// Bitangents
-			auto l_bitangents = p_fbxMesh->GetLayer( 0 )->GetBinormals();
+			// Texture UVs
+			auto l_uvs = l_layer.GetUVs();
 
-			if ( DoRetrieveMeshValues( cuT( "Bitangents" ), p_fbxMesh, l_bitangents, l_bit ) )
+			if ( DoRetrieveMeshValues( cuT( "Texture UVs" ), p_fbxMesh, l_uvs, l_tex ) )
 			{
 				l_index = 0u;
-				real * l_buffer{ l_bit.data() };
+				real * l_buffer{ l_tex.data() };
 
 				for ( auto & l_vertex : l_vertices )
 				{
-					std::memcpy( l_vertex.m_bin.data(), l_buffer, sizeof( l_vertex.m_bin ) );
+					std::memcpy( l_vertex.m_tex.data(), l_buffer, sizeof( l_vertex.m_tex ) );
 					l_buffer += 3;
+				}
+			}
+
+			if ( m_parameters.Get( cuT( "tangent_space" ), l_tangentSpace )
+				&& l_tangentSpace )
+			{
+				p_fbxMesh->GenerateTangentsData( 0 );
+
+				// Tangents
+				auto l_tangents = l_layer.GetTangents();
+
+				if ( DoRetrieveMeshValues( cuT( "Tangents" ), p_fbxMesh, l_tangents, l_tan ) )
+				{
+					l_index = 0u;
+					real * l_buffer{ l_tan.data() };
+
+					for ( auto & l_vertex : l_vertices )
+					{
+						std::memcpy( l_vertex.m_tan.data(), l_buffer, sizeof( l_vertex.m_tan ) );
+						l_buffer += 3;
+					}
+				}
+
+				// Bitangents
+				auto l_bitangents = l_layer.GetBinormals();
+
+				if ( DoRetrieveMeshValues( cuT( "Bitangents" ), p_fbxMesh, l_bitangents, l_bit ) )
+				{
+					l_index = 0u;
+					real * l_buffer{ l_bit.data() };
+
+					for ( auto & l_vertex : l_vertices )
+					{
+						std::memcpy( l_vertex.m_bin.data(), l_buffer, sizeof( l_vertex.m_bin ) );
+						l_buffer += 3;
+					}
 				}
 			}
 		}

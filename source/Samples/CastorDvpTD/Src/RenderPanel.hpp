@@ -1,6 +1,9 @@
 #pragma once
 
 #include <wx/panel.h>
+#include <wx/timer.h>
+
+#include <NodeState.hpp>
 
 #include <Engine.hpp>
 
@@ -36,8 +39,11 @@ namespace castortd
 		void OnMove( wxMoveEvent & p_event );
 		void OnPaint( wxPaintEvent & p_event );
 		void OnKeyUp( wxKeyEvent & p_event );
+		void OnMouseLDown( wxMouseEvent & p_event );
 		void OnMouseLUp( wxMouseEvent & p_event );
 		void OnMouseRUp( wxMouseEvent & p_event );
+		void OnMouseMove( wxMouseEvent & p_event );
+		void OnMouseTimer( wxTimerEvent & p_event );
 		void OnNewLongRangeTower( wxCommandEvent & p_event );
 		void OnNewShortRangeTower( wxCommandEvent & p_event );
 		void OnUpgradeTowerSpeed( wxCommandEvent & p_event );
@@ -45,6 +51,13 @@ namespace castortd
 		void OnUpgradeTowerDamage( wxCommandEvent & p_event );
 
 	private:
+		Castor::real m_x{ 0.0_r };
+		Castor::real m_y{ 0.0_r };
+		Castor::real m_oldX{ 0.0_r };
+		Castor::real m_oldY{ 0.0_r };
+		bool m_mouseLeftDown{ false };
+		wxTimer * m_mouseTimer{ nullptr };
+		GuiCommon::NodeStatePtr m_cameraState;
 		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::FrameListenerSPtr m_listener;
 		Castor3D::GeometryWPtr m_selectedGeometry;

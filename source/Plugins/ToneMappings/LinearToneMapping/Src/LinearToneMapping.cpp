@@ -1,4 +1,4 @@
-#include "LinearToneMapping.hpp"
+﻿#include "LinearToneMapping.hpp"
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
@@ -55,18 +55,18 @@ namespace Linear
 			auto c3d_fExposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
 			auto c3d_fGamma = l_config.GetUniform< Float >( ShaderProgram::Gamma );
 			l_config.End();
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareApplyGamma();
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_hdrColor = l_writer.GetLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				auto l_hdrColor = l_writer.DeclLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				l_hdrColor *= vec3( c3d_fExposure );
 				plx_v4FragColor = vec4( l_utils.ApplyGamma( c3d_fGamma, l_hdrColor ), 1.0 );
 			} );

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 #define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 
-#include <FogPass.hpp>
+#include <CombinePass.hpp>
 #include <LightingPass.hpp>
 #include <ReflectionPass.hpp>
 
@@ -181,9 +181,9 @@ namespace deferred_msaa
 		//!\~english	The fog pass.
 		//!\~french		La passe de brouillard.
 		std::unique_ptr< deferred_common::LightingPass > m_lightingPass;
-		//!\~english	The fog pass.
-		//!\~french		La passe de brouillard.
-		std::unique_ptr< deferred_common::FogPass > m_fogPass;
+		//!\~english	The combination pass.
+		//!\~french		La passe de combinaison.
+		std::unique_ptr< deferred_common::CombinePass > m_combinePass;
 		//!\~english	The reflection pass.
 		//!\~french		La passe de réflexion.
 		std::unique_ptr< deferred_common::ReflectionPass > m_reflection;

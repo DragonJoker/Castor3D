@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\param[in]	p_submesh	Le sous-maillage
 		 *\param[in]	p_material	Le matériau
 		 */
-		C3D_API void SetMaterial( Submesh & p_submesh, MaterialSPtr p_material );
+		C3D_API void SetMaterial( Submesh & p_submesh, MaterialSPtr p_material, bool p_updateSubmesh = true );
 		/**
 		 *\~english
 		 *\brief		Retrieves the mesh

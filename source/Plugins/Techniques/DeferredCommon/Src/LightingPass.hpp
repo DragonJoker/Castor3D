@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,9 +23,8 @@ SOFTWARE.
 #ifndef ___C3D_LightingPass_H___
 #define ___C3D_LightingPass_H___
 
-#include "FogPass.hpp"
+#include "CombinePass.hpp"
 #include "ReflectionPass.hpp"
-#include "SsaoPass.hpp"
 
 namespace deferred_common
 {
@@ -40,7 +39,6 @@ namespace deferred_common
 			, Castor::Size const & p_size
 			, Castor3D::Scene const & p_scene
 			, OpaquePass & p_opaque
-			, bool p_ssao
 			, Castor3D::FrameBufferAttachment & p_depthAttach
 			, Castor3D::SceneUbo & p_sceneUbo );
 		~LightingPass();
@@ -57,11 +55,6 @@ namespace deferred_common
 			return m_result;
 		}
 
-		inline Castor3D::TextureLayout const & GetSsao()const
-		{
-			return m_ssao.GetRaw();
-		}
-
 	private:
 		void DoRenderLights( Castor3D::Scene const & p_scene
 			, Castor3D::Camera const & p_camera
@@ -70,7 +63,6 @@ namespace deferred_common
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView
 			, Castor::Matrix4x4r const & p_invProj
-			, Castor3D::TextureUnit const * p_ssao
 			, bool & p_first );
 
 	private:
@@ -90,12 +82,6 @@ namespace deferred_common
 		//!\~english	The light passes, with shadows.
 		//!\~french		Les passes de lumière, avec ombres.
 		LightPasses m_lightPassShadow;
-		//!\~english	Tells if SSAO is to be used in lighting pass.
-		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
-		bool m_ssaoEnabled{ false };
-		//!\~english	The SSAO pass.
-		//!\~french		La passe SSAO.
-		SsaoPass m_ssao;
 	};
 }
 

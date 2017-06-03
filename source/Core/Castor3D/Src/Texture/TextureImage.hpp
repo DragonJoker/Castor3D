@@ -47,6 +47,16 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tampon de la texture.
 		 */
+		C3D_API TextureSource( Engine & p_engine )
+			: m_engine{ p_engine }
+		{
+		}
+		/**
+		 *\~english
+		 *\return		The texture buffer.
+		 *\~french
+		 *\return		Le tampon de la texture.
+		 */
 		C3D_API virtual ~TextureSource()
 		{
 		}
@@ -131,6 +141,9 @@ namespace Castor3D
 		bool DoAdjustDimensions( Castor::Size & p_size, uint32_t & p_depth );
 
 	protected:
+		//!\~english	The engine.
+		//!\~french		Le moteur.
+		Engine & m_engine;
 		//!\~english	The source's pixel format.
 		//!\~french		Le format des pixels de la source.
 		Castor::PixelFormat m_format;

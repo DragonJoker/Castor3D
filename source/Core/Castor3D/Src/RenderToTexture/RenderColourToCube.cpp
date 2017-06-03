@@ -1,4 +1,4 @@
-#include "RenderColourToCube.hpp"
+﻿#include "RenderColourToCube.hpp"
 
 #include "Engine.hpp"
 
@@ -160,12 +160,12 @@ namespace Castor3D
 			GlslWriter l_writer{ l_renderSystem.CreateGlslWriter() };
 
 			// Inputs
-			auto position = l_writer.GetAttribute< Vec3 >( ShaderProgram::Position );
+			auto position = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
 			UBO_MATRIX( l_writer );
 
 			// Outputs
-			auto vtx_position = l_writer.GetOutput< Vec3 >( cuT( "vtx_position" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -182,15 +182,15 @@ namespace Castor3D
 			GlslWriter l_writer{ l_renderSystem.CreateGlslWriter() };
 
 			// Inputs
-			auto vtx_position = l_writer.GetInput< Vec3 >( cuT( "vtx_position" ) );
-			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_position = l_writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 
 			// Outputs
-			auto plx_v4FragColor = l_writer.GetOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto plx_v4FragColor = l_writer.DeclOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
 			auto l_sampleSphericalMap = l_writer.ImplementFunction< Vec2 >( cuT( "SampleSphericalMap" ), [&]( Vec3 const & v )
 			{
-				auto uv = l_writer.GetLocale( cuT( "uv" ), vec2( atan( v.z(), v.x() ), asin( v.y() ) ) );
+				auto uv = l_writer.DeclLocale( cuT( "uv" ), vec2( atan( v.z(), v.x() ), asin( v.y() ) ) );
 				uv *= vec2( 0.1591_f, 0.3183_f );
 				uv += 0.5_f;
 				l_writer.Return( uv );
@@ -198,7 +198,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto uv = l_writer.GetLocale( cuT( "uv" ), l_sampleSphericalMap( normalize( vtx_position ) ) );
+				auto uv = l_writer.DeclLocale( cuT( "uv" ), l_sampleSphericalMap( normalize( vtx_position ) ) );
 				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( uv.x(), 1.0_r - uv.y() ) ).rgb(), 1.0_f );
 			} );
 

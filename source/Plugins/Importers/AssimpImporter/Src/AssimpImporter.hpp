@@ -85,12 +85,41 @@ namespace C3dAssimp
 		 */
 		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
-		bool DoProcessMesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor3D::Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Castor3D::Submesh & p_submesh );
-		Castor3D::MaterialSPtr DoProcessMaterial( Castor3D::Scene & p_scene, aiMaterial const & p_aiMaterial );
-		void DoProcessBones( Castor3D::Skeleton & p_pSkeleton, aiBone const * const * p_aiBones, uint32_t p_count, std::vector< Castor3D::VertexBoneData > & p_arrayVertices );
-		void DoProcessAnimation( Castor::String const & p_name, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation );
-		void DoProcessAnimationNodes( Castor3D::SkeletonAnimation & p_animation, int64_t p_ticksPerMilliSecond, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, Castor3D::SkeletonAnimationObjectSPtr p_object );
-		void DoProcessAnimationMeshes( Castor3D::Mesh & p_mesh, Castor3D::Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim );
+		bool DoProcessMesh( Castor3D::Scene & p_scene
+			, Castor3D::Mesh & p_mesh
+			, Castor3D::Skeleton & p_skeleton
+			, aiMesh const & p_aiMesh
+			, aiScene const & p_aiScene
+			, Castor3D::Submesh & p_submesh );
+		Castor3D::MaterialSPtr DoProcessMaterial( Castor3D::Scene & p_scene
+			, aiMaterial const & p_aiMaterial );
+		Castor3D::BoneSPtr DoAddBone( Castor::String const & p_name
+			, Castor::Matrix4x4r const & p_offset
+			, Castor3D::Skeleton & p_skeleton
+			, uint32_t & p_index );
+		void DoProcessBones( Castor3D::Skeleton & p_pSkeleton
+			, aiBone const * const * p_aiBones
+			, uint32_t p_count
+			, std::vector< Castor3D::VertexBoneData > & p_arrayVertices );
+		void DoProcessAnimation( Castor3D::Mesh & p_mesh
+			, Castor::String const & p_name
+			, Castor3D::Skeleton & p_skeleton
+			, aiNode const & p_aiNode
+			, aiAnimation const & p_aiAnimation );
+		void DoProcessAnimationNodes( Castor3D::Mesh & p_mesh
+			, Castor3D::SkeletonAnimation & p_animation
+			, int64_t p_ticksPerMilliSecond
+			, Castor3D::Skeleton & p_skeleton
+			, aiNode const & p_aiNode
+			, aiAnimation const & p_aiAnimation
+			, Castor3D::SkeletonAnimationObjectSPtr p_object );
+		void DoProcessAnimationNodeKeys( aiNodeAnim const & p_aiNodeAnim
+			, int64_t p_ticksPerMilliSecond
+			, Castor3D::SkeletonAnimationObject & p_object );
+		void DoProcessAnimationMeshes( Castor3D::Mesh & p_mesh
+			, Castor3D::Submesh & p_submesh
+			, aiMesh const & p_aiMesh
+			, aiMeshAnim const & p_aiMeshAnim );
 
 	public:
 		static Castor::String const Name;

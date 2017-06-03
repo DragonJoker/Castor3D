@@ -697,6 +697,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		\p true if the submesh has bone data.
+		 *\~french
+		 *\return		\p true si le sous-maillage a des données d'os.
+		 */
+		inline bool HasBoneData()const
+		{
+			return !m_bonesData.empty();
+		}
+		/**
+		 *\~english
 		 *\return		The instantiation VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer d'instanciation.
