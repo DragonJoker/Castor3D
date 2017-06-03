@@ -1,4 +1,4 @@
-﻿#include "ShaderDialog.hpp"
+#include "ShaderDialog.hpp"
 
 #include "AuiDockArt.hpp"
 #include "AuiTabArt.hpp"
@@ -178,6 +178,7 @@ namespace GuiCommon
 	void ShaderDialog::DoCleanup()
 	{
 		m_auiManager.DetachPane( m_pNotebookEditors );
+		m_pNotebookEditors->DeleteAllPages();
 
 		if ( m_bOwnShader && !m_shaderProgram.expired() )
 		{

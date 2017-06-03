@@ -1,4 +1,4 @@
-﻿#include "NodeState.hpp"
+#include "NodeState.hpp"
 
 #include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/FunctorEvent.hpp>

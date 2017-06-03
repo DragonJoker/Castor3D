@@ -1,4 +1,4 @@
-﻿#include "ShaderEditorPage.hpp"
+#include "ShaderEditorPage.hpp"
 
 #include "AuiDockArt.hpp"
 #include "StcTextEditor.hpp"
@@ -94,6 +94,7 @@ namespace GuiCommon
 
 	ShaderEditorPage::~ShaderEditorPage()
 	{
+		DoCleanup();
 		m_auiManager.UnInit();
 	}
 
@@ -227,15 +228,22 @@ namespace GuiCommon
 			, p_pipeline );
 	}
 
+	void ShaderEditorPage::DoCleanup()
+	{
+		m_auiManager.DetachPane( m_editor );
+		m_auiManager.DetachPane( m_frameVariablesList );
+		m_auiManager.DetachPane( m_frameVariablesProperties );
+		m_frameVariablesList->DeleteAllItems();
+		m_frameVariablesProperties->DestroyChildren();
+	}
+
 	BEGIN_EVENT_TABLE( ShaderEditorPage, wxPanel )
 		EVT_CLOSE( ShaderEditorPage::OnClose )
 	END_EVENT_TABLE()
 
 	void ShaderEditorPage::OnClose( wxCloseEvent & p_event )
 	{
-		m_auiManager.DetachPane( m_editor );
-		m_auiManager.DetachPane( m_frameVariablesList );
-		m_auiManager.DetachPane( m_frameVariablesProperties );
+		DoCleanup();
 		p_event.Skip();
 	}
 }

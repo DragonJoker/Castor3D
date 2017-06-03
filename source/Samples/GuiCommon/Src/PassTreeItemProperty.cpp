@@ -1,4 +1,4 @@
-﻿#include "PassTreeItemProperty.hpp"
+#include "PassTreeItemProperty.hpp"
 
 #include "ShaderDialog.hpp"
 
