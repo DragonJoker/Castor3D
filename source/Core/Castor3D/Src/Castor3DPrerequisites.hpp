@@ -487,6 +487,7 @@ namespace Castor3D
 	class PickingPass;
 	class TransformFeedback;
 	class ComputePipeline;
+	struct SsaoConfig;
 
 	DECLARE_SMART_PTR( RenderBuffer );
 	DECLARE_SMART_PTR( ColourRenderBuffer );

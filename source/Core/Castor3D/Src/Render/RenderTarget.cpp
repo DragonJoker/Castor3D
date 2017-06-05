@@ -1,4 +1,4 @@
-﻿#include "RenderTarget.hpp"
+#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -174,7 +174,11 @@ namespace Castor3D
 
 				try
 				{
-					m_renderTechnique = GetEngine()->GetRenderTechniqueCache().Add( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ), m_techniqueName, *this, m_techniqueParameters );
+					m_renderTechnique = GetEngine()->GetRenderTechniqueCache().Add( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index )
+						, m_techniqueName
+						, *this
+						, m_techniqueParameters
+						, m_ssaoConfig );
 				}
 				catch ( Exception & p_exc )
 				{

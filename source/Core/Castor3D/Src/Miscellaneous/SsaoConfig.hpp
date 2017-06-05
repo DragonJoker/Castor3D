@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_TECHNIQUE_CACHE_H___
-#define ___C3D_TECHNIQUE_CACHE_H___
+#ifndef ___C3D_SsaoConfig_H___
+#define ___C3D_SsaoConfig_H___
 
 #include "Castor3DPrerequisites.hpp"
 
@@ -29,31 +29,25 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
+	\version	0.10.0
+	\date		05/06/2017
 	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	\remarks	Specialisation for RenderTechnique.
+	\brief		SSAO configuration values.
 	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	\remarks	Spécialisation pour RenderTechnique.
+	\brief		Valeurs de configuration du SSAO.
 	*/
-	template< typename KeyType >
-	struct CacheTraits< RenderTechnique, KeyType >
+	struct SsaoConfig
 	{
-		C3D_API static const Castor::String Name;
-		using Producer = std::function < std::shared_ptr< RenderTechnique >( KeyType const &
-			, Castor::String const &
-			, RenderTarget &
-			, Parameters const &
-			, SsaoConfig const & ) >;
-		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &
-			, Castor::Collection< RenderTechnique, KeyType > &
-			, std::shared_ptr< RenderTechnique > ) >;
+		//!\~english	The effect activation status.
+		//!\~french		Le statut d'activation de l'effet.
+		bool m_enabled{ false };
+		//!\~english	The effect radius.
+		//!\~french		Le rayon de l'effet.
+		float m_radius{ 0.5f };
+		//!\~english	The effect bias.
+		//!\~french		Le bias de l'effet.
+		float m_bias{ 0.025f };
 	};
 }
-
-// included after because it depends on CacheTraits
-#include "Cache/Cache.hpp"
 
 #endif

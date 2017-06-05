@@ -1,4 +1,4 @@
-﻿#include "CombinePass.hpp"
+#include "CombinePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -8,6 +8,7 @@
 #include <Mesh/Buffer/BufferElementGroup.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Miscellaneous/SsaoConfig.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Camera.hpp>
@@ -267,7 +268,7 @@ namespace deferred_common
 
 	CombinePass::CombinePass( Engine & p_engine
 		, Size const & p_size
-		, bool p_ssao )
+		, SsaoConfig const & p_config )
 		: m_size{ p_size }
 		, m_viewport{ p_engine }
 		, m_vertexBuffer{ DoCreateVbo( p_engine ) }
@@ -277,14 +278,14 @@ namespace deferred_common
 		, m_programs
 		{
 			{
-				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_ssao, GLSL::FogType::eDisabled },
-				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_ssao, GLSL::FogType::eLinear },
-				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_ssao, GLSL::FogType::eExponential },
-				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_ssao, GLSL::FogType::eSquaredExponential }
+				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_config.m_enabled, GLSL::FogType::eDisabled },
+				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_config.m_enabled, GLSL::FogType::eLinear },
+				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_config.m_enabled, GLSL::FogType::eExponential },
+				CombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, p_config.m_enabled, GLSL::FogType::eSquaredExponential }
 			}
 		}
-		, m_ssaoEnabled{ p_ssao }
-		, m_ssao{ p_engine, p_size }
+		, m_ssaoEnabled{ p_config.m_enabled }
+		, m_ssao{ p_engine, p_size, p_config }
 	{
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.Initialise();

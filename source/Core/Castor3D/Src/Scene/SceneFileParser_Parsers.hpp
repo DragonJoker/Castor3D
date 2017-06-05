@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -54,6 +54,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetStereo )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetPostEffect )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetToneMapping )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetSsao )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetEnd )
 
 	// Sampler parsers
@@ -300,6 +301,12 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxFront )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxBack )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxEnd )
+
+	//SSAO parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_SsaoEnabled )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SsaoRadius )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SsaoBias )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SsaoEnd )
 }
 
 #endif

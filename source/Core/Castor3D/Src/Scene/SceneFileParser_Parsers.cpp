@@ -1,4 +1,4 @@
-#include "SceneFileParser_Parsers.hpp"
+﻿#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -510,6 +510,17 @@ namespace Castor3D
 		}
 	}
 	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetSsao )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pRenderTarget )
+		{
+			PARSING_ERROR( cuT( "No render target initialised." ) );
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eSsao )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetEnd )
 	{
@@ -4444,6 +4455,93 @@ namespace Castor3D
 		else
 		{
 			PARSING_ERROR( cuT( "No skybox initialised" ) );
+		}
+	}
+	END_ATTRIBUTE_POP()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SsaoEnabled )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( l_parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool l_value;
+				p_params[0]->Get( l_value );
+				l_parsingContext->ssaoConfig.m_enabled = l_value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SsaoRadius )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( l_parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float l_value;
+				p_params[0]->Get( l_value );
+				l_parsingContext->ssaoConfig.m_radius = l_value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SsaoBias )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( l_parsingContext->pRenderTarget )
+		{
+			if ( p_params.empty() )
+			{
+				PARSING_ERROR( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float l_value;
+				p_params[0]->Get( l_value );
+				l_parsingContext->ssaoConfig.m_bias = l_value;
+			}
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SsaoEnd )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( l_parsingContext->pRenderTarget )
+		{
+			l_parsingContext->pRenderTarget->SetSsaoConfig( l_parsingContext->ssaoConfig );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No render target initialised" ) );
 		}
 	}
 	END_ATTRIBUTE_POP()

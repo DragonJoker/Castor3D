@@ -30,6 +30,7 @@ SOFTWARE.
 
 #include "Mesh/Submesh.hpp"
 #include "Scene/Skybox.hpp"
+#include "Miscellaneous/SsaoConfig.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -73,6 +74,7 @@ namespace Castor3D
 		eSkybox = MAKE_SECTION_NAME( 'S', 'K', 'B', 'X' ),
 		eParticleSystem = MAKE_SECTION_NAME( 'P', 'L', 'S', 'M' ),
 		eParticle = MAKE_SECTION_NAME( 'P', 'T', 'C', 'L' ),
+		eSsao = MAKE_SECTION_NAME( 'S', 'S', 'A', 'O' ),
 	};
 	//! The context used into parsing functions
 	/*!
@@ -140,6 +142,7 @@ namespace Castor3D
 		AnimationInstanceRPtr pAnimation;
 		SkyboxUPtr pSkybox;
 		ParticleSystemSPtr particleSystem;
+		SsaoConfig ssaoConfig;
 
 	public:
 		/**

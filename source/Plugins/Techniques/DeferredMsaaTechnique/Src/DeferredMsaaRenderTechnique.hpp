@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -56,16 +56,21 @@ namespace deferred_msaa
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderTarget	The render target for this technique
-		 *\param[in]	p_renderSystem	The render system
-		 *\param[in]	p_params		The technique parameters
+		 *\param[in]	p_renderTarget	The render target for this technique.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_params		The technique parameters.
+		 *\param[in]	p_config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderTarget	La render target pour cette technique
-		 *\param[in]	p_renderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
+		 *\param[in]	p_renderTarget	La render target pour cette technique.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_params		Les paramètres de la technique.
+		 *\param[in]	p_config		La configuration du SSAO.
 		 */
-		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
+		RenderTechnique( Castor3D::RenderTarget & p_renderTarget
+			, Castor3D::RenderSystem & p_renderSystem
+			, Castor3D::Parameters const & p_params
+			, Castor3D::SsaoConfig const & p_config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -75,19 +80,24 @@ namespace deferred_msaa
 		virtual ~RenderTechnique();
 		/**
 		 *\~english
-		 *\brief		Instantiation function, used by the factory to create objects of a wanted type
-		 *\param[in]	p_renderTarget	The technique render target
-		 *\param[in]	p_renderSystem	The render system
-		 *\param[in]	p_params		The technique parameters
-		 *\return		A clone of this object
+		 *\brief		Instantiation function, used by the factory to create objects of a wanted type.
+		 *\param[in]	p_renderTarget	The technique render target.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_params		The technique parameters.
+		 *\param[in]	p_config		The SSAO configuration.
+		 *\return		A clone of this object.
 		 *\~french
-		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné
-		 *\param[in]	p_renderTarget	La cible de rendu de la technique
-		 *\param[in]	p_renderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
-		 *\return		Un clône de cet objet
+		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné.
+		 *\param[in]	p_renderTarget	La cible de rendu de la technique.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_params		Les paramètres de la technique.
+		 *\param[in]	p_config		La configuration du SSAO.
+		 *\return		Un clône de cet objet.
 		 */
-		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget
+			, Castor3D::RenderSystem & p_renderSystem
+			, Castor3D::Parameters const & p_params
+			, Castor3D::SsaoConfig const & p_config );
 
 	protected:
 		/**
@@ -217,9 +227,9 @@ namespace deferred_msaa
 		//!\~english	The technique blit rectangle.
 		//!\~french		Le rectangle de blit de la technique.
 		Castor::Rectangle m_rect;
-		//!\~english	Tells if SSAO is to be used in lighting pass.
-		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
-		bool m_ssaoEnabled{ false };
+		//!\~english	The SSAO configuration.
+		//!\~french		La configuration du SSAO.
+		Castor3D::SsaoConfig m_ssaoConfig;
 	};
 }
 

@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 #include "Miscellaneous/Parameter.hpp"
+#include "Miscellaneous/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
 
@@ -341,9 +342,21 @@ namespace Castor3D
 		 *\brief		Définit la Scene
 		 *\param[in]	p_scene	La nouvelle Scene
 		 */
-		inline void	SetScene( SceneSPtr p_scene )
+		inline void SetScene( SceneSPtr p_scene )
 		{
 			m_pScene = p_scene;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the SSAO configuration.
+		 *\param[in]	p_config	The new value.
+		 *\~french
+		 *\brief		Définit la configuration du SSAO.
+		 *\param[in]	p_config	La nouvelle value.
+		 */
+		inline void SetSsaoConfig( SsaoConfig const & p_config )
+		{
+			m_ssaoConfig = p_config;
 		}
 		/**
 		 *\~english
@@ -504,6 +517,9 @@ namespace Castor3D
 		//!\~english	The tone mapping implementation.
 		//!\~french		L'implémentation de mappage de ton.
 		ToneMappingSPtr m_toneMapping;
+		//!\~english	The SSAO configuration.
+		//!\~french		La configuration du SSAO.
+		SsaoConfig m_ssaoConfig;
 	};
 }
 

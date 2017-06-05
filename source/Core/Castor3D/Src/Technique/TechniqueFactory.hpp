@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -38,7 +38,7 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique de techniques de rendu
 	*/
-	using TechniqueFactory = Castor::Factory< RenderTechnique, Castor::String, RenderTechniqueSPtr, std::function< RenderTechniqueSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
+	using TechniqueFactory = Castor::Factory< RenderTechnique, Castor::String, RenderTechniqueSPtr, std::function< RenderTechniqueSPtr( RenderTarget &, RenderSystem &, Parameters const &, SsaoConfig const & ) > >;
 }
 
 #endif

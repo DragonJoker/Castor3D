@@ -438,6 +438,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "stereo" ), Parser_RenderTargetStereo, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), Parser_RenderTargetPostEffect, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), Parser_RenderTargetToneMapping, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
+	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "ssao" ), Parser_RenderTargetSsao );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), Parser_RenderTargetEnd );
 
 	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
@@ -674,6 +675,11 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "front" ), Parser_SkyboxFront, { MakeParameter< ParameterType::ePath >() } );
 	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "back" ), Parser_SkyboxBack, { MakeParameter< ParameterType::ePath >() } );
 	AddParser( uint32_t( CSCNSection::eSkybox ), cuT( "}" ), Parser_SkyboxEnd );
+
+	AddParser( uint32_t( CSCNSection::eSsao ), cuT( "enabled" ), Parser_SsaoEnabled, { MakeParameter< ParameterType::eBool >() } );
+	AddParser( uint32_t( CSCNSection::eSsao ), cuT( "radius" ), Parser_SsaoRadius, { MakeParameter< ParameterType::eFloat >() } );
+	AddParser( uint32_t( CSCNSection::eSsao ), cuT( "bias" ), Parser_SsaoBias, { MakeParameter< ParameterType::eFloat >() } );
+	AddParser( uint32_t( CSCNSection::eSsao ), cuT( "}" ), Parser_SsaoEnd );
 
 	for ( auto const & l_it : GetEngine()->GetAdditionalParsers() )
 	{

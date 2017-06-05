@@ -66,7 +66,7 @@ namespace deferred_common
 	public:
 		CombinePass( Castor3D::Engine & p_engine
 			, Castor::Size const & p_size
-			, bool p_ssao );
+			, Castor3D::SsaoConfig const & p_config );
 		~CombinePass();
 		void Render( GeometryPassResult const & p_gp
 			, Castor3D::TextureUnit const & p_lp
