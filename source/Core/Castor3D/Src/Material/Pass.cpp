@@ -1,4 +1,4 @@
-﻿#include "Pass.hpp"
+#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -79,7 +79,7 @@ namespace Castor3D
 
 		if ( l_return && p_pass.GetOpacity() < 1 )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\talpha %f\n" ), m_tabs.c_str(), p_pass.GetOpacity() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\talpha " ) + string::to_string( p_pass.GetOpacity() ) + cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass opacity" );
 		}
 

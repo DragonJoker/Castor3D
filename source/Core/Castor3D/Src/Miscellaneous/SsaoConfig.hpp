@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -38,6 +38,40 @@ namespace Castor3D
 	*/
 	struct SsaoConfig
 	{
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		RenderTarget loader
+		\~english
+		\brief		Loader de RenderTarget
+		*/
+		class TextWriter
+			: public Castor::TextWriter< SsaoConfig >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\param[in]	p_tabs	The tabulations to put at the beginning of each line
+			 *\~french
+			 *\brief		Constructeur
+			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
+			 */
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			/**
+			 *\~english
+			 *\brief		Writes a SSAO configuration into a text file
+			 *\param[in]	p_target	the render target
+			 *\param[in]	p_file		the file
+			 *\~french
+			 *\brief		Ecrit une configuration SSAO dans un fichier texte
+			 *\param[in]	p_target	La cible de rendu
+			 *\param[in]	p_file		Le fichier
+			 */
+			C3D_API bool operator()( Castor3D::SsaoConfig const & p_target, Castor::TextFile & p_file )override;
+		};
+
 		//!\~english	The effect activation status.
 		//!\~french		Le statut d'activation de l'effet.
 		bool m_enabled{ false };

@@ -1,4 +1,4 @@
-#include "RenderTarget.hpp"
+﻿#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
@@ -77,6 +77,11 @@ namespace Castor3D
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
 				Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget post effect" );
 			}
+		}
+
+		if ( l_return )
+		{
+			l_return = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( p_target.m_ssaoConfig, p_file );
 		}
 
 		p_file.WriteText( m_tabs + cuT( "}\n" ) );
