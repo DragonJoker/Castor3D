@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -21,14 +21,16 @@ using namespace Castor3D;
 namespace deferred_common
 {
 	OpaquePass::OpaquePass( Scene & p_scene
-		, Camera * p_camera )
+		, Camera * p_camera
+		, SsaoConfig const & p_config )
 		: Castor3D::RenderTechniquePass{ cuT( "deferred_opaque" )
 			, p_scene
 			, p_camera
 			, true
 			, false
 			, false
-			, nullptr }
+			, nullptr
+			, p_config }
 		, m_directionalShadowMap{ *p_scene.GetEngine() }
 		, m_spotShadowMap{ *p_scene.GetEngine() }
 		, m_pointShadowMap{ *p_scene.GetEngine() }

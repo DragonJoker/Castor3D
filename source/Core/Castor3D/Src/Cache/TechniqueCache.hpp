@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,10 +42,14 @@ namespace Castor3D
 	struct CacheTraits< RenderTechnique, KeyType >
 	{
 		C3D_API static const Castor::String Name;
-		using Producer = std::function< std::shared_ptr< RenderTechnique >( KeyType const &, Castor::String const &, RenderTarget &, Parameters const & ) >;
+		using Producer = std::function < std::shared_ptr< RenderTechnique >( KeyType const &
+			, Castor::String const &
+			, RenderTarget &
+			, Parameters const &
+			, SsaoConfig const & ) >;
 		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &
-											, Castor::Collection< RenderTechnique, KeyType > &
-											, std::shared_ptr< RenderTechnique > ) >;
+			, Castor::Collection< RenderTechnique, KeyType > &
+			, std::shared_ptr< RenderTechnique > ) >;
 	};
 }
 

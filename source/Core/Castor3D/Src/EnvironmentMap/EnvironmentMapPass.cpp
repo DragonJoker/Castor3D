@@ -1,4 +1,4 @@
-﻿#include "EnvironmentMapPass.hpp"
+#include "EnvironmentMapPass.hpp"
 
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/Viewport.hpp"
@@ -33,14 +33,16 @@ namespace Castor3D
 			, true
 			, false
 			, true
-			, &p_objectNode ) }
+			, &p_objectNode
+			, SsaoConfig{} ) }
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
 			, *p_node->GetScene()
 			, m_camera.get()
 			, false
 			, false
 			, true
-			, &p_objectNode ) }
+			, &p_objectNode
+			, SsaoConfig{} ) }
 	{
 	}
 

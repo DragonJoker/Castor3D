@@ -1,4 +1,4 @@
-#include "ForwardRenderTechniquePass.hpp"
+﻿#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -21,14 +21,16 @@ namespace Castor3D
 		, bool p_opaque
 		, bool p_multisampling
 		, bool p_environment
-		, SceneNode const * p_ignored )
+		, SceneNode const * p_ignored
+		, SsaoConfig const & p_config )
 		: RenderTechniquePass{ p_name
 			, p_scene
 			, p_camera
 			, p_opaque
 			, p_multisampling
 			, p_environment
-			, p_ignored }
+			, p_ignored
+			, p_config }
 		, m_directionalShadowMap{ *p_scene.GetEngine() }
 		, m_spotShadowMap{ *p_scene.GetEngine() }
 		, m_pointShadowMap{ *p_scene.GetEngine() }

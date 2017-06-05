@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -50,13 +50,16 @@ namespace deferred_common
 		 *\brief		Constructor
 		 *\param[in]	p_scene		The scene for this technique.
 		 *\param[in]	p_camera	The camera for this technique (may be null).
+		 *\param[in]	p_config	The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_scene		La scène pour cette technique.
 		 *\param[in]	p_camera	La caméra pour cette technique (peut être nulle).
+		 *\param[in]	p_config	La configuration du SSAO.
 		 */
 		OpaquePass( Castor3D::Scene & p_scene
-			, Castor3D::Camera * p_camera );
+			, Castor3D::Camera * p_camera
+			, Castor3D::SsaoConfig const & p_config );
 		/**
 		 *\~english
 		 *\brief		Destructor

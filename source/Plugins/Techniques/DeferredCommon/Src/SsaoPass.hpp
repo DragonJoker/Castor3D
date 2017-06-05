@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "LightPass.hpp"
 
+#include <Miscellaneous/SsaoConfig.hpp>
 #include <Shader/MatrixUbo.hpp>
 #include <Texture/TextureUnit.hpp>
 
@@ -34,7 +35,8 @@ namespace deferred_common
 	{
 	public:
 		SsaoPass( Castor3D::Engine & p_engine
-			, Castor::Size const & p_size );
+			, Castor::Size const & p_size
+			, Castor3D::SsaoConfig const & p_config );
 		~SsaoPass();
 		void Render( GeometryPassResult const & p_gp
 			, Castor3D::Camera const & p_camera
@@ -64,6 +66,7 @@ namespace deferred_common
 
 	private:
 		Castor3D::Engine & m_engine;
+		Castor3D::SsaoConfig m_config;
 		// Quad rendering
 		Castor::Size m_size;
 		Castor3D::MatrixUbo m_matrixUbo;

@@ -79,6 +79,11 @@ namespace Castor3D
 			}
 		}
 
+		if ( l_return )
+		{
+			l_return = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( p_target.m_ssaoConfig, p_file );
+		}
+
 		p_file.WriteText( m_tabs + cuT( "}\n" ) );
 		return l_return;
 	}
@@ -174,7 +179,11 @@ namespace Castor3D
 
 				try
 				{
-					m_renderTechnique = GetEngine()->GetRenderTechniqueCache().Add( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ), m_techniqueName, *this, m_techniqueParameters );
+					m_renderTechnique = GetEngine()->GetRenderTechniqueCache().Add( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index )
+						, m_techniqueName
+						, *this
+						, m_techniqueParameters
+						, m_ssaoConfig );
 				}
 				catch ( Exception & p_exc )
 				{

@@ -1,4 +1,4 @@
-﻿#include "SsaoPass.hpp"
+#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -414,8 +414,11 @@ namespace deferred_common
 		}
 	}
 
+	//*********************************************************************************************
+
 	SsaoPass::SsaoPass( Engine & p_engine
-		, Size const & p_size )
+		, Size const & p_size
+		, SsaoConfig const & p_config )
 		: m_engine{ p_engine }
 		, m_size{ p_size }
 		, m_matrixUbo{ p_engine }
@@ -434,6 +437,7 @@ namespace deferred_common
 		//, m_blurFbo{ DoCreateFbo( p_engine, p_size ) }
 		//, m_blurResultAttach{ DoCreateAttach( *m_blurFbo, m_blurResult ) }
 		, m_viewport{ p_engine }
+		, m_config{ p_config }
 	{
 		DoInitialiseQuadRendering();
 		DoInitialiseSsaoPass();
@@ -477,8 +481,8 @@ namespace deferred_common
 		float const l_hScale = m_size.height() / 4.0f;
 		m_kernelUniform = m_ssaoConfig.CreateUniform< UniformType::eVec3f >( cuT( "c3d_kernel" ), 64u );
 		m_ssaoConfig.CreateUniform< UniformType::eInt >( cuT( "c3d_kernelSize" ) )->SetValue( 64 );
-		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->SetValue( 0.5f );
-		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->SetValue( 0.025f );
+		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_radius" ) )->SetValue( m_config.m_radius );
+		m_ssaoConfig.CreateUniform< UniformType::eFloat >( cuT( "c3d_bias" ) )->SetValue( m_config.m_bias );
 		m_ssaoConfig.CreateUniform< UniformType::eVec2f >( cuT( "c3d_noiseScale" ) )->SetValue( Point2f( l_wScale, l_hScale ) );
 		m_kernelUniform->SetValues( m_ssaoKernel );
 

@@ -1,4 +1,4 @@
-﻿#include "Engine.hpp"
+#include "Engine.hpp"
 
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/FrameListener.hpp"
@@ -118,9 +118,13 @@ namespace Castor3D
 			, l_mergeResource );
 		m_targetCache = std::make_unique< RenderTargetCache >( *this );
 		m_techniqueCache = MakeCache< RenderTechnique, String >( *this
-			, [this]( String const & p_name, String const & p_type, RenderTarget & p_renderTarget, Parameters const & p_parameters )
+			, [this]( String const & p_name
+				, String const & p_type
+				, RenderTarget & p_renderTarget
+				, Parameters const & p_parameters
+				, SsaoConfig const & p_config )
 			{
-				return m_techniqueFactory.Create( p_type, p_renderTarget, *GetRenderSystem(), p_parameters );
+				return m_techniqueFactory.Create( p_type, p_renderTarget, *GetRenderSystem(), p_parameters, p_config );
 			}
 			, l_dummy
 			, l_dummy

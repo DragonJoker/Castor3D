@@ -1,4 +1,4 @@
-#include "DeferredMsaaRenderTechnique.hpp"
+﻿#include "DeferredMsaaRenderTechnique.hpp"
 
 #include <OpaquePass.hpp>
 
@@ -90,24 +90,27 @@ namespace deferred_msaa
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget
 		, RenderSystem & p_renderSystem
-		, Parameters const & p_params )
+		, Parameters const & p_params
+		, SsaoConfig const & p_config )
 		: Castor3D::RenderTechnique( cuT( "deferred_msaa" )
 			, p_renderTarget
 			, p_renderSystem
 			, std::make_unique< deferred_common::OpaquePass >( *p_renderTarget.GetScene()
-				, p_renderTarget.GetCamera().get() )
+				, p_renderTarget.GetCamera().get()
+				, p_config )
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "deferred_msaa_transparent" )
 				, *p_renderTarget.GetScene()
 				, p_renderTarget.GetCamera().get()
 				, false
 				, GetSamplesCountParam( p_params, m_samplesCount ) > 1
 				, false
-				, nullptr )
+				, nullptr
+				, p_config )
 			, p_params
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 		, m_viewport{ *p_renderSystem.GetEngine() }
 		, m_sceneUbo{ *p_renderSystem.GetEngine() }
-		, m_ssaoEnabled{ DoUsesSsao( p_params ) }
+		, m_ssaoConfig{ p_config }
 	{
 		Logger::LogInfo( StringStream() << cuT( "Using Deferred MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 	}
@@ -116,10 +119,15 @@ namespace deferred_msaa
 	{
 	}
 
-	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
+	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget
+		, RenderSystem & p_renderSystem
+		, Parameters const & p_params
+		, SsaoConfig const & p_config )
 	{
-		// No make_shared because ctor is protected;
-		return std::make_shared< RenderTechnique >( p_renderTarget, p_renderSystem, p_params );
+		return std::make_shared< RenderTechnique >( p_renderTarget
+			, p_renderSystem
+			, p_params
+			, p_config );
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
@@ -206,7 +214,7 @@ namespace deferred_msaa
 
 #if DEBUG_DEFERRED_BUFFERS && !defined( NDEBUG )
 
-		auto l_count = 6 + ( m_ssaoEnabled ? 1 : 0 );
+		auto l_count = 6 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		int l_width = int( m_size.width() ) / l_count;
 		int l_height = int( m_size.height() ) / l_count;
 		int l_left = int( m_size.width() ) - l_width;
@@ -222,7 +230,7 @@ namespace deferred_msaa
 		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( deferred_common::DsTexture::eEmissive )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_lightingPass->GetResult().GetTexture() );
 
-		if ( m_ssaoEnabled )
+		if ( m_ssaoConfig.m_enabled )
 		{
 			l_context.RenderTexture( Position{ l_width * ( l_index++ ), 0 }, l_size, m_combinePass->GetSsao() );
 		}
@@ -234,10 +242,7 @@ namespace deferred_msaa
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
-		return p_file.WriteText( cuT( " -samples_count=" ) + string::to_string( m_samplesCount ) ) > 0
-			&& m_ssaoEnabled
-				? p_file.WriteText( cuT( " ssao" ) ) > 0
-				: true;
+		return p_file.WriteText( cuT( " -samples_count=" ) + string::to_string( m_samplesCount ) ) > 0;
 	}
 
 	bool RenderTechnique::DoInitialiseDeferred( uint32_t & p_index )
@@ -256,7 +261,7 @@ namespace deferred_msaa
 				, m_renderTarget.GetSize() );
 			m_combinePass = std::make_unique< deferred_common::CombinePass >( *m_renderSystem.GetEngine()
 				, m_renderTarget.GetSize()
-				, m_ssaoEnabled );
+				, m_ssaoConfig );
 		}
 
 		return l_return;

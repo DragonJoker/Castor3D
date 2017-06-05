@@ -52,7 +52,8 @@ namespace forward_msaa
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget
 		, RenderSystem & p_renderSystem
-		, Parameters const & p_params )
+		, Parameters const & p_params
+		, SsaoConfig const & p_config )
 		: Castor3D::RenderTechnique( RenderTechnique::Type
 			, p_renderTarget
 			, p_renderSystem
@@ -62,14 +63,16 @@ namespace forward_msaa
 				, true
 				, GetSamplesCountParam( p_params, m_samplesCount ) > 1
 				, false
-				, nullptr )
+				, nullptr
+				, p_config )
 			, std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_msaa_transparent" )
 				, *p_renderTarget.GetScene()
 				, p_renderTarget.GetCamera().get()
 				, false
 				, GetSamplesCountParam( p_params, m_samplesCount ) > 1
 				, false
-				, nullptr )
+				, nullptr
+				, p_config )
 			, p_params
 			, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 	{
@@ -88,9 +91,13 @@ namespace forward_msaa
 
 	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget
 		, RenderSystem & p_renderSystem
-		, Parameters const & p_params )
+		, Parameters const & p_params
+		, SsaoConfig const & p_config )
 	{
-		return std::make_shared< RenderTechnique >( p_renderTarget, p_renderSystem, p_params );
+		return std::make_shared< RenderTechnique >( p_renderTarget
+			, p_renderSystem
+			, p_params
+			, p_config );
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )

@@ -141,12 +141,14 @@ namespace Castor3D
 		, bool p_opaque
 		, bool p_multisampling
 		, bool p_environment
-		, SceneNode const * p_ignored )
+		, SceneNode const * p_ignored
+		, SsaoConfig const & p_config )
 		: RenderPass{ p_name, *p_scene.GetEngine(), p_opaque, p_multisampling, p_ignored }
 		, m_scene{ p_scene }
 		, m_camera{ p_camera }
 		, m_sceneNode{}
 		, m_environment{ p_environment }
+		, m_ssaoConfig{ p_config }
 	{
 	}
 

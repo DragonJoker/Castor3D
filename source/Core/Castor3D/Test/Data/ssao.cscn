@@ -100,7 +100,14 @@ window "Window"
 		size screen_size
 		scene "Scene"
 		camera "MainCamera"
-		technique "deferred" -ssao
+		technique "deferred"
+
+		ssao
+		{
+			enabled true
+			radius 50.0
+			bias 0.025
+		}
 	}
 
 	fullscreen false
