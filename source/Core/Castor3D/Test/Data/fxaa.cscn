@@ -59,7 +59,6 @@ window "Window"
 		size screen_size
 		scene "Scene"
 		camera "MainCamera"
-		technique "forward"
 		postfx "fxaa"
 	}
 	fullscreen false

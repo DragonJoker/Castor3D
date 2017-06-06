@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -123,6 +123,21 @@ namespace Castor3D
 			}
 
 			return l_return;
+		}
+		/**
+		 *\~english
+		 *\brief		Adds a parameters list.
+		 *\param[in]	p_parameters	The parameters list.
+		 *\~french
+		 *\brief		Ajoute une liste de paramètres.
+		 *\param[in]	p_parameters	La liste de paramètres.
+		 */
+		inline void Add( Parameters const & p_parameters )
+		{
+			for ( auto l_parameter : p_parameters.m_mapParameters )
+			{
+				m_mapParameters.insert( { l_parameter.first, l_parameter.second } );
+			}
 		}
 		/**
 		 *\~english

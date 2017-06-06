@@ -177,15 +177,13 @@ namespace Castor3D
 		C3D_API void SetSize( Castor::Size const & p_size );
 		/**
 		 *\~english
-		 *\brief		Defines the RenderTechnique.
-		 *\param[in]	p_name			The RenderTechnique name.
+		 *\brief		Adds RenderTechnique parameters.
 		 *\param[in]	p_parameters	The RenderTechnique parameters.
 		 *\~french
-		 *\brief		Définit la RenderTechnique.
-		 *\param[in]	p_name			Le nom de la RenderTechnique.
+		 *\brief		Ajoute des paramètres de RenderTechnique.
 		 *\param[in]	p_parameters	Les paramètres de la RenderTechnique.
 		 */
-		C3D_API void SetTechnique( Castor::String const & p_name, Parameters const & p_parameters );
+		C3D_API void AddTechniqueParameters( Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Retrieves the ViewportType
@@ -505,9 +503,6 @@ namespace Castor3D
 		//!\~english	This render target's index.
 		//!\~french		L'index de cette render target.
 		uint32_t m_index;
-		//!\~english	The render technique name.
-		//!\~french		Le nom de la technique de rendu.
-		Castor::String m_techniqueName;
 		//!\~english	The render technique parameters.
 		//!\~french		Les paramètres de la technique de rendu.
 		Parameters m_techniqueParameters;

@@ -1,7 +1,8 @@
-﻿#include "EnvironmentMap.hpp"
+#include "EnvironmentMap.hpp"
 
 #include "Engine.hpp"
 
+#include "EnvironmentMap/EnvironmentMapPass.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
@@ -99,12 +100,12 @@ namespace Castor3D
 			return EnvironmentMap::EnvironmentMapPasses
 			{
 				{
-					EnvironmentMapPass{ p_map, l_nodes[0], p_node },
-					EnvironmentMapPass{ p_map, l_nodes[1], p_node },
-					EnvironmentMapPass{ p_map, l_nodes[2], p_node },
-					EnvironmentMapPass{ p_map, l_nodes[3], p_node },
-					EnvironmentMapPass{ p_map, l_nodes[4], p_node },
-					EnvironmentMapPass{ p_map, l_nodes[5], p_node },
+					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[0], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[1], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[2], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[3], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[4], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[5], p_node ),
 				}
 			};
 		}
@@ -170,7 +171,7 @@ namespace Castor3D
 
 			for ( auto & l_pass : m_passes )
 			{
-				l_pass.Initialise( MapSize );
+				l_pass->Initialise( MapSize );
 			}
 		}
 
@@ -183,7 +184,7 @@ namespace Castor3D
 		{
 			for ( auto & l_pass : m_passes )
 			{
-				l_pass.Cleanup();
+				l_pass->Cleanup();
 			}
 
 			m_frameBuffer->Bind();
@@ -210,7 +211,7 @@ namespace Castor3D
 	{
 		for ( auto & l_pass : m_passes )
 		{
-			l_pass.Update( m_node, p_queues );
+			l_pass->Update( m_node, p_queues );
 		}
 	}
 
@@ -224,7 +225,7 @@ namespace Castor3D
 			l_attach->Attach( AttachmentPoint::eColour, 0u );
 			m_frameBuffer->SetDrawBuffer( l_attach );
 			m_frameBuffer->Clear( BufferComponent::eDepth | BufferComponent::eColour );
-			m_passes[l_face].Render();
+			m_passes[l_face]->Render();
 			m_frameBuffer->Unbind();
 			l_face++;
 		}

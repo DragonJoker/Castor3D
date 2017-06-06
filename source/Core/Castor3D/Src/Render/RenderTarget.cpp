@@ -60,11 +60,13 @@ namespace Castor3D
 			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget tone mapping" );
 		}
 
-		if ( l_return && p_target.m_renderTechnique )
+		if ( l_return
+			&& p_target.m_renderTechnique
+			&& p_target.m_renderTechnique->IsMultisampling() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttechnique \"" ) + p_target.m_renderTechnique->GetName() + cuT( "\"" ) )
-					   && p_target.m_renderTechnique->WriteInto( p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\t" ) )
+				&& p_target.m_renderTechnique->WriteInto( p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget technique" );
 		}
 
@@ -151,7 +153,6 @@ namespace Castor3D
 		, m_bMultisampling{ false }
 		, m_samplesCount{ 0 }
 		, m_index{ ++sm_uiCount }
-		, m_techniqueName{ cuT( "deferred" ) }
 		, m_frameBuffer{ *this }
 	{
 		m_toneMapping = GetEngine()->GetRenderTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
@@ -172,22 +173,20 @@ namespace Castor3D
 
 			if ( !m_renderTechnique )
 			{
-				if ( m_techniqueName.find( cuT( "msaa" ) ) != String::npos )
-				{
-					m_bMultisampling = true;
-				}
-
 				try
 				{
-					m_renderTechnique = GetEngine()->GetRenderTechniqueCache().Add( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index )
-						, m_techniqueName
-						, *this
-						, m_techniqueParameters
-						, m_ssaoConfig );
+					auto l_name = cuT( "RenderTargetTechnique_" ) + string::to_string( m_index );
+					m_renderTechnique = GetEngine()->GetRenderTechniqueCache().Add( l_name
+						, std::make_shared< RenderTechnique >( l_name
+							, *this
+							, *GetEngine()->GetRenderSystem()
+							, m_techniqueParameters
+							, m_ssaoConfig ) );
+					m_bMultisampling = m_renderTechnique->IsMultisampling();
 				}
 				catch ( Exception & p_exc )
 				{
-					Logger::LogError( cuT( "Couldn't load technique " ) + m_techniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
+					Logger::LogError( cuT( "Couldn't load render technique: " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
 					throw;
 				}
 			}
@@ -283,11 +282,9 @@ namespace Castor3D
 		m_size = p_size;
 	}
 
-	void RenderTarget::SetTechnique( Castor::String const & p_name, Parameters const & p_parameters )
+	void RenderTarget::AddTechniqueParameters( Parameters const & p_parameters )
 	{
-		m_techniqueName = p_name;
-		m_techniqueParameters = p_parameters;
-		m_bMultisampling = p_name.find( cuT( "msaa" ) ) != String::npos;
+		m_techniqueParameters.Add( p_parameters );
 	}
 
 	void RenderTarget::DoRender( RenderInfo & p_info, RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera )

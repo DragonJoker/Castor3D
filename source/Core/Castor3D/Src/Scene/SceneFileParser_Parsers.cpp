@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser_Parsers.hpp"
+#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -264,6 +264,7 @@ namespace Castor3D
 		if ( l_parsingContext->pWindow )
 		{
 			l_parsingContext->pRenderTarget = l_parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( TargetType::eWindow );
+			l_parsingContext->iInt16 = 0;
 		}
 		else
 		{
@@ -396,39 +397,6 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetTechnique )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pRenderTarget )
-		{
-			PARSING_ERROR( cuT( "No target initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			Parameters l_parameters;
-
-			if ( p_params.size() > 1 )
-			{
-				String l_tmp;
-				l_parameters.Parse( p_params[1]->Get( l_tmp ) );
-			}
-
-			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
-
-			if ( !l_engine->GetTechniqueFactory().IsRegistered( string::lower_case( l_name ) ) )
-			{
-				PARSING_ERROR( cuT( "Technique [" ) + l_name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
-				l_name = cuT( "direct" );
-			}
-
-			l_parsingContext->pRenderTarget->SetTechnique( l_name, l_parameters );
-		}
-	}
-	END_ATTRIBUTE()
-
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetStereo )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -494,7 +462,11 @@ namespace Castor3D
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
-		else if ( !p_params.empty() )
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
@@ -521,6 +493,28 @@ namespace Castor3D
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSsao )
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetSamplesCount )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pRenderTarget )
+		{
+			PARSING_ERROR( cuT( "No render target initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			p_params[0]->Get( l_parsingContext->iInt16 );
+			Parameters l_params;
+			l_params.Add( cuT( "samples_count" ), uint8_t( l_parsingContext->iInt16 ) );
+			l_parsingContext->pRenderTarget->AddTechniqueParameters( l_params );
+		}
+	}
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetEnd )
 	{

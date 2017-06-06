@@ -840,7 +840,7 @@ namespace C3dFbx
 			l_vertex.m_pos[2] = real( l_fbxVertex[2] );
 		}
 
-		for ( auto i = 0u; i < l_layerCount; ++i )
+		for ( auto i = 0; i < l_layerCount; ++i )
 		{
 			auto & l_layer = *p_fbxMesh->GetLayer( i );
 			// Normals

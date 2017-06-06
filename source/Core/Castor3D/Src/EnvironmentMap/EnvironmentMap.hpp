@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,10 +23,9 @@ SOFTWARE.
 #ifndef ___C3D_EnvironmentMap_H___
 #define ___C3D_EnvironmentMap_H___
 
-#include "EnvironmentMap/EnvironmentMapPass.hpp"
 #include "Scene/SceneNode.hpp"
-#include "Texture/TextureUnit.hpp"
 #include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -49,7 +48,7 @@ namespace Castor3D
 		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t (CubeMapFace::eCount) >;
 		using CubeCameras = std::array< CameraSPtr, size_t (CubeMapFace::eCount) >;
 		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
-		using EnvironmentMapPasses = std::array< EnvironmentMapPass, size_t (CubeMapFace::eCount) >;
+		using EnvironmentMapPasses = std::array< std::unique_ptr< EnvironmentMapPass >, size_t (CubeMapFace::eCount) >;
 
 	public:
 		/**
