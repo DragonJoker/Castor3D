@@ -433,7 +433,6 @@ window "MyWindow"
 		size screen_size
 		scene "Scene"
 		camera "MainCamera"
-		technique "forward"
 	}
 	vsync false
 }

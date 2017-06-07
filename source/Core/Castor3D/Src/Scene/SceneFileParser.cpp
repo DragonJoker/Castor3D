@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser.hpp"
+#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -434,11 +434,11 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "camera" ), Parser_RenderTargetCamera, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "size" ), Parser_RenderTargetSize, { MakeParameter< ParameterType::eSize >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "format" ), Parser_RenderTargetFormat, { MakeParameter< ParameterType::ePixelFormat >() } );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "technique" ), Parser_RenderTargetTechnique, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "stereo" ), Parser_RenderTargetStereo, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), Parser_RenderTargetPostEffect, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), Parser_RenderTargetToneMapping, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "ssao" ), Parser_RenderTargetSsao );
+	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "samples_count" ), Parser_RenderTargetSamplesCount, { MakeParameter< ParameterType::eInt16 >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), Parser_RenderTargetEnd );
 
 	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );

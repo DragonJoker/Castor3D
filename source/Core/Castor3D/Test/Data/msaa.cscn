@@ -32,6 +32,20 @@ scene "Scene"
 		material "Silver"
 	}
 
+	scene_node "FinalAlphaNode"
+	{
+		position 0.0 40.0 0.0
+	}
+	object "FinalPrimitiveAlpha"
+	{
+		parent "FinalAlphaNode"
+		mesh "Mesh"
+		{
+			type "torus" -inner_count=40 -outer_count=40 -inner_size=25 -outer_size=50
+		}
+		material "AlphaSilver"
+	}
+
 	scene_node "MainCameraNode"
 	{
 		position 0.0 0.0 -200.0
@@ -59,7 +73,7 @@ window "Window"
 		size screen_size
 		scene "Scene"
 		camera "MainCamera"
-		technique "forward_msaa" -samples_count=8
+		samples_count 8
 	}
 	fullscreen false
 	vsync false

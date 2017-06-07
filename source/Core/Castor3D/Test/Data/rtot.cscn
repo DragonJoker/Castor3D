@@ -100,7 +100,6 @@ scene "FinalScene"
 					size 1024 1024
 					scene "TextureScene"
 					camera "TextureCamera"
-					technique "forward"
 				}
 				colour 1.0 1.0 1.0 1.0
 				channel diffuse
@@ -174,7 +173,6 @@ window "MyWindow"
 		size 1125 600
 		scene "FinalScene"
 		camera "MainCamera"
-		technique "forward"
 	}
 	fullscreen false
 	vsync false

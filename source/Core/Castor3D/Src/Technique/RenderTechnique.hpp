@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -20,12 +20,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_RENDER_TECHNIQUE_H___
-#define ___C3D_RENDER_TECHNIQUE_H___
+#ifndef ___C3D_RenderTechnique_H___
+#define ___C3D_RenderTechnique_H___
 
 #include "HDR/ToneMapping.hpp"
+#include "Miscellaneous/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
+#include "Technique/Deferred/CombinePass.hpp"
+#include "Technique/Deferred/LightingPass.hpp"
+#include "Technique/Deferred/ReflectionPass.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
@@ -66,10 +70,10 @@ namespace Castor3D
 		\~french
 		\brief		Structure interne contenant un tampon d'image complet.
 		*/
-		struct stFRAME_BUFFER
+		struct TechniqueFbo
 		{
 		public:
-			explicit stFRAME_BUFFER( RenderTechnique & p_technique );
+			explicit TechniqueFbo( RenderTechnique & p_technique );
 			bool Initialise( Castor::Size p_size );
 			void Cleanup();
 
@@ -93,36 +97,28 @@ namespace Castor3D
 			RenderTechnique & m_technique;
 		};
 
-	protected:
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_name				The technique name.
 		 *\param[in]	p_renderTarget		The render target for this technique.
 		 *\param[in]	p_renderSystem		The render system.
-		 *\param[in]	p_opaquePass		The opaque nodes pass.
-		 *\param[in]	p_transparentPass	The transparent nodes pass.
 		 *\param[in]	p_params			The technique parameters.
-		 *\param[in]	p_multisampling		The multisampling status
+		 *\param[in]	p_config			The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name				Le nom de la technique.
 		 *\param[in]	p_renderTarget		La render target pour cette technique.
 		 *\param[in]	p_renderSystem		Le render system.
-		 *\param[in]	p_opaquePass		La passe pour les noeuds opaques.
-		 *\param[in]	p_transparentPass	La passe pour les noeuds transparents.
 		 *\param[in]	p_params			Les paramètres de la technique.
-		 *\param[in]	p_multisampling		Le statut de multiéchantillonnage.
+		 *\param[in]	p_config			La configuration du SSAO.
 		 */
 		C3D_API RenderTechnique( Castor::String const & p_name
 			, RenderTarget & p_renderTarget
 			, RenderSystem & p_renderSystem
-			, std::unique_ptr< RenderTechniquePass > && p_opaquePass
-			, std::unique_ptr< RenderTechniquePass > && p_transparentPass
 			, Parameters const & p_params
-			, bool p_multisampling = false );
-
-	public:
+			, SsaoConfig const & p_config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -220,26 +216,18 @@ namespace Castor3D
 			REQUIRE( m_transparentPass );
 			return *m_transparentPass;
 		}
+		/**
+		 *\~english
+		 *\return		\p true if the samples count is greater than 1.
+		 *\~french
+		 *\return		\p true si le nombre d'échantillons est plus grand que 1.
+		 */
+		inline bool IsMultisampling()const
+		{
+			return m_msaa.m_samplesCount > 1;
+		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_index	The base texture index
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_index	L'index de texture de base
-		 *\return		\p true if ok
-		 */
-		C3D_API virtual bool DoInitialise( uint32_t & p_index ) = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
@@ -248,7 +236,7 @@ namespace Castor3D
 		 *\brief		Dessine les noeuds opaques.
 		 *\param[out]	p_info	Reçoit les informations de rendu.
 		 */
-		C3D_API virtual void DoRenderOpaque( RenderInfo & p_info ) = 0;
+		void DoRenderOpaque( RenderInfo & p_info );
 		/**
 		 *\~english
 		 *\brief		Renders transparent nodes.
@@ -257,18 +245,51 @@ namespace Castor3D
 		 *\brief		Dessine les noeuds transparents.
 		 *\param[out]	p_info	Reçoit les informations de rendu.
 		 */
-		C3D_API virtual void DoRenderTransparent( RenderInfo & p_info ) = 0;
+		void DoRenderTransparent( RenderInfo & p_info );
 		/**
 		 *\~english
-		 *\brief		Writes the technique into a text file.
-		 *\param[in]	p_file	The file.
+		 *\brief		Initialises deferred rendering related stuff.
+		 *\return		\p false if anything went wrong (the technique is then not usable).
 		 *\~french
-		 *\brief		Ecrit la technique dans un fichier texte.
-		 *\param[in]	p_file	Le fichier.
+		 *\brief		Initialise les données liées au deferred rendering.
+		 *\return		\p false si un problème est survenu, la technique est alors inutilisable.
 		 */
-		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
+		bool DoInitialiseDeferred( uint32_t & p_index );
+		/**
+		 *\~english
+		 *\brief		Initialises MSAA related stuff.
+		 *\return		\p false if anything went wrong (the technique is then not usable).
+		 *\~french
+		 *\brief		Initialise les données liées au MSAA.
+		 *\return		\p false si un problème est survenu, la technique est alors inutilisable.
+		 */
+		bool DoInitialiseMsaa();
+		/**
+		 *\~english
+		 *\brief		Destroys deferred rendering related stuff.
+		 *\~french
+		 *\brief		Détruit les données liées au deferred rendering.
+		 */
+		void DoCleanupDeferred();
+		/**
+		 *\~english
+		 *\brief		Destroys MSAA related stuff.
+		 *\~french
+		 *\brief		Détruit les données liées au MSAA.
+		 */
+		void DoCleanupMsaa();
+		bool DoInitialiseGeometryPass( uint32_t & p_index );
+		void DoCleanupGeometryPass();
+		void DoRenderLights( LightType p_type
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj
+			, bool & p_first );
 
-	protected:
+	private:
+		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
+		using GeometryBufferAttachs = std::array< TextureAttachmentSPtr, size_t( DsTexture::eCount ) >;
+
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
@@ -278,18 +299,78 @@ namespace Castor3D
 		//!\~english	The render system.
 		//!\~french		Le render system.
 		RenderSystem & m_renderSystem;
+		struct
+		{
+			//!\~english	The depth buffer.
+			//!\~french		Le tampon de profondeur.
+			RenderBufferSPtr m_lightPassDepthBuffer;
+			//!\~english	The attachment between depth buffer and deferred shading frame buffer.
+			//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
+			RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
+			//!\~english	The multisampled frame buffer.
+			//!\~french		Le tampon d'image multisamplé
+			FrameBufferSPtr m_frameBuffer;
+			//!\~english	The buffer receiving the multisampled color render.
+			//!\~french		Le tampon recevant le rendu couleur multisamplé.
+			ColourRenderBufferSPtr m_colorBuffer;
+			//!\~english	The buffer receiving the multisampled depth render.
+			//!\~french		Le tampon recevant le rendu profondeur multisamplé.
+			DepthStencilRenderBufferSPtr m_depthBuffer;
+			//!\~english	The attach between multisampled colour buffer and multisampled frame buffer.
+			//!\~french		L'attache entre le tampon couleur multisamplé et le tampon multisamplé.
+			RenderBufferAttachmentSPtr m_colorAttach;
+			//!\~english	The attach between multisampled depth buffer and multisampled frame buffer.
+			//!\~french		L'attache entre le tampon profondeur multisamplé et le tampon multisamplé.
+			RenderBufferAttachmentSPtr m_depthAttach;
+			//!\~english	The technique blit rectangle.
+			//!\~french		Le rectangle de blit de la technique.
+			Castor::Rectangle m_rect;
+			//!\~english	The samples count.
+			//!\~french		Le nombre de samples.
+			uint8_t m_samplesCount{ 0 };
+		} m_msaa;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
 		Castor::Size m_size;
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
-		stFRAME_BUFFER m_frameBuffer;
+		TechniqueFbo m_frameBuffer;
 		//!\~english	The pass used to render opaque nodes.
 		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		//!\~english	The pass used to render transparent nodes.
 		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
+		//!\~english	The SSAO configuration.
+		//!\~french		La configuration du SSAO.
+		SsaoConfig m_ssaoConfig;
+		//!\~english	The uniform buffer containing the scene data.
+		//!\~french		Le tampon d'uniformes contenant les données de scène.
+		SceneUbo m_sceneUbo;
+		//!\~english	The fog pass.
+		//!\~french		La passe de brouillard.
+		std::unique_ptr< LightingPass > m_lightingPass;
+		//!\~english	The combination pass.
+		//!\~french		La passe de combinaison.
+		std::unique_ptr< CombinePass > m_combinePass;
+		//!\~english	The reflection pass.
+		//!\~french		La passe de réflexion.
+		std::unique_ptr< ReflectionPass > m_reflection;
+		//!\~english	The various textures.
+		//!\~french		Les diverses textures.
+		GeometryBufferTextures m_geometryPassResult;
+		//!\~english	The deferred shading frame buffer.
+		//!\~french		Le tampon d'image pour le deferred shading.
+		FrameBufferSPtr m_geometryPassFrameBuffer;
+		//!\~english	The attachments between textures and deferred shading frame buffer.
+		//!\~french		Les attaches entre les textures et le tampon deferred shading.
+		GeometryBufferAttachs m_geometryPassTexAttachs;
+		//!\~english	The selected frame buffer.
+		//!\~french		Le tampon d'image sélectionné.
+		FrameBufferRPtr m_currentFrameBuffer{ nullptr };
+		//!\~english	The selected attach.
+		//!\~french		L'attache sélectionnée.
+		FrameBufferAttachmentRPtr m_currentDepthAttach{ nullptr };
 	};
 }
 

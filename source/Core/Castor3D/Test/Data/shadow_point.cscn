@@ -136,7 +136,6 @@ window "Window"
 		size screen_size
 		scene "Scene"
 		camera "MainCamera"
-		technique "forward"
 	}
 
 	fullscreen false
