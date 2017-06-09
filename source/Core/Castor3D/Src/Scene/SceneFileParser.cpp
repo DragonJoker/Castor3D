@@ -129,23 +129,13 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureArguments[cuT( "diffuse" )] = uint32_t( BlendSource::eDiffuse );
 	m_mapTextureArguments[cuT( "previous" )] = uint32_t( BlendSource::ePrevious );
 
-	m_mapTextureRgbFunctions[cuT( "none" )] = uint32_t( ColourBlendFunc::eNoBlend );
-	m_mapTextureRgbFunctions[cuT( "first_arg" )] = uint32_t( ColourBlendFunc::eFirstArg );
-	m_mapTextureRgbFunctions[cuT( "add" )] = uint32_t( ColourBlendFunc::eAdd );
-	m_mapTextureRgbFunctions[cuT( "add_signed" )] = uint32_t( ColourBlendFunc::eAddSigned );
-	m_mapTextureRgbFunctions[cuT( "modulate" )] = uint32_t( ColourBlendFunc::eModulate );
-	m_mapTextureRgbFunctions[cuT( "interpolate" )] = uint32_t( ColourBlendFunc::eInterpolate );
-	m_mapTextureRgbFunctions[cuT( "subtract" )] = uint32_t( ColourBlendFunc::eSubtract );
-	m_mapTextureRgbFunctions[cuT( "dot3_rgb" )] = uint32_t( ColourBlendFunc::eDot3RGB );
-	m_mapTextureRgbFunctions[cuT( "dot3_rgba" )] = uint32_t( ColourBlendFunc::eDot3RGBA );
-
-	m_mapTextureAlphaFunctions[cuT( "none" )] = uint32_t( AlphaBlendFunc::eNoBlend );
-	m_mapTextureAlphaFunctions[cuT( "first_arg" )] = uint32_t( AlphaBlendFunc::eFirstArg );
-	m_mapTextureAlphaFunctions[cuT( "add" )] = uint32_t( AlphaBlendFunc::eAdd );
-	m_mapTextureAlphaFunctions[cuT( "add_signed" )] = uint32_t( AlphaBlendFunc::eAddSigned );
-	m_mapTextureAlphaFunctions[cuT( "modulate" )] = uint32_t( AlphaBlendFunc::eModulate );
-	m_mapTextureAlphaFunctions[cuT( "interpolate" )] = uint32_t( AlphaBlendFunc::eInterpolate );
-	m_mapTextureAlphaFunctions[cuT( "substract" )] = uint32_t( AlphaBlendFunc::eSubtract );
+	m_mapTextureBlendModes[cuT( "none" )] = uint32_t( TextureBlendFunc::eNoBlend );
+	m_mapTextureBlendModes[cuT( "first_arg" )] = uint32_t( TextureBlendFunc::eFirstArg );
+	m_mapTextureBlendModes[cuT( "add" )] = uint32_t( TextureBlendFunc::eAdd );
+	m_mapTextureBlendModes[cuT( "add_signed" )] = uint32_t( TextureBlendFunc::eAddSigned );
+	m_mapTextureBlendModes[cuT( "modulate" )] = uint32_t( TextureBlendFunc::eModulate );
+	m_mapTextureBlendModes[cuT( "interpolate" )] = uint32_t( TextureBlendFunc::eInterpolate );
+	m_mapTextureBlendModes[cuT( "subtract" )] = uint32_t( TextureBlendFunc::eSubtract );
 
 	m_mapTextureChannels[cuT( "diffuse" )] = uint32_t( TextureChannel::eDiffuse );
 	m_mapTextureChannels[cuT( "normal" )] = uint32_t( TextureChannel::eNormal );
@@ -553,8 +543,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), Parser_UnitImage, { MakeParameter< ParameterType::ePath >() } );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), Parser_UnitRenderTarget );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), MakeParameter< ParameterType::eFloat >() } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureRgbFunctions ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ) } );
-	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureAlphaFunctions ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ) } );
+	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureBlendModes ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ) } );
+	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureBlendModes ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ), MakeParameter< ParameterType::eCheckedText >( m_mapTextureArguments ) } );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "channel" ), Parser_UnitChannel, { MakeParameter< ParameterType::eCheckedText >( m_mapTextureChannels ) } );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), Parser_UnitSampler, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "colour" ), Parser_UnitBlendColour, { MakeParameter< ParameterType::eColour >() } );

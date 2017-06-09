@@ -2891,15 +2891,15 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiArg1;
-			uint32_t l_uiArg2;
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			p_params[1]->Get( l_uiArg1 );
-			p_params[2]->Get( l_uiArg2 );
-			l_parsingContext->pTextureUnit->SetRgbFunction( ColourBlendFunc( l_uiMode ) );
-			l_parsingContext->pTextureUnit->SetRgbArgument( BlendSrcIndex::eIndex0, BlendSource( l_uiArg1 ) );
-			l_parsingContext->pTextureUnit->SetRgbArgument( BlendSrcIndex::eIndex1, BlendSource( l_uiArg2 ) );
+			uint32_t l_arg1;
+			uint32_t l_arg2;
+			uint32_t l_mode;
+			p_params[0]->Get( l_mode );
+			p_params[1]->Get( l_arg1 );
+			p_params[2]->Get( l_arg2 );
+			l_parsingContext->pTextureUnit->SetRgbBlend( TextureBlendFunc( l_mode )
+				, BlendSource( l_arg1 )
+				, BlendSource( l_arg2 ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2914,15 +2914,15 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiArg1;
-			uint32_t l_uiArg2;
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			p_params[1]->Get( l_uiArg1 );
-			p_params[2]->Get( l_uiArg2 );
-			l_parsingContext->pTextureUnit->SetAlpFunction( AlphaBlendFunc( l_uiMode ) );
-			l_parsingContext->pTextureUnit->SetAlpArgument( BlendSrcIndex::eIndex0, BlendSource( l_uiArg1 ) );
-			l_parsingContext->pTextureUnit->SetAlpArgument( BlendSrcIndex::eIndex1, BlendSource( l_uiArg2 ) );
+			uint32_t l_arg1;
+			uint32_t l_arg2;
+			uint32_t l_mode;
+			p_params[0]->Get( l_mode );
+			p_params[1]->Get( l_arg1 );
+			p_params[2]->Get( l_arg2 );
+			l_parsingContext->pTextureUnit->SetAlphaBlend( TextureBlendFunc( l_mode )
+				, BlendSource( l_arg1 )
+				, BlendSource( l_arg2 ) );
 		}
 	}
 	END_ATTRIBUTE()

@@ -197,46 +197,7 @@ namespace Castor3D
 	\~french
 	\brief		Enumération de fonctions de mélange RGB
 	*/
-	enum class ColourBlendFunc
-		: uint8_t
-	{
-		//!\~english No blend
-		//!\~french Pas de mélange
-		eNoBlend,
-		//!\~english Arg0
-		//!\~french Arg0
-		eFirstArg,
-		//!\~english Arg0 + Arg1
-		//!\~french Arg0 + Arg1
-		eAdd,
-		//!\~english Arg0 + Arg1 - 0.5
-		//!\~french Arg0 + Arg1 - 0.5
-		eAddSigned,
-		//!\~english Arg0 x Arg1
-		//!\~french Arg0 x Arg1
-		eModulate,
-		//!\~english Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		//!\~french Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		eInterpolate,
-		//!\~english Arg0 - Arg1
-		//!\~french Arg0 - Arg1
-		eSubtract,
-		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)))
-		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)))
-		eDot3RGB,
-		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
-		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
-		eDot3RGBA,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Alpha blending functions enumeration
-	\~french
-	\brief		Enumération de fonctions de mélange alpha
-	*/
-	enum class AlphaBlendFunc
+	enum class TextureBlendFunc
 		: uint8_t
 	{
 		//!\~english No blend

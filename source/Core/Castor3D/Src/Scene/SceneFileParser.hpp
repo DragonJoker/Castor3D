@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -230,8 +230,7 @@ namespace Castor3D
 		UIntStrMap m_mapTypes;
 		UIntStrMap m_mapComparisonFuncs;
 		UIntStrMap m_mapTextureArguments;
-		UIntStrMap m_mapTextureRgbFunctions;
-		UIntStrMap m_mapTextureAlphaFunctions;
+		UIntStrMap m_mapTextureBlendModes;
 		UIntStrMap m_mapTextureChannels;
 		UIntStrMap m_mapLightTypes;
 		UIntStrMap m_mapPrimitiveTypes;
