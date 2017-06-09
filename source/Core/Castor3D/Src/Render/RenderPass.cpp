@@ -318,15 +318,33 @@ namespace Castor3D
 
 	RenderPass::RenderPass( String const & p_name
 		, Engine & p_engine
-		, bool p_opaque
-		, bool p_multisampling
 		, SceneNode const * p_ignored )
 		: OwnedBy< Engine >{ p_engine }
 		, Named{ p_name }
 		, m_renderSystem{ *p_engine.GetRenderSystem() }
-		, m_multisampling{ p_multisampling }
-		, m_renderQueue{ *this, p_opaque, p_ignored }
-		, m_opaque{ p_opaque }
+		, m_oit{ true }
+		, m_renderQueue{ *this, true, p_ignored }
+		, m_opaque{ true }
+		, m_matrixUbo{ p_engine }
+		, m_modelMatrixUbo{ p_engine }
+		, m_sceneUbo{ p_engine }
+		, m_modelUbo{ p_engine }
+		, m_billboardUbo{ p_engine }
+		, m_skinningUbo{ p_engine }
+		, m_morphingUbo{ p_engine }
+	{
+	}
+
+	RenderPass::RenderPass( String const & p_name
+		, Engine & p_engine
+		, bool p_oit
+		, SceneNode const * p_ignored )
+		: OwnedBy< Engine >{ p_engine }
+		, Named{ p_name }
+		, m_renderSystem{ *p_engine.GetRenderSystem() }
+		, m_oit{ p_oit }
+		, m_renderQueue{ *this, false, p_ignored }
+		, m_opaque{ false }
 		, m_matrixUbo{ p_engine }
 		, m_modelMatrixUbo{ p_engine }
 		, m_sceneUbo{ p_engine }
@@ -606,7 +624,7 @@ namespace Castor3D
 	}
 
 	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
-		, VertexBuffer & p_matrixBuffer )
+		, VertexBuffer & p_matrixBuffer )const
 	{
 		auto const l_mtxSize = sizeof( float ) * 16;
 		auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
@@ -632,14 +650,14 @@ namespace Castor3D
 
 	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
 		, VertexBuffer & p_matrixBuffer
-		, RenderInfo & p_info )
+		, RenderInfo & p_info )const
 	{
 		auto l_count = DoCopyNodesMatrices( p_renderNodes, p_matrixBuffer );
 		p_info.m_visibleObjectsCount += l_count;
 		return l_count;
 	}
 
-	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes )const
 	{
 		DoTraverseNodes( *this
 			, p_nodes
@@ -657,7 +675,7 @@ namespace Castor3D
 	}
 
 	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoTraverseNodes( *this
 			, p_nodes
@@ -677,7 +695,7 @@ namespace Castor3D
 	}
 
 	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+		, Camera const & p_camera )const
 	{
 		DoTraverseNodes( *this
 			, p_camera
@@ -697,7 +715,7 @@ namespace Castor3D
 
 	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoTraverseNodes( *this
 			, p_camera
@@ -720,7 +738,7 @@ namespace Castor3D
 	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+		, RenderInfo & p_info )const
 	{
 		DoTraverseNodes( *this
 			, p_camera
@@ -741,14 +759,14 @@ namespace Castor3D
 			} );
 	}
 
-	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes )const
 	{
 		DoRenderNonInstanced( *this
 			, p_nodes );
 	}
 
 	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoRenderNonInstanced( *this
 			, p_nodes
@@ -757,7 +775,7 @@ namespace Castor3D
 	}
 
 	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+		, Camera const & p_camera )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -766,7 +784,7 @@ namespace Castor3D
 
 	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -778,7 +796,7 @@ namespace Castor3D
 	void RenderPass::DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+		, RenderInfo & p_info )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -788,14 +806,14 @@ namespace Castor3D
 			, p_info );
 	}
 
-	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes )const
 	{
 		DoRenderNonInstanced( *this
 			, p_nodes );
 	}
 
 	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoRenderNonInstanced( *this
 			, p_nodes
@@ -804,7 +822,7 @@ namespace Castor3D
 	}
 
 	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+		, Camera const & p_camera )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -813,7 +831,7 @@ namespace Castor3D
 
 	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -825,7 +843,7 @@ namespace Castor3D
 	void RenderPass::DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+		, RenderInfo & p_info )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -835,14 +853,14 @@ namespace Castor3D
 			, p_info );
 	}
 
-	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes )const
 	{
 		DoRenderNonInstanced( *this
 			, p_nodes );
 	}
 
 	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoRenderNonInstanced( *this
 			, p_nodes
@@ -851,7 +869,7 @@ namespace Castor3D
 	}
 
 	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+		, Camera const & p_camera )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -860,7 +878,7 @@ namespace Castor3D
 
 	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -872,7 +890,7 @@ namespace Castor3D
 	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+		, RenderInfo & p_info )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -882,14 +900,14 @@ namespace Castor3D
 			, p_info );
 	}
 
-	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes )
+	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes )const
 	{
 		DoRenderNonInstanced( *this
 			, p_nodes );
 	}
 
 	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoRenderNonInstanced( *this
 			, p_nodes
@@ -898,7 +916,7 @@ namespace Castor3D
 	}
 
 	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-		, Camera const & p_camera )
+		, Camera const & p_camera )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -907,7 +925,7 @@ namespace Castor3D
 
 	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps )
+		, DepthMapArray & p_depthMaps )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera
@@ -919,7 +937,7 @@ namespace Castor3D
 	void RenderPass::DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
 		, Camera const & p_camera
 		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )
+		, RenderInfo & p_info )const
 	{
 		DoRenderNonInstanced( *this
 			, p_camera

@@ -1,4 +1,4 @@
-﻿#include "FrameBufferAttachment.hpp"
+#include "FrameBufferAttachment.hpp"
 
 using namespace Castor;
 
@@ -35,15 +35,29 @@ namespace Castor3D
 		m_index = 0;
 	}
 
-	void FrameBufferAttachment::Clear( BufferComponent p_component )const
+	void FrameBufferAttachment::Clear( Castor::Colour const & p_colour )const
 	{
-		REQUIRE( ( p_component == BufferComponent::eColour && m_point == AttachmentPoint::eColour )
-			|| ( p_component == BufferComponent::eDepth
-				&& ( m_point == AttachmentPoint::eDepth
-					|| m_point == AttachmentPoint::eDepthStencil ) )
-			|| ( p_component == BufferComponent::eStencil
-				&& ( m_point == AttachmentPoint::eStencil
-					|| m_point == AttachmentPoint::eDepthStencil ) ) );
-		DoClear( p_component );
+		REQUIRE( m_point == AttachmentPoint::eColour );
+		DoClear( p_colour );
+	}
+
+	void FrameBufferAttachment::Clear( float p_depth )const
+	{
+		REQUIRE( m_point == AttachmentPoint::eDepth
+			|| m_point == AttachmentPoint::eDepthStencil );
+		DoClear( p_depth );
+	}
+
+	void FrameBufferAttachment::Clear( int p_stencil )const
+	{
+		REQUIRE( m_point == AttachmentPoint::eStencil
+			|| m_point == AttachmentPoint::eDepthStencil );
+		DoClear( p_stencil );
+	}
+
+	void FrameBufferAttachment::Clear( float p_depth, int p_stencil )const
+	{
+		REQUIRE( m_point == AttachmentPoint::eDepthStencil );
+		DoClear( p_depth, p_stencil );
 	}
 }

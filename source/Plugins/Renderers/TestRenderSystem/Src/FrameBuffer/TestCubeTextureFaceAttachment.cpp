@@ -23,7 +23,19 @@ namespace TestRender
 	{
 	}
 
-	void TestCubeTextureFaceAttachment::DoClear( BufferComponent p_component )const
-	{	
+	void TestCubeTextureFaceAttachment::DoClear( Colour const & p_colour )const
+	{
+	}
+
+	void TestCubeTextureFaceAttachment::DoClear( float p_depth )const
+	{
+	}
+
+	void TestCubeTextureFaceAttachment::DoClear( int p_stencil )const
+	{
+	}
+
+	void TestCubeTextureFaceAttachment::DoClear( float p_depth, int p_stencil )const
+	{
 	}
 }

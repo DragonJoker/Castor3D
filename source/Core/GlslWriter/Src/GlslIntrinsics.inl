@@ -336,6 +336,12 @@ namespace GLSL
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "abs" ), p_value );
 	}
 
+	template< typename Value >
+	inline Value isinf( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "isinf" ), p_value );
+	}
+
 	template< typename ValueA, typename ValueB >
 	ValueB smoothstep( ValueA const & p_edge0, ValueA const & p_edge1, ValueB const & x )
 	{

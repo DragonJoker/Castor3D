@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\brief		Récupère les noeuds d'une scène, du point de vue d'une caméra.
 		 *\return		Les noeuds de rendu
 		 */
-		C3D_API SceneRenderNodes & GetRenderNodes();
+		C3D_API SceneRenderNodes & GetRenderNodes()const;
 
 	private:
 		/**

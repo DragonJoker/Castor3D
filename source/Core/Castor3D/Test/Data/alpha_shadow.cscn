@@ -1,0 +1,110 @@
+debug_overlays true
+
+scene "Scene"
+{
+	ambient_light 0.2 0.2 0.2
+	background_colour 0.5 0.5 0.5 1.0
+	include "common_materials.cscn"
+
+	scene_node "LightNode"
+	{
+		orientation 1 0 0 45
+	}
+
+	light "Light"
+	{
+		type directional
+		parent "LightNode"
+		colour 1.0 1.0 1.0
+		intensity 0.8 1.0
+		shadow_producer true
+	}
+
+	scene_node "Plane"
+	{
+		position 0.0 0.0 50.0
+		orientation 1.0 0.0 0.0 90.0
+	}
+
+	scene_node "Plane2"
+	{
+		position 0.0 50.0 150.0
+	}
+
+	scene_node "Torus"
+	{
+		position 0.0 30.0 0.0
+	}
+
+	object "Plane"
+	{
+		parent "Plane"
+
+		mesh "Plane"
+		{
+			type "plane" -width_subdiv=0 -depth_subdiv=0 -width=200 -depth=200
+		}
+
+		material "Gold"
+	}
+
+	object "Plane2"
+	{
+		parent "Plane2"
+		receive_shadows false
+
+		mesh "Plane2"
+		{
+			type "plane" -width_subdiv=0 -depth_subdiv=0 -width=200 -depth=200
+		}
+
+		material "Copper"
+	}
+
+	object "Torus"
+	{
+		parent "Torus"
+
+		mesh "Torus"
+		{
+			type "torus" -inner_count=30 -outer_count=30 -inner_size=15 -outer_size=30
+		}
+
+		material "AlphaSilver"
+	}
+
+	scene_node "MainCameraNode"
+	{
+		position 0.0 200.0 -200.0
+		orientation 1 0 0 45
+	}
+
+	camera "MainCamera"
+	{
+		parent "MainCameraNode"
+
+		viewport "MainViewport"
+		{
+			type perspective
+			fov_y 45.0
+			aspect_ratio 1.778
+			near 0.1
+			far 20000.0
+		}
+	}
+}
+
+window "Window"
+{
+	render_target
+	{
+		format argb32
+		size screen_size
+		scene "Scene"
+		camera "MainCamera"
+		samples_count 8
+	}
+
+	fullscreen false
+	vsync false
+}

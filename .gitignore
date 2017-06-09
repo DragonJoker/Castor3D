@@ -5,6 +5,7 @@
 /doc/x86
 /doc/x64
 /source/Core/Castor3D/Data/Core
+/source/Samples/CastorDvpTD/HUD_Source.jpg
 /source/Samples/CastorViewerSharp/Src/obj
 /source/CMake
 /source/Core/Castor3D/Test/Data/Tests
@@ -43,6 +44,7 @@
 /source/Core/Castor3D/Test/Data/Sampler
 /source/Core/Castor3D/Test/Data/Skybox
 /source/Core/Castor3D/Test/Data/Ssao
+/source/Core/Castor3D/Test/Data/Tessellate
 /source/Core/Castor3D/Test/Data/Test
 /source/Core/Castor3D/Test/Data/Texturing
 /source/Samples/CastorDvpTD/Data/Data

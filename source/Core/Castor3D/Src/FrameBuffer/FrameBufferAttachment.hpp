@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -90,12 +90,41 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
-		 *\param[in]	p_component	The component to clear.
+		 *\param[in]	p_colour	The clear colour.
 		 *\~french
 		 *\brief		Vide le tampon de l'attache.
-		 *\param[in]	p_component	La composante à vider.
+		 *\param[in]	p_colour	La couleur de vidage.
 		 */
-		C3D_API void Clear( BufferComponent p_component )const;
+		C3D_API void Clear( Castor::Colour const & p_colour )const;
+		/**
+		 *\~english
+		 *\brief		Clears the attachment buffer.
+		 *\param[in]	p_depth		The depth clear value.
+		 *\~french
+		 *\brief		Vide le tampon de l'attache.
+		 *\param[in]	p_depth		La valeur de nettoyage pour la profondeur.
+		 */
+		C3D_API void Clear( float p_depth )const;
+		/**
+		 *\~english
+		 *\brief		Clears the attachment buffer.
+		 *\param[in]	p_stencil	The stencil clear value.
+		 *\~french
+		 *\brief		Vide le tampon de l'attache.
+		 *\param[in]	p_stencil	La valeur de nettoyage pour le stencil.
+		 */
+		C3D_API void Clear( int p_stencil )const;
+		/**
+		 *\~english
+		 *\brief		Clears the attachment buffer.
+		 *\param[in]	p_depth		The depth clear value.
+		 *\param[in]	p_stencil	The stencil clear value.
+		 *\~french
+		 *\brief		Vide le tampon de l'attache.
+		 *\param[in]	p_depth		La valeur de nettoyage pour la profondeur.
+		 *\param[in]	p_stencil	La valeur de nettoyage pour le stencil.
+		 */
+		C3D_API void Clear( float p_depth, int p_stencil )const;
 		/**
 		*\~english
 		*\return		The data buffer.
@@ -152,12 +181,41 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Clears the attachment buffer.
-		 *\param[in]	p_component	The component to clear.
+		 *\param[in]	p_colour	The clear colour.
 		 *\~french
 		 *\brief		Vide le tampon de l'attache.
-		 *\param[in]	p_component	La composante à vider.
+		 *\param[in]	p_colour	La couleur de vidage.
 		 */
-		C3D_API virtual void DoClear( BufferComponent p_component )const = 0;
+		C3D_API virtual void DoClear( Castor::Colour const & p_colour )const = 0;
+		/**
+		 *\~english
+		 *\brief		Clears the attachment buffer.
+		 *\param[in]	p_depth		The depth clear value.
+		 *\~french
+		 *\brief		Vide le tampon de l'attache.
+		 *\param[in]	p_depth		La valeur de nettoyage pour la profondeur.
+		 */
+		C3D_API virtual void DoClear( float p_depth )const = 0;
+		/**
+		 *\~english
+		 *\brief		Clears the attachment buffer.
+		 *\param[in]	p_stencil	The stencil clear value.
+		 *\~french
+		 *\brief		Vide le tampon de l'attache.
+		 *\param[in]	p_stencil	La valeur de nettoyage pour le stencil.
+		 */
+		C3D_API virtual void DoClear( int p_stencil )const = 0;
+		/**
+		 *\~english
+		 *\brief		Clears the attachment buffer.
+		 *\param[in]	p_depth		The depth clear value.
+		 *\param[in]	p_stencil	The stencil clear value.
+		 *\~french
+		 *\brief		Vide le tampon de l'attache.
+		 *\param[in]	p_depth		La valeur de nettoyage pour la profondeur.
+		 *\param[in]	p_stencil	La valeur de nettoyage pour le stencil.
+		 */
+		C3D_API virtual void DoClear( float p_depth, int p_stencil )const = 0;
 
 	private:
 		//!\~english	The attachment type.

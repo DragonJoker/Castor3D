@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -703,6 +703,9 @@ namespace Castor3D
 		//!\~english	Name of the camera far plane frame variable.
 		//!\~french		Nom de la frame variable contenant la valeur du plan éloigné de la caméra.
 		C3D_API static const Castor::String CameraFarPlane;
+		//!\~english	Name of the camera near plane frame variable.
+		//!\~french		Nom de la frame variable contenant la valeur du plan proche de la caméra.
+		C3D_API static const Castor::String CameraNearPlane;
 		//!\~english	Name of the ambient light frame variable.
 		//!\~french		Nom de la frame variable contenant la lumière ambiante.
 		C3D_API static const Castor::String AmbientLight;

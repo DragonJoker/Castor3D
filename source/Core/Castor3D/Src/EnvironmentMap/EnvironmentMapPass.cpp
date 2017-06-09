@@ -31,15 +31,12 @@ namespace Castor3D
 			, *p_node->GetScene()
 			, m_camera.get()
 			, true
-			, false
-			, true
 			, &p_objectNode
 			, SsaoConfig{} ) }
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
 			, *p_node->GetScene()
 			, m_camera.get()
-			, false
-			, false
+			, true
 			, true
 			, &p_objectNode
 			, SsaoConfig{} ) }

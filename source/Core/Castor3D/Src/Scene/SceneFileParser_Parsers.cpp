@@ -1,4 +1,4 @@
-#include "SceneFileParser_Parsers.hpp"
+﻿#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -493,28 +493,6 @@ namespace Castor3D
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSsao )
-
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetSamplesCount )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pRenderTarget )
-		{
-			PARSING_ERROR( cuT( "No render target initialised." ) );
-		}
-		else if ( p_params.empty() )
-		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			p_params[0]->Get( l_parsingContext->iInt16 );
-			Parameters l_params;
-			l_params.Add( cuT( "samples_count" ), uint8_t( l_parsingContext->iInt16 ) );
-			l_parsingContext->pRenderTarget->AddTechniqueParameters( l_params );
-		}
-	}
-	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetEnd )
 	{

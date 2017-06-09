@@ -1,4 +1,4 @@
-#include "FrameBuffer/GlRenderBufferAttachment.hpp"
+﻿#include "FrameBuffer/GlRenderBufferAttachment.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
@@ -77,8 +77,32 @@ namespace GlRender
 		}
 	}
 
-	void GlRenderBufferAttachment::DoClear( BufferComponent p_component )const
+	void GlRenderBufferAttachment::DoClear( Colour const & p_colour )const
 	{
-		GetOpenGl().Clear( GetOpenGl().GetComponents( p_component ) );
+		GetOpenGl().ClearBuffer( GlComponent::eColour
+			, GetAttachmentIndex()
+			, p_colour.const_ptr() );
+	}
+
+	void GlRenderBufferAttachment::DoClear( float p_depth )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eDepth
+			, GetAttachmentIndex()
+			, &p_depth );
+	}
+
+	void GlRenderBufferAttachment::DoClear( int p_stencil )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eStencil
+			, GetAttachmentIndex()
+			, &p_stencil );
+	}
+
+	void GlRenderBufferAttachment::DoClear( float p_depth, int p_stencil )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eDepthStencil
+			, GetAttachmentIndex()
+			, p_depth
+			, p_stencil );
 	}
 }

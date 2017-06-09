@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -46,22 +46,18 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor for opaque nodes.
 		 *\param[in]	p_name			The technique name.
 		 *\param[in]	p_scene			The scene for this technique.
 		 *\param[in]	p_camera		The camera for this technique (may be null).
-		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
-		 *\param[in]	p_multisampling	The multisampling status.
 		 *\param[in]	p_environment	Pass used for an environment map rendering.
 		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
 		 *\param[in]	p_config		The SSAO configuration.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur pour les noeuds opaques.
 		 *\param[in]	p_name			Le nom de la technique.
 		 *\param[in]	p_scene			La scène pour cette technique.
 		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
-		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
-		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
 		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
 		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	p_config		La configuration du SSAO.
@@ -69,8 +65,33 @@ namespace Castor3D
 		C3D_API ForwardRenderTechniquePass( Castor::String const & p_name
 			, Scene & p_scene
 			, Camera * p_camera
-			, bool p_opaque
-			, bool p_multisampling
+			, bool p_environment
+			, SceneNode const * p_ignored
+			, SsaoConfig const & p_config );
+		/**
+		 *\~english
+		 *\brief		Constructor for transparent nodes.
+		 *\param[in]	p_name			The technique name.
+		 *\param[in]	p_scene			The scene for this technique.
+		 *\param[in]	p_camera		The camera for this technique (may be null).
+		 *\param[in]	p_oit			The OIT status.
+		 *\param[in]	p_environment	Pass used for an environment map rendering.
+		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
+		 *\param[in]	p_config		The SSAO configuration.
+		 *\~french
+		 *\brief		Constructeur pour les noeuds transparents.
+		 *\param[in]	p_name			Le nom de la technique.
+		 *\param[in]	p_scene			La scène pour cette technique.
+		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	p_oit			Le statut d'OIT.
+		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	p_config		La configuration du SSAO.
+		 */
+		C3D_API ForwardRenderTechniquePass( Castor::String const & p_name
+			, Scene & p_scene
+			, Camera * p_camera
+			, bool p_oit
 			, bool p_environment
 			, SceneNode const * p_ignored
 			, SsaoConfig const & p_config );

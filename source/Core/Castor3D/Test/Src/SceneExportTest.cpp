@@ -151,7 +151,7 @@ namespace Testing
 
 	void SceneExportTest::AlphaScene()
 	{
-		DoTestScene( cuT( "Msaa.zip" ) );
+		DoTestScene( cuT( "Alpha.zip" ) );
 	}
 
 	void SceneExportTest::AnimatedScene()

@@ -1,4 +1,4 @@
-#include "FrameBuffer/GlTextureAttachment.hpp"
+﻿#include "FrameBuffer/GlTextureAttachment.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
@@ -124,8 +124,32 @@ namespace GlRender
 		}
 	}
 
-	void GlTextureAttachment::DoClear( BufferComponent p_component )const
+	void GlTextureAttachment::DoClear( Colour const & p_colour )const
 	{
-		GetOpenGl().Clear( GetOpenGl().GetComponents( p_component ) );
+		GetOpenGl().ClearBuffer( GlComponent::eColour
+			, GetAttachmentIndex()
+			, p_colour.const_ptr() );
+	}
+
+	void GlTextureAttachment::DoClear( float p_depth )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eDepth
+			, GetAttachmentIndex()
+			, &p_depth );
+	}
+
+	void GlTextureAttachment::DoClear( int p_stencil )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eStencil
+			, GetAttachmentIndex()
+			, &p_stencil );
+	}
+
+	void GlTextureAttachment::DoClear( float p_depth, int p_stencil )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eDepthStencil
+			, GetAttachmentIndex()
+			, p_depth
+			, p_stencil );
 	}
 }

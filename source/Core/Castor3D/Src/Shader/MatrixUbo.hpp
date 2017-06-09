@@ -117,6 +117,9 @@ namespace Castor3D
 		//!\~english	The projection matrix variable.
 		//!\~french		La variable de la matrice projection.
 		Uniform4x4f & m_projection;
+		//!\~english	The inverse projection matrix variable.
+		//!\~french		La variable de la matrice projection inverse.
+		Uniform4x4f & m_invProjection;
 	};
 }
 
@@ -124,6 +127,7 @@ namespace Castor3D
 	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix };\
 	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxProjection );\
 	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxView );\
+	auto c3d_mtxInvProjection = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxInvProjection );\
 	l_matrices.End()
 
 #endif

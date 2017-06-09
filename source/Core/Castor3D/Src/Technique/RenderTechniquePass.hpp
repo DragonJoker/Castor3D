@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -40,25 +40,21 @@ namespace Castor3D
 	class RenderTechniquePass
 		: public RenderPass
 	{
-	public:
+	protected:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor for opaque nodes.
 		 *\param[in]	p_name			The technique name.
 		 *\param[in]	p_scene			The scene for this technique.
 		 *\param[in]	p_camera		The camera for this technique (may be null).
-		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
-		 *\param[in]	p_multisampling	The multisampling status.
 		 *\param[in]	p_environment	Pass used for an environment map rendering.
 		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
 		 *\param[in]	p_config		The SSAO configuration.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur pour les noeuds opaques.
 		 *\param[in]	p_name			Le nom de la technique.
 		 *\param[in]	p_scene			La scène pour cette technique.
 		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
-		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
-		 *\param[in]	p_multisampling	Le statut de multi-échantillonnage.
 		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
 		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	p_config		La configuration du SSAO.
@@ -66,11 +62,38 @@ namespace Castor3D
 		C3D_API RenderTechniquePass( Castor::String const & p_name
 			, Scene & p_scene
 			, Camera * p_camera
-			, bool p_opaque
-			, bool p_multisampling
 			, bool p_environment
 			, SceneNode const * p_ignored
 			, SsaoConfig const & p_config );
+		/**
+		 *\~english
+		 *\brief		Constructor for transparent nodes.
+		 *\param[in]	p_name			The technique name.
+		 *\param[in]	p_scene			The scene for this technique.
+		 *\param[in]	p_camera		The camera for this technique (may be null).
+		 *\param[in]	p_oit			The OIT status.
+		 *\param[in]	p_environment	Pass used for an environment map rendering.
+		 *\param[in]	p_ignored		The geometries attached to this node will be ignored in the render.
+		 *\param[in]	p_config		The SSAO configuration.
+		 *\~french
+		 *\brief		Constructeur pour les noeuds transparents.
+		 *\param[in]	p_name			Le nom de la technique.
+		 *\param[in]	p_scene			La scène pour cette technique.
+		 *\param[in]	p_camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	p_oit			Le statut d'OIT.
+		 *\param[in]	p_environment	Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	p_ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	p_config		La configuration du SSAO.
+		 */
+		C3D_API RenderTechniquePass( Castor::String const & p_name
+			, Scene & p_scene
+			, Camera * p_camera
+			, bool p_oit
+			, bool p_environment
+			, SceneNode const * p_ignored
+			, SsaoConfig const & p_config );
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -134,8 +157,6 @@ namespace Castor3D
 		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
 		C3D_API void DoRender( RenderInfo & p_info, bool p_shadows );
-
-	private:
 		/**
 		 *\~english
 		 *\brief			Renders render nodes.
@@ -153,40 +174,7 @@ namespace Castor3D
 		C3D_API void DoRenderNodes( SceneRenderNodes & p_nodes
 			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
-			, RenderInfo & p_info );
-		/**
-		 *\~english
-		 *\brief		Renders objects sorted by distance to camera.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\~french
-		 *\brief		Dessine d'objets triés par distance à la caméra.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 */
-		C3D_API void DoRenderByDistance( DistanceSortedNodeMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps );
-		/**
-		 *\~english
-		 *\brief			Renders objects sorted by distance to camera.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param			p_camera	The viewing camera.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_count		Receives the rendered nodes count.
-		 *\~french
-		 *\brief			Dessine d'objets triés par distance à la caméra.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param			p_camera	La caméra regardant la scène.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in, out]	p_count		Reçouit le nombre de noeuds dessinés.
-		 */
-		C3D_API void DoRenderByDistance( DistanceSortedNodeMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps
-			, RenderInfo & p_info );
+			, RenderInfo & p_info )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the depth maps for opaque nodes.

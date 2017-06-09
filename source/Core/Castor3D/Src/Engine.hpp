@@ -41,7 +41,6 @@ SOFTWARE.
 #include "Mesh/MeshFactory.hpp"
 #include "Mesh/SubdividerFactory.hpp"
 #include "Render/RenderSystemFactory.hpp"
-#include "Technique/TechniqueFactory.hpp"
 
 #include <FileParser/FileParser.hpp>
 #include <Graphics/FontCache.hpp>
@@ -462,26 +461,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The RenderTechnique factory.
-		 *\~french
-		 *\return		La fabrique de RenderTechnique.
-		 */
-		inline TechniqueFactory const & GetTechniqueFactory()const
-		{
-			return m_techniqueFactory;
-		}
-		/**
-		 *\~english
-		 *\return		The RenderTechnique factory.
-		 *\~french
-		 *\return		La fabrique de RenderTechnique.
-		 */
-		inline TechniqueFactory & GetTechniqueFactory()
-		{
-			return m_techniqueFactory;
-		}
-		/**
-		 *\~english
 		 *\return		The Subdivider factory.
 		 *\~french
 		 *\return		La fabrique de Subdivider.
@@ -626,9 +605,6 @@ namespace Castor3D
 		//!\~english	The MeshGenerator factory.
 		//!\~french		La fabrique de MeshGenerator.
 		MeshFactory m_meshFactory;
-		//!\~english	The RenderTechnique factory.
-		//!\~french		La fabrique de RenderTechnique.
-		TechniqueFactory m_techniqueFactory;
 		//!\~english	The subdivider factory.
 		//!\~french		La fabrique de subdiviseurs.
 		SubdividerFactory m_subdividerFactory;

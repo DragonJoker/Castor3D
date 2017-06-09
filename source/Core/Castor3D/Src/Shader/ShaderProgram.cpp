@@ -1,4 +1,4 @@
-﻿#include "ShaderProgram.hpp"
+#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -120,6 +120,7 @@ namespace Castor3D
 
 	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
 	const String ShaderProgram::CameraFarPlane = cuT( "c3d_fCameraFarPlane" );
+	const String ShaderProgram::CameraNearPlane = cuT( "c3d_fCameraNearPlane" );
 	const String ShaderProgram::AmbientLight = cuT( "c3d_v4AmbientLight" );
 	const String ShaderProgram::BackgroundColour = cuT( "c3d_v4BackgroundColour" );
 	const String ShaderProgram::FogType = cuT( "c3d_iFogType" );

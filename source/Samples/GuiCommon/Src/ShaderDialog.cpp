@@ -16,6 +16,7 @@
 #include <Render/RenderWindow.hpp>
 #include <Scene/Scene.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Technique/RenderTechnique.hpp>
 #include <Technique/RenderTechniquePass.hpp>
 
 using namespace Castor3D;

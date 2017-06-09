@@ -1,4 +1,4 @@
-﻿#include "SceneUbo.hpp"
+#include "SceneUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/Viewport.hpp"
@@ -18,6 +18,7 @@ namespace Castor3D
 		, m_backgroundColour{ *m_ubo.CreateUniform< UniformType::eVec4f >( ShaderProgram::BackgroundColour ) }
 		, m_lightsCount{ *m_ubo.CreateUniform< UniformType::eVec4i >( ShaderProgram::LightsCount ) }
 		, m_cameraPos{ *m_ubo.CreateUniform< UniformType::eVec3f >( ShaderProgram::CameraPos ) }
+		, m_cameraNearPlane{ *m_ubo.CreateUniform< UniformType::eFloat >( ShaderProgram::CameraNearPlane ) }
 		, m_cameraFarPlane{ *m_ubo.CreateUniform< UniformType::eFloat >( ShaderProgram::CameraFarPlane ) }
 		, m_fogType{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::FogType ) }
 		, m_fogDensity{ *m_ubo.CreateUniform< UniformType::eFloat >( ShaderProgram::FogDensity ) }
@@ -46,6 +47,7 @@ namespace Castor3D
 
 		m_ambientLight.SetValue( rgba_float( p_camera.GetScene()->GetAmbientLight() ) );
 		m_backgroundColour.SetValue( rgba_float( p_camera.GetScene()->GetBackgroundColour() ) );
+		m_cameraNearPlane.SetValue( p_camera.GetViewport().GetNear() );
 		m_cameraFarPlane.SetValue( p_camera.GetViewport().GetFar() );
 		UpdateCameraPosition( p_camera );
 	}
