@@ -1,4 +1,4 @@
-#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
+﻿#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
@@ -67,8 +67,32 @@ namespace GlRender
 		m_glAttachmentPoint = GlAttachmentPoint::eNone;
 	}
 
-	void GlCubeTextureFaceAttachment::DoClear( BufferComponent p_component )const
+	void GlCubeTextureFaceAttachment::DoClear( Colour const & p_colour )const
 	{
-		GetOpenGl().Clear( GetOpenGl().GetComponents( p_component ) );
+		GetOpenGl().ClearBuffer( GlComponent::eColour
+			, GetAttachmentIndex()
+			, p_colour.const_ptr() );
+	}
+
+	void GlCubeTextureFaceAttachment::DoClear( float p_depth )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eDepth
+			, GetAttachmentIndex()
+			, &p_depth );
+	}
+
+	void GlCubeTextureFaceAttachment::DoClear( int p_stencil )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eStencil
+			, GetAttachmentIndex()
+			, &p_stencil );
+	}
+
+	void GlCubeTextureFaceAttachment::DoClear( float p_depth, int p_stencil )const
+	{
+		GetOpenGl().ClearBuffer( GlComponent::eDepthStencil
+			, GetAttachmentIndex()
+			, p_depth
+			, p_stencil );
 	}
 }

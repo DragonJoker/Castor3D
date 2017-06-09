@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -87,7 +87,19 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoClear
 		 */
-		void DoClear( Castor3D::BufferComponent p_component )const override;
+		void DoClear( Castor::Colour const & p_colour )const override;
+		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		 */
+		void DoClear( float p_depth )const override;
+		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		 */
+		void DoClear( int p_stencil )const override;
+		/**
+		*\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		*/
+		void DoClear( float p_depth, int p_stencil )const override;
 
 	private:
 		GlTexDim m_glFace;

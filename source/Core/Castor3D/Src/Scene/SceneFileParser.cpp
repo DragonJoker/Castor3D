@@ -1,4 +1,4 @@
-#include "SceneFileParser.hpp"
+﻿#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -438,7 +438,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), Parser_RenderTargetPostEffect, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), Parser_RenderTargetToneMapping, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "ssao" ), Parser_RenderTargetSsao );
-	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "samples_count" ), Parser_RenderTargetSamplesCount, { MakeParameter< ParameterType::eInt16 >() } );
 	AddParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), Parser_RenderTargetEnd );
 
 	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );

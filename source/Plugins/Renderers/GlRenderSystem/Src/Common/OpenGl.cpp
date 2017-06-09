@@ -430,6 +430,10 @@ namespace GlRender
 		ComparisonModes[uint32_t( Castor3D::ComparisonMode::eNone )] = GlCompareMode::eNone;
 		ComparisonModes[uint32_t( Castor3D::ComparisonMode::eRefToTexture )] = GlCompareMode::eRefToTexture;
 
+		Components[Castor3D::AttachmentPoint::eColour] = GlComponent::eColour;
+		Components[Castor3D::AttachmentPoint::eDepth] = GlComponent::eDepth;
+		Components[Castor3D::AttachmentPoint::eStencil] = GlComponent::eStencil;
+
 		Cleanup();
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
@@ -738,6 +742,9 @@ namespace GlRender
 			gl_api::GetFunction( m_pfnFramebufferTexture3D, cuT( "glFramebufferTexture3D" ), cuT( "ARB" ) );
 			gl_api::GetFunction( m_pfnFramebufferTextureLayer, cuT( "glFramebufferTextureLayer" ), cuT( "ARB" ) );
 			gl_api::GetFunction( m_pfnCheckFramebufferStatus, cuT( "glCheckFramebufferStatus" ), cuT( "ARB" ) );
+			gl_api::GetFunction( m_pfnClearBufferfv, cuT( "glClearBufferfv" ), cuT( "ARB" ) );
+			gl_api::GetFunction( m_pfnClearBufferiv, cuT( "glClearBufferiv" ), cuT( "ARB" ) );
+			gl_api::GetFunction( m_pfnClearBufferfi, cuT( "glClearBufferfi" ), cuT( "ARB" ) );
 		}
 		else if ( HasExtension( EXT_framebuffer_object ) )
 		{
@@ -762,6 +769,9 @@ namespace GlRender
 			gl_api::GetFunction( m_pfnFramebufferTexture3D, cuT( "glFramebufferTexture3D" ), cuT( "EXT" ) );
 			gl_api::GetFunction( m_pfnFramebufferTextureLayer, cuT( "glFramebufferTextureLayer" ), cuT( "EXT" ) );
 			gl_api::GetFunction( m_pfnCheckFramebufferStatus, cuT( "glCheckFramebufferStatus" ), cuT( "EXT" ) );
+			gl_api::GetFunction( m_pfnClearBufferfv, cuT( "glClearBufferfv" ), cuT( "EXT" ) );
+			gl_api::GetFunction( m_pfnClearBufferiv, cuT( "glClearBufferiv" ), cuT( "EXT" ) );
+			gl_api::GetFunction( m_pfnClearBufferfi, cuT( "glClearBufferfi" ), cuT( "EXT" ) );
 		}
 
 		if ( HasExtension( ARB_sampler_objects ) )

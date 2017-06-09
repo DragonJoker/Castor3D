@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -401,7 +401,8 @@ namespace GlRender
 		inline PixelFmt const & Get( Castor::PixelFormat p_pixelFormat )const;
 		inline GlShaderType Get( Castor3D::ShaderType p_type )const;
 		inline GlInternal GetInternal( Castor::PixelFormat p_format )const;
-		inline Castor::FlagCombination< GlBufferBit > GetComponents( Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const;
+		inline Castor::FlagCombination< GlBufferBit > GetComponents( Castor3D::BufferComponents const & p_components )const;
+		inline GlComponent GetComponent( Castor3D::AttachmentPoint p_component )const;
 		inline GlAttachmentPoint Get( Castor3D::AttachmentPoint p_eAttachment )const;
 		inline GlFrameBufferMode Get( Castor3D::FrameBufferTarget p_target )const;
 		inline GlInternal GetRboStorage( Castor::PixelFormat p_pixelFormat )const;
@@ -732,9 +733,19 @@ namespace GlRender
 		inline void GetRenderbufferParameteriv( GlRenderBufferMode p_eBindingMode, GlRenderBufferParameter param, int * value )const;
 		inline void BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, GlInterpolationMode filter )const;
 		inline void BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, uint32_t mask, GlInterpolationMode filter )const;
-		inline void BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, GlComponent mask, GlInterpolationMode filter )const;
-		inline void BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, GlComponent mask, GlInterpolationMode filter )const;
 		inline void DrawBuffers( int n, const uint32_t * bufs )const;
+
+		/** see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glClearBuffer.xhtml
+		*/
+		inline void ClearBuffer( GlComponent buffer, uint32_t id, float const * values )const;
+
+		/** see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glClearBuffer.xhtml
+		*/
+		inline void ClearBuffer( GlComponent buffer, uint32_t id, int const * values )const;
+
+		/** see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glClearBuffer.xhtml
+		*/
+		inline void ClearBuffer( GlComponent buffer, uint32_t id, float depth, int stencil )const;
 
 		//@}
 		/**@name Uniform variable Functions */
@@ -983,6 +994,7 @@ namespace GlRender
 		std::array< bool, size_t( Castor3D::WritingMask::eCount ) > WriteMasks;
 		std::array< GlComparator, size_t( Castor3D::DepthFunc::eCount ) > DepthFuncs;
 		std::map< GlAttachmentPoint, GlBufferBinding > BuffersTA;
+		std::map< Castor3D::AttachmentPoint, GlComponent > Components;
 
 		bool m_bHasVao{ false };
 		bool m_bHasUbo{ false };
@@ -1193,6 +1205,9 @@ namespace GlRender
 		GlFunction< void, uint32_t, uint32_t , uint32_t , uint32_t , int , int > m_pfnFramebufferTexture3D;
 		GlFunction< void, int, int , int , int , int , int , int , int , uint32_t , uint32_t > m_pfnBlitFramebuffer;
 		GlFunction< void, int, uint32_t const * > m_pfnDrawBuffers;
+		GlFunction< void, uint32_t, uint32_t, float const * > m_pfnClearBufferfv;
+		GlFunction< void, uint32_t, uint32_t, int const * > m_pfnClearBufferiv;
+		GlFunction< void, uint32_t, uint32_t, float, int > m_pfnClearBufferfi;
 
 		//@}
 		/**@name RBO */

@@ -85,7 +85,8 @@ parse_subdir_files( Shader "Shader" )
 parse_subdir_files( ShadowMap "ShadowMap" )
 parse_subdir_files( State "State" )
 parse_subdir_files( Technique "Technique" )
-parse_subdir_files( Technique/Deferred "Technique\\\\Deferred" )
+parse_subdir_files( Technique/Opaque "Technique\\\\Opaque" )
+parse_subdir_files( Technique/Transparent "Technique\\\\Transparent" )
 parse_subdir_files( Texture "Texture" )
 
 set( CastorMinLibraries

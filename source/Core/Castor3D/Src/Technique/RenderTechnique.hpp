@@ -27,18 +27,12 @@ SOFTWARE.
 #include "Miscellaneous/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
-#include "Technique/Deferred/CombinePass.hpp"
-#include "Technique/Deferred/LightingPass.hpp"
-#include "Technique/Deferred/ReflectionPass.hpp"
+#include "Technique/Opaque/DeferredRendering.hpp"
+#include "Technique/Transparent/WeightedBlendRendering.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Rectangle.hpp>
-
-#if defined( CASTOR_COMPILER_MSVC )
-#	pragma warning( push )
-#	pragma warning( disable:4503 )
-#endif
 
 namespace Castor3D
 {
@@ -224,72 +218,10 @@ namespace Castor3D
 		 */
 		inline bool IsMultisampling()const
 		{
-			return m_msaa.m_samplesCount > 1;
+			return false;
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Renders opaque nodes.
-		 *\param[out]	p_info	Receives the render informations.
-		 *\~french
-		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
-		 */
-		void DoRenderOpaque( RenderInfo & p_info );
-		/**
-		 *\~english
-		 *\brief		Renders transparent nodes.
-		 *\param[out]	p_info	Receives the render informations.
-		 *\~french
-		 *\brief		Dessine les noeuds transparents.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
-		 */
-		void DoRenderTransparent( RenderInfo & p_info );
-		/**
-		 *\~english
-		 *\brief		Initialises deferred rendering related stuff.
-		 *\return		\p false if anything went wrong (the technique is then not usable).
-		 *\~french
-		 *\brief		Initialise les données liées au deferred rendering.
-		 *\return		\p false si un problème est survenu, la technique est alors inutilisable.
-		 */
-		bool DoInitialiseDeferred( uint32_t & p_index );
-		/**
-		 *\~english
-		 *\brief		Initialises MSAA related stuff.
-		 *\return		\p false if anything went wrong (the technique is then not usable).
-		 *\~french
-		 *\brief		Initialise les données liées au MSAA.
-		 *\return		\p false si un problème est survenu, la technique est alors inutilisable.
-		 */
-		bool DoInitialiseMsaa();
-		/**
-		 *\~english
-		 *\brief		Destroys deferred rendering related stuff.
-		 *\~french
-		 *\brief		Détruit les données liées au deferred rendering.
-		 */
-		void DoCleanupDeferred();
-		/**
-		 *\~english
-		 *\brief		Destroys MSAA related stuff.
-		 *\~french
-		 *\brief		Détruit les données liées au MSAA.
-		 */
-		void DoCleanupMsaa();
-		bool DoInitialiseGeometryPass( uint32_t & p_index );
-		void DoCleanupGeometryPass();
-		void DoRenderLights( LightType p_type
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj
-			, bool & p_first );
-
-	private:
-		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
-		using GeometryBufferAttachs = std::array< TextureAttachmentSPtr, size_t( DsTexture::eCount ) >;
-
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
@@ -299,36 +231,6 @@ namespace Castor3D
 		//!\~english	The render system.
 		//!\~french		Le render system.
 		RenderSystem & m_renderSystem;
-		struct
-		{
-			//!\~english	The depth buffer.
-			//!\~french		Le tampon de profondeur.
-			RenderBufferSPtr m_lightPassDepthBuffer;
-			//!\~english	The attachment between depth buffer and deferred shading frame buffer.
-			//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
-			RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
-			//!\~english	The multisampled frame buffer.
-			//!\~french		Le tampon d'image multisamplé
-			FrameBufferSPtr m_frameBuffer;
-			//!\~english	The buffer receiving the multisampled color render.
-			//!\~french		Le tampon recevant le rendu couleur multisamplé.
-			ColourRenderBufferSPtr m_colorBuffer;
-			//!\~english	The buffer receiving the multisampled depth render.
-			//!\~french		Le tampon recevant le rendu profondeur multisamplé.
-			DepthStencilRenderBufferSPtr m_depthBuffer;
-			//!\~english	The attach between multisampled colour buffer and multisampled frame buffer.
-			//!\~french		L'attache entre le tampon couleur multisamplé et le tampon multisamplé.
-			RenderBufferAttachmentSPtr m_colorAttach;
-			//!\~english	The attach between multisampled depth buffer and multisampled frame buffer.
-			//!\~french		L'attache entre le tampon profondeur multisamplé et le tampon multisamplé.
-			RenderBufferAttachmentSPtr m_depthAttach;
-			//!\~english	The technique blit rectangle.
-			//!\~french		Le rectangle de blit de la technique.
-			Castor::Rectangle m_rect;
-			//!\~english	The samples count.
-			//!\~french		Le nombre de samples.
-			uint8_t m_samplesCount{ 0 };
-		} m_msaa;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
 		Castor::Size m_size;
@@ -344,38 +246,13 @@ namespace Castor3D
 		//!\~english	The SSAO configuration.
 		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
-		//!\~english	The uniform buffer containing the scene data.
-		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		SceneUbo m_sceneUbo;
-		//!\~english	The fog pass.
-		//!\~french		La passe de brouillard.
-		std::unique_ptr< LightingPass > m_lightingPass;
-		//!\~english	The combination pass.
-		//!\~french		La passe de combinaison.
-		std::unique_ptr< CombinePass > m_combinePass;
-		//!\~english	The reflection pass.
-		//!\~french		La passe de réflexion.
-		std::unique_ptr< ReflectionPass > m_reflection;
-		//!\~english	The various textures.
-		//!\~french		Les diverses textures.
-		GeometryBufferTextures m_geometryPassResult;
-		//!\~english	The deferred shading frame buffer.
-		//!\~french		Le tampon d'image pour le deferred shading.
-		FrameBufferSPtr m_geometryPassFrameBuffer;
-		//!\~english	The attachments between textures and deferred shading frame buffer.
-		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		GeometryBufferAttachs m_geometryPassTexAttachs;
-		//!\~english	The selected frame buffer.
-		//!\~french		Le tampon d'image sélectionné.
-		FrameBufferRPtr m_currentFrameBuffer{ nullptr };
-		//!\~english	The selected attach.
-		//!\~french		L'attache sélectionnée.
-		FrameBufferAttachmentRPtr m_currentDepthAttach{ nullptr };
+		//!\~english	The deferred rendering used for opaque meshes.
+		//!\~french		Le rendu différé utilisé pour les maillages opaques.
+		std::unique_ptr< DeferredRendering > m_deferredRendering;
+		//!\~english	The weighted blend rendering used for transparent meshes.
+		//!\~french		Le rendu weighted blend utilisé pour les maillages transparents.
+		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 	};
 }
-
-#if defined( CASTOR_COMPILER_MSVC )
-#	pragma warning( pop )
-#endif
 
 #endif

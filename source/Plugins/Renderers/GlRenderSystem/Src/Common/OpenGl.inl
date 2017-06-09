@@ -1,4 +1,4 @@
-#include <Log/Logger.hpp>
+﻿#include <Log/Logger.hpp>
 #include <Graphics/Position.hpp>
 #include <Graphics/Rectangle.hpp>
 #include <Graphics/Size.hpp>
@@ -587,13 +587,18 @@ namespace GlRender
 		return Internals[uint32_t( p_format )];
 	}
 
-	inline Castor::FlagCombination< GlBufferBit > OpenGl::GetComponents( Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const
+	inline Castor::FlagCombination< GlBufferBit > OpenGl::GetComponents( Castor3D::BufferComponents const & p_components )const
 	{
 		Castor::FlagCombination< GlBufferBit > l_return;
 		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eColour ) ? GlBufferBit::eColour : GlBufferBit( 0u ) );
 		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eDepth ) ? GlBufferBit::eDepth : GlBufferBit( 0u ) );
 		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eStencil ) ? GlBufferBit::eStencil : GlBufferBit( 0u ) );
 		return l_return;
+	}
+
+	inline GlComponent OpenGl::GetComponent( Castor3D::AttachmentPoint p_component )const
+	{
+		return Components.at( p_component );
 	}
 
 	inline GlAttachmentPoint OpenGl::Get( Castor3D::AttachmentPoint p_eAttachment )const
@@ -1738,19 +1743,24 @@ namespace GlRender
 		EXEC_FUNCTION( BlitFramebuffer, rcSrc.left(), rcSrc.top(), rcSrc.right(), rcSrc.bottom(), rcDst.left(), rcDst.top(), rcDst.right(), rcDst.bottom(), mask, uint32_t( filter ) );
 	}
 
-	void OpenGl::BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, GlComponent mask, GlInterpolationMode filter )const
-	{
-		EXEC_FUNCTION( BlitFramebuffer, srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, uint32_t( mask ), uint32_t( filter ) );
-	}
-
-	void OpenGl::BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, GlComponent mask, GlInterpolationMode filter )const
-	{
-		EXEC_FUNCTION( BlitFramebuffer, rcSrc.left(), rcSrc.top(), rcSrc.right(), rcSrc.bottom(), rcDst.left(), rcDst.top(), rcDst.right(), rcDst.bottom(), uint32_t( mask ), uint32_t( filter ) );
-	}
-
 	void OpenGl::DrawBuffers( int n, const uint32_t * bufs )const
 	{
 		EXEC_FUNCTION( DrawBuffers, n, bufs );
+	}
+
+	void OpenGl::ClearBuffer( GlComponent buffer, uint32_t id, float const * values )const
+	{
+		return EXEC_FUNCTION( ClearBufferfv, uint32_t( buffer ), id, values );
+	}
+
+	void OpenGl::ClearBuffer( GlComponent buffer, uint32_t id, int const * values )const
+	{
+		return EXEC_FUNCTION( ClearBufferiv, uint32_t( buffer ), id, values );
+	}
+
+	void OpenGl::ClearBuffer( GlComponent buffer, uint32_t id, float depth, int stencil )const
+	{
+		return EXEC_FUNCTION( ClearBufferfi, uint32_t( buffer ), id, depth, stencil );
 	}
 
 	GlFramebufferStatus OpenGl::CheckFramebufferStatus( GlFrameBufferMode p_target )const

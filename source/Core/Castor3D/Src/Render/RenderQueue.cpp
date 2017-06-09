@@ -1,4 +1,4 @@
-#if defined( CASTOR_COMPILER_MSVC )
+﻿#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -353,7 +353,7 @@ namespace Castor3D
 							if ( l_submesh->GetRefCount( l_material ) > 1
 								&& !l_mesh
 								&& !l_skeleton
-								&& ( !l_pass->HasAlphaBlending() || p_renderPass.IsMultisampling() )
+								&& ( !l_pass->HasAlphaBlending() || p_renderPass.IsOrderIndependent() )
 								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing()
 								&& !l_pass->HasEnvironmentMapping() )
 							{
@@ -604,7 +604,7 @@ namespace Castor3D
 		}
 	}
 	
-	SceneRenderNodes & RenderQueue::GetRenderNodes()
+	SceneRenderNodes & RenderQueue::GetRenderNodes()const
 	{
 		if ( m_camera )
 		{

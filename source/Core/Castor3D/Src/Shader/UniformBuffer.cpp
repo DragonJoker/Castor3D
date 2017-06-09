@@ -1,4 +1,4 @@
-﻿#include "UniformBuffer.hpp"
+#include "UniformBuffer.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -303,7 +303,7 @@ namespace Castor3D
 			}
 			else
 			{
-				Logger::LogWarning( cuT( "The variable [" ) + l_variable->GetName() + cuT( "]was not found in the binding." ) );
+				Logger::LogWarning( cuT( "The variable [" ) + l_variable->GetName() + cuT( "] was not found in the binding." ) );
 			}
 		}
 

@@ -1,13 +1,15 @@
-﻿#include "RenderTarget.hpp"
+#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
+#include "HDR/ToneMapping.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/PassBuffer.hpp"
+#include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 

@@ -1,4 +1,4 @@
-﻿#include "PickingPass.hpp"
+#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -181,7 +181,7 @@ namespace Castor3D
 	}
 
 	PickingPass::PickingPass( Engine & p_engine )
-		: RenderPass{ cuT( "Picking" ), p_engine, true, false, nullptr }
+		: RenderPass{ cuT( "Picking" ), p_engine, nullptr }
 		, m_pickingUbo{ Picking, *p_engine.GetRenderSystem() }
 	{
 		m_pickingUbo.CreateUniform( UniformType::eUInt, DrawIndex );

@@ -12,6 +12,7 @@
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderWindow.hpp"
 #include "Scene/SceneFileParser.hpp"
+#include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 
 #include <Miscellaneous/DynamicLibrary.hpp>
@@ -124,7 +125,7 @@ namespace Castor3D
 				, Parameters const & p_parameters
 				, SsaoConfig const & p_config )
 			{
-				return m_techniqueFactory.Create( p_type, p_renderTarget, *GetRenderSystem(), p_parameters, p_config );
+				return std::make_shared< RenderTechnique >( p_name, p_renderTarget, *GetRenderSystem(), p_parameters, p_config );
 			}
 			, l_dummy
 			, l_dummy

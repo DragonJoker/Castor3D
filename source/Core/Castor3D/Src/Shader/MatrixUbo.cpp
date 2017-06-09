@@ -1,4 +1,4 @@
-#include "MatrixUbo.hpp"
+﻿#include "MatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -13,6 +13,7 @@ namespace Castor3D
 		: m_ubo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
 		, m_view{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxView ) }
 		, m_projection{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxProjection ) }
+		, m_invProjection{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxInvProjection ) }
 	{
 	}
 
@@ -25,12 +26,14 @@ namespace Castor3D
 	{
 		m_view.SetValue( p_view );
 		m_projection.SetValue( p_projection );
+		m_invProjection.SetValue( p_projection.get_inverse() );
 		m_ubo.Update();
 	}
 
 	void MatrixUbo::Update( Matrix4x4r const & p_projection )const
 	{
 		m_projection.SetValue( p_projection );
+		m_invProjection.SetValue( p_projection.get_inverse() );
 		m_ubo.Update();
 	}
 }

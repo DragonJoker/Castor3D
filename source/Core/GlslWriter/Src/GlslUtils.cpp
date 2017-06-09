@@ -96,6 +96,26 @@ namespace GLSL
 			, InVec3{ &m_writer, cuT( "p_sRGB" ) } );
 	}
 
+	void Utils::DeclareLineariseDepth()
+	{
+		m_lineariseDepth = m_writer.ImplementFunction< Float >( cuT( "LineariseDepth" )
+			, [&]( Float const & p_depth
+				, Mat4 const & p_invProj )
+			{
+				auto c3d_fCameraNearPlane = m_writer.GetBuiltin< Float >( cuT( "c3d_fCameraNearPlane" ) );
+				auto c3d_fCameraFarPlane = m_writer.GetBuiltin< Float >( cuT( "c3d_fCameraFarPlane" ) );
+				auto l_z = m_writer.DeclLocale( cuT( "l_z" )
+					, p_depth *2.0_f - 1.0_f );
+				auto l_unprojected = m_writer.DeclLocale( cuT( "l_unprojected" )
+					, p_invProj * vec4( 0.0_f, 0.0_f, l_z, 1.0_f ) );
+				l_z = l_unprojected.z() / l_unprojected.w();
+				m_writer.Return( m_writer.Paren( l_z - c3d_fCameraNearPlane )
+					/ m_writer.Paren( c3d_fCameraFarPlane - c3d_fCameraNearPlane ) );
+
+			}, InFloat{ &m_writer, cuT( "p_depth" ) }
+			, InMat4{ &m_writer, cuT( "p_invProj" ) } );
+	}
+
 	Vec2 Utils::CalcTexCoord()
 	{
 		return m_calcTexCoord();
@@ -129,5 +149,10 @@ namespace GLSL
 		, Vec3 const & p_sRGB )
 	{
 		return m_removeGamma( p_gamma, p_sRGB );
+	}
+
+	Float Utils::LineariseDepth( Float const & p_depth, Mat4 const & p_invProj )
+	{
+		return m_lineariseDepth( p_depth, p_invProj );
 	}
 }

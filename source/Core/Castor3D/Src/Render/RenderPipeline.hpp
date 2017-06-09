@@ -214,6 +214,7 @@ namespace Castor3D
 		C3D_API static const Castor::String MtxProjection;
 		C3D_API static const Castor::String MtxModel;
 		C3D_API static const Castor::String MtxView;
+		C3D_API static const Castor::String MtxInvProjection;
 		C3D_API static const Castor::String MtxNormal;
 		C3D_API static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 

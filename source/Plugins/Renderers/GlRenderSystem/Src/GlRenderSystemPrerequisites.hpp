@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -397,9 +397,10 @@ namespace GlRender
 	enum class GlComponent
 		: uint32_t
 	{
-		eColour = 0x1900,
-		eStencil = 0x1901,
-		eDepth = 0x1902,
+		eColour = 0x1800,
+		eDepth = 0x1801,
+		eStencil = 0x1802,
+		eDepthStencil = 0x84F9,
 	};
 
 	enum class GlBufferTarget

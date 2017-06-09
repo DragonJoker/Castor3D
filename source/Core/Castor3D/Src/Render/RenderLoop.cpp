@@ -4,6 +4,7 @@
 
 #include "Overlay/DebugOverlays.hpp"
 #include "Render/RenderWindow.hpp"
+#include "Technique/RenderTechnique.hpp"
 
 #include <Design/BlockGuard.hpp>
 
