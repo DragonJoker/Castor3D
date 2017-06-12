@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -56,28 +56,28 @@ namespace Castor3D
 	{
 		//!\~english Always take texture colour
 		//!\~french Prend toujours la couleur de la texture
-		eAlways,
+		eAlways = 0x0,
 		//!\~english Takes texture colour if alpha is less than given value
 		//!\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnée
-		eLess,
+		eLess = 0x1,
 		//!\~english Takes texture colour if alpha is less than or equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est inferieur ou egal a la valeur donnée
-		eLEqual,
+		eLEqual = 0x2,
 		//!\~english Takes texture colour if alpha is equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnée
-		eEqual,
+		eEqual = 0x3,
 		//!\~english Takes texture colour if alpha is different of given value
 		//!\~french Prend la couleur de la texture si l'alpha est different de la valeur donnée
-		eNEqual,
+		eNEqual = 0x4,
 		//!\~english Takes texture colour if alpha is grater than or equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est superieur ou egal a la valeur donnée
-		eGEqual,
+		eGEqual = 0x5,
 		//!\~english Takes texture colour if alpha is greater than given value
 		//!\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnée
-		eGreater,
+		eGreater = 0x6,
 		//!\~english Never take texture colour
 		//!\~french Ne prend jamais la couleur de la texture
-		eNever,
+		eNever = 0x7,
 		CASTOR_SCOPED_ENUM_BOUNDS( eAlways )
 	};
 	/*!

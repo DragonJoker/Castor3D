@@ -456,7 +456,8 @@ namespace Castor3D
 
 	String PickingPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();

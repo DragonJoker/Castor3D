@@ -148,7 +148,8 @@ namespace Castor3D
 		 */
 		C3D_API Castor::String GetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const;
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const;
 		/**
 		 *\~english
 		 *\return		The sorted shadow mapping passes.
@@ -236,7 +237,8 @@ namespace Castor3D
 		 */
 		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const = 0;
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const = 0;
 
 	protected:
 		//!\~english	The frame buffer.

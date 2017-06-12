@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -43,6 +43,7 @@ namespace GLSL
 		GlslWriter_API Int GetReflection( Int const & p_index )const;
 		GlslWriter_API Float GetGamma( Int const & p_index )const;
 		GlslWriter_API Float GetExposure( Int const & p_index )const;
+		GlslWriter_API Float GetAlphaRef( Int const & p_index )const;
 
 	protected:
 		GlslWriter_API void DoDeclare( int p_offsetRR, int p_indexRR
@@ -50,7 +51,8 @@ namespace GLSL
 			, int p_offsetRL, int p_indexRL
 			, int p_offsetOP, int p_indexOP
 			, int p_offsetGM, int p_indexGM
-			, int p_offsetEX, int p_indexEX );
+			, int p_offsetEX, int p_indexEX
+			, int p_offsetAR, int p_indexAR );
 
 	private:
 		// Materials are aligned on vec4, so the size of a material
@@ -70,6 +72,7 @@ namespace GLSL
 		Function< Float, InInt > m_opacity;
 		Function< Float, InInt > m_gamma;
 		Function< Float, InInt > m_exposure;
+		Function< Float, InInt > m_alphaRef;
 	};
 
 	class LegacyMaterials

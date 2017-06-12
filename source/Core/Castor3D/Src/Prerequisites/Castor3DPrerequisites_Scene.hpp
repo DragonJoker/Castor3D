@@ -42,25 +42,25 @@ namespace Castor3D
 	{
 		//!\~english	No flag.
 		//!\~french		Aucun indicateur.
-		eNone = 0x0000,
+		eNone = 0x000,
 		//!\~english	Linear fog.
 		//!\~french		Brouillard linéaire.
-		eFogLinear = 0x0001,
+		eFogLinear = 0x001,
 		//!\~english	Exponential fog.
 		//!\~french		Brouillard exponentiel.
-		eFogExponential = 0x0002,
+		eFogExponential = 0x002,
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
-		eFogSquaredExponential = 0x0003,
+		eFogSquaredExponential = 0x003,
 		//!\~english	No filtering.
 		//!\~french		Pas de filtrage.
-		eShadowFilterRaw = 0x0004,
+		eShadowFilterRaw = 0x004,
 		//!\~english	Poisson filtering.
 		//!\~french		Filtrage poisson.
-		eShadowFilterPoisson = 0x0008,
+		eShadowFilterPoisson = 0x008,
 		//!\~english	Stratified poisson filtering.
 		//!\~french		Filtrage poisson stratifié.
-		eShadowFilterStratifiedPoisson = 0x000C,
+		eShadowFilterStratifiedPoisson = 0x00C,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	IMPLEMENT_FLAGS( SceneFlag )

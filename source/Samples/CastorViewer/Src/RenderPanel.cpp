@@ -70,16 +70,7 @@ namespace CastorViewer
 		{
 			TextureUnitSPtr l_clone = std::make_shared< TextureUnit >( *p_clone->GetOwner()->GetEngine() );
 
-			l_clone->SetAlphaBlend( p_source.GetAlphaBlendMode()
-				, p_source.GetAlphaBlendArgument( BlendSrcIndex::eIndex0 )
-				, p_source.GetAlphaBlendArgument( BlendSrcIndex::eIndex1 ) );
-			l_clone->SetRgbBlend( p_source.GetRgbBlendMode()
-				, p_source.GetRgbBlendArgument( BlendSrcIndex::eIndex0 )
-				, p_source.GetRgbBlendArgument( BlendSrcIndex::eIndex1 ) );
-			l_clone->SetAlphaFunc( p_source.GetAlphaFunc() );
-			l_clone->SetAlphaValue( p_source.GetAlphaValue() );
 			l_clone->SetAutoMipmaps( p_source.GetAutoMipmaps() );
-			l_clone->SetBlendColour( p_source.GetBlendColour() );
 			l_clone->SetChannel( p_source.GetChannel() );
 			l_clone->SetIndex( p_source.GetIndex() );
 			l_clone->SetRenderTarget( p_source.GetRenderTarget() );
@@ -112,6 +103,8 @@ namespace CastorViewer
 			l_clone->SetTwoSided( p_source.IsTwoSided() );
 			l_clone->SetAlphaBlendMode( p_source.GetAlphaBlendMode() );
 			l_clone->SetColourBlendMode( p_source.GetColourBlendMode() );
+			l_clone->SetAlphaFunc( p_source.GetAlphaFunc() );
+			l_clone->SetAlphaValue( p_source.GetAlphaValue() );
 
 			for ( auto const & l_unit : p_source )
 			{

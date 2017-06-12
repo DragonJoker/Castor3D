@@ -163,7 +163,8 @@ namespace Castor3D
 
 	String ShadowMapSpot::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

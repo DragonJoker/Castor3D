@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -88,6 +88,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_alphaFunc		The alpha test function.
 		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
 		 *\return		The found or created program.
 		 *\~french
@@ -96,15 +97,16 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr GetAutomaticProgram(
-			RenderPass const & p_renderPass,
-			TextureChannels const & p_textureFlags,
-			ProgramFlags const & p_programFlags,
-			SceneFlags const & p_sceneFlags,
-			bool p_invertNormals );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass
+			, TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc
+			, bool p_invertNormals );
 		/**
 		 *\~english
 		 *\brief		Creates the textures related frame variables.
@@ -210,6 +212,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	TextureChannel combination.
 		 *\param[in]	p_programFlags	ProgramFlag combination.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_alphaFunc		The alpha test function.
 		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
 		 *\return		The found or created program.
 		 *\~french
@@ -218,15 +221,16 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	TextureChannel combination.
 		 *\param[in]	p_programFlags	ProgramFlag combination.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr DoCreateAutomaticProgram(
-			RenderPass const & p_renderPass,
-			TextureChannels const & p_textureFlags,
-			ProgramFlags const & p_programFlags,
-			SceneFlags const & p_sceneFlags,
-			bool p_invertNormals )const;
+		C3D_API ShaderProgramSPtr DoCreateAutomaticProgram( RenderPass const & p_renderPass
+			, TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc
+			, bool p_invertNormals )const;
 		/**
 		 *\~english
 		 *\brief		Adds an automatically generated shader program corresponding to given flags.
@@ -234,6 +238,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	TextureChannel combination.
 		 *\param[in]	p_programFlags	ProgramFlag combination.
 		 *\param[in]	p_sceneFlags	The scene flags (fog, ...).
+		 *\param[in]	p_alphaFunc		The alpha test function.
 		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
 		 *\return		The found program.
 		 *\~french
@@ -242,15 +247,16 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs de la scène (brouillard, ...).
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API void DoAddAutomaticProgram(
-			ShaderProgramSPtr p_program,
-			TextureChannels const & p_textureFlags,
-			ProgramFlags const & p_programFlags,
-			SceneFlags const & p_sceneFlags,
-			bool p_invertNormals );
+		C3D_API void DoAddAutomaticProgram( ShaderProgramSPtr p_program
+			, TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc
+			, bool p_invertNormals );
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for billboards rendering use.
@@ -258,6 +264,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	TextureChannel combination.
 		 *\param[in]	p_programFlags	ProgramFlag combination.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_alphaFunc		The alpha test function.
 		 *\return		The created program.
 		 *\~french
 		 *\brief		Crée un programme shader pour les rendu de billboards.
@@ -265,32 +272,35 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr DoCreateBillboardProgram(
-			RenderPass const & p_renderPass,
-			TextureChannels const & p_textureFlags,
-			ProgramFlags const & p_programFlags,
-			SceneFlags const & p_sceneFlags )const;
+		C3D_API ShaderProgramSPtr DoCreateBillboardProgram( RenderPass const & p_renderPass
+			, TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const;
 		/**
 		 *\~english
 		 *\brief		Adds a billboards shader program corresponding to given flags.
 		 *\param[in]	p_program		The program to add.
 		 *\param[in]	p_textureFlags	TextureChannel combination.
 		 *\param[in]	p_programFlags	ProgramFlag combination.
+		 *\param[in]	p_alphaFunc		The alpha test function.
 		 *\return		The found program.
 		 *\~french
 		 *\brief		Ajoute un programme de billboards correspondant aux flags donnés.
 		 *\param[in]	p_program		Le programme à ajouter.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API void DoAddBillboardProgram(
-			ShaderProgramSPtr p_program,
-			TextureChannels const & p_textureFlags,
-			ProgramFlags const & p_programFlags,
-			SceneFlags const & p_sceneFlags );
+		C3D_API void DoAddBillboardProgram( ShaderProgramSPtr p_program
+			 ,TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc );
 
 	private:
 		DECLARE_MAP( uint64_t, ShaderProgramWPtr, ShaderProgramWPtrUInt64 );

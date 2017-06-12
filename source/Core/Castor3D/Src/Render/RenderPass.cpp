@@ -1,4 +1,4 @@
-﻿#include "RenderPass.hpp"
+#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -22,6 +22,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		template< typename MapType, typename FuncType >
@@ -316,6 +318,8 @@ namespace Castor3D
 		}
 	}
 
+	//*********************************************************************************************
+
 	RenderPass::RenderPass( String const & p_name
 		, Engine & p_engine
 		, SceneNode const * p_ignored )
@@ -393,25 +397,35 @@ namespace Castor3D
 		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
 	{
-		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
+		return DoGetVertexShaderSource( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags
+			, p_invertNormals );
 	}
 
 	String RenderPass::GetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		return DoGetPixelShaderSource( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags
+			, p_alphaFunc );
 	}
 
 	String RenderPass::GetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
 	{
-		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		return DoGetGeometryShaderSource( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags );
 	}
 
 	void RenderPass::PreparePipeline( BlendMode p_colourBlendMode
 		, BlendMode p_alphaBlendMode
+		, ComparisonFunc p_alphaFunc
 		, TextureChannels & p_textureFlags
 		, ProgramFlags & p_programFlags
 		, SceneFlags & p_sceneFlags
@@ -430,11 +444,19 @@ namespace Castor3D
 				p_alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
+			auto l_backProgram = DoGetProgram( p_textureFlags
+				, p_programFlags
+				, p_sceneFlags
+				, p_alphaFunc
+				, false );
 
 			if ( !m_opaque )
 			{
-				auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
+				auto l_frontProgram = DoGetProgram( p_textureFlags
+					, p_programFlags
+					, p_sceneFlags
+					, p_alphaFunc
+					, true );
 				auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
 				DoPrepareFrontPipeline( *l_frontProgram, l_flags );
 				DoPrepareBackPipeline( *l_backProgram, l_flags );
@@ -445,7 +467,11 @@ namespace Castor3D
 
 				if ( p_twoSided || CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
+					auto l_frontProgram = DoGetProgram( p_textureFlags
+						, p_programFlags
+						, p_sceneFlags
+						, p_alphaFunc
+						, true );
 					DoPrepareFrontPipeline( *l_frontProgram, l_flags );
 				}
 
@@ -456,6 +482,7 @@ namespace Castor3D
 
 	RenderPipeline * RenderPass::GetPipelineFront( BlendMode p_colourBlendMode
 		, BlendMode p_alphaBlendMode
+		, ComparisonFunc p_alphaFunc
 		, TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
@@ -478,6 +505,7 @@ namespace Castor3D
 
 	RenderPipeline * RenderPass::GetPipelineBack( BlendMode p_colourBlendMode
 		, BlendMode p_alphaBlendMode
+		, ComparisonFunc p_alphaFunc
 		, TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
@@ -618,9 +646,15 @@ namespace Castor3D
 	ShaderProgramSPtr RenderPass::DoGetProgram( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc
 		, bool p_invertNormals )const
 	{
-		return GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *this, p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
+		return GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *this
+			, p_textureFlags
+			, p_programFlags
+			, p_sceneFlags
+			, p_alphaFunc
+			, p_invertNormals );
 	}
 
 	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes

@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser_Parsers.hpp"
+#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -2755,6 +2755,26 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlphaFunc )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pass )
+		{
+			PARSING_ERROR( cuT( "No Pass initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			uint32_t l_uiFunc;
+			float l_fFloat;
+			p_params[0]->Get( l_uiFunc );
+			p_params[1]->Get( l_fFloat );
+			l_parsingContext->pass->SetAlphaFunc( ComparisonFunc( l_uiFunc ) );
+			l_parsingContext->pass->SetAlphaValue( l_fFloat );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassRefractionRatio )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2861,72 +2881,6 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eRenderTarget )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitAlphaFunc )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pTextureUnit )
-		{
-			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			uint32_t l_uiFunc;
-			float l_fFloat;
-			p_params[0]->Get( l_uiFunc );
-			p_params[1]->Get( l_fFloat );
-			l_parsingContext->pTextureUnit->SetAlphaFunc( ComparisonFunc( l_uiFunc ) );
-			l_parsingContext->pTextureUnit->SetAlphaValue( l_fFloat );
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitRgbBlend )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pTextureUnit )
-		{
-			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			uint32_t l_arg1;
-			uint32_t l_arg2;
-			uint32_t l_mode;
-			p_params[0]->Get( l_mode );
-			p_params[1]->Get( l_arg1 );
-			p_params[2]->Get( l_arg2 );
-			l_parsingContext->pTextureUnit->SetRgbBlend( TextureBlendFunc( l_mode )
-				, BlendSource( l_arg1 )
-				, BlendSource( l_arg2 ) );
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitAlphaBlend )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pTextureUnit )
-		{
-			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			uint32_t l_arg1;
-			uint32_t l_arg2;
-			uint32_t l_mode;
-			p_params[0]->Get( l_mode );
-			p_params[1]->Get( l_arg1 );
-			p_params[2]->Get( l_arg2 );
-			l_parsingContext->pTextureUnit->SetAlphaBlend( TextureBlendFunc( l_mode )
-				, BlendSource( l_arg1 )
-				, BlendSource( l_arg2 ) );
-		}
-	}
-	END_ATTRIBUTE()
-
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitChannel )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2965,23 +2919,6 @@ namespace Castor3D
 			{
 				PARSING_ERROR( cuT( "Unknown sampler : [" ) + l_name + cuT( "]" ) );
 			}
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitBlendColour )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pTextureUnit )
-		{
-			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			Colour l_clrColour;
-			p_params[0]->Get( l_clrColour );
-			l_parsingContext->pTextureUnit->SetBlendColour( l_clrColour );
 		}
 	}
 	END_ATTRIBUTE()

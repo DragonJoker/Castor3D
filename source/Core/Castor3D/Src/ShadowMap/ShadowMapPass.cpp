@@ -131,10 +131,12 @@ namespace Castor3D
 
 	String ShadowMapPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
 	{
 		return m_shadowMap.GetPixelShaderSource( p_textureFlags
 			, p_programFlags
-			, p_sceneFlags );
+			, p_sceneFlags
+			, p_alphaFunc );
 	}
 }

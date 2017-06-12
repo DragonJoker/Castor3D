@@ -149,50 +149,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The alpha function.
-		 *\~french
-		 *\return		La fonction d'alpha.
-		 */
-		inline Castor3D::ComparisonFunc GetAlphaFunc()const
-		{
-			return m_alphaFunc;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the alpha function.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la fonction d'alpha.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetAlphaFunc( Castor3D::ComparisonFunc p_value )
-		{
-			m_alphaFunc = p_value;
-		}
-		/**
-		 *\~english
-		 *\return		The alpha reference value.
-		 *\~french
-		 *\return		La valeur de référence pour l'alpha.
-		 */
-		inline float GetAlphaValue()const
-		{
-			return m_alphaValue;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the alpha reference value.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de référence pour l'alpha.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetAlphaValue( float p_value )
-		{
-			m_alphaValue = p_value;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the texture channel.
 		 *\return		The value.
 		 *\~french
@@ -239,28 +195,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The blend colour.
-		 *\~french
-		 *\return		La couleur de mélange.
-		 */
-		inline const Castor::Colour	& GetBlendColour()const
-		{
-			return m_blendColour;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the blend colour.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la couleur de mélange.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetBlendColour( const Castor::Colour & p_value )
-		{
-			m_blendColour = p_value;
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the target holding the texture.
 		 *\param[in]	p_value	The new value.
 		 *\~french
@@ -292,146 +226,6 @@ namespace Castor3D
 		inline SamplerSPtr GetSampler()const
 		{
 			return m_sampler.lock();
-		}
-		/**
-		 *\~english
-		 *\return		The RGB blending function.
-		 *\~french
-		 *\return		La fonction de mélange RGB.
-		 */
-		inline Castor3D::TextureBlendFunc GetRgbBlendMode()const
-		{
-			return m_rgbBlendMode;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets RGB blending function.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit fonction de mélange RGB.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetRgbBlendMode( Castor3D::TextureBlendFunc p_value )
-		{
-			m_rgbBlendMode = p_value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets RGB blending mode.
-		 *\param[in]	p_mode		The new mode.
-		 *\param[in]	p_first		The first operand.
-		 *\param[in]	p_second	The second operand.
-		 *\~french
-		 *\brief		Définit le mode de mélange RGB.
-		 *\param[in]	p_mode		Le nouveau mode.
-		 *\param[in]	p_first		Le premier opérande.
-		 *\param[in]	p_second	Le second opérande.
-		 */
-		inline void SetRgbBlend( Castor3D::TextureBlendFunc p_mode
-			, BlendSource p_first
-			, BlendSource p_second )
-		{
-			m_rgbBlendMode = p_mode;
-			m_rgbBlendArguments[0u] = p_first;
-			m_rgbBlendArguments[1u] = p_second;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the RGB blend parameter.
-		 *\param[in]	p_index	The parameter index.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère le paramètre de mélange RGB.
-		 *\param[in]	p_index	L'index du paramètre.
-		 *\return		La valeur.
-		 */
-		inline BlendSource GetRgbBlendArgument( BlendSrcIndex p_index )const
-		{
-			return m_rgbBlendArguments[uint32_t( p_index )];
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the RGB blend parameter.
-		 *\param[in]	p_index	The parameter index.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit le paramètre de mélange RGB.
-		 *\param[in]	p_index	L'index du paramètre.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetRgbBlendArgument( BlendSrcIndex p_index, BlendSource p_value )
-		{
-			m_rgbBlendArguments[uint32_t( p_index )] = p_value;
-		}
-		/**
-		 *\~english
-		 *\return		The alpha blending function.
-		 *\~french
-		 *\return		La fonction de mélange d'alpha.
-		 */
-		inline Castor3D::TextureBlendFunc GetAlphaBlendMode()const
-		{
-			return m_alphaBlendMode;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the alpha blending function.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la fonction de mélange d'alpha.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetAlphaBlendMode( Castor3D::TextureBlendFunc p_value )
-		{
-			m_alphaBlendMode = p_value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets alpha blending mode.
-		 *\param[in]	p_mode		The new mode.
-		 *\param[in]	p_first		The first operand.
-		 *\param[in]	p_second	The second operand.
-		 *\~french
-		 *\brief		Définit le mode de mélange alpha.
-		 *\param[in]	p_mode		Le nouveau mode.
-		 *\param[in]	p_first		Le premier opérande.
-		 *\param[in]	p_second	Le second opérande.
-		 */
-		inline void SetAlphaBlend( Castor3D::TextureBlendFunc p_mode
-			, BlendSource p_first
-			, BlendSource p_second )
-		{
-			m_alphaBlendMode = p_mode;
-			m_alphaBlendArguments[0u] = p_first;
-			m_alphaBlendArguments[1u] = p_second;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Alpha blend parameter.
-		 *\param[in]	p_index	The parameter index.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère le paramètre de mélange Alpha.
-		 *\param[in]	p_index	L'index du paramètre.
-		 *\return		La valeur.
-		 */
-		inline BlendSource GetAlphaBlendArgument( BlendSrcIndex p_index )const
-		{
-			return m_alphaBlendArguments[uint32_t( p_index )];
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the Alpha blend parameter.
-		 *\param[in]	p_index	The parameter index.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit le paramètre de mélange Alpha.
-		 *\param[in]	p_index	L'index du paramètre.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetAlphaBlendArgument( BlendSrcIndex p_index, BlendSource p_value )
-		{
-			m_alphaBlendArguments[uint32_t( p_index )] = p_value;
 		}
 		/**
 		 *\~english
@@ -485,24 +279,6 @@ namespace Castor3D
 		//\~english		The unit channel inside it's pass.
 		//!\~french		Le canal de l'unité dans sa passe.
 		TextureChannel m_channel;
-		//!\~english	The reference alpha value for alpha comparison.
-		//!\~french		La valeur d'alpha de référence pour la comparaison d'alpha.
-		float m_alphaValue;
-		//!\~english	The alpha function for alpha comparison.
-		//!\~french		La fonction d'alpha utilisée lors de la comparaison d'alpha.
-		ComparisonFunc m_alphaFunc;
-		//!\~english	The RGB blending parameters.
-		//!\~french		Les paramètres de mélange RGB.
-		BlendSource m_rgbBlendArguments[uint32_t( BlendSrcIndex::eCount )];
-		//!\~english	The Alpha blending parameters.
-		//!\~french		Les paramètres de mélange Alpha.
-		BlendSource m_alphaBlendArguments[uint32_t( BlendSrcIndex::eCount )];
-		//!\~english	The RGB blending function.
-		//!\~french		La fonction de mélange RGB.
-		TextureBlendFunc m_rgbBlendMode;
-		//!\~english	The Alpha blending function.
-		//!\~french		La fonction de mélange Alpha.
-		TextureBlendFunc m_alphaBlendMode;
 		//!\~english	The unit transformations.
 		//!\~french		Les transformations de l'unité.
 		Castor::Matrix4x4r m_transformations;
@@ -515,9 +291,6 @@ namespace Castor3D
 		//!\~english	The sampler state assigned to this unit.
 		//!\~french		Le sampler state affecté à cette unité.
 		SamplerWPtr m_sampler;
-		//!\~english	The blend colour when it is enabled.
-		//!\~french		Couleur de mélange lorsque celui-ci est actif.
-		Castor::Colour m_blendColour;
 		//!\~english	Tells mipmaps must be regenerated after each texture data change.
 		//!\~french		Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture.
 		bool m_autoMipmaps;
@@ -537,7 +310,7 @@ namespace Castor3D
 	 *\param[in]		p_texture	La texture.
 	 *\return			Une référence sur le flux.
 	 */
-	inline std::ostream & operator <<( std::ostream & p_streamOut, TextureUnitSPtr const & p_texture )
+	inline std::ostream & operator<<( std::ostream & p_streamOut, TextureUnitSPtr const & p_texture )
 	{
 		p_streamOut << p_texture->GetIndex();
 		return p_streamOut;

@@ -1,4 +1,4 @@
-﻿#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -109,6 +109,7 @@ namespace Castor3D
 			{
 				auto l_pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
+					, p_pass.GetAlphaFunc()
 					, p_textureFlags
 					, p_programFlags
 					, p_sceneFlags );
@@ -122,6 +123,7 @@ namespace Castor3D
 
 			auto l_pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 				, p_pass.GetAlphaBlendMode()
+				, p_pass.GetAlphaFunc()
 				, p_textureFlags
 				, p_programFlags
 				, p_sceneFlags );
@@ -201,6 +203,7 @@ namespace Castor3D
 					{
 						auto l_pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 							, p_pass.GetAlphaBlendMode()
+							, p_pass.GetAlphaFunc()
 							, p_textureFlags
 							, p_programFlags
 							, p_sceneFlags );
@@ -214,6 +217,7 @@ namespace Castor3D
 
 					auto l_pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
+						, p_pass.GetAlphaFunc()
 						, p_textureFlags
 						, p_programFlags
 						, p_sceneFlags );
@@ -228,6 +232,7 @@ namespace Castor3D
 				{
 					auto l_pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
+						, p_pass.GetAlphaFunc()
 						, p_textureFlags
 						, p_programFlags
 						, p_sceneFlags );
@@ -240,6 +245,7 @@ namespace Castor3D
 
 					l_pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
+						, p_pass.GetAlphaFunc()
 						, p_textureFlags
 						, p_programFlags
 						, p_sceneFlags );
@@ -369,6 +375,7 @@ namespace Castor3D
 							auto l_textureFlags = l_pass->GetTextureFlags();
 							p_renderPass.PreparePipeline( l_pass->GetColourBlendMode()
 								, l_pass->GetAlphaBlendMode()
+								, l_pass->GetAlphaFunc()
 								, l_textureFlags
 								, l_programFlags
 								, l_sceneFlags
@@ -453,6 +460,7 @@ namespace Castor3D
 				auto l_textureFlags = p_pass.GetTextureFlags();
 				p_renderPass.PreparePipeline( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
+					, p_pass.GetAlphaFunc()
 					, l_textureFlags
 					, l_programFlags
 					, l_sceneFlags

@@ -1,4 +1,4 @@
-#include "FbxImporter.hpp"
+﻿#include "FbxImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
@@ -984,7 +984,6 @@ namespace C3dFbx
 		{
 			Logger::LogDebug( StringStream() << "    Texture: " << l_fbxtex->GetName() << cuT( " at channel " ) << TEXTURE_CHANNEL_NAME[p_channel] );
 			l_texture->SetChannel( p_channel );
-			l_texture->SetAlphaValue( float( l_fbxtex->Alpha ) );
 
 			static const WrapMode l_mode[2] =
 			{

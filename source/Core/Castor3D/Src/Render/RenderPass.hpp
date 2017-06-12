@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -164,15 +164,18 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_alphaFunc		The alpha test function.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 */
 		C3D_API Castor::String GetPixelShaderSource( TextureChannels const & p_textureFlags
-			,ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const;
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
@@ -193,6 +196,7 @@ namespace Castor3D
 		 *\brief		Prepares the pipeline matching the given flags.
 		 *\param[in]	p_colourBlendMode	The colour blend mode.
 		 *\param[in]	p_alphaBlendMode	The alpha blend mode.
+		 *\param[in]	p_alphaFunc			The alpha test function.
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
@@ -201,6 +205,7 @@ namespace Castor3D
 		 *\brief		Prépare le pipeline qui correspond aux indicateurs donnés.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_alphaBlendMode	Le mode de mélange alpha.
+		 *\param[in]	p_alphaFunc			La fonction de test alpha.
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
@@ -208,6 +213,7 @@ namespace Castor3D
 		 */
 		C3D_API void PreparePipeline( BlendMode p_colourBlendMode
 			, BlendMode p_alphaBlendMode
+			, ComparisonFunc p_alphaFunc
 			, TextureChannels & p_textureFlags
 			, ProgramFlags & p_programFlags
 			, SceneFlags & p_sceneFlags
@@ -217,6 +223,7 @@ namespace Castor3D
 		 *\brief		Retrieves the pipeline matching the given flags, for front face culling.
 		 *\param[in]	p_colourBlendMode	The colour blend mode.
 		 *\param[in]	p_alphaBlendMode	The alpha blend mode.
+		 *\param[in]	p_alphaFunc			The alpha test function.
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
@@ -225,6 +232,7 @@ namespace Castor3D
 		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés, pour les faces avant supprimées.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_alphaBlendMode	Le mode de mélange alpha.
+		 *\param[in]	p_alphaFunc			La fonction de test alpha.
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
@@ -232,6 +240,7 @@ namespace Castor3D
 		 */
 		C3D_API RenderPipeline * GetPipelineFront( BlendMode p_colourBlendMode
 			, BlendMode p_alphaBlendMode
+			, ComparisonFunc p_alphaFunc
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const;
@@ -240,6 +249,7 @@ namespace Castor3D
 		 *\brief		Retrieves the pipeline matching the given flags, for back face culling.
 		 *\param[in]	p_colourBlendMode	The colour blend mode.
 		 *\param[in]	p_alphaBlendMode	The alpha blend mode.
+		 *\param[in]	p_alphaFunc			The alpha test function.
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
@@ -248,6 +258,7 @@ namespace Castor3D
 		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_alphaBlendMode	Le mode de mélange alpha.
+		 *\param[in]	p_alphaFunc			La fonction de test alpha.
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
@@ -255,6 +266,7 @@ namespace Castor3D
 		 */
 		C3D_API RenderPipeline * GetPipelineBack( BlendMode p_colourBlendMode
 			, BlendMode p_alphaBlendMode
+			, ComparisonFunc p_alphaFunc
 			, TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const;
@@ -411,17 +423,20 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_alphaFunc		The alpha test function.
 		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le programme shader correspondant aux flags donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
 		C3D_API ShaderProgramSPtr DoGetProgram( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc
 			, bool p_invertNormals )const;
 		/**
 		 *\~english
@@ -852,15 +867,18 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_alphaFunc		The alpha test function.
 		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux indicateurs donnés.
+		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 */
 		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const = 0;
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.

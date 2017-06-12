@@ -117,14 +117,20 @@ namespace Castor3D
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
 	{
-		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		return DoGetGeometryShaderSource( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags );
 	}
 
 	String ShadowMap::GetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		return DoGetPixelShaderSource( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags
+			, p_alphaFunc );
 	}
 
 	String ShadowMap::DoGetVertexShaderSource( TextureChannels const & p_textureFlags

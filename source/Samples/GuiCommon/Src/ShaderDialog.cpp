@@ -90,6 +90,7 @@ namespace GuiCommon
 						, m_pass.GetTextureFlags()
 						, m_pass.GetProgramFlags()
 						, m_scene.GetFlags()
+						, m_pass.GetAlphaFunc()
 						, false );
 					m_bOwnShader = true;
 				}
