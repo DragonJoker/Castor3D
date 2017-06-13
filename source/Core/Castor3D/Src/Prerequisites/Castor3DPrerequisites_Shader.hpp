@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -179,6 +179,9 @@ namespace Castor3D
 		//!\~english	Shader used to render an environment map.
 		//\~french		Shader utilisé pour dessiner une texture d'environnement.
 		eEnvironmentMapping = 0x1000,
+		//!\~english	Shader using alpha test.
+		//\~french		Shader utilisant un test alpha.
+		eAlphaTest = 0x2000,
 	};
 	IMPLEMENT_FLAGS( ProgramFlag )
 	/**

@@ -121,7 +121,7 @@ namespace Castor3D
 			// TODO: store gamma correction and exposure per pass ? or remove from pass
 			, NeedsGammaCorrection() ? 2.2f : 1.0f //gamma correction
 			, 1.0f //exposure
-			, 0.0f );
+			, GetAlphaValue() );
 	}
 
 	void LegacyPass::DoSetOpacity( float p_value )

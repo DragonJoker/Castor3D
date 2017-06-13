@@ -18,7 +18,8 @@ namespace GLSL
 		, int p_offsetRL, int p_indexRL
 		, int p_offsetOP, int p_indexOP
 		, int p_offsetGM, int p_indexGM
-		, int p_offsetEX, int p_indexEX )
+		, int p_offsetEX, int p_indexEX
+		, int p_offsetAR, int p_indexAR )
 	{
 		auto c3d_materials = m_writer.DeclUniform< SamplerBuffer >( PassBufferName );
 		
@@ -92,6 +93,12 @@ namespace GLSL
 			{
 				m_writer.Return( m_float( p_index, Int( p_offsetEX ), Int( p_indexEX ) ) );
 			}, InInt{ &m_writer, cuT( "p_index" ) } );
+
+		m_alphaRef = m_writer.ImplementFunction< Float >( cuT( "Mat_GetAlphaRef" )
+			, [this, p_offsetAR, p_indexAR]( Int const & p_index )
+			{
+				m_writer.Return( m_float( p_index, Int( p_offsetAR ), Int( p_indexAR ) ) );
+			}, InInt{ &m_writer, cuT( "p_index" ) } );
 	}
 
 	Float Materials::GetRefractionRatio( Int const & p_index )const
@@ -124,6 +131,11 @@ namespace GLSL
 		return m_exposure( p_index );
 	}
 
+	Float Materials::GetAlphaRef( Int const & p_index )const
+	{
+		return m_alphaRef( p_index );
+	}
+
 	//*********************************************************************************************
 
 	LegacyMaterials::LegacyMaterials( GlslWriter & p_writer )
@@ -139,6 +151,7 @@ namespace GLSL
 			, 0, 3
 			, 3, 1
 			, 3, 2
+			, 3, 3
 		);
 		m_diffuse = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetDiffuse" )
 			, [this]( Int const & p_index )

@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -233,7 +233,8 @@ namespace Castor3D
 
 	String OpaquePass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -261,6 +262,7 @@ namespace Castor3D
 		auto c3d_mapNormal( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapSpecular( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
 		auto c3d_mapEmissive( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && p_alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapGloss( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
 		auto c3d_mapEnvironment( l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ) );
@@ -319,6 +321,64 @@ namespace Castor3D
 				, CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
 				, c3d_envMapIndex
 				, l_flags );
+
+			if ( p_alphaFunc != ComparisonFunc::eAlways
+				&& CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+			{
+				auto l_alpha = l_writer.DeclLocale( cuT( "l_alpha" )
+					, texture( c3d_mapOpacity, l_texCoord.xy() ).r() );
+
+				switch ( p_alphaFunc )
+				{
+				case ComparisonFunc::eLess:
+					IF( l_writer, l_alpha >= l_materials.GetAlphaRef( vtx_material ) )
+					{
+						l_writer.Discard();
+					}
+					FI;
+					break;
+
+				case ComparisonFunc::eLEqual:
+					IF( l_writer, l_alpha > l_materials.GetAlphaRef( vtx_material ) )
+					{
+						l_writer.Discard();
+					}
+					FI;
+					break;
+
+				case ComparisonFunc::eEqual:
+					IF( l_writer, l_alpha != l_materials.GetAlphaRef( vtx_material ) )
+					{
+						l_writer.Discard();
+					}
+					FI;
+					break;
+
+				case ComparisonFunc::eNEqual:
+					IF( l_writer, l_alpha == l_materials.GetAlphaRef( vtx_material ) )
+					{
+						l_writer.Discard();
+					}
+					FI;
+					break;
+
+				case ComparisonFunc::eGEqual:
+					IF( l_writer, l_alpha < l_materials.GetAlphaRef( vtx_material ) )
+					{
+						l_writer.Discard();
+					}
+					FI;
+					break;
+
+				case ComparisonFunc::eGreater:
+					IF( l_writer, l_alpha <= l_materials.GetAlphaRef( vtx_material ) )
+					{
+						l_writer.Discard();
+					}
+					FI;
+					break;
+				}
+			}
 
 			out_c3dNormal = vec4( l_v3Normal, l_flags );
 			out_c3dDiffuse = vec4( l_v3Diffuse, 0.0_f );

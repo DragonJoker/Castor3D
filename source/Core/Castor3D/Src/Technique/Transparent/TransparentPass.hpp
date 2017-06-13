@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -217,7 +217,8 @@ namespace Castor3D
 		 */
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */

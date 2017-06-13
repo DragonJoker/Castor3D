@@ -395,8 +395,7 @@ namespace GlRender
 		inline GlWrapMode Get( Castor3D::WrapMode p_eWrapMode )const;
 		inline GlInterpolationMode Get( Castor3D::InterpolationMode p_interpolation )const;
 		inline GlBlendSource Get( Castor3D::BlendSource p_eArgument )const;
-		inline GlBlendFunc Get( Castor3D::ColourBlendFunc p_mode )const;
-		inline GlBlendFunc Get( Castor3D::AlphaBlendFunc p_mode )const;
+		inline GlBlendFunc Get( Castor3D::TextureBlendFunc p_mode )const;
 		inline GlBlendFactor Get( Castor3D::BlendOperand p_eBlendFactor )const;
 		inline PixelFmt const & Get( Castor::PixelFormat p_pixelFormat )const;
 		inline GlShaderType Get( Castor3D::ShaderType p_type )const;
@@ -972,8 +971,7 @@ namespace GlRender
 		std::array< GlInterpolationMode, size_t( Castor3D::InterpolationMode::eCount ) > TextureInterpolation;
 		std::array< GlBlendFactor, size_t( Castor3D::BlendOperand::eCount ) > BlendFactors;
 		std::array< GlBlendSource, size_t( Castor3D::BlendSource::eCount ) > TextureArguments;
-		std::array< GlBlendFunc, size_t( Castor3D::ColourBlendFunc::eCount ) > RgbBlendFuncs;
-		std::array< GlBlendFunc, size_t( Castor3D::AlphaBlendFunc::eCount ) > AlphaBlendFuncs;
+		std::array< GlBlendFunc, size_t( Castor3D::TextureBlendFunc::eCount ) > TextureBlendFuncs;
 		std::array< GlBlendOp, size_t( Castor3D::BlendOperation::eCount ) > BlendOps;
 		std::array< PixelFmt, size_t( Castor::PixelFormat::eCount ) > PixelFormats;
 		std::array< GlShaderType, size_t( Castor3D::ShaderType::eCount ) > ShaderTypes;

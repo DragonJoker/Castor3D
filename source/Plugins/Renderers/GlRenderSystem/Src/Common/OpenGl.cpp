@@ -1,4 +1,4 @@
-﻿#include "Common/OpenGl.hpp"
+#include "Common/OpenGl.hpp"
 
 #include "Render/GlRenderSystem.hpp"
 
@@ -217,23 +217,13 @@ namespace GlRender
 		TextureArguments[uint32_t( Castor3D::BlendSource::eDiffuse )] = GlBlendSource::eColour;
 		TextureArguments[uint32_t( Castor3D::BlendSource::ePrevious )] = GlBlendSource::ePrevious;
 
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eNoBlend )] = GlBlendFunc::eModulate;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eFirstArg )] = GlBlendFunc::eReplace;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eAdd )] = GlBlendFunc::eAdd;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eAddSigned )] = GlBlendFunc::eAddSigned;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eModulate )] = GlBlendFunc::eModulate;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eInterpolate )] = GlBlendFunc::eInterpolate;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eSubtract )] = GlBlendFunc::eSubtract;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eDot3RGB )] = GlBlendFunc::eDot3RGB;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::eDot3RGBA )] = GlBlendFunc::eDot3RGBA;
-
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::eNoBlend )] = GlBlendFunc::eModulate;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::eFirstArg )] = GlBlendFunc::eReplace;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::eAdd )] = GlBlendFunc::eAdd;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::eAddSigned )] = GlBlendFunc::eAddSigned;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::eModulate )] = GlBlendFunc::eModulate;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::eInterpolate )] = GlBlendFunc::eInterpolate;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::eSubtract )] = GlBlendFunc::eSubtract;
+		TextureBlendFuncs[uint32_t( Castor3D::TextureBlendFunc::eNoBlend )] = GlBlendFunc::eModulate;
+		TextureBlendFuncs[uint32_t( Castor3D::TextureBlendFunc::eFirstArg )] = GlBlendFunc::eReplace;
+		TextureBlendFuncs[uint32_t( Castor3D::TextureBlendFunc::eAdd )] = GlBlendFunc::eAdd;
+		TextureBlendFuncs[uint32_t( Castor3D::TextureBlendFunc::eAddSigned )] = GlBlendFunc::eAddSigned;
+		TextureBlendFuncs[uint32_t( Castor3D::TextureBlendFunc::eModulate )] = GlBlendFunc::eModulate;
+		TextureBlendFuncs[uint32_t( Castor3D::TextureBlendFunc::eInterpolate )] = GlBlendFunc::eInterpolate;
+		TextureBlendFuncs[uint32_t( Castor3D::TextureBlendFunc::eSubtract )] = GlBlendFunc::eSubtract;
 
 		BlendOps[uint32_t( Castor3D::BlendOperation::eAdd )] = GlBlendOp::eAdd;
 		BlendOps[uint32_t( Castor3D::BlendOperation::eSubtract )] = GlBlendOp::eSubtract;

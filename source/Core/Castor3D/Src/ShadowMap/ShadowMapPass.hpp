@@ -169,7 +169,8 @@ namespace Castor3D
 		 */
 		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const override;
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const override;
 
 	protected:
 		//!\~english	The parent shadow map.

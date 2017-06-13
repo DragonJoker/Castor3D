@@ -1,4 +1,4 @@
-﻿#include "RenderPanel.hpp"
+#include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 #include "RotateNodeEvent.hpp"
@@ -70,21 +70,10 @@ namespace CastorViewer
 		{
 			TextureUnitSPtr l_clone = std::make_shared< TextureUnit >( *p_clone->GetOwner()->GetEngine() );
 
-			l_clone->SetAlpArgument( BlendSrcIndex::eIndex0, p_source.GetAlpArgument( BlendSrcIndex::eIndex0 ) );
-			l_clone->SetAlpArgument( BlendSrcIndex::eIndex1, p_source.GetAlpArgument( BlendSrcIndex::eIndex1 ) );
-			l_clone->SetAlpArgument( BlendSrcIndex::eIndex2, p_source.GetAlpArgument( BlendSrcIndex::eIndex2 ) );
-			l_clone->SetAlpFunction( p_source.GetAlpFunction() );
-			l_clone->SetAlphaFunc( p_source.GetAlphaFunc() );
-			l_clone->SetAlphaValue( p_source.GetAlphaValue() );
 			l_clone->SetAutoMipmaps( p_source.GetAutoMipmaps() );
-			l_clone->SetBlendColour( p_source.GetBlendColour() );
 			l_clone->SetChannel( p_source.GetChannel() );
 			l_clone->SetIndex( p_source.GetIndex() );
 			l_clone->SetRenderTarget( p_source.GetRenderTarget() );
-			l_clone->SetRgbArgument( BlendSrcIndex::eIndex0, p_source.GetRgbArgument( BlendSrcIndex::eIndex0 ) );
-			l_clone->SetRgbArgument( BlendSrcIndex::eIndex1, p_source.GetRgbArgument( BlendSrcIndex::eIndex1 ) );
-			l_clone->SetRgbArgument( BlendSrcIndex::eIndex2, p_source.GetRgbArgument( BlendSrcIndex::eIndex2 ) );
-			l_clone->SetRgbFunction( p_source.GetRgbFunction() );
 			l_clone->SetSampler( p_source.GetSampler() );
 			l_clone->SetTexture( p_source.GetTexture() );
 
@@ -114,6 +103,8 @@ namespace CastorViewer
 			l_clone->SetTwoSided( p_source.IsTwoSided() );
 			l_clone->SetAlphaBlendMode( p_source.GetAlphaBlendMode() );
 			l_clone->SetColourBlendMode( p_source.GetColourBlendMode() );
+			l_clone->SetAlphaFunc( p_source.GetAlphaFunc() );
+			l_clone->SetAlphaValue( p_source.GetAlphaValue() );
 
 			for ( auto const & l_unit : p_source )
 			{

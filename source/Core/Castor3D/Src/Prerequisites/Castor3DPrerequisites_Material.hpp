@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -56,28 +56,28 @@ namespace Castor3D
 	{
 		//!\~english Always take texture colour
 		//!\~french Prend toujours la couleur de la texture
-		eAlways,
+		eAlways = 0x0,
 		//!\~english Takes texture colour if alpha is less than given value
 		//!\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnée
-		eLess,
+		eLess = 0x1,
 		//!\~english Takes texture colour if alpha is less than or equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est inferieur ou egal a la valeur donnée
-		eLEqual,
+		eLEqual = 0x2,
 		//!\~english Takes texture colour if alpha is equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnée
-		eEqual,
+		eEqual = 0x3,
 		//!\~english Takes texture colour if alpha is different of given value
 		//!\~french Prend la couleur de la texture si l'alpha est different de la valeur donnée
-		eNEqual,
+		eNEqual = 0x4,
 		//!\~english Takes texture colour if alpha is grater than or equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est superieur ou egal a la valeur donnée
-		eGEqual,
+		eGEqual = 0x5,
 		//!\~english Takes texture colour if alpha is greater than given value
 		//!\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnée
-		eGreater,
+		eGreater = 0x6,
 		//!\~english Never take texture colour
 		//!\~french Ne prend jamais la couleur de la texture
-		eNever,
+		eNever = 0x7,
 		CASTOR_SCOPED_ENUM_BOUNDS( eAlways )
 	};
 	/*!
@@ -197,46 +197,7 @@ namespace Castor3D
 	\~french
 	\brief		Enumération de fonctions de mélange RGB
 	*/
-	enum class ColourBlendFunc
-		: uint8_t
-	{
-		//!\~english No blend
-		//!\~french Pas de mélange
-		eNoBlend,
-		//!\~english Arg0
-		//!\~french Arg0
-		eFirstArg,
-		//!\~english Arg0 + Arg1
-		//!\~french Arg0 + Arg1
-		eAdd,
-		//!\~english Arg0 + Arg1 - 0.5
-		//!\~french Arg0 + Arg1 - 0.5
-		eAddSigned,
-		//!\~english Arg0 x Arg1
-		//!\~french Arg0 x Arg1
-		eModulate,
-		//!\~english Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		//!\~french Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		eInterpolate,
-		//!\~english Arg0 - Arg1
-		//!\~french Arg0 - Arg1
-		eSubtract,
-		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)))
-		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)))
-		eDot3RGB,
-		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
-		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
-		eDot3RGBA,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Alpha blending functions enumeration
-	\~french
-	\brief		Enumération de fonctions de mélange alpha
-	*/
-	enum class AlphaBlendFunc
+	enum class TextureBlendFunc
 		: uint8_t
 	{
 		//!\~english No blend

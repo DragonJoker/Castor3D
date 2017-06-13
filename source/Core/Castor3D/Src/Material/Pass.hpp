@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -443,6 +443,50 @@ namespace Castor3D
 		{
 			m_id = p_value;
 		}
+		/**
+		 *\~english
+		 *\return		The alpha function.
+		 *\~french
+		 *\return		La fonction d'alpha.
+		 */
+		inline Castor3D::ComparisonFunc GetAlphaFunc()const
+		{
+			return m_alphaFunc;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the alpha function.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la fonction d'alpha.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetAlphaFunc( Castor3D::ComparisonFunc p_value )
+		{
+			m_alphaFunc = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The alpha reference value.
+		 *\~french
+		 *\return		La valeur de référence pour l'alpha.
+		 */
+		inline float GetAlphaValue()const
+		{
+			return m_alphaValue;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the alpha reference value.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la valeur de référence pour l'alpha.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetAlphaValue( float p_value )
+		{
+			m_alphaValue = p_value;
+		}
 
 	protected:
 		/**
@@ -568,6 +612,12 @@ namespace Castor3D
 		//!\~english	The colour blend mode.
 		//!\~french		Le mode de mélange couleur.
 		BlendMode m_colourBlendMode{ BlendMode::eNoBlend };
+		//!\~english	The reference alpha value for alpha comparison.
+		//!\~french		La valeur d'alpha de référence pour la comparaison d'alpha.
+		float m_alphaValue{ 0.0f };
+		//!\~english	The alpha function for alpha comparison.
+		//!\~french		La fonction d'alpha utilisée lors de la comparaison d'alpha.
+		ComparisonFunc m_alphaFunc{ ComparisonFunc::eAlways };
 		//!\~english	Tells if the pass' textures are reduced.
 		//!\~french		Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced{ false };

@@ -66,6 +66,7 @@ namespace GuiCommon
 					l_technique.GetTransparentPass().UpdateFlags( l_textureFlags, l_programFlags, l_sceneFlags );
 					l_pipeline = l_technique.GetTransparentPass().GetPipelineBack( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
+						, p_pass.GetAlphaFunc()
 						, l_textureFlags
 						, l_programFlags
 						, l_sceneFlags );
@@ -75,6 +76,7 @@ namespace GuiCommon
 					l_technique.GetOpaquePass().UpdateFlags( l_textureFlags, l_programFlags, l_sceneFlags );
 					l_pipeline = l_technique.GetOpaquePass().GetPipelineBack( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
+						, p_pass.GetAlphaFunc()
 						, l_textureFlags
 						, l_programFlags
 						, l_sceneFlags );

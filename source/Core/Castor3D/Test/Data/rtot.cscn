@@ -101,7 +101,6 @@ scene "FinalScene"
 					scene "TextureScene"
 					camera "TextureCamera"
 				}
-				colour 1.0 1.0 1.0 1.0
 				channel diffuse
 				sampler "Linear"
 			}

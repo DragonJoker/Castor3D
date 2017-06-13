@@ -1,4 +1,4 @@
-#include "Pass.hpp"
+﻿#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -65,6 +65,17 @@ namespace Castor3D
 
 	bool Pass::TextWriter::operator()( Pass const & p_pass, TextFile & p_file )
 	{
+		static std::map< ComparisonFunc, String > l_strAlphaFuncs
+		{
+			{ ComparisonFunc::eAlways, cuT( "always" ) },
+			{ ComparisonFunc::eLess, cuT( "less" ) },
+			{ ComparisonFunc::eLEqual, cuT( "less_or_equal" ) },
+			{ ComparisonFunc::eEqual, cuT( "equal" ) },
+			{ ComparisonFunc::eNEqual, cuT( "not_equal" ) },
+			{ ComparisonFunc::eGEqual, cuT( "greater_or_equal" ) },
+			{ ComparisonFunc::eGreater, cuT( "greater" ) },
+			{ ComparisonFunc::eNever, cuT( "never" ) },
+		};
 		static const String StrBlendModes[uint32_t( BlendMode::eCount )] =
 		{
 			cuT( "none" ),
@@ -99,6 +110,14 @@ namespace Castor3D
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( p_pass.GetAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass alpha blend mode" );
+		}
+
+		if ( l_return && p_pass.GetAlphaFunc() != ComparisonFunc::eAlways )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " )
+				+ l_strAlphaFuncs[p_pass.GetAlphaFunc()] + cuT( " " )
+				+ string::to_string( p_pass.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass alpha function" );
 		}
 
 		if ( l_return )
@@ -218,7 +237,8 @@ namespace Castor3D
 
 	bool Pass::HasAlphaBlending()const
 	{
-		return CheckFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f;
+		return ( CheckFlag( m_textureFlags, TextureChannel::eOpacity ) && GetAlphaFunc() == ComparisonFunc::eAlways )
+			|| m_opacity < 1.0f;
 	}
 
 	void Pass::PrepareTextures()
@@ -306,6 +326,11 @@ namespace Castor3D
 			&& !CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) )
 		{
 			AddFlag( l_result, ProgramFlag::eAlphaBlending );
+		}
+
+		if ( GetAlphaFunc() != ComparisonFunc::eAlways )
+		{
+			AddFlag( l_result, ProgramFlag::eAlphaTest );
 		}
 
 		return l_result;
