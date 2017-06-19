@@ -17,8 +17,11 @@ namespace castortd
 				eLongRange
 			};
 
-			Category( Kind p_kind )
+			Category( Kind p_kind
+				, Castor::String const & p_attackAnimName )
 				: m_kind{ p_kind }
+				, m_attackAnimName{ p_attackAnimName }
+				, m_attackAnimTime{}
 			{
 			}
 
@@ -32,9 +35,10 @@ namespace castortd
 				m_range.Upgrade();
 			}
 
-			inline void UpgradeSpeed()
+			inline float UpgradeSpeed()
 			{
 				m_cooldown.Upgrade();
+				return m_initialCooldown.count() / float( m_cooldown.GetValue().count() );
 			}
 
 			inline bool CanUpgradeDamage()
@@ -102,20 +106,38 @@ namespace castortd
 				return m_colour;
 			}
 
+			inline Castor::String const & GetAttackAnimationName()const
+			{
+				return m_attackAnimName;
+			}
+
+			inline std::chrono::milliseconds const & GetAttackAnimationTime()const
+			{
+				return m_attackAnimTime;
+			}
+
 			inline Kind const & GetKind()const
 			{
 				return m_kind;
+			}
+
+			inline void SetAttackAnimationTime( std::chrono::milliseconds const & p_time )
+			{
+				m_attackAnimTime = p_time;
 			}
 
 		protected:
 			Kind m_kind;
 			PaidAbility< uint32_t > m_damage;
 			PaidAbility< std::chrono::milliseconds > m_cooldown;
+			std::chrono::milliseconds m_initialCooldown;
 			PaidAbility< float > m_range;
 			float m_bulletSpeed{ 0.0f };
 			uint32_t m_towerCost{ 0u };
 			Castor::String m_material;
 			Castor::Colour m_colour;
+			Castor::String m_attackAnimName;
+			std::chrono::milliseconds m_attackAnimTime;
 		};
 
 		using CategoryPtr = std::unique_ptr< Category >;
@@ -124,10 +146,14 @@ namespace castortd
 		{
 			Idle,
 			Spotted,
+			Shooting,
 		};
 
 	public:
-		Tower( CategoryPtr && p_category, Castor3D::SceneNode & p_node, Cell const & p_cell );
+		Tower( CategoryPtr && p_category
+			, Castor3D::SceneNode & p_node
+			, Castor3D::AnimatedObjectGroup & p_anim
+			, Cell const & p_cell );
 		~Tower();
 
 		void Accept( Game & p_game );
@@ -197,18 +223,6 @@ namespace castortd
 			return uint32_t( m_category->GetSpeed().count() );
 		}
 
-	private:
-		bool LookForEnemy( EnemyArray & p_enemies );
-		bool CanShoot();
-		void Shoot( Game & p_game );
-
-		bool DoIsInRange( Enemy const & p_enemy )const;
-
-		inline Castor3D::SceneNode & GetNode()
-		{
-			return m_node;
-		}
-
 		inline void UpgradeDamage()
 		{
 			m_category->UpgradeDamage();
@@ -221,15 +235,33 @@ namespace castortd
 
 		inline void UpgradeSpeed()
 		{
-			m_category->UpgradeSpeed();
+			m_animScale = m_category->UpgradeSpeed();
+		}
+
+	private:
+		bool DoLookForEnemy( EnemyArray & p_enemies );
+		bool DoCanShoot();
+		void DoStartAttack();
+		bool DoAnimEnded( EnemyArray & p_enemies );
+		void DoShoot( Game & p_game );
+		void DoUpdateTimes( std::chrono::milliseconds const & p_elapsed );
+		bool DoIsInRange( Enemy const & p_enemy )const;
+		void DoTurnToTarget();
+
+		inline Castor3D::SceneNode & GetNode()
+		{
+			return m_node;
 		}
 
 	private:
 		Castor3D::SceneNode & m_node;
+		Castor3D::AnimatedObjectGroup & m_anim;
 		Cell const & m_cell;
 		State m_state{ State::Idle };
 		std::chrono::milliseconds m_remaining{ 0 };
+		std::chrono::milliseconds m_animRemain{ 0 };
 		EnemyPtr m_target{ nullptr };
 		CategoryPtr m_category;
+		float m_animScale{ 1.0f };
 	};
 }

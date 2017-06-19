@@ -6,7 +6,8 @@ using namespace Castor3D;
 namespace castortd
 {
 	LongRangeTower::LongRangeTower()
-		: Category{ Tower::Category::Kind::eLongRange }
+		: Category{ Tower::Category::Kind::eLongRange
+			, cuT( "armature_short_range.1|attack" ) }
 	{
 		auto l_costIncrement = []( uint32_t p_inc
 			, uint32_t p_value
@@ -45,8 +46,9 @@ namespace castortd
 			, std::bind( l_costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 )
 			, 15u );
 
-		m_cooldown.Initialise( std::chrono::milliseconds{ 1000u }
-			, std::bind( l_decrement, std::chrono::milliseconds{ 40u }, std::placeholders::_1, std::placeholders::_2 )
+		m_initialCooldown = std::chrono::milliseconds{ 6000u };
+		m_cooldown.Initialise( m_initialCooldown
+			, std::bind( l_decrement, std::chrono::milliseconds{ 240u }, std::placeholders::_1, std::placeholders::_2 )
 			, 200u
 			, std::bind( l_costIncrement, 20u, std::placeholders::_1, std::placeholders::_2 ) );
 
@@ -62,7 +64,8 @@ namespace castortd
 	}
 
 	ShortRangeTower::ShortRangeTower()
-		: Category{ Tower::Category::Kind::eShortRange }
+		: Category{ Tower::Category::Kind::eShortRange
+			, cuT( "armature_short_range.1|attack" ) }
 	{
 		auto l_costIncrement = []( uint32_t p_inc
 			, uint32_t p_value
@@ -100,8 +103,9 @@ namespace castortd
 			, 400u
 			, std::bind( l_costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 ) );
 
-		m_cooldown.Initialise( std::chrono::milliseconds{ 500u }
-			, std::bind( l_decrement, std::chrono::milliseconds{ 30u }, std::placeholders::_1, std::placeholders::_2 )
+		m_initialCooldown = std::chrono::milliseconds{ 1000u };
+		m_cooldown.Initialise( m_initialCooldown
+			, std::bind( l_decrement, std::chrono::milliseconds{ 50u }, std::placeholders::_1, std::placeholders::_2 )
 			, 150u
 			, std::bind( l_costIncrement, 10u, std::placeholders::_1, std::placeholders::_2 ) );
 

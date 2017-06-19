@@ -1,9 +1,14 @@
 ﻿#include "Game.hpp"
 
+#include <Cache/AnimatedObjectGroupCache.hpp>
 #include <Engine.hpp>
+#include <Animation/Animation.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
+#include <Mesh/Skeleton/Skeleton.hpp>
 #include <Scene/Geometry.hpp>
+#include <Scene/Animation/AnimatedObject.hpp>
+#include <Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Scene/Scene.hpp>
 #include <Scene/Light/PointLight.hpp>
 
@@ -16,7 +21,7 @@ namespace castortd
 	{
 #if defined( NDEBUG )
 		constexpr uint32_t InitialLives = 5u;
-		constexpr uint32_t InitialOre = 750u;
+		constexpr uint32_t InitialOre = 75000u;
 #else
 		constexpr uint32_t InitialLives = 1u;
 		constexpr uint32_t InitialOre = 75000u;
@@ -590,14 +595,54 @@ namespace castortd
 	{
 		String l_name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
 		auto l_node = m_scene.GetSceneNodeCache().Add( l_name );
-		l_node->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1] * 3.0_r / 2, 0 } );
+		l_node->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1], 0 } );
 		l_node->AttachTo( m_mapNode );
 		MeshSPtr l_mesh = DoSelectMesh( *p_category );
 		auto l_tower = m_scene.GetGeometryCache().Add( l_name, l_node, l_mesh );
+		auto l_animGroup = m_scene.GetAnimatedObjectGroupCache().Add( l_name );
+		std::chrono::milliseconds l_time{ 0 };
+
+		if ( !l_tower->GetAnimations().empty() )
+		{
+			auto l_object = l_animGroup->AddObject( *l_tower, l_tower->GetName() + cuT( "_Movable" ) );
+		}
+
+		if ( l_tower->GetMesh() )
+		{
+			auto l_mesh = l_tower->GetMesh();
+
+			if ( !l_mesh->GetAnimations().empty() )
+			{
+				auto l_object = l_animGroup->AddObject( *l_mesh, l_tower->GetName() + cuT( "_Mesh" ) );
+				l_time = std::max( l_time
+					, l_mesh->GetAnimation( p_category->GetAttackAnimationName() ).GetLength() );
+			}
+
+			auto l_skeleton = l_mesh->GetSkeleton();
+
+			if ( l_skeleton )
+			{
+				if ( !l_skeleton->GetAnimations().empty() )
+				{
+					auto l_object = l_animGroup->AddObject( *l_skeleton, l_tower->GetName() + cuT( "_Skeleton" ) );
+					l_time = std::max( l_time
+						, l_skeleton->GetAnimation( p_category->GetAttackAnimationName() ).GetLength() );
+				}
+			}
+		}
+
+		l_animGroup->AddAnimation( p_category->GetAttackAnimationName() );
+		l_animGroup->SetAnimationLooped( p_category->GetAttackAnimationName(), false );
 		DoUpdateMaterials( *l_tower
 			, p_category->GetKind()
 			, m_scene.GetMaterialView() );
 		p_cell.m_state = Cell::State::Tower;
+		p_category->SetAttackAnimationTime( l_time );
+		l_animGroup->StartAnimation( p_category->GetAttackAnimationName() );
+		l_animGroup->PauseAnimation( p_category->GetAttackAnimationName() );
+		l_node->SetScale( Point3r{ 0.15, 0.15, 0.15 } );
+		std::clog << "Animation time: " << l_time.count() << std::endl;
+		m_towers.push_back( std::make_shared< Tower >( std::move( p_category ), *l_node, *l_animGroup, p_cell ) );
 	}
 
 	void Game::DoGameOver()

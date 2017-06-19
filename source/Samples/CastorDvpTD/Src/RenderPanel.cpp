@@ -1,4 +1,4 @@
-﻿#include "RenderPanel.hpp"
+#include "RenderPanel.hpp"
 
 #include "CastorDvpTD.hpp"
 #include "Game.hpp"
@@ -22,26 +22,38 @@ namespace castortd
 {
 	namespace
 	{
-		typedef enum eMENU_ID
+		enum class MenuID
 		{
-			eMENU_ID_NEW_LR_TOWER = 1,
-			eMENU_ID_NEW_SR_TOWER,
-			eMENU_ID_UPGRADE_SPEED,
-			eMENU_ID_UPGRADE_RANGE,
-			eMENU_ID_UPGRADE_DAMAGE,
-		}	eMENU_ID;
+			eNewLRTower = 1,
+			eNewSRTower,
+			eUpgradeSpeed,
+			eUpgradeRange,
+			eUpgradeDamage,
+		};
+
+		static real const g_camSpeed = 10.0_r;
 	}
 
 	RenderPanel::RenderPanel( wxWindow * p_parent, wxSize const & p_size, Game & p_game )
 		: wxPanel{ p_parent, wxID_ANY, wxDefaultPosition, p_size }
 		, m_game{ p_game }
-		, m_mouseTimer{ new wxTimer( this, 1 ) }
+		, m_timers
+		{
+			new wxTimer( this, int( TimerID::eUp ) ),
+			new wxTimer( this, int( TimerID::eDown ) ),
+			new wxTimer( this, int( TimerID::eLeft ) ),
+			new wxTimer( this, int( TimerID::eRight ) ),
+			new wxTimer( this, int( TimerID::eMouse ) ),
+		}
 	{
 	}
 
 	RenderPanel::~RenderPanel()
 	{
-		delete m_mouseTimer;
+		for ( auto & timer : m_timers )
+		{
+			delete timer;
+		}
 	}
 
 	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_window )
@@ -72,7 +84,7 @@ namespace castortd
 					auto l_camera = l_scene->GetCameraCache().begin()->second;
 					p_window->GetPickingPass().AddScene( *l_scene, *l_camera );
 					m_cameraState = std::make_unique< GuiCommon::NodeState >( l_scene->GetListener(), l_camera->GetParent() );
-					m_mouseTimer->Start( 30 );
+					m_timers[size_t( TimerID::eMouse )]->Start( 30 );
 				}
 			}
 		}
@@ -235,21 +247,47 @@ namespace castortd
 		}
 	}
 
+	void RenderPanel::DoStartTimer( TimerID p_id )
+	{
+		m_timers[size_t( p_id )]->Start( 10 );
+	}
+
+	void RenderPanel::DoStopTimer( TimerID p_id )
+	{
+		if ( p_id != TimerID::eCount )
+		{
+			m_timers[size_t( p_id )]->Stop();
+		}
+		else
+		{
+			for ( size_t i = 0; i < size_t( TimerID::eMouse ); i++ )
+			{
+				m_timers[i]->Stop();
+			}
+		}
+	}
+
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
 		EVT_SIZE( RenderPanel::OnSize )
 		EVT_MOVE( RenderPanel::OnMove )
 		EVT_PAINT( RenderPanel::OnPaint )
+		EVT_KEY_DOWN( RenderPanel::OnKeyDown )
 		EVT_KEY_UP( RenderPanel::OnKeyUp )
 		EVT_LEFT_DOWN( RenderPanel::OnMouseLDown )
 		EVT_LEFT_UP( RenderPanel::OnMouseLUp )
 		EVT_RIGHT_UP( RenderPanel::OnMouseRUp )
 		EVT_MOTION( RenderPanel::OnMouseMove )
-		EVT_TIMER( 1, RenderPanel::OnMouseTimer )
-		EVT_MENU( eMENU_ID_NEW_LR_TOWER, RenderPanel::OnNewLongRangeTower )
-		EVT_MENU( eMENU_ID_NEW_SR_TOWER, RenderPanel::OnNewShortRangeTower )
-		EVT_MENU( eMENU_ID_UPGRADE_SPEED, RenderPanel::OnUpgradeTowerSpeed )
-		EVT_MENU( eMENU_ID_UPGRADE_RANGE, RenderPanel::OnUpgradeTowerRange )
-		EVT_MENU( eMENU_ID_UPGRADE_DAMAGE, RenderPanel::OnUpgradeTowerDamage )
+		EVT_MOUSEWHEEL( RenderPanel::OnMouseWheel )
+		EVT_TIMER( int( TimerID::eUp ), RenderPanel::OnTimerUp )
+		EVT_TIMER( int( TimerID::eDown ), RenderPanel::OnTimerDown )
+		EVT_TIMER( int( TimerID::eLeft ), RenderPanel::OnTimerLeft )
+		EVT_TIMER( int( TimerID::eRight ), RenderPanel::OnTimerRight )
+		EVT_TIMER( int( TimerID::eMouse ), RenderPanel::OnMouseTimer )
+		EVT_MENU( int( MenuID::eNewLRTower ), RenderPanel::OnNewLongRangeTower )
+		EVT_MENU( int( MenuID::eNewSRTower ), RenderPanel::OnNewShortRangeTower )
+		EVT_MENU( int( MenuID::eUpgradeSpeed ), RenderPanel::OnUpgradeTowerSpeed )
+		EVT_MENU( int( MenuID::eUpgradeRange ), RenderPanel::OnUpgradeTowerRange )
+		EVT_MENU( int( MenuID::eUpgradeDamage ), RenderPanel::OnUpgradeTowerDamage )
 	END_EVENT_TABLE()
 
 	void RenderPanel::OnSize( wxSizeEvent & p_event )
@@ -296,6 +334,45 @@ namespace castortd
 			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
+		}
+
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnSetFocus( wxFocusEvent & p_event )
+	{
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnKillFocus( wxFocusEvent & p_event )
+	{
+		DoStopTimer( TimerID::eCount );
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnKeyDown( wxKeyEvent & p_event )
+	{
+		switch ( p_event.GetKeyCode() )
+		{
+		case WXK_LEFT:
+		case 'Q':
+			DoStartTimer( TimerID::eLeft );
+			break;
+
+		case WXK_RIGHT:
+		case 'D':
+			DoStartTimer( TimerID::eRight );
+			break;
+
+		case WXK_UP:
+		case 'Z':
+			DoStartTimer( TimerID::eUp );
+			break;
+
+		case WXK_DOWN:
+		case 'S':
+			DoStartTimer( TimerID::eDown );
+			break;
 		}
 
 		p_event.Skip();
@@ -364,6 +441,26 @@ namespace castortd
 					}
 				}
 			} ) );
+			break;
+
+		case WXK_LEFT:
+		case 'Q':
+			DoStopTimer( TimerID::eLeft );
+			break;
+
+		case WXK_RIGHT:
+		case 'D':
+			DoStopTimer( TimerID::eRight );
+			break;
+
+		case WXK_UP:
+		case 'Z':
+			DoStopTimer( TimerID::eUp );
+			break;
+
+		case WXK_DOWN:
+		case 'S':
+			DoStopTimer( TimerID::eDown );
 			break;
 		}
 
@@ -434,35 +531,35 @@ namespace castortd
 
 				if ( m_selectedTower->CanUpgradeSpeed() )
 				{
-					l_menu.Append( eMENU_ID_UPGRADE_SPEED, wxString{ wxT( "Augmenter vitesse (" ) } << m_selectedTower->GetSpeedUpgradeCost() << wxT( ")" ) );
-					l_menu.Enable( eMENU_ID_UPGRADE_SPEED, m_game.CanAfford( m_selectedTower->GetSpeedUpgradeCost() ) );
+					l_menu.Append( int( MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (" ) } << m_selectedTower->GetSpeedUpgradeCost() << wxT( ")" ) );
+					l_menu.Enable( int( MenuID::eUpgradeSpeed ), m_game.CanAfford( m_selectedTower->GetSpeedUpgradeCost() ) );
 				}
 				else
 				{
-					l_menu.Append( eMENU_ID_UPGRADE_SPEED, wxString{ wxT( "Augmenter vitesse (Max)" ) } );
-					l_menu.Enable( eMENU_ID_UPGRADE_SPEED, false );
+					l_menu.Append( int( MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (Max)" ) } );
+					l_menu.Enable( int( MenuID::eUpgradeSpeed ), false );
 				}
 
 				if ( m_selectedTower->CanUpgradeRange() )
 				{
-					l_menu.Append( eMENU_ID_UPGRADE_RANGE, wxString{ wxT( "Augmenter portee (" ) } << m_selectedTower->GetRangeUpgradeCost() << wxT( ")" ) );
-					l_menu.Enable( eMENU_ID_UPGRADE_RANGE, m_game.CanAfford( m_selectedTower->GetRangeUpgradeCost() ) );
+					l_menu.Append( int( MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (" ) } << m_selectedTower->GetRangeUpgradeCost() << wxT( ")" ) );
+					l_menu.Enable( int( MenuID::eUpgradeRange ), m_game.CanAfford( m_selectedTower->GetRangeUpgradeCost() ) );
 				}
 				else
 				{
-					l_menu.Append( eMENU_ID_UPGRADE_RANGE, wxString{ wxT( "Augmenter portee (Max)" ) } );
-					l_menu.Enable( eMENU_ID_UPGRADE_RANGE, false );
+					l_menu.Append( int( MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (Max)" ) } );
+					l_menu.Enable( int( MenuID::eUpgradeRange ), false );
 				}
 
 				if ( m_selectedTower->CanUpgradeDamage() )
 				{
-					l_menu.Append( eMENU_ID_UPGRADE_DAMAGE, wxString{ wxT( "Augmenter degats (" ) } << m_selectedTower->GetDamageUpgradeCost() << wxT( ")" ) );
-					l_menu.Enable( eMENU_ID_UPGRADE_DAMAGE, m_game.CanAfford( m_selectedTower->GetDamageUpgradeCost() ) );
+					l_menu.Append( int( MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (" ) } << m_selectedTower->GetDamageUpgradeCost() << wxT( ")" ) );
+					l_menu.Enable( int( MenuID::eUpgradeDamage ), m_game.CanAfford( m_selectedTower->GetDamageUpgradeCost() ) );
 				}
 				else
 				{
-					l_menu.Append( eMENU_ID_UPGRADE_DAMAGE, wxString{ wxT( "Augmenter degats (Max)" ) } );
-					l_menu.Enable( eMENU_ID_UPGRADE_DAMAGE, false );
+					l_menu.Append( int( MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (Max)" ) } );
+					l_menu.Enable( int( MenuID::eUpgradeDamage ), false );
 				}
 
 				PopupMenu( &l_menu, p_event.GetPosition() );
@@ -470,10 +567,10 @@ namespace castortd
 			else if ( !m_selectedGeometry.expired() )
 			{
 				wxMenu l_menu;
-				l_menu.Append( eMENU_ID_NEW_LR_TOWER, wxString( "Nouvelle Tour Longue Distance (" ) << m_longRange.GetTowerCost() << wxT( ")" ) );
-				l_menu.Append( eMENU_ID_NEW_SR_TOWER, wxString( "Nouvelle Tour Courte Distance (" ) << m_shortRange.GetTowerCost() << wxT( ")" ) );
-				l_menu.Enable( eMENU_ID_NEW_LR_TOWER, m_game.CanAfford( m_longRange.GetTowerCost() ) );
-				l_menu.Enable( eMENU_ID_NEW_SR_TOWER, m_game.CanAfford( m_shortRange.GetTowerCost() ) );
+				l_menu.Append( int( MenuID::eNewLRTower ), wxString( "Nouvelle Tour Longue Distance (" ) << m_longRange.GetTowerCost() << wxT( ")" ) );
+				l_menu.Append( int( MenuID::eNewSRTower ), wxString( "Nouvelle Tour Courte Distance (" ) << m_shortRange.GetTowerCost() << wxT( ")" ) );
+				l_menu.Enable( int( MenuID::eNewLRTower ), m_game.CanAfford( m_longRange.GetTowerCost() ) );
+				l_menu.Enable( int( MenuID::eNewSRTower ), m_game.CanAfford( m_shortRange.GetTowerCost() ) );
 				PopupMenu( &l_menu, p_event.GetPosition() );
 			}
 		}
@@ -492,17 +589,8 @@ namespace castortd
 			if ( m_game.IsRunning() )
 			{
 				static real constexpr l_mult = 4.0_r;
-				real l_deltaX = std::min( 1.0_r / l_mult, 1.0_r ) * ( m_oldX - m_x ) / l_mult;
+				real l_deltaX = 0.0_r;
 				real l_deltaY = std::min( 1.0_r / l_mult, 1.0_r ) * ( m_oldY - m_y ) / l_mult;
-
-				if ( p_event.ControlDown() )
-				{
-					l_deltaX = 0;
-				}
-				else if ( p_event.ShiftDown() )
-				{
-					l_deltaY = 0;
-				}
 
 				if ( m_mouseLeftDown )
 				{
@@ -516,6 +604,27 @@ namespace castortd
 		p_event.Skip();
 	}
 
+	void RenderPanel::OnMouseWheel( wxMouseEvent & p_event )
+	{
+		int l_wheelRotation = p_event.GetWheelRotation();
+
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+
+		if ( !l_inputListener || !l_inputListener->FireMouseWheel( Position( 0, l_wheelRotation ) ) )
+		{
+			if ( l_wheelRotation < 0 )
+			{
+				m_cameraState->AddScalarVelocity( Point3r{ 0.0_r, 0.0_r, -g_camSpeed } );
+			}
+			else
+			{
+				m_cameraState->AddScalarVelocity( Point3r{ 0.0_r, 0.0_r, g_camSpeed } );
+			}
+		}
+
+		p_event.Skip();
+	}
+
 	void RenderPanel::OnMouseTimer( wxTimerEvent & p_event )
 	{
 		if ( m_game.IsRunning() && m_cameraState )
@@ -523,6 +632,30 @@ namespace castortd
 			m_cameraState->Update();
 		}
 
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
+	{
+		m_cameraState->AddScalarVelocity( Point3r{ 0.0_r, g_camSpeed, 0.0_r } );
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnTimerDown( wxTimerEvent & p_event )
+	{
+		m_cameraState->AddScalarVelocity( Point3r{ 0.0_r, -g_camSpeed, 0.0_r } );
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnTimerLeft( wxTimerEvent & p_event )
+	{
+		m_cameraState->AddScalarVelocity( Point3r{ g_camSpeed, 0.0_r, 0.0_r } );
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnTimerRight( wxTimerEvent & p_event )
+	{
+		m_cameraState->AddScalarVelocity( Point3r{ -g_camSpeed, 0.0_r, 0.0_r } );
 		p_event.Skip();
 	}
 
