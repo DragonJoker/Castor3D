@@ -129,6 +129,10 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderTechniquePass::RenderShadowMaps
 		 */
 		C3D_API void RenderShadowMaps()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechniquePass::AddShadowProducer
+		 */
+		C3D_API void AddShadowProducer( Light & p_light )override;
 
 	private:
 		/**

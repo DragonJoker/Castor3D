@@ -289,6 +289,14 @@ namespace Castor3D
 		m_techniqueParameters.Add( p_parameters );
 	}
 
+	void RenderTarget::AddShadowProducer( Light & p_light )
+	{
+		if ( m_renderTechnique )
+		{
+			m_renderTechnique->AddShadowProducer( p_light );
+		}
+	}
+
 	void RenderTarget::DoRender( RenderInfo & p_info, RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera )
 	{
 		SceneSPtr l_scene = GetScene();

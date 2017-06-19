@@ -1,4 +1,4 @@
-#include "RenderTechnique.hpp"
+﻿#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -25,8 +25,8 @@
 
 using namespace Castor;
 
-#define DEBUG_DEFERRED_BUFFERS 1
-#define DEBUG_WEIGHTED_BLEND_BUFFERS 1
+#define DEBUG_DEFERRED_BUFFERS 0
+#define DEBUG_WEIGHTED_BLEND_BUFFERS 0
 #define USE_WEIGHTED_BLEND 1
 
 namespace Castor3D
@@ -298,5 +298,11 @@ namespace Castor3D
 	bool RenderTechnique::WriteInto( Castor::TextFile & p_file )
 	{
 		return true;
+	}
+
+	void RenderTechnique::AddShadowProducer( Light & p_light )
+	{
+		m_transparentPass->AddShadowProducer( p_light );
+		m_opaquePass->AddShadowProducer( p_light );
 	}
 }

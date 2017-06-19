@@ -226,6 +226,15 @@ namespace Castor3D
 		C3D_API void SetToneMappingType( Castor::String const & p_name, Parameters const & p_parameters );
 		/**
 		 *\~english
+		 *\brief		Adds a shadow producing light source.
+		 *\param[in]	p_light	The light source.
+		 *\~french
+		 *\brief		Ajoute une source lumineuse produisant des ombres.
+		 *\param[in]	p_light	La source lumineuse.
+		 */
+		C3D_API void AddShadowProducer( Light & p_light );
+		/**
+		 *\~english
 		 *\brief		Retrieves the intialisation status
 		 *\return		The intialisation status
 		 *\~french

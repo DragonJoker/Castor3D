@@ -29,11 +29,17 @@ namespace Castor3D
 		{
 			auto & l_animation = *l_it->second;
 
-			if ( l_animation.GetState() != AnimationState::ePlaying
-					&& l_animation.GetState() != AnimationState::ePaused )
+			if ( l_animation.GetState() != AnimationState::ePlaying )
 			{
-				l_animation.Play();
-				DoStartAnimation( l_animation );
+				if ( l_animation.GetState() != AnimationState::ePaused )
+				{
+					l_animation.Play();
+					DoStartAnimation( l_animation );
+				}
+				else
+				{
+					l_animation.Play();
+				}
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -167,6 +167,15 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier.
 		 */
 		C3D_API bool WriteInto( Castor::TextFile & p_file );
+		/**
+		 *\~english
+		 *\brief		Adds a shadow producing light source.
+		 *\param[in]	p_light	The light source.
+		 *\~french
+		 *\brief		Ajoute une source lumineuse produisant des ombres.
+		 *\param[in]	p_light	La source lumineuse.
+		 */
+		C3D_API void AddShadowProducer( Light & p_light );
 		/**
 		 *\~english
 		 *\return		The render area dimensions.

@@ -6,9 +6,6 @@
 
 using namespace Castor;
 
-#define DEBUG_DEFERRED_BUFFERS 1
-#define DEBUG_WEIGHTED_BLEND_BUFFERS 1
-
 namespace Castor3D
 {
 	DeferredRendering::DeferredRendering( Engine & p_engine

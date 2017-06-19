@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -44,27 +44,32 @@ namespace Castor3D
 		DoRender( p_info, p_shadows );
 	}
 
+	void OpaquePass::AddShadowProducer( Light & p_light )
+	{
+		if ( p_light.IsShadowProducer() )
+		{
+			switch ( p_light.GetLightType() )
+			{
+			case LightType::eDirectional:
+				m_directionalShadowMap.AddLight( p_light );
+				break;
+
+			case LightType::ePoint:
+				m_pointShadowMap.AddLight( p_light );
+				break;
+
+			case LightType::eSpot:
+				m_spotShadowMap.AddLight( p_light );
+				break;
+			}
+		}
+	}
+
 	bool OpaquePass::InitialiseShadowMaps()
 	{
 		m_scene.GetLightCache().ForEach( [this]( Light & p_light )
 		{
-			if ( p_light.IsShadowProducer() )
-			{
-				switch ( p_light.GetLightType() )
-				{
-				case LightType::eDirectional:
-					m_directionalShadowMap.AddLight( p_light );
-					break;
-
-				case LightType::ePoint:
-					m_pointShadowMap.AddLight( p_light );
-					break;
-
-				case LightType::eSpot:
-					m_spotShadowMap.AddLight( p_light );
-					break;
-				}
-			}
+			AddShadowProducer( p_light );
 		} );
 
 		bool l_result = m_directionalShadowMap.Initialise();

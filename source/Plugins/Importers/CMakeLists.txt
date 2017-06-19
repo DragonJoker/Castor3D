@@ -35,12 +35,6 @@ function( ImportersBuild )
 			set( BUILTIN_NEEDED OFF )
 		endif()
 
-		if( ${CASTOR_BUILD_IMPORTER_FBX} )
-			set( Build ${Fbx} )
-			add_subdirectory( Plugins/Importers/FbxImporter )
-			set( Fbx ${Build} PARENT_SCOPE )
-		endif()
-
 		if( ${CASTOR_BUILD_IMPORTER_OGR} )
 			set( Build ${Ogr} )
 			add_subdirectory( Plugins/Importers/OgreImporter )
@@ -61,6 +55,12 @@ function( ImportersBuild )
 
 		if( BUILTIN_NEEDED OR CASTOR_FORCE_ALL_IMPORTERS )
 			msg_debug( "using builtin importers" )
+			if( ${CASTOR_BUILD_IMPORTER_FBX} )
+				set( Build ${Fbx} )
+				add_subdirectory( Plugins/Importers/FbxImporter )
+				set( Fbx ${Build} PARENT_SCOPE )
+			endif()
+
 			if( ${CASTOR_BUILD_IMPORTER_ASE} )
 				set( Build ${Ase} )
 				add_subdirectory( Plugins/Importers/AseImporter )
@@ -116,9 +116,6 @@ function( ImportersSummary msg msgtest )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( msg_tmp "${msg_tmp}\n    Assimp               ${Assimp}" )
 		endif ()
-		if( ${CASTOR_BUILD_IMPORTER_FBX} )
-			set( msg_tmp "${msg_tmp}\n    Built-in FBX         ${Fbx}" )
-		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
 			set( msg_tmp "${msg_tmp}\n    Built-in OBJ         ${Obj}" )
 		endif ()
@@ -131,6 +128,9 @@ function( ImportersSummary msg msgtest )
 
 		STRING( FIND "${Assimp}" "yes" POS )
 		if( ${POS} STREQUAL -1 OR CASTOR_FORCE_ALL_IMPORTERS )
+			if( ${CASTOR_BUILD_IMPORTER_FBX} )
+				set( msg_tmp "${msg_tmp}\n    Built-in FBX         ${Fbx}" )
+			endif ()
 			if( ${CASTOR_BUILD_IMPORTER_ASE} )
 				set( msg_tmp "${msg_tmp}\n    Built-in ASE         ${Ase}" )
 			endif ()
@@ -162,16 +162,6 @@ function( ImportersSetup )
 			cpack_add_component( AssimpImporter
 				DISPLAY_NAME "AssimpImporter"
 				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D."
-				GROUP Importers
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-
-		if( ${CASTOR_BUILD_IMPORTER_FBX} )
-			cpack_add_component( FbxImporter
-				DISPLAY_NAME "FbxImporter"
-				DESCRIPTION "Allows the FBX objects import in Castor3D."
 				GROUP Importers
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
@@ -210,6 +200,16 @@ function( ImportersSetup )
 
 		STRING( FIND "${Assimp}" "yes" POS )
 		if( ${POS} STREQUAL -1 OR CASTOR_FORCE_ALL_IMPORTERS )
+			if( ${CASTOR_BUILD_IMPORTER_FBX} )
+				cpack_add_component( FbxImporter
+					DISPLAY_NAME "FbxImporter"
+					DESCRIPTION "Allows the FBX objects import in Castor3D."
+					GROUP Importers
+					DEPENDS Castor3D
+					INSTALL_TYPES Full
+				)
+			endif ()
+
 			if( ${CASTOR_BUILD_IMPORTER_ASE} )
 				cpack_add_component( AseImporter
 					DISPLAY_NAME "AseImporter"

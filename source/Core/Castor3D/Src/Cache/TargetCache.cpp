@@ -27,6 +27,19 @@ namespace Castor3D
 		return l_return;
 	}
 
+	void RenderTargetCache::AddShadowProducer( Light & p_light )
+	{
+		auto l_lock = make_unique_lock( *this );
+
+		for ( auto l_target : m_renderTargets[size_t( TargetType::eWindow )] )
+		{
+			if ( l_target->GetScene()->GetName() == p_light.GetScene()->GetName() )
+			{
+				l_target->AddShadowProducer( p_light );
+			}
+		}
+	}
+
 	void RenderTargetCache::Remove( RenderTargetSPtr p_target )
 	{
 		auto l_lock = make_unique_lock( *this );

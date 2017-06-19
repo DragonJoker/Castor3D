@@ -160,6 +160,10 @@ namespace Castor3D
 		 */
 		void RenderShadowMaps()override;
 		/**
+		 *\copydoc		Castor3D::RenderTechniquePass::AddShadowProducer
+		 */
+		C3D_API void AddShadowProducer( Light & p_light )override;
+		/**
 		 *\~english
 		 *\return		The directional light shadow map.
 		 *\~french

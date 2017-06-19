@@ -1,4 +1,4 @@
-#include "ForwardRenderTechniquePass.hpp"
+﻿#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -64,27 +64,32 @@ namespace Castor3D
 		m_scene.GetLightCache().UnbindLights();
 	}
 
+	void ForwardRenderTechniquePass::AddShadowProducer( Light & p_light )
+	{
+		if ( p_light.IsShadowProducer() )
+		{
+			switch ( p_light.GetLightType() )
+			{
+			case LightType::eDirectional:
+				m_directionalShadowMap.AddLight( p_light );
+				break;
+
+			case LightType::ePoint:
+				m_pointShadowMap.AddLight( p_light );
+				break;
+
+			case LightType::eSpot:
+				m_spotShadowMap.AddLight( p_light );
+				break;
+			}
+		}
+	}
+
 	bool ForwardRenderTechniquePass::InitialiseShadowMaps()
 	{
 		m_scene.GetLightCache().ForEach( [this]( Light & p_light )
 		{
-			if ( p_light.IsShadowProducer() )
-			{
-				switch ( p_light.GetLightType() )
-				{
-				case LightType::eDirectional:
-					m_directionalShadowMap.AddLight( p_light );
-					break;
-
-				case LightType::ePoint:
-					m_pointShadowMap.AddLight( p_light );
-					break;
-
-				case LightType::eSpot:
-					m_spotShadowMap.AddLight( p_light );
-					break;
-				}
-			}
+			AddShadowProducer( p_light );
 		} );
 
 		bool l_result = m_directionalShadowMap.Initialise();

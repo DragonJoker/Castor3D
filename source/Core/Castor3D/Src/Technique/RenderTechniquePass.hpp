@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -144,6 +144,15 @@ namespace Castor3D
 		 *\brief		Dessine les maps d'ombres.
 		 */
 		C3D_API virtual void RenderShadowMaps() = 0;
+		/**
+		 *\~english
+		 *\brief		Adds a shadow producing light source.
+		 *\param[in]	p_light	The light source.
+		 *\~french
+		 *\brief		Ajoute une source lumineuse produisant des ombres.
+		 *\param[in]	p_light	La source lumineuse.
+		 */
+		C3D_API virtual void AddShadowProducer( Light & p_light ) = 0;
 
 	protected:
 		/**
@@ -211,7 +220,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		C3D_API void DoUpdatePipeline( RenderPipeline & p_pipeline)const override;
+		C3D_API void DoUpdatePipeline( RenderPipeline & p_pipeline )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoPrepareFrontPipeline
 		 */

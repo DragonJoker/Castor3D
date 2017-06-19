@@ -73,6 +73,15 @@ namespace Castor3D
 		C3D_API RenderTargetSPtr Add( TargetType p_type );
 		/**
 		 *\~english
+		 *\brief		Adds a shadow producing light source.
+		 *\param[in]	p_light	The light source.
+		 *\~french
+		 *\brief		Ajoute une source lumineuse produisant des ombres.
+		 *\param[in]	p_light	La source lumineuse.
+		 */
+		C3D_API void AddShadowProducer( Light & p_light );
+		/**
+		 *\~english
 		 *\brief		Removes a render target from the render loop
 		 *\param[in]	p_target	The render target
 		 *\~french
