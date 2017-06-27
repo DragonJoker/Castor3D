@@ -23,7 +23,8 @@ SOFTWARE.
 #ifndef ___GL_BUFFER_H___
 #define ___GL_BUFFER_H___
 
-#include "Buffer/GlBufferBase.hpp"
+#include "GlRenderSystemPrerequisites.hpp"
+#include "Common/GlBindable.hpp"
 
 #include <Mesh/Buffer/GpuBuffer.hpp>
 
@@ -38,74 +39,89 @@ namespace GlRender
 	\~french
 	\brief 		Classe implémentant les VBO OpenGL.
 	*/
-	template< typename T >
 	class GlBuffer
-		: public Castor3D::GpuBuffer< T >
-		, public Holder
+		: public Castor3D::GpuBuffer
+		, public Bindable<
+			std::function< void( int, uint32_t * ) >,
+			std::function< void( int, uint32_t const * ) >,
+			std::function< void( uint32_t ) > >
 	{
+		using BindableType = Bindable<
+			std::function< void( int, uint32_t * ) >,
+			std::function< void( int, uint32_t const * ) >,
+			std::function< void( uint32_t ) > >;
+
 	public:
-		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, GlBufferTarget p_target );
+		GlBuffer( GlRenderSystem & p_renderSystem
+			, OpenGl & p_gl
+			, GlBufferTarget p_target );
 		virtual ~GlBuffer();
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Create
+		 *\copydoc		Castor3D::GpuBuffer::Create
 		 */
 		bool Create()override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Destroy
+		 *\copydoc		Castor3D::GpuBuffer::Destroy
 		 */
 		void Destroy()override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::InitialiseStorage
+		 *\copydoc		Castor3D::GpuBuffer::InitialiseStorage
 		 */
-		void InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const override;
+		void InitialiseStorage( uint32_t p_count
+			, Castor3D::BufferAccessType p_type
+			, Castor3D::BufferAccessNature p_nature )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::SetBindingPoint
+		 *\copydoc		Castor3D::GpuBuffer::SetBindingPoint
 		 */
 		void SetBindingPoint( uint32_t p_index )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Bind
+		 *\copydoc		Castor3D::GpuBuffer::Bind
 		 */
 		void Bind()const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Unbind
+		 *\copydoc		Castor3D::GpuBuffer::Unbind
 		 */
 		void Unbind()const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Copy
+		 *\copydoc		Castor3D::GpuBuffer::Copy
 		 */
-		void Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )const override;
+		void Copy( Castor3D::GpuBuffer const & p_src
+			, uint32_t p_size )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Upload
+		 *\copydoc		Castor3D::GpuBuffer::Upload
 		 */
-		void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const override;
+		void Upload( uint32_t p_offset
+			, uint32_t p_count
+			, uint8_t const * p_buffer )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Upload
+		 *\copydoc		Castor3D::GpuBuffer::Upload
 		 */
-		void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const override;
+		void Download( uint32_t p_offset
+			, uint32_t p_count
+			, uint8_t * p_buffer )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Lock
+		 *\copydoc		Castor3D::GpuBuffer::Lock
 		 */
-		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const override;
+		uint8_t * Lock( uint32_t p_offset
+			, uint32_t p_count
+			, Castor3D::AccessTypes const & p_flags )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Unlock
+		 *\copydoc		Castor3D::GpuBuffer::Unlock
 		 */
 		void Unlock()const override;
 
-		inline uint32_t GetGlName()const
-		{
-			return m_glBuffer.GetGlName();
-		}
+		uint8_t * Lock( GlAccessType p_access )const;
 
 		inline uint32_t GetBindingPoint()const
 		{
-			return m_glBuffer.GetBindingPoint();
+			return m_bindingPoint;
 		}
 
-	protected:
-		GlBufferBase< T > m_glBuffer;
+	private:
+		GlBufferTarget m_target;
+		mutable uint32_t m_bindingPoint{ 0u };
+		mutable uint32_t m_allocatedSize{ 0u };
 	};
 }
-
-#include "GlBuffer.inl"
 
 #endif

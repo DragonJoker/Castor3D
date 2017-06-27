@@ -290,7 +290,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le stockage GPU.
 		 */
-		inline GpuBuffer< uint8_t > & GetStorage()const
+		inline GpuBuffer & GetStorage()const
 		{
 			REQUIRE( m_storage );
 			return *m_storage;
@@ -374,7 +374,7 @@ namespace Castor3D
 		Castor::ByteArray m_buffer;
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
-		std::unique_ptr< GpuBuffer< uint8_t > > m_storage;
+		GpuBufferUPtr m_storage;
 		//!\~english	The bindings per program.
 		//!\~french		Les bindings par programme.
 		UniformBufferBindingMap m_bindings;

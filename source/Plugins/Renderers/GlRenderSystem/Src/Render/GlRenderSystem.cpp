@@ -71,43 +71,6 @@ namespace GlRender
 		}
 
 #endif
-
-		template< typename T >
-		std::unique_ptr< GpuBuffer< T > > DoCreateBuffer( GlRenderSystem & p_renderSystem, BufferType p_type )
-		{
-			std::unique_ptr< GpuBuffer< T > > l_return;
-
-			switch ( p_type )
-			{
-			case BufferType::eArray:
-				l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eArray );
-				break;
-
-			case BufferType::eElementArray:
-				l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eElementArray );
-				break;
-
-			case BufferType::eUniform:
-				l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eUniform );
-				break;
-
-			case BufferType::eAtomicCounter:
-				if ( p_renderSystem.GetOpenGl().HasSsbo() )
-				{
-					l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eAtomicCounter );
-				}
-				break;
-
-			case BufferType::eShaderStorage:
-				if ( p_renderSystem.GetOpenGl().HasSsbo() )
-				{
-					l_return = std::make_unique< GlBuffer< T > >( p_renderSystem, p_renderSystem.GetOpenGl(), GlBufferTarget::eShaderStorage );
-				}
-				break;
-			}
-
-			return l_return;
-		}
 	}
 
 	String GlRenderSystem::Name = cuT( "OpenGL Renderer" );
@@ -494,24 +457,50 @@ namespace GlRender
 			, static_cast< GlShaderProgram const & >( p_program ) );
 	}
 
-	std::unique_ptr< GpuBuffer< uint8_t > > GlRenderSystem::CreateUInt8Buffer( BufferType p_type )
+	GpuBufferUPtr GlRenderSystem::CreateBuffer( BufferType p_type )
 	{
-		return DoCreateBuffer< uint8_t >( *this, p_type );
-	}
+		GpuBufferUPtr l_return;
 
-	std::unique_ptr< GpuBuffer< uint16_t > > GlRenderSystem::CreateUInt16Buffer( BufferType p_type )
-	{
-		return DoCreateBuffer< uint16_t >( *this, p_type );
-	}
+		switch ( p_type )
+		{
+		case BufferType::eArray:
+			l_return = std::make_unique< GlBuffer >( *this
+				, GetOpenGl()
+				, GlBufferTarget::eArray );
+			break;
 
-	std::unique_ptr< GpuBuffer< uint32_t > > GlRenderSystem::CreateUInt32Buffer( BufferType p_type )
-	{
-		return DoCreateBuffer< uint32_t >( *this, p_type );
-	}
+		case BufferType::eElementArray:
+			l_return = std::make_unique< GlBuffer >( *this
+				, GetOpenGl()
+				, GlBufferTarget::eElementArray );
+			break;
 
-	std::unique_ptr< GpuBuffer< float > > GlRenderSystem::CreateFloatBuffer( BufferType p_type )
-	{
-		return DoCreateBuffer< float >( *this, p_type );
+		case BufferType::eUniform:
+			l_return = std::make_unique< GlBuffer >( *this
+				, GetOpenGl()
+				, GlBufferTarget::eUniform );
+			break;
+
+		case BufferType::eAtomicCounter:
+			if ( GetOpenGl().HasSsbo() )
+			{
+				l_return = std::make_unique< GlBuffer >( *this
+					, GetOpenGl()
+					, GlBufferTarget::eAtomicCounter );
+			}
+			break;
+
+		case BufferType::eShaderStorage:
+			if ( GetOpenGl().HasSsbo() )
+			{
+				l_return = std::make_unique< GlBuffer >( *this
+					, GetOpenGl()
+					, GlBufferTarget::eShaderStorage );
+			}
+			break;
+		}
+
+		return l_return;
 	}
 
 	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed

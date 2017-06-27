@@ -81,19 +81,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateUInt8Buffer
 		 */
-		std::unique_ptr< Castor3D::GpuBuffer< uint8_t > > CreateUInt8Buffer( Castor3D::BufferType p_type )override;
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateUInt16Buffer
-		 */
-		std::unique_ptr< Castor3D::GpuBuffer< uint16_t > > CreateUInt16Buffer( Castor3D::BufferType p_type )override;
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateUInt32Buffer
-		 */
-		std::unique_ptr< Castor3D::GpuBuffer< uint32_t > > CreateUInt32Buffer( Castor3D::BufferType p_type )override;
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateFloatBuffer
-		 */
-		std::unique_ptr< Castor3D::GpuBuffer< float > > CreateFloatBuffer( Castor3D::BufferType p_type )override;
+		Castor3D::GpuBufferUPtr CreateBuffer( Castor3D::BufferType p_type )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */

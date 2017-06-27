@@ -44,9 +44,6 @@ namespace Castor3D
 		: public Castor::Named
 		, public Castor::OwnedBy< ShaderProgram >
 	{
-	private:
-		using GpuBufferUPtr = std::unique_ptr< GpuBuffer< uint8_t > >;
-
 	public:
 		/**
 		 *\~english
@@ -58,7 +55,8 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du tampon.
 		 *\param[in]	p_program	Le programme parent.
 		 */
-		C3D_API ShaderStorageBuffer( Castor::String const & p_name, ShaderProgram & p_program );
+		C3D_API ShaderStorageBuffer( Castor::String const & p_name
+			, ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -82,7 +80,10 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API bool Initialise( uint32_t p_size, uint32_t p_index, BufferAccessType p_type, BufferAccessNature p_nature );
+		C3D_API bool Initialise( uint32_t p_size
+			, uint32_t p_index
+			, BufferAccessType p_type
+			, BufferAccessNature p_nature );
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated.
@@ -106,7 +107,9 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API uint8_t * Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags );
+		C3D_API uint8_t * Lock( uint32_t p_offset
+			, uint32_t p_count
+			, AccessTypes const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.
@@ -130,7 +133,9 @@ namespace Castor3D
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[in]	p_buffer	Les données.
 		 */
-		C3D_API void Upload( uint32_t p_offset, uint32_t p_count, uint8_t const * p_buffer );
+		C3D_API void Upload( uint32_t p_offset
+			, uint32_t p_count
+			, uint8_t const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.
@@ -145,7 +150,9 @@ namespace Castor3D
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[out]	p_buffer	Les données.
 		 */
-		C3D_API void Download( uint32_t p_offset, uint32_t p_count, uint8_t * p_buffer );
+		C3D_API void Download( uint32_t p_offset
+			, uint32_t p_count
+			, uint8_t * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
@@ -179,14 +186,15 @@ namespace Castor3D
 		 *\param[in]	p_src	Le tampon source.
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
 		 */
-		C3D_API void Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size );
+		C3D_API void Copy( GpuBuffer const & p_src
+			, uint32_t p_size );
 		/**
 		 *\~english
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\return		Le tampon GPU.
 		 */
-		inline GpuBuffer< uint8_t > const & GetGpuBuffer()const
+		inline GpuBuffer const & GetGpuBuffer()const
 		{
 			REQUIRE( m_gpuBuffer );
 			return *m_gpuBuffer;

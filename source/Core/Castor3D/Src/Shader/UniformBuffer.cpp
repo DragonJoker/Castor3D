@@ -309,12 +309,16 @@ namespace Castor3D
 
 		if ( !m_storage )
 		{
-			m_storage = GetRenderSystem()->CreateUInt8Buffer( BufferType::eUniform );
+			m_storage = GetRenderSystem()->CreateBuffer( BufferType::eUniform );
 			m_storage->Create();
 		}
 
-		m_storage->InitialiseStorage( uint32_t( m_buffer.size() ), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-		m_storage->Upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
+		m_storage->InitialiseStorage( uint32_t( m_buffer.size() )
+			, BufferAccessType::eDynamic
+			, BufferAccessNature::eDraw );
+		m_storage->Upload( 0u
+			, uint32_t( m_buffer.size() )
+			, m_buffer.data() );
 
 		for ( auto & l_variable : *this )
 		{

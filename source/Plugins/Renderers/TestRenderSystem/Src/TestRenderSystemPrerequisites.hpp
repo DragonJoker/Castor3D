@@ -44,8 +44,7 @@ namespace TestRender
 	class TestAttributeBase;
 	template< typename T, uint32_t Columns, uint32_t Rows > class TestMatAttribute;
 	template< typename T, uint32_t Count > class TestAttribute;
-	template< typename T > class TestBufferBase;
-	template< typename T > class TestBuffer;
+	class TestBuffer;
 	class TestVertexBufferObject;
 	class Test3VertexBufferObject;
 	class TestGeometryBuffers;
