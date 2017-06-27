@@ -320,6 +320,7 @@ namespace Castor3D
 		: OwnedBy< Engine >{ p_engine }
 		, Named{ p_name }
 		, m_listener{ p_engine.GetFrameListenerCache().Add( cuT( "Scene_" ) + p_name + string::to_string( (size_t)this ) ) }
+		, m_animationUpdater{ std::max( 2u, p_engine.GetCpuInformations().CoreCount() - ( p_engine.IsThreaded() ? 2u : 1u ) ) }
 	{
 		auto l_mergeObject = [this]( auto const & p_source
 			, auto & p_destination
@@ -734,11 +735,32 @@ namespace Castor3D
 	void Scene::Update()
 	{
 		m_rootNode->Update();
+		std::vector< std::reference_wrapper< AnimatedObjectGroup > > l_groups;
 
-		m_animatedObjectGroupCache->ForEach( []( AnimatedObjectGroup & p_group )
+		m_animatedObjectGroupCache->ForEach( [&l_groups]( AnimatedObjectGroup & p_group )
 		{
-			p_group.Update();
+			l_groups.push_back( p_group );
 		} );
+
+		if ( l_groups.size() > m_animationUpdater.GetCount() )
+		{
+			for ( auto & l_group : l_groups )
+			{
+				m_animationUpdater.PushJob( [&l_group]()
+				{
+					l_group.get().Update();
+				} );
+			}
+
+			m_animationUpdater.WaitAll( std::chrono::milliseconds::max() );
+		}
+		else
+		{
+			for ( auto & l_group : l_groups )
+			{
+				l_group.get().Update();
+			}
+		}
 
 		if ( !m_skybox && !m_backgroundImage )
 		{
