@@ -690,6 +690,39 @@ namespace Castor3D
 		p_info.m_visibleObjectsCount += l_count;
 		return l_count;
 	}
+	
+	uint32_t RenderPass::DoCopyNodesBones( SkinningRenderNodeArray const & p_renderNodes
+		, ShaderStorageBuffer & p_bonesBuffer )const
+	{
+		uint32_t const l_mtxSize = sizeof( float ) * 16;
+		uint32_t const l_stride = l_mtxSize * 400u;
+		auto const l_count = std::min( p_bonesBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
+		REQUIRE( l_count <= p_renderNodes.size() );
+		auto l_buffer = p_bonesBuffer.data();
+		auto l_it = p_renderNodes.begin();
+		auto i = 0u;
+
+		while ( i < l_count )
+		{
+			auto & l_node = *l_it;
+			l_node.m_skeleton.FillBuffer( l_buffer );
+			l_buffer += l_stride;
+			++i;
+			++l_it;
+		}
+
+		p_bonesBuffer.Upload( 0u, l_stride * l_count, p_bonesBuffer.data() );
+		return l_count;
+	}
+
+	uint32_t RenderPass::DoCopyNodesBones( SkinningRenderNodeArray const & p_renderNodes
+		, ShaderStorageBuffer & p_bonesBuffer
+		, RenderInfo & p_info )const
+	{
+		auto l_count = DoCopyNodesBones( p_renderNodes, p_bonesBuffer );
+		p_info.m_visibleObjectsCount += l_count;
+		return l_count;
+	}
 
 	void RenderPass::DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes )const
 	{
@@ -715,7 +748,7 @@ namespace Castor3D
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, p_depthMaps
-			, [this, &p_depthMaps]( RenderPipeline & p_pipeline
+			, [this]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh
 				, StaticRenderNodeArray & p_renderNodes )
@@ -756,7 +789,7 @@ namespace Castor3D
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, p_depthMaps
-			, [this, &p_depthMaps]( RenderPipeline & p_pipeline
+			, [this]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh
 				, StaticRenderNodeArray & p_renderNodes )
@@ -779,7 +812,7 @@ namespace Castor3D
 			, p_nodes
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, p_depthMaps
-			, [this, &p_info, &p_depthMaps]( RenderPipeline & p_pipeline
+			, [this, &p_info]( RenderPipeline & p_pipeline
 				, Pass & p_pass
 				, Submesh & p_submesh
 				, StaticRenderNodeArray & p_renderNodes )
@@ -885,6 +918,108 @@ namespace Castor3D
 			, *GetEngine()->GetRenderSystem()->GetTopScene()
 			, p_depthMaps
 			, p_info );
+	}
+
+	void RenderPass::DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes )const
+	{
+		DoTraverseNodes( *this
+			, p_nodes
+			, [this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, SkinningRenderNodeArray & p_renderNodes )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				}
+			} );
+	}
+
+	void RenderPass::DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes
+		, DepthMapArray & p_depthMaps )const
+	{
+		DoTraverseNodes( *this
+			, p_nodes
+			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, p_depthMaps
+			, [this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, SkinningRenderNodeArray & p_renderNodes )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				}
+			} );
+	}
+
+	void RenderPass::DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera )const
+	{
+		DoTraverseNodes( *this
+			, p_camera
+			, p_nodes
+			, [this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, SkinningRenderNodeArray & p_renderNodes )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				}
+			} );
+	}
+
+	void RenderPass::DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps )const
+	{
+		DoTraverseNodes( *this
+			, p_camera
+			, p_nodes
+			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, p_depthMaps
+			, [this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, SkinningRenderNodeArray & p_renderNodes )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				}
+			} );
+	}
+
+	void RenderPass::DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes
+		, Camera const & p_camera
+		, DepthMapArray & p_depthMaps
+		, RenderInfo & p_info )const
+	{
+		DoTraverseNodes( *this
+			, p_camera
+			, p_nodes
+			, *GetEngine()->GetRenderSystem()->GetTopScene()
+			, p_depthMaps
+			, [this, &p_info]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, SkinningRenderNodeArray & p_renderNodes )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer(), p_info );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					++p_info.m_drawCalls;
+				}
+			} );
 	}
 
 	void RenderPass::DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes )const
@@ -1012,6 +1147,8 @@ namespace Castor3D
 		UBO_MORPHING( l_writer, p_programFlags );
 		UBO_SCENE( l_writer );
 
+		SkinningUbo::Declare( l_writer, p_programFlags );
+
 		// Outputs
 		auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
 		auto vtx_tangentSpaceFragPosition = l_writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
@@ -1033,6 +1170,7 @@ namespace Castor3D
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
+				l_mtxModel = SkinningUbo::ComputeTransform( l_writer );
 				auto l_mtxBoneTransform = l_writer.DeclLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
 				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];

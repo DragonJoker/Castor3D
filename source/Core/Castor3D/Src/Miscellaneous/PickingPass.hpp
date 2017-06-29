@@ -189,6 +189,11 @@ namespace Castor3D
 		void DoRenderSkinningSubmeshes( Scene & p_scene
 			, SkinningRenderNodesByPipelineMap & p_nodes );
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoRenderInstancedSkinningSubmeshes
+		 */
+		void DoRenderInstancedSkinningSubmeshes( Scene & p_scene
+			, SubmeshSkinningRenderNodesByPipelineMap & p_nodes );
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
 		 */
 		void DoRenderMorphingSubmeshes( Scene & p_scene

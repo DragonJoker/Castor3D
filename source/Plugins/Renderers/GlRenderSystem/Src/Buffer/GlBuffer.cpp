@@ -73,7 +73,7 @@ namespace GlRender
 		REQUIRE( this->GetGlName() != GlInvalidIndex );
 		REQUIRE( p_size > 0 );
 		REQUIRE( m_allocatedSize >= p_size );
-		REQUIRE( p_src.m_allocatedSize >= p_size );
+		REQUIRE( static_cast< GlBuffer const & >( p_src ).m_allocatedSize >= p_size );
 		GetOpenGl().BindBuffer( GlBufferTarget::eRead
 			, static_cast< GlBuffer const & >( p_src ).GetGlName() );
 		GetOpenGl().BindBuffer( GlBufferTarget::eWrite, GetGlName() );
@@ -91,7 +91,7 @@ namespace GlRender
 		, uint8_t const * p_buffer )const
 	{
 		REQUIRE( this->GetGlName() != GlInvalidIndex );
-		REQUIRE( p_size > 0 );
+		REQUIRE( p_count > 0 );
 		REQUIRE( m_allocatedSize >= p_count + p_offset );
 		Bind();
 		auto l_provider = BindableType::GetOpenGl().GetProvider();
@@ -124,7 +124,7 @@ namespace GlRender
 		, uint8_t * p_buffer )const
 	{
 		REQUIRE( this->GetGlName() != GlInvalidIndex );
-		REQUIRE( l_size > 0 );
+		REQUIRE( p_count > 0 );
 		REQUIRE( m_allocatedSize >= p_count + p_offset );
 		Bind();
 		auto l_buffer = Lock( p_offset

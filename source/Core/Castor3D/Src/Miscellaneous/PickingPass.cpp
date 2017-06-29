@@ -233,6 +233,7 @@ namespace Castor3D
 		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_nodes.m_instancedNodes.m_backCulled );
 		DoRenderStaticSubmeshes( p_nodes.m_scene, p_nodes.m_staticNodes.m_backCulled );
 		DoRenderSkinningSubmeshes( p_nodes.m_scene, p_nodes.m_skinningNodes.m_backCulled );
+		DoRenderInstancedSkinningSubmeshes( p_nodes.m_scene, p_nodes.m_instancedSkinningNodes.m_backCulled );
 		DoRenderMorphingSubmeshes( p_nodes.m_scene, p_nodes.m_morphingNodes.m_backCulled );
 		DoRenderBillboards( p_nodes.m_scene, p_nodes.m_billboardNodes.m_backCulled );
 	}
@@ -343,6 +344,26 @@ namespace Castor3D
 			, p_scene
 			, NodeType::eSkinning
 			, p_nodes );
+	}
+	
+	void PickingPass::DoRenderInstancedSkinningSubmeshes( Scene & p_scene
+		, SubmeshSkinningRenderNodesByPipelineMap & p_nodes )
+	{
+		DoTraverseNodes< true >( *this
+			, m_pickingUbo
+			, p_nodes
+			, NodeType::eInstantiated
+			, [&p_scene, this]( RenderPipeline & p_pipeline
+				, Pass & p_pass
+				, Submesh & p_submesh
+				, SkinningRenderNodeArray & p_renderNodes )
+			{
+				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+				{
+					auto l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				}
+			} );
 	}
 
 	void PickingPass::DoRenderMorphingSubmeshes( Scene & p_scene

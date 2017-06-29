@@ -95,9 +95,12 @@ namespace Castor3D
 	DECLARE_MAP( RenderPipelineRPtr, MorphingRenderNodeArray, MorphingRenderNodesByPipeline );
 	DECLARE_MAP( RenderPipelineRPtr, BillboardRenderNodeArray, BillboardRenderNodesByPipeline );
 	DECLARE_MAP( SubmeshRPtr, StaticRenderNodeArray, SubmeshStaticRenderNodes );
+	DECLARE_MAP( SubmeshRPtr, SkinningRenderNodeArray, SubmeshSkinningRenderNodes );
 
 	using SubmeshStaticRenderNodesByPassMap = TypeRenderNodesByPassMap< SubmeshStaticRenderNodesMap >;
 	DECLARE_MAP( RenderPipelineRPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByPipeline );
+	using SubmeshSkinninRenderNodesByPassMap = TypeRenderNodesByPassMap< SubmeshSkinningRenderNodesMap >;
+	DECLARE_MAP( RenderPipelineRPtr, SubmeshSkinninRenderNodesByPassMap, SubmeshSkinningRenderNodesByPipeline );
 }
 
 #endif

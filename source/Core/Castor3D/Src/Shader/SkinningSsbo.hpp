@@ -20,10 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_SkinningUbo_H___
-#define ___C3D_SkinningUbo_H___
+#ifndef ___C3D_SkinningSsbo_H___
+#define ___C3D_SkinningSsbo_H___
 
-#include "UniformBuffer.hpp"
+#include "ShaderStorageBuffer.hpp"
 
 namespace Castor3D
 {
@@ -32,11 +32,11 @@ namespace Castor3D
 	\version	0.10.0
 	\date		12/04/2017
 	\~english
-	\brief		Matrices Uniform buffer management.
+	\brief		Skinning SSBO management.
 	\~french
-	\brief		Gestion du tampon de variables uniformes pour les matrices.
+	\brief		Gestion du tampon shader pour le skinning.
 	*/
-	class SkinningUbo
+	class SkinningSsbo
 	{
 	public:
 		/**
@@ -46,10 +46,10 @@ namespace Castor3D
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API SkinningUbo( SkinningUbo const & ) = delete;
-		C3D_API SkinningUbo & operator=( SkinningUbo const & ) = delete;
-		C3D_API SkinningUbo( SkinningUbo && ) = default;
-		C3D_API SkinningUbo & operator=( SkinningUbo && ) = default;
+		C3D_API SkinningSsbo( SkinningSsbo const & ) = delete;
+		C3D_API SkinningSsbo & operator=( SkinningSsbo const & ) = delete;
+		C3D_API SkinningSsbo( SkinningSsbo && ) = default;
+		C3D_API SkinningSsbo & operator=( SkinningSsbo && ) = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -59,72 +59,56 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API SkinningUbo( Engine & p_engine );
+		C3D_API SkinningSsbo( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~SkinningUbo();
+		C3D_API ~SkinningSsbo();
 		/**
 		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_materialIndex	The overlay's material index.
+		 *\brief		Updates the SSBO from given values.
+		 *\param[in]	p_skeleton	The skeleton.
+		 *\param[in]	p_index		The instance index.
 		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
+		 *\brief		Met à jour le SSBO avec les valeurs données.
+		 *\param[in]	p_skeleton	Le squelette.
+		 *\param[in]	p_index		L'indice de l'instance.
 		 */
-		C3D_API void Update( AnimatedSkeleton const & p_skeleton )const;
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_materialIndex	The overlay's material index.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
-		 */
-		C3D_API static void Declare( GLSL::GlslWriter & p_writer
-			, ProgramFlags const & p_flags );
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_materialIndex	The overlay's material index.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
-		 */
-		C3D_API static GLSL::Mat4 ComputeTransform( GLSL::GlslWriter & p_writer
-			, ProgramFlags const & p_flags );
+		C3D_API void Update( AnimatedSkeleton const & p_skeleton
+			, uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\name			Getters.
 		 *\~french
 		 *\name			Getters.
 		 */
-		inline UniformBuffer & GetUbo()
+		/**@{*/
+		inline ShaderStorageBuffer & GetSsbo()
 		{
-			return m_ubo;
+			return m_ssbo;
 		}
 
-		inline UniformBuffer const & GetUbo()const
+		inline ShaderStorageBuffer const & GetSsbo()const
 		{
-			return m_ubo;
+			return m_ssbo;
 		}
 		/**@}*/
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
+		//!\~english	The SSBO.
+		//!\~french		L'SSBO.
+		ShaderStorageBuffer m_ssbo;
 		//!\~english	The bones matrices uniform variable.
 		//!\~french		Le variable uniforme contenant les matrices des os.
-		Uniform4x4f & m_bonesMatrix;
+		std::vector< Castor::Matrix4x4f > m_bonesMatrix;
 	};
 }
 
-#define UBO_SKINNING( Writer, Flags )\
-	GLSL::Ubo l_skinning{ l_writer, ShaderProgram::BufferSkinning };\
+#define SSBO_SKINNING( Writer, Flags )\
+	GLSL::Ssbo l_skinning{ l_writer, ShaderProgram::BufferSkinning };\
 	auto c3d_mtxBones = l_skinning.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
 	l_skinning.End()
 

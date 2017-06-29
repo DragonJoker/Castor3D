@@ -8,6 +8,7 @@
 #include "Mesh/Skeleton/BonedVertex.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/ShaderStorageBuffer.hpp"
 #include "Vertex.hpp"
 
 #include <Miscellaneous/BlockTracker.hpp>
@@ -248,6 +249,11 @@ namespace Castor3D
 			if ( m_initialised && m_matrixBuffer )
 			{
 				m_initialised = m_matrixBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			}
+
+			if ( m_initialised && m_instancedBonesBuffer )
+			{
+				m_initialised = m_instancedBonesBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 		}
 	}
@@ -964,36 +970,19 @@ namespace Castor3D
 		{
 			m_indexBuffer = std::make_shared< IndexBuffer >( *GetScene()->GetEngine() );
 		}
-
-		if ( ( CheckFlag( GetProgramFlags(), ProgramFlag::eSkinning ) && m_parentMesh.GetSkeleton() )
-				|| CheckFlag( GetProgramFlags(), ProgramFlag::eMorphing ) )
+		
+		if ( CheckFlag( GetProgramFlags(), ProgramFlag::eMorphing ) )
 		{
-			if ( CheckFlag( GetProgramFlags(), ProgramFlag::eMorphing ) )
+			m_animBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 			{
-				m_animBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 				{
-					{
-						BufferElementDeclaration( ShaderProgram::Position2, uint32_t( ElementUsage::ePosition ), ElementType::eVec3, Vertex::GetOffsetPos() ),
-						BufferElementDeclaration( ShaderProgram::Normal2, uint32_t( ElementUsage::eNormal ), ElementType::eVec3, Vertex::GetOffsetNml() ),
-						BufferElementDeclaration( ShaderProgram::Tangent2, uint32_t( ElementUsage::eTangent ), ElementType::eVec3, Vertex::GetOffsetTan() ),
-						BufferElementDeclaration( ShaderProgram::Bitangent2, uint32_t( ElementUsage::eBitangent ), ElementType::eVec3, Vertex::GetOffsetBin() ),
-						BufferElementDeclaration( ShaderProgram::Texture2, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec3, Vertex::GetOffsetTex() ),
-					}
-				} );
-			}
-			else
-			{
-				m_bonesBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
-				{
-					{
-						BufferElementDeclaration{ ShaderProgram::BoneIds0, uint32_t( ElementUsage::eBoneIds0 ), ElementType::eIVec4, 0 },
-						BufferElementDeclaration{ ShaderProgram::BoneIds1, uint32_t( ElementUsage::eBoneIds1 ), ElementType::eIVec4, 16 },
-						BufferElementDeclaration{ ShaderProgram::Weights0, uint32_t( ElementUsage::eBoneWeights0 ), ElementType::eVec4, 32 },
-						BufferElementDeclaration{ ShaderProgram::Weights1, uint32_t( ElementUsage::eBoneWeights1 ), ElementType::eVec4, 48 },
-					}
-				} );
-				ENSURE( m_bonesBuffer->GetDeclaration().stride() == BonedVertex::Stride );
-			}
+					BufferElementDeclaration( ShaderProgram::Position2, uint32_t( ElementUsage::ePosition ), ElementType::eVec3, Vertex::GetOffsetPos() ),
+					BufferElementDeclaration( ShaderProgram::Normal2, uint32_t( ElementUsage::eNormal ), ElementType::eVec3, Vertex::GetOffsetNml() ),
+					BufferElementDeclaration( ShaderProgram::Tangent2, uint32_t( ElementUsage::eTangent ), ElementType::eVec3, Vertex::GetOffsetTan() ),
+					BufferElementDeclaration( ShaderProgram::Bitangent2, uint32_t( ElementUsage::eBitangent ), ElementType::eVec3, Vertex::GetOffsetBin() ),
+					BufferElementDeclaration( ShaderProgram::Texture2, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec3, Vertex::GetOffsetTex() ),
+				}
+			} );
 		}
 		else if ( GetScene()->GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 		{
@@ -1018,6 +1007,25 @@ namespace Castor3D
 			else
 			{
 				m_matrixBuffer.reset();
+			}
+		}
+
+		if ( CheckFlag( m_programFlags, ProgramFlag::eSkinning ) && m_parentMesh.GetSkeleton() )
+		{
+			m_bonesBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
+			{
+				{
+					BufferElementDeclaration{ ShaderProgram::BoneIds0, uint32_t( ElementUsage::eBoneIds0 ), ElementType::eIVec4, 0 },
+					BufferElementDeclaration{ ShaderProgram::BoneIds1, uint32_t( ElementUsage::eBoneIds1 ), ElementType::eIVec4, 16 },
+					BufferElementDeclaration{ ShaderProgram::Weights0, uint32_t( ElementUsage::eBoneWeights0 ), ElementType::eVec4, 32 },
+					BufferElementDeclaration{ ShaderProgram::Weights1, uint32_t( ElementUsage::eBoneWeights1 ), ElementType::eVec4, 48 },
+				}
+			} );
+			ENSURE( m_bonesBuffer->GetDeclaration().stride() == BonedVertex::Stride );
+
+			if ( CheckFlag( m_programFlags, ProgramFlag::eInstantiation ) )
+			{
+				m_instancedBonesBuffer = std::make_shared< ShaderStorageBuffer >( *GetScene()->GetEngine() );
 			}
 		}
 	}
@@ -1051,6 +1059,11 @@ namespace Castor3D
 			m_bonesBuffer->Cleanup();
 		}
 
+		if ( m_instancedBonesBuffer )
+		{
+			m_instancedBonesBuffer->Cleanup();
+		}
+
 		for ( auto l_buffers : m_geometryBuffers )
 		{
 			l_buffers->Cleanup();
@@ -1078,6 +1091,11 @@ namespace Castor3D
 		if ( !m_bones.empty() )
 		{
 			DoGenerateBonesBuffer();
+
+			if ( l_count > 1 )
+			{
+				DoGenerateInstantiatedBonesBuffer( l_count );
+			}
 		}
 
 		if ( CheckFlag( m_programFlags, ProgramFlag::eMorphing ) )
@@ -1222,6 +1240,28 @@ namespace Castor3D
 			else
 			{
 				m_matrixBuffer.reset();
+			}
+		}
+	}
+
+	void Submesh::DoGenerateInstantiatedBonesBuffer( uint32_t p_count )
+	{
+		if ( m_instancedBonesBuffer )
+		{
+			if ( p_count )
+			{
+				auto & l_bonesBuffer = *m_instancedBonesBuffer;
+				auto l_stride = sizeof( float ) * 16u * 400u;
+				uint32_t l_size = p_count * l_stride;
+
+				if ( l_bonesBuffer.GetSize() != l_size )
+				{
+					l_bonesBuffer.Resize( l_size );
+				}
+			}
+			else
+			{
+				m_instancedBonesBuffer.reset();
 			}
 		}
 	}

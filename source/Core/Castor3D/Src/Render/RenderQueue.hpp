@@ -71,6 +71,7 @@ namespace Castor3D
 			m_staticNodes = p_rhs.m_staticNodes;
 			m_instancedNodes = p_rhs.m_instancedNodes;
 			m_skinningNodes = p_rhs.m_skinningNodes;
+			m_instancedSkinningNodes = p_rhs.m_instancedSkinningNodes;
 			m_morphingNodes = p_rhs.m_morphingNodes;
 			m_billboardNodes = p_rhs.m_billboardNodes;
 			return *this;
@@ -79,6 +80,7 @@ namespace Castor3D
 		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesByPipelineMap >;
 		using InstancedNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap >;
 		using SkinningNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodesByPipelineMap >;
+		using InstancedSkinningNodesMap = RenderNodesT< SkinningRenderNode, SubmeshSkinningRenderNodesByPipelineMap >;
 		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodesByPipelineMap >;
 		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap >;
 
@@ -95,6 +97,9 @@ namespace Castor3D
 		SkinningNodesMap m_skinningNodes;
 		//!\~english	The animated render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu animés, triés par programme shader.
+		InstancedSkinningNodesMap m_instancedSkinningNodes;
+		//!\~english	The animated render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu animés, triés par programme shader.
 		MorphingNodesMap m_morphingNodes;
 		//!\~english	The billboards render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
@@ -104,12 +109,14 @@ namespace Castor3D
 			, StaticNodesMap const & p_staticGeometries = StaticNodesMap()
 			, InstancedNodesMap const & p_instancedGeometries = InstancedNodesMap()
 			, SkinningNodesMap const & p_skinningGeometries = SkinningNodesMap()
+			, InstancedSkinningNodesMap const & p_instancedSkinningGeometries = InstancedSkinningNodesMap()
 			, MorphingNodesMap const & p_morphingGeometries = MorphingNodesMap()
 			, BillboardNodesMap const & p_billboards = BillboardNodesMap() )
 			: m_scene{ p_scene }
 			, m_staticNodes( p_staticGeometries )
 			, m_instancedNodes( p_instancedGeometries )
 			, m_skinningNodes( p_skinningGeometries )
+			, m_instancedSkinningNodes( p_instancedSkinningGeometries )
 			, m_morphingNodes( p_morphingGeometries )
 			, m_billboardNodes( p_billboards )
 		{

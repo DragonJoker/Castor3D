@@ -25,8 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
+#include "Mesh/Buffer/CpuBuffer.hpp"
 
 namespace Castor3D
 {
@@ -41,169 +40,47 @@ namespace Castor3D
 	\brief		Interface de tampon de stockage shader.
 	*/
 	class ShaderStorageBuffer
-		: public Castor::Named
-		, public Castor::OwnedBy< ShaderProgram >
+		: public CpuBuffer< uint8_t >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name		The buffer name.
-		 *\param[in]	p_program	The parent program.
+		 *\param[in]	p_engine		The engine.
+		 *\param[in]	p_declaration	The buffer declaration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name		Le nom du tampon.
-		 *\param[in]	p_program	Le programme parent.
+		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	p_declaration	La déclaration du tampon.
 		 */
-		C3D_API ShaderStorageBuffer( Castor::String const & p_name
-			, ShaderProgram & p_program );
+		C3D_API ShaderStorageBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~ShaderStorageBuffer();
+		C3D_API ~ShaderStorageBuffer();
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
-		 *\param[in]	p_size		The buffer size.
-		 *\param[in]	p_index		The binding index.
-		 *\param[in]	p_type		The buffer access type.
-		 *\param[in]	p_nature	The buffer access nature.
-		 *\return		\p false if any problem occured.
+		 *\param[in]	p_type		Buffer access type.
+		 *\param[in]	p_nature	Buffer access nature.
+		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
-		 *\param[in]	p_size		Taille du tampon.
-		 *\param[in]	p_index		L'index d'attache.
 		 *\param[in]	p_type		Type d'accès du tampon.
 		 *\param[in]	p_nature	Nature d'accès du tampon.
-		 *\return		\p false if any problem occured.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( uint32_t p_size
-			, uint32_t p_index
-			, BufferAccessType p_type
-			, BufferAccessNature p_nature );
+		C3D_API bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature );
 		/**
 		 *\~english
-		 *\brief		Cleans all the variables up and the GPU buffer associated.
+		 *\brief		Clean up the GPU buffer.
 		 *\~french
-		 *\brief		Nettoie toutes les variables et le tampon GPU associé.
+		 *\brief		Nettoie le tampon GPU.
 		 */
 		C3D_API void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
-		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset in the buffer.
-		 *\param[in]	p_count		The mapped elements count.
-		 *\param[in]	p_flags		The lock flags.
-		 *\return		The mapped buffer address.
-		 *\~french
-		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
-		 *\remarks		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_uiSize-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Le nombre d'éléments à mapper.
-		 *\param[in]	p_flags		Les flags de lock.
-		 *\return		L'adresse du tampon mappé.
-		 */
-		C3D_API uint8_t * Lock( uint32_t p_offset
-			, uint32_t p_count
-			, AccessTypes const & p_flags );
-		/**
-		 *\~english
-		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.
-		 *\remarks		All modifications made in the mapped buffer are put into GPU memory.
-		 *\~french
-		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus.
-		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU.
-		 */
-		C3D_API void Unlock();
-		/**
-		 *\~english
-		 *\brief		Transfers data to the GPU buffer from RAM.
-		 *\remarks		Transfers data from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset.
-		 *\param[in]	p_count		Elements count.
-		 *\param[in]	p_buffer	The data.
-		 *\~french
-		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
-		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Nombre d'éléments.
-		 *\param[in]	p_buffer	Les données.
-		 */
-		C3D_API void Upload( uint32_t p_offset
-			, uint32_t p_count
-			, uint8_t const * p_buffer );
-		/**
-		 *\~english
-		 *\brief		Transfers data from the GPU buffer to RAM.
-		 *\remarks		Transfers data from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset.
-		 *\param[in]	p_count		Elements count.
-		 *\param[out]	p_buffer	The data.
-		 *\~french
-		 *\brief		Transfère des données du tampon GPU vers la RAM.
-		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Nombre d'éléments.
-		 *\param[out]	p_buffer	Les données.
-		 */
-		C3D_API void Download( uint32_t p_offset
-			, uint32_t p_count
-			, uint8_t * p_buffer );
-		/**
-		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active.
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
-		 */
-		C3D_API void Bind();
-		/**
-		 *\~english
-		 *\brief		Binds the buffer to given point.
-		 *\param[in]	p_point	The binding point.
-		 *\~french
-		 *\brief		Active le tampon au point d'attache donné.
-		 *\param[in]	p_point	Le point d'attache.
-		 */
-		C3D_API void BindTo( uint32_t p_point );
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive.
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
-		 */
-		C3D_API void Unbind();
-		/**
-		 *\~english
-		 *\brief		Copies data from given buffer to this one.
-		 *\param[in]	p_src	The cource buffer.
-		 *\param[in]	p_size	The number of elements to copy.
-		 *\~french
-		 *\brief		Copie les données du tampon donné dans celui-ci.
-		 *\param[in]	p_src	Le tampon source.
-		 *\param[in]	p_size	Le nombre d'éléments à copier.
-		 */
-		C3D_API void Copy( GpuBuffer const & p_src
-			, uint32_t p_size );
-		/**
-		 *\~english
-		 *\return		The GPU buffer.
-		 *\~french
-		 *\return		Le tampon GPU.
-		 */
-		inline GpuBuffer const & GetGpuBuffer()const
-		{
-			REQUIRE( m_gpuBuffer );
-			return *m_gpuBuffer;
-		}
-
-	protected:
-		//!\~english	The GPU buffer.
-		//!\~french		Le tampon GPU.
-		GpuBufferUPtr m_gpuBuffer;
 	};
 }
 

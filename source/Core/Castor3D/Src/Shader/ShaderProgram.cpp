@@ -425,42 +425,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	ShaderStorageBuffer & ShaderProgram::CreateStorageBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask )
-	{
-		auto l_it = m_storageBuffersByName.find( p_name );
-
-		if ( l_it == m_storageBuffersByName.end() )
-		{
-			auto l_ssbo = std::make_shared< ShaderStorageBuffer >( p_name, *this );
-			m_listStorageBuffers.push_back( l_ssbo );
-			l_it = m_storageBuffersByName.insert( { p_name, l_ssbo } ).first;
-
-			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); ++i )
-			{
-				if ( CheckFlag( p_shaderMask, uint8_t( 0x01 << i ) ) )
-				{
-					REQUIRE( m_shaders[i] );
-					m_storageBuffers[i].push_back( l_ssbo );
-				}
-			}
-		}
-
-		return *l_it->second.lock();
-	}
-
-	ShaderStorageBufferSPtr ShaderProgram::FindStorageBuffer( Castor::String const & p_name )const
-	{
-		ShaderStorageBufferSPtr l_buffer;
-		auto l_it = m_storageBuffersByName.find( p_name );
-
-		if ( l_it != m_storageBuffersByName.end() )
-		{
-			l_buffer = l_it->second.lock();
-		}
-
-		return l_buffer;
-	}
-
 	AtomicCounterBuffer & ShaderProgram::CreateAtomicCounterBuffer( String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
 		auto l_it = m_atomicCounterBuffersByName.find( p_name );

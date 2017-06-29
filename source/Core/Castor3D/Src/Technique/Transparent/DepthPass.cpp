@@ -89,6 +89,7 @@ namespace Castor3D
 		if ( !p_nodes.m_staticNodes.m_backCulled.empty()
 			|| !p_nodes.m_instancedNodes.m_backCulled.empty()
 			|| !p_nodes.m_skinningNodes.m_backCulled.empty()
+			|| !p_nodes.m_instancedSkinningNodes.m_backCulled.empty()
 			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
 			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
@@ -97,12 +98,14 @@ namespace Castor3D
 			DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_frontCulled, p_camera );
 			DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_frontCulled, p_camera );
 			DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_frontCulled, p_camera );
+			DoRenderInstancedSkinningSubmeshes( p_nodes.m_instancedSkinningNodes.m_frontCulled, p_camera );
 			DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_frontCulled, p_camera );
 			DoRenderBillboards( p_nodes.m_billboardNodes.m_frontCulled, p_camera );
 
 			DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera );
 			DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera );
 			DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera );
+			DoRenderInstancedSkinningSubmeshes( p_nodes.m_instancedSkinningNodes.m_backCulled, p_camera );
 			DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera );
 			DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera );
 		}

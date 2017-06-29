@@ -33,7 +33,6 @@ namespace Castor3D
 	void AnimatedSkeleton::FillShader( Uniform4x4r & p_variable )const
 	{
 		Skeleton & l_skeleton = m_skeleton;
-
 		uint32_t i{ 0u };
 
 		if ( m_playingAnimations.empty() )
@@ -60,6 +59,43 @@ namespace Castor3D
 				}
 
 				p_variable.SetValue( l_final, i++ );
+			}
+		}
+	}
+
+	void AnimatedSkeleton::FillBuffer( uint8_t * p_buffer )const
+	{
+		Skeleton & l_skeleton = m_skeleton;
+		uint32_t i{ 0u };
+		auto l_buffer = reinterpret_cast< float * >( p_buffer );
+		auto l_stride = 16u;
+
+		if ( m_playingAnimations.empty() )
+		{
+			for ( auto l_bone : l_skeleton )
+			{
+				std::memcpy( l_buffer, l_skeleton.GetGlobalInverseTransform().const_ptr(), l_stride );
+				l_buffer += l_stride;
+			}
+		}
+		else
+		{
+			for ( auto l_bone : l_skeleton )
+			{
+				Matrix4x4r l_final{ 1.0_r };
+
+				for ( auto & l_animation : m_playingAnimations )
+				{
+					auto l_object = l_animation.get().GetObject( *l_bone );
+
+					if ( l_object )
+					{
+						l_final *= l_object->GetFinalTransform();
+					}
+				}
+
+				std::memcpy( l_buffer, l_final.const_ptr (), l_stride );
+				l_buffer += l_stride;
 			}
 		}
 	}

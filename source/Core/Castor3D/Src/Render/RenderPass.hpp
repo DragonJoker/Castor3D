@@ -469,6 +469,35 @@ namespace Castor3D
 			, RenderInfo & p_info )const;
 		/**
 		 *\~english
+		 *\brief		Copies the instanced skinned nodes model matrices into given matrix buffer.
+		 *\param[in]	p_renderNodes	The instanced nodes.
+		 *\param[in]	p_bonesBuffer	The bones matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
+		 *\param[in]	p_renderNodes	Les noeuds instanciés.
+		 *\param[in]	p_bonesBuffer	Le tampon de matrices des os.
+		 */
+		C3D_API uint32_t DoCopyNodesBones( SkinningRenderNodeArray const & p_renderNodes
+			, ShaderStorageBuffer & p_bonesBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced skinned nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		p_renderNodes	The instanced nodes.
+		 *\param[in]		p_bonesBuffer	The bones matrix buffer.
+		 *\param[in, out]	p_info			Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		p_renderNodes	Les noeuds instanciés.
+		 *\param[in]		p_bonesBuffer	Le tampon de matrices des os.
+		 *\param[in,out]	p_info			Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t DoCopyNodesBones( SkinningRenderNodeArray const & p_renderNodes
+			, ShaderStorageBuffer & p_bonesBuffer
+			, RenderInfo & p_info )const;
+		/**
+		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	p_nodes	The render nodes.
 		 *\~french
@@ -662,6 +691,72 @@ namespace Castor3D
 		 *\param[in,out]	p_info		Reçoit les informations de rendu.
 		 */
 		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps
+			, RenderInfo & p_info )const;
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_nodes	The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_nodes	Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes )const;
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes
+			, DepthMapArray & p_depthMaps )const;
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 */
+		C3D_API void DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera )const;
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param		p_camera	The viewing camera.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes
+			, Camera const & p_camera
+			, DepthMapArray & p_depthMaps )const;
+		/**
+		 *\~english
+		 *\brief			Renders instanced submeshes.
+		 *\param[in]		p_nodes		The render nodes.
+		 *\param			p_camera	The viewing camera.
+		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	p_info		Receives the render informations.
+		 *\~french
+		 *\brief			Dessine des sous maillages instanciés.
+		 *\param[in]		p_nodes		Les noeuds de rendu.
+		 *\param			p_camera	La caméra regardant la scène.
+		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in,out]	p_info		Reçoit les informations de rendu.
+		 */
+		C3D_API void DoRenderInstancedSkinningSubmeshes( SubmeshSkinningRenderNodesByPipelineMap & p_nodes
 			, Camera const & p_camera
 			, DepthMapArray & p_depthMaps
 			, RenderInfo & p_info )const;

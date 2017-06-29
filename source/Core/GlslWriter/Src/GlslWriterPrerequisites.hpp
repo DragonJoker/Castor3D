@@ -93,12 +93,6 @@ namespace GLSL
 		eSquaredExponential,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
 	};
-	enum class UboLayout
-	{
-		eStd140,
-		ePacked,
-		eShared
-	};
 
 	struct GlslWriterConfig;
 	class GlslWriter;
