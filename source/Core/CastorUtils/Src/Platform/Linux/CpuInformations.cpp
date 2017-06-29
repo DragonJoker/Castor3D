@@ -29,7 +29,8 @@ namespace Castor
 		{
 			char res[128];
 			FILE * fp = popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" );
-			ENSURE( fread( res, 1, sizeof( res ) - 1, fp ) < sizeof( res ) );
+			auto read = fread( res, 1, sizeof( res ) - 1, fp ) < sizeof( res );
+			ENSURE( read && read < sizeof( res ) );
 			pclose( fp );
 			return uint32_t( res[0] );
 		}

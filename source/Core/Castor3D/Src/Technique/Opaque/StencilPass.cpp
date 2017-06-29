@@ -1,4 +1,4 @@
-﻿#include "StencilPass.hpp"
+#include "StencilPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>

@@ -257,8 +257,8 @@ namespace Castor3D
 			p_info.m_particlesCount += p_particleSystem.GetParticlesCount();
 		} );
 
-		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		m_frameBuffer.m_frameBuffer->Unbind();
+		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 
 #if USE_WEIGHTED_BLEND
 

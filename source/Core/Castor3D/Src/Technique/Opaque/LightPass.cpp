@@ -1,4 +1,4 @@
-﻿#include "LightPass.hpp"
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>

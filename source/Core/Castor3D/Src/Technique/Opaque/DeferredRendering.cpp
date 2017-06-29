@@ -1,4 +1,4 @@
-﻿#include "DeferredRendering.hpp"
+#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -133,10 +133,6 @@ namespace Castor3D
 		m_opaquePass.Render( p_info, p_scene.HasShadows() );
 		m_geometryPassFrameBuffer->Unbind();
 
-		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
-		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
-		m_frameBuffer.Clear( BufferComponent::eColour | BufferComponent::eStencil );
-		m_frameBuffer.Unbind();
 		BlitDepthInto( m_frameBuffer );
 
 		m_sceneUbo.Update( p_scene, p_camera );
