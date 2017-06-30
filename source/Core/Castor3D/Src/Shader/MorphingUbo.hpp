@@ -104,7 +104,7 @@ namespace Castor3D
 }
 
 #define UBO_MORPHING( Writer, Flags )\
-	GLSL::Ubo l_morphing{ l_writer, ShaderProgram::BufferMorphing };\
+	GLSL::Ubo l_morphing{ l_writer, ShaderProgram::BufferMorphing, 6u };\
 	auto c3d_fTime = l_morphing.DeclMember< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
 	l_morphing.End()
 

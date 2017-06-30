@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,6 +42,7 @@ namespace GLSL
 
 		GlslWriter_API Ubo( GlslWriter & p_writer
 			, Castor::String const & p_name
+			, uint32_t p_bind
 			, Layout p_layout = Layout::eStd140 );
 		GlslWriter_API void End();
 
@@ -85,7 +86,6 @@ namespace GLSL
 		Castor::StringStream m_stream;
 		std::unique_ptr< IndentBlock > m_block;
 		Castor::String m_name;
-		Layout m_layout;
 		uint32_t m_count{ 0u };
 		Info m_info;
 	};

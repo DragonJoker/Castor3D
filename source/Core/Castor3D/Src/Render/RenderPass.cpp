@@ -1144,9 +1144,9 @@ namespace Castor3D
 
 		UBO_MATRIX( l_writer );
 		UBO_MODEL_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
 		SkinningUbo::Declare( l_writer, p_programFlags );
 		UBO_MORPHING( l_writer, p_programFlags );
-		UBO_SCENE( l_writer );
 
 		// Outputs
 		auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );

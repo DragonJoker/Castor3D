@@ -32,8 +32,9 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API static std::unique_ptr< GLSL::KeywordsBase > Get( GlslWriterConfig const & p_rs );
-		inline Castor::String GetLayout (Ubo::Layout p_layout, uint32_t p_index)const;
-		inline Castor::String GetLayout( Ssbo::Layout p_layout, uint32_t p_index )const;
+		GlslWriter_API Castor::String GetLayout (Ubo::Layout p_layout, uint32_t p_index)const;
+		GlslWriter_API Castor::String GetLayout( Ssbo::Layout p_layout, uint32_t p_index )const;
+
 		inline Castor::String const & GetVersion()const;
 		inline Castor::String const & GetIn()const;
 		inline Castor::String const & GetOut()const;

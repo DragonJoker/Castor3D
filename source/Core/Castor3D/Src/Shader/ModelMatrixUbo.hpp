@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -119,7 +119,7 @@ namespace Castor3D
 }
 
 #define UBO_MODEL_MATRIX( Writer )\
-	GLSL::Ubo l_modelMatrices{ l_writer, ShaderProgram::BufferModelMatrix };\
+	GLSL::Ubo l_modelMatrices{ l_writer, ShaderProgram::BufferModelMatrix, 2u };\
 	auto c3d_mtxModel = l_modelMatrices.DeclMember< GLSL::Mat4 >( RenderPipeline::MtxModel );\
 	auto c3d_mtxNormal = l_modelMatrices.DeclMember< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
 	l_modelMatrices.End()

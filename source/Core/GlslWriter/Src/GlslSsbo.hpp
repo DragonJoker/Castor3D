@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -41,40 +41,52 @@ namespace GLSL
 
 		using Info = BoInfo< Ssbo::Layout >;
 
-		GlslWriter_API Ssbo( GlslWriter & p_writer, Castor::String const & p_name, Layout p_layout = Layout::eStd430 );
+		GlslWriter_API Ssbo( GlslWriter & p_writer
+			, Castor::String const & p_name
+			, uint32_t p_bind
+			, Layout p_layout = Layout::eStd430 );
 		GlslWriter_API void End();
 
 		template< typename T >
 		inline T DeclMember( Castor::String const & p_name );
 		template< typename T >
-		inline Array< T > DeclMember( Castor::String const & p_name, uint32_t p_dimension );
+		inline Array< T > DeclMember( Castor::String const & p_name
+			, uint32_t p_dimension );
 		template< typename T >
 		inline Array< T > DeclMemberArray( Castor::String const & p_name );
 		template< typename T >
-		inline Optional< T > DeclMember( Castor::String const & p_name, bool p_enabled );
+		inline Optional< T > DeclMember( Castor::String const & p_name
+			, bool p_enabled );
 		template< typename T >
-		inline Optional< Array< T > > DeclMember( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		inline Optional< Array< T > > DeclMember( Castor::String const & p_name
+			, uint32_t p_dimension
+			, bool p_enabled );
 		template< typename T >
-		inline Optional< Array< T > > DeclMemberArray( Castor::String const & p_name, bool p_enabled );
+		inline Optional< Array< T > > DeclMemberArray( Castor::String const & p_name
+			, bool p_enabled );
 		template< typename T >
 		inline T GetMember( Castor::String const & p_name );
 		template< typename T >
-		inline Array< T > GetMember( Castor::String const & p_name, uint32_t p_dimension );
+		inline Array< T > GetMember( Castor::String const & p_name
+			, uint32_t p_dimension );
 		template< typename T >
 		inline Array< T > GetMemberArray( Castor::String const & p_name );
 		template< typename T >
-		inline Optional< T > GetMember( Castor::String const & p_name, bool p_enabled );
+		inline Optional< T > GetMember( Castor::String const & p_name
+			, bool p_enabled );
 		template< typename T >
-		inline Optional< Array< T > > GetMember( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		inline Optional< Array< T > > GetMember( Castor::String const & p_name
+			, uint32_t p_dimension
+			, bool p_enabled );
 		template< typename T >
-		inline Optional< Array< T > > GetMemberArray( Castor::String const & p_name, bool p_enabled );
+		inline Optional< Array< T > > GetMemberArray( Castor::String const & p_name
+			, bool p_enabled );
 
 	private:
 		GlslWriter & m_writer;
 		Castor::StringStream m_stream;
 		std::unique_ptr< IndentBlock > m_block;
 		Castor::String m_name;
-		Layout m_layout;
 		uint32_t m_count{ 0u };
 		Info m_info;
 	};

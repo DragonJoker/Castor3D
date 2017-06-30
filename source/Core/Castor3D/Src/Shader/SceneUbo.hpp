@@ -152,7 +152,7 @@ namespace Castor3D
 }
 
 #define UBO_SCENE( Writer )\
-	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
+	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene, 3u };\
 	auto c3d_v4AmbientLight = l_scene.DeclMember< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
 	auto c3d_v4BackgroundColour = l_scene.DeclMember< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
 	auto c3d_iLightsCount = l_scene.DeclMember< GLSL::IVec4 >( ShaderProgram::LightsCount );\

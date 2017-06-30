@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -78,7 +78,7 @@ namespace Castor3D
 }
 
 #define UBO_GPINFO( p_writer )\
-	GLSL::Ubo l_gpInfo{ p_writer, GpInfoUbo::GPInfo };\
+	GLSL::Ubo l_gpInfo{ p_writer, GpInfoUbo::GPInfo, 4u };\
 	auto c3d_mtxInvViewProj = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvViewProj );\
 	auto c3d_mtxInvView = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvView );\
 	auto c3d_mtxInvProj = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvProj );\

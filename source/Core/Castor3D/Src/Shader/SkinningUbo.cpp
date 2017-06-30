@@ -1,4 +1,4 @@
-﻿#include "SkinningUbo.hpp"
+#include "SkinningUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -30,17 +30,20 @@ namespace Castor3D
 	void SkinningUbo::Declare( GLSL::GlslWriter & p_writer
 		, ProgramFlags const & p_flags )
 	{
-		if ( CheckFlag( p_flags, ProgramFlag::eInstantiation ) )
+		if ( CheckFlag( p_flags, ProgramFlag::eSkinning ) )
 		{
-			GLSL::Ssbo l_skinning{ p_writer, ShaderProgram::BufferSkinning };
-			auto c3d_mtxBones = l_skinning.DeclMemberArray< GLSL::Mat4 >( ShaderProgram::Bones, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
-			l_skinning.End();
-		}
-		else
-		{
-			GLSL::Ubo l_skinning{ p_writer, ShaderProgram::BufferSkinning };
-			auto c3d_mtxBones = l_skinning.DeclMember< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
-			l_skinning.End();
+			if ( CheckFlag( p_flags, ProgramFlag::eInstantiation ) )
+			{
+				GLSL::Ssbo l_skinning{ p_writer, ShaderProgram::BufferSkinning, 5u };
+				auto c3d_mtxBones = l_skinning.DeclMemberArray< GLSL::Mat4 >( ShaderProgram::Bones, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
+				l_skinning.End();
+			}
+			else
+			{
+				GLSL::Ubo l_skinning{ p_writer, ShaderProgram::BufferSkinning, 5u };
+				auto c3d_mtxBones = l_skinning.DeclMember< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
+				l_skinning.End();
+			}
 		}
 	}
 
