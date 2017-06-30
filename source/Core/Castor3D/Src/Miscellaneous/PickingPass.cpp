@@ -230,12 +230,12 @@ namespace Castor3D
 	{
 		m_matrixUbo.Update( p_camera.GetView()
 			, p_camera.GetViewport().GetProjection() );
-		DoRenderInstancedSubmeshes( p_nodes.m_scene, p_nodes.m_instancedNodes.m_backCulled );
-		DoRenderStaticSubmeshes( p_nodes.m_scene, p_nodes.m_staticNodes.m_backCulled );
-		DoRenderSkinningSubmeshes( p_nodes.m_scene, p_nodes.m_skinningNodes.m_backCulled );
-		DoRenderInstancedSkinningSubmeshes( p_nodes.m_scene, p_nodes.m_instancedSkinningNodes.m_backCulled );
-		DoRenderMorphingSubmeshes( p_nodes.m_scene, p_nodes.m_morphingNodes.m_backCulled );
-		DoRenderBillboards( p_nodes.m_scene, p_nodes.m_billboardNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_instancedNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_staticNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_skinningNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_instancedSkinningNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_morphingNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_billboardNodes.m_backCulled );
 	}
 
 	Point3f PickingPass::DoFboPick( Position const & p_position
@@ -306,7 +306,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void PickingPass::DoRenderInstancedSubmeshes( Scene & p_scene
+	void PickingPass::DoRender( Scene & p_scene
 		, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
 	{
 		DoTraverseNodes< true >( *this
@@ -326,7 +326,7 @@ namespace Castor3D
 			} );
 	}
 
-	void PickingPass::DoRenderStaticSubmeshes( Scene & p_scene
+	void PickingPass::DoRender( Scene & p_scene
 		, StaticRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
@@ -336,7 +336,7 @@ namespace Castor3D
 			, p_nodes );
 	}
 
-	void PickingPass::DoRenderSkinningSubmeshes( Scene & p_scene
+	void PickingPass::DoRender( Scene & p_scene
 		, SkinningRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
@@ -346,7 +346,7 @@ namespace Castor3D
 			, p_nodes );
 	}
 	
-	void PickingPass::DoRenderInstancedSkinningSubmeshes( Scene & p_scene
+	void PickingPass::DoRender( Scene & p_scene
 		, SubmeshSkinningRenderNodesByPipelineMap & p_nodes )
 	{
 		DoTraverseNodes< true >( *this
@@ -366,7 +366,7 @@ namespace Castor3D
 			} );
 	}
 
-	void PickingPass::DoRenderMorphingSubmeshes( Scene & p_scene
+	void PickingPass::DoRender( Scene & p_scene
 		, MorphingRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
@@ -376,7 +376,7 @@ namespace Castor3D
 			, p_nodes );
 	}
 
-	void PickingPass::DoRenderBillboards( Scene & p_scene
+	void PickingPass::DoRender( Scene & p_scene
 		, BillboardRenderNodesByPipelineMap & p_nodes )
 	{
 		DoRenderNonInstanced< true >( *this
@@ -468,14 +468,14 @@ namespace Castor3D
 	{
 	}
 
-	String PickingPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader PickingPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
 	{
-		return String{};
+		return GLSL::Shader{};
 	}
 
-	String PickingPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader PickingPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const
@@ -485,8 +485,8 @@ namespace Castor3D
 
 		// UBOs
 		Ubo l_uboPicking{ l_writer, Picking };
-		auto c3d_iDrawIndex( l_uboPicking.GetUniform< UInt >( DrawIndex ) );
-		auto c3d_iNodeIndex( l_uboPicking.GetUniform< UInt >( NodeIndex ) );
+		auto c3d_iDrawIndex( l_uboPicking.DeclMember< UInt >( DrawIndex ) );
+		auto c3d_iNodeIndex( l_uboPicking.DeclMember< UInt >( NodeIndex ) );
 		l_uboPicking.End();
 
 		// Fragment Intputs

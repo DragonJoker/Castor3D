@@ -42,7 +42,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			String l_vtx;
+			GLSL::Shader l_vtx;
 			{
 				auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
@@ -68,9 +68,8 @@ namespace Castor3D
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
 			auto l_pxl = DoCreate();
-			auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
+			l_program->SetSource( ShaderType::ePixel, l_pxl );
 			l_return = l_program->Initialise();
 		}
 

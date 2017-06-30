@@ -79,12 +79,12 @@ namespace Castor3D
 
 #define UBO_GPINFO( p_writer )\
 	GLSL::Ubo l_gpInfo{ p_writer, GpInfoUbo::GPInfo };\
-	auto c3d_mtxInvViewProj = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfoUbo::InvViewProj );\
-	auto c3d_mtxInvView = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfoUbo::InvView );\
-	auto c3d_mtxInvProj = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfoUbo::InvProj );\
-	auto c3d_mtxGView = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfoUbo::View );\
-	auto c3d_mtxGProj = l_gpInfo.GetUniform< GLSL::Mat4 >( GpInfoUbo::Proj );\
-	auto c3d_renderSize = l_gpInfo.GetUniform< GLSL::Vec2 >( GpInfoUbo::RenderSize );\
+	auto c3d_mtxInvViewProj = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvViewProj );\
+	auto c3d_mtxInvView = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvView );\
+	auto c3d_mtxInvProj = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvProj );\
+	auto c3d_mtxGView = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::View );\
+	auto c3d_mtxGProj = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::Proj );\
+	auto c3d_renderSize = l_gpInfo.DeclMember< GLSL::Vec2 >( GpInfoUbo::RenderSize );\
 	l_gpInfo.End()
 
 #endif

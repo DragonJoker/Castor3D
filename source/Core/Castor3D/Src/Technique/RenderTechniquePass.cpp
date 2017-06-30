@@ -197,19 +197,19 @@ namespace Castor3D
 		{
 			m_matrixUbo.Update( p_camera.GetView()
 				, p_camera.GetViewport().GetProjection() );
-			DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderInstancedSkinningSubmeshes( p_nodes.m_instancedSkinningNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderBillboards( p_nodes.m_billboardNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_instancedNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_staticNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_skinningNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_instancedSkinningNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_morphingNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_billboardNodes.m_frontCulled, p_camera, p_depthMaps );
 
-			DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			DoRenderInstancedSkinningSubmeshes( p_nodes.m_instancedSkinningNodes.m_backCulled, p_camera, p_depthMaps );
-			DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_instancedNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_skinningNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_instancedSkinningNodes.m_backCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_info );
 		}
 	}
 
@@ -248,11 +248,11 @@ namespace Castor3D
 		}
 	}
 
-	String RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
 	{
-		return String{};
+		return GLSL::Shader{};
 	}
 
 	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const

@@ -119,8 +119,8 @@ namespace Castor3D
 
 #define UBO_BILLBOARD( Writer )\
 	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards };\
-	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( ShaderProgram::Dimensions );\
-	auto c3d_v2iWindowSize = l_billboard.GetUniform< IVec2 >( ShaderProgram::WindowSize );\
+	auto c3d_v2iDimensions = l_billboard.DeclMember< IVec2 >( ShaderProgram::Dimensions );\
+	auto c3d_v2iWindowSize = l_billboard.DeclMember< IVec2 >( ShaderProgram::WindowSize );\
 	l_billboard.End()
 
 #endif

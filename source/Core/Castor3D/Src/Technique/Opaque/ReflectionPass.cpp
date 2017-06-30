@@ -71,7 +71,7 @@ namespace Castor3D
 			return l_result;
 		}
 
-		String DoCreateVertexProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreateVertexProgram( RenderSystem & p_renderSystem )
 		{
 			using namespace GLSL;
 			auto l_writer = p_renderSystem.CreateGlslWriter();
@@ -94,7 +94,7 @@ namespace Castor3D
 			return l_writer.Finalise();
 		}
 
-		String DoCreatePixelProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreatePixelProgram( RenderSystem & p_renderSystem )
 		{
 			using namespace GLSL;
 			auto l_writer = p_renderSystem.CreateGlslWriter();
@@ -103,8 +103,8 @@ namespace Castor3D
 			UBO_SCENE( l_writer );
 			UBO_GPINFO( l_writer );
 			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig };
-			auto c3d_fExposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
-			auto c3d_fGamma = l_config.GetUniform< Float >( ShaderProgram::Gamma );
+			auto c3d_fExposure = l_config.DeclMember< Float >( ShaderProgram::Exposure );
+			auto c3d_fGamma = l_config.DeclMember< Float >( ShaderProgram::Gamma );
 			l_config.End();
 			auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
 			auto c3d_mapNormal = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
@@ -201,14 +201,13 @@ namespace Castor3D
 		ShaderProgramSPtr DoCreateProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_vtx = DoCreateVertexProgram( l_renderSystem );
-			String l_pxl = DoCreatePixelProgram( l_renderSystem );
+			auto l_vtx = DoCreateVertexProgram( l_renderSystem );
+			auto l_pxl = DoCreatePixelProgram( l_renderSystem );
 			auto l_result = p_engine.GetShaderProgramCache().GetNewProgram( false );
-			ShaderModel l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 			l_result->CreateObject( ShaderType::eVertex );
 			l_result->CreateObject( ShaderType::ePixel );
-			l_result->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_result->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_result->SetSource( ShaderType::eVertex, l_vtx );
+			l_result->SetSource( ShaderType::ePixel, l_pxl );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDepth ), ShaderType::ePixel )->SetValue( 0u );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel )->SetValue( 1u );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDiffuse ), ShaderType::ePixel )->SetValue( 2u );

@@ -46,36 +46,22 @@ namespace GlRender
 	bool GlShaderObject::Compile()
 	{
 		bool l_return = false;
-		String l_loadedSource;
+		String l_loadedSource = m_source.GetSource();
 
-		for ( size_t i = size_t( ShaderModel::eModel5 ); i >= size_t( ShaderModel::eModel1 ) && l_loadedSource.empty() && i < m_arraySources.size(); i-- )
-		{
-			if ( m_parent->GetRenderSystem()->GetGpuInformations().CheckSupport( ShaderModel( i ) ) )
-			{
-				l_loadedSource = m_arraySources[i];
-
-				if ( !l_loadedSource.empty() )
-				{
-					m_eShaderModel = ShaderModel( i );
-				}
-			}
-		}
-
-		if ( m_status != ShaderStatus::eError && !l_loadedSource.empty() && l_loadedSource != m_loadedSource )
+		if ( m_status != ShaderStatus::eError && !l_loadedSource.empty() )
 		{
 			l_return = true;
-			m_loadedSource = l_loadedSource;
 
 			if ( m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
 			{
 				m_status = ShaderStatus::eNotCompiled;
 				int l_compiled = 0;
-				int l_iLength = int( m_loadedSource.size() );
-				std::string l_tmp = string::string_cast< char >( m_loadedSource );
-				std::vector< char > l_pszTmp( m_loadedSource.size() + 1 );
+				int l_iLength = int( l_loadedSource.size() );
+				std::string l_tmp = string::string_cast< char >( l_loadedSource );
+				std::vector< char > l_pszTmp( l_loadedSource.size() + 1 );
 				char * l_buffer = l_pszTmp.data();
 #if defined( CASTOR_COMPILER_MSVC )
-				strncpy_s( l_buffer, m_loadedSource.size() + 1, l_tmp.c_str(), l_tmp.size() );
+				strncpy_s( l_buffer, l_loadedSource.size() + 1, l_tmp.c_str(), l_tmp.size() );
 #else
 				strncpy( l_buffer, l_tmp.c_str(), l_tmp.size() );
 #endif
@@ -100,7 +86,7 @@ namespace GlRender
 				Logger::LogError( "GlShaderObject::Compile - Shader type not supported by currently loaded API." );
 			}
 		}
-		else if ( m_loadedSource.empty() )
+		else if ( l_loadedSource.empty() )
 		{
 			Logger::LogError( "GlShaderObject::Compile - No shader source." );
 		}

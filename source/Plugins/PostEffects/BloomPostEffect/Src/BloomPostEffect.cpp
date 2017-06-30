@@ -38,7 +38,7 @@ namespace Bloom
 {
 	namespace
 	{
-		Castor::String GetVertexProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetVertexProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -60,7 +60,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetHiPassProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetHiPassProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -91,15 +91,15 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetBlurXProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetBlurXProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			Ubo l_config{ l_writer, BloomPostEffect::FilterConfig };
-			auto c3d_fCoefficients = l_config.GetUniform< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
-			auto c3d_fCoefficientsCount = l_config.GetUniform< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
+			auto c3d_fCoefficients = l_config.DeclMember< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
+			auto c3d_fCoefficientsCount = l_config.DeclMember< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 			l_config.End();
 			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
@@ -124,15 +124,15 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetBlurYProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetBlurYProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			Ubo l_config{ l_writer, BloomPostEffect::FilterConfig };
-			auto c3d_fCoefficients = l_config.GetUniform< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
-			auto c3d_fCoefficientsCount = l_config.GetUniform< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
+			auto c3d_fCoefficients = l_config.DeclMember< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
+			auto c3d_fCoefficientsCount = l_config.DeclMember< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 			l_config.End();
 			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
@@ -157,7 +157,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetCombineProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetCombineProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -610,7 +610,6 @@ namespace Bloom
 	bool BloomPostEffect::DoInitialiseHiPassProgram()
 	{
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderModel const l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_hipass = GetHiPassProgram( GetRenderSystem() );
 
@@ -619,8 +618,8 @@ namespace Bloom
 		l_program->CreateObject( ShaderType::ePixel );
 		m_hiPassMapDiffuse = l_program->CreateUniform < UniformType::eSampler >( ShaderProgram::MapDiffuse
 			, ShaderType::ePixel );
-		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_hipass );
+		l_program->SetSource( ShaderType::eVertex, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_hipass );
 		bool l_return = l_program->Initialise();
 
 		if ( l_return )
@@ -643,7 +642,6 @@ namespace Bloom
 	bool BloomPostEffect::DoInitialiseBlurXProgram()
 	{
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderModel const l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_blurX = GetBlurXProgram( GetRenderSystem() );
 
@@ -655,8 +653,8 @@ namespace Bloom
 		m_blurXCoeffCount->SetValue( m_size );
 		m_blurXCoeffs->SetValues( m_kernel );
 
-		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_blurX );
+		l_program->SetSource( ShaderType::eVertex, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_blurX );
 		bool l_return = l_program->Initialise();
 
 		if ( l_return )
@@ -680,7 +678,6 @@ namespace Bloom
 	bool BloomPostEffect::DoInitialiseBlurYProgram()
 	{
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderModel const l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_blurY = GetBlurYProgram( GetRenderSystem() );
 
@@ -692,8 +689,8 @@ namespace Bloom
 		m_blurYCoeffCount->SetValue( m_size );
 		m_blurYCoeffs->SetValues( m_kernel );
 
-		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_blurY );
+		l_program->SetSource( ShaderType::eVertex, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_blurY );
 		bool l_return = l_program->Initialise();
 
 		if ( l_return )
@@ -717,7 +714,6 @@ namespace Bloom
 	bool BloomPostEffect::DoInitialiseCombineProgram()
 	{
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderModel const l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_combine = GetCombineProgram( GetRenderSystem() );
 
@@ -735,8 +731,8 @@ namespace Bloom
 		l_program->CreateUniform< UniformType::eSampler >( BloomPostEffect::CombineMapScene
 			, ShaderType::ePixel )->SetValue( 4 );
 
-		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_combine );
+		l_program->SetSource( ShaderType::eVertex, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_combine );
 		bool l_return = l_program->Initialise();
 
 		if ( l_return )

@@ -139,35 +139,30 @@ namespace Castor3D
 			return l_result;
 		}
 
-		String DoGetSsaoVertexProgram( Engine & p_engine )
+		GLSL::Shader DoGetSsaoVertexProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_vtx;
-			{
-				using namespace GLSL;
-				auto l_writer = l_renderSystem.CreateGlslWriter();
+			using namespace GLSL;
+			auto l_writer = l_renderSystem.CreateGlslWriter();
 
-				// Shader inputs
-				UBO_MATRIX( l_writer );
-				UBO_GPINFO( l_writer );
-				auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
-				auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
+			// Shader inputs
+			UBO_MATRIX( l_writer );
+			UBO_GPINFO( l_writer );
+			auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
 
-				// Shader outputs
-				auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			// Shader outputs
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-				l_writer.ImplementFunction< void >( cuT( "main" )
-					, [&]()
-					{
-						gl_Position = c3d_mtxProjection * vec4( position, 0.0, 1.0 );
-					} );
-				l_vtx = l_writer.Finalise();
-			}
-
-			return l_vtx;
+			l_writer.ImplementFunction< void >( cuT( "main" )
+				, [&]()
+				{
+					gl_Position = c3d_mtxProjection * vec4( position, 0.0, 1.0 );
+				} );
+			return l_writer.Finalise();
 		}
 		
-		String DoGetSsaoPixelProgram( Engine & p_engine )
+		GLSL::Shader DoGetSsaoPixelProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			using namespace GLSL;
@@ -181,11 +176,11 @@ namespace Castor3D
 			auto c3d_mapNoise = l_writer.DeclUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
 
 			Ubo l_ssaoConfig{ l_writer, cuT( "SsaoConfig" ) };
-			auto c3d_kernel = l_ssaoConfig.GetUniform< Vec3 >( cuT( "c3d_kernel" ), 64u );
-			auto c3d_kernelSize = l_ssaoConfig.GetUniform< Int >( cuT( "c3d_kernelSize" ) );
-			auto c3d_radius = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_radius" ) );
-			auto c3d_bias = l_ssaoConfig.GetUniform< Float >( cuT( "c3d_bias" ) );
-			auto c3d_noiseScale = l_ssaoConfig.GetUniform< Vec2 >( cuT( "c3d_noiseScale" ) );
+			auto c3d_kernel = l_ssaoConfig.DeclMember< Vec3 >( cuT( "c3d_kernel" ), 64u );
+			auto c3d_kernelSize = l_ssaoConfig.DeclMember< Int >( cuT( "c3d_kernelSize" ) );
+			auto c3d_radius = l_ssaoConfig.DeclMember< Float >( cuT( "c3d_radius" ) );
+			auto c3d_bias = l_ssaoConfig.DeclMember< Float >( cuT( "c3d_bias" ) );
+			auto c3d_noiseScale = l_ssaoConfig.DeclMember< Vec2 >( cuT( "c3d_noiseScale" ) );
 			l_ssaoConfig.End();
 
 			GLSL::Utils l_utils{ l_writer };
@@ -241,7 +236,7 @@ namespace Castor3D
 			return l_writer.Finalise();
 		}
 		
-		String DoGetBlurVertexProgram( Engine & p_engine )
+		GLSL::Shader DoGetBlurVertexProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			using namespace GLSL;
@@ -266,7 +261,7 @@ namespace Castor3D
 			return l_writer.Finalise();
 		}
 
-		String DoGetBlurPixelProgram( Engine & p_engine )
+		GLSL::Shader DoGetBlurPixelProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			using namespace GLSL;
@@ -305,17 +300,16 @@ namespace Castor3D
 		ShaderProgramSPtr DoGetSsaoProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_vtx = DoGetSsaoVertexProgram( p_engine );
-			String l_pxl = DoGetSsaoPixelProgram( p_engine );
+			auto l_vtx = DoGetSsaoVertexProgram( p_engine );
+			auto l_pxl = DoGetSsaoPixelProgram( p_engine );
 			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->SetValue( 0 );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNormal" ), ShaderType::ePixel )->SetValue( 1 );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapNoise" ), ShaderType::ePixel )->SetValue( 2 );
-			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
+			l_program->SetSource( ShaderType::ePixel, l_pxl );
 			l_program->Initialise();
 			return l_program;
 		}
@@ -323,15 +317,14 @@ namespace Castor3D
 		ShaderProgramSPtr DoGetBlurProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_vtx = DoGetBlurVertexProgram( p_engine );
-			String l_pxl = DoGetBlurPixelProgram( p_engine );
+			auto l_vtx = DoGetBlurVertexProgram( p_engine );
+			auto l_pxl = DoGetBlurPixelProgram( p_engine );
 			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->SetValue( 0 );
-			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
+			l_program->SetSource( ShaderType::ePixel, l_pxl );
 			l_program->Initialise();
 			return l_program;
 		}

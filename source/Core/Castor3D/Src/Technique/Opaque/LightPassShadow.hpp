@@ -335,8 +335,8 @@ namespace Castor3D
 			 *\param[in]	p_pxl		Le source du fagment shader.
 			 */
 			Program( Engine & p_engine
-				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl )
+				, GLSL::Shader const & p_vtx
+				, GLSL::Shader const & p_pxl )
 				: my_program_type( p_engine, p_vtx, p_pxl )
 			{
 				this->m_program->template CreateUniform< UniformType::eSampler >( my_traits::GetName()
@@ -435,8 +435,8 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::LightPass::DoCreateProgram
 		 */
-		typename LightPass::ProgramPtr DoCreateProgram( Castor::String const & p_vtx
-			, Castor::String const & p_pxl )const override
+		typename LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & p_vtx
+			, GLSL::Shader const & p_pxl )const override
 		{
 			return std::make_unique< LightPassShadow::Program >( this->m_engine
 				, p_vtx

@@ -245,8 +245,8 @@ namespace Castor3D
 			 *\param[in]	p_pxl		Le source du fagment shader.
 			 */
 			Program( Engine & p_engine
-				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl );
+				, GLSL::Shader const & p_vtx
+				, GLSL::Shader const & p_pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -514,7 +514,7 @@ namespace Castor3D
 		 *\param[in]	p_type			Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual Castor::String DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
+		virtual GLSL::Shader DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
 			, LightType p_type )const;
 		/**
 		 *\~english
@@ -526,7 +526,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs de scène.
 		 *\return		Le source.
 		 */
-		virtual Castor::String DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const = 0;
+		virtual GLSL::Shader DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a light pass program.
@@ -539,8 +539,8 @@ namespace Castor3D
 		 *\param[in]	p_pxl		Le source du fagment shader.
 		 *\return		Le programme créé.
 		 */
-		virtual ProgramPtr DoCreateProgram( Castor::String const & p_vtx
-			, Castor::String const & p_pxl )const = 0;
+		virtual ProgramPtr DoCreateProgram( GLSL::Shader const & p_vtx
+			, GLSL::Shader const & p_pxl )const = 0;
 
 	protected:
 		//!\~english	The engine.

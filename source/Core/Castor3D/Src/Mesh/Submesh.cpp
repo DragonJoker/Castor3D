@@ -1251,7 +1251,7 @@ namespace Castor3D
 			if ( p_count )
 			{
 				auto & l_bonesBuffer = *m_instancedBonesBuffer;
-				auto l_stride = sizeof( float ) * 16u * 400u;
+				auto l_stride = uint32_t( sizeof( float ) * 16u * 400u );
 				uint32_t l_size = p_count * l_stride;
 
 				if ( l_bonesBuffer.GetSize() != l_size )

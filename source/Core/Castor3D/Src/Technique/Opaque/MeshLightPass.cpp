@@ -22,8 +22,8 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	MeshLightPass::Program::Program( Engine & p_engine
-		, String const & p_vtx
-		, String const & p_pxl )
+		, GLSL::Shader const & p_vtx
+		, GLSL::Shader const & p_pxl )
 		: LightPass::Program{ p_engine, p_vtx, p_pxl }
 		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 	{
@@ -145,7 +145,7 @@ namespace Castor3D
 		m_stencilPass.Render( m_indexBuffer->GetSize() );
 	}
 	
-	String MeshLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
+	GLSL::Shader MeshLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();

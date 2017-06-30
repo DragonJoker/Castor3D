@@ -67,8 +67,8 @@ namespace Castor3D
 	{
 		Skeleton & l_skeleton = m_skeleton;
 		uint32_t i{ 0u };
-		auto l_buffer = reinterpret_cast< float * >( p_buffer );
-		auto l_stride = 16u;
+		auto l_buffer = p_buffer;
+		auto l_stride = 16u * sizeof( float );
 
 		if ( m_playingAnimations.empty() )
 		{

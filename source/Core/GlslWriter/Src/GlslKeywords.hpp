@@ -23,23 +23,8 @@ SOFTWARE.
 #ifndef ___GLSL_KEYWORDS_H___
 #define ___GLSL_KEYWORDS_H___
 
-#include "GlslWriterPrerequisites.hpp"
-
-#include <Stream/StreamIndentManipulators.hpp>
-
-#ifdef max
-#	undef max
-#	undef min
-#	undef abs
-#endif
-
-#ifdef OUT
-#	undef OUT
-#endif
-
-#ifdef IN
-#	undef IN
-#endif
+#include "GlslUbo.hpp"
+#include "GlslSsbo.hpp"
 
 namespace GLSL
 {
@@ -47,7 +32,8 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API static std::unique_ptr< GLSL::KeywordsBase > Get( GlslWriterConfig const & p_rs );
-		inline Castor::String GetUboLayout( UboLayout p_layout, uint32_t p_index )const;
+		inline Castor::String GetLayout (Ubo::Layout p_layout, uint32_t p_index)const;
+		inline Castor::String GetLayout( Ssbo::Layout p_layout, uint32_t p_index )const;
 		inline Castor::String const & GetVersion()const;
 		inline Castor::String const & GetIn()const;
 		inline Castor::String const & GetOut()const;
@@ -108,22 +94,6 @@ namespace GLSL
 		inline Castor::String const & GetTexelFetch1D()const;
 		inline Castor::String const & GetTexelFetch2D()const;
 		inline Castor::String const & GetTexelFetch3D()const;
-		inline Castor::String const & GetPixelOut()const;
-		inline Castor::String const & GetPixelOutputName()const;
-		inline Castor::String const & GetGSOutPositionName()const;
-		inline Castor::String const & GetGSOutNormalName()const;
-		inline Castor::String const & GetGSOutTangentName()const;
-		inline Castor::String const & GetGSOutBitangentName()const;
-		inline Castor::String const & GetGSOutDiffuseName()const;
-		inline Castor::String const & GetGSOutSpecularName()const;
-		inline Castor::String const & GetGSOutEmissiveName()const;
-		inline Castor::String const & GetGSOutPositionDecl()const;
-		inline Castor::String const & GetGSOutNormalDecl()const;
-		inline Castor::String const & GetGSOutTangentDecl()const;
-		inline Castor::String const & GetGSOutBitangentDecl()const;
-		inline Castor::String const & GetGSOutDiffuseDecl()const;
-		inline Castor::String const & GetGSOutSpecularDecl()const;
-		inline Castor::String const & GetGSOutEmissiveDecl()const;
 
 		GlslWriter_API virtual Castor::String GetLayout( uint32_t p_index )const = 0;
 		GlslWriter_API virtual Castor::String GetAttribute( uint32_t p_index )const;
@@ -133,6 +103,8 @@ namespace GLSL
 	protected:
 		Castor::String m_strUboLayout;
 		Castor::String m_strUboBinding;
+		Castor::String m_strSsboLayout;
+		Castor::String m_strSsboBinding;
 		Castor::String m_version;
 		Castor::String m_strAttribute;
 		Castor::String m_strIn;
@@ -194,43 +166,6 @@ namespace GLSL
 		Castor::String m_strTexelFetch1D;
 		Castor::String m_strTexelFetch2D;
 		Castor::String m_strTexelFetch3D;
-		Castor::String m_strPixelOut;
-		Castor::String m_strPixelOutputName;
-		Castor::String m_strGSOutPositionName;
-		Castor::String m_strGSOutNormalName;
-		Castor::String m_strGSOutTangentName;
-		Castor::String m_strGSOutBitangentName;
-		Castor::String m_strGSOutDiffuseName;
-		Castor::String m_strGSOutSpecularName;
-		Castor::String m_strGSOutEmissiveName;
-		Castor::String m_strGSOutPositionDecl;
-		Castor::String m_strGSOutNormalDecl;
-		Castor::String m_strGSOutTangentDecl;
-		Castor::String m_strGSOutBitangentDecl;
-		Castor::String m_strGSOutDiffuseDecl;
-		Castor::String m_strGSOutSpecularDecl;
-		Castor::String m_strGSOutEmissiveDecl;
-	};
-
-	//! Language keywords
-	struct Version
-	{
-	};
-	struct Attribute
-	{
-	};
-	struct In
-	{
-	};
-	struct Out
-	{
-	};
-	struct Layout
-	{
-		int m_index;
-	};
-	struct Uniform
-	{
 	};
 }
 

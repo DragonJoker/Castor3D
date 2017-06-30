@@ -68,7 +68,14 @@ namespace GLSL
 			break;
 
 		default:
-			l_return = std::make_unique< Keywords< 110 > >();
+			if ( p_rs.m_shaderLanguageVersion > 450 )
+			{
+				l_return = std::make_unique< Keywords< 450 > >();
+			}
+			else
+			{
+				l_return = std::make_unique< Keywords< 110 > >();
+			}
 			break;
 		}
 

@@ -8,6 +8,8 @@
 #include "ShadowMap/ShadowMap.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <GlslShader.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -40,12 +42,12 @@ namespace Castor3D
 	void ShadowMapPass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera )
 	{
-		DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera );
-		DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera );
-		DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera );
-		DoRenderInstancedSkinningSubmeshes( p_nodes.m_instancedSkinningNodes.m_backCulled, p_camera );
-		DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera );
-		DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_instancedNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_skinningNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_instancedSkinningNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera );
 	}
 
 	void ShadowMapPass::DoUpdateFlags( TextureChannels & p_textureFlags
@@ -110,7 +112,7 @@ namespace Castor3D
 		}
 	}
 
-	String ShadowMapPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader ShadowMapPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
@@ -121,7 +123,7 @@ namespace Castor3D
 			, p_invertNormals );
 	}
 
-	String ShadowMapPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader ShadowMapPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
 	{
@@ -130,7 +132,7 @@ namespace Castor3D
 			, p_sceneFlags );
 	}
 
-	String ShadowMapPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader ShadowMapPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const

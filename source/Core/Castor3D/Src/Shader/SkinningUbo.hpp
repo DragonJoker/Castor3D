@@ -78,21 +78,27 @@ namespace Castor3D
 		C3D_API void Update( AnimatedSkeleton const & p_skeleton )const;
 		/**
 		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_materialIndex	The overlay's material index.
+		 *\brief		Declares the GLSL variables needed to compute skinning in vertex shader.
+		 *\param[in]	p_writer	The GLSL writer.
+		 *\param[in]	p_flags		The program flags.
 		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
+		 *\brief		Déclare les variables nécessaires au calcul du skinning dans le vertex shader.
+		 *\param[in]	p_writer	Le GLSL writer.
+		 *\param[in]	p_flags		Les indicateurs du programme.
 		 */
 		C3D_API static void Declare( GLSL::GlslWriter & p_writer
 			, ProgramFlags const & p_flags );
 		/**
 		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_materialIndex	The overlay's material index.
+		 *\brief		Computes skinning transformation in vertex shader.
+		 *\param[in]	p_writer	The GLSL writer.
+		 *\param[in]	p_flags		The program flags.
+		 *\return		The resulting matrix.
 		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_materialIndex	L'index du matériau de l'incrustation.
+		 *\brief		Effectue le calcul de la transformation du skinning dans le vertex shader.
+		 *\param[in]	p_writer	Le GLSL writer.
+		 *\param[in]	p_flags		Les indicateurs du programme.
+		 *\return		La matrice résultat.
 		 */
 		C3D_API static GLSL::Mat4 ComputeTransform( GLSL::GlslWriter & p_writer
 			, ProgramFlags const & p_flags );
@@ -122,10 +128,5 @@ namespace Castor3D
 		Uniform4x4f & m_bonesMatrix;
 	};
 }
-
-#define UBO_SKINNING( Writer, Flags )\
-	GLSL::Ubo l_skinning{ l_writer, ShaderProgram::BufferSkinning };\
-	auto c3d_mtxBones = l_skinning.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
-	l_skinning.End()
 
 #endif

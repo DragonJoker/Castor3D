@@ -107,9 +107,4 @@ namespace Castor3D
 	};
 }
 
-#define SSBO_SKINNING( Writer, Flags )\
-	GLSL::Ssbo l_skinning{ l_writer, ShaderProgram::BufferSkinning };\
-	auto c3d_mtxBones = l_skinning.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
-	l_skinning.End()
-
 #endif

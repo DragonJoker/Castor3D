@@ -150,7 +150,7 @@ namespace Castor3D
 		AddFlag( p_programFlags, ProgramFlag::eShadowMapSpot );
 	}
 
-	String DeferredShadowMapSpot::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader DeferredShadowMapSpot::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const

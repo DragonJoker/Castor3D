@@ -570,7 +570,7 @@ namespace Castor3D
 		l_program->CreateObject( ShaderType::ePixel );
 
 		// Vertex shader
-		String l_strVs;
+		GLSL::Shader l_strVs;
 		{
 			auto l_writer = GetRenderSystem()->CreateGlslWriter();
 
@@ -606,7 +606,7 @@ namespace Castor3D
 		}
 
 		// Pixel shader
-		String l_strPs;
+		GLSL::Shader l_strPs;
 		{
 			auto l_writer = GetRenderSystem()->CreateGlslWriter();
 
@@ -667,9 +667,8 @@ namespace Castor3D
 			l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel )->SetValue( l_index++ );
 		}
 
-		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-		l_program->SetSource( ShaderType::eVertex, l_model, l_strVs );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_strPs );
+		l_program->SetSource( ShaderType::eVertex, l_strVs );
+		l_program->SetSource( ShaderType::ePixel, l_strPs );
 		l_program->Initialise();
 		return l_program;
 	}

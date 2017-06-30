@@ -190,21 +190,8 @@ namespace GuiCommon
 		if ( l_program->GetObjectStatus( m_shaderType ) != ShaderStatus::eDontExist )
 		{
 			// Load the shader source file/text
-			uint8_t l_shaderModel = uint8_t( m_shaderModel );
-
-			while ( m_shaderSource.empty() && m_shaderFile.empty() && ShaderModel( l_shaderModel ) >= ShaderModel::eModel1 )
-			{
-				m_shaderSource = l_program->GetSource( m_shaderType, ShaderModel( l_shaderModel ) );
-				m_shaderFile = l_program->GetFile( m_shaderType, ShaderModel( l_shaderModel ) );
-
-				if ( !m_shaderSource.empty() || !m_shaderFile.empty() )
-				{
-					// Stop the loop as soon as we've got one of source or file
-					l_shaderModel = uint8_t( ShaderModel::eModel1 );
-				}
-
-				--l_shaderModel;
-			}
+			m_shaderSource = l_program->GetSource( m_shaderType );
+			m_shaderFile = l_program->GetFile( m_shaderType );
 		}
 
 		// Load the shader in the editor

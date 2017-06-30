@@ -120,14 +120,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets all objects file.
-		 *\param[in]	p_eModel	The shader model.
 		 *\param[in]	p_pathFile	The file name.
 		 *\~french
 		 *\brief		Définit le fichier utilisé par tous les objets.
-		 *\param[in]	p_eModel	Le modèle de shader.
 		 *\param[in]	p_pathFile	Le nom du fichier.
 		 */
-		C3D_API void SetFile( ShaderModel p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Creates an atomic counter buffer.
@@ -194,78 +192,77 @@ namespace Castor3D
 		C3D_API void SetOutputVtxCount( ShaderType p_target, uint8_t p_count );
 		/**
 		 *\~english
-		 *\brief		Sets the shader file for given model.
-		 *\remarks		The loaded file will be the one of the highest supported profile.
+		 *\brief		Sets the shader file.
 		 *\param[in]	p_target	The shader object concerned.
-		 *\param[in]	p_eModel	The shader model.
 		 *\param[in]	p_pathFile	The file name.
 		 *\~french
-		 *\brief		Définit le fichier du shader pour le modèle donné.
-		 *\remarks		Le fichier chargé sera celui du plus haut profil supporté.
+		 *\brief		Définit le fichier du shader.
 		 *\param[in]	p_target	Le shader object concerné.
-		 *\param[in]	p_eModel	Le modèle de shader.
 		 *\param[in]	p_pathFile	Le nom du fichier.
 		 */
-		C3D_API void SetFile( ShaderType p_target, ShaderModel p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( ShaderType p_target, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
-		 *\brief		Retrieves the shader file for given model.
+		 *\brief		Retrieves the shader file.
 		 *\param[in]	p_target	The shader object concerned.
-		 *\param[in]	p_eModel	The shader model.
 		 *\return		The file name.
 		 *\~french
-		 *\brief		Récupère le fichier du shader pour le modèle donné.
+		 *\brief		Récupère le fichier du shader.
 		 *\param[in]	p_target	Le shader object concerné.
-		 *\param[in]	p_eModel	Le modèle de shader.
 		 *\return		Le nom du fichier.
 		 */
-		C3D_API Castor::Path GetFile( ShaderType p_target, ShaderModel p_eModel )const;
+		C3D_API Castor::Path GetFile( ShaderType p_target )const;
 		/**
 		 *\~english
-		 *\brief		Tells if the shader object has a source file, whatever model it is.
+		 *\brief		Tells if the shader object has a source file.
 		 *\param[in]	p_target	The shader object concerned.
 		 *\return		\p true if the shader object has a source file.
 		 *\~french
-		 *\brief		Dit si le shader a un fichier source, quel que soit son modèle.
+		 *\brief		Dit si le shader a un fichier source.
 		 *\param[in]	p_target	Le shader object concerné.
 		 *\return		\p true si le shader a un fichier source.
 		 */
 		C3D_API bool HasFile( ShaderType p_target )const;
 		/**
 		 *\~english
-		 *\brief		Sets the shader source for given model.
-		 *\remarks		The loaded source will be the one of the highest supported profile.
+		 *\brief		Sets the shader source.
 		 *\param[in]	p_target	The shader object concerned.
-		 *\param[in]	p_eModel	The shader model.
-		 *\param[in]	p_strSource	The source code.
+		 *\param[in]	p_source	The source code.
 		 *\~french
-		 *\brief		Définit la source du shader pour le modèle donné.
-		 *\remarks		La source chargée sera celle du plus haut profil supporté.
+		 *\brief		Définit la source du shader.
 		 *\param[in]	p_target	Le shader object concerné.
-		 *\param[in]	p_eModel	Le modèle de shader.
-		 *\param[in]	p_strSource	Le code de la source.
+		 *\param[in]	p_source	Le code de la source.
 		 */
-		C3D_API void SetSource( ShaderType p_target, ShaderModel p_eModel, Castor::String const & p_strSource );
+		C3D_API void SetSource( ShaderType p_target, Castor::String const & p_source );
 		/**
 		 *\~english
-		 *\brief		Retrieves the shader source for given model.
+		 *\brief		Sets the shader source.
 		 *\param[in]	p_target	The shader object concerned.
-		 *\param[in]	p_eModel	The shader model.
+		 *\param[in]	p_source	The source code.
+		 *\~french
+		 *\brief		Définit la source du shader.
+		 *\param[in]	p_target	Le shader object concerné.
+		 *\param[in]	p_source	Le code de la source.
+		 */
+		C3D_API void SetSource( ShaderType p_target, GLSL::Shader const & p_source );
+		/**
+		 *\~english
+		 *\brief		Retrieves the shader source.
+		 *\param[in]	p_target	The shader object concerned.
 		 *\return		The source code.
 		 *\~french
-		 *\brief		Récupère la source du shader pour le modèle donné.
+		 *\brief		Récupère la source du shader.
 		 *\param[in]	p_target	Le shader object concerné.
-		 *\param[in]	p_eModel	Le modèle de shader.
 		 *\return		Le code de la source.
 		 */
-		C3D_API Castor::String GetSource( ShaderType p_target, ShaderModel p_eModel )const;
+		C3D_API Castor::String GetSource( ShaderType p_target )const;
 		/**
 		 *\~english
-		 *\brief		Tells if the shader object has a source code, whatever model it is.
+		 *\brief		Tells if the shader object has a source code.
 		 *\param[in]	p_target	The shader object concerned.
 		 *\return		\p true if the shader object has a source code.
 		 *\~french
-		 *\brief		Dit si le shader a un code source, quel que soit son modèle.
+		 *\brief		Dit si le shader a un code source.
 		 *\param[in]	p_target	Le shader object concerné.
 		 *\return		\p true si le shader a un code source.
 		 */
@@ -811,7 +808,7 @@ namespace Castor3D
 		std::vector< ShaderObjectSPtr > m_activeShaders;
 		//!\~english	Array of files path, sorted by shader model.
 		//!\~french		Tableau des chemins de fichiers, triés par modèle de shader.
-		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
+		Castor::Path m_file;
 		//!\~english	The atomic counter buffers map, ordered by name.
 		//!\~french		La liste des tampons de compteurs atomiques, triés par nom.
 		AtomicCounterBufferPtrStrMap m_atomicCounterBuffersByName;

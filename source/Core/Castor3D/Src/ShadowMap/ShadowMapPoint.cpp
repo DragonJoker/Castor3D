@@ -208,7 +208,7 @@ namespace Castor3D
 		AddFlag( p_programFlags, ProgramFlag::eShadowMapPoint );
 	}
 
-	String ShadowMapPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader ShadowMapPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const
@@ -218,8 +218,8 @@ namespace Castor3D
 
 		// Fragment Intputs
 		Ubo l_shadowMap{ l_writer, ShadowMapUbo };
-		auto c3d_v3WordLightPosition( l_shadowMap.GetUniform< Vec3 >( WorldLightPosition ) );
-		auto c3d_fFarPlane( l_shadowMap.GetUniform< Float >( FarPlane ) );
+		auto c3d_v3WordLightPosition( l_shadowMap.DeclMember< Vec3 >( WorldLightPosition ) );
+		auto c3d_fFarPlane( l_shadowMap.DeclMember< Float >( FarPlane ) );
 		l_shadowMap.End();
 
 		auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );

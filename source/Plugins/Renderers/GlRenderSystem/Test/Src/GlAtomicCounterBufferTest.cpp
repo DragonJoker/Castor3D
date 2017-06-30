@@ -32,9 +32,8 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eCompute );
-			l_program->SetSource( ShaderType::eCompute, l_model, l_vtx );
+			l_program->SetSource( ShaderType::eCompute, l_vtx );
 			return l_program;
 		}
 
@@ -49,9 +48,8 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eCompute );
-			l_program->SetSource( ShaderType::eCompute, l_model, l_vtx );
+			l_program->SetSource( ShaderType::eCompute, l_vtx );
 			return l_program;
 		}
 	}

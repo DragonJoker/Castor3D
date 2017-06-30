@@ -178,7 +178,7 @@ namespace Castor3D
 	{
 		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
 
-		String l_vtx;
+		GLSL::Shader l_vtx;
 		{
 			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
 
@@ -201,7 +201,7 @@ namespace Castor3D
 			l_vtx = l_writer.Finalise();
 		}
 
-		String l_pxl;
+		GLSL::Shader l_pxl;
 		{
 			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
 
@@ -226,11 +226,10 @@ namespace Castor3D
 			l_pxl = l_writer.Finalise();
 		}
 
-		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->CreateObject( ShaderType::eVertex );
 		l_program->CreateObject( ShaderType::ePixel );
-		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+		l_program->SetSource( ShaderType::eVertex, l_vtx );
+		l_program->SetSource( ShaderType::ePixel, l_pxl );
 		l_program->Initialise();
 		return *l_program;
 	}

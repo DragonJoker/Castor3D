@@ -295,17 +295,16 @@ namespace Castor3D
 	//************************************************************************************************
 
 	LightPass::Program::Program( Engine & p_engine
-		, String const & p_vtx
-		, String const & p_pxl )
+		, GLSL::Shader const & p_vtx
+		, GLSL::Shader const & p_pxl )
 	{
 		auto & l_renderSystem = *p_engine.GetRenderSystem();
-		ShaderModel l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 
 		m_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
 		m_program->CreateObject( ShaderType::eVertex );
 		m_program->CreateObject( ShaderType::ePixel );
-		m_program->SetSource( ShaderType::eVertex, l_model, p_vtx );
-		m_program->SetSource( ShaderType::ePixel, l_model, p_pxl );
+		m_program->SetSource( ShaderType::eVertex, p_vtx );
+		m_program->SetSource( ShaderType::ePixel, p_pxl );
 
 		m_lightColour = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), ShaderType::ePixel );
 
@@ -481,7 +480,7 @@ namespace Castor3D
 		m_frameBuffer.Unbind();
 	}
 	
-	String LightPass::DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
+	GLSL::Shader LightPass::DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
 		, LightType p_type )const
 	{
 		using namespace GLSL;

@@ -310,41 +310,41 @@ namespace GLSL
 	void LightingModel::Declare_Light()
 	{
 		Struct l_lightDecl = m_writer.GetStruct( cuT( "Light" ) );
-		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_colour" ) );
-		l_lightDecl.DeclareMember< Vec2 >( cuT( "m_intensity" ) );
+		l_lightDecl.DeclMember< Vec3 >( cuT( "m_colour" ) );
+		l_lightDecl.DeclMember< Vec2 >( cuT( "m_intensity" ) );
 		l_lightDecl.End();
 	}
 
 	void LightingModel::Declare_DirectionalLight()
 	{
 		Struct l_lightDecl = m_writer.GetStruct( cuT( "DirectionalLight" ) );
-		l_lightDecl.DeclareMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_direction" ) );
-		l_lightDecl.DeclareMember< Mat4 >( cuT( "m_transform" ) );
+		l_lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
+		l_lightDecl.DeclMember< Vec3 >( cuT( "m_direction" ) );
+		l_lightDecl.DeclMember< Mat4 >( cuT( "m_transform" ) );
 		l_lightDecl.End();
 	}
 
 	void LightingModel::Declare_PointLight()
 	{
 		Struct l_lightDecl = m_writer.GetStruct( cuT( "PointLight" ) );
-		l_lightDecl.DeclareMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_position" ) );
-		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_attenuation" ) );
-		l_lightDecl.DeclareMember< Int >( cuT( "m_index" ) );
+		l_lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
+		l_lightDecl.DeclMember< Vec3 >( cuT( "m_position" ) );
+		l_lightDecl.DeclMember< Vec3 >( cuT( "m_attenuation" ) );
+		l_lightDecl.DeclMember< Int >( cuT( "m_index" ) );
 		l_lightDecl.End();
 	}
 
 	void LightingModel::Declare_SpotLight()
 	{
 		Struct l_lightDecl = m_writer.GetStruct( cuT( "SpotLight" ) );
-		l_lightDecl.DeclareMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_position" ) );
-		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_attenuation" ) );
-		l_lightDecl.DeclareMember< Int >( cuT( "m_index" ) );
-		l_lightDecl.DeclareMember< Vec3 >( cuT( "m_direction" ) );
-		l_lightDecl.DeclareMember< Float >( cuT( "m_exponent" ) );
-		l_lightDecl.DeclareMember< Float >( cuT( "m_cutOff" ) );
-		l_lightDecl.DeclareMember< Mat4 >( cuT( "m_transform" ) );
+		l_lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
+		l_lightDecl.DeclMember< Vec3 >( cuT( "m_position" ) );
+		l_lightDecl.DeclMember< Vec3 >( cuT( "m_attenuation" ) );
+		l_lightDecl.DeclMember< Int >( cuT( "m_index" ) );
+		l_lightDecl.DeclMember< Vec3 >( cuT( "m_direction" ) );
+		l_lightDecl.DeclMember< Float >( cuT( "m_exponent" ) );
+		l_lightDecl.DeclMember< Float >( cuT( "m_cutOff" ) );
+		l_lightDecl.DeclMember< Mat4 >( cuT( "m_transform" ) );
 		l_lightDecl.End();
 	}
 

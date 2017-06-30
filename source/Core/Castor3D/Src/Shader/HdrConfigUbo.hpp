@@ -109,8 +109,8 @@ namespace Castor3D
 
 #define UBO_HDR_CONFIG( Writer )\
 	Ubo l_hdrConfig{ l_writer, ShaderProgram::BufferHdrConfig };\
-	auto c3d_exposure = l_hdrConfig.GetUniform< Float >( ShaderProgram::Exposure );\
-	auto c3d_gamma = l_hdrConfig.GetUniform< Float >( ShaderProgram::Gamma );\
+	auto c3d_exposure = l_hdrConfig.DeclMember< Float >( ShaderProgram::Exposure );\
+	auto c3d_gamma = l_hdrConfig.DeclMember< Float >( ShaderProgram::Gamma );\
 	l_hdrConfig.End()
 
 #endif

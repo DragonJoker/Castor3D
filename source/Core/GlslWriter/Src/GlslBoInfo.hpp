@@ -20,33 +20,47 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GLSL_Function_H___
-#define ___GLSL_Function_H___
+#ifndef ___GLSL_BoInfo_H___
+#define ___GLSL_BoInfo_H___
 
-#include "GlslOptionalArray.hpp"
+#include "GlslWriterPrerequisites.hpp"
 
 namespace GLSL
 {
-	template< typename RetT, typename ... ParamsT >
-	inline RetT WriteFunctionCall( GlslWriter * p_writer, Castor::String const & p_name, ParamsT const & ... p_params );
-
-	template< typename Return, typename ... Params >
-	inline void WriteFunctionHeader( GlslWriter & p_writer, Castor::String const & p_name, Params && ... p_params );
-
-	template< typename RetT, typename ... ParamsT >
-	struct Function
+	template< typename LayoutType >
+	struct BoInfo
 	{
-	public:
-		Function() = default;
-		Function( GlslWriter * p_writer, Castor::String const & p_name );
-		RetT operator()( ParamsT && ... p_params )const;
+		BoInfo( LayoutType p_layout, uint32_t p_bind )
+			: m_layout{ p_layout }
+			, m_bind{ p_bind }
+		{
+		}
+
+		inline void RegisterMember( Castor::String const & p_name, TypeName p_type )
+		{
+			m_members.emplace( p_name, p_type );
+		}
+		
+		inline TypeName GetMemberType( Castor::String const & p_name )const
+		{
+			return m_members.at( p_name );
+		}
+
+		inline LayoutType GetLayout()const
+		{
+			return m_layout;
+		}
+
+		inline uint32_t GetBindingPoint()const
+		{
+			return m_bind;
+		}
 
 	private:
-		GlslWriter * m_writer{ nullptr };
-		Castor::String m_name;
+		LayoutType m_layout;
+		uint32_t m_bind;
+		std::map< Castor::String, TypeName > m_members;
 	};
 }
-
-#include "GlslFunction.inl"
 
 #endif

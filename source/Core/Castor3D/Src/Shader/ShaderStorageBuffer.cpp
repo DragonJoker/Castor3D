@@ -31,11 +31,21 @@ namespace Castor3D
 			l_return = DoInitialise( p_type, p_nature );
 		}
 
+		if ( l_return )
+		{
+			m_gpuBuffer->SetBindingPoint( 0u );
+		}
+
 		return l_return;
 	}
 
 	void ShaderStorageBuffer::Cleanup()
 	{
 		DoCleanup();
+	}
+
+	void ShaderStorageBuffer::BindTo( uint32_t p_index )const
+	{
+		GetGpuBuffer().SetBindingPoint( p_index );
 	}
 }

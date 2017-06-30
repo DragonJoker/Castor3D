@@ -35,9 +35,8 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eVertex );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
 			return l_program;
 		}
 
@@ -52,9 +51,8 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eVertex );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
 			return l_program;
 		}
 
@@ -84,11 +82,10 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::eGeometry );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::eGeometry, l_model, l_geo );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
+			l_program->SetSource( ShaderType::eGeometry, l_geo );
 			return l_program;
 		}
 
@@ -214,11 +211,10 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::eGeometry );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::eGeometry, l_model, l_geo );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
+			l_program->SetSource( ShaderType::eGeometry, l_geo );
 			return l_program;
 		}
 	}

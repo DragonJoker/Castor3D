@@ -27,7 +27,7 @@ namespace Castor3D
 
 	namespace
 	{
-		String DoGetVertexShader( Engine const & p_engine )
+		GLSL::Shader DoGetVertexShader( Engine const & p_engine )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_engine.GetRenderSystem()->CreateGlslWriter();
@@ -48,7 +48,7 @@ namespace Castor3D
 			return l_writer.Finalise();
 		}
 
-		String DoGetPixelShader( Engine const & p_engine )
+		GLSL::Shader DoGetPixelShader( Engine const & p_engine )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_engine.GetRenderSystem()->CreateGlslWriter();
@@ -79,13 +79,12 @@ namespace Castor3D
 	{
 		auto & l_engine = *p_vbo.GetEngine();
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
-		ShaderModel l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 
 		m_program = l_engine.GetShaderProgramCache().GetNewProgram( false );
 		m_program->CreateObject( ShaderType::eVertex );
 		m_program->CreateObject( ShaderType::ePixel );
-		m_program->SetSource( ShaderType::eVertex, l_model, DoGetVertexShader( l_engine ) );
-		m_program->SetSource( ShaderType::ePixel, l_model, DoGetPixelShader( l_engine ) );
+		m_program->SetSource( ShaderType::eVertex, DoGetVertexShader( l_engine ) );
+		m_program->SetSource( ShaderType::ePixel, DoGetPixelShader( l_engine ) );
 		m_program->Initialise();
 
 		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );

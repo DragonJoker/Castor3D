@@ -55,12 +55,12 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
 	{
-		DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled );
-		DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled );
-		DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled );
-		DoRenderInstancedSkinningSubmeshes( p_nodes.m_instancedSkinningNodes.m_backCulled );
-		DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled );
-		DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_instancedNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_skinningNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_instancedSkinningNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled );
 	}
 
 	bool ShadowMapPassPoint::DoInitialise( Size const & p_size )

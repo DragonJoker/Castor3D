@@ -219,7 +219,7 @@ namespace GuiCommon
 				{
 					m_pEditorPages[i]->SaveFile( false );
 					m_shaderProgram.lock()->CreateObject( ShaderType( i ) );
-					m_shaderProgram.lock()->SetFile( ShaderType( i ), m_pEditorPages[i]->GetShaderModel(), Path{ ( wxChar const * )l_file.c_str() } );
+					m_shaderProgram.lock()->SetFile( ShaderType( i ), Path{ ( wxChar const * )l_file.c_str() } );
 				}
 			}
 

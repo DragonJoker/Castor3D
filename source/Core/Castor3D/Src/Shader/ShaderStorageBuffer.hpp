@@ -81,6 +81,15 @@ namespace Castor3D
 		 *\brief		Nettoie le tampon GPU.
 		 */
 		C3D_API void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Sets the buffer's binding point.
+		 *\param[in]	p_index	The binding point.
+		 *\~french
+		 *\brief		Définit le point d'attache du tampon.
+		 *\param[in]	p_index	Le point d'attache.
+		 */
+		C3D_API void BindTo( uint32_t p_index )const;
 	};
 }
 
