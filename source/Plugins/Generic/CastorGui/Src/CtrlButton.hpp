@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -71,11 +71,6 @@ namespace CastorGui
 		*/
 		virtual ~ButtonCtrl();
 
-		/** Sets the caption
-		 *\param[in]	p_value		The new value
-		 */
-		void SetCaption( Castor::String const & p_value );
-
 		/** Sets the text material.
 		 *\param[in]	p_material	The new value.
 		 */
@@ -116,6 +111,16 @@ namespace CastorGui
 		*/
 		void SetFont( Castor::String const & p_font );
 
+		/** Sets the horizontal alignment for the text.
+		*\param[in]	p_align	The new value.
+		*/
+		void SetHAlign( Castor3D::HAlign p_align );
+
+		/** Sets the vertical alignment for the text.
+		*\param[in]	p_align	The new value.
+		*/
+		void SetVAlign( Castor3D::VAlign p_align );
+
 		/** Retrieves the caption
 		 *\return		The valu
 		 */
@@ -137,31 +142,35 @@ namespace CastorGui
 	private:
 		/** @copydoc CastorGui::Control::DoCreate
 		*/
-		virtual void DoCreate();
+		void DoCreate()override;
 
 		/** @copydoc CastorGui::Control::DoDestroy
 		*/
-		virtual void DoDestroy();
+		void DoDestroy()override;
 
 		/** @copydoc CastorGui::Control::DoSetPosition
 		*/
-		virtual void DoSetPosition( Castor::Position const & p_value );
+		void DoSetPosition( Castor::Position const & p_value )override;
 
 		/** @copydoc CastorGui::Control::DoSetSize
 		*/
-		virtual void DoSetSize( Castor::Size const & p_value );
+		void DoSetSize( Castor::Size const & p_value )override;
 
 		/** @copydoc CastorGui::Control::DoSetBackgroundMaterial
 		*/
-		virtual void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+		void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::DoSetForegroundMaterial
 		*/
-		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material );
+		void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material )override;
+
+		/** @copydoc CastorGui::Control::DoSetCaption
+		*/
+		void DoSetCaption( Castor::String const & p_caption )override;
 
 		/** @copydoc CastorGui::Control::DoSetVisible
 		*/
-		virtual void DoSetVisible( bool p_visible );
+		void DoSetVisible( bool p_visible )override;
 
 		/** Event when mouse enters the control
 		 *\param[in]	p_event		The mouse event

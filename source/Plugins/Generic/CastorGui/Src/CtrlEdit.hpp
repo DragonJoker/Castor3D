@@ -71,11 +71,6 @@ namespace CastorGui
 		 */
 		virtual ~EditCtrl();
 
-		/** Sets the caption
-		 *\param[in]	p_value		The new value
-		 */
-		void SetCaption( Castor::String const & p_value );
-
 		/** Sets the caption font.
 		*\param[in]	p_font	The new value.
 		*/
@@ -118,35 +113,39 @@ namespace CastorGui
 	private:
 		/** @copydoc CastorGui::Control::DoCreate
 		*/
-		virtual void DoCreate();
+		void DoCreate()override;
 
 		/** @copydoc CastorGui::Control::DoDestroy
 		*/
-		virtual void DoDestroy();
+		void DoDestroy()override;
 
 		/** @copydoc CastorGui::Control::DoSetPosition
 		*/
-		virtual void DoSetPosition( Castor::Position const & p_value );
+		void DoSetPosition( Castor::Position const & p_value )override;
 
 		/** @copydoc CastorGui::Control::DoSetSize
 		*/
-		virtual void DoSetSize( Castor::Size const & p_value );
+		void DoSetSize( Castor::Size const & p_value )override;
 
 		/** @copydoc CastorGui::Control::DoSetBackgroundMaterial
 		*/
-		virtual void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+		void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::DoSetForegroundMaterial
 		*/
-		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material );
+		void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material )override;
+
+		/** @copydoc CastorGui::Control::DoSetCaption
+		*/
+		void DoSetCaption( Castor::String const & p_value )override;
 
 		/** @copydoc CastorGui::Control::DoSetVisible
 		*/
-		virtual void DoSetVisible( bool p_visible );
+		void DoSetVisible( bool p_visible )override;
 
 		/** @copydoc CastorGui::Control::DoUpdateStyle
 		*/
-		virtual void DoUpdateStyle();
+		void DoUpdateStyle()override;
 
 		/** Event when the control is activated
 		 *\param[in]	p_event		The control event

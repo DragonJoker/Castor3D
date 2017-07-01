@@ -48,7 +48,7 @@ namespace CastorGui
 			l_parentOv = l_parent->GetBackground()->GetOverlay().shared_from_this();
 		}
 
-		OverlaySPtr l_overlay = GetEngine().GetOverlayCache().Add( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), OverlayType::eBorderPanel, nullptr, l_parentOv );
+		OverlaySPtr l_overlay = GetEngine().GetOverlayCache().Add( p_name, OverlayType::eBorderPanel, nullptr, l_parentOv );
 		l_overlay->SetPixelPosition( GetPosition() );
 		l_overlay->SetPixelSize( GetSize() );
 		BorderPanelOverlaySPtr l_panel = l_overlay->GetBorderPanelOverlay();
@@ -162,6 +162,11 @@ namespace CastorGui
 		}
 
 		DoSetForegroundMaterial( GetForegroundMaterial() );
+	}
+
+	void Control::SetCaption( Castor::String const & p_caption )
+	{
+		DoSetCaption( p_caption );
 	}
 
 	void Control::SetVisible( bool p_value )

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -60,6 +60,8 @@ namespace CastorGui
 	DECLARE_ATTRIBUTE_PARSER( Parser_ButtonPushedBackgroundMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ButtonPushedForegroundMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ButtonPushedTextMaterial )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ButtonHAlign )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ButtonVAlign )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ButtonEnd )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ComboBox )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ComboBoxFont )
@@ -85,6 +87,8 @@ namespace CastorGui
 	DECLARE_ATTRIBUTE_PARSER( Parser_Static )
 	DECLARE_ATTRIBUTE_PARSER( Parser_StaticFont )
 	DECLARE_ATTRIBUTE_PARSER( Parser_StaticCaption )
+	DECLARE_ATTRIBUTE_PARSER( Parser_StaticHAlign )
+	DECLARE_ATTRIBUTE_PARSER( Parser_StaticVAlign )
 	DECLARE_ATTRIBUTE_PARSER( Parser_StaticEnd )
 
 	DECLARE_ATTRIBUTE_PARSER( Parser_ControlPixelPosition )

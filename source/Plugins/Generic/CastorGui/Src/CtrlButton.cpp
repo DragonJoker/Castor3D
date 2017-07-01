@@ -89,17 +89,6 @@ namespace CastorGui
 	{
 	}
 
-	void ButtonCtrl::SetCaption( String const & p_value )
-	{
-		m_caption =  p_value;
-		TextOverlaySPtr l_text = m_text.lock();
-
-		if ( l_text )
-		{
-			l_text->SetCaption( p_value );
-		}
-	}
-
 	void ButtonCtrl::SetTextMaterial( MaterialSPtr p_material )
 	{
 		m_textMaterial = p_material;
@@ -142,6 +131,26 @@ namespace CastorGui
 		if ( l_text )
 		{
 			l_text->SetFont( p_font );
+		}
+	}
+
+	void ButtonCtrl::SetHAlign( HAlign p_align )
+	{
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetHAlign( p_align );
+		}
+	}
+
+	void ButtonCtrl::SetVAlign( VAlign p_align )
+	{
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetVAlign( p_align );
 		}
 	}
 
@@ -239,6 +248,17 @@ namespace CastorGui
 	void ButtonCtrl::DoSetForegroundMaterial( MaterialSPtr p_material )
 	{
 		m_highlightedForegroundMaterial = DoCreateMaterial( p_material, -0.1f );
+	}
+
+	void ButtonCtrl::DoSetCaption( String const & p_value )
+	{
+		m_caption = p_value;
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetCaption( p_value );
+		}
 	}
 
 	void ButtonCtrl::DoSetVisible( bool p_visible )

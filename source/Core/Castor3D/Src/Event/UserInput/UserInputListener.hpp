@@ -330,6 +330,38 @@ namespace Castor3D
 		C3D_API bool FireChar( KeyboardKey p_key, Castor::String const & p_char );
 
 		//@}
+		/**@name Overlay events */
+		//@{
+
+		/**
+		 *\~english
+		 *\~brief		Fires a material change event.
+		 *\param[in]	p_overlay	The overlay name.
+		 *\param[in]	p_material	The material name.
+		 *\return		\p true if the event is processed by a control.
+		 *\~french
+		 *\~brief		Lance un évènement de changement de matériau.
+		 *\param[in]	p_overlay	Le nom de l'incrustation.
+		 *\param[in]	p_material	Le nom du matériau.
+		 *\return		\p true si l'évènement est traité par un gestionnaire.
+		 */
+		C3D_API virtual bool FireMaterialEvent( Castor::String const & p_overlay, Castor::String const & p_material );
+		
+		/**
+		 *\~english
+		 *\~brief		Fires a caption change event.
+		 *\param[in]	p_overlay	The overlay name.
+		 *\param[in]	p_caption	The new caption.
+		 *\return		\p true if the event is processed by a control.
+		 *\~french
+		 *\~brief		Lance un évènement de changement de texte.
+		 *\param[in]	p_overlay	Le nom de l'incrustation.
+		 *\param[in]	p_caption	Le nouveau texte.
+		 *\return		\p true si l'évènement est traité par un gestionnaire.
+		 */
+		C3D_API virtual bool FireTextEvent( Castor::String const & p_overlay, Castor::String const & p_caption );
+
+		//@}
 
 	protected:
 		/**
@@ -410,10 +442,15 @@ namespace Castor3D
 		//@}
 
 	protected:
-		//!\~english  The mutex used to protect the handlers array.	\~french Le mutex de protection du tableau de gestionnaires.
+		//!\~english	The mutex used to protect the handlers array.
+		//!\~french		Le mutex de protection du tableau de gestionnaires.
 		mutable std::mutex m_mutexHandlers;
-		//!\~english The handlers array.	\~french Le tableau de gestionnaires.
+		//!\~english	The handlers array.
+		//!\~french		Le tableau de gestionnaires.
 		std::vector< EventHandlerSPtr > m_handlers;
+		//!\~english	The associated frame listener.
+		//!\~french		Le frame listener associé.
+		FrameListenerSPtr m_frameListener;
 
 	private:
 		//!\~english	The current mouse state.
@@ -425,9 +462,6 @@ namespace Castor3D
 		//!\~english	Tells if the listener needs to be refreshed or not.
 		//!\~french		Dit si le listener doit être mis à jour.
 		bool m_enabled;
-		//!\~english	The associated frame listener.
-		//!\~french		Le frame listener associé.
-		FrameListenerSPtr m_frameListener;
 		//!\~english	The currently active handler.
 		//!\~french		Le gestionnaire actif.
 		EventHandlerWPtr m_activeHandler;

@@ -203,17 +203,22 @@ namespace CastorGui
 
 	private:
 		/**
-		*\brief
-		*	Initialises the base materials.
-		*\return
-		*	\p true, hopefully :P
-		*/
-		bool DoInitialise();
+		 *copydoc		Castor3D::UserInputListener::DoInitialise
+		 */
+		bool DoInitialise()override;
 		/**
-		*\brief
-		*	Cleans up the manager.
-		*/
-		void DoCleanup();
+		 *copydoc		Castor3D::UserInputListener::DoCleanup
+		 */
+		void DoCleanup()override;
+		/**
+		 *copydoc		Castor3D::UserInputListener::FireMaterialEvent
+		 */
+		bool FireMaterialEvent( Castor::String const & p_overlay, Castor::String const & p_material )override;
+		
+		/**
+		 *copydoc		Castor3D::UserInputListener::FireTextEvent
+		 */
+		bool FireTextEvent( Castor::String const & p_overlay, Castor::String const & p_caption )override;
 		/**
 		*\brief
 		*	Retrieves the first handler which can be targeted by mouse, at its position

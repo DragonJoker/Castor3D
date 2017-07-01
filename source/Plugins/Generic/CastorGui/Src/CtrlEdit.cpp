@@ -105,13 +105,6 @@ namespace CastorGui
 	{
 	}
 
-	void EditCtrl::SetCaption( String const & p_value )
-	{
-		m_caption = p_value;
-		m_caretIt = m_caption.end();
-		DoUpdateCaption();
-	}
-
 	void EditCtrl::SetFont( Castor::String const & p_font )
 	{
 		TextOverlaySPtr l_text = m_text.lock();
@@ -176,6 +169,13 @@ namespace CastorGui
 			l_text->SetMaterial( p_material );
 			l_text.reset();
 		}
+	}
+
+	void EditCtrl::DoSetCaption( String const & p_value )
+	{
+		m_caption = p_value;
+		m_caretIt = m_caption.end();
+		DoUpdateCaption();
 	}
 
 	void EditCtrl::DoSetVisible( bool p_visible )

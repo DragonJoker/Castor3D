@@ -4,6 +4,8 @@
 
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
+#include "Overlay/Overlay.hpp"
+#include "Overlay/TextOverlay.hpp"
 
 using namespace Castor;
 
@@ -331,6 +333,45 @@ namespace Castor3D
 		if ( l_active )
 		{
 			l_active->PushEvent( KeyboardEvent( KeyboardEventType::eChar, p_key, p_char, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+			l_return = true;
+		}
+
+		return l_return;
+	}
+
+	bool UserInputListener::FireMaterialEvent( Castor::String const & p_overlay, Castor::String const & p_material )
+	{
+		bool l_return = false;
+		auto & l_cache = GetEngine()->GetOverlayCache();
+		auto l_overlay = l_cache.Find( p_overlay );
+
+		if ( l_overlay )
+		{
+			auto l_material = GetEngine()->GetMaterialCache().Find( p_material );
+
+			if ( l_material )
+			{
+				this->m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePreRender
+					, [l_overlay, l_material]()
+					{
+						l_overlay->SetMaterial( l_material );
+					} ) );
+				l_return = true;
+			}
+		}
+		
+		return l_return;
+	}
+
+	bool UserInputListener::FireTextEvent( Castor::String const & p_overlay, Castor::String const & p_caption )
+	{
+		bool l_return = false;
+		auto & l_cache = GetEngine()->GetOverlayCache();
+		auto l_overlay = l_cache.Find( p_overlay );
+
+		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		{
+			l_overlay->GetTextOverlay()->SetCaption( p_caption );
 			l_return = true;
 		}
 

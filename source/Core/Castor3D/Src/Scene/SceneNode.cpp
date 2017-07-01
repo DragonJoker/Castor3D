@@ -1,4 +1,4 @@
-#include "SceneNode.hpp"
+﻿#include "SceneNode.hpp"
 
 #include "Engine.hpp"
 
@@ -371,6 +371,21 @@ namespace Castor3D
 	Matrix4x4r const & SceneNode::GetDerivedTransformationMatrix()const
 	{
 		return m_derivedTransform;
+	}
+
+	void SceneNode::SetVisible( bool p_visible )
+	{
+		if ( m_visible != p_visible )
+		{
+			GetScene()->SetChanged();
+			m_visible = p_visible;
+		}
+	}
+
+	bool SceneNode::IsVisible()const
+	{
+		auto l_parent = m_parent.lock();
+		return m_visible && ( l_parent ? l_parent->IsVisible() : true );
 	}
 
 	void SceneNode::DoComputeMatrix()

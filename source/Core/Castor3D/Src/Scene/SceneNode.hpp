@@ -332,6 +332,24 @@ namespace Castor3D
 		C3D_API Castor::Matrix4x4r const & GetDerivedTransformationMatrix()const;
 		/**
 		 *\~english
+		 *\brief		Sets the node visibility status
+		 *\param[in]	p_visible	The new value
+		 *\~french
+		 *\brief		Définit le statut de visibilité du noeud
+		 *\param[in]	p_visible	La nouvelle valeur
+		 */
+		C3D_API void SetVisible( bool p_visible );
+		/**
+		 *\~english
+		 *\brief		Retrieves the visibility status
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le statut de visibilité
+		 *\return		La valeur
+		 */
+		C3D_API bool IsVisible()const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the relative position
 		 *\return		The value
 		 *\~french
@@ -379,18 +397,6 @@ namespace Castor3D
 		inline void GetAxisAngle( Castor::Point3r & p_axis, Castor::Angle & p_angle )const
 		{
 			m_orientation.to_axis_angle( p_axis, p_angle );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the visibility status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut de visibilité
-		 *\return		La valeur
-		 */
-		inline bool IsVisible()const
-		{
-			return m_visible;
 		}
 		/**
 		 *\~english
@@ -561,18 +567,6 @@ namespace Castor3D
 		inline bool IsModified()const
 		{
 			return m_mtxChanged || m_derivedMtxChanged;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the node visibility status
-		 *\param[in]	p_visible	The new value
-		 *\~french
-		 *\brief		Définit le statut de visibilité du noeud
-		 *\param[in]	p_visible	La nouvelle valeur
-		 */
-		inline void SetVisible( bool p_visible )
-		{
-			m_visible = p_visible;
 		}
 
 	private:

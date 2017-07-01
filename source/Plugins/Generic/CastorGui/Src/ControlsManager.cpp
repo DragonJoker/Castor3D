@@ -42,6 +42,61 @@ namespace CastorGui
 		}
 	}
 
+	bool ControlsManager::FireMaterialEvent( Castor::String const & p_overlay, Castor::String const & p_material )
+	{
+		auto l_lock = make_unique_lock( m_mutexControls );
+		auto l_it = std::find_if( std::begin( m_controlsByZIndex )
+			, std::end( m_controlsByZIndex )
+			, [&p_overlay]( ControlSPtr p_control )
+		{
+			return p_control->GetName() == p_overlay;
+		} );
+		bool l_result = false;
+
+		if ( l_it != std::end( m_controlsByZIndex ) )
+		{
+			auto l_material = GetEngine()->GetMaterialCache().Find( p_material );
+
+			if ( l_material )
+			{
+				auto l_control = *l_it;
+				m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePreRender
+					, [l_control, l_material]()
+					{
+						l_control->SetBackgroundMaterial( l_material );
+					} ) );
+				l_result = true;
+			}
+		}
+
+		return l_result;
+	}
+
+	bool ControlsManager::FireTextEvent( Castor::String const & p_overlay, Castor::String const & p_caption )
+	{
+		auto l_lock = make_unique_lock( m_mutexControls );
+		auto l_it = std::find_if( std::begin( m_controlsByZIndex )
+			, std::end( m_controlsByZIndex )
+			, [&p_overlay]( ControlSPtr p_control )
+		{
+			return p_control->GetName() == p_overlay;
+		} );
+		bool l_result = false;
+
+		if ( l_it != std::end( m_controlsByZIndex ) )
+		{
+			auto l_control = *l_it;
+			m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePreRender
+				, [l_control, p_caption]()
+				{
+					l_control->SetCaption( p_caption );
+				} ) );
+			l_result = true;
+		}
+
+		return l_result;
+	}
+
 	void ControlsManager::Create( ControlSPtr p_control )
 	{
 		AddControl( p_control );

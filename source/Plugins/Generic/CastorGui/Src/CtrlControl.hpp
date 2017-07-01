@@ -101,6 +101,11 @@ namespace CastorGui
 		 */
 		void SetForegroundMaterial( Castor3D::MaterialSPtr p_material );
 
+		/** Sets the caption.
+		 *\param[in]	p_caption	The new value
+		 */
+		void SetCaption( Castor::String const & p_caption );
+
 		/** Sets the visibility
 		 *\param[in]	p_value		The new value.
 		 */
@@ -290,6 +295,11 @@ namespace CastorGui
 		*\param[in]	p_material		The new value
 		*/
 		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material ) = 0;
+
+		/** Sets the caption.
+		 *\param[in]	p_caption	The new value
+		 */
+		virtual void DoSetCaption( Castor::String const & p_caption ){}
 
 		/** Tells if the control catches mouse events
 		 *\remarks		A control catches mouse events when it is visible, enabled, and when it explicitly catches it (enables by default, except for static controls

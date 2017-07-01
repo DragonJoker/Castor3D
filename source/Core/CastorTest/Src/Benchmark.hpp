@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___CastorTest_Benchmark___
 #define ___CastorTest_Benchmark___
 
-#include "TestPrerequisites.hpp"
+#include "CastorTestPrerequisites.hpp"
 
 #include <chrono>
 

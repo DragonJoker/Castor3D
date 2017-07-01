@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -68,15 +68,20 @@ namespace CastorGui
 		*/
 		virtual ~StaticCtrl();
 
-		/** Sets the static caption
-		*\param[in]	p_value		The new value
-		*/
-		void SetCaption( Castor::String const & p_value );
-
 		/** Sets the caption font.
 		*\param[in]	p_font	The new value.
 		*/
 		void SetFont( Castor::String const & p_font );
+
+		/** Sets the horizontal alignment for the text.
+		*\param[in]	p_align	The new value.
+		*/
+		void SetHAlign( Castor3D::HAlign p_align );
+
+		/** Sets the vertical alignment for the text.
+		*\param[in]	p_align	The new value.
+		*/
+		void SetVAlign( Castor3D::VAlign p_align );
 
 		/** Retrieve the static caption
 		 *\return		The value
@@ -89,35 +94,39 @@ namespace CastorGui
 	private:
 		/** @copydoc CastorGui::Control::DoCreate
 		*/
-		virtual void DoCreate();
+		virtual void DoCreate()override;
 
 		/** @copydoc CastorGui::Control::DoDestroy
 		*/
-		virtual void DoDestroy();
+		virtual void DoDestroy()override;
 
 		/** @copydoc CastorGui::Control::DoSetPosition
 		*/
-		virtual void DoSetPosition( Castor::Position const & p_value );
+		virtual void DoSetPosition( Castor::Position const & p_value )override;
 
 		/** @copydoc CastorGui::Control::DoSetSize
 		*/
-		virtual void DoSetSize( Castor::Size const & p_value );
+		virtual void DoSetSize( Castor::Size const & p_value )override;
 
 		/** @copydoc CastorGui::Control::DoSetBackgroundMaterial
 		*/
-		virtual void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+		virtual void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::DoSetForegroundMaterial
 		*/
-		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material );
+		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material )override;
+
+		/** @copydoc CastorGui::Control::DoSetCaption
+		*/
+		void DoSetCaption( Castor::String const & p_value )override;
 
 		/** @copydoc CastorGui::Control::DoSetVisible
 		*/
-		virtual void DoSetVisible( bool p_visible );
+		virtual void DoSetVisible( bool p_visible )override;
 
 		/** @copydoc CastorGui::Control::DoUpdateStyle
 		*/
-		virtual void DoUpdateStyle();
+		virtual void DoUpdateStyle()override;
 
 	private:
 		//! The static caption

@@ -390,6 +390,42 @@ namespace CastorGui
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonHAlign )
+	{
+		ParserContext & l_context = GetParserContext( p_context );
+		ButtonCtrlSPtr l_button = l_context.m_button;
+
+		if ( l_button )
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+			l_button->SetHAlign( HAlign( l_value ) );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No button initialised." ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonVAlign )
+	{
+		ParserContext & l_context = GetParserContext( p_context );
+		ButtonCtrlSPtr l_button = l_context.m_button;
+
+		if ( l_button )
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+			l_button->SetVAlign( VAlign( l_value ) );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No button initialised." ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonEnd )
 	{
 		ParserContext & l_context = GetParserContext( p_context );
@@ -797,6 +833,42 @@ namespace CastorGui
 			String l_text;
 			p_params[0]->Get( l_text );
 			l_static->SetCaption( l_text );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No static initialised." ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_StaticHAlign )
+	{
+		ParserContext & l_context = GetParserContext( p_context );
+		StaticCtrlSPtr l_static = l_context.m_static;
+
+		if ( l_static )
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+			l_static->SetHAlign( HAlign( l_value ) );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No static initialised." ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_StaticVAlign )
+	{
+		ParserContext & l_context = GetParserContext( p_context );
+		StaticCtrlSPtr l_static = l_context.m_static;
+
+		if ( l_static )
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+			l_static->SetVAlign( VAlign( l_value ) );
 		}
 		else
 		{

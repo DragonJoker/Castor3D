@@ -1,4 +1,4 @@
-#include "CtrlStatic.hpp"
+﻿#include "CtrlStatic.hpp"
 
 #include "ControlsManager.hpp"
 
@@ -69,25 +69,33 @@ namespace CastorGui
 	{
 	}
 
-	void StaticCtrl::SetCaption( String const & p_value )
-	{
-		m_caption = p_value;
-		TextOverlaySPtr l_text = m_text.lock();
-
-		if ( l_text )
-		{
-			l_text->SetCaption( p_value );
-			l_text.reset();
-		}
-	}
-
-	void StaticCtrl::SetFont( Castor::String const & p_font )
+	void StaticCtrl::SetFont( String const & p_font )
 	{
 		TextOverlaySPtr l_text = m_text.lock();
 
 		if ( l_text )
 		{
 			l_text->SetFont( p_font );
+		}
+	}
+
+	void StaticCtrl::SetHAlign( HAlign p_align )
+	{
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetHAlign( p_align );
+		}
+	}
+
+	void StaticCtrl::SetVAlign( VAlign p_align )
+	{
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetVAlign( p_align );
 		}
 	}
 
@@ -142,6 +150,18 @@ namespace CastorGui
 		if ( l_text )
 		{
 			l_text->SetMaterial( p_material );
+		}
+	}
+
+	void StaticCtrl::DoSetCaption( String const & p_value )
+	{
+		m_caption = p_value;
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetCaption( p_value );
+			l_text.reset();
 		}
 	}
 

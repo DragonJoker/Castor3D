@@ -1,4 +1,4 @@
-#include "RenderPanel.hpp"
+﻿#include "RenderPanel.hpp"
 
 #include "CastorDvpTD.hpp"
 #include "Game.hpp"
@@ -191,13 +191,7 @@ namespace castortd
 						break;
 
 					case Cell::State::Target:
-						m_selectedTower = nullptr;
-						break;
-
 					case Cell::State::Path:
-						m_selectedTower = nullptr;
-						break;
-
 					default:
 						m_selectedTower = nullptr;
 						break;

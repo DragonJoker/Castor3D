@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___CastorTest_BenchManager___
 #define ___CastorTest_BenchManager___
 
-#include "TestPrerequisites.hpp"
+#include "CastorTestPrerequisites.hpp"
 
 namespace Testing
 {

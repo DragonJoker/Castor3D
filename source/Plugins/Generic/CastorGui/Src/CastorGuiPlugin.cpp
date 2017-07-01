@@ -59,9 +59,22 @@ namespace CastorGui
 
 		FileParser::AttributeParsersBySection CreateParsers( Castor3D::Engine * p_engine )
 		{
+			static UIntStrMap l_mapHAligns
+			{
+				{ "left", uint32_t( HAlign::eLeft ) },
+				{ "center", uint32_t( HAlign::eCenter ) },
+				{ "right", uint32_t( HAlign::eRight ) }
+			};
+			static UIntStrMap l_mapVAligns
+			{
+				{ "top", uint32_t( VAlign::eTop ) },
+				{ "center", uint32_t( VAlign::eCenter ) },
+				{ "bottom", uint32_t( VAlign::eBottom ) }
+			};
 			FileParser::AttributeParsersBySection l_return;
 
 			AddParser( l_return, uint32_t( CSCNSection::eRoot ), cuT( "gui" ), &Parser_Gui );
+			AddParser( l_return, uint32_t( CSCNSection::eScene ), cuT( "gui" ), &Parser_Gui );
 
 			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "default_font" ), &Parser_DefaultFont, { MakeParameter< ParameterType::eName >() } );
 			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "button" ), &Parser_Button, { MakeParameter< ParameterType::eName >() } );
@@ -82,6 +95,8 @@ namespace CastorGui
 			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "pushed_text_material" ), &Parser_ButtonPushedTextMaterial, { MakeParameter< ParameterType::eName >() } );
 			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "font" ), &Parser_ButtonFont, { MakeParameter< ParameterType::eName >() } );
 			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "caption" ), &Parser_ButtonCaption, { MakeParameter< ParameterType::eText >() } );
+			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "horizontal_align" ), &Parser_ButtonHAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapHAligns ) } );
+			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "vertical_align" ), &Parser_ButtonVAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapVAligns ) } );
 
 			CreateDefaultParsers( l_return, uint32_t( GUISection::eListBox ), &Parser_ListBoxEnd );
 			AddParser( l_return, uint32_t( GUISection::eListBox ), cuT( "font" ), &Parser_ListBoxFont, { MakeParameter< ParameterType::eName >() } );
@@ -100,6 +115,8 @@ namespace CastorGui
 			CreateDefaultParsers( l_return, uint32_t( GUISection::eStatic ), &Parser_StaticEnd );
 			AddParser( l_return, uint32_t( GUISection::eStatic ), cuT( "font" ), &Parser_StaticFont, { MakeParameter< ParameterType::eName >() } );
 			AddParser( l_return, uint32_t( GUISection::eStatic ), cuT( "caption" ), &Parser_StaticCaption, { MakeParameter< ParameterType::eText >() } );
+			AddParser( l_return, uint32_t( GUISection::eStatic ), cuT( "horizontal_align" ), &Parser_StaticHAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapHAligns ) } );
+			AddParser( l_return, uint32_t( GUISection::eStatic ), cuT( "vertical_align" ), &Parser_StaticVAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapVAligns ) } );
 
 			CreateDefaultParsers( l_return, uint32_t( GUISection::eEdit ), &Parser_EditEnd );
 			AddParser( l_return, uint32_t( GUISection::eEdit ), cuT( "font" ), &Parser_EditFont, { MakeParameter< ParameterType::eName >() } );

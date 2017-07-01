@@ -1,4 +1,4 @@
-#if defined( CASTOR_COMPILER_MSVC )
+﻿#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -319,7 +319,8 @@ namespace Castor3D
 
 			for ( auto l_primitive : p_scene.GetGeometryCache() )
 			{
-				if ( p_ignored != l_primitive.second->GetParent().get() )
+				if ( p_ignored != l_primitive.second->GetParent().get()
+					&& l_primitive.second->GetParent()->IsVisible() )
 				{
 					MeshSPtr l_mesh = l_primitive.second->GetMesh();
 					REQUIRE( l_mesh );
