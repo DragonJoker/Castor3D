@@ -1,4 +1,4 @@
-﻿#include "RenderTechniquePass.hpp"
+#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -302,7 +302,8 @@ namespace Castor3D
 						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
 						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
@@ -356,7 +357,8 @@ namespace Castor3D
 						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
 						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}

@@ -90,6 +90,11 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderPass::DoRender
 		 */
 		void DoRender( uint32_t p_face )override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoPrepareBackPipeline
+		 */
+		void DoPrepareBackPipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
 
 	private:
 		//!\~english	The camera created from the light.

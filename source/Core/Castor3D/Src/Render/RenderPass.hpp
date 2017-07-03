@@ -469,6 +469,35 @@ namespace Castor3D
 			, RenderInfo & p_info )const;
 		/**
 		 *\~english
+		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
+		 *\param[in]	p_renderNodes	The instanced nodes.
+		 *\param[in]	p_matrixBuffer	The matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\param[in]	p_renderNodes	Les noeuds instanciés.
+		 *\param[in]	p_matrixBuffer	Le tampon de matrices.
+		 */
+		C3D_API uint32_t DoCopyNodesMatrices( SkinningRenderNodeArray const & p_renderNodes
+			, VertexBuffer & p_matrixBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		p_renderNodes	The instanced nodes.
+		 *\param[in]		p_matrixBuffer	The matrix buffer.
+		 *\param[in, out]	p_info			Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		p_renderNodes	Les noeuds instanciés.
+		 *\param[in]		p_matrixBuffer	Le tampon de matrices.
+		 *\param[in,out]	p_info			Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t DoCopyNodesMatrices( SkinningRenderNodeArray const & p_renderNodes
+			, VertexBuffer & p_matrixBuffer
+			, RenderInfo & p_info )const;
+		/**
+		 *\~english
 		 *\brief		Copies the instanced skinned nodes model matrices into given matrix buffer.
 		 *\param[in]	p_renderNodes	The instanced nodes.
 		 *\param[in]	p_bonesBuffer	The bones matrix buffer.

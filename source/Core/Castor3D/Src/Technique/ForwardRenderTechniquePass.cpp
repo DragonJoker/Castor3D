@@ -1,4 +1,4 @@
-﻿#include "ForwardRenderTechniquePass.hpp"
+#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -197,7 +197,15 @@ namespace Castor3D
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
 				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
-				vtx_material = c3d_materialIndex;
+
+				if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+				{
+					vtx_material = material;
+				}
+				else
+				{
+					vtx_material = c3d_materialIndex;
+				}
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{

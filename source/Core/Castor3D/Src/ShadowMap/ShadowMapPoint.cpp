@@ -217,7 +217,7 @@ namespace Castor3D
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Fragment Intputs
-		Ubo l_shadowMap{ l_writer, ShadowMapUbo };
+		Ubo l_shadowMap{ l_writer, ShadowMapUbo, 8u };
 		auto c3d_v3WordLightPosition( l_shadowMap.DeclMember< Vec3 >( WorldLightPosition ) );
 		auto c3d_fFarPlane( l_shadowMap.DeclMember< Float >( FarPlane ) );
 		l_shadowMap.End();

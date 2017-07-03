@@ -106,6 +106,13 @@ namespace Castor3D
 		C3D_API virtual void SetBindingPoint( uint32_t p_index )const = 0;
 		/**
 		 *\~english
+		 *\return		The buffer's binding point.
+		 *\~french
+		 *\return		Le point d'attache du tampon.
+		 */
+		C3D_API virtual uint32_t GetBindingPoint()const = 0;
+		/**
+		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
 		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
 		 *\param[in]	p_offset	The start offset in the buffer.

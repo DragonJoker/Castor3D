@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,6 +27,7 @@ SOFTWARE.
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Shader/SceneUbo.hpp"
 #include "Shader/GpInfoUbo.hpp"
+#include "Shader/HdrConfigUbo.hpp"
 
 namespace Castor3D
 {
@@ -115,16 +116,10 @@ namespace Castor3D
 		GpInfoUbo m_gpInfo;
 		//!\~english	The HDR configuration.
 		//!\~french		La configuration HDR.
-		UniformBuffer m_configUbo;
+		HdrConfigUbo m_configUbo;
 		//!\~english	The render pipeline.
 		//!\~french		Le pipeline de rendu.
 		RenderPipelineUPtr m_pipeline;
-		//!\~english	The exposure shader variable.
-		//!\~french		La variable shader pour l'exposition.
-		Uniform1fSPtr m_exposureUniform;
-		//!\~english	The gamma correction shader variable.
-		//!\~french		La variable shader pour la correction gamma.
-		Uniform1fSPtr m_gammaUniform;
 	};
 }
 

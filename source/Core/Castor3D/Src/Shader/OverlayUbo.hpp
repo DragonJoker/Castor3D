@@ -102,6 +102,9 @@ namespace Castor3D
 		}
 		/**@}*/
 
+	public:
+		static constexpr uint32_t BindingPoint = 2u;
+
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
@@ -116,7 +119,7 @@ namespace Castor3D
 }
 
 #define UBO_OVERLAY( Writer )\
-	GLSL::Ubo l_overlay{ l_writer, ShaderProgram::BufferOverlay, 2u };\
+	GLSL::Ubo l_overlay{ l_writer, ShaderProgram::BufferOverlay, OverlayUbo::BindingPoint };\
 	auto c3d_position = l_overlay.DeclMember< GLSL::IVec2 >( ShaderProgram::OvPosition );\
 	auto c3d_materialIndex = l_overlay.DeclMember< GLSL::Int >( ShaderProgram::MaterialIndex );\
 	l_overlay.End()

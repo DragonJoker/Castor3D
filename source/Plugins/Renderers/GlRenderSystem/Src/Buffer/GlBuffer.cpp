@@ -1,4 +1,4 @@
-#include "GlBuffer.hpp"
+﻿#include "GlBuffer.hpp"
 #include "Render/GlRenderSystem.hpp"
 
 namespace GlRender
@@ -57,6 +57,11 @@ namespace GlRender
 			, GetGlName() );
 	}
 
+	uint32_t GlBuffer::GetBindingPoint()const
+	{
+		return m_bindingPoint;
+	}
+
 	void GlBuffer::Bind()const
 	{
 		BindableType::Bind();
@@ -94,7 +99,7 @@ namespace GlRender
 		REQUIRE( p_count > 0 );
 		REQUIRE( m_allocatedSize >= p_count + p_offset );
 		Bind();
-		auto l_provider = BindableType::GetOpenGl().GetProvider();
+		static auto const l_provider = BindableType::GetOpenGl().GetProvider();
 
 		if ( l_provider == GlProvider::eNvidia || l_provider == GlProvider::eATI )
 		{

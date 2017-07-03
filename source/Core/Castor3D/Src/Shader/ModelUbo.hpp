@@ -106,6 +106,9 @@ namespace Castor3D
 		}
 		/**@}*/
 
+	public:
+		static constexpr uint32_t BindingPoint = 4u;
+
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
@@ -123,7 +126,7 @@ namespace Castor3D
 }
 
 #define UBO_MODEL( Writer )\
-	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel, 4u };\
+	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel, ModelUbo::BindingPoint };\
 	auto c3d_shadowReceiver = l_model.DeclMember< GLSL::Int >( ShaderProgram::ShadowReceiver );\
 	auto c3d_materialIndex = l_model.DeclMember< GLSL::Int >( ShaderProgram::MaterialIndex );\
 	auto c3d_envMapIndex = l_model.DeclMember< GLSL::Int >( ShaderProgram::EnvironmentIndex );\

@@ -1,4 +1,4 @@
-﻿#include "RenderNode.hpp"
+#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -208,7 +208,11 @@ namespace Castor3D
 
 	inline void DoRenderNodeNoPass( SkinningRenderNode & p_node )
 	{
-		p_node.m_skinningUbo.Update( p_node.m_skeleton );
+		if ( !CheckFlag( p_node.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		{
+			p_node.m_skinningUbo.Update( p_node.m_skeleton );
+		}
+
 		DoRenderObjectNode( p_node );
 	}
 

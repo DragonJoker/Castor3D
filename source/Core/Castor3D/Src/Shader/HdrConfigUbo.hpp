@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -94,6 +94,9 @@ namespace Castor3D
 		}
 		/**@}*/
 
+	public:
+		static constexpr uint32_t BindingPoint = 3u;
+
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
@@ -108,7 +111,7 @@ namespace Castor3D
 }
 
 #define UBO_HDR_CONFIG( Writer )\
-	Ubo l_hdrConfig{ l_writer, ShaderProgram::BufferHdrConfig, 3u };\
+	Ubo l_hdrConfig{ l_writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };\
 	auto c3d_exposure = l_hdrConfig.DeclMember< Float >( ShaderProgram::Exposure );\
 	auto c3d_gamma = l_hdrConfig.DeclMember< Float >( ShaderProgram::Gamma );\
 	l_hdrConfig.End()

@@ -54,7 +54,7 @@ namespace Fxaa
 
 			// Shader inputs
 			UBO_MATRIX( l_writer );
-			Ubo l_fxaa{ l_writer, FxaaUbo };
+			Ubo l_fxaa{ l_writer, FxaaUbo, 2u };
 			auto c3d_fSubpixShift = l_fxaa.DeclMember< Float >( SubpixShift );
 			auto c3d_fSpanMax = l_fxaa.DeclMember< Float >( SpanMax );
 			auto c3d_fReduceMul = l_fxaa.DeclMember< Float >( ReduceMul );
@@ -90,7 +90,7 @@ namespace Fxaa
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto vtx_posPos = l_writer.DeclInput< Vec4 >( PosPos );
 
-			Ubo l_fxaa{ l_writer, FxaaUbo };
+			Ubo l_fxaa{ l_writer, FxaaUbo, 2u };
 			auto c3d_fSubpixShift = l_fxaa.DeclMember< Float >( SubpixShift );
 			auto c3d_fSpanMax = l_fxaa.DeclMember< Float >( SpanMax );
 			auto c3d_fReduceMul = l_fxaa.DeclMember< Float >( ReduceMul );
@@ -234,6 +234,7 @@ namespace Fxaa
 		m_uniformReduceMul->SetValue( m_reduceMul );
 		m_uniformRenderTargetWidth->SetValue( float( l_size.width() ) );
 		m_uniformRenderTargetHeight->SetValue( float( l_size.height() ) );
+		m_fxaaUbo.Update();
 
 		DepthStencilState l_dsstate;
 		l_dsstate.SetDepthTest( false );
@@ -261,6 +262,7 @@ namespace Fxaa
 
 		if ( l_attach && l_attach->GetAttachmentType() == AttachmentType::eTexture )
 		{
+			m_fxaaUbo.BindTo( 2u );
 			m_pipeline->Apply();
 			m_surface.m_fbo->Bind( FrameBufferTarget::eDraw );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();

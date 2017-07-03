@@ -30,5 +30,6 @@ namespace Castor3D
 		m_shadowReceiver.SetValue( p_shadowReceiver ? 1 : 0 );
 		m_materialIndex.SetValue( p_materialIndex - 1 );
 		m_ubo.Update();
+		m_ubo.BindTo( ModelUbo::BindingPoint );
 	}
 }

@@ -6,6 +6,7 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Shader/HdrConfigUbo.hpp>
 #include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/TextureLayout.hpp>
@@ -49,7 +50,7 @@ namespace HaarmPieterDuiker
 			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig };
+			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };
 			auto c3d_fExposure = l_config.DeclMember< Float >( ShaderProgram::Exposure );
 			auto c3d_fGamma = l_config.DeclMember< Float >( ShaderProgram::Gamma );
 			l_config.End();

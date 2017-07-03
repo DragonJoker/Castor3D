@@ -32,5 +32,7 @@ namespace GLSL
 		{
 			m_writer.m_stream << m_stream.rdbuf();
 		}
+
+		m_writer.RegisterSsbo( m_name, m_info );
 	}
 }

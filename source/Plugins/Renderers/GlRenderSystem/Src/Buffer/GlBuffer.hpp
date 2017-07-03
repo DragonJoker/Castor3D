@@ -75,6 +75,10 @@ namespace GlRender
 		 */
 		void SetBindingPoint( uint32_t p_index )const override;
 		/**
+		 *\copydoc		Castor3D::GpuBuffer::GetBindingPoint
+		 */
+		uint32_t GetBindingPoint()const override;
+		/**
 		 *\copydoc		Castor3D::GpuBuffer::Bind
 		 */
 		void Bind()const override;
@@ -111,11 +115,6 @@ namespace GlRender
 		void Unlock()const override;
 
 		uint8_t * Lock( GlAccessType p_access )const;
-
-		inline uint32_t GetBindingPoint()const
-		{
-			return m_bindingPoint;
-		}
 
 	private:
 		GlBufferTarget m_target;

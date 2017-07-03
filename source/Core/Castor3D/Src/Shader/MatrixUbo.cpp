@@ -1,4 +1,4 @@
-﻿#include "MatrixUbo.hpp"
+#include "MatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -28,6 +28,7 @@ namespace Castor3D
 		m_projection.SetValue( p_projection );
 		m_invProjection.SetValue( p_projection.get_inverse() );
 		m_ubo.Update();
+		m_ubo.BindTo( MatrixUbo::BindingPoint );
 	}
 
 	void MatrixUbo::Update( Matrix4x4r const & p_projection )const
@@ -35,5 +36,6 @@ namespace Castor3D
 		m_projection.SetValue( p_projection );
 		m_invProjection.SetValue( p_projection.get_inverse() );
 		m_ubo.Update();
+		m_ubo.BindTo( MatrixUbo::BindingPoint );
 	}
 }

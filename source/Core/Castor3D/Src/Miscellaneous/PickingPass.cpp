@@ -245,6 +245,7 @@ namespace Castor3D
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
 		p_camera.Apply();
+		m_pickingUbo.BindTo( 7u );
 		DoRenderNodes( p_nodes, p_camera );
 		m_frameBuffer->Unbind();
 
@@ -484,7 +485,7 @@ namespace Castor3D
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
 
 		// UBOs
-		Ubo l_uboPicking{ l_writer, Picking };
+		Ubo l_uboPicking{ l_writer, Picking, 7u };
 		auto c3d_iDrawIndex( l_uboPicking.DeclMember< UInt >( DrawIndex ) );
 		auto c3d_iNodeIndex( l_uboPicking.DeclMember< UInt >( NodeIndex ) );
 		l_uboPicking.End();
@@ -549,7 +550,8 @@ namespace Castor3D
 				l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 			}
 
-			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+			if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+				&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 			{
 				l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 			}

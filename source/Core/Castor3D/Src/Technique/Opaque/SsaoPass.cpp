@@ -1,4 +1,4 @@
-﻿#include "SsaoPass.hpp"
+#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -175,7 +175,7 @@ namespace Castor3D
 			auto c3d_mapNormal = l_writer.DeclUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
 			auto c3d_mapNoise = l_writer.DeclUniform< Sampler2D >( cuT( "c3d_mapNoise" ) );
 
-			Ubo l_ssaoConfig{ l_writer, cuT( "SsaoConfig" ) };
+			Ubo l_ssaoConfig{ l_writer, cuT( "SsaoConfig" ), 8u };
 			auto c3d_kernel = l_ssaoConfig.DeclMember< Vec3 >( cuT( "c3d_kernel" ), 64u );
 			auto c3d_kernelSize = l_ssaoConfig.DeclMember< Int >( cuT( "c3d_kernelSize" ) );
 			auto c3d_radius = l_ssaoConfig.DeclMember< Float >( cuT( "c3d_radius" ) );
@@ -599,6 +599,7 @@ namespace Castor3D
 
 	void SsaoPass::DoRenderSsao( GeometryPassResult const & p_gp )
 	{
+		m_ssaoConfig.BindTo( 8u );
 		m_ssaoFbo->Bind( FrameBufferTarget::eDraw );
 		m_ssaoFbo->Clear( BufferComponent::eColour );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );

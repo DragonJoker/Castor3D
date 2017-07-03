@@ -472,7 +472,7 @@ namespace GlRender
 
 		for ( auto & l_binding : m_bindings )
 		{
-			l_binding.get().Bind( l_count++ );
+			l_binding.get().Bind( l_binding.get().GetOwner()->GetBindingPoint() );
 		}
 	}
 }

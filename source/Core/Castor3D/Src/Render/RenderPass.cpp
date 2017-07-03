@@ -13,6 +13,7 @@
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
+#include "Shader/ShaderStorageBuffer.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 
@@ -315,6 +316,32 @@ namespace Castor3D
 					++p_info.m_visibleObjectsCount;
 				}
 			}
+		}
+
+		template< typename ArrayT >
+		uint32_t CopyNodesMatrices( ArrayT const & p_renderNodes
+			, VertexBuffer & p_matrixBuffer )
+		{
+			auto const l_mtxSize = sizeof( float ) * 16;
+			auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
+			auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
+			REQUIRE( l_count <= p_renderNodes.size() );
+			auto l_buffer = p_matrixBuffer.data();
+			auto l_it = p_renderNodes.begin();
+			auto i = 0u;
+
+			while ( i < l_count )
+			{
+				std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_mtxSize );
+				auto l_id = l_it->m_passNode.m_pass.GetId() - 1;
+				std::memcpy( l_buffer + l_mtxSize, &l_id, sizeof( int ) );
+				l_buffer += l_stride;
+				++i;
+				++l_it;
+			}
+
+			p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
+			return l_count;
 		}
 	}
 
@@ -660,33 +687,29 @@ namespace Castor3D
 	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
 		, VertexBuffer & p_matrixBuffer )const
 	{
-		auto const l_mtxSize = sizeof( float ) * 16;
-		auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
-		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-		REQUIRE( l_count <= p_renderNodes.size() );
-		auto l_buffer = p_matrixBuffer.data();
-		auto l_it = p_renderNodes.begin();
-		auto i = 0u;
-
-		while ( i < l_count )
-		{
-			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_mtxSize );
-			auto l_id = l_it->m_passNode.m_pass.GetId() - 1;
-			std::memcpy( l_buffer + l_mtxSize, &l_id, sizeof( int ) );
-			l_buffer += l_stride;
-			++i;
-			++l_it;
-		}
-
-		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
-		return l_count;
+		return CopyNodesMatrices( p_renderNodes, p_matrixBuffer );
 	}
 
 	uint32_t RenderPass::DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
 		, VertexBuffer & p_matrixBuffer
 		, RenderInfo & p_info )const
 	{
-		auto l_count = DoCopyNodesMatrices( p_renderNodes, p_matrixBuffer );
+		auto l_count = CopyNodesMatrices( p_renderNodes, p_matrixBuffer );
+		p_info.m_visibleObjectsCount += l_count;
+		return l_count;
+	}
+
+	uint32_t RenderPass::DoCopyNodesMatrices( SkinningRenderNodeArray const & p_renderNodes
+		, VertexBuffer & p_matrixBuffer )const
+	{
+		return CopyNodesMatrices( p_renderNodes, p_matrixBuffer );
+	}
+
+	uint32_t RenderPass::DoCopyNodesMatrices( SkinningRenderNodeArray const & p_renderNodes
+		, VertexBuffer & p_matrixBuffer
+		, RenderInfo & p_info )const
+	{
+		auto l_count = CopyNodesMatrices( p_renderNodes, p_matrixBuffer );
 		p_info.m_visibleObjectsCount += l_count;
 		return l_count;
 	}
@@ -929,10 +952,15 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasInstancedBonesBuffer() )
+				if ( !p_renderNodes.empty() )
 				{
-					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
+					REQUIRE( p_submesh.HasMatrixBuffer() );
+					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					REQUIRE( l_count1 == l_count2 );
+					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
 				}
 			} );
 	}
@@ -949,10 +977,15 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasInstancedBonesBuffer() )
+				if ( !p_renderNodes.empty() )
 				{
-					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
+					REQUIRE( p_submesh.HasMatrixBuffer() );
+					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					REQUIRE( l_count1 == l_count2 );
+					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
 				}
 			} );
 	}
@@ -968,10 +1001,15 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasInstancedBonesBuffer() )
+				if ( !p_renderNodes.empty() )
 				{
-					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
+					REQUIRE( p_submesh.HasMatrixBuffer() );
+					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					REQUIRE( l_count1 == l_count2 );
+					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
 				}
 			} );
 	}
@@ -990,11 +1028,15 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasInstancedBonesBuffer() )
+				if ( !p_renderNodes.empty() )
 				{
-					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
-					p_submesh.GetInstancedBonesBuffer().BindTo( 2 );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
+					REQUIRE( p_submesh.HasMatrixBuffer() );
+					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					REQUIRE( l_count1 == l_count2 );
+					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
 				}
 			} );
 	}
@@ -1014,10 +1056,15 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() && p_submesh.HasInstancedBonesBuffer() )
+				if ( !p_renderNodes.empty() )
 				{
-					uint32_t l_count = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer(), p_info );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
+					REQUIRE( p_submesh.HasMatrixBuffer() );
+					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_info );
+					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer(), p_info );
+					REQUIRE( l_count1 == l_count2 );
+					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
 					++p_info.m_drawCalls;
 				}
 			} );

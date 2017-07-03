@@ -33,6 +33,11 @@ namespace TestRender
 	{
 	}
 
+	uint32_t TestBuffer::GetBindingPoint()const
+	{
+		return 0u;
+	}
+
 	void TestBuffer::Bind()const
 	{
 	}

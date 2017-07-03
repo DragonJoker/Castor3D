@@ -1,4 +1,4 @@
-﻿#include "BloomPostEffect.hpp"
+#include "BloomPostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -97,7 +97,7 @@ namespace Bloom
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, BloomPostEffect::FilterConfig };
+			Ubo l_config{ l_writer, BloomPostEffect::FilterConfig, 2u };
 			auto c3d_fCoefficients = l_config.DeclMember< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
 			auto c3d_fCoefficientsCount = l_config.DeclMember< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 			l_config.End();
@@ -130,7 +130,7 @@ namespace Bloom
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, BloomPostEffect::FilterConfig };
+			Ubo l_config{ l_writer, BloomPostEffect::FilterConfig, 2u };
 			auto c3d_fCoefficients = l_config.DeclMember< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
 			auto c3d_fCoefficientsCount = l_config.DeclMember< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
 			l_config.End();
@@ -519,6 +519,7 @@ namespace Bloom
 		, UniformBuffer & p_ubo )
 	{
 		auto l_context = GetRenderSystem()->GetCurrentContext();
+		p_ubo.BindTo( 2u );
 
 		for ( uint32_t i = 0; i < FILTER_COUNT; ++i )
 		{

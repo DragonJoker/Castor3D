@@ -1,4 +1,4 @@
-﻿#include "GpInfoUbo.hpp"
+#include "GpInfoUbo.hpp"
 
 #include <Engine.hpp>
 #include <Scene/Camera.hpp>
@@ -44,6 +44,7 @@ namespace Castor3D
 		m_gProjUniform->SetValue( p_camera.GetViewport().GetProjection() );
 		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
 		m_gpInfoUbo.Update();
+		m_gpInfoUbo.BindTo( GpInfoUbo::BindingPoint );
 	}
 
 	//************************************************************************************************

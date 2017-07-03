@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -126,6 +126,22 @@ namespace Castor3D
 		 *\brief		Met à jour le stockage GPU.
 		 */
 		C3D_API void Update()const;
+		/**
+		 *\~english
+		 *\brief		Sets the buffer's binding point.
+		 *\param[in]	p_index	The binding point.
+		 *\~french
+		 *\brief		Définit le point d'attache du tampon.
+		 *\param[in]	p_index	Le point d'attache.
+		 */
+		C3D_API void BindTo( uint32_t p_index )const;
+		/**
+		 *\~english
+		 *\return		The buffer's binding point.
+		 *\~french
+		 *\return		Le point d'attache du tampon.
+		 */
+		C3D_API uint32_t GetBindingPoint()const;
 		/**
 		 *\~english
 		 *\brief		Creates a binding of this unifor buffer to given program.

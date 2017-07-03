@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPassPoint.hpp"
+#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -100,6 +100,7 @@ namespace Castor3D
 		if ( m_initialised )
 		{
 			m_shadowConfig.Update();
+			m_shadowConfig.BindTo( 8u );
 			m_viewport.Apply();
 			m_matrixUbo.Update( m_matrices[p_face], m_projection );
 			DoRenderNodes( m_renderQueue.GetRenderNodes() );
@@ -128,7 +129,6 @@ namespace Castor3D
 			{
 				l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
 				l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
-				l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
 				l_pipeline.AddUniformBuffer( m_shadowConfig );
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
@@ -136,7 +136,8 @@ namespace Castor3D
 					l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 				}
 
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+					&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 				{
 					l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 				}

@@ -1,4 +1,4 @@
-#include "SkinningUbo.hpp"
+﻿#include "SkinningUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -25,6 +25,7 @@ namespace Castor3D
 	{
 		p_skeleton.FillShader( m_bonesMatrix );
 		m_ubo.Update();
+		m_ubo.BindTo( SkinningUbo::BindingPoint );
 	}
 
 	void SkinningUbo::Declare( GLSL::GlslWriter & p_writer
@@ -34,13 +35,13 @@ namespace Castor3D
 		{
 			if ( CheckFlag( p_flags, ProgramFlag::eInstantiation ) )
 			{
-				GLSL::Ssbo l_skinning{ p_writer, ShaderProgram::BufferSkinning, 5u };
+				GLSL::Ssbo l_skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
 				auto c3d_mtxBones = l_skinning.DeclMemberArray< GLSL::Mat4 >( ShaderProgram::Bones, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
 				l_skinning.End();
 			}
 			else
 			{
-				GLSL::Ubo l_skinning{ p_writer, ShaderProgram::BufferSkinning, 5u };
+				GLSL::Ubo l_skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
 				auto c3d_mtxBones = l_skinning.DeclMember< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
 				l_skinning.End();
 			}
@@ -62,6 +63,7 @@ namespace Castor3D
 		if ( CheckFlag( p_flags, ProgramFlag::eInstantiation ) )
 		{
 			auto gl_InstanceID = p_writer.GetBuiltin< GLSL::Int >( cuT( "gl_InstanceID" ) );
+			auto transform = p_writer.GetBuiltin< GLSL::Mat4 >( cuT( "transform" ) );
 			auto l_mtxInstanceOffset = p_writer.DeclLocale< Int >( cuT( "l_mtxInstanceOffset" )
 				, gl_InstanceID * 400_i );
 			l_mtxBoneTransform = c3d_mtxBones[l_mtxInstanceOffset + bone_ids0[0_i]] * weights0[0_i];
@@ -72,6 +74,7 @@ namespace Castor3D
 			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids1[1_i]] * weights1[1_i];
 			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids1[2_i]] * weights1[2_i];
 			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids1[3_i]] * weights1[3_i];
+			l_mtxBoneTransform = transform * l_mtxBoneTransform;
 		}
 		else
 		{
@@ -83,8 +86,9 @@ namespace Castor3D
 			l_mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
 			l_mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
 			l_mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
+			l_mtxBoneTransform = c3d_mtxModel * l_mtxBoneTransform;
 		}
 
-		return c3d_mtxModel * l_mtxBoneTransform;
+		return l_mtxBoneTransform;
 	}
 }

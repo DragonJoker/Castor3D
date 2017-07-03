@@ -2,6 +2,7 @@
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
+#include <Shader/HdrConfigUbo.hpp>
 
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
@@ -41,7 +42,7 @@ namespace HejlBurgessDawson
 			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, ToneMapping::HdrConfigUbo };
+			Ubo l_config{ l_writer, ToneMapping::HdrConfigUbo, HdrConfigUbo::BindingPoint };
 			auto c3d_exposure = l_config.DeclMember< Float >( ShaderProgram::Exposure );
 			l_config.End();
 			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );

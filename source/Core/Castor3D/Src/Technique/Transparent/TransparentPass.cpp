@@ -334,7 +334,15 @@ namespace Castor3D
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
 				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
-				vtx_material = c3d_materialIndex;
+
+				if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+				{
+					vtx_material = material;
+				}
+				else
+				{
+					vtx_material = c3d_materialIndex;
+				}
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -615,7 +623,8 @@ namespace Castor3D
 			p_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 		}
 
-		if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+		if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+			&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 		{
 			p_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 		}

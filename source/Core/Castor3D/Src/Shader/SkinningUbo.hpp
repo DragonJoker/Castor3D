@@ -119,6 +119,9 @@ namespace Castor3D
 		}
 		/**@}*/
 
+	public:
+		static constexpr uint32_t BindingPoint = 5u;
+
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.

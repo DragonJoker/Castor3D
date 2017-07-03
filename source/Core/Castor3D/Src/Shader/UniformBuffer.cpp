@@ -1,4 +1,4 @@
-#include "UniformBuffer.hpp"
+﻿#include "UniformBuffer.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -168,6 +168,18 @@ namespace Castor3D
 		m_bindings.clear();
 		m_mapVariables.clear();
 		m_listVariables.clear();
+	}
+
+	void UniformBuffer::BindTo( uint32_t p_index )const
+	{
+		REQUIRE( m_storage );
+		m_storage->SetBindingPoint( p_index );
+	}
+
+	uint32_t UniformBuffer::GetBindingPoint()const
+	{
+		REQUIRE( m_storage );
+		return m_storage->GetBindingPoint();
 	}
 
 	UniformBufferBinding & UniformBuffer::CreateBinding( ShaderProgram & p_program )

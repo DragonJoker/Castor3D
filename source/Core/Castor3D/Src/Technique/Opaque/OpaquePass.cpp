@@ -146,10 +146,10 @@ namespace Castor3D
 
 		UBO_MATRIX( l_writer );
 		UBO_MODEL_MATRIX( l_writer );
-		SkinningUbo::Declare( l_writer, p_programFlags );
-		UBO_MORPHING( l_writer, p_programFlags );
 		UBO_SCENE( l_writer );
 		UBO_MODEL( l_writer );
+		SkinningUbo::Declare( l_writer, p_programFlags );
+		UBO_MORPHING( l_writer, p_programFlags );
 
 		// Outputs
 		auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
@@ -174,7 +174,15 @@ namespace Castor3D
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
 				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
-				vtx_material = c3d_materialIndex;
+
+				if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+				{
+					vtx_material = material;
+				}
+				else
+				{
+					vtx_material = c3d_materialIndex;
+				}
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{

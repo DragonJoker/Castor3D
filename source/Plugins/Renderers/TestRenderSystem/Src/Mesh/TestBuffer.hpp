@@ -55,6 +55,10 @@ namespace TestRender
 		 */
 		void SetBindingPoint( uint32_t p_point )const override;
 		/**
+		 *\copydoc		Castor3D::GpuBuffer::GetBindingPoint
+		 */
+		uint32_t GetBindingPoint()const override;
+		/**
 		 *\copydoc		Castor3D::GpuBuffer::Lock
 		 */
 		uint8_t * Lock( uint32_t p_offset

@@ -1,10 +1,11 @@
-﻿#include "ToneMapping.hpp"
+#include "ToneMapping.hpp"
 
 #include "Engine.hpp"
 
 #include "RenderToTexture/RenderColourToTexture.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/HdrConfigUbo.hpp"
 
 #include <GlslSource.hpp>
 
@@ -116,6 +117,7 @@ namespace Castor3D
 		m_exposureVar->SetValue( m_config.GetExposure() );
 		DoUpdate();
 		m_configUbo.Update();
+		m_configUbo.BindTo( HdrConfigUbo::BindingPoint );
 		m_colour->Render( l_position
 			, p_size
 			, p_texture

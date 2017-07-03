@@ -51,6 +51,7 @@ namespace Castor3D
 		static const Castor::String View;
 		static const Castor::String Proj;
 		static const Castor::String RenderSize;
+		static constexpr uint32_t BindingPoint = 4u;
 
 	private:
 		//!\~english	The uniform buffer containing Geometry pass informations.
@@ -78,7 +79,7 @@ namespace Castor3D
 }
 
 #define UBO_GPINFO( p_writer )\
-	GLSL::Ubo l_gpInfo{ p_writer, GpInfoUbo::GPInfo, 4u };\
+	GLSL::Ubo l_gpInfo{ p_writer, GpInfoUbo::GPInfo, GpInfoUbo::BindingPoint };\
 	auto c3d_mtxInvViewProj = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvViewProj );\
 	auto c3d_mtxInvView = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvView );\
 	auto c3d_mtxInvProj = l_gpInfo.DeclMember< GLSL::Mat4 >( GpInfoUbo::InvProj );\

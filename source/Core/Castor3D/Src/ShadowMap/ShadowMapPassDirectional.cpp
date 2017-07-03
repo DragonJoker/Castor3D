@@ -2,6 +2,7 @@
 
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureImage.hpp"
+#include "Render/RenderPipeline.hpp"
 
 #include <Graphics/Image.hpp>
 
@@ -60,6 +61,50 @@ namespace Castor3D
 			m_matrixUbo.Update( m_camera->GetView()
 				, m_camera->GetViewport().GetProjection() );
 			DoRenderNodes( m_renderQueue.GetRenderNodes(), *m_camera );
+		}
+	}
+
+	void ShadowMapPassDirectional::DoPrepareBackPipeline( ShaderProgram & p_program
+		, PipelineFlags const & p_flags )
+	{
+		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
+		{
+			RasteriserState l_rsState;
+			l_rsState.SetCulledFaces( Culling::eNone );
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
+			auto & l_pipeline = *m_backPipelines.emplace( p_flags
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
+					, std::move( l_rsState )
+					, BlendState{}
+					, MultisampleState{}
+					, p_program
+					, p_flags ) ).first->second;
+
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
+				, [this, &l_pipeline, p_flags]()
+				{
+					l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+					l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+					{
+						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
+					}
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
+					{
+						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
+					}
+
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+					{
+						l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
+					}
+
+					m_initialised = true;
+				} ) );
 		}
 	}
 }
