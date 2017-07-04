@@ -717,6 +717,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		Tells if the bone instantiation buffer exists.
+		 *\~french
+		 *\return		Dit si le tampon d'instanciation des os existe.
+		 */
+		inline bool HasInstancedBonesBuffer()const
+		{
+			return bool( m_instancedBonesBuffer );
+		}
+		/**
+		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
@@ -817,6 +827,26 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The bone instantiation ShaderStorageBuffer.
+		 *\~french
+		 *\return		Le ShaderStorageBuffer d'instanciation des os.
+		 */
+		inline ShaderStorageBuffer const & GetInstancedBonesBuffer()const
+		{
+			return *m_instancedBonesBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The bone instantiation ShaderStorageBuffer.
+		 *\~french
+		 *\return		Le ShaderStorageBuffer d'instanciation des os.
+		 */
+		inline ShaderStorageBuffer & GetInstancedBonesBuffer()
+		{
+			return *m_instancedBonesBuffer;
+		}
+		/**
+		 *\~english
 		 *\return		The initialisation status.
 		 *\~french
 		 *\return		Le statut d'initialisation.
@@ -898,6 +928,7 @@ namespace Castor3D
 		void DoGenerateIndexBuffer();
 		void DoGenerateBonesBuffer();
 		void DoGenerateMatrixBuffer( uint32_t p_count );
+		void DoGenerateInstantiatedBonesBuffer( uint32_t p_count );
 		void DoInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers );
 
 	private:
@@ -937,6 +968,9 @@ namespace Castor3D
 		//!\~english	The matrix buffer (instantiation).
 		//!\~french		Le tampon de matrices (instanciation).
 		VertexBufferSPtr m_matrixBuffer;
+		//!\~english	The matrix buffer (instantiation).
+		//!\~french		Le tampon de matrices (instanciation).
+		ShaderStorageBufferSPtr m_instancedBonesBuffer;
 		//!\~english	The faces in the submesh.
 		//!\~french		Le tableau de faces.
 		FaceArray m_faces;

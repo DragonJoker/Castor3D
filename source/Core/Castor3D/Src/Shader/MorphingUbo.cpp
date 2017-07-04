@@ -1,4 +1,4 @@
-﻿#include "MorphingUbo.hpp"
+#include "MorphingUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -22,5 +22,6 @@ namespace Castor3D
 	{
 		m_time.SetValue( p_time );
 		m_ubo.Update();
+		m_ubo.BindTo( MorphingUbo::BindingPoint );
 	}
 }

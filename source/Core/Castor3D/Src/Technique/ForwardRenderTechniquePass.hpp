@@ -142,14 +142,14 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
 		 */
-		C3D_API Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+		C3D_API GLSL::Shader DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
-		C3D_API Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		C3D_API GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const override;

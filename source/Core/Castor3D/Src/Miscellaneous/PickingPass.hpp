@@ -174,29 +174,34 @@ namespace Castor3D
 		PickingPass::NodeType DoPick( Castor::Point3f const & p_pixel
 			, SceneRenderNodes & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderInstancedSubmeshes
+		 *\copydoc		Castor3D::RenderPass::DoRender
 		 */
-		void DoRenderInstancedSubmeshes( Scene & p_scene
+		void DoRender( Scene & p_scene
 			, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshes
+		 *\copydoc		Castor3D::RenderPass::DoRender
 		 */
-		void DoRenderStaticSubmeshes( Scene & p_scene
+		void DoRender( Scene & p_scene
 			, StaticRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
 		 */
-		void DoRenderSkinningSubmeshes( Scene & p_scene
+		void DoRender( Scene & p_scene
 			, SkinningRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoRender
+		 */
+		void DoRender( Scene & p_scene
+			, SubmeshSkinningRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshes
 		 */
-		void DoRenderMorphingSubmeshes( Scene & p_scene
+		void DoRender( Scene & p_scene
 			, MorphingRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRenderBillboards
+		 *\copydoc		Castor3D::RenderPass::DoRender
 		 */
-		void DoRenderBillboards( Scene & p_scene
+		void DoRender( Scene & p_scene
 			, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoInitialise
@@ -213,13 +218,13 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
-		Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+		GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
-		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const override;

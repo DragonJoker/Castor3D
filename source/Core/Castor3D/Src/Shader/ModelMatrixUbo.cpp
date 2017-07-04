@@ -32,5 +32,6 @@ namespace Castor3D
 		m_model.SetValue( p_model );
 		m_normal.SetValue( p_normal );
 		m_ubo.Update();
+		m_ubo.BindTo( ModelMatrixUbo::BindingPoint );
 	}
 }

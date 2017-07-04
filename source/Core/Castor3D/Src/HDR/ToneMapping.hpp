@@ -130,7 +130,7 @@ namespace Castor3D
 		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
 		 *\return			Le source du pixel shader.
 		 */
-		C3D_API virtual Castor::String DoCreate() = 0;
+		C3D_API virtual GLSL::Shader DoCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the tone mapping shader variables.

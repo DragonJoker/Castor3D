@@ -66,8 +66,8 @@ namespace Castor3D
 			 *\param[in]	p_pxl		Le source du fagment shader.
 			 */
 			Program( Engine & p_engine
-				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl );
+				, GLSL::Shader const & p_vtx
+				, GLSL::Shader const & p_pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -134,8 +134,8 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::LightPass::DoCreateProgram
 		 */
-		LightPass::ProgramPtr DoCreateProgram( Castor::String const & p_vtx
-			, Castor::String const & p_pxl )const override;
+		LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & p_vtx
+			, GLSL::Shader const & p_pxl )const override;
 		/**
 		 *\copydoc		Castor3D::MeshLightPass::DoGenerateVertices
 		 */

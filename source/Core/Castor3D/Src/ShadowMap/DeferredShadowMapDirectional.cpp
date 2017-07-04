@@ -129,7 +129,7 @@ namespace Castor3D
 		AddFlag( p_programFlags, ProgramFlag::eShadowMapDirectional );
 	}
 
-	String DeferredShadowMapDirectional::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader DeferredShadowMapDirectional::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const

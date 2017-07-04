@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <GlslShader.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -138,7 +140,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
 		 */
-		C3D_API void SetFile( ShaderModel p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file, whatever model it is
@@ -152,15 +154,24 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the shader source for given model
 		 *\remarks		The loaded source will be the one of the highest supported profile
-		 *\param[in]	p_eModel	The shader model
-		 *\param[in]	p_strSource	The source code
+		 *\param[in]	p_source	The source code
 		 *\~french
 		 *\brief		Définit la source du shader pour le modèle donné
 		 *\remarks		La source chargée sera celle du plus haut profil supporté
-		 *\param[in]	p_eModel	Le modèle de shader
-		 *\param[in]	p_strSource	Le code de la source
+		 *\param[in]	p_source	Le code de la source
 		 */
-		C3D_API void SetSource( ShaderModel p_eModel, Castor::String const & p_strSource );
+		C3D_API void SetSource( Castor::String const & p_source );
+		/**
+		 *\~english
+		 *\brief		Sets the shader source for given model
+		 *\remarks		The loaded source will be the one of the highest supported profile
+		 *\param[in]	p_source	The source code
+		 *\~french
+		 *\brief		Définit la source du shader pour le modèle donné
+		 *\remarks		La source chargée sera celle du plus haut profil supporté
+		 *\param[in]	p_source	Le code de la source
+		 */
+		C3D_API void SetSource( GLSL::Shader const & p_source );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code, whatever model it is
@@ -241,27 +252,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the shader source for given model
-		 *\param[in]	p_eModel	The shader model
-		 *\return		The source code
-		 *\~french
-		 *\brief		Récupère la source du shader pour le modèle donné
-		 *\param[in]	p_eModel	Le modèle de shader
-		 *\return		Le code de la source
-		 */
-		inline Castor::String const & GetSource( ShaderModel p_eModel )const
-		{
-			return m_arraySources[size_t( p_eModel )];
-		}
-		/**
-		 *\~english
 		 *\return		The compiled shader source code.
 		 *\~french
 		 *\return		Le code source du shader compilé.
 		 */
-		inline Castor::String const & GetLoadedSource()const
+		inline Castor::String const & GetSource()const
 		{
-			return m_loadedSource;
+			return m_source.GetSource();
 		}
 		/**
 		 *\~english
@@ -273,19 +270,9 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le nom du fichier
 		 */
-		inline Castor::Path const & GetFile( ShaderModel p_eModel )const
+		inline Castor::Path const & GetFile()const
 		{
-			return m_arrayFiles[size_t( p_eModel )];
-		}
-		/**
-		 *\~english
-		 *\return		The file name for current model.
-		 *\~french
-		 *\return		Le nom du fichier pour le modèle courant.
-		 */
-		inline Castor::Path const & GetCurrentFile()const
-		{
-			return m_arrayFiles[size_t( m_eShaderModel )];
+			return m_file;
 		}
 		/**
 		 *\~english
@@ -435,21 +422,12 @@ namespace Castor3D
 		//!\~english	The output vertex count (for geometry shaders)..
 		//!\~french		Le nombre de vertex générés (pour les geometry shaders).
 		uint8_t m_outputVtxCount{ 3 };
-		//!\~english	The current shader model.
-		//!\~french		Le modèle de shader actuel.
-		ShaderModel m_eShaderModel{ ShaderModel::eModel1 };
 		//!\~english	Array of files path, sorted by shader model..
 		//!\~french		Tableau des chemins de fichiers, triés par modèle de shader.
-		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
-		//!\~english	Array of source codes, sorted by shader model..
-		//!\~french		Tableau des codes sources, triés par modèle de shader.
-		std::array< Castor::String, size_t( ShaderModel::eCount ) > m_arraySources;
-		//!<\~english	Actually loaded ASCII source code.
-		//!\~french		Le texte ASCII du shader chargé.
-		Castor::String m_loadedSource;
-		//!<\~english	Actually loaded file path.
-		//!\~french		Le chemin d'accès au fichier contenant le source du shader.
-		Castor::Path m_pathLoadedFile;
+		Castor::Path m_file;
+		//!\~english	The shader information.
+		//!\~french		Les informations du shader.
+		GLSL::Shader m_source;
 		//!\~english	The frame variables map, ordered by name.
 		//!\~french		La liste des variables de frame.
 		PushUniformMap m_mapUniforms;

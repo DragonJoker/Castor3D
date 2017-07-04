@@ -278,7 +278,7 @@ namespace Castor3D
 		}
 	}
 
-	String TransparentPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader TransparentPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
@@ -306,7 +306,7 @@ namespace Castor3D
 
 		UBO_MATRIX( l_writer );
 		UBO_MODEL_MATRIX( l_writer );
-		UBO_SKINNING( l_writer, p_programFlags );
+		SkinningUbo::Declare( l_writer, p_programFlags );
 		UBO_MORPHING( l_writer, p_programFlags );
 		UBO_SCENE( l_writer );
 		UBO_MODEL( l_writer );
@@ -333,17 +333,16 @@ namespace Castor3D
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto l_mtxBoneTransform = l_writer.DeclLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
-				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
-				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
-				vtx_material = c3d_materialIndex;
+				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
+
+				if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+				{
+					vtx_material = material;
+				}
+				else
+				{
+					vtx_material = c3d_materialIndex;
+				}
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -396,7 +395,7 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String TransparentPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader TransparentPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const
@@ -624,7 +623,8 @@ namespace Castor3D
 			p_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 		}
 
-		if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+		if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+			&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 		{
 			p_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 		}

@@ -71,7 +71,7 @@ namespace Castor3D
 			return l_result;
 		}
 
-		String DoCreateVertexProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreateVertexProgram( RenderSystem & p_renderSystem )
 		{
 			using namespace GLSL;
 			auto l_writer = p_renderSystem.CreateGlslWriter();
@@ -94,7 +94,7 @@ namespace Castor3D
 			return l_writer.Finalise();
 		}
 
-		String DoCreatePixelProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreatePixelProgram( RenderSystem & p_renderSystem )
 		{
 			using namespace GLSL;
 			auto l_writer = p_renderSystem.CreateGlslWriter();
@@ -102,10 +102,7 @@ namespace Castor3D
 			// Shader inputs
 			UBO_SCENE( l_writer );
 			UBO_GPINFO( l_writer );
-			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig };
-			auto c3d_fExposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
-			auto c3d_fGamma = l_config.GetUniform< Float >( ShaderProgram::Gamma );
-			l_config.End();
+			UBO_HDR_CONFIG( l_writer );
 			auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
 			auto c3d_mapNormal = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
 			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
@@ -201,14 +198,13 @@ namespace Castor3D
 		ShaderProgramSPtr DoCreateProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_vtx = DoCreateVertexProgram( l_renderSystem );
-			String l_pxl = DoCreatePixelProgram( l_renderSystem );
+			auto l_vtx = DoCreateVertexProgram( l_renderSystem );
+			auto l_pxl = DoCreatePixelProgram( l_renderSystem );
 			auto l_result = p_engine.GetShaderProgramCache().GetNewProgram( false );
-			ShaderModel l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 			l_result->CreateObject( ShaderType::eVertex );
 			l_result->CreateObject( ShaderType::ePixel );
-			l_result->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_result->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_result->SetSource( ShaderType::eVertex, l_vtx );
+			l_result->SetSource( ShaderType::ePixel, l_pxl );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDepth ), ShaderType::ePixel )->SetValue( 0u );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel )->SetValue( 1u );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDiffuse ), ShaderType::ePixel )->SetValue( 2u );
@@ -228,11 +224,9 @@ namespace Castor3D
 			, ShaderProgram & p_program
 			, MatrixUbo & p_matrixUbo
 			, SceneUbo & p_sceneUbo
-			, UniformBuffer & p_gpInfoUbo
-			, UniformBuffer & p_configUbo )
+			, GpInfoUbo & p_gpInfoUbo
+			, HdrConfigUbo & p_configUbo )
 		{
-			p_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma );
-			p_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
 			DepthStencilState l_dsState;
@@ -247,8 +241,8 @@ namespace Castor3D
 				, PipelineFlags{} );
 			l_result->AddUniformBuffer( p_matrixUbo.GetUbo() );
 			l_result->AddUniformBuffer( p_sceneUbo.GetUbo() );
-			l_result->AddUniformBuffer( p_gpInfoUbo );
-			l_result->AddUniformBuffer( p_configUbo );
+			l_result->AddUniformBuffer( p_gpInfoUbo.GetUbo() );
+			l_result->AddUniformBuffer( p_configUbo.GetUbo() );
 			return l_result;
 		}
 	}
@@ -266,10 +260,8 @@ namespace Castor3D
 		, m_matrixUbo{ p_engine }
 		, m_sceneUbo{ p_engine }
 		, m_gpInfo{ p_engine }
-		, m_configUbo{ ShaderProgram::BufferHdrConfig, *p_engine.GetRenderSystem() }
-		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, m_matrixUbo, m_sceneUbo, m_gpInfo.GetUbo(), m_configUbo ) }
-		, m_gammaUniform{ m_configUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Gamma ) }
-		, m_exposureUniform{ m_configUbo.GetUniform< UniformType::eFloat >( ShaderProgram::Exposure ) }
+		, m_configUbo{ p_engine }
+		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, m_matrixUbo, m_sceneUbo, m_gpInfo, m_configUbo ) }
 	{
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.Initialise();
@@ -321,9 +313,7 @@ namespace Castor3D
 		m_resultAttach.reset();
 		m_result.Cleanup();
 
-		m_exposureUniform.reset();
-		m_gammaUniform.reset();
-		m_configUbo.Cleanup();
+		m_configUbo.GetUbo().Cleanup();
 		m_sceneUbo.GetUbo().Cleanup();
 		m_matrixUbo.GetUbo().Cleanup();
 		m_pipeline->Cleanup();
@@ -351,9 +341,7 @@ namespace Castor3D
 			, p_invView
 			, p_invProj );
 		m_sceneUbo.UpdateCameraPosition( p_camera );
-		m_exposureUniform->SetValue( p_scene.GetHdrConfig().GetExposure() );
-		m_gammaUniform->SetValue( p_scene.GetHdrConfig().GetGamma() );
-		m_configUbo.Update();
+		m_configUbo.Update( p_scene.GetHdrConfig() );
 		auto & l_maps = p_scene.GetEnvironmentMaps();
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );

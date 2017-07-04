@@ -47,19 +47,19 @@ namespace Fxaa
 		static String const ReduceMul = cuT( "c3d_fReduceMul" );
 		static String const PosPos = cuT( "vtx_posPos" );
 
-		String GetVertexProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetVertexProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			UBO_MATRIX( l_writer );
-			Ubo l_fxaa{ l_writer, FxaaUbo };
-			auto c3d_fSubpixShift = l_fxaa.GetUniform< Float >( SubpixShift );
-			auto c3d_fSpanMax = l_fxaa.GetUniform< Float >( SpanMax );
-			auto c3d_fReduceMul = l_fxaa.GetUniform< Float >( ReduceMul );
-			auto c3d_fRenderTargetWidth = l_fxaa.GetUniform< Float >( RenderTargetWidth );
-			auto c3d_fRenderTargetHeight = l_fxaa.GetUniform< Float >( RenderTargetHeight );
+			Ubo l_fxaa{ l_writer, FxaaUbo, 2u };
+			auto c3d_fSubpixShift = l_fxaa.DeclMember< Float >( SubpixShift );
+			auto c3d_fSpanMax = l_fxaa.DeclMember< Float >( SpanMax );
+			auto c3d_fReduceMul = l_fxaa.DeclMember< Float >( ReduceMul );
+			auto c3d_fRenderTargetWidth = l_fxaa.DeclMember< Float >( RenderTargetWidth );
+			auto c3d_fRenderTargetHeight = l_fxaa.DeclMember< Float >( RenderTargetHeight );
 			l_fxaa.End();
 			auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
 
@@ -80,7 +80,7 @@ namespace Fxaa
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetFragmentProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetFragmentProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -90,12 +90,12 @@ namespace Fxaa
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto vtx_posPos = l_writer.DeclInput< Vec4 >( PosPos );
 
-			Ubo l_fxaa{ l_writer, FxaaUbo };
-			auto c3d_fSubpixShift = l_fxaa.GetUniform< Float >( SubpixShift );
-			auto c3d_fSpanMax = l_fxaa.GetUniform< Float >( SpanMax );
-			auto c3d_fReduceMul = l_fxaa.GetUniform< Float >( ReduceMul );
-			auto c3d_fRenderTargetWidth = l_fxaa.GetUniform< Float >( RenderTargetWidth );
-			auto c3d_fRenderTargetHeight = l_fxaa.GetUniform< Float >( RenderTargetHeight );
+			Ubo l_fxaa{ l_writer, FxaaUbo, 2u };
+			auto c3d_fSubpixShift = l_fxaa.DeclMember< Float >( SubpixShift );
+			auto c3d_fSpanMax = l_fxaa.DeclMember< Float >( SpanMax );
+			auto c3d_fReduceMul = l_fxaa.DeclMember< Float >( ReduceMul );
+			auto c3d_fRenderTargetWidth = l_fxaa.DeclMember< Float >( RenderTargetWidth );
+			auto c3d_fRenderTargetHeight = l_fxaa.DeclMember< Float >( RenderTargetHeight );
 			l_fxaa.End();
 
 			// Shader outputs
@@ -216,37 +216,34 @@ namespace Fxaa
 	{
 		bool l_return = false;
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 
 		auto l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto l_fragment = GetFragmentProgram( GetRenderSystem() );
 
-		if ( !l_vertex.empty() && !l_fragment.empty() )
-		{
-			ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->CreateObject( ShaderType::ePixel );
-			m_mapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_fragment );
-			l_program->Initialise();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
+		l_program->CreateObject( ShaderType::eVertex );
+		l_program->CreateObject( ShaderType::ePixel );
+		m_mapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_program->SetSource( ShaderType::eVertex, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_fragment );
+		l_program->Initialise();
 
-			m_uniformSubpixShift->SetValue( m_subpixShift );
-			m_uniformSpanMax->SetValue( m_spanMax );
-			m_uniformReduceMul->SetValue( m_reduceMul );
-			m_uniformRenderTargetWidth->SetValue( float( l_size.width() ) );
-			m_uniformRenderTargetHeight->SetValue( float( l_size.height() ) );
+		m_uniformSubpixShift->SetValue( m_subpixShift );
+		m_uniformSpanMax->SetValue( m_spanMax );
+		m_uniformReduceMul->SetValue( m_reduceMul );
+		m_uniformRenderTargetWidth->SetValue( float( l_size.width() ) );
+		m_uniformRenderTargetHeight->SetValue( float( l_size.height() ) );
+		m_fxaaUbo.Update();
 
-			DepthStencilState l_dsstate;
-			l_dsstate.SetDepthTest( false );
-			l_dsstate.SetDepthMask( WritingMask::eZero );
-			RasteriserState l_rsstate;
-			l_rsstate.SetCulledFaces( Culling::eBack );
-			m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-			m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
-			m_pipeline->AddUniformBuffer( m_fxaaUbo );
-		}
+		DepthStencilState l_dsstate;
+		l_dsstate.SetDepthTest( false );
+		l_dsstate.SetDepthMask( WritingMask::eZero );
+		RasteriserState l_rsstate;
+		l_rsstate.SetCulledFaces( Culling::eBack );
+		m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
+		m_pipeline->AddUniformBuffer( m_fxaaUbo );
 
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );
 	}
@@ -265,6 +262,7 @@ namespace Fxaa
 
 		if ( l_attach && l_attach->GetAttachmentType() == AttachmentType::eTexture )
 		{
+			m_fxaaUbo.BindTo( 2u );
 			m_pipeline->Apply();
 			m_surface.m_fbo->Bind( FrameBufferTarget::eDraw );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();

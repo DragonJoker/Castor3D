@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -24,6 +24,21 @@ SOFTWARE.
 #define ___GLSL_WRITER_PREREQUISITES_H___
 
 #include <CastorUtils.hpp>
+#include <Design/Factory.hpp>
+
+#ifdef max
+#	undef max
+#	undef min
+#	undef abs
+#endif
+
+#ifdef OUT
+#	undef OUT
+#endif
+
+#ifdef IN
+#	undef IN
+#endif
 
 #ifdef CASTOR_PLATFORM_WINDOWS
 #	ifdef GlslWriter_EXPORTS
@@ -93,15 +108,11 @@ namespace GLSL
 		eSquaredExponential,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
 	};
-	enum class UboLayout
-	{
-		eStd140,
-		ePacked,
-		eShared
-	};
 
+	struct IndentBlock;
 	struct GlslWriterConfig;
 	class GlslWriter;
+	class Shader;
 	class KeywordsBase;
 	template< int Version, class Enable = void >
 	class Keywords;
@@ -192,6 +203,7 @@ namespace GLSL
 	struct Sampler1D;
 	struct Sampler2D;
 	struct Sampler3D;
+	struct Sampler2DRect;
 	struct SamplerCube;
 	struct Sampler1DArray;
 	struct Sampler2DArray;
@@ -253,6 +265,39 @@ namespace GLSL
 
 	template< typename T >
 	struct name_of;
+
+	class LightingModel;
+	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
+
+	struct Endl
+	{
+	};
+	struct Endi
+	{
+	};
+	struct Version
+	{
+	};
+	struct Attribute
+	{
+	};
+	struct In
+	{
+	};
+	struct Out
+	{
+	};
+	struct Layout
+	{
+		int m_index;
+	};
+	struct Uniform
+	{
+	};
+
+	GlslWriter_API void WriteLine( GlslWriter & p_writer, Castor::String const & p_line );
+	GlslWriter_API void RegisterName( GlslWriter & p_writer, Castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void CheckNameExists( GlslWriter & p_writer, Castor::String const & p_name, TypeName p_type );
 }
 
 #undef DECLARE_GLSL_PARAMETER

@@ -57,9 +57,8 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eCompute );
-			l_program->SetSource( ShaderType::eCompute, l_model, l_code );
+			l_program->SetSource( ShaderType::eCompute, l_code );
 			return l_program;
 		}
 
@@ -85,9 +84,8 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eCompute );
-			l_program->SetSource( ShaderType::eCompute, l_model, l_code );
+			l_program->SetSource( ShaderType::eCompute, l_code );
 			return l_program;
 		}
 
@@ -110,9 +108,8 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eCompute );
-			l_program->SetSource( ShaderType::eCompute, l_model, l_code );
+			l_program->SetSource( ShaderType::eCompute, l_code );
 			return l_program;
 		}
 
@@ -139,9 +136,8 @@ namespace Testing
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
-			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_program->CreateObject( ShaderType::eCompute );
-			l_program->SetSource( ShaderType::eCompute, l_model, l_code );
+			l_program->SetSource( ShaderType::eCompute, l_code );
 			return l_program;
 		}
 	}
@@ -166,11 +162,12 @@ namespace Testing
 	void GlComputeShaderTest::SimpleCompute()
 	{
 		auto l_program = DoCreateSimpleComputeProgram( m_engine );
-		auto & l_storageBuffer = l_program->CreateStorageBuffer( cuT( "Storage" ), ShaderTypeFlag::eCompute );
+		ShaderStorageBuffer l_storageBuffer( m_engine );
 		auto l_pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *l_program );
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( l_storageBuffer.Initialise( 5u * sizeof( Point4ui ), 0u, BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		l_storageBuffer.Resize( 5u * sizeof( Point4ui ) );
+		CT_CHECK( l_storageBuffer.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
 		CT_CHECK( l_program->Initialise() );
 		l_pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > l_results;
@@ -191,16 +188,18 @@ namespace Testing
 	void GlComputeShaderTest::TwoStorages()
 	{
 		auto l_program = DoCreateTwoStoragesProgram( m_engine );
-		auto & l_storage1 = l_program->CreateStorageBuffer( cuT( "Storage1" ), ShaderTypeFlag::eCompute );
-		auto & l_storage2 = l_program->CreateStorageBuffer( cuT( "Storage2" ), ShaderTypeFlag::eCompute );
+		ShaderStorageBuffer l_storage1( m_engine );
+		ShaderStorageBuffer l_storage2( m_engine );
 		auto l_pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *l_program );
 		std::array< uint32_t, 5 * 4 > l_init{ 0 };
 		auto l_size = uint32_t( sizeof( uint32_t ) * l_init.size() );
+		l_storage1.Resize( l_size );
+		l_storage2.Resize( l_size );
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
-		CT_CHECK( l_storage1.Initialise( l_size, 1u, BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_storage1.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
 		l_storage1.Upload( 0u, l_size, reinterpret_cast< uint8_t * >( l_init.data() ) );
-		CT_CHECK( l_storage2.Initialise( l_size, 2u, BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_storage2.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
 		l_storage2.Upload( 0u, l_size, reinterpret_cast< uint8_t * >( l_init.data() ) );
 		CT_CHECK( l_program->Initialise() );
 		l_storage1.BindTo( 1u );
@@ -239,15 +238,17 @@ namespace Testing
 	{
 		auto l_program = DoCreateAtomicCounterProgram( m_engine );
 		auto & l_atomicCounterBuffer = l_program->CreateAtomicCounterBuffer( cuT( "Counter" ), ShaderTypeFlag::eCompute );
-		auto & l_storageBuffer = l_program->CreateStorageBuffer( cuT( "Storage" ), ShaderTypeFlag::eCompute );
+		ShaderStorageBuffer l_storageBuffer( m_engine );
 		auto l_pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *l_program );
 		uint32_t l_count = 0u;
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_atomicCounterBuffer.Initialise( 1u, 0u ) );
 		l_atomicCounterBuffer.Upload( 0u, 1u, &l_count );
-		CT_CHECK( l_storageBuffer.Initialise( 5u * sizeof( Point4ui ), 1u, BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		l_storageBuffer.Resize( 5u * sizeof( Point4ui ) );
+		CT_CHECK( l_storageBuffer.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
 		CT_CHECK( l_program->Initialise() );
+		l_storageBuffer.BindTo( 1u );
 		l_pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > l_results;
 		l_storageBuffer.Download( 0u, uint32_t( l_results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( l_results.data() ) );
@@ -269,19 +270,21 @@ namespace Testing
 	{
 		auto l_program = DoCreateTwoStoragesAndAtomicCounterProgram( m_engine );
 		auto & l_atomicCounterBuffer = l_program->CreateAtomicCounterBuffer( cuT( "Counter" ), ShaderTypeFlag::eCompute );
-		auto & l_storage1 = l_program->CreateStorageBuffer( cuT( "Storage1" ), ShaderTypeFlag::eCompute );
-		auto & l_storage2 = l_program->CreateStorageBuffer( cuT( "Storage2" ), ShaderTypeFlag::eCompute );
+		ShaderStorageBuffer l_storage1( m_engine );
+		ShaderStorageBuffer l_storage2( m_engine );
 		auto l_pipeline = m_engine.GetRenderSystem()->CreateComputePipeline( *l_program );
 		uint32_t l_count = 0u;
 		std::array< uint32_t, 5 * 4 > l_init{ 0 };
 		auto l_size = uint32_t( sizeof( uint32_t ) * l_init.size() );
+		l_storage1.Resize( l_size );
+		l_storage2.Resize( l_size );
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_atomicCounterBuffer.Initialise( 1u, 0u ) );
 		l_atomicCounterBuffer.Upload( 0u, 1u, &l_count );
-		CT_CHECK( l_storage1.Initialise( l_size, 1u, BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_storage1.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
 		l_storage1.Upload( 0u, l_size, reinterpret_cast< uint8_t * >( l_init.data() ) );
-		CT_CHECK( l_storage2.Initialise( l_size, 2u, BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_storage2.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
 		l_storage2.Upload( 0u, l_size, reinterpret_cast< uint8_t * >( l_init.data() ) );
 		CT_CHECK( l_program->Initialise() );
 		l_storage1.BindTo( 1u );

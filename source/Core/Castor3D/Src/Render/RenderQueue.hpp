@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -69,16 +69,18 @@ namespace Castor3D
 		SceneRenderNodes & operator=( SceneRenderNodes const & p_rhs )
 		{
 			m_staticNodes = p_rhs.m_staticNodes;
-			m_instancedNodes = p_rhs.m_instancedNodes;
-			m_skinningNodes = p_rhs.m_skinningNodes;
+			m_instantiatedStaticNodes = p_rhs.m_instantiatedStaticNodes;
+			m_skinnedNodes = p_rhs.m_skinnedNodes;
+			m_instantiatedSkinnedNodes = p_rhs.m_instantiatedSkinnedNodes;
 			m_morphingNodes = p_rhs.m_morphingNodes;
 			m_billboardNodes = p_rhs.m_billboardNodes;
 			return *this;
 		}
 
 		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesByPipelineMap >;
-		using InstancedNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap >;
-		using SkinningNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodesByPipelineMap >;
+		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodesByPipelineMap >;
+		using InstantiatedStaticNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap >;
+		using InstantiatedSkinnedNodesMap = RenderNodesT< SkinningRenderNode, SubmeshSkinningRenderNodesByPipelineMap >;
 		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodesByPipelineMap >;
 		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap >;
 
@@ -87,12 +89,15 @@ namespace Castor3D
 		//!\~english	The static render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
 		StaticNodesMap m_staticNodes;
-		//!\~english	The instanced render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
-		InstancedNodesMap m_instancedNodes;
 		//!\~english	The animated render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		SkinningNodesMap m_skinningNodes;
+		SkinnedNodesMap m_skinnedNodes;
+		//!\~english	The instanced render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
+		InstantiatedStaticNodesMap m_instantiatedStaticNodes;
+		//!\~english	The animated render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu animés, triés par programme shader.
+		InstantiatedSkinnedNodesMap m_instantiatedSkinnedNodes;
 		//!\~english	The animated render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu animés, triés par programme shader.
 		MorphingNodesMap m_morphingNodes;
@@ -102,14 +107,16 @@ namespace Castor3D
 
 		SceneRenderNodes( Scene & p_scene
 			, StaticNodesMap const & p_staticGeometries = StaticNodesMap()
-			, InstancedNodesMap const & p_instancedGeometries = InstancedNodesMap()
-			, SkinningNodesMap const & p_skinningGeometries = SkinningNodesMap()
+			, SkinnedNodesMap const & p_skinnedGeometries = SkinnedNodesMap()
+			, InstantiatedStaticNodesMap const & p_instantiatedStaticGeometries = InstantiatedStaticNodesMap()
+			, InstantiatedSkinnedNodesMap const & p_instantiatedSkinnedGeometries = InstantiatedSkinnedNodesMap()
 			, MorphingNodesMap const & p_morphingGeometries = MorphingNodesMap()
 			, BillboardNodesMap const & p_billboards = BillboardNodesMap() )
 			: m_scene{ p_scene }
 			, m_staticNodes( p_staticGeometries )
-			, m_instancedNodes( p_instancedGeometries )
-			, m_skinningNodes( p_skinningGeometries )
+			, m_skinnedNodes( p_skinnedGeometries )
+			, m_instantiatedStaticNodes( p_instantiatedStaticGeometries )
+			, m_instantiatedSkinnedNodes( p_instantiatedSkinnedGeometries )
 			, m_morphingNodes( p_morphingGeometries )
 			, m_billboardNodes( p_billboards )
 		{

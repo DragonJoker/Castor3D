@@ -1,4 +1,4 @@
-﻿#include "OverlayUbo.hpp"
+#include "OverlayUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -28,5 +28,6 @@ namespace Castor3D
 	{
 		m_material.SetValue( p_materialIndex - 1 );
 		m_ubo.Update();
+		m_ubo.BindTo( OverlayUbo::BindingPoint );
 	}
 }

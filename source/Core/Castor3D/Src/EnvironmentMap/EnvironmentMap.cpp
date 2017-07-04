@@ -119,7 +119,7 @@ namespace Castor3D
 		, m_environmentMap{ DoInitialisePoint( p_engine, MapSize ) }
 		, m_node{ p_node }
 		, m_index{ ++m_count }
-		, m_passes{ DoCreatePasses( *this, p_node ) }
+		, m_passes( DoCreatePasses( *this, p_node ) )
 	{
 	}
 

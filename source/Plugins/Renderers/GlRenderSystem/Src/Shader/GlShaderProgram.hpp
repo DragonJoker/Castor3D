@@ -97,7 +97,7 @@ namespace GlRender
 		 */
 		std::shared_ptr< Castor3D::PushUniform > DoCreateUniform( Castor3D::UniformType p_type, int p_occurences )override;
 		/**
-		 *\copydoc		Castor3D::ShaderProgram::DoGetVertexShaderSource
+		 *\copydoc		Castor3D::ShaderProgram::DoRetrieveLinkerLog
 		 */
 		Castor::String DoRetrieveLinkerLog();
 

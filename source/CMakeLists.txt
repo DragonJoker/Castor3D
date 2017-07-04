@@ -8,7 +8,7 @@ set( MAIN_PROJECT_NAME "Castor3D" )
 
 # Set project version numbers
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 9 )
+set( VERSION_MINOR 10 )
 set( VERSION_BUILD 0 )
 set( VERSION_YEAR 2016 )
 

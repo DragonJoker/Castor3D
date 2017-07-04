@@ -3102,7 +3102,7 @@ namespace Castor3D
 				Path l_path;
 				p_params[0]->Get( l_uiModel );
 				p_params[1]->Get( l_path );
-				l_parsingContext->pShaderProgram->SetFile( l_parsingContext->eShaderObject, ShaderModel( l_uiModel ), p_context->m_file->GetFilePath() / l_path );
+				l_parsingContext->pShaderProgram->SetFile( l_parsingContext->eShaderObject, p_context->m_file->GetFilePath() / l_path );
 			}
 			else
 			{

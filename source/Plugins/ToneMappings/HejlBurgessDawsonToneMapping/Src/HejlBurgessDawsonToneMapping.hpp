@@ -74,7 +74,7 @@ namespace HejlBurgessDawson
 		/**
 		 *\copydoc		Castor3D::ToneMapping::DoCreate
 		 */
-		Castor::String DoCreate()override;
+		GLSL::Shader DoCreate()override;
 		/**
 		 *\copydoc		Castor3D::ToneMapping::DoDestroy
 		 */

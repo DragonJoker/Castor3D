@@ -8,7 +8,7 @@ using namespace Castor;
 namespace TestRender
 {
 	TestShaderStorageBuffer::TestShaderStorageBuffer( TestRenderSystem & p_renderSystem )
-		: GpuBuffer< uint8_t >( p_renderSystem )
+		: GpuBuffer( p_renderSystem )
 	{
 	}
 
@@ -25,7 +25,9 @@ namespace TestRender
 	{
 	}
 
-	void TestShaderStorageBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
+	void TestShaderStorageBuffer::InitialiseStorage( uint32_t p_count
+		, BufferAccessType p_type
+		, BufferAccessNature p_nature )const
 	{
 	}
 
@@ -41,7 +43,9 @@ namespace TestRender
 	{
 	}
 
-	uint8_t * TestShaderStorageBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )const
+	uint8_t * TestShaderStorageBuffer::Lock( uint32_t p_offset
+		, uint32_t p_count
+		, AccessTypes const & p_flags )const
 	{
 		return nullptr;
 	}
@@ -50,15 +54,20 @@ namespace TestRender
 	{
 	}
 
-	void TestShaderStorageBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )const
+	void TestShaderStorageBuffer::Copy( GpuBuffer const & p_src
+		, uint32_t p_size )const
 	{
 	}
 
-	void TestShaderStorageBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint8_t const * p_buffer )const
+	void TestShaderStorageBuffer::Upload( uint32_t p_offset
+		, uint32_t p_size
+		, uint8_t const * p_buffer )const
 	{
 	}
 
-	void TestShaderStorageBuffer::Download( uint32_t p_offset, uint32_t p_size, uint8_t * p_buffer )const
+	void TestShaderStorageBuffer::Download( uint32_t p_offset
+		, uint32_t p_size
+		, uint8_t * p_buffer )const
 	{
 	}
 }

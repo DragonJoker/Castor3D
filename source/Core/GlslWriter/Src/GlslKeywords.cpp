@@ -68,7 +68,14 @@ namespace GLSL
 			break;
 
 		default:
-			l_return = std::make_unique< Keywords< 110 > >();
+			if ( p_rs.m_shaderLanguageVersion > 450 )
+			{
+				l_return = std::make_unique< Keywords< 450 > >();
+			}
+			else
+			{
+				l_return = std::make_unique< Keywords< 110 > >();
+			}
 			break;
 		}
 
@@ -78,5 +85,58 @@ namespace GLSL
 	String KeywordsBase::GetAttribute( uint32_t p_index )const
 	{
 		return GetLayout( p_index ) + m_strAttribute;
+	}
+
+	String KeywordsBase::GetLayout( Ubo::Layout p_layout, uint32_t p_index )const
+	{
+		static std::map< Ubo::Layout, String > LayoutName
+		{
+			{ Ubo::Layout::eStd140, cuT( "std140" ) },
+			{ Ubo::Layout::eShared, cuT( "shared" ) },
+			{ Ubo::Layout::ePacked, cuT( "packed" ) },
+		};
+
+		String l_return;
+
+		if ( !m_strUboLayout.empty() )
+		{
+			l_return = m_strUboLayout + cuT( "( " ) + LayoutName[p_layout];
+
+			if ( !m_strUboBinding.empty() )
+			{
+				l_return += cuT( ", " ) + m_strUboBinding + cuT( " = " ) + string::to_string( p_index );
+			}
+
+			l_return += cuT( " ) " );
+		}
+
+		return l_return;
+	}
+
+	String KeywordsBase::GetLayout( Ssbo::Layout p_layout, uint32_t p_index )const
+	{
+		static std::map< Ssbo::Layout, String > LayoutName
+		{
+			{ Ssbo::Layout::eStd140, cuT( "std140" ) },
+			{ Ssbo::Layout::eStd430, cuT( "std430" ) },
+			{ Ssbo::Layout::eShared, cuT( "shared" ) },
+			{ Ssbo::Layout::ePacked, cuT( "packed" ) },
+		};
+
+		String l_return;
+
+		if ( !m_strSsboLayout.empty() )
+		{
+			l_return = m_strSsboLayout + cuT( "( " ) + LayoutName[p_layout];
+
+			if ( !m_strSsboBinding.empty() )
+			{
+				l_return += cuT( ", " ) + m_strSsboBinding + cuT( " = " ) + string::to_string( p_index );
+			}
+
+			l_return += cuT( " ) " );
+		}
+
+		return l_return;
 	}
 }

@@ -157,7 +157,7 @@ namespace Castor3D
 	ShaderProgramSPtr RenderColourToTexture::DoCreateProgram()
 	{
 		auto & l_renderSystem = *GetOwner()->GetRenderSystem();
-		String l_vtx;
+		GLSL::Shader l_vtx;
 		{
 			using namespace GLSL;
 			auto l_writer = l_renderSystem.CreateGlslWriter();
@@ -180,7 +180,7 @@ namespace Castor3D
 			l_vtx = l_writer.Finalise();
 		}
 
-		String l_pxl;
+		GLSL::Shader l_pxl;
 		{
 			using namespace GLSL;
 			auto l_writer = l_renderSystem.CreateGlslWriter();
@@ -199,13 +199,12 @@ namespace Castor3D
 			l_pxl = l_writer.Finalise();
 		}
 
-		auto l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 		auto & l_cache = l_renderSystem.GetEngine()->GetShaderProgramCache();
 		auto l_program = l_cache.GetNewProgram( false );
 		l_program->CreateObject( ShaderType::eVertex );
 		l_program->CreateObject( ShaderType::ePixel );
-		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+		l_program->SetSource( ShaderType::eVertex, l_vtx );
+		l_program->SetSource( ShaderType::ePixel, l_pxl );
 		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_program->Initialise();
 		return l_program;

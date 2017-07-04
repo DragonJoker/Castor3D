@@ -1,10 +1,11 @@
-﻿#include "ToneMapping.hpp"
+#include "ToneMapping.hpp"
 
 #include "Engine.hpp"
 
 #include "RenderToTexture/RenderColourToTexture.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/HdrConfigUbo.hpp"
 
 #include <GlslSource.hpp>
 
@@ -42,7 +43,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			String l_vtx;
+			GLSL::Shader l_vtx;
 			{
 				auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
@@ -68,9 +69,8 @@ namespace Castor3D
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
 			auto l_pxl = DoCreate();
-			auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
+			l_program->SetSource( ShaderType::ePixel, l_pxl );
 			l_return = l_program->Initialise();
 		}
 
@@ -117,6 +117,7 @@ namespace Castor3D
 		m_exposureVar->SetValue( m_config.GetExposure() );
 		DoUpdate();
 		m_configUbo.Update();
+		m_configUbo.BindTo( HdrConfigUbo::BindingPoint );
 		m_colour->Render( l_position
 			, p_size
 			, p_texture

@@ -120,6 +120,9 @@ namespace Castor3D
 		}
 		/**@}*/
 
+	public:
+		static constexpr uint32_t BindingPoint = 3u;
+
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
@@ -152,15 +155,15 @@ namespace Castor3D
 }
 
 #define UBO_SCENE( Writer )\
-	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
-	auto c3d_v4AmbientLight = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
-	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
-	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
-	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
-	auto c3d_v3CameraNearPlane = l_scene.GetUniform< GLSL::Float >( ShaderProgram::CameraNearPlane ); \
-	auto c3d_v3CameraFarPlane = l_scene.GetUniform< GLSL::Float >( ShaderProgram::CameraFarPlane );\
-	auto c3d_iFogType = l_scene.GetUniform< GLSL::Int >( ShaderProgram::FogType );\
-	auto c3d_fFogDensity = l_scene.GetUniform< GLSL::Float >( ShaderProgram::FogDensity );\
+	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene, SceneUbo::BindingPoint };\
+	auto c3d_v4AmbientLight = l_scene.DeclMember< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
+	auto c3d_v4BackgroundColour = l_scene.DeclMember< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
+	auto c3d_iLightsCount = l_scene.DeclMember< GLSL::IVec4 >( ShaderProgram::LightsCount );\
+	auto c3d_v3CameraPosition = l_scene.DeclMember< GLSL::Vec3 >( ShaderProgram::CameraPos );\
+	auto c3d_v3CameraNearPlane = l_scene.DeclMember< GLSL::Float >( ShaderProgram::CameraNearPlane ); \
+	auto c3d_v3CameraFarPlane = l_scene.DeclMember< GLSL::Float >( ShaderProgram::CameraFarPlane );\
+	auto c3d_iFogType = l_scene.DeclMember< GLSL::Int >( ShaderProgram::FogType );\
+	auto c3d_fFogDensity = l_scene.DeclMember< GLSL::Float >( ShaderProgram::FogDensity );\
 	l_scene.End()
 
 #endif

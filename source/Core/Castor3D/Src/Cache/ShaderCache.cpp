@@ -225,18 +225,17 @@ namespace Castor3D
 		if ( l_return )
 		{
 			ShaderTypeFlags l_matrixUboShaderMask = ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel;
-			ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			l_return->CreateObject( ShaderType::eVertex );
 			l_return->CreateObject( ShaderType::ePixel );
-			l_return->SetSource( ShaderType::eVertex, l_model, p_renderPass.GetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals ) );
-			l_return->SetSource( ShaderType::ePixel, l_model, p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_alphaFunc ) );
+			l_return->SetSource( ShaderType::eVertex, p_renderPass.GetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals ) );
+			l_return->SetSource( ShaderType::ePixel, p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_alphaFunc ) );
 			auto l_geometry = p_renderPass.GetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 
-			if ( !l_geometry.empty() )
+			if ( !l_geometry.GetSource().empty() )
 			{
 				AddFlag( l_matrixUboShaderMask, ShaderTypeFlag::eGeometry );
 				l_return->CreateObject( ShaderType::eGeometry );
-				l_return->SetSource( ShaderType::eGeometry, l_model, l_geometry );
+				l_return->SetSource( ShaderType::eGeometry, l_geometry );
 			}
 
 			CreateTextureVariables( *l_return, p_textureFlags, p_programFlags );
@@ -278,7 +277,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			String l_strVtxShader;
+			GLSL::Shader l_strVtxShader;
 			{
 				using namespace GLSL;
 				auto l_writer = l_renderSystem.CreateGlslWriter();
@@ -347,16 +346,15 @@ namespace Castor3D
 				l_strVtxShader = l_writer.Finalise();
 			}
 
-			String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags
+			GLSL::Shader l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags
 				, p_programFlags
 				, p_sceneFlags
 				, p_alphaFunc );
 
-			auto l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
 			l_return->CreateObject( ShaderType::eVertex );
 			l_return->CreateObject( ShaderType::ePixel );
-			l_return->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
-			l_return->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
+			l_return->SetSource( ShaderType::eVertex, l_strVtxShader );
+			l_return->SetSource( ShaderType::ePixel, l_strPxlShader );
 
 			CreateTextureVariables( *l_return, p_textureFlags, p_programFlags );
 		}

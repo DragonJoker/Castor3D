@@ -214,7 +214,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
-		C3D_API Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+		C3D_API GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const override;
 		/**

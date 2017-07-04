@@ -8,7 +8,7 @@ set( CastorBinsDependencies
 
 set( ${PROJECT_NAME}_DESCRIPTION "FXAA Post Effect" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 9 )
+set( ${PROJECT_NAME}_VERSION_MINOR 10 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 add_definitions( ${PostEffectDefinitions} )

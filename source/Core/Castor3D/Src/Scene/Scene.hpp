@@ -45,6 +45,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Design/Signal.hpp>
+#include <Multithreading/ThreadPool.hpp>
 
 namespace Castor3D
 {
@@ -615,6 +616,9 @@ namespace Castor3D
 		//!\~english	The HDR configuration.
 		//!\~french		La configuration HDR.
 		HdrConfig m_config;
+		//!\~english	The pool used to update the animations.
+		//!\~french		Le pool de mise à jour des animations.
+		Castor::ThreadPool m_animationUpdater;
 
 	public:
 		//!\~english	The cameras root node name.

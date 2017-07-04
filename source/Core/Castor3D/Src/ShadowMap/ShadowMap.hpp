@@ -115,7 +115,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API Castor::String GetVertexShaderSource( TextureChannels const & p_textureFlags
+		C3D_API GLSL::Shader GetVertexShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const;
@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		Castor::String GetGeometryShaderSource( TextureChannels const & p_textureFlags
+		C3D_API GLSL::Shader GetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const;
 		/**
@@ -146,7 +146,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Castor::String GetPixelShaderSource( TextureChannels const & p_textureFlags
+		C3D_API GLSL::Shader GetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const;
@@ -222,20 +222,20 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetVertexShaderSource
 		 */
-		C3D_API virtual Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+		C3D_API virtual GLSL::Shader DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetGeometryShaderSource
 		 */
-		C3D_API virtual Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+		C3D_API virtual GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetPixelShaderSource
 		 */
-		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		C3D_API virtual GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const = 0;

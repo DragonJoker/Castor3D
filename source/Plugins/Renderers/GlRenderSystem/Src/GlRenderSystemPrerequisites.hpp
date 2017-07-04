@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -1171,7 +1171,7 @@ namespace GlRender
 	template< typename T, uint32_t Columns, uint32_t Rows > class GlMatAttribute;
 	template< typename T, uint32_t Count > class GlVecAttribute;
 	template< typename T > class GlBufferBase;
-	template< typename T > class GlBuffer;
+	class GlBuffer;
 	class GlVertexBufferObject;
 	class Gl3VertexBufferObject;
 	class GlGeometryBuffers;

@@ -87,24 +87,27 @@ namespace Castor3D
 		, Camera const & p_camera )const
 	{
 		if ( !p_nodes.m_staticNodes.m_backCulled.empty()
-			|| !p_nodes.m_instancedNodes.m_backCulled.empty()
-			|| !p_nodes.m_skinningNodes.m_backCulled.empty()
+			|| !p_nodes.m_instantiatedStaticNodes.m_backCulled.empty()
+			|| !p_nodes.m_skinnedNodes.m_backCulled.empty()
+			|| !p_nodes.m_instantiatedSkinnedNodes.m_backCulled.empty()
 			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
 			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
 			m_matrixUbo.Update( p_camera.GetView()
 				, p_camera.GetViewport().GetProjection() );
-			DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_frontCulled, p_camera );
-			DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_frontCulled, p_camera );
-			DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_frontCulled, p_camera );
-			DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_frontCulled, p_camera );
-			DoRenderBillboards( p_nodes.m_billboardNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_instantiatedStaticNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_staticNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_skinnedNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_instantiatedSkinnedNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_morphingNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_billboardNodes.m_frontCulled, p_camera );
 
-			DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera );
-			DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera );
-			DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera );
-			DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera );
-			DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_staticNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_skinnedNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_morphingNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera );
 		}
 	}
 
@@ -148,7 +151,8 @@ namespace Castor3D
 					l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 				}
 
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+					&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 				{
 					l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 				}
@@ -161,7 +165,7 @@ namespace Castor3D
 		}
 	}
 
-	String DepthPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader DepthPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, bool p_invertNormals )const
@@ -179,7 +183,7 @@ namespace Castor3D
 
 		UBO_MATRIX( l_writer );
 		UBO_MODEL_MATRIX( l_writer );
-		UBO_SKINNING( l_writer, p_programFlags );
+		SkinningUbo::Declare( l_writer, p_programFlags );
 		UBO_MORPHING( l_writer, p_programFlags );
 		UBO_MODEL( l_writer );
 
@@ -193,16 +197,7 @@ namespace Castor3D
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto l_mtxBoneTransform = l_writer.DeclLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
-				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
-				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
+				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -228,14 +223,14 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String DepthPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader DepthPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
 	{
-		return String{};
+		return GLSL::Shader{};
 	}
 
-	String DepthPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader DepthPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const

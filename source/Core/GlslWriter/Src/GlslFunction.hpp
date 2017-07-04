@@ -30,6 +30,9 @@ namespace GLSL
 	template< typename RetT, typename ... ParamsT >
 	inline RetT WriteFunctionCall( GlslWriter * p_writer, Castor::String const & p_name, ParamsT const & ... p_params );
 
+	template< typename Return, typename ... Params >
+	inline void WriteFunctionHeader( GlslWriter & p_writer, Castor::String const & p_name, Params && ... p_params );
+
 	template< typename RetT, typename ... ParamsT >
 	struct Function
 	{

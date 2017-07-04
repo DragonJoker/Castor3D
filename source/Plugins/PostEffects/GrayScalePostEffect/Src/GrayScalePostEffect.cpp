@@ -38,7 +38,7 @@ namespace GrayScale
 {
 	namespace
 	{
-		Castor::String GetVertexProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetVertexProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -60,7 +60,7 @@ namespace GrayScale
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetFragmentProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetFragmentProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -122,30 +122,25 @@ namespace GrayScale
 	{
 		bool l_return = false;
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 
 		auto l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto l_fragment = GetFragmentProgram( GetRenderSystem() );
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
+		l_program->CreateObject( ShaderType::eVertex );
+		l_program->CreateObject( ShaderType::ePixel );
+		m_mapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_program->SetSource( ShaderType::eVertex, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_fragment );
+		l_program->Initialise();
 
-		if ( !l_vertex.empty() && !l_fragment.empty() )
-		{
-			ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->CreateObject( ShaderType::ePixel );
-			m_mapDiffuse = l_program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_fragment );
-			l_program->Initialise();
-
-			DepthStencilState l_dsstate;
-			l_dsstate.SetDepthTest( false );
-			l_dsstate.SetDepthMask( WritingMask::eZero );
-			RasteriserState l_rsstate;
-			l_rsstate.SetCulledFaces( Culling::eBack );
-			m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-			m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
-		}
+		DepthStencilState l_dsstate;
+		l_dsstate.SetDepthTest( false );
+		l_dsstate.SetDepthMask( WritingMask::eZero );
+		RasteriserState l_rsstate;
+		l_rsstate.SetCulledFaces( Culling::eBack );
+		m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );
 	}

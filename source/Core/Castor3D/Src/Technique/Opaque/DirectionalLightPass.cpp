@@ -29,8 +29,8 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	DirectionalLightPass::Program::Program( Engine & p_engine
-		, String const & p_vtx
-		, String const & p_pxl )
+		, GLSL::Shader const & p_vtx
+		, GLSL::Shader const & p_pxl )
 		: LightPass::Program{ p_engine, p_vtx, p_pxl }
 		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
@@ -145,7 +145,7 @@ namespace Castor3D
 		m_matrixUbo.Update( p_camera.GetView(), m_viewport.GetProjection() );
 	}
 
-	String DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
+	GLSL::Shader DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();
@@ -166,8 +166,8 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( String const & p_vtx
-		, String const & p_pxl )const
+	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( GLSL::Shader const & p_vtx
+		, GLSL::Shader const & p_pxl )const
 	{
 		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
 	}

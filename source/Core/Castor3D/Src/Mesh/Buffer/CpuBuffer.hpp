@@ -44,8 +44,6 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	protected:
-		using MyGpuBuffer = GpuBuffer< T >;
-		using GpuBufferUPtr = std::unique_ptr< MyGpuBuffer >;
 		DECLARE_TPL_VECTOR( T, T );
 
 	protected:
@@ -89,10 +87,14 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		inline T * Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags )
+		inline T * Lock( uint32_t p_offset
+			, uint32_t p_count
+			, AccessTypes const & p_flags )
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->Lock( p_offset, p_count, p_flags );
+			return reinterpret_cast< T * >( m_gpuBuffer->Lock( p_offset * sizeof( T )
+				, p_count * sizeof( T )
+				, p_flags ) );
 		}
 		/**
 		 *\~english
@@ -121,10 +123,14 @@ namespace Castor3D
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[in]	p_buffer	Les données.
 		 */
-		inline void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )
+		inline void Upload( uint32_t p_offset
+			, uint32_t p_count
+			, T const * p_buffer )
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->Upload( p_offset, p_count, p_buffer );
+			return m_gpuBuffer->Upload( p_offset * sizeof( T )
+				, p_count * sizeof( T )
+				, reinterpret_cast< uint8_t const * >( p_buffer ) );
 		}
 		/**
 		 *\~english
@@ -134,7 +140,9 @@ namespace Castor3D
 		 */
 		inline void Upload()
 		{
-			return Upload( 0u, uint32_t( m_data.size() ), m_data.data() );
+			return Upload( 0u
+				, uint32_t( m_data.size() )
+				, m_data.data() );
 		}
 		/**
 		 *\~english
@@ -150,10 +158,14 @@ namespace Castor3D
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[out]	p_buffer	Les données.
 		 */
-		inline void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )
+		inline void Download( uint32_t p_offset
+			, uint32_t p_count
+			, T * p_buffer )
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->Download( p_offset, p_count, p_buffer );
+			return m_gpuBuffer->Download( p_offset * sizeof( T )
+				, p_count * sizeof( T )
+				, reinterpret_cast< uint8_t * >( p_buffer ) );
 		}
 		/**
 		 *\~english
@@ -163,7 +175,9 @@ namespace Castor3D
 		 */
 		inline void Download()
 		{
-			Download( 0u, uint32_t( m_data.size() ), m_data.data() );
+			Download( 0u
+				, uint32_t( m_data.size() )
+				, m_data.data() );
 		}
 		/**
 		 *\~english
@@ -197,10 +211,12 @@ namespace Castor3D
 		 *\param[in]	p_src	Le tampon source.
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
 		 */
-		inline void Copy( GpuBuffer< T > const & p_src, uint32_t p_size )
+		inline void Copy( GpuBuffer const & p_src
+			, uint32_t p_size )
 		{
 			REQUIRE( m_gpuBuffer );
-			m_gpuBuffer->Copy( p_src, p_size );
+			m_gpuBuffer->Copy( p_src
+				, p_size * sizeof( T ) );
 		}
 		/**
 		 *\~english
@@ -212,7 +228,8 @@ namespace Castor3D
 		 *\param[in]	p_src	Le tampon source.
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
 		 */
-		inline void Copy( CpuBuffer< T > const & p_src, uint32_t p_size )
+		inline void Copy( CpuBuffer< T > const & p_src
+			, uint32_t p_size )
 		{
 			REQUIRE( p_src.m_gpuBuffer );
 			return Copy( *p_src.m_gpuBuffer, p_size );
@@ -223,7 +240,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tampon GPU.
 		 */
-		inline MyGpuBuffer const & GetGpuBuffer()const
+		inline GpuBuffer const & GetGpuBuffer()const
 		{
 			REQUIRE( m_gpuBuffer );
 			return *m_gpuBuffer;
@@ -378,15 +395,20 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool DoInitialise( BufferAccessType p_type, BufferAccessNature p_nature )
+		inline bool DoInitialise( BufferAccessType p_type
+			, BufferAccessNature p_nature )
 		{
 			REQUIRE( m_gpuBuffer );
 			bool l_return = m_gpuBuffer->Create();
 
 			if ( l_return )
 			{
-				m_gpuBuffer->InitialiseStorage( uint32_t( m_data.size() ), p_type, p_nature );
-				m_gpuBuffer->Upload( 0u, uint32_t( m_data.size() ), m_data.data() );
+				m_gpuBuffer->InitialiseStorage( uint32_t( m_data.size() * sizeof( T ) )
+					, p_type
+					, p_nature );
+				m_gpuBuffer->Upload( 0u
+					, uint32_t( m_data.size() * sizeof( T ) )
+					, reinterpret_cast< uint8_t * >( m_data.data() ) );
 			}
 
 			return l_return;

@@ -1,4 +1,4 @@
-﻿#include "GlslWriter.hpp"
+#include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
 #include "GlslLighting.hpp"
@@ -7,102 +7,6 @@
 
 namespace GLSL
 {
-	using Castor::operator<<;
-
-	//*****************************************************************************************
-
-	IndentBlock::IndentBlock( GlslWriter & p_writter )
-		: m_stream( p_writter.m_stream )
-	{
-		using namespace Castor;
-		m_stream << cuT( "{" );
-		m_indent = format::get_indent( m_stream );
-		m_stream << format::indent( m_indent + 4 );
-		m_stream << std::endl;
-	}
-
-	IndentBlock::IndentBlock( Castor::StringStream & p_stream )
-		: m_stream( p_stream )
-	{
-		using namespace Castor;
-		m_stream << cuT( "{" );
-		m_indent = format::get_indent( m_stream );
-		m_stream << format::indent( m_indent + 4 );
-		m_stream << std::endl;
-	}
-
-	IndentBlock::~IndentBlock()
-	{
-		using namespace Castor;
-		m_stream << format::indent( m_indent );
-		m_stream << cuT( "}" );
-	}
-
-	//*****************************************************************************************
-
-	Ubo::Ubo( GlslWriter & p_writer, Castor::String const & p_name, UboLayout p_layout )
-		: m_writer( p_writer )
-		, m_name( p_name )
-		, m_block( nullptr )
-		, m_layout( p_layout )
-	{
-		if ( m_writer.HasConstantsBuffers() )
-		{
-			m_stream << std::endl;
-			m_stream << m_writer.m_keywords->GetUboLayout( m_layout, m_writer.m_uniformIndex++ ) << m_writer.m_uniform << p_name << std::endl;
-			m_writer.m_uniform.clear();
-			m_block = new IndentBlock( m_stream );
-		}
-	}
-
-	void Ubo::End()
-	{
-		delete m_block;
-		m_block = nullptr;
-		m_writer.m_uniform = cuT( "uniform " );
-
-		if ( m_writer.HasConstantsBuffers() )
-		{
-			m_stream << cuT( ";" );
-		}
-
-		m_stream << std::endl;
-
-		if ( m_count )
-		{
-			m_writer.m_stream << m_stream.rdbuf();
-		}
-	}
-
-	//*****************************************************************************************
-
-	Struct::Struct( GlslWriter & p_writer, Castor::String const & p_name )
-		: m_writer( p_writer )
-		, m_name( p_name )
-		, m_block( nullptr )
-	{
-		m_writer << Endl();
-		m_writer << cuT( "struct " ) << p_name << Endl();
-		m_block = new IndentBlock( m_writer );
-	}
-
-	Struct::Struct( GlslWriter & p_writer, Castor::String const & p_name, Castor::String const & p_instName )
-		: m_writer( p_writer )
-		, m_name( p_name )
-		, m_instName( p_instName )
-		, m_block( nullptr )
-	{
-	}
-
-	void Struct::End()
-	{
-		delete m_block;
-		m_block = nullptr;
-		m_writer << cuT( ";" ) << Endl();
-	}
-
-	//*****************************************************************************************
-
 	GlslWriter::GlslWriter( GlslWriterConfig const & p_config )
 		: m_keywords( GLSL::KeywordsBase::Get( p_config ) )
 		, m_uniform( cuT( "uniform " ) )
@@ -114,7 +18,6 @@ namespace GLSL
 
 	GlslWriter::GlslWriter( GlslWriter const & p_rhs )
 		: m_keywords( GLSL::KeywordsBase::Get( p_rhs.m_config ) )
-		, m_uniformIndex( p_rhs.m_uniformIndex )
 		, m_attributeIndex( p_rhs.m_attributeIndex )
 		, m_layoutIndex( p_rhs.m_layoutIndex )
 		, m_uniform( p_rhs.m_uniform )
@@ -125,7 +28,6 @@ namespace GLSL
 
 	GlslWriter & GlslWriter::operator=( GlslWriter const & p_rhs )
 	{
-		m_uniformIndex = p_rhs.m_uniformIndex;
 		m_attributeIndex = p_rhs.m_attributeIndex;
 		m_layoutIndex = p_rhs.m_layoutIndex;
 		m_uniform = p_rhs.m_uniform;
@@ -188,9 +90,10 @@ namespace GLSL
 		return l_lighting;
 	}
 
-	Castor::String GlslWriter::Finalise()
+	Shader GlslWriter::Finalise()
 	{
-		return m_stream.str();
+		m_shader.SetSource( m_stream.str() );
+		return m_shader;
 	}
 
 	void GlslWriter::WriteAssign( Type const & p_lhs, Type const & p_rhs )
@@ -920,29 +823,29 @@ namespace GLSL
 
 	GlslWriter & GlslWriter::operator<<( InputLayout const & p_rhs )
 	{
-		static std::map< InputLayout::Layout, Castor::String > const Names
+		static std::map< InputLayout::Kind, Castor::String > const Names
 		{
-			{ InputLayout::ePoints, cuT( "points" ) },
-			{ InputLayout::eLines, cuT( "lines" ) },
-			{ InputLayout::eLinesAdjacency, cuT( "lines_adjacency" ) },
-			{ InputLayout::eTriangles, cuT( "triangles" ) },
-			{ InputLayout::eTrianglesAdjacency, cuT( "triangles_adjacency" ) },
+			{ InputLayout::Kind::ePoints, cuT( "points" ) },
+			{ InputLayout::Kind::eLines, cuT( "lines" ) },
+			{ InputLayout::Kind::eLinesAdjacency, cuT( "lines_adjacency" ) },
+			{ InputLayout::Kind::eTriangles, cuT( "triangles" ) },
+			{ InputLayout::Kind::eTrianglesAdjacency, cuT( "triangles_adjacency" ) },
 		};
-		REQUIRE( p_rhs.m_layout >= InputLayout::ePoints && p_rhs.m_layout <= InputLayout::eTrianglesAdjacency );
-		m_stream << cuT( "layout( " ) << Names.at( p_rhs.m_layout ) << cuT( " ) in;" ) << std::endl;
+		REQUIRE( p_rhs.m_kind >= InputLayout::Kind::ePoints && p_rhs.m_kind <= InputLayout::Kind::eTrianglesAdjacency );
+		m_stream << cuT( "layout( " ) << Names.at( p_rhs.m_kind ) << cuT( " ) in;" ) << std::endl;
 		return *this;
 	}
 
 	GlslWriter & GlslWriter::operator<<( OutputLayout const & p_rhs )
 	{
-		static std::map< OutputLayout::Layout, Castor::String > const Names
+		static std::map< OutputLayout::Kind, Castor::String > const Names
 		{
-			{ OutputLayout::ePoints, cuT( "points" ) },
-			{ OutputLayout::eLineStrip, cuT( "line_strip" ) },
-			{ OutputLayout::eTriangleStrip, cuT( "triangle_strip" ) },
+			{ OutputLayout::Kind::ePoints, cuT( "points" ) },
+			{ OutputLayout::Kind::eLineStrip, cuT( "line_strip" ) },
+			{ OutputLayout::Kind::eTriangleStrip, cuT( "triangle_strip" ) },
 		};
-		REQUIRE( p_rhs.m_layout >= OutputLayout::ePoints && p_rhs.m_layout <= OutputLayout::eTriangleStrip );
-		m_stream << cuT( "layout( " ) << Names.at( p_rhs.m_layout ) << cuT( ", max_vertices = " ) << p_rhs.m_count << cuT( " ) out;" ) << std::endl;
+		REQUIRE( p_rhs.m_kind >= OutputLayout::Kind::ePoints && p_rhs.m_kind <= OutputLayout::Kind::eTriangleStrip );
+		m_stream << cuT( "layout( " ) << Names.at( p_rhs.m_kind ) << cuT( ", max_vertices = " ) << p_rhs.m_count << cuT( " ) out;" ) << std::endl;
 		return *this;
 	}
 

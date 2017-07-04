@@ -123,8 +123,8 @@ namespace Castor3D
 		uint32_t l_counts[]{ 0u, 0u };
 		m_generatedCountBuffer->Upload( 0u, 2u, l_counts );
 
-		m_particlesStorages[m_in]->BindTo( 2u );
-		m_particlesStorages[m_out]->BindTo( 3u );
+		m_particlesStorages[m_in]->GetGpuBuffer().SetBindingPoint( 2u );
+		m_particlesStorages[m_out]->GetGpuBuffer().SetBindingPoint( 3u );
 		m_binding->Bind( 5u );
 
 		m_computePipeline->Run(
@@ -158,14 +158,9 @@ namespace Castor3D
 		auto & l_atomic = m_updateProgram->CreateAtomicCounterBuffer( cuT( "Counters" ), ShaderTypeFlag::eCompute );
 		m_generatedCountBuffer = m_updateProgram->FindAtomicCounterBuffer( cuT( "Counters" ) );
 
-		auto & l_random = m_updateProgram->CreateStorageBuffer( cuT( "Random" ), ShaderTypeFlag::eCompute );
-		m_randomStorage = m_updateProgram->FindStorageBuffer( cuT( "Random" ) );
-
-		auto & l_particlesIn = m_updateProgram->CreateStorageBuffer( cuT( "ParticlesIn" ), ShaderTypeFlag::eCompute );
-		m_particlesStorages[m_in] = m_updateProgram->FindStorageBuffer( cuT( "ParticlesIn" ) );
-
-		auto & l_particlesOut = m_updateProgram->CreateStorageBuffer( cuT( "ParticlesOut" ), ShaderTypeFlag::eCompute );
-		m_particlesStorages[m_out] = m_updateProgram->FindStorageBuffer( cuT( "ParticlesOut" ) );
+		m_randomStorage = std::make_shared< ShaderStorageBuffer >( *m_parent.GetScene()->GetEngine() );
+		m_particlesStorages[m_in] = std::make_shared< ShaderStorageBuffer >( *m_parent.GetScene()->GetEngine() );
+		m_particlesStorages[m_out] = std::make_shared< ShaderStorageBuffer >( *m_parent.GetScene()->GetEngine() );;
 	}
 
 	bool ComputeParticleSystem::DoInitialiseParticleStorage()
@@ -175,12 +170,14 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = m_particlesStorages[m_in]->Initialise( l_size, 2u, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_particlesStorages[m_in]->Resize( l_size );
+			l_return = m_particlesStorages[m_in]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 		}
 
 		if ( l_return )
 		{
-			l_return = m_particlesStorages[m_out]->Initialise( l_size, 3u, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_particlesStorages[m_out]->Resize( l_size );
+			l_return = m_particlesStorages[m_out]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 		}
 
 		if ( l_return )
@@ -207,7 +204,8 @@ namespace Castor3D
 		auto & l_engine = *m_parent.GetScene()->GetEngine();
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
 		auto l_size = uint32_t( 1024u * 4u * sizeof( float ) );
-		bool l_return = m_randomStorage->Initialise( l_size, 1u, BufferAccessType::eStatic, BufferAccessNature::eRead );
+		m_randomStorage->Resize( l_size );
+		bool l_return = m_randomStorage->Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead );
 
 		if ( l_return )
 		{

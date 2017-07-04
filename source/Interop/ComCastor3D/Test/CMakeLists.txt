@@ -2,7 +2,7 @@ if ( MSVC )
 	project( ComCastor3DTest )
 
 	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-	set( ${PROJECT_NAME}_VERSION_MINOR	9 )
+	set( ${PROJECT_NAME}_VERSION_MINOR 10 )
 	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR} )

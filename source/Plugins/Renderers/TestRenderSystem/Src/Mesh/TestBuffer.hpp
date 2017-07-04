@@ -29,63 +29,74 @@ SOFTWARE.
 
 namespace TestRender
 {
-	template< typename T >
 	class TestBuffer
-		: public Castor3D::GpuBuffer< T >
+		: public Castor3D::GpuBuffer
 	{
 	public:
-		TestBuffer( TestRenderSystem & p_renderSystem, Castor3D::BufferType p_type );
+		TestBuffer( TestRenderSystem & p_renderSystem
+			, Castor3D::BufferType p_type );
 		~TestBuffer();
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Create
+		 *\copydoc		Castor3D::GpuBuffer::Create
 		 */
 		bool Create()override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Destroy
+		 *\copydoc		Castor3D::GpuBuffer::Destroy
 		 */
 		void Destroy()override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::InitialiseStorage
+		 *\copydoc		Castor3D::GpuBuffer::InitialiseStorage
 		 */
-		void InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const override;
+		void InitialiseStorage( uint32_t p_count
+			, Castor3D::BufferAccessType p_type
+			, Castor3D::BufferAccessNature p_nature )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::SetBindingPoint
+		 *\copydoc		Castor3D::GpuBuffer::SetBindingPoint
 		 */
 		void SetBindingPoint( uint32_t p_point )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Lock
+		 *\copydoc		Castor3D::GpuBuffer::GetBindingPoint
 		 */
-		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessTypes const & p_flags )const override;
+		uint32_t GetBindingPoint()const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Unlock
+		 *\copydoc		Castor3D::GpuBuffer::Lock
+		 */
+		uint8_t * Lock( uint32_t p_offset
+			, uint32_t p_count
+			, Castor3D::AccessTypes const & p_flags )const override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer::Unlock
 		 */
 		void Unlock()const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Bind
+		 *\copydoc		Castor3D::GpuBuffer::Bind
 		 */
 		void Bind()const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Unbind
+		 *\copydoc		Castor3D::GpuBuffer::Unbind
 		 */
 		void Unbind()const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Copy
+		 *\copydoc		Castor3D::GpuBuffer::Copy
 		 */
-		void Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )const override;
+		void Copy( Castor3D::GpuBuffer const & p_src
+			, uint32_t p_size )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Upload
+		 *\copydoc		Castor3D::GpuBuffer::Upload
 		 */
-		void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const override;
+		void Upload( uint32_t p_offset
+			, uint32_t p_count
+			, uint8_t const * p_buffer )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Download
+		 *\copydoc		Castor3D::GpuBuffer::Download
 		 */
-		void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const override;
+		void Download( uint32_t p_offset
+			, uint32_t p_count
+			, uint8_t * p_buffer )const override;
 
 	private:
 		Castor3D::BufferType m_type;
 	};
 }
-
-#include "TestBuffer.inl"
 
 #endif

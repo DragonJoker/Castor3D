@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPassPoint.hpp"
+#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -55,11 +55,12 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
 	{
-		DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled );
-		DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled );
-		DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled );
-		DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled );
-		DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_skinnedNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled );
 	}
 
 	bool ShadowMapPassPoint::DoInitialise( Size const & p_size )
@@ -99,6 +100,7 @@ namespace Castor3D
 		if ( m_initialised )
 		{
 			m_shadowConfig.Update();
+			m_shadowConfig.BindTo( 8u );
 			m_viewport.Apply();
 			m_matrixUbo.Update( m_matrices[p_face], m_projection );
 			DoRenderNodes( m_renderQueue.GetRenderNodes() );
@@ -127,7 +129,6 @@ namespace Castor3D
 			{
 				l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
 				l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
-				l_pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
 				l_pipeline.AddUniformBuffer( m_shadowConfig );
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
@@ -135,7 +136,8 @@ namespace Castor3D
 					l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 				}
 
-				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+					&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 				{
 					l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 				}

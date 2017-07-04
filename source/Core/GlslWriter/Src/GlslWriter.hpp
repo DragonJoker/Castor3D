@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -24,103 +24,18 @@ SOFTWARE.
 #define ___GLSL_WRITER_H___
 
 #include "GlslFunction.hpp"
+#include "GlslIndentBlock.hpp"
+#include "GlslInputLayout.hpp"
+#include "GlslOutputLayout.hpp"
+#include "GlslShader.hpp"
+#include "GlslStruct.hpp"
 
-#include <Design/Factory.hpp>
 #include <Design/OwnedBy.hpp>
 
 #include <map>
 
 namespace GLSL
 {
-	struct Int;
-	struct UInt;
-	struct SamplerBuffer;
-	struct Sampler1D;
-	struct Sampler2D;
-	struct Sampler2DRect;
-	struct Sampler3D;
-	struct SamplerCube;
-
-	class LightingModel;
-	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
-
-	struct Endl {};
-	struct Endi {};
-
-	struct InputLayout
-	{
-		typedef enum Layout
-		{
-			ePoints,
-			eLines,
-			eLinesAdjacency,
-			eTriangles,
-			eTrianglesAdjacency
-		}	Layout;
-		InputLayout( Layout p_layout )
-			: m_layout{ p_layout }
-		{
-		}
-		Layout m_layout;
-	};
-
-	struct OutputLayout
-	{
-		typedef enum Layout
-		{
-			ePoints,
-			eLineStrip,
-			eTriangleStrip,
-		}	Layout;
-		OutputLayout( Layout p_layout, uint32_t p_count )
-			: m_layout{ p_layout }
-			, m_count{ p_count }
-		{
-		}
-		Layout m_layout;
-		uint32_t m_count;
-	};
-
-	struct IndentBlock
-	{
-		GlslWriter_API IndentBlock( GlslWriter & p_writter );
-		GlslWriter_API IndentBlock( Castor::StringStream & p_stream );
-		GlslWriter_API ~IndentBlock();
-		Castor::StringStream & m_stream;
-		int m_indent;
-	};
-
-	struct Ubo
-	{
-		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name, UboLayout p_layout = UboLayout::eStd140 );
-		GlslWriter_API void End();
-		template< typename T > inline T GetUniform( Castor::String const & p_name );
-		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
-		template< typename T > inline Optional< T > GetUniform( Castor::String const & p_name, bool p_enabled );
-		template< typename T > inline Optional< Array< T > > GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
-		IndentBlock * m_block;
-		GlslWriter & m_writer;
-		Castor::StringStream m_stream;
-		Castor::String m_name;
-		UboLayout m_layout;
-		uint32_t m_count{ 0u };
-	};
-
-	struct Struct
-	{
-		GlslWriter_API Struct( GlslWriter & p_writer, Castor::String const & p_name );
-		GlslWriter_API Struct( GlslWriter & p_writer, Castor::String const & p_name, Castor::String const & p_instName );
-		GlslWriter_API void End();
-		template< typename T > inline void DeclareMember( Castor::String const & p_name );
-		template< typename T > inline void DeclareMember( Castor::String const & p_name, uint32_t p_dimension );
-		template< typename T > inline T GetMember( Castor::String const & p_name );
-		template< typename T > inline Array< T > GetMember( Castor::String const & p_name, uint32_t p_dimension );
-		IndentBlock * m_block;
-		GlslWriter & m_writer;
-		Castor::String m_name;
-		Castor::String m_instName;
-	};
-
 	struct GlslWriterConfig
 	{
 		uint32_t m_shaderLanguageVersion;
@@ -131,7 +46,8 @@ namespace GLSL
 	class GlslWriter
 	{
 		friend struct IndentBlock;
-		friend struct Ubo;
+		friend class Ubo;
+		friend class Ssbo;
 
 	public:
 		GlslWriter_API GlslWriter( GlslWriterConfig const & p_config );
@@ -160,12 +76,46 @@ namespace GLSL
 			return GetShaderLanguageVersion() >= 130;
 		}
 
+		inline void RegisterSsbo( Castor::String const & p_name, Ssbo::Info const & p_info )
+		{
+			m_shader.RegisterSsbo( p_name, p_info );
+		}
+
+		inline void RegisterUbo( Castor::String const & p_name, Ubo::Info const & p_info )
+		{
+			m_shader.RegisterUbo( p_name, p_info );
+		}
+
+		inline void RegisterUniform( Castor::String const & p_name, TypeName p_type )
+		{
+			RegisterName( p_name, p_type );
+			m_shader.RegisterUniform( p_name, p_type );
+		}
+
+		inline void RegisterAttribute( Castor::String const & p_name, TypeName p_type )
+		{
+			RegisterName( p_name, p_type );
+			m_shader.RegisterAttribute( p_name, p_type );
+		}
+
+		inline void RegisterInput( Castor::String const & p_name, TypeName p_type )
+		{
+			RegisterName( p_name, p_type );
+			m_shader.RegisterInput( p_name, p_type );
+		}
+
+		inline void RegisterOutput( Castor::String const & p_name, TypeName p_type )
+		{
+			RegisterName( p_name, p_type );
+			m_shader.RegisterOutput( p_name, p_type );
+		}
+
 		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 		GlslWriter_API std::unique_ptr< LightingModel > CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 		GlslWriter_API std::unique_ptr< LightingModel > CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 		GlslWriter_API std::unique_ptr< LightingModel > CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 
-		GlslWriter_API Castor::String Finalise();
+		GlslWriter_API Shader Finalise();
 		GlslWriter_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
 		GlslWriter_API void WriteAssign( Type const & p_lhs, int const & p_rhs );
 		GlslWriter_API void WriteAssign( Type const & p_lhs, unsigned int const & p_rhs );
@@ -322,8 +272,11 @@ namespace GLSL
 		template< typename T > inline Array< T > DeclLocale( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > DeclLocale( Castor::String const & p_name, uint32_t p_dimension, T const & p_rhs );
 		template< typename T > inline Array< T > DeclBuiltin( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > DeclBuiltinArray( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > GetBuiltinArray( Castor::String const & p_name );
 		template< typename T > inline Array< T > DeclUniform( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > DeclUniformArray( Castor::String const & p_name );
 		template< typename T > inline Array< T > DeclUniform( Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs );
 		template< typename T > inline Optional< T > DeclAttribute( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > DeclOutput( Castor::String const & p_name, bool p_enabled );
@@ -336,12 +289,17 @@ namespace GLSL
 		template< typename T > inline Optional< T > DeclUniform( Castor::String const & p_name, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< Array< T > > DeclAttribute( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > DeclOutput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > DeclOutputArray( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > DeclInput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > DeclInputArray( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > DeclLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > DeclLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< Array< T > > DeclBuiltin( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > DeclBuiltinArray( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetBuiltinArray( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > DeclUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > DeclUniformArray( Castor::String const & p_namep_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > DeclUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, std::vector< T > const & p_rhs );
 
 		GlslWriter_API GlslWriter & operator<<( Version const & p_rhs );
@@ -364,10 +322,10 @@ namespace GLSL
 		Castor::String m_uniform;
 		std::unique_ptr< KeywordsBase > m_keywords;
 		Castor::StringStream m_stream;
-		uint32_t m_uniformIndex{ 0u };
 		uint32_t m_attributeIndex{ 0u };
 		uint32_t m_layoutIndex{ 0u };
 		LightingModelFactory m_lightingFactory;
+		Shader m_shader;
 	};
 
 #define FOR( Writer, Type, Name, Init, Cond, Incr )\

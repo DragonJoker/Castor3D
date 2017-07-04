@@ -1,4 +1,4 @@
-﻿#include "BillboardUbo.hpp"
+#include "BillboardUbo.hpp"
 
 #include "Engine.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -22,6 +22,7 @@ namespace Castor3D
 	{
 		m_dimensions.SetValue( Point2i( p_dimensions[0], p_dimensions[1] ) );
 		m_ubo.Update();
+		m_ubo.BindTo( BillboardUbo::BindingPoint );
 	}
 
 	void BillboardUbo::SetWindowSize( Size const & p_window )const

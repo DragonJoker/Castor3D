@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -105,6 +105,9 @@ namespace Castor3D
 		}
 		/**@}*/
 
+	public:
+		static constexpr uint32_t BindingPoint = 2u;
+
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
@@ -119,9 +122,9 @@ namespace Castor3D
 }
 
 #define UBO_MODEL_MATRIX( Writer )\
-	GLSL::Ubo l_modelMatrices{ l_writer, ShaderProgram::BufferModelMatrix };\
-	auto c3d_mtxModel = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxModel );\
-	auto c3d_mtxNormal = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
+	GLSL::Ubo l_modelMatrices{ l_writer, ShaderProgram::BufferModelMatrix, ModelMatrixUbo::BindingPoint };\
+	auto c3d_mtxModel = l_modelMatrices.DeclMember< GLSL::Mat4 >( RenderPipeline::MtxModel );\
+	auto c3d_mtxNormal = l_modelMatrices.DeclMember< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
 	l_modelMatrices.End()
 
 #endif

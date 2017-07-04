@@ -409,48 +409,15 @@ namespace Castor3D
 			, AccessTypes const & p_gpuAccess ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a uint8_t buffer.
+		 *\brief		Creates a GPU buffer.
 		 *\param[in]	p_type	The buffer type.
 		 *\return		The created buffer, depending on current API.
 		 *\~french
-		 *\brief		Crée un tampon d'uint8_t.
+		 *\brief		Crée un tampon GPU.
 		 *\param[in]	p_type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual std::unique_ptr< GpuBuffer< uint8_t > > CreateUInt8Buffer( BufferType p_type ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a uint16_t buffer.
-		 *\param[in]	p_type	The buffer type.
-		 *\return		The created buffer, depending on current API.
-		 *\~french
-		 *\brief		Crée un tampon d'uint16_t.
-		 *\param[in]	p_type	Le type de tampon.
-		 *\return		Le tampon créé, dépendant de l'API actuelle.
-		 */
-		C3D_API virtual std::unique_ptr< GpuBuffer< uint16_t > > CreateUInt16Buffer( BufferType p_type ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a uint32_t buffer.
-		 *\param[in]	p_type	The buffer type.
-		 *\return		The created buffer, depending on current API.
-		 *\~french
-		 *\brief		Crée un tampon d'uint32_t.
-		 *\param[in]	p_type	Le type de tampon.
-		 *\return		Le tampon créé, dépendant de l'API actuelle.
-		 */
-		C3D_API virtual std::unique_ptr< GpuBuffer< uint32_t > > CreateUInt32Buffer( BufferType p_type ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a float buffer.
-		 *\param[in]	p_type	The buffer type.
-		 *\return		The created buffer, depending on current API.
-		 *\~french
-		 *\brief		Crée un tampon de float.
-		 *\param[in]	p_type	Le type de tampon.
-		 *\return		Le tampon créé, dépendant de l'API actuelle.
-		 */
-		C3D_API virtual std::unique_ptr< GpuBuffer< float > > CreateFloatBuffer( BufferType p_type ) = 0;
+		C3D_API virtual GpuBufferUPtr CreateBuffer( BufferType p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a transform feedback instance.

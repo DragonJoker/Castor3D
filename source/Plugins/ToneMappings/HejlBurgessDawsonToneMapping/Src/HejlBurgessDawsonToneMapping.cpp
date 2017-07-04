@@ -2,6 +2,7 @@
 
 #include <Engine.hpp>
 #include <Cache/ShaderCache.hpp>
+#include <Shader/HdrConfigUbo.hpp>
 
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
@@ -34,15 +35,15 @@ namespace HejlBurgessDawson
 		return std::make_shared< ToneMapping >( p_engine, p_parameters );
 	}
 
-	String ToneMapping::DoCreate()
+	GLSL::Shader ToneMapping::DoCreate()
 	{
-		String l_pxl;
+		GLSL::Shader l_pxl;
 		{
 			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, ToneMapping::HdrConfigUbo };
-			auto c3d_exposure = l_config.GetUniform< Float >( ShaderProgram::Exposure );
+			Ubo l_config{ l_writer, ToneMapping::HdrConfigUbo, HdrConfigUbo::BindingPoint };
+			auto c3d_exposure = l_config.DeclMember< Float >( ShaderProgram::Exposure );
 			l_config.End();
 			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );

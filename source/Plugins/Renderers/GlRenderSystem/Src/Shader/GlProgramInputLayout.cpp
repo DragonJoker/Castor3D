@@ -1,4 +1,4 @@
-#include "Shader/GlProgramInputLayout.hpp"
+﻿#include "Shader/GlProgramInputLayout.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
@@ -180,7 +180,9 @@ namespace GlRender
 				GlslProperty::eBufferBinding,
 				[this, &l_program]( std::string p_name, int p_point, int p_index )
 				{
-					Logger::LogDebug( StringStream() << cuT( "   ShaderStorage block: " ) << string::string_cast< xchar >( p_name ) );
+					Logger::LogDebug( StringStream() << cuT( "   ShaderStorage block: " ) << string::string_cast< xchar >( p_name )
+						<< cuT( ", at point " ) << p_point
+						<< cuT( ", and index " ) << p_index );
 				} );
 
 			GetUnnamedProgramInterfaceInfos(
@@ -200,7 +202,9 @@ namespace GlRender
 				GlslProperty::eBufferBinding,
 				[this, &l_program]( std::string p_name, int p_value, int p_index )
 				{
-					Logger::LogDebug( StringStream() << cuT( "   Uniform block: " ) << string::string_cast< xchar >( p_name ) );
+					Logger::LogDebug( StringStream() << cuT( "   Uniform block: " ) << string::string_cast< xchar >( p_name )
+						<< cuT( ", at point " ) << p_value
+						<< cuT( ", and index " ) << p_index );
 				} );
 		}
 		else

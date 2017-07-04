@@ -43,9 +43,6 @@ namespace Castor3D
 	class AtomicCounterBuffer
 		: public Castor::OwnedBy< ShaderProgram >
 	{
-	private:
-		using GpuBufferUPtr = std::unique_ptr< GpuBuffer< uint32_t > >;
-
 	public:
 		/**
 		 *\~english
@@ -77,7 +74,8 @@ namespace Castor3D
 		 *\param[in]	p_index	Le point d'attache du tampon.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API bool Initialise( uint32_t p_size, uint32_t p_index );
+		C3D_API bool Initialise( uint32_t p_size
+			, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated.
@@ -101,7 +99,9 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API uint32_t * Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags );
+		C3D_API uint32_t * Lock( uint32_t p_offset
+			, uint32_t p_count
+			, AccessTypes const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.
@@ -125,7 +125,9 @@ namespace Castor3D
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[in]	p_buffer	Les données.
 		 */
-		C3D_API void Upload( uint32_t p_offset, uint32_t p_count, uint32_t const * p_buffer );
+		C3D_API void Upload( uint32_t p_offset
+			, uint32_t p_count
+			, uint32_t const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.
@@ -140,7 +142,9 @@ namespace Castor3D
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[in]	p_buffer	Les données.
 		 */
-		C3D_API void Download( uint32_t p_offset, uint32_t p_count, uint32_t * p_buffer );
+		C3D_API void Download( uint32_t p_offset
+			, uint32_t p_count
+			, uint32_t * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
@@ -169,14 +173,15 @@ namespace Castor3D
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API void Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size );
+		C3D_API void Copy( GpuBuffer const & p_src
+			, uint32_t p_size );
 		/**
 		 *\~english
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\return		Le tampon GPU.
 		 */
-		inline GpuBuffer< uint32_t > const & GetGpuBuffer()const
+		inline GpuBuffer const & GetGpuBuffer()const
 		{
 			REQUIRE( m_gpuBuffer );
 			return *m_gpuBuffer;

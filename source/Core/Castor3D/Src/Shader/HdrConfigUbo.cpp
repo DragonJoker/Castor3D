@@ -23,5 +23,6 @@ namespace Castor3D
 		m_exposure.SetValue( p_config.GetExposure() );
 		m_gamma.SetValue( p_config.GetGamma() );
 		m_ubo.Update();
+		m_ubo.BindTo( HdrConfigUbo::BindingPoint );
 	}
 }

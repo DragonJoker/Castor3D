@@ -33,6 +33,7 @@ namespace Castor3D
 	{
 		m_cameraPos.SetValue( p_camera.GetParent()->GetDerivedPosition() );
 		m_ubo.Update();
+		m_ubo.BindTo( SceneUbo::BindingPoint );
 	}
 
 	void SceneUbo::Update( Camera const & p_camera

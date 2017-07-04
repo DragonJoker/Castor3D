@@ -96,6 +96,15 @@ namespace Castor3D
 		 */
 		C3D_API void FillShader( Uniform4x4r & p_variable )const;
 		/**
+		 *\~english
+		 *\brief		Fills a buffer with this object's skeleton transforms.
+		 *\param[out]	p_buffer	Receives the transforms.
+		 *\~french
+		 *\brief		Remplit un tampon avec les transformations du squelette de cet objet.
+		 *\param[out]	p_buffer	Reçoit les transformations.
+		 */
+		C3D_API void FillBuffer( uint8_t * p_buffer )const;
+		/**
 		 *\copydoc		Castor3D::AnimatedObject::Update
 		 */
 		C3D_API void Update( std::chrono::milliseconds const & p_tslf )override;

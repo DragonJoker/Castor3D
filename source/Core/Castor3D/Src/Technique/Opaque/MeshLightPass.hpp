@@ -68,8 +68,8 @@ namespace Castor3D
 			 *\param[in]	p_pxl		Le source du fagment shader.
 			 */
 			Program( Engine & p_engine
-				, Castor::String const & p_vtx
-				, Castor::String const & p_pxl );
+				, GLSL::Shader const & p_vtx
+				, GLSL::Shader const & p_pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -158,7 +158,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::LightPass::DoGetVertexShaderSource
 		 */
-		Castor::String DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const override;
+		GLSL::Shader DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const override;
 		/**
 		 *\~english
 		 *\return		The vertices needed to draw the mesh.

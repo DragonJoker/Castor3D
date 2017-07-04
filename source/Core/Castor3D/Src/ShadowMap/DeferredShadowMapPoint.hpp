@@ -131,7 +131,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
 		 */
-		Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const override;

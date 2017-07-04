@@ -1,4 +1,4 @@
-﻿#include "RenderTechniquePass.hpp"
+#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -189,24 +189,27 @@ namespace Castor3D
 		, RenderInfo & p_info )const
 	{
 		if ( !p_nodes.m_staticNodes.m_backCulled.empty()
-			|| !p_nodes.m_instancedNodes.m_backCulled.empty()
-			|| !p_nodes.m_skinningNodes.m_backCulled.empty()
+			|| !p_nodes.m_instantiatedStaticNodes.m_backCulled.empty()
+			|| !p_nodes.m_skinnedNodes.m_backCulled.empty()
+			|| !p_nodes.m_instantiatedSkinnedNodes.m_backCulled.empty()
 			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
 			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
 			m_matrixUbo.Update( p_camera.GetView()
 				, p_camera.GetViewport().GetProjection() );
-			DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_frontCulled, p_camera, p_depthMaps );
-			DoRenderBillboards( p_nodes.m_billboardNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_staticNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_skinnedNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_morphingNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_billboardNodes.m_frontCulled, p_camera, p_depthMaps );
 
-			DoRenderInstancedSubmeshes( p_nodes.m_instancedNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			DoRenderStaticSubmeshes( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			DoRenderSkinningSubmeshes( p_nodes.m_skinningNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			DoRenderMorphingSubmeshes( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			DoRenderBillboards( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_skinnedNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_info );
 		}
 	}
 
@@ -245,11 +248,11 @@ namespace Castor3D
 		}
 	}
 
-	String RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
 	{
-		return String{};
+		return GLSL::Shader{};
 	}
 
 	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
@@ -299,7 +302,8 @@ namespace Castor3D
 						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
 						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
@@ -353,7 +357,8 @@ namespace Castor3D
 						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning ) )
+					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
 						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}

@@ -76,36 +76,31 @@ namespace Castor3D
 			return l_result;
 		}
 
-		String DoGetVertexProgram( Engine & p_engine )
+		GLSL::Shader DoGetVertexProgram( Engine & p_engine )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_vtx;
-			{
-				using namespace GLSL;
-				auto l_writer = l_renderSystem.CreateGlslWriter();
+			using namespace GLSL;
+			auto l_writer = l_renderSystem.CreateGlslWriter();
 
-				// Shader inputs
-				UBO_MATRIX( l_writer );
-				auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
-				auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
+			// Shader inputs
+			UBO_MATRIX( l_writer );
+			auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
 
-				// Shader outputs
-				auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
-				auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			// Shader outputs
+			auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-				l_writer.ImplementFunction< void >( cuT( "main" )
-					, [&]()
-					{
-						vtx_texture = texture;
-						gl_Position = c3d_mtxProjection * vec4( position, 0.0, 1.0 );
-					} );
-				l_vtx = l_writer.Finalise();
-			}
-
-			return l_vtx;
+			l_writer.ImplementFunction< void >( cuT( "main" )
+				, [&]()
+				{
+					vtx_texture = texture;
+					gl_Position = c3d_mtxProjection * vec4( position, 0.0, 1.0 );
+				} );
+			return l_writer.Finalise();
 		}
 		
-		String DoGetPixelProgram( Engine & p_engine
+		GLSL::Shader DoGetPixelProgram( Engine & p_engine
 			, GLSL::FogType p_fogType )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
@@ -178,8 +173,8 @@ namespace Castor3D
 			, GLSL::FogType p_fogType )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			String l_vtx = DoGetVertexProgram( p_engine );
-			String l_pxl = DoGetPixelProgram( p_engine, p_fogType );
+			auto l_vtx = DoGetVertexProgram( p_engine );
+			auto l_pxl = DoGetPixelProgram( p_engine, p_fogType );
 			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
 			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::ePixel );
@@ -187,9 +182,8 @@ namespace Castor3D
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eAccumulation ), ShaderType::ePixel )->SetValue( 1u );
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eRevealage ), ShaderType::ePixel )->SetValue( 2u );
 
-			auto const l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
+			l_program->SetSource( ShaderType::eVertex, l_vtx );
+			l_program->SetSource( ShaderType::ePixel, l_pxl );
 			l_program->Initialise();
 			return l_program;
 		}

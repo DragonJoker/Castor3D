@@ -94,6 +94,9 @@ namespace Castor3D
 		}
 		/**@}*/
 
+	public:
+		static constexpr uint32_t BindingPoint = 3u;
+
 	private:
 		//!\~english	The UBO.
 		//!\~french		L'UBO.
@@ -108,9 +111,9 @@ namespace Castor3D
 }
 
 #define UBO_HDR_CONFIG( Writer )\
-	Ubo l_hdrConfig{ l_writer, ShaderProgram::BufferHdrConfig };\
-	auto c3d_exposure = l_hdrConfig.GetUniform< Float >( ShaderProgram::Exposure );\
-	auto c3d_gamma = l_hdrConfig.GetUniform< Float >( ShaderProgram::Gamma );\
+	Ubo l_hdrConfig{ l_writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };\
+	auto c3d_exposure = l_hdrConfig.DeclMember< Float >( ShaderProgram::Exposure );\
+	auto c3d_gamma = l_hdrConfig.DeclMember< Float >( ShaderProgram::Gamma );\
 	l_hdrConfig.End()
 
 #endif

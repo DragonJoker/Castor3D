@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -128,6 +128,22 @@ namespace Castor3D
 		C3D_API void Update()const;
 		/**
 		 *\~english
+		 *\brief		Sets the buffer's binding point.
+		 *\param[in]	p_index	The binding point.
+		 *\~french
+		 *\brief		Définit le point d'attache du tampon.
+		 *\param[in]	p_index	Le point d'attache.
+		 */
+		C3D_API void BindTo( uint32_t p_index )const;
+		/**
+		 *\~english
+		 *\return		The buffer's binding point.
+		 *\~french
+		 *\return		Le point d'attache du tampon.
+		 */
+		C3D_API uint32_t GetBindingPoint()const;
+		/**
+		 *\~english
 		 *\brief		Creates a binding of this unifor buffer to given program.
 		 *\remarks		If this is the first binding created, the GPU storage and variables will be initialised.
 		 *\param[in]	p_program	The program.
@@ -205,92 +221,11 @@ namespace Castor3D
 		inline std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;
 		/**
 		 *\~english
-		 *\brief		Fills a UBO with matrix related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux matrices.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillMatrixBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with model matrix related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux matrices modèle.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillModelMatrixBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with scene related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives à la scène.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillSceneBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with pass related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives à la passe.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillPassBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with model related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives au modèle.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillModelBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with skinning animation related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux animations de skinning.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillSkinningBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with morphing animation related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux animations de morphing.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillMorphingBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with billboard related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives au billboard.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillBillboardBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with overlay related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux incrustations.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillOverlayBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
 		 *\return		The GPU storage.
 		 *\~french
 		 *\return		Le stockage GPU.
 		 */
-		inline GpuBuffer< uint8_t > & GetStorage()const
+		inline GpuBuffer & GetStorage()const
 		{
 			REQUIRE( m_storage );
 			return *m_storage;
@@ -374,7 +309,7 @@ namespace Castor3D
 		Castor::ByteArray m_buffer;
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
-		std::unique_ptr< GpuBuffer< uint8_t > > m_storage;
+		GpuBufferUPtr m_storage;
 		//!\~english	The bindings per program.
 		//!\~french		Les bindings par programme.
 		UniformBufferBindingMap m_bindings;

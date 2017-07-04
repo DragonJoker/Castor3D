@@ -35,8 +35,8 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	PointLightPass::Program::Program( Engine & p_engine
-		, String const & p_vtx
-		, String const & p_pxl )
+		, GLSL::Shader const & p_vtx
+		, GLSL::Shader const & p_pxl )
 		: MeshLightPass::Program{ p_engine, p_vtx, p_pxl }
 		, m_lightPosition{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
 		, m_lightAttenuation{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
@@ -175,8 +175,8 @@ namespace Castor3D
 		return l_model;
 	}
 
-	LightPass::ProgramPtr PointLightPass::DoCreateProgram( Castor::String const & p_vtx
-		, Castor::String const & p_pxl )const
+	LightPass::ProgramPtr PointLightPass::DoCreateProgram( GLSL::Shader const & p_vtx
+		, GLSL::Shader const & p_pxl )const
 	{
 		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
 	}

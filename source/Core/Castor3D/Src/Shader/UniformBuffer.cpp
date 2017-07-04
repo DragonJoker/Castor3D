@@ -1,4 +1,4 @@
-#include "UniformBuffer.hpp"
+﻿#include "UniformBuffer.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -170,6 +170,18 @@ namespace Castor3D
 		m_listVariables.clear();
 	}
 
+	void UniformBuffer::BindTo( uint32_t p_index )const
+	{
+		REQUIRE( m_storage );
+		m_storage->SetBindingPoint( p_index );
+	}
+
+	uint32_t UniformBuffer::GetBindingPoint()const
+	{
+		REQUIRE( m_storage );
+		return m_storage->GetBindingPoint();
+	}
+
 	UniformBufferBinding & UniformBuffer::CreateBinding( ShaderProgram & p_program )
 	{
 		auto l_it = m_bindings.find( &p_program );
@@ -214,74 +226,6 @@ namespace Castor3D
 		}
 	}
 
-	void UniformBuffer::FillMatrixBuffer( UniformBuffer & p_ubo )
-	{
-		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxProjection );
-		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxView );
-	}
-
-	void UniformBuffer::FillModelMatrixBuffer( UniformBuffer & p_ubo )
-	{
-		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxModel );
-		p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxNormal );
-	}
-
-	void UniformBuffer::FillSceneBuffer( UniformBuffer & p_ubo )
-	{
-		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::AmbientLight );
-		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::BackgroundColour );
-		p_ubo.CreateUniform( UniformType::eVec4i, ShaderProgram::LightsCount );
-		p_ubo.CreateUniform( UniformType::eVec3r, ShaderProgram::CameraPos );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::CameraFarPlane );
-		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::FogType );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::FogDensity );
-	}
-
-	void UniformBuffer::FillPassBuffer( UniformBuffer & p_ubo )
-	{
-		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
-		{
-			p_ubo.CreateUniform( UniformType::eMat4x4r, RenderPipeline::MtxTexture[i] );
-		}
-
-		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatDiffuse );
-		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatEmissive );
-		p_ubo.CreateUniform( UniformType::eVec4f, ShaderProgram::MatSpecular );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatShininess );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatOpacity );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::EnvironmentIndex );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::MatRefractionRatio );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Gamma );
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Exposure );
-	}
-
-	void UniformBuffer::FillModelBuffer( UniformBuffer & p_ubo )
-	{
-		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::ShadowReceiver );
-	}
-
-	void UniformBuffer::FillSkinningBuffer( UniformBuffer & p_ubo )
-	{
-		p_ubo.CreateUniform( UniformType::eMat4x4r, ShaderProgram::Bones, 400 );
-	}
-
-	void UniformBuffer::FillMorphingBuffer( UniformBuffer & p_ubo )
-	{
-		p_ubo.CreateUniform( UniformType::eFloat, ShaderProgram::Time );
-	}
-
-	void UniformBuffer::FillBillboardBuffer( UniformBuffer & p_ubo )
-	{
-		p_ubo.CreateUniform( UniformType::eVec2i, ShaderProgram::Dimensions );
-		p_ubo.CreateUniform( UniformType::eVec2i, ShaderProgram::WindowSize );
-	}
-
-	void UniformBuffer::FillOverlayBuffer( UniformBuffer & p_ubo )
-	{
-		p_ubo.CreateUniform( UniformType::eVec2i, ShaderProgram::OvPosition );
-		p_ubo.CreateUniform( UniformType::eInt, ShaderProgram::MaterialIndex );
-	}
-
 	void UniformBuffer::DoInitialise( UniformBufferBinding const & p_binding )
 	{
 		m_buffer.resize( p_binding.GetSize() );
@@ -309,12 +253,16 @@ namespace Castor3D
 
 		if ( !m_storage )
 		{
-			m_storage = GetRenderSystem()->CreateUInt8Buffer( BufferType::eUniform );
+			m_storage = GetRenderSystem()->CreateBuffer( BufferType::eUniform );
 			m_storage->Create();
 		}
 
-		m_storage->InitialiseStorage( uint32_t( m_buffer.size() ), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-		m_storage->Upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
+		m_storage->InitialiseStorage( uint32_t( m_buffer.size() )
+			, BufferAccessType::eDynamic
+			, BufferAccessNature::eDraw );
+		m_storage->Upload( 0u
+			, uint32_t( m_buffer.size() )
+			, m_buffer.data() );
 
 		for ( auto & l_variable : *this )
 		{

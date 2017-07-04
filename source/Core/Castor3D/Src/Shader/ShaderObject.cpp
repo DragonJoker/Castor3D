@@ -3,6 +3,7 @@
 #include "UniformBuffer.hpp"
 
 #include <Stream/StreamPrefixManipulators.hpp>
+#include <GlslShader.hpp>
 
 using namespace Castor;
 
@@ -34,15 +35,6 @@ namespace Castor3D
 
 	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		static std::array< String, size_t( ShaderModel::eCount ) > const l_arrayModels
-		{
-			cuT( "sm_1" ),
-			cuT( "sm_2" ),
-			cuT( "sm_3" ),
-			cuT( "sm_4" ),
-			cuT( "sm_5" ),
-		};
-
 		bool l_return = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
@@ -57,18 +49,15 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			for ( size_t i = 0; i < size_t( ShaderModel::eCount ); i++ )
-			{
-				Path l_file = p_shaderObject.GetFile( ShaderModel( i ) );
+			Path l_file = p_shaderObject.GetFile();
 
-				if ( !l_file.empty() )
-				{
-					File::CopyFile( l_file, l_pathFile );
-					String l_fileName = Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
-					string::replace( l_fileName, cuT( "\\" ), cuT( "/" ) );
-					l_return = p_file.WriteText( m_tabs + cuT( "\tfile " ) + l_arrayModels[i] + cuT( " \"" ) + l_fileName + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< ShaderObject >::CheckError( l_return, "ShaderObject file" );
-				}
+			if ( !l_file.empty() )
+			{
+				File::CopyFile( l_file, l_pathFile );
+				String l_fileName = Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
+				string::replace( l_fileName, cuT( "\\" ), cuT( "/" ) );
+				l_return = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_fileName + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< ShaderObject >::CheckError( l_return, "ShaderObject file" );
 			}
 		}
 
@@ -127,11 +116,11 @@ namespace Castor3D
 	{
 	}
 
-	void ShaderObject::SetFile( ShaderModel p_eModel, Path const & p_filename )
+	void ShaderObject::SetFile( Path const & p_filename )
 	{
 		m_status = ShaderStatus::eNotCompiled;
-		m_arrayFiles[size_t( p_eModel )].clear();
-		m_arraySources[size_t( p_eModel )].clear();
+		m_file.clear();
+		m_source = GLSL::Shader{};
 
 		if ( !p_filename.empty() && File::FileExists( p_filename ) )
 		{
@@ -141,8 +130,10 @@ namespace Castor3D
 			{
 				if ( l_file.GetLength() > 0 )
 				{
-					m_arrayFiles[size_t( p_eModel )] = p_filename;
-					l_file.CopyToString( m_arraySources[size_t( p_eModel )] );
+					m_file = p_filename;
+					String l_source;
+					l_file.CopyToString( l_source );
+					m_source.SetSource( l_source );
 				}
 			}
 		}
@@ -150,32 +141,23 @@ namespace Castor3D
 
 	bool ShaderObject::HasFile()const
 	{
-		bool l_return = false;
-
-		for ( size_t i = 0; i < size_t( ShaderModel::eCount ) && !l_return; i++ )
-		{
-			l_return = !m_arrayFiles[i].empty();
-		}
-
-		return l_return;
+		return !m_file.empty();
 	}
 
-	void ShaderObject::SetSource( ShaderModel p_eModel, String const & p_strSource )
+	void ShaderObject::SetSource( String const & p_source )
 	{
 		m_status = ShaderStatus::eNotCompiled;
-		m_arraySources[size_t( p_eModel )] = p_strSource;
+		m_source.SetSource( p_source );
+	}
+
+	void ShaderObject::SetSource( GLSL::Shader const & p_source )
+	{
+		m_source = p_source;
 	}
 
 	bool ShaderObject::HasSource()const
 	{
-		bool l_return = false;
-
-		for ( size_t i = 0; i < size_t( ShaderModel::eCount ) && !l_return; i++ )
-		{
-			l_return = !m_arraySources[i].empty();
-		}
-
-		return l_return;
+		return !m_source.GetSource().empty();
 	}
 
 	void ShaderObject::AddUniform( PushUniformSPtr p_variable )
@@ -223,16 +205,15 @@ namespace Castor3D
 
 			StringStream l_source;
 			l_source << format::line_prefix();
-			l_source << m_loadedSource;
+			l_source << GetSource();
 			Logger::LogInfo( l_source.str() );
-			m_loadedSource.clear();
 		}
 		else if ( m_status == ShaderStatus::eError )
 		{
 			Logger::LogWarning( cuT( "ShaderObject::Compile - Compilaton failed but shader may be usable to link." ) );
 			StringStream l_source;
 			l_source << format::line_prefix();
-			l_source << m_loadedSource;
+			l_source << GetSource();
 			Logger::LogInfo( l_source.str() );
 			m_status = ShaderStatus::eNotCompiled;
 		}

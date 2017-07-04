@@ -94,24 +94,9 @@ namespace TestRender
 		return std::make_unique< TestTransformFeedback >( *this, p_computed, p_topology, p_program );
 	}
 
-	std::unique_ptr< GpuBuffer< uint8_t > > TestRenderSystem::CreateUInt8Buffer( BufferType p_type )
+	GpuBufferUPtr TestRenderSystem::CreateBuffer( BufferType p_type )
 	{
-		return std::make_unique< TestBuffer< uint8_t > >( *this, p_type );
-	}
-
-	std::unique_ptr< GpuBuffer< uint16_t > > TestRenderSystem::CreateUInt16Buffer( BufferType p_type )
-	{
-		return std::make_unique< TestBuffer< uint16_t > >( *this, p_type );
-	}
-
-	std::unique_ptr< GpuBuffer< uint32_t > > TestRenderSystem::CreateUInt32Buffer( BufferType p_type )
-	{
-		return std::make_unique< TestBuffer< uint32_t > >( *this, p_type );
-	}
-
-	std::unique_ptr< GpuBuffer< float > > TestRenderSystem::CreateFloatBuffer( BufferType p_type )
-	{
-		return std::make_unique< TestBuffer< float > >( *this, p_type );
+		return std::make_unique< TestBuffer >( *this, p_type );
 	}
 
 	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessTypes const & p_cpuAccess, AccessTypes const & p_gpuAccess )

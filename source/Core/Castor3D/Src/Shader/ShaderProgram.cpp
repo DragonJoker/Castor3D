@@ -6,6 +6,7 @@
 #include "Shader/ShaderStorageBuffer.hpp"
 
 #include <Stream/StreamPrefixManipulators.hpp>
+#include <GlslShader.hpp>
 
 using namespace Castor;
 
@@ -47,11 +48,7 @@ namespace Castor3D
 		{
 			if ( p_shaderProgram.HasObject( ShaderType( i ) ) )
 			{
-				while ( j < uint8_t( ShaderModel::eCount ) && !l_hasFile )
-				{
-					l_hasFile = !p_shaderProgram.GetFile( ShaderType( i ), ShaderModel( j ) ).empty();
-					++j;
-				}
+				l_hasFile = !p_shaderProgram.GetFile( ShaderType( i ) ).empty();
 			}
 
 			++i;
@@ -187,12 +184,9 @@ namespace Castor3D
 			m_shaders[size_t( p_type )] = l_return;
 			size_t i = size_t( ShaderModel::eModel1 );
 
-			for ( auto const & l_file : m_arrayFiles )
+			if ( !m_file.empty() )
 			{
-				if ( !l_file.empty() )
-				{
-					m_shaders[size_t( p_type )]->SetFile( ShaderModel( i++ ), l_file );
-				}
+				m_shaders[size_t( p_type )]->SetFile( m_file );
 			}
 		}
 
@@ -212,19 +206,19 @@ namespace Castor3D
 		}
 
 		m_activeShaders.clear();
-		clear_container( m_arrayFiles );
+		m_file.clear();
 	}
 
-	void ShaderProgram::SetFile( ShaderModel p_eModel, Path const & p_path )
+	void ShaderProgram::SetFile( Path const & p_path )
 	{
-		m_arrayFiles[size_t( p_eModel )] = p_path;
+		m_file = p_path;
 		uint8_t i = uint8_t( ShaderType::eVertex );
 
 		for ( auto l_shader : m_shaders )
 		{
 			if ( l_shader && GetRenderSystem()->GetGpuInformations().HasShaderType( ShaderType( i++ ) ) )
 			{
-				l_shader->SetFile( p_eModel, p_path );
+				l_shader->SetFile( p_path );
 			}
 		}
 
@@ -263,24 +257,11 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderProgram::SetFile( ShaderType p_target, ShaderModel p_eModel, Path const & p_pathFile )
+	void ShaderProgram::SetFile( ShaderType p_target, Path const & p_pathFile )
 	{
 		if ( m_shaders[size_t( p_target )] )
 		{
-			if ( p_eModel == ShaderModel::eCount )
-			{
-				for ( uint8_t i = 0; i < uint8_t( ShaderModel::eCount ); ++i )
-				{
-					if ( GetRenderSystem()->GetGpuInformations().CheckSupport( ShaderModel( i ) ) )
-					{
-						m_shaders[size_t( p_target )]->SetFile( ShaderModel( i ), p_pathFile );
-					}
-				}
-			}
-			else
-			{
-				m_shaders[size_t( p_target )]->SetFile( p_eModel, p_pathFile );
-			}
+			m_shaders[size_t( p_target )]->SetFile( p_pathFile );
 		}
 		else
 		{
@@ -290,14 +271,14 @@ namespace Castor3D
 		ResetToCompile();
 	}
 
-	Path ShaderProgram::GetFile( ShaderType p_target, ShaderModel p_eModel )const
+	Path ShaderProgram::GetFile( ShaderType p_target )const
 	{
 		REQUIRE( m_shaders[size_t( p_target )] );
 		Path l_pathReturn;
 
 		if ( m_shaders[size_t( p_target )] )
 		{
-			l_pathReturn = m_shaders[size_t( p_target )]->GetFile( p_eModel );
+			l_pathReturn = m_shaders[size_t( p_target )]->GetFile();
 		}
 
 		return l_pathReturn;
@@ -316,24 +297,11 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderProgram::SetSource( ShaderType p_target, ShaderModel p_eModel, String const & p_strSource )
+	void ShaderProgram::SetSource( ShaderType p_target, String const & p_source )
 	{
 		if ( m_shaders[size_t( p_target )] )
 		{
-			if ( p_eModel == ShaderModel::eCount )
-			{
-				for ( uint8_t i = 0; i < uint8_t( ShaderModel::eCount ); ++i )
-				{
-					if ( GetRenderSystem()->GetGpuInformations().CheckSupport( ShaderModel( i ) ) )
-					{
-						m_shaders[size_t( p_target )]->SetSource( ShaderModel( i ), p_strSource );
-					}
-				}
-			}
-			else
-			{
-				m_shaders[size_t( p_target )]->SetSource( p_eModel, p_strSource );
-			}
+			m_shaders[size_t( p_target )]->SetSource( p_source );
 		}
 		else
 		{
@@ -343,14 +311,28 @@ namespace Castor3D
 		ResetToCompile();
 	}
 
-	String ShaderProgram::GetSource( ShaderType p_target, ShaderModel p_eModel )const
+	void ShaderProgram::SetSource( ShaderType p_target, GLSL::Shader const & p_source )
+	{
+		if ( m_shaders[size_t( p_target )] )
+		{
+			m_shaders[size_t( p_target )]->SetSource( p_source );
+		}
+		else
+		{
+			CASTOR_EXCEPTION( "Setting the source of a non available shader object" );
+		}
+
+		ResetToCompile();
+	}
+
+	String ShaderProgram::GetSource( ShaderType p_target )const
 	{
 		REQUIRE( m_shaders[size_t( p_target )] );
 		String l_strReturn;
 
 		if ( m_shaders[size_t( p_target )] )
 		{
-			l_strReturn = m_shaders[size_t( p_target )]->GetSource( p_eModel );
+			l_strReturn = m_shaders[size_t( p_target )]->GetSource();
 		}
 
 		return l_strReturn;
@@ -423,42 +405,6 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	ShaderStorageBuffer & ShaderProgram::CreateStorageBuffer( Castor::String const & p_name, ShaderTypeFlags const & p_shaderMask )
-	{
-		auto l_it = m_storageBuffersByName.find( p_name );
-
-		if ( l_it == m_storageBuffersByName.end() )
-		{
-			auto l_ssbo = std::make_shared< ShaderStorageBuffer >( p_name, *this );
-			m_listStorageBuffers.push_back( l_ssbo );
-			l_it = m_storageBuffersByName.insert( { p_name, l_ssbo } ).first;
-
-			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); ++i )
-			{
-				if ( CheckFlag( p_shaderMask, uint8_t( 0x01 << i ) ) )
-				{
-					REQUIRE( m_shaders[i] );
-					m_storageBuffers[i].push_back( l_ssbo );
-				}
-			}
-		}
-
-		return *l_it->second.lock();
-	}
-
-	ShaderStorageBufferSPtr ShaderProgram::FindStorageBuffer( Castor::String const & p_name )const
-	{
-		ShaderStorageBufferSPtr l_buffer;
-		auto l_it = m_storageBuffersByName.find( p_name );
-
-		if ( l_it != m_storageBuffersByName.end() )
-		{
-			l_buffer = l_it->second.lock();
-		}
-
-		return l_buffer;
 	}
 
 	AtomicCounterBuffer & ShaderProgram::CreateAtomicCounterBuffer( String const & p_name, ShaderTypeFlags const & p_shaderMask )
@@ -544,7 +490,7 @@ namespace Castor3D
 				{
 					StringStream l_source;
 					l_source << format::line_prefix();
-					l_source << l_shader->GetLoadedSource();
+					l_source << l_shader->GetSource();
 					Logger::LogDebug( l_source.str() );
 					l_shader->Destroy();
 				}
