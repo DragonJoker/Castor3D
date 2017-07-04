@@ -8,6 +8,7 @@
 #include "CtrlSlider.hpp"
 #include "CtrlStatic.hpp"
 
+#include <Engine.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Overlay/BorderPanelOverlay.hpp>
