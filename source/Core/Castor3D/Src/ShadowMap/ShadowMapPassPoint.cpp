@@ -55,10 +55,10 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoRenderNodes( SceneRenderNodes & p_nodes )
 	{
-		RenderPass::DoRender( p_nodes.m_instancedNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled );
 		RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled );
-		RenderPass::DoRender( p_nodes.m_skinningNodes.m_backCulled );
-		RenderPass::DoRender( p_nodes.m_instancedSkinningNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_skinnedNodes.m_backCulled );
+		RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
 		RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled );
 		RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled );
 	}

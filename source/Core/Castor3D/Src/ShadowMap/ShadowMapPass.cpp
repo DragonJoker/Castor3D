@@ -42,10 +42,10 @@ namespace Castor3D
 	void ShadowMapPass::DoRenderNodes( SceneRenderNodes & p_nodes
 		, Camera const & p_camera )
 	{
-		RenderPass::DoRender( p_nodes.m_instancedNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_camera );
 		RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled, p_camera );
-		RenderPass::DoRender( p_nodes.m_skinningNodes.m_backCulled, p_camera );
-		RenderPass::DoRender( p_nodes.m_instancedSkinningNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_skinnedNodes.m_backCulled, p_camera );
+		RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_camera );
 		RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled, p_camera );
 		RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera );
 	}

@@ -1,4 +1,4 @@
-#include "PickingPass.hpp"
+﻿#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -230,10 +230,10 @@ namespace Castor3D
 	{
 		m_matrixUbo.Update( p_camera.GetView()
 			, p_camera.GetViewport().GetProjection() );
-		DoRender( p_nodes.m_scene, p_nodes.m_instancedNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_instantiatedStaticNodes.m_backCulled );
 		DoRender( p_nodes.m_scene, p_nodes.m_staticNodes.m_backCulled );
-		DoRender( p_nodes.m_scene, p_nodes.m_skinningNodes.m_backCulled );
-		DoRender( p_nodes.m_scene, p_nodes.m_instancedSkinningNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_skinnedNodes.m_backCulled );
+		DoRender( p_nodes.m_scene, p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
 		DoRender( p_nodes.m_scene, p_nodes.m_morphingNodes.m_backCulled );
 		DoRender( p_nodes.m_scene, p_nodes.m_billboardNodes.m_backCulled );
 	}
@@ -278,7 +278,7 @@ namespace Castor3D
 			switch ( l_return )
 			{
 			case NodeType::eInstantiated:
-				DoPickFromList( p_nodes.m_instancedNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				DoPickFromList( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eStatic:
@@ -286,7 +286,7 @@ namespace Castor3D
 				break;
 
 			case NodeType::eSkinning:
-				DoPickFromList( p_nodes.m_skinningNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
+				DoPickFromList( p_nodes.m_skinnedNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eMorphing:

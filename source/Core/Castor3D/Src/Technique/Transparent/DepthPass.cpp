@@ -87,25 +87,25 @@ namespace Castor3D
 		, Camera const & p_camera )const
 	{
 		if ( !p_nodes.m_staticNodes.m_backCulled.empty()
-			|| !p_nodes.m_instancedNodes.m_backCulled.empty()
-			|| !p_nodes.m_skinningNodes.m_backCulled.empty()
-			|| !p_nodes.m_instancedSkinningNodes.m_backCulled.empty()
+			|| !p_nodes.m_instantiatedStaticNodes.m_backCulled.empty()
+			|| !p_nodes.m_skinnedNodes.m_backCulled.empty()
+			|| !p_nodes.m_instantiatedSkinnedNodes.m_backCulled.empty()
 			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
 			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
 			m_matrixUbo.Update( p_camera.GetView()
 				, p_camera.GetViewport().GetProjection() );
-			DoRender( p_nodes.m_instancedNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_instantiatedStaticNodes.m_frontCulled, p_camera );
 			DoRender( p_nodes.m_staticNodes.m_frontCulled, p_camera );
-			DoRender( p_nodes.m_skinningNodes.m_frontCulled, p_camera );
-			DoRender( p_nodes.m_instancedSkinningNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_skinnedNodes.m_frontCulled, p_camera );
+			DoRender( p_nodes.m_instantiatedSkinnedNodes.m_frontCulled, p_camera );
 			DoRender( p_nodes.m_morphingNodes.m_frontCulled, p_camera );
 			DoRender( p_nodes.m_billboardNodes.m_frontCulled, p_camera );
 
-			DoRender( p_nodes.m_instancedNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_camera );
 			DoRender( p_nodes.m_staticNodes.m_backCulled, p_camera );
-			DoRender( p_nodes.m_skinningNodes.m_backCulled, p_camera );
-			DoRender( p_nodes.m_instancedSkinningNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_skinnedNodes.m_backCulled, p_camera );
+			DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_camera );
 			DoRender( p_nodes.m_morphingNodes.m_backCulled, p_camera );
 			DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera );
 		}

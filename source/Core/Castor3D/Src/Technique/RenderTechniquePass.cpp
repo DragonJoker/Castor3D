@@ -189,25 +189,25 @@ namespace Castor3D
 		, RenderInfo & p_info )const
 	{
 		if ( !p_nodes.m_staticNodes.m_backCulled.empty()
-			|| !p_nodes.m_instancedNodes.m_backCulled.empty()
-			|| !p_nodes.m_skinningNodes.m_backCulled.empty()
-			|| !p_nodes.m_instancedSkinningNodes.m_backCulled.empty()
+			|| !p_nodes.m_instantiatedStaticNodes.m_backCulled.empty()
+			|| !p_nodes.m_skinnedNodes.m_backCulled.empty()
+			|| !p_nodes.m_instantiatedSkinnedNodes.m_backCulled.empty()
 			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
 			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
 		{
 			m_matrixUbo.Update( p_camera.GetView()
 				, p_camera.GetViewport().GetProjection() );
-			RenderPass::DoRender( p_nodes.m_instancedNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_frontCulled, p_camera, p_depthMaps );
 			RenderPass::DoRender( p_nodes.m_staticNodes.m_frontCulled, p_camera, p_depthMaps );
-			RenderPass::DoRender( p_nodes.m_skinningNodes.m_frontCulled, p_camera, p_depthMaps );
-			RenderPass::DoRender( p_nodes.m_instancedSkinningNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_skinnedNodes.m_frontCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_frontCulled, p_camera, p_depthMaps );
 			RenderPass::DoRender( p_nodes.m_morphingNodes.m_frontCulled, p_camera, p_depthMaps );
 			RenderPass::DoRender( p_nodes.m_billboardNodes.m_frontCulled, p_camera, p_depthMaps );
 
-			RenderPass::DoRender( p_nodes.m_instancedNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
 			RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			RenderPass::DoRender( p_nodes.m_skinningNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			RenderPass::DoRender( p_nodes.m_instancedSkinningNodes.m_backCulled, p_camera, p_depthMaps );
+			RenderPass::DoRender( p_nodes.m_skinnedNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+			RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_camera, p_depthMaps );
 			RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_info );
 			RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_info );
 		}

@@ -952,10 +952,10 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() )
+				if ( !p_renderNodes.empty()
+					&& p_submesh.HasInstancedBonesBuffer() 
+					&& p_submesh.HasMatrixBuffer() )
 				{
-					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
-					REQUIRE( p_submesh.HasMatrixBuffer() );
 					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
 					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
 					REQUIRE( l_count1 == l_count2 );
@@ -977,10 +977,10 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() )
+				if ( !p_renderNodes.empty()
+					&& p_submesh.HasInstancedBonesBuffer() 
+					&& p_submesh.HasMatrixBuffer() )
 				{
-					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
-					REQUIRE( p_submesh.HasMatrixBuffer() );
 					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
 					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
 					REQUIRE( l_count1 == l_count2 );
@@ -1001,10 +1001,10 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() )
+				if ( !p_renderNodes.empty()
+					&& p_submesh.HasInstancedBonesBuffer() 
+					&& p_submesh.HasMatrixBuffer() )
 				{
-					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
-					REQUIRE( p_submesh.HasMatrixBuffer() );
 					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
 					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
 					REQUIRE( l_count1 == l_count2 );
@@ -1028,10 +1028,10 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() )
+				if ( !p_renderNodes.empty()
+					&& p_submesh.HasInstancedBonesBuffer() 
+					&& p_submesh.HasMatrixBuffer() )
 				{
-					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
-					REQUIRE( p_submesh.HasMatrixBuffer() );
 					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
 					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
 					REQUIRE( l_count1 == l_count2 );
@@ -1056,10 +1056,10 @@ namespace Castor3D
 				, Submesh & p_submesh
 				, SkinningRenderNodeArray & p_renderNodes )
 			{
-				if ( !p_renderNodes.empty() )
+				if ( !p_renderNodes.empty()
+					&& p_submesh.HasInstancedBonesBuffer() 
+					&& p_submesh.HasMatrixBuffer() )
 				{
-					REQUIRE( p_submesh.HasInstancedBonesBuffer() );
-					REQUIRE( p_submesh.HasMatrixBuffer() );
 					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_info );
 					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer(), p_info );
 					REQUIRE( l_count1 == l_count2 );
