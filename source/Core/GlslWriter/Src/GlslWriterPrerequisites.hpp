@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -296,6 +296,8 @@ namespace GLSL
 	};
 
 	GlslWriter_API void WriteLine( GlslWriter & p_writer, Castor::String const & p_line );
+	GlslWriter_API void RegisterName( GlslWriter & p_writer, Castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void CheckNameExists( GlslWriter & p_writer, Castor::String const & p_name, TypeName p_type );
 }
 
 #undef DECLARE_GLSL_PARAMETER

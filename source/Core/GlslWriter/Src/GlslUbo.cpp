@@ -14,27 +14,15 @@ namespace GLSL
 		, m_block( nullptr )
 		, m_info{ p_layout, p_bind }
 	{
-		if ( m_writer.HasConstantsBuffers() )
-		{
-			m_stream << std::endl;
-			m_stream << m_writer.m_keywords->GetLayout( p_layout, p_bind ) << m_writer.m_uniform << p_name << std::endl;
-			m_writer.m_uniform.clear();
-			m_block = std::make_unique< IndentBlock >( m_stream );
-			++m_writer.m_uniformIndex;
-		}
+		m_stream << std::endl;
+		m_stream << m_writer.m_keywords->GetLayout( p_layout, p_bind ) << cuT( "uniform " ) << p_name << std::endl;
+		m_block = std::make_unique< IndentBlock >( m_stream );
 	}
 
 	void Ubo::End()
 	{
 		m_block.reset();
-		m_writer.m_uniform = cuT( "uniform " );
-
-		if ( m_writer.HasConstantsBuffers() )
-		{
-			m_stream << cuT( ";" );
-		}
-
-		m_stream << std::endl;
+		m_stream << cuT( ";" ) << std::endl;
 
 		if ( m_count )
 		{

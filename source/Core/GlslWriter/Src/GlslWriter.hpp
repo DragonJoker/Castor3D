@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -322,7 +322,6 @@ namespace GLSL
 		Castor::String m_uniform;
 		std::unique_ptr< KeywordsBase > m_keywords;
 		Castor::StringStream m_stream;
-		uint32_t m_uniformIndex{ 0u };
 		uint32_t m_attributeIndex{ 0u };
 		uint32_t m_layoutIndex{ 0u };
 		LightingModelFactory m_lightingFactory;

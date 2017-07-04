@@ -1,12 +1,10 @@
-﻿#include "GlslStruct.hpp"
+#include "GlslStruct.hpp"
 
 #include "GlslIndentBlock.hpp"
 #include "GlslWriter.hpp"
 
 namespace GLSL
 {
-	using Castor::operator<<;
-
 	Struct::Struct( GlslWriter & p_writer, Castor::String const & p_name )
 		: m_writer( p_writer )
 		, m_name( p_name )

@@ -1,4 +1,4 @@
-﻿#include "GlslWriter.hpp"
+#include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
 #include "GlslLighting.hpp"
@@ -7,10 +7,6 @@
 
 namespace GLSL
 {
-	using Castor::operator<<;
-
-	//*****************************************************************************************
-
 	GlslWriter::GlslWriter( GlslWriterConfig const & p_config )
 		: m_keywords( GLSL::KeywordsBase::Get( p_config ) )
 		, m_uniform( cuT( "uniform " ) )
@@ -22,7 +18,6 @@ namespace GLSL
 
 	GlslWriter::GlslWriter( GlslWriter const & p_rhs )
 		: m_keywords( GLSL::KeywordsBase::Get( p_rhs.m_config ) )
-		, m_uniformIndex( p_rhs.m_uniformIndex )
 		, m_attributeIndex( p_rhs.m_attributeIndex )
 		, m_layoutIndex( p_rhs.m_layoutIndex )
 		, m_uniform( p_rhs.m_uniform )
@@ -33,7 +28,6 @@ namespace GLSL
 
 	GlslWriter & GlslWriter::operator=( GlslWriter const & p_rhs )
 	{
-		m_uniformIndex = p_rhs.m_uniformIndex;
 		m_attributeIndex = p_rhs.m_attributeIndex;
 		m_layoutIndex = p_rhs.m_layoutIndex;
 		m_uniform = p_rhs.m_uniform;
