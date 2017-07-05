@@ -1,7 +1,9 @@
-#include "GlslWriter.hpp"
+﻿#include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
 #include "GlslLighting.hpp"
+#include "GlslPhongLighting.hpp"
+#include "GlslCookTorranceLighting.hpp"
 
 #include <Log/Logger.hpp>
 
@@ -13,6 +15,7 @@ namespace GLSL
 		, m_config( p_config )
 	{
 		m_lightingFactory.Register( PhongLightingModel::Name, &PhongLightingModel::Create );
+		m_lightingFactory.Register( CookTorranceLightingModel::Name, &CookTorranceLightingModel::Create );
 		*this << GLSL::Version() << Endl();
 	}
 
@@ -62,30 +65,30 @@ namespace GLSL
 		}
 	}
 
-	std::unique_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows )
+	std::shared_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		std::shared_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
 		l_lighting->DeclareModel();
 		return l_lighting;
 	}
 
-	std::unique_ptr< LightingModel > GlslWriter::CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows )
+	std::shared_ptr< LightingModel > GlslWriter::CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		std::shared_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
 		l_lighting->DeclareDirectionalModel();
 		return l_lighting;
 	}
 
-	std::unique_ptr< LightingModel > GlslWriter::CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows )
+	std::shared_ptr< LightingModel > GlslWriter::CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		std::shared_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
 		l_lighting->DeclarePointModel();
 		return l_lighting;
 	}
 
-	std::unique_ptr< LightingModel > GlslWriter::CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows )
+	std::shared_ptr< LightingModel > GlslWriter::CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		std::shared_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
 		l_lighting->DeclareSpotModel();
 		return l_lighting;
 	}

@@ -104,9 +104,9 @@ namespace Castor3D
 			UBO_GPINFO( l_writer );
 			UBO_HDR_CONFIG( l_writer );
 			auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
-			auto c3d_mapNormal = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
-			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-			auto c3d_mapEmissive = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+			auto c3d_mapNormal = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData1 ) );
+			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData2 ) );
+			auto c3d_mapEmissive = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData4 ) );
 			auto c3d_mapPostLight = l_writer.DeclUniform< Sampler2D >( cuT( "c3d_mapPostLight" ) );
 			auto c3d_mapEnvironment = l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment, 16u );
 			auto c3d_fresnelBias = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
@@ -206,9 +206,9 @@ namespace Castor3D
 			l_result->SetSource( ShaderType::eVertex, l_vtx );
 			l_result->SetSource( ShaderType::ePixel, l_pxl );
 			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDepth ), ShaderType::ePixel )->SetValue( 0u );
-			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel )->SetValue( 1u );
-			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDiffuse ), ShaderType::ePixel )->SetValue( 2u );
-			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eEmissive ), ShaderType::ePixel )->SetValue( 3u );
+			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eData1 ), ShaderType::ePixel )->SetValue( 1u );
+			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eData2 ), ShaderType::ePixel )->SetValue( 2u );
+			l_result->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eData4 ), ShaderType::ePixel )->SetValue( 3u );
 			l_result->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->SetValue( 4u );
 			int const c = int( c_environmentStart );
 			l_result->CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel, 16u )->SetValues(
@@ -345,14 +345,14 @@ namespace Castor3D
 		auto & l_maps = p_scene.GetEnvironmentMaps();
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
-		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Bind( 1u );
-		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Bind( 1u );
-		p_gp[size_t( DsTexture::eDiffuse )]->GetTexture()->Bind( 2u );
-		p_gp[size_t( DsTexture::eDiffuse )]->GetSampler()->Bind( 2u );
-		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Bind( 3u );
-		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Bind( 3u );
+		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 1u );
+		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Bind( 1u );
+		p_gp[size_t( DsTexture::eData2 )]->GetTexture()->Bind( 2u );
+		p_gp[size_t( DsTexture::eData2 )]->GetSampler()->Bind( 2u );
+		p_gp[size_t( DsTexture::eData4 )]->GetTexture()->Bind( 3u );
+		p_gp[size_t( DsTexture::eData4 )]->GetSampler()->Bind( 3u );
 		p_lp.Bind( 4u );
-		p_gp[size_t( DsTexture::eSpecular )]->GetSampler()->Bind( 4u );
+		p_gp[size_t( DsTexture::eData3 )]->GetSampler()->Bind( 4u );
 		auto l_index = c_environmentStart;
 
 		for ( auto & l_map : l_maps )
@@ -373,14 +373,14 @@ namespace Castor3D
 			++l_index;
 		}
 
-		p_gp[size_t( DsTexture::eSpecular )]->GetTexture()->Unbind( 4u );
+		p_gp[size_t( DsTexture::eData3 )]->GetTexture()->Unbind( 4u );
 		p_lp.Unbind( 4u );
-		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Unbind( 3u );
-		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Unbind( 3u );
-		p_gp[size_t( DsTexture::eDiffuse )]->GetTexture()->Unbind( 2u );
-		p_gp[size_t( DsTexture::eDiffuse )]->GetSampler()->Unbind( 2u );
-		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Unbind( 1u );
-		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Unbind( 1u );
+		p_gp[size_t( DsTexture::eData4 )]->GetTexture()->Unbind( 3u );
+		p_gp[size_t( DsTexture::eData4 )]->GetSampler()->Unbind( 3u );
+		p_gp[size_t( DsTexture::eData2 )]->GetTexture()->Unbind( 2u );
+		p_gp[size_t( DsTexture::eData2 )]->GetSampler()->Unbind( 2u );
+		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Unbind( 1u );
+		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
 		m_frameBuffer->Unbind();

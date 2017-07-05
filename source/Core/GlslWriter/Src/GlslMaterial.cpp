@@ -19,7 +19,8 @@ namespace GLSL
 		, int p_offsetOP, int p_indexOP
 		, int p_offsetGM, int p_indexGM
 		, int p_offsetEX, int p_indexEX
-		, int p_offsetAR, int p_indexAR )
+		, int p_offsetAR, int p_indexAR
+		, int p_offsetEM, int p_indexEM )
 	{
 		auto c3d_materials = m_writer.DeclUniform< SamplerBuffer >( PassBufferName );
 		
@@ -99,6 +100,12 @@ namespace GLSL
 			{
 				m_writer.Return( m_float( p_index, Int( p_offsetAR ), Int( p_indexAR ) ) );
 			}, InInt{ &m_writer, cuT( "p_index" ) } );
+
+		m_emissive = m_writer.ImplementFunction< Float >( cuT( "Mat_GetEmissive" )
+			, [this, p_offsetEM, p_indexEM]( Int const & p_index )
+		{
+			m_writer.Return( m_float( p_index, Int( p_offsetEM ), Int( p_indexEM ) ) );
+		}, InInt{ &m_writer, cuT( "p_index" ) } );
 	}
 
 	Float Materials::GetRefractionRatio( Int const & p_index )const
@@ -136,6 +143,11 @@ namespace GLSL
 		return m_alphaRef( p_index );
 	}
 
+	Float Materials::GetEmissive( Int const & p_index )const
+	{
+		return m_emissive( p_index );
+	}
+
 	//*********************************************************************************************
 
 	LegacyMaterials::LegacyMaterials( GlslWriter & p_writer )
@@ -152,6 +164,7 @@ namespace GLSL
 			, 3, 1
 			, 3, 2
 			, 3, 3
+			, 2, 3
 		);
 		m_diffuse = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetDiffuse" )
 			, [this]( Int const & p_index )
@@ -169,12 +182,6 @@ namespace GLSL
 			, [this]( Int const & p_index )
 			{
 				m_writer.Return( m_vec3( p_index, 2_i, 0_i ) );
-			}, InInt{ &m_writer, cuT( "p_index" ) } );
-
-		m_emissive = m_writer.ImplementFunction< Float >( cuT( "Mat_GetEmissive" )
-			, [this]( Int const & p_index )
-			{
-				m_writer.Return( m_float( p_index, 2_i, 3_i ) );
 			}, InInt{ &m_writer, cuT( "p_index" ) } );
 
 		m_shininess = m_writer.ImplementFunction< Float >( cuT( "Mat_GetShininess" )
@@ -199,14 +206,61 @@ namespace GLSL
 		return m_specular( p_index );
 	}
 
-	Float LegacyMaterials::GetEmissive( Int const & p_index )const
-	{
-		return m_emissive( p_index );
-	}
-
 	Float LegacyMaterials::GetShininess( Int const & p_index )const
 	{
 		return m_shininess( p_index );
+	}
+
+	//*********************************************************************************************
+
+	PbrMaterials::PbrMaterials( GlslWriter & p_writer )
+		: Materials{ p_writer }
+	{
+	}
+
+	void PbrMaterials::Declare()
+	{
+		DoDeclare( 0, 0
+			, 0, 1
+			, 0, 2
+			, 0, 3
+			, 2, 2
+			, 2, 3
+			, 3, 1
+			, 2, 1
+		);
+		m_albedo = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetAlbedo" )
+			, [this]( Int const & p_index )
+		{
+			m_writer.Return( m_vec3( p_index, 1_i, 0_i ) );
+		}, InInt{ &m_writer, cuT( "p_index" ) } );
+
+		m_roughness = m_writer.ImplementFunction< Float >( cuT( "Mat_GetRoughness" )
+			, [this]( Int const & p_index )
+		{
+			m_writer.Return( m_float( p_index, 1_i, 3_i ) );
+		}, InInt{ &m_writer, cuT( "p_index" ) } );
+
+		m_reflectance = m_writer.ImplementFunction< Float >( cuT( "Mat_GetReflectance" )
+			, [this]( Int const & p_index )
+		{
+			m_writer.Return( m_float( p_index, 2_i, 0_i ) );
+		}, InInt{ &m_writer, cuT( "p_index" ) } );
+	}
+
+	Vec3 PbrMaterials::GetAlbedo( Int const & p_index )const
+	{
+		return m_albedo( p_index );
+	}
+
+	Float PbrMaterials::GetRoughness( Int const & p_index )const
+	{
+		return m_roughness( p_index );
+	}
+
+	Float PbrMaterials::GetReflectance( Int const & p_index )const
+	{
+		return m_reflectance( p_index );
 	}
 
 	//*********************************************************************************************

@@ -5,7 +5,7 @@ namespace GLSL
 	{
 		RegisterName( m_writer, p_name, name_of< T >::value );
 		m_info.RegisterMember( p_name, name_of< T >::value );
-		m_stream << T().m_type << p_name << cuT( ";" ) << std::endl;
+		m_stream << type_of< T >::type().m_type << p_name << cuT( ";" ) << std::endl;
 		m_count++;
 		return T( &m_writer, p_name );
 	}
@@ -15,7 +15,7 @@ namespace GLSL
 	{
 		RegisterName( m_writer, p_name, name_of< T >::value );
 		m_info.RegisterMember( p_name, name_of< T >::value );
-		m_stream << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << std::endl;
+		m_stream << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << std::endl;
 		m_count++;
 		return Array< T >( &m_writer, p_name, p_dimension );
 	}
@@ -25,7 +25,7 @@ namespace GLSL
 	{
 		RegisterName( m_writer, p_name, name_of< T >::value );
 		m_info.RegisterMember( p_name, name_of< T >::value );
-		m_stream << T().m_type << p_name << cuT( "[];" ) << std::endl;
+		m_stream << type_of< T >::type().m_type << p_name << cuT( "[];" ) << std::endl;
 		m_count++;
 		return Array< T >( &m_writer, p_name, 0xFFFFFFFF );
 	}
@@ -38,7 +38,7 @@ namespace GLSL
 
 		if ( p_enabled )
 		{
-			m_stream << T().m_type << p_name << cuT( ";" ) << std::endl;
+			m_stream << type_of< T >::type().m_type << p_name << cuT( ";" ) << std::endl;
 			m_count++;
 		}
 
@@ -53,7 +53,7 @@ namespace GLSL
 
 		if ( p_enabled )
 		{
-			m_stream << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << std::endl;
+			m_stream << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << std::endl;
 			m_count++;
 		}
 
@@ -68,7 +68,7 @@ namespace GLSL
 
 		if ( p_enabled )
 		{
-			m_stream << T().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << std::endl;
+			m_stream << type_of< T >::type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << std::endl;
 			m_count++;
 		}
 

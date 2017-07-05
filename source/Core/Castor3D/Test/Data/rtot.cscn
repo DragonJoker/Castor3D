@@ -2,6 +2,7 @@ debug_overlays true
 
 scene "TextureScene"
 {
+	materials legacy
 	ambient_light 0.2 0.2 0.2
 	background_colour 0.5 0.0 0.0 1.0
 	include "common_materials.cscn"
@@ -65,6 +66,7 @@ scene "TextureScene"
 
 scene "FinalScene"
 {
+	materials legacy
 	ambient_light 0.2 0.2 0.2
 	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0 0 0 1
@@ -84,7 +86,6 @@ scene "FinalScene"
 
 	material "RToTMaterial"
 	{
-		type legacy
 		pass
 		{
 			diffuse 1.0 1.0 1.0 1.0

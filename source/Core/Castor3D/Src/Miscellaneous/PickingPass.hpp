@@ -214,7 +214,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdate
 		 */
-		C3D_API void DoUpdate( RenderQueueArray & p_queues )override;
+		void DoUpdate( RenderQueueArray & p_queues )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
@@ -222,12 +222,26 @@ namespace Castor3D
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
+		 */
+		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetPbrPixelShaderSource
+		 */
+		GLSL::Shader DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
 		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+			, ComparisonFunc p_alphaFunc )const;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */

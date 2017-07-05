@@ -148,9 +148,16 @@ namespace Castor3D
 			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetPbrPixelShaderSource
+		 */
+		GLSL::Shader DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const override;
@@ -169,6 +176,12 @@ namespace Castor3D
 		//!\~english	The shadow map used for pont lights.
 		//!\~french		Le mappage d'ombres utilisée pour les lumières de type point.
 		DeferredShadowMapPoint m_pointShadowMap;
+
+	private:
+		static Castor::String const Output1;
+		static Castor::String const Output2;
+		static Castor::String const Output3;
+		static Castor::String const Output4;
 	};
 }
 

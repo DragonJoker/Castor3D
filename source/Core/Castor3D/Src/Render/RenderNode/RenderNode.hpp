@@ -78,6 +78,11 @@ namespace Castor3D
 			return m_map.insert( p_pair );
 		}
 
+		inline auto emplace( key_type && p_key, mapped_type && p_value )
+		{
+			return m_map.emplace( std::move( p_key ), std::move( p_value ) );
+		}
+
 	private:
 		std::map< key_type, mapped_type > m_map;
 	};

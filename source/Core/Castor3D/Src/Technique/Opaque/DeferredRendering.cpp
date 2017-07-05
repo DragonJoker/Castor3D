@@ -178,10 +178,10 @@ namespace Castor3D
 		m_frameBuffer.Bind();
 		auto l_index = 0;
 		l_context.RenderDepth( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eDepth )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eNormal )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eDiffuse )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eSpecular )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eEmissive )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eData1 )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eData2 )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eData3 )]->GetTexture() );
+		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eData4 )]->GetTexture() );
 		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_lightingPass->GetResult().GetTexture() );
 
 		if ( m_ssaoConfig.m_enabled )

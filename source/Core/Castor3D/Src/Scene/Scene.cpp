@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+﻿#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -321,6 +321,7 @@ namespace Castor3D
 		, Named{ p_name }
 		, m_listener{ p_engine.GetFrameListenerCache().Add( cuT( "Scene_" ) + p_name + string::to_string( (size_t)this ) ) }
 		, m_animationUpdater{ std::max( 2u, p_engine.GetCpuInformations().CoreCount() - ( p_engine.IsThreaded() ? 2u : 1u ) ) }
+		, m_materialType{ MaterialType::eLegacy }
 	{
 		auto l_mergeObject = [this]( auto const & p_source
 			, auto & p_destination
@@ -923,6 +924,13 @@ namespace Castor3D
 				l_result |= SceneFlag::eShadowFilterStratifiedPoisson;
 				break;
 			}
+		}
+
+		switch ( m_materialType )
+		{
+		case MaterialType::ePbr:
+			l_result |= SceneFlag::ePbr;
+			break;
 		}
 
 		return l_result;

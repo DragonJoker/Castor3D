@@ -4,21 +4,21 @@ namespace GLSL
 	inline void Struct::DeclMember( Castor::String const & p_name )
 	{
 		RegisterName( m_writer, m_name + cuT( "::" ) + p_name, name_of< T >::value );
-		m_writer << T().m_type << p_name << cuT( ";" ) << Endl();
+		m_writer << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 	}
 
 	template< typename T >
 	inline void Struct::DeclMember( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		RegisterName( m_writer, m_name + cuT( "::" ) + p_name, name_of< T >::value );
-		m_writer << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		m_writer << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 	}
 
 	template< typename T >
 	inline void Struct::DeclMemberArray( Castor::String const & p_name )
 	{
 		RegisterName( m_writer, m_name + cuT( "::" ) + p_name, name_of< T >::value );
-		m_writer << T().m_type << p_name << cuT( "[];" ) << Endl();
+		m_writer << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
 	}
 
 	template< typename T >

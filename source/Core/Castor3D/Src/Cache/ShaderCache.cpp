@@ -1,4 +1,4 @@
-#include "ShaderCache.hpp"
+﻿#include "ShaderCache.hpp"
 
 #include "Engine.hpp"
 
@@ -154,19 +154,9 @@ namespace Castor3D
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::Lights, ShaderType::ePixel )->SetValue( Pass::LightBufferIndex );
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
-		{
-			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-		}
-
 		if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
 		{
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapNormal, ShaderType::ePixel );
-		}
-
-		if ( CheckFlag( p_textureFlags, TextureChannel::eSpecular ) )
-		{
-			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapSpecular, ShaderType::ePixel );
 		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
@@ -179,20 +169,52 @@ namespace Castor3D
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel );
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eGloss ) )
-		{
-			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapGloss, ShaderType::ePixel );
-		}
-
 		if ( CheckFlag( p_textureFlags, TextureChannel::eHeight ) )
 		{
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapHeight, ShaderType::ePixel );
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
-			|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
+		if ( CheckFlag( p_programFlags, ProgramFlag::ePbr ) )
 		{
+			if ( CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) )
+			{
+				p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapAlbedo, ShaderType::ePixel );
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eMetallic ) )
+			{
+				p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapMetallic, ShaderType::ePixel );
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eRoughness ) )
+			{
+				p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapRoughness, ShaderType::ePixel );
+			}
+
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+		}
+		else
+		{
+			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
+				|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
+			{
+				p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
+			{
+				p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eSpecular ) )
+			{
+				p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapSpecular, ShaderType::ePixel );
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eGloss ) )
+			{
+				p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapGloss, ShaderType::ePixel );
+			}
 		}
 	}
 

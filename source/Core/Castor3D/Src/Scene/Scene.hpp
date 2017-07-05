@@ -458,6 +458,28 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The materials type.
+		 *\~french
+		 *\return		Le type des matériaux.
+		 */
+		inline MaterialType GetMaterialsType()const
+		{
+			return m_materialType;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the materials type.
+		 *\param[in]	p_type	The new value.
+		 *\~french
+		 *\brief		Définit le type des matériaux.
+		 *\param[in]	p_type	La nouvelle valeur.
+		 */
+		inline void SetMaterialsType( MaterialType p_type )
+		{
+			m_materialType = p_type;
+		}
+		/**
+		 *\~english
 		 *\return		The scene's frame listener.
 		 *\~french
 		 *\return		Le frame listener de la scène.
@@ -601,6 +623,9 @@ namespace Castor3D
 		//!\~english	The shadows parameters.
 		//!\~french		Les paramètres des ombres.
 		Shadow m_shadow;
+		//!\~english	The materials type.
+		//!\~french		Le type des matériaux.
+		MaterialType m_materialType;
 		//!\~english	The pipeline used to render the background image, if any.
 		//!\~french		Le pipeline utilisé pour le rendu de l'image de fond, s'il y en a une.
 		std::unique_ptr< TextureProjection > m_colour;

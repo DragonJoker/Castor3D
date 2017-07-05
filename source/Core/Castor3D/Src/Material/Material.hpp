@@ -57,7 +57,22 @@ namespace Castor3D
 	{
 		using Type = LegacyPass;
 	};
-
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::ePbr.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::ePbr.
+	*/
+	template<>
+	struct PassTyper< MaterialType::ePbr >
+	{
+		using Type = PbrPass;
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.1
@@ -285,7 +300,7 @@ namespace Castor3D
 		PassPtrArray m_passes;
 		//!\~english	The material type.
 		//!\~french		Le type de matériau.
-		MaterialType m_type;
+		MaterialType m_type{ MaterialType::eLegacy };
 	};
 }
 

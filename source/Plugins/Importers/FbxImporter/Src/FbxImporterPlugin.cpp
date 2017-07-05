@@ -1,4 +1,4 @@
-﻿#include "FbxImporter.hpp"
+#include "FbxImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>

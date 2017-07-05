@@ -42,6 +42,9 @@ namespace Castor3D
 		//!\~english	Traditional (pre-PBR).
 		//!\~french		Traditionnel (pré-PBR).
 		eLegacy,
+		//!\~english	PBR.
+		//!\~french		PBR.
+		ePbr,
 		CASTOR_SCOPED_ENUM_BOUNDS( eLegacy )
 	};
 	/*!
@@ -436,6 +439,9 @@ namespace Castor3D
 		//!\~english Diffuse map
 		//!\~french Map de diffuse
 		eDiffuse = 0x0001,
+		//!\~english Diffuse map
+		//!\~french Map de diffuse
+		eAlbedo = eDiffuse,
 		//!\~english Normal map
 		//!\~french Map de normales
 		eNormal = 0x0002,
@@ -445,12 +451,18 @@ namespace Castor3D
 		//!\~english Specular map
 		//!\~french Map de spéculaire
 		eSpecular = 0x0008,
+		//!\~english Specular map
+		//!\~french Map de spéculaire
+		eRoughness = eSpecular,
 		//!\~english Height map
 		//!\~french Map de hauteur
 		eHeight = 0x0010,
 		//!\~english Gloss map
 		//!\~french Map de gloss
 		eGloss = 0x0020,
+		//!\~english Specular map
+		//!\~french Map de spéculaire
+		eMetallic = eGloss,
 		//!\~english Emissive map
 		//!\~french Map d'émissive
 		eEmissive = 0x040,
@@ -476,6 +488,7 @@ namespace Castor3D
 	class Material;
 	class Pass;
 	class LegacyPass;
+	class PbrPass;
 	class Sampler;
 
 	DECLARE_SMART_PTR( TextureImage );
@@ -485,6 +498,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );
 	DECLARE_SMART_PTR( LegacyPass );
+	DECLARE_SMART_PTR( PbrPass );
 	DECLARE_SMART_PTR( Sampler );
 
 	//! Material pointer array

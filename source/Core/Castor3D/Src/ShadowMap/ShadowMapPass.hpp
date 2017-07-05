@@ -165,9 +165,16 @@ namespace Castor3D
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const override;
 		/**
-		 *\copydoc		Castor3D::ShadowMap::DoGetPixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetPbrPixelShaderSource
+		 */
+		GLSL::Shader DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const override;

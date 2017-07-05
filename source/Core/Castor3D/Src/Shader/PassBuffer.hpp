@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -117,6 +117,16 @@ namespace Castor3D
 		C3D_API void SetComponents( uint32_t p_index
 			, uint32_t p_components
 			, Castor::Colour const & p_rgb
+			, float p_a );
+		/**
+		 *\~english
+		 *\brief		Cleans up the pass and all it's dependencies.
+		 *\~french
+		 *\brief		Nettoie la passe et toutes ses dépendances.
+		 */
+		C3D_API void SetComponents( uint32_t p_index
+			, uint32_t p_components
+			, Castor::HdrColour const & p_rgb
 			, float p_a );
 		/**
 		 *\~english

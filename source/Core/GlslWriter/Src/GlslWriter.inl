@@ -1,4 +1,4 @@
-﻿namespace GLSL
+namespace GLSL
 {
 	//***********************************************************************************************
 
@@ -129,7 +129,7 @@
 	inline T GlslWriter::DeclAttribute( Castor::String const & p_name )
 	{
 		RegisterInput( p_name, name_of< T >::value );
-		*this << Attribute() << T().m_type << p_name << cuT( ";" ) << Endl();
+		*this << Attribute() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 
 		if ( std::is_same< T, Mat4 >::value )
 		{
@@ -143,7 +143,7 @@
 	inline T GlslWriter::DeclOutput( Castor::String const & p_name )
 	{
 		RegisterOutput( p_name, name_of< T >::value );
-		*this << OutputGetter< T >() << T().m_type << p_name << cuT( ";" ) << Endl();
+		*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 		return T( this, p_name );
 	}
 
@@ -151,7 +151,7 @@
 	inline T GlslWriter::DeclInput( Castor::String const & p_name )
 	{
 		RegisterInput( p_name, name_of< T >::value );
-		*this << InputGetter< T >() << T().m_type << p_name << cuT( ";" ) << Endl();
+		*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 		return T( this, p_name );
 	}
 
@@ -159,7 +159,7 @@
 	inline T GlslWriter::DeclLocale( Castor::String const & p_name )
 	{
 		RegisterName( p_name, name_of< T >::value );
-		*this << T().m_type << p_name << cuT( ";" ) << Endl();
+		*this << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 		return T( this, p_name );
 	}
 
@@ -167,7 +167,7 @@
 	inline T GlslWriter::DeclLocale( Castor::String const & p_name, T const & p_rhs )
 	{
 		RegisterName( p_name, name_of< T >::value );
-		m_stream << T().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << type_of< T >::type().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		T l_return( this, p_name );
 		return l_return;
 	}
@@ -190,7 +190,7 @@
 	inline T GlslWriter::DeclUniform( Castor::String const & p_name )
 	{
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << T().m_type << p_name << cuT( ";" ) << Endl();
+		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 		return T( this, p_name );
 	}
 
@@ -198,7 +198,7 @@
 	inline T GlslWriter::DeclUniform( Castor::String const & p_name, T const & p_rhs )
 	{
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << T().m_type << p_name << cuT( " = " );
+		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( " = " );
 		m_stream << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		return T( this, p_name );
 	}
@@ -211,7 +211,7 @@
 
 		if ( m_keywords->HasNamedFragData() )
 		{
-			*this << Layout { int( p_index ) } << OutputGetter< T >() << T().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Layout { int( p_index ) } << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 			l_name = p_name;
 		}
 		else
@@ -226,7 +226,7 @@
 	inline Array< T > GlslWriter::DeclAttribute( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		RegisterInput( p_name, name_of< T >::value );
-		*this << Attribute() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		*this << Attribute() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 
 		if ( std::is_same< T, Mat4 >::value )
 		{
@@ -240,7 +240,7 @@
 	inline Array< T > GlslWriter::DeclOutput( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		RegisterOutput( p_name, name_of< T >::value );
-		*this << OutputGetter< T >() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 
@@ -248,7 +248,7 @@
 	inline Array< T > GlslWriter::DeclOutputArray( Castor::String const & p_name )
 	{
 		RegisterOutput( p_name, name_of< T >::value );
-		*this << OutputGetter< T >() << T().m_type << p_name << cuT( "[];" ) << Endl();
+		*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
 		return Array< T >( this, p_name, 32u );
 	}
 
@@ -256,7 +256,7 @@
 	inline Array< T > GlslWriter::DeclInput( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		RegisterInput( p_name, name_of< T >::value );
-		*this << InputGetter< T >() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 
@@ -264,7 +264,7 @@
 	inline Array< T > GlslWriter::DeclInputArray( Castor::String const & p_name )
 	{
 		RegisterInput( p_name, name_of< T >::value );
-		*this << InputGetter< T >() << T().m_type << p_name << cuT( "[];" ) << Endl();
+		*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
 		return Array< T >( this, p_name, 32u );
 	}
 
@@ -272,7 +272,7 @@
 	inline Array< T > GlslWriter::DeclLocale( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		RegisterName( p_name, name_of< T >::value );
-		*this << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+		*this << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 
@@ -280,7 +280,7 @@
 	inline Array< T > GlslWriter::DeclLocale( Castor::String const & p_name, uint32_t p_dimension, T const & p_rhs )
 	{
 		RegisterName( p_name, name_of< T >::value );
-		m_stream << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		return Array< T >( this, p_name );
 	}
 
@@ -316,7 +316,7 @@
 	inline Array< T > GlslWriter::DeclUniform( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 
@@ -324,7 +324,7 @@
 	inline Array< T > GlslWriter::DeclUniformArray( Castor::String const & p_name )
 	{
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << T().m_type << p_name << cuT( "[];" ) << Endl();
+		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
 		return Array< T >( this, p_name, 0xFFFFFFFF );
 	}
 
@@ -337,7 +337,7 @@
 		}
 		
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << T().m_type << cuT( "[]( " );
+		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type_of< T >::type().m_type << cuT( "[]( " );
 		Castor::String l_sep;
 
 		for ( auto const & l_value : p_rhs )
@@ -357,7 +357,7 @@
 
 		if ( p_enabled )
 		{
-			*this << Attribute() << T().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Attribute() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 
 			if ( std::is_same< T, Mat4 >::value )
 			{
@@ -375,7 +375,7 @@
 
 		if ( p_enabled )
 		{
-			*this << OutputGetter< T >() << T().m_type << p_name << cuT( ";" ) << Endl();
+			*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -388,7 +388,7 @@
 
 		if ( p_enabled )
 		{
-			*this << InputGetter< T >() << T().m_type << p_name << cuT( ";" ) << Endl();
+			*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -401,7 +401,7 @@
 
 		if ( p_enabled )
 		{
-			*this << T().m_type << p_name << cuT( ";" ) << Endl();
+			*this << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -414,7 +414,7 @@
 
 		if ( p_enabled )
 		{
-			m_stream << T().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << type_of< T >::type().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -441,7 +441,7 @@
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << T().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -454,7 +454,7 @@
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << T().m_type << p_name << cuT( " = " );
+			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( " = " );
 			m_stream << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
@@ -468,7 +468,7 @@
 
 		if ( p_enabled )
 		{
-			*this << Attribute() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << Attribute() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 
 			if ( std::is_same< T, Mat4 >::value )
 			{
@@ -486,7 +486,7 @@
 
 		if ( p_enabled )
 		{
-			*this << OutputGetter< T >() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -499,7 +499,7 @@
 
 		if ( p_enabled )
 		{
-			*this << OutputGetter< T >() << T().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
+			*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
@@ -512,7 +512,7 @@
 
 		if ( p_enabled )
 		{
-			*this << InputGetter< T >() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -525,7 +525,7 @@
 
 		if ( p_enabled )
 		{
-			*this << InputGetter< T >() << T().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
+			*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
@@ -538,7 +538,7 @@
 
 		if ( p_enabled )
 		{
-			*this << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -551,7 +551,7 @@
 
 		if ( p_enabled )
 		{
-			m_stream << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -592,7 +592,7 @@
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -605,7 +605,7 @@
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << T().m_type << p_name << cuT( "[];" ) << Endl();
+			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
@@ -623,7 +623,7 @@
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << T().m_type << cuT( "[]( " );
+			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type_of< T >::type().m_type << cuT( "[]( " );
 			Castor::String l_sep;
 
 			for ( auto const & l_value : p_rhs )

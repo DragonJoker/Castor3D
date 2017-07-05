@@ -1,4 +1,4 @@
-#include "Config/PlatformConfig.hpp"
+﻿#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 

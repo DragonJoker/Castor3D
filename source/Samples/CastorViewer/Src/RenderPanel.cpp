@@ -12,6 +12,7 @@
 #include <Event/UserInput/UserInputListener.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
+#include <Material/PbrPass.hpp>
 #include <Mesh/Submesh.hpp>
 #include <ShadowMap/ShadowMapPass.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
@@ -96,6 +97,16 @@ namespace CastorViewer
 					l_pass->SetShininess( l_source.GetShininess() );
 				}
 				break;
+
+			case MaterialType::ePbr:
+				{
+					auto & l_source = static_cast< PbrPass const & >( p_source );
+					auto l_pass = std::static_pointer_cast< PbrPass >( l_clone );
+					l_pass->SetAlbedo( l_source.GetAlbedo() );
+					l_pass->SetRoughness( l_source.GetRoughness() );
+					l_pass->SetReflectance( l_source.GetReflectance() );
+				}
+				break;
 			}
 			
 			l_clone->SetOpacity( p_source.GetOpacity() );
@@ -166,11 +177,22 @@ namespace CastorViewer
 		{
 			p_selected.m_selectedMaterial = DoCloneMaterial( *p_selected.m_originalMaterial );
 
-			if ( p_selected.m_selectedMaterial->GetType() == MaterialType::eLegacy )
+			switch ( p_selected.m_selectedMaterial->GetType() )
 			{
-				auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
-				l_pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
-				l_pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+			case MaterialType::eLegacy:
+				{
+					auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
+					l_pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+					l_pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+				}
+				break;
+
+			case MaterialType::ePbr:
+				{
+					auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::ePbr >( 0u );
+					l_pass->SetAlbedo( HdrColour::from_predef( PredefinedColour::eMedAlphaRed ) );
+				}
+				break;
 			}
 
 			p_geometry->GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePostRender

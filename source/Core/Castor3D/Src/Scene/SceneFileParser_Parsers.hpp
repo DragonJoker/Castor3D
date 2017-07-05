@@ -73,6 +73,7 @@ namespace Castor3D
 
 	// Scene parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneInclude )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneMaterials )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkColour )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkImage )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneFont )
@@ -169,6 +170,9 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAmbient )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassEmissive )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassShininess )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlbedo )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassRoughness )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassMetallic )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlpha )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassDoubleFace )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit )

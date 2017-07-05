@@ -1,4 +1,4 @@
-﻿#include "CombinePass.hpp"
+#include "CombinePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -116,9 +116,9 @@ namespace Castor3D
 			UBO_GPINFO( l_writer );
 			auto c3d_mapColour = l_writer.DeclUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
 			auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
-			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDiffuse ) );
-			auto c3d_mapEmissive = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
-			auto c3d_mapNormal = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eNormal ) );
+			auto c3d_mapData2 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData2 ) );
+			auto c3d_mapData4 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData4 ) );
+			auto c3d_mapData1 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData1 ) );
 			auto c3d_mapSsao = l_writer.DeclUniform< Sampler2D >( cuT( "c3d_mapSsao" ), p_ssao );
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -135,10 +135,10 @@ namespace Castor3D
 				, [&]()
 				{
 					auto l_colour = l_writer.DeclLocale( cuT( "l_colour" ), texture( c3d_mapColour, vtx_texture ).xyz() );
-					auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), texture( c3d_mapDiffuse, vtx_texture ).xyz() );
+					auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), texture( c3d_mapData2, vtx_texture ).xyz() );
 					auto l_ambient = l_writer.DeclLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
-					auto l_emissive = l_writer.DeclLocale( cuT( "l_emissive" ), texture( c3d_mapEmissive, vtx_texture ).xyz() );
-					auto l_flags = l_writer.DeclLocale( cuT( "l_flags" ), texture( c3d_mapNormal, vtx_texture ).w() );
+					auto l_emissive = l_writer.DeclLocale( cuT( "l_emissive" ), texture( c3d_mapData4, vtx_texture ).xyz() );
+					auto l_flags = l_writer.DeclLocale( cuT( "l_flags" ), texture( c3d_mapData1, vtx_texture ).w() );
 					auto l_envMapIndex = l_writer.DeclLocale( cuT( "l_envMapIndex" ), 0_i );
 					auto l_receiver = l_writer.DeclLocale( cuT( "l_receiver" ), 0_i );
 					auto l_reflection = l_writer.DeclLocale( cuT( "l_reflection" ), 0_i );
@@ -187,9 +187,9 @@ namespace Castor3D
 			l_program->CreateObject( ShaderType::ePixel );
 			l_program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->SetValue( 0u );
 			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDepth ), ShaderType::ePixel )->SetValue( 1u );
-			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eDiffuse ), ShaderType::ePixel )->SetValue( 2u );
-			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eEmissive ), ShaderType::ePixel )->SetValue( 3u );
-			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eNormal ), ShaderType::ePixel )->SetValue( 4u );
+			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eData2 ), ShaderType::ePixel )->SetValue( 2u );
+			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eData4 ), ShaderType::ePixel )->SetValue( 3u );
+			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( DsTexture::eData1 ), ShaderType::ePixel )->SetValue( 4u );
 
 			if ( p_ssao )
 			{
@@ -329,12 +329,12 @@ namespace Castor3D
 		p_lp.Bind();
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 1u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 1u );
-		p_gp[size_t( DsTexture::eDiffuse )]->GetTexture()->Bind( 2u );
-		p_gp[size_t( DsTexture::eDiffuse )]->GetSampler()->Bind( 2u );
-		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Bind( 3u );
-		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Bind( 3u );
-		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Bind( 4u );
-		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Bind( 4u );
+		p_gp[size_t( DsTexture::eData2 )]->GetTexture()->Bind( 2u );
+		p_gp[size_t( DsTexture::eData2 )]->GetSampler()->Bind( 2u );
+		p_gp[size_t( DsTexture::eData4 )]->GetTexture()->Bind( 3u );
+		p_gp[size_t( DsTexture::eData4 )]->GetSampler()->Bind( 3u );
+		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 4u );
+		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Bind( 4u );
 
 		if ( m_ssaoEnabled )
 		{
@@ -350,12 +350,12 @@ namespace Castor3D
 			l_ssao->GetTexture()->Unbind( 5u );
 		}
 
-		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Unbind( 4u );
-		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Unbind( 4u );
-		p_gp[size_t( DsTexture::eEmissive )]->GetTexture()->Unbind( 3u );
-		p_gp[size_t( DsTexture::eEmissive )]->GetSampler()->Unbind( 3u );
-		p_gp[size_t( DsTexture::eDiffuse )]->GetTexture()->Unbind( 2u );
-		p_gp[size_t( DsTexture::eDiffuse )]->GetSampler()->Unbind( 2u );
+		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Unbind( 4u );
+		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 4u );
+		p_gp[size_t( DsTexture::eData4 )]->GetTexture()->Unbind( 3u );
+		p_gp[size_t( DsTexture::eData4 )]->GetSampler()->Unbind( 3u );
+		p_gp[size_t( DsTexture::eData2 )]->GetTexture()->Unbind( 2u );
+		p_gp[size_t( DsTexture::eData2 )]->GetSampler()->Unbind( 2u );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 1u );
 		p_lp.Unbind();
