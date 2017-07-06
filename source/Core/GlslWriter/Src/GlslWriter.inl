@@ -128,8 +128,9 @@ namespace GLSL
 	template< typename T >
 	inline T GlslWriter::DeclAttribute( Castor::String const & p_name )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
-		*this << Attribute() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+		*this << Attribute() << type().m_type << p_name << cuT( ";" ) << Endl();
 
 		if ( std::is_same< T, Mat4 >::value )
 		{
@@ -142,32 +143,36 @@ namespace GLSL
 	template< typename T >
 	inline T GlslWriter::DeclOutput( Castor::String const & p_name )
 	{
+		using type = typename type_of< T >::type;
 		RegisterOutput( p_name, name_of< T >::value );
-		*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+		*this << OutputGetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
 		return T( this, p_name );
 	}
 
 	template< typename T >
 	inline T GlslWriter::DeclInput( Castor::String const & p_name )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
-		*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+		*this << InputGetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
 		return T( this, p_name );
 	}
 
 	template< typename T >
 	inline T GlslWriter::DeclLocale( Castor::String const & p_name )
 	{
+		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
-		*this << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+		*this << type().m_type << p_name << cuT( ";" ) << Endl();
 		return T( this, p_name );
 	}
 
 	template< typename T >
 	inline T GlslWriter::DeclLocale( Castor::String const & p_name, T const & p_rhs )
 	{
+		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
-		m_stream << type_of< T >::type().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << type().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		T l_return( this, p_name );
 		return l_return;
 	}
@@ -189,16 +194,18 @@ namespace GLSL
 	template< typename T >
 	inline T GlslWriter::DeclUniform( Castor::String const & p_name )
 	{
+		using type = typename type_of< T >::type;
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+		*this << Uniform() << type().m_type << p_name << cuT( ";" ) << Endl();
 		return T( this, p_name );
 	}
 
 	template< typename T >
 	inline T GlslWriter::DeclUniform( Castor::String const & p_name, T const & p_rhs )
 	{
+		using type = typename type_of< T >::type;
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( " = " );
+		*this << Uniform() << type().m_type << p_name << cuT( " = " );
 		m_stream << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		return T( this, p_name );
 	}
@@ -206,12 +213,13 @@ namespace GLSL
 	template< typename T >
 	inline T GlslWriter::DeclFragData( Castor::String const & p_name, uint32_t p_index )
 	{
+		using type = typename type_of< T >::type;
 		RegisterOutput( p_name, name_of< T >::value );
 		Castor::String l_name;
 
 		if ( m_keywords->HasNamedFragData() )
 		{
-			*this << Layout { int( p_index ) } << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Layout { int( p_index ) } << OutputGetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
 			l_name = p_name;
 		}
 		else
@@ -225,8 +233,9 @@ namespace GLSL
 	template< typename T >
 	inline Array< T > GlslWriter::DeclAttribute( Castor::String const & p_name, uint32_t p_dimension )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
-		*this << Attribute() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		*this << Attribute() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 
 		if ( std::is_same< T, Mat4 >::value )
 		{
@@ -239,48 +248,54 @@ namespace GLSL
 	template< typename T >
 	inline Array< T > GlslWriter::DeclOutput( Castor::String const & p_name, uint32_t p_dimension )
 	{
+		using type = typename type_of< T >::type;
 		RegisterOutput( p_name, name_of< T >::value );
-		*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		*this << OutputGetter< T >() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 
 	template< typename T >
 	inline Array< T > GlslWriter::DeclOutputArray( Castor::String const & p_name )
 	{
+		using type = typename type_of< T >::type;
 		RegisterOutput( p_name, name_of< T >::value );
-		*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
+		*this << OutputGetter< T >() << type().m_type << p_name << cuT( "[];" ) << Endl();
 		return Array< T >( this, p_name, 32u );
 	}
 
 	template< typename T >
 	inline Array< T > GlslWriter::DeclInput( Castor::String const & p_name, uint32_t p_dimension )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
-		*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		*this << InputGetter< T >() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 
 	template< typename T >
 	inline Array< T > GlslWriter::DeclInputArray( Castor::String const & p_name )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
-		*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
+		*this << InputGetter< T >() << type().m_type << p_name << cuT( "[];" ) << Endl();
 		return Array< T >( this, p_name, 32u );
 	}
 
 	template< typename T >
 	inline Array< T > GlslWriter::DeclLocale( Castor::String const & p_name, uint32_t p_dimension )
 	{
+		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
-		*this << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+		*this << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 
 	template< typename T >
 	inline Array< T > GlslWriter::DeclLocale( Castor::String const & p_name, uint32_t p_dimension, T const & p_rhs )
 	{
+		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
-		m_stream << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		return Array< T >( this, p_name );
 	}
 
@@ -315,29 +330,32 @@ namespace GLSL
 	template< typename T >
 	inline Array< T > GlslWriter::DeclUniform( Castor::String const & p_name, uint32_t p_dimension )
 	{
+		using type = typename type_of< T >::type;
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 
 	template< typename T >
 	inline Array< T > GlslWriter::DeclUniformArray( Castor::String const & p_name )
 	{
+		using type = typename type_of< T >::type;
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
+		*this << Uniform() << type().m_type << p_name << cuT( "[];" ) << Endl();
 		return Array< T >( this, p_name, 0xFFFFFFFF );
 	}
 
 	template< typename T >
 	inline Array< T > GlslWriter::DeclUniform( Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs )
 	{
+		using type = typename type_of< T >::type;
 		if ( p_rhs.size() != p_dimension )
 		{
 			CASTOR_EXCEPTION( "Given parameters count doesn't match the array dimensions" );
 		}
 		
 		RegisterUniform( p_name, name_of< T >::value );
-		*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type_of< T >::type().m_type << cuT( "[]( " );
+		*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type().m_type << cuT( "[]( " );
 		Castor::String l_sep;
 
 		for ( auto const & l_value : p_rhs )
@@ -353,11 +371,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< T > GlslWriter::DeclAttribute( Castor::String const & p_name, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << Attribute() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Attribute() << type().m_type << p_name << cuT( ";" ) << Endl();
 
 			if ( std::is_same< T, Mat4 >::value )
 			{
@@ -371,11 +390,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< T > GlslWriter::DeclOutput( Castor::String const & p_name, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterOutput( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << OutputGetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -384,11 +404,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< T > GlslWriter::DeclInput( Castor::String const & p_name, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << InputGetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -397,11 +418,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< T > GlslWriter::DeclLocale( Castor::String const & p_name, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << type().m_type << p_name << cuT( ";" ) << Endl();
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -410,11 +432,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< T > GlslWriter::DeclLocale( Castor::String const & p_name, bool p_enabled, T const & p_rhs )
 	{
+		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			m_stream << type_of< T >::type().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << type().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -437,11 +460,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< T > GlslWriter::DeclUniform( Castor::String const & p_name, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterUniform( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( ";" ) << Endl();
+			*this << Uniform() << type().m_type << p_name << cuT( ";" ) << Endl();
 		}
 
 		return Optional< T >( this, p_name, p_enabled );
@@ -450,11 +474,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< T > GlslWriter::DeclUniform( Castor::String const & p_name, bool p_enabled, T const & p_rhs )
 	{
+		using type = typename type_of< T >::type;
 		RegisterUniform( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( " = " );
+			*this << Uniform() << type().m_type << p_name << cuT( " = " );
 			m_stream << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
@@ -464,11 +489,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclAttribute( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterAttribute( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << Attribute() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << Attribute() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 
 			if ( std::is_same< T, Mat4 >::value )
 			{
@@ -482,11 +508,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclOutput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterOutput( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << OutputGetter< T >() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -495,11 +522,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclOutputArray( Castor::String const & p_name, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterOutput( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << OutputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
+			*this << OutputGetter< T >() << type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
@@ -508,11 +536,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclInput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << InputGetter< T >() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -521,11 +550,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclInputArray( Castor::String const & p_name, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterInput( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << InputGetter< T >() << type_of< T >::type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
+			*this << InputGetter< T >() << type().m_type << p_name << cuT( "[]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
@@ -534,11 +564,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
+			*this << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( ";" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -547,11 +578,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, T const & p_rhs )
 	{
+		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			m_stream << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -588,11 +620,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterUniform( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+			*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
@@ -601,11 +634,12 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclUniformArray( Castor::String const & p_name, bool p_enabled )
 	{
+		using type = typename type_of< T >::type;
 		RegisterUniform( p_name, name_of< T >::value );
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[];" ) << Endl();
+			*this << Uniform() << type().m_type << p_name << cuT( "[];" ) << Endl();
 		}
 
 		return Optional< Array< T > >( this, p_name, 0xFFFFFFFF, p_enabled );
@@ -614,6 +648,7 @@ namespace GLSL
 	template< typename T >
 	inline Optional< Array< T > > GlslWriter::DeclUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, std::vector< T > const & p_rhs )
 	{
+		using type = typename type_of< T >::type;
 		if ( p_rhs.size() != p_dimension )
 		{
 			CASTOR_EXCEPTION( "Given parameters count doesn't match the array dimensions" );
@@ -623,7 +658,7 @@ namespace GLSL
 
 		if ( p_enabled )
 		{
-			*this << Uniform() << type_of< T >::type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type_of< T >::type().m_type << cuT( "[]( " );
+			*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type().m_type << cuT( "[]( " );
 			Castor::String l_sep;
 
 			for ( auto const & l_value : p_rhs )
