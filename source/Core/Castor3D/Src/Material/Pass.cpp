@@ -1,4 +1,4 @@
-﻿#include "Pass.hpp"
+#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -21,7 +21,7 @@ namespace Castor3D
 			switch ( p_channel )
 			{
 			case TextureChannel::eDiffuse:
-				l_result << cuT( "Diffuse" );
+				l_result << cuT( "Diffuse/Albedo" );
 				break;
 
 			case TextureChannel::eNormal:
@@ -33,7 +33,7 @@ namespace Castor3D
 				break;
 
 			case TextureChannel::eSpecular:
-				l_result << cuT( "Specular" );
+				l_result << cuT( "Specular/Roughness" );
 				break;
 
 			case TextureChannel::eHeight:
@@ -41,7 +41,7 @@ namespace Castor3D
 				break;
 
 			case TextureChannel::eGloss:
-				l_result << cuT( "Gloss" );
+				l_result << cuT( "Gloss/Metallic" );
 				break;
 
 			case TextureChannel::eEmissive:
@@ -92,6 +92,12 @@ namespace Castor3D
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\talpha " ) + string::to_string( p_pass.GetOpacity() ) + cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass opacity" );
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\temissive " ) + string::to_string( p_pass.GetEmissive() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass emissive" );
 		}
 
 		if ( l_return )

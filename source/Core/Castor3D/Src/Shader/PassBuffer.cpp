@@ -1,4 +1,4 @@
-﻿#include "PassBuffer.hpp"
+#include "PassBuffer.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -126,6 +126,15 @@ namespace Castor3D
 	void PassBuffer::SetComponents( uint32_t p_index
 		, uint32_t p_components
 		, Castor::Colour const & p_rgb
+		, float p_a )
+	{
+		auto l_rgb = rgb_float( p_rgb );
+		SetComponents( p_index, p_components, l_rgb[0], l_rgb[1], l_rgb[2], p_a );
+	}
+
+	void PassBuffer::SetComponents( uint32_t p_index
+		, uint32_t p_components
+		, Castor::HdrColour const & p_rgb
 		, float p_a )
 	{
 		auto l_rgb = rgb_float( p_rgb );

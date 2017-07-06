@@ -1,7 +1,6 @@
 
 material "Silver"
 {
-	type legacy
 	pass
 	{
 		diffuse 0.75164	0.75164	0.75164 1.0
@@ -14,7 +13,6 @@ material "Silver"
 
 material "AlphaSilver"
 {
-	type legacy
 	pass
 	{
 		diffuse 0.75164 0.75164 0.75164 1.0
@@ -27,7 +25,6 @@ material "AlphaSilver"
 
 material "Gold"
 {
-	type legacy
 	pass
 	{
 		diffuse 0.75164 0.60648 0.22648 1.0
@@ -40,7 +37,6 @@ material "Gold"
 
 material "AlphaGold"
 {
-	type legacy
 	pass
 	{
 		diffuse 0.75164 0.60648 0.22648 1.0
@@ -54,7 +50,6 @@ material "AlphaGold"
 
 material "Copper"
 {
-	type legacy
 	pass
 	{
 		diffuse 0.7038 0.27048 0.0828 1.0
@@ -67,7 +62,6 @@ material "Copper"
 
 material "WhiteEmit"
 {
-	type legacy
 	pass
 	{
 		emissive 1.1 1.1 1.1 1.1

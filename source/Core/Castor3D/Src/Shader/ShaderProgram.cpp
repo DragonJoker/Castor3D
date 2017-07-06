@@ -1,4 +1,4 @@
-#include "ShaderProgram.hpp"
+﻿#include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Shader/AtomicCounterBuffer.hpp"
@@ -130,6 +130,9 @@ namespace Castor3D
 	const String ShaderProgram::MatSpecular = cuT( "c3d_v4MatSpecular" );
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
 	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
+	const String ShaderProgram::MatAlbedo = cuT( "c3d_v4MatAlbedo" );
+	const String ShaderProgram::MatRoughness = cuT( "c3d_fRoughness" );
+	const String ShaderProgram::MatMetallic = cuT( "c3d_fMetallic" );
 	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
 	const String ShaderProgram::MatRefractionRatio = cuT( "c3d_refractionRatio" );
 	const String ShaderProgram::Time = cuT( "c3d_fTime" );
@@ -137,12 +140,15 @@ namespace Castor3D
 	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
 	const String ShaderProgram::WindowSize = cuT( "c3d_v2iWindowSize" );
 	const String ShaderProgram::OvPosition = cuT( "c3d_v2iPosition" );
-	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
-	const String ShaderProgram::MapSpecular = cuT( "c3d_mapSpecular" );
+	const String ShaderProgram::MapDiffuse = cuT ("c3d_mapDiffuse");
+	const String ShaderProgram::MapAlbedo = cuT( "c3d_mapAlbedo" );
+	const String ShaderProgram::MapSpecular = cuT ("c3d_mapSpecular");
+	const String ShaderProgram::MapRoughness = cuT( "c3d_mapRoughness" );
 	const String ShaderProgram::MapEmissive = cuT( "c3d_mapEmissive" );
 	const String ShaderProgram::MapNormal = cuT( "c3d_mapNormal" );
 	const String ShaderProgram::MapOpacity = cuT( "c3d_mapOpacity" );
 	const String ShaderProgram::MapGloss = cuT( "c3d_mapGloss" );
+	const String ShaderProgram::MapMetallic = cuT ("c3d_mapMetallic");
 	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
 	const String ShaderProgram::MapEnvironment = cuT( "c3d_mapEnvironment" );
 	const String ShaderProgram::MapShadow = cuT( "c3d_mapShadow" );

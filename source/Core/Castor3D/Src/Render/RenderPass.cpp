@@ -430,17 +430,6 @@ namespace Castor3D
 			, p_invertNormals );
 	}
 
-	GLSL::Shader RenderPass::GetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
-	{
-		return DoGetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
-	}
-
 	GLSL::Shader RenderPass::GetGeometryShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags )const
@@ -448,6 +437,31 @@ namespace Castor3D
 		return DoGetGeometryShaderSource( p_textureFlags
 			, p_programFlags
 			, p_sceneFlags );
+	}
+
+	GLSL::Shader RenderPass::GetPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
+	{
+		GLSL::Shader l_result;
+
+		if ( CheckFlag( p_programFlags, ProgramFlag::ePbr ) )
+		{
+			l_result = DoGetPbrPixelShaderSource( p_textureFlags
+				, p_programFlags
+				, p_sceneFlags
+				, p_alphaFunc );
+		}
+		else
+		{
+			l_result = DoGetLegacyPixelShaderSource( p_textureFlags
+				, p_programFlags
+				, p_sceneFlags
+				, p_alphaFunc );
+		}
+
+		return l_result;
 	}
 
 	void RenderPass::PreparePipeline( BlendMode p_colourBlendMode

@@ -260,6 +260,19 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the emissive factor.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit le facteur d'émission.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetEmissive( float const & p_value )
+		{
+			m_emissive = p_value;
+			onChanged( *this );
+		}
+		/**
+		 *\~english
 		 *\brief		Sets the refraction ratio.
 		 *\param[in]	p_value	The new value.
 		 *\~french
@@ -338,6 +351,16 @@ namespace Castor3D
 		inline float GetOpacity()const
 		{
 			return m_opacity;
+		}
+		/**
+		 *\~english
+		 *\return		The emissive factor.
+		 *\~french
+		 *\return		Le facteur émission.
+		 */
+		inline float GetEmissive()const
+		{
+			return m_emissive;
 		}
 		/**
 		 *\~english
@@ -597,6 +620,9 @@ namespace Castor3D
 		//!\~english	The opacity value.
 		//!\~french		La valeur d'opacité.
 		float m_opacity{ 1.0f };
+		//!\~english	The emission factor.
+		//!\~french		Le facteur d'émission.
+		float m_emissive{ 0.0f };
 		//!\~english	The refraction ratio.
 		//!\~french		Le ratio de réfraction.
 		float m_refractionRatio{ 0.0f };

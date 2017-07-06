@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -660,6 +660,9 @@ namespace Castor3D
 		/**@name Pass */
 		//@{
 
+		/**@name Legacy */
+		//@{
+
 		//!\~english	Name of the diffuse material colour frame variable.
 		//!\~french		Nom de la frame variable contenant la couleur diffuse du matériau.
 		C3D_API static const Castor::String MatDiffuse;
@@ -672,6 +675,23 @@ namespace Castor3D
 		//!\~english	Name of the material shininess frame variable.
 		//!\~french		Nom de la frame variable contenant l'exposante du matériau.
 		C3D_API static const Castor::String MatShininess;
+
+		//@}
+		/**@name PBR */
+		//@{
+
+		//!\~english	Name of the material colour frame variable.
+		//!\~french		Nom de la frame variable contenant la couleur du matériau.
+		C3D_API static const Castor::String MatAlbedo;
+		//!\~english	Name of the material roughness frame variable.
+		//!\~french		Nom de la frame variable contenant la rugosité du matériau.
+		C3D_API static const Castor::String MatRoughness;
+		//!\~english	Name of the material reflectance frame variable.
+		//!\~french		Nom de la frame variable contenant la réflectivité du matériau.
+		C3D_API static const Castor::String MatMetallic;
+
+		//@}
+
 		//!\~english	Name of the material opacity frame variable.
 		//!\~french		Nom de la frame variable contenant l'opacité du matériau.
 		C3D_API static const Castor::String MatOpacity;
@@ -733,12 +753,18 @@ namespace Castor3D
 		/**@name Textures */
 		//@{
 
+		//!\~english	Name of the albedo texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de couleur albedo.
+		C3D_API static const Castor::String MapAlbedo;
 		//!\~english	Name of the diffuse texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture de couleur diffuse.
 		C3D_API static const Castor::String MapDiffuse;
 		//!\~english	Name of the specular texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture de couleur spéculaire.
 		C3D_API static const Castor::String MapSpecular;
+		//!\~english	Name of the roughness texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de rugosité.
+		C3D_API static const Castor::String MapRoughness;
 		//!\~english	Name of the emissive texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture de couleur émissive.
 		C3D_API static const Castor::String MapEmissive;
@@ -751,6 +777,9 @@ namespace Castor3D
 		//!\~english	Name of the shininess texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture d'exposante.
 		C3D_API static const Castor::String MapGloss;
+		//!\~english	Name of the metallic texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de "métallosité".
+		C3D_API static const Castor::String MapMetallic;
 		//!\~english	Name of the height texture frame variable.
 		//!\~french		Nom de la frame variable contenant texture de hauteur.
 		C3D_API static const Castor::String MapHeight;

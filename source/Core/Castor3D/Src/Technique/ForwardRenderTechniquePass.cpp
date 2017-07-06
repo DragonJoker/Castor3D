@@ -1,4 +1,4 @@
-#include "ForwardRenderTechniquePass.hpp"
+﻿#include "ForwardRenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -10,6 +10,8 @@
 #include <GlslSource.hpp>
 #include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
+#include <GlslPhongLighting.hpp>
+#include <GlslCookTorranceLighting.hpp>
 
 using namespace Castor;
 
@@ -257,7 +259,7 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	GLSL::Shader ForwardRenderTechniquePass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader ForwardRenderTechniquePass::DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const
@@ -293,13 +295,20 @@ namespace Castor3D
 			auto c3d_sLights = l_writer.DeclUniform< Sampler1D >( ShaderProgram::Lights );
 		}
 
-		auto c3d_mapDiffuse( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
-		auto c3d_mapSpecular( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapEmissive( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapHeight( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapGloss( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
+		auto c3d_mapDiffuse( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse
+			, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
+		auto c3d_mapNormal( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal
+			, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
+			, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
+		auto c3d_mapSpecular( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapSpecular
+			, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
+		auto c3d_mapEmissive( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive
+			, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapHeight( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapHeight
+			, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
+		auto c3d_mapGloss( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapGloss
+			, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
 		auto c3d_fresnelBias = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelBias" )
 			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
 			, 0.10_f );
@@ -317,7 +326,7 @@ namespace Castor3D
 
 		auto gl_FragCoord( l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name
+		auto l_lighting = legacy::CreateLightingModel( l_writer
 			, GetShadowType( p_sceneFlags ) );
 		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
 		GLSL::Utils l_utils{ l_writer };
@@ -353,7 +362,7 @@ namespace Castor3D
 				l_texCoord.xy() = l_parallaxMapping( l_texCoord.xy(), l_viewDir );
 			}
 
-			ComputePreLightingMapContributions( l_writer
+			legacy::ComputePreLightingMapContributions( l_writer
 				, l_v3Normal
 				, l_fMatShininess
 				, p_textureFlags
@@ -365,7 +374,7 @@ namespace Castor3D
 				, c3d_shadowReceiver
 				, FragmentInput( vtx_position, l_v3Normal )
 				, l_output );
-			ComputePostLightingMapContributions( l_writer
+			legacy::ComputePostLightingMapContributions( l_writer
 				, l_diffuse
 				, l_v3Specular
 				, l_emissive
@@ -406,6 +415,187 @@ namespace Castor3D
 				{
 					auto l_refFactor = l_writer.DeclLocale( cuT( "l_refFactor" )
 						, c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_v3Normal ), c3d_fresnelPower ) );
+					pxl_v4FragColor.xyz() = mix( l_refractedColour, l_reflectedColour, l_refFactor );
+				}
+			}
+
+			if ( !m_opaque )
+			{
+				auto l_alpha = l_writer.DeclLocale( cuT( "l_alpha" ), l_materials.GetOpacity( vtx_material ) );
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+				{
+					l_alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+				}
+
+				pxl_v4FragColor.a() = l_alpha;
+			}
+
+			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
+			{
+				auto l_wvPosition = l_writer.DeclLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
+			}
+		} );
+
+		return l_writer.Finalise();
+	}
+
+	GLSL::Shader ForwardRenderTechniquePass::DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
+	{
+		using namespace GLSL;
+		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
+
+		// UBOs
+		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_MODEL( l_writer );
+
+		// Fragment Intputs
+		auto vtx_position = l_writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_tangentSpaceFragPosition = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
+		auto vtx_normal = l_writer.DeclInput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = l_writer.DeclInput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = l_writer.DeclInput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_material = l_writer.DeclInput< Int >( cuT( "vtx_material" ) );
+
+		PbrMaterials l_materials{ l_writer };
+		l_materials.Declare();
+
+		if ( l_writer.HasTextureBuffers() )
+		{
+			auto c3d_sLights = l_writer.DeclUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
+		}
+		else
+		{
+			auto c3d_sLights = l_writer.DeclUniform< Sampler1D >( cuT( "c3d_sLights" ) );
+		}
+
+		auto c3d_mapAlbedo( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapAlbedo
+			, CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) ) );
+		auto c3d_mapRoughness( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapRoughness
+			, CheckFlag( p_textureFlags, TextureChannel::eRoughness ) ) );
+		auto c3d_mapNormal( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal
+			, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
+			, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
+		auto c3d_mapMetallic( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapMetallic
+			, CheckFlag( p_textureFlags, TextureChannel::eMetallic ) ) );
+		auto c3d_mapEnvironment( l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment
+			, CheckFlag( p_textureFlags, TextureChannel::eReflection )
+			|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ) );
+		auto c3d_fresnelBias = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelBias" )
+			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
+			, 0.10_f );
+		auto c3d_fresnelScale = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelScale" )
+			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
+			, 0.25_f );
+		auto c3d_fresnelPower = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelPower" )
+			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
+			, 0.30_f );
+		auto c3d_fheightScale( l_writer.DeclUniform< Float >( cuT( "c3d_fheightScale" )
+			, CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+
+		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+
+		auto l_lighting = pbr::CreateLightingModel( l_writer
+			, GetShadowType( p_sceneFlags ) );
+		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
+		GLSL::Utils l_utils{ l_writer };
+		l_utils.DeclareApplyGamma();
+		l_utils.DeclareRemoveGamma();
+
+		auto l_parallaxMapping = DeclareParallaxMappingFunc( l_writer, p_textureFlags, p_programFlags );
+
+		// Fragment Outputs
+		auto pxl_v4FragColor( l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
+
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		{
+			auto l_normal = l_writer.DeclLocale( cuT( "l_v3Normal" ), normalize( vtx_normal ) );
+			auto l_ambient = l_writer.DeclLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), vec3( 0.0_f ) );
+			auto l_specular = l_writer.DeclLocale( cuT( "l_specular" ), vec3( 0.0_f ) );
+			auto l_metallic = l_writer.DeclLocale( cuT( "l_metallic" ), l_materials.GetReflectance( vtx_material ) );
+			auto l_gamma = l_writer.DeclLocale( cuT( "l_gamma" ), l_materials.GetGamma( vtx_material ) );
+			auto l_albedo = l_writer.DeclLocale( cuT( "l_albedo" ), l_utils.RemoveGamma( l_gamma, l_materials.GetAlbedo( vtx_material ) ) );
+			auto l_roughness = l_writer.DeclLocale( cuT( "l_roughness" ), l_materials.GetRoughness( vtx_material ) );
+			auto l_emissive = l_writer.DeclLocale( cuT( "l_emissive" ), l_albedo * l_materials.GetEmissive( vtx_material ) );
+			auto l_worldEye = l_writer.DeclLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			auto l_envAmbient = l_writer.DeclLocale( cuT( "l_envAmbient" ), vec3( 1.0_f ) );
+			auto l_envDiffuse = l_writer.DeclLocale( cuT( "l_envDiffuse" ), vec3( 1.0_f ) );
+			auto l_texCoord = l_writer.DeclLocale( cuT( "l_texCoord" ), vtx_texture );
+
+			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 1.0f );
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
+				&& CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+			{
+				auto l_viewDir = -l_writer.DeclLocale( cuT( "l_viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				l_texCoord.xy() = l_parallaxMapping( l_texCoord.xy(), l_viewDir );
+			}
+
+			pbr::ComputePreLightingMapContributions( l_writer
+				, l_normal
+				, l_metallic
+				, l_roughness
+				, p_textureFlags
+				, p_programFlags
+				, p_sceneFlags );
+			OutputComponents l_output{ l_diffuse, l_specular };
+			l_lighting->ComputeCombinedLighting( l_worldEye
+				, l_albedo
+				, l_metallic
+				, l_roughness
+				, c3d_shadowReceiver
+				, FragmentInput( vtx_position, l_normal )
+				, l_output );
+			pbr::ComputePostLightingMapContributions( l_writer
+				, l_albedo
+				, l_emissive
+				, l_gamma
+				, p_textureFlags
+				, p_programFlags
+				, p_sceneFlags );
+
+			pxl_v4FragColor.xyz() = l_writer.Paren( l_ambient + l_diffuse + l_emissive ) * mix( l_albedo.xyz(), vec3( 0.0_f ), l_metallic )
+				+ l_specular;
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
+				|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
+			{
+				auto l_incident = l_writer.DeclLocale( cuT( "l_i" ), normalize( vtx_position - c3d_v3CameraPosition ) );
+				auto l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
+				auto l_refractedColour = l_writer.DeclLocale( cuT( "l_refractedColour" ), l_albedo / 2.0 );
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) )
+				{
+					auto l_reflect = l_writer.DeclLocale( cuT( "l_reflect" )
+						, reflect( l_incident, l_normal ) );
+					l_reflectedColour = texture( c3d_mapEnvironment, l_reflect ).xyz() * length( pxl_v4FragColor.xyz() );
+				}
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
+				{
+					auto l_refract = l_writer.DeclLocale( cuT( "l_refract" ), refract( l_incident, l_normal, l_materials.GetRefractionRatio( vtx_material ) ) );
+					l_refractedColour = texture( c3d_mapEnvironment, l_refract ).xyz() * l_albedo / length( l_albedo );
+				}
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
+					&& !CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
+				{
+					pxl_v4FragColor.xyz() = l_reflectedColour * l_albedo / length( l_albedo );
+				}
+				else
+				{
+					auto l_refFactor = l_writer.DeclLocale( cuT( "l_refFactor" )
+						, c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_normal ), c3d_fresnelPower ) );
 					pxl_v4FragColor.xyz() = mix( l_refractedColour, l_reflectedColour, l_refFactor );
 				}
 			}

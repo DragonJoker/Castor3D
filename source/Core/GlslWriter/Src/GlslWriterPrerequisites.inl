@@ -1,4 +1,4 @@
-﻿namespace GLSL
+namespace GLSL
 {
 	template<>
 	struct name_of< Boolean >
@@ -238,5 +238,41 @@
 	struct name_of< SpotLight >
 	{
 		static TypeName const value = TypeName::eSpotLight;
+	};
+
+	template< typename T >
+	struct name_of< InParam< T > >
+	{
+		static TypeName const value = name_of< T >::value;
+	};
+
+	template< typename T >
+	struct name_of< OutParam< T > >
+	{
+		static TypeName const value = name_of< T >::value;
+	};
+
+	template< typename T >
+	struct name_of< InOutParam< T > >
+	{
+		static TypeName const value = name_of< T >::value;
+	};
+
+	template< typename T >
+	struct type_of< InParam< T > >
+	{
+		using type = T;
+	};
+
+	template< typename T >
+	struct type_of< OutParam< T > >
+	{
+		using type = T;
+	};
+
+	template< typename T >
+	struct type_of< InOutParam< T > >
+	{
+		using type = T;
 	};
 }

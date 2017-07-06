@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -61,47 +61,6 @@ namespace GLSL
 		GlslWriter_API DirectionalLight GetDirectionalLight( Type const & p_value );
 		GlslWriter_API PointLight GetPointLight( Type const & p_value );
 		GlslWriter_API SpotLight GetSpotLight( Type const & p_value );
-		GlslWriter_API void ComputeCombinedLighting( Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeDirectionalLight( DirectionalLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputePointLight( PointLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeSpotLight( SpotLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOneDirectionalLight( DirectionalLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOnePointLight( PointLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOneSpotLight( SpotLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
 
 	protected:
 		GlslWriter_API Light GetBaseLight( Type const & p_value );
@@ -126,43 +85,6 @@ namespace GLSL
 		ShadowType m_shadows;
 		GlslWriter & m_writer;
 		Shadow m_shadowModel;
-		Function< Void, DirectionalLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeDirectional;
-		Function< Void, PointLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computePoint;
-		Function< Void, SpotLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeSpot;
-		Function< Void, DirectionalLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOneDirectional;
-		Function< Void, PointLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOnePoint;
-		Function< Void, SpotLight, InVec3, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOneSpot;
-	};
-
-	class PhongLightingModel
-		: public LightingModel
-	{
-	public:
-		GlslWriter_API PhongLightingModel( ShadowType p_shadows, GlslWriter & p_writer );
-		GlslWriter_API static std::unique_ptr< LightingModel > Create( ShadowType p_shadows, GlslWriter & p_writer );
-
-	protected:
-		void DoDeclareModel();
-		void Declare_ComputeDirectionalLight()override;
-		void Declare_ComputePointLight()override;
-		void Declare_ComputeSpotLight()override;
-		void Declare_ComputeOneDirectionalLight()override;
-		void Declare_ComputeOnePointLight()override;
-		void Declare_ComputeOneSpotLight()override;
-
-		void DoComputeLight( Light const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_directionDiffuse
-			, Vec3 const & p_directionSpecular
-			, Float const & p_shininess
-			, Float const & p_shadowFactor
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		void DoDeclare_ComputeLight();
-
-	public:
-		GlslWriter_API static const Castor::String Name;
-		Function< Void, InLight, InVec3, InVec3, InVec3, InFloat, InFloat, FragmentInput, OutputComponents & > m_computeLight;
 	};
 }
 

@@ -604,14 +604,14 @@ namespace Castor3D
 		m_ssaoFbo->Clear( BufferComponent::eColour );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
-		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Bind( 1u );
-		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Bind( 1u );
+		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 1u );
+		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Bind( 1u );
 		m_ssaoNoise.Bind();
 		m_ssaoPipeline->Apply();
 		m_ssaoGeometryBuffers->Draw( 6u, 0 );
 		m_ssaoNoise.Unbind();
-		p_gp[size_t( DsTexture::eNormal )]->GetTexture()->Unbind( 1u );
-		p_gp[size_t( DsTexture::eNormal )]->GetSampler()->Unbind( 1u );
+		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Unbind( 1u );
+		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
 		m_ssaoFbo->Unbind();

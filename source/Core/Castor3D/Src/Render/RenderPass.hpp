@@ -155,7 +155,7 @@ namespace Castor3D
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
 		C3D_API GLSL::Shader GetVertexShaderSource( TextureChannels const & p_textureFlags
-			,ProgramFlags const & p_programFlags
+			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, bool p_invertNormals )const;
 		/**
@@ -189,7 +189,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
 		C3D_API GLSL::Shader GetGeometryShaderSource( TextureChannels const & p_textureFlags
-			,ProgramFlags const & p_programFlags
+			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags )const;
 		/**
 		 *\~english
@@ -999,7 +999,25 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\param[in]	p_alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+		C3D_API virtual GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_alphaFunc		The alpha test function.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_alphaFunc		La fonction de test alpha.
+		 */
+		C3D_API virtual GLSL::Shader DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const = 0;

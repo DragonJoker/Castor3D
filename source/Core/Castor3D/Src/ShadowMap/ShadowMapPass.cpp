@@ -132,7 +132,18 @@ namespace Castor3D
 			, p_sceneFlags );
 	}
 
-	GLSL::Shader ShadowMapPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader ShadowMapPass::DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
+	{
+		return m_shadowMap.GetPixelShaderSource( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags
+			, p_alphaFunc );
+	}
+
+	GLSL::Shader ShadowMapPass::DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const

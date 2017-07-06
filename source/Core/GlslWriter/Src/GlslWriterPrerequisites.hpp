@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -265,9 +265,16 @@ namespace GLSL
 
 	template< typename T >
 	struct name_of;
+	template< typename T >
+	struct type_of
+	{
+		using type = T;
+	};
 
 	class LightingModel;
-	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
+	class PhongLightingModel;
+	class CookTorranceLightingModel;
+	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::shared_ptr< LightingModel >, std::function< std::shared_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
 
 	struct Endl
 	{

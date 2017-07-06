@@ -39,6 +39,7 @@ namespace GLSL
 	public:
 		GlslWriter_API Float GetRefractionRatio( Int const & p_index )const;
 		GlslWriter_API Float GetOpacity( Int const & p_index )const;
+		GlslWriter_API Float GetEmissive( Int const & p_index )const;
 		GlslWriter_API Int GetRefraction( Int const & p_index )const;
 		GlslWriter_API Int GetReflection( Int const & p_index )const;
 		GlslWriter_API Float GetGamma( Int const & p_index )const;
@@ -52,7 +53,8 @@ namespace GLSL
 			, int p_offsetOP, int p_indexOP
 			, int p_offsetGM, int p_indexGM
 			, int p_offsetEX, int p_indexEX
-			, int p_offsetAR, int p_indexAR );
+			, int p_offsetAR, int p_indexAR
+			, int p_offsetEM, int p_indexEM );
 
 	private:
 		// Materials are aligned on vec4, so the size of a material
@@ -73,6 +75,7 @@ namespace GLSL
 		Function< Float, InInt > m_gamma;
 		Function< Float, InInt > m_exposure;
 		Function< Float, InInt > m_alphaRef;
+		Function< Float, InInt > m_emissive;
 	};
 
 	class LegacyMaterials
@@ -84,7 +87,6 @@ namespace GLSL
 		GlslWriter_API Vec3 GetDiffuse( Int const & p_index )const;
 		GlslWriter_API Vec3 GetSpecular( Int const & p_index )const;
 		GlslWriter_API Float GetAmbient( Int const & p_index )const;
-		GlslWriter_API Float GetEmissive( Int const & p_index )const;
 		GlslWriter_API Float GetShininess( Int const & p_index )const;
 
 		static uint32_t constexpr Size = 4u;
@@ -99,8 +101,31 @@ namespace GLSL
 		Function< Vec3, InInt > m_diffuse;
 		Function< Float, InInt > m_ambient;
 		Function< Vec3, InInt > m_specular;
-		Function< Float, InInt > m_emissive;
 		Function< Float, InInt > m_shininess;
+	};
+
+	class PbrMaterials
+		: public Materials
+	{
+	public:
+		GlslWriter_API PbrMaterials( GlslWriter & p_writer );
+		GlslWriter_API void Declare()override;
+		GlslWriter_API Vec3 GetAlbedo( Int const & p_index )const;
+		GlslWriter_API Float GetRoughness( Int const & p_index )const;
+		GlslWriter_API Float GetReflectance( Int const & p_index )const;
+
+		static uint32_t constexpr Size = 4u;
+
+	private:
+		inline int DoGetMaterialSize()const override
+		{
+			return int( Size );
+		}
+
+	private:
+		Function< Vec3, InInt > m_albedo;
+		Function< Float, InInt > m_roughness;
+		Function< Float, InInt > m_reflectance;
 	};
 }
 

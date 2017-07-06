@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -147,19 +147,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the emissive factor.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit le facteur d'émission.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetEmissive( float const & p_value )
-		{
-			m_emissive = p_value;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the shininess.
 		 *\param[in]	p_value	The new value.
 		 *\~french
@@ -213,16 +200,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The emissive factor.
-		 *\~french
-		 *\return		Le facteur émission.
-		 */
-		inline float GetEmissive()const
-		{
-			return m_emissive;
-		}
-		/**
-		 *\~english
 		 *\return		The diffuse colour.
 		 *\~french
 		 *\return		La couleur diffuse.
@@ -269,10 +246,7 @@ namespace Castor3D
 		Castor::Colour m_specular;
 		//!\~english	The ambient contribution factor.
 		//!\~french		Le facteur de contribution a l'ambiente.
-		float m_ambient;
-		//!\~english	The emission factor.
-		//!\~french		Le facteur d'émission.
-		float m_emissive;
+		float m_ambient{ 0.0f };
 		//!\~english	The shininess value.
 		//!\~french		La valeur d'exposant.
 		float m_shininess{ 50.0f };

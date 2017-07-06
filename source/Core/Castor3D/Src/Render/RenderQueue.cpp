@@ -51,18 +51,18 @@ namespace Castor3D
 
 		template< typename NodeType, typename MapType >
 		void DoAddRenderNode( RenderPipeline & p_pipeline
-			, NodeType const & p_node
+			, NodeType && p_node
 			, MapType & p_nodes )
 		{
 			using ObjectRenderNodesArray = typename MapType::mapped_type;
 			auto l_itPipeline = p_nodes.insert( { &p_pipeline, ObjectRenderNodesArray() } ).first;
-			l_itPipeline->second.push_back( p_node );
+			l_itPipeline->second.emplace_back( std::move( p_node ) );
 		}
 
 		template< typename NodeType, typename MapType >
 		void DoAddRenderNode( Pass & p_pass
 			, RenderPipeline & p_pipeline
-			, NodeType const & p_node
+			, NodeType && p_node
 			, Submesh & p_object
 			, MapType & p_nodes )
 		{
@@ -70,10 +70,10 @@ namespace Castor3D
 			using ObjectRenderNodesByPassMap = typename ObjectRenderNodesByPipelineMap::mapped_type;
 			using ObjectRenderNodesArray = typename ObjectRenderNodesByPassMap::mapped_type;
 
-			auto l_itPipeline = p_nodes.insert( { &p_pipeline, ObjectRenderNodesByPipelineMap() } ).first;
-			auto l_itPass = l_itPipeline->second.insert( { &p_pass, ObjectRenderNodesByPassMap() } ).first;
-			auto l_itObject = l_itPass->second.insert( { &p_object, ObjectRenderNodesArray() } ).first;
-			l_itObject->second.push_back( p_node );
+			auto l_itPipeline = p_nodes.emplace( &p_pipeline, ObjectRenderNodesByPipelineMap() ).first;
+			auto l_itPass = l_itPipeline->second.emplace( &p_pass, ObjectRenderNodesByPassMap() ).first;
+			auto l_itObject = l_itPass->second.emplace( &p_object, ObjectRenderNodesArray() ).first;
+			l_itObject->second.emplace_back( std::move( p_node ) );
 		}
 
 		AnimatedObjectSPtr DoFindAnimatedObject( Scene & p_scene, String const & p_name )
@@ -350,6 +350,11 @@ namespace Castor3D
 							RemFlag( l_programFlags, ProgramFlag::eMorphing );
 							auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
 							auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
+
+							if ( l_material->GetType() == MaterialType::ePbr )
+							{
+								AddFlag( l_programFlags, ProgramFlag::ePbr );
+							}
 
 							if ( l_skeleton && l_submesh->HasBoneData() )
 							{

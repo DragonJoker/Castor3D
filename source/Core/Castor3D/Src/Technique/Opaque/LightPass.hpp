@@ -46,10 +46,10 @@ namespace Castor3D
 		: uint8_t
 	{
 		eDepth,
-		eNormal,
-		eDiffuse,
-		eSpecular,
-		eEmissive,
+		eData1,
+		eData2,
+		eData3,
+		eData4,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
 	};
 	/**
@@ -514,7 +514,21 @@ namespace Castor3D
 		 *\param[in]	p_type			Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetPixelShaderSource( SceneFlags const & p_sceneFlags
+		virtual GLSL::Shader DoGetLegacyPixelShaderSource( SceneFlags const & p_sceneFlags
+			, LightType p_type )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source for this light pass.
+		 *\param[in]	p_sceneFlags	The scene flags.
+		 *\param[in]	p_type			The light source type.
+		 *\return		The source.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
+		 *\param[in]	p_sceneFlags	Les indicateurs de scène.
+		 *\param[in]	p_type			Le type de source lumineuse.
+		 *\return		Le source.
+		 */
+		virtual GLSL::Shader DoGetPbrPixelShaderSource( SceneFlags const & p_sceneFlags
 			, LightType p_type )const;
 		/**
 		 *\~english

@@ -25,8 +25,8 @@
 
 using namespace Castor;
 
-#define DEBUG_DEFERRED_BUFFERS 0
-#define DEBUG_WEIGHTED_BLEND_BUFFERS 0
+#define DEBUG_DEFERRED_BUFFERS 1
+#define DEBUG_WEIGHTED_BLEND_BUFFERS 1
 #define USE_WEIGHTED_BLEND 1
 
 namespace Castor3D

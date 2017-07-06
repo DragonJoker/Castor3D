@@ -234,7 +234,6 @@ namespace Fxaa
 		m_uniformReduceMul->SetValue( m_reduceMul );
 		m_uniformRenderTargetWidth->SetValue( float( l_size.width() ) );
 		m_uniformRenderTargetHeight->SetValue( float( l_size.height() ) );
-		m_fxaaUbo.Update();
 
 		DepthStencilState l_dsstate;
 		l_dsstate.SetDepthTest( false );
@@ -245,6 +244,7 @@ namespace Fxaa
 		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		m_pipeline->AddUniformBuffer( m_fxaaUbo );
 
+		m_fxaaUbo.Update();
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );
 	}
 

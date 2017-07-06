@@ -50,7 +50,7 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = l_cache.Add( p_name, MaterialType::eLegacy);
+			l_return = l_cache.Add( p_name, MaterialType::eLegacy );
 			l_return->CreatePass();
 		}
 

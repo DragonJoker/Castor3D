@@ -1,4 +1,4 @@
-#include "SceneFileParser.hpp"
+﻿#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -146,6 +146,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureChannels[cuT( "emissive" )] = uint32_t( TextureChannel::eEmissive );
 	m_mapTextureChannels[cuT( "reflection" )] = uint32_t( TextureChannel::eReflection );
 	m_mapTextureChannels[cuT( "refraction" )] = uint32_t( TextureChannel::eRefraction );
+	m_mapTextureChannels[cuT( "roughness" )] = uint32_t( TextureChannel::eRoughness );
+	m_mapTextureChannels[cuT( "albedo" )] = uint32_t( TextureChannel::eAlbedo );
+	m_mapTextureChannels[cuT( "metallic" )] = uint32_t( TextureChannel::eMetallic );
 
 	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::ePoint );
 	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::eSpot );
@@ -325,6 +328,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapBillboardSizes[cuT( "fixed" )] = uint32_t( BillboardSize::eFixed );
 
 	m_mapMaterialTypes[cuT( "legacy" )] = uint32_t( MaterialType::eLegacy );
+	m_mapMaterialTypes[cuT( "pbr" )] = uint32_t( MaterialType::ePbr );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -445,6 +449,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_func" ), Parser_SamplerComparisonFunc, { MakeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ) } );
 
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "include" ), Parser_SceneInclude, { MakeParameter< ParameterType::ePath >() } );
+	AddParser( uint32_t( CSCNSection::eScene ), cuT( "materials" ), Parser_SceneMaterials, { MakeParameter< ParameterType::eCheckedText >( m_mapMaterialTypes ) } );
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "background_colour" ), Parser_SceneBkColour, { MakeParameter< ParameterType::eColour >() } );
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "background_image" ), Parser_SceneBkImage, { MakeParameter< ParameterType::ePath >() } );
 	AddParser( uint32_t( CSCNSection::eScene ), cuT( "font" ), Parser_SceneFont, { MakeParameter< ParameterType::eName >() } );
@@ -522,7 +527,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "tangent" ), Parser_SubmeshTangent, { MakeParameter< ParameterType::ePoint3F >() } );
 	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "}" ), Parser_SubmeshEnd );
 
-	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "type" ), Parser_MaterialType, { MakeParameter< ParameterType::eCheckedText >( m_mapMaterialTypes ) } );
 	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), Parser_MaterialPass );
 	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "}" ), Parser_MaterialEnd );
 
@@ -531,6 +535,9 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "ambient" ), Parser_PassAmbient, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "emissive" ), Parser_PassEmissive, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "shininess" ), Parser_PassShininess, { MakeParameter< ParameterType::eFloat >() } );
+	AddParser( uint32_t( CSCNSection::ePass ), cuT( "albedo" ), Parser_PassAlbedo, { MakeParameter< ParameterType::eHdrColour >() } );
+	AddParser( uint32_t( CSCNSection::ePass ), cuT( "roughness" ), Parser_PassRoughness, { MakeParameter< ParameterType::eFloat >() } );
+	AddParser( uint32_t( CSCNSection::ePass ), cuT( "metallic" ), Parser_PassMetallic, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "alpha" ), Parser_PassAlpha, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), Parser_PassDoubleFace, { MakeParameter< ParameterType::eBool >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), Parser_PassTextureUnit );

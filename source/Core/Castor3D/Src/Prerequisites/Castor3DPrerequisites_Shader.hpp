@@ -182,6 +182,9 @@ namespace Castor3D
 		//!\~english	Shader using alpha test.
 		//\~french		Shader utilisant un test alpha.
 		eAlphaTest = 0x2000,
+		//!\~english	Shader for PBR material (if not set, will use legacy material code).
+		//\~french		Shader pour un matériau PBR (si non défini, utilisera le code de matériau traditionnel).
+		ePbr = 0x4000,
 	};
 	IMPLEMENT_FLAGS( ProgramFlag )
 	/**

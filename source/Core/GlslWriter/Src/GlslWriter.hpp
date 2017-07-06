@@ -110,10 +110,10 @@ namespace GLSL
 			m_shader.RegisterOutput( p_name, p_type );
 		}
 
-		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows );
-		GlslWriter_API std::unique_ptr< LightingModel > CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows );
-		GlslWriter_API std::unique_ptr< LightingModel > CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows );
-		GlslWriter_API std::unique_ptr< LightingModel > CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::shared_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::shared_ptr< LightingModel > CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::shared_ptr< LightingModel > CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows );
+		GlslWriter_API std::shared_ptr< LightingModel > CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 
 		GlslWriter_API Shader Finalise();
 		GlslWriter_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
