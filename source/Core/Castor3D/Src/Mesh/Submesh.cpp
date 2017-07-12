@@ -912,8 +912,6 @@ namespace Castor3D
 				l_buffer += l_stride;
 			}
 
-			l_buffer = l_vertexBuffer.GetData();
-
 			//m_points.clear();
 			//m_pointsData.clear();
 		}

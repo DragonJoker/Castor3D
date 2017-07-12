@@ -1,4 +1,4 @@
-﻿#include "OpaquePass.hpp"
+#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 

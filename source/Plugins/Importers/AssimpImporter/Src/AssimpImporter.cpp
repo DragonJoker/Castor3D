@@ -1,4 +1,4 @@
-﻿#include "AssimpImporter.hpp"
+#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -594,16 +594,6 @@ namespace C3dAssimp
 					p_submesh.AddFace( l_face.mIndices[0], l_face.mIndices[1], l_face.mIndices[2] );
 				}
 			}
-
-			//for ( auto & l_face : p_submesh.GetFaces() )
-			//{
-			//	Point3r l_a, l_b, l_c;
-			//	Vertex::GetTexCoord( p_submesh[l_face[0]], l_a );
-			//	Vertex::GetTexCoord( p_submesh[l_face[1]], l_b );
-			//	Vertex::GetTexCoord( p_submesh[l_face[2]], l_c );
-			//	REQUIRE( Point2r( l_a[0], l_a[1] ) != Point2r( l_b[0], l_b[1] )
-			//		&& Point2r( l_b[0], l_b[1] ) != Point2r( l_c[0], l_c[1] ) );
-			//}
 
 			if ( !p_aiMesh.mNormals )
 			{
