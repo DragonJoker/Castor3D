@@ -472,6 +472,9 @@ namespace Castor3D
 		//!\~english Refraction map
 		//!\~french Map de réfraction
 		eRefraction = 0x0100,
+		//!\~english Ambient occlusion map
+		//!\~french Map d'occlusion ambiante.
+		eAmbientOcclusion = 0x0200,
 		//!\~english Mask for all the texture channels
 		//!\~french Masque pour les canaux de texture
 		eAll = 0x0FFF,

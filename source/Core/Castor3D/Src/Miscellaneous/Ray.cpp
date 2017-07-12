@@ -93,9 +93,9 @@ namespace Castor3D
 	{
 		Point3r l_pt1, l_pt2, l_pt3;
 		auto l_stride = p_submesh.GetVertexBuffer().GetDeclaration().stride();
-		return Intersects( p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[0] * l_stride], l_pt1 )
-						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[1] * l_stride], l_pt2 )
-						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[2] * l_stride], l_pt3 )
+		return Intersects( p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().GetData()[p_face[0] * l_stride], l_pt1 )
+						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().GetData()[p_face[1] * l_stride], l_pt2 )
+						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().GetData()[p_face[2] * l_stride], l_pt3 )
 						   , p_distance );
 	}
 
@@ -288,9 +288,9 @@ namespace Castor3D
 					{
 						Face l_face
 						{
-							l_submesh->GetIndexBuffer().data()[k * 3 + 0],
-							l_submesh->GetIndexBuffer().data()[k * 3 + 1],
-							l_submesh->GetIndexBuffer().data()[k * 3 + 2],
+							l_submesh->GetIndexBuffer().GetData()[k * 3 + 0],
+							l_submesh->GetIndexBuffer().GetData()[k * 3 + 1],
+							l_submesh->GetIndexBuffer().GetData()[k * 3 + 2],
 						};
 						real l_curfaceDist = 0.0_r;
 

@@ -100,7 +100,7 @@ namespace Castor3D
 		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, l_declaration );
 		auto l_size = l_data.size() * sizeof( *l_data.data() );
 		m_vertexBuffer->Resize( uint32_t( l_size ) );
-		std::memcpy( m_vertexBuffer->data()
+		std::memcpy( m_vertexBuffer->GetData()
 			, l_data.data()->const_ptr()
 			, l_size );
 		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
@@ -108,7 +108,7 @@ namespace Castor3D
 		auto l_faces = DoGenerateFaces();
 		m_indexBuffer = std::make_shared< IndexBuffer >( m_engine );
 		m_indexBuffer->Resize( uint32_t( l_faces.size() ) );
-		std::memcpy( m_indexBuffer->data()
+		std::memcpy( m_indexBuffer->GetData()
 			, l_faces.data()
 			, l_faces.size() * sizeof( *l_faces.data() ) );
 		m_indexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );

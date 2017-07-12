@@ -4281,18 +4281,12 @@ namespace Castor3D
 			{
 				Size l_size;
 				p_params[1]->Get( l_size );
-				auto & l_skybox = *l_parsingContext->pSkybox;
-				auto l_engine = l_parsingContext->pScene->GetEngine();
-				l_parsingContext->pScene->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender
-					, [l_buffer, &l_skybox, l_engine, l_size]()
-					{
-						auto l_texture = l_engine->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
-						l_texture->GetImage().InitialiseSource( l_buffer );
-						l_texture->Initialise();
-						l_engine->GetRenderSystem()->GetCurrentContext()->PrepareSkybox( *l_texture, l_size, l_skybox );
-						l_texture->Cleanup();
-						l_texture.reset();
-					} ) );
+				auto l_texture = l_parsingContext->pScene->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+					, AccessType::eNone
+					, AccessType::eRead );
+				l_texture->GetImage().InitialiseSource( l_buffer );
+				l_parsingContext->pSkybox->SetEquiTexture( l_texture
+					, l_size );
 			}
 			else
 			{

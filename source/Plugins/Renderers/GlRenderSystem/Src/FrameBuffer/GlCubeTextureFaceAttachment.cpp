@@ -1,4 +1,4 @@
-﻿#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
+#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
@@ -9,10 +9,14 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlCubeTextureFaceAttachment::GlCubeTextureFaceAttachment( OpenGl & p_gl, TextureLayoutSPtr p_texture, CubeMapFace p_face )
+	GlCubeTextureFaceAttachment::GlCubeTextureFaceAttachment( OpenGl & p_gl
+		, TextureLayoutSPtr p_texture
+		, CubeMapFace p_face
+		, uint32_t p_mipLevel )
 		: TextureAttachment( p_texture )
 		, Holder( p_gl )
 		, m_glFace{ p_gl.Get( p_face ) }
+		, m_mipLevel{ p_mipLevel }
 	{
 	}
 
@@ -28,10 +32,11 @@ namespace GlRender
 		switch ( l_texture->GetType() )
 		{
 		case TextureType::eCube:
-			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
+			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), m_mipLevel );
 			break;
 
 		case TextureType::eCubeArray:
+			REQUIRE( m_mipLevel == 0u );
 			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
 			break;
 

@@ -117,7 +117,7 @@ namespace Castor3D
 
 				l_stride = m_quad->GetDeclaration().stride();
 				m_quad->Resize( 4 * l_stride );
-				auto l_buffer = m_quad->data();
+				auto l_buffer = m_quad->GetData();
 
 				for ( auto & l_vertex : l_vertices )
 				{
@@ -334,7 +334,7 @@ namespace Castor3D
 	{
 		uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
 		m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
-		uint8_t * l_buffer = m_vertexBuffer->data();
+		uint8_t * l_buffer = m_vertexBuffer->GetData();
 
 		for ( auto & l_pos : m_arrayPositions )
 		{

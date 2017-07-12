@@ -1,4 +1,4 @@
-#include "TextureUnit.hpp"
+﻿#include "TextureUnit.hpp"
 
 #include "Engine.hpp"
 
@@ -21,7 +21,7 @@ namespace Castor3D
 
 	bool TextureUnit::TextWriter::operator()( TextureUnit const & p_unit, TextFile & p_file )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
 		if ( p_unit.IsTextured() && p_unit.GetTexture() )
 		{
@@ -30,48 +30,52 @@ namespace Castor3D
 
 			if ( !l_image.empty() || !l_texture->GetImage().IsStaticSource() )
 			{
-				if ( l_return )
+				if ( l_result )
 				{
-					l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
+					l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
 							   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 
-				if ( l_return && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
+				if ( l_result && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit sampler" );
+					l_result = p_file.WriteText( m_tabs + cuT( "\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
+					Castor::TextWriter< TextureUnit >::CheckError( l_result, "TextureUnit sampler" );
 				}
 
-				if ( l_return && p_unit.GetChannel() != TextureChannel::eUndefined )
+				if ( l_result && p_unit.GetChannel() != TextureChannel::eUndefined )
 				{
 					switch ( p_unit.GetChannel() )
 					{
 					case TextureChannel::eDiffuse:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
+						l_result = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eNormal:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
+						l_result = p_file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eOpacity:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
+						l_result = p_file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eSpecular:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
+						l_result = p_file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eEmissive:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
+						l_result = p_file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eHeight:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
+						l_result = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
 						break;
 
 					case TextureChannel::eGloss:
-						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
+						l_result = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
+						break;
+
+					case TextureChannel::eAmbientOcclusion:
+						l_result = p_file.WriteText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
 						break;
 
 					default:
@@ -80,9 +84,9 @@ namespace Castor3D
 
 					if ( !l_texture->GetImage().IsStaticSource() )
 					{
-						if ( l_return && p_unit.GetRenderTarget() )
+						if ( l_result && p_unit.GetRenderTarget() )
 						{
-							l_return = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
+							l_result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
 						}
 					}
 					else
@@ -90,19 +94,19 @@ namespace Castor3D
 						Path l_relative{ Scene::TextWriter::CopyFile( Path{ l_image }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } ) };
 						String l_path = l_relative;
 						string::replace( l_path, cuT( "\\" ), cuT( "/" ) );
-						l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_path + cuT( "\"\n" ) ) > 0;
-						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit image" );
+						l_result = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_path + cuT( "\"\n" ) ) > 0;
+						Castor::TextWriter< TextureUnit >::CheckError( l_result, "TextureUnit image" );
 					}
 
-					if ( l_return )
+					if ( l_result )
 					{
-						l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+						l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 					}
 				}
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*********************************************************************************************
@@ -135,20 +139,30 @@ namespace Castor3D
 	bool TextureUnit::Initialise()
 	{
 		RenderTargetSPtr l_target = m_renderTarget.lock();
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( l_target )
 		{
 			l_target->Initialise( GetIndex() );
 			m_texture = l_target->GetTexture().GetTexture();
-			l_return = true;
+			l_result = true;
 		}
 		else if ( m_texture )
 		{
-			l_return = m_texture->Initialise();
+			l_result = m_texture->Initialise();
+			auto l_sampler = GetSampler();
+
+			if ( l_result
+				&& l_sampler
+				&& l_sampler->GetInterpolationMode( InterpolationFilter::eMip ) != InterpolationMode::eNearest )
+			{
+				m_texture->Bind( 0u );
+				m_texture->GenerateMipmaps();
+				m_texture->Unbind( 0u );
+			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void TextureUnit::Cleanup()

@@ -1,4 +1,4 @@
-#include "RenderTechniquePass.hpp"
+﻿#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -47,9 +47,23 @@ namespace Castor3D
 			if ( GetShadowType( p_sceneFlags ) != GLSL::ShadowType::eNone
 				&& !p_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
-				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
-				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel, 6u );
+				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional
+					, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot
+					, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint
+					, ShaderType::ePixel, 6u );
+			}
+
+			if ( CheckFlag( p_programFlags, ProgramFlag::ePbr )
+				&& CheckFlag( p_programFlags, ProgramFlag::eLighting ) )
+			{
+				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
+					, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered
+					, ShaderType::ePixel );
+				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapBrdf
+					, ShaderType::ePixel );
 			}
 		}
 

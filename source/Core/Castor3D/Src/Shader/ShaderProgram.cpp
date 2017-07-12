@@ -151,6 +151,10 @@ namespace Castor3D
 	const String ShaderProgram::MapMetallic = cuT ("c3d_mapMetallic");
 	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
 	const String ShaderProgram::MapEnvironment = cuT( "c3d_mapEnvironment" );
+	const String ShaderProgram::MapAmbientOcclusion = cuT( "c3d_mapAmbientOcclusion" );
+	const String ShaderProgram::MapIrradiance = cuT( "c3d_mapIrradiance" );
+	const String ShaderProgram::MapPrefiltered = cuT( "c3d_mapPrefiltered" );
+	const String ShaderProgram::MapBrdf = cuT( "c3d_mapBrdf" );
 	const String ShaderProgram::MapShadow = cuT( "c3d_mapShadow" );
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
 	const String ShaderProgram::ShadowReceiver = cuT( "c3d_shadowReceiver" );

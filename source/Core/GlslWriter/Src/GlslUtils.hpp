@@ -38,6 +38,9 @@ namespace GLSL
 		GlslWriter_API void DeclareApplyGamma();
 		GlslWriter_API void DeclareRemoveGamma();
 		GlslWriter_API void DeclareLineariseDepth();
+		GlslWriter_API void DeclareGetMapNormal();
+		GlslWriter_API void DeclareFresnelSchlick();
+		GlslWriter_API void DeclareComputeIBL();
 		GlslWriter_API Vec2 CalcTexCoord();
 		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & p_uv
 			, Mat4 const & p_invProj );
@@ -49,8 +52,27 @@ namespace GLSL
 			, Vec3 const & p_HDR );
 		GlslWriter_API Vec3 RemoveGamma( Float const & p_gamma
 			, Vec3 const & p_sRGB );
+		GlslWriter_API Vec3 GetMapNormal( Vec2 const & p_uv
+			, Vec3 const & p_normal
+			, Vec3 const & p_position );
 		GlslWriter_API Float LineariseDepth( Float const & p_depth
 			, Mat4 const & p_invProj );
+		GlslWriter_API Vec3 FresnelSchlick( Float const & p_product
+			, Vec3 const & p_f0
+			, Float const & p_roughness );
+		GlslWriter_API Vec3 ComputeIBL( Vec3 const & p_normal
+			, Vec3 const & p_position
+			, Vec3 const & p_albedo
+			, Float const & p_metalness
+			, Float const & p_roughness
+			, Vec3 const & p_worldEye
+			, SamplerCube const & p_irradiance
+			, SamplerCube const & p_prefiltered
+			, Sampler2D const & p_brdf
+			, Int const & p_invertY );
+
+	public:
+		static uint32_t constexpr MaxIblReflectionLod = 4u;
 
 	private:
 		GlslWriter & m_writer;
@@ -60,7 +82,10 @@ namespace GLSL
 		Function< Vec3, InVec2, InMat4 > m_calcWSPosition;
 		Function< Vec3, InFloat, InVec3 > m_applyGamma;
 		Function< Vec3, InFloat, InVec3 > m_removeGamma;
+		Function< Vec3, InVec2, InVec3, InVec3 > m_getMapNormal;
 		Function< Float, InFloat, InMat4 > m_lineariseDepth;
+		Function< Vec3, InFloat, InVec3, InFloat > m_fresnelSchlick;
+		Function< Vec3, InVec3, InVec3, InVec3, InFloat, InFloat, InVec3, InParam< SamplerCube >, InParam< SamplerCube >, InParam< Sampler2D >, InInt > m_computeIBL;
 	};
 }
 

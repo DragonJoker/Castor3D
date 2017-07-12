@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -47,14 +47,30 @@ namespace GLSL
 		inline Int operator++( int );
 		inline Int & operator<<=( int i );
 		inline Int & operator>>=( int i );
+		inline Int & operator<<=( Int const & i );
+		inline Int & operator>>=( Int const & i );
+		inline Int & operator<<=( UInt const & i );
+		inline Int & operator>>=( UInt const & i );
 		inline Int & operator&=( int i );
 		inline Int & operator|=( int i );
+		inline Int & operator&=( Int const & i );
+		inline Int & operator|=( Int const & i );
+		inline Int & operator&=( UInt const & i );
+		inline Int & operator|=( UInt const & i );
 	};
 
 	inline Int operator<<( Int const & p_value, int i );
 	inline Int operator>>( Int const & p_value, int i );
+	inline Int operator<<( Int const & p_value, Int const & i );
+	inline Int operator>>( Int const & p_value, Int const & i );
+	inline Int operator<<( Int const & p_value, UInt const & i );
+	inline Int operator>>( Int const & p_value, UInt const & i );
 	inline Int operator&( Int const & p_value, int i );
 	inline Int operator|( Int const & p_value, int i );
+	inline Int operator&( Int const & p_value, Int const & i );
+	inline Int operator|( Int const & p_value, Int const & i );
+	inline Int operator&( Int const & p_value, UInt const & i );
+	inline Int operator|( Int const & p_value, UInt const & i );
 
 	inline Int operator "" _i( unsigned long long p_value )
 	{
@@ -79,7 +95,32 @@ namespace GLSL
 		inline explicit operator uint32_t();
 		inline UInt & operator++();
 		inline UInt operator++( int );
+		inline UInt & operator<<=( int i );
+		inline UInt & operator>>=( int i );
+		inline UInt & operator<<=( Int const & i );
+		inline UInt & operator>>=( Int const & i );
+		inline UInt & operator<<=( UInt const & i );
+		inline UInt & operator>>=( UInt const & i );
+		inline UInt & operator&=( int i );
+		inline UInt & operator|=( int i );
+		inline UInt & operator&=( Int const & i );
+		inline UInt & operator|=( Int const & i );
+		inline UInt & operator&=( UInt const & i );
+		inline UInt & operator|=( UInt const & i );
 	};
+
+	inline UInt operator<<( UInt const & p_value, int i );
+	inline UInt operator>>( UInt const & p_value, int i );
+	inline UInt operator<<( UInt const & p_value, Int const & i );
+	inline UInt operator>>( UInt const & p_value, Int const & i );
+	inline UInt operator<<( UInt const & p_value, UInt const & i );
+	inline UInt operator>>( UInt const & p_value, UInt const & i );
+	inline UInt operator&( UInt const & p_value, int i );
+	inline UInt operator|( UInt const & p_value, int i );
+	inline UInt operator&( UInt const & p_value, Int const & i );
+	inline UInt operator|( UInt const & p_value, Int const & i );
+	inline UInt operator&( UInt const & p_value, UInt const & i );
+	inline UInt operator|( UInt const & p_value, UInt const & i );
 
 	inline UInt operator "" _ui( unsigned long long p_value )
 	{

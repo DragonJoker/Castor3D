@@ -1,4 +1,4 @@
-#include "RenderPass.hpp"
+﻿#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -326,7 +326,7 @@ namespace Castor3D
 			auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
 			auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
 			REQUIRE( l_count <= p_renderNodes.size() );
-			auto l_buffer = p_matrixBuffer.data();
+			auto l_buffer = p_matrixBuffer.GetData();
 			auto l_it = p_renderNodes.begin();
 			auto i = 0u;
 
@@ -340,7 +340,7 @@ namespace Castor3D
 				++l_it;
 			}
 
-			p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
+			p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.GetData() );
 			return l_count;
 		}
 	}
@@ -735,7 +735,7 @@ namespace Castor3D
 		uint32_t const l_stride = l_mtxSize * 400u;
 		auto const l_count = std::min( p_bonesBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
 		REQUIRE( l_count <= p_renderNodes.size() );
-		auto l_buffer = p_bonesBuffer.data();
+		auto l_buffer = p_bonesBuffer.GetData();
 		auto l_it = p_renderNodes.begin();
 		auto i = 0u;
 
@@ -748,7 +748,7 @@ namespace Castor3D
 			++l_it;
 		}
 
-		p_bonesBuffer.Upload( 0u, l_stride * l_count, p_bonesBuffer.data() );
+		p_bonesBuffer.Upload( 0u, l_stride * l_count, p_bonesBuffer.GetData() );
 		return l_count;
 	}
 

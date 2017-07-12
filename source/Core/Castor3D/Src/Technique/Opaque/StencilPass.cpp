@@ -88,7 +88,7 @@ namespace Castor3D
 		m_program->Initialise();
 
 		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->Initialise( { p_vbo }, p_ibo );
+		m_geometryBuffers->Initialise( { p_vbo }, p_ibo.get() );
 
 		DepthStencilState l_dsstate;
 		l_dsstate.SetDepthTest( true );

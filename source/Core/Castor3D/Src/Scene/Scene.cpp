@@ -766,6 +766,7 @@ namespace Castor3D
 		if ( !m_skybox && !m_backgroundImage )
 		{
 			m_skybox = std::make_unique< Skybox >( *GetEngine() );
+			m_skybox->SetScene( *this );
 			Size l_size{ 16, 16 };
 			constexpr PixelFormat l_format{ PixelFormat::eR8G8B8 };
 			UbPixel l_pixel{ true };
@@ -823,6 +824,7 @@ namespace Castor3D
 	bool Scene::SetForeground( SkyboxUPtr && p_skybox )
 	{
 		m_skybox = std::move( p_skybox );
+		m_skybox->SetScene( *this );
 		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 		{
 			m_skybox->Initialise();
@@ -962,7 +964,7 @@ namespace Castor3D
 		}
 	}
 
-	bool Scene::HasEnvironmentMap( SceneNode const & p_node )
+	bool Scene::HasEnvironmentMap( SceneNode const & p_node )const
 	{
 		return m_reflectionMaps.end() != m_reflectionMaps.find( &p_node );
 	}
@@ -971,5 +973,17 @@ namespace Castor3D
 	{
 		REQUIRE( HasEnvironmentMap( p_node ) );
 		return *m_reflectionMaps.find( &p_node )->second;
+	}
+
+	IblTextures const & Scene::GetIbl( SceneNode const & p_node )const
+	{
+		REQUIRE( m_skybox );
+
+		if ( !HasEnvironmentMap( p_node ) )
+		{
+			return m_skybox->GetIbl();
+		}
+
+		return m_skybox->GetIbl();
 	}
 }

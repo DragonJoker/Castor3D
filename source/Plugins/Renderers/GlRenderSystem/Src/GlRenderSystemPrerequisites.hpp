@@ -574,6 +574,7 @@ namespace GlRender
 		eDebugOutputSynchronous = 0x8242,
 		eDepthClamp = 0x864F,
 		eRasterizerDiscard = 0x8C89,
+		eSeamlessCubeMaps = 0x884F,
 	};
 
 	enum class GlFramebufferStatus

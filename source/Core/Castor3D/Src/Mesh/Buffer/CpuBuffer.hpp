@@ -285,66 +285,35 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the filled buffer size.
-		 *\return		The size.
+		 *\return		The buffer size.
 		 *\~french
-		 *\brief		Récupère la taille remplie du tampon.
-		 *\return		La taille.
+		 *\return		La taille du tampon.
 		 */
 		inline uint32_t GetSize()const
 		{
-			uint32_t l_uiReturn = m_savedSize;
-
-			if ( m_data.size() )
-			{
-				l_uiReturn = uint32_t( m_data.size() );
-			}
-
-			return l_uiReturn;
+			return uint32_t( m_data.size() );
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the allocated buffer size.
-		 *\return		The size.
+		 *\return		\p true if the buffer is empty.
 		 *\~french
-		 *\brief		Récupère la taille allouée du tampon.
-		 *\return		La taille.
+		 *\return		\p true si le tampon est vide.
 		 */
-		inline uint32_t GetCapacity()const
+		inline uint32_t IsEmpty()const
 		{
-			// Safe cast since I limit a buffer size to uint32_t.
-			return uint32_t( m_data.capacity() );
+			return m_data.empty();
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the allocated size of the buffer.
-		 *\param[in]	p_uiNewSize	The new size.
+		 *\param[in]	p_value	The new size.
 		 *\~french
 		 *\brief		Définit la taille allouée du tampon.
-		 *\param[in]	p_uiNewSize	La nouvelle taille.
+		 *\param[in]	p_value	La nouvelle taille.
 		 */
-		inline void Resize( uint32_t p_uiNewSize )
+		inline void Resize( uint32_t p_value )
 		{
-			m_data.resize( p_uiNewSize, T{} );
-		}
-		/**
-		 *\~english
-		 *\brief		Increases the allocated size of the buffer.
-		 *\param[in]	p_uiIncrement	The size increment.
-		 *\~french
-		 *\brief		Augmente la taille allouée du tampon.
-		 *\param[in]	p_uiIncrement	L'incrément de taille.
-		 */
-		inline void Grow( uint32_t p_uiIncrement )
-		{
-			if ( p_uiIncrement + GetCapacity() < p_uiIncrement )
-			{
-				throw std::range_error( "Can't reserve more space for this buffer" );
-			}
-			else
-			{
-				m_data.reserve( m_data.capacity() + p_uiIncrement );
-			}
+			m_data.resize( p_value, T{} );
 		}
 		/**
 		 *\~english
@@ -354,32 +323,67 @@ namespace Castor3D
 		 */
 		inline void Clear()
 		{
-			m_savedSize = uint32_t( m_data.size() );
 			m_data.clear();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the data pointer.
 		 *\return		The data pointer.
 		 *\~french
-		 *\brief		Récupère le pointeur sur les données.
 		 *\return		Le pointeur sur les données.
 		 */
-		inline T const * data()const
+		inline T const * GetData()const
 		{
-			return ( m_data.size() ? &m_data[0] : nullptr );
+			return ( !m_data.empty() ? m_data.data() : nullptr );
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the data pointer.
 		 *\return		The data pointer.
 		 *\~french
-		 *\brief		Récupère le pointeur sur les données.
 		 *\return		Le pointeur sur les données.
 		 */
-		inline T * data()
+		inline T * GetData()
 		{
-			return ( m_data.size() ? &m_data[0] : nullptr );
+			return ( !m_data.empty() ? m_data.data() : nullptr );
+		}
+		/**
+		 *\~english
+		 *\return		An iterator to the beginning of the elements.
+		 *\~french
+		 *\return		Un itérateur sur le début des éléments.
+		 */
+		inline auto begin()
+		{
+			return m_data.begin();
+		}
+		/**
+		 *\~english
+		 *\return		An iterator to the beginning of the elements.
+		 *\~french
+		 *\return		Un itérateur sur le début des éléments.
+		 */
+		inline auto begin()const
+		{
+			return m_data.begin();
+		}
+		/**
+		 *\~english
+		 *\return		An iterator to the end of the elements.
+		 *\~french
+		 *\return		Un itérateur sur la fin des éléments.
+		 */
+		inline auto end()
+		{
+			return m_data.end();
+		}
+		/**
+		 *\~english
+		 *\return		An iterator to the end of the elements.
+		 *\~french
+		 *\return		Un itérateur sur la fin des éléments.
+		 */
+		inline auto end()const
+		{
+			return m_data.end();
 		}
 
 	protected:

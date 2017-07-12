@@ -1,13 +1,46 @@
-#include "DeferredRendering.hpp"
+﻿#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
+#include "Scene/Skybox.hpp"
 #include "Technique/Opaque/OpaquePass.hpp"
+#include "Texture/Sampler.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
+	//*********************************************************************************************
+
+	namespace
+	{
+		SamplerSPtr DoCreateSampler( Engine & p_engine
+			, String const & p_name )
+		{
+			SamplerSPtr l_result;
+			auto & l_cache = p_engine.GetSamplerCache();
+
+			if ( l_cache.Has( p_name ) )
+			{
+				l_result = l_cache.Find( p_name );
+			}
+			else
+			{
+				l_result = p_engine.GetRenderSystem()->CreateSampler( p_name );
+				l_result->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+				l_result->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+				l_result->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+				l_result->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+				l_result->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+				l_result->Initialise();
+				l_cache.Add( p_name, l_result );
+			}
+
+			return l_result;
+		}
+	}
+
+	//*********************************************************************************************
 	DeferredRendering::DeferredRendering( Engine & p_engine
 		, OpaquePass & p_opaquePass
 		, FrameBuffer & p_frameBuffer
@@ -46,7 +79,7 @@ namespace Castor3D
 				m_geometryPassResult[i] = std::make_unique< TextureUnit >( p_engine );
 				m_geometryPassResult[i]->SetIndex( i );
 				m_geometryPassResult[i]->SetTexture( l_texture );
-				m_geometryPassResult[i]->SetSampler( p_engine.GetLightsSampler() );
+				m_geometryPassResult[i]->SetSampler( DoCreateSampler( p_engine, GetTextureName( DsTexture( i ) ) ) );
 				m_geometryPassResult[i]->Initialise();
 
 				m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
@@ -76,9 +109,11 @@ namespace Castor3D
 				, m_depthAttach
 				, m_sceneUbo );
 			m_reflection = std::make_unique< ReflectionPass >( p_engine
-				, m_size );
+				, m_size
+				, m_sceneUbo );
 			m_combinePass = std::make_unique< CombinePass >( p_engine
 				, m_size
+				, m_sceneUbo
 				, m_ssaoConfig );
 		}
 
@@ -142,28 +177,56 @@ namespace Castor3D
 			, l_invViewProj
 			, l_invView
 			, l_invProj );
-		TextureUnit const * l_result = &m_lightingPass->GetResult();
 
-		if ( !p_scene.GetEnvironmentMaps().empty() )
+		if ( p_scene.GetMaterialsType() == MaterialType::ePbr )
 		{
+			m_sceneUbo.GetUbo().BindTo( SceneUbo::BindingPoint );
 			m_reflection->Render( m_geometryPassResult
-				, *m_lightingPass->GetResult().GetTexture()
+				, m_lightingPass->GetResult()
 				, p_scene
 				, p_camera
 				, l_invViewProj
 				, l_invView
 				, l_invProj );
-			l_result = &m_reflection->GetResult();
-		}
 
-		m_combinePass->Render( m_geometryPassResult
-			, *l_result
-			, p_camera
-			, l_invViewProj
-			, l_invView
-			, l_invProj
-			, p_scene.GetFog()
-			, m_frameBuffer );
+			m_combinePass->Render( m_geometryPassResult
+				, m_lightingPass->GetResult()
+				, m_reflection->GetResult()
+				, p_scene.GetSkybox().GetIbl().GetIrradiance()
+				, p_scene.GetSkybox().GetIbl().GetPrefilteredEnvironment()
+				, p_scene.GetSkybox().GetIbl().GetPrefilteredBrdf()
+				, p_camera
+				, l_invViewProj
+				, l_invView
+				, l_invProj
+				, p_scene.GetFog()
+				, m_frameBuffer );
+		}
+		else
+		{
+			TextureUnit const * l_result = &m_lightingPass->GetResult();
+
+			if ( !p_scene.GetEnvironmentMaps().empty() )
+			{
+				m_reflection->Render( m_geometryPassResult
+					, *l_result
+					, p_scene
+					, p_camera
+					, l_invViewProj
+					, l_invView
+					, l_invProj );
+				l_result = &m_reflection->GetResult();
+			}
+
+			m_combinePass->Render( m_geometryPassResult
+				, *l_result
+				, p_camera
+				, l_invViewProj
+				, l_invView
+				, l_invProj
+				, p_scene.GetFog()
+				, m_frameBuffer );
+		}
 	}
 
 	void DeferredRendering::Debug( Camera const & p_camera )

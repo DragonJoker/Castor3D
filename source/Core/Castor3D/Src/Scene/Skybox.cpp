@@ -1,12 +1,16 @@
-#include "Skybox.hpp"
+﻿#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Buffer/BufferElementGroup.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -71,7 +75,9 @@ namespace Castor3D
 
 	Skybox::Skybox( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
-		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eRead ) }
+		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube
+			, AccessType::eNone
+			, AccessType::eRead ) }
 		, m_matrixUbo{ p_engine }
 		, m_modelMatrixUbo{ p_engine }
 		, m_configUbo{ p_engine }
@@ -127,11 +133,24 @@ namespace Castor3D
 
 	bool Skybox::Initialise()
 	{
+		REQUIRE( m_scene );
 		REQUIRE( m_texture );
+		bool l_result = DoInitialiseTexture();
 		auto & l_program = DoInitialiseShader();
-		return DoInitialiseTexture()
-			   && DoInitialiseVertexBuffer()
-			   && DoInitialisePipeline( l_program );
+
+		if ( l_result )
+		{
+			if ( m_scene->GetMaterialsType() == MaterialType::ePbr )
+			{
+				m_ibl = std::make_unique< IblTextures >( *m_scene );
+				m_ibl->Update( *m_texture );
+			}
+
+			l_result = DoInitialiseVertexBuffer()
+				&& DoInitialisePipeline( l_program );
+		}
+
+		return l_result;
 	}
 
 	void Skybox::Cleanup()
@@ -148,6 +167,7 @@ namespace Castor3D
 		m_configUbo.GetUbo().Cleanup();
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
+		m_ibl.reset();
 	}
 
 	void Skybox::Render( Camera const & p_camera )
@@ -210,7 +230,11 @@ namespace Castor3D
 			auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
 			auto skybox = l_writer.DeclUniform< SamplerCube >( cuT( "skybox" ) );
 			GLSL::Utils l_utils{ l_writer };
-			l_utils.DeclareRemoveGamma();
+
+			if ( !m_hdr )
+			{
+				l_utils.DeclareRemoveGamma();
+			}
 
 			// Outputs
 			auto pxl_FragColor = l_writer.DeclOutput< Vec4 >( cuT( "pxl_FragColor" ) );
@@ -219,7 +243,13 @@ namespace Castor3D
 			{
 				auto l_skybox = l_writer.DeclLocale( cuT( "l_skybox" )
 					, texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) ) );
-				pxl_FragColor = vec4( l_utils.RemoveGamma( c3d_gamma, l_skybox.xyz() ), l_skybox.w() );
+
+				if ( !m_hdr )
+				{
+					pxl_FragColor = vec4( l_utils.RemoveGamma( c3d_gamma, l_skybox.xyz() ), l_skybox.w() );
+				}
+
+				pxl_FragColor = vec4( l_skybox.xyz(), l_skybox.w() );
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
@@ -244,7 +274,98 @@ namespace Castor3D
 
 	bool Skybox::DoInitialiseTexture()
 	{
-		return m_texture->Initialise();
+		if ( m_equiTexture )
+		{
+			DoInitialiseEquiTexture();
+			m_hdr = true;
+		}
+
+		auto l_result = m_texture->Initialise();
+
+		if ( l_result )
+		{
+			auto l_sampler = m_sampler.lock();
+			m_texture->Bind( 0 );
+			m_texture->GenerateMipmaps();
+			m_texture->Unbind( 0 );
+		}
+
+		return l_result;
+	}
+
+	void Skybox::DoInitialiseEquiTexture()
+	{
+		auto & l_engine = *GetEngine();
+		auto & l_renderSystem = *l_engine.GetRenderSystem();
+		m_equiTexture->Initialise();
+
+		// Create the cube texture.
+		m_texture = l_renderSystem.CreateTexture( TextureType::eCube
+			, AccessType::eNone
+			, AccessType::eRead | AccessType::eWrite
+			, PixelFormat::eRGB32F
+			, m_equiSize );
+		m_texture->GetImage( uint32_t( CubeMapFace::ePositiveX ) ).InitialiseSource();
+		m_texture->GetImage( uint32_t( CubeMapFace::eNegativeX ) ).InitialiseSource();
+		m_texture->GetImage( uint32_t( CubeMapFace::ePositiveY ) ).InitialiseSource();
+		m_texture->GetImage( uint32_t( CubeMapFace::eNegativeY ) ).InitialiseSource();
+		m_texture->GetImage( uint32_t( CubeMapFace::ePositiveZ ) ).InitialiseSource();
+		m_texture->GetImage( uint32_t( CubeMapFace::eNegativeZ ) ).InitialiseSource();
+		m_texture->Initialise();
+
+		// Create the one shot FBO and attaches
+		auto l_fbo = l_renderSystem.CreateFrameBuffer();
+		std::array< FrameBufferAttachmentSPtr, 6 > l_attachs
+		{
+			{
+				l_fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveX ),
+				l_fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeX ),
+				l_fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveY ),
+				l_fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeY ),
+				l_fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveZ ),
+				l_fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeZ ),
+			}
+		};
+		// Create The depth RBO.
+		auto l_depthRbo = l_fbo->CreateDepthStencilRenderBuffer( PixelFormat::eD24 );
+		l_depthRbo->Create();
+		l_depthRbo->Initialise( m_equiSize );
+		auto l_depthAttach = l_fbo->CreateAttachment( l_depthRbo );
+
+		// Fill the FBO
+		l_fbo->Create();
+		l_fbo->Initialise( m_equiSize );
+		l_fbo->Bind();
+		l_fbo->Attach( AttachmentPoint::eDepth, l_depthAttach );
+		REQUIRE( l_fbo->IsComplete() );
+		l_fbo->Unbind();
+
+		// Render the equirectangular texture to the cube faces.
+		l_renderSystem.GetCurrentContext()->RenderEquiToCube( m_equiSize
+			, *m_equiTexture
+			, m_texture
+			, l_fbo
+			, l_attachs );
+
+		// Cleanup the one shot FBO and attaches
+		l_fbo->Bind();
+		l_fbo->DetachAll();
+		l_fbo->Unbind();
+
+		l_depthRbo->Cleanup();
+		l_depthRbo->Destroy();
+
+		for ( auto & l_attach : l_attachs )
+		{
+			l_attach.reset();
+		}
+
+		l_depthAttach.reset();
+		l_fbo->Cleanup();
+		l_fbo->Destroy();
+
+		m_equiTexture->Cleanup();
+		m_equiTexture.reset();
 	}
 
 	bool Skybox::DoInitialisePipeline( ShaderProgram & p_program )

@@ -1,4 +1,4 @@
-﻿#include "OverlayRenderer.hpp"
+#include "OverlayRenderer.hpp"
 
 #include "Engine.hpp"
 
@@ -110,7 +110,7 @@ namespace Castor3D
 			m_panelVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			uint32_t l_stride = m_declaration.stride();
 			m_panelVertexBuffer->Resize( uint32_t( m_panelVertex.size() * l_stride ) );
-			uint8_t * l_buffer = m_panelVertexBuffer->data();
+			uint8_t * l_buffer = m_panelVertexBuffer->GetData();
 
 			for ( auto & l_vertex : m_panelVertex )
 			{
@@ -138,7 +138,7 @@ namespace Castor3D
 			m_borderVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			uint32_t l_stride = m_declaration.stride();
 			m_borderVertexBuffer->Resize( uint32_t( m_borderVertex.size() * l_stride ) );
-			uint8_t * l_buffer = m_borderVertexBuffer->data();
+			uint8_t * l_buffer = m_borderVertexBuffer->GetData();
 
 			for ( auto & l_vertex : m_borderVertex )
 			{

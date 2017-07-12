@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -201,7 +201,7 @@ namespace Castor3D
 	 *\param[in]	p_receiver		La variable qui recevra le statut de receveur d'ombres.
 	 */
 	void DecodeReceiver( GLSL::GlslWriter & p_writer
-		, GLSL::Float & p_encoded
+		, GLSL::Int & p_encoded
 		, GLSL::Int const & p_receiver );
 	//!\~english	The geometry pass result.
 	//!\~french		Le résultat de la geometry pass.

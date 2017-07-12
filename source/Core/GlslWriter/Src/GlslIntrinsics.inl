@@ -349,6 +349,42 @@ namespace GLSL
 	}
 
 	template< typename Value >
+	inline Value dFdx( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "dFdx" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value dFdy( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "dFdy" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value dFdxCoarse( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "dFdyCoarse" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value dFdyCoarse( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "dFdyCoarse" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value dFdxFine( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "dFdxFine" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value dFdyFine( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "dFdyFine" ), p_value );
+	}
+
+	template< typename Value >
 	inline Value neg( Value const & p_value )
 	{
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "-" ), p_value );

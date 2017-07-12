@@ -1,4 +1,4 @@
-﻿#include "FbxImporter.hpp"
+#include "FbxImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
@@ -251,7 +251,7 @@ namespace C3dFbx
 			{
 				uint32_t l_count = p_fbxValues->GetDirectArray().GetCount();
 				bool l_useIndex = p_fbxValues->GetReferenceMode() == FbxLayerElement::eIndexToDirect
-								  || p_fbxValues->GetReferenceMode() == FbxLayerElement::eIndex;
+					|| p_fbxValues->GetReferenceMode() == FbxLayerElement::eIndex;
 
 				switch ( p_fbxValues->GetMappingMode() )
 				{
@@ -922,6 +922,11 @@ namespace C3dFbx
 
 		l_submesh->AddPoints( l_vertices );
 		l_submesh->AddFaceGroup( l_faces );
+
+		if ( !l_tangentSpace )
+		{
+			l_submesh->ComputeTangentsFromNormals();
+		}
 
 		return l_submesh;
 	}

@@ -170,10 +170,10 @@ namespace Castor3D
 
 		std::function< void() > l_main = [&]()
 		{
-			auto l_v4Vertex = l_writer.DeclLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_v4Normal = l_writer.DeclLocale( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
-			auto l_v4Tangent = l_writer.DeclLocale( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto l_v3Texture = l_writer.DeclLocale( cuT( "l_v3Texture" ), texture );
+			auto l_position = l_writer.DeclLocale( cuT( "l_position" ), vec4( position.xyz(), 1.0 ) );
+			auto l_normal = l_writer.DeclLocale( cuT( "l_normal" ), vec4( normal, 0.0 ) );
+			auto l_tangent = l_writer.DeclLocale( cuT( "l_tangent" ), vec4( tangent, 0.0 ) );
+			auto l_texture = l_writer.DeclLocale( cuT( "l_texture" ), texture );
 			auto l_mtxModel = l_writer.DeclLocale< Mat4 >( cuT( "l_mtxModel" ) );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
@@ -203,33 +203,33 @@ namespace Castor3D
 			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto l_time = l_writer.DeclLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
+				l_position = vec4( l_position.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
+				l_normal = vec4( l_normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
+				l_tangent = vec4( l_tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
+				l_texture = l_texture * l_writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
-			vtx_texture = l_v3Texture;
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_position = l_v4Vertex.xyz();
-			l_v4Vertex = c3d_mtxView * l_v4Vertex;
+			vtx_texture = l_texture;
+			l_position = l_mtxModel * l_position;
+			vtx_position = l_position.xyz();
+			l_position = c3d_mtxView * l_position;
 			auto l_mtxNormal = l_writer.DeclLocale( cuT( "l_mtxNormal" )
 				, transpose( inverse( mat3( l_mtxModel ) ) ) );
 
 			if ( p_invertNormals )
 			{
-				vtx_normal = normalize( l_mtxNormal * -l_v4Normal.xyz() );
+				vtx_normal = normalize( l_mtxNormal * -l_normal.xyz() );
 			}
 			else
 			{
-				vtx_normal = normalize( l_mtxNormal * l_v4Normal.xyz() );
+				vtx_normal = normalize( l_mtxNormal * l_normal.xyz() );
 			}
 
-			vtx_tangent = normalize( l_mtxNormal * l_v4Tangent.xyz() );
+			vtx_tangent = normalize( l_mtxNormal * l_tangent.xyz() );
 			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * l_v4Vertex;
+			gl_Position = c3d_mtxProjection * l_position;
 
 			auto l_tbn = l_writer.DeclLocale( cuT( "l_tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = l_tbn * vtx_position;
@@ -435,6 +435,12 @@ namespace Castor3D
 			, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
 			, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
+		auto c3d_mapHeight( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapHeight
+			, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
+		auto c3d_mapAmbientOcclusion( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+			, CheckFlag( p_textureFlags, TextureChannel::eAmbientOcclusion ) ) );
+		auto c3d_mapEmissive( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive
+			, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapEnvironment( l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment
 			, CheckFlag( p_textureFlags, TextureChannel::eReflection )
 			|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ) );
@@ -463,6 +469,11 @@ namespace Castor3D
 		Declare_EncodeMaterial( l_writer );
 		GLSL::Utils l_utils{ l_writer };
 		l_utils.DeclareRemoveGamma();
+
+		if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+		{
+			l_utils.DeclareGetMapNormal();
+		}
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -561,9 +572,17 @@ namespace Castor3D
 				}
 			}
 
+			auto l_ambientOcclusion = l_writer.DeclLocale( cuT( "l_ambientOcclusion" )
+				, 1.0_f );
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eAmbientOcclusion ) )
+			{
+				l_ambientOcclusion = texture( c3d_mapAmbientOcclusion, l_texCoord.xy() ).r();
+			}
+
 			out_c3dOutput1 = vec4( l_normal, l_flags );
 			out_c3dOutput2 = vec4( l_matAlbedo, 0.0_f );
-			out_c3dOutput3 = vec4( l_matMetallic, l_matRoughness, 0.0_f, 0.0_f );
+			out_c3dOutput3 = vec4( l_matMetallic, l_matRoughness, l_ambientOcclusion, 0.0_f );
 			out_c3dOutput4 = vec4( l_matEmissive, l_materials.GetRefractionRatio( vtx_material ) );
 		} );
 

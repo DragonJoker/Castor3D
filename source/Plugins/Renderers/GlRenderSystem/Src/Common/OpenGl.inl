@@ -715,6 +715,11 @@ namespace GlRender
 			l_return |= GlBarrierBit::eShaderStorage;
 		}
 
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eTextureFetch ) )
+		{
+			l_return |= GlBarrierBit::eTextureFetch;
+		}
+
 		return l_return;
 	}
 
@@ -897,32 +902,32 @@ namespace GlRender
 
 	void OpenGl::DrawArrays( GlTopology mode, int first, int count )const
 	{
-		EXEC_FUNCTION( DrawArrays, uint32_t( mode ), first, count );
+		EXEC_FUNCTION( DrawArrays, mode, first, count );
 	}
 
 	void OpenGl::DrawElements( GlTopology mode, int count, GlType type, void const * indices )const
 	{
-		EXEC_FUNCTION( DrawElements, uint32_t( mode ), count, uint32_t( type ), indices );
+		EXEC_FUNCTION( DrawElements, mode, count, type, indices );
 	}
 
 	void OpenGl::Enable( GlTweak mode )const
 	{
-		EXEC_FUNCTION( Enable, uint32_t( mode ) );
+		EXEC_FUNCTION( EnableTweak, mode );
 	}
 
 	void OpenGl::Disable( GlTweak mode )const
 	{
-		EXEC_FUNCTION( Disable, uint32_t( mode ) );
+		EXEC_FUNCTION( DisableTweak, mode );
 	}
 
 	void OpenGl::Enable( GlTexDim texture )const
 	{
-		EXEC_FUNCTION( Enable, uint32_t( texture ) );
+		EXEC_FUNCTION( EnableTexDim, texture );
 	}
 
 	void OpenGl::Disable( GlTexDim texture )const
 	{
-		EXEC_FUNCTION( Disable, uint32_t( texture ) );
+		EXEC_FUNCTION( DisableTexDim, texture );
 	}
 
 	void OpenGl::SelectBuffer( int size, uint32_t * buffer )const
@@ -1238,12 +1243,12 @@ namespace GlRender
 
 	void OpenGl::DrawArraysInstanced( GlTopology mode, int first, int count, int primcount )const
 	{
-		EXEC_FUNCTION( DrawArraysInstanced, uint32_t( mode ), first, count, primcount );
+		EXEC_FUNCTION( DrawArraysInstanced, mode, first, count, primcount );
 	}
 
 	void OpenGl::DrawElementsInstanced( GlTopology mode, int count, GlType type, const void * indices, int primcount )const
 	{
-		EXEC_FUNCTION( DrawElementsInstanced, uint32_t( mode ), count, uint32_t( type ), indices, primcount );
+		EXEC_FUNCTION( DrawElementsInstanced, mode, count, type, indices, primcount );
 	}
 
 	void OpenGl::VertexAttribDivisor( uint32_t index, uint32_t divisor )const

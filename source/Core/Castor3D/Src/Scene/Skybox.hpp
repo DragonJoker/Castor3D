@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -27,6 +27,8 @@ SOFTWARE.
 #include "Shader/HdrConfigUbo.hpp"
 #include "Shader/MatrixUbo.hpp"
 #include "Shader/ModelMatrixUbo.hpp"
+#include "PBR/IblTextures.hpp"
+#include "Texture/TextureUnit.hpp"
 
 namespace Castor3D
 {
@@ -118,6 +120,18 @@ namespace Castor3D
 		 */
 		C3D_API void Render( Camera const & p_camera );
 		/**
+		*\~english
+		*\return		Sets the skybox's texture.
+		*\~french
+		*\return		Définit la texture de la skybox.
+		*/
+		inline void SetEquiTexture( TextureLayoutSPtr p_texture
+			, Castor::Size const & p_size )
+		{
+			m_equiTexture = p_texture;
+			m_equiSize = p_size;
+		}
+		/**
 		 *\~english
 		 *\return		The skybox's texture.
 		 *\~french
@@ -140,6 +154,17 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The skybox's IBL textures.
+		 *\~french
+		 *\return		Les texture d'IBL de la skybox.
+		 */
+		inline IblTextures const & GetIbl()const
+		{
+			REQUIRE( m_ibl );
+			return *m_ibl;
+		}
+		/**
+		 *\~english
 		 *\return		Sets the skybox's texture.
 		 *\~french
 		 *\return		Définit la texture de la skybox.
@@ -148,17 +173,37 @@ namespace Castor3D
 		{
 			m_texture = p_texture;
 		}
+		/**
+		 *\~english
+		 *\return		Sets the skybox's scene.
+		 *\~french
+		 *\return		Définit la scène de la skybox.
+		 */
+		inline void SetScene( Scene & p_scene )
+		{
+			m_scene = &p_scene;
+		}
 
 	private:
 		ShaderProgram & DoInitialiseShader();
 		bool DoInitialiseTexture();
+		void DoInitialiseEquiTexture();
 		bool DoInitialiseVertexBuffer();
 		bool DoInitialisePipeline( ShaderProgram & p_program );
 
 	private:
+		//!\~english	The skybox's scene.
+		//!\~french		La scène de la skybox.
+		SceneRPtr m_scene{ nullptr };
 		//!\~english	The pipeline used while rendering the skybox.
 		//!\~french		Le pipeline utilisé pour le rendu de la skybox.
 		RenderPipelineUPtr m_pipeline;
+		//!\~english	The skybox equirectangular map texture.
+		//!\~french		La texture équirectangulaire de la skybox.
+		TextureLayoutSPtr m_equiTexture;
+		//!\~english	The skybox equirectangular map texture wanted face size.
+		//!\~french		La taille voulue pour les faces de la texture équirectangulaire de la skybox.
+		Castor::Size m_equiSize;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
 		TextureLayoutSPtr m_texture;
@@ -191,6 +236,12 @@ namespace Castor3D
 		//!\~english	The model matrix.
 		//!\~french		La matrice modèle.
 		Castor::Matrix4x4r m_mtxModel;
+		//!\~english	The IBL textures.
+		//!\~french		Les textures l'IBL.
+		std::unique_ptr< IblTextures > m_ibl;
+		//!\~english	Tells if the skybox's texture is HDR.
+		//!\~french		Dit si la texture de la skybox est HDR.
+		bool m_hdr{ false };
 	};
 }
 

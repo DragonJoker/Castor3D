@@ -1,4 +1,4 @@
-#include "EnvironmentMap.hpp"
+﻿#include "EnvironmentMap.hpp"
 
 #include "Engine.hpp"
 
@@ -40,6 +40,8 @@ namespace Castor3D
 				l_sampler->SetInterpolationMode( InterpolationFilter::eMin
 					, InterpolationMode::eLinear );
 				l_sampler->SetInterpolationMode( InterpolationFilter::eMag
+					, InterpolationMode::eLinear );
+				l_sampler->SetInterpolationMode( InterpolationFilter::eMip
 					, InterpolationMode::eLinear );
 				l_sampler->SetWrappingMode( TextureUVW::eU
 					, WrapMode::eClampToEdge );
@@ -147,6 +149,9 @@ namespace Castor3D
 				m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
 				auto l_texture = m_environmentMap.GetTexture();
 				l_texture->Initialise();
+				l_texture->Bind( 0 );
+				l_texture->GenerateMipmaps();
+				l_texture->Unbind( 0 );
 				uint32_t i = 0;
 
 				for ( auto & l_attach : m_colourAttachs )
@@ -173,6 +178,13 @@ namespace Castor3D
 			{
 				l_pass->Initialise( MapSize );
 			}
+
+			auto & l_scene = *m_node.GetScene();
+
+			if ( l_scene.GetMaterialsType() == MaterialType::ePbr )
+			{
+				m_ibl = std::make_unique< IblTextures >( l_scene );
+			}
 		}
 
 		return l_return;
@@ -180,6 +192,8 @@ namespace Castor3D
 
 	void EnvironmentMap::Cleanup()
 	{
+		m_ibl.reset();
+
 		if ( m_frameBuffer )
 		{
 			for ( auto & l_pass : m_passes )
@@ -217,17 +231,28 @@ namespace Castor3D
 
 	void EnvironmentMap::Render()
 	{
-		uint32_t l_face = 0;
+		uint32_t l_face = 0u;
+		m_render++;
 
-		for ( auto & l_attach : m_colourAttachs )
+		if ( m_render == 5u )
 		{
-			m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-			l_attach->Attach( AttachmentPoint::eColour, 0u );
-			m_frameBuffer->SetDrawBuffer( l_attach );
-			m_frameBuffer->Clear( BufferComponent::eDepth | BufferComponent::eColour );
-			m_passes[l_face]->Render();
-			m_frameBuffer->Unbind();
-			l_face++;
+			for ( auto & l_attach : m_colourAttachs )
+			{
+				m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+				l_attach->Attach( AttachmentPoint::eColour, 0u );
+				m_frameBuffer->SetDrawBuffer( l_attach );
+				m_frameBuffer->Clear( BufferComponent::eDepth | BufferComponent::eColour );
+				m_passes[l_face]->Render();
+				m_frameBuffer->Unbind();
+				l_face++;
+			}
+
+			if ( m_ibl )
+			{
+				m_ibl->Update( *m_environmentMap.GetTexture() );
+			}
+
+			m_render = 0u;
 		}
 	}
 }

@@ -354,6 +354,21 @@ namespace Castor3D
 		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face ) = 0;
 		/**
 		 *\~english
+		 *\brief		Creates an attachment to a cube texture's face's mipmap.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_face		The face.
+		 *\param[in]	p_mipLevel	The mipmap level.
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à un mipmap d'une face d'une texture cube.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_face		La face.
+		 *\param[in]	p_mipLevel	Le niveau du mipmap.
+		 *\return		L'attache créée
+		 */
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel ) = 0;
+		/**
+		 *\~english
 		 *\brief		Checks if the FBO is complete
 		 *\return		\p false if the buffer is in error if there is an attachment missing
 		 *\~french

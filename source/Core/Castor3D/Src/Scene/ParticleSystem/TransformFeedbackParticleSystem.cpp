@@ -185,7 +185,7 @@ namespace Castor3D
 			if ( l_return )
 			{
 				m_updateVertexBuffers[i]->Resize( uint32_t( m_parent.GetMaxParticlesCount() ) * m_computed.stride() );
-				auto l_buffer = m_updateVertexBuffers[i]->data();
+				auto l_buffer = m_updateVertexBuffers[i]->GetData();
 
 				for ( uint32_t i = 0u; i < m_parent.GetMaxParticlesCount(); ++i )
 				{

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <Type Name="Castor3D::TUniform&lt;*&gt;">
+    <DisplayString>{{name={m_name} count={m_occurences}}}</DisplayString>
+    <Expand>
+      <Item Name="name">m_name</Item>
+      <Item Name="count">m_occurences</Item>
+      <Item Name="changed">m_changed</Item>
+      <Item Name="stride">m_stride</Item>
+      <Item Name="values">m_typedValues</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="Castor3D::UniformBufferBinding">
+    <DisplayString>{{size={m_size}}}</DisplayString>
+    <Expand>
+      <Item Name="size">m_size</Item>
+      <Item Name="variables">m_variables</Item>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>

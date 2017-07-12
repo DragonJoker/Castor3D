@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -33,61 +33,54 @@ namespace GLSL
 	public:
 		GlslWriter_API CookTorranceLightingModel( ShadowType p_shadows, GlslWriter & p_writer );
 		GlslWriter_API static std::shared_ptr< LightingModel > Create( ShadowType p_shadows, GlslWriter & p_writer );
-		GlslWriter_API void ComputeCombinedLighting( Vec3 const & p_worldEye
+		GlslWriter_API Vec3 ComputeCombinedLighting( Vec3 const & p_worldEye
 			, Vec3 const & p_albedo
 			, Float const & p_metallic
 			, Float const & p_roughness
 			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeDirectionalLight( DirectionalLight const & p_light
+			, FragmentInput const & p_fragmentIn );
+		GlslWriter_API Vec3 ComputeDirectionalLight( DirectionalLight const & p_light
 			, Vec3 const & p_worldEye
 			, Vec3 const & p_albedo
 			, Float const & p_metallic
 			, Float const & p_roughness
 			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputePointLight( PointLight const & p_light
+			, FragmentInput const & p_fragmentIn );
+		GlslWriter_API Vec3 ComputePointLight( PointLight const & p_light
 			, Vec3 const & p_worldEye
 			, Vec3 const & p_albedo
 			, Float const & p_metallic
 			, Float const & p_roughness
 			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeSpotLight( SpotLight const & p_light
+			, FragmentInput const & p_fragmentIn );
+		GlslWriter_API Vec3 ComputeSpotLight( SpotLight const & p_light
 			, Vec3 const & p_worldEye
 			, Vec3 const & p_albedo
 			, Float const & p_metallic
 			, Float const & p_roughness
 			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOneDirectionalLight( DirectionalLight const & p_light
+			, FragmentInput const & p_fragmentIn );
+		GlslWriter_API Vec3 ComputeOneDirectionalLight( DirectionalLight const & p_light
 			, Vec3 const & p_worldEye
 			, Vec3 const & p_albedo
 			, Float const & p_metallic
 			, Float const & p_roughness
 			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOnePointLight( PointLight const & p_light
+			, FragmentInput const & p_fragmentIn );
+		GlslWriter_API Vec3 ComputeOnePointLight( PointLight const & p_light
 			, Vec3 const & p_worldEye
 			, Vec3 const & p_albedo
 			, Float const & p_metallic
 			, Float const & p_roughness
 			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOneSpotLight( SpotLight const & p_light
+			, FragmentInput const & p_fragmentIn );
+		GlslWriter_API Vec3 ComputeOneSpotLight( SpotLight const & p_light
 			, Vec3 const & p_worldEye
 			, Vec3 const & p_albedo
 			, Float const & p_metallic
 			, Float const & p_roughness
 			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
+			, FragmentInput const & p_fragmentIn );
 
 	protected:
 		void DoDeclareModel();
@@ -98,15 +91,14 @@ namespace GLSL
 		void Declare_ComputeOnePointLight()override;
 		void Declare_ComputeOneSpotLight()override;
 
-		void DoComputeLight( Light const & p_light
+		Vec3 DoComputeLight( Light const & p_light
 			, Vec3 const & p_worldEye
 			, Vec3 const & p_direction
 			, Vec3 const & p_albedo
 			, Float const & p_metalness
 			, Float const & p_roughness
 			, Float const & p_shadowFactor
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
+			, FragmentInput const & p_fragmentIn );
 
 		void DoDeclare_Distribution();
 		void DoDeclare_Geometry();
@@ -121,12 +113,12 @@ namespace GLSL
 		Function< Float, InVec3, InVec3, InVec3, InFloat > m_smith;
 		Function< Vec3, InFloat, InVec3 > m_schlickFresnel;
 		Function< Vec3, InFloat, InFloat, InFloat, InFloat, InVec3 > m_cookTorrance;
-		Function< Void, DirectionalLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput, OutputComponents & > m_computeDirectional;
-		Function< Void, PointLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput, OutputComponents & > m_computePoint;
-		Function< Void, SpotLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput, OutputComponents & > m_computeSpot;
-		Function< Void, DirectionalLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOneDirectional;
-		Function< Void, PointLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOnePoint;
-		Function< Void, SpotLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput, OutputComponents & > m_computeOneSpot;
+		Function< Vec3, DirectionalLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput > m_computeDirectional;
+		Function< Vec3, PointLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput > m_computePoint;
+		Function< Vec3, SpotLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput > m_computeSpot;
+		Function< Vec3, DirectionalLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput > m_computeOneDirectional;
+		Function< Vec3, PointLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput > m_computeOnePoint;
+		Function< Vec3, SpotLight, InVec3, InVec3, InFloat, InFloat, InInt, FragmentInput > m_computeOneSpot;
 	};
 }
 

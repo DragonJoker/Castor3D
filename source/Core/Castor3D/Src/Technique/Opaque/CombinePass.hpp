@@ -72,6 +72,7 @@ namespace Castor3D
 			, SceneUbo & p_sceneUbo
 			, GpInfoUbo & p_gpInfo
 			, bool p_ssao
+			, bool p_pbr
 			, GLSL::FogType p_fogType );
 		/**
 		 *\~english
@@ -101,7 +102,7 @@ namespace Castor3D
 	};
 	//!\~english	An array of CombineProgram, one per fog type.
 	//!\~french		Un tableau de CombineProgram, un par type de brouillard.
-	using CombinePrograms = std::array< CombineProgram, size_t( GLSL::FogType::eCount ) >;
+	using CombinePrograms = std::array< CombineProgram, size_t( GLSL::FogType::eCount ) * 2u >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -128,6 +129,7 @@ namespace Castor3D
 		 */
 		CombinePass( Engine & p_engine
 			, Castor::Size const & p_size
+			, SceneUbo & p_sceneUbo
 			, SsaoConfig const & p_config );
 		/**
 		 *\~english
@@ -168,6 +170,40 @@ namespace Castor3D
 			, FrameBuffer const & p_frameBuffer );
 		/**
 		 *\~english
+		 *\brief		Renders the combination on given framebuffer.
+		 *\param[in]	p_gp			The geometry pass result.
+		 *\param[in]	p_lp			The light pas result.
+		 *\param[in]	p_camera		The viewing camera.
+		 *\param[in]	p_invViewProj	The inverse view projection matrix.
+		 *\param[in]	p_invView		The inverse view matrix.
+		 *\param[in]	p_invProj		The inverse projection matrix.
+		 *\param[in]	p_fog			The fog.
+		 *\param[in]	p_frameBuffer	The target framebuffer.
+		 *\~french
+		 *\brief		Dessine la combinaison sur le tampon d'image donné.
+		 *\param[in]	p_gp			Le résultat de la geometry pass.
+		 *\param[in]	p_lp			Le résultat de la light pass.
+		 *\param[in]	p_camera		La caméra.
+		 *\param[in]	p_invViewProj	La matrice vue projection inversée.
+		 *\param[in]	p_invView		La matrice vue inversée.
+		 *\param[in]	p_invProj		La matrice projection inversée.
+		 *\param[in]	p_fog			Le brouillard.
+		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
+		 */
+		void Render( GeometryPassResult const & p_gp
+			, TextureUnit const & p_light
+			, TextureUnit const & p_ambient
+			, TextureUnit const & p_irradiance
+			, TextureUnit const & p_prefiltered
+			, TextureUnit const & p_brdf
+			, Camera const & p_camera
+			, Castor::Matrix4x4r const & p_invViewProj
+			, Castor::Matrix4x4r const & p_invView
+			, Castor::Matrix4x4r const & p_invProj
+			, Fog const & p_fog
+			, FrameBuffer const & p_frameBuffer );
+		/**
+		 *\~english
 		 *\return		The SSAO texture.
 		 *\~french
 		 *\return		La texture SSAO.
@@ -190,9 +226,6 @@ namespace Castor3D
 		//!\~english	The matrices uniform buffer.
 		//!\~french		Le tampon d'uniformes contenant les matrices.
 		MatrixUbo m_matrixUbo;
-		//!\~english	The scene uniform buffer.
-		//!\~french		Le tampon d'uniformes contenant les informations de la scène.
-		SceneUbo m_sceneUbo;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
 		GpInfoUbo m_gpInfo;
