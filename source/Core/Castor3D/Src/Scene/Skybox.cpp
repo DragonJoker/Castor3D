@@ -1,4 +1,4 @@
-﻿#include "Skybox.hpp"
+#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -248,8 +248,10 @@ namespace Castor3D
 				{
 					pxl_FragColor = vec4( l_utils.RemoveGamma( c3d_gamma, l_skybox.xyz() ), l_skybox.w() );
 				}
-
-				pxl_FragColor = vec4( l_skybox.xyz(), l_skybox.w() );
+				else
+				{
+					pxl_FragColor = vec4( l_skybox.xyz(), l_skybox.w() );
+				}
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
