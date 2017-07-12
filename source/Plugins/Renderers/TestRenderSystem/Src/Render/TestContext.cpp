@@ -44,4 +44,8 @@ namespace TestRender
 	void TestContext::DoSwapBuffers()
 	{
 	}
+
+	void TestContext::DoBarrier( MemoryBarriers const & p_barriers )
+	{
+	}
 }

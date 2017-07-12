@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="Castor::PointDataHolder&lt;*, 2&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="Castor::PointDataHolder&lt;*, 3&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+      <Item Name="z">m_coords[2]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="Castor::PointDataHolder&lt;*, 4&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]} w={m_coords[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+      <Item Name="z">m_coords[2]</Item>
+      <Item Name="w">m_coords[3]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="Castor::ColourT&lt;*&gt;">
+    <DisplayString>{{r={m_arrayValues[0]} g={m_arrayValues[1]} b={m_arrayValues[2]} a={m_arrayValues[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="r">m_arrayValues[0]</Item>
+      <Item Name="g">m_arrayValues[1]</Item>
+      <Item Name="b">m_arrayValues[2]</Item>
+      <Item Name="a">m_arrayValues[3]</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>

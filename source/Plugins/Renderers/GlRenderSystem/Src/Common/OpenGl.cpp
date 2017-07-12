@@ -551,6 +551,10 @@ namespace GlRender
 		m_pfnDrawElements = &glDrawElements;
 		m_pfnEnable = &glEnable;
 		m_pfnDisable = &glDisable;
+		m_pfnEnableTweak = &glEnable;
+		m_pfnDisableTweak = &glDisable;
+		m_pfnEnableTexDim = &glEnable;
+		m_pfnDisableTexDim = &glDisable;
 		m_pfnGenTextures = &glGenTextures;
 		m_pfnDeleteTextures = &glDeleteTextures;
 		m_pfnBlendFunc = &glBlendFunc;

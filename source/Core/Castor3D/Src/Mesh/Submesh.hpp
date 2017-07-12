@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -29,6 +29,8 @@ SOFTWARE.
 #include "FaceInfos.hpp"
 #include "Face.hpp"
 #include "VertexGroup.hpp"
+#include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Mesh/Buffer/IndexBuffer.hpp"
 
 #include "Mesh/Skeleton/VertexBoneData.hpp"
 #include "Mesh/Buffer/BufferDeclaration.hpp"
@@ -657,16 +659,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
-		inline bool HasVertexBuffer()const
-		{
-			return bool( m_vertexBuffer );
-		}
-		/**
-		 *\~english
 		 *\return		The IndexBuffer.
 		 *\~french
 		 *\return		L'IndexBuffer.
@@ -674,16 +666,6 @@ namespace Castor3D
 		inline bool HasAnimationBuffer()const
 		{
 			return bool( m_animBuffer );
-		}
-		/**
-		 *\~english
-		 *\return		The IndexBuffer.
-		 *\~french
-		 *\return		L'IndexBuffer.
-		 */
-		inline bool HasIndexBuffer()const
-		{
-			return bool( m_indexBuffer );
 		}
 		/**
 		 *\~english
@@ -733,7 +715,7 @@ namespace Castor3D
 		 */
 		inline VertexBuffer const & GetVertexBuffer()const
 		{
-			return *m_vertexBuffer;
+			return m_vertexBuffer;
 		}
 		/**
 		 *\~english
@@ -743,7 +725,7 @@ namespace Castor3D
 		 */
 		inline VertexBuffer & GetVertexBuffer()
 		{
-			return *m_vertexBuffer;
+			return m_vertexBuffer;
 		}
 		/**
 		 *\~english
@@ -773,7 +755,7 @@ namespace Castor3D
 		 */
 		inline IndexBuffer const & GetIndexBuffer()const
 		{
-			return *m_indexBuffer;
+			return m_indexBuffer;
 		}
 		/**
 		 *\~english
@@ -783,7 +765,7 @@ namespace Castor3D
 		 */
 		inline IndexBuffer & GetIndexBuffer()
 		{
-			return *m_indexBuffer;
+			return m_indexBuffer;
 		}
 		/**
 		 *\~english
@@ -941,7 +923,10 @@ namespace Castor3D
 		//!\~english	The shader program flags.
 		//!\~french		Les indicateurs pour le shader.
 		ProgramFlags m_programFlags{ 0u };
-		//!\~english	Tells the VBOs has been initialised.
+		//!\~english	Tells the VBOs have been generated.
+		//!\~french		Dit que les VBOs ont été générés.
+		bool m_generated{ false };
+		//!\~english	Tells the VBOs have been initialised.
 		//!\~french		Dit que les VBOs ont été initialisés.
 		bool m_initialised{ false };
 		//!\~english	Tells the VAO needs reininitialisation.
@@ -950,24 +935,21 @@ namespace Castor3D
 		//!\~english	The submesh instances count.
 		//!\~french		Le nombre d'instances du sous-maillage.
 		std::map< MaterialSPtr, uint32_t > m_instanceCount;
-		//!\~english	Vertex elements declaration, deduced from points.
-		//!\~french		Déclaration des éléments d'un sommet, déduite à partir des points.
-		BufferDeclaration m_layout;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
+		VertexBuffer m_vertexBuffer;
 		//!\~english	The animated vertex buffer.
 		//!\~french		Le tampon de sommets animés.
-		VertexBufferSPtr m_animBuffer;
+		VertexBufferUPtr m_animBuffer;
 		//!\~english	The index buffer.
 		//!\~french		Le tampon d'indices.
-		IndexBufferSPtr m_indexBuffer;
+		IndexBuffer m_indexBuffer;
 		//!\~english	The bone data buffer (animation).
 		//!\~french		Le tampon de données de bones (animation).
-		VertexBufferSPtr m_bonesBuffer;
+		VertexBufferUPtr m_bonesBuffer;
 		//!\~english	The matrix buffer (instantiation).
 		//!\~french		Le tampon de matrices (instanciation).
-		VertexBufferSPtr m_matrixBuffer;
+		VertexBufferUPtr m_matrixBuffer;
 		//!\~english	The matrix buffer (instantiation).
 		//!\~french		Le tampon de matrices (instanciation).
 		ShaderStorageBufferSPtr m_instancedBonesBuffer;

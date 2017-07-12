@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -106,7 +106,7 @@ namespace Castor3D
 		inline void LinkCoords( ItType p_begin, ItType p_end )
 		{
 			uint32_t l_stride = m_bufferDeclaration.stride();
-			uint8_t * l_buffer = CpuBuffer< uint8_t >::data();
+			uint8_t * l_buffer = CpuBuffer< uint8_t >::GetData();
 
 			for ( auto l_it = p_begin; l_it != p_end; ++l_it )
 			{

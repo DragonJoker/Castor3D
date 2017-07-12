@@ -1,0 +1,128 @@
+﻿/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+#ifndef ___C3D_BrdfPrefilter_H___
+#define ___C3D_BrdfPrefilter_H___
+
+#include "Render/Viewport.hpp"
+
+#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Shader/MatrixUbo.hpp"
+
+#include <Design/OwnedBy.hpp>
+
+namespace Castor3D
+{
+	/*!
+	\author 	Sylvain DOREMUS
+	\date		02/03/2017
+	\version	0.9.0
+	\~english
+	\brief		Class used to render colour equirectangular textures to cube maps.
+	\~french
+	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
+	*/
+	class BrdfPrefilter
+		: public Castor::OwnedBy< Engine >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_context	The Context.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_context	Le Context.
+		 */
+		C3D_API explicit BrdfPrefilter( Engine & p_engine
+			, Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		C3D_API ~BrdfPrefilter();
+		/**
+		 *\~english
+		 *\brief		Computes the convoluted BRDF.
+		 *\param[in]	p_dstTexture	The cube texture destination.
+		 *\~french
+		 *\brief		Calcule le BRDF circonvolu.
+		 *\param[in]	p_dstTexture	La texture cube destination.
+		 */
+		C3D_API void Render( TextureLayoutSPtr p_dstTexture );
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Creates the render a 2D texture shader program.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Crée le programme shader de dessin de texture 2D.
+		 *\return		Le programme.
+		 */
+		ShaderProgramSPtr DoCreateProgram();
+
+	private:
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		MatrixUbo m_matrixUbo;
+		//!\~english	The resulting dimensions.
+		//!\~french		Les dimensions du résultat.
+		Castor::Size m_size;
+		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
+		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
+		Viewport m_viewport;
+		//!	6 * 2(vertex position)
+		std::array< Castor::real, 6 * 2 > m_bufferVertex;
+		//!\~english	Buffer elements declaration.
+		//!\~french		Déclaration des éléments d'un vertex.
+		Castor3D::BufferDeclaration m_declaration;
+		//!\~english	Vertex array (quad definition).
+		//!\~french		Tableau de vertex (définition du quad).
+		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The GeometryBuffers used when rendering a texture to the frame buffer.
+		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image.
+		GeometryBuffersSPtr m_geometryBuffers;
+		//!\~english	The pipeline used to render a texture in the framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image.
+		RenderPipelineUPtr m_pipeline;
+		//!\~english	The frame buffer.
+		//!\~french		Le tampon d'image.
+		FrameBufferSPtr m_frameBuffer;
+		//!\~english	The depth buffer.
+		//!\~french		Le tampon de profondeur.
+		DepthStencilRenderBufferSPtr m_depthBuffer;
+		//!\~english	The depth buffer attach.
+		//!\~french		L'attache du tampon de profondeur.
+		RenderBufferAttachmentSPtr m_depthAttach;
+		//!\~english	The roughness variable.
+		//!\~french		La variable pour la roughness.
+		PushUniform1fSPtr m_roughnessUniform;
+	};
+}
+
+#endif

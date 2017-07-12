@@ -23,7 +23,7 @@ using namespace Castor;
 Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::ExtensionArray l_extensions;
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "FBX2" ), cuT( "Autodesk FBX" ) ) );
+	l_extensions.push_back( ImporterPlugin::Extension( cuT( "FBX" ), cuT( "Autodesk FBX" ) ) );
 	return l_extensions;
 }
 

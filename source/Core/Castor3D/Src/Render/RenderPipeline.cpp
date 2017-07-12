@@ -1,4 +1,4 @@
-#include "RenderPipeline.hpp"
+﻿#include "RenderPipeline.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
@@ -63,6 +63,14 @@ namespace Castor3D
 			m_spotShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
 			m_pointShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
 			m_environmentMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+
+			if ( CheckFlag( m_flags.m_programFlags, ProgramFlag::ePbr )
+				&& CheckFlag( m_flags.m_programFlags, ProgramFlag::eLighting ) )
+			{
+				m_irradianceMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel );
+				m_prefilteredMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel );
+				m_brdfMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel );
+			}
 		}
 	}
 

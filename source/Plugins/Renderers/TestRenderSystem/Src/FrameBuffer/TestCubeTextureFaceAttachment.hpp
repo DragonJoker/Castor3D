@@ -43,7 +43,7 @@ namespace TestRender
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\param[in]	p_texture	La texture.
 		 */
-		TestCubeTextureFaceAttachment( Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face );
+		TestCubeTextureFaceAttachment( Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face, uint32_t p_mipLevel = 0 );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -80,6 +80,7 @@ namespace TestRender
 
 	private:
 		Castor3D::CubeMapFace m_face;
+		uint32_t m_mipLevel;
 	};
 }
 

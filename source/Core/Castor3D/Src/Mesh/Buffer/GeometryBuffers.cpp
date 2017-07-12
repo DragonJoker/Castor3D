@@ -1,4 +1,4 @@
-#include "GeometryBuffers.hpp"
+﻿#include "GeometryBuffers.hpp"
 
 using namespace Castor;
 
@@ -14,7 +14,7 @@ namespace Castor3D
 	{
 	}
 
-	bool GeometryBuffers::Initialise( VertexBufferArray const & p_buffers, IndexBufferSPtr p_index )
+	bool GeometryBuffers::Initialise( VertexBufferArray const & p_buffers, IndexBufferRPtr p_index )
 	{
 		m_buffers = p_buffers;
 		m_indexBuffer = p_index;
@@ -24,7 +24,7 @@ namespace Castor3D
 	void GeometryBuffers::Cleanup()
 	{
 		DoCleanup();
-		m_indexBuffer.reset();
+		m_indexBuffer = nullptr;
 		m_buffers.clear();
 	}
 }

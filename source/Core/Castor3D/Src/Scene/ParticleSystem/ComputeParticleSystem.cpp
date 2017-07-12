@@ -123,8 +123,9 @@ namespace Castor3D
 		uint32_t l_counts[]{ 0u, 0u };
 		m_generatedCountBuffer->Upload( 0u, 2u, l_counts );
 
-		m_particlesStorages[m_in]->GetGpuBuffer().SetBindingPoint( 2u );
-		m_particlesStorages[m_out]->GetGpuBuffer().SetBindingPoint( 3u );
+		m_randomStorage->BindTo( 1u );
+		m_particlesStorages[m_in]->BindTo( 2u );
+		m_particlesStorages[m_out]->BindTo( 3u );
 		m_binding->Bind( 5u );
 
 		m_computePipeline->Run(

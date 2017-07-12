@@ -1,4 +1,4 @@
-﻿#include "RenderColourToTexture.hpp"
+#include "RenderColourToTexture.hpp"
 
 #include "Engine.hpp"
 

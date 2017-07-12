@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -237,6 +237,7 @@ namespace GLSL
 	DECLARE_GLSL_PARAMETER( Light );
 	DECLARE_GLSL_PARAMETER( Float );
 	DECLARE_GLSL_PARAMETER( Int );
+	DECLARE_GLSL_PARAMETER( UInt );
 	DECLARE_GLSL_PARAMETER( Boolean );
 	DECLARE_GLSL_PARAMETER( Vec2 );
 	DECLARE_GLSL_PARAMETER( Vec3 );

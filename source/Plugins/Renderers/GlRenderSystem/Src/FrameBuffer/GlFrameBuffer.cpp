@@ -1,4 +1,4 @@
-#include "FrameBuffer/GlFrameBuffer.hpp"
+﻿#include "FrameBuffer/GlFrameBuffer.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlColourRenderBuffer.hpp"
@@ -125,6 +125,11 @@ namespace GlRender
 	TextureAttachmentSPtr GlFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
 	{
 		return std::make_shared< GlCubeTextureFaceAttachment >( GetOpenGl(), p_texture, p_face );
+	}
+
+	TextureAttachmentSPtr GlFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )
+	{
+		return std::make_shared< GlCubeTextureFaceAttachment >( GetOpenGl(), p_texture, p_face, p_mipLevel );
 	}
 
 	void GlFrameBuffer::DoBind( FrameBufferTarget p_target )const

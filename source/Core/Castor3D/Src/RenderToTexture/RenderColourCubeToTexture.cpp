@@ -1,4 +1,4 @@
-﻿#include "RenderColourCubeToTexture.hpp"
+#include "RenderColourCubeToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -96,12 +96,13 @@ namespace Castor3D
 		m_viewport.Cleanup();
 	}
 
-	void RenderColourCubeToTexture::Render( Castor::Size const & p_size
+	void RenderColourCubeToTexture::Render( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture )
 	{
 		int l_w = p_size.width();
 		int l_h = p_size.height();
-		DoRender( Position{ l_w * 0, l_h * 1 }
+		DoRender( Position{ p_position.x() + l_w * 0, p_position.y() + l_h * 1 }
 			, p_size
 			, p_texture
 			, Point3f{ -1, 0, 0 }
@@ -109,7 +110,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 1 }
+		DoRender( Position{ p_position.x() + l_w * 1, p_position.y() + l_h * 1 }
 			, p_size
 			, p_texture
 			, Point3f{ 0, -1, 0 }
@@ -117,7 +118,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 2, l_h * 1 }
+		DoRender( Position{ p_position.x() + l_w * 2, p_position.y() + l_h * 1 }
 			, p_size
 			, p_texture
 			, Point3f{ 1, 0, 0 }
@@ -125,7 +126,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 3, l_h * 1 }
+		DoRender( Position{ p_position.x() + l_w * 3, p_position.y() + l_h * 1 }
 			, p_size
 			, p_texture
 			, Point3f{ 0, 1, 0 }
@@ -133,7 +134,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 0 }
+		DoRender( Position{ p_position.x() + l_w * 1, p_position.y() + l_h * 0 }
 			, p_size
 			, p_texture
 			, Point3f{ 0, 0, -1 }
@@ -141,7 +142,7 @@ namespace Castor3D
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 2 }
+		DoRender( Position{ p_position.x() + l_w * 1, p_position.y() + l_h * 2 }
 			, p_size
 			, p_texture
 			, Point3f{ 0, 0, 1 }

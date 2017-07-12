@@ -12,6 +12,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Skybox.hpp"
 #include "Shader/PassBuffer.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
 #include "Technique/RenderTechniquePass.hpp"
@@ -27,7 +28,10 @@ using namespace Castor;
 
 #define DEBUG_DEFERRED_BUFFERS 1
 #define DEBUG_WEIGHTED_BLEND_BUFFERS 1
+#define DEBUG_IBL_BUFFERS 0
 #define USE_WEIGHTED_BLEND 1
+
+#define DEBUG_FORWARD_RENDERING 0
 
 namespace Castor3D
 {
@@ -124,9 +128,18 @@ namespace Castor3D
 		, Named{ p_name }
 		, m_renderTarget{ p_renderTarget }
 		, m_renderSystem{ p_renderSystem }
+#if DEBUG_FORWARD_RENDERING
+		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
+			, *p_renderTarget.GetScene()
+			, p_renderTarget.GetCamera().get()
+			, false
+			, nullptr
+			, p_config ) }
+#else
 		, m_opaquePass{ std::make_unique< OpaquePass >( *p_renderTarget.GetScene()
 			, p_renderTarget.GetCamera().get()
 			, p_config ) }
+#endif
 #if USE_WEIGHTED_BLEND
 		, m_transparentPass{ std::make_unique< TransparentPass >( *p_renderTarget.GetScene()
 			, p_renderTarget.GetCamera().get()
@@ -178,6 +191,7 @@ namespace Castor3D
 
 			if ( m_initialised )
 			{
+#if !DEBUG_FORWARD_RENDERING
 				m_deferredRendering = std::make_unique< DeferredRendering >( *GetEngine()
 					, static_cast< OpaquePass & >( *m_opaquePass )
 					, *m_frameBuffer.m_frameBuffer
@@ -185,6 +199,7 @@ namespace Castor3D
 					, m_renderTarget.GetSize()
 					, *m_renderTarget.GetScene()
 					, m_ssaoConfig );
+#endif
 #if USE_WEIGHTED_BLEND
 				m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *GetEngine()
 					, static_cast< TransparentPass & >( *m_transparentPass )
@@ -202,9 +217,7 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
-#if USE_WEIGHTED_BLEND
 		m_weightedBlendRendering.reset();
-#endif
 		m_deferredRendering.reset();
 		m_transparentPass->CleanupShadowMaps();
 		m_opaquePass->CleanupShadowMaps();
@@ -245,9 +258,24 @@ namespace Castor3D
 		l_camera.Resize( m_size );
 		l_camera.Update();
 
+#if DEBUG_FORWARD_RENDERING
+
+		GetEngine()->SetPerObjectLighting( true );
+		m_opaquePass->RenderShadowMaps();
+		m_renderTarget.GetCamera()->Apply();
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
+		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
+
+#else
+
 		m_deferredRendering->Render( p_info
 			, l_scene
 			, l_camera );
+
+#endif
+
 		l_scene.RenderBackground( GetSize(), l_camera );
 
 		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
@@ -261,8 +289,12 @@ namespace Castor3D
 		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 
 #if USE_WEIGHTED_BLEND
+#	if !DEBUG_FORWARD_RENDERING
 
 		m_deferredRendering->BlitDepthInto( m_weightedBlendRendering->GetFbo() );
+
+#	endif
+
 		m_weightedBlendRendering->Render( p_info
 			, l_scene
 			, l_camera );
@@ -273,17 +305,24 @@ namespace Castor3D
 		m_transparentPass->RenderShadowMaps();
 		m_renderTarget.GetCamera()->Apply();
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
 		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
 #endif
 
-#if DEBUG_DEFERRED_BUFFERS && !defined( NDEBUG )
+#if DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING && !defined( NDEBUG )
 		m_deferredRendering->Debug( l_camera );
 #endif
 
 #if USE_WEIGHTED_BLEND && DEBUG_WEIGHTED_BLEND_BUFFERS && !defined( NDEBUG )
 		m_weightedBlendRendering->Debug( l_camera );
+#endif
+
+#if DEBUG_IBL_BUFFERS && !defined( NDEBUG )
+		m_frameBuffer.m_frameBuffer->Bind();
+		l_scene.GetSkybox().GetIbl().Debug( l_camera );
+		m_frameBuffer.m_frameBuffer->Unbind();
 #endif
 
 		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();

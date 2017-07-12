@@ -1,4 +1,4 @@
-#include "Render/GlContext.hpp"
+﻿#include "Render/GlContext.hpp"
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 #	include "Render/GlMswContext.hpp"
@@ -76,10 +76,11 @@ namespace GlRender
 
 			GetImpl().UpdateVSync( m_window->GetVSync() );
 			l_engine->GetRenderLoop().UpdateVSync( m_window->GetVSync() );
+			l_renderSystem->GetOpenGl().Enable( GlTweak::eSeamlessCubeMaps );
 
-			if ( m_glRenderSystem->GetOpenGlMajor() < 3 )
+			if ( m_glRenderSystem->GetOpenGlMajor() < 4 )
 			{
-				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D" ) );
+				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D (OpenGL 4.2 is needed, at least)" ) );
 			}
 		}
 		else if ( !l_mainContext )
@@ -113,5 +114,10 @@ namespace GlRender
 	void GlContext::DoSwapBuffers()
 	{
 		GetImpl().SwapBuffers();
+	}
+
+	void GlContext::DoBarrier( MemoryBarriers const & p_barriers )
+	{
+		GetOpenGl().MemoryBarrier( GetOpenGl().Get( p_barriers ) );
 	}
 }

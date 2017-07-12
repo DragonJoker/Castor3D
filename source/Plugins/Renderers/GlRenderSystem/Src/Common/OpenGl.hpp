@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -92,14 +92,16 @@ namespace GlRender
 
 		inline GlFunction() = default;
 
-		inline GlFunction( FuncType p_function )
-			: m_function{ p_function }
+		template< typename FuncT >
+		inline GlFunction( FuncT p_function )
+			: m_function{ reinterpret_cast< FuncType >( p_function ) }
 		{
 		}
 
-		inline GlFunction & operator=( FuncType p_function )
+		template< typename FuncT >
+		inline GlFunction & operator=( FuncT p_function )
 		{
-			m_function = p_function;
+			m_function = reinterpret_cast< FuncType >( p_function );
 			return *this;
 		}
 
@@ -1035,6 +1037,10 @@ namespace GlRender
 		GlFunction< void, uint32_t > m_pfnClear;
 		GlFunction< void, uint32_t > m_pfnEnable;
 		GlFunction< void, uint32_t > m_pfnDisable;
+		GlFunction< void, GlTweak > m_pfnEnableTweak;
+		GlFunction< void, GlTweak > m_pfnDisableTweak;
+		GlFunction< void, GlTexDim > m_pfnEnableTexDim;
+		GlFunction< void, GlTexDim > m_pfnDisableTexDim;
 		GlFunction< void, int, uint32_t *> m_pfnSelectBuffer;
 		GlFunction< void, uint32_t, int *> m_pfnGetIntegerv;
 
@@ -1077,10 +1083,10 @@ namespace GlRender
 		/**@name Buffer rendering */
 		//@{
 
-		GlFunction< void, uint32_t, int , int > m_pfnDrawArrays;
-		GlFunction< void, uint32_t, int , uint32_t , void const * > m_pfnDrawElements;
-		GlFunction< void, uint32_t, int , int , int > m_pfnDrawArraysInstanced;
-		GlFunction< void, uint32_t, int , uint32_t , void const * , int > m_pfnDrawElementsInstanced;
+		GlFunction< void, GlTopology, int , int > m_pfnDrawArrays;
+		GlFunction< void, GlTopology, int , GlType, void const * > m_pfnDrawElements;
+		GlFunction< void, GlTopology, int , int , int > m_pfnDrawArraysInstanced;
+		GlFunction< void, GlTopology, int , GlType, void const * , int > m_pfnDrawElementsInstanced;
 		GlFunction< void, uint32_t, uint32_t > m_pfnVertexAttribDivisor;
 
 		//@}

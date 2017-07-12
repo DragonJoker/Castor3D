@@ -126,6 +126,7 @@ namespace GuiCommon
 		uint32_t l_offset = 1;
 		uint32_t l_count = 0;
 		auto const & l_cache = p_scene.GetMeshCache();
+		l_cache.lock();
 
 		for ( auto const & l_it : l_cache )
 		{
@@ -133,6 +134,7 @@ namespace GuiCommon
 			l_obj << DoExportMesh( *l_mesh, l_offset, l_count ) << cuT( "\n" );
 		}
 
+		l_cache.unlock();
 		TextFile l_fileObj( l_pathFileObj, File::OpenMode::eWrite, File::EncodingMode::eASCII );
 		l_fileObj.WriteText( l_obj.str() );
 	}
@@ -198,8 +200,8 @@ namespace GuiCommon
 			uint32_t l_stride = l_vtxBuffer.GetDeclaration().stride();
 			uint32_t l_uiNbPoints = l_vtxBuffer.GetSize() / l_stride;
 			uint32_t l_uiNbFaces = l_idxBuffer.GetSize() / 3;
-			uint8_t * l_pVtx = l_vtxBuffer.data();
-			uint32_t * l_pIdx = l_idxBuffer.data();
+			uint8_t * l_pVtx = l_vtxBuffer.GetData();
+			uint32_t * l_pIdx = l_idxBuffer.GetData();
 			Point3r l_ptPos;
 			Point3r l_ptNml;
 			Point3r l_ptTex;

@@ -40,27 +40,31 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::Context::DoInitialise
 		 */
-		virtual bool DoInitialise();
+		bool DoInitialise()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoCleanup
 		 */
-		virtual void DoCleanup();
+		void DoCleanup()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoDestroy
 		 */
-		virtual void DoDestroy();
+		void DoDestroy()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoSetCurrent
 		 */
-		virtual void DoSetCurrent();
+		void DoSetCurrent()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoEndCurrent
 		 */
-		virtual void DoEndCurrent();
+		void DoEndCurrent()override;
 		/**
 		 *\copydoc		Castor3D::Context::DoSwapBuffers
 		 */
-		virtual void DoSwapBuffers();
+		void DoSwapBuffers()override;
+		/**
+		 *\copydoc		Castor3D::Context::DoBarrier
+		 */
+		void DoBarrier( Castor3D::MemoryBarriers const & p_barriers )override;
 	};
 }
 

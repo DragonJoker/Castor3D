@@ -209,6 +209,39 @@ namespace Castor3D
 			REQUIRE( m_environmentMap );
 			return *m_environmentMap;
 		}
+		/**
+		 *\~english
+		 *\return		The irradiance map frame variable.
+		 *\~french
+		 *\return		La variable shader de la texture d'irradiance.
+		 */
+		inline PushUniform1s & GetIrradianceMapVariable()
+		{
+			REQUIRE( m_irradianceMap );
+			return *m_irradianceMap;
+		}
+		/**
+		 *\~english
+		 *\return		The irradiance map frame variable.
+		 *\~french
+		 *\return		La variable shader de la texture d'irradiance.
+		 */
+		inline PushUniform1s & GetPrefilteredMapVariable()
+		{
+			REQUIRE( m_prefilteredMap );
+			return *m_prefilteredMap;
+		}
+		/**
+		 *\~english
+		 *\return		The BRDF map frame variable.
+		 *\~french
+		 *\return		La variable shader de la texture de BRDF.
+		 */
+		inline PushUniform1s & GetBrdfMapVariable()
+		{
+			REQUIRE( m_brdfMap );
+			return *m_brdfMap;
+		}
 
 	public:
 		C3D_API static const Castor::String MtxProjection;
@@ -246,6 +279,15 @@ namespace Castor3D
 		//!\~english	The environment map frame variable.
 		//!\~french		La variable shader pour la texture d'environnement.
 		PushUniform1sSPtr m_environmentMap;
+		//!\~english	The irradiance map frame variable.
+		//!\~french		La variable shader pour la texture d'irradiance.
+		PushUniform1sSPtr m_irradianceMap;
+		//!\~english	The prefiltered environment map frame variable.
+		//!\~french		La variable shader pour la texture d'environnement préfiltrée.
+		PushUniform1sSPtr m_prefilteredMap;
+		//!\~english	The BRDF map frame variable.
+		//!\~french		La variable shader pour la texture de BRDF.
+		PushUniform1sSPtr m_brdfMap;
 		//!\~english	The creation flags.
 		//!\~french		Les indicateurs de création.
 		PipelineFlags m_flags;

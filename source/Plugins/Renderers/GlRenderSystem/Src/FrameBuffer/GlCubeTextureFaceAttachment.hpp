@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -40,13 +40,18 @@ namespace GlRender
 		 *\para[in]		p_gl		The OpenGL APIs.
 		 *\param[in]	p_texture	The texture.
 		 *\param[in]	p_face		The face.
+		 *\param[in]	p_mipLevel	The mipmap level.
 		 *\~french
 		 *\brief		Constructeur
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_face		La face.
+		 *\param[in]	p_mipLevel	Le niveau de mipmap.
 		 */
-		GlCubeTextureFaceAttachment( OpenGl & p_gl, Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face );
+		GlCubeTextureFaceAttachment( OpenGl & p_gl
+			, Castor3D::TextureLayoutSPtr p_texture
+			, Castor3D::CubeMapFace p_face
+			, uint32_t p_mipLevel = 0u );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -105,6 +110,7 @@ namespace GlRender
 		GlTexDim m_glFace;
 		GlAttachmentPoint m_glAttachmentPoint{ GlAttachmentPoint::eNone };
 		GlFramebufferStatus m_glStatus{ GlFramebufferStatus::eIncompleteMissingAttachment };
+		uint32_t m_mipLevel;
 	};
 }
 

@@ -1,4 +1,6 @@
-﻿namespace GLSL
+﻿#include <iomanip>
+
+namespace GLSL
 {
 	//*****************************************************************************************
 
@@ -113,6 +115,30 @@
 		return *this;
 	}
 
+	inline Int & Int::operator<<=( Int const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int & Int::operator>>=( Int const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int & Int::operator<<=( UInt const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int & Int::operator>>=( UInt const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
 	inline Int & Int::operator&=( int i )
 	{
 		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
@@ -122,6 +148,30 @@
 	inline Int & Int::operator|=( int i )
 	{
 		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int & Int::operator&=( Int const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int & Int::operator|=( Int const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int & Int::operator&=( UInt const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline Int & Int::operator|=( UInt const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
 		return *this;
 	}
 
@@ -139,10 +189,73 @@
 		return l_return;
 	}
 
+	inline Int operator<<( Int const & p_value, Int const & i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " << " << Castor::String( i );
+		return l_return;
+	}
+
+	inline Int operator>>( Int const & p_value, Int const & i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " >> " << Castor::String( i );
+		return l_return;
+	}
+
+	inline Int operator<<( Int const & p_value, UInt const & i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " << " << Castor::String( i );
+		return l_return;
+	}
+
+	inline Int operator>>( Int const & p_value, UInt const & i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " >> " << Castor::String( i );
+		return l_return;
+	}
+
 	inline Int operator&( Int const & p_value, int i )
 	{
 		Int l_return( p_value.m_writer );
 		l_return.m_value << Castor::String( p_value ) << " & " << ToString( i );
+		return l_return;
+	}
+
+	inline Int operator|( Int const & p_value, int i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " | " << ToString( i );
+		return l_return;
+	}
+
+	inline Int operator&( Int const & p_value, Int const & i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " & " << Castor::String( i );
+		return l_return;
+	}
+
+	inline Int operator|( Int const & p_value, Int const & i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " | " << Castor::String( i );
+		return l_return;
+	}
+
+	inline Int operator&( Int const & p_value, UInt const & i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " & " << Castor::String( i );
+		return l_return;
+	}
+
+	inline Int operator|( Int const & p_value, UInt const & i )
+	{
+		Int l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " | " << Castor::String( i );
 		return l_return;
 	}
 
@@ -247,6 +360,162 @@
 		return l_return;
 	}
 
+	inline UInt & UInt::operator<<=( int i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator>>=( int i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator<<=( Int const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator>>=( Int const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator<<=( UInt const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " <<= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator>>=( UInt const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " >>= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator&=( int i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator|=( int i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::string::to_string( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator&=( Int const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator|=( Int const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator&=( UInt const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " &= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt & UInt::operator|=( UInt const & i )
+	{
+		*m_writer << Castor::String{ *this } << cuT( " |= " ) << Castor::String( i ) << cuT( ";" ) << Endl();
+		return *this;
+	}
+
+	inline UInt operator<<( UInt const & p_value, int i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " << " << ToString( i );
+		return l_return;
+	}
+
+	inline UInt operator>>( UInt const & p_value, int i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " >> " << ToString( i );
+		return l_return;
+	}
+
+	inline UInt operator<<( UInt const & p_value, Int const & i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " << " << Castor::String( i );
+		return l_return;
+	}
+
+	inline UInt operator>>( UInt const & p_value, Int const & i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " >> " << Castor::String( i );
+		return l_return;
+	}
+
+	inline UInt operator<<( UInt const & p_value, UInt const & i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " << " << Castor::String( i );
+		return l_return;
+	}
+
+	inline UInt operator>>( UInt const & p_value, UInt const & i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " >> " << Castor::String( i );
+		return l_return;
+	}
+
+	inline UInt operator&( UInt const & p_value, int i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " & " << ToString( i );
+		return l_return;
+	}
+
+	inline UInt operator|( UInt const & p_value, int i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " | " << ToString( i );
+		return l_return;
+	}
+
+	inline UInt operator&( UInt const & p_value, Int const & i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " & " << Castor::String( i );
+		return l_return;
+	}
+
+	inline UInt operator|( UInt const & p_value, Int const & i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " | " << Castor::String( i );
+		return l_return;
+	}
+
+	inline UInt operator&( UInt const & p_value, UInt const & i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " & " << Castor::String( i );
+		return l_return;
+	}
+
+	inline UInt operator|( UInt const & p_value, UInt const & i )
+	{
+		UInt l_return( p_value.m_writer );
+		l_return.m_value << Castor::String( p_value ) << " | " << Castor::String( i );
+		return l_return;
+	}
+
 	//*****************************************************************************************
 
 	Float::Float()
@@ -299,7 +568,7 @@
 		}
 		else
 		{
-			m_value << p_value;
+			m_value << std::setprecision( 15u ) << p_value;
 		}
 	}
 
@@ -332,7 +601,7 @@
 		}
 		else
 		{
-			m_value << p_value;
+			m_value << std::setprecision( 15u ) << p_value;
 		}
 	}
 

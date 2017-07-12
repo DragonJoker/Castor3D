@@ -1,4 +1,4 @@
-#include "Pass.hpp"
+﻿#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -46,6 +46,18 @@ namespace Castor3D
 
 			case TextureChannel::eEmissive:
 				l_result << cuT( "Emissive" );
+				break;
+
+			case TextureChannel::eReflection:
+				l_result << cuT( "Reflection" );
+				break;
+
+			case TextureChannel::eRefraction:
+				l_result << cuT( "Refraction" );
+				break;
+
+			case TextureChannel::eAmbientOcclusion:
+				l_result << cuT( "Ambient Occlusion" );
 				break;
 
 			default:
@@ -267,6 +279,8 @@ namespace Castor3D
 			DoPrepareTexture( TextureChannel::eNormal, l_index );
 			DoPrepareTexture( TextureChannel::eGloss, l_index );
 			DoPrepareTexture( TextureChannel::eHeight, l_index );
+
+			DoPrepareTexture( TextureChannel::eAmbientOcclusion, l_index );
 
 			DoPrepareOpacity( l_opacitySource, l_opacityImage, l_index );
 

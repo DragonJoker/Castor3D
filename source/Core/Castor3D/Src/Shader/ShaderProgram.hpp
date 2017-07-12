@@ -783,9 +783,21 @@ namespace Castor3D
 		//!\~english	Name of the height texture frame variable.
 		//!\~french		Nom de la frame variable contenant texture de hauteur.
 		C3D_API static const Castor::String MapHeight;
+		//!\~english	Name of the ambient occlusion texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture d'occlusion ambiante.
+		C3D_API static const Castor::String MapAmbientOcclusion;
 		//!\~english	Name of the environment texture frame variable.
 		//!\~french		Nom de la frame variable contenant la texture d'environnement.
 		C3D_API static const Castor::String MapEnvironment;
+		//!\~english	Name of the irradiance texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture d'irradiance.
+		C3D_API static const Castor::String MapIrradiance;
+		//!\~english	Name of the prefiltered map texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture préfiltrée.
+		C3D_API static const Castor::String MapPrefiltered;
+		//!\~english	Name of the BRDF texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture BRDF.
+		C3D_API static const Castor::String MapBrdf;
 
 		//@}
 		/**@name Frame Variable Buffers */

@@ -325,30 +325,25 @@ namespace Testing
 	bool C3DTestCase::compare( Submesh const & p_a, Submesh const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetPointsCount(), p_b.GetPointsCount() ) };
-		l_return &= CT_EQUAL( std::make_pair( p_a.GetVertexBuffer().data(), p_a.GetVertexBuffer().GetSize() )
-							  , std::make_pair( p_b.GetVertexBuffer().data(), p_b.GetVertexBuffer().GetSize() ) );
-		l_return &= CT_EQUAL( p_a.HasIndexBuffer(), p_b.HasIndexBuffer() );
-
-		if ( l_return && p_a.HasIndexBuffer() )
-		{
-			l_return &= CT_EQUAL( std::make_pair( p_a.GetIndexBuffer().data(), p_a.GetIndexBuffer().GetSize() )
-								  , std::make_pair( p_b.GetIndexBuffer().data(), p_b.GetIndexBuffer().GetSize() ) );
-		}
+		l_return &= CT_EQUAL( std::make_pair( p_a.GetVertexBuffer().GetData(), p_a.GetVertexBuffer().GetSize() )
+							  , std::make_pair( p_b.GetVertexBuffer().GetData(), p_b.GetVertexBuffer().GetSize() ) );
+		l_return &= CT_EQUAL( std::make_pair( p_a.GetIndexBuffer().GetData(), p_a.GetIndexBuffer().GetSize() )
+								, std::make_pair( p_b.GetIndexBuffer().GetData(), p_b.GetIndexBuffer().GetSize() ) );
 
 		l_return &= CT_EQUAL( p_a.HasBonesBuffer(), p_b.HasBonesBuffer() );
 
 		if ( l_return && p_a.HasBonesBuffer() )
 		{
-			l_return &= CT_EQUAL( std::make_pair( p_a.GetBonesBuffer().data(), p_a.GetBonesBuffer().GetSize() )
-								  , std::make_pair( p_b.GetBonesBuffer().data(), p_b.GetBonesBuffer().GetSize() ) );
+			l_return &= CT_EQUAL( std::make_pair( p_a.GetBonesBuffer().GetData(), p_a.GetBonesBuffer().GetSize() )
+								  , std::make_pair( p_b.GetBonesBuffer().GetData(), p_b.GetBonesBuffer().GetSize() ) );
 		}
 
 		l_return &= CT_EQUAL( p_a.HasMatrixBuffer(), p_b.HasMatrixBuffer() );
 
 		if ( l_return && p_a.HasMatrixBuffer() )
 		{
-			l_return &= CT_EQUAL( std::make_pair( p_a.GetMatrixBuffer().data(), p_a.GetMatrixBuffer().GetSize() )
-								  , std::make_pair( p_b.GetMatrixBuffer().data(), p_b.GetMatrixBuffer().GetSize() ) );
+			l_return &= CT_EQUAL( std::make_pair( p_a.GetMatrixBuffer().GetData(), p_a.GetMatrixBuffer().GetSize() )
+								  , std::make_pair( p_b.GetMatrixBuffer().GetData(), p_b.GetMatrixBuffer().GetSize() ) );
 		}
 
 		return l_return;

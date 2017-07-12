@@ -192,12 +192,12 @@ namespace Castor3D
 	{
 		using namespace GLSL;
 		auto l_decodeReceiver = p_writer.ImplementFunction< Void >( cuT( "DecodeReceiver" )
-			, [&]( Float const & p_encoded
+			, [&]( Int const & p_encoded
 				, Int p_receiver )
 			{
-				auto l_flags = p_writer.DeclLocale( cuT( "l_flags" ), p_writer.Cast< Int >( p_encoded ) );
+				auto l_flags = p_writer.DeclLocale( cuT( "l_flags" ), p_encoded );
 				p_receiver = l_flags >> 7;
-			}, InFloat{ &p_writer, cuT( "p_encoded" ) }
+			}, InInt{ &p_writer, cuT( "p_encoded" ) }
 			, OutInt{ &p_writer, cuT( "p_receiver" ) } );
 	}
 
@@ -238,13 +238,13 @@ namespace Castor3D
 	}
 
 	void DecodeReceiver( GLSL::GlslWriter & p_writer
-		, GLSL::Float const & p_encoded
+		, GLSL::Int & p_encoded
 		, GLSL::Int const & p_receiver )
 	{
 		using namespace GLSL;
 		p_writer << WriteFunctionCall< Void >( &p_writer
 			, cuT( "DecodeReceiver" )
-			, InFloat{ p_encoded }
+			, InInt{ p_encoded }
 			, OutInt{ p_receiver } );
 		p_writer << Endi{};
 	}
@@ -308,7 +308,7 @@ namespace Castor3D
 		}
 
 		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->Initialise( { p_vbo }, p_ibo );
+		m_geometryBuffers->Initialise( { p_vbo }, p_ibo.get() );
 	}
 
 	void LightPass::Program::Cleanup()
@@ -589,61 +589,54 @@ namespace Castor3D
 			DecodeReceiver( l_writer, l_flags, l_shadowReceiver );
 			auto l_albedo = l_writer.DeclLocale( cuT( "l_albedo" ), l_data2.xyz() );
 			auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), vec3( 0.0_f ) );
-			auto l_specular = l_writer.DeclLocale( cuT( "l_specular" ), vec3( 0.0_f ) );
 			auto l_eye = l_writer.DeclLocale( cuT( "l_eye" ), c3d_v3CameraPosition );
 
 			auto l_wsPosition = l_writer.DeclLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord, c3d_mtxInvViewProj ) );
 			auto l_wsNormal = l_writer.DeclLocale( cuT( "l_wsNormal" ), l_data1.xyz() );
-
-			OutputComponents l_output{ l_diffuse, l_specular };
 
 			switch ( p_type )
 			{
 			case LightType::eDirectional:
 				{
 					auto light = l_writer.GetBuiltin< GLSL::DirectionalLight >( cuT( "light" ) );
-					l_lighting->ComputeOneDirectionalLight( light
+					l_diffuse = l_lighting->ComputeOneDirectionalLight( light
 						, l_eye
 						, l_albedo
 						, l_metallic
 						, l_roughness
 						, l_shadowReceiver
-						, FragmentInput( l_wsPosition, l_wsNormal )
-						, l_output );
+						, FragmentInput( l_wsPosition, l_wsNormal ) );
 				}
 				break;
 
 			case LightType::ePoint:
 				{
-				auto light = l_writer.GetBuiltin< GLSL::PointLight >( cuT( "light" ) );
-					l_lighting->ComputeOnePointLight( light
+					auto light = l_writer.GetBuiltin< GLSL::PointLight >( cuT( "light" ) );
+					l_diffuse = l_lighting->ComputeOnePointLight( light
 						, l_eye
 						, l_albedo
 						, l_metallic
 						, l_roughness
 						, l_shadowReceiver
-						, FragmentInput( l_wsPosition, l_wsNormal )
-						, l_output );
+						, FragmentInput( l_wsPosition, l_wsNormal ) );
 				}
 				break;
 
 			case LightType::eSpot:
 				{
-				auto light = l_writer.GetBuiltin< GLSL::SpotLight >( cuT( "light" ) );
-					l_lighting->ComputeOneSpotLight( light
+					auto light = l_writer.GetBuiltin< GLSL::SpotLight >( cuT( "light" ) );
+					l_diffuse = l_lighting->ComputeOneSpotLight( light
 						, l_eye
 						, l_albedo
 						, l_metallic
 						, l_roughness
 						, l_shadowReceiver
-						, FragmentInput( l_wsPosition, l_wsNormal )
-						, l_output );
+						, FragmentInput( l_wsPosition, l_wsNormal ) );
 				}
 				break;
 			}
 
-			pxl_v4FragColor = vec4( l_diffuse * mix( l_albedo.xyz(), vec3( 0.0_f ), l_metallic )
-				+ l_specular, 1.0 );
+			pxl_v4FragColor = vec4( l_diffuse, 1.0 );
 		} );
 
 		return l_writer.Finalise();

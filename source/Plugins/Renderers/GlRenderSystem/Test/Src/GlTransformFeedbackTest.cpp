@@ -273,7 +273,7 @@ namespace Testing
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
 		l_vboIn.Resize( sizeof( l_data ) );
-		std::memcpy( l_vboIn.data(), l_data, sizeof( l_data ) );
+		std::memcpy( l_vboIn.GetData(), l_data, sizeof( l_data ) );
 
 		// Output VBO
 		VertexBuffer l_vboOut{ m_engine, l_outputs };
@@ -365,7 +365,7 @@ namespace Testing
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
 		l_vboIn.Resize( sizeof( l_data ) );
-		std::memcpy( l_vboIn.data(), l_data, sizeof( l_data ) );
+		std::memcpy( l_vboIn.GetData(), l_data, sizeof( l_data ) );
 
 		// Output VBO
 		VertexBuffer l_vboOut{ m_engine, l_outputs };
@@ -446,7 +446,7 @@ namespace Testing
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
 		l_vboIn.Resize( sizeof( l_data ) );
-		std::memcpy( l_vboIn.data(), l_data, sizeof( l_data ) );
+		std::memcpy( l_vboIn.GetData(), l_data, sizeof( l_data ) );
 
 		// Output VBO
 		VertexBuffer l_vboOut{ m_engine, l_outputs };
@@ -541,7 +541,7 @@ namespace Testing
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
 		l_vboIn.Resize( 10000 * sizeof( l_particle ) );
-		std::memcpy( l_vboIn.data(), &l_particle, sizeof( l_particle ) );
+		std::memcpy( l_vboIn.GetData(), &l_particle, sizeof( l_particle ) );
 
 		// Output VBO
 		VertexBuffer l_vboOut{ m_engine, l_outputs };
@@ -687,7 +687,7 @@ namespace Testing
 		for ( uint32_t i = 0; i < 2; ++i )
 		{
 			l_vbos[i].Resize( 10000 * sizeof( l_particle ) );
-			std::memcpy( l_vbos[i].data(), &l_particle, sizeof( l_particle ) );
+			std::memcpy( l_vbos[i].GetData(), &l_particle, sizeof( l_particle ) );
 			CT_CHECK( l_vbos[i].Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
 		}
 

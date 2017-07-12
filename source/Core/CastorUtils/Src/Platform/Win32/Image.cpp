@@ -1,4 +1,4 @@
-﻿#include "Config/PlatformConfig.hpp"
+#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
@@ -156,7 +156,8 @@ namespace Castor
 				LOADER_ERROR( "Can't convert image to 32 bits with alpha : " + string::string_cast< char >( p_path ) );
 			}
 		}
-		else if ( l_fiFormat == FIF_HDR )
+		else if ( l_fiFormat == FIF_HDR
+			|| l_fiFormat == FIF_EXR )
 		{
 			auto l_bpp = FreeImage_GetBPP( l_fiImage ) / 8;
 

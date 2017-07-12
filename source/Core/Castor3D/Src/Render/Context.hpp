@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -107,30 +107,27 @@ namespace Castor3D
 		C3D_API void SwapBuffers();
 		/**
 		 *\~english
-		 *\brief		Prepares the skybox faces from an equirectangular HDR image.
-		 *\param[in]	p_texture	The texture holding the HDR image.
-		 *\param[in]	p_size		The skybox faces dimensions.
-		 *\param[out]	p_skybox	The skybox to prepare.
+		 *\brief		Raise a memory barrier.
+		 *\param[in]	p_barriers	The barrier to wait.
 		 *\~french
-		 *\brief		Prépare les face d'une skybox depuis une image HDR equirectangulaire.
-		 *\param[in]	p_texture	La texture contenant l'image HDR.
-		 *\param[in]	p_size		Les dimensions des faces de la skybox.
-		 *\param[out]	p_skybox	La skybox à préparer.
+		 *\brief		Met en place un barrière mémoire.
+		 *\param[in]	p_barriers	La barrière à attendre.
 		 */
-		C3D_API void PrepareSkybox( TextureLayout const & p_texture
-			, Castor::Size const & p_size
-			, Skybox & p_skybox );
+		C3D_API void Barrier( MemoryBarriers const & p_barriers );
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_position	The render viewport position.
 		 *\param[in]	p_size		The render viewport size.
 		 *\param[in]	p_texture	The texture.
 		 *\~french
 		 *\brief		Rend la texture cube donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_position	La position du viewport de rendu.
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API void RenderTextureCube( Castor::Size const & p_size
+		C3D_API void RenderTextureCube( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture );
 		/**
 		 *\~english
@@ -335,6 +332,24 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\~french
+		 *\brief		Rend la texture cube donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 */
+		inline void RenderTextureCube( Castor::Size const & p_size
+			, TextureLayout const & p_texture )
+		{
+			static Castor::Position const l_position;
+			RenderTextureCube( l_position
+				, p_size
+				, p_texture );
+		}
+		/**
+		 *\~english
 		 *\brief		Renders the given depth 2D texture to the currently draw-bound frame buffer.
 		 *\param[in]	p_size		The render viewport size.
 		 *\param[in]	p_texture	The texture.
@@ -412,6 +427,30 @@ namespace Castor3D
 				, p_size
 				, p_texture
 				, p_index );
+		}
+		/**
+		 *\~english
+		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_index		The layer index.
+		 *\~french
+		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_index		L'index de la couche.
+		 */
+		inline void RenderEquiToCube( Castor::Size const & p_size
+			, TextureLayout const & p_2dTexture
+			, TextureLayoutSPtr p_cubeTexture
+			, FrameBufferSPtr p_fbo
+			, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs )
+		{
+			m_cube.Render( p_size
+				, p_2dTexture
+				, p_cubeTexture
+				, p_fbo
+				, p_attachs );
 		}
 		/**
 		 *\~english
@@ -567,6 +606,15 @@ namespace Castor3D
 		 *\brief		Echange les buffers de rendu
 		 */
 		C3D_API virtual void DoSwapBuffers() = 0;
+		/**
+		 *\~english
+		 *\brief		Raise a memory barrier.
+		 *\param[in]	p_barriers	The barrier to wait.
+		 *\~french
+		 *\brief		Met en place un barrière mémoire.
+		 *\param[in]	p_barriers	La barrière à attendre.
+		 */
+		C3D_API virtual void DoBarrier( MemoryBarriers const & p_barriers ) = 0;
 
 	protected:
 		//!\~english	RenderWindow associated to this context.

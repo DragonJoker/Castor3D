@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser.hpp"
+#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -148,6 +148,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureChannels[cuT( "refraction" )] = uint32_t( TextureChannel::eRefraction );
 	m_mapTextureChannels[cuT( "roughness" )] = uint32_t( TextureChannel::eRoughness );
 	m_mapTextureChannels[cuT( "albedo" )] = uint32_t( TextureChannel::eAlbedo );
+	m_mapTextureChannels[cuT( "ambient_occlusion" )] = uint32_t( TextureChannel::eAmbientOcclusion );
 	m_mapTextureChannels[cuT( "metallic" )] = uint32_t( TextureChannel::eMetallic );
 
 	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::ePoint );

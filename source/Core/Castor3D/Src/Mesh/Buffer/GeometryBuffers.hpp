@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -76,7 +76,7 @@ namespace Castor3D
 		 *\param[in]	p_index		Le tampon d'indices.
 		 *\return		\p true si ça s'est bien passé.
 		 */
-		C3D_API bool Initialise( VertexBufferArray const & p_buffers, IndexBufferSPtr p_index );
+		C3D_API bool Initialise( VertexBufferArray const & p_buffers, IndexBufferRPtr p_index );
 		/**
 		 *\~english
 		 *\brief		Destroys the VAO.
@@ -169,7 +169,7 @@ namespace Castor3D
 		VertexBufferArray m_buffers;
 		//!\~english	The index buffer.
 		//!\\~french	Le tampon d'indices.
-		IndexBufferSPtr m_indexBuffer{ nullptr };
+		IndexBufferRPtr m_indexBuffer{ nullptr };
 		//!\~english	The shader program.
 		//!\\~french	Le programme de rendu.
 		ShaderProgram const & m_program;

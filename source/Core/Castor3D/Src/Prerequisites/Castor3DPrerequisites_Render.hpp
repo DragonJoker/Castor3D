@@ -726,6 +726,7 @@ namespace Castor3D
 	class RenderDepthToCube;
 	class TextureProjection;
 	class GpuBuffer;
+	class IblTextures;
 
 	template< typename T >
 	class CpuBuffer;
@@ -771,6 +772,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderDepthToCube );
 	DECLARE_SMART_PTR( TextureProjection );
 	DECLARE_SMART_PTR( GpuBuffer );
+	DECLARE_SMART_PTR( IblTextures );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );

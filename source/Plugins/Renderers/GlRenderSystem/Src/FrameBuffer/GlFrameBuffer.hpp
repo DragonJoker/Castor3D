@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -106,6 +106,10 @@ namespace GlRender
 		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
 		 */
 		Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face )override;
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
+		 */
+		Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face, uint32_t p_mipLevel )override;
 
 	public:
 		using BindableType::GetGlName;

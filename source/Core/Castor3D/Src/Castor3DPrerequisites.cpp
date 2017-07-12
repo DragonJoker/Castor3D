@@ -5,6 +5,7 @@
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslUtils.hpp>
 #include <GlslMaterial.hpp>
 #include <GlslPhongLighting.hpp>
 #include <GlslCookTorranceLighting.hpp>
@@ -261,7 +262,7 @@ namespace Castor3D
 		}
 
 		void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_diffuse
+			, GLSL::Vec3 & p_albedo
 			, GLSL::Vec3 & p_emissive
 			, GLSL::Float const & p_gamma
 			, TextureChannels const & p_textureFlags
@@ -274,13 +275,17 @@ namespace Castor3D
 			if ( CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) )
 			{
 				auto c3d_mapAlbedo( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapAlbedo ) );
-				p_diffuse = texture( c3d_mapAlbedo, l_texCoord.xy() ).xyz();
+				p_albedo *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+					, p_gamma
+					, texture( c3d_mapAlbedo, l_texCoord.xy() ).xyz() );
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
 			{
 				auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
-				p_emissive *= texture( c3d_mapEmissive, l_texCoord.xy() ).xyz();
+				p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+					, p_gamma
+					, texture( c3d_mapEmissive, l_texCoord.xy() ).xyz() );
 			}
 		}
 

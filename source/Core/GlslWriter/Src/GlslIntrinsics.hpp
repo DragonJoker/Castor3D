@@ -162,6 +162,12 @@ namespace GLSL
 	template< typename Value > inline Value abs( Value const & p_value );
 	template< typename Value > inline Value isinf( Value const & p_value );
 	template< typename ValueA, typename ValueB > ValueB smoothstep( ValueA const & p_edge0, ValueA const & p_edge1, ValueB const & x );
+	template< typename Value > inline Value dFdx( Value const & p_value );
+	template< typename Value > inline Value dFdy( Value const & p_value );
+	template< typename Value > inline Value dFdxCoarse( Value const & p_value );
+	template< typename Value > inline Value dFdyCoarse( Value const & p_value );
+	template< typename Value > inline Value dFdxFine( Value const & p_value );
+	template< typename Value > inline Value dFdyFine( Value const & p_value );
 	GlslWriter_API Int textureSize( Sampler1D const & p_sampler, Int const p_lod );
 	GlslWriter_API IVec2 textureSize( Sampler2D const & p_sampler, Int const & p_lod );
 	GlslWriter_API IVec3 textureSize( Sampler3D const & p_sampler, Int const & p_lod );

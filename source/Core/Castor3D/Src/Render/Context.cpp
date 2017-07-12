@@ -1,4 +1,4 @@
-#include "Context.hpp"
+﻿#include "Context.hpp"
 
 #include "Engine.hpp"
 
@@ -124,82 +124,21 @@ namespace Castor3D
 		DoSwapBuffers();
 	}
 
-	void Context::PrepareSkybox( TextureLayout const & p_texture
-		, Size const & p_size
-		, Skybox & p_skybox )
+	void Context::Barrier( MemoryBarriers const & p_barriers )
 	{
-		// Create the cube texture.
-		auto l_texture = GetRenderSystem()->CreateTexture( TextureType::eCube
-			, AccessType::eNone
-			, AccessType::eRead | AccessType::eWrite
-			, PixelFormat::eRGB32F
-			, p_size );
-		l_texture->GetImage( uint32_t( CubeMapFace::ePositiveX ) ).InitialiseSource();
-		l_texture->GetImage( uint32_t( CubeMapFace::eNegativeX ) ).InitialiseSource();
-		l_texture->GetImage( uint32_t( CubeMapFace::ePositiveY ) ).InitialiseSource();
-		l_texture->GetImage( uint32_t( CubeMapFace::eNegativeY ) ).InitialiseSource();
-		l_texture->GetImage( uint32_t( CubeMapFace::ePositiveZ ) ).InitialiseSource();
-		l_texture->GetImage( uint32_t( CubeMapFace::eNegativeZ ) ).InitialiseSource();
-		l_texture->Initialise();
-
-		// Create the one shot FBO and attaches
-		auto l_fbo = GetRenderSystem()->CreateFrameBuffer();
-		std::array< FrameBufferAttachmentSPtr, 6 > l_attachs
-		{
-			{
-				l_fbo->CreateAttachment( l_texture, CubeMapFace::ePositiveX ),
-				l_fbo->CreateAttachment( l_texture, CubeMapFace::eNegativeX ),
-				l_fbo->CreateAttachment( l_texture, CubeMapFace::ePositiveY ),
-				l_fbo->CreateAttachment( l_texture, CubeMapFace::eNegativeY ),
-				l_fbo->CreateAttachment( l_texture, CubeMapFace::ePositiveZ ),
-				l_fbo->CreateAttachment( l_texture, CubeMapFace::eNegativeZ ),
-			}
-		};
-		// Create The depth RBO.
-		auto l_depthRbo = l_fbo->CreateDepthStencilRenderBuffer( PixelFormat::eD24 );
-		l_depthRbo->Create();
-		l_depthRbo->Initialise( p_size );
-		auto l_depthAttach = l_fbo->CreateAttachment( l_depthRbo );
-
-		// Fill the FBO
-		l_fbo->Create();
-		l_fbo->Initialise( p_size );
-		l_fbo->Bind();
-		l_fbo->Attach( AttachmentPoint::eDepth, l_depthAttach );
-		REQUIRE( l_fbo->IsComplete() );
-		l_fbo->Unbind();
-		
-		// Render the equirectangular texture to the cube faces.
-		m_cube.Render( p_size, p_texture, l_texture, l_fbo, l_attachs );
-
-		// Cleanup the one shot FBO and attaches
-		l_fbo->Bind();
-		l_fbo->DetachAll();
-		l_fbo->Unbind();
-
-		l_depthRbo->Cleanup();
-		l_depthRbo->Destroy();
-
-		for ( auto & l_attach : l_attachs )
-		{
-			l_attach.reset();
-		}
-
-		l_depthAttach.reset();
-		l_fbo->Cleanup();
-		l_fbo->Destroy();
-
-		// Set the cube texture to the skybox.
-		p_skybox.SetTexture( l_texture );
+		DoBarrier( p_barriers );
 	}
 
-	void Context::RenderTextureCube( Castor::Size const & p_size
+	void Context::RenderTextureCube( Position const & p_position
+		, Size const & p_size
 		, TextureLayout const & p_texture )
 	{
-		m_colourCube.Render( p_size, p_texture );
+		m_colourCube.Render( p_position
+			, p_size
+			, p_texture );
 	}
 
-	void Context::RenderTextureCube( Castor::Size const & p_size
+	void Context::RenderTextureCube( Size const & p_size
 		, TextureLayout const & p_texture
 		, uint32_t p_index )
 	{

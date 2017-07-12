@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -455,6 +455,8 @@ namespace Castor3D
 		eAtomicCounterBuffer = 0x01 << 3,
 		eQueryBuffer = 0x01 << 4,
 		eShaderStorageBuffer = 0x01 << 5,
+		eTextureFetch = 0x01 << 6,
+		eTextureUpdate = 0x01 << 7,
 		eAll = 0xFFFFFFFF,
 	};
 	IMPLEMENT_FLAGS( MemoryBarrier )

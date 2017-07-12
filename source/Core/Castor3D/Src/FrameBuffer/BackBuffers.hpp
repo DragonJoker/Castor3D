@@ -92,7 +92,7 @@ namespace Castor3D
 		 *\param[in]	p_renderBuffer	Le tampon de rendu
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_renderBuffer )
+		C3D_API RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_renderBuffer )override
 		{
 			return nullptr;
 		}
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture )
+		C3D_API TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture )override
 		{
 			return nullptr;
 		}
@@ -122,7 +122,23 @@ namespace Castor3D
 		 *\param[in]	p_face		La face.
 		 *\return		L'attache créée.
 		 */
-		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
+		C3D_API TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )override
+		{
+			return nullptr;
+		}
+		/**
+		 *\~english
+		 *\brief		Creates an attachment to a cube texture's face.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_face		The face.
+		 *\return		The created attachment.
+		 *\~french
+		 *\brief		Crée une attache à une face d'une texture cube.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_face		La face.
+		 *\return		L'attache créée.
+		 */
+		C3D_API TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )override
 		{
 			return nullptr;
 		}

@@ -84,7 +84,7 @@ namespace Castor3D
 			auto l_vertexBuffer = std::make_shared< VertexBuffer >( p_engine, l_declaration );
 			uint32_t l_stride = l_declaration.stride();
 			l_vertexBuffer->Resize( uint32_t( sizeof( l_data ) ) );
-			uint8_t * l_buffer = l_vertexBuffer->data();
+			uint8_t * l_buffer = l_vertexBuffer->GetData();
 			std::memcpy( l_buffer, l_data, sizeof( l_data ) );
 			l_vertexBuffer->Initialise( BufferAccessType::eStatic
 				, BufferAccessNature::eDraw );

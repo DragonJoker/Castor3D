@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -80,14 +80,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_position	The render viewport position.
 		 *\param[in]	p_size		The render viewport size.
 		 *\param[in]	p_texture	The texture.
 		 *\~french
 		 *\brief		Rend la texture cube donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_position	La position du viewport de rendu.
 		 *\param[in]	p_size		La taille du viewport de rendu.
 		 *\param[in]	p_texture	La texture.
 		 */
-		C3D_API void Render( Castor::Size const & p_size
+		C3D_API void Render( Castor::Position const & p_position
+			, Castor::Size const & p_size
 			, TextureLayout const & p_texture );
 
 	protected:

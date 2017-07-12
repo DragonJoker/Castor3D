@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -246,7 +246,7 @@ namespace Castor3D
 		 *\return		Dit s'il y a une reflection map pour le noeud donné.
 		 *\param[in]	p_node	Le noeud de scène.
 		 */
-		C3D_API bool HasEnvironmentMap( SceneNode const & p_node );
+		C3D_API bool HasEnvironmentMap( SceneNode const & p_node )const;
 		/**
 		 *\~english
 		 *\remarks		Call HasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
@@ -258,6 +258,15 @@ namespace Castor3D
 		 *\param[in]	p_node	Le noeud de scène.
 		 */
 		C3D_API EnvironmentMap & GetEnvironmentMap( SceneNode const & p_node );
+		/**
+		 *\~english
+		 *\return		the IBL textures for given node, the skybox's one if no environment map exists for this SceneNode.
+		 *\param[in]	p_node	The scene node.
+		 *\~french
+		 *\return		Les textures d'IBL pour le noeud donné, celles de la skybox si aucune EnvironmentMap n'existe pour ce noeud.
+		 *\param[in]	p_node	Le noeud de scène.
+		 */
+		C3D_API IblTextures const & GetIbl( SceneNode const & p_node )const;
 		/**
 		 *\~english
 		 *\return		The reflection maps list.

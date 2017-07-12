@@ -1,4 +1,4 @@
-#include "RenderNode.hpp"
+﻿#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -7,6 +7,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
@@ -18,6 +19,7 @@
 #include "Shader/ModelUbo.hpp"
 #include "Shader/SceneUbo.hpp"
 #include "Shader/PushUniform.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -69,6 +71,23 @@ namespace Castor3D
 		return l_index;
 	}
 
+	inline uint32_t DoFillShaderPbrMaps( RenderPipeline & p_pipeline
+		, Scene & p_scene
+		, SceneNode & p_sceneNode
+		, uint32_t p_index )
+	{
+		p_scene.GetIbl( p_sceneNode ).GetIrradiance().GetTexture()->Bind( p_index );
+		p_scene.GetIbl( p_sceneNode ).GetIrradiance().GetSampler()->Bind( p_index );
+		p_pipeline.GetIrradianceMapVariable().SetValue( p_index++ );
+		p_scene.GetIbl( p_sceneNode ).GetPrefilteredEnvironment().GetTexture()->Bind( p_index );
+		p_scene.GetIbl( p_sceneNode ).GetPrefilteredEnvironment().GetSampler()->Bind( p_index );
+		p_pipeline.GetPrefilteredMapVariable().SetValue( p_index++ );
+		p_scene.GetSkybox().GetIbl().GetPrefilteredBrdf().GetTexture()->Bind( p_index );
+		p_scene.GetSkybox().GetIbl().GetPrefilteredBrdf().GetSampler()->Bind( p_index );
+		p_pipeline.GetBrdfMapVariable().SetValue( p_index++ );
+		return p_index;
+	}
+
 	inline void DoBindPass( SceneNode & p_sceneNode
 		, PassRenderNode & p_node
 		, Scene & p_scene
@@ -80,6 +99,15 @@ namespace Castor3D
 		auto l_index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 
 		p_node.m_pass.BindTextures();
+
+		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::ePbr )
+			&& CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+		{
+			l_index = DoFillShaderPbrMaps( p_pipeline
+				, p_scene
+				, p_sceneNode
+				, l_index );
+		}
 
 		for ( auto l_pair : p_node.m_textures )
 		{

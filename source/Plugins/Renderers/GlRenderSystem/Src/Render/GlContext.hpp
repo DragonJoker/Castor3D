@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -64,6 +64,10 @@ namespace GlRender
 		 *\copydoc		Castor3D::Context::DoSwapBuffers
 		 */
 		virtual void DoSwapBuffers();
+		/**
+		 *\copydoc		Castor3D::Context::DoBarrier
+		 */
+		virtual void DoBarrier( Castor3D::MemoryBarriers const & p_barriers );
 
 	private:
 		std::unique_ptr< GlContextImpl > m_implementation;
