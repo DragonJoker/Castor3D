@@ -1,4 +1,4 @@
-﻿#include "FrameBuffer/GlTextureAttachment.hpp"
+#include "FrameBuffer/GlTextureAttachment.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
@@ -19,6 +19,18 @@ namespace GlRender
 
 	GlTextureAttachment::~GlTextureAttachment()
 	{
+	}
+
+	void GlTextureAttachment::DoDownload( Castor::Position const & p_offset
+		, Castor::PxBufferBase & p_buffer )const
+	{
+		GetOpenGl().ReadBuffer( GlBufferBinding( int( GlBufferBinding::eColor0 ) + GetAttachmentIndex() ) );
+		auto l_format = GetOpenGl().Get( p_buffer.format() );
+		GetOpenGl().ReadPixels( p_offset
+			, p_buffer.dimensions()
+			, l_format.Format
+			, l_format.Type
+			, p_buffer.ptr() );
 	}
 
 	void GlTextureAttachment::DoAttach()

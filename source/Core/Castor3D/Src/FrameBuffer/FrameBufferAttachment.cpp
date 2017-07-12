@@ -15,6 +15,15 @@ namespace Castor3D
 	{
 	}
 
+	void FrameBufferAttachment::Download( Castor::Position const & p_offset
+		, Castor::PxBufferBase & p_buffer )const
+	{
+		REQUIRE( GetAttachmentPoint() == AttachmentPoint::eColour );
+		REQUIRE( int32_t( GetBuffer()->dimensions().width() ) >= int32_t( p_offset.x() + p_buffer.dimensions().width() ) );
+		REQUIRE( int32_t( GetBuffer()->dimensions().height() ) >= int32_t( p_offset.y() + p_buffer.dimensions().height() ) );
+		DoDownload( p_offset, p_buffer );
+	}
+
 	void FrameBufferAttachment::Attach( AttachmentPoint p_eAttachment )
 	{
 		Attach( p_eAttachment, 0 );

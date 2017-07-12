@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -74,6 +74,11 @@ namespace GlRender
 		}
 
 	private:
+		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::Download
+		 */
+		void DoDownload( Castor::Position const & p_offset
+			, Castor::PxBufferBase & p_buffer )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
 		 */

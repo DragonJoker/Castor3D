@@ -132,6 +132,12 @@ namespace Castor
 			return m_pixel;
 		}
 
+		inline pixel_type * operator->()
+		{
+			REQUIRE( m_current != m_end );
+			return &m_pixel;
+		}
+
 		inline bool operator==( pixel_iterator const & p_it )const
 		{
 			return m_current == p_it.m_current;
@@ -510,6 +516,28 @@ namespace Castor
 		PxBufferBase::const_pixel_data get_at( uint32_t x, uint32_t y )const override;
 		/**
 		 *\~english
+		 *\brief		Retrieves the pixel data at given position
+		 *\param[in]	x, y	The pixel position
+		 *\return		The pixel data
+		 *\~french
+		 *\brief		Récupère les données du pixel à la position donnée
+		 *\param[in]	x, y	The pixel position
+		 *\return		Les données du pixel
+		 */
+		pixel at( uint32_t x, uint32_t y );
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel data at given position
+		 *\param[in]	x, y	The pixel position
+		 *\return		The pixel constant data
+		 *\~french
+		 *\brief		Récupère les données du pixel à la position donnée
+		 *\param[in]	x, y	The pixel position
+		 *\return		Les données constantes du pixel
+		 */
+		pixel at( uint32_t x, uint32_t y )const;
+		/**
+		 *\~english
 		 *\brief		Makes a horizontal swap of pixels
 		 *\~french
 		 *\brief		Effectue un échange horizontal des pixels
@@ -557,6 +585,7 @@ namespace Castor
 		}
 
 	private:
+		uint32_t do_convert( uint32_t x, uint32_t y )const;
 		virtual void do_init_column( uint32_t p_column )const;
 		virtual void do_init_column( uint32_t p_column );
 
