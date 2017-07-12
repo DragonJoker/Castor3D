@@ -1,4 +1,4 @@
-﻿#include "Submesh.hpp"
+#include "Submesh.hpp"
 
 #include "SubmeshUtils.hpp"
 
@@ -235,7 +235,6 @@ namespace Castor3D
 		if ( !m_initialised )
 		{
 			m_initialised = m_vertexBuffer.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-			GetParent().GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext()->Barrier( MemoryBarrier::eVertexBuffer );
 
 			if ( m_initialised )
 			{
