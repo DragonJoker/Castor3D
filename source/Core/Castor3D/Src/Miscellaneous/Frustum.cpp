@@ -80,19 +80,19 @@ namespace Castor3D
 		}
 		else
 		{
-			real l_tan = real( tan( m_viewport.GetFovY().radians() ) );
-			l_nearHeight = l_tan * m_viewport.GetNear();
+			real l_tan = real( m_viewport.GetFovY().tan() );
+			l_nearHeight = 2 * l_tan * m_viewport.GetNear();
 			l_nearWidth = l_nearHeight * m_viewport.GetRatio();
-			l_farHeight = l_tan * m_viewport.GetFar();
+			l_farHeight = 2 * l_tan * m_viewport.GetFar();
 			l_farWidth = l_farHeight * m_viewport.GetRatio();
 		}
 
 		// Compute planes' points
 		// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
-		Point3r l_rn{ p_x * l_nearWidth };
-		Point3r l_rf{ p_x * l_farWidth };
-		Point3r l_tn{ p_y * l_nearHeight };
-		Point3r l_tf{ p_y * l_farHeight };
+		Point3r l_rn{ p_x * l_nearWidth / 2 };
+		Point3r l_rf{ p_x * l_farWidth / 2 };
+		Point3r l_tn{ p_y * l_nearHeight / 2 };
+		Point3r l_tf{ p_y * l_farHeight / 2 };
 		Point3r l_nc{ p_position + p_z * m_viewport.GetNear() };
 		Point3r l_ntl{ l_nc + l_tn - l_rn };
 		Point3r l_ntr{ l_nc + l_tn + l_rn };
@@ -166,7 +166,7 @@ namespace Castor3D
 			++i;
 		}
 
-		return true;// l_return != Intersection::eOut;
+		return l_return != Intersection::eOut;
 	}
 
 	bool Frustum::IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const
@@ -192,17 +192,19 @@ namespace Castor3D
 			++i;
 		}
 
-		return true;// l_return != Intersection::eOut;
+		return l_return != Intersection::eOut;
 	}
 
 	bool Frustum::IsVisible( Point3r const & p_point )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-		auto l_it = std::find_if( m_planes.begin(), m_planes.end(), [&p_point]( auto const & p_plane )
+		auto l_it = std::find_if( m_planes.begin()
+			, m_planes.end()
+			, [&p_point]( auto const & p_plane )
 		{
 			return p_plane.Distance( p_point ) < 0;
 		} );
 
-		return true;// l_it == m_planes.end();
+		return l_it == m_planes.end();
 	}
 }
