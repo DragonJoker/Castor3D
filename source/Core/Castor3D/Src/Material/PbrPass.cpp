@@ -38,7 +38,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
-					   && HdrColour::TextWriter( String() )( p_pass.GetAlbedo(), p_file )
+					   && Colour::TextWriter( String() )( p_pass.GetAlbedo(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< PbrPass >::CheckError( l_return, "PbrPass albedo" );
 		}
@@ -53,8 +53,8 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\treflectance " )
-				+ string::to_string( p_pass.GetReflectance() )
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmetallic " )
+				+ string::to_string( p_pass.GetMetallic() )
 				+ cuT( "\n" ) ) > 0;
 			Castor::TextWriter< PbrPass >::CheckError( l_return, "PbrPass reflectance" );
 		}
@@ -76,7 +76,7 @@ namespace Castor3D
 
 	PbrPass::PbrPass( Material & p_parent )
 		: Pass{ p_parent }
-		, m_albedo{ HdrColour::from_rgba( 0xFFFFFFFF ) }
+		, m_albedo{ Colour::from_rgba( 0xFFFFFFFF ) }
 	{
 	}
 
@@ -106,7 +106,7 @@ namespace Castor3D
 			, GetRoughness() );
 		p_buffer.SetComponents( GetId() - 1
 			, 2u
-			, GetReflectance()
+			, GetMetallic()
 			, GetEmissive()
 			// TODO: store gamma correction and exposure per pass ? or remove from pass
 			, NeedsGammaCorrection() ? 2.2f : 1.0f //gamma correction

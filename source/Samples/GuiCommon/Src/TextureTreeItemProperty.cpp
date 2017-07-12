@@ -30,11 +30,17 @@ namespace GuiCommon
 		static wxString PROPERTY_CHANNEL_EMISSIVE = _( "Emissive" );
 		static wxString PROPERTY_CHANNEL_REFLECTION = _( "Reflection" );
 		static wxString PROPERTY_CHANNEL_REFRACTION = _( "Refraction" );
+		static wxString PROPERTY_CHANNEL_ALBEDO = _( "Albedo" );
+		static wxString PROPERTY_CHANNEL_ROUGHNESS = _( "Roughness" );
+		static wxString PROPERTY_CHANNEL_METALLIC = _( "Metallic" );
 	}
 
-	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable, TextureUnitSPtr p_texture )
+	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable
+		, TextureUnitSPtr p_texture
+		, MaterialType p_type )
 		: TreeItemProperty( p_texture->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
-		, m_texture( p_texture )
+		, m_texture{ p_texture }
+		, m_materialType{ p_type }
 	{
 		PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
 		PROPERTY_TEXTURE_IMAGE = _( "Image" );
@@ -48,6 +54,9 @@ namespace GuiCommon
 		PROPERTY_CHANNEL_EMISSIVE = _( "Emissive" );
 		PROPERTY_CHANNEL_REFLECTION = _( "Reflection" );
 		PROPERTY_CHANNEL_REFRACTION = _( "Refraction" );
+		PROPERTY_CHANNEL_ALBEDO = _( "Albedo" );
+		PROPERTY_CHANNEL_ROUGHNESS = _( "Roughness" );
+		PROPERTY_CHANNEL_METALLIC = _( "Metallic" );
 
 		CreateTreeItemMenu();
 	}
@@ -63,54 +72,109 @@ namespace GuiCommon
 		if ( l_unit )
 		{
 			wxPGChoices l_choices;
-			l_choices.Add( PROPERTY_CHANNEL_DIFFUSE );
-			l_choices.Add( PROPERTY_CHANNEL_NORMAL );
-			l_choices.Add( PROPERTY_CHANNEL_OPACITY );
-			l_choices.Add( PROPERTY_CHANNEL_SPECULAR );
-			l_choices.Add( PROPERTY_CHANNEL_EMISSIVE );
-			l_choices.Add( PROPERTY_CHANNEL_HEIGHT );
-			l_choices.Add( PROPERTY_CHANNEL_GLOSS );
-			l_choices.Add( PROPERTY_CHANNEL_REFLECTION );
-			l_choices.Add( PROPERTY_CHANNEL_REFRACTION );
 			wxString l_selected;
 
-			switch ( l_unit->GetChannel() )
+			if ( m_materialType == MaterialType::eLegacy )
 			{
-			case TextureChannel::eDiffuse:
-				l_selected = PROPERTY_CHANNEL_DIFFUSE;
-				break;
+				l_choices.Add( PROPERTY_CHANNEL_DIFFUSE );
+				l_choices.Add( PROPERTY_CHANNEL_NORMAL );
+				l_choices.Add( PROPERTY_CHANNEL_OPACITY );
+				l_choices.Add( PROPERTY_CHANNEL_SPECULAR );
+				l_choices.Add( PROPERTY_CHANNEL_EMISSIVE );
+				l_choices.Add( PROPERTY_CHANNEL_HEIGHT );
+				l_choices.Add( PROPERTY_CHANNEL_GLOSS );
+				l_choices.Add( PROPERTY_CHANNEL_REFLECTION );
+				l_choices.Add( PROPERTY_CHANNEL_REFRACTION );
 
-			case TextureChannel::eNormal:
-				l_selected = PROPERTY_CHANNEL_NORMAL;
-				break;
+				switch ( l_unit->GetChannel() )
+				{
+				case TextureChannel::eDiffuse:
+					l_selected = PROPERTY_CHANNEL_DIFFUSE;
+					break;
 
-			case TextureChannel::eOpacity:
-				l_selected = PROPERTY_CHANNEL_OPACITY;
-				break;
+				case TextureChannel::eNormal:
+					l_selected = PROPERTY_CHANNEL_NORMAL;
+					break;
 
-			case TextureChannel::eSpecular:
-				l_selected = PROPERTY_CHANNEL_SPECULAR;
-				break;
+				case TextureChannel::eOpacity:
+					l_selected = PROPERTY_CHANNEL_OPACITY;
+					break;
 
-			case TextureChannel::eEmissive:
-				l_selected = PROPERTY_CHANNEL_EMISSIVE;
-				break;
+				case TextureChannel::eSpecular:
+					l_selected = PROPERTY_CHANNEL_SPECULAR;
+					break;
 
-			case TextureChannel::eHeight:
-				l_selected = PROPERTY_CHANNEL_HEIGHT;
-				break;
+				case TextureChannel::eEmissive:
+					l_selected = PROPERTY_CHANNEL_EMISSIVE;
+					break;
 
-			case TextureChannel::eGloss:
-				l_selected = PROPERTY_CHANNEL_GLOSS;
-				break;
+				case TextureChannel::eHeight:
+					l_selected = PROPERTY_CHANNEL_HEIGHT;
+					break;
 
-			case TextureChannel::eReflection:
-				l_selected = PROPERTY_CHANNEL_REFLECTION;
-				break;
+				case TextureChannel::eGloss:
+					l_selected = PROPERTY_CHANNEL_GLOSS;
+					break;
 
-			case TextureChannel::eRefraction:
-				l_selected = PROPERTY_CHANNEL_REFRACTION;
-				break;
+				case TextureChannel::eReflection:
+					l_selected = PROPERTY_CHANNEL_REFLECTION;
+					break;
+
+				case TextureChannel::eRefraction:
+					l_selected = PROPERTY_CHANNEL_REFRACTION;
+					break;
+				}
+			}
+			else
+			{
+				l_choices.Add( PROPERTY_CHANNEL_ALBEDO );
+				l_choices.Add( PROPERTY_CHANNEL_NORMAL );
+				l_choices.Add( PROPERTY_CHANNEL_OPACITY );
+				l_choices.Add( PROPERTY_CHANNEL_ROUGHNESS );
+				l_choices.Add( PROPERTY_CHANNEL_EMISSIVE );
+				l_choices.Add( PROPERTY_CHANNEL_HEIGHT );
+				l_choices.Add( PROPERTY_CHANNEL_METALLIC );
+				l_choices.Add( PROPERTY_CHANNEL_REFLECTION );
+				l_choices.Add( PROPERTY_CHANNEL_REFRACTION );
+
+				switch ( l_unit->GetChannel() )
+				{
+				case TextureChannel::eDiffuse:
+					l_selected = PROPERTY_CHANNEL_ALBEDO;
+					break;
+
+				case TextureChannel::eNormal:
+					l_selected = PROPERTY_CHANNEL_NORMAL;
+					break;
+
+				case TextureChannel::eOpacity:
+					l_selected = PROPERTY_CHANNEL_OPACITY;
+					break;
+
+				case TextureChannel::eSpecular:
+					l_selected = PROPERTY_CHANNEL_ROUGHNESS;
+					break;
+
+				case TextureChannel::eEmissive:
+					l_selected = PROPERTY_CHANNEL_EMISSIVE;
+					break;
+
+				case TextureChannel::eHeight:
+					l_selected = PROPERTY_CHANNEL_HEIGHT;
+					break;
+
+				case TextureChannel::eGloss:
+					l_selected = PROPERTY_CHANNEL_METALLIC;
+					break;
+
+				case TextureChannel::eReflection:
+					l_selected = PROPERTY_CHANNEL_REFLECTION;
+					break;
+
+				case TextureChannel::eRefraction:
+					l_selected = PROPERTY_CHANNEL_REFRACTION;
+					break;
+				}
 			}
 
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXTURE ) );
@@ -181,6 +245,21 @@ namespace GuiCommon
 				{
 					OnChannelChange( TextureChannel::eRefraction );
 				}
+
+				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_ALBEDO )
+				{
+					OnChannelChange( TextureChannel::eAlbedo );
+				}
+
+				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_ROUGHNESS )
+				{
+					OnChannelChange( TextureChannel::eRoughness );
+				}
+
+				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_METALLIC )
+				{
+					OnChannelChange( TextureChannel::eMetallic );
+				}
 			}
 			else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )
 			{
@@ -209,7 +288,9 @@ namespace GuiCommon
 			{
 				// Absolute path
 				l_unit->SetAutoMipmaps( true );
-				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
+				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+					, AccessType::eRead
+					, AccessType::eRead );
 				l_texture->GetImage().InitialiseSource( Path{}, Path{ p_value } );
 				l_unit->SetTexture( l_texture );
 				l_unit->Initialise();

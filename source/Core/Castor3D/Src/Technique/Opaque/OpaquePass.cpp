@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -480,7 +480,7 @@ namespace Castor3D
 			auto l_normal = l_writer.DeclLocale( cuT( "l_normal" ), normalize( vtx_normal ) );
 			auto l_matAlbedo = l_writer.DeclLocale( cuT( "l_matDiffuse" ), l_materials.GetAlbedo( vtx_material ) );
 			auto l_matRoughness = l_writer.DeclLocale( cuT( "l_matRoughness" ), l_materials.GetRoughness( vtx_material ) );
-			auto l_matMetallic = l_writer.DeclLocale( cuT( "l_matMetallic" ), l_materials.GetReflectance( vtx_material ) );
+			auto l_matMetallic = l_writer.DeclLocale( cuT( "l_matMetallic" ), l_materials.GetMetallic( vtx_material ) );
 			auto l_matEmissive = l_writer.DeclLocale( cuT( "l_matEmissive" ), l_matAlbedo * l_materials.GetEmissive( vtx_material ) );
 			auto l_matGamma = l_writer.DeclLocale( cuT( "l_matGamma" ), l_materials.GetGamma( vtx_material ) );
 			auto l_texCoord = l_writer.DeclLocale( cuT( "l_texCoord" ), vtx_texture );

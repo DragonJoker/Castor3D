@@ -1,4 +1,4 @@
-﻿#include "TransparentPass.hpp"
+#include "TransparentPass.hpp"
 
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -715,7 +715,7 @@ namespace Castor3D
 			auto l_normal = l_writer.DeclLocale( cuT( "l_normal" ), normalize( vtx_normal ) );
 			auto l_ambient = l_writer.DeclLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
 			auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), vec3( 0.0_f ) );
-			auto l_metalness = l_writer.DeclLocale( cuT( "l_metallic" ), l_materials.GetReflectance( vtx_material ) );
+			auto l_metalness = l_writer.DeclLocale( cuT( "l_metallic" ), l_materials.GetMetallic( vtx_material ) );
 			auto l_roughness = l_writer.DeclLocale( cuT( "l_roughness" ), l_materials.GetRoughness( vtx_material ) );
 			auto l_gamma = l_writer.DeclLocale( cuT( "l_gamma" ), l_materials.GetGamma( vtx_material ) );
 			auto l_albedo = l_writer.DeclLocale( cuT( "l_albedo" ), l_utils.RemoveGamma(l_gamma, l_materials.GetAlbedo( vtx_material ) ) );

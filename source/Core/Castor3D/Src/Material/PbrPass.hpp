@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur d'albédo.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetAlbedo( Castor::HdrColour const & p_value )
+		inline void SetAlbedo( Castor::Colour const & p_value )
 		{
 			m_albedo = p_value;
 		}
@@ -138,9 +138,9 @@ namespace Castor3D
 		 *\brief		Définit la réflectivité.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetReflectance( float p_value )
+		inline void SetMetallic( float p_value )
 		{
-			m_reflectance = p_value;
+			m_metallic = p_value;
 		}
 		/**
 		 *\~english
@@ -148,7 +148,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur.
 		 */
-		inline Castor::HdrColour const & GetAlbedo()const
+		inline Castor::Colour const & GetAlbedo()const
 		{
 			return m_albedo;
 		}
@@ -168,9 +168,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La réflectivité.
 		 */
-		inline float const & GetReflectance()const
+		inline float const & GetMetallic()const
 		{
-			return m_reflectance;
+			return m_metallic;
 		}
 
 	private:
@@ -194,13 +194,13 @@ namespace Castor3D
 	private:
 		//!\~english	The albedo colour.
 		//!\~french		La couleur d'albédo.
-		Castor::HdrColour m_albedo;
+		Castor::Colour m_albedo;
 		//!\~english	The roughness.
 		//!\~french		La rugosité.
 		float m_roughness{ 1.0 };
 		//!\~english	The reflectance.
 		//!\~french		La réflectivité.
-		float m_reflectance{ 0.0 };
+		float m_metallic{ 0.0 };
 	};
 }
 

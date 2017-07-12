@@ -241,7 +241,7 @@ namespace GLSL
 			m_writer.Return( m_float( p_index, 1_i, 3_i ) );
 		}, InInt{ &m_writer, cuT( "p_index" ) } );
 
-		m_reflectance = m_writer.ImplementFunction< Float >( cuT( "Mat_GetReflectance" )
+		m_metallic = m_writer.ImplementFunction< Float >( cuT( "Mat_GetMetallic" )
 			, [this]( Int const & p_index )
 		{
 			m_writer.Return( m_float( p_index, 2_i, 0_i ) );
@@ -258,9 +258,9 @@ namespace GLSL
 		return m_roughness( p_index );
 	}
 
-	Float PbrMaterials::GetReflectance( Int const & p_index )const
+	Float PbrMaterials::GetMetallic( Int const & p_index )const
 	{
-		return m_reflectance( p_index );
+		return m_metallic( p_index );
 	}
 
 	//*********************************************************************************************

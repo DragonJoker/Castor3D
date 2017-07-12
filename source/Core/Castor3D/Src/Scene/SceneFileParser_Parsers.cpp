@@ -2664,7 +2664,7 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			HdrColour l_value;
+			Colour l_value;
 			p_params[0]->Get( l_value );
 			l_parsingContext->pbrPass->SetAlbedo( l_value );
 		}
@@ -2700,7 +2700,7 @@ namespace Castor3D
 		{
 			float l_value;
 			p_params[0]->Get( l_value );
-			l_parsingContext->pbrPass->SetReflectance( l_value );
+			l_parsingContext->pbrPass->SetMetallic( l_value );
 		}
 	}
 	END_ATTRIBUTE()

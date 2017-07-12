@@ -33,16 +33,26 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		MaterialsList( PropertiesHolder * p_propertiesHolder
+			, wxWindow * p_parent
+			, wxPoint const & p_ptPos = wxDefaultPosition
+			, wxSize const & p_size = wxDefaultSize );
 		~MaterialsList();
 
-		void LoadMaterials( Castor3D::Engine * p_engine, Castor3D::Scene & p_scene );
+		void LoadMaterials( Castor3D::Engine * p_engine
+			, Castor3D::Scene & p_scene );
 		void UnloadMaterials();
 
 	private:
-		void DoAddMaterial( wxTreeItemId p_id, Castor3D::MaterialSPtr p_material );
-		void DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass );
-		void DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture );
+		void DoAddMaterial( wxTreeItemId p_id
+			, Castor3D::MaterialSPtr p_material );
+		void DoAddPass( wxTreeItemId p_id
+			, uint32_t p_index
+			, Castor3D::PassSPtr p_pass );
+		void DoAddTexture( wxTreeItemId p_id
+			, uint32_t p_index
+			, Castor3D::TextureUnitSPtr p_texture
+			, Castor3D::MaterialType p_type );
 
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
