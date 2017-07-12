@@ -178,6 +178,9 @@ namespace Castor3D
 				p_face = l_faceIndex;
 			}
 		}
+
+		static uint32_t constexpr PickingWidth = 50u;
+		static int constexpr PickingOffset = int( PickingWidth / 2 );
 	}
 
 	PickingPass::PickingPass( Engine & p_engine )
@@ -249,21 +252,18 @@ namespace Castor3D
 		DoRenderNodes( p_nodes, p_camera );
 		m_frameBuffer->Unbind();
 
-		m_colourTexture->Bind( 0 );
-		Point3f l_pixel;
-		auto l_data = m_colourTexture->Lock( AccessType::eRead, 0u );
-
-		if ( l_data )
+		Position l_offset
 		{
-			auto l_dimensions = m_colourTexture->GetDimensions();
-			auto l_format = m_colourTexture->GetPixelFormat();
-			Image l_image{ cuT( "tmp" ), l_dimensions, l_format, l_data, l_format };
-			l_image.GetPixel( p_position.x(), l_dimensions.height() - 1 - p_position.y(), reinterpret_cast< uint8_t * >( l_pixel.ptr() ), l_format );
-			m_colourTexture->Unlock( false, 0u );
-		}
-
-		m_colourTexture->Unbind( 0 );
-		return l_pixel;
+			p_position.x() - PickingOffset,
+			p_position.y() - PickingOffset
+		};
+		m_frameBuffer->Bind( FrameBufferTarget::eRead );
+		m_colourAttach->Download( l_offset
+			, *m_buffer );
+		m_frameBuffer->Unbind();
+		auto l_it = std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( m_buffer )->begin();
+		l_it += ( PickingOffset * PickingWidth ) + PickingOffset - 1;
+		return Point3f{ reinterpret_cast< float const * >( l_it->const_ptr() ) };
 	}
 
 	PickingPass::NodeType PickingPass::DoPick( Point3f const & p_pixel
@@ -389,7 +389,13 @@ namespace Castor3D
 
 	bool PickingPass::DoInitialise( Size const & p_size )
 	{
-		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGB32F, p_size );
+		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			, AccessType::eRead
+			, AccessType::eRead | AccessType::eWrite
+			, PixelFormat::eRGB32F
+			, p_size );
+		m_buffer = PxBufferBase::create( Size{ PickingWidth, PickingWidth }
+			, m_colourTexture->GetPixelFormat() );
 		m_colourTexture->GetImage().InitialiseSource();
 		auto l_size = m_colourTexture->GetDimensions();
 		bool l_return = m_colourTexture->Initialise();
@@ -443,6 +449,7 @@ namespace Castor3D
 
 	void PickingPass::DoCleanup()
 	{
+		m_buffer.reset();
 		m_pickingUbo.Cleanup();
 
 		if ( m_frameBuffer )
