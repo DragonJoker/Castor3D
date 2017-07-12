@@ -97,6 +97,10 @@ namespace TestRender
 		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
 		 */
 		Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face )override;
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
+		 */
+		Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face, uint32_t p_mipLevel )override;
 
 	private:
 		/**

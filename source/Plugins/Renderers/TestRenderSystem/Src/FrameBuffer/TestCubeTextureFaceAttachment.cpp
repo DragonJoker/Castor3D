@@ -5,9 +5,10 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestCubeTextureFaceAttachment::TestCubeTextureFaceAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
+	TestCubeTextureFaceAttachment::TestCubeTextureFaceAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face, uint32_t p_mipLevel )
 		: TextureAttachment( p_texture )
 		, m_face( p_face )
+		, m_mipLevel( p_mipLevel )
 	{
 	}
 
