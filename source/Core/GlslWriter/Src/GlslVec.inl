@@ -1,4 +1,4 @@
-namespace GLSL
+﻿namespace GLSL
 {
 	//*****************************************************************************************
 
@@ -153,6 +153,14 @@ namespace GLSL
 		return l_return;
 	}
 
+	template< typename ValueT >
+	inline Vec2T< ValueT > operator*( ValueT const & p_lhs, Vec2T< ValueT > const & p_rhs )
+	{
+		Vec2T< ValueT > l_result( p_lhs.m_writer );
+		l_result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
+		return l_result;
+	}
+
 	//*****************************************************************************************
 
 	template< typename ValueT >
@@ -198,6 +206,14 @@ namespace GLSL
 		return l_return;
 	}
 
+	template< typename ValueT >
+	inline Vec3T< ValueT > operator*( ValueT const & p_lhs, Vec3T< ValueT > const & p_rhs )
+	{
+		Vec3T< ValueT > l_result( p_lhs.m_writer );
+		l_result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
+		return l_result;
+	}
+
 	//*****************************************************************************************
 
 	template< typename ValueT >
@@ -241,6 +257,14 @@ namespace GLSL
 	{
 		ValueT l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
 		return l_return;
+	}
+
+	template< typename ValueT >
+	inline Vec4T< ValueT > operator*( ValueT const & p_lhs, Vec4T< ValueT > const & p_rhs )
+	{
+		Vec4T< ValueT > l_result( p_lhs.m_writer );
+		l_result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
+		return l_result;
 	}
 
 	//*****************************************************************************************

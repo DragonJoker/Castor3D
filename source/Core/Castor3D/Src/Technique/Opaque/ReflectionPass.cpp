@@ -1,4 +1,4 @@
-#include "ReflectionPass.hpp"
+﻿#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -119,7 +119,8 @@ namespace Castor3D
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto pxl_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+			auto pxl_reflection = l_writer.DeclFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = l_writer.DeclFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcWSPosition();
@@ -140,6 +141,7 @@ namespace Castor3D
 					, l_reflection
 					, l_refraction
 					, l_envMapIndex );
+				auto l_postLight = l_writer.DeclLocale( cuT( "l_postLight" ), texture( c3d_mapPostLight, vtx_texture ).xyz() );
 
 				IF( l_writer, "l_envMapIndex < 1 || ( l_reflection + l_refraction == 0 )" )
 				{
@@ -147,8 +149,8 @@ namespace Castor3D
 				}
 				FI;
 
-				auto l_postLight = l_writer.DeclLocale( cuT( "l_postLight" ), texture( c3d_mapPostLight, vtx_texture ).xyz() );
-				pxl_v4FragColor = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
+				pxl_reflection = vec3( 0.0_f );
+				pxl_refraction = vec4( -1.0_f );
 				auto l_position = l_writer.DeclLocale( cuT( "l_position" )
 					, l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
 				auto l_normal = l_writer.DeclLocale( cuT( "l_normal" )
@@ -157,14 +159,12 @@ namespace Castor3D
 					, normalize( l_position - c3d_v3CameraPosition ) );
 				l_envMapIndex = l_envMapIndex - 1_i;
 				auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), texture( c3d_mapData2, vtx_texture ).xyz() );
-				auto l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_refractedColour = l_writer.DeclLocale( cuT( "l_refractedColour" ), l_diffuse / 2.0 );
 
 				IF( l_writer, l_reflection != 0_i )
 				{
 					auto l_reflect = l_writer.DeclLocale( cuT( "l_reflect" )
 						, reflect( l_incident, l_normal ) );
-					l_reflectedColour = texture( c3d_mapEnvironment[l_envMapIndex], l_reflect ).xyz() * length( l_postLight.xyz() );
+					pxl_reflection = texture( c3d_mapEnvironment[l_envMapIndex], l_reflect ).xyz();
 				}
 				FI;
 
@@ -172,21 +172,27 @@ namespace Castor3D
 				{
 					auto l_ratio = l_writer.DeclLocale( cuT( "l_ratio" )
 						, texture( c3d_mapData4, vtx_texture ).w() );
+					auto l_subRatio = l_writer.DeclLocale( cuT( "l_subRatio" )
+						, 1.0_f - l_ratio );
+					auto l_addRatio = l_writer.DeclLocale( cuT( "l_addRatio" )
+						, 1.0_f + l_ratio );
+					auto l_reflectance = l_writer.DeclLocale( cuT( "l_reflectance" )
+						, l_writer.Paren( l_subRatio * l_subRatio ) / l_writer.Paren( l_addRatio * l_addRatio ) );
+					auto l_product = l_writer.DeclLocale( cuT( "l_product" )
+						, max( 0.0_f, dot( -l_incident, l_normal ) ) );
+					auto l_fresnel = l_writer.DeclLocale( cuT( "l_fresnel" )
+						, l_reflectance + l_writer.Paren( 1.0_f - l_reflectance ) * pow( 1.0_f - l_product, 5.0 ) );
 					auto l_refract = l_writer.DeclLocale( cuT( "l_refract" )
 						, refract( l_incident, l_normal, l_ratio ) );
-					l_refractedColour = texture( c3d_mapEnvironment[l_envMapIndex], l_refract ).xyz() * l_diffuse / length( l_diffuse );
+					pxl_refraction.xyz() = texture( c3d_mapEnvironment[l_envMapIndex], l_refract ).xyz();
+					pxl_refraction.xyz() *= l_diffuse / length( l_diffuse );
+					pxl_refraction.w() = l_fresnel;
 				}
 				FI;
 
 				IF( l_writer, cuT( "l_reflection != 0 && l_refraction == 0" ) )
 				{
-					pxl_v4FragColor.xyz() = l_reflectedColour * l_diffuse / length( l_diffuse );
-				}
-				ELSE
-				{
-					auto l_refFactor = l_writer.DeclLocale( cuT( "l_refFactor" )
-					, clamp( c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_normal ), c3d_fresnelPower ), 0.0_f, 1.0_f ) );
-					pxl_v4FragColor.xyz() = mix( l_refractedColour, l_reflectedColour, l_refFactor );
+					pxl_reflection *= l_diffuse / length( l_diffuse );
 				}
 				FI;
 			} );
@@ -216,7 +222,8 @@ namespace Castor3D
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto pxl_fragColor = l_writer.DeclFragData< Vec3 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_reflection = l_writer.DeclFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = l_writer.DeclFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
 
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcWSPosition();
@@ -246,9 +253,8 @@ namespace Castor3D
 					, l_refraction
 					, l_envMapIndex );
 
-				pxl_fragColor = vec3( 0.0_f );
-				auto l_ambient = l_writer.DeclLocale( cuT( "l_ambient" )
-					, vec3( 1.0_f ) );
+				pxl_reflection = vec3( 0.0_f );
+				pxl_refraction = vec4( -1.0_f );
 				auto l_data2 = l_writer.DeclLocale( cuT( "l_data2" )
 					, texture( c3d_mapData2, vtx_texture ) );
 				auto l_data3 = l_writer.DeclLocale( cuT( "l_data3" )
@@ -265,44 +271,41 @@ namespace Castor3D
 					, l_data1.xyz() );
 				auto l_position = l_writer.DeclLocale( cuT( "l_position" )
 					, l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
-				auto l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflectedColour" )
-					, vec3( 0.0_f, 0, 0 ) );
-				auto l_refractedColour = l_writer.DeclLocale( cuT( "l_refractedColour" )
-					, l_albedo / 2.0 );
 				auto l_incident = l_writer.DeclLocale( cuT( "l_incident" )
 					, normalize( l_position - c3d_v3CameraPosition ) );
 
-				l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflect" )
-					, l_ambient * l_occlusion * l_utils.ComputeIBL( l_normal
-						, l_position
-						, l_albedo
-						, l_metalness
-						, l_roughness
-						, c3d_v3CameraPosition
-						, c3d_mapIrradiance[l_envMapIndex]
-						, c3d_mapPrefiltered[l_envMapIndex]
-						, c3d_mapBrdf
-						, l_envMapIndex ) );
+				pxl_reflection = l_occlusion * l_utils.ComputeIBL( l_normal
+					, l_position
+					, l_albedo
+					, l_metalness
+					, l_roughness
+					, c3d_v3CameraPosition
+					, c3d_mapIrradiance[l_envMapIndex]
+					, c3d_mapPrefiltered[l_envMapIndex]
+					, c3d_mapBrdf
+					, l_envMapIndex );
 
 				auto l_ratio = l_writer.DeclLocale( cuT( "l_ratio" )
 					, texture( c3d_mapData4, vtx_texture ).w() );
 
 				IF( l_writer, l_ratio != 0.0_f )
 				{
-					auto l_ratio = l_writer.DeclLocale( cuT( "l_ratio" )
-						, texture( c3d_mapData4, vtx_texture ).w() );
+					auto l_subRatio = l_writer.DeclLocale( cuT( "l_subRatio" )
+						, 1.0_f - l_ratio );
+					auto l_addRatio = l_writer.DeclLocale( cuT( "l_addRatio" )
+						, 1.0_f + l_ratio );
+					auto l_reflectance = l_writer.DeclLocale( cuT( "l_reflectance" )
+						, l_writer.Paren( l_subRatio * l_subRatio ) / l_writer.Paren( l_addRatio * l_addRatio ) );
+					auto l_product = l_writer.DeclLocale( cuT( "l_product" )
+						, max( 0.0_f, dot( -l_incident, l_normal ) ) );
+					auto l_fresnel = l_writer.DeclLocale( cuT( "l_fresnel" )
+						, l_reflectance + l_writer.Paren( max( 1.0_f - l_roughness, l_reflectance ) - l_reflectance ) * pow( 1.0_f - l_product, 5.0 ) );
 					auto l_refract = l_writer.DeclLocale( cuT( "l_refract" )
 						, refract( l_incident, l_normal, l_ratio ) );
 					l_refract.y() = l_writer.Ternary( l_envMapIndex != 0_i, l_refract.y(), -l_refract.y() );
-					l_refractedColour = texture( c3d_mapPrefiltered[l_envMapIndex], l_refract, l_roughness * Utils::MaxIblReflectionLod ).xyz();
-					l_refractedColour *= l_albedo / length( l_albedo );
-					auto l_refFactor = l_writer.DeclLocale( cuT( "l_refFactor" )
-						, clamp( c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_normal ), c3d_fresnelPower ), 0.0_f, 1.0_f ) );
-					pxl_fragColor = mix( l_refractedColour, l_reflectedColour, l_refFactor );
-				}
-				ELSE
-				{
-					pxl_fragColor = l_reflectedColour;
+					pxl_refraction.xyz() = texture( c3d_mapPrefiltered[l_envMapIndex], l_refract, l_roughness * Utils::MaxIblReflectionLod ).xyz();
+					pxl_refraction.xyz() *= l_albedo / length( l_albedo );
+					pxl_refraction.w() = l_fresnel;
 				}
 				FI;
 			} );
@@ -416,7 +419,8 @@ namespace Castor3D
 		, SceneUbo & p_sceneUbo )
 		: OwnedBy< Engine >{ p_engine }
 		, m_size{ p_size }
-		, m_result{ p_engine }
+		, m_reflection{ p_engine }
+		, m_refraction{ p_engine }
 		, m_frameBuffer{ p_engine.GetRenderSystem()->CreateFrameBuffer() }
 		, m_viewport{ p_engine }
 		, m_vertexBuffer{ DoCreateVbo( p_engine ) }
@@ -438,14 +442,14 @@ namespace Castor3D
 		m_matrixUbo.Update( m_viewport.GetProjection() );
 
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eTransparentBlack ) );
-		bool l_return = m_frameBuffer->Create();
+		bool l_result = m_frameBuffer->Create();
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_frameBuffer->Initialise( p_size );
+			l_result = m_frameBuffer->Initialise( p_size );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
@@ -454,16 +458,35 @@ namespace Castor3D
 				, p_size );
 			l_texture->GetImage().InitialiseSource();
 
-			m_result.SetIndex( 0u );
-			m_result.SetTexture( l_texture );
-			m_result.SetSampler( p_engine.GetLightsSampler() );
-			m_result.Initialise();
+			m_reflection.SetIndex( 0u );
+			m_reflection.SetTexture( l_texture );
+			m_reflection.SetSampler( p_engine.GetLightsSampler() );
+			l_result = m_reflection.Initialise();
+			ENSURE( l_result );
+			m_reflectAttach = m_frameBuffer->CreateAttachment( l_texture );
 
-			m_resultAttach = m_frameBuffer->CreateAttachment( l_texture );
+			l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+				, AccessType::eNone
+				, AccessType::eRead | AccessType::eWrite
+				, PixelFormat::eRGBA32F
+				, p_size );
+			l_texture->GetImage().InitialiseSource();
+
+			m_refraction.SetIndex( 1u );
+			m_refraction.SetTexture( l_texture );
+			m_refraction.SetSampler( p_engine.GetLightsSampler() );
+			l_result = m_refraction.Initialise();
+			ENSURE( l_result );
+			m_refractAttach = m_frameBuffer->CreateAttachment( l_texture );
 
 			m_frameBuffer->Bind();
 			m_frameBuffer->Attach( AttachmentPoint::eColour
-				, m_resultAttach
+				, 0u
+				, m_reflectAttach
+				, l_texture->GetType() );
+			m_frameBuffer->Attach( AttachmentPoint::eColour
+				, 1u
+				, m_refractAttach
 				, l_texture->GetType() );
 			ENSURE( m_frameBuffer->IsComplete() );
 			m_frameBuffer->SetDrawBuffers();
@@ -478,8 +501,10 @@ namespace Castor3D
 		m_frameBuffer->Unbind();
 		m_frameBuffer->Cleanup();
 		m_frameBuffer->Destroy();
-		m_resultAttach.reset();
-		m_result.Cleanup();
+		m_refractAttach.reset();
+		m_reflectAttach.reset();
+		m_reflection.Cleanup();
+		m_refraction.Cleanup();
 
 		m_configUbo.GetUbo().Cleanup();
 		m_matrixUbo.GetUbo().Cleanup();

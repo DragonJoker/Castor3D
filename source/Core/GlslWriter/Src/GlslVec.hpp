@@ -55,6 +55,9 @@ namespace GLSL
 	};
 
 	template< typename ValueT >
+	inline Vec2T< ValueT > operator*( ValueT const & p_lhs, Vec2T< ValueT > const & p_rhs );
+
+	template< typename ValueT >
 	struct Vec3T
 		: public Type
 	{
@@ -114,6 +117,9 @@ namespace GLSL
 		GLSL_SWIZZLE( my_vec3, my_vec3, brg );
 		GLSL_LAST_SWIZZLE( my_vec3, my_vec3, bgr );
 	};
+
+	template< typename ValueT >
+	inline Vec3T< ValueT > operator*( ValueT const & p_lhs, Vec3T< ValueT > const & p_rhs );
 
 	template< typename ValueT >
 	struct Vec4T
@@ -325,6 +331,9 @@ namespace GLSL
 		GLSL_SWIZZLE( my_vec4, my_vec4, abrg );
 		GLSL_LAST_SWIZZLE( my_vec4, my_vec4, abgr );
 	};
+
+	template< typename ValueT >
+	inline Vec4T< ValueT > operator*( ValueT const & p_lhs, Vec4T< ValueT > const & p_rhs );
 }
 
 #include "GlslVec.inl"

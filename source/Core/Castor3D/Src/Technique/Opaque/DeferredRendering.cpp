@@ -1,4 +1,4 @@
-﻿#include "DeferredRendering.hpp"
+#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -178,23 +178,21 @@ namespace Castor3D
 			, l_invView
 			, l_invProj );
 
+		m_reflection->Render( m_geometryPassResult
+			, m_lightingPass->GetResult()
+			, p_scene
+			, p_camera
+			, l_invViewProj
+			, l_invView
+			, l_invProj );
+
 		if ( p_scene.GetMaterialsType() == MaterialType::ePbr )
 		{
-			m_sceneUbo.GetUbo().BindTo( SceneUbo::BindingPoint );
-			m_reflection->Render( m_geometryPassResult
-				, m_lightingPass->GetResult()
-				, p_scene
-				, p_camera
-				, l_invViewProj
-				, l_invView
-				, l_invProj );
-
 			m_combinePass->Render( m_geometryPassResult
 				, m_lightingPass->GetResult()
-				, m_reflection->GetResult()
-				, p_scene.GetSkybox().GetIbl().GetIrradiance()
-				, p_scene.GetSkybox().GetIbl().GetPrefilteredEnvironment()
-				, p_scene.GetSkybox().GetIbl().GetPrefilteredBrdf()
+				, m_reflection->GetReflection()
+				, m_reflection->GetRefraction()
+				, p_scene.GetSkybox().GetIbl()
 				, p_camera
 				, l_invViewProj
 				, l_invView
@@ -204,22 +202,10 @@ namespace Castor3D
 		}
 		else
 		{
-			TextureUnit const * l_result = &m_lightingPass->GetResult();
-
-			if ( !p_scene.GetEnvironmentMaps().empty() )
-			{
-				m_reflection->Render( m_geometryPassResult
-					, *l_result
-					, p_scene
-					, p_camera
-					, l_invViewProj
-					, l_invView
-					, l_invProj );
-				l_result = &m_reflection->GetResult();
-			}
-
 			m_combinePass->Render( m_geometryPassResult
-				, *l_result
+				, m_lightingPass->GetResult()
+				, m_reflection->GetReflection()
+				, m_reflection->GetRefraction()
 				, p_camera
 				, l_invViewProj
 				, l_invView
