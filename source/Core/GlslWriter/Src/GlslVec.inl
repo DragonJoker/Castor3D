@@ -1,4 +1,4 @@
-﻿namespace GLSL
+namespace GLSL
 {
 	//*****************************************************************************************
 
@@ -139,15 +139,6 @@
 	}
 
 	template< typename ValueT >
-	template< typename RhsT >
-	inline Vec2T< ValueT > & Vec2T< ValueT >::operator=( RhsT const & p_rhs )
-	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
-		return *this;
-	}
-
-	template< typename ValueT >
 	template< typename IndexT >
 	inline ValueT Vec2T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
@@ -193,15 +184,6 @@
 	}
 
 	template< typename ValueT >
-	template< typename RhsT >
-	inline Vec3T< ValueT > & Vec3T< ValueT >::operator=( RhsT const & p_rhs )
-	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
-		return *this;
-	}
-
-	template< typename ValueT >
 	template< typename IndexT >
 	inline ValueT Vec3T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
@@ -243,15 +225,6 @@
 			m_writer = p_rhs.m_writer;
 		}
 
-		return *this;
-	}
-
-	template< typename ValueT >
-	template< typename RhsT >
-	inline Vec4T< ValueT > & Vec4T< ValueT >::operator=( RhsT const & p_rhs )
-	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
 		return *this;
 	}
 

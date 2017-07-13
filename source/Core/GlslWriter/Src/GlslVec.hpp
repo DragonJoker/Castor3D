@@ -37,7 +37,6 @@ namespace GLSL
 		inline Vec2T();
 		inline Vec2T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline my_vec2 & operator=( my_vec2 const & p_rhs );
-		template< typename RhsT > inline my_vec2 & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;
 
@@ -66,7 +65,6 @@ namespace GLSL
 		inline Vec3T();
 		inline Vec3T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline my_vec3 & operator=( my_vec3 const & p_rhs );
-		template< typename RhsT > inline my_vec3 & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;
 
@@ -129,7 +127,6 @@ namespace GLSL
 		inline Vec4T();
 		inline Vec4T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline my_vec4 & operator=( my_vec4 const & p_rhs );
-		template< typename RhsT > inline my_vec4 & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;
 
