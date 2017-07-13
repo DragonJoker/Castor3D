@@ -1,4 +1,4 @@
-﻿#include "CombinePass.hpp"
+#include "CombinePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -168,18 +168,26 @@ namespace Castor3D
 					auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" )
 						, l_data2.xyz() );
 
-					IF( l_writer, cuT( "l_envMapIndex < 1 || ( l_reflection == 0 && l_refraction == 0 )" ) )
+					if ( p_ssao )
 					{
-						if ( p_ssao )
+						IF( l_writer, cuT( "l_envMapIndex < 1 || ( l_reflection + l_refraction == 0 )" ) )
 						{
 							l_ambient *= texture( c3d_mapSsao, vtx_texture ).r();
 						}
+						ELSE
+						{
+							l_ambient = vec3( 0.0_f );
+						}
+						FI;
 					}
-					ELSE
+					else
 					{
-						l_ambient = vec3( 0.0_f );
+						IF( l_writer, cuT( "l_envMapIndex >= 1 && ( l_reflection + l_refraction != 0 )" ) )
+						{
+							l_ambient = vec3( 0.0_f );
+						}
+						FI;
 					}
-					FI;
 
 					pxl_fragColor = vec4( l_colour + l_emissive + l_diffuse * l_ambient, 1.0 );
 
@@ -446,7 +454,8 @@ namespace Castor3D
 			, p_invViewProj
 			, p_invView
 			, p_invProj );
-		p_lp.Bind();
+		p_lp.GetTexture()->Bind( 0u );
+		p_lp.GetSampler()->Bind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 1u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 1u );
 		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 2u );
@@ -482,7 +491,8 @@ namespace Castor3D
 		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 2u );
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 1u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 1u );
-		p_lp.Unbind();
+		p_lp.GetTexture()->Bind( 0u );
+		p_lp.GetSampler()->Bind( 0u );
 	}
 
 	void CombinePass::Render( GeometryPassResult const & p_gp

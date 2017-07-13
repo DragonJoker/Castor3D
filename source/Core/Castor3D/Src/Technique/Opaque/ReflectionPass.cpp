@@ -1,4 +1,4 @@
-﻿#include "ReflectionPass.hpp"
+#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -129,7 +129,6 @@ namespace Castor3D
 				, [&]()
 			{
 				auto l_data1 = l_writer.DeclLocale( cuT( "l_data1" ), texture( c3d_mapData1, vtx_texture ) );
-				auto l_postLight = l_writer.DeclLocale( cuT( "l_postLight" ), texture( c3d_mapPostLight, vtx_texture ).xyz() );
 				auto l_flags = l_writer.DeclLocale( cuT( "l_flags" ), l_data1.w() );
 				auto l_envMapIndex = l_writer.DeclLocale( cuT( "l_envMapIndex" ), 0_i );
 				auto l_receiver = l_writer.DeclLocale( cuT( "l_receiver" ), 0_i );
@@ -142,53 +141,52 @@ namespace Castor3D
 					, l_refraction
 					, l_envMapIndex );
 
-				IF( l_writer, "l_envMapIndex < 1 || (l_reflection == 0 && l_refraction == 0)" )
+				IF( l_writer, "l_envMapIndex < 1 || ( l_reflection + l_refraction == 0 )" )
 				{
-					pxl_v4FragColor.xyz() = vec3( l_postLight );
+					l_writer.Discard();
+				}
+				FI;
+
+				auto l_postLight = l_writer.DeclLocale( cuT( "l_postLight" ), texture( c3d_mapPostLight, vtx_texture ).xyz() );
+				pxl_v4FragColor = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
+				auto l_position = l_writer.DeclLocale( cuT( "l_position" )
+					, l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+				auto l_normal = l_writer.DeclLocale( cuT( "l_normal" )
+					, normalize( l_data1.xyz() ) );
+				auto l_incident = l_writer.DeclLocale( cuT( "l_incident" )
+					, normalize( l_position - c3d_v3CameraPosition ) );
+				l_envMapIndex = l_envMapIndex - 1_i;
+				auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), texture( c3d_mapData2, vtx_texture ).xyz() );
+				auto l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
+				auto l_refractedColour = l_writer.DeclLocale( cuT( "l_refractedColour" ), l_diffuse / 2.0 );
+
+				IF( l_writer, l_reflection != 0_i )
+				{
+					auto l_reflect = l_writer.DeclLocale( cuT( "l_reflect" )
+						, reflect( l_incident, l_normal ) );
+					l_reflectedColour = texture( c3d_mapEnvironment[l_envMapIndex], l_reflect ).xyz() * length( l_postLight.xyz() );
+				}
+				FI;
+
+				IF( l_writer, l_refraction != 0_i )
+				{
+					auto l_ratio = l_writer.DeclLocale( cuT( "l_ratio" )
+						, texture( c3d_mapData4, vtx_texture ).w() );
+					auto l_refract = l_writer.DeclLocale( cuT( "l_refract" )
+						, refract( l_incident, l_normal, l_ratio ) );
+					l_refractedColour = texture( c3d_mapEnvironment[l_envMapIndex], l_refract ).xyz() * l_diffuse / length( l_diffuse );
+				}
+				FI;
+
+				IF( l_writer, cuT( "l_reflection != 0 && l_refraction == 0" ) )
+				{
+					pxl_v4FragColor.xyz() = l_reflectedColour * l_diffuse / length( l_diffuse );
 				}
 				ELSE
 				{
-					pxl_v4FragColor = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
-					auto l_position = l_writer.DeclLocale( cuT( "l_position" )
-						, l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
-					auto l_normal = l_writer.DeclLocale( cuT( "l_normal" )
-						, normalize( l_data1.xyz() ) );
-					auto l_incident = l_writer.DeclLocale( cuT( "l_incident" )
-						, normalize( l_position - c3d_v3CameraPosition ) );
-					l_envMapIndex = l_envMapIndex - 1_i;
-					auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), texture( c3d_mapData2, vtx_texture ).xyz() );
-					auto l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
-					auto l_refractedColour = l_writer.DeclLocale( cuT( "l_refractedColour" ), l_diffuse / 2.0 );
-
-					IF( l_writer, l_reflection != 0_i )
-					{
-						auto l_reflect = l_writer.DeclLocale( cuT( "l_reflect" )
-							, reflect( l_incident, l_normal ) );
-						l_reflectedColour = texture( c3d_mapEnvironment[l_envMapIndex], l_reflect ).xyz() * length( l_postLight.xyz() );
-					}
-					FI;
-
-					IF( l_writer, l_refraction != 0_i )
-					{
-						auto l_ratio = l_writer.DeclLocale( cuT( "l_ratio" )
-							, texture( c3d_mapData4, vtx_texture ).w() );
-						auto l_refract = l_writer.DeclLocale( cuT( "l_refract" )
-							, refract( l_incident, l_normal, l_ratio ) );
-						l_refractedColour = texture( c3d_mapEnvironment[l_envMapIndex], l_refract ).xyz() * l_diffuse / length( l_diffuse );
-					}
-					FI;
-
-					IF( l_writer, cuT( "l_reflection != 0 && l_refraction == 0" ) )
-					{
-						pxl_v4FragColor.xyz() = l_reflectedColour * l_diffuse / length( l_diffuse );
-					}
-					ELSE
-					{
-						auto l_refFactor = l_writer.DeclLocale( cuT( "l_refFactor" )
-						, clamp( c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_normal ), c3d_fresnelPower ), 0.0_f, 1.0_f ) );
-						pxl_v4FragColor.xyz() = mix( l_refractedColour, l_reflectedColour, l_refFactor );
-					}
-					FI;
+					auto l_refFactor = l_writer.DeclLocale( cuT( "l_refFactor" )
+					, clamp( c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_normal ), c3d_fresnelPower ), 0.0_f, 1.0_f ) );
+					pxl_v4FragColor.xyz() = mix( l_refractedColour, l_reflectedColour, l_refFactor );
 				}
 				FI;
 			} );
@@ -212,6 +210,9 @@ namespace Castor3D
 			auto c3d_mapBrdf = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapBrdf );
 			auto c3d_mapIrradiance = l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapIrradiance, c_pbrEnvironmentCount );
 			auto c3d_mapPrefiltered = l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapPrefiltered, c_pbrEnvironmentCount );
+			auto c3d_fresnelBias = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
+			auto c3d_fresnelScale = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
+			auto c3d_fresnelPower = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
 			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -262,21 +263,48 @@ namespace Castor3D
 					, l_data3.b() );
 				auto l_normal = l_writer.DeclLocale( cuT( "l_normal" )
 					, l_data1.xyz() );
-				auto l_wsPosition = l_writer.DeclLocale( cuT( "l_wsPosition" )
+				auto l_position = l_writer.DeclLocale( cuT( "l_position" )
 					, l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+				auto l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflectedColour" )
+					, vec3( 0.0_f, 0, 0 ) );
+				auto l_refractedColour = l_writer.DeclLocale( cuT( "l_refractedColour" )
+					, l_albedo / 2.0 );
+				auto l_incident = l_writer.DeclLocale( cuT( "l_incident" )
+					, normalize( l_position - c3d_v3CameraPosition ) );
 
-				l_ambient *= l_occlusion * l_utils.ComputeIBL( l_normal
-					, l_wsPosition
-					, l_albedo
-					, l_metalness
-					, l_roughness
-					, c3d_v3CameraPosition
-					, c3d_mapIrradiance[l_envMapIndex]
-					, c3d_mapPrefiltered[l_envMapIndex]
-					, c3d_mapBrdf
-					, l_envMapIndex );
+				l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflect" )
+					, l_ambient * l_occlusion * l_utils.ComputeIBL( l_normal
+						, l_position
+						, l_albedo
+						, l_metalness
+						, l_roughness
+						, c3d_v3CameraPosition
+						, c3d_mapIrradiance[l_envMapIndex]
+						, c3d_mapPrefiltered[l_envMapIndex]
+						, c3d_mapBrdf
+						, l_envMapIndex ) );
 
-				pxl_fragColor = l_ambient;
+				auto l_ratio = l_writer.DeclLocale( cuT( "l_ratio" )
+					, texture( c3d_mapData4, vtx_texture ).w() );
+
+				IF( l_writer, l_ratio != 0.0_f )
+				{
+					auto l_ratio = l_writer.DeclLocale( cuT( "l_ratio" )
+						, texture( c3d_mapData4, vtx_texture ).w() );
+					auto l_refract = l_writer.DeclLocale( cuT( "l_refract" )
+						, refract( l_incident, l_normal, l_ratio ) );
+					l_refract.y() = l_writer.Ternary( l_envMapIndex != 0_i, l_refract.y(), -l_refract.y() );
+					l_refractedColour = texture( c3d_mapPrefiltered[l_envMapIndex], l_refract, l_roughness * Utils::MaxIblReflectionLod ).xyz();
+					l_refractedColour *= l_albedo / length( l_albedo );
+					auto l_refFactor = l_writer.DeclLocale( cuT( "l_refFactor" )
+						, clamp( c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_normal ), c3d_fresnelPower ), 0.0_f, 1.0_f ) );
+					pxl_fragColor = mix( l_refractedColour, l_reflectedColour, l_refFactor );
+				}
+				ELSE
+				{
+					pxl_fragColor = l_reflectedColour;
+				}
+				FI;
 			} );
 			return l_writer.Finalise();
 		}

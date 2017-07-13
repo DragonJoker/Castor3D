@@ -509,8 +509,8 @@ namespace Castor3D
 			auto l_flags = l_writer.DeclLocale( cuT( "l_flags" ), 0.0_f );
 			EncodeMaterial( l_writer
 				, c3d_shadowReceiver
-				, CheckFlag( p_textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
-				, CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ? 1_i : 0_i
+				, 0_i
+				, 0_i
 				, c3d_envMapIndex
 				, l_flags );
 
