@@ -1,4 +1,4 @@
-#include "PickingPass.hpp"
+﻿#include "PickingPass.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -255,7 +255,7 @@ namespace Castor3D
 		Position l_offset
 		{
 			p_position.x() - PickingOffset,
-			p_position.y() - PickingOffset
+			int32_t( p_camera.GetHeight() - p_position.y() - PickingOffset )
 		};
 		m_frameBuffer->Bind( FrameBufferTarget::eRead );
 		m_colourAttach->Download( l_offset
