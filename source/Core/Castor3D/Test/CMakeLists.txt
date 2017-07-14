@@ -32,8 +32,8 @@ add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 file(
 	GLOB
 		DataFiles
-		${CMAKE_CURRENT_SOURCE_DIR}/Data/*.zip
-		${CMAKE_CURRENT_SOURCE_DIR}/Data/*.cscn
+		${CMAKE_CURRENT_SOURCE_DIR}/Data/Legacy/*.zip
+		${CMAKE_CURRENT_SOURCE_DIR}/Data/Legacy/*.cscn
 		${CMAKE_CURRENT_SOURCE_DIR}/Data/*.cmsh
 )
 

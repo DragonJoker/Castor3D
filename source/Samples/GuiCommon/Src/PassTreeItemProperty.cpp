@@ -1,4 +1,4 @@
-#include "PassTreeItemProperty.hpp"
+﻿#include "PassTreeItemProperty.hpp"
 
 #include "ShaderDialog.hpp"
 
@@ -6,7 +6,7 @@
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
-#include <Material/PbrPass.hpp>
+#include <Material/MetallicRoughnessPbrPass.hpp>
 
 #include "AdditionalProperties.hpp"
 #include "PointProperties.hpp"
@@ -78,9 +78,9 @@ namespace GuiCommon
 				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( l_legacy->GetAmbient() );
 				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_legacy->GetShininess() );
 			}
-			else if ( l_pass->GetType() == MaterialType::ePbr )
+			else if ( l_pass->GetType() == MaterialType::ePbrMetallicRoughness )
 			{
-				auto l_pbr = std::static_pointer_cast< PbrPass >( l_pass );
+				auto l_pbr = std::static_pointer_cast< MetallicRoughnessPbrPass >( l_pass );
 				p_grid->Append( new wxColourProperty( PROPERTY_PASS_ALBEDO ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pbr->GetAlbedo() ) ) ) );
 				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_ROUGHNESS ) )->SetValue( l_pbr->GetRoughness() );
 				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_METALLIC ) )->SetValue( l_pbr->GetMetallic() );
@@ -239,7 +239,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnAlbedoChange( Castor::Colour const & p_value )
 	{
-		auto l_pass = GetTypedPass< MaterialType::ePbr >();
+		auto l_pass = GetTypedPass< MaterialType::ePbrMetallicRoughness >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -249,7 +249,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnRoughnessChange( double p_value )
 	{
-		auto l_pass = GetTypedPass< MaterialType::ePbr >();
+		auto l_pass = GetTypedPass< MaterialType::ePbrMetallicRoughness >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -259,7 +259,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnMetallicChange( double p_value )
 	{
-		auto l_pass = GetTypedPass< MaterialType::ePbr >();
+		auto l_pass = GetTypedPass< MaterialType::ePbrMetallicRoughness >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{

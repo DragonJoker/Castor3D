@@ -1,4 +1,4 @@
-﻿#include "RenderTechniquePass.hpp"
+#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -55,7 +55,7 @@ namespace Castor3D
 					, ShaderType::ePixel, 6u );
 			}
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::ePbr )
+			if ( CheckFlag( p_programFlags, ProgramFlag::ePbrMetallicRoughness )
 				&& CheckFlag( p_programFlags, ProgramFlag::eLighting ) )
 			{
 				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance

@@ -186,7 +186,7 @@ namespace Castor3D
 			, l_invView
 			, l_invProj );
 
-		if ( p_scene.GetMaterialsType() == MaterialType::ePbr )
+		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
 		{
 			m_combinePass->Render( m_geometryPassResult
 				, m_lightingPass->GetResult()

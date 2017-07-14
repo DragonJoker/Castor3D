@@ -1,4 +1,4 @@
-﻿#include "RenderNode.hpp"
+#include "RenderNode.hpp"
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
@@ -100,7 +100,7 @@ namespace Castor3D
 
 		p_node.m_pass.BindTextures();
 
-		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::ePbr )
+		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::ePbrMetallicRoughness )
 			&& CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
 			l_index = DoFillShaderPbrMaps( p_pipeline

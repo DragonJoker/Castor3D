@@ -174,7 +174,7 @@ namespace Castor3D
 			p_shader.CreateUniform< UniformType::eSampler >( ShaderProgram::MapHeight, ShaderType::ePixel );
 		}
 
-		if ( CheckFlag( p_programFlags, ProgramFlag::ePbr ) )
+		if ( CheckFlag( p_programFlags, ProgramFlag::ePbrMetallicRoughness ) )
 		{
 			if ( CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) )
 			{

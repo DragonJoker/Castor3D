@@ -1,4 +1,4 @@
-﻿#include "LightPass.hpp"
+#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -393,7 +393,7 @@ namespace Castor3D
 		m_gpInfo = std::make_unique< GpInfoUbo >( m_engine );
 		SceneFlags l_sceneFlags{ p_scene.GetFlags() };
 
-		if ( CheckFlag( l_sceneFlags, SceneFlag::ePbr ) )
+		if ( CheckFlag( l_sceneFlags, SceneFlag::ePbrMetallicRoughness ) )
 		{
 			m_program = DoCreateProgram( DoGetVertexShaderSource( l_sceneFlags )
 				, DoGetPbrPixelShaderSource( l_sceneFlags, p_type ) );

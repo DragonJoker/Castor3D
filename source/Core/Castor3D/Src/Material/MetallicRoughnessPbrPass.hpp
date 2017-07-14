@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_PbrPass_H___
-#define ___C3D_PbrPass_H___
+#ifndef ___C3D_MetallicRoughnessPbrPass_H___
+#define ___C3D_MetallicRoughnessPbrPass_H___
 
 #include "Material/Pass.hpp"
 
@@ -32,13 +32,13 @@ namespace Castor3D
 	\version	0.9.0
 	\date		13/02/2017
 	\~english
-	\brief		Definition of a PBR pass.
+	\brief		Definition of a PBR Metallic/Roughness pass.
 	\remark		A PBR pass is composed of : colour, roughness, reflectance.
 	\~french
-	\brief		Définition d'une passe PBR.
+	\brief		Définition d'une passe PBR Metallic/Roughness.
 	\remark		Une passe PBR est composée de : couleur, rugosité, réflectivité.
 	*/
-	class PbrPass
+	class MetallicRoughnessPbrPass
 		: public Pass
 	{
 	public:
@@ -52,7 +52,7 @@ namespace Castor3D
 		\brief Loader de Pass.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< PbrPass >
+			: public Castor::TextWriter< MetallicRoughnessPbrPass >
 		{
 		public:
 			/**
@@ -72,7 +72,7 @@ namespace Castor3D
 			 *\param[in]		p_pass	La LegacyPass à écrire.
 			 *\param[in,out]	p_file	Le file où écrire la LegacyPass.
 			 */
-			C3D_API bool operator()( PbrPass const & p_pass, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( MetallicRoughnessPbrPass const & p_pass, Castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -86,14 +86,14 @@ namespace Castor3D
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
 		 *\param[in]	p_parent	Le matériau parent.
 		 */
-		C3D_API PbrPass( Material & p_parent );
+		C3D_API MetallicRoughnessPbrPass( Material & p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~PbrPass();
+		C3D_API ~MetallicRoughnessPbrPass();
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass

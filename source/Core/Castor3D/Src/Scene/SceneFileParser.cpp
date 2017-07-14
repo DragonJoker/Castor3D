@@ -1,4 +1,4 @@
-#include "SceneFileParser.hpp"
+﻿#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -329,7 +329,8 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapBillboardSizes[cuT( "fixed" )] = uint32_t( BillboardSize::eFixed );
 
 	m_mapMaterialTypes[cuT( "legacy" )] = uint32_t( MaterialType::eLegacy );
-	m_mapMaterialTypes[cuT( "pbr" )] = uint32_t( MaterialType::ePbr );
+	m_mapMaterialTypes[cuT( "pbr_metallic_roughness" )] = uint32_t( MaterialType::ePbrMetallicRoughness );
+	m_mapMaterialTypes[cuT( "pbr_specular_glossiness" )] = uint32_t( MaterialType::ePbrSpecularGlossiness );
 }
 
 SceneFileParser::~SceneFileParser()

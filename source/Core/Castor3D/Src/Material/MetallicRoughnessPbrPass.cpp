@@ -1,4 +1,4 @@
-#include "PbrPass.hpp"
+#include "MetallicRoughnessPbrPass.hpp"
 
 #include "Engine.hpp"
 #include "Cache/CameraCache.hpp"
@@ -24,14 +24,14 @@ namespace Castor3D
 {
 	//*********************************************************************************************
 
-	PbrPass::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< PbrPass >{ p_tabs }
+	MetallicRoughnessPbrPass::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< MetallicRoughnessPbrPass >{ p_tabs }
 	{
 	}
 
-	bool PbrPass::TextWriter::operator()( PbrPass const & p_pass, TextFile & p_file )
+	bool MetallicRoughnessPbrPass::TextWriter::operator()( MetallicRoughnessPbrPass const & p_pass, TextFile & p_file )
 	{
-		Logger::LogInfo( m_tabs + cuT( "Writing PbrPass " ) );
+		Logger::LogInfo( m_tabs + cuT( "Writing MetallicRoughnessPbrPass " ) );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		
@@ -40,7 +40,7 @@ namespace Castor3D
 			l_return = p_file.Print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
 					   && Colour::TextWriter( String() )( p_pass.GetAlbedo(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< PbrPass >::CheckError( l_return, "PbrPass albedo" );
+			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( l_return, "MetallicRoughnessPbrPass albedo" );
 		}
 
 		if ( l_return )
@@ -48,7 +48,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\troughness " )
 				+ string::to_string( p_pass.GetRoughness() )
 				+ cuT( "\n" ) ) > 0;
-			Castor::TextWriter< PbrPass >::CheckError( l_return, "PbrPass roughness" );
+			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( l_return, "MetallicRoughnessPbrPass roughness" );
 		}
 
 		if ( l_return )
@@ -56,7 +56,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\tmetallic " )
 				+ string::to_string( p_pass.GetMetallic() )
 				+ cuT( "\n" ) ) > 0;
-			Castor::TextWriter< PbrPass >::CheckError( l_return, "PbrPass reflectance" );
+			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( l_return, "MetallicRoughnessPbrPass reflectance" );
 		}
 
 		if ( l_return )
@@ -74,25 +74,25 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	PbrPass::PbrPass( Material & p_parent )
+	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & p_parent )
 		: Pass{ p_parent }
 		, m_albedo{ Colour::from_rgba( 0xFFFFFFFF ) }
 	{
 	}
 
-	PbrPass::~PbrPass()
+	MetallicRoughnessPbrPass::~MetallicRoughnessPbrPass()
 	{
 	}
 
-	void PbrPass::DoInitialise()
+	void MetallicRoughnessPbrPass::DoInitialise()
 	{
 	}
 
-	void PbrPass::DoCleanup()
+	void MetallicRoughnessPbrPass::DoCleanup()
 	{
 	}
 
-	void PbrPass::DoUpdate( PassBuffer & p_buffer )const
+	void MetallicRoughnessPbrPass::DoUpdate( PassBuffer & p_buffer )const
 	{
 		p_buffer.SetComponents( GetId() - 1
 			, 0u
@@ -119,7 +119,7 @@ namespace Castor3D
 			, 0.0f );
 	}
 
-	void PbrPass::DoSetOpacity( float p_value )
+	void MetallicRoughnessPbrPass::DoSetOpacity( float p_value )
 	{
 		m_albedo.alpha() = p_value;
 	}

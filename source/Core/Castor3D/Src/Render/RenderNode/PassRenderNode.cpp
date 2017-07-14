@@ -35,7 +35,7 @@ namespace Castor3D
 		, ShaderProgram const & p_program )
 		: m_pass{ p_pass }
 	{
-		if ( p_pass.GetType() == MaterialType::ePbr )
+		if ( p_pass.GetType() == MaterialType::ePbrMetallicRoughness )
 		{
 			DoGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapAlbedo, *this );
 			DoGetTexture( p_pass, p_program, TextureChannel::eMetallic, ShaderProgram::MapMetallic, *this );

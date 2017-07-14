@@ -1,4 +1,4 @@
-#include "EnvironmentMap.hpp"
+﻿#include "EnvironmentMap.hpp"
 
 #include "Engine.hpp"
 
@@ -44,7 +44,7 @@ namespace Castor3D
 				l_sampler->SetInterpolationMode( InterpolationFilter::eMag
 					, InterpolationMode::eLinear );
 
-				if ( p_type == MaterialType::ePbr )
+				if ( p_type == MaterialType::ePbrMetallicRoughness )
 				{
 					l_sampler->SetInterpolationMode( InterpolationFilter::eMip
 						, InterpolationMode::eLinear );
@@ -158,7 +158,7 @@ namespace Castor3D
 				auto l_texture = m_environmentMap.GetTexture();
 				l_texture->Initialise();
 
-				if ( l_scene.GetMaterialsType() == MaterialType::ePbr )
+				if ( l_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
 				{
 					l_texture->Bind( 0 );
 					l_texture->GenerateMipmaps();
@@ -192,7 +192,7 @@ namespace Castor3D
 				l_pass->Initialise( MapSize );
 			}
 
-			if ( l_scene.GetMaterialsType() == MaterialType::ePbr )
+			if ( l_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
 			{
 				m_ibl = std::make_unique< IblTextures >( l_scene );
 			}

@@ -12,7 +12,7 @@
 #include "Cache/CacheView.hpp"
 #include "Material/Material.hpp"
 #include "Material/LegacyPass.hpp"
-#include "Material/PbrPass.hpp"
+#include "Material/MetallicRoughnessPbrPass.hpp"
 #include "Mesh/Face.hpp"
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
@@ -2548,8 +2548,8 @@ namespace Castor3D
 				l_parsingContext->legacyPass = std::static_pointer_cast< LegacyPass >( l_parsingContext->pass );
 				break;
 
-			case MaterialType::ePbr:
-				l_parsingContext->pbrPass = std::static_pointer_cast< PbrPass >( l_parsingContext->pass );
+			case MaterialType::ePbrMetallicRoughness:
+				l_parsingContext->pbrPass = std::static_pointer_cast< MetallicRoughnessPbrPass >( l_parsingContext->pass );
 				break;
 
 			default:

@@ -1,4 +1,4 @@
-#include "Skybox.hpp"
+﻿#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -140,7 +140,7 @@ namespace Castor3D
 
 		if ( l_result )
 		{
-			if ( m_scene->GetMaterialsType() == MaterialType::ePbr )
+			if ( m_scene->GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
 			{
 				m_ibl = std::make_unique< IblTextures >( *m_scene );
 				m_ibl->Update( *m_texture );

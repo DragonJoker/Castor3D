@@ -1,4 +1,4 @@
-﻿#include "ReflectionPass.hpp"
+#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -541,7 +541,7 @@ namespace Castor3D
 		p_lp.GetTexture()->Bind( 5u );
 		p_lp.GetSampler()->Bind( 5u );
 
-		if ( p_scene.GetMaterialsType() == MaterialType::ePbr )
+		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
 		{
 			auto l_index = c_environmentStart;
 			auto & l_skyboxIbl = p_scene.GetSkybox().GetIbl();

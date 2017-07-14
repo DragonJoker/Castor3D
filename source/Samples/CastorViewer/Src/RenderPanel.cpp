@@ -1,4 +1,4 @@
-#include "RenderPanel.hpp"
+﻿#include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 #include "RotateNodeEvent.hpp"
@@ -12,7 +12,7 @@
 #include <Event/UserInput/UserInputListener.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
-#include <Material/PbrPass.hpp>
+#include <Material/MetallicRoughnessPbrPass.hpp>
 #include <Mesh/Submesh.hpp>
 #include <ShadowMap/ShadowMapPass.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
@@ -98,10 +98,10 @@ namespace CastorViewer
 				}
 				break;
 
-			case MaterialType::ePbr:
+			case MaterialType::ePbrMetallicRoughness:
 				{
-					auto & l_source = static_cast< PbrPass const & >( p_source );
-					auto l_pass = std::static_pointer_cast< PbrPass >( l_clone );
+					auto & l_source = static_cast< MetallicRoughnessPbrPass const & >( p_source );
+					auto l_pass = std::static_pointer_cast< MetallicRoughnessPbrPass >( l_clone );
 					l_pass->SetAlbedo( l_source.GetAlbedo() );
 					l_pass->SetRoughness( l_source.GetRoughness() );
 					l_pass->SetMetallic( l_source.GetMetallic() );
@@ -187,9 +187,9 @@ namespace CastorViewer
 				}
 				break;
 
-			case MaterialType::ePbr:
+			case MaterialType::ePbrMetallicRoughness:
 				{
-					auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::ePbr >( 0u );
+					auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::ePbrMetallicRoughness >( 0u );
 					l_pass->SetAlbedo( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
 				}
 				break;

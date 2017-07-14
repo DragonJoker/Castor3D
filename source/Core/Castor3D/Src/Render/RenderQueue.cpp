@@ -1,4 +1,4 @@
-﻿#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -351,9 +351,9 @@ namespace Castor3D
 							auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
 							auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
 
-							if ( l_material->GetType() == MaterialType::ePbr )
+							if ( l_material->GetType() == MaterialType::ePbrMetallicRoughness )
 							{
-								AddFlag( l_programFlags, ProgramFlag::ePbr );
+								AddFlag( l_programFlags, ProgramFlag::ePbrMetallicRoughness );
 							}
 
 							if ( l_skeleton && l_submesh->HasBoneData() )

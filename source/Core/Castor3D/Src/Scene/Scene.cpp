@@ -1,4 +1,4 @@
-﻿#include "Scene.hpp"
+#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -930,8 +930,8 @@ namespace Castor3D
 
 		switch ( m_materialType )
 		{
-		case MaterialType::ePbr:
-			l_result |= SceneFlag::ePbr;
+		case MaterialType::ePbrMetallicRoughness:
+			l_result |= SceneFlag::ePbrMetallicRoughness;
 			break;
 		}
 
