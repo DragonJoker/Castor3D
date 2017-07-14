@@ -112,7 +112,7 @@ namespace GLSL
 		GlslWriter_API void Declare()override;
 		GlslWriter_API Vec3 GetAlbedo( Int const & p_index )const;
 		GlslWriter_API Float GetRoughness( Int const & p_index )const;
-		GlslWriter_API Float GetReflectance( Int const & p_index )const;
+		GlslWriter_API Float GetMetallic( Int const & p_index )const;
 
 		static uint32_t constexpr Size = 4u;
 
@@ -125,7 +125,7 @@ namespace GLSL
 	private:
 		Function< Vec3, InInt > m_albedo;
 		Function< Float, InInt > m_roughness;
-		Function< Float, InInt > m_reflectance;
+		Function< Float, InInt > m_metallic;
 	};
 }
 

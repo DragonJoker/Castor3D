@@ -1,4 +1,4 @@
-﻿#include "MaterialsList.hpp"
+#include "MaterialsList.hpp"
 
 #include "ImagesLoader.hpp"
 #include "MaterialTreeItemProperty.hpp"
@@ -34,7 +34,10 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	MaterialsList::MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
+	MaterialsList::MaterialsList( PropertiesHolder * p_propertiesHolder
+		, wxWindow * p_parent
+		, wxPoint const & p_ptPos
+		, wxSize const & p_size )
 		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
 		, m_engine( nullptr )
 		, m_propertiesHolder( p_propertiesHolder )
@@ -80,7 +83,8 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::LoadMaterials( Engine * p_engine, Scene & p_scene )
+	void MaterialsList::LoadMaterials( Engine * p_engine
+		, Scene & p_scene )
 	{
 		m_engine = p_engine;
 		m_scene = &p_scene;
@@ -98,9 +102,15 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::DoAddMaterial( wxTreeItemId p_id, Castor3D::MaterialSPtr p_material )
+	void MaterialsList::DoAddMaterial( wxTreeItemId p_id
+		, Castor3D::MaterialSPtr p_material )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_material->GetName(), eBMP_MATERIAL - eBMP_MATERIAL, eBMP_MATERIAL_SEL - eBMP_MATERIAL, new MaterialTreeItemProperty( m_propertiesHolder->IsEditable(), p_material ) );
+		wxTreeItemId l_id = AppendItem( p_id
+			, p_material->GetName()
+			, eBMP_MATERIAL - eBMP_MATERIAL
+			, eBMP_MATERIAL_SEL - eBMP_MATERIAL
+			, new MaterialTreeItemProperty( m_propertiesHolder->IsEditable()
+				, p_material ) );
 		uint32_t l_index = 0;
 
 		for ( auto l_pass : *p_material )
@@ -109,20 +119,37 @@ namespace GuiCommon
 		}
 	}
 
-	void MaterialsList::DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass )
+	void MaterialsList::DoAddPass( wxTreeItemId p_id
+		, uint32_t p_index
+		, Castor3D::PassSPtr p_pass )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new PassTreeItemProperty( m_propertiesHolder->IsEditable(), p_pass, *m_scene ) );
+		wxTreeItemId l_id = AppendItem( p_id
+			, wxString( _( "Pass " ) ) << p_index
+			, eBMP_PASS - eBMP_MATERIAL
+			, eBMP_PASS_SEL - eBMP_MATERIAL
+			, new PassTreeItemProperty( m_propertiesHolder->IsEditable()
+				, p_pass
+				, *m_scene ) );
 		uint32_t l_index = 0;
 
 		for ( auto l_unit : *p_pass )
 		{
-			DoAddTexture( l_id, l_index++, l_unit );
+			DoAddTexture( l_id, l_index++, l_unit, p_pass->GetType() );
 		}
 	}
 
-	void MaterialsList::DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture )
+	void MaterialsList::DoAddTexture( wxTreeItemId p_id
+		, uint32_t p_index
+		, Castor3D::TextureUnitSPtr p_texture
+		, Castor3D::MaterialType p_type )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Texture Unit " ) ) << p_index, eBMP_TEXTURE - eBMP_MATERIAL, eBMP_TEXTURE_SEL - eBMP_MATERIAL, new TextureTreeItemProperty( m_propertiesHolder->IsEditable(), p_texture ) );
+		wxTreeItemId l_id = AppendItem( p_id
+			, wxString( _( "Texture Unit " ) ) << p_index
+			, eBMP_TEXTURE - eBMP_MATERIAL
+			, eBMP_TEXTURE_SEL - eBMP_MATERIAL
+			, new TextureTreeItemProperty( m_propertiesHolder->IsEditable()
+				, p_texture
+				, p_type ) );
 
 		if ( p_texture->GetRenderTarget() )
 		{
@@ -131,7 +158,12 @@ namespace GuiCommon
 			if ( l_target )
 			{
 				wxString l_name = _( "Render Target" );
-				AppendItem( l_id, l_name, eBMP_RENDER_TARGET, eBMP_RENDER_TARGET_SEL, new RenderTargetTreeItemProperty( m_propertiesHolder->IsEditable(), l_target ) );
+				AppendItem( l_id
+					, l_name
+					, eBMP_RENDER_TARGET
+					, eBMP_RENDER_TARGET_SEL
+					, new RenderTargetTreeItemProperty( m_propertiesHolder->IsEditable()
+						, l_target ) );
 			}
 		}
 	}

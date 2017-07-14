@@ -303,6 +303,9 @@ namespace Castor3D
 		//!\~english	The picking data UBO.
 		//!\~french		L'UBO de données de picking.
 		UniformBuffer m_pickingUbo;
+		//!\~english	Receives the picking area pixels.
+		//!\~french		Reçoit les pixels de la zone pickée.
+		Castor::PxBufferBaseSPtr m_buffer;
 	};
 }
 

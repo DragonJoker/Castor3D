@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -110,6 +110,10 @@ namespace GuiCommon
 		void OnExponentChange( double p_value );
 		void OnTwoSidedChange( bool p_value );
 		void OnOpacityChange( double p_value );
+		void OnRefractionRatioChange( double p_value );
+		void OnAlbedoChange( Castor::Colour const & p_value );
+		void OnRoughnessChange( double p_value );
+		void OnMetallicChange( double p_value );
 		bool OnEditShader( wxPGProperty * p_property );
 
 	private:

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -59,6 +59,18 @@ namespace Castor3D
 		C3D_API virtual ~FrameBufferAttachment();
 
 	public:
+		/**
+		 *\~english
+ 		 *\brief			Downloads the attach content in the given buffer.
+		 *\param[in]		p_offset	The offset position.
+		 *\param[in,out]	p_buffer	Receives the data, and describes the area dimensions and its pixel format.
+		 *\~french
+		 *\brief			Copie les données de l'attache dans le tampon donné.
+		 *\param[in]		p_offset	La position de décalage.
+		 *\param[in,out]	p_buffer	Reçoit les données, et décrit les dimensions à copier, ainsi que le format voulu pour les pixels.
+		 */
+		C3D_API void Download( Castor::Position const & p_offset
+			, Castor::PxBufferBase & p_buffer )const;
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the currently bound frame buffer, at given attachment point.
@@ -164,6 +176,18 @@ namespace Castor3D
 		}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief			Downloads the attach content in the given buffer.
+		 *\param[in]		p_offset	The offset position.
+		 *\param[in,out]	p_buffer	Receives the data, and describes the area dimensions and its pixel format.
+		 *\~french
+		 *\brief			Copie les données de l'attache dans le tampon donné.
+		 *\param[in]		p_offset	La position de décalage.
+		 *\param[in,out]	p_buffer	Reçoit les données, et décrit les dimensions à copier, ainsi que le format voulu pour les pixels.
+		 */
+		C3D_API virtual void DoDownload( Castor::Position const & p_offset
+			, Castor::PxBufferBase & p_buffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the frame buffer, at given attachment point

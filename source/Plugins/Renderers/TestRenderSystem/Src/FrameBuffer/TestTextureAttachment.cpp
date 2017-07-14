@@ -14,6 +14,11 @@ namespace TestRender
 	{
 	}
 
+	void TestTextureAttachment::DoDownload( Castor::Position const & p_offset
+		, Castor::PxBufferBase & p_buffer )const
+	{
+	}
+
 	void TestTextureAttachment::DoAttach()
 	{
 	}

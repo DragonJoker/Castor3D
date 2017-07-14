@@ -1,4 +1,4 @@
-﻿namespace Castor
+namespace Castor
 {
 	template< PixelFormat FT >
 	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_buffer, PixelFormat p_bufferFormat )
@@ -107,14 +107,28 @@
 	typename PxBufferBase::pixel_data PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
 		REQUIRE( x < width() && y < height() );
-		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
+		return m_buffer.begin() + ( do_convert( x, y ) * pixel_definitions< FT >::Size );
 	}
 
 	template< PixelFormat FT >
 	typename PxBufferBase::const_pixel_data PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
 		REQUIRE( x < width() && y < height() );
-		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
+		return m_buffer.begin() + ( do_convert( x, y ) * pixel_definitions< FT >::Size );
+	}
+
+	template< PixelFormat FT >
+	Pixel< FT > PxBuffer< FT >::at( uint32_t x, uint32_t y )
+	{
+		REQUIRE( x < width() && y < height() );
+		return *( begin() + do_convert( x, y ) );
+	}
+
+	template< PixelFormat FT >
+	Pixel< FT > PxBuffer< FT >::at( uint32_t x, uint32_t y )const
+	{
+		REQUIRE( x < width() && y < height() );
+		return *( begin() + do_convert( x, y ) );
 	}
 
 	template< PixelFormat FT >
@@ -139,6 +153,12 @@
 				l_rhs -= pixel_definitions< FT >::Size;
 			}
 		}
+	}
+
+	template< PixelFormat FT >
+	uint32_t PxBuffer< FT >::do_convert( uint32_t x, uint32_t y )const
+	{
+		return y * width() + x;
 	}
 
 	template< PixelFormat FT >

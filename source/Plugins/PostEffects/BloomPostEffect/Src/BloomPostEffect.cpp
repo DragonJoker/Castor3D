@@ -111,7 +111,7 @@ namespace Bloom
 			{
 				auto l_base = l_writer.DeclLocale( cuT( "l_base" ), vec2( 1.0_f, 0 ) / textureSize( c3d_mapDiffuse, 0 ) );
 				auto l_offset = l_writer.DeclLocale( cuT( "l_offset" ), vec2( 0.0_f, 0 ) );
-				plx_v4FragColor = c3d_fCoefficients[0] * texture( c3d_mapDiffuse, vtx_texture );
+				plx_v4FragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_fCoefficients[0];
 
 				FOR( l_writer, Int, i, 1, cuT( "i < c3d_fCoefficientsCount" ), cuT( "++i" ) )
 				{
@@ -144,7 +144,7 @@ namespace Bloom
 			{
 				auto l_base = l_writer.DeclLocale( cuT( "l_base" ), vec2( 0.0_f, 1 ) / textureSize( c3d_mapDiffuse, 0 ) );
 				auto l_offset = l_writer.DeclLocale( cuT( "l_offset" ), vec2( 0.0_f, 0 ) );
-				plx_v4FragColor = c3d_fCoefficients[0] * texture( c3d_mapDiffuse, vtx_texture );
+				plx_v4FragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_fCoefficients[0];
 
 				FOR( l_writer, Int, i, 1, cuT( "i < c3d_fCoefficientsCount" ), cuT( "++i" ) )
 				{

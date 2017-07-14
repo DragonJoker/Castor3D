@@ -54,6 +54,11 @@ namespace TestRender
 
 	private:
 		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::DoDownload
+		 */
+		void DoDownload( Castor::Position const & p_offset
+			, Castor::PxBufferBase & p_buffer )const override;
+		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
 		 */
 		void DoAttach()override;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -78,7 +78,17 @@ namespace Castor3D
 
 		inline TextureUnit const & GetResult()const
 		{
-			return m_result;
+			return m_reflection;
+		}
+
+		inline TextureUnit const & GetReflection()const
+		{
+			return m_reflection;
+		}
+
+		inline TextureUnit const & GetRefraction()const
+		{
+			return m_refraction;
 		}
 
 	private:
@@ -112,13 +122,19 @@ namespace Castor3D
 		Castor::Size m_size;
 		//!\~english	The light pass output.
 		//!\~french		La sortie de la passe de lumières.
-		TextureUnit m_result;
+		TextureUnit m_reflection;
+		//!\~english	The light pass output.
+		//!\~french		La sortie de la passe de lumières.
+		TextureUnit m_refraction;
 		//!\~english	The target FBO.
 		//!\~french		Le FBO cible.
 		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attachments between textures and deferred shading frame buffer.
-		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		TextureAttachmentSPtr m_resultAttach;
+		//!\~english	The attachments between reflection result and FBO.
+		//!\~french		Les attaches entre le résultat de la réflexion et le FBO.
+		TextureAttachmentSPtr m_reflectAttach;
+		//!\~english	The attachments between refraction result and FBO.
+		//!\~french		Les attaches entre le résultat de la réfraction et le FBO.
+		TextureAttachmentSPtr m_refractAttach;
 		//!\~english	The render viewport.
 		//!\~french		La viewport du rendu.
 		Viewport m_viewport;

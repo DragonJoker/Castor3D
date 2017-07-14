@@ -1,4 +1,4 @@
-﻿#include "EnvironmentMap.hpp"
+#include "EnvironmentMap.hpp"
 
 #include "Engine.hpp"
 
@@ -24,7 +24,9 @@ namespace Castor3D
 	{
 		static Size const MapSize{ 1024, 1024 };
 
-		TextureUnit DoInitialisePoint( Engine & p_engine, Size const & p_size )
+		TextureUnit DoInitialisePoint( Engine & p_engine
+			, Size const & p_size
+			, MaterialType p_type )
 		{
 			String const l_name = cuT( "EnvironmentMap" );
 
@@ -41,8 +43,13 @@ namespace Castor3D
 					, InterpolationMode::eLinear );
 				l_sampler->SetInterpolationMode( InterpolationFilter::eMag
 					, InterpolationMode::eLinear );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMip
-					, InterpolationMode::eLinear );
+
+				if ( p_type == MaterialType::ePbr )
+				{
+					l_sampler->SetInterpolationMode( InterpolationFilter::eMip
+						, InterpolationMode::eLinear );
+				}
+
 				l_sampler->SetWrappingMode( TextureUVW::eU
 					, WrapMode::eClampToEdge );
 				l_sampler->SetWrappingMode( TextureUVW::eV
@@ -118,7 +125,7 @@ namespace Castor3D
 	EnvironmentMap::EnvironmentMap( Engine & p_engine
 		, SceneNode  & p_node )
 		: OwnedBy< Engine >{ p_engine }
-		, m_environmentMap{ DoInitialisePoint( p_engine, MapSize ) }
+		, m_environmentMap{ DoInitialisePoint( p_engine, MapSize, p_node.GetScene()->GetMaterialsType() ) }
 		, m_node{ p_node }
 		, m_index{ ++m_count }
 		, m_passes( DoCreatePasses( *this, p_node ) )
@@ -135,6 +142,7 @@ namespace Castor3D
 
 		if ( !m_frameBuffer )
 		{
+			auto & l_scene = *m_node.GetScene();
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			l_return = m_frameBuffer->Create();
 
@@ -149,9 +157,14 @@ namespace Castor3D
 				m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
 				auto l_texture = m_environmentMap.GetTexture();
 				l_texture->Initialise();
-				l_texture->Bind( 0 );
-				l_texture->GenerateMipmaps();
-				l_texture->Unbind( 0 );
+
+				if ( l_scene.GetMaterialsType() == MaterialType::ePbr )
+				{
+					l_texture->Bind( 0 );
+					l_texture->GenerateMipmaps();
+					l_texture->Unbind( 0 );
+				}
+
 				uint32_t i = 0;
 
 				for ( auto & l_attach : m_colourAttachs )
@@ -178,8 +191,6 @@ namespace Castor3D
 			{
 				l_pass->Initialise( MapSize );
 			}
-
-			auto & l_scene = *m_node.GetScene();
 
 			if ( l_scene.GetMaterialsType() == MaterialType::ePbr )
 			{

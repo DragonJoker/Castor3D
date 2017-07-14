@@ -37,7 +37,6 @@ namespace GLSL
 		inline Vec2T();
 		inline Vec2T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline my_vec2 & operator=( my_vec2 const & p_rhs );
-		template< typename RhsT > inline my_vec2 & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;
 
@@ -56,6 +55,9 @@ namespace GLSL
 	};
 
 	template< typename ValueT >
+	inline Vec2T< ValueT > operator*( ValueT const & p_lhs, Vec2T< ValueT > const & p_rhs );
+
+	template< typename ValueT >
 	struct Vec3T
 		: public Type
 	{
@@ -66,7 +68,6 @@ namespace GLSL
 		inline Vec3T();
 		inline Vec3T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline my_vec3 & operator=( my_vec3 const & p_rhs );
-		template< typename RhsT > inline my_vec3 & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;
 
@@ -118,6 +119,9 @@ namespace GLSL
 	};
 
 	template< typename ValueT >
+	inline Vec3T< ValueT > operator*( ValueT const & p_lhs, Vec3T< ValueT > const & p_rhs );
+
+	template< typename ValueT >
 	struct Vec4T
 		: public Type
 	{
@@ -129,7 +133,6 @@ namespace GLSL
 		inline Vec4T();
 		inline Vec4T( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline my_vec4 & operator=( my_vec4 const & p_rhs );
-		template< typename RhsT > inline my_vec4 & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_type operator[]( IndexT const & p_rhs )const;
 		inline my_type operator[]( int const & p_rhs )const;
 
@@ -328,6 +331,9 @@ namespace GLSL
 		GLSL_SWIZZLE( my_vec4, my_vec4, abrg );
 		GLSL_LAST_SWIZZLE( my_vec4, my_vec4, abgr );
 	};
+
+	template< typename ValueT >
+	inline Vec4T< ValueT > operator*( ValueT const & p_lhs, Vec4T< ValueT > const & p_rhs );
 }
 
 #include "GlslVec.inl"

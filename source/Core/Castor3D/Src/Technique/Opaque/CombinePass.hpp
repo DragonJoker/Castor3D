@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -161,7 +161,9 @@ namespace Castor3D
 		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
 		 */
 		void Render( GeometryPassResult const & p_gp
-			, TextureUnit const & p_lp
+			, TextureUnit const & p_light
+			, TextureUnit const & p_reflection
+			, TextureUnit const & p_refraction
 			, Camera const & p_camera
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView
@@ -192,10 +194,9 @@ namespace Castor3D
 		 */
 		void Render( GeometryPassResult const & p_gp
 			, TextureUnit const & p_light
-			, TextureUnit const & p_ambient
-			, TextureUnit const & p_irradiance
-			, TextureUnit const & p_prefiltered
-			, TextureUnit const & p_brdf
+			, TextureUnit const & p_reflection
+			, TextureUnit const & p_refraction
+			, IblTextures const & p_ibl
 			, Camera const & p_camera
 			, Castor::Matrix4x4r const & p_invViewProj
 			, Castor::Matrix4x4r const & p_invView

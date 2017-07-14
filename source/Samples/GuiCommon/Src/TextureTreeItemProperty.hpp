@@ -50,7 +50,9 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_texture	La texture cible
 		 */
-		TextureTreeItemProperty( bool p_editable, Castor3D::TextureUnitSPtr p_texture );
+		TextureTreeItemProperty( bool p_editable
+			, Castor3D::TextureUnitSPtr p_texture
+			, Castor3D::MaterialType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -87,6 +89,7 @@ namespace GuiCommon
 
 	private:
 		Castor3D::TextureUnitWPtr m_texture;
+		Castor3D::MaterialType m_materialType;
 	};
 }
 

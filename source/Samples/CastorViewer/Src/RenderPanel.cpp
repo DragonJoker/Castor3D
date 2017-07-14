@@ -104,7 +104,7 @@ namespace CastorViewer
 					auto l_pass = std::static_pointer_cast< PbrPass >( l_clone );
 					l_pass->SetAlbedo( l_source.GetAlbedo() );
 					l_pass->SetRoughness( l_source.GetRoughness() );
-					l_pass->SetReflectance( l_source.GetReflectance() );
+					l_pass->SetMetallic( l_source.GetMetallic() );
 				}
 				break;
 			}
@@ -190,7 +190,7 @@ namespace CastorViewer
 			case MaterialType::ePbr:
 				{
 					auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::ePbr >( 0u );
-					l_pass->SetAlbedo( HdrColour::from_predef( PredefinedColour::eMedAlphaRed ) );
+					l_pass->SetAlbedo( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
 				}
 				break;
 			}

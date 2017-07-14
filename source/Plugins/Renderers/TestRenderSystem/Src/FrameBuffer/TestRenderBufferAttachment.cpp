@@ -10,6 +10,11 @@ namespace TestRender
 	{
 	}
 
+	void TestRenderBufferAttachment::DoDownload( Castor::Position const & p_offset
+		, Castor::PxBufferBase & p_buffer )const
+	{
+	}
+
 	TestRenderBufferAttachment::~TestRenderBufferAttachment()
 	{
 	}
