@@ -27,16 +27,6 @@ SOFTWARE.
 
 #include <Graphics/Colour.hpp>
 
-#ifndef _WIN32
-#	define C3D_SMax_API
-#else
-#	ifdef SMaxImporter_EXPORTS
-#		define C3D_SMax_API __declspec(dllexport)
-#	else
-#		define C3D_SMax_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace C3dSMax
 {
 	typedef enum eSMAX_CHUNK

@@ -25,16 +25,6 @@ SOFTWARE.
 
 #include <Mesh/Importer.hpp>
 
-#ifndef _WIN32
-#	define C3D_Lwo_API
-#else
-#	ifdef LwoImporter_EXPORTS
-#		define C3D_Lwo_API __declspec(dllexport)
-#	else
-#		define C3D_Lwo_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace Lwo
 {
 	typedef uint8_t UI1;
