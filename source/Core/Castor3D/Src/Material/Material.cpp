@@ -1,7 +1,8 @@
-#include "Material.hpp"
+﻿#include "Material.hpp"
 
 #include "LegacyPass.hpp"
 #include "MetallicRoughnessPbrPass.hpp"
+#include "SpecularGlossinessPbrPass.hpp"
 
 #include "Scene/SceneFileParser.hpp"
 
@@ -36,6 +37,13 @@ namespace Castor3D
 				for ( auto l_pass : p_material )
 				{
 					l_return &= MetallicRoughnessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( l_pass ), p_file );
+				}
+				break;
+
+			case MaterialType::ePbrSpecularGlossiness:
+				for ( auto l_pass : p_material )
+				{
+					l_return &= SpecularGlossinessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( l_pass ), p_file );
 				}
 				break;
 
@@ -98,6 +106,10 @@ namespace Castor3D
 
 		case MaterialType::ePbrMetallicRoughness:
 			l_newPass = std::make_shared< MetallicRoughnessPbrPass >( *this );
+			break;
+
+		case MaterialType::ePbrSpecularGlossiness:
+			l_newPass = std::make_shared< SpecularGlossinessPbrPass >( *this );
 			break;
 
 		default:

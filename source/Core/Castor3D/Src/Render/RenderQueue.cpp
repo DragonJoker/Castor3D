@@ -1,4 +1,4 @@
-#if defined( CASTOR_COMPILER_MSVC )
+﻿#if defined( CASTOR_COMPILER_MSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -354,6 +354,10 @@ namespace Castor3D
 							if ( l_material->GetType() == MaterialType::ePbrMetallicRoughness )
 							{
 								AddFlag( l_programFlags, ProgramFlag::ePbrMetallicRoughness );
+							}
+							else if ( l_material->GetType() == MaterialType::ePbrSpecularGlossiness )
+							{
+								AddFlag( l_programFlags, ProgramFlag::ePbrSpecularGlossiness );
 							}
 
 							if ( l_skeleton && l_submesh->HasBoneData() )

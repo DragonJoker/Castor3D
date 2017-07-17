@@ -75,6 +75,22 @@ namespace Castor3D
 	};
 	/*!
 	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::ePbrMetallicRoughness.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::ePbrMetallicRoughness.
+	*/
+	template<>
+	struct PassTyper< MaterialType::ePbrSpecularGlossiness >
+	{
+		using Type = SpecularGlossinessPbrPass;
+	};
+	/*!
+	\author		Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
 	\~english

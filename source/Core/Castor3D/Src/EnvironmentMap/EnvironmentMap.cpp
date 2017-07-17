@@ -44,7 +44,8 @@ namespace Castor3D
 				l_sampler->SetInterpolationMode( InterpolationFilter::eMag
 					, InterpolationMode::eLinear );
 
-				if ( p_type == MaterialType::ePbrMetallicRoughness )
+				if ( p_type == MaterialType::ePbrMetallicRoughness
+					|| p_type == MaterialType::ePbrSpecularGlossiness )
 				{
 					l_sampler->SetInterpolationMode( InterpolationFilter::eMip
 						, InterpolationMode::eLinear );
@@ -158,7 +159,8 @@ namespace Castor3D
 				auto l_texture = m_environmentMap.GetTexture();
 				l_texture->Initialise();
 
-				if ( l_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
+				if ( l_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+					|| l_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 				{
 					l_texture->Bind( 0 );
 					l_texture->GenerateMipmaps();
@@ -192,7 +194,8 @@ namespace Castor3D
 				l_pass->Initialise( MapSize );
 			}
 
-			if ( l_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
+			if ( l_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+				|| l_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
 				m_ibl = std::make_unique< IblTextures >( l_scene );
 			}

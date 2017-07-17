@@ -171,9 +171,9 @@ namespace GLSL
 			, InFloat{ &m_writer, cuT( "p_roughness" ) } );
 	}
 
-	void Utils::DeclareComputeIBL()
+	void Utils::DeclareComputeMetallicIBL()
 	{
-		m_computeIBL = m_writer.ImplementFunction< Vec3 >( cuT( "DiffuseIBL" )
+		m_computeMetallicIBL = m_writer.ImplementFunction< Vec3 >( cuT( "ComputeIBL" )
 			, [&]( Vec3 const & p_normal
 				, Vec3 const & p_position
 				, Vec3 const & p_albedo
@@ -220,6 +220,64 @@ namespace GLSL
 			, InVec3{ &m_writer, cuT( "p_albedo" ) }
 			, InFloat{ &m_writer, cuT( "p_metalness" ) }
 			, InFloat{ &m_writer, cuT( "p_roughness" ) }
+			, InVec3{ &m_writer, cuT( "p_worldEye" ) }
+			, InParam< SamplerCube >{ &m_writer, cuT( "p_irradiance" ) }
+			, InParam< SamplerCube >{ &m_writer, cuT( "p_prefiltered" ) }
+			, InParam< Sampler2D >{ &m_writer, cuT( "p_brdf" ) }
+			, InInt{ &m_writer, cuT( "p_invertY" ) } );
+	}
+
+	void Utils::DeclareComputeSpecularIBL()
+	{
+		m_computeSpecularIBL = m_writer.ImplementFunction< Vec3 >( cuT( "ComputeIBL" )
+			, [&]( Vec3 const & p_normal
+				, Vec3 const & p_position
+				, Vec3 const & p_diffuse
+				, Vec3 const & p_specular
+				, Float const & p_glossiness
+				, Vec3 const & p_worldEye
+				, SamplerCube const & p_irradiance
+				, SamplerCube const & p_prefiltered
+				, Sampler2D const & p_brdf
+				, Int const & p_invertY )
+			{
+				auto l_roughness = m_writer.DeclLocale( cuT( "l_roughness" )
+					, 1.0_f - p_glossiness );
+				auto l_V = m_writer.DeclLocale( cuT( "l_V" )
+					, normalize( p_worldEye - p_position ) );
+				auto l_NdotV = m_writer.DeclLocale( cuT( "l_NdotV" )
+					, max( dot( p_normal, l_V ), 0.0 ) );
+				auto l_f0 = m_writer.DeclLocale( cuT( "l_f0" )
+					, p_specular );
+				auto l_F = m_writer.DeclLocale( cuT( "l_F" )
+					, FresnelSchlick( l_NdotV, l_f0, l_roughness ) );
+				auto l_kS = m_writer.DeclLocale( cuT( "l_kS" )
+					, l_F );
+				auto l_kD = m_writer.DeclLocale( cuT( "l_kD" )
+					, vec3( 1.0_f ) - l_kS );
+				l_kD *= 1.0 - length( p_specular );
+				auto l_irradiance = m_writer.DeclLocale( cuT( "l_irradiance" )
+					, texture( p_irradiance, p_normal ).rgb() );
+				auto l_diffuse = m_writer.DeclLocale( cuT( "l_diffuse" )
+					, l_irradiance * p_diffuse );
+
+				auto l_R = m_writer.DeclLocale( cuT( "l_R" )
+					, reflect( -l_V, p_normal ) );
+				l_R.y() = m_writer.Ternary( p_invertY != 0_i, l_R.y(), -l_R.y() );
+				auto l_prefilteredColor = m_writer.DeclLocale( cuT( "l_prefilteredColor" )
+					, texture( p_prefiltered, l_R, l_roughness * MaxIblReflectionLod ).rgb() );
+				auto l_envBRDF = m_writer.DeclLocale( cuT( "l_envBRDF" )
+					, texture( p_brdf, vec2( l_NdotV, l_roughness ) ).rg() );
+				auto l_specular = m_writer.DeclLocale( cuT( "l_specular" )
+					, l_prefilteredColor * m_writer.Paren( l_kS * l_envBRDF.x() + l_envBRDF.y() ) );
+
+				m_writer.Return( l_kD * l_diffuse + l_specular );
+			}
+			, InVec3{ &m_writer, cuT( "p_normal" ) }
+			, InVec3{ &m_writer, cuT( "p_position" ) }
+			, InVec3{ &m_writer, cuT( "p_diffuse" ) }
+			, InVec3{ &m_writer, cuT( "p_specular" ) }
+			, InFloat{ &m_writer, cuT( "p_glossiness" ) }
 			, InVec3{ &m_writer, cuT( "p_worldEye" ) }
 			, InParam< SamplerCube >{ &m_writer, cuT( "p_irradiance" ) }
 			, InParam< SamplerCube >{ &m_writer, cuT( "p_prefiltered" ) }
@@ -285,7 +343,7 @@ namespace GLSL
 		return m_fresnelSchlick( p_product, p_f0, p_roughness );
 	}
 
-	Vec3 Utils::ComputeIBL( Vec3 const & p_normal
+	Vec3 Utils::ComputeMetallicIBL( Vec3 const & p_normal
 		, Vec3 const & p_position
 		, Vec3 const & p_albedo
 		, Float const & p_metalness
@@ -296,11 +354,34 @@ namespace GLSL
 		, Sampler2D const & p_brdf
 		, Int const & p_invertY )
 	{
-		return m_computeIBL( p_normal
+		return m_computeMetallicIBL( p_normal
 			, p_position
 			, p_albedo
 			, p_metalness
 			, p_roughness
+			, p_worldEye 
+			, p_irradiance
+			, p_prefiltered
+			, p_brdf
+			, p_invertY );
+	}
+
+	Vec3 Utils::ComputeSpecularIBL( Vec3 const & p_normal
+		, Vec3 const & p_position
+		, Vec3 const & p_diffuse
+		, Vec3 const & p_specular
+		, Float const & p_glossiness
+		, Vec3 const & p_worldEye
+		, SamplerCube const & p_irradiance
+		, SamplerCube const & p_prefiltered
+		, Sampler2D const & p_brdf
+		, Int const & p_invertY )
+	{
+		return m_computeSpecularIBL( p_normal
+			, p_position
+			, p_diffuse
+			, p_specular
+			, p_glossiness
 			, p_worldEye 
 			, p_irradiance
 			, p_prefiltered

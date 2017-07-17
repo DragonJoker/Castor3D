@@ -8,7 +8,8 @@
 #include <GlslUtils.hpp>
 #include <GlslMaterial.hpp>
 #include <GlslPhongLighting.hpp>
-#include <GlslCookTorranceLighting.hpp>
+#include <GlslMetallicBrdfLighting.hpp>
+#include <GlslSpecularBrdfLighting.hpp>
 
 IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::Engine, Engine )
 IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::RenderSystem, RenderSystem )
@@ -224,116 +225,233 @@ namespace Castor3D
 
 	namespace pbr
 	{
-		void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_normal
-			, GLSL::Float & p_metallic
-			, GLSL::Float & p_roughness
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )
+		namespace mr
 		{
-			using namespace GLSL;
-			auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+			void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
+				, GLSL::Vec3 & p_normal
+				, GLSL::Float & p_metallic
+				, GLSL::Float & p_roughness
+				, TextureChannels const & p_textureFlags
+				, ProgramFlags const & p_programFlags
+				, SceneFlags const & p_sceneFlags )
 			{
-				auto vtx_normal( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
-				auto vtx_tangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
-				auto vtx_bitangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
-				auto c3d_mapNormal( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+				using namespace GLSL;
+				auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
 
-				auto l_tbn = p_writer.DeclLocale( cuT( "l_tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
-				auto l_v3MapNormal = p_writer.DeclLocale( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, l_texCoord.xy() ).xyz() );
-				l_v3MapNormal = normalize( l_v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
-				p_normal = normalize( l_tbn * l_v3MapNormal );
+				if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+				{
+					auto vtx_normal( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
+					auto vtx_tangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
+					auto vtx_bitangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
+					auto c3d_mapNormal( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+
+					auto l_tbn = p_writer.DeclLocale( cuT( "l_tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
+					auto l_v3MapNormal = p_writer.DeclLocale( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, l_texCoord.xy() ).xyz() );
+					l_v3MapNormal = normalize( l_v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+					p_normal = normalize( l_tbn * l_v3MapNormal );
+				}
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eMetallic ) )
+				{
+					auto c3d_mapMetallic( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapMetallic ) );
+					p_metallic = texture( c3d_mapMetallic, l_texCoord.xy() ).r();
+				}
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eRoughness ) )
+				{
+					auto c3d_mapRoughness( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapRoughness ) );
+					p_roughness = texture( c3d_mapRoughness, l_texCoord.xy() ).r();
+				}
 			}
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eMetallic ) )
+			void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
+				, GLSL::Vec3 & p_albedo
+				, GLSL::Vec3 & p_emissive
+				, GLSL::Float const & p_gamma
+				, TextureChannels const & p_textureFlags
+				, ProgramFlags const & p_programFlags
+				, SceneFlags const & p_sceneFlags )
 			{
-				auto c3d_mapMetallic( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapMetallic ) );
-				p_metallic = texture( c3d_mapMetallic, l_texCoord.xy() ).r();
+				using namespace GLSL;
+				auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) )
+				{
+					auto c3d_mapAlbedo( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapAlbedo ) );
+					p_albedo *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+						, p_gamma
+						, texture( c3d_mapAlbedo, l_texCoord.xy() ).xyz() );
+				}
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
+				{
+					auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
+					p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+						, p_gamma
+						, texture( c3d_mapEmissive, l_texCoord.xy() ).xyz() );
+				}
 			}
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eRoughness ) )
+			std::shared_ptr< GLSL::MetallicBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+				, GLSL::ShadowType p_shadows )
 			{
-				auto c3d_mapRoughness( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapRoughness ) );
-				p_roughness = texture( c3d_mapRoughness, l_texCoord.xy() ).r();
-			}
-		}
-
-		void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_albedo
-			, GLSL::Vec3 & p_emissive
-			, GLSL::Float const & p_gamma
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )
-		{
-			using namespace GLSL;
-			auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) )
-			{
-				auto c3d_mapAlbedo( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapAlbedo ) );
-				p_albedo *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
-					, p_gamma
-					, texture( c3d_mapAlbedo, l_texCoord.xy() ).xyz() );
+				return std::static_pointer_cast< GLSL::MetallicBrdfLightingModel >( p_writer.CreateLightingModel( GLSL::MetallicBrdfLightingModel::Name
+					, p_shadows ) );
 			}
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
+			std::shared_ptr< GLSL::MetallicBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+				, LightType p_light
+				, GLSL::ShadowType p_shadows )
 			{
-				auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
-				p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
-					, p_gamma
-					, texture( c3d_mapEmissive, l_texCoord.xy() ).xyz() );
-			}
-		}
+				std::shared_ptr< GLSL::LightingModel > l_result;
 
-		std::shared_ptr< GLSL::CookTorranceLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
-			, GLSL::ShadowType p_shadows )
-		{
-			return std::static_pointer_cast< GLSL::CookTorranceLightingModel >( p_writer.CreateLightingModel( GLSL::CookTorranceLightingModel::Name
-				, p_shadows ) );
-		}
-
-		std::shared_ptr< GLSL::CookTorranceLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
-			, LightType p_light
-			, GLSL::ShadowType p_shadows )
-		{
-			std::shared_ptr< GLSL::LightingModel > l_result;
-
-			switch ( p_light )
-			{
-			case LightType::eDirectional:
-			{
-				l_result = p_writer.CreateDirectionalLightingModel( GLSL::CookTorranceLightingModel::Name
-					, p_shadows );
-				auto light = p_writer.DeclUniform< GLSL::DirectionalLight >( cuT( "light" ) );
-			}
-			break;
-
-			case LightType::ePoint:
-			{
-				l_result = p_writer.CreatePointLightingModel( GLSL::CookTorranceLightingModel::Name
-					, p_shadows );
-				auto light = p_writer.DeclUniform< GLSL::PointLight >( cuT( "light" ) );
-			}
-			break;
-
-			case LightType::eSpot:
-			{
-				l_result = p_writer.CreateSpotLightingModel( GLSL::CookTorranceLightingModel::Name
-					, p_shadows );
-				auto light = p_writer.DeclUniform< GLSL::SpotLight >( cuT( "light" ) );
-			}
-			break;
-
-			default:
-				FAILURE( "Invalid light type" );
+				switch ( p_light )
+				{
+				case LightType::eDirectional:
+				{
+					l_result = p_writer.CreateDirectionalLightingModel( GLSL::MetallicBrdfLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.DeclUniform< GLSL::DirectionalLight >( cuT( "light" ) );
+				}
 				break;
+
+				case LightType::ePoint:
+				{
+					l_result = p_writer.CreatePointLightingModel( GLSL::MetallicBrdfLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.DeclUniform< GLSL::PointLight >( cuT( "light" ) );
+				}
+				break;
+
+				case LightType::eSpot:
+				{
+					l_result = p_writer.CreateSpotLightingModel( GLSL::MetallicBrdfLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.DeclUniform< GLSL::SpotLight >( cuT( "light" ) );
+				}
+				break;
+
+				default:
+					FAILURE( "Invalid light type" );
+					break;
+				}
+
+				return std::static_pointer_cast< GLSL::MetallicBrdfLightingModel >( l_result );
+			}
+		}
+		namespace sg
+		{
+			void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
+				, GLSL::Vec3 & p_normal
+				, GLSL::Vec3 & p_specular
+				, GLSL::Float & p_glossiness
+				, TextureChannels const & p_textureFlags
+				, ProgramFlags const & p_programFlags
+				, SceneFlags const & p_sceneFlags )
+			{
+				using namespace GLSL;
+				auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+				{
+					auto vtx_normal( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
+					auto vtx_tangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
+					auto vtx_bitangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
+					auto c3d_mapNormal( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+
+					auto l_tbn = p_writer.DeclLocale( cuT( "l_tbn" ), mat3( normalize( vtx_tangent ), normalize( vtx_bitangent ), p_normal ) );
+					auto l_v3MapNormal = p_writer.DeclLocale( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, l_texCoord.xy() ).xyz() );
+					l_v3MapNormal = normalize( l_v3MapNormal * 2.0_f - vec3( 1.0_f, 1.0, 1.0 ) );
+					p_normal = normalize( l_tbn * l_v3MapNormal );
+				}
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eSpecular ) )
+				{
+					auto c3d_mapSpecular( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
+					p_specular = texture( c3d_mapSpecular, l_texCoord.xy() ).rgb();
+				}
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eGloss ) )
+				{
+					auto c3d_mapGloss( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
+					p_glossiness = texture( c3d_mapGloss, l_texCoord.xy() ).r();
+				}
 			}
 
-			return std::static_pointer_cast< GLSL::CookTorranceLightingModel >( l_result );
+			void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
+				, GLSL::Vec3 & p_diffuse
+				, GLSL::Vec3 & p_emissive
+				, GLSL::Float const & p_gamma
+				, TextureChannels const & p_textureFlags
+				, ProgramFlags const & p_programFlags
+				, SceneFlags const & p_sceneFlags )
+			{
+				using namespace GLSL;
+				auto l_texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "l_texCoord" ) ) );
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) )
+				{
+					auto c3d_mapDiffuse( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
+					p_diffuse *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+						, p_gamma
+						, texture( c3d_mapDiffuse, l_texCoord.xy() ).xyz() );
+				}
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
+				{
+					auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
+					p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
+						, p_gamma
+						, texture( c3d_mapEmissive, l_texCoord.xy() ).xyz() );
+				}
+			}
+
+			std::shared_ptr< GLSL::SpecularBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+				, GLSL::ShadowType p_shadows )
+			{
+				return std::static_pointer_cast< GLSL::SpecularBrdfLightingModel >( p_writer.CreateLightingModel( GLSL::SpecularBrdfLightingModel::Name
+					, p_shadows ) );
+			}
+
+			std::shared_ptr< GLSL::SpecularBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+				, LightType p_light
+				, GLSL::ShadowType p_shadows )
+			{
+				std::shared_ptr< GLSL::LightingModel > l_result;
+
+				switch ( p_light )
+				{
+				case LightType::eDirectional:
+				{
+					l_result = p_writer.CreateDirectionalLightingModel( GLSL::SpecularBrdfLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.DeclUniform< GLSL::DirectionalLight >( cuT( "light" ) );
+				}
+				break;
+
+				case LightType::ePoint:
+				{
+					l_result = p_writer.CreatePointLightingModel( GLSL::SpecularBrdfLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.DeclUniform< GLSL::PointLight >( cuT( "light" ) );
+				}
+				break;
+
+				case LightType::eSpot:
+				{
+					l_result = p_writer.CreateSpotLightingModel( GLSL::SpecularBrdfLightingModel::Name
+						, p_shadows );
+					auto light = p_writer.DeclUniform< GLSL::SpotLight >( cuT( "light" ) );
+				}
+				break;
+
+				default:
+					FAILURE( "Invalid light type" );
+					break;
+				}
+
+				return std::static_pointer_cast< GLSL::SpecularBrdfLightingModel >( l_result );
+			}
 		}
 	}
 

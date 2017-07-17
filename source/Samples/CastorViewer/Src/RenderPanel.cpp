@@ -13,6 +13,7 @@
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
 #include <Material/MetallicRoughnessPbrPass.hpp>
+#include <Material/SpecularGlossinessPbrPass.hpp>
 #include <Mesh/Submesh.hpp>
 #include <ShadowMap/ShadowMapPass.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
@@ -107,6 +108,16 @@ namespace CastorViewer
 					l_pass->SetMetallic( l_source.GetMetallic() );
 				}
 				break;
+
+			case MaterialType::ePbrSpecularGlossiness:
+				{
+					auto & l_source = static_cast< SpecularGlossinessPbrPass const & >( p_source );
+					auto l_pass = std::static_pointer_cast< SpecularGlossinessPbrPass >( l_clone );
+					l_pass->SetDiffuse( l_source.GetDiffuse() );
+					l_pass->SetGlossiness( l_source.GetGlossiness() );
+					l_pass->SetSpecular( l_source.GetSpecular() );
+				}
+				break;
 			}
 			
 			l_clone->SetOpacity( p_source.GetOpacity() );
@@ -191,6 +202,13 @@ namespace CastorViewer
 				{
 					auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::ePbrMetallicRoughness >( 0u );
 					l_pass->SetAlbedo( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+				}
+				break;
+
+			case MaterialType::ePbrSpecularGlossiness:
+				{
+					auto l_pass = p_selected.m_selectedMaterial->GetTypedPass< MaterialType::ePbrSpecularGlossiness >( 0u );
+					l_pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
 				}
 				break;
 			}

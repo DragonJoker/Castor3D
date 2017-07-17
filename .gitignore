@@ -62,11 +62,13 @@
 /source/Core/Castor3D/Test/Data/PBR_MetallicRoughness/ReflectionRefractionMap
 /source/Core/Castor3D/Test/Data/PBR_MetallicRoughness/RefractionMap
 /source/Core/Castor3D/Test/Data/PBR_MetallicRoughness/Rusted
+/source/Core/Castor3D/Test/Data/PBR_MetallicRoughness/Sphere
 /source/Core/Castor3D/Test/Data/PBR_MetallicRoughness/Spheres
 /source/Core/Castor3D/Test/Data/PBR_MetallicRoughness/StoneTiles
 /source/Core/Castor3D/Test/Data/PBR_MetallicRoughness/StuffedPlastic
 /source/Core/Castor3D/Test/Data/PBR_MetallicRoughness/SyntheticRubber
 /source/Core/Castor3D/Test/Data/PBR_SpecularGlossiness/Dragon
+/source/Core/Castor3D/Test/Data/PBR_SpecularGlossiness/Sphere
 /source/Core/Castor3D/Test/Data/PBR_SpecularGlossiness/Spheres
 /source/Samples/CastorDvpTD/Data/Data
 /.gitattributes

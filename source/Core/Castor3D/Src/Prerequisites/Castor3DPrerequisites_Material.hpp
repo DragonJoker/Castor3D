@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -495,6 +495,7 @@ namespace Castor3D
 	class Pass;
 	class LegacyPass;
 	class MetallicRoughnessPbrPass;
+	class SpecularGlossinessPbrPass;
 	class Sampler;
 
 	DECLARE_SMART_PTR( TextureImage );
@@ -505,6 +506,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Pass );
 	DECLARE_SMART_PTR( LegacyPass );
 	DECLARE_SMART_PTR( MetallicRoughnessPbrPass );
+	DECLARE_SMART_PTR( SpecularGlossinessPbrPass );
 	DECLARE_SMART_PTR( Sampler );
 
 	//! Material pointer array

@@ -104,7 +104,8 @@ namespace Castor3D
 				, SceneUbo & p_sceneUbo
 				, GpInfoUbo & p_gpInfo
 				, HdrConfigUbo & p_configUbo
-				, bool p_pbr );
+				, bool p_pbr
+				, bool p_isMR );
 			~ProgramPipeline();
 			void Render();
 			//!\~english	The shader program.
@@ -152,7 +153,7 @@ namespace Castor3D
 		HdrConfigUbo m_configUbo;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
-		std::array< ProgramPipeline, 2u > m_programs;
+		std::array< ProgramPipeline, 3u > m_programs;
 	};
 }
 

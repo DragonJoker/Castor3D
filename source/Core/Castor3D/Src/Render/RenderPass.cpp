@@ -1,4 +1,4 @@
-#include "RenderPass.hpp"
+﻿#include "RenderPass.hpp"
 
 #include "Engine.hpp"
 
@@ -448,7 +448,14 @@ namespace Castor3D
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::ePbrMetallicRoughness ) )
 		{
-			l_result = DoGetPbrPixelShaderSource( p_textureFlags
+			l_result = DoGetPbrMRPixelShaderSource( p_textureFlags
+				, p_programFlags
+				, p_sceneFlags
+				, p_alphaFunc );
+		}
+		else if ( CheckFlag( p_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+		{
+			l_result = DoGetPbrSGPixelShaderSource( p_textureFlags
 				, p_programFlags
 				, p_sceneFlags
 				, p_alphaFunc );

@@ -1,4 +1,4 @@
-#include "PassRenderNode.hpp"
+﻿#include "PassRenderNode.hpp"
 
 #include "Material/Pass.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -35,20 +35,31 @@ namespace Castor3D
 		, ShaderProgram const & p_program )
 		: m_pass{ p_pass }
 	{
-		if ( p_pass.GetType() == MaterialType::ePbrMetallicRoughness )
+		switch ( p_pass.GetType() )
 		{
-			DoGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapAlbedo, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eMetallic, ShaderProgram::MapMetallic, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eRoughness, ShaderProgram::MapRoughness, *this );
-			DoGetTexture( p_pass, p_program, TextureChannel::eAmbientOcclusion, ShaderProgram::MapAmbientOcclusion, *this );
-		}
-		else
-		{
+		case MaterialType::eLegacy:
 			DoGetTexture( p_pass, p_program, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, *this );
 			DoGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
 			DoGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
+			break;
+
+		case MaterialType::ePbrMetallicRoughness:
+			DoGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapAlbedo, *this );
+			DoGetTexture( p_pass, p_program, TextureChannel::eMetallic, ShaderProgram::MapMetallic, *this );
+			DoGetTexture( p_pass, p_program, TextureChannel::eRoughness, ShaderProgram::MapRoughness, *this );
+			break;
+
+		case MaterialType::ePbrSpecularGlossiness:
+			DoGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapDiffuse, *this );
+			DoGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
+			DoGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
+			break;
+
+		default:
+			FAILURE( "Unsupported material type" );
 		}
 
+		DoGetTexture( p_pass, p_program, TextureChannel::eAmbientOcclusion, ShaderProgram::MapAmbientOcclusion, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eEmissive, ShaderProgram::MapEmissive, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eOpacity, ShaderProgram::MapOpacity, *this );
 		DoGetTexture( p_pass, p_program, TextureChannel::eHeight, ShaderProgram::MapHeight, *this );

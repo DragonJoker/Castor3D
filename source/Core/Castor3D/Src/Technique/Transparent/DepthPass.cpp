@@ -241,7 +241,18 @@ namespace Castor3D
 			, p_alphaFunc );
 	}
 
-	GLSL::Shader DepthPass::DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader DepthPass::DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
+	{
+		return DoGetPixelShaderSource( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags
+			, p_alphaFunc );
+	}
+
+	GLSL::Shader DepthPass::DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const

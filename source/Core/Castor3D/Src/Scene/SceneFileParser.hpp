@@ -98,7 +98,8 @@ namespace Castor3D
 		SamplerSPtr pSampler;
 		RenderTargetSPtr pRenderTarget;
 		LegacyPassSPtr legacyPass;
-		MetallicRoughnessPbrPassSPtr pbrPass;
+		MetallicRoughnessPbrPassSPtr pbrMRPass;
+		SpecularGlossinessPbrPassSPtr pbrSGPass;
 		PassSPtr pass;
 		TextureUnitSPtr pTextureUnit;
 		ShaderProgramSPtr pShaderProgram;

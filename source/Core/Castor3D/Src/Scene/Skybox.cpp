@@ -140,7 +140,8 @@ namespace Castor3D
 
 		if ( l_result )
 		{
-			if ( m_scene->GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
+			if ( m_scene->GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+				|| m_scene->GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
 				m_ibl = std::make_unique< IblTextures >( *m_scene );
 				m_ibl->Update( *m_texture );

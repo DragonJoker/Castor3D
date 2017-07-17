@@ -1,4 +1,4 @@
-#include "ReflectionPass.hpp"
+﻿#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -199,7 +199,7 @@ namespace Castor3D
 			return l_writer.Finalise();
 		}
 
-		GLSL::Shader DoCreatePbrPixelProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreatePbrMRPixelProgram( RenderSystem & p_renderSystem )
 		{
 			using namespace GLSL;
 			auto l_writer = p_renderSystem.CreateGlslWriter();
@@ -228,7 +228,7 @@ namespace Castor3D
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcWSPosition();
 			l_utils.DeclareFresnelSchlick();
-			l_utils.DeclareComputeIBL();
+			l_utils.DeclareComputeMetallicIBL();
 			Declare_DecodeMaterial( l_writer );
 
 			l_writer.ImplementFunction< void >( cuT( "main" )
@@ -274,7 +274,7 @@ namespace Castor3D
 				auto l_incident = l_writer.DeclLocale( cuT( "l_incident" )
 					, normalize( l_position - c3d_v3CameraPosition ) );
 
-				pxl_reflection = l_occlusion * l_utils.ComputeIBL( l_normal
+				pxl_reflection = l_occlusion * l_utils.ComputeMetallicIBL( l_normal
 					, l_position
 					, l_albedo
 					, l_metalness
@@ -312,12 +312,131 @@ namespace Castor3D
 			return l_writer.Finalise();
 		}
 
-		ShaderProgramSPtr DoCreateProgram( Engine & p_engine, bool p_pbr )
+		GLSL::Shader DoCreatePbrSGPixelProgram( RenderSystem & p_renderSystem )
+		{
+			using namespace GLSL;
+			auto l_writer = p_renderSystem.CreateGlslWriter();
+
+			// Shader inputs
+			UBO_SCENE( l_writer );
+			UBO_GPINFO( l_writer );
+			UBO_HDR_CONFIG( l_writer );
+			auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
+			auto c3d_mapData1 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData1 ) );
+			auto c3d_mapData2 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData2 ) );
+			auto c3d_mapData3 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData3 ) );
+			auto c3d_mapData4 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData4 ) );
+			auto c3d_mapBrdf = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapBrdf );
+			auto c3d_mapIrradiance = l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapIrradiance, c_pbrEnvironmentCount );
+			auto c3d_mapPrefiltered = l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapPrefiltered, c_pbrEnvironmentCount );
+			auto c3d_fresnelBias = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelBias" ), 0.10_f );
+			auto c3d_fresnelScale = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelScale" ), 0.25_f );
+			auto c3d_fresnelPower = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelPower" ), 0.30_f );
+			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+
+			// Shader outputs
+			auto pxl_reflection = l_writer.DeclFragData< Vec3 >( cuT( "pxl_reflection" ), 0 );
+			auto pxl_refraction = l_writer.DeclFragData< Vec4 >( cuT( "pxl_refraction" ), 1 );
+
+			GLSL::Utils l_utils{ l_writer };
+			l_utils.DeclareCalcWSPosition();
+			l_utils.DeclareFresnelSchlick();
+			l_utils.DeclareComputeSpecularIBL();
+			Declare_DecodeMaterial( l_writer );
+
+			l_writer.ImplementFunction< void >( cuT( "main" )
+				, [&]()
+			{
+				auto l_data1 = l_writer.DeclLocale( cuT( "l_data1" )
+					, texture( c3d_mapData1, vtx_texture ) );
+				auto l_flags = l_writer.DeclLocale( cuT( "l_flags" )
+					, l_data1.w() );
+				auto l_envMapIndex = l_writer.DeclLocale( cuT( "l_envMapIndex" )
+					, 0_i );
+				auto l_receiver = l_writer.DeclLocale( cuT( "l_receiver" )
+					, 0_i );
+				auto l_reflection = l_writer.DeclLocale( cuT( "l_reflection" )
+					, 0_i );
+				auto l_refraction = l_writer.DeclLocale( cuT( "l_refraction" )
+					, 0_i );
+				DecodeMaterial( l_writer
+					, l_flags
+					, l_receiver
+					, l_reflection
+					, l_refraction
+					, l_envMapIndex );
+
+				pxl_reflection = vec3( 0.0_f );
+				pxl_refraction = vec4( -1.0_f );
+				auto l_data2 = l_writer.DeclLocale( cuT( "l_data2" )
+					, texture( c3d_mapData2, vtx_texture ) );
+				auto l_data3 = l_writer.DeclLocale( cuT( "l_data3" )
+					, texture( c3d_mapData3, vtx_texture ) );
+				auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" )
+					, l_data2.xyz() );
+				auto l_specular = l_writer.DeclLocale( cuT( "l_specular" )
+					, l_data3.xyz() );
+				auto l_glossiness = l_writer.DeclLocale( cuT( "l_glossiness" )
+					, l_data2.w() );
+				auto l_occlusion = l_writer.DeclLocale( cuT( "l_occlusion" )
+					, l_data3.w() );
+				auto l_normal = l_writer.DeclLocale( cuT( "l_normal" )
+					, l_data1.xyz() );
+				auto l_position = l_writer.DeclLocale( cuT( "l_position" )
+					, l_utils.CalcWSPosition( vtx_texture, c3d_mtxInvViewProj ) );
+
+				pxl_reflection = l_occlusion * l_utils.ComputeSpecularIBL( l_normal
+					, l_position
+					, l_diffuse
+					, l_specular
+					, l_glossiness
+					, c3d_v3CameraPosition
+					, c3d_mapIrradiance[l_envMapIndex]
+					, c3d_mapPrefiltered[l_envMapIndex]
+					, c3d_mapBrdf
+					, l_envMapIndex );
+
+				auto l_ratio = l_writer.DeclLocale( cuT( "l_ratio" )
+					, texture( c3d_mapData4, vtx_texture ).w() );
+
+				IF( l_writer, l_ratio != 0.0_f )
+				{
+					auto l_incident = l_writer.DeclLocale( cuT( "l_incident" )
+						, normalize( l_position - c3d_v3CameraPosition ) );
+					auto l_roughness = l_writer.DeclLocale( cuT( "l_roughness" )
+						, 1.0_f - l_glossiness );
+					auto l_subRatio = l_writer.DeclLocale( cuT( "l_subRatio" )
+						, 1.0_f - l_ratio );
+					auto l_addRatio = l_writer.DeclLocale( cuT( "l_addRatio" )
+						, 1.0_f + l_ratio );
+					auto l_reflectance = l_writer.DeclLocale( cuT( "l_reflectance" )
+						, l_writer.Paren( l_subRatio * l_subRatio ) / l_writer.Paren( l_addRatio * l_addRatio ) );
+					auto l_product = l_writer.DeclLocale( cuT( "l_product" )
+						, max( 0.0_f, dot( -l_incident, l_normal ) ) );
+					auto l_fresnel = l_writer.DeclLocale( cuT( "l_fresnel" )
+						, l_reflectance + l_writer.Paren( max( 1.0_f - l_roughness, l_reflectance ) - l_reflectance ) * pow( 1.0_f - l_product, 5.0 ) );
+					auto l_refract = l_writer.DeclLocale( cuT( "l_refract" )
+						, refract( l_incident, l_normal, l_ratio ) );
+					l_refract.y() = l_writer.Ternary( l_envMapIndex != 0_i, l_refract.y(), -l_refract.y() );
+					pxl_refraction.xyz() = texture( c3d_mapPrefiltered[l_envMapIndex], l_refract, l_roughness * Utils::MaxIblReflectionLod ).xyz();
+					pxl_refraction.xyz() *= l_diffuse / length( l_diffuse );
+					pxl_refraction.w() = l_fresnel;
+				}
+				FI;
+			} );
+			return l_writer.Finalise();
+		}
+
+		ShaderProgramSPtr DoCreateProgram( Engine & p_engine
+			, bool p_pbr
+			, bool p_isMR )
 		{
 			auto & l_renderSystem = *p_engine.GetRenderSystem();
 			auto l_vtx = DoCreateVertexProgram( l_renderSystem );
 			auto l_pxl = p_pbr
-				? DoCreatePbrPixelProgram( l_renderSystem )
+				? p_isMR
+					? DoCreatePbrMRPixelProgram( l_renderSystem )
+					: DoCreatePbrSGPixelProgram( l_renderSystem )
 				: DoCreateLegacyPixelProgram( l_renderSystem );
 			auto l_result = p_engine.GetShaderProgramCache().GetNewProgram( false );
 			l_result->CreateObject( ShaderType::eVertex );
@@ -392,8 +511,9 @@ namespace Castor3D
 		, SceneUbo & p_sceneUbo
 		, GpInfoUbo & p_gpInfo
 		, HdrConfigUbo & p_configUbo
-		, bool p_pbr )
-		: m_program{ DoCreateProgram( p_engine, p_pbr ) }
+		, bool p_pbr
+		, bool p_isMR )
+		: m_program{ DoCreateProgram( p_engine, p_pbr, p_isMR ) }
 		, m_geometryBuffers{ DoCreateVao( p_engine, *m_program, p_vbo ) }
 		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, p_matrixUbo, p_sceneUbo, p_gpInfo, p_configUbo ) }
 	{
@@ -430,8 +550,9 @@ namespace Castor3D
 		, m_programs
 		{
 			{
-				ProgramPipeline{ p_engine, *m_vertexBuffer, m_matrixUbo, p_sceneUbo, m_gpInfo, m_configUbo, false },
-				ProgramPipeline{ p_engine, *m_vertexBuffer, m_matrixUbo, p_sceneUbo, m_gpInfo, m_configUbo, true },
+				ProgramPipeline{ p_engine, *m_vertexBuffer, m_matrixUbo, p_sceneUbo, m_gpInfo, m_configUbo, false, false },
+				ProgramPipeline{ p_engine, *m_vertexBuffer, m_matrixUbo, p_sceneUbo, m_gpInfo, m_configUbo, true, false },
+				ProgramPipeline{ p_engine, *m_vertexBuffer, m_matrixUbo, p_sceneUbo, m_gpInfo, m_configUbo, true, true },
 			}
 		}
 	{
@@ -541,7 +662,8 @@ namespace Castor3D
 		p_lp.GetTexture()->Bind( 5u );
 		p_lp.GetSampler()->Bind( 5u );
 
-		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
+		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+			|| p_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
 			auto l_index = c_environmentStart;
 			auto & l_skyboxIbl = p_scene.GetSkybox().GetIbl();
@@ -564,7 +686,10 @@ namespace Castor3D
 				++l_index;
 			}
 
-			m_programs[1].Render();
+			auto l_program = p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+				? 2u
+				: 1u;
+			m_programs[l_program].Render();
 			l_index = c_environmentStart;
 			l_skyboxIbl.GetPrefilteredBrdf().GetTexture()->Unbind( l_index );
 			l_skyboxIbl.GetPrefilteredBrdf().GetSampler()->Unbind( l_index );

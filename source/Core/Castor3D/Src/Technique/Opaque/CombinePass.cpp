@@ -1,4 +1,4 @@
-#include "CombinePass.hpp"
+﻿#include "CombinePass.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -248,8 +248,6 @@ namespace Castor3D
 			GLSL::Utils l_utils{ l_writer };
 			l_utils.DeclareCalcVSPosition();
 			l_utils.DeclareCalcWSPosition();
-			l_utils.DeclareFresnelSchlick();
-			l_utils.DeclareComputeIBL();
 
 			Declare_DecodeMaterial( l_writer );
 

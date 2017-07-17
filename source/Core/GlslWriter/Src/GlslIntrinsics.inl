@@ -399,7 +399,7 @@ namespace GLSL
 	template< typename Value >
 	inline Value log( Value const & p_value )
 	{
-		return WriteFunctionCall< Value >( p_value.m_input->m_writer, cuT( "log" ), p_value );
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "log" ), p_value );
 	}
 
 	template< typename Value >

@@ -540,6 +540,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "albedo" ), Parser_PassAlbedo, { MakeParameter< ParameterType::eColour >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "roughness" ), Parser_PassRoughness, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "metallic" ), Parser_PassMetallic, { MakeParameter< ParameterType::eFloat >() } );
+	AddParser( uint32_t( CSCNSection::ePass ), cuT( "glossiness" ), Parser_PassGlossiness, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "alpha" ), Parser_PassAlpha, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), Parser_PassDoubleFace, { MakeParameter< ParameterType::eBool >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), Parser_PassTextureUnit );

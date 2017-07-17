@@ -1,4 +1,4 @@
-#include "GlslMaterial.hpp"
+﻿#include "GlslMaterial.hpp"
 
 #include "GlslSource.hpp"
 
@@ -170,25 +170,29 @@ namespace GLSL
 			, [this]( Int const & p_index )
 			{
 				m_writer.Return( m_vec3( p_index, 1_i, 0_i ) );
-			}, InInt{ &m_writer, cuT( "p_index" ) } );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
 
 		m_ambient = m_writer.ImplementFunction< Float >( cuT( "Mat_GetAmbient" )
 			, [this]( Int const & p_index )
 			{
 				m_writer.Return( m_float( p_index, 1_i, 3_i ) );
-			}, InInt{ &m_writer, cuT( "p_index" ) } );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
 
 		m_specular = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetSpecular" )
 			, [this]( Int const & p_index )
 			{
 				m_writer.Return( m_vec3( p_index, 2_i, 0_i ) );
-			}, InInt{ &m_writer, cuT( "p_index" ) } );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
 
 		m_shininess = m_writer.ImplementFunction< Float >( cuT( "Mat_GetShininess" )
 			, [this]( Int const & p_index )
 			{
 				m_writer.Return( m_float( p_index, 3_i, 0_i ) );
-			}, InInt{ &m_writer, cuT( "p_index" ) } );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
 	}
 
 	Vec3 LegacyMaterials::GetDiffuse( Int const & p_index )const
@@ -213,12 +217,12 @@ namespace GLSL
 
 	//*********************************************************************************************
 
-	PbrMaterials::PbrMaterials( GlslWriter & p_writer )
+	PbrMRMaterials::PbrMRMaterials( GlslWriter & p_writer )
 		: Materials{ p_writer }
 	{
 	}
 
-	void PbrMaterials::Declare()
+	void PbrMRMaterials::Declare()
 	{
 		DoDeclare( 0, 0
 			, 0, 1
@@ -231,36 +235,94 @@ namespace GLSL
 		);
 		m_albedo = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetAlbedo" )
 			, [this]( Int const & p_index )
-		{
-			m_writer.Return( m_vec3( p_index, 1_i, 0_i ) );
-		}, InInt{ &m_writer, cuT( "p_index" ) } );
+			{
+				m_writer.Return( m_vec3( p_index, 1_i, 0_i ) );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
 
 		m_roughness = m_writer.ImplementFunction< Float >( cuT( "Mat_GetRoughness" )
 			, [this]( Int const & p_index )
-		{
-			m_writer.Return( m_float( p_index, 1_i, 3_i ) );
-		}, InInt{ &m_writer, cuT( "p_index" ) } );
+			{
+				m_writer.Return( m_float( p_index, 1_i, 3_i ) );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
 
 		m_metallic = m_writer.ImplementFunction< Float >( cuT( "Mat_GetMetallic" )
 			, [this]( Int const & p_index )
-		{
-			m_writer.Return( m_float( p_index, 2_i, 0_i ) );
-		}, InInt{ &m_writer, cuT( "p_index" ) } );
+			{
+				m_writer.Return( m_float( p_index, 2_i, 0_i ) );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
 	}
 
-	Vec3 PbrMaterials::GetAlbedo( Int const & p_index )const
+	Vec3 PbrMRMaterials::GetAlbedo( Int const & p_index )const
 	{
 		return m_albedo( p_index );
 	}
 
-	Float PbrMaterials::GetRoughness( Int const & p_index )const
+	Float PbrMRMaterials::GetRoughness( Int const & p_index )const
 	{
 		return m_roughness( p_index );
 	}
 
-	Float PbrMaterials::GetMetallic( Int const & p_index )const
+	Float PbrMRMaterials::GetMetallic( Int const & p_index )const
 	{
 		return m_metallic( p_index );
+	}
+
+	//*********************************************************************************************
+
+	PbrSGMaterials::PbrSGMaterials( GlslWriter & p_writer )
+		: Materials{ p_writer }
+	{
+	}
+
+	void PbrSGMaterials::Declare()
+	{
+		DoDeclare( 0, 0
+			, 0, 1
+			, 0, 2
+			, 0, 3
+			, 3, 1
+			, 3, 2
+			, 3, 3
+			, 2, 3
+		);
+		m_diffuse = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetDiffuse" )
+			, [this]( Int const & p_index )
+			{
+				m_writer.Return( m_vec3( p_index, 1_i, 0_i ) );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
+
+		m_specular = m_writer.ImplementFunction< Vec3 >( cuT( "Mat_GetSpecular" )
+			, [this]( Int const & p_index )
+			{
+				m_writer.Return( m_vec3( p_index, 2_i, 0_i ) );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
+
+		m_glossiness = m_writer.ImplementFunction< Float >( cuT( "Mat_GetGlossiness" )
+			, [this]( Int const & p_index )
+			{
+				m_writer.Return( m_float( p_index, 3_i, 0_i ) );
+			}
+			, InInt{ &m_writer, cuT( "p_index" ) } );
+	}
+
+	Vec3 PbrSGMaterials::GetDiffuse( Int const & p_index )const
+	{
+		return m_diffuse( p_index );
+	}
+
+	Vec3 PbrSGMaterials::GetSpecular( Int const & p_index )const
+	{
+		return m_specular( p_index );
+	}
+
+	Float PbrSGMaterials::GetGlossiness( Int const & p_index )const
+	{
+		return m_glossiness( p_index );
 	}
 
 	//*********************************************************************************************

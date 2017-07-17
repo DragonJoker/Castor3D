@@ -1,4 +1,4 @@
-#include "DeferredRendering.hpp"
+﻿#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -186,7 +186,8 @@ namespace Castor3D
 			, l_invView
 			, l_invProj );
 
-		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness )
+		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+			|| p_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
 			m_combinePass->Render( m_geometryPassResult
 				, m_lightingPass->GetResult()

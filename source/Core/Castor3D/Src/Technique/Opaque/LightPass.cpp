@@ -1,4 +1,4 @@
-#include "LightPass.hpp"
+﻿#include "LightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -24,7 +24,8 @@
 #include <GlslShadow.hpp>
 #include <GlslUtils.hpp>
 #include <GlslPhongLighting.hpp>
-#include <GlslCookTorranceLighting.hpp>
+#include <GlslMetallicBrdfLighting.hpp>
+#include <GlslSpecularBrdfLighting.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -396,7 +397,12 @@ namespace Castor3D
 		if ( CheckFlag( l_sceneFlags, SceneFlag::ePbrMetallicRoughness ) )
 		{
 			m_program = DoCreateProgram( DoGetVertexShaderSource( l_sceneFlags )
-				, DoGetPbrPixelShaderSource( l_sceneFlags, p_type ) );
+				, DoGetPbrMRPixelShaderSource( l_sceneFlags, p_type ) );
+		}
+		else if ( CheckFlag( l_sceneFlags, SceneFlag::ePbrSpecularGlossiness ) )
+		{
+			m_program = DoCreateProgram( DoGetVertexShaderSource( l_sceneFlags )
+				, DoGetPbrSGPixelShaderSource( l_sceneFlags, p_type ) );
 		}
 		else
 		{
@@ -545,7 +551,7 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 	
-	GLSL::Shader LightPass::DoGetPbrPixelShaderSource( SceneFlags const & p_sceneFlags
+	GLSL::Shader LightPass::DoGetPbrMRPixelShaderSource( SceneFlags const & p_sceneFlags
 		, LightType p_type )const
 	{
 		using namespace GLSL;
@@ -566,7 +572,7 @@ namespace Castor3D
 		auto pxl_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		// Utility functions
-		auto l_lighting = pbr::CreateLightingModel( l_writer
+		auto l_lighting = pbr::mr::CreateLightingModel( l_writer
 			, p_type
 			, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
 		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
@@ -637,6 +643,103 @@ namespace Castor3D
 			}
 
 			pxl_v4FragColor = vec4( l_diffuse, 1.0 );
+		} );
+
+		return l_writer.Finalise();
+	}
+	
+	GLSL::Shader LightPass::DoGetPbrSGPixelShaderSource( SceneFlags const & p_sceneFlags
+		, LightType p_type )const
+	{
+		using namespace GLSL;
+		GlslWriter l_writer = m_engine.GetRenderSystem()->CreateGlslWriter();
+
+		// Shader inputs
+		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_GPINFO( l_writer );
+		auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eDepth ) );
+		auto c3d_mapData1 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData1 ) );
+		auto c3d_mapData2 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData2 ) );
+		auto c3d_mapData3 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData3 ) );
+		auto c3d_mapData4 = l_writer.DeclUniform< Sampler2D >( GetTextureName( DsTexture::eData4 ) );
+		auto gl_FragCoord = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+
+		// Shader outputs
+		auto pxl_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+
+		// Utility functions
+		auto l_lighting = pbr::sg::CreateLightingModel( l_writer
+			, p_type
+			, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
+		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
+		GLSL::Utils l_utils{ l_writer };
+		l_utils.DeclareCalcTexCoord();
+		l_utils.DeclareCalcWSPosition();
+		Declare_DecodeReceiver( l_writer );
+
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		{
+			auto l_texCoord = l_writer.DeclLocale( cuT( "l_texCoord" ), l_utils.CalcTexCoord() );
+			auto l_data1 = l_writer.DeclLocale( cuT( "l_data1" ), texture( c3d_mapData1, l_texCoord ) );
+			auto l_data2 = l_writer.DeclLocale( cuT( "l_data2" ), texture( c3d_mapData2, l_texCoord ) );
+			auto l_data3 = l_writer.DeclLocale( cuT( "l_data3" ), texture( c3d_mapData3, l_texCoord ) );
+			auto l_data4 = l_writer.DeclLocale( cuT( "l_data4" ), texture( c3d_mapData4, l_texCoord ) );
+			auto l_specular = l_writer.DeclLocale( cuT( "l_specular" ), l_data3.rgb() );
+			auto l_glossiness = l_writer.DeclLocale( cuT( "l_glossiness" ), l_data2.a() );
+			auto l_flags = l_writer.DeclLocale( cuT( "l_flags" ), l_writer.Cast< Int >( l_data1.w() ) );
+			auto l_shadowReceiver = l_writer.DeclLocale( cuT( "l_shadowReceiver" ), 0_i );
+			DecodeReceiver( l_writer, l_flags, l_shadowReceiver );
+			auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), l_data2.xyz() );
+			auto l_light = l_writer.DeclLocale( cuT( "l_light" ), vec3( 0.0_f ) );
+			auto l_eye = l_writer.DeclLocale( cuT( "l_eye" ), c3d_v3CameraPosition );
+
+			auto l_wsPosition = l_writer.DeclLocale( cuT( "l_wsPosition" ), l_utils.CalcWSPosition( l_texCoord, c3d_mtxInvViewProj ) );
+			auto l_wsNormal = l_writer.DeclLocale( cuT( "l_wsNormal" ), l_data1.xyz() );
+
+			switch ( p_type )
+			{
+			case LightType::eDirectional:
+				{
+					auto light = l_writer.GetBuiltin< GLSL::DirectionalLight >( cuT( "light" ) );
+					l_light = l_lighting->ComputeOneDirectionalLight( light
+						, l_eye
+						, l_diffuse
+						, l_specular
+						, l_glossiness
+						, l_shadowReceiver
+						, FragmentInput( l_wsPosition, l_wsNormal ) );
+				}
+				break;
+
+			case LightType::ePoint:
+				{
+					auto light = l_writer.GetBuiltin< GLSL::PointLight >( cuT( "light" ) );
+					l_light = l_lighting->ComputeOnePointLight( light
+						, l_eye
+						, l_diffuse
+						, l_specular
+						, l_glossiness
+						, l_shadowReceiver
+						, FragmentInput( l_wsPosition, l_wsNormal ) );
+				}
+				break;
+
+			case LightType::eSpot:
+				{
+					auto light = l_writer.GetBuiltin< GLSL::SpotLight >( cuT( "light" ) );
+					l_light = l_lighting->ComputeOneSpotLight( light
+						, l_eye
+						, l_diffuse
+						, l_specular
+						, l_glossiness
+						, l_shadowReceiver
+						, FragmentInput( l_wsPosition, l_wsNormal ) );
+				}
+				break;
+			}
+
+			pxl_v4FragColor = vec4( l_light, 1.0 );
 		} );
 
 		return l_writer.Finalise();

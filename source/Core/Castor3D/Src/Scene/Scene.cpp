@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+﻿#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -932,6 +932,10 @@ namespace Castor3D
 		{
 		case MaterialType::ePbrMetallicRoughness:
 			l_result |= SceneFlag::ePbrMetallicRoughness;
+			break;
+
+		case MaterialType::ePbrSpecularGlossiness:
+			l_result |= SceneFlag::ePbrSpecularGlossiness;
 			break;
 		}
 

@@ -3,7 +3,8 @@
 #include "GlslVec.hpp"
 #include "GlslLighting.hpp"
 #include "GlslPhongLighting.hpp"
-#include "GlslCookTorranceLighting.hpp"
+#include "GlslMetallicBrdfLighting.hpp"
+#include "GlslSpecularBrdfLighting.hpp"
 
 #include <Log/Logger.hpp>
 
@@ -15,7 +16,8 @@ namespace GLSL
 		, m_config( p_config )
 	{
 		m_lightingFactory.Register( PhongLightingModel::Name, &PhongLightingModel::Create );
-		m_lightingFactory.Register( CookTorranceLightingModel::Name, &CookTorranceLightingModel::Create );
+		m_lightingFactory.Register( MetallicBrdfLightingModel::Name, &MetallicBrdfLightingModel::Create );
+		m_lightingFactory.Register( SpecularBrdfLightingModel::Name, &SpecularBrdfLightingModel::Create );
 		*this << GLSL::Version() << Endl();
 	}
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -104,7 +104,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetPassSize()const override
 		{
-			return 3u;
+			return 4u;
 		}
 		/**
 		 *\~english
@@ -117,6 +117,7 @@ namespace Castor3D
 		inline void SetAlbedo( Castor::Colour const & p_value )
 		{
 			m_albedo = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -129,6 +130,7 @@ namespace Castor3D
 		inline void SetRoughness( float p_value )
 		{
 			m_roughness = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -141,6 +143,7 @@ namespace Castor3D
 		inline void SetMetallic( float p_value )
 		{
 			m_metallic = p_value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
