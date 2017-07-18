@@ -126,10 +126,10 @@ namespace Castor3D
 }
 
 #define UBO_MODEL( Writer )\
-	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel, ModelUbo::BindingPoint };\
-	auto c3d_shadowReceiver = l_model.DeclMember< GLSL::Int >( ShaderProgram::ShadowReceiver );\
-	auto c3d_materialIndex = l_model.DeclMember< GLSL::Int >( ShaderProgram::MaterialIndex );\
-	auto c3d_envMapIndex = l_model.DeclMember< GLSL::Int >( ShaderProgram::EnvironmentIndex );\
+	GLSL::Ubo l_model{ l_writer, Castor3D::ShaderProgram::BufferModel, Castor3D::ModelUbo::BindingPoint };\
+	auto c3d_shadowReceiver = l_model.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::ShadowReceiver );\
+	auto c3d_materialIndex = l_model.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::MaterialIndex );\
+	auto c3d_envMapIndex = l_model.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::EnvironmentIndex );\
 	l_model.End()
 
 #endif

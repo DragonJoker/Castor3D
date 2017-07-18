@@ -111,9 +111,9 @@ namespace Castor3D
 }
 
 #define UBO_HDR_CONFIG( Writer )\
-	Ubo l_hdrConfig{ l_writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };\
-	auto c3d_exposure = l_hdrConfig.DeclMember< Float >( ShaderProgram::Exposure );\
-	auto c3d_gamma = l_hdrConfig.DeclMember< Float >( ShaderProgram::Gamma );\
+	Ubo l_hdrConfig{ l_writer, Castor3D::ShaderProgram::BufferHdrConfig, Castor3D::HdrConfigUbo::BindingPoint };\
+	auto c3d_exposure = l_hdrConfig.DeclMember< Float >( Castor3D::ShaderProgram::Exposure );\
+	auto c3d_gamma = l_hdrConfig.DeclMember< Float >( Castor3D::ShaderProgram::Gamma );\
 	l_hdrConfig.End()
 
 #endif

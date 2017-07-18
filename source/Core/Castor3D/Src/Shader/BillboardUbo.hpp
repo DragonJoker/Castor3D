@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -121,9 +121,9 @@ namespace Castor3D
 }
 
 #define UBO_BILLBOARD( Writer )\
-	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards, BillboardUbo::BindingPoint };\
-	auto c3d_v2iDimensions = l_billboard.DeclMember< IVec2 >( ShaderProgram::Dimensions );\
-	auto c3d_v2iWindowSize = l_billboard.DeclMember< IVec2 >( ShaderProgram::WindowSize );\
+	GLSL::Ubo l_billboard{ l_writer, Castor3D::ShaderProgram::BufferBillboards, Castor3D::BillboardUbo::BindingPoint };\
+	auto c3d_v2iDimensions = l_billboard.DeclMember< IVec2 >( Castor3D::ShaderProgram::Dimensions );\
+	auto c3d_v2iWindowSize = l_billboard.DeclMember< IVec2 >( Castor3D::ShaderProgram::WindowSize );\
 	l_billboard.End()
 
 #endif
