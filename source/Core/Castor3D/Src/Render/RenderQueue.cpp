@@ -78,24 +78,24 @@ namespace Castor3D
 
 		AnimatedObjectSPtr DoFindAnimatedObject( Scene & p_scene, String const & p_name )
 		{
-			AnimatedObjectSPtr l_return;
+			AnimatedObjectSPtr l_result;
 			auto & l_cache = p_scene.GetAnimatedObjectGroupCache();
 			auto l_lock = make_unique_lock( l_cache );
 
 			for ( auto l_group : l_cache )
 			{
-				if ( !l_return )
+				if ( !l_result )
 				{
 					auto l_it = l_group.second->GetObjects().find( p_name );
 
 					if ( l_it != l_group.second->GetObjects().end() )
 					{
-						l_return = l_it->second;
+						l_result = l_it->second;
 					}
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		template< typename CreatorFunc, typename NodesType, typename ... Params >

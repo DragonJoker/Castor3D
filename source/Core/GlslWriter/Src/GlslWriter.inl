@@ -104,25 +104,25 @@ namespace GLSL
 	template< typename ExprType >
 	ExprType GlslWriter::Paren( ExprType const p_expr )
 	{
-		ExprType l_return( this );
-		l_return.m_value << cuT( "( " ) << Castor::String( p_expr ) << cuT( " )" );
-		return l_return;
+		ExprType l_result( this );
+		l_result.m_value << cuT( "( " ) << Castor::String( p_expr ) << cuT( " )" );
+		return l_result;
 	}
 
 	template< typename ExprType >
 	ExprType GlslWriter::Ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right )
 	{
-		ExprType l_return( this );
-		l_return.m_value << cuT( "( ( " ) << ToString( p_condition ) << cuT( " ) ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right ) << cuT( " )" );
-		return l_return;
+		ExprType l_result( this );
+		l_result.m_value << cuT( "( ( " ) << ToString( p_condition ) << cuT( " ) ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right ) << cuT( " )" );
+		return l_result;
 	}
 
 	template< typename T >
 	inline T GlslWriter::Cast( Type const & p_from )
 	{
-		T l_return;
-		l_return.m_value << Castor::string::trim( l_return.m_type ) << cuT( "( " ) << Castor::String( p_from ) << cuT( " )" );
-		return l_return;
+		T l_result;
+		l_result.m_value << Castor::string::trim( l_result.m_type ) << cuT( "( " ) << Castor::String( p_from ) << cuT( " )" );
+		return l_result;
 	}
 
 	template< typename T >
@@ -173,8 +173,8 @@ namespace GLSL
 		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
 		m_stream << type().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
-		T l_return( this, p_name );
-		return l_return;
+		T l_result( this, p_name );
+		return l_result;
 	}
 
 	template< typename T >

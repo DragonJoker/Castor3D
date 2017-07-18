@@ -174,14 +174,14 @@ namespace CastorGui
 
 	String ListBoxCtrl::GetItemText( int p_index )
 	{
-		String l_return;
+		String l_result;
 
 		if ( uint32_t( p_index ) < m_values.size() && p_index >= 0 )
 		{
-			l_return = m_values[p_index];
+			l_result = m_values[p_index];
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ListBoxCtrl::Clear()

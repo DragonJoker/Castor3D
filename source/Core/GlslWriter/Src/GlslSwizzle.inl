@@ -95,21 +95,21 @@ namespace GLSL
 	template< typename Input, typename Output >
 	Swizzle< Input, Output >::operator Output()const
 	{
-		Castor::String l_return = m_input->m_value.str();
+		Castor::String l_result = m_input->m_value.str();
 
-		if ( l_return.empty() )
+		if ( l_result.empty() )
 		{
 			if ( m_input->m_name.empty() )
 			{
-				l_return = m_input->m_type;
+				l_result = m_input->m_type;
 			}
 			else
 			{
-				l_return = m_input->m_name;
+				l_result = m_input->m_name;
 			}
 		}
 
-		Output l_output( m_input->m_writer, l_return );
+		Output l_output( m_input->m_writer, l_result );
 		l_output.m_value << l_output.m_name << "." << m_value.rdbuf();
 		return l_output;
 	}
@@ -195,160 +195,160 @@ namespace GLSL
 	template< typename TInput, typename UInput, typename Output >
 	Output operator+( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Output > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::String( static_cast< Output >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::String( static_cast< Output >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator-( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Output > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::String( static_cast< Output >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::String( static_cast< Output >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator*( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Output > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::String( static_cast< Output >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::String( static_cast< Output >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator/( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Output > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::String( static_cast< Output >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::String( static_cast< Output >( p_b ) );
+		return l_result;
 	}
 	template< typename TInput, typename UInput, typename Output >
 	Output operator+( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Float > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::String( static_cast< Float >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::String( static_cast< Float >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator-( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Float > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::String( static_cast< Float >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::String( static_cast< Float >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator*( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Float > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::String( static_cast< Float >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::String( static_cast< Float >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator/( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Float > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::String( static_cast< Float >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::String( static_cast< Float >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator+( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Int > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::String( static_cast< Int >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::String( static_cast< Int >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator-( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Int > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::String( static_cast< Int >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::String( static_cast< Int >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator*( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Int > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::String( static_cast< Int >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::String( static_cast< Int >( p_b ) );
+		return l_result;
 	}
 
 	template< typename TInput, typename UInput, typename Output >
 	Output operator/( Swizzle< TInput, Output > const & p_a, Swizzle< UInput, Int > const & p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::String( static_cast< Int >( p_b ) );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::String( static_cast< Int >( p_b ) );
+		return l_result;
 	}
 
 	template< typename Input, typename Output >
 	Output operator+( Swizzle< Input, Output > const & p_a, float p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::string::to_string( p_b );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::string::to_string( p_b );
+		return l_result;
 	}
 
 	template< typename Input, typename Output >
 	Output operator-( Swizzle< Input, Output > const & p_a, float p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::string::to_string( p_b );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::string::to_string( p_b );
+		return l_result;
 	}
 
 	template< typename Input, typename Output >
 	Output operator*( Swizzle< Input, Output > const & p_a, float p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::string::to_string( p_b );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::string::to_string( p_b );
+		return l_result;
 	}
 
 	template< typename Input, typename Output >
 	Output operator/( Swizzle< Input, Output > const & p_a, float p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::string::to_string( p_b );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::string::to_string( p_b );
+		return l_result;
 	}
 
 	template< typename Input, typename Output >
 	Output operator+( Swizzle< Input, Output > const & p_a, int p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::string::to_string( p_b );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << Castor::string::to_string( p_b );
+		return l_result;
 	}
 
 	template< typename Input, typename Output >
 	Output operator-( Swizzle< Input, Output > const & p_a, int p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::string::to_string( p_b );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << Castor::string::to_string( p_b );
+		return l_result;
 	}
 
 	template< typename Input, typename Output >
 	Output operator*( Swizzle< Input, Output > const & p_a, int p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::string::to_string( p_b );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << Castor::string::to_string( p_b );
+		return l_result;
 	}
 
 	template< typename Input, typename Output >
 	Output operator/( Swizzle< Input, Output > const & p_a, int p_b )
 	{
-		Output l_return( p_a.m_input->m_writer, p_a.m_input->m_type );
-		l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::string::to_string( p_b );
-		return l_return;
+		Output l_result( p_a.m_input->m_writer, p_a.m_input->m_type );
+		l_result.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::string::to_string( p_b );
+		return l_result;
 	}
 
 	//*****************************************************************************************

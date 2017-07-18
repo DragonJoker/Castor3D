@@ -225,9 +225,9 @@ namespace GLSL
 	inline Output Name()const\
 	{\
 		Castor::String l_me( *this );\
-		Output l_return( m_writer, l_me );\
-		l_return.m_value << l_me << cuT( "."#Name );\
-		return l_return;\
+		Output l_result( m_writer, l_me );\
+		l_result.m_value << l_me << cuT( "."#Name );\
+		return l_result;\
 	}
 
 #	define GLSL_FIRST_SWIZZLE( Input, Output, Name )\

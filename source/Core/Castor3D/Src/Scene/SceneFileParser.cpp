@@ -715,7 +715,7 @@ void SceneFileParser::DoValidate()
 
 String SceneFileParser::DoGetSectionName( uint32_t p_section )
 {
-	String l_return;
+	String l_result;
 
 	switch ( CSCNSection( p_section ) )
 	{
@@ -723,140 +723,140 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		break;
 
 	case CSCNSection::eScene:
-		l_return = cuT( "scene" );
+		l_result = cuT( "scene" );
 		break;
 
 	case CSCNSection::eWindow:
-		l_return = cuT( "window" );
+		l_result = cuT( "window" );
 		break;
 
 	case CSCNSection::eSampler:
-		l_return = cuT( "sampler" );
+		l_result = cuT( "sampler" );
 		break;
 
 	case CSCNSection::eCamera:
-		l_return = cuT( "camera" );
+		l_result = cuT( "camera" );
 		break;
 
 	case CSCNSection::eViewport:
-		l_return = cuT( "viewport" );
+		l_result = cuT( "viewport" );
 		break;
 
 	case CSCNSection::eLight:
-		l_return = cuT( "light" );
+		l_result = cuT( "light" );
 		break;
 
 	case CSCNSection::eNode:
-		l_return = cuT( "scene_node" );
+		l_result = cuT( "scene_node" );
 		break;
 
 	case CSCNSection::eObject:
-		l_return = cuT( "object" );
+		l_result = cuT( "object" );
 		break;
 
 	case CSCNSection::eObjectMaterials:
-		l_return = cuT( "materials" );
+		l_result = cuT( "materials" );
 		break;
 
 	case CSCNSection::eFont:
-		l_return = cuT( "font" );
+		l_result = cuT( "font" );
 		break;
 
 	case CSCNSection::ePanelOverlay:
-		l_return = cuT( "panel_overlay" );
+		l_result = cuT( "panel_overlay" );
 		break;
 
 	case CSCNSection::eBorderPanelOverlay:
-		l_return = cuT( "border_panel_overlay" );
+		l_result = cuT( "border_panel_overlay" );
 		break;
 
 	case CSCNSection::eTextOverlay:
-		l_return = cuT( "text_overlay" );
+		l_result = cuT( "text_overlay" );
 		break;
 
 	case CSCNSection::eMesh:
-		l_return = cuT( "mesh" );
+		l_result = cuT( "mesh" );
 		break;
 
 	case CSCNSection::eSubmesh:
-		l_return = cuT( "submesh" );
+		l_result = cuT( "submesh" );
 		break;
 
 	case CSCNSection::eMaterial:
-		l_return = cuT( "material" );
+		l_result = cuT( "material" );
 		break;
 
 	case CSCNSection::ePass:
-		l_return = cuT( "pass" );
+		l_result = cuT( "pass" );
 		break;
 
 	case CSCNSection::eTextureUnit:
-		l_return = cuT( "texture_unit" );
+		l_result = cuT( "texture_unit" );
 		break;
 
 	case CSCNSection::eRenderTarget:
-		l_return = cuT( "render_target" );
+		l_result = cuT( "render_target" );
 		break;
 
 	case CSCNSection::eShaderProgram:
-		l_return = cuT( "gl_shader_program" );
+		l_result = cuT( "gl_shader_program" );
 		break;
 
 	case CSCNSection::eShaderObject:
-		l_return = cuT( "shader_object" );
+		l_result = cuT( "shader_object" );
 		break;
 
 	case CSCNSection::eShaderUBO:
-		l_return = cuT( "constants_buffer" );
+		l_result = cuT( "constants_buffer" );
 		break;
 
 	case CSCNSection::eUBOVariable:
-		l_return = cuT( "variable" );
+		l_result = cuT( "variable" );
 		break;
 
 	case CSCNSection::eBillboard:
-		l_return = cuT( "billboard" );
+		l_result = cuT( "billboard" );
 		break;
 
 	case CSCNSection::eBillboardList:
-		l_return = cuT( "positions" );
+		l_result = cuT( "positions" );
 		break;
 
 	case CSCNSection::eAnimGroup:
-		l_return = cuT( "animated_object_group" );
+		l_result = cuT( "animated_object_group" );
 		break;
 
 	case CSCNSection::eAnimation:
-		l_return = cuT( "animation" );
+		l_result = cuT( "animation" );
 		break;
 
 	case CSCNSection::eSkybox:
-		l_return = cuT( "skybox" );
+		l_result = cuT( "skybox" );
 		break;
 
 	case CSCNSection::eParticleSystem:
-		l_return = cuT( "particle_system" );
+		l_result = cuT( "particle_system" );
 		break;
 
 	case CSCNSection::eParticle:
-		l_return = cuT( "particle" );
+		l_result = cuT( "particle" );
 		break;
 
 	default:
 		for ( auto const & l_sections : GetEngine()->GetAdditionalSections() )
 		{
-			if ( l_return.empty() )
+			if ( l_result.empty() )
 			{
 				auto l_it = l_sections.second.find( p_section );
 
 				if ( l_it != l_sections.second.end() )
 				{
-					l_return = l_it->second;
+					l_result = l_it->second;
 				}
 			}
 		}
 
-		if ( l_return.empty() )
+		if ( l_result.empty() )
 		{
 			FAILURE( "Section not found" );
 		}
@@ -864,7 +864,7 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		break;
 	}
 
-	return l_return;
+	return l_result;
 }
 
 //****************************************************************************************************

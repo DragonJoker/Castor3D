@@ -223,7 +223,7 @@ namespace GlRender
 			{ GL_INVALID_FRAMEBUFFER_OPERATION, cuT( "Invalid frame buffer operation" ) },
 		};
 
-		bool l_return = true;
+		bool l_result = true;
 		uint32_t l_errorCode = m_pfnGetError();
 
 		if ( l_errorCode )
@@ -251,11 +251,11 @@ namespace GlRender
 
 			//l_error << Debug::Backtrace{ 20, 4 };
 			//Logger::LogError( l_error );
-			l_return = false;
+			l_result = false;
 			l_errorCode = m_pfnGetError();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GlDebug::DebugLog( GlDebugSource source

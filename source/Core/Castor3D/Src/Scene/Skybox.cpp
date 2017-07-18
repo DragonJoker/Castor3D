@@ -40,7 +40,7 @@ namespace Castor3D
 			cuT( "front" ),
 		};
 
-		bool l_return = true;
+		bool l_result = true;
 
 		if ( Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 0 ) ) ).ToString() } )
 			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 1 ) ) ).ToString() } )
@@ -49,26 +49,26 @@ namespace Castor3D
 			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 4 ) ) ).ToString() } )
 			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 5 ) ) ).ToString() } ) )
 		{
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+			l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
 				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 			Path l_subfolder{ cuT( "Textures" ) };
 
-			for ( uint32_t i = 0; i < 6 && l_return; ++i )
+			for ( uint32_t i = 0; i < 6 && l_result; ++i )
 			{
 				Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( i ) ) ).ToString() }
 					, p_file.GetFilePath()
 					, l_subfolder );
-				l_return = p_file.WriteText( m_tabs + cuT( "\t" ) + l_faces[i] + cuT( " \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-				Castor::TextWriter< Skybox >::CheckError( l_return, ( "Skybox " + l_faces[i] ).c_str() );
+				l_result = p_file.WriteText( m_tabs + cuT( "\t" ) + l_faces[i] + cuT( " \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< Skybox >::CheckError( l_result, ( "Skybox " + l_faces[i] ).c_str() );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//************************************************************************************************

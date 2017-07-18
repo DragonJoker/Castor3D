@@ -11,7 +11,7 @@ namespace Castor3D
 			return p_object == l_object.m_object;
 		} );
 
-		bool l_return = l_it == m_allocated.end();
+		bool l_result = l_it == m_allocated.end();
 
 		std::stringstream l_ptr;
 		l_ptr.width( 16 );
@@ -21,7 +21,7 @@ namespace Castor3D
 		l_type.width( 20 );
 		l_type << std::left << p_type;
 
-		if ( l_return )
+		if ( l_result )
 		{
 			std::stringstream l_stream;
 			l_stream << Castor::Debug::Backtrace();
@@ -38,7 +38,7 @@ namespace Castor3D
 			Castor::Logger::LogDebug( std::stringstream() << "Rereferencing object: " << l_name.str() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool GpuObjectTracker::Track( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
@@ -53,7 +53,7 @@ namespace Castor3D
 			return p_object == p_decl.m_object;
 		} );
 
-		bool l_return = false;
+		bool l_result = false;
 		char l_szName[1024] = { 0 };
 		std::stringstream l_ptr;
 		l_ptr.width( 16 );
@@ -66,7 +66,7 @@ namespace Castor3D
 			l_type.width( 20 );
 			l_type << std::left << l_it->m_name;
 			p_declaration = *l_it;
-			l_return = true;
+			l_result = true;
 			Castor::Logger::LogWarning( std::stringstream() << "Released " << l_type.str() << " [0x" << l_ptr.str() << "]" );
 			m_allocated.erase( l_it );
 		}
@@ -75,7 +75,7 @@ namespace Castor3D
 			Castor::Logger::LogWarning( std::stringstream() << "Untracked [0x" << l_ptr.str() << cuT( "]" ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GpuObjectTracker::ReportTracked()

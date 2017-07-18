@@ -222,7 +222,7 @@ namespace GlRender
 
 	bool GlContextImpl::DoSelectPixelFormat( PixelFormat p_colour, bool p_stereo )
 	{
-		bool l_return = false;
+		bool l_result = false;
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
 		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
 		l_pfd.nVersion = 1;
@@ -240,9 +240,9 @@ namespace GlRender
 
 		if ( l_iPixelFormats )
 		{
-			l_return = ::SetPixelFormat( m_hDC, l_iPixelFormats, &l_pfd ) != FALSE;
+			l_result = ::SetPixelFormat( m_hDC, l_iPixelFormats, &l_pfd ) != FALSE;
 
-			if ( !l_return )
+			if ( !l_result )
 			{
 				Castor::String l_error = Castor::System::GetLastErrorText();
 
@@ -253,7 +253,7 @@ namespace GlRender
 				else
 				{
 					Logger::LogWarning( cuT( "ChoosePixelFormat failed" ) );
-					l_return = true;
+					l_result = true;
 				}
 			}
 		}
@@ -262,12 +262,12 @@ namespace GlRender
 			Logger::LogError( cuT( "SetPixelFormat failed : " ) + Castor::System::GetLastErrorText() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool GlContextImpl::DoSelectStereoPixelFormat( PixelFormat p_colour )
 	{
-		bool l_return = false;
+		bool l_result = false;
 		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
 		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
@@ -307,26 +307,26 @@ namespace GlRender
 
 		if ( l_bStereoAvailable )
 		{
-			l_return = ::SetPixelFormat( m_hDC, l_iPixelFormat, &l_pfd ) == TRUE;
+			l_result = ::SetPixelFormat( m_hDC, l_iPixelFormat, &l_pfd ) == TRUE;
 
-			if ( !l_return )
+			if ( !l_result )
 			{
 				l_bStereoAvailable = false;
-				l_return = DoSelectPixelFormat( p_colour, false );
+				l_result = DoSelectPixelFormat( p_colour, false );
 			}
 		}
 		else
 		{
-			l_return = DoSelectPixelFormat( p_colour, true );
+			l_result = DoSelectPixelFormat( p_colour, true );
 		}
 
 		m_gpuInformations.UpdateFeature( GpuFeature::eStereo, l_bStereoAvailable );
-		return l_return;
+		return l_result;
 	}
 
 	bool GlContextImpl::DoCreateGl3Context()
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		try
 		{
@@ -369,9 +369,9 @@ namespace GlRender
 
 				EndCurrent();
 				GetOpenGl().DeleteContext( l_hContext );
-				l_return = m_hContext != nullptr;
+				l_result = m_hContext != nullptr;
 
-				if ( l_return )
+				if ( l_result )
 				{
 					Logger::LogInfo( StringStream() << cuT( "GlContext::Create - " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context created." ) );
 				}
@@ -390,10 +390,10 @@ namespace GlRender
 		}
 		catch ( ... )
 		{
-			l_return = false;
+			l_result = false;
 		}
 
-		return l_return;
+		return l_result;
 	}
 }
 

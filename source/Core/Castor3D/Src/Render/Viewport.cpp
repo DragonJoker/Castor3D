@@ -13,20 +13,20 @@ namespace Castor3D
 
 	bool Viewport::TextWriter::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[size_t( p_viewport.GetType() )] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Viewport >::CheckError( l_return, "Viewport type" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[size_t( p_viewport.GetType() )] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Viewport >::CheckError( l_result, "Viewport type" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			if ( p_viewport.GetType() == ViewportType::eOrtho || p_viewport.GetType() == ViewportType::eFrustum )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+				l_result = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tleft " ) + string::to_string( p_viewport.GetLeft() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tright " ) + string::to_string( p_viewport.GetRight() ) + cuT( "\n" ) ) > 0
@@ -35,21 +35,21 @@ namespace Castor3D
 			}
 			else
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+				l_result = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\taspect_ratio " ) + string::to_string( p_viewport.GetRatio() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
 			}
 
-			Castor::TextWriter< Viewport >::CheckError( l_return, "Viewport values" );
+			Castor::TextWriter< Viewport >::CheckError( l_result, "Viewport values" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -144,7 +144,7 @@ namespace Castor3D
 
 	bool Viewport::Update()
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( IsModified() )
 		{
@@ -167,10 +167,10 @@ namespace Castor3D
 			}
 
 			m_modified = false;
-			l_return = true;
+			l_result = true;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Viewport::Apply()const

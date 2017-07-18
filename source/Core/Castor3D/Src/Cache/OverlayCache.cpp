@@ -169,11 +169,11 @@ namespace Castor3D
 	bool Cache< Overlay, Castor::String >::Write( Castor::TextFile & p_file )const
 	{
 		auto l_lock = make_unique_lock( *this );
-		bool l_return = true;
+		bool l_result = true;
 		auto l_it = m_overlays.begin();
 		bool l_first = true;
 
-		while ( l_return && l_it != m_overlays.end() )
+		while ( l_result && l_it != m_overlays.end() )
 		{
 			Overlay const & l_overlay = ( *l_it )->GetOverlay();
 
@@ -186,11 +186,11 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_return = Overlay::TextWriter( String{} )( l_overlay, p_file );
+			l_result = Overlay::TextWriter( String{} )( l_overlay, p_file );
 			++l_it;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool Cache< Overlay, Castor::String >::Read( Castor::TextFile & p_file )
@@ -203,28 +203,28 @@ namespace Castor3D
 	FontTextureSPtr Cache< Overlay, Castor::String >::GetFontTexture( Castor::String const & p_name )
 	{
 		auto l_it = m_fontTextures.find( p_name );
-		FontTextureSPtr l_return;
+		FontTextureSPtr l_result;
 
 		if ( l_it != m_fontTextures.end() )
 		{
-			l_return = l_it->second;
+			l_result = l_it->second;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	FontTextureSPtr Cache< Overlay, Castor::String >::CreateFontTexture( Castor::FontSPtr p_font )
 	{
 		auto l_it = m_fontTextures.find( p_font->GetName() );
-		FontTextureSPtr l_return;
+		FontTextureSPtr l_result;
 
 		if ( l_it == m_fontTextures.end() )
 		{
-			l_return = std::make_shared< FontTexture >( *GetEngine(), p_font );
-			m_fontTextures.emplace( p_font->GetName(), l_return );
-			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
+			l_result = std::make_shared< FontTexture >( *GetEngine(), p_font );
+			m_fontTextures.emplace( p_font->GetName(), l_result );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_result ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

@@ -139,20 +139,20 @@ namespace Castor3D
 
 	bool EnvironmentMap::Initialise()
 	{
-		bool l_return = true;
+		bool l_result = true;
 
 		if ( !m_frameBuffer )
 		{
 			auto & l_scene = *m_node.GetScene();
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			l_return = m_frameBuffer->Create();
+			l_result = m_frameBuffer->Create();
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = m_frameBuffer->Initialise( MapSize );
+				l_result = m_frameBuffer->Initialise( MapSize );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
 				constexpr float l_component = std::numeric_limits< float >::max();
 				m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
@@ -201,7 +201,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void EnvironmentMap::Cleanup()

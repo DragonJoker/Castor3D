@@ -20,64 +20,64 @@ namespace Castor3D
 
 	bool Geometry::TextWriter::operator()( Geometry const & p_geometry, TextFile & p_file )
 	{
-		bool l_return{ true };
+		bool l_result{ true };
 
 		if ( p_geometry.GetMesh() )
 		{
 			Logger::LogInfo( m_tabs + cuT( "Writing Geometry " ) + p_geometry.GetName() );
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "object \"" ) + p_geometry.GetName() + cuT( "\"\n" ) ) > 0
+			l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "object \"" ) + p_geometry.GetName() + cuT( "\"\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry name" );
+			Castor::TextWriter< Geometry >::CheckError( l_result, "Geometry name" );
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_geometry, p_file );
+				l_result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_geometry, p_file );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = RenderedObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_geometry, p_file );
+				l_result = RenderedObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_geometry, p_file );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmesh \"" ) + p_geometry.GetMesh()->GetName() + cuT( "\"\n" ) ) > 0
+				l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmesh \"" ) + p_geometry.GetMesh()->GetName() + cuT( "\"\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\t\timport \"Meshes/" ) + p_geometry.GetMesh()->GetName() + cuT( ".cmsh\"\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-				Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry mesh" );
+				Castor::TextWriter< Geometry >::CheckError( l_result, "Geometry mesh" );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmaterials\n" ) ) > 0
+				l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmaterials\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
-				Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry materials" );
+				Castor::TextWriter< Geometry >::CheckError( l_result, "Geometry materials" );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
 				uint16_t l_index{ 0u };
 
 				for ( auto l_submesh : *p_geometry.GetMesh() )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\t\tmaterial " ) + string::to_string( l_index++ ) + cuT( " \"" ) + p_geometry.GetMaterial( *l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry material" );
+					l_result = p_file.WriteText( m_tabs + cuT( "\t\tmaterial " ) + string::to_string( l_index++ ) + cuT( " \"" ) + p_geometry.GetMaterial( *l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
+					Castor::TextWriter< Geometry >::CheckError( l_result, "Geometry material" );
 				}
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				l_result = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -242,18 +242,18 @@ namespace Castor3D
 
 	MaterialSPtr Geometry::GetMaterial( Submesh const & p_submesh )const
 	{
-		MaterialSPtr l_return;
+		MaterialSPtr l_result;
 		auto l_it = m_submeshesMaterials.find( &p_submesh );
 
 		if ( l_it != m_submeshesMaterials.end() )
 		{
-			l_return = l_it->second.lock();
+			l_result = l_it->second.lock();
 		}
 		else
 		{
 			Logger::LogError( cuT( "Geometry::GetMaterial - Wrong submesh" ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

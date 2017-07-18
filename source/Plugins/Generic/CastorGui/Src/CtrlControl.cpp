@@ -111,14 +111,14 @@ namespace CastorGui
 	Position Control::GetAbsolutePosition()const
 	{
 		ControlRPtr l_parent = GetParent();
-		Position l_return = m_position;
+		Position l_result = m_position;
 
 		if ( l_parent )
 		{
-			l_return += l_parent->GetAbsolutePosition();
+			l_result += l_parent->GetAbsolutePosition();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Control::SetSize( Size const & p_value )

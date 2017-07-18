@@ -120,7 +120,7 @@ namespace GrayScale
 
 	bool GrayScalePostEffect::Initialise()
 	{
-		bool l_return = false;
+		bool l_result = false;
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		Size l_size = m_renderTarget.GetSize();
 

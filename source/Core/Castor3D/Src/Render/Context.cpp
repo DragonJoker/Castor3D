@@ -47,9 +47,9 @@ namespace Castor3D
 		m_timerQuery[0] = GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed );
 		m_timerQuery[1] = GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed );
 		m_bMultiSampling = p_window->IsMultisampling();
-		bool l_return = DoInitialise();
+		bool l_result = DoInitialise();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			DoSetCurrent();
 			m_timerQuery[0]->Initialise();
@@ -70,7 +70,7 @@ namespace Castor3D
 			DoEndCurrent();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Context::Cleanup()

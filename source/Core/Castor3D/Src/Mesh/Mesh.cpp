@@ -12,44 +12,44 @@ namespace Castor3D
 {
 	bool BinaryWriter< Mesh >::DoWrite( Mesh const & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			l_result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
 		for ( auto l_submesh : p_obj )
 		{
-			l_return &= BinaryWriter< Submesh >{}.Write( *l_submesh, m_chunk );
+			l_result &= BinaryWriter< Submesh >{}.Write( *l_submesh, m_chunk );
 		}
 
-		if ( l_return && p_obj.m_skeleton )
+		if ( l_result && p_obj.m_skeleton )
 		{
-			l_return = BinaryWriter< Skeleton >{}.Write( *p_obj.m_skeleton, m_chunk );
+			l_result = BinaryWriter< Skeleton >{}.Write( *p_obj.m_skeleton, m_chunk );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< Mesh >::DoParse( Mesh & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 		SubmeshSPtr l_submesh;
 		SkeletonSPtr l_skeleton;
 		String l_name;
 		BinaryChunk l_chunk;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( l_result && DoGetSubChunk( l_chunk ) )
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
 			case ChunkType::eName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				l_result = DoParseChunk( l_name, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					p_obj.m_name = l_name;
 				}
@@ -58,9 +58,9 @@ namespace Castor3D
 
 			case ChunkType::eSubmesh:
 				l_submesh = std::make_shared< Submesh >( *p_obj.GetScene(), p_obj, p_obj.GetSubmeshCount() );
-				l_return = BinaryParser< Submesh >{}.Parse( *l_submesh, l_chunk );
+				l_result = BinaryParser< Submesh >{}.Parse( *l_submesh, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					p_obj.m_submeshes.push_back( l_submesh );
 				}
@@ -69,9 +69,9 @@ namespace Castor3D
 
 			case ChunkType::eSkeleton:
 				l_skeleton = std::make_shared< Skeleton >( *p_obj.GetScene() );
-				l_return = BinaryParser< Skeleton >{}.Parse( *l_skeleton, l_chunk );
+				l_result = BinaryParser< Skeleton >{}.Parse( *l_skeleton, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					p_obj.SetSkeleton( l_skeleton );
 				}
@@ -80,12 +80,12 @@ namespace Castor3D
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			p_obj.ComputeContainers();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -172,14 +172,14 @@ namespace Castor3D
 
 	SubmeshSPtr Mesh::GetSubmesh( uint32_t p_index )const
 	{
-		SubmeshSPtr l_return;
+		SubmeshSPtr l_result;
 
 		if ( p_index < m_submeshes.size() )
 		{
-			l_return = m_submeshes[p_index];
+			l_result = m_submeshes[p_index];
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	SubmeshSPtr Mesh::CreateSubmesh()

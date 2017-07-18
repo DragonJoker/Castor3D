@@ -132,9 +132,9 @@ namespace CastorViewer
 	bool MainFrame::Initialise()
 	{
 		Logger::RegisterCallback( std::bind( &MainFrame::DoLogCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ), this );
-		bool l_return = DoInitialiseImages();
+		bool l_result = DoInitialiseImages();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			DoPopulateStatusBar();
 			DoPopulateToolBar();
@@ -142,11 +142,11 @@ namespace CastorViewer
 			SetIcon( l_icon );
 			DoInitialiseGUI();
 			DoInitialisePerspectives();
-			l_return = DoInitialise3D();
+			l_result = DoInitialise3D();
 		}
 
-		Show( l_return );
-		return l_return;
+		Show( l_result );
+		return l_result;
 	}
 
 	void MainFrame::DoCleanupScene()
@@ -346,7 +346,7 @@ namespace CastorViewer
 
 	bool MainFrame::DoInitialise3D()
 	{
-		bool l_return = true;
+		bool l_result = true;
 		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
 
 		try
@@ -375,15 +375,15 @@ namespace CastorViewer
 		catch ( std::exception & exc )
 		{
 			wxMessageBox( _( "Problem occured while initialising Castor3D." ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
-			l_return = false;
+			l_result = false;
 		}
 		catch ( ... )
 		{
 			wxMessageBox( _( "Problem occured while initialising Castor3D.\nLook at CastorViewer.log for more details" ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
-			l_return = false;
+			l_result = false;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool MainFrame::DoInitialiseImages()
@@ -532,24 +532,24 @@ namespace CastorViewer
 
 	bool MainFrame::DoStartRecord()
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( m_pRenderPanel )
 		{
 			try
 			{
-				l_return = m_recorder.StartRecord( m_pRenderPanel->GetRenderWindow()->GetRenderTarget()->GetSize(), m_recordFps );
+				l_result = m_recorder.StartRecord( m_pRenderPanel->GetRenderWindow()->GetRenderTarget()->GetSize(), m_recordFps );
 			}
 			catch ( std::exception & p_exc )
 			{
 				wxMessageBox( wxString( p_exc.what(), wxMBConvLibc() ) );
-				l_return = false;
+				l_result = false;
 			}
 		}
 
 #if defined( GUICOMMON_RECORDS )
 
-		if ( l_return )
+		if ( l_result )
 		{
 			if ( CASTOR3D_THREADED )
 			{
@@ -562,7 +562,7 @@ namespace CastorViewer
 		}
 
 #endif
-		return l_return;
+		return l_result;
 	}
 
 	void MainFrame::DoRecordFrame()

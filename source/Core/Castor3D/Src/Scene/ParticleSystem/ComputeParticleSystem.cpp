@@ -40,36 +40,36 @@ namespace Castor3D
 
 	bool ComputeParticleSystem::Initialise()
 	{
-		bool l_return = m_updateProgram != nullptr;
+		bool l_result = m_updateProgram != nullptr;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoCreateRandomStorage();
+			l_result = DoCreateRandomStorage();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoInitialiseParticleStorage();
+			l_result = DoInitialiseParticleStorage();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_maxParticleCount->SetValue( uint32_t( m_parent.GetMaxParticlesCount() ) );
-			l_return = m_updateProgram->Initialise();
+			l_result = m_updateProgram->Initialise();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_binding = &m_ubo.CreateBinding( *m_updateProgram );
-			l_return = m_binding != nullptr;
+			l_result = m_binding != nullptr;
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoInitialisePipeline();
+			l_result = DoInitialisePipeline();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ComputeParticleSystem::Cleanup()
@@ -167,21 +167,21 @@ namespace Castor3D
 	bool ComputeParticleSystem::DoInitialiseParticleStorage()
 	{
 		auto l_size = uint32_t( m_parent.GetMaxParticlesCount() * m_inputs.stride() );
-		bool l_return = m_generatedCountBuffer->Initialise( uint32_t( sizeof( uint32_t ) * 2u ), 0u );
+		bool l_result = m_generatedCountBuffer->Initialise( uint32_t( sizeof( uint32_t ) * 2u ), 0u );
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_particlesStorages[m_in]->Resize( l_size );
-			l_return = m_particlesStorages[m_in]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			l_result = m_particlesStorages[m_in]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_particlesStorages[m_out]->Resize( l_size );
-			l_return = m_particlesStorages[m_out]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			l_result = m_particlesStorages[m_out]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			std::vector< uint8_t > l_particles;
 			l_particles.resize( m_parent.GetMaxParticlesCount() * m_inputs.stride() );
@@ -197,7 +197,7 @@ namespace Castor3D
 			m_particlesStorages[m_in]->Upload( 0u, uint32_t( l_particles.size() ), l_particles.data() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool ComputeParticleSystem::DoCreateRandomStorage()
@@ -206,9 +206,9 @@ namespace Castor3D
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
 		auto l_size = uint32_t( 1024u * 4u * sizeof( float ) );
 		m_randomStorage->Resize( l_size );
-		bool l_return = m_randomStorage->Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead );
+		bool l_result = m_randomStorage->Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead );
 
-		if ( l_return )
+		if ( l_result )
 		{
 			std::array< float, 1024u * 4u > l_buffer;
 			std::random_device l_device;
@@ -222,7 +222,7 @@ namespace Castor3D
 			m_randomStorage->Upload( 0u, l_size, reinterpret_cast< uint8_t * >( l_buffer.data() ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool ComputeParticleSystem::DoInitialisePipeline()

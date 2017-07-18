@@ -108,23 +108,23 @@ namespace
 			File::DirectoryCreate( Castor3D::Engine::GetEngineDirectory() );
 		}
 
-		auto l_return = std::make_unique< Castor3D::Engine >();
-		DoLoadPlugins( *l_return );
+		auto l_result = std::make_unique< Castor3D::Engine >();
+		DoLoadPlugins( *l_result );
 
-		auto l_renderers = l_return->GetPluginCache().GetPlugins( Castor3D::PluginType::eRenderer );
+		auto l_renderers = l_result->GetPluginCache().GetPlugins( Castor3D::PluginType::eRenderer );
 
 		if ( l_renderers.empty() )
 		{
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( l_return->LoadRenderer( GlRender::GlRenderSystem::Type ) )
+		if ( l_result->LoadRenderer( GlRender::GlRenderSystem::Type ) )
 		{
-			l_return->Initialise( 1, false );
-			auto l_context = l_return->GetRenderSystem()->CreateContext();
-			auto l_scene = l_return->GetSceneCache().Add( cuT( "Test" ) );
-			auto l_window = l_return->GetRenderWindowCache().Add( cuT( "Window" ) );
-			auto l_target = l_return->GetRenderTargetCache().Add( Castor3D::TargetType::eWindow );
+			l_result->Initialise( 1, false );
+			auto l_context = l_result->GetRenderSystem()->CreateContext();
+			auto l_scene = l_result->GetSceneCache().Add( cuT( "Test" ) );
+			auto l_window = l_result->GetRenderWindowCache().Add( cuT( "Window" ) );
+			auto l_target = l_result->GetRenderTargetCache().Add( Castor3D::TargetType::eWindow );
 			l_target->SetPixelFormat( PixelFormat::eA8R8G8B8 );
 			l_target->SetSize( Size{ 1024, 1024 } );
 			l_target->SetScene( l_scene );
@@ -136,7 +136,7 @@ namespace
 			CASTOR_EXCEPTION( "Couldn't load renderer." );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 #if defined( _WIN32 )
@@ -366,7 +366,7 @@ namespace
 
 int main( int argc, char const * argv[] )
 {
-	int l_return = EXIT_SUCCESS;
+	int l_result = EXIT_SUCCESS;
 	int l_count = 1;
 
 	if ( argc == 2 )
@@ -407,7 +407,7 @@ int main( int argc, char const * argv[] )
 					}
 
 					// Tests loop.
-					BENCHLOOP( l_count, l_return );
+					BENCHLOOP( l_count, l_result );
 
 					l_engine->Cleanup();
 				}
@@ -419,5 +419,5 @@ int main( int argc, char const * argv[] )
 		}
 	}
 	Castor::Logger::Cleanup();
-	return l_return;
+	return l_result;
 }

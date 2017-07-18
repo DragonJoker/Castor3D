@@ -24,44 +24,44 @@ namespace Castor3D
 		};
 
 		Logger::LogInfo( m_tabs + cuT( "Writing Light " ) + p_light.GetLight().GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.GetLight().GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.GetLight().GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory name" );
+		Castor::TextWriter< LightCategory >::CheckError( l_result, "LightCategory name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_light.GetLight(), p_file );
+			l_result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_light.GetLight(), p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + l_type[p_light.GetLightType()] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory type" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\ttype " ) + l_type[p_light.GetLightType()] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< LightCategory >::CheckError( l_result, "LightCategory type" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0
+			l_result = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0
 					   && Point3f::TextWriter( String{} )( p_light.GetColour(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory colour" );
+			Castor::TextWriter< LightCategory >::CheckError( l_result, "LightCategory colour" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0
+			l_result = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0
 					   && Point2f::TextWriter( String{} )( p_light.GetIntensity(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory intensity" );
+			Castor::TextWriter< LightCategory >::CheckError( l_result, "LightCategory intensity" );
 		}
 
-		if ( l_return && p_light.GetLight().IsShadowProducer() )
+		if ( l_result && p_light.GetLight().IsShadowProducer() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tshadow_producer true\n" ) ) > 0;
-			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory shadow producer" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tshadow_producer true\n" ) ) > 0;
+			Castor::TextWriter< LightCategory >::CheckError( l_result, "LightCategory shadow producer" );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************

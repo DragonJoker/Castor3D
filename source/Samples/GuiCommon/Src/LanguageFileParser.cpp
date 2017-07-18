@@ -48,7 +48,7 @@ namespace GuiCommon
 
 	bool LanguageFileParser::DoDiscardParser( String const & p_line )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( m_context->m_sections.back() == uint32_t( LANGSection::eList ) )
 		{
@@ -57,14 +57,14 @@ namespace GuiCommon
 			StringArray l_arrayWords = string::split( string::trim( l_strWords ), cuT( "\t " ), 1000, false );
 			LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( m_context );
 			l_pContext->arrayWords.insert( l_pContext->arrayWords.end(), l_arrayWords.begin(), l_arrayWords.end() );
-			l_return = true;
+			l_result = true;
 		}
 		else
 		{
 			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_line );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void LanguageFileParser::DoValidate()
@@ -74,7 +74,7 @@ namespace GuiCommon
 
 	String LanguageFileParser::DoGetSectionName( uint32_t p_section )
 	{
-		String l_return;
+		String l_result;
 
 		switch ( LANGSection( p_section ) )
 		{
@@ -82,19 +82,19 @@ namespace GuiCommon
 			break;
 
 		case LANGSection::eLanguage:
-			l_return = cuT( "language" );
+			l_result = cuT( "language" );
 			break;
 
 		case LANGSection::eSection:
-			l_return = cuT( "section" );
+			l_result = cuT( "section" );
 			break;
 
 		case LANGSection::eStyle:
-			l_return = cuT( "style" );
+			l_result = cuT( "style" );
 			break;
 
 		case LANGSection::eList:
-			l_return = cuT( "list" );
+			l_result = cuT( "list" );
 			break;
 
 		default:
@@ -102,7 +102,7 @@ namespace GuiCommon
 			break;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Root_Language )

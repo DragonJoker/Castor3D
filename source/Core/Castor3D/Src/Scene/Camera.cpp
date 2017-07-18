@@ -21,26 +21,26 @@ namespace Castor3D
 	bool Camera::TextWriter::operator()( Camera const & p_camera, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Camera " ) + p_camera.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< Camera >::CheckError( l_return, "Camera name" );
+		Castor::TextWriter< Camera >::CheckError( l_result, "Camera name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_camera, p_file );
+			l_result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_camera, p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( p_camera.GetViewport(), p_file );
+			l_result = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( p_camera.GetViewport(), p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************

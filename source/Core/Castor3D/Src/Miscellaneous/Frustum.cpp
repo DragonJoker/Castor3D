@@ -13,46 +13,46 @@ namespace Castor3D
 	{
 		Point3r GetVertexP( Point3r const & p_min, Point3r const & p_max, Point3r const & p_normal )
 		{
-			Point3r l_return{ p_min };
+			Point3r l_result{ p_min };
 
 			if ( p_normal[0] >= 0 )
 			{
-				l_return[0] = p_max[0];
+				l_result[0] = p_max[0];
 			}
 
 			if ( p_normal[1] >= 0 )
 			{
-				l_return[1] = p_max[1];
+				l_result[1] = p_max[1];
 			}
 
 			if ( p_normal[2] >= 0 )
 			{
-				l_return[2] = p_max[2];
+				l_result[2] = p_max[2];
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		Point3r GetVertexN( Point3r const & p_min, Point3r const & p_max, Point3r const & p_normal )
 		{
-			Point3r l_return{ p_max };
+			Point3r l_result{ p_max };
 
 			if ( p_normal[0] >= 0 )
 			{
-				l_return[0] = p_min[0];
+				l_result[0] = p_min[0];
 			}
 
 			if ( p_normal[1] >= 0 )
 			{
-				l_return[1] = p_min[1];
+				l_result[1] = p_min[1];
 			}
 
 			if ( p_normal[2] >= 0 )
 			{
-				l_return[2] = p_min[2];
+				l_result[2] = p_min[2];
 			}
 
-			return l_return;
+			return l_result;
 		}
 	}
 
@@ -145,54 +145,54 @@ namespace Castor3D
 			l_max[2] = std::max( l_corners[j][2], l_max[2] );
 		}
 
-		Intersection l_return{ Intersection::eIn };
+		Intersection l_result{ Intersection::eIn };
 		size_t i{ 0u };
 
-		while ( i < size_t( FrustumPlane::eCount ) && l_return != Intersection::eOut )
+		while ( i < size_t( FrustumPlane::eCount ) && l_result != Intersection::eOut )
 		{
 			auto & l_plane = m_planes[i];
 
 			if ( l_plane.Distance( GetVertexP( l_min, l_max, m_planes[i].GetNormal() ) ) < 0 )
 			{
 				// The positive vertex outside?
-				l_return = Intersection::eOut;
+				l_result = Intersection::eOut;
 			}
 			else if ( l_plane.Distance( GetVertexN( l_min, l_max, m_planes[i].GetNormal() ) ) < 0 )
 			{
 				// The negative vertex outside?
-				l_return = Intersection::eIntersect;
+				l_result = Intersection::eIntersect;
 			}
 
 			++i;
 		}
 
-		return l_return != Intersection::eOut;
+		return l_result != Intersection::eOut;
 	}
 
 	bool Frustum::IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-		Intersection l_return{ Intersection::eIn };
+		Intersection l_result{ Intersection::eIn };
 		Point3r l_center = p_box.GetCenter() + Point3r{ m_transformations[3][0], m_transformations[3][1], m_transformations[3][2] };
 		size_t i{ 0u };
 
-		while ( i < size_t( FrustumPlane::eCount ) && l_return != Intersection::eOut )
+		while ( i < size_t( FrustumPlane::eCount ) && l_result != Intersection::eOut )
 		{
 			float l_distance = m_planes[i].Distance( l_center );
 
 			if ( l_distance < -p_box.GetRadius() )
 			{
-				l_return = Intersection::eOut;
+				l_result = Intersection::eOut;
 			}
 			else if ( l_distance < p_box.GetRadius() )
 			{
-				l_return = Intersection::eIntersect;
+				l_result = Intersection::eIntersect;
 			}
 
 			++i;
 		}
 
-		return l_return != Intersection::eOut;
+		return l_result != Intersection::eOut;
 	}
 
 	bool Frustum::IsVisible( Point3r const & p_point )const

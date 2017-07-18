@@ -98,55 +98,55 @@ namespace Castor3D
 			cuT( "depth_peeling" ),
 		};
 
-		bool l_return = true;
+		bool l_result = true;
 
-		if ( l_return && p_pass.GetOpacity() < 1 )
+		if ( l_result && p_pass.GetOpacity() < 1 )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\talpha " ) + string::to_string( p_pass.GetOpacity() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( l_return, "Pass opacity" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\talpha " ) + string::to_string( p_pass.GetOpacity() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_result, "Pass opacity" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\temissive " ) + string::to_string( p_pass.GetEmissive() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( l_return, "Pass emissive" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\temissive " ) + string::to_string( p_pass.GetEmissive() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_result, "Pass emissive" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttwo_sided " ) + String( p_pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( l_return, "Pass sidedness" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\ttwo_sided " ) + String( p_pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_result, "Pass sidedness" );
 		}
 
-		if ( l_return && ( p_pass.GetColourBlendMode() != BlendMode::eInterpolative ) )
+		if ( l_result && ( p_pass.GetColourBlendMode() != BlendMode::eInterpolative ) )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour_blend_mode " ) + StrBlendModes[uint32_t( p_pass.GetColourBlendMode() )] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( l_return, "Pass colour blend mode" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tcolour_blend_mode " ) + StrBlendModes[uint32_t( p_pass.GetColourBlendMode() )] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_result, "Pass colour blend mode" );
 		}
 
-		if ( l_return && ( p_pass.GetAlphaBlendMode() != BlendMode::eInterpolative ) )
+		if ( l_result && ( p_pass.GetAlphaBlendMode() != BlendMode::eInterpolative ) )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( p_pass.GetAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( l_return, "Pass alpha blend mode" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( p_pass.GetAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_result, "Pass alpha blend mode" );
 		}
 
-		if ( l_return && p_pass.GetAlphaFunc() != ComparisonFunc::eAlways )
+		if ( l_result && p_pass.GetAlphaFunc() != ComparisonFunc::eAlways )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " )
+			l_result = p_file.WriteText( m_tabs + cuT( "\talpha_func " )
 				+ l_strAlphaFuncs[p_pass.GetAlphaFunc()] + cuT( " " )
 				+ string::to_string( p_pass.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( l_return, "Pass alpha function" );
+			Castor::TextWriter< Pass >::CheckError( l_result, "Pass alpha function" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			for ( auto l_unit : p_pass )
 			{
-				l_return = TextureUnit::TextWriter( m_tabs + cuT( "\t" ) )( *l_unit, p_file );
+				l_result = TextureUnit::TextWriter( m_tabs + cuT( "\t" ) )( *l_unit, p_file );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*********************************************************************************************
@@ -220,14 +220,14 @@ namespace Castor3D
 				return p_unit->GetChannel() == p_channel;
 			} );
 
-		TextureUnitSPtr l_return;
+		TextureUnitSPtr l_result;
 
 		if ( l_it != m_textureUnits.end() )
 		{
-			l_return = *l_it;
+			l_result = *l_it;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Pass::DestroyTextureUnit( uint32_t p_index )
@@ -359,20 +359,20 @@ namespace Castor3D
 	bool Pass::DoPrepareTexture( TextureChannel p_channel, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, PxBufferBaseSPtr & p_opacity )
 	{
 		PxBufferBaseSPtr l_opacity = DoPrepareTexture( p_channel, p_index );
-		bool l_return = l_opacity != nullptr;
+		bool l_result = l_opacity != nullptr;
 
-		if ( l_return && !p_opacity )
+		if ( l_result && !p_opacity )
 		{
 			p_opacity = l_opacity;
 			p_opacitySource = GetTextureUnit( p_channel );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	PxBufferBaseSPtr Pass::DoPrepareTexture( TextureChannel p_channel, uint32_t & p_index )
 	{
-		PxBufferBaseSPtr l_return;
+		PxBufferBaseSPtr l_result;
 		auto l_unit = GetTextureUnit( p_channel );
 
 		if ( l_unit )
@@ -382,9 +382,9 @@ namespace Castor3D
 			if ( l_texture && l_texture->GetImage().GetBuffer() )
 			{
 				PxBufferBaseSPtr l_extracted = l_texture->GetImage().GetBuffer();
-				l_return = PF::ExtractAlpha( l_extracted );
+				l_result = PF::ExtractAlpha( l_extracted );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					l_texture->SetSource( l_extracted );
 				}
@@ -394,7 +394,7 @@ namespace Castor3D
 			Logger::LogDebug( cuT( "	" ) + GetName( p_channel ) + cuT( " map at index " ) + string::to_string( l_unit->GetIndex() ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Pass::DoPrepareOpacity( TextureUnitSPtr p_opacitySource, PxBufferBaseSPtr p_opacityImage, uint32_t & p_index )

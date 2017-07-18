@@ -16,34 +16,34 @@ namespace Castor3D
 
 	bool SpotLight::TextWriter::operator()( SpotLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextWriter::operator()( p_light, p_file );
+		bool l_result = LightCategory::TextWriter::operator()( p_light, p_file );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
+			l_result = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
 					   && Point3f::TextWriter( String() )( p_light.GetAttenuation(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			LightCategory::TextWriter::CheckError( l_return, "SpotLight attenuation" );
+			LightCategory::TextWriter::CheckError( l_result, "SpotLight attenuation" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\texponent %f\n" ), m_tabs.c_str(), p_light.GetExponent() ) > 0;
-			LightCategory::TextWriter::CheckError( l_return, "SpotLight exponent" );
+			l_result = p_file.Print( 256, cuT( "%s\texponent %f\n" ), m_tabs.c_str(), p_light.GetExponent() ) > 0;
+			LightCategory::TextWriter::CheckError( l_result, "SpotLight exponent" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tcut_off %f\n" ), m_tabs.c_str(), p_light.GetCutOff().degrees() ) > 0;
-			LightCategory::TextWriter::CheckError( l_return, "SpotLight cutoff" );
+			l_result = p_file.Print( 256, cuT( "%s\tcut_off %f\n" ), m_tabs.c_str(), p_light.GetCutOff().degrees() ) > 0;
+			LightCategory::TextWriter::CheckError( l_result, "SpotLight cutoff" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool SpotLight::TextWriter::WriteInto( Castor::TextFile & p_file )

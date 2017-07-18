@@ -63,9 +63,9 @@ namespace GLSL
 	template< typename T >
 	T operator-( T const & p_value )
 	{
-		T l_return( p_value.m_writer );
-		l_return.m_value << cuT( "-( " ) + Castor::String( p_value ) << cuT( " )" );
-		return l_return;
+		T l_result( p_value.m_writer );
+		l_result.m_value << cuT( "-( " ) + Castor::String( p_value ) << cuT( " )" );
+		return l_result;
 	}
 
 	GlslWriter_API Castor::String ToString( Type const & p_value );

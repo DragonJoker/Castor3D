@@ -70,7 +70,7 @@ namespace GlRender
 
 	uint8_t * GlDirectTextureStorageTraits::Lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
 	{
-		uint8_t * l_return = nullptr;
+		uint8_t * l_result = nullptr;
 		auto l_buffer = p_storage.GetOwner()->GetImage( p_index ).GetBuffer();
 
 		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
@@ -84,10 +84,10 @@ namespace GlRender
 		if ( CheckFlag( p_lock, AccessType::eRead )
 			 || CheckFlag( p_lock, AccessType::eWrite ) )
 		{
-			l_return = l_buffer->ptr();
+			l_result = l_buffer->ptr();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GlDirectTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )

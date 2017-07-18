@@ -61,14 +61,14 @@ namespace Castor3D
 
 	Scene * RenderSystem::GetTopScene()
 	{
-		Scene * l_return = nullptr;
+		Scene * l_result = nullptr;
 
 		if ( m_stackScenes.size() )
 		{
-			l_return = m_stackScenes.top();
+			l_result = m_stackScenes.top();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	GLSL::GlslWriter RenderSystem::CreateGlslWriter()
@@ -83,14 +83,14 @@ namespace Castor3D
 
 	Context * RenderSystem::GetCurrentContext()
 	{
-		Context * l_return{ nullptr };
+		Context * l_result{ nullptr };
 		auto l_it = m_currentContexts.find( std::this_thread::get_id() );
 
 		if ( l_it != m_currentContexts.end() )
 		{
-			l_return = l_it->second;
+			l_result = l_it->second;
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

@@ -62,21 +62,21 @@ namespace Castor3D
 	{
 		// First we retrieve the chunk type
 		BinaryChunk l_subchunk;
-		bool l_return = DoRead( &l_subchunk.m_type, 1 );
+		bool l_result = DoRead( &l_subchunk.m_type, 1 );
 		uint32_t l_size = 0;
 
-		if ( l_return )
+		if ( l_result )
 		{
 			// Then the chunk data size
-			l_return = DoRead( &l_size, 1 );
+			l_result = DoRead( &l_size, 1 );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_index + l_size <= m_data.size();
+			l_result = m_index + l_size <= m_data.size();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			// Eventually we retrieve the chunk data
 			l_subchunk.m_data.insert( l_subchunk.m_data.end(), m_data.begin() + m_index, m_data.begin() + m_index + l_size );
@@ -85,7 +85,7 @@ namespace Castor3D
 			p_chunkDst = l_subchunk;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool BinaryChunk::AddSubChunk( BinaryChunk const & p_subchunk )
@@ -110,47 +110,47 @@ namespace Castor3D
 
 	bool BinaryChunk::Write( Castor::BinaryFile & p_file )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
-		if ( l_return )
+		if ( l_result )
 		{
 			auto l_type = SystemEndianToBigEndian( GetChunkType() );
-			l_return = p_file.Write( l_type ) == sizeof( ChunkType );
+			l_result = p_file.Write( l_type ) == sizeof( ChunkType );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			Finalise();
 			auto l_size = SystemEndianToBigEndian( GetDataSize() );
-			l_return = p_file.Write( l_size ) == sizeof( uint32_t );
+			l_result = p_file.Write( l_size ) == sizeof( uint32_t );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteArray( m_data.data(), m_data.size() ) == m_data.size();
+			l_result = p_file.WriteArray( m_data.data(), m_data.size() ) == m_data.size();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool BinaryChunk::Read( Castor::BinaryFile & p_file )
 	{
 		uint32_t l_size = 0;
-		bool l_return = p_file.Read( m_type ) == sizeof( ChunkType );
+		bool l_result = p_file.Read( m_type ) == sizeof( ChunkType );
 		BigEndianToSystemEndian( m_type );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Read( l_size ) == sizeof( uint32_t );
+			l_result = p_file.Read( l_size ) == sizeof( uint32_t );
 			BigEndianToSystemEndian( l_size );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_data.resize( l_size );
-			l_return = p_file.ReadArray( m_data.data(), m_data.size() ) == m_data.size();
+			l_result = p_file.ReadArray( m_data.data(), m_data.size() ) == m_data.size();
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

@@ -11,9 +11,9 @@ namespace GlRender
 	{
 		static inline RetT Call( OpenGl const & p_gl, GlFunction< RetT, ParamsT ... > const & p_function, char const * const p_name, ParamsT ... p_params )
 		{
-			RetT l_return = p_function( p_params... );
+			RetT l_result = p_function( p_params... );
 			glCheckError( p_gl, p_name );
-			return l_return;
+			return l_result;
 		}
 	};
 
@@ -584,11 +584,11 @@ namespace GlRender
 
 	inline Castor::FlagCombination< GlBufferBit > OpenGl::GetComponents( Castor3D::BufferComponents const & p_components )const
 	{
-		Castor::FlagCombination< GlBufferBit > l_return;
-		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eColour ) ? GlBufferBit::eColour : GlBufferBit( 0u ) );
-		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eDepth ) ? GlBufferBit::eDepth : GlBufferBit( 0u ) );
-		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eStencil ) ? GlBufferBit::eStencil : GlBufferBit( 0u ) );
-		return l_return;
+		Castor::FlagCombination< GlBufferBit > l_result;
+		l_result |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eColour ) ? GlBufferBit::eColour : GlBufferBit( 0u ) );
+		l_result |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eDepth ) ? GlBufferBit::eDepth : GlBufferBit( 0u ) );
+		l_result |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eStencil ) ? GlBufferBit::eStencil : GlBufferBit( 0u ) );
+		return l_result;
 	}
 
 	inline GlComponent OpenGl::GetComponent( Castor3D::AttachmentPoint p_component )const
@@ -683,44 +683,44 @@ namespace GlRender
 
 	inline Castor::FlagCombination< GlBarrierBit > OpenGl::Get( Castor3D::MemoryBarriers const & p_barriers )const
 	{
-		Castor::FlagCombination< GlBarrierBit > l_return;
+		Castor::FlagCombination< GlBarrierBit > l_result;
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eVertexBuffer ) )
 		{
-			l_return |= GlBarrierBit::eVertexArrayAttrib;
+			l_result |= GlBarrierBit::eVertexArrayAttrib;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eIndexBuffer ) )
 		{
-			l_return |= GlBarrierBit::eElementArray;
+			l_result |= GlBarrierBit::eElementArray;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eUniformBuffer ) )
 		{
-			l_return |= GlBarrierBit::eUniform;
+			l_result |= GlBarrierBit::eUniform;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eAtomicCounterBuffer ) )
 		{
-			l_return |= GlBarrierBit::eAtomicCounter;
+			l_result |= GlBarrierBit::eAtomicCounter;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eQueryBuffer ) )
 		{
-			l_return |= GlBarrierBit::eQueryBuffer;
+			l_result |= GlBarrierBit::eQueryBuffer;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eShaderStorageBuffer ) )
 		{
-			l_return |= GlBarrierBit::eShaderStorage;
+			l_result |= GlBarrierBit::eShaderStorage;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eTextureFetch ) )
 		{
-			l_return |= GlBarrierBit::eTextureFetch;
+			l_result |= GlBarrierBit::eTextureFetch;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	inline Castor::String const & OpenGl::GetVendor()const
@@ -863,11 +863,11 @@ namespace GlRender
 
 	bool OpenGl::HasExtension( Castor::String const & p_strExtName, bool p_log )const
 	{
-		bool l_return = m_extensions.find( p_strExtName ) != Castor::String::npos;
+		bool l_result = m_extensions.find( p_strExtName ) != Castor::String::npos;
 
 		if ( p_log )
 		{
-			if ( l_return )
+			if ( l_result )
 			{
 				Castor::Logger::LogDebug( cuT( "Extension [" ) + p_strExtName + cuT( "] available" ) );
 			}
@@ -877,7 +877,7 @@ namespace GlRender
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void OpenGl::ClearColor( float red, float green, float blue, float alpha )const

@@ -14,14 +14,14 @@ namespace Castor3D
 
 	bool DirectionalLight::TextWriter::operator()( DirectionalLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextWriter::operator()( p_light, p_file );
+		bool l_result = LightCategory::TextWriter::operator()( p_light, p_file );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool DirectionalLight::TextWriter::WriteInto( Castor::TextFile & p_file )

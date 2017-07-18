@@ -26,15 +26,15 @@ namespace GlRender
 				l_names.push_back( l_szChar );
 			}
 
-			UIntArray l_return( l_names.size() );
-			p_gl.GetUniformIndices( p_program, int( l_names.size() ), l_names.data(), l_return.data() );
+			UIntArray l_result( l_names.size() );
+			p_gl.GetUniformIndices( p_program, int( l_names.size() ), l_names.data(), l_result.data() );
 
 			for ( auto l_name : l_names )
 			{
 				delete [] l_name;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		void DoAdjustOffset( int p_align, uint32_t & p_offset )

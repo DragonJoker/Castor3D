@@ -35,7 +35,7 @@ namespace Castor3D
 
 	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0
+		bool l_result = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );
@@ -47,7 +47,7 @@ namespace Castor3D
 
 		bool l_hasFile = false;
 
-		if ( l_return )
+		if ( l_result )
 		{
 			Path l_file = p_shaderObject.GetFile();
 
@@ -56,8 +56,8 @@ namespace Castor3D
 				File::CopyFile( l_file, l_pathFile );
 				String l_fileName = Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
 				string::replace( l_fileName, cuT( "\\" ), cuT( "/" ) );
-				l_return = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_fileName + cuT( "\"\n" ) ) > 0;
-				Castor::TextWriter< ShaderObject >::CheckError( l_return, "ShaderObject file" );
+				l_result = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_fileName + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< ShaderObject >::CheckError( l_result, "ShaderObject file" );
 			}
 		}
 
@@ -65,16 +65,16 @@ namespace Castor3D
 		{
 			for ( auto l_it : p_shaderObject.GetUniforms() )
 			{
-				l_return = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( l_it->GetBaseUniform(), p_file );
+				l_result = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( l_it->GetBaseUniform(), p_file );
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -171,15 +171,15 @@ namespace Castor3D
 
 	PushUniformSPtr ShaderObject::FindUniform( Castor::String const & p_name )const
 	{
-		PushUniformSPtr l_return;
+		PushUniformSPtr l_result;
 		auto l_it = m_mapUniforms.find( p_name );
 
 		if ( l_it != m_mapUniforms.end() )
 		{
-			l_return = l_it->second.lock();
+			l_result = l_it->second.lock();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ShaderObject::FlushUniforms()

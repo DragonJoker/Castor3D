@@ -276,12 +276,12 @@ namespace castortd
 		static Cell l_dummy;
 		l_dummy.m_state = Cell::State::Invalid;
 		auto l_coords = Convert( p_position );
-		Cell & l_return = l_dummy;
+		Cell & l_result = l_dummy;
 
 		if ( l_coords[0] >= 0 && l_coords[0] < int( m_grid.GetWidth() )
 			 && l_coords[1] >= 0 && l_coords[1] < int( m_grid.GetHeight() ) )
 		{
-			l_return = GetCell( l_coords );
+			l_result = GetCell( l_coords );
 		}
 
 		return l_dummy;
@@ -289,7 +289,7 @@ namespace castortd
 
 	bool Game::BuildTower( Castor::Point3r const & p_position, Tower::CategoryPtr && p_category )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( CanAfford( p_category->GetTowerCost() ) )
 		{
@@ -300,11 +300,11 @@ namespace castortd
 				l_cell.m_state = Cell::State::Tower;
 				Spend( p_category->GetTowerCost() );
 				DoAddTower( l_cell, std::move( p_category ) );
-				l_return = true;
+				l_result = true;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	Point3r Game::Convert( Castor::Point2i const & p_position )const
@@ -378,7 +378,7 @@ namespace castortd
 
 	TowerPtr Game::SelectTower( Cell const & p_cell )
 	{
-		TowerPtr l_return;
+		TowerPtr l_result;
 
 		if ( p_cell.m_state == Cell::State::Tower )
 		{
@@ -392,12 +392,12 @@ namespace castortd
 
 			if ( l_it != m_towers.end() )
 			{
-				l_return = *l_it;
-				m_selectedTower = l_return;
+				l_result = *l_it;
+				m_selectedTower = l_result;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Game::UpgradeTowerSpeed( Tower & p_tower )

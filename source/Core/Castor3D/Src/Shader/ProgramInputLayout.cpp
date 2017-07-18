@@ -35,75 +35,75 @@ namespace Castor3D
 
 	FlagCombination< ElementUsage > ProgramInputLayout::DoGuessUsages( String const & p_name, ElementType p_type )
 	{
-		FlagCombination< ElementUsage > l_return = 0u;
+		FlagCombination< ElementUsage > l_result = 0u;
 
 		if ( IsLike( p_name, ShaderProgram::Position ) )
 		{
-			l_return |= uint32_t( ElementUsage::ePosition );
+			l_result |= uint32_t( ElementUsage::ePosition );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Normal ) )
 		{
-			l_return |= uint32_t( ElementUsage::eNormal );
+			l_result |= uint32_t( ElementUsage::eNormal );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Tangent ) )
 		{
-			l_return |= uint32_t( ElementUsage::eTangent );
+			l_result |= uint32_t( ElementUsage::eTangent );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Bitangent ) )
 		{
-			l_return |= uint32_t( ElementUsage::eBitangent );
+			l_result |= uint32_t( ElementUsage::eBitangent );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Texture ) )
 		{
-			l_return |= uint32_t( ElementUsage::eTexCoords );
+			l_result |= uint32_t( ElementUsage::eTexCoords );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::BoneIds0 ) )
 		{
-			l_return |= uint32_t( ElementUsage::eBoneIds0 );
+			l_result |= uint32_t( ElementUsage::eBoneIds0 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::BoneIds1 ) )
 		{
-			l_return |= uint32_t( ElementUsage::eBoneIds1 );
+			l_result |= uint32_t( ElementUsage::eBoneIds1 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Weights0 ) )
 		{
-			l_return |= uint32_t( ElementUsage::eBoneWeights0 );
+			l_result |= uint32_t( ElementUsage::eBoneWeights0 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Weights1 ) )
 		{
-			l_return |= uint32_t( ElementUsage::eBoneWeights1 );
+			l_result |= uint32_t( ElementUsage::eBoneWeights1 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Transform ) )
 		{
-			l_return |= uint32_t( ElementUsage::eTransform );
+			l_result |= uint32_t( ElementUsage::eTransform );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool operator==( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs )
 	{
-		bool l_return = p_lhs.m_layout.size() == p_rhs.m_layout.size();
+		bool l_result = p_lhs.m_layout.size() == p_rhs.m_layout.size();
 		auto l_itl = p_lhs.m_layout.begin();
 		auto l_itr = p_rhs.m_layout.begin();
 
-		while ( l_return && l_itl != p_lhs.m_layout.end() )
+		while ( l_result && l_itl != p_lhs.m_layout.end() )
 		{
-			l_return = *l_itl == *l_itr;
+			l_result = *l_itl == *l_itr;
 			++l_itl;
 			++l_itr;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool operator!=( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs )

@@ -205,7 +205,7 @@ namespace Castor3D
 	PickingPass::NodeType PickingPass::Pick( Position const & p_position
 		, Camera const & p_camera )
 	{
-		NodeType l_return{ NodeType::eNone };
+		NodeType l_result{ NodeType::eNone };
 		m_geometry.reset();
 		m_submesh.reset();
 		m_face = 0u;
@@ -221,11 +221,11 @@ namespace Castor3D
 				l_itCam->second.Update();
 				auto & l_nodes = l_itCam->second.GetRenderNodes();
 				auto l_pixel = DoFboPick( p_position, p_camera, l_nodes );
-				l_return = DoPick( l_pixel, l_nodes );
+				l_result = DoPick( l_pixel, l_nodes );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void PickingPass::DoRenderNodes( SceneRenderNodes & p_nodes
@@ -269,13 +269,13 @@ namespace Castor3D
 	PickingPass::NodeType PickingPass::DoPick( Point3f const & p_pixel
 		, SceneRenderNodes & p_nodes )
 	{
-		NodeType l_return{ NodeType::eNone };
+		NodeType l_result{ NodeType::eNone };
 
 		if ( Castor::point::length_squared( p_pixel ) )
 		{
-			l_return = NodeType( uint32_t( p_pixel[0] ) & 0xFF );
+			l_result = NodeType( uint32_t( p_pixel[0] ) & 0xFF );
 
-			switch ( l_return )
+			switch ( l_result )
 			{
 			case NodeType::eInstantiated:
 				DoPickFromList( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_pixel, m_geometry, m_submesh, m_face );
@@ -299,12 +299,12 @@ namespace Castor3D
 
 			default:
 				FAILURE( "Unsupported index" );
-				l_return = NodeType::eNone;
+				l_result = NodeType::eNone;
 				break;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void PickingPass::DoRender( Scene & p_scene
@@ -398,44 +398,44 @@ namespace Castor3D
 			, m_colourTexture->GetPixelFormat() );
 		m_colourTexture->GetImage().InitialiseSource();
 		auto l_size = m_colourTexture->GetDimensions();
-		bool l_return = m_colourTexture->Initialise();
+		bool l_result = m_colourTexture->Initialise();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
-			l_return = m_depthBuffer->Create();
+			l_result = m_depthBuffer->Create();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_depthBuffer->Initialise( l_size );
+			l_result = m_depthBuffer->Initialise( l_size );
 
-			if ( !l_return )
+			if ( !l_result )
 			{
 				m_depthBuffer->Destroy();
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_colourAttach = m_frameBuffer->CreateAttachment( m_colourTexture );
 			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
-			l_return = m_frameBuffer->Create();
+			l_result = m_frameBuffer->Create();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_frameBuffer->Initialise( l_size );
+			l_result = m_frameBuffer->Initialise( l_size );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				m_frameBuffer->Bind();
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
 				m_frameBuffer->SetDrawBuffer( m_colourAttach );
-				l_return = m_frameBuffer->IsComplete();
+				l_result = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
 			else
@@ -444,7 +444,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void PickingPass::DoCleanup()

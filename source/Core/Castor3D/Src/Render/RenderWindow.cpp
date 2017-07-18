@@ -18,29 +18,29 @@ namespace Castor3D
 	bool RenderWindow::TextWriter::operator()( RenderWindow const & p_window, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Window " ) + p_window.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow name" );
+		Castor::TextWriter< RenderWindow >::CheckError( l_result, "RenderWindow name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.GetVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
-			Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow vsync" );
+			l_result = p_file.Print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.GetVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			Castor::TextWriter< RenderWindow >::CheckError( l_result, "RenderWindow vsync" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.IsFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
-			Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow fullscreen" );
+			l_result = p_file.Print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.IsFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			Castor::TextWriter< RenderWindow >::CheckError( l_result, "RenderWindow fullscreen" );
 		}
 
-		if ( l_return && p_window.GetRenderTarget() )
+		if ( l_result && p_window.GetRenderTarget() )
 		{
-			l_return = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
+			l_result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
 		}
 
 		p_file.WriteText( m_tabs + cuT( "}\n" ) );
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -207,28 +207,28 @@ namespace Castor3D
 
 	bool RenderWindow::IsMultisampling()const
 	{
-		bool l_return = false;
+		bool l_result = false;
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
-			l_return = l_target->IsMultisampling();
+			l_result = l_target->IsMultisampling();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	int32_t RenderWindow::GetSamplesCount()const
 	{
-		int32_t l_return = 0;
+		int32_t l_result = 0;
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
-			l_return = l_target->GetSamplesCount();
+			l_result = l_target->GetSamplesCount();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void RenderWindow::UpdateFullScreen( bool p_value )
@@ -248,41 +248,41 @@ namespace Castor3D
 
 	SceneSPtr RenderWindow::GetScene()const
 	{
-		SceneSPtr l_return;
+		SceneSPtr l_result;
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
-			l_return = l_target->GetScene();
+			l_result = l_target->GetScene();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	CameraSPtr RenderWindow::GetCamera()const
 	{
-		CameraSPtr l_return;
+		CameraSPtr l_result;
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
-			l_return = l_target->GetCamera();
+			l_result = l_target->GetCamera();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	ViewportType RenderWindow::GetViewportType()const
 	{
-		ViewportType l_return = ViewportType( -1 );
+		ViewportType l_result = ViewportType( -1 );
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
-			l_return = l_target->GetViewportType();
+			l_result = l_target->GetViewportType();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void RenderWindow::SetViewportType( ViewportType val )
@@ -297,15 +297,15 @@ namespace Castor3D
 
 	PixelFormat RenderWindow::GetPixelFormat()const
 	{
-		PixelFormat l_return = PixelFormat( -1 );
+		PixelFormat l_result = PixelFormat( -1 );
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
-			l_return = l_target->GetPixelFormat();
+			l_result = l_target->GetPixelFormat();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void RenderWindow::SetPixelFormat( PixelFormat val )
@@ -330,15 +330,15 @@ namespace Castor3D
 
 	bool RenderWindow::IsUsingStereo()const
 	{
-		bool l_return = false;
+		bool l_result = false;
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
-			//l_return = l_target->IsUsingStereo();
+			//l_result = l_target->IsUsingStereo();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void RenderWindow::SetStereo( bool p_bStereo )
@@ -353,15 +353,15 @@ namespace Castor3D
 
 	real RenderWindow::GetIntraOcularDistance()const
 	{
-		real l_return = 0;
+		real l_result = 0;
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
-			//l_return = l_target->GetIntraOcularDistance();
+			//l_result = l_target->GetIntraOcularDistance();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void RenderWindow::SetIntraOcularDistance( real p_rIao )

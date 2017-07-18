@@ -32,44 +32,44 @@ namespace Castor3D
 	bool SpecularGlossinessPbrPass::TextWriter::operator()( SpecularGlossinessPbrPass const & p_pass, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing SpecularGlossinessPbrPass " ) );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
+			l_result = p_file.Print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
 					   && Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< SpecularGlossinessPbrPass >::CheckError( l_return, "SpecularGlossinessPbrPass albedo" );
+			Castor::TextWriter< SpecularGlossinessPbrPass >::CheckError( l_result, "SpecularGlossinessPbrPass albedo" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tglossiness " )
+			l_result = p_file.WriteText( m_tabs + cuT( "\tglossiness " )
 				+ string::to_string( p_pass.GetGlossiness() )
 				+ cuT( "\n" ) ) > 0;
-			Castor::TextWriter< SpecularGlossinessPbrPass >::CheckError( l_return, "SpecularGlossinessPbrPass glossiness" );
+			Castor::TextWriter< SpecularGlossinessPbrPass >::CheckError( l_result, "SpecularGlossinessPbrPass glossiness" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
+			l_result = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< SpecularGlossinessPbrPass >::CheckError( l_return, "SpecularGlossinessPbrPass specular" );
+			Castor::TextWriter< SpecularGlossinessPbrPass >::CheckError( l_result, "SpecularGlossinessPbrPass specular" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = Castor::TextWriter< Pass >{ m_tabs }( p_pass, p_file );
+			l_result = Castor::TextWriter< Pass >{ m_tabs }( p_pass, p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*********************************************************************************************

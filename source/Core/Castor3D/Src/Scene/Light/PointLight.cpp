@@ -14,22 +14,22 @@ namespace Castor3D
 
 	bool PointLight::TextWriter::operator()( PointLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextWriter::operator()( p_light, p_file );
+		bool l_result = LightCategory::TextWriter::operator()( p_light, p_file );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
+			l_result = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
 					   && Point3f::TextWriter( String() )( p_light.GetAttenuation(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			LightCategory::TextWriter::CheckError( l_return, "PointLight attenuation" );
+			LightCategory::TextWriter::CheckError( l_result, "PointLight attenuation" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool PointLight::TextWriter::WriteInto( Castor::TextFile & p_file )

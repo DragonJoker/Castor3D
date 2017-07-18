@@ -68,11 +68,11 @@ namespace Castor3D
 	PluginSPtr PluginCache::LoadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
 	{
 		Path l_strFilePath{ CASTOR_DLL_PREFIX + p_pluginName + cuT( "." ) + CASTOR_DLL_EXT };
-		PluginSPtr l_return;
+		PluginSPtr l_result;
 
 		try
 		{
-			l_return = DoLoadPlugin( l_strFilePath );
+			l_result = DoLoadPlugin( l_strFilePath );
 		}
 		catch ( VersionException & p_exc )
 		{
@@ -82,7 +82,7 @@ namespace Castor3D
 		{
 			if ( !p_pathFolder.empty() )
 			{
-				l_return = LoadPlugin( p_pathFolder / l_strFilePath );
+				l_result = LoadPlugin( p_pathFolder / l_strFilePath );
 			}
 			else
 			{
@@ -98,16 +98,16 @@ namespace Castor3D
 			Logger::LogWarning( cuT( "LoadPlugin - Fail - Unknown error" ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	PluginSPtr PluginCache::LoadPlugin( Path const & p_fileFullPath )throw( )
 	{
-		PluginSPtr l_return;
+		PluginSPtr l_result;
 
 		try
 		{
-			l_return = DoLoadPlugin( p_fileFullPath );
+			l_result = DoLoadPlugin( p_fileFullPath );
 		}
 		catch ( VersionException & p_exc )
 		{
@@ -126,7 +126,7 @@ namespace Castor3D
 			Logger::LogWarning( cuT( "LoadPlugin - Fail - Unknown error" ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	PluginStrMap PluginCache::GetPlugins( PluginType p_type )
@@ -161,7 +161,7 @@ namespace Castor3D
 
 	PluginSPtr PluginCache::DoLoadPlugin( Path const & p_pathFile )
 	{
-		PluginSPtr l_return;
+		PluginSPtr l_result;
 		auto l_lockTypes = make_unique_lock( m_mutexLoadedPluginTypes );
 		auto l_it = m_loadedPluginTypes.find( p_pathFile );
 
@@ -193,39 +193,39 @@ namespace Castor3D
 			switch ( l_type )
 			{
 			case PluginType::eDivider:
-				l_return = std::make_shared< DividerPlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< DividerPlugin >( l_library, GetEngine() );
 				break;
 
 			case PluginType::eImporter:
-				l_return = std::make_shared< ImporterPlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< ImporterPlugin >( l_library, GetEngine() );
 				break;
 
 			case PluginType::eRenderer:
-				l_return = std::make_shared< RendererPlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< RendererPlugin >( l_library, GetEngine() );
 				break;
 
 			case PluginType::eGeneric:
-				l_return = std::make_shared< GenericPlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< GenericPlugin >( l_library, GetEngine() );
 				break;
 
 			case PluginType::eTechnique:
-				l_return = std::make_shared< TechniquePlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< TechniquePlugin >( l_library, GetEngine() );
 				break;
 
 			case PluginType::eToneMapping:
-				l_return = std::make_shared< ToneMappingPlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< ToneMappingPlugin >( l_library, GetEngine() );
 				break;
 
 			case PluginType::ePostEffect:
-				l_return = std::make_shared< PostFxPlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< PostFxPlugin >( l_library, GetEngine() );
 				break;
 
 			case PluginType::eParticle:
-				l_return = std::make_shared< ParticlePlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< ParticlePlugin >( l_library, GetEngine() );
 				break;
 
 			case PluginType::eGenerator:
-				l_return = std::make_shared< GeneratorPlugin >( l_library, GetEngine() );
+				l_result = std::make_shared< GeneratorPlugin >( l_library, GetEngine() );
 				break;
 
 			default:
@@ -238,9 +238,9 @@ namespace Castor3D
 			}
 
 			Version l_toCheck( 0, 0 );
-			l_return->GetRequiredVersion( l_toCheck );
+			l_result->GetRequiredVersion( l_toCheck );
 			String l_strToLog( cuT( "Plug-in [" ) );
-			Logger::LogInfo( StringStream() << l_strToLog << l_return->GetName() << cuT( "] - Required engine version : " ) << l_toCheck );
+			Logger::LogInfo( StringStream() << l_strToLog << l_result->GetName() << cuT( "] - Required engine version : " ) << l_toCheck );
 			Version l_version = GetEngine()->GetVersion();
 
 			if ( l_toCheck <= l_version )
@@ -248,14 +248,14 @@ namespace Castor3D
 				m_loadedPluginTypes.insert( std::make_pair( p_pathFile, l_type ) );
 				{
 					auto l_lockPlugins = make_unique_lock( m_mutexLoadedPlugins );
-					m_loadedPlugins[size_t( l_type )].insert( std::make_pair( p_pathFile, l_return ) );
+					m_loadedPlugins[size_t( l_type )].insert( std::make_pair( p_pathFile, l_result ) );
 				}
 				{
 					auto l_lockLibraries = make_unique_lock( m_mutexLibraries );
 					m_libraries[size_t( l_type )].insert( std::make_pair( p_pathFile, l_library ) );
 				}
 				l_strToLog = cuT( "Plug-in [" );
-				Logger::LogInfo( l_strToLog + l_return->GetName() + cuT( "] loaded" ) );
+				Logger::LogInfo( l_strToLog + l_result->GetName() + cuT( "] loaded" ) );
 			}
 			else
 			{
@@ -266,9 +266,9 @@ namespace Castor3D
 		{
 			PluginType l_type = l_it->second;
 			auto l_lock = make_unique_lock( m_mutexLoadedPlugins );
-			l_return = m_loadedPlugins[size_t( l_type )].find( p_pathFile )->second;
+			l_result = m_loadedPlugins[size_t( l_type )].find( p_pathFile )->second;
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

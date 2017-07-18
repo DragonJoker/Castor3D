@@ -52,9 +52,9 @@ namespace Castor3D
 		m_colourTexture->GetImage().InitialiseSource();
 		p_size = m_colourTexture->GetDimensions();
 
-		bool l_return = m_colourTexture->Initialise();
+		bool l_result = m_colourTexture->Initialise();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			m_depthBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
@@ -63,27 +63,27 @@ namespace Castor3D
 				, PixelFormat::eD24S8
 				, p_size );
 			m_depthBuffer->GetImage().InitialiseSource();
-			l_return = m_depthBuffer->Initialise();
+			l_result = m_depthBuffer->Initialise();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_colourAttach = m_frameBuffer->CreateAttachment( m_colourTexture );
 			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
-			l_return = m_frameBuffer->Create();
+			l_result = m_frameBuffer->Create();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_frameBuffer->Initialise( p_size );
+			l_result = m_frameBuffer->Initialise( p_size );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				m_frameBuffer->Bind();
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( AttachmentPoint::eDepthStencil, m_depthAttach, m_depthBuffer->GetType() );
 				m_frameBuffer->SetDrawBuffer( m_colourAttach );
-				l_return = m_frameBuffer->IsComplete();
+				l_result = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
 			else
@@ -92,7 +92,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void RenderTechnique::TechniqueFbo::Cleanup()

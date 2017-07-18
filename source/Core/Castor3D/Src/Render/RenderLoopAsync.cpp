@@ -142,7 +142,7 @@ namespace Castor3D
 
 	ContextSPtr RenderLoopAsync::DoCreateMainContext( RenderWindow & p_window )
 	{
-		ContextSPtr l_return;
+		ContextSPtr l_result;
 
 		if ( !m_createContext )
 		{
@@ -156,10 +156,10 @@ namespace Castor3D
 
 			m_createContext = false;
 			DoSetWindow( nullptr );
-			l_return = m_renderSystem.GetMainContext();
+			l_result = m_renderSystem.GetMainContext();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void RenderLoopAsync::DoMainLoop()

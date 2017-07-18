@@ -257,9 +257,9 @@ namespace GuiCommon
 				break;
 			}
 
-			wxVariant l_return;
-			l_return << l_point;
-			return l_return;
+			wxVariant l_result;
+			l_result << l_point;
+			return l_result;
 		}
 	};
 

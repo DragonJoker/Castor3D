@@ -94,32 +94,32 @@ namespace
 			File::DirectoryCreate( Engine::GetEngineDirectory() );
 		}
 
-		std::unique_ptr< Engine > l_return = std::make_unique< Engine >();
-		DoLoadPlugins( *l_return );
+		std::unique_ptr< Engine > l_result = std::make_unique< Engine >();
+		DoLoadPlugins( *l_result );
 
-		auto l_renderers = l_return->GetPluginCache().GetPlugins( PluginType::eRenderer );
+		auto l_renderers = l_result->GetPluginCache().GetPlugins( PluginType::eRenderer );
 
 		if ( l_renderers.empty() )
 		{
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( l_return->LoadRenderer( TestRender::TestRenderSystem::Type ) )
+		if ( l_result->LoadRenderer( TestRender::TestRenderSystem::Type ) )
 		{
-			l_return->Initialise( 1, false );
+			l_result->Initialise( 1, false );
 		}
 		else
 		{
 			CASTOR_EXCEPTION( "Couldn't load renderer." );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }
 
 int main( int argc, char const * argv[] )
 {
-	int l_return = EXIT_SUCCESS;
+	int l_result = EXIT_SUCCESS;
 	int l_count = 1;
 
 	if ( argc == 2 )
@@ -142,10 +142,10 @@ int main( int argc, char const * argv[] )
 		Testing::Register( std::make_unique< Testing::SceneExportTest >( *l_engine ) );
 
 		// Tests loop.
-		BENCHLOOP( l_count, l_return );
+		BENCHLOOP( l_count, l_result );
 
 		l_engine->Cleanup();
 	}
 	Logger::Cleanup();
-	return l_return;
+	return l_result;
 }

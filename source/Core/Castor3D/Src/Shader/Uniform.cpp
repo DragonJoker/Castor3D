@@ -157,33 +157,33 @@ namespace Castor3D
 
 	bool Uniform::TextWriter::operator()( Uniform const & p_variable, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "variable\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "variable\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Uniform >::CheckError( l_return, "Uniform type" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Uniform >::CheckError( l_result, "Uniform type" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Uniform >::CheckError( l_return, "Uniform name" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Uniform >::CheckError( l_result, "Uniform name" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Uniform >::CheckError( l_return, "Uniform value" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Uniform >::CheckError( l_result, "Uniform value" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -230,15 +230,15 @@ namespace Castor3D
 
 	String Uniform::GetStrValues()const
 	{
-		String l_return;
+		String l_result;
 		String l_separator;
 
 		for ( uint32_t i = 0u; i < m_occurences; ++i )
 		{
-			l_return += l_separator + GetStrValue( i );
+			l_result += l_separator + GetStrValue( i );
 			l_separator = "|";
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

@@ -153,24 +153,24 @@ namespace Castor3D
 		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent = nullptr )
 		{
 			auto l_lock = Castor::make_unique_lock( this->m_elements );
-			ElementPtr l_return;
+			ElementPtr l_result;
 
 			if ( !this->m_elements.has( p_name ) )
 			{
-				l_return = this->m_produce( p_name );
-				this->m_initialise( l_return );
-				this->m_elements.insert( p_name, l_return );
-				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+				l_result = this->m_produce( p_name );
+				this->m_initialise( l_result );
+				this->m_elements.insert( p_name, l_result );
+				m_attach( l_result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 				this->onChanged();
 			}
 			else
 			{
-				l_return = this->m_elements.find( p_name );
+				l_result = this->m_elements.find( p_name );
 				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
-			return l_return;
+			return l_result;
 		}
 	};
 	using SceneNodeCache = ObjectCache< SceneNode, Castor::String >;

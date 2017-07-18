@@ -53,60 +53,60 @@ namespace Castor3D
 
 	bool BinaryWriter< Submesh >::DoWrite( Submesh const & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
-		if ( l_return )
+		if ( l_result )
 		{
 			VertexBuffer const & l_buffer = p_obj.GetVertexBuffer();
 			size_t l_size = l_buffer.GetSize();
 			uint32_t l_stride = l_buffer.GetDeclaration().stride();
 			uint32_t l_count = uint32_t( l_size / l_stride );
-			l_return = DoWriteChunk( l_count, ChunkType::eSubmeshVertexCount, m_chunk );
+			l_result = DoWriteChunk( l_count, ChunkType::eSubmeshVertexCount, m_chunk );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				InterleavedVertex const * l_srcbuf = reinterpret_cast< InterleavedVertex const * >( l_buffer.GetData() );
 				std::vector< InterleavedVertexT< double > > l_dstbuf( l_count );
 				DoCopyVertices( l_count, l_srcbuf, l_dstbuf.data() );
-				l_return = DoWriteChunk( l_dstbuf, ChunkType::eSubmeshVertex, m_chunk );
+				l_result = DoWriteChunk( l_dstbuf, ChunkType::eSubmeshVertex, m_chunk );
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			IndexBuffer const & l_buffer = p_obj.GetIndexBuffer();
 			uint32_t l_count = l_buffer.GetSize() / 3;
-			l_return = DoWriteChunk( l_count, ChunkType::eSubmeshFaceCount, m_chunk );
+			l_result = DoWriteChunk( l_count, ChunkType::eSubmeshFaceCount, m_chunk );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				FaceIndices const * l_srcbuf = reinterpret_cast< FaceIndices const * >( l_buffer.GetData() );
-				l_return = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / 3, ChunkType::eSubmeshFaces, m_chunk );
+				l_result = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / 3, ChunkType::eSubmeshFaces, m_chunk );
 			}
 		}
 
-		if ( l_return && p_obj.HasBonesBuffer() )
+		if ( l_result && p_obj.HasBonesBuffer() )
 		{
 			VertexBuffer const & l_buffer = p_obj.GetBonesBuffer();
 			uint32_t l_stride = l_buffer.GetDeclaration().stride();
 			uint32_t l_count = l_buffer.GetSize() / l_stride;
-			l_return = DoWriteChunk( l_count, ChunkType::eSubmeshBoneCount, m_chunk );
+			l_result = DoWriteChunk( l_count, ChunkType::eSubmeshBoneCount, m_chunk );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				VertexBoneData const * l_srcbuf = reinterpret_cast< VertexBoneData const * >( l_buffer.GetData() );
-				l_return = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / sizeof( VertexBoneData ), ChunkType::eSubmeshBones, m_chunk );
+				l_result = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / sizeof( VertexBoneData ), ChunkType::eSubmeshBones, m_chunk );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< Submesh >::DoParse( Submesh & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 		String l_name;
 		std::vector< FaceIndices > l_faces;
 		std::vector< VertexBoneData > l_bones;
@@ -116,14 +116,14 @@ namespace Castor3D
 		uint32_t l_boneCount{ 0u };
 		BinaryChunk l_chunk;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( l_result && DoGetSubChunk( l_chunk ) )
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
 			case ChunkType::eSubmeshVertexCount:
-				l_return = DoParseChunk( l_count, l_chunk );
+				l_result = DoParseChunk( l_count, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					l_srcbuf.resize( l_count );
 				}
@@ -131,9 +131,9 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshVertex:
-				l_return = DoParseChunk( l_srcbuf, l_chunk );
+				l_result = DoParseChunk( l_srcbuf, l_chunk );
 
-				if ( l_return && !l_srcbuf.empty() )
+				if ( l_result && !l_srcbuf.empty() )
 				{
 					std::vector< InterleavedVertex > l_dstbuf( l_srcbuf.size() );
 					DoCopyVertices( uint32_t( l_srcbuf.size() ), l_srcbuf.data(), l_dstbuf.data() );
@@ -143,9 +143,9 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshBoneCount:
-				l_return = DoParseChunk( l_count, l_chunk );
+				l_result = DoParseChunk( l_count, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					l_boneCount = l_count;
 					l_bones.resize( l_count );
@@ -154,9 +154,9 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshBones:
-				l_return = DoParseChunk( l_bones, l_chunk );
+				l_result = DoParseChunk( l_bones, l_chunk );
 
-				if ( l_return && l_boneCount > 0 )
+				if ( l_result && l_boneCount > 0 )
 				{
 					p_obj.AddBoneDatas( l_bones );
 				}
@@ -165,9 +165,9 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshFaceCount:
-				l_return = DoParseChunk( l_count, l_chunk );
+				l_result = DoParseChunk( l_count, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					l_faceCount = l_count;
 					l_faces.resize( l_count );
@@ -176,9 +176,9 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshFaces:
-				l_return = DoParseChunk( l_faces, l_chunk );
+				l_result = DoParseChunk( l_faces, l_chunk );
 
-				if ( l_return && l_faceCount > 0 )
+				if ( l_result && l_faceCount > 0 )
 				{
 					p_obj.AddFaceGroup( l_faces );
 				}
@@ -187,12 +187,12 @@ namespace Castor3D
 				break;
 
 			default:
-				l_return = false;
+				l_result = false;
 				break;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -335,14 +335,14 @@ namespace Castor3D
 
 	BufferElementGroupSPtr Submesh::AddPoint( real x, real y, real z )
 	{
-		BufferElementGroupSPtr l_return;
+		BufferElementGroupSPtr l_result;
 		uint32_t l_stride = 3 * sizeof( real ) * 5;
 		m_pointsData.push_back( ByteArray( l_stride ) );
 		uint8_t * l_data = m_pointsData.back().data();
-		l_return = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-		Vertex::SetPosition( l_return, x, y, z );
-		m_points.push_back( l_return );
-		return l_return;
+		l_result = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
+		Vertex::SetPosition( l_result, x, y, z );
+		m_points.push_back( l_result );
+		return l_result;
 	}
 
 	BufferElementGroupSPtr Submesh::AddPoint( Point3r const & p_v )
@@ -393,11 +393,11 @@ namespace Castor3D
 
 	Face Submesh::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
-		Face l_return{ a, b, c };
+		Face l_result{ a, b, c };
 
 		if ( a < m_points.size() && b < m_points.size() && c < m_points.size() )
 		{
-			m_faces.push_back( l_return );
+			m_faces.push_back( l_result );
 			m_hasNormals = false;
 		}
 		else
@@ -405,7 +405,7 @@ namespace Castor3D
 			throw std::range_error( "Submesh::AddFace - One or more index out of bound" );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Submesh::AddFaceGroup( FaceIndices const * const p_begin, FaceIndices const * const p_end )
@@ -642,11 +642,11 @@ namespace Castor3D
 	uint32_t Submesh::UnRef( MaterialSPtr p_material )
 	{
 		auto l_it = m_instanceCount.find( p_material );
-		uint32_t l_return{ 0u };
+		uint32_t l_result{ 0u };
 
 		if ( l_it != m_instanceCount.end() )
 		{
-			l_return = l_it->second;
+			l_result = l_it->second;
 
 			if ( l_it->second )
 			{
@@ -659,20 +659,20 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	uint32_t Submesh::GetRefCount( MaterialSPtr p_material )const
 	{
-		uint32_t l_return = 0;
+		uint32_t l_result = 0;
 		auto l_it = m_instanceCount.find( p_material );
 
 		if ( l_it != m_instanceCount.end() )
 		{
-			l_return = l_it->second;
+			l_result = l_it->second;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	uint32_t Submesh::GetMaxRefCount()const
@@ -688,14 +688,14 @@ namespace Castor3D
 
 	Topology Submesh::GetTopology()const
 	{
-		Topology l_return = Topology::eCount;
+		Topology l_result = Topology::eCount;
 
 		for ( auto l_buffers : m_geometryBuffers )
 		{
-			l_return = l_buffers->GetTopology();
+			l_result = l_buffers->GetTopology();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Submesh::SetTopology( Topology p_value )

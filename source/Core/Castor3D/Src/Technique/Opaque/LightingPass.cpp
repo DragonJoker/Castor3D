@@ -43,14 +43,14 @@ namespace Castor3D
 		, m_frameBuffer{ p_engine.GetRenderSystem()->CreateFrameBuffer() }
 	{
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eTransparentBlack ) );
-		bool l_return = m_frameBuffer->Create();
+		bool l_result = m_frameBuffer->Create();
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_frameBuffer->Initialise( p_size );
+			l_result = m_frameBuffer->Initialise( p_size );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			auto l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone

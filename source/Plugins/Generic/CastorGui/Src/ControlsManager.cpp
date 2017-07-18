@@ -259,10 +259,10 @@ namespace CastorGui
 		}
 
 		auto l_lock = make_unique_lock( m_mutexControls );
-		EventHandlerSPtr l_return;
+		EventHandlerSPtr l_result;
 		auto l_it = m_controlsByZIndex.rbegin();
 
-		while ( !l_return && l_it != m_controlsByZIndex.rend() )
+		while ( !l_result && l_it != m_controlsByZIndex.rend() )
 		{
 			ControlSPtr l_control = *l_it;
 
@@ -273,13 +273,13 @@ namespace CastorGui
 					&& l_control->GetAbsolutePosition().y() + int32_t( l_control->GetSize().height() ) > p_position.y()
 			   )
 			{
-				l_return = l_control;
+				l_result = l_control;
 			}
 
 			++l_it;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ControlsManager::DoUpdate()const

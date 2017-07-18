@@ -56,19 +56,19 @@ namespace Castor3D
 		inline bool Write( TWritten const & p_obj, Castor::BinaryFile & p_file )
 		{
 			BinaryChunk l_chunk{ ChunkType::eCmshFile };
-			bool l_return = DoWriteHeader( l_chunk );
+			bool l_result = DoWriteHeader( l_chunk );
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = Write( p_obj, l_chunk );
+				l_result = Write( p_obj, l_chunk );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = l_chunk.Write( p_file );
+				l_result = l_chunk.Write( p_file );
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english
@@ -84,15 +84,15 @@ namespace Castor3D
 		 */
 		inline bool Write( TWritten const & p_obj, BinaryChunk & p_chunk )
 		{
-			bool l_return{ DoWrite( p_obj ) };
+			bool l_result{ DoWrite( p_obj ) };
 
-			if ( l_return )
+			if ( l_result )
 			{
 				m_chunk.Finalise();
 				p_chunk.AddSubChunk( m_chunk );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 	protected:
@@ -109,22 +109,22 @@ namespace Castor3D
 		inline bool DoWriteHeader( BinaryChunk & p_chunk )const
 		{
 			BinaryChunk l_chunk{ ChunkType::eCmshHeader };
-			bool l_return = DoWriteChunk( CMSH_VERSION, ChunkType::eCmshVersion, l_chunk );
+			bool l_result = DoWriteChunk( CMSH_VERSION, ChunkType::eCmshVersion, l_chunk );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				Castor::StringStream l_stream;
 				l_stream << cuT( "Castor 3D - Version " ) << Castor3D::Version{};
-				l_return = DoWriteChunk( l_stream.str(), ChunkType::eName, l_chunk );
+				l_result = DoWriteChunk( l_stream.str(), ChunkType::eName, l_chunk );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
 				l_chunk.Finalise();
-				l_return = p_chunk.AddSubChunk( l_chunk );
+				l_result = p_chunk.AddSubChunk( l_chunk );
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english

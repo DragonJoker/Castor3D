@@ -71,61 +71,61 @@ namespace CastorGui
 				{ "center", uint32_t( VAlign::eCenter ) },
 				{ "bottom", uint32_t( VAlign::eBottom ) }
 			};
-			FileParser::AttributeParsersBySection l_return;
+			FileParser::AttributeParsersBySection l_result;
 
-			AddParser( l_return, uint32_t( CSCNSection::eRoot ), cuT( "gui" ), &Parser_Gui );
-			AddParser( l_return, uint32_t( CSCNSection::eScene ), cuT( "gui" ), &Parser_Gui );
+			AddParser( l_result, uint32_t( CSCNSection::eRoot ), cuT( "gui" ), &Parser_Gui );
+			AddParser( l_result, uint32_t( CSCNSection::eScene ), cuT( "gui" ), &Parser_Gui );
 
-			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "default_font" ), &Parser_DefaultFont, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "button" ), &Parser_Button, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "static" ), &Parser_Static, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "slider" ), &Parser_Slider, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "combobox" ), &Parser_ComboBox, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "listbox" ), &Parser_ListBox, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "edit" ), &Parser_Edit, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eGUI ), cuT( "}" ), &Parser_GuiEnd );
+			AddParser( l_result, uint32_t( GUISection::eGUI ), cuT( "default_font" ), &Parser_DefaultFont, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eGUI ), cuT( "button" ), &Parser_Button, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eGUI ), cuT( "static" ), &Parser_Static, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eGUI ), cuT( "slider" ), &Parser_Slider, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eGUI ), cuT( "combobox" ), &Parser_ComboBox, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eGUI ), cuT( "listbox" ), &Parser_ListBox, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eGUI ), cuT( "edit" ), &Parser_Edit, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eGUI ), cuT( "}" ), &Parser_GuiEnd );
 
-			CreateDefaultParsers( l_return, uint32_t( GUISection::eButton ), &Parser_ButtonEnd );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "text_material" ), &Parser_ButtonTextMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "highlighted_background_material" ), &Parser_ButtonHighlightedBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "highlighted_foreground_material" ), &Parser_ButtonHighlightedForegroundMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "highlighted_text_material" ), &Parser_ButtonHighlightedTextMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "pushed_background_material" ), &Parser_ButtonPushedBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "pushed_foreground_material" ), &Parser_ButtonPushedForegroundMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "pushed_text_material" ), &Parser_ButtonPushedTextMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "font" ), &Parser_ButtonFont, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "caption" ), &Parser_ButtonCaption, { MakeParameter< ParameterType::eText >() } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "horizontal_align" ), &Parser_ButtonHAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapHAligns ) } );
-			AddParser( l_return, uint32_t( GUISection::eButton ), cuT( "vertical_align" ), &Parser_ButtonVAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapVAligns ) } );
+			CreateDefaultParsers( l_result, uint32_t( GUISection::eButton ), &Parser_ButtonEnd );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "text_material" ), &Parser_ButtonTextMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "highlighted_background_material" ), &Parser_ButtonHighlightedBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "highlighted_foreground_material" ), &Parser_ButtonHighlightedForegroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "highlighted_text_material" ), &Parser_ButtonHighlightedTextMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "pushed_background_material" ), &Parser_ButtonPushedBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "pushed_foreground_material" ), &Parser_ButtonPushedForegroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "pushed_text_material" ), &Parser_ButtonPushedTextMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "font" ), &Parser_ButtonFont, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "caption" ), &Parser_ButtonCaption, { MakeParameter< ParameterType::eText >() } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "horizontal_align" ), &Parser_ButtonHAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapHAligns ) } );
+			AddParser( l_result, uint32_t( GUISection::eButton ), cuT( "vertical_align" ), &Parser_ButtonVAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapVAligns ) } );
 
-			CreateDefaultParsers( l_return, uint32_t( GUISection::eListBox ), &Parser_ListBoxEnd );
-			AddParser( l_return, uint32_t( GUISection::eListBox ), cuT( "font" ), &Parser_ListBoxFont, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eListBox ), cuT( "item" ), &Parser_ListBoxItem, { MakeParameter< ParameterType::eText >() } );
-			AddParser( l_return, uint32_t( GUISection::eListBox ), cuT( "selected_item_background_material" ), &Parser_ListBoxSelectedItemBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eListBox ), cuT( "selected_item_foreground_material" ), &Parser_ListBoxSelectedItemForegroundMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eListBox ), cuT( "highlighted_item_background_material" ), &Parser_ListBoxHighlightedItemBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			CreateDefaultParsers( l_result, uint32_t( GUISection::eListBox ), &Parser_ListBoxEnd );
+			AddParser( l_result, uint32_t( GUISection::eListBox ), cuT( "font" ), &Parser_ListBoxFont, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eListBox ), cuT( "item" ), &Parser_ListBoxItem, { MakeParameter< ParameterType::eText >() } );
+			AddParser( l_result, uint32_t( GUISection::eListBox ), cuT( "selected_item_background_material" ), &Parser_ListBoxSelectedItemBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eListBox ), cuT( "selected_item_foreground_material" ), &Parser_ListBoxSelectedItemForegroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eListBox ), cuT( "highlighted_item_background_material" ), &Parser_ListBoxHighlightedItemBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
 
-			CreateDefaultParsers( l_return, uint32_t( GUISection::eComboBox ), &Parser_ComboBoxEnd );
-			AddParser( l_return, uint32_t( GUISection::eComboBox ), cuT( "font" ), &Parser_ComboBoxFont, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eComboBox ), cuT( "item" ), &Parser_ComboBoxItem, { MakeParameter< ParameterType::eText >() } );
-			AddParser( l_return, uint32_t( GUISection::eComboBox ), cuT( "selected_item_background_material" ), &Parser_ComboBoxSelectedItemBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eComboBox ), cuT( "selected_item_foreground_material" ), &Parser_ComboBoxSelectedItemForegroundMaterial, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eComboBox ), cuT( "highlighted_item_background_material" ), &Parser_ComboBoxHighlightedItemBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			CreateDefaultParsers( l_result, uint32_t( GUISection::eComboBox ), &Parser_ComboBoxEnd );
+			AddParser( l_result, uint32_t( GUISection::eComboBox ), cuT( "font" ), &Parser_ComboBoxFont, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eComboBox ), cuT( "item" ), &Parser_ComboBoxItem, { MakeParameter< ParameterType::eText >() } );
+			AddParser( l_result, uint32_t( GUISection::eComboBox ), cuT( "selected_item_background_material" ), &Parser_ComboBoxSelectedItemBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eComboBox ), cuT( "selected_item_foreground_material" ), &Parser_ComboBoxSelectedItemForegroundMaterial, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eComboBox ), cuT( "highlighted_item_background_material" ), &Parser_ComboBoxHighlightedItemBackgroundMaterial, { MakeParameter< ParameterType::eName >() } );
 
-			CreateDefaultParsers( l_return, uint32_t( GUISection::eStatic ), &Parser_StaticEnd );
-			AddParser( l_return, uint32_t( GUISection::eStatic ), cuT( "font" ), &Parser_StaticFont, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eStatic ), cuT( "caption" ), &Parser_StaticCaption, { MakeParameter< ParameterType::eText >() } );
-			AddParser( l_return, uint32_t( GUISection::eStatic ), cuT( "horizontal_align" ), &Parser_StaticHAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapHAligns ) } );
-			AddParser( l_return, uint32_t( GUISection::eStatic ), cuT( "vertical_align" ), &Parser_StaticVAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapVAligns ) } );
+			CreateDefaultParsers( l_result, uint32_t( GUISection::eStatic ), &Parser_StaticEnd );
+			AddParser( l_result, uint32_t( GUISection::eStatic ), cuT( "font" ), &Parser_StaticFont, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eStatic ), cuT( "caption" ), &Parser_StaticCaption, { MakeParameter< ParameterType::eText >() } );
+			AddParser( l_result, uint32_t( GUISection::eStatic ), cuT( "horizontal_align" ), &Parser_StaticHAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapHAligns ) } );
+			AddParser( l_result, uint32_t( GUISection::eStatic ), cuT( "vertical_align" ), &Parser_StaticVAlign, { MakeParameter< ParameterType::eCheckedText >( l_mapVAligns ) } );
 
-			CreateDefaultParsers( l_return, uint32_t( GUISection::eEdit ), &Parser_EditEnd );
-			AddParser( l_return, uint32_t( GUISection::eEdit ), cuT( "font" ), &Parser_EditFont, { MakeParameter< ParameterType::eName >() } );
-			AddParser( l_return, uint32_t( GUISection::eEdit ), cuT( "multiline" ), &Parser_EditMultiLine, { MakeParameter< ParameterType::eBool >() } );
-			AddParser( l_return, uint32_t( GUISection::eEdit ), cuT( "caption" ), &Parser_EditCaption, { MakeParameter< ParameterType::eText >() } );
+			CreateDefaultParsers( l_result, uint32_t( GUISection::eEdit ), &Parser_EditEnd );
+			AddParser( l_result, uint32_t( GUISection::eEdit ), cuT( "font" ), &Parser_EditFont, { MakeParameter< ParameterType::eName >() } );
+			AddParser( l_result, uint32_t( GUISection::eEdit ), cuT( "multiline" ), &Parser_EditMultiLine, { MakeParameter< ParameterType::eBool >() } );
+			AddParser( l_result, uint32_t( GUISection::eEdit ), cuT( "caption" ), &Parser_EditCaption, { MakeParameter< ParameterType::eText >() } );
 
-			CreateDefaultParsers( l_return, uint32_t( GUISection::eSlider ), &Parser_SliderEnd );
+			CreateDefaultParsers( l_result, uint32_t( GUISection::eSlider ), &Parser_SliderEnd );
 
-			return l_return;
+			return l_result;
 		}
 
 		StrUIntMap CreateSections()

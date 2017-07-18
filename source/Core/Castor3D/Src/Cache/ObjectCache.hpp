@@ -171,7 +171,7 @@ namespace Castor3D
 		 */
 		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
 		{
-			ElementPtr l_return{ p_element };
+			ElementPtr l_result{ p_element };
 
 			if ( p_element )
 			{
@@ -180,7 +180,7 @@ namespace Castor3D
 				if ( m_elements.has( p_name ) )
 				{
 					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
-					l_return = m_elements.find( p_name );
+					l_result = m_elements.find( p_name );
 				}
 				else
 				{
@@ -193,7 +193,7 @@ namespace Castor3D
 				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << GetObjectTypeName() << cuT( ": " ) );
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english
@@ -213,24 +213,24 @@ namespace Castor3D
 		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, Parameters && ... p_parameters )
 		{
 			auto l_lock = Castor::make_unique_lock( m_elements );
-			ElementPtr l_return;
+			ElementPtr l_result;
 
 			if ( !m_elements.has( p_name ) )
 			{
-				l_return = m_produce( p_name, p_parent, std::forward< Parameters >( p_parameters )... );
-				m_initialise( l_return );
-				m_elements.insert( p_name, l_return );
-				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+				l_result = m_produce( p_name, p_parent, std::forward< Parameters >( p_parameters )... );
+				m_initialise( l_result );
+				m_elements.insert( p_name, l_result );
+				m_attach( l_result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 				onChanged();
 			}
 			else
 			{
-				l_return = m_elements.find( p_name );
+				l_result = m_elements.find( p_name );
 				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english

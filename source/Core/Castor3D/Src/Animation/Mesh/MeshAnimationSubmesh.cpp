@@ -70,41 +70,41 @@ namespace Castor3D
 
 	bool BinaryWriter< MeshAnimationSubmesh >::DoWrite( MeshAnimationSubmesh const & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoWriteChunk( real( p_obj.m_length.count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
+			l_result = DoWriteChunk( real( p_obj.m_length.count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( !p_obj.m_buffers.empty() )
 		{
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = DoWriteChunk( uint32_t( p_obj.m_buffers.begin()->m_buffer.size() ), ChunkType::eSubmeshAnimationBufferSize, m_chunk );
+				l_result = DoWriteChunk( uint32_t( p_obj.m_buffers.begin()->m_buffer.size() ), ChunkType::eSubmeshAnimationBufferSize, m_chunk );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = DoWriteChunk( uint32_t( p_obj.m_buffers.size() ), ChunkType::eSubmeshAnimationBuffersCount, m_chunk );
+				l_result = DoWriteChunk( uint32_t( p_obj.m_buffers.size() ), ChunkType::eSubmeshAnimationBuffersCount, m_chunk );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
 				std::vector< SubmeshAnimationBufferd > l_buffers;
 				DoConvert( p_obj.m_buffers, l_buffers );
-				l_return = DoWriteChunk( l_buffers, ChunkType::eSubmeshAnimationBuffers, m_chunk );
+				l_result = DoWriteChunk( l_buffers, ChunkType::eSubmeshAnimationBuffers, m_chunk );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< MeshAnimationSubmesh >::DoParse( MeshAnimationSubmesh & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 		Matrix4x4r l_transform;
 		std::vector< SubmeshAnimationBufferd > l_buffers;
 		BinaryChunk l_chunk;
@@ -112,14 +112,14 @@ namespace Castor3D
 		uint32_t l_count{ 0 };
 		real l_length{ 0.0_r };
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( l_result && DoGetSubChunk( l_chunk ) )
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
 			case ChunkType::eSubmeshAnimationBufferSize:
-				l_return = DoParseChunk( l_size, l_chunk );
+				l_result = DoParseChunk( l_size, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					l_buffers.resize( l_size );
 				}
@@ -127,9 +127,9 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshAnimationBuffersCount:
-				l_return = DoParseChunk( l_count, l_chunk );
+				l_result = DoParseChunk( l_count, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					for ( auto & l_buffer : l_buffers )
 					{
@@ -140,9 +140,9 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eSubmeshAnimationBuffers:
-				l_return = DoParseChunk( l_buffers, l_chunk );
+				l_result = DoParseChunk( l_buffers, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					DoConvert( l_buffers, p_obj.m_buffers );
 				}
@@ -150,13 +150,13 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eAnimLength:
-				l_return = DoParseChunk( l_length, l_chunk );
+				l_result = DoParseChunk( l_length, l_chunk );
 				p_obj.m_length = std::chrono::milliseconds{ int64_t( l_length * 1000 ) };
 				break;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -179,16 +179,16 @@ namespace Castor3D
 			return std::chrono::milliseconds{ int64_t( p_keyframe.m_timeIndex ) } == p_from;
 		} );
 
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( l_it == m_buffers.end() )
 		{
 			m_length = p_from;
 			m_buffers.insert( m_buffers.end(), SubmeshAnimationBuffer{ float( p_from.count() ), std::move( p_buffer ) } );
-			l_return = true;
+			l_result = true;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************

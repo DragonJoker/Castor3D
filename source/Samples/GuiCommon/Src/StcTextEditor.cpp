@@ -94,7 +94,7 @@ bool StcTextEditor::TextAutoCompleter::Start( wxString const & p_prefix )
 
 wxString StcTextEditor::TextAutoCompleter::GetNext()
 {
-	wxString l_return;
+	wxString l_result;
 
 	if ( m_current != m_keywords.end() )
 	{
@@ -104,12 +104,12 @@ wxString StcTextEditor::TextAutoCompleter::GetNext()
 		{
 			if ( m_current->find( m_prefix ) == 0 )
 			{
-				l_return = *m_current;
+				l_result = *m_current;
 			}
 		}
 	}
 
-	return l_return;
+	return l_result;
 }
 #endif
 //*************************************************************************************************
@@ -165,7 +165,7 @@ StcTextEditor::~StcTextEditor()
 
 bool StcTextEditor::LoadFile()
 {
-	bool l_return = false;
+	bool l_result = false;
 #if wxUSE_FILEDLG
 
 	if ( ! m_strFilename )
@@ -180,9 +180,9 @@ bool StcTextEditor::LoadFile()
 		m_strFilename = l_dlg.GetPath();
 	}
 
-	l_return = LoadFile( m_strFilename );
+	l_result = LoadFile( m_strFilename );
 #endif
-	return l_return;
+	return l_result;
 }
 
 bool StcTextEditor::LoadFile( wxString const & p_strFilename )
@@ -213,7 +213,7 @@ void StcTextEditor::SetText( wxString const & p_strSource )
 
 bool StcTextEditor::SaveFile()
 {
-	bool l_return = false;
+	bool l_result = false;
 #if wxUSE_FILEDLG
 
 	if ( IsModified() )
@@ -224,43 +224,43 @@ bool StcTextEditor::SaveFile()
 
 			if ( l_dlg.ShowModal() != wxID_OK )
 			{
-				l_return = false;
+				l_result = false;
 			}
 			else
 			{
-				l_return = true;
+				l_result = true;
 				m_strFilename = l_dlg.GetPath();
 			}
 		}
 		else
 		{
-			l_return = true;
+			l_result = true;
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = SaveFile( m_strFilename );
+			l_result = SaveFile( m_strFilename );
 		}
 	}
 	else
 	{
-		l_return = true;
+		l_result = true;
 	}
 
 #endif
-	return l_return;
+	return l_result;
 }
 
 bool StcTextEditor::SaveFile( wxString const & p_strFilename )
 {
-	bool l_return = true;
+	bool l_result = true;
 
 	if ( IsModified() )
 	{
-		l_return = wxStyledTextCtrl::SaveFile( p_strFilename );
+		l_result = wxStyledTextCtrl::SaveFile( p_strFilename );
 	}
 
-	return l_return;
+	return l_result;
 }
 
 bool StcTextEditor::IsModified()

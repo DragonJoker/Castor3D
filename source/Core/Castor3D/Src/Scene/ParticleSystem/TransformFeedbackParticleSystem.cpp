@@ -38,24 +38,24 @@ namespace Castor3D
 
 	bool TransformFeedbackParticleSystem::Initialise()
 	{
-		bool l_return = m_updateProgram != nullptr;
+		bool l_result = m_updateProgram != nullptr;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoCreateRandomTexture();
+			l_result = DoCreateRandomTexture();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_updateProgram->Initialise();
+			l_result = m_updateProgram->Initialise();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoCreateUpdatePipeline();
+			l_result = DoCreateUpdatePipeline();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void TransformFeedbackParticleSystem::Cleanup()
@@ -176,13 +176,13 @@ namespace Castor3D
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
 
 		Particle l_particle{ m_computed, m_parent.GetDefaultValues() };
-		bool l_return{ true };
+		bool l_result{ true };
 
-		for ( uint32_t i = 0; i < 2 && l_return; ++i )
+		for ( uint32_t i = 0; i < 2 && l_result; ++i )
 		{
 			m_updateVertexBuffers[i] = std::make_shared< VertexBuffer >( l_engine, m_inputs );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				m_updateVertexBuffers[i]->Resize( uint32_t( m_parent.GetMaxParticlesCount() ) * m_computed.stride() );
 				auto l_buffer = m_updateVertexBuffers[i]->GetData();
@@ -193,23 +193,23 @@ namespace Castor3D
 					l_buffer += m_computed.stride();
 				}
 
-				l_return = m_updateVertexBuffers[i]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				l_result = m_updateVertexBuffers[i]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 		}
 
-		for ( uint32_t i = 0; i < 2 && l_return; ++i )
+		for ( uint32_t i = 0; i < 2 && l_result; ++i )
 		{
 			m_transformFeedbacks[i] = l_renderSystem.CreateTransformFeedback( m_computed, Topology::ePoints, *m_updateProgram );
-			l_return = m_transformFeedbacks[i]->Initialise( { *m_updateVertexBuffers[i] } );
+			l_result = m_transformFeedbacks[i]->Initialise( { *m_updateVertexBuffers[i] } );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				m_updateGeometryBuffers[i] = l_renderSystem.CreateGeometryBuffers( Topology::ePoints, *m_updateProgram );
-				l_return = m_updateGeometryBuffers[i]->Initialise( { *m_updateVertexBuffers[i] }, nullptr );
+				l_result = m_updateGeometryBuffers[i]->Initialise( { *m_updateVertexBuffers[i] }, nullptr );
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			RasteriserState l_rs;
 			l_rs.SetDiscardPrimitives( true );
@@ -224,7 +224,7 @@ namespace Castor3D
 			m_updatePipeline->AddUniformBuffer( m_ubo );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool TransformFeedbackParticleSystem::DoCreateRandomTexture()
@@ -251,17 +251,17 @@ namespace Castor3D
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
-		bool l_return = l_sampler->Initialise();
+		bool l_result = l_sampler->Initialise();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_randomTexture.SetTexture( l_texture );
 			m_randomTexture.SetSampler( l_sampler );
 			m_randomTexture.SetIndex( 0 );
-			l_return = m_randomTexture.Initialise();
+			l_result = m_randomTexture.Initialise();
 			l_texture->GenerateMipmaps();
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

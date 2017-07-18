@@ -74,9 +74,9 @@ namespace GlRender
 			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
 		}
 
-		bool l_return = ObjectType::Create();
+		bool l_result = ObjectType::Create();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			GetOpenGl().BindVertexArray( GetGlName() );
 
@@ -100,7 +100,7 @@ namespace GlRender
 			GetOpenGl().BindVertexArray( 0 );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GlGeometryBuffers::DoCleanup()
@@ -112,35 +112,35 @@ namespace GlRender
 	BufferDeclaration::const_iterator GlGeometryBuffers::DoFindElement( BufferDeclaration const & p_declaration, BufferElementDeclaration const & p_element )const
 	{
 		// First try to find an attribute with matching name.
-		BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
+		BufferDeclaration::const_iterator l_result = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
 		{
 			return l_element.m_name == p_element.m_name;
 		} );
 
-		if ( l_return == p_declaration.end() )
+		if ( l_result == p_declaration.end() )
 		{
 			// We try to find an element with the same ElementUsage as asked.
-			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
+			BufferDeclaration::const_iterator l_result = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
 			{
 				return l_element.m_usages == p_element.m_usages;
 			} );
 		}
 
-		if ( l_return == p_declaration.end() )
+		if ( l_result == p_declaration.end() )
 		{
 			// We try to find an element with an ElementUsage approaching the one asked.
-			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
+			BufferDeclaration::const_iterator l_result = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
 			{
 				return ( l_element.m_usages & p_element.m_usages ) != 0;
 			} );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	GlAttributeBaseSPtr GlGeometryBuffers::DoCreateAttribute( BufferElementDeclaration const & p_element, uint32_t p_offset, uint32_t p_divisor, BufferDeclaration const & p_declaration )
 	{
-		bool l_return = true;
+		bool l_result = true;
 		auto const & l_renderSystem = GetOpenGl().GetRenderSystem();
 		GlAttributeBaseSPtr l_attribute;
 		uint32_t l_stride = p_declaration.stride();

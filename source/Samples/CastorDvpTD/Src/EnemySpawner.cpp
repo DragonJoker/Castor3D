@@ -53,7 +53,7 @@ namespace castortd
 		++m_totalSpawned;
 		auto & l_pathNode = *p_path.begin();
 		auto & l_cell = p_game.GetCell( Point2i{ l_pathNode.m_x, l_pathNode.m_y } );
-		EnemyPtr l_return;
+		EnemyPtr l_result;
 
 		if ( m_enemiesCache.empty() )
 		{
@@ -75,17 +75,17 @@ namespace castortd
 			l_light->SetColour( Colour::from_predef( PredefinedColour::eOpaqueRed ) );
 			l_light->SetIntensity( 0.8f, 1.0f );
 			l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );
-			l_return = std::make_shared< Enemy >( *l_baseNode, p_game, p_path, m_category );
+			l_result = std::make_shared< Enemy >( *l_baseNode, p_game, p_path, m_category );
 		}
 		else
 		{
-			l_return = m_enemiesCache.front();
+			l_result = m_enemiesCache.front();
 			m_enemiesCache.erase( m_enemiesCache.begin() );
-			l_return->GetNode().SetPosition( p_game.Convert( Point2i{ l_cell.m_x, l_cell.m_y - 1 } ) + Point3r{ 0, p_game.GetCellHeight(), 0 } );
-			l_return->Load( p_game );
+			l_result->GetNode().SetPosition( p_game.Convert( Point2i{ l_cell.m_x, l_cell.m_y - 1 } ) + Point3r{ 0, p_game.GetCellHeight(), 0 } );
+			l_result->Load( p_game );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void EnemySpawner::KillEnemy( Game & p_game, EnemyPtr && p_enemy )

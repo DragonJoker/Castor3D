@@ -10,44 +10,44 @@ namespace Castor3D
 
 	bool BinaryWriter< Bone >::DoWrite( Bone const & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			l_result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoWriteChunk( p_obj.GetOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
+			l_result = DoWriteChunk( p_obj.GetOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
 		}
 
 		if ( p_obj.GetParent() )
 		{
-			l_return = DoWriteChunk( p_obj.GetParent()->GetName(), ChunkType::eBoneParentName, m_chunk );
+			l_result = DoWriteChunk( p_obj.GetParent()->GetName(), ChunkType::eBoneParentName, m_chunk );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< Bone >::DoParse( Bone & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 		BoneSPtr l_bone;
 		String l_name;
 		BinaryChunk l_chunk;
 		auto & l_skeleton = p_obj.m_skeleton;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( l_result && DoGetSubChunk( l_chunk ) )
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
 			case ChunkType::eName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				l_result = DoParseChunk( l_name, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					p_obj.SetName( l_name );
 				}
@@ -55,13 +55,13 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eBoneOffsetMatrix:
-				l_return = DoParseChunk( p_obj.m_offset, l_chunk );
+				l_result = DoParseChunk( p_obj.m_offset, l_chunk );
 				break;
 
 			case ChunkType::eBoneParentName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				l_result = DoParseChunk( l_name, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					auto l_parent = l_skeleton.FindBone( l_name );
 
@@ -72,7 +72,7 @@ namespace Castor3D
 					}
 					else
 					{
-						l_return = false;
+						l_result = false;
 					}
 				}
 
@@ -80,7 +80,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************

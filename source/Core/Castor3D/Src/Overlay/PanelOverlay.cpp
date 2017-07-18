@@ -16,21 +16,21 @@ namespace Castor3D
 	bool PanelOverlay::TextWriter::operator()( PanelOverlay const & p_overlay, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing PanelOverlay " ) + p_overlay.GetOverlayName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		OverlayCategory::TextWriter::CheckError( l_return, "PanelOverlay name" );
+		OverlayCategory::TextWriter::CheckError( l_result, "PanelOverlay name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
+			l_result = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool PanelOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )

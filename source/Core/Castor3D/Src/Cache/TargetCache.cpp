@@ -22,9 +22,9 @@ namespace Castor3D
 	RenderTargetSPtr RenderTargetCache::Add( TargetType p_type )
 	{
 		auto l_lock = make_unique_lock( *this );
-		RenderTargetSPtr l_return = std::make_shared< RenderTarget >( *GetEngine(), p_type );
-		m_renderTargets[size_t( p_type )].push_back( l_return );
-		return l_return;
+		RenderTargetSPtr l_result = std::make_shared< RenderTarget >( *GetEngine(), p_type );
+		m_renderTargets[size_t( p_type )].push_back( l_result );
+		return l_result;
 	}
 
 	void RenderTargetCache::AddShadowProducer( Light & p_light )

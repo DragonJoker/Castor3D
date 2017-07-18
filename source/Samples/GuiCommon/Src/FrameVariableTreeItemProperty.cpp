@@ -60,120 +60,120 @@ namespace GuiCommon
 		wxPGProperty * DoBuildValueProperty( wxString const & p_name
 			, UniformSPtr p_variable )
 		{
-			wxPGProperty * l_return = nullptr;
+			wxPGProperty * l_result = nullptr;
 
 			switch ( p_variable->GetFullType() )
 			{
 			case UniformType::eBool:
-				l_return = new wxBoolProperty( p_name, p_name, std::static_pointer_cast< Uniform1b >( p_variable )->GetValue() );
+				l_result = new wxBoolProperty( p_name, p_name, std::static_pointer_cast< Uniform1b >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eInt:
-				l_return = new wxIntProperty( p_name, p_name, std::static_pointer_cast< Uniform1i >( p_variable )->GetValue() );
+				l_result = new wxIntProperty( p_name, p_name, std::static_pointer_cast< Uniform1i >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eUInt:
-				l_return = new wxUIntProperty( p_name, p_name, std::static_pointer_cast< Uniform1ui >( p_variable )->GetValue() );
+				l_result = new wxUIntProperty( p_name, p_name, std::static_pointer_cast< Uniform1ui >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eFloat:
-				l_return = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1f >( p_variable )->GetValue() );
+				l_result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1f >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eDouble:
-				l_return = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1d >( p_variable )->GetValue() );
+				l_result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1d >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eSampler:
-				l_return = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1i >( p_variable )->GetValue() );
+				l_result = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< Uniform1i >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec2b:
-				l_return = new BoolPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2b >( p_variable )->GetValue() );
+				l_result = new BoolPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2b >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec3b:
-				l_return = new BoolPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3b >( p_variable )->GetValue() );
+				l_result = new BoolPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3b >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec4b:
-				l_return = new BoolPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4b >( p_variable )->GetValue() );
+				l_result = new BoolPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4b >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec2i:
-				l_return = new IntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2i >( p_variable )->GetValue() );
+				l_result = new IntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2i >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec3i:
-				l_return = new IntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3i >( p_variable )->GetValue() );
+				l_result = new IntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3i >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec4i:
-				l_return = new IntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4i >( p_variable )->GetValue() );
+				l_result = new IntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4i >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec2ui:
-				l_return = new UIntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2ui >( p_variable )->GetValue() );
+				l_result = new UIntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2ui >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec3ui:
-				l_return = new UIntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3ui >( p_variable )->GetValue() );
+				l_result = new UIntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3ui >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec4ui:
-				l_return = new UIntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4ui >( p_variable )->GetValue() );
+				l_result = new UIntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4ui >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec2f:
-				l_return = new FloatPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2f >( p_variable )->GetValue() );
+				l_result = new FloatPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2f >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec3f:
-				l_return = new FloatPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3f >( p_variable )->GetValue() );
+				l_result = new FloatPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3f >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec4f:
-				l_return = new FloatPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4f >( p_variable )->GetValue() );
+				l_result = new FloatPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4f >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec2d:
-				l_return = new DoublePointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2d >( p_variable )->GetValue() );
+				l_result = new DoublePointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Uniform2d >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec3d:
-				l_return = new DoublePointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3d >( p_variable )->GetValue() );
+				l_result = new DoublePointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Uniform3d >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eVec4d:
-				l_return = new DoublePointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4d >( p_variable )->GetValue() );
+				l_result = new DoublePointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Uniform4d >( p_variable )->GetValue() );
 				break;
 
 			case UniformType::eMat2x2f:
-				l_return = new FloatMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2f{ std::static_pointer_cast< Uniform2x2f >( p_variable )->GetValue() } );
+				l_result = new FloatMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2f{ std::static_pointer_cast< Uniform2x2f >( p_variable )->GetValue() } );
 				break;
 
 			case UniformType::eMat3x3f:
-				l_return = new FloatMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3f{ std::static_pointer_cast< Uniform3x3f >( p_variable )->GetValue() } );
+				l_result = new FloatMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3f{ std::static_pointer_cast< Uniform3x3f >( p_variable )->GetValue() } );
 				break;
 
 			case UniformType::eMat4x4f:
-				l_return = new FloatMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4f{ std::static_pointer_cast< Uniform4x4f >( p_variable )->GetValue() } );
+				l_result = new FloatMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4f{ std::static_pointer_cast< Uniform4x4f >( p_variable )->GetValue() } );
 				break;
 
 			case UniformType::eMat2x2d:
-				l_return = new DoubleMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2d{ std::static_pointer_cast< Uniform2x2d >( p_variable )->GetValue() } );
+				l_result = new DoubleMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2d{ std::static_pointer_cast< Uniform2x2d >( p_variable )->GetValue() } );
 				break;
 
 			case UniformType::eMat3x3d:
-				l_return = new DoubleMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3d{ std::static_pointer_cast< Uniform3x3d >( p_variable )->GetValue() } );
+				l_result = new DoubleMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3d{ std::static_pointer_cast< Uniform3x3d >( p_variable )->GetValue() } );
 				break;
 
 			case UniformType::eMat4x4d:
-				l_return = new DoubleMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4d{ std::static_pointer_cast< Uniform4x4d >( p_variable )->GetValue() } );
+				l_result = new DoubleMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4d{ std::static_pointer_cast< Uniform4x4d >( p_variable )->GetValue() } );
 				break;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		void DoSetValue( UniformSPtr p_variable, wxVariant const & p_value, int p_index = 0 )

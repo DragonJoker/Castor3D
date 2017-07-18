@@ -76,21 +76,21 @@ namespace Castor3D
 
 	uint32_t Overlay::GetChildrenCount( int p_level )const
 	{
-		uint32_t l_return{ 0 };
+		uint32_t l_result{ 0 };
 
 		if ( p_level == GetLevel() + 1 )
 		{
-			l_return = int( m_overlays.size() );
+			l_result = int( m_overlays.size() );
 		}
 		else if ( p_level > GetLevel() )
 		{
 			for ( auto l_overlay : m_overlays )
 			{
-				l_return += l_overlay->GetChildrenCount( p_level );
+				l_result += l_overlay->GetChildrenCount( p_level );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	PanelOverlaySPtr Overlay::GetPanelOverlay()const
@@ -125,13 +125,13 @@ namespace Castor3D
 
 	bool Overlay::IsVisible()const
 	{
-		bool l_return = m_category->IsVisible();
+		bool l_result = m_category->IsVisible();
 
-		if ( l_return && GetParent() )
+		if ( l_result && GetParent() )
 		{
-			l_return = GetParent()->IsVisible();
+			l_result = GetParent()->IsVisible();
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

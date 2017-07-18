@@ -16,15 +16,15 @@ namespace castortd
 	{
 		TextOverlaySPtr GetTextOverlay( OverlayCache & p_cache, String const & p_name )
 		{
-			TextOverlaySPtr l_return;
+			TextOverlaySPtr l_result;
 			OverlaySPtr l_overlay = p_cache.Find( p_name );
 
 			if ( l_overlay )
 			{
-				l_return = l_overlay->GetTextOverlay();
+				l_result = l_overlay->GetTextOverlay();
 			}
 
-			return l_return;
+			return l_result;
 		}
 	}
 

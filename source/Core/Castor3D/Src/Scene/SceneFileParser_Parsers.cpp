@@ -54,8 +54,8 @@ namespace Castor3D
 	{
 		InterleavedVertexArray Convert( VertexPtrArray const & p_points )
 		{
-			InterleavedVertexArray l_return;
-			l_return.reserve( p_points.size() );
+			InterleavedVertexArray l_result;
+			l_result.reserve( p_points.size() );
 
 			for ( auto l_point : p_points )
 			{
@@ -65,10 +65,10 @@ namespace Castor3D
 				Vertex::GetTangent( *l_point, l_vertex.m_tan );
 				Vertex::GetBitangent( *l_point, l_vertex.m_bin );
 				Vertex::GetTexCoord( *l_point, l_vertex.m_tex );
-				l_return.push_back( l_vertex );
+				l_result.push_back( l_vertex );
 			}
 
-			return l_return;
+			return l_result;
 		}
 	}
 

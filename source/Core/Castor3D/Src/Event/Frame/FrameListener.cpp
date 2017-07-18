@@ -40,35 +40,35 @@ namespace Castor3D
 		FrameEventPtrArray l_arrayEvents;
 		std::swap( l_arrayEvents, m_events[size_t( p_type )] );
 		m_mutex.unlock();
-		bool l_return = true;
+		bool l_result = true;
 
 		try
 		{
 			for ( auto & l_event : l_arrayEvents )
 			{
-				if ( l_return )
+				if ( l_result )
 				{
-					l_return = l_event->Apply();
+					l_result = l_event->Apply();
 				}
 			}
 		}
 		catch ( Exception & p_exc )
 		{
 			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::string_cast< xchar >( p_exc.GetFullDescription() ) );
-			l_return = false;
+			l_result = false;
 		}
 		catch ( std::exception & p_exc )
 		{
 			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::string_cast< xchar >( p_exc.what() ) );
-			l_return = false;
+			l_result = false;
 		}
 		catch ( ... )
 		{
 			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events" ) );
-			l_return = false;
+			l_result = false;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void FrameListener::FlushEvents( EventType p_type )

@@ -24,79 +24,79 @@ namespace Castor3D
 
 	bool ParticleSystem::TextWriter::operator()( ParticleSystem const & p_obj, Castor::TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "particle_system \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "particle_system \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		MovableObject::TextWriter::CheckError( l_return, "ParticleSystem name" );
+		MovableObject::TextWriter::CheckError( l_result, "ParticleSystem name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_obj, p_file );
+			l_result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_obj, p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tparticles_count %d\n" ), m_tabs.c_str(), uint32_t( p_obj.GetMaxParticlesCount() ) ) > 0;
-			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particles count" );
+			l_result = p_file.Print( 256, cuT( "%s\tparticles_count %d\n" ), m_tabs.c_str(), uint32_t( p_obj.GetMaxParticlesCount() ) ) > 0;
+			MovableObject::TextWriter::CheckError( l_result, "ParticleSystem particles count" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
-			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem dimensions" );
+			l_result = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
+			MovableObject::TextWriter::CheckError( l_result, "ParticleSystem dimensions" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
-			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem material" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			MovableObject::TextWriter::CheckError( l_result, "ParticleSystem material" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tparticle\n" ) ) > 0
+			l_result = p_file.WriteText( m_tabs + cuT( "\tparticle\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
-			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle" );
+			MovableObject::TextWriter::CheckError( l_result, "ParticleSystem particle" );
 
-			if ( l_return && !p_obj.GetParticleType().empty() )
+			if ( l_result && !p_obj.GetParticleType().empty() )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\t\ttype \"" ) + p_obj.GetParticleType() + cuT( "\"\n" ) ) > 0;
-				MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle" );
+				l_result = p_file.WriteText( m_tabs + cuT( "\t\ttype \"" ) + p_obj.GetParticleType() + cuT( "\"\n" ) ) > 0;
+				MovableObject::TextWriter::CheckError( l_result, "ParticleSystem particle" );
 			}
 
 			auto l_values = p_obj.GetDefaultValues();
 
 			for ( auto & l_var : p_obj.GetParticleVariables() )
 			{
-				if ( l_return )
+				if ( l_result )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\t\tvariable \"" ) + l_var.m_name + cuT( "\" " ) + Castor3D::GetName( l_var.m_dataType ) + cuT( " " ) + l_values[cuT( "out_" ) + l_var.m_name] + cuT( "\n" ) ) > 0;
-					MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle variable" );
+					l_result = p_file.WriteText( m_tabs + cuT( "\t\tvariable \"" ) + l_var.m_name + cuT( "\" " ) + Castor3D::GetName( l_var.m_dataType ) + cuT( " " ) + l_values[cuT( "out_" ) + l_var.m_name] + cuT( "\n" ) ) > 0;
+					MovableObject::TextWriter::CheckError( l_result, "ParticleSystem particle variable" );
 				}
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-				MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle" );
+				l_result = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				MovableObject::TextWriter::CheckError( l_result, "ParticleSystem particle" );
 			}
 		}
 
-		if ( l_return && p_obj.m_tfImpl->HasUpdateProgram() )
+		if ( l_result && p_obj.m_tfImpl->HasUpdateProgram() )
 		{
-			l_return = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "tf_shader_program" ) )( p_obj.m_tfImpl->GetUpdateProgram(), p_file );
+			l_result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "tf_shader_program" ) )( p_obj.m_tfImpl->GetUpdateProgram(), p_file );
 		}
 
-		if ( l_return && p_obj.m_csImpl->HasUpdateProgram() )
+		if ( l_result && p_obj.m_csImpl->HasUpdateProgram() )
 		{
-			l_return = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( p_obj.m_csImpl->GetUpdateProgram(), p_file );
+			l_result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( p_obj.m_csImpl->GetUpdateProgram(), p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -124,32 +124,32 @@ namespace Castor3D
 		m_particlesBillboard->SetDimensions( m_dimensions );
 		m_particlesBillboard->SetMaterial( m_material.lock() );
 		m_particlesBillboard->SetCenterOffset( m_centerOffset );
-		bool l_return = m_particlesBillboard->Initialise( uint32_t( m_particlesCount ) );
+		bool l_result = m_particlesBillboard->Initialise( uint32_t( m_particlesCount ) );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_csImpl->Initialise();
+			l_result = m_csImpl->Initialise();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			Logger::LogInfo( cuT( "Using Compute Shader Particle System" ) );
 			m_impl = m_csImpl.get();
 		}
 		else
 		{
-			l_return = m_tfImpl->Initialise();
+			l_result = m_tfImpl->Initialise();
 
-			if ( l_return )
+			if ( l_result )
 			{
 				Logger::LogInfo( cuT( "Using Transform Feedback Particle System" ) );
 				m_impl = m_tfImpl.get();
 			}
 			else
 			{
-				l_return = m_cpuImpl->Initialise();
+				l_result = m_cpuImpl->Initialise();
 
-				if ( l_return )
+				if ( l_result )
 				{
 					Logger::LogInfo( cuT( "Using CPU Particle System" ) );
 					m_impl = m_cpuImpl.get();
@@ -158,7 +158,7 @@ namespace Castor3D
 		}
 
 		m_timer.Time();
-		return l_return;
+		return l_result;
 	}
 
 	void ParticleSystem::Cleanup()

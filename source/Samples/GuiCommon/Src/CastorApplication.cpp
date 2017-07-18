@@ -107,7 +107,7 @@ namespace GuiCommon
 
 #endif
 
-		bool l_return = DoParseCommandLine();
+		bool l_result = DoParseCommandLine();
 		wxDisplay l_display;
 		wxRect l_rect = l_display.GetClientArea();
 		SplashScreen l_splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), m_steps, m_version );
@@ -115,33 +115,33 @@ namespace GuiCommon
 		wxApp::SetTopWindow( m_splashScreen );
 		wxWindow * l_window = nullptr;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoInitialiseLocale( l_splashScreen );
+			l_result = DoInitialiseLocale( l_splashScreen );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			try
 			{
 				DoLoadImages( l_splashScreen );
-				l_return = DoInitialiseCastor( l_splashScreen );
+				l_result = DoInitialiseCastor( l_splashScreen );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					l_window = DoInitialiseMainFrame( &l_splashScreen );
-					l_return = l_window != nullptr;
+					l_result = l_window != nullptr;
 				}
 			}
 			catch ( Exception & exc )
 			{
 				Logger::LogError( std::stringstream() << string::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.GetFullDescription() );
-				l_return = false;
+				l_result = false;
 			}
 			catch ( std::exception & exc )
 			{
 				Logger::LogError( std::stringstream() << string::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
-				l_return = false;
+				l_result = false;
 			}
 		}
 
@@ -149,12 +149,12 @@ namespace GuiCommon
 		l_splashScreen.Close();
 		m_splashScreen = nullptr;
 
-		if ( !l_return )
+		if ( !l_result )
 		{
 			DoCleanup();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	int CastorApplication::OnExit()
@@ -172,16 +172,16 @@ namespace GuiCommon
 		l_parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 		l_parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
 		l_parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test" ) );
-		bool l_return = l_parser.Parse( false ) == 0;
+		bool l_result = l_parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
-		if ( !l_return || l_parser.Found( wxT( 'h' ) ) )
+		if ( !l_result || l_parser.Found( wxT( 'h' ) ) )
 		{
 			l_parser.Usage();
-			l_return = false;
+			l_result = false;
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			LogType l_eLogLevel = LogType::eCount;
 			long l_log;
@@ -215,7 +215,7 @@ namespace GuiCommon
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool CastorApplication::DoInitialiseLocale( SplashScreen & p_splashScreen )
@@ -252,7 +252,7 @@ namespace GuiCommon
 
 	bool CastorApplication::DoInitialiseCastor( SplashScreen & p_splashScreen )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
 		if ( !File::DirectoryExists( Engine::GetEngineDirectory() ) )
 		{
@@ -288,20 +288,20 @@ namespace GuiCommon
 			}
 			else
 			{
-				l_return = false;
+				l_result = false;
 			}
 		}
 		else
 		{
-			l_return = true;
+			l_result = true;
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = m_castor->LoadRenderer( m_rendererType );
+			l_result = m_castor->LoadRenderer( m_rendererType );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void CastorApplication::DoLoadPlugins( SplashScreen & p_splashScreen )

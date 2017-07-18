@@ -71,14 +71,14 @@ namespace Castor3D
 		 */
 		Pointer GetReversed()const
 		{
-			Pointer l_return = std::make_shared< Pattern< T > >();
+			Pointer l_result = std::make_shared< Pattern< T > >();
 
 			for ( typename TObjList::iterator l_it = m_listElements.begin(); l_it != m_listElements.end(); l_it++ )
 			{
-				l_return->m_listElements.push_front( *l_it );
+				l_result->m_listElements.push_front( *l_it );
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english

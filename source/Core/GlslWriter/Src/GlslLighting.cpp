@@ -11,34 +11,34 @@ namespace GLSL
 
 	String ParamToString( String & p_sep, FragmentInput const & p_value )
 	{
-		StringStream l_return;
-		l_return << ParamToString( p_sep, p_value.m_v3Vertex );
-		l_return << ParamToString( p_sep, p_value.m_v3Normal );
-		return l_return.str();
+		StringStream l_result;
+		l_result << ParamToString( p_sep, p_value.m_v3Vertex );
+		l_result << ParamToString( p_sep, p_value.m_v3Normal );
+		return l_result.str();
 	}
 
 	String ParamToString( String & p_sep, OutputComponents const & p_value )
 	{
-		StringStream l_return;
-		l_return << ParamToString( p_sep, p_value.m_v3Diffuse );
-		l_return << ParamToString( p_sep, p_value.m_v3Specular );
-		return l_return.str();
+		StringStream l_result;
+		l_result << ParamToString( p_sep, p_value.m_v3Diffuse );
+		l_result << ParamToString( p_sep, p_value.m_v3Specular );
+		return l_result.str();
 	}
 
 	String ToString( FragmentInput const & p_value )
 	{
-		StringStream l_return;
-		l_return << ToString( p_value.m_v3Vertex ) << ", ";
-		l_return << ToString( p_value.m_v3Normal );
-		return l_return.str();
+		StringStream l_result;
+		l_result << ToString( p_value.m_v3Vertex ) << ", ";
+		l_result << ToString( p_value.m_v3Normal );
+		return l_result.str();
 	}
 
 	String ToString( OutputComponents const & p_value )
 	{
-		StringStream l_return;
-		l_return << ToString( p_value.m_v3Diffuse ) << ", ";
-		l_return << ToString( p_value.m_v3Specular );
-		return l_return.str();
+		StringStream l_result;
+		l_result << ToString( p_value.m_v3Diffuse ) << ", ";
+		l_result << ToString( p_value.m_v3Specular );
+		return l_result.str();
 	}
 
 	//***********************************************************************************************

@@ -6,386 +6,386 @@ namespace Testing
 		{
 			static inline Testing::Point< T1, C1 > add( Testing::Point< T1, C1 > const & p_ptA, Testing::Point< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer += p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > sub( Testing::Point< T1, C1 > const & p_ptA, Testing::Point< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer -= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > mul( Testing::Point< T1, C1 > const & p_ptA, Testing::Point< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer *= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > div( Testing::Point< T1, C1 > const & p_ptA, Testing::Point< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer /= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > add( Testing::Point< T1, C1 > const & p_ptA, T2 * p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer += p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > sub( Testing::Point< T1, C1 > const & p_ptA, T2 * p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer -= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > mul( Testing::Point< T1, C1 > const & p_ptA, T2 * p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer *= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > div( Testing::Point< T1, C1 > const & p_ptA, T2 * p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer /= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > add( Testing::Point< T1, C1 > const & p_ptA, T2 const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
+				Testing::Point< T1, C1 > l_result( p_ptA );
 
 				for ( uint32_t i = 0; i < C1; ++i )
 				{
-					l_return[i] += p_ptB;
+					l_result[i] += p_ptB;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > sub( Testing::Point< T1, C1 > const & p_ptA, T2 const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
+				Testing::Point< T1, C1 > l_result( p_ptA );
 
 				for ( uint32_t i = 0; i < C1; ++i )
 				{
-					l_return[i] -= p_ptB;
+					l_result[i] -= p_ptB;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > mul( Testing::Point< T1, C1 > const & p_ptA, T2 const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
+				Testing::Point< T1, C1 > l_result( p_ptA );
 
 				for ( uint32_t i = 0; i < C1; ++i )
 				{
-					l_return[i] *= p_ptB;
+					l_result[i] *= p_ptB;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > div( Testing::Point< T1, C1 > const & p_ptA, T2 const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
+				Testing::Point< T1, C1 > l_result( p_ptA );
 
 				for ( uint32_t i = 0; i < C1; ++i )
 				{
-					l_return[i] /= p_ptB;
+					l_result[i] /= p_ptB;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > add( Testing::Coords< T1, C1 > const & p_ptA, Testing::Point< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer += p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > sub( Testing::Coords< T1, C1 > const & p_ptA, Testing::Point< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer -= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > mul( Testing::Coords< T1, C1 > const & p_ptA, Testing::Point< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer *= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > div( Testing::Coords< T1, C1 > const & p_ptA, Testing::Point< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer /= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > add( Testing::Coords< T1, C1 > const & p_ptA, T2 * p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer += p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > sub( Testing::Coords< T1, C1 > const & p_ptA, T2 * p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer -= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > mul( Testing::Coords< T1, C1 > const & p_ptA, T2 * p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer *= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > div( Testing::Coords< T1, C1 > const & p_ptA, T2 * p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer /= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > add( Testing::Coords< T1, C1 > const & p_ptA, T2 const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
+				Testing::Point< T1, C1 > l_result( p_ptA );
 
 				for ( uint32_t i = 0; i < C1; ++i )
 				{
-					l_return[i] += p_ptB;
+					l_result[i] += p_ptB;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > sub( Testing::Coords< T1, C1 > const & p_ptA, T2 const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
+				Testing::Point< T1, C1 > l_result( p_ptA );
 
 				for ( uint32_t i = 0; i < C1; ++i )
 				{
-					l_return[i] -= p_ptB;
+					l_result[i] -= p_ptB;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > mul( Testing::Coords< T1, C1 > const & p_ptA, T2 const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
+				Testing::Point< T1, C1 > l_result( p_ptA );
 
 				for ( uint32_t i = 0; i < C1; ++i )
 				{
-					l_return[i] *= p_ptB;
+					l_result[i] *= p_ptB;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > div( Testing::Coords< T1, C1 > const & p_ptA, T2 const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
+				Testing::Point< T1, C1 > l_result( p_ptA );
 
 				for ( uint32_t i = 0; i < C1; ++i )
 				{
-					l_return[i] /= p_ptB;
+					l_result[i] /= p_ptB;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > add( Testing::Coords< T1, C1 > const & p_ptA, Testing::Coords< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer += p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > sub( Testing::Coords< T1, C1 > const & p_ptA, Testing::Coords< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer -= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > mul( Testing::Coords< T1, C1 > const & p_ptA, Testing::Coords< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer *= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > div( Testing::Coords< T1, C1 > const & p_ptA, Testing::Coords< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer /= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > add( Testing::Point< T1, C1 > const & p_ptA, Testing::Coords< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer += p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > sub( Testing::Point< T1, C1 > const & p_ptA, Testing::Coords< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer -= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > mul( Testing::Point< T1, C1 > const & p_ptA, Testing::Coords< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer *= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 
 			static inline Testing::Point< T1, C1 > div( Testing::Point< T1, C1 > const & p_ptA, Testing::Coords< T2, C2 > const & p_ptB )
 			{
-				Testing::Point< T1, C1 > l_return( p_ptA );
-				T1 * l_pBuffer = l_return.ptr();
+				Testing::Point< T1, C1 > l_result( p_ptA );
+				T1 * l_pBuffer = l_result.ptr();
 				std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 				{
 					*l_pBuffer /= p_pVal;
 					l_pBuffer++;
 				} );
-				return l_return;
+				return l_result;
 			}
 		};
 
@@ -1109,14 +1109,14 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_return = ( Count == _Count );
+		bool l_result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_return; i++ )
+		for ( uint32_t i = 0; i < Count && l_result; i++ )
 		{
-			l_return = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_result = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
@@ -1503,14 +1503,14 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_return = ( Count == _Count );
+		bool l_result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_return; i++ )
+		for ( uint32_t i = 0; i < Count && l_result; i++ )
 		{
-			l_return = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_result = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -1580,14 +1580,14 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_return = ( Count == _Count );
+		bool l_result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_return; i++ )
+		for ( uint32_t i = 0; i < Count && l_result; i++ )
 		{
-			l_return = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_result = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -1627,14 +1627,14 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_return = ( Count == _Count );
+		bool l_result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_return; i++ )
+		for ( uint32_t i = 0; i < Count && l_result; i++ )
 		{
-			l_return = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_result = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_return;
+		return l_result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
@@ -1673,14 +1673,14 @@ namespace Testing
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > operator -( Point< T, Count > const & p_pt )
 	{
-		Point< T, Count > l_return;
+		Point< T, Count > l_result;
 
 		for ( uint32_t i = 0; i < Count; ++i )
 		{
-			l_return[i] = -p_pt[i];
+			l_result[i] = -p_pt[i];
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -1708,9 +1708,9 @@ namespace Testing
 	template< typename T, uint32_t Count >
 	Point< T, Count > point::get_normalised( Point< T, Count > const & p_point )
 	{
-		Point< T, Count > l_return( p_point );
-		normalise( l_return );
-		return l_return;
+		Point< T, Count > l_result( p_point );
+		normalise( l_result );
+		return l_result;
 	}
 
 	template< typename T, uint32_t Count >

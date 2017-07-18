@@ -215,7 +215,7 @@ namespace GlRender
 	XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_window, IntArray p_arrayAttribs, int p_screen )
 	{
 		Logger::LogDebug( cuT( "GlXContext::Create - Using FBConfig" ) );
-		XVisualInfo * l_return = nullptr;
+		XVisualInfo * l_result = nullptr;
 		int l_result = 0;
 		m_fbConfig = glXChooseFBConfig( m_display, p_screen, p_arrayAttribs.data(), &l_result );
 
@@ -252,7 +252,7 @@ namespace GlRender
 					{
 						// Last FBConfig try failed
 						Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
-						l_return = DoCreateVisualInfoWithoutFBConfig( l_attribList, p_screen );
+						l_result = DoCreateVisualInfoWithoutFBConfig( l_attribList, p_screen );
 					}
 					else
 					{
@@ -275,7 +275,7 @@ namespace GlRender
 				{
 					// Last FBConfig try failed, we try from XVisualInfo
 					Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
-					l_return = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_screen );
+					l_result = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_screen );
 				}
 				else
 				{
@@ -298,9 +298,9 @@ namespace GlRender
 
 		if ( m_fbConfig )
 		{
-			l_return = glXGetVisualFromFBConfig( m_display, m_fbConfig[0] );
+			l_result = glXGetVisualFromFBConfig( m_display, m_fbConfig[0] );
 
-			if ( !l_return )
+			if ( !l_result )
 			{
 				Logger::LogError( cuT( "GlXContext::Create - glXGetVisualFromFBConfig failed" ) );
 			}
@@ -310,25 +310,25 @@ namespace GlRender
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray p_arrayAttribs, int p_screen )
 	{
 		Logger::LogInfo( cuT( "GlXContext::Create - Not using FBConfig" ) );
-		XVisualInfo * l_return = glXChooseVisual( m_display, p_screen, p_arrayAttribs.data() );
+		XVisualInfo * l_result = glXChooseVisual( m_display, p_screen, p_arrayAttribs.data() );
 
-		if ( !l_return )
+		if ( !l_result )
 		{
 			Logger::LogError( cuT( "GlXContext::Create - glXChooseVisual failed" ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_window )
 	{
-		bool l_return = false;
+		bool l_result = false;
 		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 		GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
@@ -355,9 +355,9 @@ namespace GlRender
 				m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], nullptr, true, l_attribList.data() );
 			}
 
-			l_return = m_glxContext != nullptr;
+			l_result = m_glxContext != nullptr;
 
-			if ( l_return )
+			if ( l_result )
 			{
 				Logger::LogInfo( StringStream() << cuT( "GlContext::Create - " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context created." ) );
 			}
@@ -371,10 +371,10 @@ namespace GlRender
 			//It's not possible to make a GL 3.x and later context. Use the old style context (GL 2.1 and before)
 			l_renderSystem->SetOpenGlVersion( 2, 1 );
 			Logger::LogWarning( cuT( "GlContext::Create - Can't create OpenGL >= 3.x context, since glCreateContextAttribs is not supported." ) );
-			l_return = true;
+			l_result = true;
 		}
 
-		return l_return;
+		return l_result;
 	}
 }
 

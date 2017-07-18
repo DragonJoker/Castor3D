@@ -111,7 +111,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool Add( Castor::String const & p_name, T * p_values, uint32_t p_count )
 		{
-			bool l_return = false;
+			bool l_result = false;
 			ParamNameMapIt l_it = m_mapParameters.find( p_name );
 
 			if ( l_it == m_mapParameters.end() )
@@ -119,10 +119,10 @@ namespace Castor3D
 				ByteArray l_param( sizeof( T ) * p_count, 0 );
 				std::memcpy( &l_param[0], p_values, sizeof( T ) * p_count );
 				m_mapParameters.insert( std::make_pair( p_name, l_param ) );
-				l_return = true;
+				l_result = true;
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english
@@ -193,7 +193,7 @@ namespace Castor3D
 		 */
 		inline bool Add( Castor::String const & p_name, Castor::String const & p_value )
 		{
-			bool l_return = false;
+			bool l_result = false;
 			ParamNameMapIt l_it = m_mapParameters.find( p_name );
 
 			if ( l_it == m_mapParameters.end() )
@@ -202,10 +202,10 @@ namespace Castor3D
 				ByteArray l_param( l_size + 1, 0 );
 				std::memcpy( &l_param[0], p_value.data(), l_size );
 				m_mapParameters.insert( std::make_pair( p_name, l_param ) );
-				l_return = true;
+				l_result = true;
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english
@@ -222,16 +222,16 @@ namespace Castor3D
 		template< typename T >
 		inline bool Set( Castor::String const & p_name, T const & p_value )
 		{
-			bool l_return = false;
+			bool l_result = false;
 			ParamNameMapIt l_it = m_mapParameters.find( p_name );
 
 			if ( l_it != m_mapParameters.end() )
 			{
 				std::memcpy( &l_it->second[0], &p_value, sizeof( T ) );
-				l_return = true;
+				l_result = true;
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english
@@ -250,7 +250,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool Get( Castor::String const & p_name, T * p_values, uint32_t p_count )const
 		{
-			bool l_return = false;
+			bool l_result = false;
 			ParamNameMapConstIt l_it = m_mapParameters.find( p_name );
 
 			if ( l_it != m_mapParameters.end() )
@@ -258,11 +258,11 @@ namespace Castor3D
 				if ( sizeof( T ) * p_count >= l_it->second.size() )
 				{
 					std::memcpy( p_values, &l_it->second[0], l_it->second.size() );
-					l_return = true;
+					l_result = true;
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english
@@ -312,16 +312,16 @@ namespace Castor3D
 		 */
 		inline bool Get( Castor::String const & p_name, Castor::String & p_value )const
 		{
-			bool l_return = false;
+			bool l_result = false;
 			ParamNameMapConstIt l_it = m_mapParameters.find( p_name );
 
 			if ( l_it != m_mapParameters.end() )
 			{
 				p_value = reinterpret_cast< xchar const * const >( l_it->second.data() );
-				l_return = true;
+				l_result = true;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 	private:

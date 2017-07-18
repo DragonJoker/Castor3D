@@ -39,20 +39,20 @@ namespace GlRender
 
 	bool GlShaderProgram::Initialise()
 	{
-		bool l_return = true;
+		bool l_result = true;
 
 		if ( m_status != ProgramStatus::eLinked )
 		{
 			ObjectType::Create();
-			l_return = DoInitialise();
+			l_result = DoInitialise();
 
-			if ( l_return )
+			if ( l_result )
 			{
 				m_layout.Initialise( *this );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool GlShaderProgram::Link()
@@ -67,7 +67,7 @@ namespace GlRender
 		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eLink, &l_linked );
 		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_linked );
 		m_linkerLog = DoRetrieveLinkerLog();
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( l_linked && l_attached == int( m_activeShaders.size() ) && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
 		{
@@ -76,7 +76,7 @@ namespace GlRender
 				Logger::LogWarning( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
 			}
 
-			l_return = DoLink();
+			l_result = DoLink();
 		}
 		else
 		{
@@ -93,7 +93,7 @@ namespace GlRender
 			m_status = ProgramStatus::eError;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GlShaderProgram::Bind()const
@@ -124,8 +124,8 @@ namespace GlRender
 
 	ShaderObjectSPtr GlShaderProgram::DoCreateObject( ShaderType p_type )
 	{
-		ShaderObjectSPtr l_return = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
-		return l_return;
+		ShaderObjectSPtr l_result = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
+		return l_result;
 	}
 
 	std::shared_ptr< PushUniform > GlShaderProgram::DoCreateUniform( UniformType p_type, int p_occurences )

@@ -121,9 +121,9 @@ namespace GuiCommon
 			Castor::SquareMatrix< T, Count > & l_matrix = MatrixRefFromVariant< T, Count >( p_thisValue );
 			Castor::Point< T, Count > const & l_row = PointRefFromVariant< T, Count >( p_newValue );
 			l_matrix.set_row( p_index, l_row );
-			wxVariant l_return;
-			l_return << l_matrix;
-			return l_return;
+			wxVariant l_result;
+			l_result << l_matrix;
+			return l_result;
 		}
 	};
 

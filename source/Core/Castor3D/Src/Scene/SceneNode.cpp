@@ -18,7 +18,7 @@ namespace Castor3D
 
 	bool SceneNode::TextWriter::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
-		bool l_return = p_node.GetName() == cuT( "RootNode" )
+		bool l_result = p_node.GetName() == cuT( "RootNode" )
 						|| p_node.GetName() == cuT( "ObjectRootNode" )
 						|| p_node.GetName() == cuT( "CameraRootNode" );
 
@@ -27,52 +27,52 @@ namespace Castor3D
 			 && p_node.GetName() != cuT( "CameraRootNode" ) )
 		{
 			Logger::LogInfo( m_tabs + cuT( "Writing Node " ) + p_node.GetName() );
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + p_node.GetName() + cuT( "\"\n" ) ) > 0
+			l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + p_node.GetName() + cuT( "\"\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			Castor::TextWriter< SceneNode >::CheckError( l_return, "Node name" );
+			Castor::TextWriter< SceneNode >::CheckError( l_result, "Node name" );
 
-			if ( l_return && p_node.GetParent() )
+			if ( l_result && p_node.GetParent() )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_return, "Node parent name" );
+				l_result = p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node parent name" );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
+				l_result = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
 						   && Quaternion::TextWriter( String() )( p_node.GetOrientation(), p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_return, "Node orientation" );
+				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node orientation" );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
+				l_result = p_file.Print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
 						   && Point3r::TextWriter( String() )( p_node.GetPosition(), p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_return, "Node position" );
+				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node position" );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
+				l_result = p_file.Print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
 						   && Point3r::TextWriter( String() )( p_node.GetScale(), p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_return, "Node scale" );
+				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node scale" );
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_return, "Node end" );
+				l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node end" );
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			for ( auto const & l_it : p_node.m_children )
 			{
-				if ( l_return
+				if ( l_result
 					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
 					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
 				{
@@ -80,13 +80,13 @@ namespace Castor3D
 
 					if ( l_node )
 					{
-						l_return = SceneNode::TextWriter{ m_tabs }( *l_node, p_file );
+						l_result = SceneNode::TextWriter{ m_tabs }( *l_node, p_file );
 					}
 				}
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -326,41 +326,41 @@ namespace Castor3D
 
 	Point3r SceneNode::GetDerivedPosition()const
 	{
-		Point3r l_return( m_position );
+		Point3r l_result( m_position );
 		auto l_parent = GetParent();
 
 		if ( l_parent )
 		{
-			l_return = matrix::get_transformed( l_parent->GetDerivedTransformationMatrix(), m_position );
+			l_result = matrix::get_transformed( l_parent->GetDerivedTransformationMatrix(), m_position );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	Quaternion SceneNode::GetDerivedOrientation()const
 	{
-		Quaternion l_return( m_orientation );
+		Quaternion l_result( m_orientation );
 		auto l_parent = GetParent();
 
 		if ( l_parent )
 		{
-			l_return  = l_return * l_parent->GetDerivedOrientation();
+			l_result  = l_result * l_parent->GetDerivedOrientation();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	Point3r SceneNode::GetDerivedScale()const
 	{
-		Point3r l_return( m_scale );
+		Point3r l_result( m_scale );
 		auto l_parent = GetParent();
 
 		if ( l_parent )
 		{
-			l_return *= l_parent->GetDerivedScale();
+			l_result *= l_parent->GetDerivedScale();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	Matrix4x4r const & SceneNode::GetTransformationMatrix()const

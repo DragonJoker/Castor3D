@@ -541,14 +541,14 @@ namespace Castor3D
 		}
 
 		auto l_it = m_frontPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		RenderPipeline * l_return{ nullptr };
+		RenderPipeline * l_result{ nullptr };
 
 		if ( l_it != m_frontPipelines.end() )
 		{
-			l_return = l_it->second.get();
+			l_result = l_it->second.get();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	RenderPipeline * RenderPass::GetPipelineBack( BlendMode p_colourBlendMode
@@ -564,14 +564,14 @@ namespace Castor3D
 		}
 
 		auto l_it = m_backPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		RenderPipeline * l_return{ nullptr };
+		RenderPipeline * l_result{ nullptr };
 
 		if ( l_it != m_backPipelines.end() )
 		{
-			l_return = l_it->second.get();
+			l_result = l_it->second.get();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	SkinningRenderNode RenderPass::CreateSkinningNode( Pass & p_pass

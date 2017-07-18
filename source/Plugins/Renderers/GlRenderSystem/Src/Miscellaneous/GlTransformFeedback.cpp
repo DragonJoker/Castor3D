@@ -30,9 +30,9 @@ namespace GlRender
 
 	bool GlTransformFeedback::DoInitialise()
 	{
-		bool l_return = BindableType::Create();
+		bool l_result = BindableType::Create();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			BindableType::Bind();
 			uint32_t l_index{ 0u };
@@ -46,7 +46,7 @@ namespace GlRender
 			BindableType::Unbind();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GlTransformFeedback::DoCleanup()

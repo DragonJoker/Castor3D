@@ -207,14 +207,14 @@ namespace Castor3D
 			{
 				Size l_size{ p_size };
 				DoAdjustDimensions( l_size, p_depth );
-				bool l_return = m_size != p_size;
+				bool l_result = m_size != p_size;
 
-				if ( l_return )
+				if ( l_result )
 				{
 					m_size = p_size;
 				}
 
-				return l_return;
+				return l_result;
 			}
 
 			inline PxBufferBaseSPtr GetBuffer()const
@@ -296,19 +296,19 @@ namespace Castor3D
 
 	bool TextureSource::DoAdjustDimensions( Castor::Size & p_size, uint32_t & p_depth )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( !m_engine.GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 		{
 			uint32_t l_depth{ GetNext2Pow( p_depth ) };
-			l_return = p_depth != l_depth;
+			l_result = p_depth != l_depth;
 			p_depth = l_depth;
 			Size l_size{ GetNext2Pow( p_size.width() ), GetNext2Pow( p_size.height() ) };
-			l_return |= l_size != p_size;
+			l_result |= l_size != p_size;
 		}
 
 		p_size[1] *= p_depth;
-		return l_return;
+		return l_result;
 	}
 
 	//*********************************************************************************************

@@ -39,9 +39,9 @@ namespace Castor3D
 	bool ToneMapping::Initialise()
 	{
 		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
-		bool l_return = l_program != nullptr;
+		bool l_result = l_program != nullptr;
 
-		if ( l_return )
+		if ( l_result )
 		{
 			GLSL::Shader l_vtx;
 			{
@@ -71,10 +71,10 @@ namespace Castor3D
 			auto l_pxl = DoCreate();
 			l_program->SetSource( ShaderType::eVertex, l_vtx );
 			l_program->SetSource( ShaderType::ePixel, l_pxl );
-			l_return = l_program->Initialise();
+			l_result = l_program->Initialise();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
@@ -87,7 +87,7 @@ namespace Castor3D
 			m_colour->Initialise();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ToneMapping::Cleanup()

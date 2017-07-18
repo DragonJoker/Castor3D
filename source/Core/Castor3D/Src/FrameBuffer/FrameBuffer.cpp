@@ -89,14 +89,14 @@ namespace Castor3D
 			return p_attach->GetAttachmentIndex() == p_index && p_attach->GetAttachmentPoint() == p_point;
 		} );
 
-		FrameBufferAttachmentSPtr l_return;
+		FrameBufferAttachmentSPtr l_result;
 
 		if ( l_it != m_attaches.end() )
 		{
-			l_return = *l_it;
+			l_result = *l_it;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void FrameBuffer::DetachAll()
@@ -154,7 +154,7 @@ namespace Castor3D
 
 	PixelFormat FrameBuffer::DoGetPixelFormat( AttachmentPoint p_point, uint8_t p_index )
 	{
-		PixelFormat l_return = PixelFormat::eCount;
+		PixelFormat l_result = PixelFormat::eCount;
 
 		if ( !m_attaches.empty() && p_point != AttachmentPoint::eNone )
 		{
@@ -168,17 +168,17 @@ namespace Castor3D
 				if ( ( *l_it )->GetAttachmentType() == AttachmentType::eTexture )
 				{
 					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
-					l_return = l_attach->GetTexture()->GetPixelFormat();
+					l_result = l_attach->GetTexture()->GetPixelFormat();
 				}
 				else
 				{
 					RenderBufferAttachmentSPtr l_attach = std::static_pointer_cast< RenderBufferAttachment >( *l_it );
-					l_return = l_attach->GetRenderBuffer()->GetPixelFormat();
+					l_result = l_attach->GetRenderBuffer()->GetPixelFormat();
 				}
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void FrameBuffer::DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )

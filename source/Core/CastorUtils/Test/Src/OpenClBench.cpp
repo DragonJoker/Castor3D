@@ -21,7 +21,7 @@ namespace Testing
 {
 	bool CheckErr( cl_int p_iErr, const char * p_szName )
 	{
-		bool l_return = true;
+		bool l_result = true;
 		static std::map< cl_int, std::string > MapErrors;
 
 		if ( MapErrors.empty() )
@@ -118,10 +118,10 @@ namespace Testing
 				std::cerr << "ERROR: " << p_szName << " - 0x" << std::hex << p_iErr << std::endl;
 			}
 
-			l_return = false;
+			l_result = false;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	OpenCLBench::OpenCLBench()

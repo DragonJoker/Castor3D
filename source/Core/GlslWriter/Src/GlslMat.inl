@@ -151,15 +151,15 @@
 	template< typename IndexT >
 	Vec2T< ValueT > Mat2T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
-		Vec2T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
-		return l_return;
+		Vec2T< ValueT > l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return l_result;
 	}
 
 	template< typename ValueT >
 	Vec2T< ValueT > Mat2T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		Vec2T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
-		return l_return;
+		Vec2T< ValueT > l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return l_result;
 	}
 
 	//*****************************************************************************************
@@ -205,15 +205,15 @@
 	template< typename IndexT >
 	Vec3T< ValueT > Mat3T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
-		Vec3T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
-		return l_return;
+		Vec3T< ValueT > l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return l_result;
 	}
 
 	template< typename ValueT >
 	Vec3T< ValueT > Mat3T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		Vec3T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
-		return l_return;
+		Vec3T< ValueT > l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return l_result;
 	}
 
 	//*****************************************************************************************
@@ -259,15 +259,15 @@
 	template< typename IndexT >
 	Vec4T< ValueT > Mat4T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
-		Vec4T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
-		return l_return;
+		Vec4T< ValueT > l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return l_result;
 	}
 
 	template< typename ValueT >
 	Vec4T< ValueT > Mat4T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		Vec4T< ValueT > l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
-		return l_return;
+		Vec4T< ValueT > l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return l_result;
 	}
 
 	//*****************************************************************************************

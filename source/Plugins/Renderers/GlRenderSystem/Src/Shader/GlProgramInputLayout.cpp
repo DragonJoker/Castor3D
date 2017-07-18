@@ -26,7 +26,7 @@ namespace GlRender
 	bool GlProgramInputLayout::Initialise( ShaderProgram const & p_program )
 	{
 		auto l_attributes = DoListAttributes( p_program );
-		bool l_return = true;
+		bool l_result = true;
 
 		for ( auto & l_element : l_attributes )
 		{
@@ -34,7 +34,7 @@ namespace GlRender
 		}
 
 		DoListOther( p_program );
-		return l_return;
+		return l_result;
 	}
 
 	void GlProgramInputLayout::Cleanup()

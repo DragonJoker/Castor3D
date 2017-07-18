@@ -76,7 +76,7 @@ namespace Castor3D
 
 	MaterialSPtr MaterialCache::Add( Key const & p_name, MaterialSPtr p_element )
 	{
-		MaterialSPtr l_return{ p_element };
+		MaterialSPtr l_result{ p_element };
 
 		if ( p_element )
 		{
@@ -85,7 +85,7 @@ namespace Castor3D
 			if ( m_elements.has( p_name ) )
 			{
 				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
-				l_return = m_elements.find( p_name );
+				l_result = m_elements.find( p_name );
 			}
 			else
 			{
@@ -97,7 +97,7 @@ namespace Castor3D
 			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << GetObjectTypeName() << cuT( ": " ) );
 		}
 
-		for ( auto & l_pass : *l_return )
+		for ( auto & l_pass : *l_result )
 		{
 			if ( l_pass->GetId() == 0 )
 			{
@@ -105,28 +105,28 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	MaterialSPtr MaterialCache::Add( Key const & p_name, MaterialType p_type )
 	{
-		MaterialSPtr l_return;
+		MaterialSPtr l_result;
 		auto l_lock = Castor::make_unique_lock( m_elements );
 
 		if ( !m_elements.has( p_name ) )
 		{
-			l_return = m_produce( p_name, p_type );
-			m_initialise( l_return );
-			m_elements.insert( p_name, l_return );
+			l_result = m_produce( p_name, p_type );
+			m_initialise( l_result );
+			m_elements.insert( p_name, l_result );
 			Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 		else
 		{
-			l_return = m_elements.find( p_name );
+			l_result = m_elements.find( p_name );
 			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 
-		for ( auto & l_pass : *l_return )
+		for ( auto & l_pass : *l_result )
 		{
 			if ( l_pass->GetId() == 0 )
 			{
@@ -134,7 +134,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void MaterialCache::GetNames( StringArray & l_names )
@@ -163,11 +163,11 @@ namespace Castor3D
 			}
 		}
 
-		bool l_return = true;
+		bool l_result = true;
 		auto l_it = m_elements.begin();
 		bool l_first = true;
 
-		while ( l_return && l_it != m_elements.end() )
+		while ( l_result && l_it != m_elements.end() )
 		{
 			if ( l_first )
 			{
@@ -178,11 +178,11 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_return = Material::TextWriter( String() )( * l_it->second, p_file );
+			l_result = Material::TextWriter( String() )( * l_it->second, p_file );
 			++l_it;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool MaterialCache::Read( TextFile & p_file )

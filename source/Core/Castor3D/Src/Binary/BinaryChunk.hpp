@@ -325,9 +325,9 @@ namespace Castor3D
 		inline bool DoRead( T * p_values, uint32_t p_count )
 		{
 			auto l_size = p_count * uint32_t( sizeof( T ) );
-			bool l_return{ m_index + l_size < m_data.size() };
+			bool l_result{ m_index + l_size < m_data.size() };
 
-			if ( l_return )
+			if ( l_result )
 			{
 				auto l_begin = reinterpret_cast< T * >( &m_data[m_index] );
 				auto l_end = l_begin + p_count;
@@ -343,7 +343,7 @@ namespace Castor3D
 				m_index += l_size;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 	private:

@@ -67,9 +67,9 @@ namespace Castor3D
 	Face Subdivider::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
 		REQUIRE( a < GetPointsCount() && b < GetPointsCount() && c < GetPointsCount() );
-		Face l_return{ a, b, c };
-		m_arrayFaces.push_back( l_return );
-		return l_return;
+		Face l_result{ a, b, c };
+		m_arrayFaces.push_back( l_result );
+		return l_result;
 	}
 
 	int Subdivider::IsInMyPoints( Point3r const & p_vertex, double p_precision )
@@ -96,25 +96,25 @@ namespace Castor3D
 	{
 		std::unique_lock< std::recursive_mutex > l_lock( m_mutex );
 		int l_index = -1;
-		Castor3D::BufferElementGroupSPtr l_return;
+		Castor3D::BufferElementGroupSPtr l_result;
 
 		if ( ( l_index = IsInMyPoints( p_point, 0.00001 ) ) < 0 )
 		{
-			l_return = AddPoint( p_point );
+			l_result = AddPoint( p_point );
 		}
 		else
 		{
-			l_return = GetPoint( l_index );
+			l_result = GetPoint( l_index );
 			Coords3r l_coords;
-			Castor3D::Vertex::GetPosition( *l_return, l_coords );
+			Castor3D::Vertex::GetPosition( *l_result, l_coords );
 
 			if ( l_coords != p_point )
 			{
-				Castor3D::Vertex::SetPosition( *l_return, ( l_coords + p_point ) / real( 2 ) );
+				Castor3D::Vertex::SetPosition( *l_result, ( l_coords + p_point ) / real( 2 ) );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Subdivider::DoSubdivide( SubmeshSPtr p_submesh, bool p_generateBuffers, bool p_threaded )

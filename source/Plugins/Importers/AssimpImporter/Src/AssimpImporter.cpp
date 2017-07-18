@@ -1,4 +1,4 @@
-#include "AssimpImporter.hpp"
+﻿#include "AssimpImporter.hpp"
 
 #include <Design/ArrayView.hpp>
 
@@ -38,7 +38,7 @@ namespace C3dAssimp
 		aiNodeAnim const * const FindNodeAnim( const aiAnimation & p_animation
 			, const String & p_nodeName )
 		{
-			aiNodeAnim const * l_return = nullptr;
+			aiNodeAnim const * l_result = nullptr;
 			auto l_it = std::find_if( p_animation.mChannels
 				, p_animation.mChannels + p_animation.mNumChannels
 				, [&p_nodeName]( aiNodeAnim const * const p_nodeAnim )
@@ -48,16 +48,16 @@ namespace C3dAssimp
 
 			if ( l_it != p_animation.mChannels + p_animation.mNumChannels )
 			{
-				l_return = *l_it;
+				l_result = *l_it;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		aiMeshAnim const * const FindMeshAnim( const aiAnimation & p_animation
 			, const String & p_meshName )
 		{
-			aiMeshAnim const * l_return = nullptr;
+			aiMeshAnim const * l_result = nullptr;
 			auto l_it = std::find_if( p_animation.mMeshChannels
 				, p_animation.mMeshChannels + p_animation.mNumMeshChannels
 				, [&p_meshName]( aiMeshAnim const * const p_meshAnim )
@@ -67,10 +67,10 @@ namespace C3dAssimp
 
 			if ( l_it != p_animation.mMeshChannels + p_animation.mNumMeshChannels )
 			{
-				l_return = *l_it;
+				l_result = *l_it;
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		template< typename aiMeshType >
@@ -179,11 +179,11 @@ namespace C3dAssimp
 			, Interpolator< T > const & p_interpolator
 			, std::map< std::chrono::milliseconds, T > const & p_values )
 		{
-			T l_return;
+			T l_result;
 
 			if ( p_values.size() == 1 )
 			{
-				l_return = p_values.begin()->second;
+				l_result = p_values.begin()->second;
 			}
 			else
 			{
@@ -192,10 +192,10 @@ namespace C3dAssimp
 				DoFind( p_from, p_values, l_prv, l_cur );
 				auto l_dt = l_cur->first - l_prv->first;
 				real l_factor = ( p_from - l_prv->first ).count() / real( l_dt.count() );
-				l_return = p_interpolator.Interpolate( l_prv->second, l_cur->second, l_factor );
+				l_result = p_interpolator.Interpolate( l_prv->second, l_cur->second, l_factor );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		void DoProcessPassBaseComponents( LegacyPass & p_pass
@@ -424,9 +424,9 @@ namespace C3dAssimp
 	bool AssimpImporter::DoImportScene( Scene & p_scene )
 	{
 		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_PLY" ) );
-		bool l_return = DoImportMesh( *l_mesh );
+		bool l_result = DoImportMesh( *l_mesh );
 
-		if ( l_return )
+		if ( l_result )
 		{
 			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
 			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
@@ -434,12 +434,12 @@ namespace C3dAssimp
 			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool AssimpImporter::DoImportMesh( Mesh & p_mesh )
 	{
-		bool l_return{ false };
+		bool l_result{ false };
 		m_mapBoneByID.clear();
 		m_arrayBones.clear();
 		SubmeshSPtr l_submesh;
@@ -548,7 +548,7 @@ namespace C3dAssimp
 					l_importer.FreeScene();
 				}
 
-				l_return = true;
+				l_result = true;
 			}
 			else
 			{
@@ -561,12 +561,12 @@ namespace C3dAssimp
 			Logger::LogError( std::stringstream() << "Scene import failed : " << l_importer.GetErrorString() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool AssimpImporter::DoProcessMesh( Scene & p_scene, Mesh & p_mesh, Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Submesh & p_submesh )
 	{
-		bool l_return = false;
+		bool l_result = false;
 		MaterialSPtr l_material;
 
 		if ( p_aiMesh.mMaterialIndex < p_aiScene.mNumMaterials )
@@ -622,10 +622,10 @@ namespace C3dAssimp
 				}
 			}
 
-			l_return = true;
+			l_result = true;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void AssimpImporter::DoProcessAnimationMeshes( Mesh & p_mesh
@@ -653,7 +653,7 @@ namespace C3dAssimp
 	MaterialSPtr AssimpImporter::DoProcessMaterial( Scene & p_scene
 		, aiMaterial const & p_aiMaterial )
 	{
-		MaterialSPtr l_return;
+		MaterialSPtr l_result;
 		auto & l_cache = p_scene.GetMaterialView();
 		aiString l_mtlname;
 		p_aiMaterial.Get( AI_MATKEY_NAME, l_mtlname );
@@ -666,20 +666,20 @@ namespace C3dAssimp
 
 		if ( l_cache.Has( l_name ) )
 		{
-			l_return = l_cache.Find( l_name );
-			REQUIRE( l_return->GetType() == MaterialType::eLegacy );
+			l_result = l_cache.Find( l_name );
+			REQUIRE( l_result->GetType() == MaterialType::eLegacy );
 		}
 		else
 		{
-			l_return = l_cache.Add( l_name, MaterialType::eLegacy );
-			l_return->CreatePass();
-			auto l_pass = l_return->GetTypedPass< MaterialType::eLegacy >( 0 );
+			l_result = l_cache.Add( l_name, MaterialType::eLegacy );
+			l_result->CreatePass();
+			auto l_pass = l_result->GetTypedPass< MaterialType::eLegacy >( 0 );
 
 			DoProcessPassBaseComponents( *l_pass, p_aiMaterial );
 			DoProcessPassTextures( *l_pass, p_aiMaterial, *this );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	BoneSPtr AssimpImporter::DoAddBone( String const & p_name

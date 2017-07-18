@@ -11,37 +11,37 @@ namespace Castor3D
 
 	bool BinaryWriter< SkeletonAnimationBone >::DoWrite( SkeletonAnimationBone const & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			l_result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
+			l_result = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< SkeletonAnimationBone >::DoParse( SkeletonAnimationBone & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 		String l_name;
 		BinaryChunk l_chunk;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( l_result && DoGetSubChunk( l_chunk ) )
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
 			case ChunkType::eName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				l_result = DoParseChunk( l_name, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					auto l_bone = static_cast< Skeleton * >( p_obj.GetOwner()->GetOwner() )->FindBone( l_name );
 
@@ -58,12 +58,12 @@ namespace Castor3D
 				break;
 
 			case ChunkType::eAnimationObject:
-				l_return = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, l_chunk );
+				l_result = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, l_chunk );
 				break;
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************

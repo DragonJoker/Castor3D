@@ -41,9 +41,9 @@ namespace C3dPly
 	bool PlyImporter::DoImportScene( Scene & p_scene )
 	{
 		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_PLY" ) );
-		bool l_return = DoImportMesh( *l_mesh );
+		bool l_result = DoImportMesh( *l_mesh );
 
-		if ( l_return )
+		if ( l_result )
 		{
 			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
 			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
@@ -51,12 +51,12 @@ namespace C3dPly
 			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool PlyImporter::DoImportMesh( Mesh & p_mesh )
 	{
-		bool l_return{ false };
+		bool l_result{ false };
 		UIntArray l_faces;
 		RealArray l_sizes;
 		String l_name = m_fileName.GetFileName();
@@ -228,7 +228,7 @@ namespace C3dPly
 				l_submesh->AddFaceGroup( l_faces );
 			}
 
-			l_return = true;
+			l_result = true;
 		}
 
 		l_submesh->ComputeContainers();
@@ -243,6 +243,6 @@ namespace C3dPly
 		}
 
 		l_isFile.close();
-		return l_return;
+		return l_result;
 	}
 }

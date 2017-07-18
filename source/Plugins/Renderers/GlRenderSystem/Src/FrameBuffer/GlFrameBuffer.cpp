@@ -43,7 +43,7 @@ namespace GlRender
 
 	void GlFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )const
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( !p_attaches.empty() )
 		{

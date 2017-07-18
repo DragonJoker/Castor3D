@@ -27,69 +27,69 @@ namespace Castor3D
 	bool RenderTarget::TextWriter::operator()( RenderTarget const & p_target, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing RenderTarget" ) );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget name" );
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		Castor::TextWriter< RenderTarget >::CheckError( l_result, "RenderTarget name" );
 
-		if ( l_return && p_target.GetScene() )
+		if ( l_result && p_target.GetScene() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tscene \"" ) + p_target.GetScene()->GetName() + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget scene" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tscene \"" ) + p_target.GetScene()->GetName() + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_result, "RenderTarget scene" );
 		}
 
-		if ( l_return && p_target.GetCamera() )
+		if ( l_result && p_target.GetCamera() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tcamera \"" ) + p_target.GetCamera()->GetName() + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget camera" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tcamera \"" ) + p_target.GetCamera()->GetName() + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_result, "RenderTarget camera" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tsize %d %d\n" ) ).c_str(), p_target.GetSize().width(), p_target.GetSize().height() ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget size" );
+			l_result = p_file.Print( 256, ( m_tabs + cuT( "\tsize %d %d\n" ) ).c_str(), p_target.GetSize().width(), p_target.GetSize().height() ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_result, "RenderTarget size" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget format" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_result, "RenderTarget format" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + p_target.m_toneMapping->GetName() + cuT( "\"" ) )
+			l_result = p_file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + p_target.m_toneMapping->GetName() + cuT( "\"" ) )
 					   && p_target.m_toneMapping->WriteInto( p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget tone mapping" );
+			Castor::TextWriter< RenderTarget >::CheckError( l_result, "RenderTarget tone mapping" );
 		}
 
-		if ( l_return
+		if ( l_result
 			&& p_target.m_renderTechnique
 			&& p_target.m_renderTechnique->IsMultisampling() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\t" ) )
+			l_result = p_file.WriteText( m_tabs + cuT( "\t" ) )
 				&& p_target.m_renderTechnique->WriteInto( p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget technique" );
+			Castor::TextWriter< RenderTarget >::CheckError( l_result, "RenderTarget technique" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			for ( auto const & l_effect : p_target.m_postEffects )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tpostfx \"" ) + l_effect->GetName() + cuT( "\"" ) )
+				l_result = p_file.WriteText( m_tabs + cuT( "\tpostfx \"" ) + l_effect->GetName() + cuT( "\"" ) )
 						   && l_effect->WriteInto( p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget post effect" );
+				Castor::TextWriter< RenderTarget >::CheckError( l_result, "RenderTarget post effect" );
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( p_target.m_ssaoConfig, p_file );
+			l_result = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( p_target.m_ssaoConfig, p_file );
 		}
 
 		p_file.WriteText( m_tabs + cuT( "}\n" ) );
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -121,10 +121,10 @@ namespace Castor3D
 		m_frameBuffer->Bind();
 		m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture.GetTexture()->GetType() );
 		m_frameBuffer->SetDrawBuffer( m_colourAttach );
-		bool l_return = m_frameBuffer->IsComplete();
+		bool l_result = m_frameBuffer->IsComplete();
 		m_frameBuffer->Unbind();
 
-		return l_return;
+		return l_result;
 	}
 
 	void RenderTarget::stFRAME_BUFFER::Cleanup()

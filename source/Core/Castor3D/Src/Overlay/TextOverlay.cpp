@@ -62,63 +62,63 @@ namespace Castor3D
 		};
 
 		Logger::LogInfo( m_tabs + cuT( "Writing TextOverlay " ) + p_overlay.GetOverlayName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "text_overlay \"" ) + p_overlay.GetOverlayName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "text_overlay \"" ) + p_overlay.GetOverlayName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay name" );
+		OverlayCategory::TextWriter::CheckError( l_result, "TextOverlay name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tfont \"" ) + p_overlay.GetFontTexture()->GetFontName() + cuT( "\"\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay font" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tfont \"" ) + p_overlay.GetFontTexture()->GetFontName() + cuT( "\"\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_result, "TextOverlay font" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttext \"" ) + p_overlay.GetCaption() + cuT( "\"\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\ttext \"" ) + p_overlay.GetCaption() + cuT( "\"\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_result, "TextOverlay text" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttext_wrapping " ) + TextWrappingModes[size_t( p_overlay.GetTextWrappingMode() )] + cuT( "\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text wrapping" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\ttext_wrapping " ) + TextWrappingModes[size_t( p_overlay.GetTextWrappingMode() )] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_result, "TextOverlay text wrapping" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tvertical_align " ) + VerticalAligns[size_t( p_overlay.GetVAlign() )] + cuT( "\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text vertical align" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tvertical_align " ) + VerticalAligns[size_t( p_overlay.GetVAlign() )] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_result, "TextOverlay text vertical align" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\thorizontal_align " ) + HorizontalAligns[size_t( p_overlay.GetHAlign() )] + cuT( "\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text horizontal align" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\thorizontal_align " ) + HorizontalAligns[size_t( p_overlay.GetHAlign() )] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_result, "TextOverlay text horizontal align" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttexturing_mode " ) + TexturingModes[size_t( p_overlay.GetTexturingMode() )] + cuT( "\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text texturing mode" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\ttexturing_mode " ) + TexturingModes[size_t( p_overlay.GetTexturingMode() )] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_result, "TextOverlay text texturing mode" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tline_spacing_mode " ) + LineSpacingModes[size_t( p_overlay.GetLineSpacingMode() )] + cuT( "\n" ) ) > 0;
-			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay line spacing mode" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tline_spacing_mode " ) + LineSpacingModes[size_t( p_overlay.GetLineSpacingMode() )] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_result, "TextOverlay line spacing mode" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
+			l_result = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool TextOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
@@ -355,7 +355,7 @@ namespace Castor3D
 		FontTextureSPtr l_fontTexture = GetFontTexture();
 		FontSPtr l_font = l_fontTexture->GetFont();
 		StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), uint32_t( std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 ), true );
-		DisplayableLineArray l_return;
+		DisplayableLineArray l_result;
 		DisplayableLine l_line;
 
 		for ( auto const & l_lineText : l_lines )
@@ -373,7 +373,7 @@ namespace Castor3D
 						|| l_glyph.GetCharacter() == cuT( '\t' ) )
 				{
 					// Write the word and leave space before next word.
-					DoPrepareWord( p_renderSize, l_word, l_wordWidth, p_size, l_left, l_line, l_return );
+					DoPrepareWord( p_renderSize, l_word, l_wordWidth, p_size, l_left, l_line, l_result );
 					l_word.clear();
 					l_wordWidth = 0;
 					l_left += l_character.m_size[0];
@@ -387,14 +387,14 @@ namespace Castor3D
 
 			if ( !l_word.empty() )
 			{
-				DoPrepareWord( p_renderSize, l_word, l_wordWidth, p_size, l_left, l_line, l_return );
+				DoPrepareWord( p_renderSize, l_word, l_wordWidth, p_size, l_left, l_line, l_result );
 			}
 
-			l_line = DoFinishLine( p_size, l_line, l_left, l_return );
+			l_line = DoFinishLine( p_size, l_line, l_left, l_result );
 		}
 
-		DoAlignVertically( p_size[1], l_return );
-		return l_return;
+		DoAlignVertically( p_size[1], l_result );
+		return l_result;
 	}
 
 	void TextOverlay::DoPrepareWord( Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines )

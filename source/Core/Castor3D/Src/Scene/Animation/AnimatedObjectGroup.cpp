@@ -24,9 +24,9 @@ namespace Castor3D
 	bool AnimatedObjectGroup::TextWriter::operator()( AnimatedObjectGroup const & p_group, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing AnimatedObjectGroup " ) + p_group.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "animated_object_group \"" ) + p_group.GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "animated_object_group \"" ) + p_group.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup name" );
+		Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_result, "AnimatedObjectGroup name" );
 
 		StrSet l_written;
 
@@ -53,47 +53,47 @@ namespace Castor3D
 
 			if ( l_write )
 			{
-				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimated_object \"" ) + l_name + cuT( "\"\n" ) ) > 0;
+				l_result &= p_file.WriteText( m_tabs + cuT( "\tanimated_object \"" ) + l_name + cuT( "\"\n" ) ) > 0;
 				l_written.insert( l_name );
-				Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup object name" );
+				Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_result, "AnimatedObjectGroup object name" );
 			}
 		}
 
 		if ( !p_group.GetAnimations().empty() )
 		{
-			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_result &= p_file.WriteText( cuT( "\n" ) ) > 0;
 
 			for ( auto l_it : p_group.GetAnimations() )
 			{
-				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
+				l_result &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
 							&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
 							&& p_file.WriteText( m_tabs + cuT( "\t\tlooped " ) + String{ l_it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
 							&& p_file.WriteText( m_tabs + cuT( "\t\tscale " ) + string::to_string( l_it.second.m_scale ) + cuT( "\n" ) ) > 0
 							&& p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-				Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup animation" );
+				Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_result, "AnimatedObjectGroup animation" );
 			}
 		}
 
 		if ( !p_group.GetAnimations().empty() )
 		{
-			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_result &= p_file.WriteText( cuT( "\n" ) ) > 0;
 
 			for ( auto l_it : p_group.GetAnimations() )
 			{
 				if ( l_it.second.m_state == AnimationState::ePlaying )
 				{
-					l_return &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup started animation" );
+					l_result &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
+					Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_result, "AnimatedObjectGroup started animation" );
 				}
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -142,9 +142,9 @@ namespace Castor3D
 
 	bool AnimatedObjectGroup::AddObject( AnimatedObjectSPtr p_object )
 	{
-		bool l_return = p_object && m_objects.find( p_object->GetName() ) == m_objects.end();
+		bool l_result = p_object && m_objects.find( p_object->GetName() ) == m_objects.end();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_objects.insert( { p_object->GetName(), p_object } );
 		}
@@ -157,7 +157,7 @@ namespace Castor3D
 			l_animation.SetScale( l_it.second.m_scale );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void AnimatedObjectGroup::AddAnimation( String const & p_name )

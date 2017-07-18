@@ -37,7 +37,7 @@ namespace CastorViewer
 	{
 		KeyboardKey ConvertKeyCode( int p_code )
 		{
-			KeyboardKey l_return = KeyboardKey::eNone;
+			KeyboardKey l_result = KeyboardKey::eNone;
 
 			if ( p_code < 0x20 )
 			{
@@ -47,25 +47,25 @@ namespace CastorViewer
 				case WXK_TAB:
 				case WXK_RETURN:
 				case WXK_ESCAPE:
-					l_return = KeyboardKey( p_code );
+					l_result = KeyboardKey( p_code );
 					break;
 				}
 			}
 			else if ( p_code == 0x7F )
 			{
-				l_return = KeyboardKey::eDelete;
+				l_result = KeyboardKey::eDelete;
 			}
 			else if ( p_code > 0xFF )
 			{
-				l_return = KeyboardKey( p_code + int( KeyboardKey::eStart ) - WXK_START );
+				l_result = KeyboardKey( p_code + int( KeyboardKey::eStart ) - WXK_START );
 			}
 			else
 			{
 				// ASCII or extended ASCII character
-				l_return = KeyboardKey( p_code );
+				l_result = KeyboardKey( p_code );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		TextureUnitSPtr DoCloneUnit( PassSPtr p_clone, TextureUnit const & p_source )

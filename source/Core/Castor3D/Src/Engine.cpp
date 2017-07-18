@@ -102,9 +102,9 @@ namespace Castor3D
 		m_overlayCache = MakeCache< Overlay, String >(	*this
 			, [this]( String const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
 			{
-				auto l_return = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
-				l_return->SetName( p_name );
-				return l_return;
+				auto l_result = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
+				l_result->SetName( p_name );
+				return l_result;
 			}
 			, l_dummy
 			, l_dummy
@@ -325,14 +325,14 @@ namespace Castor3D
 
 	bool Engine::SupportsShaderModel( ShaderModel p_eShaderModel )
 	{
-		bool l_return = false;
+		bool l_result = false;
 
 		if ( m_renderSystem )
 		{
-			l_return = m_renderSystem->GetGpuInformations().CheckSupport( p_eShaderModel );
+			l_result = m_renderSystem->GetGpuInformations().CheckSupport( p_eShaderModel );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Engine::RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers )

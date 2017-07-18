@@ -16,43 +16,43 @@ namespace GlRender
 	GlPboTextureStorageTraits::GlPboTextureStorageTraits( TextureStorage & p_storage )
 		: m_storage{ p_storage }
 	{
-		bool l_return = true;
+		bool l_result = true;
 		auto l_pxbuffer = p_storage.GetOwner()->GetImage().GetBuffer();
 		auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
 
 		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eWrite ) )
 		{
 			m_uploadBuffer = std::make_unique< GlUploadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer->size() );
-			l_return = m_uploadBuffer != nullptr;
+			l_result = m_uploadBuffer != nullptr;
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = m_uploadBuffer->Create();
+				l_result = m_uploadBuffer->Create();
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = m_uploadBuffer->Initialise();
+				l_result = m_uploadBuffer->Initialise();
 			}
 		}
 
-		if ( l_return && CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead ) )
+		if ( l_result && CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead ) )
 		{
 			m_downloadBuffer  = std::make_unique< GlDownloadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer->size() );
-			l_return = m_downloadBuffer != nullptr;
+			l_result = m_downloadBuffer != nullptr;
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = m_downloadBuffer->Create();
+				l_result = m_downloadBuffer->Create();
 			}
 
-			if ( l_return )
+			if ( l_result )
 			{
-				l_return = m_downloadBuffer->Initialise();
+				l_result = m_downloadBuffer->Initialise();
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			auto l_size = p_storage.GetOwner()->GetDimensions();
 			OpenGl::PixelFmt l_format = l_storage.GetOpenGl().Get( p_storage.GetOwner()->GetPixelFormat() );
@@ -126,7 +126,7 @@ namespace GlRender
 
 	uint8_t * GlPboTextureStorageTraits::Lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
 	{
-		uint8_t * l_return = nullptr;
+		uint8_t * l_result = nullptr;
 
 		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
 			 && CheckFlag( p_lock, AccessType::eRead ) )
@@ -137,10 +137,10 @@ namespace GlRender
 		if ( CheckFlag( p_lock, AccessType::eRead )
 			 || CheckFlag( p_lock, AccessType::eWrite ) )
 		{
-			l_return = p_storage.GetOwner()->GetImage( p_index ).GetBuffer()->ptr();
+			l_result = p_storage.GetOwner()->GetImage( p_index ).GetBuffer()->ptr();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GlPboTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )

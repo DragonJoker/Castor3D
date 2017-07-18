@@ -12,48 +12,48 @@ namespace Castor3D
 
 	bool BinaryWriter< Skeleton >::DoWrite( Skeleton const & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoWriteChunk( p_obj.GetGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
+			l_result = DoWriteChunk( p_obj.GetGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
 		}
 
 		for ( auto l_bone : p_obj.m_bones )
 		{
-			l_return &= BinaryWriter< Bone >{}.Write( *l_bone, m_chunk );
+			l_result &= BinaryWriter< Bone >{}.Write( *l_bone, m_chunk );
 		}
 
 		for ( auto const & l_it : p_obj.m_animations )
 		{
-			l_return = BinaryWriter< Animation >{}.Write( *l_it.second, m_chunk );
+			l_result = BinaryWriter< Animation >{}.Write( *l_it.second, m_chunk );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< Skeleton >::DoParse( Skeleton & p_obj )
 	{
-		bool l_return = true;
+		bool l_result = true;
 		BoneSPtr l_bone;
 		BinaryChunk l_chunk;
 		SkeletonAnimationUPtr l_animation;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( l_result && DoGetSubChunk( l_chunk ) )
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
 			case ChunkType::eSkeletonGlobalInverse:
-				l_return = DoParseChunk( p_obj.m_globalInverse, l_chunk );
+				l_result = DoParseChunk( p_obj.m_globalInverse, l_chunk );
 				break;
 
 			case ChunkType::eSkeletonBone:
 				l_bone = std::make_shared< Bone >( p_obj );
-				l_return = BinaryParser< Bone >{}.Parse( *l_bone, l_chunk );
+				l_result = BinaryParser< Bone >{}.Parse( *l_bone, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					p_obj.m_bones.push_back( l_bone );
 				}
@@ -62,9 +62,9 @@ namespace Castor3D
 
 			case ChunkType::eAnimation:
 				l_animation = std::make_unique< SkeletonAnimation >( p_obj );
-				l_return = BinaryParser< Animation >{}.Parse( *l_animation, l_chunk );
+				l_result = BinaryParser< Animation >{}.Parse( *l_animation, l_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					p_obj.m_animations.insert( { l_animation->GetName(), std::move( l_animation ) } );
 				}
@@ -73,7 +73,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************

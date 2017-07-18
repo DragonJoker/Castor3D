@@ -39,10 +39,10 @@ namespace Castor3D
 		m_fbo->Bind();
 		m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, l_colourTexture->GetType() );
 		m_fbo->SetDrawBuffer( m_colourAttach );
-		bool l_return = m_fbo->IsComplete();
+		bool l_result = m_fbo->IsComplete();
 		m_fbo->Unbind();
 
-		return l_return;
+		return l_result;
 	}
 
 	void PostEffect::PostEffectSurface::Cleanup()

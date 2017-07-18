@@ -72,13 +72,13 @@ namespace Castor3D
 
 	ContextSPtr RenderLoopSync::DoCreateMainContext( RenderWindow & p_window )
 	{
-		ContextSPtr l_return = DoCreateContext( p_window );
+		ContextSPtr l_result = DoCreateContext( p_window );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			m_renderSystem.SetMainContext( l_return );
+			m_renderSystem.SetMainContext( l_result );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

@@ -38,14 +38,14 @@ namespace CastorGui
 
 		ControlRPtr GetTop()const
 		{
-			ControlRPtr l_return = NULL;
+			ControlRPtr l_result = NULL;
 
 			if ( !m_parents.empty() )
 			{
-				l_return = m_parents.top().get();
+				l_result = m_parents.top().get();
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 		void Pop()

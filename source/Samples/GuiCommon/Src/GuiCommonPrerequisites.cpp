@@ -247,7 +247,7 @@ namespace GuiCommon
 
 	RenderWindowSPtr LoadScene( Engine & p_engine, Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
 	{
-		RenderWindowSPtr l_return;
+		RenderWindowSPtr l_result;
 
 		if ( File::FileExists( p_fileName ) )
 		{
@@ -261,7 +261,7 @@ namespace GuiCommon
 
 					if ( l_parser.ParseFile( p_fileName ) )
 					{
-						l_return = l_parser.GetRenderWindow();
+						l_result = l_parser.GetRenderWindow();
 					}
 					else
 					{
@@ -279,7 +279,7 @@ namespace GuiCommon
 			wxMessageBox( _( "Scene file doesn't exist :" ) + wxString( wxT( "\n" ) ) + p_fileName );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void LoadPlugins( Castor3D::Engine & p_engine )

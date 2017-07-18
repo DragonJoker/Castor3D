@@ -23,48 +23,48 @@ namespace Castor3D
 
 	bool BillboardList::TextWriter::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		MovableObject::TextWriter::CheckError( l_return, "BillboardList name" );
+		MovableObject::TextWriter::CheckError( l_result, "BillboardList name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_obj, p_file );
+			l_result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_obj, p_file );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
-			MovableObject::TextWriter::CheckError( l_return, "BillboardList material" );
+			l_result = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			MovableObject::TextWriter::CheckError( l_result, "BillboardList material" );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
-			MovableObject::TextWriter::CheckError( l_return, "BillboardList dimensions" );
+			l_result = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
+			MovableObject::TextWriter::CheckError( l_result, "BillboardList dimensions" );
 		}
 
-		if ( l_return && p_obj.GetCount() )
+		if ( l_result && p_obj.GetCount() )
 		{
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
+			l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
-			MovableObject::TextWriter::CheckError( l_return, "BillboardList positions" );
+			MovableObject::TextWriter::CheckError( l_result, "BillboardList positions" );
 
 			for ( auto const & l_point : p_obj )
 			{
-				l_return &= p_file.Print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), l_point[0], l_point[1], l_point[2] ) > 0;
-				MovableObject::TextWriter::CheckError( l_return, "BillboardList position" );
+				l_result &= p_file.Print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), l_point[0], l_point[1], l_point[2] ) > 0;
+				MovableObject::TextWriter::CheckError( l_result, "BillboardList position" );
 			}
 
-			l_return &= p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+			l_result &= p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -290,19 +290,19 @@ namespace Castor3D
 
 	ProgramFlags BillboardBase::GetProgramFlags()const
 	{
-		ProgramFlags l_return = uint32_t( ProgramFlag::eBillboards );
+		ProgramFlags l_result = uint32_t( ProgramFlag::eBillboards );
 
 		if ( m_billboardType == BillboardType::eSpherical )
 		{
-			AddFlag( l_return, ProgramFlag::eSpherical );
+			AddFlag( l_result, ProgramFlag::eSpherical );
 		}
 
 		if ( m_billboardSize == BillboardSize::eFixed )
 		{
-			AddFlag( l_return, ProgramFlag::eFixedSize );
+			AddFlag( l_result, ProgramFlag::eFixedSize );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*************************************************************************************************

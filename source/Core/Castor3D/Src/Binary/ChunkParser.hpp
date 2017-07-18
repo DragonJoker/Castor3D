@@ -56,14 +56,14 @@ namespace Castor3D
 		 */
 		static inline bool Parse( uint8_t * p_values, size_t p_size, BinaryChunk & p_chunk )
 		{
-			bool l_return = p_chunk.CheckAvailable( uint32_t( p_size ) );
+			bool l_result = p_chunk.CheckAvailable( uint32_t( p_size ) );
 
-			if ( l_return )
+			if ( l_result )
 			{
 				p_chunk.Get( p_values, uint32_t( p_size ) );
 			}
 
-			return l_return;
+			return l_result;
 		}
 	};
 	/*!
@@ -96,7 +96,7 @@ namespace Castor3D
 		 */
 		static inline bool Parse( T * p_values, size_t p_count, BinaryChunk & p_chunk )
 		{
-			bool l_return{ ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values )
+			bool l_result{ ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values )
 				, p_count * sizeof( T )
 				, p_chunk ) };
 
@@ -105,7 +105,7 @@ namespace Castor3D
 				PrepareChunkData( *p_values++ );
 			}
 
-			return l_return;
+			return l_result;
 		}
 		/**
 		 *\~english
@@ -121,11 +121,11 @@ namespace Castor3D
 		 */
 		static inline bool Parse( T & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_return{ ChunkParserBase::Parse( GetBuffer( p_value )
+			bool l_result{ ChunkParserBase::Parse( GetBuffer( p_value )
 				, uint32_t( GetDataSize( p_value ) )
 				, p_chunk ) };
 			PrepareChunkData( p_value );
-			return l_return;
+			return l_result;
 		}
 	};
 	/*!
@@ -156,23 +156,23 @@ namespace Castor3D
 		 */
 		static inline bool Parse( Castor::String & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_return = p_chunk.CheckAvailable( 1 );
+			bool l_result = p_chunk.CheckAvailable( 1 );
 			uint32_t l_size = p_chunk.GetRemaining();
 
-			if ( l_return )
+			if ( l_result )
 			{
 				std::vector< char > l_buffer( l_size + 1, 0 );
-				l_return = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_buffer.data() )
+				l_result = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_buffer.data() )
 					, l_size
 					, p_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					p_value = Castor::string::string_cast< xchar >( l_buffer.data() );
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 	};
 	/*!
@@ -203,23 +203,23 @@ namespace Castor3D
 		 */
 		static inline bool Parse( Castor::Path & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_return = p_chunk.CheckAvailable( 1 );
+			bool l_result = p_chunk.CheckAvailable( 1 );
 			uint32_t l_size = p_chunk.GetRemaining();
 
-			if ( l_return )
+			if ( l_result )
 			{
 				std::vector< char > l_buffer( l_size + 1, 0 );
-				l_return = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_buffer.data() )
+				l_result = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_buffer.data() )
 					, l_size
 					, p_chunk );
 
-				if ( l_return )
+				if ( l_result )
 				{
 					p_value = Castor::Path{ Castor::string::string_cast< xchar >( l_buffer.data() ) };
 				}
 			}
 
-			return l_return;
+			return l_result;
 		}
 	};
 }

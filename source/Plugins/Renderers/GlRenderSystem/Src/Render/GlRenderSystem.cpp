@@ -43,7 +43,7 @@ namespace GlRender
 
 		uint32_t GetVideoMemorySizeBytes()
 		{
-			uint32_t l_return{ 0u };
+			uint32_t l_result{ 0u };
 			HDC l_hdc = ::CreateDC( "DISPLAY", 0, 0, 0 );
 
 			if ( l_hdc )
@@ -54,13 +54,13 @@ namespace GlRender
 
 				if ( ::ExtEscape( l_hdc, 0x7032, l_size, LPCSTR( l_input.data() ), l_size, LPSTR( l_output.data() ) ) > 0 )
 				{
-					l_return = l_output[3] * 1048576;
+					l_result = l_output[3] * 1048576;
 				}
 
 				::DeleteDC( l_hdc );
 			}
 
-			return l_return;
+			return l_result;
 		}
 
 #else
@@ -459,24 +459,24 @@ namespace GlRender
 
 	GpuBufferUPtr GlRenderSystem::CreateBuffer( BufferType p_type )
 	{
-		GpuBufferUPtr l_return;
+		GpuBufferUPtr l_result;
 
 		switch ( p_type )
 		{
 		case BufferType::eArray:
-			l_return = std::make_unique< GlBuffer >( *this
+			l_result = std::make_unique< GlBuffer >( *this
 				, GetOpenGl()
 				, GlBufferTarget::eArray );
 			break;
 
 		case BufferType::eElementArray:
-			l_return = std::make_unique< GlBuffer >( *this
+			l_result = std::make_unique< GlBuffer >( *this
 				, GetOpenGl()
 				, GlBufferTarget::eElementArray );
 			break;
 
 		case BufferType::eUniform:
-			l_return = std::make_unique< GlBuffer >( *this
+			l_result = std::make_unique< GlBuffer >( *this
 				, GetOpenGl()
 				, GlBufferTarget::eUniform );
 			break;
@@ -484,7 +484,7 @@ namespace GlRender
 		case BufferType::eAtomicCounter:
 			if ( GetOpenGl().HasSsbo() )
 			{
-				l_return = std::make_unique< GlBuffer >( *this
+				l_result = std::make_unique< GlBuffer >( *this
 					, GetOpenGl()
 					, GlBufferTarget::eAtomicCounter );
 			}
@@ -493,14 +493,14 @@ namespace GlRender
 		case BufferType::eShaderStorage:
 			if ( GetOpenGl().HasSsbo() )
 			{
-				l_return = std::make_unique< GlBuffer >( *this
+				l_result = std::make_unique< GlBuffer >( *this
 					, GetOpenGl()
 					, GlBufferTarget::eShaderStorage );
 			}
 			break;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed
@@ -540,38 +540,38 @@ namespace GlRender
 		, AccessTypes const & p_cpuAccess
 		, AccessTypes const & p_gpuAccess )
 	{
-		TextureStorageUPtr l_return;
+		TextureStorageUPtr l_result;
 
 		if ( p_type == TextureStorageType::eBuffer )
 		{
-			l_return = std::make_unique< GlTextureStorage< GlTboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+			l_result = std::make_unique< GlTextureStorage< GlTboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 		}
 
-		if ( !l_return )
+		if ( !l_result )
 		{
 			if ( !CheckFlag( p_gpuAccess, AccessType::eWrite ) )
 			{
 				if ( GetOpenGl().HasExtension( ARB_texture_storage, false )
 					 && p_cpuAccess == AccessType::eNone )
 				{
-					l_return = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					l_result = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 				else
 				{
-					l_return = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					l_result = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 			}
 			else if ( p_cpuAccess != AccessType::eNone )
 			{
-				l_return = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				l_result = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 			}
 			else
 			{
-				l_return = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, AccessType::eNone, p_gpuAccess );
+				l_result = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, AccessType::eNone, p_gpuAccess );
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	FrameBufferSPtr GlRenderSystem::CreateFrameBuffer()

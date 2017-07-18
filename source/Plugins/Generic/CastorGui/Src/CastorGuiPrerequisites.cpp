@@ -21,41 +21,41 @@ namespace CastorGui
 	MaterialSPtr CreateMaterial( Engine & p_engine, String const & p_name, Colour const & p_colour )
 	{
 		auto & l_cache = p_engine.GetMaterialCache();
-		MaterialSPtr l_return;
+		MaterialSPtr l_result;
 
 		if ( l_cache.Has( p_name ) )
 		{
-			l_return = l_cache.Find( p_name );
+			l_result = l_cache.Find( p_name );
 		}
 
-		if ( !l_return )
+		if ( !l_result )
 		{
-			l_return = l_cache.Add( p_name, MaterialType::eLegacy );
-			l_return->CreatePass();
+			l_result = l_cache.Add( p_name, MaterialType::eLegacy );
+			l_result->CreatePass();
 		}
 
-		l_return->GetTypedPass< MaterialType::eLegacy >( 0u )->SetDiffuse( p_colour );
-		return l_return;
+		l_result->GetTypedPass< MaterialType::eLegacy >( 0u )->SetDiffuse( p_colour );
+		return l_result;
 	}
 
 	MaterialSPtr CreateMaterial( Engine & p_engine, String const & p_name, TextureLayoutSPtr p_texture )
 	{
 		auto & l_cache = p_engine.GetMaterialCache();
-		MaterialSPtr l_return;
+		MaterialSPtr l_result;
 
 		if ( l_cache.Has( p_name ) )
 		{
-			l_return = l_cache.Find( p_name );
+			l_result = l_cache.Find( p_name );
 		}
 
-		if ( !l_return )
+		if ( !l_result )
 		{
-			l_return = l_cache.Add( p_name, MaterialType::eLegacy );
-			l_return->CreatePass();
+			l_result = l_cache.Add( p_name, MaterialType::eLegacy );
+			l_result->CreatePass();
 		}
 
-		REQUIRE( l_return->GetType() == MaterialType::eLegacy );
-		auto l_pass = l_return->GetTypedPass< MaterialType::eLegacy >( 0u );
+		REQUIRE( l_result->GetType() == MaterialType::eLegacy );
+		auto l_pass = l_result->GetTypedPass< MaterialType::eLegacy >( 0u );
 
 		if ( l_pass->GetTextureUnitsCount() == 0 )
 		{
@@ -66,6 +66,6 @@ namespace CastorGui
 
 		TextureUnitSPtr l_unit = l_pass->GetTextureUnit( 0 );
 		l_unit->SetTexture( p_texture );
-		return l_return;
+		return l_result;
 	}
 }

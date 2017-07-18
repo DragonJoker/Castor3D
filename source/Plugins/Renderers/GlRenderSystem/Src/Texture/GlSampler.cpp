@@ -25,13 +25,13 @@ namespace GlRender
 
 	bool GlSampler::Initialise()
 	{
-		bool l_return = IsValid();
+		bool l_result = IsValid();
 
-		if ( !l_return )
+		if ( !l_result )
 		{
-			l_return = ObjectType::Create();
+			l_result = ObjectType::Create();
 
-			if ( l_return )
+			if ( l_result )
 			{
 				GlInterpolationMode l_minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMin ) );
 				GlInterpolationMode l_mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMip ) );
@@ -50,7 +50,7 @@ namespace GlRender
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GlSampler::Cleanup()

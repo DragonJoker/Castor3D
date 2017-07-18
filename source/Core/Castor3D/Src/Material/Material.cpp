@@ -18,32 +18,32 @@ namespace Castor3D
 	bool Material::TextWriter::operator()( Material const & p_material, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Material " ) + p_material.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
+		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< Material >::CheckError( l_return, "Material name" );
+		Castor::TextWriter< Material >::CheckError( l_result, "Material name" );
 
-		if ( l_return )
+		if ( l_result )
 		{
 			switch ( p_material.GetType() )
 			{
 			case MaterialType::eLegacy:
 				for ( auto l_pass : p_material )
 				{
-					l_return &= LegacyPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< LegacyPass >( l_pass ), p_file );
+					l_result &= LegacyPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< LegacyPass >( l_pass ), p_file );
 				}
 				break;
 
 			case MaterialType::ePbrMetallicRoughness:
 				for ( auto l_pass : p_material )
 				{
-					l_return &= MetallicRoughnessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( l_pass ), p_file );
+					l_result &= MetallicRoughnessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( l_pass ), p_file );
 				}
 				break;
 
 			case MaterialType::ePbrSpecularGlossiness:
 				for ( auto l_pass : p_material )
 				{
-					l_return &= SpecularGlossinessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( l_pass ), p_file );
+					l_result &= SpecularGlossinessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( l_pass ), p_file );
 				}
 				break;
 
@@ -53,12 +53,12 @@ namespace Castor3D
 			}
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*********************************************************************************************

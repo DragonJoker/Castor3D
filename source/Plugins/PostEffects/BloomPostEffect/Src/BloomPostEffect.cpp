@@ -187,8 +187,8 @@ namespace Bloom
 
 	std::vector< float > GetHalfPascal( uint32_t p_height )
 	{
-		std::vector< float > l_return;
-		l_return.resize( p_height );
+		std::vector< float > l_result;
+		l_result.resize( p_height );
 		auto l_x = 1.0f;
 		auto l_max = 1 + p_height;
 
@@ -198,13 +198,13 @@ namespace Bloom
 
 			if ( l_index < p_height )
 			{
-				l_return[l_index] = l_x;
+				l_result[l_index] = l_x;
 			}
 
 			l_x = l_x * ( ( p_height + 1 ) * 2 - i ) / ( i + 1 );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	//*********************************************************************************************
@@ -326,24 +326,24 @@ namespace Bloom
 
 	bool BloomPostEffect::Initialise()
 	{
-		bool l_return = false;
+		bool l_result = false;
 		m_viewport.Initialise();
 
-		l_return = DoInitialiseHiPassProgram();
+		l_result = DoInitialiseHiPassProgram();
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoInitialiseBlurXProgram();
+			l_result = DoInitialiseBlurXProgram();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoInitialiseBlurYProgram();
+			l_result = DoInitialiseBlurYProgram();
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
-			l_return = DoInitialiseCombineProgram();
+			l_result = DoInitialiseCombineProgram();
 		}
 
 		Size l_size = m_renderTarget.GetSize();
@@ -372,7 +372,7 @@ namespace Bloom
 			l_size.height() >>= 1;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void BloomPostEffect::Cleanup()
@@ -621,9 +621,9 @@ namespace Bloom
 			, ShaderType::ePixel );
 		l_program->SetSource( ShaderType::eVertex, l_vertex );
 		l_program->SetSource( ShaderType::ePixel, l_hipass );
-		bool l_return = l_program->Initialise();
+		bool l_result = l_program->Initialise();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
@@ -637,7 +637,7 @@ namespace Bloom
 			m_hiPassPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool BloomPostEffect::DoInitialiseBlurXProgram()
@@ -656,9 +656,9 @@ namespace Bloom
 
 		l_program->SetSource( ShaderType::eVertex, l_vertex );
 		l_program->SetSource( ShaderType::ePixel, l_blurX );
-		bool l_return = l_program->Initialise();
+		bool l_result = l_program->Initialise();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
@@ -673,7 +673,7 @@ namespace Bloom
 			m_blurXPipeline->AddUniformBuffer( m_blurXUbo );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool BloomPostEffect::DoInitialiseBlurYProgram()
@@ -692,9 +692,9 @@ namespace Bloom
 
 		l_program->SetSource( ShaderType::eVertex, l_vertex );
 		l_program->SetSource( ShaderType::ePixel, l_blurY );
-		bool l_return = l_program->Initialise();
+		bool l_result = l_program->Initialise();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
@@ -709,7 +709,7 @@ namespace Bloom
 			m_blurYPipeline->AddUniformBuffer( m_blurYUbo );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool BloomPostEffect::DoInitialiseCombineProgram()
@@ -734,9 +734,9 @@ namespace Bloom
 
 		l_program->SetSource( ShaderType::eVertex, l_vertex );
 		l_program->SetSource( ShaderType::ePixel, l_combine );
-		bool l_return = l_program->Initialise();
+		bool l_result = l_program->Initialise();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine()
 				, m_declaration );
@@ -745,10 +745,10 @@ namespace Bloom
 			m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles
 				, *l_program );
-			l_return = m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
+			l_result = m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 		}
 
-		if ( l_return )
+		if ( l_result )
 		{
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
@@ -762,6 +762,6 @@ namespace Bloom
 			m_combinePipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

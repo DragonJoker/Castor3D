@@ -15,9 +15,9 @@ namespace GlRender
 		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).GetOpenGl(), GlBufferTarget::eTexture }
 	{
 		REQUIRE( p_storage.GetType() == TextureStorageType::eBuffer );
-		bool l_return = m_glBuffer.Create();
+		bool l_result = m_glBuffer.Create();
 
-		if ( l_return )
+		if ( l_result )
 		{
 			auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
 			auto l_buffer = p_storage.GetOwner()->GetImage().GetBuffer();

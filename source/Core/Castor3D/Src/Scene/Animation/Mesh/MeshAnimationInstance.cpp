@@ -32,14 +32,14 @@ namespace Castor3D
 	MeshAnimationInstanceSubmesh const * MeshAnimationInstance::GetAnimationSubmesh( uint32_t p_index )const
 	{
 		auto l_it = m_submeshes.find( p_index );
-		MeshAnimationInstanceSubmesh const * l_return = nullptr;
+		MeshAnimationInstanceSubmesh const * l_result = nullptr;
 
 		if ( l_it != m_submeshes.end() )
 		{
-			l_return = &l_it->second;
+			l_result = &l_it->second;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void MeshAnimationInstance::DoUpdate()

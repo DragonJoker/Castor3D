@@ -53,17 +53,17 @@ namespace GLSL
 
 	Type::operator String()const
 	{
-		String l_return = m_value.str();
+		String l_result = m_value.str();
 
-		if ( l_return.empty() )
+		if ( l_result.empty() )
 		{
 			if ( m_name.empty() )
 			{
-				l_return = m_type;
+				l_result = m_type;
 			}
 			else
 			{
-				l_return = m_name;
+				l_result = m_name;
 			}
 		}
 		else
@@ -71,7 +71,7 @@ namespace GLSL
 			m_value.str( String() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	Type & Type::operator+=( Type const & p_type )

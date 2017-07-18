@@ -45,12 +45,12 @@ namespace GlRender
 
 	bool GlShaderObject::Compile()
 	{
-		bool l_return = false;
+		bool l_result = false;
 		String l_loadedSource = m_source.GetSource();
 
 		if ( m_status != ShaderStatus::eError && !l_loadedSource.empty() )
 		{
-			l_return = true;
+			l_result = true;
 
 			if ( m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
 			{
@@ -79,7 +79,7 @@ namespace GlRender
 					m_status = ShaderStatus::eError;
 				}
 
-				l_return = DoCheckErrors();
+				l_result = DoCheckErrors();
 			}
 			else
 			{
@@ -95,7 +95,7 @@ namespace GlRender
 			Logger::LogWarning( "GlShaderObject::Compile - Shader is already compiled." );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void GlShaderObject::Detach()

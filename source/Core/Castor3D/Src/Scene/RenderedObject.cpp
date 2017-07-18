@@ -11,20 +11,20 @@ namespace Castor3D
 
 	bool RenderedObject::TextWriter::operator()( RenderedObject const & p_object, TextFile & p_file )
 	{
-		bool l_return{ true };
+		bool l_result{ true };
 
 		if ( !p_object.IsShadowCaster() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "cast_shadows false\n" ) ) > 0;
-			Castor::TextWriter< RenderedObject >::CheckError( l_return, "Object shadow caster status" );
+			l_result = p_file.WriteText( m_tabs + cuT( "cast_shadows false\n" ) ) > 0;
+			Castor::TextWriter< RenderedObject >::CheckError( l_result, "Object shadow caster status" );
 		}
 
 		if ( !p_object.IsShadowReceiver() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "receives_shadows false\n" ) ) > 0;
-			Castor::TextWriter< RenderedObject >::CheckError( l_return, "Object shadow receiver status" );
+			l_result = p_file.WriteText( m_tabs + cuT( "receives_shadows false\n" ) ) > 0;
+			Castor::TextWriter< RenderedObject >::CheckError( l_result, "Object shadow receiver status" );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

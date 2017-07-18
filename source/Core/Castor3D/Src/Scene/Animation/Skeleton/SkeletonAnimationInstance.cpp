@@ -69,19 +69,19 @@ namespace Castor3D
 
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const
 	{
-		SkeletonAnimationInstanceObjectSPtr l_return;
+		SkeletonAnimationInstanceObjectSPtr l_result;
 		auto l_it = m_toMove.find( GetObjectTypeName( p_type ) + p_name );
 
 		if ( l_it != m_toMove.end() )
 		{
-			l_return = l_it->second;
+			l_result = l_it->second;
 		}
 		else
 		{
 			Logger::LogWarning( cuT( "No object named " ) + p_name + cuT( " for this animation instance" ) );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void SkeletonAnimationInstance::DoUpdate()

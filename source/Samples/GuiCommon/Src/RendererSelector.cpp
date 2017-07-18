@@ -84,15 +84,15 @@ namespace GuiCommon
 
 	Castor::String RendererSelector::GetSelectedRenderer()const
 	{
-		Castor::String l_return = RENDERER_TYPE_UNDEFINED;
+		Castor::String l_result = RENDERER_TYPE_UNDEFINED;
 		uint32_t l_selected = m_pListRenderers->GetSelection();
 
 		if ( l_selected >= 0 && l_selected < m_pListRenderers->GetCount() )
 		{
-			l_return = static_cast< RendererPlugin * >( m_pListRenderers->GetClientData( l_selected ) )->GetRendererType();
+			l_result = static_cast< RendererPlugin * >( m_pListRenderers->GetClientData( l_selected ) )->GetRendererType();
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void RendererSelector::DoDraw( wxDC * p_pDC )

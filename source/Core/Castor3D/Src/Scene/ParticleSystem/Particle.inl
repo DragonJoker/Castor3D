@@ -21,9 +21,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			Castor::string::parse( p_value, l_return );
-			return l_return;
+			Type l_result;
+			Castor::string::parse( p_value, l_result );
+			return l_result;
 		}
 
 		static inline float const * GetPointer( Type const & p_value )
@@ -44,9 +44,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< float, 2 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< float, 2 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline float const * GetPointer( Type const & p_value )
@@ -67,9 +67,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< float, 3 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< float, 3 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline float const * GetPointer( Type const & p_value )
@@ -90,9 +90,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< float, 4 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< float, 4 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline float const * GetPointer( Type const & p_value )
@@ -113,8 +113,8 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return{};
-			return l_return;
+			Type l_result{};
+			return l_result;
 		}
 
 		static inline uint32_t const * GetPointer( Type const & p_value )
@@ -135,9 +135,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			Castor::string::parse( p_value, l_return );
-			return l_return;
+			Type l_result;
+			Castor::string::parse( p_value, l_result );
+			return l_result;
 		}
 
 		static inline int const * GetPointer( Type const & p_value )
@@ -158,9 +158,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< int, 2 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< int, 2 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline int const * GetPointer( Type const & p_value )
@@ -181,9 +181,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< int, 3 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< int, 3 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline int const * GetPointer( Type const & p_value )
@@ -204,9 +204,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< int, 4 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< int, 4 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline int const * GetPointer( Type const & p_value )
@@ -227,9 +227,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			Castor::string::parse( p_value, l_return );
-			return l_return;
+			Type l_result;
+			Castor::string::parse( p_value, l_result );
+			return l_result;
 		}
 
 		static inline uint32_t const * GetPointer( Type const & p_value )
@@ -250,9 +250,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< uint32_t, 2 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< uint32_t, 2 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline uint32_t const * GetPointer( Type const & p_value )
@@ -273,9 +273,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< uint32_t, 3 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< uint32_t, 3 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline uint32_t const * GetPointer( Type const & p_value )
@@ -296,9 +296,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< uint32_t, 4 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< uint32_t, 4 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline uint32_t const * GetPointer( Type const & p_value )
@@ -319,9 +319,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< float, 4 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< float, 4 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline float const * GetPointer( Type const & p_value )
@@ -342,9 +342,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< float, 9 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< float, 9 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline float const * GetPointer( Type const & p_value )
@@ -365,9 +365,9 @@ namespace Castor3D
 
 		static inline Type Parse( Castor::String const & p_value )
 		{
-			Type l_return;
-			ParseArray< float, 16 >( p_value, l_return.ptr() );
-			return l_return;
+			Type l_result;
+			ParseArray< float, 16 >( p_value, l_result.ptr() );
+			return l_result;
 		}
 
 		static inline float const * GetPointer( Type const & p_value )
@@ -520,8 +520,8 @@ namespace Castor3D
 		REQUIRE( p_index < m_description.size() );
 		auto l_it = m_description.begin() + p_index;
 		REQUIRE( l_it->m_dataType == Type );
-		typename ElementTyper< Type >::Type l_return{};
-		std::memcpy( ElementTyper< Type >::GetPointer( l_return ), &m_data[l_it->m_offset], sizeof( l_return ) );
-		return l_return;
+		typename ElementTyper< Type >::Type l_result{};
+		std::memcpy( ElementTyper< Type >::GetPointer( l_result ), &m_data[l_it->m_offset], sizeof( l_result ) );
+		return l_result;
 	}
 }

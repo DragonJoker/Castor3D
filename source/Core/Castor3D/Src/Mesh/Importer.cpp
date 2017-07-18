@@ -30,9 +30,9 @@ namespace Castor3D
 		m_parameters = p_parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		bool l_return = DoImportScene( p_scene );
+		bool l_result = DoImportScene( p_scene );
 
-		if ( l_return )
+		if ( l_result )
 		{
 			for ( auto l_it : m_geometries )
 			{
@@ -47,7 +47,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	bool Importer::ImportMesh( Mesh & p_mesh, Path const & p_fileName, Parameters const & p_parameters, bool p_initialise )
@@ -57,13 +57,13 @@ namespace Castor3D
 		m_parameters = p_parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		bool l_return = true;
+		bool l_result = true;
 
 		if ( !p_mesh.GetSubmeshCount() )
 		{
-			l_return = DoImportMesh( p_mesh );
+			l_result = DoImportMesh( p_mesh );
 
-			if ( l_return && p_initialise )
+			if ( l_result && p_initialise )
 			{
 				p_mesh.ComputeContainers();
 
@@ -81,7 +81,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	TextureUnitSPtr Importer::LoadTexture( Path const & p_path, Pass & p_pass, TextureChannel p_channel )const

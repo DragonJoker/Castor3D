@@ -34,9 +34,9 @@ namespace castortd
 	bool Enemy::Accept( Game const & p_game )
 	{
 		auto l_speed = p_game.GetElapsed().count() * m_speed / 1000;
-		Point3r l_result = m_destination;
+		Point3r l_destination = m_destination;
 		Point3r l_position{ m_node.get().GetPosition() };
-		Point3r l_direction{ l_result - l_position };
+		Point3r l_direction{ l_destination - l_position };
 		auto l_distanceToDst = point::length( l_direction );
 		l_direction[0] *= l_speed / l_distanceToDst;
 		l_direction[2] *= l_speed / l_distanceToDst;
@@ -44,7 +44,7 @@ namespace castortd
 
 		if ( !l_reachDst )
 		{
-			l_result = l_position + l_direction;
+			l_destination = l_position + l_direction;
 		}
 		else if ( l_distanceToDst < l_speed )
 		{
@@ -71,13 +71,13 @@ namespace castortd
 			m_destination = p_game.Convert( Point2i{ m_cur->m_x, m_cur->m_y } ) + Point3r{ 0, p_game.GetCellHeight() / 2, 0 };
 		}
 
-		bool l_return = m_state == State::Arrived;
+		bool l_result = m_state == State::Arrived;
 
-		if ( !l_return )
+		if ( !l_result )
 		{
-			m_node.get().SetPosition( l_result );
+			m_node.get().SetPosition( l_destination );
 		}
 
-		return l_return;
+		return l_result;
 	}
 }

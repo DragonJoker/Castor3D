@@ -242,7 +242,7 @@ namespace GuiCommon
 	//
 	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pass, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxImage * l_return = nullptr;
+	//	wxImage * l_result = nullptr;
 	//
 	//	if ( p_pass )
 	//	{
@@ -332,15 +332,15 @@ namespace GuiCommon
 	//		wxBitmap l_bmpMask( *l_pMask );
 	//		delete l_pMask;
 	//		l_dcReturn.DrawBitmap( l_bmpMask, 0, 0, true );
-	//		l_return = new wxImage( l_bmpReturn.ConvertToImage() );
+	//		l_result = new wxImage( l_bmpReturn.ConvertToImage() );
 	//	}
 	//
-	//	return l_return;
+	//	return l_result;
 	//}
 	//
 	//wxImage * MaterialsList::CreateTextureUnitImage( TextureUnitSPtr p_pUnit, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxImage * l_return = nullptr;
+	//	wxImage * l_result = nullptr;
 	//
 	//	if ( p_pUnit )
 	//	{
@@ -351,8 +351,8 @@ namespace GuiCommon
 	//		{
 	//			if ( l_bmp.IsOk() )
 	//			{
-	//				l_return = new wxImage( l_bmp.ConvertToImage() );
-	//				l_return->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST );
+	//				l_result = new wxImage( l_bmp.ConvertToImage() );
+	//				l_result->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST );
 	//			}
 	//		}
 	//		catch ( ... )
@@ -361,6 +361,6 @@ namespace GuiCommon
 	//		}
 	//	}
 	//
-	//	return l_return;
+	//	return l_result;
 	//}
 }

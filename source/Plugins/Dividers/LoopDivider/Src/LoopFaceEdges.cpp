@@ -93,38 +93,38 @@ namespace Loop
 	EdgeSPtr FaceEdges::DoAddEdge( VertexSPtr p_v1, VertexSPtr p_v2, bool p_toDivide )
 	{
 		// First we check if we have the edge v1->v2
-		EdgeSPtr l_return = p_v1->GetEdge( p_v2->GetIndex() );
+		EdgeSPtr l_result = p_v1->GetEdge( p_v2->GetIndex() );
 		bool l_bCreated = false;
 
-		if ( !l_return )
+		if ( !l_result )
 		{
 			// We haven't it, we check if we have the edge v2->v1
-			l_return = p_v2->GetEdge( p_v1->GetIndex() );
+			l_result = p_v2->GetEdge( p_v1->GetIndex() );
 
-			if ( !l_return )
+			if ( !l_result )
 			{
 				// We haven't it, so we create the edge
-				l_return = std::make_shared< Edge >( p_v1, p_v2, m_face, p_toDivide );
+				l_result = std::make_shared< Edge >( p_v1, p_v2, m_face, p_toDivide );
 				l_bCreated = true;
 			}
 
 			// We tell v1 it has an edge with v2
-			p_v1->AddEdge( l_return, p_v2->GetIndex() );
+			p_v1->AddEdge( l_result, p_v2->GetIndex() );
 		}
 
 		if ( !p_v2->HasEdge( p_v1->GetIndex() ) )
 		{
 			// We tell v2 it has an edge with v1
-			p_v2->AddEdge( l_return, p_v1->GetIndex() );
+			p_v2->AddEdge( l_result, p_v1->GetIndex() );
 		}
 
 		if ( !l_bCreated )
 		{
 			// We add the face to the edge's faces
-			l_return->AddFace( m_face );
+			l_result->AddFace( m_face );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void FaceEdges::DoRemoveEdge( EdgeSPtr p_edge )

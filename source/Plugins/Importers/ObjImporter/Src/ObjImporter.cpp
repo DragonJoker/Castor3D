@@ -48,9 +48,9 @@ namespace Obj
 	bool ObjImporter::DoImportScene( Scene & p_scene )
 	{
 		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_OBJ" ) );
-		bool l_return = DoImportMesh( *l_mesh );
+		bool l_result = DoImportMesh( *l_mesh );
 
-		if ( l_return )
+		if ( l_result )
 		{
 			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
 			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
@@ -60,12 +60,12 @@ namespace Obj
 
 		m_arrayLoadedMaterials.clear();
 		m_arrayTextures.clear();
-		return l_return;
+		return l_result;
 	}
 
 	bool ObjImporter::DoImportMesh( Mesh & p_mesh )
 	{
-		bool l_return{ false };
+		bool l_result{ false };
 
 		try
 		{
@@ -85,14 +85,14 @@ namespace Obj
 				m_pThread.reset();
 			}
 
-			l_return = true;
+			l_result = true;
 		}
 		catch ( std::exception & exc )
 		{
 			Logger::LogWarning( std::stringstream() << "Encountered exception while importing mesh: " << exc.what() );
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void ObjImporter::DoAddTexture( String const & p_strValue, Pass & p_pass, TextureChannel p_channel )

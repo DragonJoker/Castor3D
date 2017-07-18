@@ -21,15 +21,15 @@ namespace Loop
 
 	EdgeSPtr Vertex::GetEdge( uint32_t p_index )
 	{
-		EdgeSPtr l_return;
+		EdgeSPtr l_result;
 		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_index );
 
 		if ( l_it != m_mapEdges.end() )
 		{
-			l_return = l_it->second;
+			l_result = l_it->second;
 		}
 
-		return l_return;
+		return l_result;
 	}
 
 	void Vertex::AddEdge( EdgeSPtr p_pEdge, uint32_t p_index )
