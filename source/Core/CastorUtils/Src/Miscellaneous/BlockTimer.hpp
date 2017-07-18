@@ -71,6 +71,6 @@ namespace Castor
 	};
 }
 
-#	define CASTOR_TIME() Castor::BlockTimer l_timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
+#	define CASTOR_TIME() Castor::BlockTimer timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
 
 #endif

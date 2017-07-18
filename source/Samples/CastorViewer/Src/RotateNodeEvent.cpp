@@ -19,16 +19,16 @@ namespace CastorViewer
 
 	bool RotateNodeEvent::Apply()
 	{
-		SceneNodeSPtr l_node = m_node.lock();
+		SceneNodeSPtr node = m_node.lock();
 
-		if ( l_node && ( m_dx || m_dy || m_dz ) )
+		if ( node && ( m_dx || m_dy || m_dz ) )
 		{
-			Quaternion l_x{ Quaternion::from_axis_angle( Point3r{ 1.0, 0.0, 0.0 }, Angle::from_degrees( m_dx ) ) };
-			Quaternion l_y{ Quaternion::from_axis_angle( Point3r{ 0.0, 1.0, 0.0 }, Angle::from_degrees( m_dy ) ) };
-			Quaternion l_z{ Quaternion::from_axis_angle( Point3r{ 0.0, 0.0, 1.0 }, Angle::from_degrees( m_dz ) ) };
-			l_node->Rotate( l_x );
-			l_node->Rotate( l_y );
-			l_node->Rotate( l_z );
+			Quaternion x{ Quaternion::from_axis_angle( Point3r{ 1.0, 0.0, 0.0 }, Angle::from_degrees( m_dx ) ) };
+			Quaternion y{ Quaternion::from_axis_angle( Point3r{ 0.0, 1.0, 0.0 }, Angle::from_degrees( m_dy ) ) };
+			Quaternion z{ Quaternion::from_axis_angle( Point3r{ 0.0, 0.0, 1.0 }, Angle::from_degrees( m_dz ) ) };
+			node->Rotate( x );
+			node->Rotate( y );
+			node->Rotate( z );
 		}
 
 		m_dx = 0;

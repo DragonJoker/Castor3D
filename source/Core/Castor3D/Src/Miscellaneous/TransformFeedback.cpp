@@ -21,14 +21,14 @@ namespace Castor3D
 	bool TransformFeedback::Initialise( VertexBufferArray const & p_buffers )
 	{
 		m_buffers = p_buffers;
-		bool l_result = m_query->Initialise();
+		bool result = m_query->Initialise();
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = DoInitialise();
+			result = DoInitialise();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void TransformFeedback::Cleanup()

@@ -42,24 +42,24 @@ namespace Castor3D
 
 		DoCleanup();
 
-		auto l_lock = make_unique_lock( m_mutexHandlers );
-		auto l_it = m_handlers.begin();
+		auto lock = make_unique_lock( m_mutexHandlers );
+		auto it = m_handlers.begin();
 
-		while ( l_it != m_handlers.end() )
+		while ( it != m_handlers.end() )
 		{
-			auto l_handler = *l_it;
-			DoRemoveHandler( l_handler );
-			l_it = m_handlers.begin();
+			auto handler = *it;
+			DoRemoveHandler( handler );
+			it = m_handlers.begin();
 		}
 	}
 
 	void UserInputListener::ProcessEvents()
 	{
-		auto l_handlers = DoGetHandlers();
+		auto handlers = DoGetHandlers();
 
-		for ( auto l_handler : l_handlers )
+		for ( auto handler : handlers )
 		{
-			l_handler->ProcessEvents();
+			handler->ProcessEvents();
 		}
 
 		if ( m_enabled )
@@ -72,9 +72,9 @@ namespace Castor3D
 	void UserInputListener::RegisterClickAction( String const & p_handler
 		, OnClickActionFunction p_function )
 	{
-		auto l_it = m_onClickActions.find( p_handler );
+		auto it = m_onClickActions.find( p_handler );
 
-		if ( l_it == m_onClickActions.end() )
+		if ( it == m_onClickActions.end() )
 		{
 			m_onClickActions.emplace( p_handler, p_function );
 		}
@@ -83,9 +83,9 @@ namespace Castor3D
 	void UserInputListener::RegisterSelectAction( String const & p_handler
 		, OnSelectActionFunction p_function )
 	{
-		auto l_it = m_onSelectActions.find( p_handler );
+		auto it = m_onSelectActions.find( p_handler );
 
-		if ( l_it == m_onSelectActions.end() )
+		if ( it == m_onSelectActions.end() )
 		{
 			m_onSelectActions.emplace( p_handler, p_function );
 		}
@@ -94,9 +94,9 @@ namespace Castor3D
 	void UserInputListener::RegisterTextAction( String const & p_handler
 		, OnTextActionFunction p_function )
 	{
-		auto l_it = m_onTextActions.find( p_handler );
+		auto it = m_onTextActions.find( p_handler );
 
-		if ( l_it == m_onTextActions.end() )
+		if ( it == m_onTextActions.end() )
 		{
 			m_onTextActions.emplace( p_handler, p_function );
 		}
@@ -104,175 +104,175 @@ namespace Castor3D
 
 	void UserInputListener::UnregisterClickAction( String const & p_handler )
 	{
-		auto l_it = m_onClickActions.find( p_handler );
+		auto it = m_onClickActions.find( p_handler );
 
-		if ( l_it != m_onClickActions.end() )
+		if ( it != m_onClickActions.end() )
 		{
-			m_onClickActions.erase( l_it );
+			m_onClickActions.erase( it );
 		}
 	}
 
 	void UserInputListener::UnregisterSelectAction( String const & p_handler )
 	{
-		auto l_it = m_onSelectActions.find( p_handler );
+		auto it = m_onSelectActions.find( p_handler );
 
-		if ( l_it != m_onSelectActions.end() )
+		if ( it != m_onSelectActions.end() )
 		{
-			m_onSelectActions.erase( l_it );
+			m_onSelectActions.erase( it );
 		}
 	}
 
 	void UserInputListener::UnregisterTextAction( String const & p_handler )
 	{
-		auto l_it = m_onTextActions.find( p_handler );
+		auto it = m_onTextActions.find( p_handler );
 
-		if ( l_it != m_onTextActions.end() )
+		if ( it != m_onTextActions.end() )
 		{
-			m_onTextActions.erase( l_it );
+			m_onTextActions.erase( it );
 		}
 	}
 
 	void UserInputListener::OnClickAction( String const & p_handler )
 	{
-		auto l_it = m_onClickActions.find( p_handler );
+		auto it = m_onClickActions.find( p_handler );
 
-		if ( l_it != m_onClickActions.end() )
+		if ( it != m_onClickActions.end() )
 		{
-			l_it->second();
+			it->second();
 		}
 	}
 
 	void UserInputListener::OnSelectAction( String const & p_handler, int p_index )
 	{
-		auto l_it = m_onSelectActions.find( p_handler );
+		auto it = m_onSelectActions.find( p_handler );
 
-		if ( l_it != m_onSelectActions.end() )
+		if ( it != m_onSelectActions.end() )
 		{
-			l_it->second( p_index );
+			it->second( p_index );
 		}
 	}
 
 	void UserInputListener::OnTextAction( String const & p_handler, Castor::String const & p_text )
 	{
-		auto l_it = m_onTextActions.find( p_handler );
+		auto it = m_onTextActions.find( p_handler );
 
-		if ( l_it != m_onTextActions.end() )
+		if ( it != m_onTextActions.end() )
 		{
-			l_it->second( p_text );
+			it->second( p_text );
 		}
 	}
 
 	bool UserInputListener::FireMouseMove( Position const & p_position )
 	{
-		bool l_result = false;
+		bool result = false;
 		m_mouse.m_position = p_position;
-		auto l_current = DoGetMouseTargetableHandler( p_position );
-		auto l_last = m_lastMouseTarget.lock();
+		auto current = DoGetMouseTargetableHandler( p_position );
+		auto last = m_lastMouseTarget.lock();
 
-		if ( l_current != l_last )
+		if ( current != last )
 		{
-			if ( l_last )
+			if ( last )
 			{
 				Castor::Logger::LogDebug( Castor::StringStream() << p_position.x() << "x" << p_position.y() );
-				l_last->PushEvent( MouseEvent( MouseEventType::eLeave, p_position ) );
-				l_last.reset();
+				last->PushEvent( MouseEvent( MouseEventType::eLeave, p_position ) );
+				last.reset();
 				m_lastMouseTarget.reset();
 			}
 		}
 
-		if ( l_current )
+		if ( current )
 		{
-			if ( l_current != l_last )
+			if ( current != last )
 			{
-				l_current->PushEvent( MouseEvent( MouseEventType::eEnter, p_position ) );
+				current->PushEvent( MouseEvent( MouseEventType::eEnter, p_position ) );
 			}
 
-			l_current->PushEvent( MouseEvent( MouseEventType::eMove, p_position ) );
-			l_result = true;
-			m_lastMouseTarget = l_current;
+			current->PushEvent( MouseEvent( MouseEventType::eMove, p_position ) );
+			result = true;
+			m_lastMouseTarget = current;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool UserInputListener::FireMouseButtonPushed( MouseButton p_button )
 	{
-		bool l_result = false;
+		bool result = false;
 		m_mouse.m_buttons[size_t( p_button )] = true;
 		m_mouse.m_changed = p_button;
-		auto l_current = DoGetMouseTargetableHandler( m_mouse.m_position );
+		auto current = DoGetMouseTargetableHandler( m_mouse.m_position );
 
-		if ( l_current )
+		if ( current )
 		{
-			auto l_active = m_activeHandler.lock();
+			auto active = m_activeHandler.lock();
 
-			if ( l_current != l_active )
+			if ( current != active )
 			{
-				if ( l_active )
+				if ( active )
 				{
-					l_active->PushEvent( HandlerEvent( HandlerEventType::eDeactivate, l_current ) );
+					active->PushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
 				}
 
-				l_current->PushEvent( HandlerEvent( HandlerEventType::eActivate, l_active ) );
+				current->PushEvent( HandlerEvent( HandlerEventType::eActivate, active ) );
 			}
 
-			l_current->PushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.m_position, p_button ) );
-			l_result = true;
-			m_activeHandler = l_current;
+			current->PushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.m_position, p_button ) );
+			result = true;
+			m_activeHandler = current;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool UserInputListener::FireMouseButtonReleased( MouseButton p_button )
 	{
-		bool l_result = false;
+		bool result = false;
 		m_mouse.m_buttons[size_t( p_button )] = false;
 		m_mouse.m_changed = p_button;
-		auto l_current = DoGetMouseTargetableHandler( m_mouse.m_position );
+		auto current = DoGetMouseTargetableHandler( m_mouse.m_position );
 
-		if ( l_current )
+		if ( current )
 		{
-			l_current->PushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.m_position, p_button ) );
-			l_result = true;
-			m_activeHandler = l_current;
+			current->PushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.m_position, p_button ) );
+			result = true;
+			m_activeHandler = current;
 		}
 		else
 		{
-			auto l_active = m_activeHandler.lock();
+			auto active = m_activeHandler.lock();
 
-			if ( l_active )
+			if ( active )
 			{
-				l_active->PushEvent( HandlerEvent( HandlerEventType::eDeactivate, l_current ) );
+				active->PushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
 			}
 
 			m_activeHandler.reset();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool UserInputListener::FireMouseWheel( Position const & p_offsets )
 	{
-		bool l_result = false;
+		bool result = false;
 		m_mouse.m_wheel += p_offsets;
-		auto l_current = DoGetMouseTargetableHandler( m_mouse.m_position );
+		auto current = DoGetMouseTargetableHandler( m_mouse.m_position );
 
-		if ( l_current )
+		if ( current )
 		{
-			l_current->PushEvent( MouseEvent( MouseEventType::eWheel, p_offsets ) );
-			l_result = true;
+			current->PushEvent( MouseEvent( MouseEventType::eWheel, p_offsets ) );
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool UserInputListener::FireKeyDown( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
 	{
-		bool l_result = false;
-		auto l_active = m_activeHandler.lock();
+		bool result = false;
+		auto active = m_activeHandler.lock();
 
-		if ( l_active )
+		if ( active )
 		{
 			if ( p_key == KeyboardKey::eControl )
 			{
@@ -289,19 +289,19 @@ namespace Castor3D
 				m_keyboard.m_shift = true;
 			}
 
-			l_active->PushEvent( KeyboardEvent( KeyboardEventType::ePushed, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			l_result = true;
+			active->PushEvent( KeyboardEvent( KeyboardEventType::ePushed, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool UserInputListener::FireKeyUp( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
 	{
-		bool l_result = false;
-		auto l_active = m_activeHandler.lock();
+		bool result = false;
+		auto active = m_activeHandler.lock();
 
-		if ( l_active )
+		if ( active )
 		{
 			if ( p_key == KeyboardKey::eControl )
 			{
@@ -318,63 +318,63 @@ namespace Castor3D
 				m_keyboard.m_shift = false;
 			}
 
-			l_active->PushEvent( KeyboardEvent( KeyboardEventType::eReleased, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			l_result = true;
+			active->PushEvent( KeyboardEvent( KeyboardEventType::eReleased, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool UserInputListener::FireChar( KeyboardKey p_key, String const & p_char )
 	{
-		bool l_result = false;
-		auto l_active = m_activeHandler.lock();
+		bool result = false;
+		auto active = m_activeHandler.lock();
 
-		if ( l_active )
+		if ( active )
 		{
-			l_active->PushEvent( KeyboardEvent( KeyboardEventType::eChar, p_key, p_char, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
-			l_result = true;
+			active->PushEvent( KeyboardEvent( KeyboardEventType::eChar, p_key, p_char, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool UserInputListener::FireMaterialEvent( Castor::String const & p_overlay, Castor::String const & p_material )
 	{
-		bool l_result = false;
-		auto & l_cache = GetEngine()->GetOverlayCache();
-		auto l_overlay = l_cache.Find( p_overlay );
+		bool result = false;
+		auto & cache = GetEngine()->GetOverlayCache();
+		auto overlay = cache.Find( p_overlay );
 
-		if ( l_overlay )
+		if ( overlay )
 		{
-			auto l_material = GetEngine()->GetMaterialCache().Find( p_material );
+			auto material = GetEngine()->GetMaterialCache().Find( p_material );
 
-			if ( l_material )
+			if ( material )
 			{
 				this->m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePreRender
-					, [l_overlay, l_material]()
+					, [overlay, material]()
 					{
-						l_overlay->SetMaterial( l_material );
+						overlay->SetMaterial( material );
 					} ) );
-				l_result = true;
+				result = true;
 			}
 		}
 		
-		return l_result;
+		return result;
 	}
 
 	bool UserInputListener::FireTextEvent( Castor::String const & p_overlay, Castor::String const & p_caption )
 	{
-		bool l_result = false;
-		auto & l_cache = GetEngine()->GetOverlayCache();
-		auto l_overlay = l_cache.Find( p_overlay );
+		bool result = false;
+		auto & cache = GetEngine()->GetOverlayCache();
+		auto overlay = cache.Find( p_overlay );
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		if ( overlay && overlay->GetType() == OverlayType::eText )
 		{
-			l_overlay->GetTextOverlay()->SetCaption( p_caption );
-			l_result = true;
+			overlay->GetTextOverlay()->SetCaption( p_caption );
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 }

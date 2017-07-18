@@ -67,13 +67,13 @@ namespace GLSL
 	template< typename TypeT >
 	Castor::String ParamToString( Castor::String & p_sep, Optional< Array< TypeT > > const & p_value )
 	{
-		Castor::String l_result;
+		Castor::String result;
 
 		if ( p_value.IsEnabled() )
 		{
-			l_result = ParamToString( p_sep, static_cast< Type const & >( p_value ) );
+			result = ParamToString( p_sep, static_cast< Type const & >( p_value ) );
 		}
 
-		return l_result;
+		return result;
 	}
 }

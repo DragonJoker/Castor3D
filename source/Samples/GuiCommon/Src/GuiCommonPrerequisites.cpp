@@ -63,50 +63,50 @@ namespace GuiCommon
 
 			virtual void LoadGlyph( Glyph & p_glyph )
 			{
-				//FT_Glyph l_ftGlyph;
+				//FT_Glyph ftGlyph;
 				//CHECK_FT_ERR( FT_Load_Glyph, m_face, FT_Get_Char_Index( m_face, p_glyph.GetCharacter() ), FT_LOAD_DEFAULT );
-				//CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &l_ftGlyph );
-				//CHECK_FT_ERR( FT_Glyph_To_Bitmap, &l_ftGlyph, FT_RENDER_MODE_NORMAL, 0, 1 );
-				//FT_BitmapGlyph l_ftBmpGlyph = FT_BitmapGlyph( l_ftGlyph );
-				//FT_Bitmap & l_ftBitmap = l_ftBmpGlyph->bitmap;
-				//Size l_advance( uint32_t( std::abs( l_ftGlyph->advance.x ) / 65536.0 ), uint32_t( l_ftGlyph->advance.y  / 65536.0 ) );
-				//uint32_t l_pitch = std::abs( l_ftBitmap.pitch );
-				//Size l_size( l_pitch, l_ftBitmap.rows );
-				//Position l_ptPosition( l_ftBmpGlyph->left, l_ftBmpGlyph->top );
-				//uint32_t l_uiSize = l_size.width() * l_size.height();
-				//ByteArray l_bitmap( l_uiSize, 0 );
-				//uint32_t l_index = 0;
+				//CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &ftGlyph );
+				//CHECK_FT_ERR( FT_Glyph_To_Bitmap, &ftGlyph, FT_RENDER_MODE_NORMAL, 0, 1 );
+				//FT_BitmapGlyph ftBmpGlyph = FT_BitmapGlyph( ftGlyph );
+				//FT_Bitmap & ftBitmap = ftBmpGlyph->bitmap;
+				//Size advance( uint32_t( std::abs( ftGlyph->advance.x ) / 65536.0 ), uint32_t( ftGlyph->advance.y  / 65536.0 ) );
+				//uint32_t pitch = std::abs( ftBitmap.pitch );
+				//Size size( pitch, ftBitmap.rows );
+				//Position ptPosition( ftBmpGlyph->left, ftBmpGlyph->top );
+				//uint32_t uiSize = size.width() * size.height();
+				//ByteArray bitmap( uiSize, 0 );
+				//uint32_t index = 0;
 
-				//if ( l_ftBitmap.pitch < 0 )
+				//if ( ftBitmap.pitch < 0 )
 				//{
-				//	uint8_t * l_dst = l_bitmap.data();
-				//	uint8_t const * l_src = l_ftBitmap.buffer;
+				//	uint8_t * dst = bitmap.data();
+				//	uint8_t const * src = ftBitmap.buffer;
 
-				//	for ( uint32_t i = 0; i < uint32_t( l_ftBitmap.rows ); i++ )
+				//	for ( uint32_t i = 0; i < uint32_t( ftBitmap.rows ); i++ )
 				//	{
-				//		memcpy( l_dst, l_src, l_ftBitmap.width );
-				//		l_src += l_pitch;
-				//		l_dst += l_pitch;
+				//		memcpy( dst, src, ftBitmap.width );
+				//		src += pitch;
+				//		dst += pitch;
 				//	}
 				//}
 				//else
 				//{
-				//	uint8_t * l_dst = l_bitmap.data() + l_uiSize - l_pitch;
-				//	uint8_t const * l_src = l_ftBitmap.buffer;
+				//	uint8_t * dst = bitmap.data() + uiSize - pitch;
+				//	uint8_t const * src = ftBitmap.buffer;
 
-				//	for ( uint32_t i = 0; i < uint32_t( l_ftBitmap.rows ); i++ )
+				//	for ( uint32_t i = 0; i < uint32_t( ftBitmap.rows ); i++ )
 				//	{
-				//		memcpy( l_dst, l_src, l_ftBitmap.width );
-				//		l_src += l_pitch;
-				//		l_dst -= l_pitch;
+				//		memcpy( dst, src, ftBitmap.width );
+				//		src += pitch;
+				//		dst -= pitch;
 				//	}
 				//}
 
-				//p_glyph.SetSize( l_size );
-				//p_glyph.SetPosition( l_ptPosition );
-				//p_glyph.SetAdvance( l_advance );
-				//p_glyph.SetBitmap( l_bitmap );
-				//return l_ftBmpGlyph->top;
+				//p_glyph.SetSize( size );
+				//p_glyph.SetPosition( ptPosition );
+				//p_glyph.SetAdvance( advance );
+				//p_glyph.SetBitmap( bitmap );
+				//return ftBmpGlyph->top;
 			}
 
 			wxFont m_font;
@@ -116,73 +116,73 @@ namespace GuiCommon
 	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap )
 	{
 		p_bitmap.Create( p_width, p_height, 24 );
-		wxNativePixelData l_data( p_bitmap );
+		wxNativePixelData data( p_bitmap );
 
-		if ( p_bitmap.IsOk() && uint32_t( l_data.GetWidth() ) == p_width && uint32_t( l_data.GetHeight() ) == p_height )
+		if ( p_bitmap.IsOk() && uint32_t( data.GetWidth() ) == p_width && uint32_t( data.GetHeight() ) == p_height )
 		{
-			wxNativePixelData::Iterator l_it( l_data );
+			wxNativePixelData::Iterator it( data );
 
 			try
 			{
 				if ( p_flip )
 				{
-					uint32_t l_pitch = p_width * 4;
-					uint8_t const * l_buffer = p_buffer + ( p_height - 1 ) * l_pitch;
+					uint32_t pitch = p_width * 4;
+					uint8_t const * buffer = p_buffer + ( p_height - 1 ) * pitch;
 
-					for ( uint32_t i = 0; i < p_height && l_it.IsOk(); i++ )
+					for ( uint32_t i = 0; i < p_height && it.IsOk(); i++ )
 					{
-						uint8_t const * l_line = l_buffer;
+						uint8_t const * line = buffer;
 #if defined( CASTOR_PLATFORM_WINDOWS )
-						wxNativePixelData::Iterator l_rowStart = l_it;
+						wxNativePixelData::Iterator rowStart = it;
 #endif
 
-						for ( uint32_t j = 0; j < p_width && l_it.IsOk(); j++ )
+						for ( uint32_t j = 0; j < p_width && it.IsOk(); j++ )
 						{
-							l_it.Red() = *l_line;
-							l_line++;
-							l_it.Green() = *l_line;
-							l_line++;
-							l_it.Blue() = *l_line;
-							l_line++;
+							it.Red() = *line;
+							line++;
+							it.Green() = *line;
+							line++;
+							it.Blue() = *line;
+							line++;
 							// Don't write the alpha.
-							l_line++;
-							l_it++;
+							line++;
+							it++;
 						}
 
-						l_buffer -= l_pitch;
+						buffer -= pitch;
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
-						l_it = l_rowStart;
-						l_it.OffsetY( l_data, 1 );
+						it = rowStart;
+						it.OffsetY( data, 1 );
 #endif
 					}
 				}
 				else
 				{
-					uint8_t const * l_buffer = p_buffer;
+					uint8_t const * buffer = p_buffer;
 
-					for ( uint32_t i = 0; i < p_height && l_it.IsOk(); i++ )
+					for ( uint32_t i = 0; i < p_height && it.IsOk(); i++ )
 					{
 #if defined( CASTOR_PLATFORM_WINDOWS )
-						wxNativePixelData::Iterator l_rowStart = l_it;
+						wxNativePixelData::Iterator rowStart = it;
 #endif
 
-						for ( uint32_t j = 0; j < p_width && l_it.IsOk(); j++ )
+						for ( uint32_t j = 0; j < p_width && it.IsOk(); j++ )
 						{
-							l_it.Red() = *l_buffer;
-							l_buffer++;
-							l_it.Green() = *l_buffer;
-							l_buffer++;
-							l_it.Blue() = *l_buffer;
-							l_buffer++;
+							it.Red() = *buffer;
+							buffer++;
+							it.Green() = *buffer;
+							buffer++;
+							it.Blue() = *buffer;
+							buffer++;
 							// Don't write the alpha.
-							l_buffer++;
-							l_it++;
+							buffer++;
+							it++;
 						}
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
-						l_it = l_rowStart;
-						l_it.OffsetY( l_data, 1 );
+						it = rowStart;
+						it.OffsetY( data, 1 );
 #endif
 					}
 				}
@@ -196,18 +196,18 @@ namespace GuiCommon
 
 	void CreateBitmapFromBuffer( PxBufferBaseSPtr p_buffer, bool p_flip, wxBitmap & p_bitmap )
 	{
-		PxBufferBaseSPtr l_buffer;
+		PxBufferBaseSPtr buffer;
 
 		if ( p_buffer->format() != PixelFormat::eA8R8G8B8 )
 		{
-			l_buffer = PxBufferBase::create( Size( p_buffer->width(), p_buffer->height() ), PixelFormat::eA8R8G8B8, p_buffer->const_ptr(), p_buffer->format() );
+			buffer = PxBufferBase::create( Size( p_buffer->width(), p_buffer->height() ), PixelFormat::eA8R8G8B8, p_buffer->const_ptr(), p_buffer->format() );
 		}
 		else
 		{
-			l_buffer = p_buffer;
+			buffer = p_buffer;
 		}
 
-		CreateBitmapFromBuffer( l_buffer->const_ptr(), l_buffer->width(), l_buffer->height(), p_flip, p_bitmap );
+		CreateBitmapFromBuffer( buffer->const_ptr(), buffer->width(), buffer->height(), p_flip, p_bitmap );
 	}
 
 	void CreateBitmapFromBuffer( TextureUnitSPtr p_pUnit, bool p_flip, wxBitmap & p_bitmap )
@@ -218,28 +218,28 @@ namespace GuiCommon
 		}
 		else
 		{
-			Path l_path{ p_pUnit->GetTexture()->GetImage().ToString() };
+			Path path{ p_pUnit->GetTexture()->GetImage().ToString() };
 
-			if ( !l_path.empty() )
+			if ( !path.empty() )
 			{
-				wxImageHandler * l_pHandler = wxImage::FindHandler( l_path.GetExtension(), wxBITMAP_TYPE_ANY );
+				wxImageHandler * pHandler = wxImage::FindHandler( path.GetExtension(), wxBITMAP_TYPE_ANY );
 
-				if ( l_pHandler )
+				if ( pHandler )
 				{
-					wxImage l_image;
+					wxImage image;
 
-					if ( l_image.LoadFile( l_path, l_pHandler->GetType() ) && l_image.IsOk() )
+					if ( image.LoadFile( path, pHandler->GetType() ) && image.IsOk() )
 					{
-						p_bitmap = wxBitmap( l_image );
+						p_bitmap = wxBitmap( image );
 					}
 					else
 					{
-						Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + l_path + cuT( "]" ) );
+						Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "]" ) );
 					}
 				}
 				else
 				{
-					Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + l_path + cuT( "] : Unsupported format" ) );
+					Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "] : Unsupported format" ) );
 				}
 			}
 		}
@@ -247,7 +247,7 @@ namespace GuiCommon
 
 	RenderWindowSPtr LoadScene( Engine & p_engine, Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
 	{
-		RenderWindowSPtr l_result;
+		RenderWindowSPtr result;
 
 		if ( File::FileExists( p_fileName ) )
 		{
@@ -257,11 +257,11 @@ namespace GuiCommon
 			{
 				try
 				{
-					SceneFileParser l_parser( p_engine );
+					SceneFileParser parser( p_engine );
 
-					if ( l_parser.ParseFile( p_fileName ) )
+					if ( parser.ParseFile( p_fileName ) )
 					{
-						l_result = l_parser.GetRenderWindow();
+						result = parser.GetRenderWindow();
 					}
 					else
 					{
@@ -279,74 +279,74 @@ namespace GuiCommon
 			wxMessageBox( _( "Scene file doesn't exist :" ) + wxString( wxT( "\n" ) ) + p_fileName );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void LoadPlugins( Castor3D::Engine & p_engine )
 	{
-		PathArray l_arrayFiles;
-		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
-		PathArray l_arrayKept;
+		PathArray arrayFiles;
+		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), arrayFiles );
+		PathArray arrayKept;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-		for ( auto l_file : l_arrayFiles )
+		for ( auto file : arrayFiles )
 		{
 #if defined( NDEBUG )
 
-			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
+			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
 #else
 
-			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
+			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
 
 #endif
 			{
-				l_arrayKept.push_back( l_file );
+				arrayKept.push_back( file );
 			}
 		}
 
-		if ( !l_arrayKept.empty() )
+		if ( !arrayKept.empty() )
 		{
-			PathArray l_arrayFailed;
-			PathArray l_otherPlugins;
+			PathArray arrayFailed;
+			PathArray otherPlugins;
 
-			for ( auto l_file : l_arrayKept )
+			for ( auto file : arrayKept )
 			{
-				if ( l_file.GetExtension() == CASTOR_DLL_EXT )
+				if ( file.GetExtension() == CASTOR_DLL_EXT )
 				{
 					// Since techniques depend on renderers, we load these first
-					if ( l_file.find( cuT( "RenderSystem" ) ) != String::npos )
+					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
+						if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
 						{
-							l_arrayFailed.push_back( l_file );
+							arrayFailed.push_back( file );
 						}
 					}
 					else
 					{
-						l_otherPlugins.push_back( l_file );
+						otherPlugins.push_back( file );
 					}
 				}
 			}
 
 			// Then we load other plug-ins
-			for ( auto l_file : l_otherPlugins )
+			for ( auto file : otherPlugins )
 			{
-				if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
+				if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
 				{
-					l_arrayFailed.push_back( l_file );
+					arrayFailed.push_back( file );
 				}
 			}
 
-			if ( !l_arrayFailed.empty() )
+			if ( !arrayFailed.empty() )
 			{
 				Logger::LogWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
-				for ( auto l_file : l_arrayFailed )
+				for ( auto file : arrayFailed )
 				{
-					Logger::LogWarning( Path( l_file ).GetFileName() );
+					Logger::LogWarning( Path( file ).GetFileName() );
 				}
 
-				l_arrayFailed.clear();
+				arrayFailed.clear();
 			}
 		}
 
@@ -361,44 +361,44 @@ namespace GuiCommon
 
 #elif defined( CASTOR_PLATFORM_LINUX )
 
-		GtkWidget * l_pGtkWidget = static_cast< GtkWidget * >( p_window->GetHandle() );
-		GLXDrawable l_drawable = 0;
-		Display * l_pDisplay = nullptr;
+		GtkWidget * pGtkWidget = static_cast< GtkWidget * >( p_window->GetHandle() );
+		GLXDrawable drawable = 0;
+		Display * pDisplay = nullptr;
 
-		if ( l_pGtkWidget && l_pGtkWidget->window )
+		if ( pGtkWidget && pGtkWidget->window )
 		{
-			l_drawable = GDK_WINDOW_XID( l_pGtkWidget->window );
-			GdkDisplay * l_pGtkDisplay = gtk_widget_get_display( l_pGtkWidget );
+			drawable = GDK_WINDOW_XID( pGtkWidget->window );
+			GdkDisplay * pGtkDisplay = gtk_widget_get_display( pGtkWidget );
 
-			if ( l_pGtkDisplay )
+			if ( pGtkDisplay )
 			{
-				l_pDisplay = gdk_x11_display_get_xdisplay( l_pGtkDisplay );
+				pDisplay = gdk_x11_display_get_xdisplay( pGtkDisplay );
 			}
 		}
 
-		return WindowHandle( std::make_shared< IXWindowHandle >( l_drawable, l_pDisplay ) );
+		return WindowHandle( std::make_shared< IXWindowHandle >( drawable, pDisplay ) );
 
 #endif
 	}
 
 	FontSPtr make_Font( Engine * p_engine, wxFont const & p_font )
 	{
-		String l_name = make_String( p_font.GetFaceName() ) + string::to_string( p_font.GetPointSize() );
-		auto & l_cache = p_engine->GetFontCache();
-		FontSPtr l_font = l_cache.Find( l_name );
+		String name = make_String( p_font.GetFaceName() ) + string::to_string( p_font.GetPointSize() );
+		auto & cache = p_engine->GetFontCache();
+		FontSPtr font = cache.Find( name );
 
-		if ( !l_font )
+		if ( !font )
 		{
 			if ( p_font.IsOk() )
 			{
-				//l_font = std::make_shared< Castor::Font >( l_name, p_font.GetPointSize() );
+				//l_font = std::make_shared< Castor::Font >( name, p_font.GetPointSize() );
 				//l_font->SetGlyphLoader( std::make_unique< wxWidgetsFontImpl >( p_font ) );
-				//Font::BinaryLoader()( *l_font, String( p_font.GetFaceName() ), uint32_t( std::abs( p_font.GetPointSize() ) ) );
-				//l_cache.insert( l_name, l_font );
+				//Font::BinaryLoader()( *font, String( p_font.GetFaceName() ), uint32_t( std::abs( p_font.GetPointSize() ) ) );
+				//l_cache.insert( name, font );
 			}
 		}
 
-		return l_font;
+		return font;
 	}
 
 	Castor::String make_String( wxString const & p_value )

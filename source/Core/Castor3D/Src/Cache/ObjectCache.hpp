@@ -127,12 +127,12 @@ namespace Castor3D
 		 */
 		inline void Cleanup()
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto lock = Castor::make_unique_lock( m_elements );
 
-			for ( auto l_it : m_elements )
+			for ( auto it : m_elements )
 			{
-				m_detach( l_it.second );
-				m_clean( l_it.second );
+				m_detach( it.second );
+				m_clean( it.second );
 			}
 
 			onChanged();
@@ -171,16 +171,16 @@ namespace Castor3D
 		 */
 		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
 		{
-			ElementPtr l_result{ p_element };
+			ElementPtr result{ p_element };
 
 			if ( p_element )
 			{
-				auto l_lock = Castor::make_unique_lock( m_elements );
+				auto lock = Castor::make_unique_lock( m_elements );
 
 				if ( m_elements.has( p_name ) )
 				{
 					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
-					l_result = m_elements.find( p_name );
+					result = m_elements.find( p_name );
 				}
 				else
 				{
@@ -193,7 +193,7 @@ namespace Castor3D
 				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << GetObjectTypeName() << cuT( ": " ) );
 			}
 
-			return l_result;
+			return result;
 		}
 		/**
 		 *\~english
@@ -212,25 +212,25 @@ namespace Castor3D
 		template< typename ... Parameters >
 		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, Parameters && ... p_parameters )
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
-			ElementPtr l_result;
+			auto lock = Castor::make_unique_lock( m_elements );
+			ElementPtr result;
 
 			if ( !m_elements.has( p_name ) )
 			{
-				l_result = m_produce( p_name, p_parent, std::forward< Parameters >( p_parameters )... );
-				m_initialise( l_result );
-				m_elements.insert( p_name, l_result );
-				m_attach( l_result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+				result = m_produce( p_name, p_parent, std::forward< Parameters >( p_parameters )... );
+				m_initialise( result );
+				m_elements.insert( p_name, result );
+				m_attach( result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 				onChanged();
 			}
 			else
 			{
-				l_result = m_elements.find( p_name );
+				result = m_elements.find( p_name );
 				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
-			return l_result;
+			return result;
 		}
 		/**
 		 *\~english
@@ -242,12 +242,12 @@ namespace Castor3D
 		 */
 		inline void Remove( Key const & p_name )
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto lock = Castor::make_unique_lock( m_elements );
 
 			if ( m_elements.has( p_name ) )
 			{
-				auto l_element = m_elements.find( p_name );
-				m_detach( l_element );
+				auto element = m_elements.find( p_name );
+				m_detach( element );
 				m_elements.erase( p_name );
 				onChanged();
 			}
@@ -262,12 +262,12 @@ namespace Castor3D
 		 */
 		inline void MergeInto( MyObjectCacheType & p_destination )
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
-			auto l_lockOther = Castor::make_unique_lock( p_destination.m_elements );
+			auto lock = Castor::make_unique_lock( m_elements );
+			auto lockOther = Castor::make_unique_lock( p_destination.m_elements );
 
-			for ( auto l_it : m_elements )
+			for ( auto it : m_elements )
 			{
-				m_merge( *this, p_destination.m_elements, l_it.second, p_destination.m_rootCameraNode.lock(), p_destination.m_rootObjectNode.lock() );
+				m_merge( *this, p_destination.m_elements, it.second, p_destination.m_rootCameraNode.lock(), p_destination.m_rootObjectNode.lock() );
 			}
 
 			Clear();
@@ -284,11 +284,11 @@ namespace Castor3D
 		template< typename FuncType >
 		inline void ForEach( FuncType p_func )const
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto lock = Castor::make_unique_lock( m_elements );
 
-			for ( auto const & l_element : m_elements )
+			for ( auto const & element : m_elements )
 			{
-				p_func( *l_element.second );
+				p_func( *element.second );
 			}
 		}
 		/**
@@ -302,11 +302,11 @@ namespace Castor3D
 		template< typename FuncType >
 		inline void ForEach( FuncType p_func )
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto lock = Castor::make_unique_lock( m_elements );
 
-			for ( auto & l_element : m_elements )
+			for ( auto & element : m_elements )
 			{
-				p_func( *l_element.second );
+				p_func( *element.second );
 			}
 		}
 		/**

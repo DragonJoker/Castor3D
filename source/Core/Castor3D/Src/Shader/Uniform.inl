@@ -53,31 +53,31 @@ namespace Castor3D
 
 			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
 			{
-				constexpr uint32_t l_size = sizeof( sub_type ) * count;
-				uint8_t * l_buffer = p_src;
+				constexpr uint32_t size = sizeof( sub_type ) * count;
+				uint8_t * buffer = p_src;
 
 				if ( !p_stride )
 				{
-					p_stride = l_size;
+					p_stride = size;
 				}
 
-				REQUIRE( p_stride >= l_size );
+				REQUIRE( p_stride >= size );
 
-				for ( auto & l_dst : p_dst )
+				for ( auto & dst : p_dst )
 				{
-					std::memcpy( l_buffer, l_dst.const_ptr(), l_size );
-					l_buffer += p_stride;
+					std::memcpy( buffer, dst.const_ptr(), size );
+					buffer += p_stride;
 				}
 			}
 
 			static void Link( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t p_stride )
 			{
-				uint8_t * l_buffer = p_src;
+				uint8_t * buffer = p_src;
 
-				for ( auto & l_dst : p_dst )
+				for ( auto & dst : p_dst )
 				{
-					l_dst.link( reinterpret_cast< sub_type * >( l_buffer ) );
-					l_buffer += p_stride;
+					dst.link( reinterpret_cast< sub_type * >( buffer ) );
+					buffer += p_stride;
 				}
 			}
 
@@ -98,24 +98,24 @@ namespace Castor3D
 
 			static inline void SetStrValue( std::vector< typed_type > & p_dst, Castor::String const & p_value, uint32_t p_index )
 			{
-				Castor::StringArray l_arrayLines = Castor::string::split( p_value, cuT( ";" ) );
+				Castor::StringArray arrayLines = Castor::string::split( p_value, cuT( ";" ) );
 
-				if ( l_arrayLines.size() == rows )
+				if ( arrayLines.size() == rows )
 				{
-					bool l_continue = true;
+					bool cont = true;
 
-					for ( uint32_t i = 0; i < rows && l_continue; i++ )
+					for ( uint32_t i = 0; i < rows && cont; i++ )
 					{
-						l_continue = false;
-						Castor::StringArray l_arraySplitted = Castor::string::split( l_arrayLines[i], cuT( ", \t" ) );
+						cont = false;
+						Castor::StringArray arraySplitted = Castor::string::split( arrayLines[i], cuT( ", \t" ) );
 
-						if ( l_arraySplitted.size() == cols )
+						if ( arraySplitted.size() == cols )
 						{
-							l_continue = true;
+							cont = true;
 
 							for ( uint32_t j = 0; j < cols; j++ )
 							{
-								Castor::string::parse( l_arraySplitted[j], p_dst[0][j][i] );
+								Castor::string::parse( arraySplitted[j], p_dst[0][j][i] );
 							}
 						}
 					}
@@ -124,22 +124,22 @@ namespace Castor3D
 
 			static inline Castor::String GetStrValue( std::vector< typed_type > const & p_src, uint32_t p_index )
 			{
-				Castor::StringStream l_stream;
+				Castor::StringStream stream;
 
 				for ( uint32_t j = 0; j < cols; j++ )
 				{
-					Castor::String l_sep;
+					Castor::String sep;
 
 					for ( uint32_t i = 0; i < rows; i++ )
 					{
-						l_stream << l_sep << p_src[p_index][j][i];
-						l_sep = ", ";
+						stream << sep << p_src[p_index][j][i];
+						sep = ", ";
 					}
 
-					l_stream << ";";
+					stream << ";";
 				}
 
-				return l_stream.str();
+				return stream.str();
 			}
 		};
 
@@ -155,38 +155,38 @@ namespace Castor3D
 
 			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
 			{
-				uint8_t * l_buffer = p_src;
-				constexpr uint32_t l_size = sizeof( sub_type ) * count;
+				uint8_t * buffer = p_src;
+				constexpr uint32_t size = sizeof( sub_type ) * count;
 
 				if ( !p_stride )
 				{
-					p_stride = l_size;
+					p_stride = size;
 				}
 
-				REQUIRE( p_stride >= l_size );
+				REQUIRE( p_stride >= size );
 
-				for ( auto & l_dst : p_dst )
+				for ( auto & dst : p_dst )
 				{
-					std::memcpy( l_buffer, l_dst.const_ptr(), l_size );
-					l_buffer += p_stride;
+					std::memcpy( buffer, dst.const_ptr(), size );
+					buffer += p_stride;
 				}
 			}
 
 			static void Link( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t p_stride )
 			{
-				uint8_t * l_buffer = p_src;
+				uint8_t * buffer = p_src;
 
-				for ( auto & l_dst : p_dst )
+				for ( auto & dst : p_dst )
 				{
-					l_dst = Castor::Coords< sub_type, count >( reinterpret_cast< sub_type * >( l_buffer ) );
-					l_buffer += p_stride;
+					dst = Castor::Coords< sub_type, count >( reinterpret_cast< sub_type * >( buffer ) );
+					buffer += p_stride;
 				}
 			}
 
 			static inline void SetValue( std::vector< typed_type > & p_dst, uint32_t p_index, param_type const & p_value )
 			{
-				auto & l_value = p_dst[p_index];
-				std::memcpy( l_value.ptr(), p_value.const_ptr(), l_value.size() );
+				auto & value = p_dst[p_index];
+				std::memcpy( value.ptr(), p_value.const_ptr(), value.size() );
 			}
 
 			static inline return_type & GetValue( std::vector< typed_type > & p_src, uint32_t p_index )
@@ -201,29 +201,29 @@ namespace Castor3D
 
 			static inline void SetStrValue( std::vector< typed_type > & p_dst, Castor::String const & p_value, uint32_t p_index )
 			{
-				Castor::StringArray l_arraySplitted = Castor::string::split( p_value, cuT( ", \t" ) );
+				Castor::StringArray arraySplitted = Castor::string::split( p_value, cuT( ", \t" ) );
 
-				if ( l_arraySplitted.size() == count )
+				if ( arraySplitted.size() == count )
 				{
 					for ( uint32_t i = 0; i < count; i++ )
 					{
-						Castor::string::parse( l_arraySplitted[i], p_dst[p_index][i] );
+						Castor::string::parse( arraySplitted[i], p_dst[p_index][i] );
 					}
 				}
 			}
 
 			static inline Castor::String GetStrValue( std::vector< typed_type > const & p_src, uint32_t p_index )
 			{
-				Castor::StringStream l_stream;
-				Castor::String l_sep;
+				Castor::StringStream stream;
+				Castor::String sep;
 
 				for ( uint32_t i = 0; i < count; i++ )
 				{
-					l_stream << l_sep << p_src[p_index][i];
-					l_sep = ", ";
+					stream << sep << p_src[p_index][i];
+					sep = ", ";
 				}
 
-				return l_stream.str();
+				return stream.str();
 			}
 		};
 
@@ -238,32 +238,32 @@ namespace Castor3D
 
 			static void Unlink( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t & p_stride )
 			{
-				uint8_t * l_buffer = p_src;
-				constexpr uint32_t l_size = sizeof( sub_type );
+				uint8_t * buffer = p_src;
+				constexpr uint32_t size = sizeof( sub_type );
 
 				if ( !p_stride )
 				{
-					p_stride = l_size;
+					p_stride = size;
 				}
 
-				REQUIRE( p_stride >= l_size );
+				REQUIRE( p_stride >= size );
 
-				for ( auto & l_dst : p_dst )
+				for ( auto & dst : p_dst )
 				{
-					std::memcpy( l_buffer, l_dst, l_size );
-					l_buffer += p_stride;
+					std::memcpy( buffer, dst, size );
+					buffer += p_stride;
 				}
 			}
 
 			static void Link( std::vector< typed_type > & p_dst, uint8_t * p_src, uint32_t p_stride )
 			{
-				uint8_t * l_buffer = p_src;
-				constexpr uint32_t l_size = sizeof( sub_type );
+				uint8_t * buffer = p_src;
+				constexpr uint32_t size = sizeof( sub_type );
 
-				for ( auto & l_dst : p_dst )
+				for ( auto & dst : p_dst )
 				{
-					l_dst = reinterpret_cast< sub_type * >( l_buffer );
-					l_buffer += p_stride;
+					dst = reinterpret_cast< sub_type * >( buffer );
+					buffer += p_stride;
 				}
 			}
 
@@ -289,9 +289,9 @@ namespace Castor3D
 
 			static inline Castor::String GetStrValue( std::vector< typed_type > const & p_src, uint32_t p_index )
 			{
-				Castor::StringStream l_stream;
-				l_stream << *p_src[p_index];
-				return l_stream.str();
+				Castor::StringStream stream;
+				stream << *p_src[p_index];
+				return stream.str();
 			}
 		};
 	}

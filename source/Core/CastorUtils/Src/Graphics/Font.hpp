@@ -235,17 +235,17 @@ namespace Castor
 		 */
 		inline Glyph const & GetGlyphAt( char32_t p_char )const
 		{
-			auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+			auto it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
 			{
 				return p_glyph.GetCharacter() == p_char;
 			} );
 
-			if ( l_it == m_loadedGlyphs.end() )
+			if ( it == m_loadedGlyphs.end() )
 			{
 				throw std::range_error( "Font subscript out of range" );
 			}
 
-			return *l_it;
+			return *it;
 		}
 		/**
 		 *\~english
@@ -259,17 +259,17 @@ namespace Castor
 		 */
 		inline Glyph & GetGlyphAt( char32_t p_char )
 		{
-			auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+			auto it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
 			{
 				return p_glyph.GetCharacter() == p_char;
 			} );
 
-			if ( l_it == m_loadedGlyphs.end() )
+			if ( it == m_loadedGlyphs.end() )
 			{
 				throw std::range_error( "Font subscript out of range" );
 			}
 
-			return *l_it;
+			return *it;
 		}
 		/**
 		 *\~english

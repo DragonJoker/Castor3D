@@ -293,12 +293,12 @@ namespace Castor
 		template< typename T1, typename T2, typename T3, typename T4 >
 		static ColourT< ComponentType > from_components( T1 const & p_r, T2 const & p_g, T3 const & p_b, T4 const & p_a )
 		{
-			ColourT l_clrReturn;
-			l_clrReturn.m_arrayComponents[size_t( Component::eRed )] = p_r;
-			l_clrReturn.m_arrayComponents[size_t( Component::eGreen )] = p_g;
-			l_clrReturn.m_arrayComponents[size_t( Component::eBlue )] = p_b;
-			l_clrReturn.m_arrayComponents[size_t( Component::eAlpha )] = p_a;
-			return l_clrReturn;
+			ColourT clrReturn;
+			clrReturn.m_arrayComponents[size_t( Component::eRed )] = p_r;
+			clrReturn.m_arrayComponents[size_t( Component::eGreen )] = p_g;
+			clrReturn.m_arrayComponents[size_t( Component::eBlue )] = p_b;
+			clrReturn.m_arrayComponents[size_t( Component::eAlpha )] = p_a;
+			return clrReturn;
 		}
 		/**
 		 *\~english
@@ -1076,9 +1076,9 @@ namespace Castor
 	template< typename ComponentType, typename T >
 	ColourT< ComponentType > operator+( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		ColourT< ComponentType > l_clrResult( p_lhs );
-		l_clrResult += p_rhs;
-		return l_clrResult;
+		ColourT< ComponentType > clrResult( p_lhs );
+		clrResult += p_rhs;
+		return clrResult;
 	}
 	/**
 	 *\~english
@@ -1093,9 +1093,9 @@ namespace Castor
 	template< typename ComponentType, typename T >
 	ColourT< ComponentType > operator-( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		ColourT< ComponentType > l_clrResult( p_lhs );
-		l_clrResult -= p_rhs;
-		return l_clrResult;
+		ColourT< ComponentType > clrResult( p_lhs );
+		clrResult -= p_rhs;
+		return clrResult;
 	}
 
 	/**
@@ -1111,9 +1111,9 @@ namespace Castor
 	template< typename ComponentType, typename T >
 	ColourT< ComponentType > operator*( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		ColourT< ComponentType > l_clrResult( p_lhs );
-		l_clrResult *= p_rhs;
-		return l_clrResult;
+		ColourT< ComponentType > clrResult( p_lhs );
+		clrResult *= p_rhs;
+		return clrResult;
 	}
 
 	/**
@@ -1129,9 +1129,9 @@ namespace Castor
 	template< typename ComponentType, typename T >
 	ColourT< ComponentType > operator/( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		ColourT< ComponentType > l_clrResult( p_lhs );
-		l_clrResult /= p_rhs;
-		return l_clrResult;
+		ColourT< ComponentType > clrResult( p_lhs );
+		clrResult /= p_rhs;
+		return clrResult;
 	}
 	/**
 	 *\~english

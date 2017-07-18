@@ -75,9 +75,9 @@ namespace Castor
 		protected:
 			Backtraced()
 			{
-				std::stringstream l_callStack;
-				l_callStack << Castor::Debug::Backtrace{};
-				m_callStack = l_callStack.str();
+				std::stringstream callStack;
+				callStack << Castor::Debug::Backtrace{};
+				m_callStack = callStack.str();
 			}
 
 			~Backtraced()

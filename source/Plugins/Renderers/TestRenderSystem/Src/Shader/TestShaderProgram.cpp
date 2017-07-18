@@ -31,14 +31,14 @@ namespace TestRender
 
 	bool TestShaderProgram::Initialise()
 	{
-		bool l_result = DoInitialise();
+		bool result = DoInitialise();
 
-		if ( l_result )
+		if ( result )
 		{
 			m_layout.Initialise( *this );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool TestShaderProgram::Link()

@@ -39,15 +39,15 @@ namespace Castor
 	\remarks	Useful to force execution of code when an exception is thrown.
 	\b Example
 	@code
-		char * l_buffer = nullptr;
+		char * buffer = nullptr;
 		{
-			auto l_guard = make_block_guard( [&l_buffer, &l_size]()
+			auto guard = make_block_guard( [&buffer, &size]()
 			{
-				l_buffer = new char[l_size + 1];
+				buffer = new char[size + 1];
 			},
 			[&buffer]()
 			{
-				delete [] l_buffer;
+				delete [] buffer;
 			} );
 			//
 			// ... Code that might throw an exception ...
@@ -60,15 +60,15 @@ namespace Castor
 	\remarks	Utile pour forcer l'exécution de code, si une exception est lancée.
 	\b Example
 	@code
-		char * l_buffer = nullptr;
+		char * buffer = nullptr;
 		{
-			auto l_guard = make_block_guard( [&l_buffer, &l_size]()
+			auto guard = make_block_guard( [&buffer, &size]()
 			{
-				l_buffer = new char[l_size + 1];
+				buffer = new char[size + 1];
 			},
 			[&buffer]()
 			{
-				delete [] l_buffer;
+				delete [] buffer;
 			} );
 			//
 			// ... Code pouvant lancer une exception ...

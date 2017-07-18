@@ -14,14 +14,14 @@ namespace Castor3D
 
 	bool DirectionalLight::TextWriter::operator()( DirectionalLight const & p_light, TextFile & p_file )
 	{
-		bool l_result = LightCategory::TextWriter::operator()( p_light, p_file );
+		bool result = LightCategory::TextWriter::operator()( p_light, p_file );
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool DirectionalLight::TextWriter::WriteInto( Castor::TextFile & p_file )
@@ -49,13 +49,13 @@ namespace Castor3D
 		, Viewport & p_viewport
 		, int32_t p_index )
 	{
-		auto l_node = GetLight().GetParent();
-		l_node->Update();
-		auto l_orientation = l_node->GetDerivedOrientation();
-		Point3f l_position;
-		Point3f l_up{ 0, 1, 0 };
-		l_orientation.transform( l_up, l_up );
-		matrix::look_at( m_lightSpace, l_position, l_position + m_direction, l_up );
+		auto node = GetLight().GetParent();
+		node->Update();
+		auto orientation = node->GetDerivedOrientation();
+		Point3f position;
+		Point3f up{ 0, 1, 0 };
+		orientation.transform( up, up );
+		matrix::look_at( m_lightSpace, position, position + m_direction, up );
 		m_lightSpace = p_viewport.GetProjection() * m_lightSpace;
 	}
 

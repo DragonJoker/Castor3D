@@ -89,8 +89,8 @@ namespace Castor3D
 		 */
 		static Castor::String const & GetName()
 		{
-			static Castor::String const l_name = GLSL::Shadow::MapShadowDirectional;
-			return l_name;
+			static Castor::String const name = GLSL::Shadow::MapShadowDirectional;
+			return name;
 		}
 		/**
 		 *\~english
@@ -125,9 +125,9 @@ namespace Castor3D
 
 		static void DebugDisplay( TextureUnit & p_shadowMap )
 		{
-			Castor::Size l_size{ 256u, 256u };
-			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
-				, l_size
+			Castor::Size size{ 256u, 256u };
+			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), 0 }
+				, size
 				, *p_shadowMap.GetTexture() );
 			++g_index;
 		}
@@ -165,8 +165,8 @@ namespace Castor3D
 		 */
 		static Castor::String const & GetName()
 		{
-			static Castor::String const l_name = GLSL::Shadow::MapShadowPoint;
-			return l_name;
+			static Castor::String const name = GLSL::Shadow::MapShadowPoint;
+			return name;
 		}
 		/**
 		 *\~english
@@ -201,9 +201,9 @@ namespace Castor3D
 
 		static void DebugDisplay( TextureUnit & p_shadowMap )
 		{
-			Castor::Size l_size{ 128u, 128u };
-			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( Castor::Position{ 0, int32_t( g_index * 3 * l_size.height() ) }
-				, l_size
+			Castor::Size size{ 128u, 128u };
+			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( Castor::Position{ 0, int32_t( g_index * 3 * size.height() ) }
+				, size
 				, *p_shadowMap.GetTexture() );
 			++g_index;
 		}
@@ -241,8 +241,8 @@ namespace Castor3D
 		 */
 		static Castor::String const & GetName()
 		{
-			static Castor::String const l_name = GLSL::Shadow::MapShadowSpot;
-			return l_name;
+			static Castor::String const name = GLSL::Shadow::MapShadowSpot;
+			return name;
 		}
 		/**
 		 *\~english
@@ -277,9 +277,9 @@ namespace Castor3D
 
 		static void DebugDisplay( TextureUnit & p_shadowMap )
 		{
-			Castor::Size l_size{ 256u, 256u };
-			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * l_size.width() ), 0 }
-				, l_size
+			Castor::Size size{ 256u, 256u };
+			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), 0 }
+				, size
 				, *p_shadowMap.GetTexture() );
 			++g_index;
 		}

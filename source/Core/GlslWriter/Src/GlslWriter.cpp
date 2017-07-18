@@ -43,13 +43,13 @@ namespace GLSL
 
 	void GlslWriter::RegisterName( Castor::String const & p_name, TypeName p_type )
 	{
-		auto l_it = m_registered.find( p_name );
+		auto it = m_registered.find( p_name );
 
-		//if ( l_it != m_registered.end() )
+		//if ( it != m_registered.end() )
 		//{
-		//	std::stringstream l_text;
-		//	l_text << "A variable with the name [" << p_name << "] is already registered.";
-		//	Castor::Logger::LogWarning( l_text );
+		//	std::stringstream text;
+		//	text << "A variable with the name [" << p_name << "] is already registered.";
+		//	Castor::Logger::LogWarning( text );
 		//}
 
 		m_registered.emplace( p_name, p_type );
@@ -57,42 +57,42 @@ namespace GLSL
 
 	void GlslWriter::CheckNameExists( Castor::String const & p_name, TypeName p_type )
 	{
-		auto l_it = m_registered.find( p_name );
+		auto it = m_registered.find( p_name );
 
-		if ( l_it == m_registered.end() )
+		if ( it == m_registered.end() )
 		{
-			std::stringstream l_text;
-			l_text << "No registered variable with the name [" << p_name << "].";
-			CASTOR_EXCEPTION( l_text.str() );
+			std::stringstream text;
+			text << "No registered variable with the name [" << p_name << "].";
+			CASTOR_EXCEPTION( text.str() );
 		}
 	}
 
 	std::shared_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::shared_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
-		l_lighting->DeclareModel();
-		return l_lighting;
+		std::shared_ptr< LightingModel > lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		lighting->DeclareModel();
+		return lighting;
 	}
 
 	std::shared_ptr< LightingModel > GlslWriter::CreateDirectionalLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::shared_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
-		l_lighting->DeclareDirectionalModel();
-		return l_lighting;
+		std::shared_ptr< LightingModel > lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		lighting->DeclareDirectionalModel();
+		return lighting;
 	}
 
 	std::shared_ptr< LightingModel > GlslWriter::CreatePointLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::shared_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
-		l_lighting->DeclarePointModel();
-		return l_lighting;
+		std::shared_ptr< LightingModel > lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		lighting->DeclarePointModel();
+		return lighting;
 	}
 
 	std::shared_ptr< LightingModel > GlslWriter::CreateSpotLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::shared_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
-		l_lighting->DeclareSpotModel();
-		return l_lighting;
+		std::shared_ptr< LightingModel > lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
+		lighting->DeclareSpotModel();
+		return lighting;
 	}
 
 	Shader GlslWriter::Finalise()
@@ -126,7 +126,7 @@ namespace GLSL
 		m_stream << std::endl;
 		m_stream << cuT( "for ( " ) << Castor::String( p_init ) << cuT( "; " ) << p_cond.m_value.rdbuf() << cuT( "; " ) << p_incr.m_value.rdbuf() << cuT( " )" ) << std::endl;
 		{
-			IndentBlock l_block( *this );
+			IndentBlock block( *this );
 			p_function();
 		}
 		m_stream << std::endl;
@@ -137,7 +137,7 @@ namespace GLSL
 		m_stream << std::endl;
 		m_stream << cuT( "while ( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
 		{
-			IndentBlock l_block( *this );
+			IndentBlock block( *this );
 			p_function();
 		}
 		m_stream << std::endl;
@@ -148,7 +148,7 @@ namespace GLSL
 		m_stream << std::endl;
 		m_stream << cuT( "if ( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
 		{
-			IndentBlock l_block( *this );
+			IndentBlock block( *this );
 			p_function();
 		}
 		m_stream << std::endl;
@@ -159,7 +159,7 @@ namespace GLSL
 	{
 		m_stream << cuT( "else if ( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
 		{
-			IndentBlock l_block( *this );
+			IndentBlock block( *this );
 			p_function();
 		}
 		m_stream << std::endl;
@@ -170,7 +170,7 @@ namespace GLSL
 	{
 		m_stream << cuT( "else" ) << std::endl;
 		{
-			IndentBlock l_block( *this );
+			IndentBlock block( *this );
 			p_function();
 		}
 		m_stream << std::endl;

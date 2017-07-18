@@ -121,9 +121,9 @@ namespace Castor3D
 }
 
 #define UBO_BILLBOARD( Writer )\
-	GLSL::Ubo l_billboard{ l_writer, Castor3D::ShaderProgram::BufferBillboards, Castor3D::BillboardUbo::BindingPoint };\
-	auto c3d_v2iDimensions = l_billboard.DeclMember< IVec2 >( Castor3D::ShaderProgram::Dimensions );\
-	auto c3d_v2iWindowSize = l_billboard.DeclMember< IVec2 >( Castor3D::ShaderProgram::WindowSize );\
-	l_billboard.End()
+	GLSL::Ubo billboard{ writer, Castor3D::ShaderProgram::BufferBillboards, Castor3D::BillboardUbo::BindingPoint };\
+	auto c3d_v2iDimensions = billboard.DeclMember< IVec2 >( Castor3D::ShaderProgram::Dimensions );\
+	auto c3d_v2iWindowSize = billboard.DeclMember< IVec2 >( Castor3D::ShaderProgram::WindowSize );\
+	billboard.End()
 
 #endif

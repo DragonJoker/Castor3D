@@ -20,52 +20,52 @@ namespace CastorGui
 {
 	MaterialSPtr CreateMaterial( Engine & p_engine, String const & p_name, Colour const & p_colour )
 	{
-		auto & l_cache = p_engine.GetMaterialCache();
-		MaterialSPtr l_result;
+		auto & cache = p_engine.GetMaterialCache();
+		MaterialSPtr result;
 
-		if ( l_cache.Has( p_name ) )
+		if ( cache.Has( p_name ) )
 		{
-			l_result = l_cache.Find( p_name );
+			result = cache.Find( p_name );
 		}
 
-		if ( !l_result )
+		if ( !result )
 		{
-			l_result = l_cache.Add( p_name, MaterialType::eLegacy );
-			l_result->CreatePass();
+			result = cache.Add( p_name, MaterialType::eLegacy );
+			result->CreatePass();
 		}
 
-		l_result->GetTypedPass< MaterialType::eLegacy >( 0u )->SetDiffuse( p_colour );
-		return l_result;
+		result->GetTypedPass< MaterialType::eLegacy >( 0u )->SetDiffuse( p_colour );
+		return result;
 	}
 
 	MaterialSPtr CreateMaterial( Engine & p_engine, String const & p_name, TextureLayoutSPtr p_texture )
 	{
-		auto & l_cache = p_engine.GetMaterialCache();
-		MaterialSPtr l_result;
+		auto & cache = p_engine.GetMaterialCache();
+		MaterialSPtr result;
 
-		if ( l_cache.Has( p_name ) )
+		if ( cache.Has( p_name ) )
 		{
-			l_result = l_cache.Find( p_name );
+			result = cache.Find( p_name );
 		}
 
-		if ( !l_result )
+		if ( !result )
 		{
-			l_result = l_cache.Add( p_name, MaterialType::eLegacy );
-			l_result->CreatePass();
+			result = cache.Add( p_name, MaterialType::eLegacy );
+			result->CreatePass();
 		}
 
-		REQUIRE( l_result->GetType() == MaterialType::eLegacy );
-		auto l_pass = l_result->GetTypedPass< MaterialType::eLegacy >( 0u );
+		REQUIRE( result->GetType() == MaterialType::eLegacy );
+		auto pass = result->GetTypedPass< MaterialType::eLegacy >( 0u );
 
-		if ( l_pass->GetTextureUnitsCount() == 0 )
+		if ( pass->GetTextureUnitsCount() == 0 )
 		{
-			auto l_unit = std::make_shared< TextureUnit >( p_engine );
-			l_unit->SetChannel( TextureChannel::eDiffuse );
-			l_pass->AddTextureUnit( l_unit );
+			auto unit = std::make_shared< TextureUnit >( p_engine );
+			unit->SetChannel( TextureChannel::eDiffuse );
+			pass->AddTextureUnit( unit );
 		}
 
-		TextureUnitSPtr l_unit = l_pass->GetTextureUnit( 0 );
-		l_unit->SetTexture( p_texture );
-		return l_result;
+		TextureUnitSPtr unit = pass->GetTextureUnit( 0 );
+		unit->SetTexture( p_texture );
+		return result;
 	}
 }

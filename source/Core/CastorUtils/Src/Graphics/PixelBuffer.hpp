@@ -102,9 +102,9 @@ namespace Castor
 
 		inline pixel_iterator operator++( int )
 		{
-			pixel_iterator l_temp = *this;
+			pixel_iterator temp = *this;
 			++( *this );
-			return l_temp;
+			return temp;
 		}
 
 		inline pixel_iterator & operator--()
@@ -115,9 +115,9 @@ namespace Castor
 
 		inline pixel_iterator operator--( int )
 		{
-			pixel_iterator l_temp = *this;
+			pixel_iterator temp = *this;
 			++( *this );
-			return l_temp;
+			return temp;
 		}
 
 		inline pixel_type const & operator*()const
@@ -167,17 +167,17 @@ namespace Castor
 	template< PixelFormat PF >
 	inline pixel_iterator< PF > operator+( pixel_iterator< PF > p_it, size_t p_offset )
 	{
-		pixel_iterator< PF > l_result{ p_it };
-		l_result += p_offset;
-		return l_result;
+		pixel_iterator< PF > result{ p_it };
+		result += p_offset;
+		return result;
 	}
 
 	template< PixelFormat PF >
 	inline pixel_iterator< PF > operator-( pixel_iterator< PF > p_it, size_t p_offset )
 	{
-		pixel_iterator< PF > l_result{ p_it };
-		l_result -= p_offset;
-		return l_result;
+		pixel_iterator< PF > result{ p_it };
+		result -= p_offset;
+		return result;
 	}
 
 	template< PixelFormat PF >
@@ -251,9 +251,9 @@ namespace Castor
 
 		inline const_pixel_iterator operator++( int )
 		{
-			const_pixel_iterator l_temp = *this;
+			const_pixel_iterator temp = *this;
 			++( *this );
-			return l_temp;
+			return temp;
 		}
 
 		inline const_pixel_iterator & operator--()
@@ -264,9 +264,9 @@ namespace Castor
 
 		inline const_pixel_iterator operator--( int )
 		{
-			const_pixel_iterator l_temp = *this;
+			const_pixel_iterator temp = *this;
 			++( *this );
-			return l_temp;
+			return temp;
 		}
 
 		inline pixel_type const & operator*()const
@@ -310,17 +310,17 @@ namespace Castor
 	template< PixelFormat PF >
 	inline const_pixel_iterator< PF > operator+( const_pixel_iterator< PF > p_it, size_t p_offset )
 	{
-		const_pixel_iterator< PF > l_result{ p_it };
-		l_result += p_offset;
-		return l_result;
+		const_pixel_iterator< PF > result{ p_it };
+		result += p_offset;
+		return result;
 	}
 
 	template< PixelFormat PF >
 	inline const_pixel_iterator< PF > operator-( const_pixel_iterator< PF > p_it, size_t p_offset )
 	{
-		const_pixel_iterator< PF > l_result{ p_it };
-		l_result -= p_offset;
-		return l_result;
+		const_pixel_iterator< PF > result{ p_it };
+		result -= p_offset;
+		return result;
 	}
 
 	/*!

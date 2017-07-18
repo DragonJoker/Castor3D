@@ -30,55 +30,55 @@ namespace Testing
 	template< typename T >
 	inline std::string to_string( T const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << p_value;
-		return l_stream.str();
+		std::stringstream stream;
+		stream << p_value;
+		return stream.str();
 	}
 
 	template<>
 	inline std::string to_string< std::chrono::milliseconds >( std::chrono::milliseconds const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << p_value.count() << "ms";
-		return l_stream.str();
+		std::stringstream stream;
+		stream << p_value.count() << "ms";
+		return stream.str();
 	}
 
 	template<>
 	inline std::string to_string< std::chrono::microseconds >( std::chrono::microseconds const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << p_value.count() << "us";
-		return l_stream.str();
+		std::stringstream stream;
+		stream << p_value.count() << "us";
+		return stream.str();
 	}
 
 	template<>
 	inline std::string to_string< std::chrono::nanoseconds >( std::chrono::nanoseconds const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << p_value.count() << "ns";
-		return l_stream.str();
+		std::stringstream stream;
+		stream << p_value.count() << "ns";
+		return stream.str();
 	}
 
 	template<>
 	inline std::string to_string< std::wstring >( std::wstring const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << p_value.c_str();
-		return l_stream.str();
+		std::stringstream stream;
+		stream << p_value.c_str();
+		return stream.str();
 	}
 
 	template< typename T >
 	inline std::string to_string( std::pair< T const *, uint32_t > const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << p_value.second << ": ";
+		std::stringstream stream;
+		stream << p_value.second << ": ";
 
-		std::for_each( p_value.first, p_value.first + p_value.second, [&l_stream]( T const & p_val )
+		std::for_each( p_value.first, p_value.first + p_value.second, [&stream]( T const & p_val )
 		{
-			l_stream << " " << p_val;
+			stream << " " << p_val;
 		} );
 
-		return l_stream.str();
+		return stream.str();
 	}
 
 	template< class Value >
@@ -101,26 +101,26 @@ namespace Testing
 
 		const Value & operator()()const
 		{
-			pointer_type l_value{ ( *m_thunk )() };
+			pointer_type value{ ( *m_thunk )() };
 
-			*m_thunk = [l_value]()
+			*m_thunk = [value]()
 			{
-				return l_value;
+				return value;
 			};
 
-			return *l_value;
+			return *value;
 		}
 
 		Value & operator()()
 		{
-			pointer_type l_value{ ( *m_thunk )() };
+			pointer_type value{ ( *m_thunk )() };
 
-			*m_thunk = [l_value]()
+			*m_thunk = [value]()
 			{
-				return l_value;
+				return value;
 			};
 
-			return *l_value;
+			return *value;
 		}
 
 	private:
@@ -147,26 +147,26 @@ namespace Testing
 
 		const Value & operator()()const
 		{
-			pointer_type l_value{ ( *m_thunk )() };
+			pointer_type value{ ( *m_thunk )() };
 
-			*m_thunk = [l_value]()
+			*m_thunk = [value]()
 			{
-				return l_value;
+				return value;
 			};
 
-			return l_value->get();
+			return value->get();
 		}
 
 		Value & operator()()
 		{
-			pointer_type l_value{ ( *m_thunk )() };
+			pointer_type value{ ( *m_thunk )() };
 
-			*m_thunk = [l_value]()
+			*m_thunk = [value]()
 			{
-				return l_value;
+				return value;
 			};
 
-			return l_value->get();
+			return value->get();
 		}
 
 	private:
@@ -265,20 +265,20 @@ namespace Testing
 			, char const * const p_conditionName )
 		{
 			AddTest();
-			bool l_result = false;
+			bool result = false;
 
 			try
 			{
-				auto const l_condition = p_condition();
+				auto const condition = p_condition();
 
-				if ( !l_condition )
+				if ( !condition )
 				{
 					ReportFailure();
 					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
 				}
 				else
 				{
-					l_result = true;
+					result = true;
 				}
 			}
 			catch ( std::exception & p_exc )
@@ -293,7 +293,7 @@ namespace Testing
 				std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << "(Unexpected exception)" << std::endl;
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename Type >
@@ -304,13 +304,13 @@ namespace Testing
 			, char const * const p_conditionName )
 		{
 			AddTest();
-			bool l_result = false;
+			bool result = false;
 
 			try
 			{
-				auto const l_condition = p_condition();
+				auto const condition = p_condition();
 
-				if ( !l_condition )
+				if ( !condition )
 				{
 					throw TestFailed( p_conditionName, p_file, p_function, p_line );
 				}
@@ -325,7 +325,7 @@ namespace Testing
 				throw TestFailed( p_conditionName, p_file, p_function, p_line );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename Type >
@@ -336,7 +336,7 @@ namespace Testing
 			, char const * const p_conditionName )
 		{
 			AddTest();
-			bool l_result = false;
+			bool result = false;
 
 			try
 			{
@@ -346,10 +346,10 @@ namespace Testing
 			}
 			catch ( ... )
 			{
-				l_result = true;
+				result = true;
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename Type >
@@ -360,12 +360,12 @@ namespace Testing
 			, char const * const p_conditionName )
 		{
 			AddTest();
-			bool l_result = false;
+			bool result = false;
 
 			try
 			{
 				p_condition();
-				l_result = true;
+				result = true;
 			}
 			catch ( std::exception & p_exc )
 			{
@@ -379,7 +379,7 @@ namespace Testing
 				std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename LhsType
@@ -395,18 +395,18 @@ namespace Testing
 			, char const * const p_rhsName )
 		{
 			AddTest();
-			bool l_result = false;
+			bool result = false;
 
 			try
 			{
-				auto const & l_lhs = p_lhs();
-				auto const & l_rhs = p_rhs();
-				l_result = p_compare( l_lhs, l_rhs );
+				auto const & lhs = p_lhs();
+				auto const & rhs = p_rhs();
+				result = p_compare( lhs, rhs );
 
-				if ( !l_result )
+				if ( !result )
 				{
 					ReportFailure();
-					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << " (" << ::Testing::to_string( l_lhs ) << " != " << ::Testing::to_string( l_rhs ) << ")" << std::endl;
+					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << " (" << ::Testing::to_string( lhs ) << " != " << ::Testing::to_string( rhs ) << ")" << std::endl;
 				}
 			}
 			catch ( std::exception & p_exc )
@@ -421,7 +421,7 @@ namespace Testing
 				std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << "(Unexpected exception)" << std::endl;
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename LhsType
@@ -437,18 +437,18 @@ namespace Testing
 			, char const * const p_rhsName )
 		{
 			AddTest();
-			bool l_result = false;
+			bool result = false;
 
 			try
 			{
-				auto const & l_lhs = p_lhs();
-				auto const & l_rhs = p_rhs();
-				l_result = p_compare( l_lhs, l_rhs );
+				auto const & lhs = p_lhs();
+				auto const & rhs = p_rhs();
+				result = p_compare( lhs, rhs );
 
-				if ( l_result )
+				if ( result )
 				{
 					ReportFailure();
-					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " != " << p_rhsName << " (" << ::Testing::to_string( l_lhs ) << " == " << ::Testing::to_string( l_rhs ) << ")" << std::endl;
+					std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " != " << p_rhsName << " (" << ::Testing::to_string( lhs ) << " == " << ::Testing::to_string( rhs ) << ")" << std::endl;
 				}
 			}
 			catch ( std::exception & p_exc )
@@ -463,7 +463,7 @@ namespace Testing
 				std::cerr << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " != " << p_rhsName << "(Unexpected exception)" << std::endl;
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, typename U >
@@ -475,55 +475,55 @@ namespace Testing
 		template< typename T >
 		inline bool compare( std::pair< T const *, uint32_t > const & p_a, std::pair< T const *, uint32_t > p_b )
 		{
-			bool l_result = p_a.second == p_b.second;
+			bool result = p_a.second == p_b.second;
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) ) == 0;
+				result = std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) ) == 0;
 			}
 
-			return l_result;
+			return result;
 		}
 
 		inline bool compare( float const & p_a, float const & p_b )
 		{
-			float l_epsilon = float ( 0.0001 );
-			return std::abs( float ( p_a - p_b ) ) < l_epsilon
+			float epsilon = float ( 0.0001 );
+			return std::abs( float ( p_a - p_b ) ) < epsilon
 				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
 		}
 
 		inline bool compare( float const & p_a, double const & p_b )
 		{
-			float l_epsilon = float ( 0.0001 );
-			return std::abs( float ( p_a - p_b ) ) < l_epsilon
+			float epsilon = float ( 0.0001 );
+			return std::abs( float ( p_a - p_b ) ) < epsilon
 				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
 		}
 
 		inline bool compare( double const & p_a, double const & p_b )
 		{
-			double l_epsilon = double ( 0.0001 );
-			return std::abs( double ( p_a - p_b ) ) < l_epsilon
+			double epsilon = double ( 0.0001 );
+			return std::abs( double ( p_a - p_b ) ) < epsilon
 				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
 		}
 
 		inline bool compare( double const & p_a, float const & p_b )
 		{
-			double l_epsilon = double( 0.0001 );
-			return std::abs( double( p_a - p_b ) ) < l_epsilon
+			double epsilon = double( 0.0001 );
+			return std::abs( double( p_a - p_b ) ) < epsilon
 				|| ( std::isnan( p_a ) && std::isnan( p_b ) );
 		}
 
 		template< typename T, size_t C1, size_t C2 >
 		inline bool compare( std::array< T, C1 > const & p_a, std::array< T, C2 > const & p_b )
 		{
-			bool l_result{ C1 == C2 };
+			bool result{ C1 == C2 };
 
-			for ( size_t i = 0u; i < C1 && l_result; ++i )
+			for ( size_t i = 0u; i < C1 && result; ++i )
 			{
-				l_result = this->compare( p_a[i], p_b[i] );
+				result = this->compare( p_a[i], p_b[i] );
 			}
 
-			return l_result;
+			return result;
 		}
 
 	private:

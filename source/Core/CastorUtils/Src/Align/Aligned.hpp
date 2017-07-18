@@ -91,26 +91,26 @@ namespace Castor
 
 		void * operator new( size_t p_size )
 		{
-			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
+			void * storage = Castor::AlignedAlloc( align_value, p_size );
 
-			if ( !l_storage )
+			if ( !storage )
 			{
 				throw std::bad_alloc();
 			}
 
-			return l_storage;
+			return storage;
 		}
 
 		void * operator new[]( size_t p_size )
 		{
-			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
+			void * storage = Castor::AlignedAlloc( align_value, p_size );
 
-			if ( !l_storage )
+			if ( !storage )
 			{
 				throw std::bad_alloc();
 			}
 
-			return l_storage;
+			return storage;
 		}
 
 		void * operator new( size_t p_size, std::nothrow_t )
@@ -145,26 +145,26 @@ namespace Castor
 
 		void * operator new( size_t p_size )
 		{
-			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
+			void * storage = Castor::AlignedAlloc( align_value, p_size );
 
-			if ( !l_storage )
+			if ( !storage )
 			{
 				throw std::bad_alloc();
 			}
 
-			return l_storage;
+			return storage;
 		}
 
 		void * operator new[]( size_t p_size )
 		{
-			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
+			void * storage = Castor::AlignedAlloc( align_value, p_size );
 
-			if ( !l_storage )
+			if ( !storage )
 			{
 				throw std::bad_alloc();
 			}
 
-			return l_storage;
+			return storage;
 		}
 
 		void * operator new( size_t p_size, std::nothrow_t )

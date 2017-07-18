@@ -60,11 +60,11 @@ namespace fxaa
 }
 
 #define UBO_FXAA( p_writer )\
-	GLSL::Ubo l_fxaa{ p_writer, FxaaUbo::Name, FxaaUbo::BindingPoint };\
-	auto c3d_subpixShift = l_fxaa.DeclMember< Float >( FxaaUbo::SubpixShift );\
-	auto c3d_spanMax = l_fxaa.DeclMember< Float >( FxaaUbo::SpanMax );\
-	auto c3d_reduceMul = l_fxaa.DeclMember< Float >( FxaaUbo::ReduceMul );\
-	auto c3d_renderSize = l_fxaa.DeclMember< Vec2 >( FxaaUbo::RenderSize );\
-	l_fxaa.End()
+	GLSL::Ubo fxaa{ p_writer, FxaaUbo::Name, FxaaUbo::BindingPoint };\
+	auto c3d_subpixShift = fxaa.DeclMember< Float >( FxaaUbo::SubpixShift );\
+	auto c3d_spanMax = fxaa.DeclMember< Float >( FxaaUbo::SpanMax );\
+	auto c3d_reduceMul = fxaa.DeclMember< Float >( FxaaUbo::ReduceMul );\
+	auto c3d_renderSize = fxaa.DeclMember< Vec2 >( FxaaUbo::RenderSize );\
+	fxaa.End()
 
 #endif

@@ -226,40 +226,40 @@ namespace GuiCommon
 		}
 		static void RefreshChildren( PointProperty< T, Count > * p_prop )
 		{
-			Castor::Point< T, Count > const & l_point = PointRefFromVariant< T, Count >( p_prop->GetValue() );
+			Castor::Point< T, Count > const & point = PointRefFromVariant< T, Count >( p_prop->GetValue() );
 
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				p_prop->Item( i )->SetValue( SetValue( l_point[i] ) );
+				p_prop->Item( i )->SetValue( SetValue( point[i] ) );
 			}
 		}
 		static wxVariant ChildChanged( wxVariant & p_thisValue, int p_index, wxVariant & p_newValue )
 		{
-			Castor::Point< T, Count > & l_point = PointRefFromVariant< T, Count >( p_thisValue );
+			Castor::Point< T, Count > & point = PointRefFromVariant< T, Count >( p_thisValue );
 			T val = GetValue< T >( p_newValue );
 
 			switch ( p_index )
 			{
 			case 0:
-				l_point[0] = val;
+				point[0] = val;
 				break;
 
 			case 1:
-				l_point[1] = val;
+				point[1] = val;
 				break;
 
 			case 2:
-				l_point[2] = val;
+				point[2] = val;
 				break;
 
 			case 3:
-				l_point[3] = val;
+				point[3] = val;
 				break;
 			}
 
-			wxVariant l_result;
-			l_result << l_point;
-			return l_result;
+			wxVariant result;
+			result << point;
+			return result;
 		}
 	};
 

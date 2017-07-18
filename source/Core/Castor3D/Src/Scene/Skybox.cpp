@@ -1,4 +1,4 @@
-﻿#include "Skybox.hpp"
+#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -30,7 +30,7 @@ namespace Castor3D
 
 	bool Skybox::TextWriter::operator()( Skybox const & p_obj, TextFile & p_file )
 	{
-		static String const l_faces[]
+		static String const faces[]
 		{
 			cuT( "right" ),
 			cuT( "left" ),
@@ -40,7 +40,7 @@ namespace Castor3D
 			cuT( "front" ),
 		};
 
-		bool l_result = true;
+		bool result = true;
 
 		if ( Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 0 ) ) ).ToString() } )
 			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 1 ) ) ).ToString() } )
@@ -49,26 +49,26 @@ namespace Castor3D
 			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 4 ) ) ).ToString() } )
 			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 5 ) ) ).ToString() } ) )
 		{
-			l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+			result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
 				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			Path l_subfolder{ cuT( "Textures" ) };
+			Path subfolder{ cuT( "Textures" ) };
 
-			for ( uint32_t i = 0; i < 6 && l_result; ++i )
+			for ( uint32_t i = 0; i < 6 && result; ++i )
 			{
-				Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( i ) ) ).ToString() }
+				Path relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( i ) ) ).ToString() }
 					, p_file.GetFilePath()
-					, l_subfolder );
-				l_result = p_file.WriteText( m_tabs + cuT( "\t" ) + l_faces[i] + cuT( " \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-				Castor::TextWriter< Skybox >::CheckError( l_result, ( "Skybox " + l_faces[i] ).c_str() );
+					, subfolder );
+				result = p_file.WriteText( m_tabs + cuT( "\t" ) + faces[i] + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< Skybox >::CheckError( result, ( "Skybox " + faces[i] ).c_str() );
 			}
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//************************************************************************************************
@@ -88,21 +88,21 @@ namespace Castor3D
 			}
 		}
 	{
-		String const l_skybox = cuT( "Skybox" );
+		String const skybox = cuT( "Skybox" );
 
-		if ( GetEngine()->GetSamplerCache().Has( l_skybox ) )
+		if ( GetEngine()->GetSamplerCache().Has( skybox ) )
 		{
-			m_sampler = GetEngine()->GetSamplerCache().Find( l_skybox );
+			m_sampler = GetEngine()->GetSamplerCache().Find( skybox );
 		}
 		else
 		{
-			auto l_sampler = GetEngine()->GetSamplerCache().Add( l_skybox );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-			m_sampler = l_sampler;
+			auto sampler = GetEngine()->GetSamplerCache().Add( skybox );
+			sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			m_sampler = sampler;
 		}
 
 		m_bufferVertex =
@@ -117,17 +117,17 @@ namespace Castor3D
 
 		uint32_t i = 0;
 
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
 		}
 	}
 
 	Skybox::~Skybox()
 	{
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex.reset();
+			vertex.reset();
 		}
 	}
 
@@ -135,10 +135,10 @@ namespace Castor3D
 	{
 		REQUIRE( m_scene );
 		REQUIRE( m_texture );
-		bool l_result = DoInitialiseTexture();
-		auto & l_program = DoInitialiseShader();
+		bool result = DoInitialiseTexture();
+		auto & program = DoInitialiseShader();
 
-		if ( l_result )
+		if ( result )
 		{
 			if ( m_scene->GetMaterialsType() == MaterialType::ePbrMetallicRoughness
 				|| m_scene->GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
@@ -147,11 +147,11 @@ namespace Castor3D
 				m_ibl->Update( *m_texture );
 			}
 
-			l_result = DoInitialiseVertexBuffer()
-				&& DoInitialisePipeline( l_program );
+			result = DoInitialiseVertexBuffer()
+				&& DoInitialisePipeline( program );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Skybox::Cleanup()
@@ -174,97 +174,97 @@ namespace Castor3D
 	void Skybox::Render( Camera const & p_camera )
 	{
 		REQUIRE( m_texture );
-		auto l_sampler = m_sampler.lock();
+		auto sampler = m_sampler.lock();
 
-		if ( l_sampler )
+		if ( sampler )
 		{
 			p_camera.Apply();
-			auto & l_scene = *p_camera.GetScene();
-			auto l_node = p_camera.GetParent();
-			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
+			auto & scene = *p_camera.GetScene();
+			auto node = p_camera.GetParent();
+			matrix::set_translate( m_mtxModel, node->GetDerivedPosition() );
 			m_matrixUbo.Update( p_camera.GetView()
 				, p_camera.GetViewport().GetProjection() );
 			m_modelMatrixUbo.Update( m_mtxModel );
-			m_configUbo.Update( l_scene.GetHdrConfig() );
+			m_configUbo.Update( scene.GetHdrConfig() );
 			m_pipeline->Apply();
 			m_texture->Bind( 0 );
-			l_sampler->Bind( 0 );
+			sampler->Bind( 0 );
 			m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
-			l_sampler->Unbind( 0 );
+			sampler->Unbind( 0 );
 			m_texture->Unbind( 0 );
 		}
 	}
 
 	ShaderProgram & Skybox::DoInitialiseShader()
 	{
-		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
+		auto program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
 
-		GLSL::Shader l_vtx;
+		GLSL::Shader vtx;
 		{
-			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
+			GlslWriter writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
 
 			// Inputs
-			auto position = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( l_writer );
-			UBO_MODEL_MATRIX( l_writer );
+			auto position = writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
+			UBO_MATRIX( writer );
+			UBO_MODEL_MATRIX( writer );
 
 			// Outputs
-			auto vtx_texture = l_writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			std::function< void() > l_main = [&]()
+			std::function< void() > main = [&]()
 			{
-				gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+				gl_Position = writer.Paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 				vtx_texture = position;
 			};
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-			l_vtx = l_writer.Finalise();
+			writer.ImplementFunction< void >( cuT( "main" ), main );
+			vtx = writer.Finalise();
 		}
 
-		GLSL::Shader l_pxl;
+		GLSL::Shader pxl;
 		{
-			GlslWriter l_writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
+			GlslWriter writer{ GetEngine()->GetRenderSystem()->CreateGlslWriter() };
 
 			// Inputs
-			UBO_HDR_CONFIG( l_writer );
-			auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
-			auto skybox = l_writer.DeclUniform< SamplerCube >( cuT( "skybox" ) );
-			GLSL::Utils l_utils{ l_writer };
+			UBO_HDR_CONFIG( writer );
+			auto vtx_texture = writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+			auto skybox = writer.DeclUniform< SamplerCube >( cuT( "skybox" ) );
+			GLSL::Utils utils{ writer };
 
 			if ( !m_hdr )
 			{
-				l_utils.DeclareRemoveGamma();
+				utils.DeclareRemoveGamma();
 			}
 
 			// Outputs
-			auto pxl_FragColor = l_writer.DeclOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_FragColor = writer.DeclOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
-			std::function< void() > l_main = [&]()
+			std::function< void() > main = [&]()
 			{
-				auto l_skybox = l_writer.DeclLocale( cuT( "l_skybox" )
+				auto colour = writer.DeclLocale( cuT( "colour" )
 					, texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) ) );
 
 				if ( !m_hdr )
 				{
-					pxl_FragColor = vec4( l_utils.RemoveGamma( c3d_gamma, l_skybox.xyz() ), l_skybox.w() );
+					pxl_FragColor = vec4( utils.RemoveGamma( c3d_gamma, colour.xyz() ), colour.w() );
 				}
 				else
 				{
-					pxl_FragColor = vec4( l_skybox.xyz(), l_skybox.w() );
+					pxl_FragColor = vec4( colour.xyz(), colour.w() );
 				}
 			};
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-			l_pxl = l_writer.Finalise();
+			writer.ImplementFunction< void >( cuT( "main" ), main );
+			pxl = writer.Finalise();
 		}
 
-		l_program->CreateObject( ShaderType::eVertex );
-		l_program->CreateObject( ShaderType::ePixel );
-		l_program->SetSource( ShaderType::eVertex, l_vtx );
-		l_program->SetSource( ShaderType::ePixel, l_pxl );
-		l_program->Initialise();
-		return *l_program;
+		program->CreateObject( ShaderType::eVertex );
+		program->CreateObject( ShaderType::ePixel );
+		program->SetSource( ShaderType::eVertex, vtx );
+		program->SetSource( ShaderType::ePixel, pxl );
+		program->Initialise();
+		return *program;
 	}
 
 	bool Skybox::DoInitialiseVertexBuffer()
@@ -283,27 +283,27 @@ namespace Castor3D
 			m_hdr = true;
 		}
 
-		auto l_result = m_texture->Initialise();
+		auto result = m_texture->Initialise();
 
-		if ( l_result )
+		if ( result )
 		{
-			auto l_sampler = m_sampler.lock();
+			auto sampler = m_sampler.lock();
 			m_texture->Bind( 0 );
 			m_texture->GenerateMipmaps();
 			m_texture->Unbind( 0 );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Skybox::DoInitialiseEquiTexture()
 	{
-		auto & l_engine = *GetEngine();
-		auto & l_renderSystem = *l_engine.GetRenderSystem();
+		auto & engine = *GetEngine();
+		auto & renderSystem = *engine.GetRenderSystem();
 		m_equiTexture->Initialise();
 
 		// Create the cube texture.
-		m_texture = l_renderSystem.CreateTexture( TextureType::eCube
+		m_texture = renderSystem.CreateTexture( TextureType::eCube
 			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite
 			, PixelFormat::eRGB32F
@@ -317,55 +317,55 @@ namespace Castor3D
 		m_texture->Initialise();
 
 		// Create the one shot FBO and attaches
-		auto l_fbo = l_renderSystem.CreateFrameBuffer();
-		std::array< FrameBufferAttachmentSPtr, 6 > l_attachs
+		auto fbo = renderSystem.CreateFrameBuffer();
+		std::array< FrameBufferAttachmentSPtr, 6 > attachs
 		{
 			{
-				l_fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveX ),
-				l_fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeX ),
-				l_fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveY ),
-				l_fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeY ),
-				l_fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveZ ),
-				l_fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeZ ),
+				fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveX ),
+				fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeX ),
+				fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveY ),
+				fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeY ),
+				fbo->CreateAttachment( m_texture, CubeMapFace::ePositiveZ ),
+				fbo->CreateAttachment( m_texture, CubeMapFace::eNegativeZ ),
 			}
 		};
 		// Create The depth RBO.
-		auto l_depthRbo = l_fbo->CreateDepthStencilRenderBuffer( PixelFormat::eD24 );
-		l_depthRbo->Create();
-		l_depthRbo->Initialise( m_equiSize );
-		auto l_depthAttach = l_fbo->CreateAttachment( l_depthRbo );
+		auto depthRbo = fbo->CreateDepthStencilRenderBuffer( PixelFormat::eD24 );
+		depthRbo->Create();
+		depthRbo->Initialise( m_equiSize );
+		auto depthAttach = fbo->CreateAttachment( depthRbo );
 
 		// Fill the FBO
-		l_fbo->Create();
-		l_fbo->Initialise( m_equiSize );
-		l_fbo->Bind();
-		l_fbo->Attach( AttachmentPoint::eDepth, l_depthAttach );
-		REQUIRE( l_fbo->IsComplete() );
-		l_fbo->Unbind();
+		fbo->Create();
+		fbo->Initialise( m_equiSize );
+		fbo->Bind();
+		fbo->Attach( AttachmentPoint::eDepth, depthAttach );
+		REQUIRE( fbo->IsComplete() );
+		fbo->Unbind();
 
 		// Render the equirectangular texture to the cube faces.
-		l_renderSystem.GetCurrentContext()->RenderEquiToCube( m_equiSize
+		renderSystem.GetCurrentContext()->RenderEquiToCube( m_equiSize
 			, *m_equiTexture
 			, m_texture
-			, l_fbo
-			, l_attachs );
+			, fbo
+			, attachs );
 
 		// Cleanup the one shot FBO and attaches
-		l_fbo->Bind();
-		l_fbo->DetachAll();
-		l_fbo->Unbind();
+		fbo->Bind();
+		fbo->DetachAll();
+		fbo->Unbind();
 
-		l_depthRbo->Cleanup();
-		l_depthRbo->Destroy();
+		depthRbo->Cleanup();
+		depthRbo->Destroy();
 
-		for ( auto & l_attach : l_attachs )
+		for ( auto & attach : attachs )
 		{
-			l_attach.reset();
+			attach.reset();
 		}
 
-		l_depthAttach.reset();
-		l_fbo->Cleanup();
-		l_fbo->Destroy();
+		depthAttach.reset();
+		fbo->Cleanup();
+		fbo->Destroy();
 
 		m_equiTexture->Cleanup();
 		m_equiTexture.reset();
@@ -373,15 +373,15 @@ namespace Castor3D
 
 	bool Skybox::DoInitialisePipeline( ShaderProgram & p_program )
 	{
-		DepthStencilState l_dsState;
-		l_dsState.SetDepthTest( true );
-		l_dsState.SetDepthMask( WritingMask::eZero );
-		l_dsState.SetDepthFunc( DepthFunc::eLEqual );
+		DepthStencilState dsState;
+		dsState.SetDepthTest( true );
+		dsState.SetDepthMask( WritingMask::eZero );
+		dsState.SetDepthFunc( DepthFunc::eLEqual );
 
-		RasteriserState l_rsState;
-		l_rsState.SetCulledFaces( Culling::eFront );
+		RasteriserState rsState;
+		rsState.SetCulledFaces( Culling::eFront );
 
-		m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+		m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState ), std::move( rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		m_pipeline->AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
 		m_pipeline->AddUniformBuffer( m_configUbo.GetUbo() );

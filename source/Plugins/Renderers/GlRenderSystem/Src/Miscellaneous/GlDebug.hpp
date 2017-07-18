@@ -56,9 +56,9 @@ namespace GlRender
 			Binding( uint32_t p_name )
 				: m_name{ p_name }
 			{
-				Castor::StringStream l_stream;
-				l_stream << Castor::Debug::Backtrace{};
-				m_stack = l_stream.str();
+				Castor::StringStream stream;
+				stream << Castor::Debug::Backtrace{};
+				m_stack = stream.str();
 			}
 
 			uint32_t m_name;

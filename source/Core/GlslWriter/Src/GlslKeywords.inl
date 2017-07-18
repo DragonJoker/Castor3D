@@ -339,9 +339,9 @@ namespace GLSL
 
 		virtual Castor::String GetFragData( uint32_t p_index )const
 		{
-			Castor::StringStream l_stream;
-			l_stream << cuT( "gl_FragData[" ) << p_index << cuT( "]" );
-			return l_stream.str();
+			Castor::StringStream stream;
+			stream << cuT( "gl_FragData[" ) << p_index << cuT( "]" );
+			return stream.str();
 		}
 
 		virtual bool HasNamedFragData()const
@@ -429,9 +429,9 @@ namespace GLSL
 
 		virtual Castor::String GetFragData( uint32_t p_index )const
 		{
-			Castor::StringStream l_stream;
-			l_stream << cuT( "gl_FragData[" ) << p_index << cuT( "]" );
-			return l_stream.str();
+			Castor::StringStream stream;
+			stream << cuT( "gl_FragData[" ) << p_index << cuT( "]" );
+			return stream.str();
 		}
 
 		virtual bool HasNamedFragData()const

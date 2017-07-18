@@ -21,22 +21,22 @@ namespace Loop
 
 	EdgeSPtr Vertex::GetEdge( uint32_t p_index )
 	{
-		EdgeSPtr l_result;
-		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_index );
+		EdgeSPtr result;
+		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
 
-		if ( l_it != m_mapEdges.end() )
+		if ( it != m_mapEdges.end() )
 		{
-			l_result = l_it->second;
+			result = it->second;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Vertex::AddEdge( EdgeSPtr p_pEdge, uint32_t p_index )
 	{
-		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_index );
+		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
 
-		if ( l_it == m_mapEdges.end() )
+		if ( it == m_mapEdges.end() )
 		{
 			m_mapEdges.insert( std::make_pair( p_index, p_pEdge ) );
 		}
@@ -44,11 +44,11 @@ namespace Loop
 
 	void Vertex::RemoveEdge( uint32_t p_index )
 	{
-		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_index );
+		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
 
-		if ( l_it != m_mapEdges.end() )
+		if ( it != m_mapEdges.end() )
 		{
-			m_mapEdges.erase( l_it );
+			m_mapEdges.erase( it );
 		}
 	}
 }

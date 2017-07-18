@@ -43,9 +43,9 @@ namespace GuiCommon
 
 	void AnimationTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		auto l_group = GetGroup();
+		auto group = GetGroup();
 
-		if ( l_group )
+		if ( group )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATION + make_wxString( m_name ) ) );
 			p_grid->Append( CreateProperty< wxFloatProperty >( PROPERTY_ANIMATION_SPEED, wxVariant( m_groupAnim.m_scale ), _( "The animation time scale." ) ) );
@@ -56,20 +56,20 @@ namespace GuiCommon
 
 	void AnimationTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		auto l_group = GetGroup();
-		wxPGProperty * l_property = p_event.GetProperty();
+		auto group = GetGroup();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_group )
+		if ( property && group )
 		{
-			wxColour l_colour;
+			wxColour colour;
 
-			if ( l_property->GetName() == PROPERTY_ANIMATION_SPEED )
+			if ( property->GetName() == PROPERTY_ANIMATION_SPEED )
 			{
-				OnSpeedChange( l_property->GetValue().GetReal() );
+				OnSpeedChange( property->GetValue().GetReal() );
 			}
-			else if ( l_property->GetName() == PROPERTY_ANIMATION_LOOPED )
+			else if ( property->GetName() == PROPERTY_ANIMATION_LOOPED )
 			{
-				OnLoopedChange( l_property->GetValue().GetBool() );
+				OnLoopedChange( property->GetValue().GetBool() );
 			}
 		}
 	}
@@ -98,23 +98,23 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_property, this]()
 		{
-			auto l_group = GetGroup();
-			ButtonData * l_data = reinterpret_cast< ButtonData * >( p_property->GetClientObject() );
+			auto group = GetGroup();
+			ButtonData * data = reinterpret_cast< ButtonData * >( p_property->GetClientObject() );
 
 			switch ( m_groupAnim.m_state )
 			{
 			case AnimationState::ePlaying:
-				l_group->PauseAnimation( m_name );
+				group->PauseAnimation( m_name );
 				m_groupAnim.m_state = AnimationState::ePaused;
 				break;
 
 			case AnimationState::eStopped:
-				l_group->StartAnimation( m_name );
+				group->StartAnimation( m_name );
 				m_groupAnim.m_state = AnimationState::ePlaying;
 				break;
 
 			case AnimationState::ePaused:
-				l_group->StopAnimation( m_name );
+				group->StopAnimation( m_name );
 				m_groupAnim.m_state = AnimationState::eStopped;
 				break;
 			}

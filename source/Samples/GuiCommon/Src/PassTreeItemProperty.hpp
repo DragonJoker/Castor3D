@@ -87,9 +87,9 @@ namespace GuiCommon
 		template< Castor3D::MaterialType Type >
 		inline std::shared_ptr< typename Castor3D::PassTyper< Type >::Type > GetTypedPass()
 		{
-			auto l_pass = m_pass.lock();
-			REQUIRE( l_pass && l_pass->GetType() == Type );
-			return std::static_pointer_cast< typename Castor3D::PassTyper< Type >::Type >( l_pass );
+			auto pass = m_pass.lock();
+			REQUIRE( pass && pass->GetType() == Type );
+			return std::static_pointer_cast< typename Castor3D::PassTyper< Type >::Type >( pass );
 		}
 
 	private:

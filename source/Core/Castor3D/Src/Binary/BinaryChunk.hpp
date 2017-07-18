@@ -324,26 +324,26 @@ namespace Castor3D
 		template< typename T >
 		inline bool DoRead( T * p_values, uint32_t p_count )
 		{
-			auto l_size = p_count * uint32_t( sizeof( T ) );
-			bool l_result{ m_index + l_size < m_data.size() };
+			auto size = p_count * uint32_t( sizeof( T ) );
+			bool result{ m_index + size < m_data.size() };
 
-			if ( l_result )
+			if ( result )
 			{
-				auto l_begin = reinterpret_cast< T * >( &m_data[m_index] );
-				auto l_end = l_begin + p_count;
-				auto l_value = p_values;
+				auto begin = reinterpret_cast< T * >( &m_data[m_index] );
+				auto end = begin + p_count;
+				auto value = p_values;
 
-				for ( auto l_it = l_begin; l_it != l_end; ++l_it )
+				for ( auto it = begin; it != end; ++it )
 				{
-					( *l_value ) = *l_it;
-					PrepareChunkData( *l_value );
-					++l_value;
+					( *value ) = *it;
+					PrepareChunkData( *value );
+					++value;
 				}
 
-				m_index += l_size;
+				m_index += size;
 			}
 
-			return l_result;
+			return result;
 		}
 
 	private:

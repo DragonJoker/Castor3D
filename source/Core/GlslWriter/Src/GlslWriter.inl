@@ -88,7 +88,7 @@ namespace GLSL
 		m_stream << std::endl;
 		WriteFunctionHeader< RetType >( *this, p_name, p_params... );
 		{
-			IndentBlock l_block( *this );
+			IndentBlock block( *this );
 			p_function( std::forward < Params && > ( p_params )... );
 		}
 		m_stream << std::endl;
@@ -104,25 +104,25 @@ namespace GLSL
 	template< typename ExprType >
 	ExprType GlslWriter::Paren( ExprType const p_expr )
 	{
-		ExprType l_result( this );
-		l_result.m_value << cuT( "( " ) << Castor::String( p_expr ) << cuT( " )" );
-		return l_result;
+		ExprType result( this );
+		result.m_value << cuT( "( " ) << Castor::String( p_expr ) << cuT( " )" );
+		return result;
 	}
 
 	template< typename ExprType >
 	ExprType GlslWriter::Ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right )
 	{
-		ExprType l_result( this );
-		l_result.m_value << cuT( "( ( " ) << ToString( p_condition ) << cuT( " ) ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right ) << cuT( " )" );
-		return l_result;
+		ExprType result( this );
+		result.m_value << cuT( "( ( " ) << ToString( p_condition ) << cuT( " ) ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right ) << cuT( " )" );
+		return result;
 	}
 
 	template< typename T >
 	inline T GlslWriter::Cast( Type const & p_from )
 	{
-		T l_result;
-		l_result.m_value << Castor::string::trim( l_result.m_type ) << cuT( "( " ) << Castor::String( p_from ) << cuT( " )" );
-		return l_result;
+		T result;
+		result.m_value << Castor::string::trim( result.m_type ) << cuT( "( " ) << Castor::String( p_from ) << cuT( " )" );
+		return result;
 	}
 
 	template< typename T >
@@ -173,8 +173,8 @@ namespace GLSL
 		using type = typename type_of< T >::type;
 		RegisterName( p_name, name_of< T >::value );
 		m_stream << type().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
-		T l_result( this, p_name );
-		return l_result;
+		T result( this, p_name );
+		return result;
 	}
 
 	template< typename T >
@@ -215,19 +215,19 @@ namespace GLSL
 	{
 		using type = typename type_of< T >::type;
 		RegisterOutput( p_name, name_of< T >::value );
-		Castor::String l_name;
+		Castor::String name;
 
 		if ( m_keywords->HasNamedFragData() )
 		{
 			*this << Layout { int( p_index ) } << OutputGetter< T >() << type().m_type << p_name << cuT( ";" ) << Endl();
-			l_name = p_name;
+			name = p_name;
 		}
 		else
 		{
-			l_name = m_keywords->GetFragData( p_index );
+			name = m_keywords->GetFragData( p_index );
 		}
 
-		return T( this, l_name );
+		return T( this, name );
 	}
 
 	template< typename T >
@@ -356,12 +356,12 @@ namespace GLSL
 		
 		RegisterUniform( p_name, name_of< T >::value );
 		*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type().m_type << cuT( "[]( " );
-		Castor::String l_sep;
+		Castor::String sep;
 
-		for ( auto const & l_value : p_rhs )
+		for ( auto const & value : p_rhs )
 		{
-			*this << l_sep << Castor::String( l_value ) << Endl();
-			l_sep = cuT( "\t, " );
+			*this << sep << Castor::String( value ) << Endl();
+			sep = cuT( "\t, " );
 		}
 
 		*this << cuT( ");" ) << Endl();
@@ -659,12 +659,12 @@ namespace GLSL
 		if ( p_enabled )
 		{
 			*this << Uniform() << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << type().m_type << cuT( "[]( " );
-			Castor::String l_sep;
+			Castor::String sep;
 
-			for ( auto const & l_value : p_rhs )
+			for ( auto const & value : p_rhs )
 			{
-				*this << l_sep << Castor::String( l_value ) << Endl();
-				l_sep = cuT( "\t, " );
+				*this << sep << Castor::String( value ) << Endl();
+				sep = cuT( "\t, " );
 			}
 
 			*this << cuT( ");" ) << Endl();

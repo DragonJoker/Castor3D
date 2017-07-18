@@ -575,11 +575,11 @@ namespace Castor
 	template< typename T >
 	float operator+( HdrColourComponent const & p_lhs, T const & p_rhs )
 	{
-		float l_fValue;
-		p_lhs.convert_to( l_fValue );
-		HdrColourComponent l_cpnt( &l_fValue );
-		l_cpnt += p_rhs;
-		return l_fValue;
+		float fValue;
+		p_lhs.convert_to( fValue );
+		HdrColourComponent cpnt( &fValue );
+		cpnt += p_rhs;
+		return fValue;
 	}
 	/**
 	 *\~english
@@ -594,11 +594,11 @@ namespace Castor
 	template< typename T >
 	float operator-( HdrColourComponent const & p_lhs, T const & p_rhs )
 	{
-		float l_fValue;
-		p_lhs.convert_to( l_fValue );
-		HdrColourComponent l_cpnt( &l_fValue );
-		l_cpnt -= p_rhs;
-		return l_fValue;
+		float fValue;
+		p_lhs.convert_to( fValue );
+		HdrColourComponent cpnt( &fValue );
+		cpnt -= p_rhs;
+		return fValue;
 	}
 	/**
 	 *\~english
@@ -613,11 +613,11 @@ namespace Castor
 	template< typename T >
 	float operator/( HdrColourComponent const & p_lhs, T const & p_rhs )
 	{
-		float l_fValue;
-		p_lhs.convert_to( l_fValue );
-		HdrColourComponent l_cpnt( &l_fValue );
-		l_cpnt /= p_rhs;
-		return l_fValue;
+		float fValue;
+		p_lhs.convert_to( fValue );
+		HdrColourComponent cpnt( &fValue );
+		cpnt /= p_rhs;
+		return fValue;
 	}
 	/**
 	 *\~english
@@ -632,11 +632,11 @@ namespace Castor
 	template< typename T >
 	float operator*( HdrColourComponent const & p_lhs, T const & p_rhs )
 	{
-		float l_fValue;
-		p_lhs.convert_to( l_fValue );
-		HdrColourComponent l_cpnt( &l_fValue );
-		l_cpnt *= p_rhs;
-		return l_fValue;
+		float fValue;
+		p_lhs.convert_to( fValue );
+		HdrColourComponent cpnt( &fValue );
+		cpnt *= p_rhs;
+		return fValue;
 	}
 	/**
 	 *\~english

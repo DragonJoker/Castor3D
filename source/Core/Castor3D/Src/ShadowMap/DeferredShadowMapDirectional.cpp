@@ -29,30 +29,30 @@ namespace Castor3D
 	{
 		TextureUnit DoInitialiseDirectional( Engine & p_engine, Size const & p_size )
 		{
-			auto l_sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Directional" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
-			l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
-			l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+			auto sampler = p_engine.GetSamplerCache().Add( cuT( "ShadowMap_Directional" ) );
+			sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
+			sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
+			sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+			sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+			sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture(
+			auto texture = p_engine.GetRenderSystem()->CreateTexture(
 				TextureType::eTwoDimensions,
 				AccessType::eNone,
 				AccessType::eRead | AccessType::eWrite,
 				PixelFormat::eD32F, p_size );
-			TextureUnit l_unit{ p_engine };
-			l_unit.SetTexture( l_texture );
-			l_unit.SetSampler( l_sampler );
+			TextureUnit unit{ p_engine };
+			unit.SetTexture( texture );
+			unit.SetSampler( sampler );
 
-			for ( auto & l_image : *l_texture )
+			for ( auto & image : *texture )
 			{
-				l_image->InitialiseSource();
+				image->InitialiseSource();
 			}
 
-			return l_unit;
+			return unit;
 		}
 	}
 
@@ -71,20 +71,20 @@ namespace Castor3D
 	{
 		if ( !m_passes.empty() )
 		{
-			for ( auto & l_it : m_passes )
+			for ( auto & it : m_passes )
 			{
-				l_it.second->Update( p_queues, 0u );
+				it.second->Update( p_queues, 0u );
 			}
 		}
 	}
 
 	void DeferredShadowMapDirectional::Render( DirectionalLight const & p_light )
 	{
-		auto l_it = m_passes.find( &p_light.GetLight() );
-		REQUIRE( l_it != m_passes.end() && "Light not found, call AddLight..." );
+		auto it = m_passes.find( &p_light.GetLight() );
+		REQUIRE( it != m_passes.end() && "Light not found, call AddLight..." );
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eDepth );
-		l_it->second->Render();
+		it->second->Render();
 		m_frameBuffer->Unbind();
 	}
 
@@ -103,8 +103,8 @@ namespace Castor3D
 		m_shadowMap.Initialise();
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 
-		auto l_texture = m_shadowMap.GetTexture();
-		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
+		auto texture = m_shadowMap.GetTexture();
+		m_depthAttach = m_frameBuffer->CreateAttachment( texture );
 		m_frameBuffer->Bind();
 		m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach, m_shadowMap.GetTexture()->GetType() );
 		ENSURE( m_frameBuffer->IsComplete() );
@@ -135,25 +135,25 @@ namespace Castor3D
 		, ComparisonFunc p_alphaFunc )const
 	{
 		using namespace GLSL;
-		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		GlslWriter writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Fragment Intputs
-		auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
-		auto gl_FragCoord( l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		auto vtx_texture = writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
+		auto gl_FragCoord( writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		auto pxl_fFragDepth( l_writer.DeclFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
+		auto pxl_fFragDepth( writer.DeclFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 			{
-				auto l_alpha = l_writer.DeclLocale( cuT( "l_alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
+				auto alpha = writer.DeclLocale( cuT( "alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
 
-				IF( l_writer, l_alpha < 0.2_f )
+				IF( writer, alpha < 0.2_f )
 				{
-					l_writer.Discard();
+					writer.Discard();
 				}
 				FI;
 			}
@@ -161,6 +161,6 @@ namespace Castor3D
 			pxl_fFragDepth = gl_FragCoord.z();
 		} );
 
-		return l_writer.Finalise();
+		return writer.Finalise();
 	}
 }

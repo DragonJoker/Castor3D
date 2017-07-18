@@ -100,8 +100,8 @@ namespace Castor
 
 				if ( m_set )
 				{
-					auto l_prefix = prefix_type::to_string();
-					m_sbuf->sputn( l_prefix.c_str(), l_prefix.size() );
+					auto prefix = prefix_type::to_string();
+					m_sbuf->sputn( prefix.c_str(), prefix.size() );
 					m_set = false;
 				}
 

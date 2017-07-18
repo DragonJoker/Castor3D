@@ -17,89 +17,89 @@ namespace Castor
 	{
 		PxBufferBaseSPtr DoLoad8BitsPerChannel( Path const & p_path )
 		{
-			PxBufferBaseSPtr l_result;
+			PxBufferBaseSPtr result;
 			int x = 0;
 			int y = 0;
 			int n = 0;
-			uint8_t * l_data = stbi_load( string::string_cast< char >( p_path ).c_str()
+			uint8_t * data = stbi_load( string::string_cast< char >( p_path ).c_str()
 				, &x
 				, &y
 				, &n
 				, 0 );
 
-			if ( l_data )
+			if ( data )
 			{
-				PixelFormat l_format;
+				PixelFormat format;
 
 				switch ( n )
 				{
 				case 1:
-					l_format = PixelFormat::eL8;
+					format = PixelFormat::eL8;
 					break;
 
 				case 2:
-					l_format = PixelFormat::eA8L8;
+					format = PixelFormat::eA8L8;
 					break;
 
 				case 3:
-					l_format = PixelFormat::eR8G8B8;
+					format = PixelFormat::eR8G8B8;
 					break;
 
 				case 4:
-					l_format = PixelFormat::eA8R8G8B8;
+					format = PixelFormat::eA8R8G8B8;
 					break;
 				}
 
-				l_result = PxBufferBase::create( Size( x, y ), l_format, l_data, l_format );
-				stbi_image_free( l_data );
+				result = PxBufferBase::create( Size( x, y ), format, data, format );
+				stbi_image_free( data );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		PxBufferBaseSPtr DoLoad32BitsPerChannel( Path const & p_path )
 		{
-			PxBufferBaseSPtr l_result;
+			PxBufferBaseSPtr result;
 			int x = 0;
 			int y = 0;
 			int n = 0;
-			float * l_data = stbi_loadf( string::string_cast< char >( p_path ).c_str()
+			float * data = stbi_loadf( string::string_cast< char >( p_path ).c_str()
 				, &x
 				, &y
 				, &n
 				, 0 );
 
-			if ( l_data )
+			if ( data )
 			{
-				PixelFormat l_format;
+				PixelFormat format;
 
 				switch ( n )
 				{
 				case 1:
-					l_format = PixelFormat::eL32F;
+					format = PixelFormat::eL32F;
 					break;
 
 				case 2:
-					l_format = PixelFormat::eAL32F;
+					format = PixelFormat::eAL32F;
 					break;
 
 				case 3:
-					l_format = PixelFormat::eRGB32F;
+					format = PixelFormat::eRGB32F;
 					break;
 
 				case 4:
-					l_format = PixelFormat::eRGBA32F;
+					format = PixelFormat::eRGBA32F;
 					break;
 				}
 
-				l_result = PxBufferBase::create( Size( x, y )
-					, l_format
-					, reinterpret_cast< uint8_t * >( l_data )
-					, l_format );
-				stbi_image_free( l_data );
+				result = PxBufferBase::create( Size( x, y )
+					, format
+					, reinterpret_cast< uint8_t * >( data )
+					, format );
+				stbi_image_free( data );
 			}
 
-			return l_result;
+			return result;
 		}
 	}
 
@@ -117,9 +117,9 @@ namespace Castor
 		}
 
 		p_image.m_buffer.reset();
-		auto l_extension = string::upper_case( p_path.GetExtension() );
+		auto extension = string::upper_case( p_path.GetExtension() );
 
-		if ( l_extension.find( cuT( "hdr" ) ) != String::npos )
+		if ( extension.find( cuT( "hdr" ) ) != String::npos )
 		{
 			p_image.m_buffer = DoLoad32BitsPerChannel( p_path );
 		}
@@ -139,9 +139,9 @@ namespace Castor
 
 	bool Image::BinaryWriter::operator()( Image const & p_image, Path const & p_path )
 	{
-		bool l_result = false;
+		bool result = false;
 
-		return l_result;
+		return result;
 	}
 
 	//************************************************************************************************

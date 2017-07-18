@@ -18,11 +18,11 @@ namespace Castor3D
 	bool CpuParticleSystem::Initialise()
 	{
 		m_particles.reserve( m_parent.GetMaxParticlesCount() );
-		auto & l_defaultValues = m_parent.GetDefaultValues();
+		auto & defaultValues = m_parent.GetDefaultValues();
 
 		for ( auto i = 0u; i < m_parent.GetMaxParticlesCount(); ++i )
 		{
-			m_particles.emplace_back( m_inputs, l_defaultValues );
+			m_particles.emplace_back( m_inputs, defaultValues );
 		}
 
 		return true;

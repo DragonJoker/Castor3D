@@ -81,10 +81,10 @@ namespace Castor3D
 
 	void Vertex::SetPosition( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetPosition( p_buffer );
-		l_pData[0] = x;
-		l_pData[1] = y;
-		l_pData[2] = z;
+		Coords3r pData = GetPosition( p_buffer );
+		pData[0] = x;
+		pData[1] = y;
+		pData[2] = z;
 	}
 
 	void Vertex::SetNormal( void * p_buffer, real const * p_coord )
@@ -94,10 +94,10 @@ namespace Castor3D
 
 	void Vertex::SetNormal( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetNormal( p_buffer );
-		l_pData[0] = x;
-		l_pData[1] = y;
-		l_pData[2] = z;
+		Coords3r pData = GetNormal( p_buffer );
+		pData[0] = x;
+		pData[1] = y;
+		pData[2] = z;
 	}
 
 	void Vertex::SetTangent( void * p_buffer, real const * p_coord )
@@ -107,10 +107,10 @@ namespace Castor3D
 
 	void Vertex::SetTangent( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetTangent( p_buffer );
-		l_pData[0] = x;
-		l_pData[1] = y;
-		l_pData[2] = z;
+		Coords3r pData = GetTangent( p_buffer );
+		pData[0] = x;
+		pData[1] = y;
+		pData[2] = z;
 	}
 
 	void Vertex::SetBitangent( void * p_buffer, real const * p_coord )
@@ -120,10 +120,10 @@ namespace Castor3D
 
 	void Vertex::SetBitangent( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetBitangent( p_buffer );
-		l_pData[0] = x;
-		l_pData[1] = y;
-		l_pData[2] = z;
+		Coords3r pData = GetBitangent( p_buffer );
+		pData[0] = x;
+		pData[1] = y;
+		pData[2] = z;
 	}
 
 	void Vertex::SetTexCoord( void * p_buffer, real const * p_coord )
@@ -133,9 +133,9 @@ namespace Castor3D
 
 	void Vertex::SetTexCoord( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetTexCoord( p_buffer );
-		l_pData[0] = x;
-		l_pData[1] = y;
-		l_pData[2] = z;
+		Coords3r pData = GetTexCoord( p_buffer );
+		pData[0] = x;
+		pData[1] = y;
+		pData[2] = z;
 	}
 }

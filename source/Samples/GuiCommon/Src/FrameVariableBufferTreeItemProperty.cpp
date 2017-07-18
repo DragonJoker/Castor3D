@@ -41,9 +41,9 @@ namespace GuiCommon
 
 	void FrameVariableBufferTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
 		}
 	}

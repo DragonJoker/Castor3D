@@ -35,67 +35,67 @@ namespace CastorGui
 
 	void ControlsManager::DoCleanup()
 	{
-		auto l_lock = make_unique_lock( m_mutexHandlers );
+		auto lock = make_unique_lock( m_mutexHandlers );
 
-		for ( auto l_handler : m_handlers )
+		for ( auto handler : m_handlers )
 		{
-			std::static_pointer_cast< Control >( l_handler )->Destroy();
+			std::static_pointer_cast< Control >( handler )->Destroy();
 		}
 	}
 
 	bool ControlsManager::FireMaterialEvent( Castor::String const & p_overlay, Castor::String const & p_material )
 	{
-		auto l_lock = make_unique_lock( m_mutexControls );
-		auto l_it = std::find_if( std::begin( m_controlsByZIndex )
+		auto lock = make_unique_lock( m_mutexControls );
+		auto it = std::find_if( std::begin( m_controlsByZIndex )
 			, std::end( m_controlsByZIndex )
 			, [&p_overlay]( ControlSPtr p_control )
 		{
 			return p_control->GetName() == p_overlay;
 		} );
-		bool l_result = false;
+		bool result = false;
 
-		if ( l_it != std::end( m_controlsByZIndex ) )
+		if ( it != std::end( m_controlsByZIndex ) )
 		{
-			auto l_material = GetEngine()->GetMaterialCache().Find( p_material );
+			auto material = GetEngine()->GetMaterialCache().Find( p_material );
 
-			if ( l_material )
+			if ( material )
 			{
-				auto l_control = *l_it;
+				auto control = *it;
 				m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePreRender
-					, [l_control, l_material]()
+					, [control, material]()
 					{
-						l_control->SetBackgroundMaterial( l_material );
+						control->SetBackgroundMaterial( material );
 					} ) );
-				l_result = true;
+				result = true;
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool ControlsManager::FireTextEvent( Castor::String const & p_overlay, Castor::String const & p_caption )
 	{
-		auto l_lock = make_unique_lock( m_mutexControls );
-		auto l_it = std::find_if( std::begin( m_controlsByZIndex )
+		auto lock = make_unique_lock( m_mutexControls );
+		auto it = std::find_if( std::begin( m_controlsByZIndex )
 			, std::end( m_controlsByZIndex )
 			, [&p_overlay]( ControlSPtr p_control )
 		{
 			return p_control->GetName() == p_overlay;
 		} );
-		bool l_result = false;
+		bool result = false;
 
-		if ( l_it != std::end( m_controlsByZIndex ) )
+		if ( it != std::end( m_controlsByZIndex ) )
 		{
-			auto l_control = *l_it;
+			auto control = *it;
 			m_frameListener->PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [l_control, p_caption]()
+				, [control, p_caption]()
 				{
-					l_control->SetCaption( p_caption );
+					control->SetCaption( p_caption );
 				} ) );
-			l_result = true;
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void ControlsManager::Create( ControlSPtr p_control )
@@ -114,7 +114,7 @@ namespace CastorGui
 	{
 		DoAddHandler( p_control );
 
-		auto l_lock = make_unique_lock( m_mutexControls );
+		auto lock = make_unique_lock( m_mutexControls );
 
 		if ( m_controlsById.find( p_control->GetId() ) != m_controlsById.end() )
 		{
@@ -127,21 +127,21 @@ namespace CastorGui
 
 	void ControlsManager::RemoveControl( uint32_t p_id )
 	{
-		auto l_lock = make_unique_lock( m_mutexControls );
+		auto lock = make_unique_lock( m_mutexControls );
 		DoRemoveControl( p_id );
 	}
 
 	ControlSPtr ControlsManager::GetControl( uint32_t p_id )
 	{
-		auto l_lock = make_unique_lock( m_mutexControls );
-		auto l_it = m_controlsById.find( p_id );
+		auto lock = make_unique_lock( m_mutexControls );
+		auto it = m_controlsById.find( p_id );
 
-		if ( l_it == m_controlsById.end() )
+		if ( it == m_controlsById.end() )
 		{
 			CASTOR_EXCEPTION( "This control does not exist in the manager" );
 		}
 
-		return l_it->second.lock();
+		return it->second.lock();
 	}
 
 	void ControlsManager::ConnectEvents( ButtonCtrl & p_control )
@@ -196,58 +196,58 @@ namespace CastorGui
 
 	void ControlsManager::DisconnectEvents( ButtonCtrl & p_control )
 	{
-		auto l_it = m_onButtonClicks.find( &p_control );
+		auto it = m_onButtonClicks.find( &p_control );
 
-		if ( l_it != m_onButtonClicks.end() )
+		if ( it != m_onButtonClicks.end() )
 		{
-			m_onButtonClicks.erase( l_it );
+			m_onButtonClicks.erase( it );
 		}
 	}
 
 	void ControlsManager::DisconnectEvents( ComboBoxCtrl & p_control )
 	{
-		auto l_it = m_onComboSelects.find( &p_control );
+		auto it = m_onComboSelects.find( &p_control );
 
-		if ( l_it != m_onComboSelects.end() )
+		if ( it != m_onComboSelects.end() )
 		{
-			m_onComboSelects.erase( l_it );
+			m_onComboSelects.erase( it );
 		}
 	}
 
 	void ControlsManager::DisconnectEvents( EditCtrl & p_control )
 	{
-		auto l_it = m_onEditUpdates.find( &p_control );
+		auto it = m_onEditUpdates.find( &p_control );
 
-		if ( l_it != m_onEditUpdates.end() )
+		if ( it != m_onEditUpdates.end() )
 		{
-			m_onEditUpdates.erase( l_it );
+			m_onEditUpdates.erase( it );
 		}
 	}
 
 	void ControlsManager::DisconnectEvents( ListBoxCtrl & p_control )
 	{
-		auto l_it = m_onListSelects.find( &p_control );
+		auto it = m_onListSelects.find( &p_control );
 
-		if ( l_it != m_onListSelects.end() )
+		if ( it != m_onListSelects.end() )
 		{
-			m_onListSelects.erase( l_it );
+			m_onListSelects.erase( it );
 		}
 	}
 
 	void ControlsManager::DisconnectEvents( SliderCtrl & p_control )
 	{
-		auto l_it = m_onSliderTracks.find( &p_control );
+		auto it = m_onSliderTracks.find( &p_control );
 
-		if ( l_it != m_onSliderTracks.end() )
+		if ( it != m_onSliderTracks.end() )
 		{
-			m_onSliderTracks.erase( l_it );
+			m_onSliderTracks.erase( it );
 		}
 
-		l_it = m_onSliderReleases.find( &p_control );
+		it = m_onSliderReleases.find( &p_control );
 
-		if ( l_it != m_onSliderReleases.end() )
+		if ( it != m_onSliderReleases.end() )
 		{
-			m_onSliderReleases.erase( l_it );
+			m_onSliderReleases.erase( it );
 		}
 	}
 
@@ -258,47 +258,47 @@ namespace CastorGui
 			DoUpdate();
 		}
 
-		auto l_lock = make_unique_lock( m_mutexControls );
-		EventHandlerSPtr l_result;
-		auto l_it = m_controlsByZIndex.rbegin();
+		auto lock = make_unique_lock( m_mutexControls );
+		EventHandlerSPtr result;
+		auto it = m_controlsByZIndex.rbegin();
 
-		while ( !l_result && l_it != m_controlsByZIndex.rend() )
+		while ( !result && it != m_controlsByZIndex.rend() )
 		{
-			ControlSPtr l_control = *l_it;
+			ControlSPtr control = *it;
 
-			if ( l_control->CatchesMouseEvents()
-					&& l_control->GetAbsolutePosition().x() <= p_position.x()
-					&& l_control->GetAbsolutePosition().x() + int32_t( l_control->GetSize().width() ) > p_position.x()
-					&& l_control->GetAbsolutePosition().y() <= p_position.y()
-					&& l_control->GetAbsolutePosition().y() + int32_t( l_control->GetSize().height() ) > p_position.y()
+			if ( control->CatchesMouseEvents()
+					&& control->GetAbsolutePosition().x() <= p_position.x()
+					&& control->GetAbsolutePosition().x() + int32_t( control->GetSize().width() ) > p_position.x()
+					&& control->GetAbsolutePosition().y() <= p_position.y()
+					&& control->GetAbsolutePosition().y() + int32_t( control->GetSize().height() ) > p_position.y()
 			   )
 			{
-				l_result = l_control;
+				result = control;
 			}
 
-			++l_it;
+			++it;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void ControlsManager::DoUpdate()const
 	{
-		auto l_lock = make_unique_lock( m_mutexControls );
+		auto lock = make_unique_lock( m_mutexControls );
 		{
-			auto l_handlers = DoGetHandlers();
+			auto handlers = DoGetHandlers();
 
-			for ( auto l_handler : l_handlers )
+			for ( auto handler : handlers )
 			{
-				m_controlsByZIndex.push_back( std::static_pointer_cast< Control >( l_handler ) );
+				m_controlsByZIndex.push_back( std::static_pointer_cast< Control >( handler ) );
 			}
 		}
 
 		std::sort( m_controlsByZIndex.begin(), m_controlsByZIndex.end(), []( ControlSPtr p_a, ControlSPtr p_b )
 		{
-			uint64_t l_a = p_a->GetBackground()->GetIndex() + p_a->GetBackground()->GetLevel() * 1000;
-			uint64_t l_b = p_b->GetBackground()->GetIndex() + p_b->GetBackground()->GetLevel() * 1000;
-			return l_a < l_b;
+			uint64_t a = p_a->GetBackground()->GetIndex() + p_a->GetBackground()->GetLevel() * 1000;
+			uint64_t b = p_b->GetBackground()->GetIndex() + p_b->GetBackground()->GetLevel() * 1000;
+			return a < b;
 		} );
 	}
 
@@ -309,21 +309,21 @@ namespace CastorGui
 
 	void ControlsManager::DoRemoveControl( uint32_t p_id )
 	{
-		EventHandlerSPtr l_handler;
+		EventHandlerSPtr handler;
 		{
-			auto l_lock = make_unique_lock( m_mutexControls );
-			auto l_it = m_controlsById.find( p_id );
+			auto lock = make_unique_lock( m_mutexControls );
+			auto it = m_controlsById.find( p_id );
 
-			if ( l_it == m_controlsById.end() )
+			if ( it == m_controlsById.end() )
 			{
 				CASTOR_EXCEPTION( "This control does not exist in the manager." );
 			}
 
-			m_controlsById.erase( l_it );
-			l_handler = l_it->second.lock();
+			m_controlsById.erase( it );
+			handler = it->second.lock();
 		}
 
 		m_changed = true;
-		DoRemoveHandler( l_handler );
+		DoRemoveHandler( handler );
 	}
 }

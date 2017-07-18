@@ -37,32 +37,32 @@ void Projection::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 {
 	//m_uiNbFaces = p_faces[0];
 	//m_fDepth = p_dimensions[0];
-	//uint32_t l_uiNbElem = m_pPattern->GetSize();
-	//real l_fTotalDistance = 0.0;
-	//Point3r l_ptDiff;
-	//SubmeshSPtr l_submesh;
-	//real l_fDistanceToOrigin = 0.0;
-	//Point3r l_ptCurrentUV;
-	//Point3r l_ptPreviousUV;
-	//IdPoint3rPattern::PointerArray l_arrayPatterns;
-	//IdPoint3rPatternPtr l_pPreviousPattern = m_pPattern;
-	//IdPoint3rPatternPtr l_pPattern;
+	//uint32_t uiNbElem = m_pPattern->GetSize();
+	//real fTotalDistance = 0.0;
+	//Point3r ptDiff;
+	//SubmeshSPtr submesh;
+	//real fDistanceToOrigin = 0.0;
+	//Point3r ptCurrentUV;
+	//Point3r ptPreviousUV;
+	//IdPoint3rPattern::PointerArray arrayPatterns;
+	//IdPoint3rPatternPtr pPreviousPattern = m_pPattern;
+	//IdPoint3rPatternPtr pPattern;
 
-	//if (l_uiNbElem > 0)
+	//if (uiNbElem > 0)
 	//{
-	//	if (m_bClosed && m_pPattern->GetElement( 0 ).GetPoint() != m_pPattern->GetElement( l_uiNbElem - 1 ).GetPoint() )
+	//	if (m_bClosed && m_pPattern->GetElement( 0 ).GetPoint() != m_pPattern->GetElement( uiNbElem - 1 ).GetPoint() )
 	//	{
-	//		m_pPattern->AddElement( m_pPattern->GetElement( l_uiNbElem - 1), 0);
-	//		l_uiNbElem++;
+	//		m_pPattern->AddElement( m_pPattern->GetElement( uiNbElem - 1), 0);
+	//		uiNbElem++;
 	//	}
 
-	//	for (uint32_t i = 1; i < l_uiNbElem; i++)
+	//	for (uint32_t i = 1; i < uiNbElem; i++)
 	//	{
-	//		l_ptDiff = m_pPattern->GetElement( i ).GetPoint() - m_pPattern->GetElement( i - 1 ).GetPoint();
-	//		l_fTotalDistance += real( point::distance_squared( l_ptDiff ) );
+	//		ptDiff = m_pPattern->GetElement( i ).GetPoint() - m_pPattern->GetElement( i - 1 ).GetPoint();
+	//		fTotalDistance += real( point::distance_squared( ptDiff ) );
 	//	}
 
-	//	for( uint32_t i = 0; i < l_uiNbElem; i++ )
+	//	for( uint32_t i = 0; i < uiNbElem; i++ )
 	//	{
 	//		GetMesh()->CreateSubmesh();
 	//	}
@@ -75,36 +75,36 @@ void Projection::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	//	// Construction des faces
 	//	for (uint32_t j = 0; j < m_uiNbFaces; j++)
 	//	{
-	//		l_pPattern.reset( new IdPoint3rPattern);
+	//		pPattern.reset( new IdPoint3rPattern);
 
-	//		l_ptCurrentUV[1] = 0;
-	//		l_ptPreviousUV[1] = 0;
-	//		l_ptCurrentUV[0] = real( j + 1) / real( m_uiNbFaces);
+	//		ptCurrentUV[1] = 0;
+	//		ptPreviousUV[1] = 0;
+	//		ptCurrentUV[0] = real( j + 1) / real( m_uiNbFaces);
 
-	//		for (uint32_t i = 0; i < l_uiNbElem; i++)
+	//		for (uint32_t i = 0; i < uiNbElem; i++)
 	//		{
-	//			l_pPattern->AddElement( *l_submesh->AddPoint( l_pPreviousPattern->GetElement( i ).GetPoint() + m_vAxis ), i);
+	//			pPattern->AddElement( *submesh->AddPoint( pPreviousPattern->GetElement( i ).GetPoint() + m_vAxis ), i);
 	//		}
 
-	//		for (uint32_t i = 1; i < l_uiNbElem; i++)
+	//		for (uint32_t i = 1; i < uiNbElem; i++)
 	//		{
-	//			IdPoint3r const & l_ptV0 = l_pPreviousPattern->GetElement( i - 1);
-	//			IdPoint3r const & l_ptV1 = l_pPreviousPattern->GetElement( i);
-	//			IdPoint3r const & l_ptV2 = l_pPattern->GetElement( i);
-	//			IdPoint3r const & l_ptV3 = l_pPattern->GetElement( i - 1);
+	//			IdPoint3r const & ptV0 = pPreviousPattern->GetElement( i - 1);
+	//			IdPoint3r const & ptV1 = pPreviousPattern->GetElement( i);
+	//			IdPoint3r const & ptV2 = pPattern->GetElement( i);
+	//			IdPoint3r const & ptV3 = pPattern->GetElement( i - 1);
 
-	//			l_ptDiff = l_ptV1.GetPoint() - l_ptV0.GetPoint();
-	//			l_fDistanceToOrigin += real( point::distance_squared( l_ptDiff ) );
-	//			l_ptCurrentUV[1] = l_fDistanceToOrigin / l_fTotalDistance;
+	//			ptDiff = ptV1.GetPoint() - ptV0.GetPoint();
+	//			fDistanceToOrigin += real( point::distance_squared( ptDiff ) );
+	//			ptCurrentUV[1] = fDistanceToOrigin / fTotalDistance;
 
-	//			l_submesh->AddQuadFace( l_ptV0.GetIndex(), l_ptV1.GetIndex(), l_ptV2.GetIndex(), l_ptV3.GetIndex(), l_uiNbElem, l_ptPreviousUV, l_ptCurrentUV);
+	//			submesh->AddQuadFace( ptV0.GetIndex(), ptV1.GetIndex(), ptV2.GetIndex(), ptV3.GetIndex(), uiNbElem, ptPreviousUV, ptCurrentUV);
 
-	//			l_ptPreviousUV[1] = l_ptCurrentUV[1];
+	//			ptPreviousUV[1] = ptCurrentUV[1];
 	//		}
 
-	//		l_pPreviousPattern = l_pPattern;
-	//		l_arrayPatterns.push_back( l_pPattern);
-	//		l_ptPreviousUV[0] = l_ptCurrentUV[0];
+	//		pPreviousPattern = pPattern;
+	//		arrayPatterns.push_back( pPattern);
+	//		ptPreviousUV[0] = ptCurrentUV[0];
 	//	}
 	//}
 

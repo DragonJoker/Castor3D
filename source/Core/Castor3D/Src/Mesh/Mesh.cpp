@@ -12,80 +12,80 @@ namespace Castor3D
 {
 	bool BinaryWriter< Mesh >::DoWrite( Mesh const & p_obj )
 	{
-		bool l_result = true;
+		bool result = true;
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
-		for ( auto l_submesh : p_obj )
+		for ( auto submesh : p_obj )
 		{
-			l_result &= BinaryWriter< Submesh >{}.Write( *l_submesh, m_chunk );
+			result &= BinaryWriter< Submesh >{}.Write( *submesh, m_chunk );
 		}
 
-		if ( l_result && p_obj.m_skeleton )
+		if ( result && p_obj.m_skeleton )
 		{
-			l_result = BinaryWriter< Skeleton >{}.Write( *p_obj.m_skeleton, m_chunk );
+			result = BinaryWriter< Skeleton >{}.Write( *p_obj.m_skeleton, m_chunk );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< Mesh >::DoParse( Mesh & p_obj )
 	{
-		bool l_result = true;
-		SubmeshSPtr l_submesh;
-		SkeletonSPtr l_skeleton;
-		String l_name;
-		BinaryChunk l_chunk;
+		bool result = true;
+		SubmeshSPtr submesh;
+		SkeletonSPtr skeleton;
+		String name;
+		BinaryChunk chunk;
 
-		while ( l_result && DoGetSubChunk( l_chunk ) )
+		while ( result && DoGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.GetChunkType() )
 			{
 			case ChunkType::eName:
-				l_result = DoParseChunk( l_name, l_chunk );
+				result = DoParseChunk( name, chunk );
 
-				if ( l_result )
+				if ( result )
 				{
-					p_obj.m_name = l_name;
+					p_obj.m_name = name;
 				}
 
 				break;
 
 			case ChunkType::eSubmesh:
-				l_submesh = std::make_shared< Submesh >( *p_obj.GetScene(), p_obj, p_obj.GetSubmeshCount() );
-				l_result = BinaryParser< Submesh >{}.Parse( *l_submesh, l_chunk );
+				submesh = std::make_shared< Submesh >( *p_obj.GetScene(), p_obj, p_obj.GetSubmeshCount() );
+				result = BinaryParser< Submesh >{}.Parse( *submesh, chunk );
 
-				if ( l_result )
+				if ( result )
 				{
-					p_obj.m_submeshes.push_back( l_submesh );
+					p_obj.m_submeshes.push_back( submesh );
 				}
 
 				break;
 
 			case ChunkType::eSkeleton:
-				l_skeleton = std::make_shared< Skeleton >( *p_obj.GetScene() );
-				l_result = BinaryParser< Skeleton >{}.Parse( *l_skeleton, l_chunk );
+				skeleton = std::make_shared< Skeleton >( *p_obj.GetScene() );
+				result = BinaryParser< Skeleton >{}.Parse( *skeleton, chunk );
 
-				if ( l_result )
+				if ( result )
 				{
-					p_obj.SetSkeleton( l_skeleton );
+					p_obj.SetSkeleton( skeleton );
 				}
 
 				break;
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			p_obj.ComputeContainers();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -106,9 +106,9 @@ namespace Castor3D
 	{
 		Animable::CleanupAnimations();
 
-		for ( auto l_submesh : m_submeshes )
+		for ( auto submesh : m_submeshes )
 		{
-			l_submesh->Cleanup();
+			submesh->Cleanup();
 		}
 
 		m_submeshes.clear();
@@ -121,107 +121,107 @@ namespace Castor3D
 			return;
 		}
 
-		uint32_t l_count = GetSubmeshCount();
+		uint32_t count = GetSubmeshCount();
 
-		for ( uint32_t i = 0; i < l_count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
 			m_submeshes[i]->ComputeContainers();
 		}
 
-		Point3r l_min( m_submeshes[0]->GetCollisionBox().GetMin() );
-		Point3r l_max( m_submeshes[0]->GetCollisionBox().GetMax() );
+		Point3r min( m_submeshes[0]->GetCollisionBox().GetMin() );
+		Point3r max( m_submeshes[0]->GetCollisionBox().GetMax() );
 
-		for ( auto l_submesh : m_submeshes )
+		for ( auto submesh : m_submeshes )
 		{
-			CubeBox const & l_box = l_submesh->GetCollisionBox();
-			l_max[0] = std::max( l_box.GetMax()[0], l_max[0] );
-			l_max[1] = std::max( l_box.GetMax()[1], l_max[1] );
-			l_max[2] = std::max( l_box.GetMax()[2], l_max[2] );
-			l_min[0] = std::min( l_box.GetMin()[0], l_min[0] );
-			l_min[1] = std::min( l_box.GetMin()[1], l_min[1] );
-			l_min[2] = std::min( l_box.GetMin()[2], l_min[2] );
+			CubeBox const & box = submesh->GetCollisionBox();
+			max[0] = std::max( box.GetMax()[0], max[0] );
+			max[1] = std::max( box.GetMax()[1], max[1] );
+			max[2] = std::max( box.GetMax()[2], max[2] );
+			min[0] = std::min( box.GetMin()[0], min[0] );
+			min[1] = std::min( box.GetMin()[1], min[1] );
+			min[2] = std::min( box.GetMin()[2], min[2] );
 		}
 
-		m_box.Load( l_min, l_max );
+		m_box.Load( min, max );
 		m_sphere.Load( m_box );
 	}
 
 	uint32_t Mesh::GetFaceCount()const
 	{
-		uint32_t l_nbFaces = 0;
+		uint32_t nbFaces = 0;
 
-		for ( auto l_submesh : m_submeshes )
+		for ( auto submesh : m_submeshes )
 		{
-			l_nbFaces += l_submesh->GetFaceCount();
+			nbFaces += submesh->GetFaceCount();
 		}
 
-		return l_nbFaces;
+		return nbFaces;
 	}
 
 	uint32_t Mesh::GetVertexCount()const
 	{
-		uint32_t l_nbFaces = 0;
+		uint32_t nbFaces = 0;
 
-		for ( auto l_submesh : m_submeshes )
+		for ( auto submesh : m_submeshes )
 		{
-			l_nbFaces += l_submesh->GetPointsCount();
+			nbFaces += submesh->GetPointsCount();
 		}
 
-		return l_nbFaces;
+		return nbFaces;
 	}
 
 	SubmeshSPtr Mesh::GetSubmesh( uint32_t p_index )const
 	{
-		SubmeshSPtr l_result;
+		SubmeshSPtr result;
 
 		if ( p_index < m_submeshes.size() )
 		{
-			l_result = m_submeshes[p_index];
+			result = m_submeshes[p_index];
 		}
 
-		return l_result;
+		return result;
 	}
 
 	SubmeshSPtr Mesh::CreateSubmesh()
 	{
-		SubmeshSPtr l_submesh = std::make_shared< Submesh >( *GetScene(), *this, GetSubmeshCount() );
-		m_submeshes.push_back( l_submesh );
-		return l_submesh;
+		SubmeshSPtr submesh = std::make_shared< Submesh >( *GetScene(), *this, GetSubmeshCount() );
+		m_submeshes.push_back( submesh );
+		return submesh;
 	}
 
 	void Mesh::DeleteSubmesh( SubmeshSPtr & p_submesh )
 	{
-		auto l_it = std::find( m_submeshes.begin(), m_submeshes.end(), p_submesh );
+		auto it = std::find( m_submeshes.begin(), m_submeshes.end(), p_submesh );
 
-		if ( l_it != m_submeshes.end() )
+		if ( it != m_submeshes.end() )
 		{
-			m_submeshes.erase( l_it );
+			m_submeshes.erase( it );
 			p_submesh.reset();
-			l_it = m_submeshes.end();
+			it = m_submeshes.end();
 		}
 	}
 
 	void Mesh::ComputeNormals( bool p_reverted )
 	{
-		for ( auto l_submesh : m_submeshes )
+		for ( auto submesh : m_submeshes )
 		{
-			l_submesh->ComputeNormals( p_reverted );
+			submesh->ComputeNormals( p_reverted );
 		}
 	}
 
 	void Mesh::Ref( MaterialSPtr p_material )
 	{
-		for ( auto l_submesh : m_submeshes )
+		for ( auto submesh : m_submeshes )
 		{
-			l_submesh->Ref( p_material );
+			submesh->Ref( p_material );
 		}
 	}
 
 	void Mesh::UnRef( MaterialSPtr p_material )
 	{
-		for ( auto l_submesh : m_submeshes )
+		for ( auto submesh : m_submeshes )
 		{
-			l_submesh->UnRef( p_material );
+			submesh->UnRef( p_material );
 		}
 	}
 

@@ -43,18 +43,18 @@ namespace Castor3D
 		, m_program{ p_program }
 		, m_flags( p_flags )
 	{
-		auto l_textures = m_flags.m_textureFlags & uint16_t( TextureChannel::eAll );
+		auto textures = m_flags.m_textureFlags & uint16_t( TextureChannel::eAll );
 
-		while ( l_textures )
+		while ( textures )
 		{
 			m_textureCount++;
 
-			while ( !( l_textures & 0x01 ) )
+			while ( !( textures & 0x01 ) )
 			{
-				l_textures >>= 1;
+				textures >>= 1;
 			}
 
-			l_textures >>= 1;
+			textures >>= 1;
 		}
 
 		if ( m_program.HasObject( ShaderType::ePixel ) )

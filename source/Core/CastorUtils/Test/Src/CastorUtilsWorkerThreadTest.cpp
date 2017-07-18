@@ -26,88 +26,88 @@ namespace Testing
 
 	void CastorUtilsWorkerThreadTest::SingleThread()
 	{
-		constexpr size_t l_count = 1000000u;
-		WorkerThread l_worker;
-		CT_CHECK( l_worker.IsEnded() );
-		std::vector< size_t > l_data;
+		constexpr size_t count = 1000000u;
+		WorkerThread worker;
+		CT_CHECK( worker.IsEnded() );
+		std::vector< size_t > data;
 
-		l_worker.Feed( [&l_data, l_count]()
+		worker.Feed( [&data, count]()
 		{
-			while ( l_data.size() < l_count )
+			while ( data.size() < count )
 			{
-				l_data.push_back( l_data.size() );
+				data.push_back( data.size() );
 			}
 		} );
 
-		CT_CHECK( !l_worker.Wait( std::chrono::milliseconds( 1 ) ) );
-		CT_CHECK( !l_worker.IsEnded() );
-		CT_CHECK( l_worker.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( l_worker.IsEnded() );
-		CT_CHECK( l_data.size() == l_count );
+		CT_CHECK( !worker.Wait( std::chrono::milliseconds( 1 ) ) );
+		CT_CHECK( !worker.IsEnded() );
+		CT_CHECK( worker.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( worker.IsEnded() );
+		CT_CHECK( data.size() == count );
 	}
 
 	void CastorUtilsWorkerThreadTest::ProducerConsumer()
 	{
-		constexpr size_t l_count = 1000000u;
-		WorkerThread l_producer;
-		WorkerThread l_consumer;
-		std::atomic_int l_value{ 0 };
+		constexpr size_t count = 1000000u;
+		WorkerThread producer;
+		WorkerThread consumer;
+		std::atomic_int value{ 0 };
 
-		l_producer.Feed( [&l_value, &l_count]()
+		producer.Feed( [&value, &count]()
 		{
 			size_t i = 0;
 
-			while ( i++ < l_count )
+			while ( i++ < count )
 			{
-				l_value++;
+				value++;
 			}
 		} );
 
-		l_consumer.Feed( [&l_value, &l_count]()
+		consumer.Feed( [&value, &count]()
 		{
 			size_t i = 0;
 
-			while ( i++ < l_count )
+			while ( i++ < count )
 			{
-				l_value--;
+				value--;
 			}
 		} );
 
-		CT_CHECK( !l_producer.IsEnded() );
-		CT_CHECK( !l_consumer.IsEnded() );
-		CT_CHECK( l_producer.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( l_consumer.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( l_producer.IsEnded() );
-		CT_CHECK( l_consumer.IsEnded() );
-		CT_CHECK( l_value == 0 );
+		CT_CHECK( !producer.IsEnded() );
+		CT_CHECK( !consumer.IsEnded() );
+		CT_CHECK( producer.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( consumer.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( producer.IsEnded() );
+		CT_CHECK( consumer.IsEnded() );
+		CT_CHECK( value == 0 );
 	}
 
 	void CastorUtilsWorkerThreadTest::MultipleSameTask()
 	{
-		constexpr size_t l_count = 1000000u;
-		WorkerThread l_worker1;
-		WorkerThread l_worker2;
-		std::atomic_int l_value{ 0 };
+		constexpr size_t count = 1000000u;
+		WorkerThread worker1;
+		WorkerThread worker2;
+		std::atomic_int value{ 0 };
 
-		auto l_job = [&l_value, &l_count]()
+		auto job = [&value, &count]()
 		{
 			size_t i = 0;
 
-			while ( i++ < l_count )
+			while ( i++ < count )
 			{
-				l_value++;
+				value++;
 			}
 		};
 
-		l_worker1.Feed( l_job );
-		l_worker2.Feed( l_job );
+		worker1.Feed( job );
+		worker2.Feed( job );
 
-		CT_CHECK( !l_worker1.IsEnded() );
-		CT_CHECK( !l_worker2.IsEnded() );
-		CT_CHECK( l_worker1.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( l_worker2.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( l_worker1.IsEnded() );
-		CT_CHECK( l_worker2.IsEnded() );
-		CT_CHECK( l_value == l_count * 2 );
+		CT_CHECK( !worker1.IsEnded() );
+		CT_CHECK( !worker2.IsEnded() );
+		CT_CHECK( worker1.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( worker2.Wait( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( worker1.IsEnded() );
+		CT_CHECK( worker2.IsEnded() );
+		CT_CHECK( value == count * 2 );
 	}
 }

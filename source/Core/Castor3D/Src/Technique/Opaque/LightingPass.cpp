@@ -43,33 +43,33 @@ namespace Castor3D
 		, m_frameBuffer{ p_engine.GetRenderSystem()->CreateFrameBuffer() }
 	{
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eTransparentBlack ) );
-		bool l_result = m_frameBuffer->Create();
+		bool result = m_frameBuffer->Create();
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = m_frameBuffer->Initialise( p_size );
+			result = m_frameBuffer->Initialise( p_size );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGBA16F32F
 				, p_size );
-			l_texture->GetImage().InitialiseSource();
+			texture->GetImage().InitialiseSource();
 
 			m_result.SetIndex( 0u );
-			m_result.SetTexture( l_texture );
+			m_result.SetTexture( texture );
 			m_result.SetSampler( p_engine.GetLightsSampler() );
 			m_result.Initialise();
 
-			m_resultAttach = m_frameBuffer->CreateAttachment( l_texture );
+			m_resultAttach = m_frameBuffer->CreateAttachment( texture );
 
 			m_frameBuffer->Bind();
 			m_frameBuffer->Attach( AttachmentPoint::eColour
 				, m_resultAttach
-				, l_texture->GetType() );
+				, texture->GetType() );
 			ENSURE( m_frameBuffer->IsComplete() );
 			m_frameBuffer->SetDrawBuffers();
 			m_frameBuffer->Unbind();
@@ -99,14 +99,14 @@ namespace Castor3D
 				, p_depthAttach
 				, p_opaque.GetSpotShadowMap() );
 
-			for ( auto & l_lightPass : m_lightPass )
+			for ( auto & lightPass : m_lightPass )
 			{
-				l_lightPass->Initialise( p_scene, p_sceneUbo );
+				lightPass->Initialise( p_scene, p_sceneUbo );
 			}
 
-			for ( auto & l_lightPass : m_lightPassShadow )
+			for ( auto & lightPass : m_lightPassShadow )
 			{
-				l_lightPass->Initialise( p_scene, p_sceneUbo );
+				lightPass->Initialise( p_scene, p_sceneUbo );
 			}
 		}
 	}
@@ -121,16 +121,16 @@ namespace Castor3D
 		m_resultAttach.reset();
 		m_result.Cleanup();
 
-		for ( auto & l_lightPass : m_lightPass )
+		for ( auto & lightPass : m_lightPass )
 		{
-			l_lightPass->Cleanup();
-			l_lightPass.reset();
+			lightPass->Cleanup();
+			lightPass.reset();
 		}
 
-		for ( auto & l_lightPass : m_lightPassShadow )
+		for ( auto & lightPass : m_lightPassShadow )
 		{
-			l_lightPass->Cleanup();
-			l_lightPass.reset();
+			lightPass->Cleanup();
+			lightPass.reset();
 		}
 	}
 
@@ -141,13 +141,13 @@ namespace Castor3D
 		, Matrix4x4r const & p_invView
 		, Matrix4x4r const & p_invProj )
 	{
-		auto & l_cache = p_scene.GetLightCache();
+		auto & cache = p_scene.GetLightCache();
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eColour );
 
-		bool l_first{ true };
+		bool first{ true };
 
-		if ( !l_cache.IsEmpty() )
+		if ( !cache.IsEmpty() )
 		{
 #if !defined( NDEBUG )
 
@@ -155,7 +155,7 @@ namespace Castor3D
 
 #endif
 
-			auto l_lock = make_unique_lock( l_cache );
+			auto lock = make_unique_lock( cache );
 			DoRenderLights( p_scene
 				, p_camera
 				, LightType::eDirectional
@@ -163,7 +163,7 @@ namespace Castor3D
 				, p_invViewProj
 				, p_invView
 				, p_invProj
-				, l_first );
+				, first );
 			DoRenderLights( p_scene
 				, p_camera
 				, LightType::ePoint
@@ -171,7 +171,7 @@ namespace Castor3D
 				, p_invViewProj
 				, p_invView
 				, p_invProj
-				, l_first );
+				, first );
 			DoRenderLights( p_scene
 				, p_camera
 				, LightType::eSpot
@@ -179,11 +179,11 @@ namespace Castor3D
 				, p_invViewProj
 				, p_invView
 				, p_invProj
-				, l_first );
-			l_first = false;
+				, first );
+			first = false;
 		}
 
-		return l_first;
+		return first;
 	}
 
 	void LightingPass::DoRenderLights( Scene const & p_scene
@@ -195,20 +195,20 @@ namespace Castor3D
 		, Matrix4x4r const & p_invProj
 		, bool & p_first )
 	{
-		auto & l_cache = p_scene.GetLightCache();
+		auto & cache = p_scene.GetLightCache();
 
-		if ( l_cache.GetLightsCount( p_type ) )
+		if ( cache.GetLightsCount( p_type ) )
 		{
-			auto & l_lightPass = *m_lightPass[size_t( p_type )];
-			auto & l_lightPassShadow = *m_lightPassShadow[size_t( p_type )];
+			auto & lightPass = *m_lightPass[size_t( p_type )];
+			auto & lightPassShadow = *m_lightPassShadow[size_t( p_type )];
 
-			for ( auto & l_light : l_cache.GetLights( p_type ) )
+			for ( auto & light : cache.GetLights( p_type ) )
 			{
-				if ( l_light->IsShadowProducer() )
+				if ( light->IsShadowProducer() )
 				{
-					l_lightPassShadow.Render( m_size
+					lightPassShadow.Render( m_size
 						, p_gp
-						, *l_light
+						, *light
 						, p_camera
 						, p_invViewProj
 						, p_invView
@@ -217,9 +217,9 @@ namespace Castor3D
 				}
 				else
 				{
-					l_lightPass.Render( m_size
+					lightPass.Render( m_size
 						, p_gp
-						, *l_light
+						, *light
 						, p_camera
 						, p_invViewProj
 						, p_invView

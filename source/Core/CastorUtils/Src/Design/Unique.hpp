@@ -83,8 +83,8 @@ namespace Castor
 		 */
 		static inline T *& DoGetInstance()
 		{
-			static T * l_pInstance = nullptr;
-			return l_pInstance;
+			static T * pInstance = nullptr;
+			return pInstance;
 		}
 	};
 }

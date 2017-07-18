@@ -93,37 +93,37 @@ namespace GuiCommon
 		{
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				wxString l_names[Count];
+				wxString names[Count];
 
 				for ( size_t j = 0; j < Count; ++j )
 				{
-					l_names[j] << p_colNames[i] << wxT( "." ) << p_rowNames[j];
+					names[j] << p_colNames[i] << wxT( "." ) << p_rowNames[j];
 				}
 
-				wxPGProperty * l_property = new PointProperty< T, Count >( l_names, wxString() << _( "Col " ) << p_rowNames[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i].const_ptr() ) );
-				l_property->Enable( false );
-				p_prop->AddPrivateChild( l_property );
+				wxPGProperty * property = new PointProperty< T, Count >( names, wxString() << _( "Col " ) << p_rowNames[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i].const_ptr() ) );
+				property->Enable( false );
+				p_prop->AddPrivateChild( property );
 			}
 		}
 		static void RefreshChildren( MatrixProperty< T, Count > * p_prop )
 		{
-			Castor::SquareMatrix< T, Count > const & l_matrix = MatrixRefFromVariant< T, Count >( p_prop->GetValue() );
+			Castor::SquareMatrix< T, Count > const & matrix = MatrixRefFromVariant< T, Count >( p_prop->GetValue() );
 
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				wxVariant l_value = p_prop->Item( i )->GetValue();
-				SetVariantFromPoint< T, Count >( l_value, Castor::Point< T, Count >( l_matrix[i].const_ptr() ) );
-				p_prop->Item( i )->SetValue( l_value );
+				wxVariant value = p_prop->Item( i )->GetValue();
+				SetVariantFromPoint< T, Count >( value, Castor::Point< T, Count >( matrix[i].const_ptr() ) );
+				p_prop->Item( i )->SetValue( value );
 			}
 		}
 		static wxVariant ChildChanged( wxVariant & p_thisValue, int p_index, wxVariant & p_newValue )
 		{
-			Castor::SquareMatrix< T, Count > & l_matrix = MatrixRefFromVariant< T, Count >( p_thisValue );
-			Castor::Point< T, Count > const & l_row = PointRefFromVariant< T, Count >( p_newValue );
-			l_matrix.set_row( p_index, l_row );
-			wxVariant l_result;
-			l_result << l_matrix;
-			return l_result;
+			Castor::SquareMatrix< T, Count > & matrix = MatrixRefFromVariant< T, Count >( p_thisValue );
+			Castor::Point< T, Count > const & row = PointRefFromVariant< T, Count >( p_newValue );
+			matrix.set_row( p_index, row );
+			wxVariant result;
+			result << matrix;
+			return result;
 		}
 	};
 

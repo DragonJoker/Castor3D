@@ -28,11 +28,11 @@ namespace GLSL
 	template< typename Return, typename ... Params >
 	inline Return WriteFunctionCall( GlslWriter * p_writer, Castor::String const & p_name, Params const & ... p_params )
 	{
-		Return l_result( p_writer );
-		l_result.m_value << p_name;
-		Castor::String l_separator = cuT( "( " );
-		WriteFunctionCallRec( l_separator, l_result, p_params... );
-		return l_result;
+		Return result( p_writer );
+		result.m_value << p_name;
+		Castor::String separator = cuT( "( " );
+		WriteFunctionCallRec( separator, result, p_params... );
+		return result;
 	}
 
 	template< typename Return, typename OptType, typename ... Params >
@@ -68,19 +68,19 @@ namespace GLSL
 	template< typename Return, typename ... Params >
 	inline void WriteFunctionHeader( GlslWriter * p_writer, Castor::String const & p_name, Params && ... p_params )
 	{
-		Return l_result( p_writer );
-		l_result.m_value << l_result.m_type << cuT( " " ) << p_name;
-		Castor::String l_separator = cuT( "( " );
-		WriteFunctionHeaderRec( l_separator, l_result, std::forward< Params >( p_params )... );
-		WriteLine( *p_writer, Castor::String( l_result ) );
+		Return result( p_writer );
+		result.m_value << result.m_type << cuT( " " ) << p_name;
+		Castor::String separator = cuT( "( " );
+		WriteFunctionHeaderRec( separator, result, std::forward< Params >( p_params )... );
+		WriteLine( *p_writer, Castor::String( result ) );
 	}
 
 	template<>
 	inline void WriteFunctionHeader< void >( GlslWriter * p_writer, Castor::String const & p_name )
 	{
-		Void l_result( p_writer );
-		l_result.m_value << l_result.m_type << cuT( " " ) << p_name << cuT( "()" );
-		WriteLine( *p_writer, Castor::String( l_result ) );
+		Void result( p_writer );
+		result.m_value << result.m_type << cuT( " " ) << p_name << cuT( "()" );
+		WriteLine( *p_writer, Castor::String( result ) );
 	}
 
 	template< typename Return, typename ... Params >

@@ -29,33 +29,33 @@ namespace Castor3D
 
 	bool operator==( BufferDeclaration const & p_lhs, BufferDeclaration const & p_rhs )
 	{
-		bool l_result = p_lhs.stride() == p_rhs.stride() && p_lhs.size() == p_rhs.size();
-		auto l_itl = p_lhs.begin();
-		auto l_itr = p_rhs.begin();
+		bool result = p_lhs.stride() == p_rhs.stride() && p_lhs.size() == p_rhs.size();
+		auto itl = p_lhs.begin();
+		auto itr = p_rhs.begin();
 
-		while ( l_result && l_itl != p_lhs.end() )
+		while ( result && itl != p_lhs.end() )
 		{
-			l_result = *l_itl++ == *l_itr++;
-			++l_itl;
-			++l_itr;
+			result = *itl++ == *itr++;
+			++itl;
+			++itr;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool operator!=( BufferDeclaration const & p_lhs, BufferDeclaration const & p_rhs )
 	{
-		bool l_result = p_lhs.stride() != p_rhs.stride() || p_lhs.size() != p_rhs.size();
-		auto l_itl = p_lhs.begin();
-		auto l_itr = p_rhs.begin();
+		bool result = p_lhs.stride() != p_rhs.stride() || p_lhs.size() != p_rhs.size();
+		auto itl = p_lhs.begin();
+		auto itr = p_rhs.begin();
 
-		while ( !l_result && l_itl != p_lhs.end() )
+		while ( !result && itl != p_lhs.end() )
 		{
-			l_result = *l_itl++ != *l_itr++;
-			++l_itl;
-			++l_itr;
+			result = *itl++ != *itr++;
+			++itl;
+			++itr;
 		}
 
-		return l_result;
+		return result;
 	}
 }

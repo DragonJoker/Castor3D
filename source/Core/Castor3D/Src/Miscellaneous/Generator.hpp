@@ -67,7 +67,7 @@ namespace Castor3D
 			}
 			inline bool IsStopped()const
 			{
-				auto l_lock = Castor::make_unique_lock( m_mutex );
+				auto lock = Castor::make_unique_lock( m_mutex );
 				return m_bStopped;
 			}
 
@@ -77,7 +77,7 @@ namespace Castor3D
 			}
 			inline void Stop()
 			{
-				auto l_lock = Castor::make_unique_lock( m_mutex );
+				auto lock = Castor::make_unique_lock( m_mutex );
 				m_bStopped = true;
 			}
 			inline void SetRed( uint8_t val )
@@ -132,9 +132,9 @@ namespace Castor3D
 		template <class ThreadClass>
 		ThreadClass * CreateThread( int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour )
 		{
-			ThreadClass * l_pThread = new ThreadClass( this, m_arraySlaveThreads.size(), m_iWidth, iTop, iBottom, iTotalHeight, p_pxColour );
-			m_arraySlaveThreads.push_back( l_pThread );
-			return l_pThread;
+			ThreadClass * pThread = new ThreadClass( this, m_arraySlaveThreads.size(), m_iWidth, iTop, iBottom, iTotalHeight, p_pxColour );
+			m_arraySlaveThreads.push_back( pThread );
+			return pThread;
 		}
 
 		inline uint8_t GetRed()const

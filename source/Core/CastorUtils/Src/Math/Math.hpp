@@ -209,18 +209,18 @@ namespace Castor
 	template< typename T >
 	inline T clamp( T const & p_value, T const & p_min, T const & p_max )
 	{
-		T l_tReturn = p_value;
+		T tReturn = p_value;
 
 		if ( p_value < p_min )
 		{
-			l_tReturn = p_min;
+			tReturn = p_min;
 		}
 		else if ( p_value > p_max )
 		{
-			l_tReturn = p_max;
+			tReturn = p_max;
 		}
 
-		return l_tReturn;
+		return tReturn;
 	}
 	/**
 	 *\~english

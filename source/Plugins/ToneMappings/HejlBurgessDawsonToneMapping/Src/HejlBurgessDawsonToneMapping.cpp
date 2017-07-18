@@ -37,33 +37,33 @@ namespace HejlBurgessDawson
 
 	GLSL::Shader ToneMapping::DoCreate()
 	{
-		GLSL::Shader l_pxl;
+		GLSL::Shader pxl;
 		{
-			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+			auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, ToneMapping::HdrConfigUbo, HdrConfigUbo::BindingPoint };
-			auto c3d_exposure = l_config.DeclMember< Float >( ShaderProgram::Exposure );
-			l_config.End();
-			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+			Ubo config{ writer, ToneMapping::HdrConfigUbo, HdrConfigUbo::BindingPoint };
+			auto c3d_exposure = config.DeclMember< Float >( ShaderProgram::Exposure );
+			config.End();
+			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_hdrColor = l_writer.DeclLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
-				l_hdrColor *= vec3( c3d_exposure );
-				auto x = l_writer.DeclLocale( cuT( "x" ), max( l_hdrColor - 0.004_f, 0.0_f ) );
-				plx_v4FragColor = vec4( l_writer.Paren( x * l_writer.Paren( 6.2f * x + 0.5f ) )
-					/ l_writer.Paren( x * l_writer.Paren( 6.2f * x + 1.7f ) + 0.06f ), 1.0 );
+				auto hdrColor = writer.DeclLocale( cuT( "hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				hdrColor *= vec3( c3d_exposure );
+				auto x = writer.DeclLocale( cuT( "x" ), max( hdrColor - 0.004_f, 0.0_f ) );
+				plx_v4FragColor = vec4( writer.Paren( x * writer.Paren( 6.2f * x + 0.5f ) )
+					/ writer.Paren( x * writer.Paren( 6.2f * x + 1.7f ) + 0.06f ), 1.0 );
 			} );
 
-			l_pxl = l_writer.Finalise();
+			pxl = writer.Finalise();
 		}
 
-		return l_pxl;
+		return pxl;
 	}
 
 	void ToneMapping::DoDestroy()

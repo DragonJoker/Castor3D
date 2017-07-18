@@ -306,8 +306,8 @@ namespace Castor
 	inline FlagCombination< FlagType, Type > operator&( FlagCombination< FlagType, Type > const & p_lhs, FlagType const & p_rhs )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't apply binary AND on different size parameters" );
-		FlagCombination< FlagType, Type > l_result{ p_lhs };
-		return l_result &= p_rhs;
+		FlagCombination< FlagType, Type > result{ p_lhs };
+		return result &= p_rhs;
 	}
 	/**
 	 *\~english
@@ -323,8 +323,8 @@ namespace Castor
 	inline FlagCombination< FlagType, Type > operator|( FlagCombination< FlagType, Type > const & p_lhs, FlagType const & p_rhs )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type ), "Can't apply binary OR on different size parameters" );
-		FlagCombination< FlagType, Type > l_result{ p_lhs };
-		return l_result |= p_rhs;
+		FlagCombination< FlagType, Type > result{ p_lhs };
+		return result |= p_rhs;
 	}
 	/**
 	 *\~english

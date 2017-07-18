@@ -102,30 +102,30 @@ namespace GlRender
 		*/
 		inline bool Create( bool p_prebind = true )
 		{
-			bool l_result = IsValid();
+			bool result = IsValid();
 
-			if ( !l_result )
+			if ( !result )
 			{
-				l_result = ObjectType::DoCreate();
+				result = ObjectType::DoCreate();
 
-				if ( l_result && p_prebind )
+				if ( result && p_prebind )
 				{
-					if ( l_result )
+					if ( result )
 					{
 						Bind();
 						Unbind();
 					}
 
-					l_result = IsValid() && Validate();
+					result = IsValid() && Validate();
 
-					if ( !l_result )
+					if ( !result )
 					{
 						ObjectType::DoDestroy();
 					}
 				}
 			}
 
-			if ( l_result )
+			if ( result )
 			{
 				glTrack( GetOpenGl(), GetGlTypeName(), this );
 
@@ -136,7 +136,7 @@ namespace GlRender
 #endif
 			}
 
-			return l_result;
+			return result;
 		}
 
 		/** Binds the object on GPU

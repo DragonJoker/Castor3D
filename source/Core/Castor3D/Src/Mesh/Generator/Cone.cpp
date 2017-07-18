@@ -27,49 +27,49 @@ namespace Castor3D
 
 	void Cone::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		String l_param;
+		String param;
 
-		if ( p_parameters.Get( cuT( "faces" ), l_param ) )
+		if ( p_parameters.Get( cuT( "faces" ), param ) )
 		{
-			m_nbFaces = string::to_uint( l_param );
+			m_nbFaces = string::to_uint( param );
 		}
 
-		if ( p_parameters.Get( cuT( "radius" ), l_param ) )
+		if ( p_parameters.Get( cuT( "radius" ), param ) )
 		{
-			m_radius = string::to_float( l_param );
+			m_radius = string::to_float( param );
 		}
 
-		if ( p_parameters.Get( cuT( "height" ), l_param ) )
+		if ( p_parameters.Get( cuT( "height" ), param ) )
 		{
-			m_height = string::to_float( l_param );
+			m_height = string::to_float( param );
 		}
 
 		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< real >::epsilon() && m_radius > std::numeric_limits< real >::epsilon() )
 		{
-			Submesh & l_submeshBase	= *p_mesh.CreateSubmesh();
-			Submesh & l_submeshSide	= *p_mesh.CreateSubmesh();
+			Submesh & submeshBase	= *p_mesh.CreateSubmesh();
+			Submesh & submeshSide	= *p_mesh.CreateSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
 			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
 			uint32_t i = 0;
-			real l_rCos, l_rSin;
+			real rCos, rSin;
 
 			for ( real dAlphaI = 0; i <= m_nbFaces; dAlphaI += angleRotation )
 			{
-				l_rCos = cos( dAlphaI );
-				l_rSin = sin( dAlphaI );
+				rCos = cos( dAlphaI );
+				rSin = sin( dAlphaI );
 
 				if ( i < m_nbFaces )
 				{
-					Vertex::SetTexCoord( l_submeshBase.AddPoint( m_radius * l_rCos, 0.0, m_radius * l_rSin ), ( 1 + l_rCos ) / 2, ( 1 + l_rSin ) / 2 );
+					Vertex::SetTexCoord( submeshBase.AddPoint( m_radius * rCos, 0.0, m_radius * rSin ), ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 );
 				}
 
-				Vertex::SetTexCoord( l_submeshSide.AddPoint( m_radius * l_rCos, 0.0, m_radius * l_rSin ), real( i ) / m_nbFaces, real( 1.0 ) );
-				Vertex::SetTexCoord( l_submeshSide.AddPoint( real( 0 ), m_height, real( 0 ) ), real( i ) / m_nbFaces, real( 0.0 ) );
+				Vertex::SetTexCoord( submeshSide.AddPoint( m_radius * rCos, 0.0, m_radius * rSin ), real( i ) / m_nbFaces, real( 1.0 ) );
+				Vertex::SetTexCoord( submeshSide.AddPoint( real( 0 ), m_height, real( 0 ) ), real( i ) / m_nbFaces, real( 0.0 ) );
 				i++;
 			}
 
-			BufferElementGroupSPtr l_ptBottomCenter	= l_submeshBase.AddPoint( 0.0, 0.0, 0.0 );
-			Vertex( *l_ptBottomCenter ).SetTexCoord( 0.5, 0.5 );
+			BufferElementGroupSPtr ptBottomCenter	= submeshBase.AddPoint( 0.0, 0.0, 0.0 );
+			Vertex( *ptBottomCenter ).SetTexCoord( 0.5, 0.5 );
 
 			//RECONSTITION DES FACES
 			if ( m_height < 0 )
@@ -81,43 +81,43 @@ namespace Castor3D
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				l_submeshBase.AddFace( l_submeshBase[i]->GetIndex(), l_submeshBase[i + 1]->GetIndex(), l_ptBottomCenter->GetIndex() );
+				submeshBase.AddFace( submeshBase[i]->GetIndex(), submeshBase[i + 1]->GetIndex(), ptBottomCenter->GetIndex() );
 			}
 
 			//Composition du bas
-			l_submeshBase.AddFace( l_submeshBase[m_nbFaces - 1]->GetIndex(), l_submeshBase[0]->GetIndex(), l_ptBottomCenter->GetIndex() );
+			submeshBase.AddFace( submeshBase[m_nbFaces - 1]->GetIndex(), submeshBase[0]->GetIndex(), ptBottomCenter->GetIndex() );
 
 			//Composition des càtàs
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				l_submeshSide.AddFace( l_submeshSide[i + 0]->GetIndex(), l_submeshSide[i + 1]->GetIndex(), l_submeshSide[i + 2]->GetIndex() );
+				submeshSide.AddFace( submeshSide[i + 0]->GetIndex(), submeshSide[i + 1]->GetIndex(), submeshSide[i + 2]->GetIndex() );
 			}
 
 			ComputeNormals( p_mesh, true );
-			Coords3r l_ptNormal0Top;
-			Coords3r l_ptNormal0Base;
-			Coords3r l_ptTangent0Top;
-			Coords3r l_ptTangent0Base;
-			Coords3r l_ptNormal1Top;
-			Coords3r l_ptNormal1Base;
-			Coords3r l_ptTangent1Top;
-			Coords3r l_ptTangent1Base;
-			Vertex::GetNormal( l_submeshSide[0], l_ptNormal0Top );
-			Vertex::GetNormal( l_submeshSide[1], l_ptNormal0Base );
-			Vertex::GetTangent( l_submeshSide[0], l_ptTangent0Top );
-			Vertex::GetTangent( l_submeshSide[1], l_ptTangent0Base );
-			l_ptNormal0Top += Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptNormal1Top );
-			l_ptNormal0Base += Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptNormal1Base );
-			l_ptTangent0Top += Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptTangent1Top );
-			l_ptTangent0Base += Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptTangent1Base );
-			point::normalise( l_ptNormal0Top );
-			point::normalise( l_ptNormal0Base );
-			point::normalise( l_ptTangent0Top );
-			point::normalise( l_ptTangent0Base );
-			Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptNormal0Top );
-			Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptNormal0Base );
-			Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptTangent0Top );
-			Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptTangent0Base );
+			Coords3r ptNormal0Top;
+			Coords3r ptNormal0Base;
+			Coords3r ptTangent0Top;
+			Coords3r ptTangent0Base;
+			Coords3r ptNormal1Top;
+			Coords3r ptNormal1Base;
+			Coords3r ptTangent1Top;
+			Coords3r ptTangent1Base;
+			Vertex::GetNormal( submeshSide[0], ptNormal0Top );
+			Vertex::GetNormal( submeshSide[1], ptNormal0Base );
+			Vertex::GetTangent( submeshSide[0], ptTangent0Top );
+			Vertex::GetTangent( submeshSide[1], ptTangent0Base );
+			ptNormal0Top += Vertex::GetNormal( submeshSide[submeshSide.GetPointsCount() - 2], ptNormal1Top );
+			ptNormal0Base += Vertex::GetNormal( submeshSide[submeshSide.GetPointsCount() - 1], ptNormal1Base );
+			ptTangent0Top += Vertex::GetTangent( submeshSide[submeshSide.GetPointsCount() - 2], ptTangent1Top );
+			ptTangent0Base += Vertex::GetTangent( submeshSide[submeshSide.GetPointsCount() - 1], ptTangent1Base );
+			point::normalise( ptNormal0Top );
+			point::normalise( ptNormal0Base );
+			point::normalise( ptTangent0Top );
+			point::normalise( ptTangent0Base );
+			Vertex::GetNormal( submeshSide[submeshSide.GetPointsCount() - 2], ptNormal0Top );
+			Vertex::GetNormal( submeshSide[submeshSide.GetPointsCount() - 1], ptNormal0Base );
+			Vertex::GetTangent( submeshSide[submeshSide.GetPointsCount() - 2], ptTangent0Top );
+			Vertex::GetTangent( submeshSide[submeshSide.GetPointsCount() - 1], ptTangent0Base );
 		}
 	}
 }

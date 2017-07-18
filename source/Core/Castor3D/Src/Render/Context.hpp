@@ -283,8 +283,8 @@ namespace Castor3D
 			, RenderPipeline & p_pipeline
 			, MatrixUbo & p_matrixUbo )
 		{
-			static Castor::Position const l_position;
-			RenderTexture( l_position
+			static Castor::Position const position;
+			RenderTexture( position
 				, p_size
 				, p_texture
 				, p_pipeline
@@ -303,8 +303,8 @@ namespace Castor3D
 		inline void RenderTexture( Castor::Size const & p_size
 			, TextureLayout const & p_texture )
 		{
-			static Castor::Position const l_position;
-			RenderTexture( l_position
+			static Castor::Position const position;
+			RenderTexture( position
 				, p_size
 				, p_texture );
 		}
@@ -324,8 +324,8 @@ namespace Castor3D
 			, TextureLayout const & p_texture
 			, uint32_t p_index )
 		{
-			static Castor::Position const l_position;
-			RenderTexture( l_position
+			static Castor::Position const position;
+			RenderTexture( position
 				, p_size
 				, p_texture
 				, p_index );
@@ -343,8 +343,8 @@ namespace Castor3D
 		inline void RenderTextureCube( Castor::Size const & p_size
 			, TextureLayout const & p_texture )
 		{
-			static Castor::Position const l_position;
-			RenderTextureCube( l_position
+			static Castor::Position const position;
+			RenderTextureCube( position
 				, p_size
 				, p_texture );
 		}
@@ -361,8 +361,8 @@ namespace Castor3D
 		inline void RenderDepth( Castor::Size const & p_size
 			, TextureLayout const & p_texture )
 		{
-			static Castor::Position const l_position;
-			RenderDepth( l_position
+			static Castor::Position const position;
+			RenderDepth( position
 				, p_size
 				, p_texture );
 		}
@@ -382,8 +382,8 @@ namespace Castor3D
 			, TextureLayout const & p_texture
 			, uint32_t p_index )
 		{
-			static Castor::Position const l_position;
-			RenderDepth( l_position
+			static Castor::Position const position;
+			RenderDepth( position
 				, p_size
 				, p_texture
 				, p_index );
@@ -401,8 +401,8 @@ namespace Castor3D
 		inline void RenderDepthCube( Castor::Size const & p_size
 			, TextureLayout const & p_texture )
 		{
-			static Castor::Position const l_position;
-			RenderDepth( l_position
+			static Castor::Position const position;
+			RenderDepth( position
 				, p_size
 				, p_texture );
 		}
@@ -422,8 +422,8 @@ namespace Castor3D
 			, TextureLayout const & p_texture
 			, uint32_t p_index )
 		{
-			static Castor::Position const l_position;
-			RenderDepth( l_position
+			static Castor::Position const position;
+			RenderDepth( position
 				, p_size
 				, p_texture
 				, p_index );

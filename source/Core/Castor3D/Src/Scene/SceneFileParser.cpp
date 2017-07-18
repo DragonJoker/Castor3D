@@ -349,52 +349,52 @@ bool SceneFileParser::ParseFile( TextFile & p_file )
 
 bool SceneFileParser::ParseFile( Path const & p_pathFile )
 {
-	Path l_path = p_pathFile;
+	Path path = p_pathFile;
 
-	if ( l_path.GetExtension() == cuT( "zip" ) )
+	if ( path.GetExtension() == cuT( "zip" ) )
 	{
-		Castor::ZipArchive l_archive( l_path, File::OpenMode::eRead );
-		l_path = Engine::GetEngineDirectory() / p_pathFile.GetFileName();
+		Castor::ZipArchive archive( path, File::OpenMode::eRead );
+		path = Engine::GetEngineDirectory() / p_pathFile.GetFileName();
 
-		if ( File::DirectoryExists( l_path ) )
+		if ( File::DirectoryExists( path ) )
 		{
-			File::DirectoryDelete( l_path );
+			File::DirectoryDelete( path );
 		}
 
-		if ( l_archive.Inflate( l_path ) )
+		if ( archive.Inflate( path ) )
 		{
-			PathArray l_files;
+			PathArray files;
 
-			if ( File::ListDirectoryFiles( l_path, l_files, true ) )
+			if ( File::ListDirectoryFiles( path, files, true ) )
 			{
-				auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
+				auto it = std::find_if( files.begin(), files.end(), []( Path const & p_path )
 				{
-					auto l_fileName = p_path.GetFileName( true );
-					return l_fileName == cuT( "main.cscn" )
-						|| l_fileName == cuT( "scene.cscn" );
+					auto fileName = p_path.GetFileName( true );
+					return fileName == cuT( "main.cscn" )
+						|| fileName == cuT( "scene.cscn" );
 				} );
 
-				if ( l_it != l_files.end() )
+				if ( it != files.end() )
 				{
-					l_path = *l_it;
+					path = *it;
 				}
 				else
 				{
-					auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
+					auto it = std::find_if( files.begin(), files.end(), []( Path const & p_path )
 					{
 						return p_path.GetExtension() == cuT( "cscn" );
 					} );
 
-					if ( l_it != l_files.end() )
+					if ( it != files.end() )
 					{
-						l_path = *l_it;
+						path = *it;
 					}
 				}
 			}
 		}
 	}
 
-	return FileParser::ParseFile( l_path );
+	return FileParser::ParseFile( path );
 }
 
 bool SceneFileParser::ParseFile( Castor::Path const & p_pathFile, SceneFileContextSPtr p_context )
@@ -407,8 +407,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 {
 	if ( !m_context )
 	{
-		SceneFileContextSPtr l_context = std::make_shared< SceneFileContext >( this, &p_file );
-		m_context = l_context;
+		SceneFileContextSPtr context = std::make_shared< SceneFileContext >( this, &p_file );
+		m_context = context;
 	}
 
 	AddParser( uint32_t( CSCNSection::eRoot ), cuT( "mtl_file" ), Parser_RootMtlFile, { MakeParameter< ParameterType::ePath >() } );
@@ -677,14 +677,14 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eSsao ), cuT( "bias" ), Parser_SsaoBias, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::eSsao ), cuT( "}" ), Parser_SsaoEnd );
 
-	for ( auto const & l_it : GetEngine()->GetAdditionalParsers() )
+	for ( auto const & it : GetEngine()->GetAdditionalParsers() )
 	{
-		for ( auto const & l_itSections : l_it.second )
+		for ( auto const & itSections : it.second )
 		{
-			for ( auto const & l_itParsers : l_itSections.second )
+			for ( auto const & itParsers : itSections.second )
 			{
-				auto l_params = l_itParsers.second.m_params;
-				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.m_function, std::move( l_params ) );
+				auto params = itParsers.second.m_params;
+				AddParser( itSections.first, itParsers.first, itParsers.second.m_function, std::move( params ) );
 			}
 		}
 	}
@@ -692,15 +692,15 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 void SceneFileParser::DoCleanupParser()
 {
-	SceneFileContextSPtr l_context = std::static_pointer_cast< SceneFileContext >( m_context );
+	SceneFileContextSPtr context = std::static_pointer_cast< SceneFileContext >( m_context );
 	m_context.reset();
 
-	for ( ScenePtrStrMap::iterator l_it = l_context->mapScenes.begin(); l_it != l_context->mapScenes.end(); ++l_it )
+	for ( ScenePtrStrMap::iterator it = context->mapScenes.begin(); it != context->mapScenes.end(); ++it )
 	{
-		m_mapScenes.insert( std::make_pair( l_it->first,  l_it->second ) );
+		m_mapScenes.insert( std::make_pair( it->first,  it->second ) );
 	}
 
-	m_renderWindow = l_context->pWindow;
+	m_renderWindow = context->pWindow;
 }
 
 bool SceneFileParser::DoDiscardParser( String const & p_line )
@@ -715,7 +715,7 @@ void SceneFileParser::DoValidate()
 
 String SceneFileParser::DoGetSectionName( uint32_t p_section )
 {
-	String l_result;
+	String result;
 
 	switch ( CSCNSection( p_section ) )
 	{
@@ -723,140 +723,140 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		break;
 
 	case CSCNSection::eScene:
-		l_result = cuT( "scene" );
+		result = cuT( "scene" );
 		break;
 
 	case CSCNSection::eWindow:
-		l_result = cuT( "window" );
+		result = cuT( "window" );
 		break;
 
 	case CSCNSection::eSampler:
-		l_result = cuT( "sampler" );
+		result = cuT( "sampler" );
 		break;
 
 	case CSCNSection::eCamera:
-		l_result = cuT( "camera" );
+		result = cuT( "camera" );
 		break;
 
 	case CSCNSection::eViewport:
-		l_result = cuT( "viewport" );
+		result = cuT( "viewport" );
 		break;
 
 	case CSCNSection::eLight:
-		l_result = cuT( "light" );
+		result = cuT( "light" );
 		break;
 
 	case CSCNSection::eNode:
-		l_result = cuT( "scene_node" );
+		result = cuT( "scene_node" );
 		break;
 
 	case CSCNSection::eObject:
-		l_result = cuT( "object" );
+		result = cuT( "object" );
 		break;
 
 	case CSCNSection::eObjectMaterials:
-		l_result = cuT( "materials" );
+		result = cuT( "materials" );
 		break;
 
 	case CSCNSection::eFont:
-		l_result = cuT( "font" );
+		result = cuT( "font" );
 		break;
 
 	case CSCNSection::ePanelOverlay:
-		l_result = cuT( "panel_overlay" );
+		result = cuT( "panel_overlay" );
 		break;
 
 	case CSCNSection::eBorderPanelOverlay:
-		l_result = cuT( "border_panel_overlay" );
+		result = cuT( "border_panel_overlay" );
 		break;
 
 	case CSCNSection::eTextOverlay:
-		l_result = cuT( "text_overlay" );
+		result = cuT( "text_overlay" );
 		break;
 
 	case CSCNSection::eMesh:
-		l_result = cuT( "mesh" );
+		result = cuT( "mesh" );
 		break;
 
 	case CSCNSection::eSubmesh:
-		l_result = cuT( "submesh" );
+		result = cuT( "submesh" );
 		break;
 
 	case CSCNSection::eMaterial:
-		l_result = cuT( "material" );
+		result = cuT( "material" );
 		break;
 
 	case CSCNSection::ePass:
-		l_result = cuT( "pass" );
+		result = cuT( "pass" );
 		break;
 
 	case CSCNSection::eTextureUnit:
-		l_result = cuT( "texture_unit" );
+		result = cuT( "texture_unit" );
 		break;
 
 	case CSCNSection::eRenderTarget:
-		l_result = cuT( "render_target" );
+		result = cuT( "render_target" );
 		break;
 
 	case CSCNSection::eShaderProgram:
-		l_result = cuT( "gl_shader_program" );
+		result = cuT( "gl_shader_program" );
 		break;
 
 	case CSCNSection::eShaderObject:
-		l_result = cuT( "shader_object" );
+		result = cuT( "shader_object" );
 		break;
 
 	case CSCNSection::eShaderUBO:
-		l_result = cuT( "constants_buffer" );
+		result = cuT( "constants_buffer" );
 		break;
 
 	case CSCNSection::eUBOVariable:
-		l_result = cuT( "variable" );
+		result = cuT( "variable" );
 		break;
 
 	case CSCNSection::eBillboard:
-		l_result = cuT( "billboard" );
+		result = cuT( "billboard" );
 		break;
 
 	case CSCNSection::eBillboardList:
-		l_result = cuT( "positions" );
+		result = cuT( "positions" );
 		break;
 
 	case CSCNSection::eAnimGroup:
-		l_result = cuT( "animated_object_group" );
+		result = cuT( "animated_object_group" );
 		break;
 
 	case CSCNSection::eAnimation:
-		l_result = cuT( "animation" );
+		result = cuT( "animation" );
 		break;
 
 	case CSCNSection::eSkybox:
-		l_result = cuT( "skybox" );
+		result = cuT( "skybox" );
 		break;
 
 	case CSCNSection::eParticleSystem:
-		l_result = cuT( "particle_system" );
+		result = cuT( "particle_system" );
 		break;
 
 	case CSCNSection::eParticle:
-		l_result = cuT( "particle" );
+		result = cuT( "particle" );
 		break;
 
 	default:
-		for ( auto const & l_sections : GetEngine()->GetAdditionalSections() )
+		for ( auto const & sections : GetEngine()->GetAdditionalSections() )
 		{
-			if ( l_result.empty() )
+			if ( result.empty() )
 			{
-				auto l_it = l_sections.second.find( p_section );
+				auto it = sections.second.find( p_section );
 
-				if ( l_it != l_sections.second.end() )
+				if ( it != sections.second.end() )
 				{
-					l_result = l_it->second;
+					result = it->second;
 				}
 			}
 		}
 
-		if ( l_result.empty() )
+		if ( result.empty() )
 		{
 			FAILURE( "Section not found" );
 		}
@@ -864,7 +864,7 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		break;
 	}
 
-	return l_result;
+	return result;
 }
 
 //****************************************************************************************************

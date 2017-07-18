@@ -122,44 +122,44 @@ namespace Castor3D
 
 	void DepthPass::DoPrepareBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_backPipelines.find( p_flags );
+		auto it = m_backPipelines.find( p_flags );
 
-		if ( l_it == m_backPipelines.end() )
+		if ( it == m_backPipelines.end() )
 		{
-			DepthStencilState l_dsState;
-			l_dsState.SetDepthTest( true );
-			l_dsState.SetDepthMask( WritingMask::eAll );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eNone );
-			auto & l_pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
-					, std::move( l_rsState )
+			DepthStencilState dsState;
+			dsState.SetDepthTest( true );
+			dsState.SetDepthMask( WritingMask::eAll );
+			RasteriserState rsState;
+			rsState.SetCulledFaces( Culling::eNone );
+			auto & pipeline = *m_backPipelines.emplace( p_flags
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
+					, std::move( rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
 					, p_flags ) ).first->second;
 
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &l_pipeline, p_flags]()
+				, [this, &pipeline, p_flags]()
 			{
-				l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
-				l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
-				l_pipeline.AddUniformBuffer( m_modelUbo.GetUbo() );
+				pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+				pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+				pipeline.AddUniformBuffer( m_modelUbo.GetUbo() );
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 				{
-					l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
+					pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 				}
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
 					&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 				{
-					l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
+					pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 				}
 
 				if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 				{
-					l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
+					pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 				}
 			} ) );
 		}
@@ -171,56 +171,56 @@ namespace Castor3D
 		, bool p_invertNormals )const
 	{
 		using namespace GLSL;
-		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 		// Vertex inputs
-		auto position = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
-		auto bone_ids0 = l_writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = l_writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = l_writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto position = writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
+		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
 
-		UBO_MATRIX( l_writer );
-		UBO_MODEL_MATRIX( l_writer );
-		SkinningUbo::Declare( l_writer, p_programFlags );
-		UBO_MORPHING( l_writer, p_programFlags );
-		UBO_MODEL( l_writer );
+		UBO_MATRIX( writer );
+		UBO_MODEL_MATRIX( writer );
+		SkinningUbo::Declare( writer, p_programFlags );
+		UBO_MORPHING( writer, p_programFlags );
+		UBO_MODEL( writer );
 
 		// Outputs
-		auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-		std::function< void() > l_main = [&]()
+		std::function< void() > main = [&]()
 		{
-			auto l_v4Vertex = l_writer.DeclLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_mtxModel = l_writer.DeclLocale< Mat4 >( cuT( "l_mtxModel" ) );
+			auto v4Vertex = writer.DeclLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
+			auto mtxModel = writer.DeclLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
-				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
+				mtxModel = SkinningUbo::ComputeTransform( writer, p_programFlags );
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
-				l_mtxModel = transform;
+				mtxModel = transform;
 			}
 			else
 			{
-				l_mtxModel = c3d_mtxModel;
+				mtxModel = c3d_mtxModel;
 			}
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto l_time = l_writer.DeclLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
+				auto time = writer.DeclLocale( cuT( "time" ), 1.0_f - c3d_fTime );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
 			}
 
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			l_v4Vertex = c3d_mtxView * l_v4Vertex;
-			gl_Position = c3d_mtxProjection * l_v4Vertex;
+			v4Vertex = mtxModel * v4Vertex;
+			v4Vertex = c3d_mtxView * v4Vertex;
+			gl_Position = c3d_mtxProjection * v4Vertex;
 		};
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
+		writer.ImplementFunction< void >( cuT( "main" ), main );
+		return writer.Finalise();
 	}
 
 	GLSL::Shader DepthPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
@@ -269,12 +269,12 @@ namespace Castor3D
 		, ComparisonFunc p_alphaFunc )const
 	{
 		using namespace GLSL;
-		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		GlslWriter writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 		} );
 
-		return l_writer.Finalise();
+		return writer.Finalise();
 	}
 }

@@ -55,13 +55,13 @@ namespace Castor3D
 			explicit Static2DTextureSource( Engine & p_engine, PxBufferBaseSPtr p_buffer )
 				: StaticTextureSource{ p_engine }
 			{
-				Size l_size{ p_buffer->dimensions() };
-				uint32_t l_depth{ 1u };
+				Size size{ p_buffer->dimensions() };
+				uint32_t depth{ 1u };
 
-				if ( DoAdjustDimensions( l_size, l_depth ) )
+				if ( DoAdjustDimensions( size, depth ) )
 				{
-					Image l_img( cuT( "Tmp" ), *p_buffer );
-					m_buffer = l_img.Resample( l_size ).GetPixels();
+					Image img( cuT( "Tmp" ), *p_buffer );
+					m_buffer = img.Resample( size ).GetPixels();
 				}
 				else
 				{
@@ -96,27 +96,27 @@ namespace Castor3D
 			{
 				if ( File::FileExists( p_folder / p_relative ) )
 				{
-					String l_name{ p_relative.GetFileName() };
+					String name{ p_relative.GetFileName() };
 
-					if ( m_engine.GetImageCache().has( l_name ) )
+					if ( m_engine.GetImageCache().has( name ) )
 					{
-						auto l_image = m_engine.GetImageCache().find( l_name );
-						m_buffer = l_image->GetPixels();
+						auto image = m_engine.GetImageCache().find( name );
+						m_buffer = image->GetPixels();
 					}
 					else
 					{
-						auto l_image = m_engine.GetImageCache().Add( l_name, p_folder / p_relative );
-						auto l_buffer = l_image->GetPixels();
-						Size l_size{ l_buffer->dimensions() };
-						uint32_t l_depth{ 1u };
+						auto image = m_engine.GetImageCache().Add( name, p_folder / p_relative );
+						auto buffer = image->GetPixels();
+						Size size{ buffer->dimensions() };
+						uint32_t depth{ 1u };
 
-						if ( DoAdjustDimensions( l_size, l_depth ) )
+						if ( DoAdjustDimensions( size, depth ) )
 						{
-							m_buffer = l_image->Resample( l_size ).GetPixels();
+							m_buffer = image->Resample( size ).GetPixels();
 						}
 						else
 						{
-							m_buffer = l_buffer;
+							m_buffer = buffer;
 						}
 					}
 				}
@@ -155,12 +155,12 @@ namespace Castor3D
 				: StaticTextureSource{ p_engine }
 			{
 				m_depth = p_dimensions[2];
-				Size l_size{ p_dimensions[0], p_dimensions[1] };
+				Size size{ p_dimensions[0], p_dimensions[1] };
 
-				if ( DoAdjustDimensions( l_size, m_depth ) )
+				if ( DoAdjustDimensions( size, m_depth ) )
 				{
-					Image l_img( cuT( "Tmp" ), *p_buffer );
-					m_buffer = l_img.Resample( l_size ).GetPixels();
+					Image img( cuT( "Tmp" ), *p_buffer );
+					m_buffer = img.Resample( size ).GetPixels();
 				}
 				else
 				{
@@ -168,7 +168,7 @@ namespace Castor3D
 				}
 
 				m_format = m_buffer->format();
-				m_size = l_size;
+				m_size = size;
 			}
 
 			virtual uint32_t GetDepth()const
@@ -205,16 +205,16 @@ namespace Castor3D
 
 			bool Resize( Size const & p_size, uint32_t p_depth )
 			{
-				Size l_size{ p_size };
-				DoAdjustDimensions( l_size, p_depth );
-				bool l_result = m_size != p_size;
+				Size size{ p_size };
+				DoAdjustDimensions( size, p_depth );
+				bool result = m_size != p_size;
 
-				if ( l_result )
+				if ( result )
 				{
 					m_size = p_size;
 				}
 
-				return l_result;
+				return result;
 			}
 
 			inline PxBufferBaseSPtr GetBuffer()const
@@ -246,8 +246,8 @@ namespace Castor3D
 			Dynamic2DTextureSource( Engine & p_engine, Size const & p_dimensions, PixelFormat p_format )
 				: DynamicTextureSource{ p_engine, p_dimensions, p_format }
 			{
-				uint32_t l_depth{ 1u };
-				DoAdjustDimensions( m_size, l_depth );
+				uint32_t depth{ 1u };
+				DoAdjustDimensions( m_size, depth );
 			}
 
 			virtual uint32_t GetDepth()const
@@ -296,19 +296,19 @@ namespace Castor3D
 
 	bool TextureSource::DoAdjustDimensions( Castor::Size & p_size, uint32_t & p_depth )
 	{
-		bool l_result = false;
+		bool result = false;
 
 		if ( !m_engine.GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 		{
-			uint32_t l_depth{ GetNext2Pow( p_depth ) };
-			l_result = p_depth != l_depth;
-			p_depth = l_depth;
-			Size l_size{ GetNext2Pow( p_size.width() ), GetNext2Pow( p_size.height() ) };
-			l_result |= l_size != p_size;
+			uint32_t depth{ GetNext2Pow( p_depth ) };
+			result = p_depth != depth;
+			p_depth = depth;
+			Size size{ GetNext2Pow( p_size.width() ), GetNext2Pow( p_size.height() ) };
+			result |= size != p_size;
 		}
 
 		p_size[1] *= p_depth;
-		return l_result;
+		return result;
 	}
 
 	//*********************************************************************************************

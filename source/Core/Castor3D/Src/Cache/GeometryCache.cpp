@@ -74,7 +74,7 @@ namespace Castor3D
 	{
 		p_info.m_totalVertexCount += m_vertexCount;
 		p_info.m_totalFaceCount += m_faceCount;
-		auto l_lock = Castor::make_unique_lock( m_elements );
+		auto lock = Castor::make_unique_lock( m_elements );
 		p_info.m_totalObjectsCount += std::accumulate( m_elements.begin()
 			, m_elements.end()
 			, 0u

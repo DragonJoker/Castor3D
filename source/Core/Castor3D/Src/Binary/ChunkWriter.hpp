@@ -61,20 +61,20 @@ namespace Castor3D
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
 		{
-			bool l_result = true;
+			bool result = true;
 
 			try
 			{
-				BinaryChunk l_chunk{ p_type };
-				l_chunk.SetData( p_begin, p_end );
-				l_result = p_chunk.AddSubChunk( l_chunk );
+				BinaryChunk chunk{ p_type };
+				chunk.SetData( p_begin, p_end );
+				result = p_chunk.AddSubChunk( chunk );
 			}
 			catch ( ... )
 			{
-				l_result = false;
+				result = false;
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 	/*!
@@ -112,15 +112,15 @@ namespace Castor3D
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
 		{
-			std::vector< T > l_values{ p_begin, p_end };
+			std::vector< T > values{ p_begin, p_end };
 
-			for ( auto & l_value : l_values )
+			for ( auto & value : values )
 			{
-				PrepareChunkData( l_value );
+				PrepareChunkData( value );
 			}
 
-			return ChunkWriterBase::Write( reinterpret_cast< uint8_t const * >( l_values.data() )
-				, reinterpret_cast< uint8_t const * >( l_values.data() + l_values.size() )
+			return ChunkWriterBase::Write( reinterpret_cast< uint8_t const * >( values.data() )
+				, reinterpret_cast< uint8_t const * >( values.data() + values.size() )
 				, p_type
 				, p_chunk );
 		}
@@ -142,11 +142,11 @@ namespace Castor3D
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
 		{
-			auto l_value = p_value;
-			PrepareChunkData( l_value );
-			auto l_begin = GetBuffer( l_value );
-			auto l_end = l_begin + GetDataSize( l_value );
-			return ChunkWriterBase::Write( l_begin, l_end, p_type, p_chunk );
+			auto value = p_value;
+			PrepareChunkData( value );
+			auto begin = GetBuffer( value );
+			auto end = begin + GetDataSize( value );
+			return ChunkWriterBase::Write( begin, end, p_type, p_chunk );
 		}
 	};
 	/*!
@@ -181,20 +181,20 @@ namespace Castor3D
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
 		{
-			bool l_result = true;
+			bool result = true;
 
 			try
 			{
-				auto l_value = Castor::string::string_cast< char >( p_value );
-				auto l_buffer = reinterpret_cast< uint8_t const * >( l_value.data() );
-				ChunkWriterBase::Write( l_buffer, l_buffer + l_value.size(), p_type, p_chunk );
+				auto value = Castor::string::string_cast< char >( p_value );
+				auto buffer = reinterpret_cast< uint8_t const * >( value.data() );
+				ChunkWriterBase::Write( buffer, buffer + value.size(), p_type, p_chunk );
 			}
 			catch ( ... )
 			{
-				l_result = false;
+				result = false;
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 	/*!
@@ -229,20 +229,20 @@ namespace Castor3D
 			, ChunkType p_type
 			, BinaryChunk & p_chunk )
 		{
-			bool l_result = true;
+			bool result = true;
 
 			try
 			{
-				auto l_value = Castor::string::string_cast< char >( p_value );
-				auto l_buffer = reinterpret_cast< uint8_t const * >( l_value.data() );
-				ChunkWriterBase::Write( l_buffer, l_buffer + l_value.size(), p_type, p_chunk );
+				auto value = Castor::string::string_cast< char >( p_value );
+				auto buffer = reinterpret_cast< uint8_t const * >( value.data() );
+				ChunkWriterBase::Write( buffer, buffer + value.size(), p_type, p_chunk );
 			}
 			catch ( ... )
 			{
-				l_result = false;
+				result = false;
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 }

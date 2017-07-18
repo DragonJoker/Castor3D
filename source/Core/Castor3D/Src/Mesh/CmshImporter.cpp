@@ -28,7 +28,7 @@ namespace Castor3D
 
 	bool CmshImporter::DoImportMesh( Mesh & p_mesh )
 	{
-		BinaryFile l_file{ m_fileName, File::OpenMode::eRead };
-		return BinaryParser< Mesh >{}.Parse( p_mesh, l_file );
+		BinaryFile file{ m_fileName, File::OpenMode::eRead };
+		return BinaryParser< Mesh >{}.Parse( p_mesh, file );
 	}
 }

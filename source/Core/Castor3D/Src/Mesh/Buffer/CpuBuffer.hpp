@@ -403,9 +403,9 @@ namespace Castor3D
 			, BufferAccessNature p_nature )
 		{
 			REQUIRE( m_gpuBuffer );
-			bool l_result = m_gpuBuffer->Create();
+			bool result = m_gpuBuffer->Create();
 
-			if ( l_result )
+			if ( result )
 			{
 				m_gpuBuffer->InitialiseStorage( uint32_t( m_data.size() * sizeof( T ) )
 					, p_type
@@ -415,7 +415,7 @@ namespace Castor3D
 					, reinterpret_cast< uint8_t * >( m_data.data() ) );
 			}
 
-			return l_result;
+			return result;
 		}
 		/**
 		 *\~english

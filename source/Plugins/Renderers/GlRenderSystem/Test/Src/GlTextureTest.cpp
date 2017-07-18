@@ -31,37 +31,37 @@ namespace Testing
 			, AccessTypes const & p_cpuAccess
 			, AccessTypes const & p_gpuAccess )
 		{
-			auto & l_renderSystem = static_cast< GlRenderSystem & >( *p_engine.GetRenderSystem() );
-			l_renderSystem.GetMainContext()->SetCurrent();
-			auto l_texture = l_renderSystem.CreateTexture( p_type, p_cpuAccess, p_gpuAccess );
-			l_texture->SetSource( PxBufferBase::create( Size{ Width, Height }, Format ) );
-			l_texture->Initialise();
-			std::array< uint8_t, Width * Height * Bpp > l_src;
-			std::iota( l_src.begin(), l_src.end(), 0 );
-			p_case.Upload( *l_texture, ArrayView< uint8_t >{ l_src.data(), l_src.size() } );
+			auto & renderSystem = static_cast< GlRenderSystem & >( *p_engine.GetRenderSystem() );
+			renderSystem.GetMainContext()->SetCurrent();
+			auto texture = renderSystem.CreateTexture( p_type, p_cpuAccess, p_gpuAccess );
+			texture->SetSource( PxBufferBase::create( Size{ Width, Height }, Format ) );
+			texture->Initialise();
+			std::array< uint8_t, Width * Height * Bpp > src;
+			std::iota( src.begin(), src.end(), 0 );
+			p_case.Upload( *texture, ArrayView< uint8_t >{ src.data(), src.size() } );
 
-			if ( l_renderSystem.GetOpenGl().HasExtension( ARB_shader_image_load_store ) )
+			if ( renderSystem.GetOpenGl().HasExtension( ARB_shader_image_load_store ) )
 			{
-				l_renderSystem.GetOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
+				renderSystem.GetOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
 			}
 
-			l_renderSystem.GetMainContext()->SwapBuffers();
+			renderSystem.GetMainContext()->SwapBuffers();
 
-			std::vector< uint8_t > l_dst;
-			l_dst.resize( l_src.size() );
-			std::memset( l_texture->GetImage().GetBuffer()->ptr(), 0, l_texture->GetImage().GetBuffer()->size() );
-			p_case.Download( *l_texture, l_dst );
+			std::vector< uint8_t > dst;
+			dst.resize( src.size() );
+			std::memset( texture->GetImage().GetBuffer()->ptr(), 0, texture->GetImage().GetBuffer()->size() );
+			p_case.Download( *texture, dst );
 
-			if ( l_renderSystem.GetOpenGl().HasExtension( ARB_shader_image_load_store ) )
+			if ( renderSystem.GetOpenGl().HasExtension( ARB_shader_image_load_store ) )
 			{
-				l_renderSystem.GetOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
+				renderSystem.GetOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
 			}
 
-			l_renderSystem.GetMainContext()->SwapBuffers();
-			l_renderSystem.GetMainContext()->EndCurrent();
-			p_case.Compare( l_src, l_dst );
+			renderSystem.GetMainContext()->SwapBuffers();
+			renderSystem.GetMainContext()->EndCurrent();
+			p_case.Compare( src, dst );
 
-			l_texture->Cleanup();
+			texture->Cleanup();
 		}
 	}
 
@@ -116,17 +116,17 @@ namespace Testing
 
 	void GlTextureTest::Upload( TextureLayout & p_layout, ArrayView< uint8_t > const & p_view )
 	{
-		auto l_buffer = p_layout.Lock( AccessType::eWrite );
-		CT_REQUIRE( l_buffer );
-		std::memcpy( l_buffer, &p_view[0], p_view.size() );
+		auto buffer = p_layout.Lock( AccessType::eWrite );
+		CT_REQUIRE( buffer );
+		std::memcpy( buffer, &p_view[0], p_view.size() );
 		p_layout.Unlock( true );
 	}
 
 	void GlTextureTest::Download( TextureLayout & p_layout, std::vector< uint8_t > & p_dst )
 	{
-		auto l_buffer = p_layout.Lock( AccessType::eRead );
-		CT_REQUIRE( l_buffer );
-		std::memcpy( p_dst.data(), l_buffer, p_dst.size() );
+		auto buffer = p_layout.Lock( AccessType::eRead );
+		CT_REQUIRE( buffer );
+		std::memcpy( p_dst.data(), buffer, p_dst.size() );
 		p_layout.Unlock( true );
 	}
 

@@ -99,17 +99,17 @@ namespace GlRender
 		REQUIRE( p_count > 0 );
 		REQUIRE( m_allocatedSize >= p_count + p_offset );
 		Bind();
-		static auto const l_provider = BindableType::GetOpenGl().GetProvider();
+		static auto const provider = BindableType::GetOpenGl().GetProvider();
 
-		if ( l_provider == GlProvider::eNvidia || l_provider == GlProvider::eATI )
+		if ( provider == GlProvider::eNvidia || provider == GlProvider::eATI )
 		{
-			auto l_buffer = Lock( p_offset
+			auto buffer = Lock( p_offset
 				, p_count
 				, Castor3D::AccessType::eWrite );
 
-			if ( l_buffer )
+			if ( buffer )
 			{
-				std::memcpy( l_buffer, p_buffer, p_count );
+				std::memcpy( buffer, p_buffer, p_count );
 				Unlock();
 			}
 		}
@@ -132,13 +132,13 @@ namespace GlRender
 		REQUIRE( p_count > 0 );
 		REQUIRE( m_allocatedSize >= p_count + p_offset );
 		Bind();
-		auto l_buffer = Lock( p_offset
+		auto buffer = Lock( p_offset
 			, p_count
 			, Castor3D::AccessType::eRead );
 
-		if ( l_buffer )
+		if ( buffer )
 		{
-			std::memcpy( p_buffer, l_buffer, p_count );
+			std::memcpy( p_buffer, buffer, p_count );
 			Unlock();
 		}
 

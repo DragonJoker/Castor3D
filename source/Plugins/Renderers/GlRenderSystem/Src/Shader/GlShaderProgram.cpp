@@ -39,44 +39,44 @@ namespace GlRender
 
 	bool GlShaderProgram::Initialise()
 	{
-		bool l_result = true;
+		bool result = true;
 
 		if ( m_status != ProgramStatus::eLinked )
 		{
 			ObjectType::Create();
-			l_result = DoInitialise();
+			result = DoInitialise();
 
-			if ( l_result )
+			if ( result )
 			{
 				m_layout.Initialise( *this );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool GlShaderProgram::Link()
 	{
 		DoBindTransformLayout();
 		ENSURE( GetGlName() != GlInvalidIndex );
-		int l_attached = 0;
-		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eAttachedShaders, &l_attached );
-		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << l_attached );
+		int attached = 0;
+		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eAttachedShaders, &attached );
+		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << attached );
 		GetOpenGl().LinkProgram( GetGlName() );
-		int l_linked = 0;
-		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eLink, &l_linked );
-		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_linked );
+		int linked = 0;
+		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eLink, &linked );
+		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << linked );
 		m_linkerLog = DoRetrieveLinkerLog();
-		bool l_result = false;
+		bool result = false;
 
-		if ( l_linked && l_attached == int( m_activeShaders.size() ) && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
+		if ( linked && attached == int( m_activeShaders.size() ) && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
 		{
 			if ( !m_linkerLog.empty() )
 			{
 				Logger::LogWarning( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
 			}
 
-			l_result = DoLink();
+			result = DoLink();
 		}
 		else
 		{
@@ -85,7 +85,7 @@ namespace GlRender
 				Logger::LogError( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
 			}
 
-			if ( l_attached != int( m_activeShaders.size() ) )
+			if ( attached != int( m_activeShaders.size() ) )
 			{
 				Logger::LogError( cuT( "GlShaderProgram::Link - The linked shaders count doesn't match the active shaders count." ) );
 			}
@@ -93,7 +93,7 @@ namespace GlRender
 			m_status = ProgramStatus::eError;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void GlShaderProgram::Bind()const
@@ -112,20 +112,20 @@ namespace GlRender
 
 	int GlShaderProgram::GetAttributeLocation( String const & p_name )const
 	{
-		int l_iReturn = int( GlInvalidIndex );
+		int iReturn = int( GlInvalidIndex );
 
 		if ( GetGlName() != GlInvalidIndex && GetOpenGl().IsProgram( GetGlName() ) )
 		{
-			l_iReturn = GetOpenGl().GetAttribLocation( GetGlName(), string::string_cast< char >( p_name ).c_str() );
+			iReturn = GetOpenGl().GetAttribLocation( GetGlName(), string::string_cast< char >( p_name ).c_str() );
 		}
 
-		return l_iReturn;
+		return iReturn;
 	}
 
 	ShaderObjectSPtr GlShaderProgram::DoCreateObject( ShaderType p_type )
 	{
-		ShaderObjectSPtr l_result = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
-		return l_result;
+		ShaderObjectSPtr result = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
+		return result;
 	}
 
 	std::shared_ptr< PushUniform > GlShaderProgram::DoCreateUniform( UniformType p_type, int p_occurences )
@@ -338,46 +338,46 @@ namespace GlRender
 
 	String GlShaderProgram::DoRetrieveLinkerLog()
 	{
-		String l_log;
+		String log;
 
 		if ( GetGlName() == GlInvalidIndex )
 		{
-			l_log = GetOpenGl().GetGlslErrorString( 2 );
+			log = GetOpenGl().GetGlslErrorString( 2 );
 		}
 		else
 		{
-			int l_length = 0;
-			GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eInfoLogLength, &l_length );
+			int length = 0;
+			GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eInfoLogLength, &length );
 
-			if ( l_length > 1 )
+			if ( length > 1 )
 			{
-				std::vector< char > l_buffer( l_length );
-				int l_written = 0;
-				GetOpenGl().GetProgramInfoLog( GetGlName(), l_length, &l_written, l_buffer.data() );
+				std::vector< char > buffer( length );
+				int written = 0;
+				GetOpenGl().GetProgramInfoLog( GetGlName(), length, &written, buffer.data() );
 
-				if ( l_written > 0 )
+				if ( written > 0 )
 				{
-					l_log = string::string_cast< xchar >( l_buffer.data(), l_buffer.data() + l_written );
+					log = string::string_cast< xchar >( buffer.data(), buffer.data() + written );
 				}
 			}
 		}
 
-		return l_log;
+		return log;
 	}
 
 	void GlShaderProgram::DoBindTransformLayout()
 	{
 		if ( m_declaration.size() > 0 )
 		{
-			std::vector< char const * > l_varyings;
-			l_varyings.reserve( m_declaration.size() );
+			std::vector< char const * > varyings;
+			varyings.reserve( m_declaration.size() );
 
-			for ( auto & l_element : m_declaration )
+			for ( auto & element : m_declaration )
 			{
-				l_varyings.push_back( l_element.m_name.c_str() );
+				varyings.push_back( element.m_name.c_str() );
 			}
 
-			GetOpenGl().TransformFeedbackVaryings( GetGlName(), int( l_varyings.size() ), l_varyings.data(), GlAttributeLayout::eInterleaved );
+			GetOpenGl().TransformFeedbackVaryings( GetGlName(), int( varyings.size() ), varyings.data(), GlAttributeLayout::eInterleaved );
 		}
 	}
 }

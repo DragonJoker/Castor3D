@@ -13,20 +13,20 @@ namespace Castor3D
 
 	bool Viewport::TextWriter::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
-		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
+		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[size_t( p_viewport.GetType() )] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Viewport >::CheckError( l_result, "Viewport type" );
+			result = p_file.WriteText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[size_t( p_viewport.GetType() )] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Viewport >::CheckError( result, "Viewport type" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			if ( p_viewport.GetType() == ViewportType::eOrtho || p_viewport.GetType() == ViewportType::eFrustum )
 			{
-				l_result = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+				result = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tleft " ) + string::to_string( p_viewport.GetLeft() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tright " ) + string::to_string( p_viewport.GetRight() ) + cuT( "\n" ) ) > 0
@@ -35,21 +35,21 @@ namespace Castor3D
 			}
 			else
 			{
-				l_result = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+				result = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\taspect_ratio " ) + string::to_string( p_viewport.GetRatio() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
 			}
 
-			Castor::TextWriter< Viewport >::CheckError( l_result, "Viewport values" );
+			Castor::TextWriter< Viewport >::CheckError( result, "Viewport values" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -144,7 +144,7 @@ namespace Castor3D
 
 	bool Viewport::Update()
 	{
-		bool l_result = false;
+		bool result = false;
 
 		if ( IsModified() )
 		{
@@ -167,10 +167,10 @@ namespace Castor3D
 			}
 
 			m_modified = false;
-			l_result = true;
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Viewport::Apply()const
@@ -253,19 +253,19 @@ namespace Castor3D
 	void Viewport::DoComputeLookAt( Point3r const & p_eye, Point3r const & p_center, Point3r const & p_up )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
-		Point3r l_f( point::get_normalised( p_center - p_eye ) );
-		Point3r l_u( point::get_normalised( p_up ) );
-		Point3r l_s( point::get_normalised( l_f ^ l_u ) );
-		l_u = l_s ^ l_f;
+		Point3r f( point::get_normalised( p_center - p_eye ) );
+		Point3r u( point::get_normalised( p_up ) );
+		Point3r s( point::get_normalised( f ^ u ) );
+		u = s ^ f;
 		m_projection.set_identity();
-		m_projection[0][0] = l_s[0];
-		m_projection[0][1] = l_u[0];
-		m_projection[0][2] = -l_f[0];
-		m_projection[1][0] = l_s[1];
-		m_projection[1][1] = l_u[1];
-		m_projection[1][2] = -l_f[1];
-		m_projection[2][0] = l_s[2];
-		m_projection[2][1] = l_u[2];
-		m_projection[2][2] = -l_f[2];
+		m_projection[0][0] = s[0];
+		m_projection[0][1] = u[0];
+		m_projection[0][2] = -f[0];
+		m_projection[1][0] = s[1];
+		m_projection[1][1] = u[1];
+		m_projection[1][2] = -f[1];
+		m_projection[2][0] = s[2];
+		m_projection[2][1] = u[2];
+		m_projection[2][2] = -f[2];
 	}
 }

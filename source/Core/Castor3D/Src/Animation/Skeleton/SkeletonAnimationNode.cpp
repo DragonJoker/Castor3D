@@ -10,44 +10,44 @@ namespace Castor3D
 
 	bool BinaryWriter< SkeletonAnimationNode >::DoWrite( SkeletonAnimationNode const & p_obj )
 	{
-		bool l_result = true;
+		bool result = true;
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
+			result = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< SkeletonAnimationNode >::DoParse( SkeletonAnimationNode & p_obj )
 	{
-		bool l_result = true;
-		String l_name;
-		BinaryChunk l_chunk;
+		bool result = true;
+		String name;
+		BinaryChunk chunk;
 
-		while ( l_result && DoGetSubChunk( l_chunk ) )
+		while ( result && DoGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.GetChunkType() )
 			{
 			case ChunkType::eName:
-				l_result = DoParseChunk( p_obj.m_name, l_chunk );
+				result = DoParseChunk( p_obj.m_name, chunk );
 				break;
 
 			case ChunkType::eAnimationObject:
-				l_result = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, l_chunk );
+				result = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, chunk );
 				break;
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************

@@ -32,44 +32,44 @@ namespace Castor3D
 	bool MetallicRoughnessPbrPass::TextWriter::operator()( MetallicRoughnessPbrPass const & p_pass, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing MetallicRoughnessPbrPass " ) );
-		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
+		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.Print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
+			result = p_file.Print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
 					   && Colour::TextWriter( String() )( p_pass.GetAlbedo(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( l_result, "MetallicRoughnessPbrPass albedo" );
+			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( result, "MetallicRoughnessPbrPass albedo" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "\troughness " )
+			result = p_file.WriteText( m_tabs + cuT( "\troughness " )
 				+ string::to_string( p_pass.GetRoughness() )
 				+ cuT( "\n" ) ) > 0;
-			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( l_result, "MetallicRoughnessPbrPass roughness" );
+			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( result, "MetallicRoughnessPbrPass roughness" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "\tmetallic " )
+			result = p_file.WriteText( m_tabs + cuT( "\tmetallic " )
 				+ string::to_string( p_pass.GetMetallic() )
 				+ cuT( "\n" ) ) > 0;
-			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( l_result, "MetallicRoughnessPbrPass reflectance" );
+			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( result, "MetallicRoughnessPbrPass reflectance" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = Castor::TextWriter< Pass >{ m_tabs }( p_pass, p_file );
+			result = Castor::TextWriter< Pass >{ m_tabs }( p_pass, p_file );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*********************************************************************************************

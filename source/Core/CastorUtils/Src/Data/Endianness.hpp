@@ -77,9 +77,9 @@ namespace Castor
 	template< typename T >
 	inline T SwitchEndianness( T const & p_value )
 	{
-		T l_value{ p_value };
-		SwitchEndianness( l_value );
-		return l_value;
+		T value{ p_value };
+		SwitchEndianness( value );
+		return value;
 	}
 	/**
 	 *\~english
@@ -110,9 +110,9 @@ namespace Castor
 	template< typename T >
 	inline T SystemEndianToBigEndian( T const & p_value )
 	{
-		T l_value{ p_value };
-		SwitchEndianness( l_value );
-		return l_value;
+		T value{ p_value };
+		SwitchEndianness( value );
+		return value;
 	}
 	/**
 	 *\~english
@@ -127,9 +127,9 @@ namespace Castor
 	{
 		if ( !IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				SwitchEndianness( l_value );
+				SwitchEndianness( value );
 			}
 		}
 
@@ -146,17 +146,17 @@ namespace Castor
 	template< typename T, size_t N >
 	inline std::array< T, N > SystemEndianToBigEndian( std::array< T, N > const & p_value )
 	{
-		std::array< T, N > l_value{ p_value };
+		std::array< T, N > value{ p_value };
 
 		if ( !IsBigEndian() )
 		{
-			for ( auto & l_element : l_value )
+			for ( auto & element : value )
 			{
-				SwitchEndianness( l_element );
+				SwitchEndianness( element );
 			}
 		}
 
-		return l_value;
+		return value;
 	}
 	/**
 	 *\~english
@@ -171,9 +171,9 @@ namespace Castor
 	{
 		if ( !IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				SwitchEndianness( l_value );
+				SwitchEndianness( value );
 			}
 		}
 
@@ -190,17 +190,17 @@ namespace Castor
 	template< typename T >
 	inline std::vector< T > SystemEndianToBigEndian( std::vector< T > const & p_value )
 	{
-		std::vector< T > l_value{ p_value };
+		std::vector< T > value{ p_value };
 
 		if ( !IsBigEndian() )
 		{
-			for ( auto & l_element : l_value )
+			for ( auto & element : value )
 			{
-				SwitchEndianness( l_element );
+				SwitchEndianness( element );
 			}
 		}
 
-		return l_value;
+		return value;
 	}
 	/**
 	 *\~english
@@ -231,7 +231,7 @@ namespace Castor
 	template< typename T >
 	inline T BigEndianToSystemEndian( T const & p_value )
 	{
-		T l_value{ p_value };
+		T value{ p_value };
 		SwitchEndianness( p_value );
 		return p_value;
 	}
@@ -248,9 +248,9 @@ namespace Castor
 	{
 		if ( !IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				SwitchEndianness( l_value );
+				SwitchEndianness( value );
 			}
 		}
 
@@ -267,17 +267,17 @@ namespace Castor
 	template< typename T, size_t N >
 	inline std::array< T, N > BigEndianToSystemEndian( std::array< T, N > const & p_value )
 	{
-		std::array< T, N > l_value{ p_value };
+		std::array< T, N > value{ p_value };
 
 		if ( !IsBigEndian() )
 		{
-			for ( auto & l_element : l_value )
+			for ( auto & element : value )
 			{
-				SwitchEndianness( l_element );
+				SwitchEndianness( element );
 			}
 		}
 
-		return l_value;
+		return value;
 	}
 	/**
 	 *\~english
@@ -292,9 +292,9 @@ namespace Castor
 	{
 		if ( !IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				SwitchEndianness( l_value );
+				SwitchEndianness( value );
 			}
 		}
 
@@ -311,17 +311,17 @@ namespace Castor
 	template< typename T >
 	inline std::vector< T > BigEndianToSystemEndian( std::vector< T > const & p_value )
 	{
-		std::vector< T > l_value{ p_value };
+		std::vector< T > value{ p_value };
 
 		if ( !IsBigEndian() )
 		{
-			for ( auto & l_element : l_value )
+			for ( auto & element : value )
 			{
-				SwitchEndianness( l_element );
+				SwitchEndianness( element );
 			}
 		}
 
-		return l_value;
+		return value;
 	}
 }
 

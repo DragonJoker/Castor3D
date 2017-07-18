@@ -114,11 +114,11 @@ namespace Castor3D
 		 */
 		void ProcessEvents()
 		{
-			EventQueue l_queue = DoSwapQueue();
+			EventQueue queue = DoSwapQueue();
 
-			for ( auto const & l_eventPair : l_queue )
+			for ( auto const & eventPair : queue )
 			{
-				l_eventPair.second();
+				eventPair.second();
 			}
 		}
 
@@ -136,9 +136,9 @@ namespace Castor3D
 		 */
 		void PushEvent( MouseEvent const & p_event )
 		{
-			auto l_event = std::make_shared< MouseEvent >( p_event );
-			auto l_lock = Castor::make_unique_lock( m_mutex );
-			m_queue.push_back( { l_event, std::bind( &EventHandler::ProcessMouseEvent, this, l_event ) } );
+			auto event = std::make_shared< MouseEvent >( p_event );
+			auto lock = Castor::make_unique_lock( m_mutex );
+			m_queue.push_back( { event, std::bind( &EventHandler::ProcessMouseEvent, this, event ) } );
 		}
 		/**
 		 *\~english
@@ -169,9 +169,9 @@ namespace Castor3D
 		 */
 		void PushEvent( KeyboardEvent const & p_event )
 		{
-			auto l_event = std::make_shared< KeyboardEvent >( p_event );
-			auto l_lock = Castor::make_unique_lock( m_mutex );
-			m_queue.push_back( { l_event, std::bind( &EventHandler::ProcessKeyboardEvent, this, l_event ) } );
+			auto event = std::make_shared< KeyboardEvent >( p_event );
+			auto lock = Castor::make_unique_lock( m_mutex );
+			m_queue.push_back( { event, std::bind( &EventHandler::ProcessKeyboardEvent, this, event ) } );
 		}
 		/**
 		 *\~english
@@ -221,9 +221,9 @@ namespace Castor3D
 		 */
 		void PushEvent( HandlerEvent const & p_event )
 		{
-			auto l_event = std::make_shared< HandlerEvent >( p_event );
-			auto l_lock = Castor::make_unique_lock( m_mutex );
-			m_queue.push_back( { l_event, std::bind( &EventHandler::ProcessHandlerEvent, this, l_event ) } );
+			auto event = std::make_shared< HandlerEvent >( p_event );
+			auto lock = Castor::make_unique_lock( m_mutex );
+			m_queue.push_back( { event, std::bind( &EventHandler::ProcessHandlerEvent, this, event ) } );
 		}
 		/**
 		 *\~english
@@ -314,11 +314,11 @@ namespace Castor3D
 		*/
 		inline EventQueue DoSwapQueue()
 		{
-			EventQueue l_queue;
+			EventQueue queue;
 			m_mutex.lock();
-			std::swap( l_queue, m_queue );
+			std::swap( queue, m_queue );
 			m_mutex.unlock();
-			return l_queue;
+			return queue;
 		}
 		/**
 		 *\~english

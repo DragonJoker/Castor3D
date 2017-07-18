@@ -38,13 +38,13 @@ namespace Castor3D
 	{
 		VertexBufferSPtr DoCreateVbo( Engine & p_engine )
 		{
-			auto l_declaration = BufferDeclaration(
+			auto declaration = BufferDeclaration(
 			{
 				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 ),
 				BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 },
 			} );
 
-			float l_data[] =
+			float data[] =
 			{
 				0, 0, 0, 0,
 				1, 1, 1, 1,
@@ -54,138 +54,138 @@ namespace Castor3D
 				1, 1, 1, 1
 			};
 
-			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			auto l_vertexBuffer = std::make_shared< VertexBuffer >( p_engine, l_declaration );
-			uint32_t l_stride = l_declaration.stride();
-			l_vertexBuffer->Resize( uint32_t( sizeof( l_data ) ) );
-			uint8_t * l_buffer = l_vertexBuffer->GetData();
-			std::memcpy( l_buffer, l_data, sizeof( l_data ) );
-			l_vertexBuffer->Initialise( BufferAccessType::eStatic
+			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto vertexBuffer = std::make_shared< VertexBuffer >( p_engine, declaration );
+			uint32_t stride = declaration.stride();
+			vertexBuffer->Resize( uint32_t( sizeof( data ) ) );
+			uint8_t * buffer = vertexBuffer->GetData();
+			std::memcpy( buffer, data, sizeof( data ) );
+			vertexBuffer->Initialise( BufferAccessType::eStatic
 				, BufferAccessNature::eDraw );
-			return l_vertexBuffer;
+			return vertexBuffer;
 		}
 
 		GeometryBuffersSPtr DoCreateVao( Engine & p_engine
 			, ShaderProgram & p_program
 			, VertexBuffer & p_vbo )
 		{
-			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			auto l_result = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
+			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto result = renderSystem.CreateGeometryBuffers( Topology::eTriangles
 				, p_program );
-			l_result->Initialise( { p_vbo }, nullptr );
-			return l_result;
+			result->Initialise( { p_vbo }, nullptr );
+			return result;
 		}
 
 		GLSL::Shader DoGetVertexProgram( Engine & p_engine )
 		{
-			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *p_engine.GetRenderSystem();
 			using namespace GLSL;
-			auto l_writer = l_renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.CreateGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( l_writer );
-			auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
+			UBO_MATRIX( writer );
+			auto position = writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
 
 			// Shader outputs
-			auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			l_writer.ImplementFunction< void >( cuT( "main" )
+			writer.ImplementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					vtx_texture = texture;
 					gl_Position = c3d_mtxProjection * vec4( position, 0.0, 1.0 );
 				} );
-			return l_writer.Finalise();
+			return writer.Finalise();
 		}
 		
 		GLSL::Shader DoGetPixelProgram( Engine & p_engine
 			, GLSL::FogType p_fogType )
 		{
-			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *p_engine.GetRenderSystem();
 			using namespace GLSL;
-			auto l_writer = l_renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.CreateGlslWriter();
 
 			// Shader inputs
-			UBO_SCENE( l_writer );
-			UBO_GPINFO( l_writer );
-			auto c3d_mapDepth = l_writer.DeclUniform< Sampler2D >( GetTextureName( WbTexture::eDepth ) );
-			auto c3d_mapAccumulation = l_writer.DeclUniform< Sampler2D >( GetTextureName( WbTexture::eAccumulation ) );
-			auto c3d_mapRevealage = l_writer.DeclUniform< Sampler2D >( GetTextureName( WbTexture::eRevealage ) );
-			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_FragCoord = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			UBO_SCENE( writer );
+			UBO_GPINFO( writer );
+			auto c3d_mapDepth = writer.DeclUniform< Sampler2D >( GetTextureName( WbTexture::eDepth ) );
+			auto c3d_mapAccumulation = writer.DeclUniform< Sampler2D >( GetTextureName( WbTexture::eAccumulation ) );
+			auto c3d_mapRevealage = writer.DeclUniform< Sampler2D >( GetTextureName( WbTexture::eRevealage ) );
+			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_FragCoord = writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Shader outputs
-			auto pxl_fragColor = l_writer.DeclOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.DeclOutput< Vec4 >( cuT( "pxl_fragColor" ) );
 
-			GLSL::Utils l_utils{ l_writer };
-			l_utils.DeclareCalcVSPosition();
+			GLSL::Utils utils{ writer };
+			utils.DeclareCalcVSPosition();
 
-			GLSL::Fog l_fog{ p_fogType, l_writer };
+			GLSL::Fog fog{ p_fogType, writer };
 
-			auto l_maxComponent = l_writer.ImplementFunction< Float >( cuT( "maxComponent" )
+			auto maxComponent = writer.ImplementFunction< Float >( cuT( "maxComponent" )
 				, [&]( Vec3 const & v )
 			{
-				l_writer.Return( max( max( v.x(), v.y() ), v.z() ) );
-			}, InVec3{ &l_writer, cuT( "v" ) } );
+				writer.Return( max( max( v.x(), v.y() ), v.z() ) );
+			}, InVec3{ &writer, cuT( "v" ) } );
 
-			l_writer.ImplementFunction< Void >( cuT( "main" )
+			writer.ImplementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-				auto l_coord = l_writer.DeclLocale( cuT( "l_coord" )
+				auto coord = writer.DeclLocale( cuT( "coord" )
 					, ivec2( gl_FragCoord.xy() ) );
-					auto l_revealage = l_writer.DeclLocale( cuT( "l_revealage" )
-						, texelFetch( c3d_mapRevealage, l_coord, 0 ).r() );
+					auto revealage = writer.DeclLocale( cuT( "revealage" )
+						, texelFetch( c3d_mapRevealage, coord, 0 ).r() );
 
-					IF( l_writer, l_revealage == 1.0_f )
+					IF( writer, revealage == 1.0_f )
 					{
 						// Save the blending and color texture fetch cost
-						l_writer.Discard();
+						writer.Discard();
 					}
 					FI;
 
-					auto l_accum = l_writer.DeclLocale( cuT( "l_accum" )
-						, texelFetch( c3d_mapAccumulation, l_coord, 0 ) );
+					auto accum = writer.DeclLocale( cuT( "accum" )
+						, texelFetch( c3d_mapAccumulation, coord, 0 ) );
 
 					// Suppress overflow
-					IF( l_writer, GLSL::isinf( l_maxComponent( GLSL::abs( l_accum.rgb() ) ) ) )
+					IF( writer, GLSL::isinf( maxComponent( GLSL::abs( accum.rgb() ) ) ) )
 					{
-						l_accum.rgb() = vec3( l_accum.a() );
+						accum.rgb() = vec3( accum.a() );
 					}
 					FI;
 
-					auto l_averageColor = l_writer.DeclLocale( cuT( "l_averageColor" )
-						, l_accum.rgb() / max( l_accum.a(), 0.00001_f ) );
+					auto averageColor = writer.DeclLocale( cuT( "averageColor" )
+						, accum.rgb() / max( accum.a(), 0.00001_f ) );
 
-					pxl_fragColor = vec4( l_averageColor.rgb(), 1.0_f - l_revealage );
+					pxl_fragColor = vec4( averageColor.rgb(), 1.0_f - revealage );
 
 					if ( p_fogType != FogType::eDisabled )
 					{
-						auto l_position = l_writer.DeclLocale( cuT( "l_position" ), l_utils.CalcVSPosition( vtx_texture, c3d_mtxInvProj ) );
-						l_fog.ApplyFog( pxl_fragColor, length( l_position ), l_position.z() );
+						auto position = writer.DeclLocale( cuT( "position" ), utils.CalcVSPosition( vtx_texture, c3d_mtxInvProj ) );
+						fog.ApplyFog( pxl_fragColor, length( position ), position.z() );
 					}
 				} );
-			return l_writer.Finalise();
+			return writer.Finalise();
 		}
 		
 		ShaderProgramSPtr DoCreateProgram( Engine & p_engine
 			, GLSL::FogType p_fogType )
 		{
-			auto & l_renderSystem = *p_engine.GetRenderSystem();
-			auto l_vtx = DoGetVertexProgram( p_engine );
-			auto l_pxl = DoGetPixelProgram( p_engine, p_fogType );
-			ShaderProgramSPtr l_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->CreateObject( ShaderType::ePixel );
-			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eDepth ), ShaderType::ePixel )->SetValue( 0u );
-			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eAccumulation ), ShaderType::ePixel )->SetValue( 1u );
-			l_program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eRevealage ), ShaderType::ePixel )->SetValue( 2u );
+			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto vtx = DoGetVertexProgram( p_engine );
+			auto pxl = DoGetPixelProgram( p_engine, p_fogType );
+			ShaderProgramSPtr program = p_engine.GetShaderProgramCache().GetNewProgram( false );
+			program->CreateObject( ShaderType::eVertex );
+			program->CreateObject( ShaderType::ePixel );
+			program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eDepth ), ShaderType::ePixel )->SetValue( 0u );
+			program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eAccumulation ), ShaderType::ePixel )->SetValue( 1u );
+			program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eRevealage ), ShaderType::ePixel )->SetValue( 2u );
 
-			l_program->SetSource( ShaderType::eVertex, l_vtx );
-			l_program->SetSource( ShaderType::ePixel, l_pxl );
-			l_program->Initialise();
-			return l_program;
+			program->SetSource( ShaderType::eVertex, vtx );
+			program->SetSource( ShaderType::ePixel, pxl );
+			program->Initialise();
+			return program;
 		}
 
 		RenderPipelineUPtr DoCreateRenderPipeline( Engine & p_engine
@@ -194,25 +194,25 @@ namespace Castor3D
 			, SceneUbo & p_sceneUbo
 			, GpInfoUbo & p_gpInfoUbo )
 		{
-			DepthStencilState l_dsstate;
-			l_dsstate.SetDepthTest( false );
-			l_dsstate.SetDepthMask( WritingMask::eZero );
-			RasteriserState l_rsstate;
-			l_rsstate.SetCulledFaces( Culling::eNone );
-			BlendState l_bdState;
-			l_bdState.EnableBlend( true );
-			l_bdState.SetAlphaBlend( BlendOperation::eAdd, BlendOperand::eSrcAlpha, BlendOperand::eInvSrcAlpha );
-			l_bdState.SetRgbBlend( BlendOperation::eAdd, BlendOperand::eSrcAlpha, BlendOperand::eInvSrcAlpha );
-			auto l_pipeline = p_engine.GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate )
-				, std::move( l_rsstate )
-				, std::move( l_bdState )
+			DepthStencilState dsstate;
+			dsstate.SetDepthTest( false );
+			dsstate.SetDepthMask( WritingMask::eZero );
+			RasteriserState rsstate;
+			rsstate.SetCulledFaces( Culling::eNone );
+			BlendState bdState;
+			bdState.EnableBlend( true );
+			bdState.SetAlphaBlend( BlendOperation::eAdd, BlendOperand::eSrcAlpha, BlendOperand::eInvSrcAlpha );
+			bdState.SetRgbBlend( BlendOperation::eAdd, BlendOperand::eSrcAlpha, BlendOperand::eInvSrcAlpha );
+			auto pipeline = p_engine.GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
+				, std::move( rsstate )
+				, std::move( bdState )
 				, MultisampleState{}
 				, p_program
 				, PipelineFlags{} );
-			l_pipeline->AddUniformBuffer( p_matrixUbo.GetUbo() );
-			l_pipeline->AddUniformBuffer( p_sceneUbo.GetUbo() );
-			l_pipeline->AddUniformBuffer( p_gpInfoUbo.GetUbo() );
-			return l_pipeline;
+			pipeline->AddUniformBuffer( p_matrixUbo.GetUbo() );
+			pipeline->AddUniformBuffer( p_sceneUbo.GetUbo() );
+			pipeline->AddUniformBuffer( p_gpInfoUbo.GetUbo() );
+			return pipeline;
 		}
 	}
 
@@ -296,7 +296,7 @@ namespace Castor3D
 		p_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		p_frameBuffer.SetDrawBuffers();
 
-		auto & l_program = m_programs[size_t( p_fog.GetType() )];
+		auto & program = m_programs[size_t( p_fog.GetType() )];
 
 		m_viewport.Apply();
 		p_r[size_t( WbTexture::eDepth )]->GetTexture()->Bind( 0u );
@@ -305,7 +305,7 @@ namespace Castor3D
 		p_r[size_t( WbTexture::eAccumulation )]->GetSampler()->Bind( 1u );
 		p_r[size_t( WbTexture::eRevealage )]->GetTexture()->Bind( 2u );
 		p_r[size_t( WbTexture::eRevealage )]->GetSampler()->Bind( 2u );
-		l_program.Render();
+		program.Render();
 		p_r[size_t( WbTexture::eRevealage )]->GetTexture()->Unbind( 2u );
 		p_r[size_t( WbTexture::eRevealage )]->GetSampler()->Unbind( 2u );
 		p_r[size_t( WbTexture::eAccumulation )]->GetTexture()->Unbind( 1u );

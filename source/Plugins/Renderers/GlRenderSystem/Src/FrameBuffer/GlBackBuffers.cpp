@@ -55,11 +55,11 @@ namespace GlRender
 	void GlBackBuffers::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
 		REQUIRE( GetOpenGl().HasFbo() );
-		auto l_mode = GetOpenGl().Get( FrameBufferTarget::eRead );
-		GetOpenGl().BindFramebuffer( l_mode, 0 );
+		auto mode = GetOpenGl().Get( FrameBufferTarget::eRead );
+		GetOpenGl().BindFramebuffer( mode, 0 );
 		GetOpenGl().ReadBuffer( GlBufferBinding::eBack );
-		OpenGl::PixelFmt l_pxFmt = GetOpenGl().Get( p_buffer->format() );
-		GetOpenGl().ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
+		OpenGl::PixelFmt pxFmt = GetOpenGl().Get( p_buffer->format() );
+		GetOpenGl().ReadPixels( Position(), p_buffer->dimensions(), pxFmt.Format, pxFmt.Type, p_buffer->ptr() );
 	}
 
 	void GlBackBuffers::DoClear( BufferComponents p_targets )

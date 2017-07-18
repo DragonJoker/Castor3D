@@ -8,186 +8,186 @@ namespace Castor
 	{
 		bool is_integer( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
-			bool l_result = true;
+			bool result = true;
 
 			if ( ! p_strToTest.empty() )
 			{
-				l_result = ( p_strToTest[0] >= '0' && p_strToTest[0] <= '9' ) || p_strToTest[0] == '-';
+				result = ( p_strToTest[0] >= '0' && p_strToTest[0] <= '9' ) || p_strToTest[0] == '-';
 
-				for ( std::size_t i = 1; i < p_strToTest.size() && l_result; i++ )
+				for ( std::size_t i = 1; i < p_strToTest.size() && result; i++ )
 				{
-					l_result = p_strToTest[i] >= '0' && p_strToTest[i] <= '9';
+					result = p_strToTest[i] >= '0' && p_strToTest[i] <= '9';
 				}
 			}
 
-			return l_result;
+			return result;
 		}
 
 		bool is_floating( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
-			bool		l_result = false;
-			StringArray	l_arrayParts;
-			String		l_strText( p_strToTest );
-			std::size_t	l_nSize;
-			replace( l_strText, cuT( "," ), cuT( "." ) );
-			l_arrayParts = split( l_strText, cuT( "." ) );
-			l_nSize = l_arrayParts.size();
+			bool		result = false;
+			StringArray	arrayParts;
+			String		strText( p_strToTest );
+			std::size_t	nSize;
+			replace( strText, cuT( "," ), cuT( "." ) );
+			arrayParts = split( strText, cuT( "." ) );
+			nSize = arrayParts.size();
 
-			if ( l_nSize > 0 && l_nSize < 3 )
+			if ( nSize > 0 && nSize < 3 )
 			{
-				l_result = is_integer( l_arrayParts[0] );
+				result = is_integer( arrayParts[0] );
 
-				if ( l_result && l_nSize > 1 )
+				if ( result && nSize > 1 )
 				{
-					l_result = is_integer( l_arrayParts[1] );
+					result = is_integer( arrayParts[1] );
 				}
 			}
 
-			return l_result;
+			return result;
 		}
 
 		short to_short( String const & p_strToTest, std::locale const & p_locale )
 		{
-			short l_sReturn = 0;
+			short sReturn = 0;
 
 			if ( ! p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_sReturn, p_locale );
+				parse( p_strToTest, sReturn, p_locale );
 			}
 
-			return l_sReturn;
+			return sReturn;
 		}
 
 		int to_int( String const & p_strToTest, std::locale const & p_locale )
 		{
-			int l_iReturn = 0;
+			int iReturn = 0;
 
 			if ( ! p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_iReturn, p_locale );
+				parse( p_strToTest, iReturn, p_locale );
 			}
 
-			return l_iReturn;
+			return iReturn;
 		}
 
 		long to_long( String const & p_strToTest, std::locale const & p_locale )
 		{
-			long l_lReturn = 0;
+			long lReturn = 0;
 
 			if ( ! p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_lReturn, p_locale );
+				parse( p_strToTest, lReturn, p_locale );
 			}
 
-			return l_lReturn;
+			return lReturn;
 		}
 
 		long long to_long_long( String const & p_strToTest, std::locale const & p_locale )
 		{
-			long long l_llReturn = 0;
+			long long llReturn = 0;
 
 			if ( ! p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_llReturn, p_locale );
+				parse( p_strToTest, llReturn, p_locale );
 			}
 
-			return l_llReturn;
+			return llReturn;
 		}
 
 		unsigned short to_ushort( String const & p_strToTest, std::locale const & p_locale )
 		{
-			unsigned short l_sReturn = 0;
+			unsigned short sReturn = 0;
 
 			if ( !p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_sReturn, p_locale );
+				parse( p_strToTest, sReturn, p_locale );
 			}
 
-			return l_sReturn;
+			return sReturn;
 		}
 
 		unsigned int to_uint( String const & p_strToTest, std::locale const & p_locale )
 		{
-			unsigned int l_iReturn = 0;
+			unsigned int iReturn = 0;
 
 			if ( !p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_iReturn, p_locale );
+				parse( p_strToTest, iReturn, p_locale );
 			}
 
-			return l_iReturn;
+			return iReturn;
 		}
 
 		unsigned long to_ulong( String const & p_strToTest, std::locale const & p_locale )
 		{
-			unsigned long l_lReturn = 0;
+			unsigned long lReturn = 0;
 
 			if ( !p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_lReturn, p_locale );
+				parse( p_strToTest, lReturn, p_locale );
 			}
 
-			return l_lReturn;
+			return lReturn;
 		}
 
 		unsigned long long to_ulong_long( String const & p_strToTest, std::locale const & p_locale )
 		{
-			unsigned long long l_llReturn = 0;
+			unsigned long long llReturn = 0;
 
 			if ( !p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_llReturn, p_locale );
+				parse( p_strToTest, llReturn, p_locale );
 			}
 
-			return l_llReturn;
+			return llReturn;
 		}
 
 		float to_float( String const & p_strToTest, std::locale const & p_locale )
 		{
-			float l_fReturn = 0;
+			float fReturn = 0;
 
 			if ( ! p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_fReturn, p_locale );
+				parse( p_strToTest, fReturn, p_locale );
 			}
 
-			return l_fReturn;
+			return fReturn;
 		}
 
 		double to_double( String const & p_strToTest, std::locale const & p_locale )
 		{
-			double l_dReturn = 0;
+			double dReturn = 0;
 
 			if ( ! p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_dReturn, p_locale );
+				parse( p_strToTest, dReturn, p_locale );
 			}
 
-			return l_dReturn;
+			return dReturn;
 		}
 
 		long double to_long_double( String const & p_strToTest, std::locale const & p_locale )
 		{
-			long double l_ldReturn = 0;
+			long double ldReturn = 0;
 
 			if ( !p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_ldReturn, p_locale );
+				parse( p_strToTest, ldReturn, p_locale );
 			}
 
-			return l_ldReturn;
+			return ldReturn;
 		}
 
 		real to_real( String const & p_strToTest, std::locale const & p_locale )
 		{
-			real l_rReturn = 0;
+			real rReturn = 0;
 
 			if ( ! p_strToTest.empty() )
 			{
-				parse( p_strToTest, l_rReturn, p_locale );
+				parse( p_strToTest, rReturn, p_locale );
 			}
 
-			return l_rReturn;
+			return rReturn;
 		}
 
 		bool is_upper_case( String const & p_strToTest )
@@ -202,28 +202,28 @@ namespace Castor
 
 		String upper_case( String const & p_str )
 		{
-			String l_strReturn;
+			String strReturn;
 			std::locale loc;
 
 			for ( std::size_t i = 0; i < p_str.size(); i++ )
 			{
-				l_strReturn += std::toupper( p_str[i], loc );
+				strReturn += std::toupper( p_str[i], loc );
 			}
 
-			return l_strReturn;
+			return strReturn;
 		}
 
 		String lower_case( String const & p_str )
 		{
-			String l_strReturn;
+			String strReturn;
 			std::locale loc;
 
 			for ( std::size_t i = 0; i < p_str.size(); i++ )
 			{
-				l_strReturn += std::tolower( p_str[i], loc );
+				strReturn += std::tolower( p_str[i], loc );
 			}
 
-			return l_strReturn;
+			return strReturn;
 		}
 
 		String & to_upper_case( String & p_str )
@@ -240,66 +240,66 @@ namespace Castor
 
 		StringArray split( String const & p_str, String const & p_delims, uint32_t p_maxSplits, bool p_bKeepVoid )
 		{
-			StringArray	l_arrayReturn;
+			StringArray	arrayReturn;
 
 			if ( !p_str.empty() && !p_delims.empty() && p_maxSplits > 0 )
 			{
-				l_arrayReturn.reserve( p_maxSplits + 1 );
-				std::size_t	l_pos = 0;
-				std::size_t	l_start = 0;
+				arrayReturn.reserve( p_maxSplits + 1 );
+				std::size_t	pos = 0;
+				std::size_t	start = 0;
 
 				do
 				{
-					l_pos = p_str.find_first_of( p_delims, l_start );
+					pos = p_str.find_first_of( p_delims, start );
 
-					if ( l_pos == l_start )
+					if ( pos == start )
 					{
-						l_start = l_pos + 1;
+						start = pos + 1;
 
 						if ( p_bKeepVoid )
 						{
-							l_arrayReturn.push_back( String() );
+							arrayReturn.push_back( String() );
 						}
 					}
-					else if ( l_pos == std::string::npos || l_arrayReturn.size() == p_maxSplits )
+					else if ( pos == std::string::npos || arrayReturn.size() == p_maxSplits )
 					{
-						String remnants = p_str.substr( l_start );
+						String remnants = p_str.substr( start );
 
 						if ( !remnants.empty() || p_bKeepVoid )
 						{
-							l_arrayReturn.push_back( remnants );
+							arrayReturn.push_back( remnants );
 						}
 
-						l_pos = String::npos;
+						pos = String::npos;
 					}
 					else
 					{
-						l_arrayReturn.push_back( p_str.substr( l_start, l_pos - l_start ) );
-						l_start = l_pos + 1;
+						arrayReturn.push_back( p_str.substr( start, pos - start ) );
+						start = pos + 1;
 					}
 
 				}
-				while ( l_pos != std::string::npos );
+				while ( pos != std::string::npos );
 			}
 
-			return l_arrayReturn;
+			return arrayReturn;
 		}
 
 		String & trim( String & p_str, bool p_bLeft, bool p_bRight )
 		{
 			if ( p_str.size() > 0 )
 			{
-				std::size_t l_index;
+				std::size_t index;
 
 				if ( p_bLeft )
 				{
-					l_index = p_str.find_first_not_of( cuT( " \t\r" ) );
+					index = p_str.find_first_not_of( cuT( " \t\r" ) );
 
-					if ( l_index > 0 )
+					if ( index > 0 )
 					{
-						if ( l_index != String::npos )
+						if ( index != String::npos )
 						{
-							p_str = p_str.substr( l_index, String::npos );
+							p_str = p_str.substr( index, String::npos );
 						}
 						else
 						{
@@ -310,13 +310,13 @@ namespace Castor
 
 				if ( p_bRight && p_str.size() > 0 )
 				{
-					l_index = p_str.find_last_not_of( cuT( " \t\r" ) );
+					index = p_str.find_last_not_of( cuT( " \t\r" ) );
 
-					if ( l_index < p_str.size() - 1 )
+					if ( index < p_str.size() - 1 )
 					{
-						if ( l_index != String::npos )
+						if ( index != String::npos )
 						{
-							p_str = p_str.substr( 0, l_index + 1 );
+							p_str = p_str.substr( 0, index + 1 );
 						}
 						else
 						{
@@ -331,43 +331,43 @@ namespace Castor
 
 		String & replace( String & p_str, xchar p_find, xchar p_replaced )
 		{
-			xchar l_szFind[2] = { p_find, cuT( '\0' ) };
-			xchar l_szReplaced[2] = { p_replaced, cuT( '\0' ) };
-			return replace( p_str, l_szFind, l_szReplaced );
+			xchar szFind[2] = { p_find, cuT( '\0' ) };
+			xchar szReplaced[2] = { p_replaced, cuT( '\0' ) };
+			return replace( p_str, szFind, szReplaced );
 		}
 
 		String & replace( String & p_str, String const & p_find, xchar p_replaced )
 		{
-			xchar l_szReplaced[2] = { p_replaced, cuT( '\0' ) };
-			return replace( p_str, p_find, l_szReplaced );
+			xchar szReplaced[2] = { p_replaced, cuT( '\0' ) };
+			return replace( p_str, p_find, szReplaced );
 		}
 
 		String & replace( String & p_str, xchar p_find, String const & p_replaced )
 		{
-			xchar l_szFind[2] = { p_find, cuT( '\0' ) };
-			return replace( p_str, l_szFind, p_replaced );
+			xchar szFind[2] = { p_find, cuT( '\0' ) };
+			return replace( p_str, szFind, p_replaced );
 		}
 
 		String & replace( String & p_str, String const & p_find, String const & p_replaced )
 		{
-			String l_temp;
-			String l_result;
-			std::size_t l_currentPos = 0;
-			std::size_t l_pos = 0;
+			String temp;
+			String result;
+			std::size_t currentPos = 0;
+			std::size_t pos = 0;
 
-			while ( ( l_pos = p_str.find( p_find, l_currentPos ) ) != String::npos )
+			while ( ( pos = p_str.find( p_find, currentPos ) ) != String::npos )
 			{
-				l_result.append( p_str.substr( l_currentPos, l_pos - l_currentPos ) );
-				l_result.append( p_replaced );
-				l_currentPos = l_pos + p_find.size();
+				result.append( p_str.substr( currentPos, pos - currentPos ) );
+				result.append( p_replaced );
+				currentPos = pos + p_find.size();
 			}
 
-			if ( l_currentPos != p_str.size() )
+			if ( currentPos != p_str.size() )
 			{
-				l_result.append( p_str.substr( l_currentPos, l_pos - l_currentPos ) );
+				result.append( p_str.substr( currentPos, pos - currentPos ) );
 			}
 
-			p_str = l_result;
+			p_str = result;
 			return p_str;
 		}
 	}

@@ -24,25 +24,25 @@ namespace Castor3D
 		m_colourTexture.SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eA8R8G8B8, p_size );
+		auto colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eA8R8G8B8, p_size );
 
 		m_colourTexture.SetSampler( p_sampler );
-		l_colourTexture->GetImage().InitialiseSource();
-		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
+		colourTexture->GetImage().InitialiseSource();
+		m_colourAttach = m_fbo->CreateAttachment( colourTexture );
 
 		m_fbo->Create();
-		m_colourTexture.SetTexture( l_colourTexture );
+		m_colourTexture.SetTexture( colourTexture );
 		m_colourTexture.Initialise();
 		m_fbo->Initialise( p_size );
 		m_fbo->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 
 		m_fbo->Bind();
-		m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, l_colourTexture->GetType() );
+		m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, colourTexture->GetType() );
 		m_fbo->SetDrawBuffer( m_colourAttach );
-		bool l_result = m_fbo->IsComplete();
+		bool result = m_fbo->IsComplete();
 		m_fbo->Unbind();
 
-		return l_result;
+		return result;
 	}
 
 	void PostEffect::PostEffectSurface::Cleanup()

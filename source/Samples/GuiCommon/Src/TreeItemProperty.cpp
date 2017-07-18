@@ -48,18 +48,18 @@ namespace GuiCommon
 
 	wxEnumProperty * TreeItemProperty::DoCreateMaterialProperty( wxString const & p_name )
 	{
-		wxEnumProperty * l_material = new wxEnumProperty( p_name );
-		auto & l_cache = m_engine->GetMaterialCache();
-		wxPGChoices l_choices;
-		auto l_lock = make_unique_lock( l_cache );
+		wxEnumProperty * material = new wxEnumProperty( p_name );
+		auto & cache = m_engine->GetMaterialCache();
+		wxPGChoices choices;
+		auto lock = make_unique_lock( cache );
 
-		for ( auto l_pair : l_cache )
+		for ( auto pair : cache )
 		{
-			l_choices.Add( l_pair.first );
+			choices.Add( pair.first );
 		}
 
-		l_material->SetChoices( l_choices );
-		return l_material;
+		material->SetChoices( choices );
+		return material;
 	}
 
 	void TreeItemProperty::DoApplyChange( std::function< void() > p_functor )

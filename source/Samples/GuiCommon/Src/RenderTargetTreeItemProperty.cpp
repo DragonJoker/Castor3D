@@ -30,9 +30,9 @@ namespace GuiCommon
 
 	void RenderTargetTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		RenderTargetSPtr l_target = GetRenderTarget();
+		RenderTargetSPtr target = GetRenderTarget();
 
-		if ( l_target )
+		if ( target )
 		{
 			wxString TARGETS[] =
 			{
@@ -40,16 +40,16 @@ namespace GuiCommon
 				_( "Texture" )
 			};
 
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( l_target->GetTargetType() )] ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target->GetTargetType() )] ) );
 		}
 	}
 
 	void RenderTargetTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		RenderTargetSPtr l_target = GetRenderTarget();
-		wxPGProperty * l_property = p_event.GetProperty();
+		RenderTargetSPtr target = GetRenderTarget();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_target )
+		if ( property && target )
 		{
 		}
 	}

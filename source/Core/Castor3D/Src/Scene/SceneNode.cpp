@@ -18,7 +18,7 @@ namespace Castor3D
 
 	bool SceneNode::TextWriter::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
-		bool l_result = p_node.GetName() == cuT( "RootNode" )
+		bool result = p_node.GetName() == cuT( "RootNode" )
 						|| p_node.GetName() == cuT( "ObjectRootNode" )
 						|| p_node.GetName() == cuT( "CameraRootNode" );
 
@@ -27,66 +27,66 @@ namespace Castor3D
 			 && p_node.GetName() != cuT( "CameraRootNode" ) )
 		{
 			Logger::LogInfo( m_tabs + cuT( "Writing Node " ) + p_node.GetName() );
-			l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + p_node.GetName() + cuT( "\"\n" ) ) > 0
+			result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + p_node.GetName() + cuT( "\"\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			Castor::TextWriter< SceneNode >::CheckError( l_result, "Node name" );
+			Castor::TextWriter< SceneNode >::CheckError( result, "Node name" );
 
-			if ( l_result && p_node.GetParent() )
+			if ( result && p_node.GetParent() )
 			{
-				l_result = p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node parent name" );
+				result = p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< SceneNode >::CheckError( result, "Node parent name" );
 			}
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
+				result = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
 						   && Quaternion::TextWriter( String() )( p_node.GetOrientation(), p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node orientation" );
+				Castor::TextWriter< SceneNode >::CheckError( result, "Node orientation" );
 			}
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = p_file.Print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
+				result = p_file.Print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
 						   && Point3r::TextWriter( String() )( p_node.GetPosition(), p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node position" );
+				Castor::TextWriter< SceneNode >::CheckError( result, "Node position" );
 			}
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = p_file.Print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
+				result = p_file.Print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
 						   && Point3r::TextWriter( String() )( p_node.GetScale(), p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node scale" );
+				Castor::TextWriter< SceneNode >::CheckError( result, "Node scale" );
 			}
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
-				Castor::TextWriter< SceneNode >::CheckError( l_result, "Node end" );
+				result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				Castor::TextWriter< SceneNode >::CheckError( result, "Node end" );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			for ( auto const & l_it : p_node.m_children )
+			for ( auto const & it : p_node.m_children )
 			{
-				if ( l_result
-					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
-					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				if ( result
+					 && it.first.find( cuT( "_REye" ) ) == String::npos
+					 && it.first.find( cuT( "_LEye" ) ) == String::npos )
 				{
-					SceneNodeSPtr l_node = l_it.second.lock();
+					SceneNodeSPtr node = it.second.lock();
 
-					if ( l_node )
+					if ( node )
 					{
-						l_result = SceneNode::TextWriter{ m_tabs }( *l_node, p_file );
+						result = SceneNode::TextWriter{ m_tabs }( *node, p_file );
 					}
 				}
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -110,11 +110,11 @@ namespace Castor3D
 	SceneNode::~SceneNode()
 	{
 		Count--;
-		SceneNodeSPtr l_parent = GetParent();
+		SceneNodeSPtr parent = GetParent();
 
-		if ( l_parent )
+		if ( parent )
 		{
-			l_parent->DetachChild( shared_from_this() );
+			parent->DetachChild( shared_from_this() );
 		}
 
 		DetachAllChilds();
@@ -124,13 +124,13 @@ namespace Castor3D
 	{
 		DoComputeMatrix();
 
-		for ( auto l_it : m_children )
+		for ( auto it : m_children )
 		{
-			auto l_child = l_it.second.lock();
+			auto child = it.second.lock();
 
-			if ( l_child )
+			if ( child )
 			{
-				l_child->Update();
+				child->Update();
 			}
 		}
 	}
@@ -144,27 +144,27 @@ namespace Castor3D
 
 	void SceneNode::DetachObject( MovableObject & p_object )
 	{
-		auto l_it = std::find_if( m_objects.begin(), m_objects.end(), [&p_object]( std::reference_wrapper< MovableObject > l_obj )
+		auto it = std::find_if( m_objects.begin(), m_objects.end(), [&p_object]( std::reference_wrapper< MovableObject > obj )
 		{
-			return l_obj.get().GetName() == p_object.GetName();
+			return obj.get().GetName() == p_object.GetName();
 		} );
 
-		if ( l_it != m_objects.end() )
+		if ( it != m_objects.end() )
 		{
-			m_objects.erase( l_it );
+			m_objects.erase( it );
 			p_object.AttachTo( nullptr );
 		}
 	}
 
 	void SceneNode::AttachTo( SceneNodeSPtr p_parent )
 	{
-		SceneNodeSPtr l_parent = GetParent();
+		SceneNodeSPtr parent = GetParent();
 
-		if ( l_parent )
+		if ( parent )
 		{
 			m_parent.reset();
-			l_parent->DetachChild( shared_from_this() );
-			l_parent.reset();
+			parent->DetachChild( shared_from_this() );
+			parent.reset();
 		}
 
 		m_parent = p_parent;
@@ -179,43 +179,43 @@ namespace Castor3D
 
 	void SceneNode::Detach()
 	{
-		SceneNodeSPtr l_parent = GetParent();
+		SceneNodeSPtr parent = GetParent();
 
-		if ( l_parent )
+		if ( parent )
 		{
 			m_displayable = false;
 			m_parent.reset();
-			l_parent->DetachChild( shared_from_this() );
+			parent->DetachChild( shared_from_this() );
 			m_mtxChanged = true;
 		}
 	}
 
 	bool SceneNode::HasChild( String const & p_name )
 	{
-		bool l_bFound = false;
+		bool bFound = false;
 
 		if ( m_children.find( p_name ) == m_children.end() )
 		{
-			l_bFound = m_children.end() != std::find_if( m_children.begin(), m_children.end(), [&p_name]( std::pair< String, SceneNodeWPtr > p_pair )
+			bFound = m_children.end() != std::find_if( m_children.begin(), m_children.end(), [&p_name]( std::pair< String, SceneNodeWPtr > p_pair )
 			{
 				return p_pair.second.lock()->HasChild( p_name );
 			} );
 		}
 
-		return l_bFound;
+		return bFound;
 	}
 
 	void SceneNode::AddChild( SceneNodeSPtr p_child )
 	{
-		String l_name = p_child->GetName();
+		String name = p_child->GetName();
 
-		if ( m_children.find( l_name ) == m_children.end() )
+		if ( m_children.find( name ) == m_children.end() )
 		{
-			m_children.insert( std::make_pair( l_name, p_child ) );
+			m_children.insert( std::make_pair( name, p_child ) );
 		}
 		else
 		{
-			Logger::LogWarning( m_name + cuT( " - Can't add SceneNode " ) + l_name + cuT( " - Already in childs" ) );
+			Logger::LogWarning( m_name + cuT( " - Can't add SceneNode " ) + name + cuT( " - Already in childs" ) );
 		}
 	}
 
@@ -233,16 +233,16 @@ namespace Castor3D
 
 	void SceneNode::DetachChild( String const & p_childName )
 	{
-		auto l_it = m_children.find( p_childName );
+		auto it = m_children.find( p_childName );
 
-		if ( l_it != m_children.end() )
+		if ( it != m_children.end() )
 		{
-			SceneNodeSPtr l_current = l_it->second.lock();
-			m_children.erase( l_it );
+			SceneNodeSPtr current = it->second.lock();
+			m_children.erase( it );
 
-			if ( l_current )
+			if ( current )
 			{
-				l_current->Detach();
+				current->Detach();
 			}
 		}
 		else
@@ -253,16 +253,16 @@ namespace Castor3D
 
 	void SceneNode::DetachAllChilds()
 	{
-		SceneNodePtrStrMap l_flush;
-		std::swap( l_flush, m_children );
+		SceneNodePtrStrMap flush;
+		std::swap( flush, m_children );
 
-		for ( auto l_it : l_flush )
+		for ( auto it : flush )
 		{
-			SceneNodeSPtr l_current = l_it.second.lock();
+			SceneNodeSPtr current = it.second.lock();
 
-			if ( l_current )
+			if ( current )
 			{
-				l_current->Detach();
+				current->Detach();
 			}
 		}
 	}
@@ -326,41 +326,41 @@ namespace Castor3D
 
 	Point3r SceneNode::GetDerivedPosition()const
 	{
-		Point3r l_result( m_position );
-		auto l_parent = GetParent();
+		Point3r result( m_position );
+		auto parent = GetParent();
 
-		if ( l_parent )
+		if ( parent )
 		{
-			l_result = matrix::get_transformed( l_parent->GetDerivedTransformationMatrix(), m_position );
+			result = matrix::get_transformed( parent->GetDerivedTransformationMatrix(), m_position );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	Quaternion SceneNode::GetDerivedOrientation()const
 	{
-		Quaternion l_result( m_orientation );
-		auto l_parent = GetParent();
+		Quaternion result( m_orientation );
+		auto parent = GetParent();
 
-		if ( l_parent )
+		if ( parent )
 		{
-			l_result  = l_result * l_parent->GetDerivedOrientation();
+			result  = result * parent->GetDerivedOrientation();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	Point3r SceneNode::GetDerivedScale()const
 	{
-		Point3r l_result( m_scale );
-		auto l_parent = GetParent();
+		Point3r result( m_scale );
+		auto parent = GetParent();
 
-		if ( l_parent )
+		if ( parent )
 		{
-			l_result *= l_parent->GetDerivedScale();
+			result *= parent->GetDerivedScale();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	Matrix4x4r const & SceneNode::GetTransformationMatrix()const
@@ -384,8 +384,8 @@ namespace Castor3D
 
 	bool SceneNode::IsVisible()const
 	{
-		auto l_parent = m_parent.lock();
-		return m_visible && ( l_parent ? l_parent->IsVisible() : true );
+		auto parent = m_parent.lock();
+		return m_visible && ( parent ? parent->IsVisible() : true );
 	}
 
 	void SceneNode::DoComputeMatrix()
@@ -400,11 +400,11 @@ namespace Castor3D
 
 		if ( m_derivedMtxChanged )
 		{
-			SceneNodeSPtr l_parent = GetParent();
+			SceneNodeSPtr parent = GetParent();
 
-			if ( l_parent )
+			if ( parent )
 			{
-				m_derivedTransform = l_parent->GetDerivedTransformationMatrix() * m_transform;
+				m_derivedTransform = parent->GetDerivedTransformationMatrix() * m_transform;
 			}
 			else
 			{
@@ -418,14 +418,14 @@ namespace Castor3D
 
 	void SceneNode::DoUpdateChildsDerivedTransform()
 	{
-		for ( auto l_it : m_children )
+		for ( auto it : m_children )
 		{
-			SceneNodeSPtr l_current = l_it.second.lock();
+			SceneNodeSPtr current = it.second.lock();
 
-			if ( l_current )
+			if ( current )
 			{
-				l_current->DoUpdateChildsDerivedTransform();
-				l_current->m_derivedMtxChanged = true;
+				current->DoUpdateChildsDerivedTransform();
+				current->m_derivedMtxChanged = true;
 			}
 		}
 	}

@@ -1458,28 +1458,28 @@ namespace GlRender
 		bool GetFunction( Castor::String const & p_name, GlFunction< Ret, Arguments... > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( Arguments... );
-			PFNType l_pfnResult = nullptr;
+			PFNType pfnResult = nullptr;
 
-			if ( GetFunction( p_name, l_pfnResult ) )
+			if ( GetFunction( p_name, pfnResult ) )
 			{
-				p_func = l_pfnResult;
+				p_func = pfnResult;
 			}
 
-			return l_pfnResult != nullptr;
+			return pfnResult != nullptr;
 		}
 
 		template< typename Ret, typename ... Arguments >
 		bool GetFunction( Castor::String const & p_name, std::function< Ret( Arguments... ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( Arguments... );
-			PFNType l_pfnResult = nullptr;
+			PFNType pfnResult = nullptr;
 
-			if ( GetFunction( p_name, l_pfnResult ) )
+			if ( GetFunction( p_name, pfnResult ) )
 			{
-				p_func = l_pfnResult;
+				p_func = pfnResult;
 			}
 
-			return l_pfnResult != nullptr;
+			return pfnResult != nullptr;
 		}
 
 		template< typename T >

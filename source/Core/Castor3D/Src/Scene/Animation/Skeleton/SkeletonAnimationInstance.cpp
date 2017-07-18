@@ -36,18 +36,18 @@ namespace Castor3D
 	SkeletonAnimationInstance::SkeletonAnimationInstance( AnimatedSkeleton & p_object, SkeletonAnimation const & p_animation )
 		: AnimationInstance{ p_object, p_animation }
 	{
-		for ( auto l_moving : p_animation.m_arrayMoving )
+		for ( auto moving : p_animation.m_arrayMoving )
 		{
-			switch ( l_moving->GetType() )
+			switch ( moving->GetType() )
 			{
 			case SkeletonAnimationObjectType::eNode:
-				m_arrayMoving.push_back( std::make_shared< SkeletonAnimationInstanceNode >( *this, *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_toMove ) );
-				m_toMove.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_arrayMoving.back() } );
+				m_arrayMoving.push_back( std::make_shared< SkeletonAnimationInstanceNode >( *this, *std::static_pointer_cast< SkeletonAnimationNode >( moving ), m_toMove ) );
+				m_toMove.insert( { GetObjectTypeName( moving->GetType() ) + moving->GetName(), m_arrayMoving.back() } );
 				break;
 
 			case SkeletonAnimationObjectType::eBone:
-				m_arrayMoving.push_back( std::make_shared< SkeletonAnimationInstanceBone >( *this, *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), m_toMove ) );
-				m_toMove.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_arrayMoving.back() } );
+				m_arrayMoving.push_back( std::make_shared< SkeletonAnimationInstanceBone >( *this, *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_toMove ) );
+				m_toMove.insert( { GetObjectTypeName( moving->GetType() ) + moving->GetName(), m_arrayMoving.back() } );
 				break;
 			}
 		}
@@ -69,26 +69,26 @@ namespace Castor3D
 
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const
 	{
-		SkeletonAnimationInstanceObjectSPtr l_result;
-		auto l_it = m_toMove.find( GetObjectTypeName( p_type ) + p_name );
+		SkeletonAnimationInstanceObjectSPtr result;
+		auto it = m_toMove.find( GetObjectTypeName( p_type ) + p_name );
 
-		if ( l_it != m_toMove.end() )
+		if ( it != m_toMove.end() )
 		{
-			l_result = l_it->second;
+			result = it->second;
 		}
 		else
 		{
 			Logger::LogWarning( cuT( "No object named " ) + p_name + cuT( " for this animation instance" ) );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void SkeletonAnimationInstance::DoUpdate()
 	{
-		for ( auto l_moving : m_arrayMoving )
+		for ( auto moving : m_arrayMoving )
 		{
-			l_moving->Update( m_currentTime, Matrix4x4r{ 1 } );
+			moving->Update( m_currentTime, Matrix4x4r{ 1 } );
 		}
 	}
 

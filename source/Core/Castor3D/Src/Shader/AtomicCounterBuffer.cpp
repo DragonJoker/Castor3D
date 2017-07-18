@@ -26,14 +26,14 @@ namespace Castor3D
 			m_gpuBuffer = GetOwner()->GetRenderSystem()->CreateBuffer( BufferType::eAtomicCounter );
 		}
 
-		bool l_result = m_gpuBuffer != nullptr;
+		bool result = m_gpuBuffer != nullptr;
 
-		if ( l_result )
+		if ( result )
 		{
 			m_gpuBuffer->Create();
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			m_gpuBuffer->InitialiseStorage( p_size * sizeof( uint32_t )
 				, BufferAccessType::eDynamic
@@ -41,7 +41,7 @@ namespace Castor3D
 			m_gpuBuffer->SetBindingPoint( p_index );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void AtomicCounterBuffer::Cleanup()

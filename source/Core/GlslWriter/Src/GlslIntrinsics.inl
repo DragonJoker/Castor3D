@@ -13,9 +13,9 @@ namespace GLSL
 
 			static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
 			{
-				Ret l_result( p_a.m_writer );
-				l_result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
-				return l_result;
+				Ret result( p_a.m_writer );
+				result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+				return result;
 			}
 		};
 
@@ -28,9 +28,9 @@ namespace GLSL
 
 			static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
 			{
-				Ret l_result( p_a.m_writer, Castor::String(), p_a.IsEnabled() );
-				l_result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
-				return l_result;
+				Ret result( p_a.m_writer, Castor::String(), p_a.IsEnabled() );
+				result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+				return result;
 			}
 		};
 
@@ -43,9 +43,9 @@ namespace GLSL
 
 			static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
 			{
-				Ret l_result( p_a.m_writer, Castor::String(), p_b.IsEnabled() );
-				l_result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
-				return l_result;
+				Ret result( p_a.m_writer, Castor::String(), p_b.IsEnabled() );
+				result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+				return result;
 			}
 		};
 

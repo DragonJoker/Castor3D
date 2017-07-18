@@ -27,8 +27,8 @@ extern "C"
 
 	C3D_Gl_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
 	{
-		auto l_plugin = static_cast< Castor3D::RendererPlugin * >( p_plugin );
-		l_plugin->SetRendererType( GlRenderSystem::Type );
+		auto plugin = static_cast< Castor3D::RendererPlugin * >( p_plugin );
+		plugin->SetRendererType( GlRenderSystem::Type );
 		p_engine->GetRenderSystemFactory().Register( GlRenderSystem::Type
 			, &GlRenderSystem::Create );
 	}

@@ -52,13 +52,13 @@ namespace Castor3D
 	template<>
 	inline void CacheView< Overlay, OverlayCache, EventType::ePreRender >::Clear()
 	{
-		for ( auto l_name : m_createdElements )
+		for ( auto name : m_createdElements )
 		{
-			auto l_resource = m_cache.Find( l_name );
+			auto resource = m_cache.Find( name );
 
-			if ( l_resource )
+			if ( resource )
 			{
-				m_cache.Remove( l_name );
+				m_cache.Remove( name );
 			}
 		}
 	}
@@ -68,13 +68,13 @@ namespace Castor3D
 	template<>
 	inline void CacheView< Font, FontCache, EventType::ePreRender >::Clear()
 	{
-		for ( auto l_name : m_createdElements )
+		for ( auto name : m_createdElements )
 		{
-			auto l_resource = m_cache.Find( l_name );
+			auto resource = m_cache.Find( name );
 
-			if ( l_resource )
+			if ( resource )
 			{
-				m_cache.Remove( l_name );
+				m_cache.Remove( name );
 			}
 		}
 	}
@@ -97,217 +97,217 @@ namespace Castor3D
 
 		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
 
-		bool l_result = true;
+		bool result = true;
 
 		if ( p_scene.GetEngine()->GetRenderLoop().HasDebugOverlays() )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_result, "Scene debug overlays" );
+			result = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( result, "Scene debug overlays" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n" ) ) > 0
+			result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_result, "Scene name" );
+			Castor::TextWriter< Scene >::CheckError( result, "Scene name" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Fonts" ) );
 
-			for ( auto const & l_name : p_scene.GetFontView() )
+			for ( auto const & name : p_scene.GetFontView() )
 			{
-				auto l_font = p_scene.GetFontView().Find( l_name );
-				l_result &= Font::TextWriter( m_tabs + cuT( "\t" ) )( *l_font, p_file );
+				auto font = p_scene.GetFontView().Find( name );
+				result &= Font::TextWriter( m_tabs + cuT( "\t" ) )( *font, p_file );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Samplers" ) );
 
-			for ( auto const & l_name : p_scene.GetSamplerView() )
+			for ( auto const & name : p_scene.GetSamplerView() )
 			{
-				auto l_sampler = p_scene.GetSamplerView().Find( l_name );
-				l_result &= Sampler::TextWriter( m_tabs + cuT( "\t" ) )( *l_sampler, p_file );
+				auto sampler = p_scene.GetSamplerView().Find( name );
+				result &= Sampler::TextWriter( m_tabs + cuT( "\t" ) )( *sampler, p_file );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Materials" ) );
 
-			for ( auto const & l_name : p_scene.GetMaterialView() )
+			for ( auto const & name : p_scene.GetMaterialView() )
 			{
-				auto l_material = p_scene.GetMaterialView().Find( l_name );
-				l_result &= Material::TextWriter( m_tabs + cuT( "\t" ) )( *l_material, p_file );
+				auto material = p_scene.GetMaterialView().Find( name );
+				result &= Material::TextWriter( m_tabs + cuT( "\t" ) )( *material, p_file );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Overlays" ) );
 
-			for ( auto const & l_name : p_scene.GetOverlayView() )
+			for ( auto const & name : p_scene.GetOverlayView() )
 			{
-				auto l_overlay = p_scene.GetOverlayView().Find( l_name );
+				auto overlay = p_scene.GetOverlayView().Find( name );
 
-				if ( !l_overlay->GetParent() )
+				if ( !overlay->GetParent() )
 				{
-					l_result &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay, p_file );
+					result &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay, p_file );
 				}
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Background colour" ) );
-			l_result = p_file.Print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
+			result = p_file.Print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
 					   && Colour::TextWriter( String() )( p_scene.GetBackgroundColour(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_result, "Scene background colour" );
+			Castor::TextWriter< Scene >::CheckError( result, "Scene background colour" );
 		}
 
-		if ( l_result && p_scene.GetBackgroundImage() )
+		if ( result && p_scene.GetBackgroundImage() )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Background image" ) );
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_scene.GetBackgroundImage()->GetImage().ToString() }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } );
-			l_result = p_file.WriteText( m_tabs + cuT( "\tbackground_image \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_result, "Scene background image" );
+			Path relative = Scene::TextWriter::CopyFile( Path{ p_scene.GetBackgroundImage()->GetImage().ToString() }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } );
+			result = p_file.WriteText( m_tabs + cuT( "\tbackground_image \"" ) + relative + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( result, "Scene background image" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Ambient light" ) );
-			l_result = p_file.Print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
+			result = p_file.Print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
 					   && Colour::TextWriter( String() )( p_scene.GetAmbientLight(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_result, "Scene ambient light" );
+			Castor::TextWriter< Scene >::CheckError( result, "Scene ambient light" );
 		}
 
-		if ( l_result && p_scene.GetFog().GetType() != GLSL::FogType::eDisabled )
+		if ( result && p_scene.GetFog().GetType() != GLSL::FogType::eDisabled )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Fog type" ) );
-			l_result = p_file.WriteText( m_tabs + cuT( "\tfog_type " ) + FogTypes.find( p_scene.GetFog().GetType() )->second + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_result, "Scene fog type" );
+			result = p_file.WriteText( m_tabs + cuT( "\tfog_type " ) + FogTypes.find( p_scene.GetFog().GetType() )->second + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( result, "Scene fog type" );
 
-			if ( l_result )
+			if ( result )
 			{
 				Logger::LogInfo( cuT( "Scene::Write - Fog density" ) );
-				l_result = p_file.WriteText( m_tabs + cuT( "\tfog_density " ) + string::to_string( p_scene.GetFog().GetDensity() ) + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Scene >::CheckError( l_result, "Scene fog density" );
+				result = p_file.WriteText( m_tabs + cuT( "\tfog_density " ) + string::to_string( p_scene.GetFog().GetDensity() ) + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Scene >::CheckError( result, "Scene fog density" );
 			}
 		}
 
-		if ( l_result && p_scene.HasSkybox() )
+		if ( result && p_scene.HasSkybox() )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Skybox" ) );
-			l_result = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( p_scene.GetSkybox(), p_file );
+			result = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( p_scene.GetSkybox(), p_file );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Cameras nodes" ) );
 
-			for ( auto const & l_it : p_scene.GetCameraRootNode()->GetChilds() )
+			for ( auto const & it : p_scene.GetCameraRootNode()->GetChilds() )
 			{
-				if ( l_result
-					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
-					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				if ( result
+					 && it.first.find( cuT( "_REye" ) ) == String::npos
+					 && it.first.find( cuT( "_LEye" ) ) == String::npos )
 				{
-					l_result = SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
+					result = SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), p_file );
 				}
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Objects nodes" ) );
 
-			for ( auto const & l_it : p_scene.GetObjectRootNode()->GetChilds() )
+			for ( auto const & it : p_scene.GetObjectRootNode()->GetChilds() )
 			{
-				l_result &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
+				result &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), p_file );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Cameras" ) );
-			auto l_lock = make_unique_lock( p_scene.GetCameraCache() );
+			auto lock = make_unique_lock( p_scene.GetCameraCache() );
 
-			for ( auto const & l_it : p_scene.GetCameraCache() )
+			for ( auto const & it : p_scene.GetCameraCache() )
 			{
-				if ( l_result
-					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
-					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				if ( result
+					 && it.first.find( cuT( "_REye" ) ) == String::npos
+					 && it.first.find( cuT( "_LEye" ) ) == String::npos )
 				{
-					l_result = Camera::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+					result = Camera::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, p_file );
 				}
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Lights" ) );
-			auto l_lock = make_unique_lock( p_scene.GetLightCache() );
+			auto lock = make_unique_lock( p_scene.GetLightCache() );
 
-			for ( auto const & l_it : p_scene.GetLightCache() )
+			for ( auto const & it : p_scene.GetLightCache() )
 			{
-				l_result &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				result &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, p_file );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Geometries" ) );
-			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
+			auto lock = make_unique_lock( p_scene.GetGeometryCache() );
 
-			for ( auto const & l_it : p_scene.GetGeometryCache() )
+			for ( auto const & it : p_scene.GetGeometryCache() )
 			{
-				l_result &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				result &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, p_file );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Particle systems" ) );
-			auto l_lock = make_unique_lock( p_scene.GetParticleSystemCache() );
+			auto lock = make_unique_lock( p_scene.GetParticleSystemCache() );
 
-			for ( auto const & l_it : p_scene.GetParticleSystemCache() )
+			for ( auto const & it : p_scene.GetParticleSystemCache() )
 			{
-				l_result &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				result &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, p_file );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Animated object groups" ) );
-			auto l_lock = make_unique_lock( p_scene.GetAnimatedObjectGroupCache() );
+			auto lock = make_unique_lock( p_scene.GetAnimatedObjectGroupCache() );
 
-			for ( auto const & l_it : p_scene.GetAnimatedObjectGroupCache() )
+			for ( auto const & it : p_scene.GetAnimatedObjectGroupCache() )
 			{
-				l_result &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				result &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, p_file );
 			}
 		}
 
 		p_file.WriteText( cuT( "}\n" ) );
 
-		if ( l_result )
+		if ( result )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Windows" ) );
-			auto l_lock = make_unique_lock( p_scene.GetEngine()->GetRenderWindowCache() );
+			auto lock = make_unique_lock( p_scene.GetEngine()->GetRenderWindowCache() );
 
-			for ( auto const & l_it : p_scene.GetEngine()->GetRenderWindowCache() )
+			for ( auto const & it : p_scene.GetEngine()->GetRenderWindowCache() )
 			{
-				if ( l_it.second->GetRenderTarget()->GetScene()->GetName() == p_scene.GetName() )
+				if ( it.second->GetRenderTarget()->GetScene()->GetName() == p_scene.GetName() )
 				{
-					l_result &= RenderWindow::TextWriter( m_tabs )( *l_it.second, p_file );
+					result &= RenderWindow::TextWriter( m_tabs )( *it.second, p_file );
 				}
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -323,7 +323,7 @@ namespace Castor3D
 		, m_animationUpdater{ std::max( 2u, p_engine.GetCpuInformations().CoreCount() - ( p_engine.IsThreaded() ? 2u : 1u ) ) }
 		, m_materialType{ MaterialType::eLegacy }
 	{
-		auto l_mergeObject = [this]( auto const & p_source
+		auto mergeObject = [this]( auto const & p_source
 			, auto & p_destination
 			, auto p_element
 			, SceneNodeSPtr p_rootCameraNode
@@ -340,39 +340,39 @@ namespace Castor3D
 				p_element->AttachTo( p_rootObjectNode );
 			}
 
-			String l_name = p_element->GetName();
+			String name = p_element->GetName();
 
-			while ( p_destination.has( l_name ) )
+			while ( p_destination.has( name ) )
 			{
-				l_name = this->GetName() + cuT( "_" ) + l_name;
+				name = this->GetName() + cuT( "_" ) + name;
 			}
 
-			p_element->SetName( l_name );
-			p_destination.insert( l_name, p_element );
+			p_element->SetName( name );
+			p_destination.insert( name, p_element );
 		};
-		auto l_mergeResource = [this]( auto const & p_source
+		auto mergeResource = [this]( auto const & p_source
 			, auto & p_destination
 			, auto p_element )
 		{
-			String l_name = p_element->GetName();
+			String name = p_element->GetName();
 
-			if ( !p_destination.has( l_name ) )
+			if ( !p_destination.has( name ) )
 			{
-				l_name = this->GetName() + cuT( "_" ) + l_name;
+				name = this->GetName() + cuT( "_" ) + name;
 			}
 
-			p_element->SetName( l_name );
-			p_destination.insert( l_name, p_element );
+			p_element->SetName( name );
+			p_destination.insert( name, p_element );
 		};
-		auto l_eventInitialise = [this]( auto p_element )
+		auto eventInitialise = [this]( auto p_element )
 		{
 			this->GetListener().PostEvent( MakeInitialiseEvent( *p_element ) );
 		};
-		auto l_eventClean = [this]( auto p_element )
+		auto eventClean = [this]( auto p_element )
 		{
 			this->GetListener().PostEvent( MakeCleanupEvent( *p_element ) );
 		};
-		auto l_attachObject = []( auto p_element
+		auto attachObject = []( auto p_element
 			, SceneNodeSPtr p_parent
 			, SceneNodeSPtr p_rootNode
 			, SceneNodeSPtr p_rootCameraNode
@@ -387,7 +387,7 @@ namespace Castor3D
 				p_rootObjectNode->AttachObject( *p_element );
 			}
 		};
-		auto l_attachCamera = []( auto p_element
+		auto attachCamera = []( auto p_element
 			, SceneNodeSPtr p_parent
 			, SceneNodeSPtr p_rootNode
 			, SceneNodeSPtr p_rootCameraNode
@@ -402,7 +402,7 @@ namespace Castor3D
 				p_rootCameraNode->AttachObject( *p_element );
 			}
 		};
-		auto l_attachNode = []( auto p_element
+		auto attachNode = []( auto p_element
 			, SceneNodeSPtr p_parent
 			, SceneNodeSPtr p_rootNode
 			, SceneNodeSPtr p_rootCameraNode
@@ -417,7 +417,7 @@ namespace Castor3D
 				p_element->AttachTo( p_rootNode );
 			}
 		};
-		auto l_dummy = []( auto p_element )
+		auto dummy = []( auto p_element )
 		{
 		};
 
@@ -438,10 +438,10 @@ namespace Castor3D
 					, *this
 					, p_parent );
 			}
-			, l_eventInitialise
-			, l_eventClean
-			, l_mergeObject
-			, l_attachObject
+			, eventInitialise
+			, eventClean
+			, mergeObject
+			, attachObject
 			, [this]( BillboardListSPtr p_element )
 			{
 				p_element->Detach();
@@ -460,10 +460,10 @@ namespace Castor3D
 					, p_parent
 					, std::move( p_viewport ) );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeObject
-			, l_attachCamera
+			, dummy
+			, dummy
+			, mergeObject
+			, attachCamera
 			, [this]( CameraSPtr p_element )
 			{
 				p_element->Detach();
@@ -482,10 +482,10 @@ namespace Castor3D
 					, p_parent
 					, p_mesh );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeObject
-			, l_attachObject
+			, dummy
+			, dummy
+			, mergeObject
+			, attachObject
 			, [this]( GeometrySPtr p_element )
 			{
 				p_element->Detach();
@@ -505,10 +505,10 @@ namespace Castor3D
 					, m_lightFactory
 					, p_lightType );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeObject
-			, l_attachObject
+			, dummy
+			, dummy
+			, mergeObject
+			, attachObject
 			, [this]( LightSPtr p_element )
 			{
 				p_element->Detach();
@@ -527,10 +527,10 @@ namespace Castor3D
 					, p_parent
 					, p_count );
 			}
-			, l_eventInitialise
-			, l_eventClean
-			, l_mergeObject
-			, l_attachObject
+			, eventInitialise
+			, eventClean
+			, mergeObject
+			, attachObject
 			, [this]( ParticleSystemSPtr p_element )
 			{
 				p_element->Detach();
@@ -544,10 +544,10 @@ namespace Castor3D
 			{
 				return std::make_shared< SceneNode >( p_name, *this );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeObject
-			, l_attachNode
+			, dummy
+			, dummy
+			, mergeObject
+			, attachNode
 			, [this]( SceneNodeSPtr p_element )
 			{
 				p_element->Detach();
@@ -557,37 +557,37 @@ namespace Castor3D
 			{
 				return std::make_shared< AnimatedObjectGroup >( p_name, *this );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeResource );
+			, dummy
+			, dummy
+			, mergeResource );
 		m_meshCache = MakeCache< Mesh, String >( p_engine
 			, [this]( Castor::String const & p_name )
 			{
 				return std::make_shared< Mesh >( p_name
 					, *this );
 			}
-			, l_dummy
-			, l_eventClean
-			, l_mergeResource );
+			, dummy
+			, eventClean
+			, mergeResource );
 
 		m_materialCacheView = MakeCacheView< Material, EventType::ePreRender >( GetName()
-			, l_eventInitialise
-			, l_eventClean
+			, eventInitialise
+			, eventClean
 			, GetEngine()->GetMaterialCache() );
 		m_samplerCacheView = MakeCacheView< Sampler, EventType::ePreRender >( GetName()
-			, l_eventInitialise
-			, l_eventClean
+			, eventInitialise
+			, eventClean
 			, GetEngine()->GetSamplerCache() );
 		m_overlayCacheView = MakeCacheView< Overlay, EventType::ePreRender >( GetName()
 			, std::bind( OverlayCache::OverlayInitialiser{ GetEngine()->GetOverlayCache() }, std::placeholders::_1 )
 			, std::bind( OverlayCache::OverlayCleaner{ GetEngine()->GetOverlayCache() }, std::placeholders::_1 )
 			, GetEngine()->GetOverlayCache() );
 		m_fontCacheView = MakeCacheView< Font, EventType::ePreRender >( GetName()
-			, l_dummy
-			, l_dummy
+			, dummy
+			, dummy
 			, GetEngine()->GetFontCache() );
 
-		auto l_notify = [this]()
+		auto notify = [this]()
 		{
 			SetChanged();
 		};
@@ -674,12 +674,12 @@ namespace Castor3D
 		m_lightCache->Cleanup();
 		m_sceneNodeCache->Cleanup();
 
-		for ( auto & l_pass : m_reflectionMapsArray )
+		for ( auto & pass : m_reflectionMapsArray )
 		{
 			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [&l_pass]()
+				, [&pass]()
 				{
-					l_pass.get().Cleanup();
+					pass.get().Cleanup();
 				} ) );
 		}
 
@@ -736,20 +736,20 @@ namespace Castor3D
 	void Scene::Update()
 	{
 		m_rootNode->Update();
-		std::vector< std::reference_wrapper< AnimatedObjectGroup > > l_groups;
+		std::vector< std::reference_wrapper< AnimatedObjectGroup > > groups;
 
-		m_animatedObjectGroupCache->ForEach( [&l_groups]( AnimatedObjectGroup & p_group )
+		m_animatedObjectGroupCache->ForEach( [&groups]( AnimatedObjectGroup & p_group )
 		{
-			l_groups.push_back( p_group );
+			groups.push_back( p_group );
 		} );
 
-		if ( l_groups.size() > m_animationUpdater.GetCount() )
+		if ( groups.size() > m_animationUpdater.GetCount() )
 		{
-			for ( auto & l_group : l_groups )
+			for ( auto & group : groups )
 			{
-				m_animationUpdater.PushJob( [&l_group]()
+				m_animationUpdater.PushJob( [&group]()
 				{
-					l_group.get().Update();
+					group.get().Update();
 				} );
 			}
 
@@ -757,9 +757,9 @@ namespace Castor3D
 		}
 		else
 		{
-			for ( auto & l_group : l_groups )
+			for ( auto & group : groups )
 			{
-				l_group.get().Update();
+				group.get().Update();
 			}
 		}
 
@@ -767,28 +767,28 @@ namespace Castor3D
 		{
 			m_skybox = std::make_unique< Skybox >( *GetEngine() );
 			m_skybox->SetScene( *this );
-			Size l_size{ 16, 16 };
-			constexpr PixelFormat l_format{ PixelFormat::eR8G8B8 };
-			UbPixel l_pixel{ true };
-			uint8_t l_c;
-			l_pixel.set< l_format >( { { m_backgroundColour.red().convert_to( l_c )
-				, m_backgroundColour.green().convert_to( l_c )
-				, m_backgroundColour.blue().convert_to( l_c ) } } );
-			auto l_buffer = PxBufferBase::create( l_size, l_format );
-			auto l_data = l_buffer->ptr();
+			Size size{ 16, 16 };
+			constexpr PixelFormat format{ PixelFormat::eR8G8B8 };
+			UbPixel pixel{ true };
+			uint8_t c;
+			pixel.set< format >( { { m_backgroundColour.red().convert_to( c )
+				, m_backgroundColour.green().convert_to( c )
+				, m_backgroundColour.blue().convert_to( c ) } } );
+			auto buffer = PxBufferBase::create( size, format );
+			auto data = buffer->ptr();
 
 			for ( uint32_t i = 0u; i < 256; ++i )
 			{
-				std::memcpy( l_data, l_pixel.const_ptr(), 3 );
-				l_data += 3;
+				std::memcpy( data, pixel.const_ptr(), 3 );
+				data += 3;
 			}
 
-			m_skybox->GetTexture().GetImage( 0u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 1u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 2u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 3u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 4u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 5u ).InitialiseSource( l_buffer );
+			m_skybox->GetTexture().GetImage( 0u ).InitialiseSource( buffer );
+			m_skybox->GetTexture().GetImage( 1u ).InitialiseSource( buffer );
+			m_skybox->GetTexture().GetImage( 2u ).InitialiseSource( buffer );
+			m_skybox->GetTexture().GetImage( 3u ).InitialiseSource( buffer );
+			m_skybox->GetTexture().GetImage( 4u ).InitialiseSource( buffer );
+			m_skybox->GetTexture().GetImage( 5u ).InitialiseSource( buffer );
 			GetListener().PostEvent( MakeInitialiseEvent( *m_skybox ) );
 		}
 
@@ -797,13 +797,13 @@ namespace Castor3D
 
 	bool Scene::SetBackground( Path const & p_folder, Path const & p_relative )
 	{
-		bool l_result = false;
+		bool result = false;
 
 		try
 		{
-			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
-			l_texture->SetSource( p_folder, p_relative );
-			m_backgroundImage = l_texture;
+			auto texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+			texture->SetSource( p_folder, p_relative );
+			m_backgroundImage = texture;
 			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_backgroundImage->Initialise();
@@ -811,14 +811,14 @@ namespace Castor3D
 				m_backgroundImage->GenerateMipmaps();
 				m_backgroundImage->Unbind( 0 );
 			} ) );
-			l_result = true;
+			result = true;
 		}
 		catch ( Castor::Exception & p_exc )
 		{
 			Logger::LogError( p_exc.what() );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool Scene::SetForeground( SkyboxUPtr && p_skybox )
@@ -857,56 +857,56 @@ namespace Castor3D
 
 	uint32_t Scene::GetVertexCount()const
 	{
-		uint32_t l_result = 0;
-		auto l_lock = make_unique_lock( *m_geometryCache );
+		uint32_t result = 0;
+		auto lock = make_unique_lock( *m_geometryCache );
 
-		for ( auto l_pair : *m_geometryCache )
+		for ( auto pair : *m_geometryCache )
 		{
-			auto l_mesh = l_pair.second->GetMesh();
+			auto mesh = pair.second->GetMesh();
 
-			if ( l_mesh )
+			if ( mesh )
 			{
-				l_result += l_pair.second->GetMesh()->GetVertexCount();
+				result += pair.second->GetMesh()->GetVertexCount();
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	uint32_t Scene::GetFaceCount()const
 	{
-		uint32_t l_result = 0;
-		auto l_lock = make_unique_lock( *m_geometryCache );
+		uint32_t result = 0;
+		auto lock = make_unique_lock( *m_geometryCache );
 
-		for ( auto l_pair : *m_geometryCache )
+		for ( auto pair : *m_geometryCache )
 		{
-			auto l_mesh = l_pair.second->GetMesh();
+			auto mesh = pair.second->GetMesh();
 
-			if ( l_mesh )
+			if ( mesh )
 			{
-				l_result += l_mesh->GetFaceCount();
+				result += mesh->GetFaceCount();
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	SceneFlags Scene::GetFlags()const
 	{
-		SceneFlags l_result;
+		SceneFlags result;
 
 		switch ( m_fog.GetType() )
 		{
 		case GLSL::FogType::eLinear:
-			l_result |= SceneFlag::eFogLinear;
+			result |= SceneFlag::eFogLinear;
 			break;
 
 		case GLSL::FogType::eExponential:
-			l_result |= SceneFlag::eFogExponential;
+			result |= SceneFlag::eFogExponential;
 			break;
 
 		case GLSL::FogType::eSquaredExponential:
-			l_result |= SceneFlag::eFogSquaredExponential;
+			result |= SceneFlag::eFogSquaredExponential;
 			break;
 		}
 
@@ -915,15 +915,15 @@ namespace Castor3D
 			switch ( m_shadow.GetFilterType() )
 			{
 			case GLSL::ShadowType::eRaw:
-				l_result |= SceneFlag::eShadowFilterRaw;
+				result |= SceneFlag::eShadowFilterRaw;
 				break;
 
 			case GLSL::ShadowType::ePoisson:
-				l_result |= SceneFlag::eShadowFilterPoisson;
+				result |= SceneFlag::eShadowFilterPoisson;
 				break;
 
 			case GLSL::ShadowType::eStratifiedPoisson:
-				l_result |= SceneFlag::eShadowFilterStratifiedPoisson;
+				result |= SceneFlag::eShadowFilterStratifiedPoisson;
 				break;
 			}
 		}
@@ -931,20 +931,20 @@ namespace Castor3D
 		switch ( m_materialType )
 		{
 		case MaterialType::ePbrMetallicRoughness:
-			l_result |= SceneFlag::ePbrMetallicRoughness;
+			result |= SceneFlag::ePbrMetallicRoughness;
 			break;
 
 		case MaterialType::ePbrSpecularGlossiness:
-			l_result |= SceneFlag::ePbrSpecularGlossiness;
+			result |= SceneFlag::ePbrSpecularGlossiness;
 			break;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool Scene::HasShadows()const
 	{
-		auto l_lock = make_unique_lock( GetLightCache() );
+		auto lock = make_unique_lock( GetLightCache() );
 
 		return GetLightCache().end() != std::find_if( GetLightCache().begin(), GetLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
 		{
@@ -956,14 +956,14 @@ namespace Castor3D
 	{
 		if ( !HasEnvironmentMap( p_node ) )
 		{
-			auto l_it = m_reflectionMaps.emplace( &p_node, std::make_unique< EnvironmentMap >( *GetEngine(), p_node ) ).first;
-			auto & l_pass = *l_it->second;
-			m_reflectionMapsArray.emplace_back( l_pass );
+			auto it = m_reflectionMaps.emplace( &p_node, std::make_unique< EnvironmentMap >( *GetEngine(), p_node ) ).first;
+			auto & pass = *it->second;
+			m_reflectionMapsArray.emplace_back( pass );
 
 			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [&l_pass]()
+				, [&pass]()
 				{
-					l_pass.Initialise();
+					pass.Initialise();
 				} ) );
 		}
 	}

@@ -50,7 +50,7 @@ int Generator::Thread::Entry()
 	{
 		if ( m_bEnded && m_bLaunched && !IsStopped() )
 		{
-			auto l_lock = Castor::make_unique_lock( m_mutex );
+			auto lock = Castor::make_unique_lock( m_mutex );
 			m_bEnded = false;
 			Step();
 			m_bEnded = true;
@@ -72,8 +72,8 @@ Generator::Generator( Engine * p_engine, int p_width, int p_height )
 	, m_backBuffer( Size( p_width, p_height ) )
 	, m_engine( p_engine )
 {
-	//uint8_t l_tmp[] = { 255, 255, 255, 255 };
-	//m_pxColour.set<PixelFormat::eA8R8G8B8>( l_tmp);
+	//uint8_t tmp[] = { 255, 255, 255, 255 };
+	//m_pxColour.set<PixelFormat::eA8R8G8B8>( tmp);
 	m_uiThreadCount = System::GetCPUCount() * 2;
 }
 
@@ -84,7 +84,7 @@ Generator::~Generator()
 
 bool Generator::Step()
 {
-	bool l_result = false;
+	bool result = false;
 
 	if ( m_initialised )
 	{
@@ -99,16 +99,16 @@ bool Generator::Step()
 			{
 				SwapBuffers();
 				m_bEnded = true;
-				l_result = true;
+				result = true;
 			}
 		}
 		else
 		{
-			l_result = false;
+			result = false;
 		}
 	}
 
-	return l_result;
+	return result;
 }
 
 void Generator::SetRed( uint8_t val )
@@ -167,13 +167,13 @@ void Generator::ClearAllThreads()
 {
 	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread *& p_pThread )
 	{
-		Generator::Thread * l_pThread = p_pThread;
+		Generator::Thread * pThread = p_pThread;
 		p_pThread = nullptr;
 
-		if ( l_pThread )
+		if ( pThread )
 		{
-			l_pThread->Wait();
-			delete l_pThread;
+			pThread->Wait();
+			delete pThread;
 		}
 	} );
 	m_arraySlaveThreads.clear();
@@ -181,15 +181,15 @@ void Generator::ClearAllThreads()
 
 bool Generator::AllEnded()
 {
-	bool l_result = true;
-	uint32_t l_count = DoGetThreadsCount();
+	bool result = true;
+	uint32_t count = DoGetThreadsCount();
 
-	for ( uint32_t i = 0; i < l_count && l_result; i++ )
+	for ( uint32_t i = 0; i < count && result; i++ )
 	{
-		l_result &= m_arraySlaveThreads[i] == nullptr || m_arraySlaveThreads[i]->IsEnded();
+		result &= m_arraySlaveThreads[i] == nullptr || m_arraySlaveThreads[i]->IsEnded();
 	}
 
-	return l_result;
+	return result;
 }
 
 void Generator::Suspend()
@@ -207,8 +207,8 @@ void Generator::DoCleanup()
 
 Point2i Generator::_loadImage( String const & p_strImagePath, Image & CU_PARAM_UNUSED( p_image ) )
 {
-	ImageSPtr l_pImage = m_engine->GetImageCache().Add( p_strImagePath, Path{ p_strImagePath } );
-	return Point2i( l_pImage->GetWidth(), l_pImage->GetHeight() );
+	ImageSPtr pImage = m_engine->GetImageCache().Add( p_strImagePath, Path{ p_strImagePath } );
+	return Point2i( pImage->GetWidth(), pImage->GetHeight() );
 }
 
 //*************************************************************************************************

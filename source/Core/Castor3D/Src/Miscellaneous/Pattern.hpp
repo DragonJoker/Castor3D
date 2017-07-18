@@ -71,14 +71,14 @@ namespace Castor3D
 		 */
 		Pointer GetReversed()const
 		{
-			Pointer l_result = std::make_shared< Pattern< T > >();
+			Pointer result = std::make_shared< Pattern< T > >();
 
-			for ( typename TObjList::iterator l_it = m_listElements.begin(); l_it != m_listElements.end(); l_it++ )
+			for ( typename TObjList::iterator it = m_listElements.begin(); it != m_listElements.end(); it++ )
 			{
-				l_result->m_listElements.push_front( *l_it );
+				result->m_listElements.push_front( *it );
 			}
 
-			return l_result;
+			return result;
 		}
 		/**
 		 *\~english
@@ -90,9 +90,9 @@ namespace Castor3D
 		 */
 		bool IsClosed()const
 		{
-			TObj const & l_t1 = **m_listElements.begin();
-			TObj const & l_t2 = **m_listElements.rbegin();
-			return l_t1 == l_t2;
+			TObj const & t1 = **m_listElements.begin();
+			TObj const & t2 = **m_listElements.rbegin();
+			return t1 == t2;
 		}
 		/**
 		 *\~english
@@ -112,14 +112,14 @@ namespace Castor3D
 			}
 			else
 			{
-				typename TObjList::iterator l_it = m_listElements.begin();
+				typename TObjList::iterator it = m_listElements.begin();
 
 				for ( uint32_t i = 0; i < p_index; i++ )
 				{
-					l_it++;
+					it++;
 				}
 
-				m_listElements.insert( l_it, p_tElement );
+				m_listElements.insert( it, p_tElement );
 			}
 		}
 		/**
@@ -145,14 +145,14 @@ namespace Castor3D
 		TObjRef operator[]( uint32_t p_index )
 		{
 			REQUIRE( p_index < m_listElements.size() );
-			typename TObjList::iterator l_it = m_listElements.begin();
+			typename TObjList::iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
 			{
-				l_it++;
+				it++;
 			}
 
-			return * l_it;
+			return * it;
 		}
 		/**
 		 *\~english
@@ -167,14 +167,14 @@ namespace Castor3D
 		TObjConstRef operator[]( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_listElements.size() );
-			typename TObjList::const_iterator l_it = m_listElements.begin();
+			typename TObjList::const_iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
 			{
-				l_it++;
+				it++;
 			}
 
-			return * l_it;
+			return * it;
 		}
 		/**
 		 *\~english
@@ -189,14 +189,14 @@ namespace Castor3D
 		TObjRef GetElement( uint32_t p_index )
 		{
 			REQUIRE( p_index < m_listElements.size() );
-			typename TObjList::iterator l_it = m_listElements.begin();
+			typename TObjList::iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
 			{
-				l_it++;
+				it++;
 			}
 
-			return * l_it;
+			return * it;
 		}
 		/**
 		 *\~english
@@ -211,14 +211,14 @@ namespace Castor3D
 		TObjConstRef GetElement( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_listElements.size() );
-			typename TObjList::const_iterator l_it = m_listElements.begin();
+			typename TObjList::const_iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
 			{
-				l_it++;
+				it++;
 			}
 
-			return * l_it;
+			return * it;
 		}
 
 	private:

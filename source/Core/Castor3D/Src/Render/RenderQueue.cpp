@@ -34,16 +34,16 @@ namespace Castor3D
 		template< typename MapType, typename FuncType >
 		void DoTraverseNodes( MapType & p_nodes, FuncType p_function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
+						p_function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.second );
 					}
 				}
 			}
@@ -55,8 +55,8 @@ namespace Castor3D
 			, MapType & p_nodes )
 		{
 			using ObjectRenderNodesArray = typename MapType::mapped_type;
-			auto l_itPipeline = p_nodes.insert( { &p_pipeline, ObjectRenderNodesArray() } ).first;
-			l_itPipeline->second.emplace_back( std::move( p_node ) );
+			auto itPipeline = p_nodes.insert( { &p_pipeline, ObjectRenderNodesArray() } ).first;
+			itPipeline->second.emplace_back( std::move( p_node ) );
 		}
 
 		template< typename NodeType, typename MapType >
@@ -70,32 +70,32 @@ namespace Castor3D
 			using ObjectRenderNodesByPassMap = typename ObjectRenderNodesByPipelineMap::mapped_type;
 			using ObjectRenderNodesArray = typename ObjectRenderNodesByPassMap::mapped_type;
 
-			auto l_itPipeline = p_nodes.emplace( &p_pipeline, ObjectRenderNodesByPipelineMap() ).first;
-			auto l_itPass = l_itPipeline->second.emplace( &p_pass, ObjectRenderNodesByPassMap() ).first;
-			auto l_itObject = l_itPass->second.emplace( &p_object, ObjectRenderNodesArray() ).first;
-			l_itObject->second.emplace_back( std::move( p_node ) );
+			auto itPipeline = p_nodes.emplace( &p_pipeline, ObjectRenderNodesByPipelineMap() ).first;
+			auto itPass = itPipeline->second.emplace( &p_pass, ObjectRenderNodesByPassMap() ).first;
+			auto itObject = itPass->second.emplace( &p_object, ObjectRenderNodesArray() ).first;
+			itObject->second.emplace_back( std::move( p_node ) );
 		}
 
 		AnimatedObjectSPtr DoFindAnimatedObject( Scene & p_scene, String const & p_name )
 		{
-			AnimatedObjectSPtr l_result;
-			auto & l_cache = p_scene.GetAnimatedObjectGroupCache();
-			auto l_lock = make_unique_lock( l_cache );
+			AnimatedObjectSPtr result;
+			auto & cache = p_scene.GetAnimatedObjectGroupCache();
+			auto lock = make_unique_lock( cache );
 
-			for ( auto l_group : l_cache )
+			for ( auto group : cache )
 			{
-				if ( !l_result )
+				if ( !result )
 				{
-					auto l_it = l_group.second->GetObjects().find( p_name );
+					auto it = group.second->GetObjects().find( p_name );
 
-					if ( l_it != l_group.second->GetObjects().end() )
+					if ( it != group.second->GetObjects().end() )
 					{
-						l_result = l_it->second;
+						result = it->second;
 					}
 				}
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename CreatorFunc, typename NodesType, typename ... Params >
@@ -110,31 +110,31 @@ namespace Castor3D
 			if ( p_pass.IsTwoSided()
 				|| p_pass.HasAlphaBlending() )
 			{
-				auto l_pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
+				auto pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
 					, p_pass.GetAlphaFunc()
 					, p_textureFlags
 					, p_programFlags
 					, p_sceneFlags );
 
-				if ( l_pipeline )
+				if ( pipeline )
 				{
-					auto l_node = p_creator( *l_pipeline );
-					DoAddRenderNode( *l_pipeline, l_node, p_nodes.m_frontCulled );
+					auto node = p_creator( *pipeline );
+					DoAddRenderNode( *pipeline, node, p_nodes.m_frontCulled );
 				}
 			}
 
-			auto l_pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
+			auto pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 				, p_pass.GetAlphaBlendMode()
 				, p_pass.GetAlphaFunc()
 				, p_textureFlags
 				, p_programFlags
 				, p_sceneFlags );
 
-			if ( l_pipeline )
+			if ( pipeline )
 			{
-				auto l_node = p_creator( *l_pipeline );
-				DoAddRenderNode( *l_pipeline, l_node, p_nodes.m_backCulled );
+				auto node = p_creator( *pipeline );
+				DoAddRenderNode( *pipeline, node, p_nodes.m_backCulled );
 			}
 		}
 
@@ -154,31 +154,31 @@ namespace Castor3D
 				if ( p_pass.HasAlphaBlending() 
 					|| p_pass.IsTwoSided() )
 				{
-					auto l_pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
+					auto pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
 						, p_pass.GetAlphaFunc()
 						, p_textureFlags
 						, p_programFlags
 						, p_sceneFlags );
 
-					if ( l_pipeline )
+					if ( pipeline )
 					{
-						auto l_node = p_renderPass.CreateSkinningNode( p_pass, *l_pipeline, p_submesh, p_primitive, p_skeleton );
-						DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_frontCulled );
+						auto node = p_renderPass.CreateSkinningNode( p_pass, *pipeline, p_submesh, p_primitive, p_skeleton );
+						DoAddRenderNode( p_pass, *pipeline, node, p_submesh, p_instanced.m_frontCulled );
 					}
 				}
 
-				auto l_pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
+				auto pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
 					, p_pass.GetAlphaFunc()
 					, p_textureFlags
 					, p_programFlags
 					, p_sceneFlags );
 
-				if ( l_pipeline )
+				if ( pipeline )
 				{
-					auto l_node = p_renderPass.CreateSkinningNode( p_pass, *l_pipeline, p_submesh, p_primitive, p_skeleton );
-					DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_backCulled );
+					auto node = p_renderPass.CreateSkinningNode( p_pass, *pipeline, p_submesh, p_primitive, p_skeleton );
+					DoAddRenderNode( p_pass, *pipeline, node, p_submesh, p_instanced.m_backCulled );
 				}
 			}
 			else
@@ -239,31 +239,31 @@ namespace Castor3D
 				if ( p_pass.HasAlphaBlending() 
 					|| p_pass.IsTwoSided() )
 				{
-					auto l_pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
+					auto pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
 						, p_pass.GetAlphaFunc()
 						, p_textureFlags
 						, p_programFlags
 						, p_sceneFlags );
 
-					if ( l_pipeline )
+					if ( pipeline )
 					{
-						auto l_node = p_renderPass.CreateStaticNode( p_pass, *l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_frontCulled );
+						auto node = p_renderPass.CreateStaticNode( p_pass, *pipeline, p_submesh, p_primitive );
+						DoAddRenderNode( p_pass, *pipeline, node, p_submesh, p_instanced.m_frontCulled );
 					}
 				}
 
-				auto l_pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
+				auto pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
 					, p_pass.GetAlphaFunc()
 					, p_textureFlags
 					, p_programFlags
 					, p_sceneFlags );
 
-				if ( l_pipeline )
+				if ( pipeline )
 				{
-					auto l_node = p_renderPass.CreateStaticNode( p_pass, *l_pipeline, p_submesh, p_primitive );
-					DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_backCulled );
+					auto node = p_renderPass.CreateStaticNode( p_pass, *pipeline, p_submesh, p_primitive );
+					DoAddRenderNode( p_pass, *pipeline, node, p_submesh, p_instanced.m_backCulled );
 				}
 			}
 			else
@@ -325,122 +325,122 @@ namespace Castor3D
 			p_morphing.m_frontCulled.clear();
 			p_morphing.m_backCulled.clear();
 
-			bool l_shadows{ p_scene.HasShadows() };
+			bool shadows{ p_scene.HasShadows() };
 
-			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
+			auto lock = make_unique_lock( p_scene.GetGeometryCache() );
 
-			for ( auto l_primitive : p_scene.GetGeometryCache() )
+			for ( auto primitive : p_scene.GetGeometryCache() )
 			{
-				if ( p_ignored != l_primitive.second->GetParent().get()
-					&& l_primitive.second->GetParent()->IsVisible() )
+				if ( p_ignored != primitive.second->GetParent().get()
+					&& primitive.second->GetParent()->IsVisible() )
 				{
-					MeshSPtr l_mesh = l_primitive.second->GetMesh();
-					REQUIRE( l_mesh );
+					MeshSPtr mesh = primitive.second->GetMesh();
+					REQUIRE( mesh );
 
-					for ( auto l_submesh : *l_mesh )
+					for ( auto submesh : *mesh )
 					{
-						MaterialSPtr l_material( l_primitive.second->GetMaterial( *l_submesh ) );
-						REQUIRE( l_material );
+						MaterialSPtr material( primitive.second->GetMaterial( *submesh ) );
+						REQUIRE( material );
 
-						for ( auto l_pass : *l_material )
+						for ( auto pass : *material )
 						{
-							auto l_programFlags = l_submesh->GetProgramFlags();
-							auto l_sceneFlags = p_scene.GetFlags();
-							RemFlag( l_programFlags, ProgramFlag::eSkinning );
-							RemFlag( l_programFlags, ProgramFlag::eMorphing );
-							auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
-							auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
+							auto programFlags = submesh->GetProgramFlags();
+							auto sceneFlags = p_scene.GetFlags();
+							RemFlag( programFlags, ProgramFlag::eSkinning );
+							RemFlag( programFlags, ProgramFlag::eMorphing );
+							auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, primitive.first + cuT( "_Skeleton" ) ) );
+							auto mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, primitive.first + cuT( "_Mesh" ) ) );
 
-							if ( l_material->GetType() == MaterialType::ePbrMetallicRoughness )
+							if ( material->GetType() == MaterialType::ePbrMetallicRoughness )
 							{
-								AddFlag( l_programFlags, ProgramFlag::ePbrMetallicRoughness );
+								AddFlag( programFlags, ProgramFlag::ePbrMetallicRoughness );
 							}
-							else if ( l_material->GetType() == MaterialType::ePbrSpecularGlossiness )
+							else if ( material->GetType() == MaterialType::ePbrSpecularGlossiness )
 							{
-								AddFlag( l_programFlags, ProgramFlag::ePbrSpecularGlossiness );
-							}
-
-							if ( l_skeleton && l_submesh->HasBoneData() )
-							{
-								AddFlag( l_programFlags, ProgramFlag::eSkinning );
+								AddFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness );
 							}
 
-							if ( l_mesh )
+							if ( skeleton && submesh->HasBoneData() )
 							{
-								AddFlag( l_programFlags, ProgramFlag::eMorphing );
+								AddFlag( programFlags, ProgramFlag::eSkinning );
 							}
 
-							if ( !l_shadows
-								|| !l_primitive.second->IsShadowReceiver() )
+							if ( mesh )
 							{
-								RemFlag( l_sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
+								AddFlag( programFlags, ProgramFlag::eMorphing );
 							}
 
-							l_pass->PrepareTextures();
+							if ( !shadows
+								|| !primitive.second->IsShadowReceiver() )
+							{
+								RemFlag( sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
+							}
 
-							if ( l_submesh->GetRefCount( l_material ) > 1
-								&& !CheckFlag( l_programFlags, ProgramFlag::eMorphing )
-								&& ( !l_pass->HasAlphaBlending() || p_renderPass.IsOrderIndependent() )
+							pass->PrepareTextures();
+
+							if ( submesh->GetRefCount( material ) > 1
+								&& !CheckFlag( programFlags, ProgramFlag::eMorphing )
+								&& ( !pass->HasAlphaBlending() || p_renderPass.IsOrderIndependent() )
 								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing()
-								&& !l_pass->HasEnvironmentMapping() )
+								&& !pass->HasEnvironmentMapping() )
 							{
-								AddFlag( l_programFlags, ProgramFlag::eInstantiation );
+								AddFlag( programFlags, ProgramFlag::eInstantiation );
 							}
 							else
 							{
-								RemFlag( l_programFlags, ProgramFlag::eInstantiation );
+								RemFlag( programFlags, ProgramFlag::eInstantiation );
 							}
 
-							AddFlags( l_programFlags, l_pass->GetProgramFlags() );
+							AddFlags( programFlags, pass->GetProgramFlags() );
 
-							auto l_textureFlags = l_pass->GetTextureFlags();
-							p_renderPass.PreparePipeline( l_pass->GetColourBlendMode()
-								, l_pass->GetAlphaBlendMode()
-								, l_pass->GetAlphaFunc()
-								, l_textureFlags
-								, l_programFlags
-								, l_sceneFlags
-								, l_pass->IsTwoSided() );
+							auto textureFlags = pass->GetTextureFlags();
+							p_renderPass.PreparePipeline( pass->GetColourBlendMode()
+								, pass->GetAlphaBlendMode()
+								, pass->GetAlphaFunc()
+								, textureFlags
+								, programFlags
+								, sceneFlags
+								, pass->IsTwoSided() );
 
-							if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
+							if ( CheckFlag( programFlags, ProgramFlag::eAlphaBlending ) != p_opaque )
 							{
-								if ( !IsShadowMapProgram( l_programFlags )
-									|| l_primitive.second->IsShadowCaster() )
+								if ( !IsShadowMapProgram( programFlags )
+									|| primitive.second->IsShadowCaster() )
 								{
-									if ( CheckFlag( l_programFlags, ProgramFlag::eSkinning ) )
+									if ( CheckFlag( programFlags, ProgramFlag::eSkinning ) )
 									{
 										DoAddSkinningNode( p_renderPass
-											, l_textureFlags
-											, l_programFlags
-											, l_sceneFlags
-											, *l_pass
-											, *l_submesh
-											, *l_primitive.second
-											, *l_skeleton
+											, textureFlags
+											, programFlags
+											, sceneFlags
+											, *pass
+											, *submesh
+											, *primitive.second
+											, *skeleton
 											, p_skinning
 											, p_instancedSkinning );
 									}
-									else if ( CheckFlag( l_programFlags, ProgramFlag::eMorphing ) )
+									else if ( CheckFlag( programFlags, ProgramFlag::eMorphing ) )
 									{
 										DoAddMorphingNode( p_renderPass
-											, l_textureFlags
-											, l_programFlags
-											, l_sceneFlags
-											, *l_pass
-											, *l_submesh
-											, *l_primitive.second
-											, *l_mesh
+											, textureFlags
+											, programFlags
+											, sceneFlags
+											, *pass
+											, *submesh
+											, *primitive.second
+											, *mesh
 											, p_morphing );
 									}
 									else
 									{
 										DoAddStaticNode( p_renderPass
-											, l_textureFlags
-											, l_programFlags
-											, l_sceneFlags
-											, *l_pass
-											, *l_submesh
-											, *l_primitive.second
+											, textureFlags
+											, programFlags
+											, sceneFlags
+											, *pass
+											, *submesh
+											, *primitive.second
 											, p_static
 											, p_instanced );
 									}
@@ -457,44 +457,44 @@ namespace Castor3D
 			, Scene & p_scene
 			, RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & p_nodes )
 		{
-			bool l_shadows{ p_scene.HasShadows() };
-			auto l_addNode = [&p_opaque, &p_renderPass, &p_scene, &p_nodes, &l_shadows]( Pass & p_pass
+			bool shadows{ p_scene.HasShadows() };
+			auto addNode = [&p_opaque, &p_renderPass, &p_scene, &p_nodes, &shadows]( Pass & p_pass
 				, BillboardBase & p_billboard )
 			{
 				p_pass.PrepareTextures();
-				auto l_programFlags = p_billboard.GetProgramFlags();
-				auto l_sceneFlags = p_scene.GetFlags();
-				AddFlag( l_programFlags, ProgramFlag::eBillboards );
+				auto programFlags = p_billboard.GetProgramFlags();
+				auto sceneFlags = p_scene.GetFlags();
+				AddFlag( programFlags, ProgramFlag::eBillboards );
 
 				if ( p_pass.HasAlphaBlending() )
 				{
-					AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
+					AddFlag( programFlags, ProgramFlag::eAlphaBlending );
 				}
 
-				if ( !l_shadows
+				if ( !shadows
 					|| !p_billboard.IsShadowReceiver() )
 				{
-					RemFlag( l_sceneFlags, SceneFlag::eShadowFilterRaw );
-					RemFlag( l_sceneFlags, SceneFlag::eShadowFilterPoisson );
-					RemFlag( l_sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
+					RemFlag( sceneFlags, SceneFlag::eShadowFilterRaw );
+					RemFlag( sceneFlags, SceneFlag::eShadowFilterPoisson );
+					RemFlag( sceneFlags, SceneFlag::eShadowFilterStratifiedPoisson );
 				}
 
-				auto l_textureFlags = p_pass.GetTextureFlags();
+				auto textureFlags = p_pass.GetTextureFlags();
 				p_renderPass.PreparePipeline( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
 					, p_pass.GetAlphaFunc()
-					, l_textureFlags
-					, l_programFlags
-					, l_sceneFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags
 					, p_pass.IsTwoSided() );
 
-				if ( CheckFlag( l_programFlags, ProgramFlag::eAlphaBlending ) != p_opaque
-					&& !IsShadowMapProgram( l_programFlags ) )
+				if ( CheckFlag( programFlags, ProgramFlag::eAlphaBlending ) != p_opaque
+					&& !IsShadowMapProgram( programFlags ) )
 				{
 					DoAddBillboardNode( p_renderPass
-						, l_textureFlags
-						, l_programFlags
-						, l_sceneFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags
 						, p_pass
 						, p_billboard
 						, p_nodes );
@@ -503,30 +503,30 @@ namespace Castor3D
 			p_nodes.m_frontCulled.clear();
 			p_nodes.m_backCulled.clear();
 			{
-				auto l_lock = make_unique_lock( p_scene.GetBillboardListCache() );
+				auto lock = make_unique_lock( p_scene.GetBillboardListCache() );
 
-				for ( auto l_billboard : p_scene.GetBillboardListCache() )
+				for ( auto billboard : p_scene.GetBillboardListCache() )
 				{
-					MaterialSPtr l_material( l_billboard.second->GetMaterial() );
-					REQUIRE( l_material );
+					MaterialSPtr material( billboard.second->GetMaterial() );
+					REQUIRE( material );
 
-					for ( auto l_pass : *l_material )
+					for ( auto pass : *material )
 					{
-						l_addNode( *l_pass, *l_billboard.second );
+						addNode( *pass, *billboard.second );
 					}
 				}
 			}
 			{
-				auto l_lock = make_unique_lock( p_scene.GetParticleSystemCache() );
+				auto lock = make_unique_lock( p_scene.GetParticleSystemCache() );
 
-				for ( auto l_particleSystem : p_scene.GetParticleSystemCache() )
+				for ( auto particleSystem : p_scene.GetParticleSystemCache() )
 				{
-					MaterialSPtr l_material( l_particleSystem.second->GetMaterial() );
-					REQUIRE( l_material );
+					MaterialSPtr material( particleSystem.second->GetMaterial() );
+					REQUIRE( material );
 
-					for ( auto l_pass : *l_material )
+					for ( auto pass : *material )
 					{
-						l_addNode( *l_pass, *l_particleSystem.second->GetBillboards() );
+						addNode( *pass, *particleSystem.second->GetBillboards() );
 					}
 				}
 			}
@@ -540,13 +540,13 @@ namespace Castor3D
 			, Submesh & p_submesh
 			, ArrayType & p_renderNodes )
 		{
-			for ( auto const & l_node : p_renderNodes )
+			for ( auto const & node : p_renderNodes )
 			{
-				if ( l_node.m_sceneNode.IsDisplayable()
-					 && l_node.m_sceneNode.IsVisible()
-					 && p_camera.IsVisible( l_node.m_data.GetCollisionSphere(), l_node.m_sceneNode.GetDerivedTransformationMatrix() ) )
+				if ( node.m_sceneNode.IsDisplayable()
+					 && node.m_sceneNode.IsVisible()
+					 && p_camera.IsVisible( node.m_data.GetCollisionSphere(), node.m_sceneNode.GetDerivedTransformationMatrix() ) )
 				{
-					DoAddRenderNode( p_pass, p_pipeline, l_node, p_submesh, p_outputNodes );
+					DoAddRenderNode( p_pass, p_pipeline, node, p_submesh, p_outputNodes );
 				}
 			}
 		}
@@ -556,15 +556,15 @@ namespace Castor3D
 			, MapType const & p_inputNodes
 			, MapType & p_outputNodes )
 		{
-			for ( auto & l_pipelines : p_inputNodes )
+			for ( auto & pipelines : p_inputNodes )
 			{
-				for ( auto const & l_node : l_pipelines.second )
+				for ( auto const & node : pipelines.second )
 				{
-					if ( l_node.m_sceneNode.IsDisplayable()
-						 && l_node.m_sceneNode.IsVisible()
-						 && p_camera.IsVisible( l_node.m_data.GetCollisionSphere(), l_node.m_sceneNode.GetDerivedTransformationMatrix() ) )
+					if ( node.m_sceneNode.IsDisplayable()
+						 && node.m_sceneNode.IsVisible()
+						 && p_camera.IsVisible( node.m_data.GetCollisionSphere(), node.m_sceneNode.GetDerivedTransformationMatrix() ) )
 					{
-						DoAddRenderNode( *l_pipelines.first, l_node, p_outputNodes );
+						DoAddRenderNode( *pipelines.first, node, p_outputNodes );
 					}
 				}
 			}
@@ -575,14 +575,14 @@ namespace Castor3D
 			, BillboardRenderNodesByPipelineMap const & p_inputNodes
 			, BillboardRenderNodesByPipelineMap & p_outputNodes )
 		{
-			for ( auto & l_pipelines : p_inputNodes )
+			for ( auto & pipelines : p_inputNodes )
 			{
-				for ( auto const & l_node : l_pipelines.second )
+				for ( auto const & node : pipelines.second )
 				{
-					if ( l_node.m_sceneNode.IsDisplayable()
-						 && l_node.m_sceneNode.IsVisible() )
+					if ( node.m_sceneNode.IsDisplayable()
+						 && node.m_sceneNode.IsVisible() )
 					{
-						DoAddRenderNode( *l_pipelines.first, l_node, p_outputNodes );
+						DoAddRenderNode( *pipelines.first, node, p_outputNodes );
 					}
 				}
 			}
@@ -662,11 +662,11 @@ namespace Castor3D
 		m_preparedRenderNodes->m_billboardNodes.m_backCulled.clear();
 		m_preparedRenderNodes->m_billboardNodes.m_frontCulled.clear();
 
-		auto & l_camera = *m_camera;
+		auto & camera = *m_camera;
 
 		DoTraverseNodes( m_renderNodes->m_instantiatedStaticNodes.m_frontCulled
 			, std::bind( DoAddRenderNodes< SubmeshStaticRenderNodesByPipelineMap, StaticRenderNodeArray >
-				, std::ref( l_camera )
+				, std::ref( camera )
 				, std::ref( m_preparedRenderNodes->m_instantiatedStaticNodes.m_frontCulled )
 				, std::placeholders::_1
 				, std::placeholders::_2
@@ -675,7 +675,7 @@ namespace Castor3D
 
 		DoTraverseNodes( m_renderNodes->m_instantiatedStaticNodes.m_backCulled
 			, std::bind( DoAddRenderNodes< SubmeshStaticRenderNodesByPipelineMap, StaticRenderNodeArray >
-				, std::ref( l_camera )
+				, std::ref( camera )
 				, std::ref( m_preparedRenderNodes->m_instantiatedStaticNodes.m_backCulled )
 				, std::placeholders::_1
 				, std::placeholders::_2
@@ -684,7 +684,7 @@ namespace Castor3D
 
 		DoTraverseNodes( m_renderNodes->m_instantiatedSkinnedNodes.m_frontCulled
 			, std::bind( DoAddRenderNodes< SubmeshSkinningRenderNodesByPipelineMap, SkinningRenderNodeArray >
-				, std::ref( l_camera )
+				, std::ref( camera )
 				, std::ref( m_preparedRenderNodes->m_instantiatedSkinnedNodes.m_frontCulled )
 				, std::placeholders::_1
 				, std::placeholders::_2
@@ -693,38 +693,38 @@ namespace Castor3D
 
 		DoTraverseNodes( m_renderNodes->m_instantiatedSkinnedNodes.m_backCulled
 			, std::bind( DoAddRenderNodes< SubmeshSkinningRenderNodesByPipelineMap, SkinningRenderNodeArray >
-				, std::ref( l_camera )
+				, std::ref( camera )
 				, std::ref( m_preparedRenderNodes->m_instantiatedSkinnedNodes.m_backCulled )
 				, std::placeholders::_1
 				, std::placeholders::_2
 				, std::placeholders::_3
 				, std::placeholders::_4 ) );
 
-		DoParseRenderNodes( l_camera
+		DoParseRenderNodes( camera
 			, m_renderNodes->m_staticNodes.m_frontCulled
 			, m_preparedRenderNodes->m_staticNodes.m_frontCulled );
-		DoParseRenderNodes( l_camera
+		DoParseRenderNodes( camera
 			, m_renderNodes->m_staticNodes.m_backCulled
 			, m_preparedRenderNodes->m_staticNodes.m_backCulled );
 
-		DoParseRenderNodes( l_camera
+		DoParseRenderNodes( camera
 			, m_renderNodes->m_skinnedNodes.m_frontCulled
 			, m_preparedRenderNodes->m_skinnedNodes.m_frontCulled );
-		DoParseRenderNodes( l_camera
+		DoParseRenderNodes( camera
 			, m_renderNodes->m_skinnedNodes.m_backCulled
 			, m_preparedRenderNodes->m_skinnedNodes.m_backCulled );
 
-		DoParseRenderNodes( l_camera
+		DoParseRenderNodes( camera
 			, m_renderNodes->m_morphingNodes.m_frontCulled
 			, m_preparedRenderNodes->m_morphingNodes.m_frontCulled );
-		DoParseRenderNodes( l_camera
+		DoParseRenderNodes( camera
 			, m_renderNodes->m_morphingNodes.m_backCulled
 			, m_preparedRenderNodes->m_morphingNodes.m_backCulled );
 
-		DoParseRenderNodes( l_camera
+		DoParseRenderNodes( camera
 			, m_renderNodes->m_billboardNodes.m_frontCulled
 			, m_preparedRenderNodes->m_billboardNodes.m_frontCulled );
-		DoParseRenderNodes( l_camera
+		DoParseRenderNodes( camera
 			, m_renderNodes->m_billboardNodes.m_backCulled
 			, m_preparedRenderNodes->m_billboardNodes.m_backCulled );
 	}

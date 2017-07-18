@@ -22,15 +22,15 @@ namespace Castor3D
 	{
 		TextOverlaySPtr GetTextOverlay( OverlayCache & p_cache, String const & p_name )
 		{
-			TextOverlaySPtr l_result;
-			OverlaySPtr l_overlay = p_cache.Find( p_name );
+			TextOverlaySPtr result;
+			OverlaySPtr overlay = p_cache.Find( p_name );
 
-			if ( l_overlay )
+			if ( overlay )
 			{
-				l_result = l_overlay->GetTextOverlay();
+				result = overlay->GetTextOverlay();
 			}
 
-			return l_result;
+			return result;
 		}
 	}
 
@@ -45,8 +45,8 @@ namespace Castor3D
 
 	void DebugOverlays::Initialise( OverlayCache & p_cache )
 	{
-		OverlaySPtr l_panel = p_cache.Find( cuT( "DebugPanel" ) );
-		m_debugPanel = l_panel;
+		OverlaySPtr panel = p_cache.Find( cuT( "DebugPanel" ) );
+		m_debugPanel = panel;
 		m_debugCpuTime = GetTextOverlay( p_cache, cuT( "DebugPanel-CpuTime-Value" ) );
 		m_debugGpuClientTime = GetTextOverlay( p_cache, cuT( "DebugPanel-GpuClientTime-Value" ) );
 		m_debugGpuServerTime = GetTextOverlay( p_cache, cuT( "DebugPanel-GpuServerTime-Value" ) );
@@ -75,9 +75,9 @@ namespace Castor3D
 				  && m_debugTime
 				  && m_externTime;
 
-		if ( l_panel )
+		if ( panel )
 		{
-			l_panel->SetVisible( m_valid && m_visible );
+			panel->SetVisible( m_valid && m_visible );
 		}
 	}
 
@@ -113,13 +113,13 @@ namespace Castor3D
 
 	void DebugOverlays::EndFrame( RenderInfo const & p_info )
 	{
-		auto l_totalTime = m_frameTimer.Time() + m_externalTime;
+		auto totalTime = m_frameTimer.Time() + m_externalTime;
 
 		if ( m_valid && m_visible )
 		{
 			m_debugTimer.Time();
-			m_framesTimes[m_frameIndex] = l_totalTime;
-			m_debugTotalTime->SetCaption( StringStream() << l_totalTime );
+			m_framesTimes[m_frameIndex] = totalTime;
+			m_debugTotalTime->SetCaption( StringStream() << totalTime );
 			m_debugCpuTime->SetCaption( StringStream() << m_cpuTime );
 			m_externTime->SetCaption( StringStream() << m_externalTime );
 			m_debugVertexCount->SetCaption( string::to_string( p_info.m_totalVertexCount ) );
@@ -128,24 +128,24 @@ namespace Castor3D
 			m_debugVisibleObjectCount->SetCaption( string::to_string( p_info.m_visibleObjectsCount ) );
 			m_debugParticlesCount->SetCaption( string::to_string( p_info.m_particlesCount ) );
 
-			auto l_serverTime = GetEngine()->GetRenderSystem()->GetGpuTime();
-			m_debugGpuClientTime->SetCaption( StringStream() << ( m_gpuTime - l_serverTime ) );
-			m_debugGpuServerTime->SetCaption( StringStream() << l_serverTime );
+			auto serverTime = GetEngine()->GetRenderSystem()->GetGpuTime();
+			m_debugGpuClientTime->SetCaption( StringStream() << ( m_gpuTime - serverTime ) );
+			m_debugGpuServerTime->SetCaption( StringStream() << serverTime );
 			GetEngine()->GetRenderSystem()->ResetGpuTime();
 
-			auto l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
-			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 4 ) << 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( l_time ).count() << cuT( " fps" ) );
-			m_debugAverageTime->SetCaption( StringStream() << l_time );
+			auto time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
+			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 4 ) << 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( time ).count() << cuT( " fps" ) );
+			m_debugAverageTime->SetCaption( StringStream() << time );
 
 			m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
-			l_time = m_debugTimer.Time();
-			m_debugTime->SetCaption( StringStream() << l_time );
+			time = m_debugTimer.Time();
+			m_debugTime->SetCaption( StringStream() << time );
 
 			m_frameTimer.Time();
 		}
 
-		std::cout << "\rTime: " << std::setw( 7 ) << l_totalTime;
-		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( l_totalTime ).count() );
+		std::cout << "\rTime: " << std::setw( 7 ) << totalTime;
+		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( totalTime ).count() );
 	}
 
 	void DebugOverlays::EndGpuTask()
@@ -167,11 +167,11 @@ namespace Castor3D
 	void DebugOverlays::Show( bool p_show )
 	{
 		m_visible = p_show;
-		OverlaySPtr l_panel = m_debugPanel.lock();
+		OverlaySPtr panel = m_debugPanel.lock();
 
-		if ( l_panel )
+		if ( panel )
 		{
-			l_panel->SetVisible( m_valid && m_visible );
+			panel->SetVisible( m_valid && m_visible );
 		}
 	}
 }

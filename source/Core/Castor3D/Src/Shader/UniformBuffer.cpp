@@ -26,19 +26,19 @@ namespace Castor3D
 				{ ShaderTypeFlag::eCompute, cuT( "compute" ) }
 			};
 
-			String l_result;
-			String l_sep;
+			String result;
+			String sep;
 
 			for ( auto it : Names )
 			{
 				if ( CheckFlag( p_flags, it.first ) )
 				{
-					l_result += l_sep + it.second;
-					l_sep = cuT( " | " );
+					result += sep + it.second;
+					sep = cuT( " | " );
 				}
 			}
 
-			return l_result;
+			return result;
 		}
 	}
 
@@ -51,55 +51,55 @@ namespace Castor3D
 
 	bool UniformBuffer::TextWriter::operator()( UniformBuffer const & p_object, TextFile & p_file )
 	{
-		bool l_result = p_file.WriteText( m_tabs + cuT( "constants_buffer \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
+		bool result = p_file.WriteText( m_tabs + cuT( "constants_buffer \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		CheckError( l_result, "Frame variable buffer" );
-		auto l_tabs = m_tabs + cuT( "\t" );
+		CheckError( result, "Frame variable buffer" );
+		auto tabs = m_tabs + cuT( "\t" );
 
-		if ( l_result )
+		if ( result )
 		{
-			for ( auto & l_variable : p_object )
+			for ( auto & variable : p_object )
 			{
-				if ( l_result )
+				if ( result )
 				{
-					l_result = p_file.WriteText( l_tabs + cuT( "variable \"" ) + l_variable->GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( l_tabs + cuT( "{\n" ) ) > 0;
-					CheckError( l_result, "Frame variable buffer variable name" );
+					result = p_file.WriteText( tabs + cuT( "variable \"" ) + variable->GetName() + cuT( "\"\n" ) ) > 0
+						&& p_file.WriteText( tabs + cuT( "{\n" ) ) > 0;
+					CheckError( result, "Frame variable buffer variable name" );
 				}
 
-				if ( l_result )
+				if ( result )
 				{
-					l_result = p_file.WriteText( l_tabs + cuT( "\tcount " ) + string::to_string( l_variable->GetOccCount() ) + cuT( "\n" ) ) > 0;
-					CheckError( l_result, "Frame variable buffer variable occurences" );
+					result = p_file.WriteText( tabs + cuT( "\tcount " ) + string::to_string( variable->GetOccCount() ) + cuT( "\n" ) ) > 0;
+					CheckError( result, "Frame variable buffer variable occurences" );
 				}
 
-				if ( l_result )
+				if ( result )
 				{
-					l_result = p_file.WriteText( l_tabs + cuT( "\ttype " ) + l_variable->GetFullTypeName() + cuT( "\n" ) ) > 0;
-					CheckError( l_result, "Frame variable buffer variable type name" );
+					result = p_file.WriteText( tabs + cuT( "\ttype " ) + variable->GetFullTypeName() + cuT( "\n" ) ) > 0;
+					CheckError( result, "Frame variable buffer variable type name" );
 				}
 
-				if ( l_result )
+				if ( result )
 				{
-					l_result = p_file.WriteText( l_tabs + cuT( "\tvalue " ) + l_variable->GetStrValue() + cuT( "\n" ) ) > 0;
-					CheckError( l_result, "Frame variable buffer variable value" );
+					result = p_file.WriteText( tabs + cuT( "\tvalue " ) + variable->GetStrValue() + cuT( "\n" ) ) > 0;
+					CheckError( result, "Frame variable buffer variable value" );
 				}
 
-				if ( l_result )
+				if ( result )
 				{
-					l_result = p_file.WriteText( l_tabs + cuT( "}\n" ) ) > 0;
-					CheckError( l_result, "Frame variable buffer variable end" );
+					result = p_file.WriteText( tabs + cuT( "}\n" ) ) > 0;
+					CheckError( result, "Frame variable buffer variable end" );
 				}
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
-			CheckError( l_result, "Frame variable buffer end" );
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			CheckError( result, "Frame variable buffer end" );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -116,44 +116,44 @@ namespace Castor3D
 
 	UniformSPtr UniformBuffer::CreateUniform( UniformType p_type, String const & p_name, uint32_t p_occurences )
 	{
-		UniformSPtr l_result;
-		auto l_it = m_mapVariables.find( p_name );
+		UniformSPtr result;
+		auto it = m_mapVariables.find( p_name );
 
-		if ( l_it == m_mapVariables.end() )
+		if ( it == m_mapVariables.end() )
 		{
-			l_result = DoCreateVariable( p_type, p_name, p_occurences );
+			result = DoCreateVariable( p_type, p_name, p_occurences );
 
-			if ( l_result )
+			if ( result )
 			{
-				m_mapVariables.insert( std::make_pair( p_name, l_result ) );
-				m_listVariables.push_back( l_result );
+				m_mapVariables.insert( std::make_pair( p_name, result ) );
+				m_listVariables.push_back( result );
 			}
 		}
 		else
 		{
-			l_result = l_it->second.lock();
+			result = it->second.lock();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void UniformBuffer::RemoveUniform( String const & p_name )
 	{
-		auto l_itMap = m_mapVariables.find( p_name );
+		auto itMap = m_mapVariables.find( p_name );
 
-		if ( l_itMap != m_mapVariables.end() )
+		if ( itMap != m_mapVariables.end() )
 		{
-			m_mapVariables.erase( l_itMap );
+			m_mapVariables.erase( itMap );
 		}
 
-		auto l_itList = std::find_if( m_listVariables.begin(), m_listVariables.end(), [&p_name]( UniformSPtr p_variable )
+		auto itList = std::find_if( m_listVariables.begin(), m_listVariables.end(), [&p_name]( UniformSPtr p_variable )
 		{
 			return p_name == p_variable->GetName();
 		} );
 
-		if ( l_itList != m_listVariables.end() )
+		if ( itList != m_listVariables.end() )
 		{
-			m_listVariables.erase( l_itList );
+			m_listVariables.erase( itList );
 		}
 	}
 
@@ -184,21 +184,21 @@ namespace Castor3D
 
 	UniformBufferBinding & UniformBuffer::CreateBinding( ShaderProgram & p_program )
 	{
-		auto l_it = m_bindings.find( &p_program );
+		auto it = m_bindings.find( &p_program );
 
-		if ( l_it == m_bindings.end() )
+		if ( it == m_bindings.end() )
 		{
-			auto l_binding = GetRenderSystem()->CreateUniformBufferBinding( *this, p_program );
+			auto binding = GetRenderSystem()->CreateUniformBufferBinding( *this, p_program );
 
-			if ( !m_storage && l_binding->GetSize() > 0 )
+			if ( !m_storage && binding->GetSize() > 0 )
 			{
-				DoInitialise( *l_binding );
+				DoInitialise( *binding );
 			}
 
-			l_it = m_bindings.emplace( &p_program, std::move( l_binding ) ).first;
+			it = m_bindings.emplace( &p_program, std::move( binding ) ).first;
 		}
 
-		return *l_it->second;
+		return *it->second;
 	}
 
 	UniformBufferBinding & UniformBuffer::GetBinding( ShaderProgram & p_program )const
@@ -210,18 +210,18 @@ namespace Castor3D
 	void UniformBuffer::Update()const
 	{
 		REQUIRE( m_storage );
-		bool l_changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( UniformSPtr p_variable )
+		bool changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( UniformSPtr p_variable )
 		{
 			return p_variable->IsChanged();
 		} );
 
-		if ( l_changed )
+		if ( changed )
 		{
 			m_storage->Upload( 0u, uint32_t( m_buffer.size() ), m_buffer.data() );
 
-			for ( auto & l_variable : m_listVariables )
+			for ( auto & variable : m_listVariables )
 			{
-				l_variable->SetChanged( false );
+				variable->SetChanged( false );
 			}
 		}
 	}
@@ -230,24 +230,24 @@ namespace Castor3D
 	{
 		m_buffer.resize( p_binding.GetSize() );
 
-		for ( auto & l_variable : *this )
+		for ( auto & variable : *this )
 		{
-			auto l_it = std::find_if( p_binding.begin()
+			auto it = std::find_if( p_binding.begin()
 				, p_binding.end()
-				, [&l_variable]( auto & p_info )
+				, [&variable]( auto & p_info )
 				{
-					return l_variable->GetName() == p_info.m_name;
+					return variable->GetName() == p_info.m_name;
 				} );
 
-			if ( l_it != p_binding.end() )
+			if ( it != p_binding.end() )
 			{
-				REQUIRE( l_variable->size() <= m_buffer.size() - ( l_it->m_offset ) );
-				l_variable->link( &m_buffer[l_it->m_offset], l_it->m_stride < 0 ? 0u : uint32_t( l_it->m_stride ) );
-				++l_it;
+				REQUIRE( variable->size() <= m_buffer.size() - ( it->m_offset ) );
+				variable->link( &m_buffer[it->m_offset], it->m_stride < 0 ? 0u : uint32_t( it->m_stride ) );
+				++it;
 			}
 			else
 			{
-				Logger::LogWarning( cuT( "The variable [" ) + l_variable->GetName() + cuT( "] was not found in the binding." ) );
+				Logger::LogWarning( cuT( "The variable [" ) + variable->GetName() + cuT( "] was not found in the binding." ) );
 			}
 		}
 
@@ -264,165 +264,165 @@ namespace Castor3D
 			, uint32_t( m_buffer.size() )
 			, m_buffer.data() );
 
-		for ( auto & l_variable : *this )
+		for ( auto & variable : *this )
 		{
-			l_variable->SetChanged( false );
+			variable->SetChanged( false );
 		}
 	}
 
 	UniformSPtr UniformBuffer::DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences )
 	{
-		UniformSPtr l_result;
+		UniformSPtr result;
 
 		switch ( p_type )
 		{
 		case UniformType::eInt:
-			l_result = std::make_shared< Uniform1i >( p_occurences );
+			result = std::make_shared< Uniform1i >( p_occurences );
 			break;
 
 		case UniformType::eUInt:
-			l_result = std::make_shared< Uniform1ui >( p_occurences );
+			result = std::make_shared< Uniform1ui >( p_occurences );
 			break;
 
 		case UniformType::eFloat:
-			l_result = std::make_shared< Uniform1f >( p_occurences );
+			result = std::make_shared< Uniform1f >( p_occurences );
 			break;
 
 		case UniformType::eDouble:
-			l_result = std::make_shared< Uniform1d >( p_occurences );
+			result = std::make_shared< Uniform1d >( p_occurences );
 			break;
 
 		case UniformType::eSampler:
-			l_result = std::make_shared< Uniform1i >( p_occurences );
+			result = std::make_shared< Uniform1i >( p_occurences );
 			break;
 
 		case UniformType::eVec2i:
-			l_result = std::make_shared< Uniform2i >( p_occurences );
+			result = std::make_shared< Uniform2i >( p_occurences );
 			break;
 
 		case UniformType::eVec3i:
-			l_result = std::make_shared< Uniform3i >( p_occurences );
+			result = std::make_shared< Uniform3i >( p_occurences );
 			break;
 
 		case UniformType::eVec4i:
-			l_result = std::make_shared< Uniform4i >( p_occurences );
+			result = std::make_shared< Uniform4i >( p_occurences );
 			break;
 
 		case UniformType::eVec2ui:
-			l_result = std::make_shared< Uniform2ui >( p_occurences );
+			result = std::make_shared< Uniform2ui >( p_occurences );
 			break;
 
 		case UniformType::eVec3ui:
-			l_result = std::make_shared< Uniform3ui >( p_occurences );
+			result = std::make_shared< Uniform3ui >( p_occurences );
 			break;
 
 		case UniformType::eVec4ui:
-			l_result = std::make_shared< Uniform4ui >( p_occurences );
+			result = std::make_shared< Uniform4ui >( p_occurences );
 			break;
 
 		case UniformType::eVec2f:
-			l_result = std::make_shared< Uniform2f >( p_occurences );
+			result = std::make_shared< Uniform2f >( p_occurences );
 			break;
 
 		case UniformType::eVec3f:
-			l_result = std::make_shared< Uniform3f >( p_occurences );
+			result = std::make_shared< Uniform3f >( p_occurences );
 			break;
 
 		case UniformType::eVec4f:
-			l_result = std::make_shared< Uniform4f >( p_occurences );
+			result = std::make_shared< Uniform4f >( p_occurences );
 			break;
 
 		case UniformType::eVec2d:
-			l_result = std::make_shared< Uniform2d >( p_occurences );
+			result = std::make_shared< Uniform2d >( p_occurences );
 			break;
 
 		case UniformType::eVec3d:
-			l_result = std::make_shared< Uniform3d >( p_occurences );
+			result = std::make_shared< Uniform3d >( p_occurences );
 			break;
 
 		case UniformType::eVec4d:
-			l_result = std::make_shared< Uniform4d >( p_occurences );
+			result = std::make_shared< Uniform4d >( p_occurences );
 			break;
 
 		case UniformType::eMat2x2f:
-			l_result = std::make_shared< Uniform2x2f >( p_occurences );
+			result = std::make_shared< Uniform2x2f >( p_occurences );
 			break;
 
 		case UniformType::eMat2x3f:
-			l_result = std::make_shared< Uniform2x3f >( p_occurences );
+			result = std::make_shared< Uniform2x3f >( p_occurences );
 			break;
 
 		case UniformType::eMat2x4f:
-			l_result = std::make_shared< Uniform2x4f >( p_occurences );
+			result = std::make_shared< Uniform2x4f >( p_occurences );
 			break;
 
 		case UniformType::eMat3x2f:
-			l_result = std::make_shared< Uniform3x2f >( p_occurences );
+			result = std::make_shared< Uniform3x2f >( p_occurences );
 			break;
 
 		case UniformType::eMat3x3f:
-			l_result = std::make_shared< Uniform3x3f >( p_occurences );
+			result = std::make_shared< Uniform3x3f >( p_occurences );
 			break;
 
 		case UniformType::eMat3x4f:
-			l_result = std::make_shared< Uniform3x4f >( p_occurences );
+			result = std::make_shared< Uniform3x4f >( p_occurences );
 			break;
 
 		case UniformType::eMat4x2f:
-			l_result = std::make_shared< Uniform4x2f >( p_occurences );
+			result = std::make_shared< Uniform4x2f >( p_occurences );
 			break;
 
 		case UniformType::eMat4x3f:
-			l_result = std::make_shared< Uniform4x3f >( p_occurences );
+			result = std::make_shared< Uniform4x3f >( p_occurences );
 			break;
 
 		case UniformType::eMat4x4f:
-			l_result = std::make_shared< Uniform4x4f >( p_occurences );
+			result = std::make_shared< Uniform4x4f >( p_occurences );
 			break;
 
 		case UniformType::eMat2x2d:
-			l_result = std::make_shared< Uniform2x2d >( p_occurences );
+			result = std::make_shared< Uniform2x2d >( p_occurences );
 			break;
 
 		case UniformType::eMat2x3d:
-			l_result = std::make_shared< Uniform2x3d >( p_occurences );
+			result = std::make_shared< Uniform2x3d >( p_occurences );
 			break;
 
 		case UniformType::eMat2x4d:
-			l_result = std::make_shared< Uniform2x4d >( p_occurences );
+			result = std::make_shared< Uniform2x4d >( p_occurences );
 			break;
 
 		case UniformType::eMat3x2d:
-			l_result = std::make_shared< Uniform3x2d >( p_occurences );
+			result = std::make_shared< Uniform3x2d >( p_occurences );
 			break;
 
 		case UniformType::eMat3x3d:
-			l_result = std::make_shared< Uniform3x3d >( p_occurences );
+			result = std::make_shared< Uniform3x3d >( p_occurences );
 			break;
 
 		case UniformType::eMat3x4d:
-			l_result = std::make_shared< Uniform3x4d >( p_occurences );
+			result = std::make_shared< Uniform3x4d >( p_occurences );
 			break;
 
 		case UniformType::eMat4x2d:
-			l_result = std::make_shared< Uniform4x2d >( p_occurences );
+			result = std::make_shared< Uniform4x2d >( p_occurences );
 			break;
 
 		case UniformType::eMat4x3d:
-			l_result = std::make_shared< Uniform4x3d >( p_occurences );
+			result = std::make_shared< Uniform4x3d >( p_occurences );
 			break;
 
 		case UniformType::eMat4x4d:
-			l_result = std::make_shared< Uniform4x4d >( p_occurences );
+			result = std::make_shared< Uniform4x4d >( p_occurences );
 			break;
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result->SetName( p_name );
+			result->SetName( p_name );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************

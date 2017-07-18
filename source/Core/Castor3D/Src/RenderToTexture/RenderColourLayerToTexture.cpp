@@ -37,27 +37,27 @@ namespace Castor3D
 	{
 		uint32_t i = 0;
 
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
 		}
 	}
 
 	RenderColourLayerToTexture::~RenderColourLayerToTexture()
 	{
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex.reset();
+			vertex.reset();
 		}
 	}
 
 	void RenderColourLayerToTexture::Initialise()
 	{
 		m_viewport.Initialise();
-		auto & l_program = *DoCreateProgram();
-		auto & l_renderSystem = *GetOwner()->GetRenderSystem();
-		l_program.Initialise();
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *l_renderSystem.GetEngine()
+		auto & program = *DoCreateProgram();
+		auto & renderSystem = *GetOwner()->GetRenderSystem();
+		program.Initialise();
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *renderSystem.GetEngine()
 			, m_declaration );
 		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size()
 			* m_declaration.stride() ) );
@@ -65,18 +65,18 @@ namespace Castor3D
 			, m_arrayVertex.end() );
 		m_vertexBuffer->Initialise( BufferAccessType::eStatic
 			, BufferAccessNature::eDraw );
-		m_geometryBuffers = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
-			, l_program );
+		m_geometryBuffers = renderSystem.CreateGeometryBuffers( Topology::eTriangles
+			, program );
 		m_geometryBuffers->Initialise( { *m_vertexBuffer }
 		, nullptr );
 
-		DepthStencilState l_dsState;
-		l_dsState.SetDepthTest( false );
-		m_pipeline = l_renderSystem.CreateRenderPipeline( std::move( l_dsState )
+		DepthStencilState dsState;
+		dsState.SetDepthTest( false );
+		m_pipeline = renderSystem.CreateRenderPipeline( std::move( dsState )
 			, RasteriserState{}
 			, BlendState{}
 			, MultisampleState{}
-			, l_program
+			, program
 			, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 
@@ -160,59 +160,59 @@ namespace Castor3D
 
 	ShaderProgramSPtr RenderColourLayerToTexture::DoCreateProgram()
 	{
-		auto & l_renderSystem = *GetOwner()->GetRenderSystem();
-		GLSL::Shader l_vtx;
+		auto & renderSystem = *GetOwner()->GetRenderSystem();
+		GLSL::Shader vtx;
 		{
 			using namespace GLSL;
-			auto l_writer = l_renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.CreateGlslWriter();
 
-			UBO_MATRIX( l_writer );
+			UBO_MATRIX( writer );
 
 			// Shader inputs
-			auto position = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = l_writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = writer.DeclAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = writer.DeclAttribute< Vec2 >( ShaderProgram::Texture );
 
 			// Shader outputs
-			auto vtx_texture = l_writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
 				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
-			l_vtx = l_writer.Finalise();
+			vtx = writer.Finalise();
 		}
 
-		GLSL::Shader l_pxl;
+		GLSL::Shader pxl;
 		{
 			using namespace GLSL;
-			auto l_writer = l_renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.CreateGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2DArray >( ShaderProgram::MapDiffuse );
-			auto c3d_iIndex = l_writer.DeclUniform< Int >( cuT( "c3d_iIndex" ) );
-			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2DArray >( ShaderProgram::MapDiffuse );
+			auto c3d_iIndex = writer.DeclUniform< Int >( cuT( "c3d_iIndex" ) );
+			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec3( vtx_texture, c3d_iIndex ) ).xyz(), 1.0 );
 			} );
-			l_pxl = l_writer.Finalise();
+			pxl = writer.Finalise();
 		}
 
-		auto & l_cache = l_renderSystem.GetEngine()->GetShaderProgramCache();
-		auto l_program = l_cache.GetNewProgram( false );
-		l_program->CreateObject( ShaderType::eVertex );
-		l_program->CreateObject( ShaderType::ePixel );
-		l_program->SetSource( ShaderType::eVertex, l_vtx );
-		l_program->SetSource( ShaderType::ePixel, l_pxl );
-		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-		m_layerIndexUniform = l_program->CreateUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
-		l_program->Initialise();
-		return l_program;
+		auto & cache = renderSystem.GetEngine()->GetShaderProgramCache();
+		auto program = cache.GetNewProgram( false );
+		program->CreateObject( ShaderType::eVertex );
+		program->CreateObject( ShaderType::ePixel );
+		program->SetSource( ShaderType::eVertex, vtx );
+		program->SetSource( ShaderType::ePixel, pxl );
+		program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		m_layerIndexUniform = program->CreateUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
+		program->Initialise();
+		return program;
 	}
 }

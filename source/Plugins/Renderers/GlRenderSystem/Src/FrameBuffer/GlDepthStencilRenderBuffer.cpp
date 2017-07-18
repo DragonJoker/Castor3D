@@ -29,14 +29,14 @@ namespace GlRender
 
 	bool GlDepthStencilRenderBuffer::Initialise( Castor::Size const & p_size )
 	{
-		bool l_result = m_glRenderBuffer.Initialise( p_size );
+		bool result = m_glRenderBuffer.Initialise( p_size );
 
-		if ( l_result )
+		if ( result )
 		{
 			m_size = p_size;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void GlDepthStencilRenderBuffer::Cleanup()
@@ -56,13 +56,13 @@ namespace GlRender
 
 	bool GlDepthStencilRenderBuffer::Resize( Castor::Size const & p_size )
 	{
-		bool l_result = m_glRenderBuffer.Resize( p_size );
+		bool result = m_glRenderBuffer.Resize( p_size );
 
-		if ( l_result )
+		if ( result )
 		{
 			m_size = p_size;
 		}
 
-		return l_result;
+		return result;
 	}
 }

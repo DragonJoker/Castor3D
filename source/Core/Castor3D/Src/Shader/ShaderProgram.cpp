@@ -39,48 +39,48 @@ namespace Castor3D
 
 	bool ShaderProgram::TextWriter::operator()( ShaderProgram const & p_shaderProgram, TextFile & p_file )
 	{
-		bool l_result = false;
-		bool l_hasFile = false;
+		bool result = false;
+		bool hasFile = false;
 		uint8_t i = 0;
 		uint8_t j = 0;
 
-		while ( i < uint8_t( ShaderType::eCount ) && !l_hasFile )
+		while ( i < uint8_t( ShaderType::eCount ) && !hasFile )
 		{
 			if ( p_shaderProgram.HasObject( ShaderType( i ) ) )
 			{
-				l_hasFile = !p_shaderProgram.GetFile( ShaderType( i ) ).empty();
+				hasFile = !p_shaderProgram.GetFile( ShaderType( i ) ).empty();
 			}
 
 			++i;
 		}
 
-		if ( l_hasFile )
+		if ( hasFile )
 		{
-			auto l_tabs = m_tabs + cuT( "\t" );
-			ShaderObjectSPtr l_object;
-			l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + m_name + cuT( "\n" ) ) > 0
+			auto tabs = m_tabs + cuT( "\t" );
+			ShaderObjectSPtr object;
+			result = p_file.WriteText( cuT( "\n" ) + m_tabs + m_name + cuT( "\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			CheckError( l_result, "Shader program" );
+			CheckError( result, "Shader program" );
 
-			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ) && l_result; i++ )
+			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ) && result; i++ )
 			{
 				if ( p_shaderProgram.HasObject( ShaderType( i ) ) )
 				{
-					l_result = ShaderObject::TextWriter( l_tabs )( *p_shaderProgram.m_shaders[i], p_file );
+					result = ShaderObject::TextWriter( tabs )( *p_shaderProgram.m_shaders[i], p_file );
 				}
 			}
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 		else
 		{
-			l_result = true;
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -185,13 +185,13 @@ namespace Castor3D
 
 	ShaderObjectSPtr ShaderProgram::CreateObject( ShaderType p_type )
 	{
-		ShaderObjectSPtr l_result;
+		ShaderObjectSPtr result;
 		REQUIRE( p_type > ShaderType::eNone && p_type < ShaderType::eCount );
 
 		if ( p_type > ShaderType::eNone && p_type < ShaderType::eCount )
 		{
-			l_result = DoCreateObject( p_type );
-			m_shaders[size_t( p_type )] = l_result;
+			result = DoCreateObject( p_type );
+			m_shaders[size_t( p_type )] = result;
 			size_t i = size_t( ShaderModel::eModel1 );
 
 			if ( !m_file.empty() )
@@ -200,18 +200,18 @@ namespace Castor3D
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void ShaderProgram::DoCleanup()
 	{
-		for ( auto l_shader : m_activeShaders )
+		for ( auto shader : m_activeShaders )
 		{
-			if ( l_shader )
+			if ( shader )
 			{
-				l_shader->Detach();
-				l_shader->FlushUniforms();
-				l_shader->Destroy();
+				shader->Detach();
+				shader->FlushUniforms();
+				shader->Destroy();
 			}
 		}
 
@@ -224,11 +224,11 @@ namespace Castor3D
 		m_file = p_path;
 		uint8_t i = uint8_t( ShaderType::eVertex );
 
-		for ( auto l_shader : m_shaders )
+		for ( auto shader : m_shaders )
 		{
-			if ( l_shader && GetRenderSystem()->GetGpuInformations().HasShaderType( ShaderType( i++ ) ) )
+			if ( shader && GetRenderSystem()->GetGpuInformations().HasShaderType( ShaderType( i++ ) ) )
 			{
-				l_shader->SetFile( p_path );
+				shader->SetFile( p_path );
 			}
 		}
 
@@ -284,27 +284,27 @@ namespace Castor3D
 	Path ShaderProgram::GetFile( ShaderType p_target )const
 	{
 		REQUIRE( m_shaders[size_t( p_target )] );
-		Path l_pathReturn;
+		Path pathReturn;
 
 		if ( m_shaders[size_t( p_target )] )
 		{
-			l_pathReturn = m_shaders[size_t( p_target )]->GetFile();
+			pathReturn = m_shaders[size_t( p_target )]->GetFile();
 		}
 
-		return l_pathReturn;
+		return pathReturn;
 	}
 
 	bool ShaderProgram::HasFile( ShaderType p_target )const
 	{
 		REQUIRE( m_shaders[size_t( p_target )] );
-		bool l_result = false;
+		bool result = false;
 
 		if ( m_shaders[size_t( p_target )] )
 		{
-			l_result = m_shaders[size_t( p_target )]->HasFile();
+			result = m_shaders[size_t( p_target )]->HasFile();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void ShaderProgram::SetSource( ShaderType p_target, String const & p_source )
@@ -338,27 +338,27 @@ namespace Castor3D
 	String ShaderProgram::GetSource( ShaderType p_target )const
 	{
 		REQUIRE( m_shaders[size_t( p_target )] );
-		String l_strReturn;
+		String strReturn;
 
 		if ( m_shaders[size_t( p_target )] )
 		{
-			l_strReturn = m_shaders[size_t( p_target )]->GetSource();
+			strReturn = m_shaders[size_t( p_target )]->GetSource();
 		}
 
-		return l_strReturn;
+		return strReturn;
 	}
 
 	bool ShaderProgram::HasSource( ShaderType p_target )const
 	{
 		REQUIRE( m_shaders[size_t( p_target )] );
-		bool l_result = false;
+		bool result = false;
 
 		if ( m_shaders[size_t( p_target )] )
 		{
-			l_result = m_shaders[size_t( p_target )]->HasSource();
+			result = m_shaders[size_t( p_target )]->HasSource();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool ShaderProgram::HasObject( ShaderType p_target )const
@@ -369,88 +369,88 @@ namespace Castor3D
 	ShaderStatus ShaderProgram::GetObjectStatus( ShaderType p_target )const
 	{
 		REQUIRE( m_shaders[size_t( p_target )] );
-		ShaderStatus l_result = ShaderStatus::eDontExist;
+		ShaderStatus result = ShaderStatus::eDontExist;
 
 		if ( m_shaders[size_t( p_target )] )
 		{
-			l_result = m_shaders[size_t( p_target )]->GetStatus();
+			result = m_shaders[size_t( p_target )]->GetStatus();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	PushUniformSPtr ShaderProgram::CreateUniform( UniformType p_type, String const & p_name, ShaderType p_shader, int p_iNbOcc )
 	{
 		REQUIRE( m_shaders[size_t( p_shader )] );
-		PushUniformSPtr l_result = FindUniform( p_type, p_name, p_shader );
+		PushUniformSPtr result = FindUniform( p_type, p_name, p_shader );
 
-		if ( !l_result )
+		if ( !result )
 		{
-			l_result = DoCreateUniform( p_type, p_iNbOcc );
-			l_result->GetBaseUniform().SetName( p_name );
+			result = DoCreateUniform( p_type, p_iNbOcc );
+			result->GetBaseUniform().SetName( p_name );
 
 			if ( m_shaders[size_t( p_shader )] )
 			{
-				m_shaders[size_t( p_shader )]->AddUniform( l_result );
+				m_shaders[size_t( p_shader )]->AddUniform( result );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	PushUniformSPtr ShaderProgram::FindUniform( UniformType p_type, Castor::String const & p_name, ShaderType p_shader )const
 	{
 		REQUIRE( m_shaders[size_t( p_shader )] );
-		PushUniformSPtr l_result;
+		PushUniformSPtr result;
 
 		if ( m_shaders[size_t( p_shader )] )
 		{
-			l_result = m_shaders[size_t( p_shader )]->FindUniform( p_name );
+			result = m_shaders[size_t( p_shader )]->FindUniform( p_name );
 
-			if ( l_result && l_result->GetBaseUniform().GetFullType() != p_type )
+			if ( result && result->GetBaseUniform().GetFullType() != p_type )
 			{
 				Logger::LogError( cuT( "Frame variable named " ) + p_name + cuT( " exists but with a different type" ) );
-				l_result.reset();
+				result.reset();
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	AtomicCounterBuffer & ShaderProgram::CreateAtomicCounterBuffer( String const & p_name, ShaderTypeFlags const & p_shaderMask )
 	{
-		auto l_it = m_atomicCounterBuffersByName.find( p_name );
+		auto it = m_atomicCounterBuffersByName.find( p_name );
 
-		if ( l_it == m_atomicCounterBuffersByName.end() )
+		if ( it == m_atomicCounterBuffersByName.end() )
 		{
-			auto l_ssbo = std::make_shared< AtomicCounterBuffer >( p_name, *this );
-			m_listAtomicCounterBuffers.push_back( l_ssbo );
-			l_it = m_atomicCounterBuffersByName.insert( { p_name, l_ssbo } ).first;
+			auto ssbo = std::make_shared< AtomicCounterBuffer >( p_name, *this );
+			m_listAtomicCounterBuffers.push_back( ssbo );
+			it = m_atomicCounterBuffersByName.insert( { p_name, ssbo } ).first;
 
 			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); ++i )
 			{
 				if ( CheckFlag( p_shaderMask, uint8_t( 0x01 << i ) ) )
 				{
 					REQUIRE( m_shaders[i] );
-					m_atomicCounterBuffers[i].push_back( l_ssbo );
+					m_atomicCounterBuffers[i].push_back( ssbo );
 				}
 			}
 		}
 
-		return *l_it->second.lock();
+		return *it->second.lock();
 	}
 
 	AtomicCounterBufferSPtr ShaderProgram::FindAtomicCounterBuffer( Castor::String const & p_name )const
 	{
-		AtomicCounterBufferSPtr l_buffer;
-		auto l_it = m_atomicCounterBuffersByName.find( p_name );
+		AtomicCounterBufferSPtr buffer;
+		auto it = m_atomicCounterBuffersByName.find( p_name );
 
-		if ( l_it != m_atomicCounterBuffersByName.end() )
+		if ( it != m_atomicCounterBuffersByName.end() )
 		{
-			l_buffer = l_it->second.lock();
+			buffer = it->second.lock();
 		}
 
-		return l_buffer;
+		return buffer;
 	}
 
 	PushUniformList & ShaderProgram::GetUniforms( ShaderType p_type )
@@ -471,23 +471,23 @@ namespace Castor3D
 		{
 			m_activeShaders.clear();
 
-			for ( auto l_shader : m_shaders )
+			for ( auto shader : m_shaders )
 			{
-				if ( l_shader && l_shader->HasSource() )
+				if ( shader && shader->HasSource() )
 				{
-					l_shader->Destroy();
-					l_shader->Create();
+					shader->Destroy();
+					shader->Create();
 
-					if ( !l_shader->Compile() && l_shader->GetStatus() == ShaderStatus::eError )
+					if ( !shader->Compile() && shader->GetStatus() == ShaderStatus::eError )
 					{
 						Logger::LogError( cuT( "ShaderProgram::Initialise - COMPILER ERROR" ) );
-						l_shader->Destroy();
+						shader->Destroy();
 						m_status = ProgramStatus::eError;
 					}
 					else
 					{
-						l_shader->AttachTo( *this );
-						m_activeShaders.push_back( l_shader );
+						shader->AttachTo( *this );
+						m_activeShaders.push_back( shader );
 					}
 				}
 			}
@@ -496,13 +496,13 @@ namespace Castor3D
 			{
 				Logger::LogError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
 
-				for ( auto l_shader : m_activeShaders )
+				for ( auto shader : m_activeShaders )
 				{
-					StringStream l_source;
-					l_source << format::line_prefix();
-					l_source << l_shader->GetSource();
-					Logger::LogDebug( l_source.str() );
-					l_shader->Destroy();
+					StringStream source;
+					source << format::line_prefix();
+					source << shader->GetSource();
+					Logger::LogDebug( source.str() );
+					shader->Destroy();
 				}
 
 				m_status = ProgramStatus::eError;
@@ -520,9 +520,9 @@ namespace Castor3D
 	{
 		if ( m_status == ProgramStatus::eLinked )
 		{
-			for ( auto l_shader : m_activeShaders )
+			for ( auto shader : m_activeShaders )
 			{
-				l_shader->Bind();
+				shader->Bind();
 			}
 		}
 	}
@@ -531,9 +531,9 @@ namespace Castor3D
 	{
 		if ( m_status == ProgramStatus::eLinked )
 		{
-			for ( auto l_shader : m_activeShaders )
+			for ( auto shader : m_activeShaders )
 			{
-				l_shader->Unbind();
+				shader->Unbind();
 			}
 		}
 	}
@@ -544,11 +544,11 @@ namespace Castor3D
 		{
 			if ( m_status != ProgramStatus::eLinked )
 			{
-				for ( auto l_shader : m_activeShaders )
+				for ( auto shader : m_activeShaders )
 				{
-					for ( auto l_it : l_shader->GetUniforms() )
+					for ( auto it : shader->GetUniforms() )
 					{
-						l_it->Initialise();
+						it->Initialise();
 					}
 				}
 

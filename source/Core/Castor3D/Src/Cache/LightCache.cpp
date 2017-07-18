@@ -32,14 +32,14 @@ namespace Castor3D
 
 			inline void operator()( LightSPtr p_element )
 			{
-				auto l_index = size_t( p_element->GetLightType() );
-				auto l_it = std::find( m_typeSortedLights[l_index].begin()
-					, m_typeSortedLights[l_index].end()
+				auto index = size_t( p_element->GetLightType() );
+				auto it = std::find( m_typeSortedLights[index].begin()
+					, m_typeSortedLights[index].end()
 					, p_element );
 
-				if ( l_it == m_typeSortedLights[l_index].end() )
+				if ( it == m_typeSortedLights[index].end() )
 				{
-					m_typeSortedLights[l_index].push_back( p_element );
+					m_typeSortedLights[index].push_back( p_element );
 				}
 			}
 
@@ -55,14 +55,14 @@ namespace Castor3D
 
 			inline void operator()( LightSPtr p_element )
 			{
-				auto l_index = size_t( p_element->GetLightType() );
-				auto l_it = std::find( m_typeSortedLights[l_index].begin()
-					, m_typeSortedLights[l_index].end()
+				auto index = size_t( p_element->GetLightType() );
+				auto it = std::find( m_typeSortedLights[index].begin()
+					, m_typeSortedLights[index].end()
 					, p_element );
 
-				if ( l_it != m_typeSortedLights[l_index].end() )
+				if ( it != m_typeSortedLights[index].end() )
 				{
-					m_typeSortedLights[l_index].erase( l_it );
+					m_typeSortedLights[index].erase( it );
 				}
 			}
 
@@ -102,19 +102,19 @@ namespace Castor3D
 
 	void ObjectCache< Light, Castor::String >::Initialise()
 	{
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer
+		auto texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer
 			, AccessType::eWrite
 			, AccessType::eRead
 			, PixelFormat::eRGBA32F
 			, Size( 1000, 1 ) );
-		l_texture->GetImage().InitialiseSource();
-		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
+		texture->GetImage().InitialiseSource();
+		SamplerSPtr sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture.SetAutoMipmaps( false );
-		m_lightsTexture.SetSampler( l_sampler );
-		m_lightsTexture.SetTexture( l_texture );
+		m_lightsTexture.SetSampler( sampler );
+		m_lightsTexture.SetTexture( texture );
 		m_lightsTexture.SetIndex( Pass::LightBufferIndex );
 		m_scene.GetListener().PostEvent( MakeInitialiseEvent( m_lightsTexture ) );
-		m_lightsBuffer = l_texture->GetImage().GetBuffer();
+		m_lightsBuffer = texture->GetImage().GetBuffer();
 	}
 
 	void ObjectCache< Light, Castor::String >::Cleanup()
@@ -125,29 +125,29 @@ namespace Castor3D
 
 	void ObjectCache< Light, Castor::String >::UpdateLights()const
 	{
-		auto l_layout = m_lightsTexture.GetTexture();
+		auto layout = m_lightsTexture.GetTexture();
 
-		if ( l_layout )
+		if ( layout )
 		{
-			auto const & l_image = l_layout->GetImage();
-			int l_index = 0;
+			auto const & image = layout->GetImage();
+			int index = 0;
 
-			for ( auto l_lights : m_typeSortedLights )
+			for ( auto lights : m_typeSortedLights )
 			{
-				for ( auto l_light : l_lights )
+				for ( auto light : lights )
 				{
-					l_light->Bind( *m_lightsBuffer, l_index++ );
+					light->Bind( *m_lightsBuffer, index++ );
 				}
 			}
 
-			auto l_locked = l_layout->Lock( AccessType::eWrite );
+			auto locked = layout->Lock( AccessType::eWrite );
 
-			if ( l_locked )
+			if ( locked )
 			{
-				memcpy( l_locked, m_lightsBuffer->const_ptr(), m_lightsBuffer->size() );
+				memcpy( locked, m_lightsBuffer->const_ptr(), m_lightsBuffer->size() );
 			}
 
-			l_layout->Unlock( true );
+			layout->Unlock( true );
 		}
 	}
 

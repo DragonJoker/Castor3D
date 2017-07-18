@@ -27,13 +27,13 @@ namespace GLSL
 		, FragmentInput const & p_fragmentIn )
 	{
 		auto c3d_iLightsCount = m_writer.GetBuiltin< Vec3 >( cuT( "c3d_iLightsCount" ) );
-		auto l_begin = m_writer.DeclLocale( cuT( "l_begin" ), 0_i );
-		auto l_end = m_writer.DeclLocale( cuT( "l_end" ), m_writer.Cast< Int >( c3d_iLightsCount.x() ) );
-		auto l_result = m_writer.DeclLocale( cuT( "l_result" ), vec3( 0.0_f ) );
+		auto begin = m_writer.DeclLocale( cuT( "begin" ), 0_i );
+		auto end = m_writer.DeclLocale( cuT( "end" ), m_writer.Cast< Int >( c3d_iLightsCount.x() ) );
+		auto result = m_writer.DeclLocale( cuT( "result" ), vec3( 0.0_f ) );
 
-		FOR( m_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 		{
-			l_result += ComputeDirectionalLight( GetDirectionalLight( i )
+			result += ComputeDirectionalLight( GetDirectionalLight( i )
 				, p_worldEye
 				, p_albedo
 				, p_metallic
@@ -43,12 +43,12 @@ namespace GLSL
 		}
 		ROF;
 
-		l_begin = l_end;
-		l_end += m_writer.Cast< Int >( c3d_iLightsCount.y() );
+		begin = end;
+		end += m_writer.Cast< Int >( c3d_iLightsCount.y() );
 
-		FOR( m_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 		{
-			l_result += ComputePointLight( GetPointLight( i )
+			result += ComputePointLight( GetPointLight( i )
 				, p_worldEye
 				, p_albedo
 				, p_metallic
@@ -58,12 +58,12 @@ namespace GLSL
 		}
 		ROF;
 
-		l_begin = l_end;
-		l_end += m_writer.Cast< Int >( c3d_iLightsCount.z() );
+		begin = end;
+		end += m_writer.Cast< Int >( c3d_iLightsCount.z() );
 
-		FOR( m_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 		{
-			l_result += ComputeSpotLight( GetSpotLight( i )
+			result += ComputeSpotLight( GetSpotLight( i )
 				, p_worldEye
 				, p_albedo
 				, p_metallic
@@ -73,7 +73,7 @@ namespace GLSL
 		}
 		ROF;
 
-		return l_result;
+		return result;
 	}
 
 	Vec3 MetallicBrdfLightingModel::ComputeDirectionalLight( DirectionalLight const & p_light
@@ -188,7 +188,7 @@ namespace GLSL
 
 	void MetallicBrdfLightingModel::Declare_ComputeDirectionalLight()
 	{
-		OutputComponents l_output{ m_writer };
+		OutputComponents output{ m_writer };
 		m_computeDirectional = m_writer.ImplementFunction< Vec3 >( cuT( "ComputeDirectionalLight" )
 			, [this]( DirectionalLight const & p_light
 				, Vec3 const & p_worldEye
@@ -198,28 +198,28 @@ namespace GLSL
 				, Int const & p_receivesShadows
 				, FragmentInput const & p_fragmentIn )
 			{
-				PbrMRMaterials l_materials{ m_writer };
-				auto l_lightDirection = m_writer.DeclLocale( cuT( "l_lightDirection" ), normalize( p_light.m_direction().xyz() ) );
-				auto l_shadowFactor = m_writer.DeclLocale( cuT( "l_shadowFactor" ), 1.0_f );
+				PbrMRMaterials materials{ m_writer };
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( p_light.m_direction().xyz() ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
-					Shadow l_shadows{ m_writer };
+					Shadow shadows{ m_writer };
 
 					IF ( m_writer, p_receivesShadows != 0_i )
 					{
-						l_shadowFactor = l_shadows.ComputeDirectionalShadow( p_light.m_transform(), p_fragmentIn.m_v3Vertex, l_lightDirection, p_fragmentIn.m_v3Normal );
+						shadowFactor = shadows.ComputeDirectionalShadow( p_light.m_transform(), p_fragmentIn.m_v3Vertex, lightDirection, p_fragmentIn.m_v3Normal );
 					}
 					FI;
 				}
 
 				m_writer.Return( DoComputeLight( p_light.m_lightBase()
 					, p_worldEye
-					, l_lightDirection
+					, lightDirection
 					, p_albedo
 					, p_metallic
 					, p_roughness
-					, l_shadowFactor
+					, shadowFactor
 					, p_fragmentIn ) );
 			}
 			, DirectionalLight( &m_writer, cuT( "p_light" ) )
@@ -233,7 +233,7 @@ namespace GLSL
 
 	void MetallicBrdfLightingModel::Declare_ComputePointLight()
 	{
-		OutputComponents l_output{ m_writer };
+		OutputComponents output{ m_writer };
 		m_computePoint = m_writer.ImplementFunction< Vec3 >( cuT( "ComputePointLight" )
 			, [this]( PointLight const & p_light
 				, Vec3 const & p_worldEye
@@ -243,34 +243,34 @@ namespace GLSL
 				, Int const & p_receivesShadows
 				, FragmentInput const & p_fragmentIn )
 			{
-				PbrMRMaterials l_materials{ m_writer };
-				auto l_lightToVertex = m_writer.DeclLocale( cuT( "l_lightToVertex" ), p_fragmentIn.m_v3Vertex - p_light.m_position().xyz() );
-				auto l_distance = m_writer.DeclLocale( cuT( "l_distance" ), length( l_lightToVertex ) );
-				auto l_lightDirection = m_writer.DeclLocale( cuT( "l_lightDirection" ), normalize( l_lightToVertex ) );
-				auto l_shadowFactor = m_writer.DeclLocale( cuT( "l_shadowFactor" ), 1.0_f );
+				PbrMRMaterials materials{ m_writer };
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), p_fragmentIn.m_v3Vertex - p_light.m_position().xyz() );
+				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
-					Shadow l_shadows{ m_writer };
+					Shadow shadows{ m_writer };
 
 					IF ( m_writer, p_receivesShadows != 0_i )
 					{
-						l_shadowFactor = l_shadows.ComputePointShadow( p_fragmentIn.m_v3Vertex, l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
+						shadowFactor = shadows.ComputePointShadow( p_fragmentIn.m_v3Vertex, lightDirection, p_fragmentIn.m_v3Normal, 0_i );
 					}
 					FI;
 				}
 
-				auto l_result = m_writer.DeclLocale( cuT( "l_result" )
+				auto result = m_writer.DeclLocale( cuT( "result" )
 					, DoComputeLight( p_light.m_lightBase()
 						, p_worldEye
-						, l_lightDirection
+						, lightDirection
 						, p_albedo
 						, p_metallic
 						, p_roughness
-						, l_shadowFactor
+						, shadowFactor
 						, p_fragmentIn ) );
-				auto l_attenuation = m_writer.DeclLocale( cuT( "l_attenuation" ), p_light.m_attenuation().x() + p_light.m_attenuation().y() * l_distance + p_light.m_attenuation().z() * l_distance * l_distance );
-				m_writer.Return( l_result / l_attenuation );
+				auto attenuation = m_writer.DeclLocale( cuT( "attenuation" ), p_light.m_attenuation().x() + p_light.m_attenuation().y() * distance + p_light.m_attenuation().z() * distance * distance );
+				m_writer.Return( result / attenuation );
 			}
 			, PointLight( &m_writer, cuT( "p_light" ) )
 			, InVec3( &m_writer, cuT( "p_worldEye" ) )
@@ -283,7 +283,7 @@ namespace GLSL
 
 	void MetallicBrdfLightingModel::Declare_ComputeSpotLight()
 	{
-		OutputComponents l_output{ m_writer };
+		OutputComponents output{ m_writer };
 		m_computeSpot = m_writer.ImplementFunction< Vec3 >( cuT( "ComputeSpotLight" )
 			, [this]( SpotLight const & p_light
 				, Vec3 const & p_worldEye
@@ -293,43 +293,43 @@ namespace GLSL
 				, Int const & p_receivesShadows
 				, FragmentInput const & p_fragmentIn )
 			{
-				PbrMRMaterials l_materials{ m_writer };
-				auto l_lightToVertex = m_writer.DeclLocale( cuT( "l_lightToVertex" ), p_fragmentIn.m_v3Vertex - p_light.m_position().xyz() );
-				auto l_distance = m_writer.DeclLocale( cuT( "l_distance" ), length( l_lightToVertex ) );
-				auto l_lightDirection = m_writer.DeclLocale( cuT( "l_lightDirection" ), normalize( l_lightToVertex ) );
-				auto l_spotFactor = m_writer.DeclLocale( cuT( "l_spotFactor" ), dot( l_lightDirection, p_light.m_direction() ) );
+				PbrMRMaterials materials{ m_writer };
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), p_fragmentIn.m_v3Vertex - p_light.m_position().xyz() );
+				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
+				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" ), dot( lightDirection, p_light.m_direction() ) );
 
-				IF( m_writer, l_spotFactor > p_light.m_cutOff() )
+				IF( m_writer, spotFactor > p_light.m_cutOff() )
 				{
-					auto l_shadowFactor = m_writer.DeclLocale( cuT( "l_shadowFactor" ), Float( 1 ) );
+					auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), Float( 1 ) );
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						Shadow l_shadows{ m_writer };
+						Shadow shadows{ m_writer };
 
 						IF ( m_writer, p_receivesShadows != 0_i )
 						{
-							l_shadowFactor = l_shadows.ComputeSpotShadow( p_light.m_transform(), p_fragmentIn.m_v3Vertex, l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) );
+							shadowFactor = shadows.ComputeSpotShadow( p_light.m_transform(), p_fragmentIn.m_v3Vertex, lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) );
 						}
 						FI;
 					}
 
-					auto l_result = m_writer.DeclLocale( cuT( "l_result" )
+					auto result = m_writer.DeclLocale( cuT( "result" )
 						, DoComputeLight( p_light.m_lightBase()
 							, p_worldEye
-							, l_lightDirection
+							, lightDirection
 							, p_albedo
 							, p_metallic
 							, p_roughness
-							, l_shadowFactor
+							, shadowFactor
 							, p_fragmentIn ) );
-					auto l_attenuation = m_writer.DeclLocale( cuT( "l_attenuation" )
+					auto attenuation = m_writer.DeclLocale( cuT( "attenuation" )
 						, p_light.m_attenuation().x()
-						+ p_light.m_attenuation().y() * l_distance
-						+ p_light.m_attenuation().z() * l_distance * l_distance );
-					l_spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - l_spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - p_light.m_cutOff() ) );
+						+ p_light.m_attenuation().y() * distance
+						+ p_light.m_attenuation().z() * distance * distance );
+					spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - p_light.m_cutOff() ) );
 
-					m_writer.Return( l_spotFactor * l_result / l_attenuation );
+					m_writer.Return( spotFactor * result / attenuation );
 				}
 				FI;
 			}
@@ -344,7 +344,7 @@ namespace GLSL
 
 	void MetallicBrdfLightingModel::Declare_ComputeOneDirectionalLight()
 	{
-		OutputComponents l_output{ m_writer };
+		OutputComponents output{ m_writer };
 		m_computeOneDirectional = m_writer.ImplementFunction< Vec3 >( cuT( "ComputeDirectionalLight" )
 			, [this]( DirectionalLight const & p_light
 				, Vec3 const & p_worldEye
@@ -354,26 +354,26 @@ namespace GLSL
 				, Int const & p_receivesShadows
 				, FragmentInput const & p_fragmentIn )
 			{
-				PbrMRMaterials l_materials{ m_writer };
-				auto l_lightDirection = m_writer.DeclLocale( cuT( "l_lightDirection" ), normalize( p_light.m_direction().xyz() ) );
-				auto l_shadowFactor = m_writer.DeclLocale( cuT( "l_shadowFactor" ), 1.0_f );
+				PbrMRMaterials materials{ m_writer };
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( p_light.m_direction().xyz() ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
-					l_shadowFactor = 1.0_f - min( p_receivesShadows
+					shadowFactor = 1.0_f - min( p_receivesShadows
 						, m_shadowModel.ComputeDirectionalShadow( p_light.m_transform()
 							, p_fragmentIn.m_v3Vertex
-							, l_lightDirection
+							, lightDirection
 							, p_fragmentIn.m_v3Normal ) );
 				}
 
 				m_writer.Return( DoComputeLight( p_light.m_lightBase()
 						, p_worldEye
-						, l_lightDirection
+						, lightDirection
 						, p_albedo
 						, p_metallic
 						, p_roughness
-						, l_shadowFactor
+						, shadowFactor
 						, p_fragmentIn ) );
 			}
 			, DirectionalLight( &m_writer, cuT( "p_light" ) )
@@ -387,7 +387,7 @@ namespace GLSL
 
 	void MetallicBrdfLightingModel::Declare_ComputeOnePointLight()
 	{
-		OutputComponents l_output{ m_writer };
+		OutputComponents output{ m_writer };
 		m_computeOnePoint = m_writer.ImplementFunction< Vec3 >( cuT( "ComputePointLight" )
 			, [this]( PointLight const & p_light
 				, Vec3 const & p_worldEye
@@ -397,34 +397,34 @@ namespace GLSL
 				, Int const & p_receivesShadows
 				, FragmentInput const & p_fragmentIn )
 			{
-				PbrMRMaterials l_materials{ m_writer };
-				auto l_lightToVertex = m_writer.DeclLocale( cuT( "l_lightToVertex" ), p_light.m_position().xyz() - p_fragmentIn.m_v3Vertex );
-				auto l_distance = m_writer.DeclLocale( cuT( "l_distance" ), length( l_lightToVertex ) );
-				auto l_lightDirection = m_writer.DeclLocale( cuT( "l_lightDirection" ), normalize( l_lightToVertex ) );
-				auto l_shadowFactor = m_writer.DeclLocale( cuT( "l_shadowFactor" ), 1.0_f );
+				PbrMRMaterials materials{ m_writer };
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), p_light.m_position().xyz() - p_fragmentIn.m_v3Vertex );
+				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
-					l_shadowFactor = 1.0_f - min( p_receivesShadows
+					shadowFactor = 1.0_f - min( p_receivesShadows
 						, m_shadowModel.ComputePointShadow( p_fragmentIn.m_v3Vertex
 							, p_light.m_position().xyz()
 							, p_fragmentIn.m_v3Normal ) );
 				}
 
-				auto l_result = m_writer.DeclLocale( cuT( "l_result" )
+				auto result = m_writer.DeclLocale( cuT( "result" )
 					, DoComputeLight( p_light.m_lightBase()
 						, p_worldEye
-						, l_lightDirection
+						, lightDirection
 						, p_albedo
 						, p_metallic
 						, p_roughness
-						, l_shadowFactor
+						, shadowFactor
 						, p_fragmentIn ) );
-				auto l_attenuation = m_writer.DeclLocale( cuT( "l_attenuation" )
+				auto attenuation = m_writer.DeclLocale( cuT( "attenuation" )
 					, p_light.m_attenuation().x()
-					+ p_light.m_attenuation().y() * l_distance
-					+ p_light.m_attenuation().z() * l_distance * l_distance );
-				m_writer.Return( l_result / l_attenuation );
+					+ p_light.m_attenuation().y() * distance
+					+ p_light.m_attenuation().z() * distance * distance );
+				m_writer.Return( result / attenuation );
 			}
 			, PointLight( &m_writer, cuT( "p_light" ) )
 			, InVec3( &m_writer, cuT( "p_worldEye" ) )
@@ -437,7 +437,7 @@ namespace GLSL
 
 	void MetallicBrdfLightingModel::Declare_ComputeOneSpotLight()
 	{
-		OutputComponents l_output{ m_writer };
+		OutputComponents output{ m_writer };
 		m_computeOneSpot = m_writer.ImplementFunction< Vec3 >( cuT( "ComputeSpotLight" )
 			, [this]( SpotLight const & p_light
 				, Vec3 const & p_worldEye
@@ -447,40 +447,40 @@ namespace GLSL
 				, Int const & p_receivesShadows
 				, FragmentInput const & p_fragmentIn )
 			{
-				PbrMRMaterials l_materials{ m_writer };
-				auto l_lightToVertex = m_writer.DeclLocale( cuT( "l_lightToVertex" ), p_light.m_position().xyz() - p_fragmentIn.m_v3Vertex );
-				auto l_distance = m_writer.DeclLocale( cuT( "l_distance" ), length( l_lightToVertex ) );
-				auto l_lightDirection = m_writer.DeclLocale( cuT( "l_lightDirection" ), normalize( l_lightToVertex ) );
-				auto l_spotFactor = m_writer.DeclLocale( cuT( "l_spotFactor" ), dot( l_lightDirection, p_light.m_direction() ) );
+				PbrMRMaterials materials{ m_writer };
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), p_light.m_position().xyz() - p_fragmentIn.m_v3Vertex );
+				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
+				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" ), dot( lightDirection, p_light.m_direction() ) );
 
-				IF( m_writer, l_spotFactor > p_light.m_cutOff() )
+				IF( m_writer, spotFactor > p_light.m_cutOff() )
 				{
-					auto l_shadowFactor = m_writer.DeclLocale( cuT( "l_shadowFactor" ), Float( 1 ) );
+					auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), Float( 1 ) );
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						l_shadowFactor = 1.0_f - min( p_receivesShadows
+						shadowFactor = 1.0_f - min( p_receivesShadows
 							, m_shadowModel.ComputeSpotShadow( p_light.m_transform()
 								, p_fragmentIn.m_v3Vertex
-								, l_lightToVertex
+								, lightToVertex
 								, p_fragmentIn.m_v3Normal ) );
 					}
 
-					auto l_result = m_writer.DeclLocale( cuT( "l_result" )
+					auto result = m_writer.DeclLocale( cuT( "result" )
 						, DoComputeLight( p_light.m_lightBase()
 							, p_worldEye
-							, l_lightDirection
+							, lightDirection
 							, p_albedo
 							, p_metallic
 							, p_roughness
-							, l_shadowFactor
+							, shadowFactor
 							, p_fragmentIn ) );
-					auto l_attenuation = m_writer.DeclLocale( cuT( "l_attenuation" )
+					auto attenuation = m_writer.DeclLocale( cuT( "attenuation" )
 						, p_light.m_attenuation().x()
-						+ p_light.m_attenuation().y() * l_distance
-						+ p_light.m_attenuation().z() * l_distance * l_distance );
-					l_spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - l_spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - p_light.m_cutOff() ) );
-					m_writer.Return( l_spotFactor * l_result / l_attenuation );
+						+ p_light.m_attenuation().y() * distance
+						+ p_light.m_attenuation().z() * distance * distance );
+					spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - p_light.m_cutOff() ) );
+					m_writer.Return( spotFactor * result / attenuation );
 				}
 				FI;
 			}
@@ -495,8 +495,8 @@ namespace GLSL
 	
 	void MetallicBrdfLightingModel::DoDeclare_ComputeLight()
 	{
-		OutputComponents l_output{ m_writer };
-		auto l_compute = [this]( Light const & p_light
+		OutputComponents output{ m_writer };
+		auto compute = [this]( Light const & p_light
 			, Vec3 const & p_worldEye
 			, Vec3 const & p_direction
 			, Vec3 const & p_albedo
@@ -507,55 +507,55 @@ namespace GLSL
 		{
 			// From https://learnopengl.com/#!PBR/Lighting
 			auto constexpr PI = 3.1415926535897932384626433832795028841968;
-			auto l_L = m_writer.DeclLocale( cuT( "l_L" )
+			auto L = m_writer.DeclLocale( cuT( "L" )
 				, normalize( p_direction ) );
-			auto l_V = m_writer.DeclLocale( cuT( "l_V" )
+			auto V = m_writer.DeclLocale( cuT( "V" )
 				, normalize( normalize( p_worldEye - p_fragmentIn.m_v3Vertex ) ) );
-			auto l_H = m_writer.DeclLocale( cuT( "l_H" )
-				, normalize( l_L + l_V ) );
-			auto l_N = m_writer.DeclLocale( cuT( "l_N" )
+			auto H = m_writer.DeclLocale( cuT( "H" )
+				, normalize( L + V ) );
+			auto N = m_writer.DeclLocale( cuT( "N" )
 				, normalize( p_fragmentIn.m_v3Normal ) );
-			auto l_radiance = m_writer.DeclLocale( cuT( "l_radiance" )
+			auto radiance = m_writer.DeclLocale( cuT( "radiance" )
 				, p_light.m_colour() );
 
-			auto l_NdotL = m_writer.DeclLocale( cuT( "l_NdotL" )
-				, max( 0.0_f, dot( l_N, l_L ) ) );
-			auto l_NdotV = m_writer.DeclLocale( cuT( "l_NdotV" )
-				, max( 0.0_f, dot( l_N, l_V ) ) );
-			auto l_NdotH = m_writer.DeclLocale( cuT( "l_NdotH" )
-				, max( 0.0_f, dot( l_N, l_H ) ) );
-			auto l_HdotV = m_writer.DeclLocale( cuT( "l_HdotV" )
-				, max( 0.0_f, dot( l_H, l_V ) ) );
-			auto l_LdotV = m_writer.DeclLocale( cuT( "l_LdotV" )
-				, max( 0.0_f, dot( l_L, l_V ) ) );
+			auto NdotL = m_writer.DeclLocale( cuT( "NdotL" )
+				, max( 0.0_f, dot( N, L ) ) );
+			auto NdotV = m_writer.DeclLocale( cuT( "NdotV" )
+				, max( 0.0_f, dot( N, V ) ) );
+			auto NdotH = m_writer.DeclLocale( cuT( "NdotH" )
+				, max( 0.0_f, dot( N, H ) ) );
+			auto HdotV = m_writer.DeclLocale( cuT( "HdotV" )
+				, max( 0.0_f, dot( H, V ) ) );
+			auto LdotV = m_writer.DeclLocale( cuT( "LdotV" )
+				, max( 0.0_f, dot( L, V ) ) );
 
-			auto l_f0 = m_writer.DeclLocale( cuT( "l_f0" )
+			auto f0 = m_writer.DeclLocale( cuT( "f0" )
 				, mix( vec3( 0.04_f ), p_albedo, p_metalness ) );
-			auto l_specfresnel = m_writer.DeclLocale( cuT( "l_specfresnel" )
-				, m_schlickFresnel( l_HdotV, l_f0 ) );
+			auto specfresnel = m_writer.DeclLocale( cuT( "specfresnel" )
+				, m_schlickFresnel( HdotV, f0 ) );
 			
-			auto l_NDF = m_writer.DeclLocale( cuT( "l_NDF" )
-				, m_distributionGGX( l_NdotH, p_roughness ) );
-			auto l_G = m_writer.DeclLocale( cuT( "l_G" )
-				, m_geometrySmith( l_NdotV, l_NdotL, p_roughness ) );
+			auto NDF = m_writer.DeclLocale( cuT( "NDF" )
+				, m_distributionGGX( NdotH, p_roughness ) );
+			auto G = m_writer.DeclLocale( cuT( "G" )
+				, m_geometrySmith( NdotV, NdotL, p_roughness ) );
 
-			auto l_nominator = m_writer.DeclLocale( cuT( "l_nominator" )
-				, l_specfresnel * l_NDF * l_G );
-			auto l_denominator = m_writer.DeclLocale( cuT( "l_denominator" )
-				, 4.0_f * l_NdotV * l_NdotL + 0.001_f );
-			auto l_specular = m_writer.DeclLocale( cuT( "l_specular" )
-				, l_nominator / l_denominator );
-			auto l_kS = m_writer.DeclLocale( cuT( "l_kS" )
-				, l_specfresnel );
-			auto l_kD = m_writer.DeclLocale( cuT( "l_kD" )
-				, vec3( 1.0_f ) - l_kS );
+			auto nominator = m_writer.DeclLocale( cuT( "nominator" )
+				, specfresnel * NDF * G );
+			auto denominator = m_writer.DeclLocale( cuT( "denominator" )
+				, 4.0_f * NdotV * NdotL + 0.001_f );
+			auto specular = m_writer.DeclLocale( cuT( "specular" )
+				, nominator / denominator );
+			auto kS = m_writer.DeclLocale( cuT( "kS" )
+				, specfresnel );
+			auto kD = m_writer.DeclLocale( cuT( "kD" )
+				, vec3( 1.0_f ) - kS );
 
-			l_kD *= 1.0_f - p_metalness;
+			kD *= 1.0_f - p_metalness;
 
-			m_writer.Return( m_writer.Paren( l_kD * p_albedo / PI + l_specular ) * l_radiance * l_NdotL );
+			m_writer.Return( m_writer.Paren( kD * p_albedo / PI + specular ) * radiance * NdotL );
 		};
 		m_writer.ImplementFunction< Vec3 >( cuT( "DoComputeLight" )
-			, l_compute
+			, compute
 			, InLight( &m_writer, cuT( "p_light" ) )
 			, InVec3( &m_writer, cuT( "p_worldEye" ) )
 			, InVec3( &m_writer, cuT( "p_direction" ) )
@@ -579,16 +579,16 @@ namespace GLSL
 					, p_roughness * p_roughness );
 				auto a2 = m_writer.DeclLocale( cuT( "a2" )
 					, a * a );
-				auto l_NdotH2 = m_writer.DeclLocale( cuT( "l_NdotH2" )
+				auto NdotH2 = m_writer.DeclLocale( cuT( "NdotH2" )
 					, p_NdotH * p_NdotH );
 
-				auto l_nominator = m_writer.DeclLocale( cuT( "l_num" )
+				auto nominator = m_writer.DeclLocale( cuT( "num" )
 					, a2 );
-				auto l_denominator = m_writer.DeclLocale( cuT( "l_denom" )
-					, l_NdotH2 * m_writer.Paren( a2 - 1.0 ) + 1.0 );
-				l_denominator = Float( PI ) * l_denominator * l_denominator;
+				auto denominator = m_writer.DeclLocale( cuT( "denom" )
+					, NdotH2 * m_writer.Paren( a2 - 1.0 ) + 1.0 );
+				denominator = Float( PI ) * denominator * denominator;
 
-				m_writer.Return( l_nominator / l_denominator );
+				m_writer.Return( nominator / denominator );
 			}
 			, InFloat( &m_writer, cuT( "p_NdotH" ) )
 			, InFloat( &m_writer, cuT( "p_roughness" ) ) );
@@ -607,12 +607,12 @@ namespace GLSL
 				auto k = m_writer.DeclLocale( cuT( "k" )
 					, m_writer.Paren( r * r ) / 8.0_f );
 
-				auto l_nominator = m_writer.DeclLocale( cuT( "l_num" )
+				auto nominator = m_writer.DeclLocale( cuT( "num" )
 					, p_product );
-				auto l_denominator = m_writer.DeclLocale( cuT( "l_denom" )
+				auto denominator = m_writer.DeclLocale( cuT( "denom" )
 					, p_product * m_writer.Paren( 1.0_f - k ) + k );
 
-				m_writer.Return( l_nominator / l_denominator );
+				m_writer.Return( nominator / denominator );
 			}
 			, InFloat( &m_writer, cuT( "p_product" ) )
 			, InFloat( &m_writer, cuT( "p_roughness" ) ) );
@@ -623,12 +623,12 @@ namespace GLSL
 				, Float const & p_roughness )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
-				auto l_ggx2 = m_writer.DeclLocale( cuT( "ggx2" )
+				auto ggx2 = m_writer.DeclLocale( cuT( "ggx2" )
 					, m_geometrySchlickGGX( p_NdotV, p_roughness ) );
-				auto l_ggx1 = m_writer.DeclLocale( cuT( "ggx1" )
+				auto ggx1 = m_writer.DeclLocale( cuT( "ggx1" )
 					, m_geometrySchlickGGX( p_NdotL, p_roughness ) );
 
-				m_writer.Return( l_ggx1 * l_ggx2 );
+				m_writer.Return( ggx1 * ggx2 );
 			}
 			, InFloat( &m_writer, cuT( "p_NdotV" ) )
 			, InFloat( &m_writer, cuT( "p_NdotL" ) )

@@ -35,12 +35,12 @@ namespace Castor3D
 
 	void MovableObject::Detach()
 	{
-		SceneNodeSPtr l_node = GetParent();
+		SceneNodeSPtr node = GetParent();
 
-		if ( l_node )
+		if ( node )
 		{
 			m_notifyIndex.disconnect();
-			l_node->DetachObject( *this );
+			node->DetachObject( *this );
 			m_sceneNode.reset();
 		}
 	}

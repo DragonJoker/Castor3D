@@ -53,146 +53,146 @@ namespace Castor3D
 
 	bool BinaryWriter< Submesh >::DoWrite( Submesh const & p_obj )
 	{
-		bool l_result = true;
+		bool result = true;
 
-		if ( l_result )
+		if ( result )
 		{
-			VertexBuffer const & l_buffer = p_obj.GetVertexBuffer();
-			size_t l_size = l_buffer.GetSize();
-			uint32_t l_stride = l_buffer.GetDeclaration().stride();
-			uint32_t l_count = uint32_t( l_size / l_stride );
-			l_result = DoWriteChunk( l_count, ChunkType::eSubmeshVertexCount, m_chunk );
+			VertexBuffer const & buffer = p_obj.GetVertexBuffer();
+			size_t size = buffer.GetSize();
+			uint32_t stride = buffer.GetDeclaration().stride();
+			uint32_t count = uint32_t( size / stride );
+			result = DoWriteChunk( count, ChunkType::eSubmeshVertexCount, m_chunk );
 
-			if ( l_result )
+			if ( result )
 			{
-				InterleavedVertex const * l_srcbuf = reinterpret_cast< InterleavedVertex const * >( l_buffer.GetData() );
-				std::vector< InterleavedVertexT< double > > l_dstbuf( l_count );
-				DoCopyVertices( l_count, l_srcbuf, l_dstbuf.data() );
-				l_result = DoWriteChunk( l_dstbuf, ChunkType::eSubmeshVertex, m_chunk );
+				InterleavedVertex const * srcbuf = reinterpret_cast< InterleavedVertex const * >( buffer.GetData() );
+				std::vector< InterleavedVertexT< double > > dstbuf( count );
+				DoCopyVertices( count, srcbuf, dstbuf.data() );
+				result = DoWriteChunk( dstbuf, ChunkType::eSubmeshVertex, m_chunk );
 			}
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			IndexBuffer const & l_buffer = p_obj.GetIndexBuffer();
-			uint32_t l_count = l_buffer.GetSize() / 3;
-			l_result = DoWriteChunk( l_count, ChunkType::eSubmeshFaceCount, m_chunk );
+			IndexBuffer const & buffer = p_obj.GetIndexBuffer();
+			uint32_t count = buffer.GetSize() / 3;
+			result = DoWriteChunk( count, ChunkType::eSubmeshFaceCount, m_chunk );
 
-			if ( l_result )
+			if ( result )
 			{
-				FaceIndices const * l_srcbuf = reinterpret_cast< FaceIndices const * >( l_buffer.GetData() );
-				l_result = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / 3, ChunkType::eSubmeshFaces, m_chunk );
+				FaceIndices const * srcbuf = reinterpret_cast< FaceIndices const * >( buffer.GetData() );
+				result = DoWriteChunk( srcbuf, buffer.GetSize() / 3, ChunkType::eSubmeshFaces, m_chunk );
 			}
 		}
 
-		if ( l_result && p_obj.HasBonesBuffer() )
+		if ( result && p_obj.HasBonesBuffer() )
 		{
-			VertexBuffer const & l_buffer = p_obj.GetBonesBuffer();
-			uint32_t l_stride = l_buffer.GetDeclaration().stride();
-			uint32_t l_count = l_buffer.GetSize() / l_stride;
-			l_result = DoWriteChunk( l_count, ChunkType::eSubmeshBoneCount, m_chunk );
+			VertexBuffer const & buffer = p_obj.GetBonesBuffer();
+			uint32_t stride = buffer.GetDeclaration().stride();
+			uint32_t count = buffer.GetSize() / stride;
+			result = DoWriteChunk( count, ChunkType::eSubmeshBoneCount, m_chunk );
 
-			if ( l_result )
+			if ( result )
 			{
-				VertexBoneData const * l_srcbuf = reinterpret_cast< VertexBoneData const * >( l_buffer.GetData() );
-				l_result = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / sizeof( VertexBoneData ), ChunkType::eSubmeshBones, m_chunk );
+				VertexBoneData const * srcbuf = reinterpret_cast< VertexBoneData const * >( buffer.GetData() );
+				result = DoWriteChunk( srcbuf, buffer.GetSize() / sizeof( VertexBoneData ), ChunkType::eSubmeshBones, m_chunk );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< Submesh >::DoParse( Submesh & p_obj )
 	{
-		bool l_result = true;
-		String l_name;
-		std::vector< FaceIndices > l_faces;
-		std::vector< VertexBoneData > l_bones;
-		std::vector< InterleavedVertexT< double > > l_srcbuf;
-		uint32_t l_count{ 0u };
-		uint32_t l_faceCount{ 0u };
-		uint32_t l_boneCount{ 0u };
-		BinaryChunk l_chunk;
+		bool result = true;
+		String name;
+		std::vector< FaceIndices > faces;
+		std::vector< VertexBoneData > bones;
+		std::vector< InterleavedVertexT< double > > srcbuf;
+		uint32_t count{ 0u };
+		uint32_t faceCount{ 0u };
+		uint32_t boneCount{ 0u };
+		BinaryChunk chunk;
 
-		while ( l_result && DoGetSubChunk( l_chunk ) )
+		while ( result && DoGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.GetChunkType() )
 			{
 			case ChunkType::eSubmeshVertexCount:
-				l_result = DoParseChunk( l_count, l_chunk );
+				result = DoParseChunk( count, chunk );
 
-				if ( l_result )
+				if ( result )
 				{
-					l_srcbuf.resize( l_count );
+					srcbuf.resize( count );
 				}
 
 				break;
 
 			case ChunkType::eSubmeshVertex:
-				l_result = DoParseChunk( l_srcbuf, l_chunk );
+				result = DoParseChunk( srcbuf, chunk );
 
-				if ( l_result && !l_srcbuf.empty() )
+				if ( result && !srcbuf.empty() )
 				{
-					std::vector< InterleavedVertex > l_dstbuf( l_srcbuf.size() );
-					DoCopyVertices( uint32_t( l_srcbuf.size() ), l_srcbuf.data(), l_dstbuf.data() );
-					p_obj.AddPoints( l_dstbuf );
+					std::vector< InterleavedVertex > dstbuf( srcbuf.size() );
+					DoCopyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
+					p_obj.AddPoints( dstbuf );
 				}
 
 				break;
 
 			case ChunkType::eSubmeshBoneCount:
-				l_result = DoParseChunk( l_count, l_chunk );
+				result = DoParseChunk( count, chunk );
 
-				if ( l_result )
+				if ( result )
 				{
-					l_boneCount = l_count;
-					l_bones.resize( l_count );
+					boneCount = count;
+					bones.resize( count );
 				}
 
 				break;
 
 			case ChunkType::eSubmeshBones:
-				l_result = DoParseChunk( l_bones, l_chunk );
+				result = DoParseChunk( bones, chunk );
 
-				if ( l_result && l_boneCount > 0 )
+				if ( result && boneCount > 0 )
 				{
-					p_obj.AddBoneDatas( l_bones );
+					p_obj.AddBoneDatas( bones );
 				}
 
-				l_boneCount = 0u;
+				boneCount = 0u;
 				break;
 
 			case ChunkType::eSubmeshFaceCount:
-				l_result = DoParseChunk( l_count, l_chunk );
+				result = DoParseChunk( count, chunk );
 
-				if ( l_result )
+				if ( result )
 				{
-					l_faceCount = l_count;
-					l_faces.resize( l_count );
+					faceCount = count;
+					faces.resize( count );
 				}
 
 				break;
 
 			case ChunkType::eSubmeshFaces:
-				l_result = DoParseChunk( l_faces, l_chunk );
+				result = DoParseChunk( faces, chunk );
 
-				if ( l_result && l_faceCount > 0 )
+				if ( result && faceCount > 0 )
 				{
-					p_obj.AddFaceGroup( l_faces );
+					p_obj.AddFaceGroup( faces );
 				}
 
-				l_faceCount = 0u;
+				faceCount = 0u;
 				break;
 
 			default:
-				l_result = false;
+				result = false;
 				break;
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -281,25 +281,25 @@ namespace Castor3D
 	{
 		if ( m_pointsData.size() > 0 )
 		{
-			Point3r l_min;
-			Point3r l_max;
-			Point3r l_cur;
-			Vertex::GetPosition( m_points[0], l_min );
-			Vertex::GetPosition( m_points[0], l_max );
-			uint32_t l_nbVertex = GetPointsCount();
+			Point3r min;
+			Point3r max;
+			Point3r cur;
+			Vertex::GetPosition( m_points[0], min );
+			Vertex::GetPosition( m_points[0], max );
+			uint32_t nbVertex = GetPointsCount();
 
-			for ( uint32_t i = 1; i < l_nbVertex; i++ )
+			for ( uint32_t i = 1; i < nbVertex; i++ )
 			{
-				Vertex::GetPosition( m_points[i], l_cur );
-				l_max[0] = std::max( l_cur[0], l_max[0] );
-				l_max[1] = std::max( l_cur[1], l_max[1] );
-				l_max[2] = std::max( l_cur[2], l_max[2] );
-				l_min[0] = std::min( l_cur[0], l_min[0] );
-				l_min[1] = std::min( l_cur[1], l_min[1] );
-				l_min[2] = std::min( l_cur[2], l_min[2] );
+				Vertex::GetPosition( m_points[i], cur );
+				max[0] = std::max( cur[0], max[0] );
+				max[1] = std::max( cur[1], max[1] );
+				max[2] = std::max( cur[2], max[2] );
+				min[0] = std::min( cur[0], min[0] );
+				min[1] = std::min( cur[1], min[1] );
+				min[2] = std::min( cur[2], min[2] );
 			}
 
-			m_box.Load( l_min, l_max );
+			m_box.Load( min, max );
 			m_sphere.Load( m_box );
 		}
 	}
@@ -316,33 +316,33 @@ namespace Castor3D
 
 	int Submesh::IsInMyPoints( Point3r const & p_vertex, double p_precision )
 	{
-		int l_iReturn = -1;
-		int l_iIndex = 0;
-		Point3r l_ptPos;
+		int iReturn = -1;
+		int iIndex = 0;
+		Point3r ptPos;
 
-		for ( VertexPtrArrayConstIt l_it = m_points.begin(); l_it != m_points.end() && l_iReturn == -1; ++l_it )
+		for ( VertexPtrArrayConstIt it = m_points.begin(); it != m_points.end() && iReturn == -1; ++it )
 		{
-			if ( point::length_squared( p_vertex - Vertex::GetPosition( ( *l_it ), l_ptPos ) ) < p_precision )
+			if ( point::length_squared( p_vertex - Vertex::GetPosition( ( *it ), ptPos ) ) < p_precision )
 			{
-				l_iReturn = int( l_iIndex );
+				iReturn = int( iIndex );
 			}
 
-			l_iIndex++;
+			iIndex++;
 		}
 
-		return l_iReturn;
+		return iReturn;
 	}
 
 	BufferElementGroupSPtr Submesh::AddPoint( real x, real y, real z )
 	{
-		BufferElementGroupSPtr l_result;
-		uint32_t l_stride = 3 * sizeof( real ) * 5;
-		m_pointsData.push_back( ByteArray( l_stride ) );
-		uint8_t * l_data = m_pointsData.back().data();
-		l_result = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-		Vertex::SetPosition( l_result, x, y, z );
-		m_points.push_back( l_result );
-		return l_result;
+		BufferElementGroupSPtr result;
+		uint32_t stride = 3 * sizeof( real ) * 5;
+		m_pointsData.push_back( ByteArray( stride ) );
+		uint8_t * data = m_pointsData.back().data();
+		result = std::make_shared< BufferElementGroup >( data, uint32_t( m_points.size() ) );
+		Vertex::SetPosition( result, x, y, z );
+		m_points.push_back( result );
+		return result;
 	}
 
 	BufferElementGroupSPtr Submesh::AddPoint( Point3r const & p_v )
@@ -357,35 +357,35 @@ namespace Castor3D
 
 	void Submesh::AddPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end )
 	{
-		uint32_t l_stride = m_vertexBuffer.GetDeclaration().stride();
-		m_pointsData.push_back( ByteArray( std::distance( p_begin, p_end ) * l_stride ) );
-		uint8_t * l_data = m_pointsData.back().data();
+		uint32_t stride = m_vertexBuffer.GetDeclaration().stride();
+		m_pointsData.push_back( ByteArray( std::distance( p_begin, p_end ) * stride ) );
+		uint8_t * data = m_pointsData.back().data();
 
-		std::for_each( p_begin, p_end, [this, &l_data, &l_stride]( InterleavedVertex const & p_data )
+		std::for_each( p_begin, p_end, [this, &data, &stride]( InterleavedVertex const & p_data )
 		{
-			BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-			Vertex::SetPosition( l_vertex, p_data.m_pos.data() );
-			Vertex::SetNormal( l_vertex, p_data.m_nml.data() );
-			Vertex::SetTangent( l_vertex, p_data.m_tan.data() );
-			Vertex::SetBitangent( l_vertex, p_data.m_bin.data() );
-			Vertex::SetTexCoord( l_vertex, p_data.m_tex.data() );
-			m_points.push_back( l_vertex );
-			l_data += l_stride;
+			BufferElementGroupSPtr vertex = std::make_shared< BufferElementGroup >( data, uint32_t( m_points.size() ) );
+			Vertex::SetPosition( vertex, p_data.m_pos.data() );
+			Vertex::SetNormal( vertex, p_data.m_nml.data() );
+			Vertex::SetTangent( vertex, p_data.m_tan.data() );
+			Vertex::SetBitangent( vertex, p_data.m_bin.data() );
+			Vertex::SetTexCoord( vertex, p_data.m_tex.data() );
+			m_points.push_back( vertex );
+			data += stride;
 		} );
 	}
 
 	void Submesh::AddBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end )
 	{
-		uint32_t l_stride = BonedVertex::Stride;
-		m_bonesData.push_back( ByteArray( std::distance( p_begin, p_end ) * l_stride ) );
-		auto l_data = &( *m_bonesData.rbegin() )[0];
+		uint32_t stride = BonedVertex::Stride;
+		m_bonesData.push_back( ByteArray( std::distance( p_begin, p_end ) * stride ) );
+		auto data = &( *m_bonesData.rbegin() )[0];
 
-		std::for_each( p_begin, p_end, [this, &l_data, &l_stride]( VertexBoneData const & p_data )
+		std::for_each( p_begin, p_end, [this, &data, &stride]( VertexBoneData const & p_data )
 		{
-			BufferElementGroupSPtr l_bonesData = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_bones.size() ) );
-			BonedVertex::SetBones( l_bonesData, p_data );
-			m_bones.push_back( l_bonesData );
-			l_data += l_stride;
+			BufferElementGroupSPtr bonesData = std::make_shared< BufferElementGroup >( data, uint32_t( m_bones.size() ) );
+			BonedVertex::SetBones( bonesData, p_data );
+			m_bones.push_back( bonesData );
+			data += stride;
 		} );
 
 		AddFlag( m_programFlags, ProgramFlag::eSkinning );
@@ -393,11 +393,11 @@ namespace Castor3D
 
 	Face Submesh::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
-		Face l_result{ a, b, c };
+		Face result{ a, b, c };
 
 		if ( a < m_points.size() && b < m_points.size() && c < m_points.size() )
 		{
-			m_faces.push_back( l_result );
+			m_faces.push_back( result );
 			m_hasNormals = false;
 		}
 		else
@@ -405,7 +405,7 @@ namespace Castor3D
 			throw std::range_error( "Submesh::AddFace - One or more index out of bound" );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Submesh::AddFaceGroup( FaceIndices const * const p_begin, FaceIndices const * const p_end )
@@ -444,9 +444,9 @@ namespace Castor3D
 
 		if ( m_initialised )
 		{
-			for ( auto & l_geometryBuffers : m_geometryBuffers )
+			for ( auto & geometryBuffers : m_geometryBuffers )
 			{
-				DoInitialiseGeometryBuffers( l_geometryBuffers );
+				DoInitialiseGeometryBuffers( geometryBuffers );
 			}
 		}
 	}
@@ -455,14 +455,14 @@ namespace Castor3D
 	{
 		if ( m_matrixBuffer )
 		{
-			uint32_t l_count = 0;
+			uint32_t count = 0;
 
-			for ( auto l_it : m_instanceCount )
+			for ( auto it : m_instanceCount )
 			{
-				l_count = std::max( l_count, l_it.second );
+				count = std::max( count, it.second );
 			}
 
-			DoGenerateMatrixBuffer( l_count );
+			DoGenerateMatrixBuffer( count );
 			m_matrixBuffer->Initialise( BufferAccessType::eStream, BufferAccessNature::eDraw );
 		}
 	}
@@ -470,11 +470,11 @@ namespace Castor3D
 	void Submesh::Draw( GeometryBuffers const & p_geometryBuffers )
 	{
 		ENSURE( m_initialised );
-		uint32_t l_size = m_vertexBuffer.GetSize() / m_vertexBuffer.GetDeclaration().stride();
+		uint32_t size = m_vertexBuffer.GetSize() / m_vertexBuffer.GetDeclaration().stride();
 
 		if ( !m_indexBuffer.IsEmpty() )
 		{
-			l_size = m_indexBuffer.GetSize();
+			size = m_indexBuffer.GetSize();
 		}
 
 		if ( m_dirty )
@@ -489,17 +489,17 @@ namespace Castor3D
 			m_dirty = false;
 		}
 
-		p_geometryBuffers.Draw( l_size, 0 );
+		p_geometryBuffers.Draw( size, 0 );
 	}
 
 	void Submesh::DrawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
 		ENSURE( m_initialised );
-		uint32_t l_size = m_vertexBuffer.GetSize() / m_vertexBuffer.GetDeclaration().stride();
+		uint32_t size = m_vertexBuffer.GetSize() / m_vertexBuffer.GetDeclaration().stride();
 
 		if ( !m_indexBuffer.IsEmpty() )
 		{
-			l_size = m_indexBuffer.GetSize();
+			size = m_indexBuffer.GetSize();
 		}
 
 		if ( m_dirty )
@@ -508,7 +508,7 @@ namespace Castor3D
 			m_dirty = false;
 		}
 
-		p_geometryBuffers.DrawInstanced( l_size, 0, p_count );
+		p_geometryBuffers.DrawInstanced( size, 0, p_count );
 	}
 
 	void Submesh::ComputeFacesFromPolygonVertex()
@@ -562,61 +562,61 @@ namespace Castor3D
 					&& !m_indexBuffer.IsEmpty()
 					&& !m_vertexBuffer.IsEmpty() )
 				{
-					IndexBuffer & l_indices = m_indexBuffer;
-					VertexBuffer & l_vertices = m_vertexBuffer;
+					IndexBuffer & indices = m_indexBuffer;
+					VertexBuffer & vertices = m_vertexBuffer;
 
-					l_vertices.Bind();
-					l_indices.Bind();
+					vertices.Bind();
+					indices.Bind();
 					m_cameraPosition = p_ptCameraPosition;
-					uint32_t l_uiIdxSize = l_indices.GetSize();
-					uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, AccessType::eRead | AccessType::eWrite );
+					uint32_t uiIdxSize = indices.GetSize();
+					uint32_t * pIdx = indices.Lock( 0, uiIdxSize, AccessType::eRead | AccessType::eWrite );
 
-					if ( l_pIdx )
+					if ( pIdx )
 					{
 						struct stFACE_DISTANCE
 						{
 							uint32_t m_index[3];
 							double m_distance;
 						};
-						uint32_t l_stride = l_vertices.GetDeclaration().stride();
-						uint8_t * l_pVtx = l_vertices.GetData();
+						uint32_t stride = vertices.GetDeclaration().stride();
+						uint8_t * pVtx = vertices.GetData();
 						DECLARE_VECTOR( stFACE_DISTANCE, Face );
-						FaceArray l_arraySorted;
-						l_arraySorted.reserve( l_uiIdxSize / 3 );
+						FaceArray arraySorted;
+						arraySorted.reserve( uiIdxSize / 3 );
 
-						if ( l_pVtx )
+						if ( pVtx )
 						{
-							for ( uint32_t * l_it = l_pIdx + 0; l_it < l_pIdx + l_uiIdxSize; l_it += 3 )
+							for ( uint32_t * it = pIdx + 0; it < pIdx + uiIdxSize; it += 3 )
 							{
-								double l_dDistance = 0.0;
-								Coords3r l_pVtx1( reinterpret_cast< real * >( &l_pVtx[l_it[0] * l_stride] ) );
-								l_dDistance += point::length_squared( l_pVtx1 - p_ptCameraPosition );
-								Coords3r l_pVtx2( reinterpret_cast< real * >( &l_pVtx[l_it[1] * l_stride] ) );
-								l_dDistance += point::length_squared( l_pVtx2 - p_ptCameraPosition );
-								Coords3r l_pVtx3( reinterpret_cast< real * >( &l_pVtx[l_it[2] * l_stride] ) );
-								l_dDistance += point::length_squared( l_pVtx3 - p_ptCameraPosition );
-								stFACE_DISTANCE l_face = { { l_it[0], l_it[1], l_it[2] }, l_dDistance };
-								l_arraySorted.push_back( l_face );
+								double dDistance = 0.0;
+								Coords3r pVtx1( reinterpret_cast< real * >( &pVtx[it[0] * stride] ) );
+								dDistance += point::length_squared( pVtx1 - p_ptCameraPosition );
+								Coords3r pVtx2( reinterpret_cast< real * >( &pVtx[it[1] * stride] ) );
+								dDistance += point::length_squared( pVtx2 - p_ptCameraPosition );
+								Coords3r pVtx3( reinterpret_cast< real * >( &pVtx[it[2] * stride] ) );
+								dDistance += point::length_squared( pVtx3 - p_ptCameraPosition );
+								stFACE_DISTANCE face = { { it[0], it[1], it[2] }, dDistance };
+								arraySorted.push_back( face );
 							}
 
-							std::sort( l_arraySorted.begin(), l_arraySorted.end(), []( stFACE_DISTANCE const & p_left, stFACE_DISTANCE const & p_right )
+							std::sort( arraySorted.begin(), arraySorted.end(), []( stFACE_DISTANCE const & p_left, stFACE_DISTANCE const & p_right )
 							{
 								return p_left.m_distance < p_right.m_distance;
 							} );
 
-							for ( FaceArrayConstIt l_it = l_arraySorted.begin(); l_it != l_arraySorted.end(); ++l_it )
+							for ( FaceArrayConstIt it = arraySorted.begin(); it != arraySorted.end(); ++it )
 							{
-								*l_pIdx++ = l_it->m_index[0];
-								*l_pIdx++ = l_it->m_index[1];
-								*l_pIdx++ = l_it->m_index[2];
+								*pIdx++ = it->m_index[0];
+								*pIdx++ = it->m_index[1];
+								*pIdx++ = it->m_index[2];
 							}
 						}
 
-						l_indices.Unlock();
+						indices.Unlock();
 					}
 
-					l_indices.Unbind();
-					l_vertices.Unbind();
+					indices.Unbind();
+					vertices.Unbind();
 				}
 			}
 		}
@@ -628,51 +628,51 @@ namespace Castor3D
 
 	uint32_t Submesh::Ref( MaterialSPtr p_material )
 	{
-		auto l_it = m_instanceCount.find( p_material );
+		auto it = m_instanceCount.find( p_material );
 
-		if ( l_it == m_instanceCount.end() )
+		if ( it == m_instanceCount.end() )
 		{
 			m_instanceCount[p_material] = 0;
-			l_it = m_instanceCount.find( p_material );
+			it = m_instanceCount.find( p_material );
 		}
 
-		return l_it->second++;
+		return it->second++;
 	}
 
 	uint32_t Submesh::UnRef( MaterialSPtr p_material )
 	{
-		auto l_it = m_instanceCount.find( p_material );
-		uint32_t l_result{ 0u };
+		auto it = m_instanceCount.find( p_material );
+		uint32_t result{ 0u };
 
-		if ( l_it != m_instanceCount.end() )
+		if ( it != m_instanceCount.end() )
 		{
-			l_result = l_it->second;
+			result = it->second;
 
-			if ( l_it->second )
+			if ( it->second )
 			{
-				l_it->second--;
+				it->second--;
 			}
 
-			if ( !l_it->second )
+			if ( !it->second )
 			{
-				m_instanceCount.erase( l_it );
+				m_instanceCount.erase( it );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	uint32_t Submesh::GetRefCount( MaterialSPtr p_material )const
 	{
-		uint32_t l_result = 0;
-		auto l_it = m_instanceCount.find( p_material );
+		uint32_t result = 0;
+		auto it = m_instanceCount.find( p_material );
 
-		if ( l_it != m_instanceCount.end() )
+		if ( it != m_instanceCount.end() )
 		{
-			l_result = l_it->second;
+			result = it->second;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	uint32_t Submesh::GetMaxRefCount()const
@@ -688,44 +688,44 @@ namespace Castor3D
 
 	Topology Submesh::GetTopology()const
 	{
-		Topology l_result = Topology::eCount;
+		Topology result = Topology::eCount;
 
-		for ( auto l_buffers : m_geometryBuffers )
+		for ( auto buffers : m_geometryBuffers )
 		{
-			l_result = l_buffers->GetTopology();
+			result = buffers->GetTopology();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Submesh::SetTopology( Topology p_value )
 	{
-		for ( auto l_buffers : m_geometryBuffers )
+		for ( auto buffers : m_geometryBuffers )
 		{
-			l_buffers->SetTopology( p_value );
+			buffers->SetTopology( p_value );
 		}
 	}
 
 	GeometryBuffersSPtr Submesh::GetGeometryBuffers( ShaderProgram const & p_program )
 	{
-		GeometryBuffersSPtr l_geometryBuffers;
-		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
+		GeometryBuffersSPtr geometryBuffers;
+		auto it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
 		{
 			return &p_buffers->GetProgram() == &p_program;
 		} );
 
-		if ( l_it == m_geometryBuffers.end() )
+		if ( it == m_geometryBuffers.end() )
 		{
-			l_geometryBuffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, p_program );
-			m_geometryBuffers.push_back( l_geometryBuffers );
-			DoInitialiseGeometryBuffers( l_geometryBuffers );
+			geometryBuffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, p_program );
+			m_geometryBuffers.push_back( geometryBuffers );
+			DoInitialiseGeometryBuffers( geometryBuffers );
 		}
 		else
 		{
-			l_geometryBuffers = *l_it;
+			geometryBuffers = *it;
 		}
 
-		return l_geometryBuffers;
+		return geometryBuffers;
 	}
 
 	void Submesh::SetAnimated( bool p_animated )
@@ -757,14 +757,14 @@ namespace Castor3D
 		}
 		else if ( GetScene()->GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 		{
-			uint32_t l_count = 0;
+			uint32_t count = 0;
 
-			for ( auto l_it : m_instanceCount )
+			for ( auto it : m_instanceCount )
 			{
-				l_count = std::max( l_count, l_it.second );
+				count = std::max( count, it.second );
 			}
 
-			if ( l_count > 1 )
+			if ( count > 1 )
 			{
 				AddFlag( m_programFlags, ProgramFlag::eInstantiation );
 				m_matrixBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
@@ -833,9 +833,9 @@ namespace Castor3D
 			m_instancedBonesBuffer->Cleanup();
 		}
 
-		for ( auto l_buffers : m_geometryBuffers )
+		for ( auto buffers : m_geometryBuffers )
 		{
-			l_buffers->Cleanup();
+			buffers->Cleanup();
 		}
 	}
 
@@ -844,26 +844,26 @@ namespace Castor3D
 		DoCreateBuffers();
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
-		uint32_t l_count = 0;
+		uint32_t count = 0;
 
-		for ( auto l_it : m_instanceCount )
+		for ( auto it : m_instanceCount )
 		{
-			l_count = std::max( l_count, l_it.second );
+			count = std::max( count, it.second );
 		}
 
-		if ( l_count > 1 )
+		if ( count > 1 )
 		{
 			AddFlag( m_programFlags, ProgramFlag::eInstantiation );
-			DoGenerateMatrixBuffer( l_count );
+			DoGenerateMatrixBuffer( count );
 		}
 
 		if ( !m_bones.empty() )
 		{
 			DoGenerateBonesBuffer();
 
-			if ( l_count > 1 )
+			if ( count > 1 )
 			{
-				DoGenerateInstantiatedBonesBuffer( l_count );
+				DoGenerateInstantiatedBonesBuffer( count );
 			}
 		}
 
@@ -877,39 +877,39 @@ namespace Castor3D
 
 	void Submesh::DoGenerateVertexBuffer()
 	{
-		VertexBuffer & l_vertexBuffer = m_vertexBuffer;
-		uint32_t l_stride = m_vertexBuffer.GetDeclaration().stride();
-		uint32_t l_size = uint32_t( m_points.size() ) * l_stride;
+		VertexBuffer & vertexBuffer = m_vertexBuffer;
+		uint32_t stride = m_vertexBuffer.GetDeclaration().stride();
+		uint32_t size = uint32_t( m_points.size() ) * stride;
 
-		if ( l_size )
+		if ( size )
 		{
-			if ( l_vertexBuffer.GetSize() != l_size )
+			if ( vertexBuffer.GetSize() != size )
 			{
-				l_vertexBuffer.Resize( l_size );
+				vertexBuffer.Resize( size );
 			}
 
-			auto l_buffer = l_vertexBuffer.GetData();
+			auto buffer = vertexBuffer.GetData();
 
-			for ( auto l_it : m_pointsData )
+			for ( auto it : m_pointsData )
 			{
-				ENSURE( l_buffer < l_vertexBuffer.GetData() + l_vertexBuffer.GetSize() );
-				ENSURE( ( l_buffer < l_vertexBuffer.GetData() + l_vertexBuffer.GetSize()
-						&& l_buffer + l_it.size() <= l_vertexBuffer.GetData() + l_vertexBuffer.GetSize() )
-					|| ( l_buffer == l_vertexBuffer.GetData() + l_vertexBuffer.GetSize() ) );
-				std::memcpy( l_buffer, l_it.data(), l_it.size() );
-				l_buffer += l_it.size();
+				ENSURE( buffer < vertexBuffer.GetData() + vertexBuffer.GetSize() );
+				ENSURE( ( buffer < vertexBuffer.GetData() + vertexBuffer.GetSize()
+						&& buffer + it.size() <= vertexBuffer.GetData() + vertexBuffer.GetSize() )
+					|| ( buffer == vertexBuffer.GetData() + vertexBuffer.GetSize() ) );
+				std::memcpy( buffer, it.data(), it.size() );
+				buffer += it.size();
 			}
 
-			l_buffer = l_vertexBuffer.GetData();
+			buffer = vertexBuffer.GetData();
 
-			for ( auto l_point : m_points )
+			for ( auto point : m_points )
 			{
-				ENSURE( l_buffer < l_vertexBuffer.GetData() + l_vertexBuffer.GetSize() );
-				ENSURE( ( l_buffer < l_vertexBuffer.GetData() + l_vertexBuffer.GetSize()
-						&& l_buffer + l_stride <= l_vertexBuffer.GetData() + l_vertexBuffer.GetSize() )
-					|| ( l_buffer == l_vertexBuffer.GetData() + l_vertexBuffer.GetSize() ) );
-				l_point->LinkCoords( l_buffer );
-				l_buffer += l_stride;
+				ENSURE( buffer < vertexBuffer.GetData() + vertexBuffer.GetSize() );
+				ENSURE( ( buffer < vertexBuffer.GetData() + vertexBuffer.GetSize()
+						&& buffer + stride <= vertexBuffer.GetData() + vertexBuffer.GetSize() )
+					|| ( buffer == vertexBuffer.GetData() + vertexBuffer.GetSize() ) );
+				point->LinkCoords( buffer );
+				buffer += stride;
 			}
 
 			//m_points.clear();
@@ -921,37 +921,37 @@ namespace Castor3D
 	{
 		if ( m_animBuffer )
 		{
-			VertexBuffer & l_vertexBuffer = m_vertexBuffer;
-			VertexBuffer & l_animBuffer = *m_animBuffer;
-			uint32_t l_size = l_vertexBuffer.GetSize();
+			VertexBuffer & vertexBuffer = m_vertexBuffer;
+			VertexBuffer & animBuffer = *m_animBuffer;
+			uint32_t size = vertexBuffer.GetSize();
 
-			if ( l_size && l_animBuffer.GetSize() != l_size )
+			if ( size && animBuffer.GetSize() != size )
 			{
-				l_animBuffer.Resize( l_size );
+				animBuffer.Resize( size );
 			}
 		}
 	}
 
 	void Submesh::DoGenerateIndexBuffer()
 	{
-		FaceSPtr l_pFace;
-		IndexBuffer & l_indexBuffer = m_indexBuffer;
-		uint32_t l_uiSize = uint32_t( m_faces.size() * 3 );
+		FaceSPtr pFace;
+		IndexBuffer & indexBuffer = m_indexBuffer;
+		uint32_t uiSize = uint32_t( m_faces.size() * 3 );
 
-		if ( l_uiSize )
+		if ( uiSize )
 		{
-			if ( l_indexBuffer.GetSize() != l_uiSize )
+			if ( indexBuffer.GetSize() != uiSize )
 			{
-				l_indexBuffer.Resize( l_uiSize );
+				indexBuffer.Resize( uiSize );
 			}
 
-			uint32_t l_index = 0;
+			uint32_t index = 0;
 
-			for ( auto const & l_face : m_faces )
+			for ( auto const & face : m_faces )
 			{
-				l_indexBuffer[l_index++] = l_face[0];
-				l_indexBuffer[l_index++] = l_face[1];
-				l_indexBuffer[l_index++] = l_face[2];
+				indexBuffer[index++] = face[0];
+				indexBuffer[index++] = face[1];
+				indexBuffer[index++] = face[2];
 			}
 
 			//m_faces.clear();
@@ -962,32 +962,32 @@ namespace Castor3D
 	{
 		if ( m_bonesBuffer )
 		{
-			VertexBuffer & l_bonesBuffer = *m_bonesBuffer;
-			uint32_t l_stride = BonedVertex::Stride;
-			uint32_t l_size = uint32_t( m_bones.size() ) * l_stride;
-			auto l_itbones = m_bones.begin();
+			VertexBuffer & bonesBuffer = *m_bonesBuffer;
+			uint32_t stride = BonedVertex::Stride;
+			uint32_t size = uint32_t( m_bones.size() ) * stride;
+			auto itbones = m_bones.begin();
 
-			if ( l_size )
+			if ( size )
 			{
-				if ( l_bonesBuffer.GetSize() != l_size )
+				if ( bonesBuffer.GetSize() != size )
 				{
-					l_bonesBuffer.Resize( l_size );
+					bonesBuffer.Resize( size );
 				}
 
-				auto l_buffer = l_bonesBuffer.GetData();
+				auto buffer = bonesBuffer.GetData();
 
-				for ( auto l_it : m_bonesData )
+				for ( auto it : m_bonesData )
 				{
-					std::memcpy( l_buffer, l_it.data(), l_it.size() );
-					l_buffer += l_it.size();
+					std::memcpy( buffer, it.data(), it.size() );
+					buffer += it.size();
 				}
 
-				l_buffer = l_bonesBuffer.GetData();
+				buffer = bonesBuffer.GetData();
 
-				for ( auto l_point : m_bones )
+				for ( auto point : m_bones )
 				{
-					l_point->LinkCoords( l_buffer );
-					l_buffer += l_stride;
+					point->LinkCoords( buffer );
+					buffer += stride;
 				}
 
 				//m_bones.clear();
@@ -1002,12 +1002,12 @@ namespace Castor3D
 		{
 			if ( p_count )
 			{
-				VertexBuffer & l_matrixBuffer = *m_matrixBuffer;
-				uint32_t l_size = p_count * l_matrixBuffer.GetDeclaration().stride();
+				VertexBuffer & matrixBuffer = *m_matrixBuffer;
+				uint32_t size = p_count * matrixBuffer.GetDeclaration().stride();
 
-				if ( l_matrixBuffer.GetSize() != l_size )
+				if ( matrixBuffer.GetSize() != size )
 				{
-					l_matrixBuffer.Resize( l_size );
+					matrixBuffer.Resize( size );
 				}
 			}
 			else
@@ -1023,13 +1023,13 @@ namespace Castor3D
 		{
 			if ( p_count )
 			{
-				auto & l_bonesBuffer = *m_instancedBonesBuffer;
-				auto l_stride = uint32_t( sizeof( float ) * 16u * 400u );
-				uint32_t l_size = p_count * l_stride;
+				auto & bonesBuffer = *m_instancedBonesBuffer;
+				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
+				uint32_t size = p_count * stride;
 
-				if ( l_bonesBuffer.GetSize() != l_size )
+				if ( bonesBuffer.GetSize() != size )
 				{
-					l_bonesBuffer.Resize( l_size );
+					bonesBuffer.Resize( size );
 				}
 			}
 			else
@@ -1041,33 +1041,33 @@ namespace Castor3D
 
 	void Submesh::DoInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers )
 	{
-		VertexBufferArray l_buffers;
-		l_buffers.push_back( m_vertexBuffer );
+		VertexBufferArray buffers;
+		buffers.push_back( m_vertexBuffer );
 
 		if ( m_animBuffer )
 		{
-			l_buffers.push_back( *m_animBuffer );
+			buffers.push_back( *m_animBuffer );
 		}
 
 		if ( m_bonesBuffer )
 		{
-			l_buffers.push_back( *m_bonesBuffer );
+			buffers.push_back( *m_bonesBuffer );
 		}
 
 		if ( m_matrixBuffer )
 		{
-			l_buffers.push_back( *m_matrixBuffer );
+			buffers.push_back( *m_matrixBuffer );
 		}
 
 		if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
 		{
-			p_geometryBuffers->Initialise( l_buffers, &m_indexBuffer );
+			p_geometryBuffers->Initialise( buffers, &m_indexBuffer );
 		}
 		else
 		{
-			GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, l_buffers]()
+			GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, buffers]()
 			{
-				p_geometryBuffers->Initialise( l_buffers, &m_indexBuffer );
+				p_geometryBuffers->Initialise( buffers, &m_indexBuffer );
 			} ) );
 		}
 	}

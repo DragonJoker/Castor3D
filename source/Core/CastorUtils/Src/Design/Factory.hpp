@@ -91,9 +91,9 @@ namespace Castor
 		 */
 		void Unregister( Key const & p_key )
 		{
-			auto l_it = m_registered.find( p_key );
+			auto it = m_registered.find( p_key );
 
-			if ( l_it != m_registered.end() )
+			if ( it != m_registered.end() )
 			{
 				m_registered.erase( p_key );
 			}
@@ -120,15 +120,15 @@ namespace Castor
 		 */
 		std::vector< Key > ListRegisteredTypes()
 		{
-			std::vector< Key > l_result;
-			l_result.reserve( m_registered.size() );
+			std::vector< Key > result;
+			result.reserve( m_registered.size() );
 
-			for ( auto const & l_it : m_registered )
+			for ( auto const & it : m_registered )
 			{
-				l_result.push_back( l_it.first );
+				result.push_back( it.first );
 			}
 
-			return l_result;
+			return result;
 		}
 		/**
 		 *\~english
@@ -145,19 +145,19 @@ namespace Castor
 		template< typename ... Parameters >
 		ObjPtr Create( Key const & p_key, Parameters && ... p_params )const
 		{
-			ObjPtr l_result;
-			auto l_it = m_registered.find( p_key );
+			ObjPtr result;
+			auto it = m_registered.find( p_key );
 
-			if ( l_it != m_registered.end() )
+			if ( it != m_registered.end() )
 			{
-				l_result = l_it->second( std::forward< Parameters >( p_params )... );
+				result = it->second( std::forward< Parameters >( p_params )... );
 			}
 			else
 			{
 				CASTOR_EXCEPTION( ERROR_UNKNOWN_OBJECT );
 			}
 
-			return l_result;
+			return result;
 		}
 
 	protected:

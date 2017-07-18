@@ -21,18 +21,18 @@ namespace Castor3D
 		: m_texture{ p_engine }
 		, m_passSize{ p_size }
 	{
-		auto l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eBuffer
+		auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eBuffer
 			, AccessType::eWrite
 			, AccessType::eRead
 			, PixelFormat::eRGBA32F
 			, Size( GLSL::MaxMaterialsCount, 1 ) );
-		l_texture->GetImage().InitialiseSource();
-		SamplerSPtr l_sampler = p_engine.GetLightsSampler();
+		texture->GetImage().InitialiseSource();
+		SamplerSPtr sampler = p_engine.GetLightsSampler();
 		m_texture.SetAutoMipmaps( false );
-		m_texture.SetSampler( l_sampler );
-		m_texture.SetTexture( l_texture );
+		m_texture.SetSampler( sampler );
+		m_texture.SetTexture( texture );
 		m_texture.SetIndex( Pass::PassBufferIndex );
-		m_buffer = l_texture->GetImage().GetBuffer();
+		m_buffer = texture->GetImage().GetBuffer();
 		m_texture.Initialise();
 	}
 
@@ -57,18 +57,18 @@ namespace Castor3D
 
 	void PassBuffer::RemovePass( Pass & p_pass )
 	{
-		auto l_id = p_pass.GetId() - 1u;
-		REQUIRE( l_id < m_passes.size() );
-		REQUIRE( &p_pass == m_passes[l_id] );
-		auto l_it = m_passes.erase( m_passes.begin() + l_id );
+		auto id = p_pass.GetId() - 1u;
+		REQUIRE( id < m_passes.size() );
+		REQUIRE( &p_pass == m_passes[id] );
+		auto it = m_passes.erase( m_passes.begin() + id );
 
-		for ( l_it; l_it != m_passes.end(); ++l_it )
+		for ( it; it != m_passes.end(); ++it )
 		{
-			( *l_it )->SetId( l_id );
-			++l_id;
+			( *it )->SetId( id );
+			++id;
 		}
 
-		m_connections.erase( m_connections.begin() + l_id );
+		m_connections.erase( m_connections.begin() + id );
 		p_pass.SetId( 0u );
 		m_passID--;
 	}
@@ -77,24 +77,24 @@ namespace Castor3D
 	{
 		if ( !m_dirty.empty() )
 		{
-			std::vector< Pass const * > l_dirty;
-			std::swap( m_dirty, l_dirty );
-			auto l_end = std::unique( l_dirty.begin(), l_dirty.end() );
+			std::vector< Pass const * > dirty;
+			std::swap( m_dirty, dirty );
+			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			std::for_each( l_dirty.begin(), l_end, [this]( Pass const * p_pass )
+			std::for_each( dirty.begin(), end, [this]( Pass const * p_pass )
 			{
 				p_pass->Update( *this );
 			} );
 
-			auto l_layout = m_texture.GetTexture();
-			auto l_locked = l_layout->Lock( AccessType::eWrite );
+			auto layout = m_texture.GetTexture();
+			auto locked = layout->Lock( AccessType::eWrite );
 
-			if ( l_locked )
+			if ( locked )
 			{
-				memcpy( l_locked, m_buffer->const_ptr(), m_buffer->size() );
+				memcpy( locked, m_buffer->const_ptr(), m_buffer->size() );
 			}
 
-			l_layout->Unlock( true );
+			layout->Unlock( true );
 		}
 	}
 
@@ -116,11 +116,11 @@ namespace Castor3D
 		, float p_a )
 	{
 		REQUIRE( p_components < m_passSize );
-		auto l_buffer = reinterpret_cast< float * >( m_buffer->ptr() ) + ( p_components + p_index * m_passSize ) * 4u;
-		*l_buffer++ = p_r;
-		*l_buffer++ = p_g;
-		*l_buffer++ = p_b;
-		*l_buffer++ = p_a;
+		auto buffer = reinterpret_cast< float * >( m_buffer->ptr() ) + ( p_components + p_index * m_passSize ) * 4u;
+		*buffer++ = p_r;
+		*buffer++ = p_g;
+		*buffer++ = p_b;
+		*buffer++ = p_a;
 	}
 
 	void PassBuffer::SetComponents( uint32_t p_index
@@ -128,8 +128,8 @@ namespace Castor3D
 		, Castor::Colour const & p_rgb
 		, float p_a )
 	{
-		auto l_rgb = rgb_float( p_rgb );
-		SetComponents( p_index, p_components, l_rgb[0], l_rgb[1], l_rgb[2], p_a );
+		auto rgb = rgb_float( p_rgb );
+		SetComponents( p_index, p_components, rgb[0], rgb[1], rgb[2], p_a );
 	}
 
 	void PassBuffer::SetComponents( uint32_t p_index
@@ -137,8 +137,8 @@ namespace Castor3D
 		, Castor::HdrColour const & p_rgb
 		, float p_a )
 	{
-		auto l_rgb = rgb_float( p_rgb );
-		SetComponents( p_index, p_components, l_rgb[0], l_rgb[1], l_rgb[2], p_a );
+		auto rgb = rgb_float( p_rgb );
+		SetComponents( p_index, p_components, rgb[0], rgb[1], rgb[2], p_a );
 	}
 
 	void PassBuffer::SetComponents( uint32_t p_index
@@ -146,7 +146,7 @@ namespace Castor3D
 		, float p_r
 		, Castor::Colour const & p_gba )
 	{
-		auto l_gba = rgb_float( p_gba );
-		SetComponents( p_index, p_components, p_r, l_gba[0], l_gba[1], l_gba[2] );
+		auto gba = rgb_float( p_gba );
+		SetComponents( p_index, p_components, p_r, gba[0], gba[1], gba[2] );
 	}
 }

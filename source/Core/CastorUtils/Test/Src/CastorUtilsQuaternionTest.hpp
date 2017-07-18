@@ -59,44 +59,44 @@ namespace Testing
 
 		inline bool compare( Castor::SquareMatrix< float, 4 > const & a, Castor::SquareMatrix< float, 4 > const & b )
 		{
-			float l_epsilon = 0.0001f;
-			return std::abs( a[0][0] - b[0][0] ) < l_epsilon
-				&& std::abs( a[0][1] - b[0][1] ) < l_epsilon
-				&& std::abs( a[0][2] - b[0][2] ) < l_epsilon
-				&& std::abs( a[0][3] - b[0][3] ) < l_epsilon
-				&& std::abs( a[1][0] - b[1][0] ) < l_epsilon
-				&& std::abs( a[1][1] - b[1][1] ) < l_epsilon
-				&& std::abs( a[1][2] - b[1][2] ) < l_epsilon
-				&& std::abs( a[1][3] - b[1][3] ) < l_epsilon
-				&& std::abs( a[2][0] - b[2][0] ) < l_epsilon
-				&& std::abs( a[2][1] - b[2][1] ) < l_epsilon
-				&& std::abs( a[2][2] - b[2][2] ) < l_epsilon
-				&& std::abs( a[2][3] - b[2][3] ) < l_epsilon
-				&& std::abs( a[3][0] - b[3][0] ) < l_epsilon
-				&& std::abs( a[3][1] - b[3][1] ) < l_epsilon
-				&& std::abs( a[3][2] - b[3][2] ) < l_epsilon
-				&& std::abs( a[3][3] - b[3][3] ) < l_epsilon;
+			float epsilon = 0.0001f;
+			return std::abs( a[0][0] - b[0][0] ) < epsilon
+				&& std::abs( a[0][1] - b[0][1] ) < epsilon
+				&& std::abs( a[0][2] - b[0][2] ) < epsilon
+				&& std::abs( a[0][3] - b[0][3] ) < epsilon
+				&& std::abs( a[1][0] - b[1][0] ) < epsilon
+				&& std::abs( a[1][1] - b[1][1] ) < epsilon
+				&& std::abs( a[1][2] - b[1][2] ) < epsilon
+				&& std::abs( a[1][3] - b[1][3] ) < epsilon
+				&& std::abs( a[2][0] - b[2][0] ) < epsilon
+				&& std::abs( a[2][1] - b[2][1] ) < epsilon
+				&& std::abs( a[2][2] - b[2][2] ) < epsilon
+				&& std::abs( a[2][3] - b[2][3] ) < epsilon
+				&& std::abs( a[3][0] - b[3][0] ) < epsilon
+				&& std::abs( a[3][1] - b[3][1] ) < epsilon
+				&& std::abs( a[3][2] - b[3][2] ) < epsilon
+				&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 		}
 
 		inline bool compare( Castor::SquareMatrix< double, 4 > const & a, Castor::SquareMatrix< double, 4 > const & b )
 		{
-			double l_epsilon = 0.0001;
-			return std::abs( a[0][0] - b[0][0] ) < l_epsilon
-				&& std::abs( a[0][1] - b[0][1] ) < l_epsilon
-				&& std::abs( a[0][2] - b[0][2] ) < l_epsilon
-				&& std::abs( a[0][3] - b[0][3] ) < l_epsilon
-				&& std::abs( a[1][0] - b[1][0] ) < l_epsilon
-				&& std::abs( a[1][1] - b[1][1] ) < l_epsilon
-				&& std::abs( a[1][2] - b[1][2] ) < l_epsilon
-				&& std::abs( a[1][3] - b[1][3] ) < l_epsilon
-				&& std::abs( a[2][0] - b[2][0] ) < l_epsilon
-				&& std::abs( a[2][1] - b[2][1] ) < l_epsilon
-				&& std::abs( a[2][2] - b[2][2] ) < l_epsilon
-				&& std::abs( a[2][3] - b[2][3] ) < l_epsilon
-				&& std::abs( a[3][0] - b[3][0] ) < l_epsilon
-				&& std::abs( a[3][1] - b[3][1] ) < l_epsilon
-				&& std::abs( a[3][2] - b[3][2] ) < l_epsilon
-				&& std::abs( a[3][3] - b[3][3] ) < l_epsilon;
+			double epsilon = 0.0001;
+			return std::abs( a[0][0] - b[0][0] ) < epsilon
+				&& std::abs( a[0][1] - b[0][1] ) < epsilon
+				&& std::abs( a[0][2] - b[0][2] ) < epsilon
+				&& std::abs( a[0][3] - b[0][3] ) < epsilon
+				&& std::abs( a[1][0] - b[1][0] ) < epsilon
+				&& std::abs( a[1][1] - b[1][1] ) < epsilon
+				&& std::abs( a[1][2] - b[1][2] ) < epsilon
+				&& std::abs( a[1][3] - b[1][3] ) < epsilon
+				&& std::abs( a[2][0] - b[2][0] ) < epsilon
+				&& std::abs( a[2][1] - b[2][1] ) < epsilon
+				&& std::abs( a[2][2] - b[2][2] ) < epsilon
+				&& std::abs( a[2][3] - b[2][3] ) < epsilon
+				&& std::abs( a[3][0] - b[3][0] ) < epsilon
+				&& std::abs( a[3][1] - b[3][1] ) < epsilon
+				&& std::abs( a[3][2] - b[3][2] ) < epsilon
+				&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 		}
 
 	};

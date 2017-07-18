@@ -22,48 +22,48 @@ namespace Castor3D
 	bool LegacyPass::TextWriter::operator()( LegacyPass const & p_pass, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing LegacyPass " ) );
-		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
+		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.Print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
+			result = p_file.Print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( l_result, "LegacyPass diffuse colour" );
+			Castor::TextWriter< LegacyPass >::CheckError( result, "LegacyPass diffuse colour" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
+			result = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
 					   && Colour::TextWriter( String() )( p_pass.GetSpecular(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( l_result, "LegacyPass specular colour" );
+			Castor::TextWriter< LegacyPass >::CheckError( result, "LegacyPass specular colour" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "\tambient " ) + string::to_string( p_pass.GetAmbient() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( l_result, "LegacyPass ambient" );
+			result = p_file.WriteText( m_tabs + cuT( "\tambient " ) + string::to_string( p_pass.GetAmbient() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< LegacyPass >::CheckError( result, "LegacyPass ambient" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "\tshininess " ) + string::to_string( p_pass.GetShininess() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< LegacyPass >::CheckError( l_result, "LegacyPass shininess" );
+			result = p_file.WriteText( m_tabs + cuT( "\tshininess " ) + string::to_string( p_pass.GetShininess() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< LegacyPass >::CheckError( result, "LegacyPass shininess" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = Pass::TextWriter{ m_tabs }( p_pass, p_file );
+			result = Pass::TextWriter{ m_tabs }( p_pass, p_file );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*********************************************************************************************

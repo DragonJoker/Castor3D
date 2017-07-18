@@ -173,22 +173,22 @@ namespace Castor3D
 		 */
 		inline Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const
 		{
-			Type l_result;
+			Type result;
 
 			if ( p_percent <= 0.0 )
 			{
-				l_result = p_src;
+				result = p_src;
 			}
 			else if ( p_percent >= 1.0 )
 			{
-				l_result = p_dst;
+				result = p_dst;
 			}
 			else
 			{
-				l_result = p_src + ( ( p_dst - p_src ) * p_percent );
+				result = p_src + ( ( p_dst - p_src ) * p_percent );
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 	/*!
@@ -237,22 +237,22 @@ namespace Castor3D
 		 */
 		inline Castor::Quaternion Interpolate( Castor::Quaternion const & p_src, Castor::Quaternion const & p_dst, real p_percent )const
 		{
-			Castor::Quaternion l_result;
+			Castor::Quaternion result;
 
 			if ( p_percent <= 0.0 )
 			{
-				l_result = p_src;
+				result = p_src;
 			}
 			else if ( p_percent >= 1.0 )
 			{
-				l_result = p_dst;
+				result = p_dst;
 			}
 			else
 			{
-				l_result = p_src.slerp( p_dst, p_percent );
+				result = p_src.slerp( p_dst, p_percent );
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 }

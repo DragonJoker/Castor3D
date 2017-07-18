@@ -62,29 +62,29 @@ namespace Testing
 
 	void CastorUtilsMatrixTest::MatrixInversion()
 	{
-		Matrix3x3d l_mtxRGBtoYUV;
-		l_mtxRGBtoYUV[0][0] =  0.299;
-		l_mtxRGBtoYUV[1][0] =  0.587;
-		l_mtxRGBtoYUV[2][0] =  0.114;
-		l_mtxRGBtoYUV[0][1] = -0.14713;
-		l_mtxRGBtoYUV[1][1] = -0.28886;
-		l_mtxRGBtoYUV[2][1] =  0.436;
-		l_mtxRGBtoYUV[0][2] =  0.615;
-		l_mtxRGBtoYUV[1][2] = -0.51499;
-		l_mtxRGBtoYUV[2][2] = -0.10001;
-		Matrix3x3d l_mtxYUVtoRGB( l_mtxRGBtoYUV.get_inverse() );
-		CT_EQUAL( l_mtxRGBtoYUV, l_mtxYUVtoRGB.get_inverse() );
-		l_mtxRGBtoYUV[0][0] =  0.2126;
-		l_mtxRGBtoYUV[1][0] =  0.7152;
-		l_mtxRGBtoYUV[2][0] =  0.0722;
-		l_mtxRGBtoYUV[0][1] = -0.09991;
-		l_mtxRGBtoYUV[1][1] = -0.33609;
-		l_mtxRGBtoYUV[2][1] =  0.436;
-		l_mtxRGBtoYUV[0][2] =  0.615;
-		l_mtxRGBtoYUV[1][2] = -0.55861;
-		l_mtxRGBtoYUV[2][2] = -0.05639;
-		l_mtxYUVtoRGB = l_mtxRGBtoYUV.get_inverse();
-		CT_EQUAL( l_mtxRGBtoYUV, l_mtxYUVtoRGB.get_inverse() );
+		Matrix3x3d mtxRGBtoYUV;
+		mtxRGBtoYUV[0][0] =  0.299;
+		mtxRGBtoYUV[1][0] =  0.587;
+		mtxRGBtoYUV[2][0] =  0.114;
+		mtxRGBtoYUV[0][1] = -0.14713;
+		mtxRGBtoYUV[1][1] = -0.28886;
+		mtxRGBtoYUV[2][1] =  0.436;
+		mtxRGBtoYUV[0][2] =  0.615;
+		mtxRGBtoYUV[1][2] = -0.51499;
+		mtxRGBtoYUV[2][2] = -0.10001;
+		Matrix3x3d mtxYUVtoRGB( mtxRGBtoYUV.get_inverse() );
+		CT_EQUAL( mtxRGBtoYUV, mtxYUVtoRGB.get_inverse() );
+		mtxRGBtoYUV[0][0] =  0.2126;
+		mtxRGBtoYUV[1][0] =  0.7152;
+		mtxRGBtoYUV[2][0] =  0.0722;
+		mtxRGBtoYUV[0][1] = -0.09991;
+		mtxRGBtoYUV[1][1] = -0.33609;
+		mtxRGBtoYUV[2][1] =  0.436;
+		mtxRGBtoYUV[0][2] =  0.615;
+		mtxRGBtoYUV[1][2] = -0.55861;
+		mtxRGBtoYUV[2][2] = -0.05639;
+		mtxYUVtoRGB = mtxRGBtoYUV.get_inverse();
+		CT_EQUAL( mtxRGBtoYUV, mtxYUVtoRGB.get_inverse() );
 	}
 
 #if defined( CASTOR_USE_GLM )
@@ -93,14 +93,14 @@ namespace Testing
 	{
 		for ( int i = 0; i < 10; ++i )
 		{
-			char l_msg[64] = { 0 };
-			Matrix4x4f l_mtx;
-			glm::mat4 l_glm;
-			randomInit( l_mtx.ptr(), &l_glm[0][0], 16 );
-			CT_EQUAL( l_mtx, l_glm );
-			Matrix4x4f l_mtxInv( l_mtx.get_inverse() );
-			glm::mat4 l_glmInv( glm::inverse( l_glm ) );
-			CT_EQUAL( l_mtxInv, l_glmInv );
+			char msg[64] = { 0 };
+			Matrix4x4f mtx;
+			glm::mat4 glm;
+			randomInit( mtx.ptr(), &glm[0][0], 16 );
+			CT_EQUAL( mtx, glm );
+			Matrix4x4f mtxInv( mtx.get_inverse() );
+			glm::mat4 glmInv( glm::inverse( glm ) );
+			CT_EQUAL( mtxInv, glmInv );
 		}
 	}
 
@@ -108,24 +108,24 @@ namespace Testing
 	{
 		for ( int i = 0; i < 10; ++i )
 		{
-			char l_msg[64] = { 0 };
-			Matrix4x4r l_mtxA;
-			glm::mat4 l_glmA;
-			randomInit( l_mtxA.ptr(), &l_glmA[0][0], 16 );
-			Matrix4x4r l_mtxB;
-			glm::mat4 l_glmB;
-			randomInit( l_mtxB.ptr(), &l_glmB[0][0], 16 );
-			CT_EQUAL( l_mtxA, l_glmA );
-			CT_EQUAL( l_mtxB, l_glmB );
-			Matrix4x4r l_mtxC( l_mtxA * l_mtxB );
-			Matrix4x4r l_mtxD( l_mtxB * l_mtxA );
-			glm::mat4 l_glmC( l_glmA * l_glmB );
-			glm::mat4 l_glmD( l_glmB * l_glmA );
-			CT_EQUAL( l_mtxC, l_glmC );
-			CT_EQUAL( l_mtxD, l_glmD );
-			l_mtxA *= l_mtxB;
-			l_glmA *= l_glmB;
-			CT_EQUAL( l_mtxA, l_glmA );
+			char msg[64] = { 0 };
+			Matrix4x4r mtxA;
+			glm::mat4 glmA;
+			randomInit( mtxA.ptr(), &glmA[0][0], 16 );
+			Matrix4x4r mtxB;
+			glm::mat4 glmB;
+			randomInit( mtxB.ptr(), &glmB[0][0], 16 );
+			CT_EQUAL( mtxA, glmA );
+			CT_EQUAL( mtxB, glmB );
+			Matrix4x4r mtxC( mtxA * mtxB );
+			Matrix4x4r mtxD( mtxB * mtxA );
+			glm::mat4 glmC( glmA * glmB );
+			glm::mat4 glmD( glmB * glmA );
+			CT_EQUAL( mtxC, glmC );
+			CT_EQUAL( mtxD, glmD );
+			mtxA *= mtxB;
+			glmA *= glmB;
+			CT_EQUAL( mtxA, glmA );
 		}
 	}
 
@@ -135,62 +135,62 @@ namespace Testing
 
 		for ( real r = 0; r < 100; r += 1 )
 		{
-			Point3r l_pt( r, r, r );
-			Matrix4x4r l_mtx( 1 );
-			matrix::translate( l_mtx, l_pt );
-			glm::vec3 l_vec( r, r, r );
-			glm::mat4 l_mat;
-			l_mat = glm::translate( l_mat, l_vec );
-			CT_EQUAL( l_mtx, l_mat );
+			Point3r pt( r, r, r );
+			Matrix4x4r mtx( 1 );
+			matrix::translate( mtx, pt );
+			glm::vec3 vec( r, r, r );
+			glm::mat4 mat;
+			mat = glm::translate( mat, vec );
+			CT_EQUAL( mtx, mat );
 		}
 
 		Logger::LogInfo( cuT( "	Scale" ) );
 
 		for ( real r = 0; r < 100; r += 1 )
 		{
-			Point3r l_pt( r, r, r );
-			Matrix4x4r l_mtx( 1 );
-			matrix::scale( l_mtx, l_pt );
-			glm::vec3 l_vec( r, r, r );
-			glm::mat4 l_mat;
-			l_mat = glm::scale( l_mat, l_vec );
-			CT_EQUAL( l_mtx, l_mat );
+			Point3r pt( r, r, r );
+			Matrix4x4r mtx( 1 );
+			matrix::scale( mtx, pt );
+			glm::vec3 vec( r, r, r );
+			glm::mat4 mat;
+			mat = glm::scale( mat, vec );
+			CT_EQUAL( mtx, mat );
 		}
 	}
 
 	void CastorUtilsMatrixTest::ProjectionMatrixComparison()
 	{
-		real l_left = 200.0f;
-		real l_right = 1920.0f;
-		real l_top = 100.0f;
-		real l_bottom = 1080.0f;
-		real l_near = 1.0f;
-		real l_far = 1000.0f;
+		real left = 200.0f;
+		real right = 1920.0f;
+		real top = 100.0f;
+		real bottom = 1080.0f;
+		real near = 1.0f;
+		real far = 1000.0f;
 		Logger::LogInfo( cuT( "	Ortho RH" ) );
 		{
-			Matrix4x4r l_mtx( 1 );
-			matrix::ortho( l_mtx, l_left, l_right, l_bottom, l_top, l_near, l_far );
-			glm::mat4 l_mat;
-			l_mat = glm::ortho( l_left, l_right, l_bottom, l_top, l_near, l_far );
-			CT_EQUAL( l_mtx, l_mat );
+			Matrix4x4r mtx( 1 );
+			matrix::ortho( mtx, left, right, bottom, top, near, far );
+			glm::mat4 mat;
+			mat = glm::ortho( left, right, bottom, top, near, far );
+			CT_EQUAL( mtx, mat );
 		}
 		Logger::LogInfo( cuT( "	Frustum" ) );
 		{
-			Matrix4x4r l_mtx( 1 );
-			matrix::frustum( l_mtx, l_left, l_right, l_bottom, l_top, l_near, l_far );
-			glm::mat4 l_mat;
-			l_mat = glm::frustum( l_left, l_right, l_bottom, l_top, l_near, l_far );
-			CT_EQUAL( l_mtx, l_mat );
+			Matrix4x4r mtx( 1 );
+			matrix::frustum( mtx, left, right, bottom, top, near, far );
+			glm::mat4 mat;
+			mat = glm::frustum( left, right, bottom, top, near, far );
+			CT_EQUAL( mtx, mat );
 		}
 		Logger::LogInfo( cuT( "	Perspective" ) );
 		{
-			Angle l_fov( Angle::from_degrees( 90.0 ) );
-			real l_aspect = 4.0f / 3.0f;
-			Matrix4x4r l_mtx( 1 );
-			matrix::perspective( l_mtx, l_fov, l_aspect, l_near, l_far );
-			glm::mat4 l_mat;
-			l_mat = glm::perspective< real >( l_fov.radians(), l_aspect, l_near, l_far );
-			CT_EQUAL( l_mtx, l_mat );
+			Angle fov( Angle::from_degrees( 90.0 ) );
+			real aspect = 4.0f / 3.0f;
+			Matrix4x4r mtx( 1 );
+			matrix::perspective( mtx, fov, aspect, near, far );
+			glm::mat4 mat;
+			mat = glm::perspective< real >( fov.radians(), aspect, near, far );
+			CT_EQUAL( mtx, mat );
 		}
 	}
 

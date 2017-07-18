@@ -59,18 +59,18 @@ namespace Castor3D
 		, m_prev{ p_animationObject.GetKeyFrames().empty() ? p_animationObject.GetKeyFrames().end() : p_animationObject.GetKeyFrames().begin() }
 		, m_curr{ p_animationObject.GetKeyFrames().empty() ? p_animationObject.GetKeyFrames().end() : p_animationObject.GetKeyFrames().begin() + 1 }
 	{
-		for ( auto l_moving : p_animationObject.m_children )
+		for ( auto moving : p_animationObject.m_children )
 		{
-			switch ( l_moving->GetType() )
+			switch ( moving->GetType() )
 			{
 			case SkeletonAnimationObjectType::eNode:
-				m_children.push_back( std::make_shared< SkeletonAnimationInstanceNode >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), p_allObjects ) );
-				p_allObjects.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_children.back() } );
+				m_children.push_back( std::make_shared< SkeletonAnimationInstanceNode >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationNode >( moving ), p_allObjects ) );
+				p_allObjects.insert( { GetObjectTypeName( moving->GetType() ) + moving->GetName(), m_children.back() } );
 				break;
 
 			case SkeletonAnimationObjectType::eBone:
-				m_children.push_back( std::make_shared< SkeletonAnimationInstanceBone >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), p_allObjects ) );
-				p_allObjects.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_children.back() } );
+				m_children.push_back( std::make_shared< SkeletonAnimationInstanceBone >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationBone >( moving ), p_allObjects ) );
+				p_allObjects.insert( { GetObjectTypeName( moving->GetType() ) + moving->GetName(), m_children.back() } );
 				break;
 			}
 		}
@@ -107,9 +107,9 @@ namespace Castor3D
 
 		DoApply();
 
-		for ( auto l_object : m_children )
+		for ( auto object : m_children )
 		{
-			l_object->Update( p_time, m_cumulativeTransform );
+			object->Update( p_time, m_cumulativeTransform );
 		}
 	}
 

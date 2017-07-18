@@ -30,19 +30,19 @@ namespace GuiCommon
 
 	void AnimatedObjectTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		auto l_object = GetObject();
+		auto object = GetObject();
 
-		if ( l_object )
+		if ( object )
 		{
 		}
 	}
 
 	void AnimatedObjectTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		auto l_object = GetObject();
-		wxPGProperty * l_property = p_event.GetProperty();
+		auto object = GetObject();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_object )
+		if ( property && object )
 		{
 		}
 	}

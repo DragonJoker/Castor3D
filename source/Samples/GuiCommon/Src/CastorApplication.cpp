@@ -107,54 +107,54 @@ namespace GuiCommon
 
 #endif
 
-		bool l_result = DoParseCommandLine();
-		wxDisplay l_display;
-		wxRect l_rect = l_display.GetClientArea();
-		SplashScreen l_splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), m_steps, m_version );
-		m_splashScreen = &l_splashScreen;
+		bool result = DoParseCommandLine();
+		wxDisplay display;
+		wxRect rect = display.GetClientArea();
+		SplashScreen splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( rect.width - 512 ) / 2, ( rect.height - 384 ) / 2 ), m_steps, m_version );
+		m_splashScreen = &splashScreen;
 		wxApp::SetTopWindow( m_splashScreen );
-		wxWindow * l_window = nullptr;
+		wxWindow * window = nullptr;
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = DoInitialiseLocale( l_splashScreen );
+			result = DoInitialiseLocale( splashScreen );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			try
 			{
-				DoLoadImages( l_splashScreen );
-				l_result = DoInitialiseCastor( l_splashScreen );
+				DoLoadImages( splashScreen );
+				result = DoInitialiseCastor( splashScreen );
 
-				if ( l_result )
+				if ( result )
 				{
-					l_window = DoInitialiseMainFrame( &l_splashScreen );
-					l_result = l_window != nullptr;
+					window = DoInitialiseMainFrame( &splashScreen );
+					result = window != nullptr;
 				}
 			}
 			catch ( Exception & exc )
 			{
 				Logger::LogError( std::stringstream() << string::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.GetFullDescription() );
-				l_result = false;
+				result = false;
 			}
 			catch ( std::exception & exc )
 			{
 				Logger::LogError( std::stringstream() << string::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
-				l_result = false;
+				result = false;
 			}
 		}
 
-		wxApp::SetTopWindow( l_window );
-		l_splashScreen.Close();
+		wxApp::SetTopWindow( window );
+		splashScreen.Close();
 		m_splashScreen = nullptr;
 
-		if ( !l_result )
+		if ( !result )
 		{
 			DoCleanup();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	int CastorApplication::OnExit()
@@ -166,85 +166,85 @@ namespace GuiCommon
 
 	bool CastorApplication::DoParseCommandLine()
 	{
-		wxCmdLineParser l_parser( wxApp::argc, wxApp::argv );
-		l_parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help" ) );
-		l_parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
-		l_parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
-		l_parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
-		l_parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test" ) );
-		bool l_result = l_parser.Parse( false ) == 0;
+		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
+		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help" ) );
+		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
+		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
+		parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
+		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test" ) );
+		bool result = parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
-		if ( !l_result || l_parser.Found( wxT( 'h' ) ) )
+		if ( !result || parser.Found( wxT( 'h' ) ) )
 		{
-			l_parser.Usage();
-			l_result = false;
+			parser.Usage();
+			result = false;
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			LogType l_eLogLevel = LogType::eCount;
-			long l_log;
+			LogType eLogLevel = LogType::eCount;
+			long log;
 
-			if ( !l_parser.Found( wxT( "l" ), &l_log ) )
+			if ( !parser.Found( wxT( "l" ), &log ) )
 			{
-				l_eLogLevel = ELogType_DEFAULT;
+				eLogLevel = ELogType_DEFAULT;
 			}
 			else
 			{
-				l_eLogLevel = LogType( l_log );
+				eLogLevel = LogType( log );
 			}
 
-			Logger::Initialise( l_eLogLevel );
+			Logger::Initialise( eLogLevel );
 
-			if ( l_parser.Found( wxT( "opengl" ) ) )
+			if ( parser.Found( wxT( "opengl" ) ) )
 			{
 				m_rendererType = cuT( "opengl" );
 			}
 
-			if ( l_parser.Found( wxT( "test" ) ) )
+			if ( parser.Found( wxT( "test" ) ) )
 			{
 				m_rendererType = cuT( "test" );
 			}
 
-			wxString l_strFileName;
+			wxString strFileName;
 
-			if ( l_parser.GetParamCount() > 0 )
+			if ( parser.GetParamCount() > 0 )
 			{
-				m_fileName = make_String( l_parser.GetParam( 0 ) );
+				m_fileName = make_String( parser.GetParam( 0 ) );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool CastorApplication::DoInitialiseLocale( SplashScreen & p_splashScreen )
 	{
 		p_splashScreen.Step( _( "Loading language" ), 1 );
-		long l_lLanguage = wxLANGUAGE_DEFAULT;
-		Path l_pathCurrent = File::GetExecutableDirectory().GetPath();
+		long lLanguage = wxLANGUAGE_DEFAULT;
+		Path pathCurrent = File::GetExecutableDirectory().GetPath();
 
 		// load language if possible, fall back to english otherwise
-		if ( wxLocale::IsAvailable( l_lLanguage ) )
+		if ( wxLocale::IsAvailable( lLanguage ) )
 		{
-			m_locale = std::make_unique< wxLocale >( l_lLanguage, wxLOCALE_LOAD_DEFAULT );
+			m_locale = std::make_unique< wxLocale >( lLanguage, wxLOCALE_LOAD_DEFAULT );
 			// add locale search paths
-			m_locale->AddCatalogLookupPathPrefix( l_pathCurrent / cuT( "share" ) / m_internalName );
+			m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
 			m_locale->AddCatalog( m_internalName );
 
 			if ( !m_locale->IsOk() )
 			{
 				std::cerr << "Selected language is wrong" << std::endl;
-				l_lLanguage = wxLANGUAGE_ENGLISH;
-				m_locale = std::make_unique< wxLocale >( l_lLanguage );
+				lLanguage = wxLANGUAGE_ENGLISH;
+				m_locale = std::make_unique< wxLocale >( lLanguage );
 			}
 		}
 		else
 		{
 			std::cerr << "The selected language is not supported by your system."
 					  << "Try installing support for this language." << std::endl;
-			l_lLanguage = wxLANGUAGE_ENGLISH;
-			m_locale = std::make_unique< wxLocale >( l_lLanguage );
+			lLanguage = wxLANGUAGE_ENGLISH;
+			m_locale = std::make_unique< wxLocale >( lLanguage );
 		}
 
 		return true;
@@ -252,7 +252,7 @@ namespace GuiCommon
 
 	bool CastorApplication::DoInitialiseCastor( SplashScreen & p_splashScreen )
 	{
-		bool l_result = true;
+		bool result = true;
 
 		if ( !File::DirectoryExists( Engine::GetEngineDirectory() ) )
 		{
@@ -266,42 +266,42 @@ namespace GuiCommon
 		DoLoadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
-		auto l_renderers = m_castor->GetPluginCache().GetPlugins( PluginType::eRenderer );
+		auto renderers = m_castor->GetPluginCache().GetPlugins( PluginType::eRenderer );
 
-		if ( l_renderers.empty() )
+		if ( renderers.empty() )
 		{
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
-		else if ( l_renderers.size() == 1 )
+		else if ( renderers.size() == 1 )
 		{
-			m_rendererType = std::static_pointer_cast< RendererPlugin >( l_renderers.begin()->second )->GetRendererType();
+			m_rendererType = std::static_pointer_cast< RendererPlugin >( renderers.begin()->second )->GetRendererType();
 		}
 
 		if ( m_rendererType == RENDERER_TYPE_UNDEFINED )
 		{
 			RendererSelector m_dialog( m_castor, nullptr, m_displayName );
-			int l_iReturn = m_dialog.ShowModal();
+			int iReturn = m_dialog.ShowModal();
 
-			if ( l_iReturn == wxID_OK )
+			if ( iReturn == wxID_OK )
 			{
 				m_rendererType = m_dialog.GetSelectedRenderer();
 			}
 			else
 			{
-				l_result = false;
+				result = false;
 			}
 		}
 		else
 		{
-			l_result = true;
+			result = true;
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = m_castor->LoadRenderer( m_rendererType );
+			result = m_castor->LoadRenderer( m_rendererType );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void CastorApplication::DoLoadPlugins( SplashScreen & p_splashScreen )

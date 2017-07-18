@@ -21,55 +21,55 @@ namespace GlRender
 	{
 		GLint DoGetMinLevels( Size const & p_size )
 		{
-			auto l_minDim = std::min( p_size.width(), p_size.height() );
-			auto l_levels = 1;
+			auto minDim = std::min( p_size.width(), p_size.height() );
+			auto levels = 1;
 
-			while ( l_minDim > 2 )
+			while ( minDim > 2 )
 			{
-				++l_levels;
-				l_minDim /= 2;
+				++levels;
+				minDim /= 2;
 			}
 
-			return l_levels;
+			return levels;
 		}
 	}
 
 	GlImmutableTextureStorageTraits::GlImmutableTextureStorageTraits( TextureStorage & p_storage )
 	{
-		auto & l_storage = static_cast< GlTextureStorage< GlImmutableTextureStorageTraits > & >( p_storage );
-		auto l_size = p_storage.GetOwner()->GetDimensions();
-		OpenGl::PixelFmt l_format = l_storage.GetOpenGl().Get( p_storage.GetOwner()->GetPixelFormat() );
+		auto & storage = static_cast< GlTextureStorage< GlImmutableTextureStorageTraits > & >( p_storage );
+		auto size = p_storage.GetOwner()->GetDimensions();
+		OpenGl::PixelFmt format = storage.GetOpenGl().Get( p_storage.GetOwner()->GetPixelFormat() );
 
-		auto l_levels = DoGetMinLevels( l_size );
+		auto levels = DoGetMinLevels( size );
 
-		switch ( l_storage.GetGlType() )
+		switch ( storage.GetGlType() )
 		{
 		case GlTextureStorageType::e1D:
-			l_storage.GetOpenGl().TexStorage1D( l_storage.GetGlType(), l_levels, l_format.Internal, l_size.width() );
+			storage.GetOpenGl().TexStorage1D( storage.GetGlType(), levels, format.Internal, size.width() );
 			break;
 
 		case GlTextureStorageType::e2D:
-			l_storage.GetOpenGl().TexStorage2D( l_storage.GetGlType(), l_levels, l_format.Internal, l_size.width(), l_size.height() );
+			storage.GetOpenGl().TexStorage2D( storage.GetGlType(), levels, format.Internal, size.width(), size.height() );
 			break;
 
 		case GlTextureStorageType::eCubeMap:
-			l_storage.GetOpenGl().TexStorage2D( l_storage.GetGlType(), l_levels, l_format.Internal, l_size.width(), l_size.height() );
+			storage.GetOpenGl().TexStorage2D( storage.GetGlType(), levels, format.Internal, size.width(), size.height() );
 			break;
 
 		case GlTextureStorageType::e2DMS:
-			l_storage.GetOpenGl().TexStorage2DMultisample( l_storage.GetGlType(), l_levels, l_format.Internal, l_size.width(), l_size.height(), true );
+			storage.GetOpenGl().TexStorage2DMultisample( storage.GetGlType(), levels, format.Internal, size.width(), size.height(), true );
 			break;
 
 		case GlTextureStorageType::e2DArray:
-			l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), l_levels, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth() );
+			storage.GetOpenGl().TexStorage3D( storage.GetGlType(), levels, format.Internal, size.width(), size.height(), p_storage.GetOwner()->GetDepth() );
 			break;
 
 		case GlTextureStorageType::eCubeMapArray:
-			l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), l_levels, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth() );
+			storage.GetOpenGl().TexStorage3D( storage.GetGlType(), levels, format.Internal, size.width(), size.height(), p_storage.GetOwner()->GetDepth() );
 			break;
 
 		case GlTextureStorageType::e3D:
-			l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), l_levels, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth() );
+			storage.GetOpenGl().TexStorage3D( storage.GetGlType(), levels, format.Internal, size.width(), size.height(), p_storage.GetOwner()->GetDepth() );
 			break;
 
 		default:
@@ -93,15 +93,15 @@ namespace GlRender
 
 	uint8_t * GlImmutableTextureStorageTraits::Lock( TextureStorage & p_storage, AccessTypes const & p_lock, uint32_t p_index )
 	{
-		uint8_t * l_result = nullptr;
+		uint8_t * result = nullptr;
 
 		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
 			 && CheckFlag( p_lock, AccessType::eRead ) )
 		{
-			l_result = p_storage.GetOwner()->GetImage( p_index ).GetBuffer()->ptr();
+			result = p_storage.GetOwner()->GetImage( p_index ).GetBuffer()->ptr();
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void GlImmutableTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )
@@ -110,38 +110,38 @@ namespace GlRender
 
 	void GlImmutableTextureStorageTraits::Fill( TextureStorage & p_storage, TextureImage const & p_image )
 	{
-		auto & l_storage = static_cast< GlTextureStorage< GlImmutableTextureStorageTraits > & >( p_storage );
-		auto l_size = p_storage.GetOwner()->GetDimensions();
-		OpenGl::PixelFmt l_format = l_storage.GetOpenGl().Get( p_storage.GetOwner()->GetPixelFormat() );
+		auto & storage = static_cast< GlTextureStorage< GlImmutableTextureStorageTraits > & >( p_storage );
+		auto size = p_storage.GetOwner()->GetDimensions();
+		OpenGl::PixelFmt format = storage.GetOpenGl().Get( p_storage.GetOwner()->GetPixelFormat() );
 
-		switch ( l_storage.GetGlType() )
+		switch ( storage.GetGlType() )
 		{
 		case GlTextureStorageType::e1D:
-			l_storage.GetOpenGl().TexSubImage1D( l_storage.GetGlType(), 0, 0, l_size.width(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.GetOpenGl().TexSubImage1D( storage.GetGlType(), 0, 0, size.width(), format.Format, format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
 		case GlTextureStorageType::e2D:
-			l_storage.GetOpenGl().TexSubImage2D( l_storage.GetGlType(), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.GetOpenGl().TexSubImage2D( storage.GetGlType(), 0, 0, 0, size.width(), size.height(), format.Format, format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
 		case GlTextureStorageType::e2DMS:
-			l_storage.GetOpenGl().TexSubImage2D( l_storage.GetGlType(), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.GetOpenGl().TexSubImage2D( storage.GetGlType(), 0, 0, 0, size.width(), size.height(), format.Format, format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
 		case GlTextureStorageType::e2DArray:
-			l_storage.GetOpenGl().TexSubImage3D( l_storage.GetGlType(), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.GetOpenGl().TexSubImage3D( storage.GetGlType(), 0, 0, 0, p_image.GetIndex(), size.width(), size.height(), p_image.GetIndex() + 1, format.Format, format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
 		case GlTextureStorageType::e3D:
-			l_storage.GetOpenGl().TexSubImage3D( l_storage.GetGlType(), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.GetOpenGl().TexSubImage3D( storage.GetGlType(), 0, 0, 0, p_image.GetIndex(), size.width(), size.height(), p_image.GetIndex() + 1, format.Format, format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
 		case GlTextureStorageType::eCubeMap:
-			l_storage.GetOpenGl().TexSubImage2D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.GetIndex() ), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.GetOpenGl().TexSubImage2D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.GetIndex() ), 0, 0, 0, size.width(), size.height(), format.Format, format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
 		case GlTextureStorageType::eCubeMapArray:
-			l_storage.GetOpenGl().TexSubImage3D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.GetIndex() % 6 ), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+			storage.GetOpenGl().TexSubImage3D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.GetIndex() % 6 ), 0, 0, 0, p_image.GetIndex(), size.width(), size.height(), p_image.GetIndex() + 1, format.Format, format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 		}
 	}

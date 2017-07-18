@@ -28,59 +28,59 @@ namespace Castor3D
 			, Size const & p_size
 			, MaterialType p_type )
 		{
-			String const l_name = cuT( "EnvironmentMap" );
+			String const name = cuT( "EnvironmentMap" );
 
-			SamplerSPtr l_sampler;
+			SamplerSPtr sampler;
 
-			if ( p_engine.GetSamplerCache().Has( l_name ) )
+			if ( p_engine.GetSamplerCache().Has( name ) )
 			{
-				l_sampler = p_engine.GetSamplerCache().Find( l_name );
+				sampler = p_engine.GetSamplerCache().Find( name );
 			}
 			else
 			{
-				l_sampler = p_engine.GetSamplerCache().Add( l_name );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMin
+				sampler = p_engine.GetSamplerCache().Add( name );
+				sampler->SetInterpolationMode( InterpolationFilter::eMin
 					, InterpolationMode::eLinear );
-				l_sampler->SetInterpolationMode( InterpolationFilter::eMag
+				sampler->SetInterpolationMode( InterpolationFilter::eMag
 					, InterpolationMode::eLinear );
 
 				if ( p_type == MaterialType::ePbrMetallicRoughness
 					|| p_type == MaterialType::ePbrSpecularGlossiness )
 				{
-					l_sampler->SetInterpolationMode( InterpolationFilter::eMip
+					sampler->SetInterpolationMode( InterpolationFilter::eMip
 						, InterpolationMode::eLinear );
 				}
 
-				l_sampler->SetWrappingMode( TextureUVW::eU
+				sampler->SetWrappingMode( TextureUVW::eU
 					, WrapMode::eClampToEdge );
-				l_sampler->SetWrappingMode( TextureUVW::eV
+				sampler->SetWrappingMode( TextureUVW::eV
 					, WrapMode::eClampToEdge );
-				l_sampler->SetWrappingMode( TextureUVW::eW
+				sampler->SetWrappingMode( TextureUVW::eW
 					, WrapMode::eClampToEdge );
 			}
 
-			auto l_texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eCube
+			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eA8R8G8B8
 				, p_size );
-			TextureUnit l_unit{ p_engine };
-			l_unit.SetTexture( l_texture );
-			l_unit.SetSampler( l_sampler );
+			TextureUnit unit{ p_engine };
+			unit.SetTexture( texture );
+			unit.SetSampler( sampler );
 
-			for ( auto & l_image : *l_texture )
+			for ( auto & image : *texture )
 			{
-				l_image->InitialiseSource();
+				image->InitialiseSource();
 			}
 
-			return l_unit;
+			return unit;
 		}
 
 		EnvironmentMap::EnvironmentMapPasses DoCreatePasses( EnvironmentMap & p_map
 			, SceneNode & p_node )
 		{
-			static Point3r const l_position;
-			std::array< SceneNodeSPtr, size_t( CubeMapFace::eCount ) > l_nodes
+			static Point3r const position;
+			std::array< SceneNodeSPtr, size_t( CubeMapFace::eCount ) > nodes
 			{
 				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosX" ), *p_node.GetScene() ),
 				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegX" ), *p_node.GetScene() ),
@@ -89,33 +89,33 @@ namespace Castor3D
 				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosZ" ), *p_node.GetScene() ),
 				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegZ" ), *p_node.GetScene() ),
 			};
-			std::array< Quaternion, size_t( CubeMapFace::eCount ) > l_orients
+			std::array< Quaternion, size_t( CubeMapFace::eCount ) > orients
 			{
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Positive X
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Negative X
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, +1 } ) ),// Positive Y
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +1, +0 }, Point3r{ +0, +0, -1 } ) ),// Negative Y
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ) ),// Positive Z
-				Quaternion::from_matrix( matrix::look_at( l_position, Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ) ),// Negative Z
+				Quaternion::from_matrix( matrix::look_at( position, Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Positive X
+				Quaternion::from_matrix( matrix::look_at( position, Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ) ),// Negative X
+				Quaternion::from_matrix( matrix::look_at( position, Point3r{ +0, -1, +0 }, Point3r{ +0, +0, +1 } ) ),// Positive Y
+				Quaternion::from_matrix( matrix::look_at( position, Point3r{ +0, +1, +0 }, Point3r{ +0, +0, -1 } ) ),// Negative Y
+				Quaternion::from_matrix( matrix::look_at( position, Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ) ),// Positive Z
+				Quaternion::from_matrix( matrix::look_at( position, Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ) ),// Negative Z
 			};
 
 			auto i = 0u;
 
-			for ( auto & l_node : l_nodes )
+			for ( auto & node : nodes )
 			{
-				l_node->SetOrientation( l_orients[i] );
+				node->SetOrientation( orients[i] );
 				++i;
 			}
 
 			return EnvironmentMap::EnvironmentMapPasses
 			{
 				{
-					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[0], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[1], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[2], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[3], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[4], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, l_nodes[5], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, nodes[0], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, nodes[1], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, nodes[2], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, nodes[3], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, nodes[4], p_node ),
+					std::make_unique< EnvironmentMapPass >( p_map, nodes[5], p_node ),
 				}
 			};
 		}
@@ -139,40 +139,40 @@ namespace Castor3D
 
 	bool EnvironmentMap::Initialise()
 	{
-		bool l_result = true;
+		bool result = true;
 
 		if ( !m_frameBuffer )
 		{
-			auto & l_scene = *m_node.GetScene();
+			auto & scene = *m_node.GetScene();
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			l_result = m_frameBuffer->Create();
+			result = m_frameBuffer->Create();
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = m_frameBuffer->Initialise( MapSize );
+				result = m_frameBuffer->Initialise( MapSize );
 			}
 
-			if ( l_result )
+			if ( result )
 			{
-				constexpr float l_component = std::numeric_limits< float >::max();
-				m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
-				auto l_texture = m_environmentMap.GetTexture();
-				l_texture->Initialise();
+				constexpr float component = std::numeric_limits< float >::max();
+				m_frameBuffer->SetClearColour( component, component, component, component );
+				auto texture = m_environmentMap.GetTexture();
+				texture->Initialise();
 
-				if ( l_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
-					|| l_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+				if ( scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+					|| scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 				{
-					l_texture->Bind( 0 );
-					l_texture->GenerateMipmaps();
-					l_texture->Unbind( 0 );
+					texture->Bind( 0 );
+					texture->GenerateMipmaps();
+					texture->Unbind( 0 );
 				}
 
 				uint32_t i = 0;
 
-				for ( auto & l_attach : m_colourAttachs )
+				for ( auto & attach : m_colourAttachs )
 				{
-					l_attach = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace( i++ ) );
-					l_attach->SetTarget( TextureType::eTwoDimensions );
+					attach = m_frameBuffer->CreateAttachment( texture, CubeMapFace( i++ ) );
+					attach->SetTarget( TextureType::eTwoDimensions );
 				}
 
 				m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
@@ -189,19 +189,19 @@ namespace Castor3D
 			m_frameBuffer->SetDrawBuffers( FrameBuffer::AttachArray{} );
 			m_frameBuffer->Unbind();
 
-			for ( auto & l_pass : m_passes )
+			for ( auto & pass : m_passes )
 			{
-				l_pass->Initialise( MapSize );
+				pass->Initialise( MapSize );
 			}
 
-			if ( l_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
-				|| l_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+			if ( scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+				|| scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
-				m_ibl = std::make_unique< IblTextures >( l_scene );
+				m_ibl = std::make_unique< IblTextures >( scene );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void EnvironmentMap::Cleanup()
@@ -210,9 +210,9 @@ namespace Castor3D
 
 		if ( m_frameBuffer )
 		{
-			for ( auto & l_pass : m_passes )
+			for ( auto & pass : m_passes )
 			{
-				l_pass->Cleanup();
+				pass->Cleanup();
 			}
 
 			m_frameBuffer->Bind();
@@ -220,9 +220,9 @@ namespace Castor3D
 			m_frameBuffer->Unbind();
 			m_depthAttach.reset();
 
-			for ( auto & l_attach : m_colourAttachs )
+			for ( auto & attach : m_colourAttachs )
 			{
-				l_attach.reset();
+				attach.reset();
 			}
 
 			m_depthBuffer->Cleanup();
@@ -237,28 +237,28 @@ namespace Castor3D
 	
 	void EnvironmentMap::Update( RenderQueueArray & p_queues )
 	{
-		for ( auto & l_pass : m_passes )
+		for ( auto & pass : m_passes )
 		{
-			l_pass->Update( m_node, p_queues );
+			pass->Update( m_node, p_queues );
 		}
 	}
 
 	void EnvironmentMap::Render()
 	{
-		uint32_t l_face = 0u;
+		uint32_t face = 0u;
 		m_render++;
 
 		if ( m_render == 5u )
 		{
-			for ( auto & l_attach : m_colourAttachs )
+			for ( auto & attach : m_colourAttachs )
 			{
 				m_frameBuffer->Bind( FrameBufferTarget::eDraw );
-				l_attach->Attach( AttachmentPoint::eColour, 0u );
-				m_frameBuffer->SetDrawBuffer( l_attach );
+				attach->Attach( AttachmentPoint::eColour, 0u );
+				m_frameBuffer->SetDrawBuffer( attach );
 				m_frameBuffer->Clear( BufferComponent::eDepth | BufferComponent::eColour );
-				m_passes[l_face]->Render();
+				m_passes[face]->Render();
 				m_frameBuffer->Unbind();
-				l_face++;
+				face++;
 			}
 
 			if ( m_ibl )

@@ -13,11 +13,11 @@ namespace Castor3D
 	{
 		CameraSPtr DoCreateCamera( SceneNode & p_node )
 		{
-			Viewport l_viewport{ *p_node.GetScene()->GetEngine() };
+			Viewport viewport{ *p_node.GetScene()->GetEngine() };
 			return std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + p_node.GetName()
 				, *p_node.GetScene()
 				, p_node.shared_from_this()
-				, std::move( l_viewport ) );
+				, std::move( viewport ) );
 		}
 	}
 
@@ -49,13 +49,13 @@ namespace Castor3D
 
 	bool EnvironmentMapPass::Initialise( Size const & p_size )
 	{
-		real const l_aspect = real( p_size.width() ) / p_size.height();
-		real const l_near = 1.0_r;
-		real const l_far = 1000.0_r;
+		real const aspect = real( p_size.width() ) / p_size.height();
+		real const near = 1.0_r;
+		real const far = 1000.0_r;
 		m_camera->GetViewport().SetPerspective( Angle::from_degrees( 90.0_r )
-			, l_aspect
-			, l_near
-			, l_far );
+			, aspect
+			, near
+			, far );
 		m_camera->Resize( p_size );
 		m_camera->GetViewport().Initialise();
 		m_opaquePass->Initialise( p_size );
@@ -72,8 +72,8 @@ namespace Castor3D
 
 	void EnvironmentMapPass::Update( SceneNode const & p_node, RenderQueueArray & p_queues )
 	{
-		auto l_position = p_node.GetDerivedPosition();
-		m_camera->GetParent()->SetPosition( l_position );
+		auto position = p_node.GetDerivedPosition();
+		m_camera->GetParent()->SetPosition( position );
 		m_camera->GetParent()->Update();
 		m_camera->Update();
 		m_opaquePass->Update( p_queues );
@@ -82,11 +82,11 @@ namespace Castor3D
 
 	void EnvironmentMapPass::Render()
 	{
-		auto & l_scene = *m_camera->GetScene();
-		RenderInfo l_info;
+		auto & scene = *m_camera->GetScene();
+		RenderInfo info;
 		m_camera->Apply();
-		m_opaquePass->Render( l_info, false );
-		l_scene.RenderBackground( GetOwner()->GetSize(), *m_camera );
-		m_transparentPass->Render( l_info, false );
+		m_opaquePass->Render( info, false );
+		scene.RenderBackground( GetOwner()->GetSize(), *m_camera );
+		m_transparentPass->Render( info, false );
 	}
 }

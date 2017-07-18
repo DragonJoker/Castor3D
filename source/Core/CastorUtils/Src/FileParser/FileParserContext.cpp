@@ -24,27 +24,27 @@ namespace Castor
 
 	void * FileParserContext::UnregisterUserContext( String const & p_name )
 	{
-		auto l_it = m_userContexts.find( p_name );
+		auto it = m_userContexts.find( p_name );
 
-		if ( l_it == m_userContexts.end() )
+		if ( it == m_userContexts.end() )
 		{
 			CASTOR_EXCEPTION( "No user context with name [" + string::string_cast< char >( p_name ) + "]." );
 		}
 
-		void * l_result = l_it->second;
-		m_userContexts.erase( l_it );
-		return l_result;
+		void * result = it->second;
+		m_userContexts.erase( it );
+		return result;
 	}
 
 	void * FileParserContext::GetUserContext( String const & p_name )
 	{
-		auto l_it = m_userContexts.find( p_name );
+		auto it = m_userContexts.find( p_name );
 
-		if ( l_it == m_userContexts.end() )
+		if ( it == m_userContexts.end() )
 		{
 			CASTOR_EXCEPTION( "No user context with name [" + string::string_cast< char >( p_name ) + "]." );
 		}
 
-		return l_it->second;
+		return it->second;
 	}
 }

@@ -140,15 +140,15 @@ namespace GlRender
 		, m_renderSystem{ p_renderSystem }
 		, m_debug{ p_renderSystem }
 	{
-		uint32_t l_index = 0;
-		GlslStrings[l_index++] = cuT( "[e00] GLSL is not available!" );
-		GlslStrings[l_index++] = cuT( "[e01] Not a valid program object!" );
-		GlslStrings[l_index++] = cuT( "[e02] Not a valid object!" );
-		GlslStrings[l_index++] = cuT( "[e03] Out of memory!" );
-		GlslStrings[l_index++] = cuT( "[e04] Unknown compiler error!" );
-		GlslStrings[l_index++] = cuT( "[e05] Linker log is not available!" );
-		GlslStrings[l_index++] = cuT( "[e06] Compiler log is not available!" );
-		GlslStrings[l_index] = cuT( "[Empty]" );
+		uint32_t index = 0;
+		GlslStrings[index++] = cuT( "[e00] GLSL is not available!" );
+		GlslStrings[index++] = cuT( "[e01] Not a valid program object!" );
+		GlslStrings[index++] = cuT( "[e02] Not a valid object!" );
+		GlslStrings[index++] = cuT( "[e03] Out of memory!" );
+		GlslStrings[index++] = cuT( "[e04] Unknown compiler error!" );
+		GlslStrings[index++] = cuT( "[e05] Linker log is not available!" );
+		GlslStrings[index++] = cuT( "[e06] Compiler log is not available!" );
+		GlslStrings[index] = cuT( "[Empty]" );
 
 		PrimitiveTypes[uint32_t( Castor3D::Topology::ePoints )] = GlTopology::ePoints;
 		PrimitiveTypes[uint32_t( Castor3D::Topology::eLines )] = GlTopology::eLines;
@@ -453,11 +453,11 @@ namespace GlRender
 
 	bool OpenGl::PreInitialise( String const & p_strExtensions )
 	{
-		char const * l_extensions = ( char const * )glGetString( GL_EXTENSIONS );
+		char const * extensions = ( char const * )glGetString( GL_EXTENSIONS );
 
-		if ( l_extensions )
+		if ( extensions )
 		{
-			m_extensions = string::string_cast< xchar >( l_extensions ) + p_strExtensions;
+			m_extensions = string::string_cast< xchar >( extensions ) + p_strExtensions;
 		}
 		else
 		{
@@ -468,26 +468,26 @@ namespace GlRender
 		m_renderer = string::string_cast< xchar >( ( char const * )glGetString( GL_RENDERER ) );
 		m_version = string::string_cast< xchar >( ( char const * )glGetString( GL_VERSION ) );
 
-		auto l_vendor = string::lower_case( m_vendor );
+		auto vendor = string::lower_case( m_vendor );
 
-		if ( l_vendor.find( "nvidia" ) != String::npos )
+		if ( vendor.find( "nvidia" ) != String::npos )
 		{
 			m_gpu = GlProvider::eNvidia;
 		}
-		else if ( l_vendor.find( "ati" ) != String::npos
-				  || l_vendor.find( "amd" ) != String::npos )
+		else if ( vendor.find( "ati" ) != String::npos
+				  || vendor.find( "amd" ) != String::npos )
 		{
 			m_gpu = GlProvider::eATI;
 		}
-		else if ( l_vendor.find( "intel" ) != String::npos )
+		else if ( vendor.find( "intel" ) != String::npos )
 		{
 			m_gpu = GlProvider::eIntel;
 		}
 
-		double l_version{ 0u };
-		StringStream l_stream( m_version );
-		l_stream >> l_version;
-		m_iVersion = int( l_version * 10 );
+		double version{ 0u };
+		StringStream stream( m_version );
+		stream >> version;
+		m_iVersion = int( version * 10 );
 
 		if ( m_iVersion >= 33 )
 		{
@@ -1059,12 +1059,12 @@ namespace GlRender
 
 	void OpenGl::DisplayExtensions()const
 	{
-		auto l_array = string::split( m_extensions, cuT( " " ), 0xFFFFFFFF, false );
-		std::sort( l_array.begin(), l_array.end() );
+		auto array = string::split( m_extensions, cuT( " " ), 0xFFFFFFFF, false );
+		std::sort( array.begin(), array.end() );
 
-		for ( auto l_extension : l_array )
+		for ( auto extension : array )
 		{
-			Logger::LogDebug( l_extension );
+			Logger::LogDebug( extension );
 		}
 	}
 

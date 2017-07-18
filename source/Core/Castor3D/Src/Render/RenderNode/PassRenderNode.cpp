@@ -1,4 +1,4 @@
-﻿#include "PassRenderNode.hpp"
+#include "PassRenderNode.hpp"
 
 #include "Material/Pass.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -17,15 +17,15 @@ namespace Castor3D
 			, String const & p_name
 			, PassRenderNode & p_node )
 		{
-			TextureUnitSPtr l_unit = p_pass.GetTextureUnit( p_channel );
+			TextureUnitSPtr unit = p_pass.GetTextureUnit( p_channel );
 
-			if ( l_unit )
+			if ( unit )
 			{
-				auto l_variable = p_program.FindUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
+				auto variable = p_program.FindUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
 
-				if ( l_variable )
+				if ( variable )
 				{
-					p_node.m_textures.emplace( l_unit->GetIndex(), *l_variable );
+					p_node.m_textures.emplace( unit->GetIndex(), *variable );
 				}
 			}
 		}

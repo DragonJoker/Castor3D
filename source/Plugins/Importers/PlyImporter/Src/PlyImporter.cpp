@@ -40,122 +40,122 @@ namespace C3dPly
 
 	bool PlyImporter::DoImportScene( Scene & p_scene )
 	{
-		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_PLY" ) );
-		bool l_result = DoImportMesh( *l_mesh );
+		auto mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_PLY" ) );
+		bool result = DoImportMesh( *mesh );
 
-		if ( l_result )
+		if ( result )
 		{
-			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
-			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
-			l_geometry->SetMesh( l_mesh );
-			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
+			SceneNodeSPtr node = p_scene.GetSceneNodeCache().Add( mesh->GetName(), p_scene.GetObjectRootNode() );
+			GeometrySPtr geometry = p_scene.GetGeometryCache().Add( mesh->GetName(), node, nullptr );
+			geometry->SetMesh( mesh );
+			m_geometries.insert( { geometry->GetName(), geometry } );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	bool PlyImporter::DoImportMesh( Mesh & p_mesh )
 	{
-		bool l_result{ false };
-		UIntArray l_faces;
-		RealArray l_sizes;
-		String l_name = m_fileName.GetFileName();
-		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		String l_materialName = l_meshName;
-		std::ifstream l_isFile;
-		l_isFile.open( string::string_cast< char >( m_fileName ).c_str(), std::ios::in );
-		std::string l_strLine;
-		std::istringstream l_ssToken;
-		String::size_type l_stIndex;
-		int l_iNbProperties = 0;
-		VertexSPtr l_pVertex;
-		Coords3r l_ptNml;
-		Coords2r l_ptTex;
-		SubmeshSPtr l_submesh = p_mesh.CreateSubmesh();
-		MaterialSPtr l_pMaterial = p_mesh.GetScene()->GetMaterialView().Find( l_materialName );
+		bool result{ false };
+		UIntArray faces;
+		RealArray sizes;
+		String name = m_fileName.GetFileName();
+		String meshName = name.substr( 0, name.find_last_of( '.' ) );
+		String materialName = meshName;
+		std::ifstream isFile;
+		isFile.open( string::string_cast< char >( m_fileName ).c_str(), std::ios::in );
+		std::string strLine;
+		std::istringstream ssToken;
+		String::size_type stIndex;
+		int iNbProperties = 0;
+		VertexSPtr pVertex;
+		Coords3r ptNml;
+		Coords2r ptTex;
+		SubmeshSPtr submesh = p_mesh.CreateSubmesh();
+		MaterialSPtr pMaterial = p_mesh.GetScene()->GetMaterialView().Find( materialName );
 
-		if ( !l_pMaterial )
+		if ( !pMaterial )
 		{
-			l_pMaterial = p_mesh.GetScene()->GetMaterialView().Add( l_materialName, MaterialType::eLegacy );
-			l_pMaterial->CreatePass();
+			pMaterial = p_mesh.GetScene()->GetMaterialView().Add( materialName, MaterialType::eLegacy );
+			pMaterial->CreatePass();
 		}
 
-		l_pMaterial->GetPass( 0 )->SetTwoSided( true );
-		l_submesh->SetDefaultMaterial( l_pMaterial );
+		pMaterial->GetPass( 0 )->SetTwoSided( true );
+		submesh->SetDefaultMaterial( pMaterial );
 		// Parsing the ply identification line
-		std::getline( l_isFile, l_strLine );
+		std::getline( isFile, strLine );
 
-		if ( l_strLine == "ply" )
+		if ( strLine == "ply" )
 		{
 			// Parsing the format specification line
-			std::getline( l_isFile, l_strLine );
+			std::getline( isFile, strLine );
 
-			if ( l_strLine == "format ascii 1.0" )
+			if ( strLine == "format ascii 1.0" )
 			{
-				int l_iNbVertex = 0;
-				int l_iNbFaces = 0;
+				int iNbVertex = 0;
+				int iNbFaces = 0;
 
 				// Parsing number of vertices
-				while ( l_isFile.good() )
+				while ( isFile.good() )
 				{
-					std::getline( l_isFile, l_strLine );
+					std::getline( isFile, strLine );
 
-					if ( ( l_stIndex = l_strLine.find( "element vertex " ) ) == std::string::npos )
+					if ( ( stIndex = strLine.find( "element vertex " ) ) == std::string::npos )
 					{
 						continue;
 					}
 					else
 					{
-						l_ssToken.str( l_strLine.substr( std::string( "element vertex " ).length() ) );
-						l_ssToken >> l_iNbVertex;
-						l_ssToken.clear( std::istringstream::goodbit );
-						Logger::LogInfo( StringStream() << cuT( "Vertices: " ) << l_iNbVertex );
+						ssToken.str( strLine.substr( std::string( "element vertex " ).length() ) );
+						ssToken >> iNbVertex;
+						ssToken.clear( std::istringstream::goodbit );
+						Logger::LogInfo( StringStream() << cuT( "Vertices: " ) << iNbVertex );
 						break;
 					}
 				}
 
 				// Parsing number of vertex properties
-				while ( l_isFile.good() )
+				while ( isFile.good() )
 				{
-					std::getline( l_isFile, l_strLine );
+					std::getline( isFile, strLine );
 
-					if ( ( l_stIndex = l_strLine.find( "property " ) ) != std::string::npos )
+					if ( ( stIndex = strLine.find( "property " ) ) != std::string::npos )
 					{
-						l_iNbProperties++;
+						iNbProperties++;
 					}
 					else
 					{
-						l_isFile.seekg( -l_isFile.gcount() ); // Unget last line
-						Logger::LogDebug( StringStream() << cuT( "Vertex properties: " ) << l_iNbProperties );
+						isFile.seekg( -isFile.gcount() ); // Unget last line
+						Logger::LogDebug( StringStream() << cuT( "Vertex properties: " ) << iNbProperties );
 						break;
 					}
 				}
 
 				// Parsing number of triangles
-				while ( l_isFile.good() )
+				while ( isFile.good() )
 				{
-					std::getline( l_isFile, l_strLine );
+					std::getline( isFile, strLine );
 
-					if ( ( l_stIndex = l_strLine.find( "element face " ) ) == std::string::npos )
+					if ( ( stIndex = strLine.find( "element face " ) ) == std::string::npos )
 					{
 						continue;
 					}
 					else
 					{
-						l_ssToken.str( l_strLine.substr( std::string( "element face " ).size() ) );
-						l_ssToken >> l_iNbFaces;
-						l_ssToken.clear( std::istringstream::goodbit );
-						Logger::LogInfo( StringStream() << cuT( "Triangles: " ) << l_iNbFaces );
+						ssToken.str( strLine.substr( std::string( "element face " ).size() ) );
+						ssToken >> iNbFaces;
+						ssToken.clear( std::istringstream::goodbit );
+						Logger::LogInfo( StringStream() << cuT( "Triangles: " ) << iNbFaces );
 						break;
 					}
 				}
 
 				// Parsing end of the header
-				while ( l_isFile.good() )
+				while ( isFile.good() )
 				{
-					std::getline( l_isFile, l_strLine );
+					std::getline( isFile, strLine );
 
-					if ( ( l_stIndex = l_strLine.find( "end_header" ) ) == std::string::npos )
+					if ( ( stIndex = strLine.find( "end_header" ) ) == std::string::npos )
 					{
 						continue;
 					}
@@ -165,84 +165,84 @@ namespace C3dPly
 					}
 				}
 
-				std::vector< InterleavedVertex > l_vertices{ size_t( l_iNbVertex ) };
+				std::vector< InterleavedVertex > vertices{ size_t( iNbVertex ) };
 
-				if ( l_iNbProperties >= 8 )
+				if ( iNbProperties >= 8 )
 				{
 					// Parsing vertices : position + normal + texture
-					for ( auto & l_vertex : l_vertices )
+					for ( auto & vertex : vertices )
 					{
-						std::getline( l_isFile, l_strLine );
-						l_ssToken.str( l_strLine );
-						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
-						l_ssToken >> l_vertex.m_nml[0] >> l_vertex.m_nml[1] >> l_vertex.m_nml[2];
-						l_ssToken >> l_vertex.m_tex[0] >> l_vertex.m_tex[1];
-						l_ssToken.clear( std::istringstream::goodbit );
+						std::getline( isFile, strLine );
+						ssToken.str( strLine );
+						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
+						ssToken >> vertex.m_nml[0] >> vertex.m_nml[1] >> vertex.m_nml[2];
+						ssToken >> vertex.m_tex[0] >> vertex.m_tex[1];
+						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
-				else if ( l_iNbProperties >= 6 )
+				else if ( iNbProperties >= 6 )
 				{
 					// Parsing vertices : position + normal
-					for ( auto & l_vertex : l_vertices )
+					for ( auto & vertex : vertices )
 					{
-						std::getline( l_isFile, l_strLine );
-						l_ssToken.str( l_strLine );
-						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
-						l_ssToken >> l_vertex.m_nml[0] >> l_vertex.m_nml[1] >> l_vertex.m_nml[2];
-						l_ssToken.clear( std::istringstream::goodbit );
+						std::getline( isFile, strLine );
+						ssToken.str( strLine );
+						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
+						ssToken >> vertex.m_nml[0] >> vertex.m_nml[1] >> vertex.m_nml[2];
+						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
 				else
 				{
 					// Parsing vertices : position
-					for ( auto & l_vertex : l_vertices )
+					for ( auto & vertex : vertices )
 					{
-						std::getline( l_isFile, l_strLine );
-						l_ssToken.str( l_strLine );
-						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
-						l_ssToken.clear( std::istringstream::goodbit );
+						std::getline( isFile, strLine );
+						ssToken.str( strLine );
+						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
+						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
 
-				l_submesh->AddPoints( l_vertices );
+				submesh->AddPoints( vertices );
 				// Parsing triangles
-				FaceSPtr l_pFace;
-				std::vector< FaceIndices > l_faces( l_iNbFaces );
-				FaceIndices * l_pFaces = &l_faces[0];
+				FaceSPtr pFace;
+				std::vector< FaceIndices > faces( iNbFaces );
+				FaceIndices * pFaces = &faces[0];
 
-				for ( int i = 0; i < l_iNbFaces; i++ )
+				for ( int i = 0; i < iNbFaces; i++ )
 				{
-					std::getline( l_isFile, l_strLine );
-					l_ssToken.str( l_strLine );
-					l_ssToken >> l_iNbVertex;
+					std::getline( isFile, strLine );
+					ssToken.str( strLine );
+					ssToken >> iNbVertex;
 
-					if ( l_iNbVertex >= 3 )
+					if ( iNbVertex >= 3 )
 					{
-						l_ssToken >> l_pFaces->m_index[0] >> l_pFaces->m_index[1] >> l_pFaces->m_index[2];
-						l_pFaces++;
+						ssToken >> pFaces->m_index[0] >> pFaces->m_index[1] >> pFaces->m_index[2];
+						pFaces++;
 					}
 
-					l_ssToken.clear( std::istringstream::goodbit );
+					ssToken.clear( std::istringstream::goodbit );
 				}
 
-				l_submesh->AddFaceGroup( l_faces );
+				submesh->AddFaceGroup( faces );
 			}
 
-			l_result = true;
+			result = true;
 		}
 
-		l_submesh->ComputeContainers();
+		submesh->ComputeContainers();
 
-		if ( l_iNbProperties < 6 )
+		if ( iNbProperties < 6 )
 		{
-			l_submesh->ComputeNormals( false );
+			submesh->ComputeNormals( false );
 		}
 		else
 		{
-			l_submesh->ComputeTangentsFromNormals();
+			submesh->ComputeTangentsFromNormals();
 		}
 
-		l_isFile.close();
-		return l_result;
+		isFile.close();
+		return result;
 	}
 }

@@ -144,48 +144,48 @@ namespace Castor
 		 */
 		inline std::string GetFullDescription()const throw()
 		{
-			std::string l_strReturn;
-			std::string l_strSep;
+			std::string strReturn;
+			std::string strSep;
 
 			if ( !m_filename.empty() )
 			{
-				l_strReturn += m_filename + " ";
+				strReturn += m_filename + " ";
 			}
 			else
 			{
-				l_strReturn += "<Unknown file> ";
+				strReturn += "<Unknown file> ";
 			}
 
 			if ( !m_functionName.empty() )
 			{
-				l_strReturn += m_functionName + " ";
+				strReturn += m_functionName + " ";
 			}
 			else
 			{
-				l_strReturn += "<Unknown function> ";
+				strReturn += "<Unknown function> ";
 			}
 
 			if ( m_line )
 			{
-				std::stringstream l_stream;
-				l_stream << m_line;
-				l_strReturn += l_stream.str() + " : ";
+				std::stringstream stream;
+				stream << m_line;
+				strReturn += stream.str() + " : ";
 			}
 			else
 			{
-				l_strReturn += "<Unknown line> : ";
+				strReturn += "<Unknown line> : ";
 			}
 
 			if ( !m_description.empty() )
 			{
-				l_strReturn += m_description;
+				strReturn += m_description;
 			}
 			else
 			{
-				l_strReturn += "<Unknown exception> : ";
+				strReturn += "<Unknown exception> : ";
 			}
 
-			return l_strReturn;
+			return strReturn;
 		}
 
 	protected:

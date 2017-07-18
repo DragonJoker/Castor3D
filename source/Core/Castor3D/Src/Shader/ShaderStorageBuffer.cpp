@@ -24,19 +24,19 @@ namespace Castor3D
 			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateBuffer( BufferType::eShaderStorage );
 		}
 
-		bool l_result = m_gpuBuffer != nullptr;
+		bool result = m_gpuBuffer != nullptr;
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = DoInitialise( p_type, p_nature );
+			result = DoInitialise( p_type, p_nature );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			m_gpuBuffer->SetBindingPoint( 0u );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void ShaderStorageBuffer::Cleanup()

@@ -30,20 +30,20 @@ namespace GuiCommon
 
 	void RenderWindowTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		RenderWindowSPtr l_window = GetRenderWindow();
+		RenderWindowSPtr window = GetRenderWindow();
 
-		if ( l_window )
+		if ( window )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_WINDOW + wxString( l_window->GetName() ) ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_WINDOW + wxString( window->GetName() ) ) );
 		}
 	}
 
 	void RenderWindowTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		RenderWindowSPtr l_window = GetRenderWindow();
-		wxPGProperty * l_property = p_event.GetProperty();
+		RenderWindowSPtr window = GetRenderWindow();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_window )
+		if ( property && window )
 		{
 		}
 	}

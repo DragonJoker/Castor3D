@@ -21,7 +21,7 @@ namespace Testing
 {
 	bool CheckErr( cl_int p_iErr, const char * p_szName )
 	{
-		bool l_result = true;
+		bool result = true;
 		static std::map< cl_int, std::string > MapErrors;
 
 		if ( MapErrors.empty() )
@@ -107,146 +107,146 @@ namespace Testing
 
 		if ( p_iErr != CL_SUCCESS )
 		{
-			std::map< cl_int, std::string >::const_iterator l_it = MapErrors.find( p_iErr );
+			std::map< cl_int, std::string >::const_iterator it = MapErrors.find( p_iErr );
 
-			if ( l_it != MapErrors.end() )
+			if ( it != MapErrors.end() )
 			{
-				std::cerr << "ERROR: " << p_szName << " - 0x" << std::hex << p_iErr << " (" << l_it->second << ")" << std::endl;
+				std::cerr << "ERROR: " << p_szName << " - 0x" << std::hex << p_iErr << " (" << it->second << ")" << std::endl;
 			}
 			else
 			{
 				std::cerr << "ERROR: " << p_szName << " - 0x" << std::hex << p_iErr << std::endl;
 			}
 
-			l_result = false;
+			result = false;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	OpenCLBench::OpenCLBench()
 		: BenchCase( "OpenCLBench" )
 	{
-		std::string l_prog;
-		cl_int l_iErr;
+		std::string prog;
+		cl_int iErr;
 		cl::Platform::get( &m_arrayPlatforms );
-		bool l_bContinue = CheckErr( m_arrayPlatforms.size() != 0 ? CL_SUCCESS : -1, "cl::Platform::get" );
+		bool bContinue = CheckErr( m_arrayPlatforms.size() != 0 ? CL_SUCCESS : -1, "cl::Platform::get" );
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
 			std::cout << "Platform count is: " << m_arrayPlatforms.size() << std::endl;
-			std::string l_strInfo;
+			std::string strInfo;
 			m_platform = m_arrayPlatforms[0];
-			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_NAME, &l_strInfo );
-			std::cout << "  Name:    " << l_strInfo << std::endl;
-			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_VENDOR, &l_strInfo );
-			std::cout << "  Vendor:  " << l_strInfo << std::endl;
-			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_VERSION, &l_strInfo );
-			std::cout << "  Version: " << l_strInfo << std::endl;
-			cl_context_properties l_props[3] = { CL_CONTEXT_PLATFORM, ( cl_context_properties )( m_platform )(), 0 };
-			m_context = cl::Context( CL_DEVICE_TYPE_CPU, l_props, NULL, NULL, &l_iErr );
-			l_bContinue = CheckErr( l_iErr, "Context::Context()" );
+			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_NAME, &strInfo );
+			std::cout << "  Name:    " << strInfo << std::endl;
+			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_VENDOR, &strInfo );
+			std::cout << "  Vendor:  " << strInfo << std::endl;
+			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_VERSION, &strInfo );
+			std::cout << "  Version: " << strInfo << std::endl;
+			cl_context_properties props[3] = { CL_CONTEXT_PLATFORM, ( cl_context_properties )( m_platform )(), 0 };
+			m_context = cl::Context( CL_DEVICE_TYPE_CPU, props, NULL, NULL, &iErr );
+			bContinue = CheckErr( iErr, "Context::Context()" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
 			m_arrayDevices = m_context.getInfo< CL_CONTEXT_DEVICES >();
-			l_bContinue = CheckErr( m_arrayDevices.size() > 0 ? CL_SUCCESS : -1, "l_arrayDevices.size() > 0" );
+			bContinue = CheckErr( m_arrayDevices.size() > 0 ? CL_SUCCESS : -1, "arrayDevices.size() > 0" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			m_queue = cl::CommandQueue( m_context, m_arrayDevices[0], 0, &l_iErr );
-			l_bContinue = CheckErr( l_iErr, "CommandQueue::CommandQueue()" );
+			m_queue = cl::CommandQueue( m_context, m_arrayDevices[0], 0, &iErr );
+			bContinue = CheckErr( iErr, "CommandQueue::CommandQueue()" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			m_clBufferMtx4x4A = cl::Buffer( m_context, CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR, 16 * sizeof( float ), m_bufferMtx4x4A, &l_iErr );
-			l_bContinue = CheckErr( l_iErr, "Buffer::Buffer() -Mtx4x4 A" );
+			m_clBufferMtx4x4A = cl::Buffer( m_context, CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR, 16 * sizeof( float ), m_bufferMtx4x4A, &iErr );
+			bContinue = CheckErr( iErr, "Buffer::Buffer() -Mtx4x4 A" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			m_clBufferMtx4x4B = cl::Buffer( m_context, CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR, 16 * sizeof( float ), m_bufferMtx4x4B, &l_iErr );
-			l_bContinue = CheckErr( l_iErr, "Buffer::Buffer() -Mtx4x4 B" );
+			m_clBufferMtx4x4B = cl::Buffer( m_context, CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR, 16 * sizeof( float ), m_bufferMtx4x4B, &iErr );
+			bContinue = CheckErr( iErr, "Buffer::Buffer() -Mtx4x4 B" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			m_clBufferMtx4x4C = cl::Buffer( m_context, CL_MEM_READ_WRITE, 16 * sizeof( float ), NULL, &l_iErr );
-			l_bContinue = CheckErr( l_iErr, "Buffer::Buffer() -Mtx4x4 C" );
+			m_clBufferMtx4x4C = cl::Buffer( m_context, CL_MEM_READ_WRITE, 16 * sizeof( float ), NULL, &iErr );
+			bContinue = CheckErr( iErr, "Buffer::Buffer() -Mtx4x4 C" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			Castor::Path l_filePath = Castor::File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorUtilsTest" );
-			std::string l_path = Castor::string::string_cast< char >( l_filePath / cuT( "mtx_ope.cl" ) );
-			std::ifstream l_file( l_path );
-			l_bContinue = CheckErr( l_file ? CL_SUCCESS : -1, l_path.c_str() );
+			Castor::Path filePath = Castor::File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorUtilsTest" );
+			std::string path = Castor::string::string_cast< char >( filePath / cuT( "mtx_ope.cl" ) );
+			std::ifstream file( path );
+			bContinue = CheckErr( file ? CL_SUCCESS : -1, path.c_str() );
 
-			if ( l_bContinue )
+			if ( bContinue )
 			{
-				l_prog = std::string( std::istreambuf_iterator<char>( l_file ), std::istreambuf_iterator<char>() );
+				prog = std::string( std::istreambuf_iterator<char>( file ), std::istreambuf_iterator<char>() );
 			}
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			cl::Program::Sources l_source( 1, cl::string( l_prog ) );
-			m_program = cl::Program( m_context, l_source );
-			l_iErr = m_program.build( m_arrayDevices );
-			l_bContinue = CheckErr( l_iErr, "Program::build()" );
+			cl::Program::Sources source( 1, cl::string( prog ) );
+			m_program = cl::Program( m_context, source );
+			iErr = m_program.build( m_arrayDevices );
+			bContinue = CheckErr( iErr, "Program::build()" );
 
-			if ( !l_bContinue )
+			if ( !bContinue )
 			{
-				cl::string l_strInfo;
-				l_iErr = m_program.getBuildInfo( m_arrayDevices[0], CL_PROGRAM_BUILD_LOG, &l_strInfo );
+				cl::string strInfo;
+				iErr = m_program.getBuildInfo( m_arrayDevices[0], CL_PROGRAM_BUILD_LOG, &strInfo );
 
-				if ( CheckErr( l_iErr, "Program::getBuildInfo()" ) )
+				if ( CheckErr( iErr, "Program::getBuildInfo()" ) )
 				{
-					std::cout << l_strInfo << std::endl;
+					std::cout << strInfo << std::endl;
 				}
 			}
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			m_kernel = cl::Kernel( m_program, "mult_4x4", &l_iErr );
-			l_bContinue = CheckErr( l_iErr, "Kernel::Kernel()" );
+			m_kernel = cl::Kernel( m_program, "mult_4x4", &iErr );
+			bContinue = CheckErr( iErr, "Kernel::Kernel()" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			l_iErr = m_kernel.setArg( 0, m_clBufferMtx4x4C );
-			l_bContinue = CheckErr( l_iErr, "Kernel::setArg() - m_clBufferMtx4x4C" );
+			iErr = m_kernel.setArg( 0, m_clBufferMtx4x4C );
+			bContinue = CheckErr( iErr, "Kernel::setArg() - m_clBufferMtx4x4C" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			l_iErr = m_kernel.setArg( 1, m_clBufferMtx4x4A );
-			l_bContinue = CheckErr( l_iErr, "Kernel::setArg() - m_clBufferMtx4x4A" );
+			iErr = m_kernel.setArg( 1, m_clBufferMtx4x4A );
+			bContinue = CheckErr( iErr, "Kernel::setArg() - m_clBufferMtx4x4A" );
 		}
 
-		if ( l_bContinue )
+		if ( bContinue )
 		{
-			l_iErr = m_kernel.setArg( 2, m_clBufferMtx4x4B );
-			l_bContinue = CheckErr( l_iErr, "Kernel::setArg() - m_clBufferMtx4x4B" );
+			iErr = m_kernel.setArg( 2, m_clBufferMtx4x4B );
+			bContinue = CheckErr( iErr, "Kernel::setArg() - m_clBufferMtx4x4B" );
 		}
 
 		try
 		{
-			if ( l_bContinue )
+			if ( bContinue )
 			{
 				m_queue.enqueueNDRangeKernel( m_kernel, cl::NullRange, cl::NDRange( 1, 1 ), cl::NDRange( 4, 4 ), NULL, &m_event );
 				m_queue.enqueueReadBuffer( m_clBufferMtx4x4C, CL_TRUE, 0, 16 * sizeof( float ), m_bufferMtx4x4C );
 			}
 
-			m_bClInitialised = l_bContinue;
+			m_bClInitialised = bContinue;
 		}
 		catch ( cl::Error & p_exc )
 		{
-			l_bContinue = CheckErr( p_exc.err(), "Kernel::enqueueNDRangeKernel() - m_kernel" );
+			bContinue = CheckErr( p_exc.err(), "Kernel::enqueueNDRangeKernel() - m_kernel" );
 		}
 	}
 

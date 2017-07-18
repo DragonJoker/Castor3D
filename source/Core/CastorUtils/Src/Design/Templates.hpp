@@ -274,9 +274,9 @@ namespace Castor
 		 */
 		static value_type parse( String const & p_str )
 		{
-			value_type l_tReturn;
-			string::parse( p_str, l_tReturn );
-			return l_tReturn;
+			value_type tReturn;
+			string::parse( p_str, tReturn );
+			return tReturn;
 		}
 		/**
 		 *\~english

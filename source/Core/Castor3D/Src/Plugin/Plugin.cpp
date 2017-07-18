@@ -21,30 +21,30 @@ namespace Castor3D
 	{
 		if ( !p_library->GetFunction( m_pfnGetName, GetNameFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in GetName function : " );
-			l_strError += System::GetLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
+			String strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in GetName function : " );
+			strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( strError ), true );
 		}
 
 		if ( !p_library->GetFunction( m_pfnGetRequiredVersion, GetRequiredVersionFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in GetRequiredVersion function : " );
-			l_strError += System::GetLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
+			String strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in GetRequiredVersion function : " );
+			strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( strError ), true );
 		}
 
 		if ( !p_library->GetFunction( m_pfnOnLoad, GetOnLoadFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in OnLoad function : " );
-			l_strError += System::GetLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
+			String strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in OnLoad function : " );
+			strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( strError ), true );
 		}
 
 		if ( !p_library->GetFunction( m_pfnOnUnload, GetOnUnloadFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in OnUnload function : " );
-			l_strError += System::GetLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
+			String strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in OnUnload function : " );
+			strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( strError ), true );
 		}
 	}
 
@@ -62,15 +62,15 @@ namespace Castor3D
 
 	String Plugin::GetName()const
 	{
-		String l_strReturn;
+		String strReturn;
 
 		if ( m_pfnGetName )
 		{
-			char const * l_name;
-			m_pfnGetName( &l_name );
-			l_strReturn = l_name;
+			char const * name;
+			m_pfnGetName( &name );
+			strReturn = name;
 		}
 
-		return l_strReturn;
+		return strReturn;
 	}
 }

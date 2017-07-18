@@ -78,13 +78,13 @@ namespace CastorGui
 			, false );
 		m_choicesSelectedConnection = m_choices->Connect( ListBoxEvent::eSelected, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
 
-		TextOverlaySPtr l_text = GetEngine().GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() )
+		TextOverlaySPtr text = GetEngine().GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() )
 			, OverlayType::eText
 			, nullptr
 			, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
-		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
-		l_text->SetVAlign( VAlign::eCenter );
-		m_text = l_text;
+		text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
+		text->SetVAlign( VAlign::eCenter );
+		m_text = text;
 	}
 
 	ComboBoxCtrl::~ComboBoxCtrl()
@@ -173,11 +173,11 @@ namespace CastorGui
 
 	void ComboBoxCtrl::SetFont( Castor::String const & p_font )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetFont( p_font );
+			text->SetFont( p_font );
 		}
 
 		m_choices->SetFont( p_font );
@@ -186,7 +186,7 @@ namespace CastorGui
 	void ComboBoxCtrl::DoCreate()
 	{
 		REQUIRE( GetControlsManager() );
-		auto & l_manager = *GetControlsManager();
+		auto & manager = *GetControlsManager();
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 
 		m_expand->SetForegroundMaterial( GetForegroundMaterial() );
@@ -207,52 +207,52 @@ namespace CastorGui
 			OnNcKeyDown( p_control, p_event );
 		} );
 
-		TextOverlaySPtr l_text = m_text.lock();
-		l_text->SetMaterial( GetForegroundMaterial() );
-		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
+		TextOverlaySPtr text = m_text.lock();
+		text->SetMaterial( GetForegroundMaterial() );
+		text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
 
-		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
+		if ( !text->GetFontTexture() || !text->GetFontTexture()->GetFont() )
 		{
-			l_text->SetFont(l_manager.GetDefaultFont()->GetName() );
+			text->SetFont(manager.GetDefaultFont()->GetName() );
 		}
 
-		int l_sel = GetSelected();
+		int sel = GetSelected();
 
-		if ( l_sel >= 0 && uint32_t( l_sel ) < GetItemCount() )
+		if ( sel >= 0 && uint32_t( sel ) < GetItemCount() )
 		{
-			l_text->SetCaption( GetItems()[l_sel] );
+			text->SetCaption( GetItems()[sel] );
 		}
 
-		l_manager.Create( m_expand );
-		l_manager.Create( m_choices );
-		l_manager.ConnectEvents( *this );
+		manager.Create( m_expand );
+		manager.Create( m_choices );
+		manager.ConnectEvents( *this );
 	}
 
 	void ComboBoxCtrl::DoDestroy()
 	{
 		REQUIRE( GetControlsManager() );
-		auto & l_manager = *GetControlsManager();
+		auto & manager = *GetControlsManager();
 		GetControlsManager()->DisconnectEvents( *this );
 
 		if ( m_expand )
 		{
-			l_manager.Destroy( m_expand );
+			manager.Destroy( m_expand );
 		}
 
 		if ( m_choices )
 		{
-			l_manager.Destroy( m_choices );
+			manager.Destroy( m_choices );
 		}
 	}
 
 	void ComboBoxCtrl::DoSetPosition( Position const & p_value )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
 			//l_text->SetPixelPosition( p_value );
-			l_text.reset();
+			text.reset();
 		}
 
 		m_expand->SetPosition( Position( GetSize().width() - GetSize().height(), 0 ) );
@@ -261,12 +261,12 @@ namespace CastorGui
 
 	void ComboBoxCtrl::DoSetSize( Size const & p_value )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetPixelSize( p_value );
-			l_text.reset();
+			text->SetPixelSize( p_value );
+			text.reset();
 		}
 
 		m_expand->SetSize( Size( p_value.height(), p_value.height() ) );
@@ -284,12 +284,12 @@ namespace CastorGui
 	{
 		m_expand->SetForegroundMaterial( GetForegroundMaterial() );
 		m_choices->SetForegroundMaterial( GetForegroundMaterial() );
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetMaterial( p_material );
-			l_text.reset();
+			text->SetMaterial( p_material );
+			text.reset();
 		}
 	}
 
@@ -302,25 +302,25 @@ namespace CastorGui
 	{
 		if ( GetSelected() != -1 )
 		{
-			bool l_changed = false;
-			int l_index = GetSelected();
+			bool changed = false;
+			int index = GetSelected();
 
 			if ( p_event.GetKey() == KeyboardKey::eUp )
 			{
-				l_index--;
-				l_changed = true;
+				index--;
+				changed = true;
 			}
 			else if ( p_event.GetKey() == KeyboardKey::eDown )
 			{
-				l_index++;
-				l_changed = true;
+				index++;
+				changed = true;
 			}
 
-			if ( l_changed )
+			if ( changed )
 			{
-				l_index = std::max( 0, std::min( l_index, int( GetItemCount() - 1 ) ) );
-				SetSelected( l_index );
-				OnSelected( l_index );
+				index = std::max( 0, std::min( index, int( GetItemCount() - 1 ) ) );
+				SetSelected( index );
+				OnSelected( index );
 			}
 		}
 	}
@@ -346,11 +346,11 @@ namespace CastorGui
 		if ( p_selected >= 0 )
 		{
 			DoSwitchExpand();
-			TextOverlaySPtr l_text = m_text.lock();
+			TextOverlaySPtr text = m_text.lock();
 
-			if ( l_text )
+			if ( text )
 			{
-				l_text->SetCaption( m_choices->GetItemText( p_selected ) );
+				text->SetCaption( m_choices->GetItemText( p_selected ) );
 			}
 		}
 

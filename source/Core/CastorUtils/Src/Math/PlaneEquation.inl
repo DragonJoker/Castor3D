@@ -31,9 +31,9 @@ namespace Castor
 	template< typename T >
 	void PlaneEquation< T >::Set( Point< T, 3 > const & p_p1, Point< T, 3 > const & p_p2, Point< T, 3 > const & p_p3 )
 	{
-		Point< T, 3 > l_v( p_p2 - p_p1 );
-		Point< T, 3 > l_w( p_p3 - p_p1 );
-		m_normal = Castor::point::get_normalised( l_w ^ l_v );
+		Point< T, 3 > v( p_p2 - p_p1 );
+		Point< T, 3 > w( p_p3 - p_p1 );
+		m_normal = Castor::point::get_normalised( w ^ v );
 		m_point = ( p_p1 + p_p2 + p_p3 ) / T( 3 );
 		m_d = -Castor::point::dot( m_point, m_normal );
 	}
@@ -49,11 +49,11 @@ namespace Castor
 	template< typename T >
 	bool PlaneEquation< T >::IsParallel( PlaneEquation< T > const & p_plane )const
 	{
-		T l_ratioA = m_normal[0] / p_plane.m_normal[0];
-		T l_ratioB = m_normal[1] / p_plane.m_normal[1];
-		T l_ratioC = m_normal[2] / p_plane.m_normal[2];
-		return policy::equals( l_ratioA, l_ratioB )
-			   && policy::equals( l_ratioA, l_ratioC );
+		T ratioA = m_normal[0] / p_plane.m_normal[0];
+		T ratioB = m_normal[1] / p_plane.m_normal[1];
+		T ratioC = m_normal[2] / p_plane.m_normal[2];
+		return policy::equals( ratioA, ratioB )
+			   && policy::equals( ratioA, ratioC );
 	}
 
 	template< typename T >
@@ -71,12 +71,12 @@ namespace Castor
 	template< typename T >
 	bool PlaneEquation< T >::Intersects( PlaneEquation< T > const & p_plane, Line3D<T> & p_line )const
 	{
-		bool l_result = false;
+		bool result = false;
 
 		if ( ! IsParallel( p_plane ) )
 		{
-			Point< T, 3 > l_normal( m_normal ^ p_plane.m_normal );
-			T l_default{};
+			Point< T, 3 > normal( m_normal ^ p_plane.m_normal );
+			T default{};
 			T b1 = m_normal[1];
 			T c1 = m_normal[2];
 			T d1 = m_d;
@@ -85,55 +85,55 @@ namespace Castor
 			T d2 = m_d;
 			T div = ( b1 * c2 ) - ( b2 * c1 );
 
-			if ( !policy::equals( b1, l_default ) && !policy::equals( div, l_default ) )
+			if ( !policy::equals( b1, default ) && !policy::equals( div, default ) )
 			{
-				Point< T, 3 > l_point;
-				l_point[2] = ( ( b2 * d1 ) - ( b1 * d2 ) ) / div;
-				l_point[1] = ( ( -c1 * l_point[2] ) - d1 ) / b1;
-				l_point[0] = 0;
-				p_line = Line3D< T >::FromPointAndSlope( l_point, l_normal );
+				Point< T, 3 > point;
+				point[2] = ( ( b2 * d1 ) - ( b1 * d2 ) ) / div;
+				point[1] = ( ( -c1 * point[2] ) - d1 ) / b1;
+				point[0] = 0;
+				p_line = Line3D< T >::FromPointAndSlope( point, normal );
 			}
 
-			l_result = true;
+			result = true;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	template< typename T >
 	bool PlaneEquation< T >::Intersects( PlaneEquation< T > const & p_plane1, PlaneEquation< T > const & p_plane2, Point<T, 3> & p_intersection )const
 	{
-		bool l_result = false;
+		bool result = false;
 
 		if ( ! IsParallel( p_plane1 ) && ! IsParallel( p_plane2 ) && ! p_plane1.IsParallel( p_plane2 ) )
 		{
 			T a1 = m_normal[0], a2 = p_plane1.m_normal[0], a3 = p_plane2.m_normal[0];
 			T b1 = m_normal[1], b2 = p_plane1.m_normal[1], b3 = p_plane2.m_normal[1];
 			T c1 = m_normal[2], c2 = p_plane1.m_normal[2], c3 = p_plane2.m_normal[2];
-			T l_d = m_d;
-			T l_d1 = p_plane1.m_d;
-			T l_d2 = p_plane2.m_d;
+			T d = m_d;
+			T d1 = p_plane1.m_d;
+			T d2 = p_plane2.m_d;
 			T alpha, beta;
 			alpha = ( a3 - ( a2 * ( b3 - ( a3 / a1 ) ) / ( b2 - ( a2 / a1 ) ) ) ) / a1;
 			beta = ( b3 - ( a3 / a1 ) ) / ( b2 - ( a2 / a1 ) );
-			T l_c3 = ( c1 * alpha ) + ( c2 * beta );
+			T c3 = ( c1 * alpha ) + ( c2 * beta );
 
-			if ( ! policy::equals( c3, l_c3 ) )
+			if ( ! policy::equals( c3, c3 ) )
 			{
 				alpha = ( ( a2 * c1 ) / ( a1 * ( b2 - ( a2 * b1 ) / a1 ) ) ) - ( c2 / ( b2 - ( a2 * b1 ) / a1 ) );
-				beta = ( ( a2 * l_d ) / ( a1 * ( b2 - ( a2 * b1 ) / a1 ) ) ) - ( l_d1 / ( b2 - ( a2 * b1 ) / a1 ) );
+				beta = ( ( a2 * d ) / ( a1 * ( b2 - ( a2 * b1 ) / a1 ) ) ) - ( d1 / ( b2 - ( a2 * b1 ) / a1 ) );
 				T x, y, z;
-				z = ( ( a3 * ( ( l_d + ( beta * b1 ) ) / a1 ) ) - l_d2 ) / ( ( b3 * alpha ) + c3 - ( a3 * ( ( alpha * b1 ) + c1 ) / a1 ) );
+				z = ( ( a3 * ( ( d + ( beta * b1 ) ) / a1 ) ) - d2 ) / ( ( b3 * alpha ) + c3 - ( a3 * ( ( alpha * b1 ) + c1 ) / a1 ) );
 				y = ( alpha * z ) + beta;
-				x = ( z * ( 0.0f - ( ( alpha * b1 ) + c1 ) ) / a1 ) - ( ( l_d + ( b1 * beta ) ) / a1 );
+				x = ( z * ( 0.0f - ( ( alpha * b1 ) + c1 ) ) / a1 ) - ( ( d + ( b1 * beta ) ) / a1 );
 				p_intersection[0] = x;
 				p_intersection[1] = y;
 				p_intersection[2] = z;
-				l_result = true;
+				result = true;
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	template< typename T >
@@ -145,16 +145,16 @@ namespace Castor
 	template< typename T >
 	bool operator==( PlaneEquation< T > const & p_a, PlaneEquation< T > const & p_b )
 	{
-		bool l_result = false;
+		bool result = false;
 
 		if ( p_a.IsParallel( p_b ) )
 		{
-			T l_ratioA = p_a.m_normal[0] / p_b.m_normal[0];
-			T l_ratioD = p_a.m_d / p_b.m_d;
-			l_result = PlaneEquation< T >::policy::equals( l_ratioA, l_ratioD );
+			T ratioA = p_a.m_normal[0] / p_b.m_normal[0];
+			T ratioD = p_a.m_d / p_b.m_d;
+			result = PlaneEquation< T >::policy::equals( ratioA, ratioD );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	template< typename T >

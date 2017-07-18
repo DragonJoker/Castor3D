@@ -300,9 +300,9 @@ namespace Castor3D
 		template< MaterialType Type >
 		inline std::shared_ptr< typename PassTyper< Type >::Type > GetTypedPass( uint32_t p_index )const
 		{
-			auto l_pass = GetPass( p_index );
+			auto pass = GetPass( p_index );
 			REQUIRE( m_type == Type );
-			return std::static_pointer_cast< typename PassTyper< Type >::Type >( l_pass );
+			return std::static_pointer_cast< typename PassTyper< Type >::Type >( pass );
 		}
 
 	public:

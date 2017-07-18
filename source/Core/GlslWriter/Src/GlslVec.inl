@@ -12,8 +12,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "vec2 " };
-				return l_name;
+				static xchar const * const name{ "vec2 " };
+				return name;
 			}
 		};
 
@@ -22,8 +22,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "ivec2 " };
-				return l_name;
+				static xchar const * const name{ "ivec2 " };
+				return name;
 			}
 		};
 
@@ -32,8 +32,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bvec2 " };
-				return l_name;
+				static xchar const * const name{ "bvec2 " };
+				return name;
 			}
 		};
 
@@ -47,8 +47,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "vec3 " };
-				return l_name;
+				static xchar const * const name{ "vec3 " };
+				return name;
 			}
 		};
 
@@ -57,8 +57,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "ivec3 " };
-				return l_name;
+				static xchar const * const name{ "ivec3 " };
+				return name;
 			}
 		};
 
@@ -67,8 +67,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bvec3 " };
-				return l_name;
+				static xchar const * const name{ "bvec3 " };
+				return name;
 			}
 		};
 
@@ -82,8 +82,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "vec4 " };
-				return l_name;
+				static xchar const * const name{ "vec4 " };
+				return name;
 			}
 		};
 
@@ -92,8 +92,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "ivec4 " };
-				return l_name;
+				static xchar const * const name{ "ivec4 " };
+				return name;
 			}
 		};
 
@@ -102,8 +102,8 @@
 		{
 			static xchar const * const GetName()
 			{
-				static xchar const * const l_name{ "bvec4 " };
-				return l_name;
+				static xchar const * const name{ "bvec4 " };
+				return name;
 			}
 		};
 	}
@@ -142,23 +142,23 @@
 	template< typename IndexT >
 	inline ValueT Vec2T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
-		ValueT l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
-		return l_result;
+		ValueT result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return result;
 	}
 
 	template< typename ValueT >
 	inline ValueT Vec2T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
-		return l_result;
+		ValueT result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return result;
 	}
 
 	template< typename ValueT >
 	inline Vec2T< ValueT > operator*( ValueT const & p_lhs, Vec2T< ValueT > const & p_rhs )
 	{
-		Vec2T< ValueT > l_result( p_lhs.m_writer );
-		l_result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
-		return l_result;
+		Vec2T< ValueT > result( p_lhs.m_writer );
+		result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
+		return result;
 	}
 
 	//*****************************************************************************************
@@ -195,23 +195,23 @@
 	template< typename IndexT >
 	inline ValueT Vec3T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
-		ValueT l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
-		return l_result;
+		ValueT result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return result;
 	}
 
 	template< typename ValueT >
 	inline ValueT Vec3T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
-		return l_result;
+		ValueT result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return result;
 	}
 
 	template< typename ValueT >
 	inline Vec3T< ValueT > operator*( ValueT const & p_lhs, Vec3T< ValueT > const & p_rhs )
 	{
-		Vec3T< ValueT > l_result( p_lhs.m_writer );
-		l_result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
-		return l_result;
+		Vec3T< ValueT > result( p_lhs.m_writer );
+		result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
+		return result;
 	}
 
 	//*****************************************************************************************
@@ -248,23 +248,23 @@
 	template< typename IndexT >
 	inline ValueT Vec4T< ValueT >::operator[]( IndexT const & p_rhs )const
 	{
-		ValueT l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
-		return l_result;
+		ValueT result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return result;
 	}
 
 	template< typename ValueT >
 	inline ValueT Vec4T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT l_result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
-		return l_result;
+		ValueT result{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return result;
 	}
 
 	template< typename ValueT >
 	inline Vec4T< ValueT > operator*( ValueT const & p_lhs, Vec4T< ValueT > const & p_rhs )
 	{
-		Vec4T< ValueT > l_result( p_lhs.m_writer );
-		l_result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
-		return l_result;
+		Vec4T< ValueT > result( p_lhs.m_writer );
+		result.m_value << Castor::String( p_lhs ) << " * " << Castor::String( p_rhs );
+		return result;
 	}
 
 	//*****************************************************************************************

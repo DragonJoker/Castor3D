@@ -67,126 +67,126 @@ namespace GuiCommon
 
 	void TextureTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		TextureUnitSPtr l_unit = GetTexture();
+		TextureUnitSPtr unit = GetTexture();
 
-		if ( l_unit )
+		if ( unit )
 		{
-			wxPGChoices l_choices;
-			wxString l_selected;
+			wxPGChoices choices;
+			wxString selected;
 
 			if ( m_materialType == MaterialType::eLegacy )
 			{
-				l_choices.Add( PROPERTY_CHANNEL_DIFFUSE );
-				l_choices.Add( PROPERTY_CHANNEL_NORMAL );
-				l_choices.Add( PROPERTY_CHANNEL_OPACITY );
-				l_choices.Add( PROPERTY_CHANNEL_SPECULAR );
-				l_choices.Add( PROPERTY_CHANNEL_EMISSIVE );
-				l_choices.Add( PROPERTY_CHANNEL_HEIGHT );
-				l_choices.Add( PROPERTY_CHANNEL_GLOSS );
-				l_choices.Add( PROPERTY_CHANNEL_REFLECTION );
-				l_choices.Add( PROPERTY_CHANNEL_REFRACTION );
+				choices.Add( PROPERTY_CHANNEL_DIFFUSE );
+				choices.Add( PROPERTY_CHANNEL_NORMAL );
+				choices.Add( PROPERTY_CHANNEL_OPACITY );
+				choices.Add( PROPERTY_CHANNEL_SPECULAR );
+				choices.Add( PROPERTY_CHANNEL_EMISSIVE );
+				choices.Add( PROPERTY_CHANNEL_HEIGHT );
+				choices.Add( PROPERTY_CHANNEL_GLOSS );
+				choices.Add( PROPERTY_CHANNEL_REFLECTION );
+				choices.Add( PROPERTY_CHANNEL_REFRACTION );
 
-				switch ( l_unit->GetChannel() )
+				switch ( unit->GetChannel() )
 				{
 				case TextureChannel::eDiffuse:
-					l_selected = PROPERTY_CHANNEL_DIFFUSE;
+					selected = PROPERTY_CHANNEL_DIFFUSE;
 					break;
 
 				case TextureChannel::eNormal:
-					l_selected = PROPERTY_CHANNEL_NORMAL;
+					selected = PROPERTY_CHANNEL_NORMAL;
 					break;
 
 				case TextureChannel::eOpacity:
-					l_selected = PROPERTY_CHANNEL_OPACITY;
+					selected = PROPERTY_CHANNEL_OPACITY;
 					break;
 
 				case TextureChannel::eSpecular:
-					l_selected = PROPERTY_CHANNEL_SPECULAR;
+					selected = PROPERTY_CHANNEL_SPECULAR;
 					break;
 
 				case TextureChannel::eEmissive:
-					l_selected = PROPERTY_CHANNEL_EMISSIVE;
+					selected = PROPERTY_CHANNEL_EMISSIVE;
 					break;
 
 				case TextureChannel::eHeight:
-					l_selected = PROPERTY_CHANNEL_HEIGHT;
+					selected = PROPERTY_CHANNEL_HEIGHT;
 					break;
 
 				case TextureChannel::eGloss:
-					l_selected = PROPERTY_CHANNEL_GLOSS;
+					selected = PROPERTY_CHANNEL_GLOSS;
 					break;
 
 				case TextureChannel::eReflection:
-					l_selected = PROPERTY_CHANNEL_REFLECTION;
+					selected = PROPERTY_CHANNEL_REFLECTION;
 					break;
 
 				case TextureChannel::eRefraction:
-					l_selected = PROPERTY_CHANNEL_REFRACTION;
+					selected = PROPERTY_CHANNEL_REFRACTION;
 					break;
 				}
 			}
 			else
 			{
-				l_choices.Add( PROPERTY_CHANNEL_ALBEDO );
-				l_choices.Add( PROPERTY_CHANNEL_NORMAL );
-				l_choices.Add( PROPERTY_CHANNEL_OPACITY );
-				l_choices.Add( PROPERTY_CHANNEL_ROUGHNESS );
-				l_choices.Add( PROPERTY_CHANNEL_EMISSIVE );
-				l_choices.Add( PROPERTY_CHANNEL_HEIGHT );
-				l_choices.Add( PROPERTY_CHANNEL_METALLIC );
-				l_choices.Add( PROPERTY_CHANNEL_REFLECTION );
-				l_choices.Add( PROPERTY_CHANNEL_REFRACTION );
+				choices.Add( PROPERTY_CHANNEL_ALBEDO );
+				choices.Add( PROPERTY_CHANNEL_NORMAL );
+				choices.Add( PROPERTY_CHANNEL_OPACITY );
+				choices.Add( PROPERTY_CHANNEL_ROUGHNESS );
+				choices.Add( PROPERTY_CHANNEL_EMISSIVE );
+				choices.Add( PROPERTY_CHANNEL_HEIGHT );
+				choices.Add( PROPERTY_CHANNEL_METALLIC );
+				choices.Add( PROPERTY_CHANNEL_REFLECTION );
+				choices.Add( PROPERTY_CHANNEL_REFRACTION );
 
-				switch ( l_unit->GetChannel() )
+				switch ( unit->GetChannel() )
 				{
 				case TextureChannel::eDiffuse:
-					l_selected = PROPERTY_CHANNEL_ALBEDO;
+					selected = PROPERTY_CHANNEL_ALBEDO;
 					break;
 
 				case TextureChannel::eNormal:
-					l_selected = PROPERTY_CHANNEL_NORMAL;
+					selected = PROPERTY_CHANNEL_NORMAL;
 					break;
 
 				case TextureChannel::eOpacity:
-					l_selected = PROPERTY_CHANNEL_OPACITY;
+					selected = PROPERTY_CHANNEL_OPACITY;
 					break;
 
 				case TextureChannel::eSpecular:
-					l_selected = PROPERTY_CHANNEL_ROUGHNESS;
+					selected = PROPERTY_CHANNEL_ROUGHNESS;
 					break;
 
 				case TextureChannel::eEmissive:
-					l_selected = PROPERTY_CHANNEL_EMISSIVE;
+					selected = PROPERTY_CHANNEL_EMISSIVE;
 					break;
 
 				case TextureChannel::eHeight:
-					l_selected = PROPERTY_CHANNEL_HEIGHT;
+					selected = PROPERTY_CHANNEL_HEIGHT;
 					break;
 
 				case TextureChannel::eGloss:
-					l_selected = PROPERTY_CHANNEL_METALLIC;
+					selected = PROPERTY_CHANNEL_METALLIC;
 					break;
 
 				case TextureChannel::eReflection:
-					l_selected = PROPERTY_CHANNEL_REFLECTION;
+					selected = PROPERTY_CHANNEL_REFLECTION;
 					break;
 
 				case TextureChannel::eRefraction:
-					l_selected = PROPERTY_CHANNEL_REFRACTION;
+					selected = PROPERTY_CHANNEL_REFRACTION;
 					break;
 				}
 			}
 
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXTURE ) );
-			p_grid->Append( new wxEnumProperty( PROPERTY_CHANNEL, PROPERTY_CHANNEL, l_choices ) )->SetValue( l_selected );
+			p_grid->Append( new wxEnumProperty( PROPERTY_CHANNEL, PROPERTY_CHANNEL, choices ) )->SetValue( selected );
 
-			if ( l_unit->GetChannel() != TextureChannel::eReflection
-				&& l_unit->GetChannel() != TextureChannel::eRefraction )
+			if ( unit->GetChannel() != TextureChannel::eReflection
+				&& unit->GetChannel() != TextureChannel::eRefraction )
 			{
-				if ( l_unit->GetTexture()->GetImage().IsStaticSource() )
+				if ( unit->GetTexture()->GetImage().IsStaticSource() )
 				{
-					Path l_path{ l_unit->GetTexture()->GetImage().ToString() };
-					p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_path );
+					Path path{ unit->GetTexture()->GetImage().ToString() };
+					p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( path );
 				}
 			}
 		}
@@ -194,106 +194,106 @@ namespace GuiCommon
 
 	void TextureTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		TextureUnitSPtr l_unit = GetTexture();
-		wxPGProperty * l_property = p_event.GetProperty();
+		TextureUnitSPtr unit = GetTexture();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_unit )
+		if ( property && unit )
 		{
-			if ( l_property->GetName() == PROPERTY_CHANNEL )
+			if ( property->GetName() == PROPERTY_CHANNEL )
 			{
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_DIFFUSE )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_DIFFUSE )
 				{
 					OnChannelChange( TextureChannel::eDiffuse );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
 				{
 					OnChannelChange( TextureChannel::eNormal );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
 				{
 					OnChannelChange( TextureChannel::eOpacity );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
 				{
 					OnChannelChange( TextureChannel::eSpecular );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_EMISSIVE )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_EMISSIVE )
 				{
 					OnChannelChange( TextureChannel::eEmissive );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
 				{
 					OnChannelChange( TextureChannel::eHeight );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 				{
 					OnChannelChange( TextureChannel::eGloss );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_REFLECTION )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_REFLECTION )
 				{
 					OnChannelChange( TextureChannel::eReflection );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_REFRACTION )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_REFRACTION )
 				{
 					OnChannelChange( TextureChannel::eRefraction );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_ALBEDO )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_ALBEDO )
 				{
 					OnChannelChange( TextureChannel::eAlbedo );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_ROUGHNESS )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_ROUGHNESS )
 				{
 					OnChannelChange( TextureChannel::eRoughness );
 				}
 
-				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_METALLIC )
+				if ( property->GetValueAsString() == PROPERTY_CHANNEL_METALLIC )
 				{
 					OnChannelChange( TextureChannel::eMetallic );
 				}
 			}
-			else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )
+			else if ( property->GetName() == PROPERTY_TEXTURE_IMAGE )
 			{
-				OnImageChange( String( l_property->GetValueAsString() ) );
+				OnImageChange( String( property->GetValueAsString() ) );
 			}
 		}
 	}
 
 	void TextureTreeItemProperty::OnChannelChange( TextureChannel p_value )
 	{
-		TextureUnitSPtr l_unit = GetTexture();
+		TextureUnitSPtr unit = GetTexture();
 
-		DoApplyChange( [p_value, l_unit]()
+		DoApplyChange( [p_value, unit]()
 		{
-			l_unit->SetChannel( p_value );
+			unit->SetChannel( p_value );
 		} );
 	}
 
 	void TextureTreeItemProperty::OnImageChange( Castor::String const & p_value )
 	{
-		TextureUnitSPtr l_unit = GetTexture();
+		TextureUnitSPtr unit = GetTexture();
 
-		DoApplyChange( [p_value, l_unit]()
+		DoApplyChange( [p_value, unit]()
 		{
 			if ( File::FileExists( Path{ p_value } ) )
 			{
 				// Absolute path
-				l_unit->SetAutoMipmaps( true );
-				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+				unit->SetAutoMipmaps( true );
+				auto texture = unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 					, AccessType::eRead
 					, AccessType::eRead );
-				l_texture->GetImage().InitialiseSource( Path{}, Path{ p_value } );
-				l_unit->SetTexture( l_texture );
-				l_unit->Initialise();
+				texture->GetImage().InitialiseSource( Path{}, Path{ p_value } );
+				unit->SetTexture( texture );
+				unit->Initialise();
 			}
 		} );
 	}

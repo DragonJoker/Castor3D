@@ -26,82 +26,82 @@ namespace Testing
 
 	void CastorUtilsThreadPoolTest::Underload()
 	{
-		constexpr size_t l_count = 1000000u;
-		ThreadPool l_pool( 5u );
-		std::vector< size_t > l_data;
-		l_pool.PushJob( [&l_data, l_count]()
+		constexpr size_t count = 1000000u;
+		ThreadPool pool( 5u );
+		std::vector< size_t > data;
+		pool.PushJob( [&data, count]()
 		{
-			while ( l_data.size() < l_count )
+			while ( data.size() < count )
 			{
-				l_data.push_back( l_data.size() );
+				data.push_back( data.size() );
 			}
 		} );
 
-		CT_CHECK( !l_pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
-		CT_CHECK( !l_pool.IsEmpty() );
-		CT_CHECK( l_pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( l_data.size() == l_count );
+		CT_CHECK( !pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
+		CT_CHECK( !pool.IsEmpty() );
+		CT_CHECK( pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( data.size() == count );
 	}
 
 	void CastorUtilsThreadPoolTest::Exactload()
 	{
-		constexpr size_t l_count = 1000000u;
-		ThreadPool l_pool( 5u );
-		std::atomic_int l_value{ 0 };
+		constexpr size_t count = 1000000u;
+		ThreadPool pool( 5u );
+		std::atomic_int value{ 0 };
 
-		auto l_job = [&l_value, l_count]()
+		auto job = [&value, count]()
 		{
 			size_t i = 0;
 
-			while ( i++ < l_count )
+			while ( i++ < count )
 			{
-				l_value++;
+				value++;
 			}
 		};
 
-		l_pool.PushJob( l_job );
-		l_pool.PushJob( l_job );
-		l_pool.PushJob( l_job );
-		l_pool.PushJob( l_job );
-		l_pool.PushJob( l_job );
+		pool.PushJob( job );
+		pool.PushJob( job );
+		pool.PushJob( job );
+		pool.PushJob( job );
+		pool.PushJob( job );
 
-		CT_CHECK( !l_pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
-		CT_CHECK( l_pool.IsEmpty() );
-		CT_CHECK( l_pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( !l_pool.IsEmpty() );
-		CT_CHECK( l_value == l_count * 5u );
+		CT_CHECK( !pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
+		CT_CHECK( pool.IsEmpty() );
+		CT_CHECK( pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( !pool.IsEmpty() );
+		CT_CHECK( value == count * 5u );
 	}
 
 	void CastorUtilsThreadPoolTest::Overload()
 	{
-		constexpr size_t l_count = 1000000u;
-		ThreadPool l_pool( 5u );
-		std::atomic_int l_value{ 0 };
+		constexpr size_t count = 1000000u;
+		ThreadPool pool( 5u );
+		std::atomic_int value{ 0 };
 
-		auto l_job = [&l_value, l_count]()
+		auto job = [&value, count]()
 		{
 			size_t i = 0;
 
-			while ( i++ < l_count )
+			while ( i++ < count )
 			{
-				l_value++;
+				value++;
 			}
 		};
 
-		l_pool.PushJob( l_job );
-		l_pool.PushJob( l_job );
-		l_pool.PushJob( l_job );
-		l_pool.PushJob( l_job );
-		l_pool.PushJob( l_job );
-		CT_CHECK( l_pool.IsEmpty() );
-		CT_CHECK( !l_pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
+		pool.PushJob( job );
+		pool.PushJob( job );
+		pool.PushJob( job );
+		pool.PushJob( job );
+		pool.PushJob( job );
+		CT_CHECK( pool.IsEmpty() );
+		CT_CHECK( !pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
 
-		l_pool.PushJob( l_job );
-		//CT_CHECK( l_pool.IsEmpty() );
-		CT_CHECK( !l_pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
+		pool.PushJob( job );
+		//CT_CHECK( pool.IsEmpty() );
+		CT_CHECK( !pool.WaitAll( std::chrono::milliseconds( 1 ) ) );
 
-		CT_CHECK( l_pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
-		CT_CHECK( !l_pool.IsEmpty() );
-		CT_CHECK( l_value == l_count * 6u );
+		CT_CHECK( pool.WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) ) );
+		CT_CHECK( !pool.IsEmpty() );
+		CT_CHECK( value == count * 6u );
 	}
 }

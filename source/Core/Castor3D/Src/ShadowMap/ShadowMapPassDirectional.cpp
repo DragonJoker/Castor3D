@@ -23,15 +23,15 @@ namespace Castor3D
 
 	bool ShadowMapPassDirectional::DoInitialise( Size const & p_size )
 	{
-		Viewport l_viewport{ *GetEngine() };
-		real l_w = real( p_size.width() );
-		real l_h = real( p_size.height() );
-		l_viewport.SetOrtho( -l_w / 4, l_w / 4, l_h / 4, -l_h / 4, -512.0_r, 512.0_r );
-		l_viewport.Update();
+		Viewport viewport{ *GetEngine() };
+		real w = real( p_size.width() );
+		real h = real( p_size.height() );
+		viewport.SetOrtho( -w / 4, w / 4, h / 4, -h / 4, -512.0_r, 512.0_r );
+		viewport.Update();
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
 			, *m_light.GetScene()
 			, m_light.GetParent()
-			, std::move( l_viewport ) );
+			, std::move( viewport ) );
 		m_camera->Resize( p_size );
 
 		m_renderQueue.Initialise( *m_light.GetScene(), *m_camera );
@@ -69,38 +69,38 @@ namespace Castor3D
 	{
 		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
 		{
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eNone );
-			DepthStencilState l_dsState;
-			l_dsState.SetDepthTest( true );
-			auto & l_pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
-					, std::move( l_rsState )
+			RasteriserState rsState;
+			rsState.SetCulledFaces( Culling::eNone );
+			DepthStencilState dsState;
+			dsState.SetDepthTest( true );
+			auto & pipeline = *m_backPipelines.emplace( p_flags
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
+					, std::move( rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
 					, p_flags ) ).first->second;
 
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &l_pipeline, p_flags]()
+				, [this, &pipeline, p_flags]()
 				{
-					l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
-					l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+					pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+					pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
-						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
+						pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
 						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
-						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
+						pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
-						l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
+						pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 					}
 
 					m_initialised = true;
