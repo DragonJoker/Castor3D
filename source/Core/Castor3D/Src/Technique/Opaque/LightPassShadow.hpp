@@ -126,7 +126,7 @@ namespace Castor3D
 		static void DebugDisplay( TextureUnit & p_shadowMap )
 		{
 			Castor::Size size{ 256u, 256u };
-			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), 0 }
+			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), int32_t( size.height() ) }
 				, size
 				, *p_shadowMap.GetTexture() );
 			++g_index;
@@ -422,7 +422,7 @@ namespace Castor3D
 
 			m_shadowMapTexture.Unbind();
 
-#if 0//!defined( NDEBUG )
+#if !defined( NDEBUG )
 
 			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 			my_traits::DebugDisplay( m_shadowMapTexture );

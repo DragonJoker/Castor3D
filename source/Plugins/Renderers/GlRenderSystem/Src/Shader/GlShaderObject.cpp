@@ -11,13 +11,15 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlShaderObject::GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, ShaderType p_type )
-		: ShaderObject( p_parent, p_type )
-		, Object( p_gl,
+	GlShaderObject::GlShaderObject( OpenGl & gl
+		, GlShaderProgram * parent
+		, ShaderType type )
+		: ShaderObject( parent, type )
+		, Object( gl,
 				  "GlShaderObject",
-				  std::bind( &OpenGl::CreateShader, std::ref( p_gl ), p_gl.Get( p_type ) ),
-				  std::bind( &OpenGl::DeleteShader, std::ref( p_gl ), std::placeholders::_1 ),
-				  std::bind( &OpenGl::IsShader, std::ref( p_gl ), std::placeholders::_1 )
+				  std::bind( &OpenGl::CreateShader, std::ref( gl ), gl.Get( type ) ),
+				  std::bind( &OpenGl::DeleteShader, std::ref( gl ), std::placeholders::_1 ),
+				  std::bind( &OpenGl::IsShader, std::ref( gl ), std::placeholders::_1 )
 				)
 		, m_shaderProgram( nullptr )
 	{
@@ -107,13 +109,13 @@ namespace GlRender
 		}
 	}
 
-	void GlShaderObject::AttachTo( ShaderProgram & p_program )
+	void GlShaderObject::AttachTo( ShaderProgram & program )
 	{
 		Detach();
 
 		if ( m_status == ShaderStatus::eCompiled && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
 		{
-			m_shaderProgram = &static_cast< GlShaderProgram & >( p_program );
+			m_shaderProgram = &static_cast< GlShaderProgram & >( program );
 			GetOpenGl().AttachShader( m_shaderProgram->GetGlName(), GetGlName() );
 		}
 	}

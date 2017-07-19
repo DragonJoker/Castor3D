@@ -1,4 +1,4 @@
-#include "Skybox.hpp"
+﻿#include "Skybox.hpp"
 
 #include "Engine.hpp"
 
@@ -23,12 +23,12 @@ using namespace GLSL;
 
 namespace Castor3D
 {
-	Skybox::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Skybox >{ p_tabs }
+	Skybox::TextWriter::TextWriter( String const & tabs )
+		: Castor::TextWriter< Skybox >{ tabs }
 	{
 	}
 
-	bool Skybox::TextWriter::operator()( Skybox const & p_obj, TextFile & p_file )
+	bool Skybox::TextWriter::operator()( Skybox const & obj, TextFile & file )
 	{
 		static String const faces[]
 		{
@@ -42,29 +42,46 @@ namespace Castor3D
 
 		bool result = true;
 
-		if ( Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 0 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 1 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 2 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 3 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 4 ) ) ).ToString() } )
-			&& Castor::File::FileExists( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( 5 ) ) ).ToString() } ) )
+		if ( !obj.GetEquiTexturePath().empty()
+			&& Castor::File::FileExists( obj.GetEquiTexturePath() ) )
 		{
-			result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+			result = file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+				&& file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+			Path subfolder{ cuT( "Textures" ) };
+			Path relative = Scene::TextWriter::CopyFile( obj.GetEquiTexturePath()
+				, file.GetFilePath()
+				, subfolder );
+			result = file.WriteText( m_tabs + cuT( "\tequirectangular" ) + cuT( " \"" ) + relative + cuT( "\" 1024 1024\n" ) ) > 0;
+			Castor::TextWriter< Skybox >::CheckError( result, "Skybox equi-texture" );
+
+			if ( result )
+			{
+				result = file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			}
+		}
+		else if ( Castor::File::FileExists( Path{ obj.m_texture->GetImage( size_t( CubeMapFace( 0 ) ) ).ToString() } )
+			&& Castor::File::FileExists( Path{ obj.m_texture->GetImage( size_t( CubeMapFace( 1 ) ) ).ToString() } )
+			&& Castor::File::FileExists( Path{ obj.m_texture->GetImage( size_t( CubeMapFace( 2 ) ) ).ToString() } )
+			&& Castor::File::FileExists( Path{ obj.m_texture->GetImage( size_t( CubeMapFace( 3 ) ) ).ToString() } )
+			&& Castor::File::FileExists( Path{ obj.m_texture->GetImage( size_t( CubeMapFace( 4 ) ) ).ToString() } )
+			&& Castor::File::FileExists( Path{ obj.m_texture->GetImage( size_t( CubeMapFace( 5 ) ) ).ToString() } ) )
+		{
+			result = file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+				&& file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 			Path subfolder{ cuT( "Textures" ) };
 
 			for ( uint32_t i = 0; i < 6 && result; ++i )
 			{
-				Path relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace( i ) ) ).ToString() }
-					, p_file.GetFilePath()
+				Path relative = Scene::TextWriter::CopyFile( Path{ obj.m_texture->GetImage( size_t( CubeMapFace( i ) ) ).ToString() }
+					, file.GetFilePath()
 					, subfolder );
-				result = p_file.WriteText( m_tabs + cuT( "\t" ) + faces[i] + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
+				result = file.WriteText( m_tabs + cuT( "\t" ) + faces[i] + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
 				Castor::TextWriter< Skybox >::CheckError( result, ( "Skybox " + faces[i] ).c_str() );
 			}
 
 			if ( result )
 			{
-				result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				result = file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
@@ -73,14 +90,14 @@ namespace Castor3D
 
 	//************************************************************************************************
 
-	Skybox::Skybox( Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
-		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube
+	Skybox::Skybox( Engine & engine )
+		: OwnedBy< Engine >{ engine }
+		, m_texture{ engine.GetRenderSystem()->CreateTexture( TextureType::eCube
 			, AccessType::eNone
 			, AccessType::eRead ) }
-		, m_matrixUbo{ p_engine }
-		, m_modelMatrixUbo{ p_engine }
-		, m_configUbo{ p_engine }
+		, m_matrixUbo{ engine }
+		, m_modelMatrixUbo{ engine }
+		, m_configUbo{ engine }
 		, m_declaration
 		{
 			{
@@ -171,19 +188,19 @@ namespace Castor3D
 		m_ibl.reset();
 	}
 
-	void Skybox::Render( Camera const & p_camera )
+	void Skybox::Render( Camera const & camera )
 	{
 		REQUIRE( m_texture );
 		auto sampler = m_sampler.lock();
 
 		if ( sampler )
 		{
-			p_camera.Apply();
-			auto & scene = *p_camera.GetScene();
-			auto node = p_camera.GetParent();
+			camera.Apply();
+			auto & scene = *camera.GetScene();
+			auto node = camera.GetParent();
 			matrix::set_translate( m_mtxModel, node->GetDerivedPosition() );
-			m_matrixUbo.Update( p_camera.GetView()
-				, p_camera.GetViewport().GetProjection() );
+			m_matrixUbo.Update( camera.GetView()
+				, camera.GetViewport().GetProjection() );
 			m_modelMatrixUbo.Update( m_mtxModel );
 			m_configUbo.Update( scene.GetHdrConfig() );
 			m_pipeline->Apply();
@@ -193,6 +210,14 @@ namespace Castor3D
 			sampler->Unbind( 0 );
 			m_texture->Unbind( 0 );
 		}
+	}
+
+	void Skybox::SetEquiTexture( TextureLayoutSPtr texture
+		, Castor::Size const & size )
+	{
+		m_equiTexturePath = Castor::Path( texture->GetImage().ToString() );
+		m_equiTexture = texture;
+		m_equiSize = size;
 	}
 
 	ShaderProgram & Skybox::DoInitialiseShader()
@@ -371,7 +396,7 @@ namespace Castor3D
 		m_equiTexture.reset();
 	}
 
-	bool Skybox::DoInitialisePipeline( ShaderProgram & p_program )
+	bool Skybox::DoInitialisePipeline( ShaderProgram & program )
 	{
 		DepthStencilState dsState;
 		dsState.SetDepthTest( true );
@@ -381,7 +406,12 @@ namespace Castor3D
 		RasteriserState rsState;
 		rsState.SetCulledFaces( Culling::eFront );
 
-		m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState ), std::move( rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+		m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
+			, std::move( rsState )
+			, BlendState{}
+			, MultisampleState{}
+			, program
+			, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		m_pipeline->AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
 		m_pipeline->AddUniformBuffer( m_configUbo.GetUbo() );

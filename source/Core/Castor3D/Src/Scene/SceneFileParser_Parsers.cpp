@@ -2649,7 +2649,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->legacyPass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2657,7 +2657,7 @@ namespace Castor3D
 		{
 			float value;
 			p_params[0]->Get( value );
-			parsingContext->legacyPass->SetEmissive( value );
+			parsingContext->pass->SetEmissive( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2950,7 +2950,7 @@ namespace Castor3D
 						buffer = tmp;
 					}
 
-					texture->SetSource( buffer );
+					texture->GetImage().SetBuffer( buffer );
 				}
 
 				parsingContext->pTextureUnit->SetTexture( texture );
@@ -4311,22 +4311,15 @@ namespace Castor3D
 			Path path;
 			Path filePath = p_context->m_file->GetFilePath();
 			p_params[0]->Get( path );
-			PxBufferBaseSPtr buffer;
 
 			if ( File::FileExists( filePath / path ) )
-			{
-				Image image{ path.GetFileName(), filePath / path };
-				buffer = image.GetPixels();
-			}
-
-			if ( buffer )
 			{
 				Size size;
 				p_params[1]->Get( size );
 				auto texture = parsingContext->pScene->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 					, AccessType::eNone
 					, AccessType::eRead );
-				texture->GetImage().InitialiseSource( buffer );
+				texture->GetImage().InitialiseSource( filePath, path );
 				parsingContext->pSkybox->SetEquiTexture( texture
 					, size );
 			}

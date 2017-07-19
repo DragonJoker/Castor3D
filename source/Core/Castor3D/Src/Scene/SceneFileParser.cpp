@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser.hpp"
+#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 
@@ -11,8 +11,8 @@ using namespace Castor;
 
 //****************************************************************************************************
 
-SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pFile )
-	: FileParserContext( p_pFile )
+SceneFileContext::SceneFileContext( SceneFileParser * parser, TextFile * file )
+	: FileParserContext( file )
 	, pWindow()
 	, pSceneNode()
 	, pGeometry()
@@ -43,7 +43,7 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, bBool2( false )
 	, m_pGeneralParentMaterial( nullptr )
 	, mapScenes()
-	, m_pParser( p_pParser )
+	, m_pParser( parser )
 {
 }
 
@@ -85,8 +85,8 @@ void SceneFileContext::Initialise()
 
 //****************************************************************************************************
 
-SceneFileParser::SceneFileParser( Engine & p_engine )
-	: OwnedBy< Engine >( p_engine )
+SceneFileParser::SceneFileParser( Engine & engine )
+	: OwnedBy< Engine >( engine )
 	, FileParser( uint32_t( CSCNSection::eRoot ) )
 {
 	m_mapBlendFactors[cuT( "zero" )] = uint32_t( BlendOperand::eZero );
@@ -342,19 +342,19 @@ RenderWindowSPtr SceneFileParser::GetRenderWindow()
 	return m_renderWindow;
 }
 
-bool SceneFileParser::ParseFile( TextFile & p_file )
+bool SceneFileParser::ParseFile( TextFile & file )
 {
-	return FileParser::ParseFile( p_file );
+	return FileParser::ParseFile( file );
 }
 
-bool SceneFileParser::ParseFile( Path const & p_pathFile )
+bool SceneFileParser::ParseFile( Path const & pathFile )
 {
-	Path path = p_pathFile;
+	Path path = pathFile;
 
 	if ( path.GetExtension() == cuT( "zip" ) )
 	{
 		Castor::ZipArchive archive( path, File::OpenMode::eRead );
-		path = Engine::GetEngineDirectory() / p_pathFile.GetFileName();
+		path = Engine::GetEngineDirectory() / pathFile.GetFileName();
 
 		if ( File::DirectoryExists( path ) )
 		{
@@ -397,17 +397,17 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 	return FileParser::ParseFile( path );
 }
 
-bool SceneFileParser::ParseFile( Castor::Path const & p_pathFile, SceneFileContextSPtr p_context )
+bool SceneFileParser::ParseFile( Castor::Path const & pathFile, SceneFileContextSPtr context )
 {
-	m_context = p_context;
-	return ParseFile( p_pathFile );
+	m_context = context;
+	return ParseFile( pathFile );
 }
 
-void SceneFileParser::DoInitialiseParser( TextFile & p_file )
+void SceneFileParser::DoInitialiseParser( TextFile & file )
 {
 	if ( !m_context )
 	{
-		SceneFileContextSPtr context = std::make_shared< SceneFileContext >( this, &p_file );
+		SceneFileContextSPtr context = std::make_shared< SceneFileContext >( this, &file );
 		m_context = context;
 	}
 
@@ -703,9 +703,9 @@ void SceneFileParser::DoCleanupParser()
 	m_renderWindow = context->pWindow;
 }
 
-bool SceneFileParser::DoDiscardParser( String const & p_line )
+bool SceneFileParser::DoDiscardParser( String const & line )
 {
-	Logger::LogError( cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_line );
+	Logger::LogError( cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + line );
 	return false;
 }
 
@@ -713,11 +713,11 @@ void SceneFileParser::DoValidate()
 {
 }
 
-String SceneFileParser::DoGetSectionName( uint32_t p_section )
+String SceneFileParser::DoGetSectionName( uint32_t section )
 {
 	String result;
 
-	switch ( CSCNSection( p_section ) )
+	switch ( CSCNSection( section ) )
 	{
 	case CSCNSection::eRoot:
 		break;
@@ -847,7 +847,7 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		{
 			if ( result.empty() )
 			{
-				auto it = sections.second.find( p_section );
+				auto it = sections.second.find( section );
 
 				if ( it != sections.second.end() )
 				{

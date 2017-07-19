@@ -257,6 +257,15 @@ namespace Castor3D
 		C3D_API void Resize( Castor::Point3ui const & p_size );
 		/**
 		 *\~english
+		 *\brief		Sets the texture buffer.
+		 *\param[in]	p_buffer	The texture buffer.
+		 *\~french
+		 *\brief		Définit le tampon de la texture.
+		 *\param[in]	p_buffer	Le tampon de la texture.
+		 */
+		C3D_API void SetBuffer( Castor::PxBufferBaseSPtr p_buffer );
+		/**
+		 *\~english
 		 *\return		\p true if the texture's source has already been defined.
 		 *\~french
 		 *\return		\p true si la source de la texture a déjà été définie.
@@ -274,18 +283,6 @@ namespace Castor3D
 		inline Castor::PxBufferBaseSPtr GetBuffer()const
 		{
 			return m_source->GetBuffer();
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the texture buffer.
-		 *\param[in]	p_buffer	The texture buffer.
-		 *\~french
-		 *\brief		Définit le tampon de la texture.
-		 *\param[in]	p_buffer	Le tampon de la texture.
-		 */
-		inline void SetBuffer( Castor::PxBufferBaseSPtr p_buffer )
-		{
-			m_source->SetBuffer( p_buffer );
 		}
 		/**
 		 *\~english

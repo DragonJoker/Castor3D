@@ -26,9 +26,9 @@ namespace GLSL
 		, Int const & p_receivesShadows
 		, FragmentInput const & p_fragmentIn )
 	{
-		auto c3d_iLightsCount = m_writer.GetBuiltin< Vec3 >( cuT( "c3d_iLightsCount" ) );
+		auto c3d_lightsCount = m_writer.GetBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
 		auto begin = m_writer.DeclLocale( cuT( "begin" ), 0_i );
-		auto end = m_writer.DeclLocale( cuT( "end" ), m_writer.Cast< Int >( c3d_iLightsCount.x() ) );
+		auto end = m_writer.DeclLocale( cuT( "end" ), m_writer.Cast< Int >( c3d_lightsCount.x() ) );
 		auto result = m_writer.DeclLocale( cuT( "result" ), vec3( 0.0_f ) );
 
 		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
@@ -44,7 +44,7 @@ namespace GLSL
 		ROF;
 
 		begin = end;
-		end += m_writer.Cast< Int >( c3d_iLightsCount.y() );
+		end += m_writer.Cast< Int >( c3d_lightsCount.y() );
 
 		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 		{
@@ -59,7 +59,7 @@ namespace GLSL
 		ROF;
 
 		begin = end;
-		end += m_writer.Cast< Int >( c3d_iLightsCount.z() );
+		end += m_writer.Cast< Int >( c3d_lightsCount.z() );
 
 		FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 		{

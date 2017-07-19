@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -49,9 +49,9 @@ namespace Castor3D
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
-		\brief		Scene loader
+		\brief		Skybox loader.
 		\~english
-		\brief		Loader de scène
+		\brief		Loader de Skybox.
 		*/
 		class TextWriter
 			: public Castor::TextWriter< Skybox >
@@ -59,34 +59,34 @@ namespace Castor3D
 		public:
 			/**
 			 *\~english
-			 *\brief		Constructor
+			 *\brief		Constructor.
 			 *\~french
-			 *\brief		Constructeur
+			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & tabs );
 			/**
 			 *\~english
-			 *\brief		Writes a Skybox into a text file
-			 *\param[in]	p_obj	the Skybox to save
-			 *\param[in]	p_file	the file to write the Skybox in
+			 *\brief		Writes a Skybox into a text file.
+			 *\param[in]	obj		The Skybox to save.
+			 *\param[in]	file	The file to write the Skybox in.
 			 *\~french
-			 *\brief		Ecrit une Skybox dans un fichier texte
-			 *\param[in]	p_obj	La Skybox
-			 *\param[in]	p_file	Le fichier
+			 *\brief		Ecrit une Skybox dans un fichier texte.
+			 *\param[in]	obj		La Skybox.
+			 *\param[in]	file	Le fichier.
 			 */
-			C3D_API bool operator()( Skybox const & p_obj, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Skybox const & obj, Castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit Skybox( Engine & p_engine );
+		C3D_API explicit Skybox( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -113,23 +113,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the skybox.
-		 *\param[in]	p_camera	The scene's camera.
+		 *\param[in]	camera	The scene's camera.
 		 *\~french
 		 *\brief		Dessine la skybox.
-		 *\param[in]	p_camera	La caméra de la scène.
+		 *\param[in]	camera	La caméra de la scène.
 		 */
-		C3D_API void Render( Camera const & p_camera );
+		C3D_API void Render( Camera const & camera );
 		/**
 		*\~english
-		*\return		Sets the skybox's texture.
+		*\return		Sets the skybox's equirectangular texture.
 		*\~french
-		*\return		Définit la texture de la skybox.
+		*\return		Définit la texture équirectangulaire de la skybox.
 		*/
-		inline void SetEquiTexture( TextureLayoutSPtr p_texture
-			, Castor::Size const & p_size )
+		C3D_API void SetEquiTexture( TextureLayoutSPtr texture
+			, Castor::Size const & size );
+		/**
+		 *\~english
+		 *\return		The skybox's equirectangular texture path.
+		 *\~french
+		 *\return		Le chemin de l'image équirectangulaire de la skybox.
+		 */
+		inline Castor::Path const & GetEquiTexturePath()const
 		{
-			m_equiTexture = p_texture;
-			m_equiSize = p_size;
+			return m_equiTexturePath;
 		}
 		/**
 		 *\~english
@@ -169,9 +175,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Définit la texture de la skybox.
 		 */
-		inline void SetTexture( TextureLayoutSPtr p_texture )
+		inline void SetTexture( TextureLayoutSPtr texture )
 		{
-			m_texture = p_texture;
+			m_texture = texture;
 		}
 		/**
 		 *\~english
@@ -179,9 +185,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Définit la scène de la skybox.
 		 */
-		inline void SetScene( Scene & p_scene )
+		inline void SetScene( Scene & scene )
 		{
-			m_scene = &p_scene;
+			m_scene = &scene;
 		}
 
 	private:
@@ -189,7 +195,7 @@ namespace Castor3D
 		bool DoInitialiseTexture();
 		void DoInitialiseEquiTexture();
 		bool DoInitialiseVertexBuffer();
-		bool DoInitialisePipeline( ShaderProgram & p_program );
+		bool DoInitialisePipeline( ShaderProgram & program );
 
 	private:
 		//!\~english	The skybox's scene.
@@ -201,6 +207,9 @@ namespace Castor3D
 		//!\~english	The skybox equirectangular map texture.
 		//!\~french		La texture équirectangulaire de la skybox.
 		TextureLayoutSPtr m_equiTexture;
+		//!\~english	The skybox equirectangular image path.
+		//!\~french		Le chemin de l'image équirectangulaire de la skybox.
+		Castor::Path m_equiTexturePath;
 		//!\~english	The skybox equirectangular map texture wanted face size.
 		//!\~french		La taille voulue pour les faces de la texture équirectangulaire de la skybox.
 		Castor::Size m_equiSize;

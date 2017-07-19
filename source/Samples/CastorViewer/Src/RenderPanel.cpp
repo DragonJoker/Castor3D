@@ -1,4 +1,4 @@
-﻿#include "RenderPanel.hpp"
+#include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 #include "RotateNodeEvent.hpp"
@@ -839,6 +839,10 @@ namespace CastorViewer
 
 			case WXK_ALT:
 				m_altDown = false;
+				break;
+
+			case WXK_ESCAPE:
+				DoUpdateSelectedGeometry( nullptr, nullptr );
 				break;
 
 			case 'L':

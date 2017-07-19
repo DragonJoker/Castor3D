@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,56 +31,56 @@ namespace GLSL
 		: public LightingModel
 	{
 	public:
-		GlslWriter_API SpecularBrdfLightingModel( ShadowType p_shadows, GlslWriter & p_writer );
-		GlslWriter_API static std::shared_ptr< LightingModel > Create( ShadowType p_shadows, GlslWriter & p_writer );
-		GlslWriter_API Vec3 ComputeCombinedLighting( Vec3 const & p_worldEye
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn );
-		GlslWriter_API Vec3 ComputeDirectionalLight( DirectionalLight const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn );
-		GlslWriter_API Vec3 ComputePointLight( PointLight const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn );
-		GlslWriter_API Vec3 ComputeSpotLight( SpotLight const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn );
-		GlslWriter_API Vec3 ComputeOneDirectionalLight( DirectionalLight const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn );
-		GlslWriter_API Vec3 ComputeOnePointLight( PointLight const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn );
-		GlslWriter_API Vec3 ComputeOneSpotLight( SpotLight const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn );
+		GlslWriter_API SpecularBrdfLightingModel( ShadowType shadows, GlslWriter & writer );
+		GlslWriter_API static std::shared_ptr< LightingModel > Create( ShadowType shadows, GlslWriter & writer );
+		GlslWriter_API Vec3 ComputeCombinedLighting( Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn );
+		GlslWriter_API Vec3 ComputeDirectionalLight( DirectionalLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn );
+		GlslWriter_API Vec3 ComputePointLight( PointLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn );
+		GlslWriter_API Vec3 ComputeSpotLight( SpotLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn );
+		GlslWriter_API Vec3 ComputeOneDirectionalLight( DirectionalLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn );
+		GlslWriter_API Vec3 ComputeOnePointLight( PointLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn );
+		GlslWriter_API Vec3 ComputeOneSpotLight( SpotLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn );
 
 	protected:
 		void DoDeclareModel();
@@ -91,14 +91,14 @@ namespace GLSL
 		void Declare_ComputeOnePointLight()override;
 		void Declare_ComputeOneSpotLight()override;
 
-		Vec3 DoComputeLight( Light const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_direction
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Float const & p_shadowFactor
-			, FragmentInput const & p_fragmentIn );
+		Vec3 DoComputeLight( Light const & light
+			, Vec3 const & worldEye
+			, Vec3 const & direction
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Float const & shadowFactor
+			, FragmentInput const & fragmentIn );
 
 		void DoDeclare_Distribution();
 		void DoDeclare_Geometry();
@@ -119,6 +119,7 @@ namespace GLSL
 		Function< Vec3, DirectionalLight, InVec3, InVec3, InVec3, InFloat, InInt, FragmentInput > m_computeOneDirectional;
 		Function< Vec3, PointLight, InVec3, InVec3, InVec3, InFloat, InInt, FragmentInput > m_computeOnePoint;
 		Function< Vec3, SpotLight, InVec3, InVec3, InVec3, InFloat, InInt, FragmentInput > m_computeOneSpot;
+		Function< Vec3, InLight, InVec3, InVec3, InVec3, InVec3, InFloat, InFloat, FragmentInput > m_computeLight;
 	};
 }
 

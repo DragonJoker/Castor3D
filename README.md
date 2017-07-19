@@ -10,6 +10,14 @@ Castor3D is a 3D engine written in C++.
 It works on Windows and also on GNU/Linux.
 It uses OpenGL (with GLSL).
 
+Features
+--------
+
+- Deferred rendering.
+- PBR rendering (Metallic and Specular), and Legacy rendering.
+- Scene graph.
+- Extendable through plug-ins.
+
 Building Castor3D
 -----------------
 
@@ -17,7 +25,7 @@ Castor3D uses CMake to build project files.
 You just need to launch CMake to build your preferential project file.
 
 Tested compilers are:
-- Visual Studio 2015
+- Visual Studio 2017
 - gcc 5.3
 - gcc 6.1
 
@@ -40,12 +48,6 @@ Dividers:
 - Loop subdivision surfaces.
 - Phong tessellation.
 - PN-Triangles surfaces.
-
-Techniques:
-- Direct: Default one, nothing special about it.
-- Deferred: Deferred rendering technique.
-- MSAA: Multi-sampling anti aliasing
-- DeferredMSAA: Deferred rendering technique using MSAA for transparent meshes.
 
 PostEffects:
 - Bloom.

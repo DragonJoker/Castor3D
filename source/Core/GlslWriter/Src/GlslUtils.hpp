@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -30,7 +30,7 @@ namespace GLSL
 	class Utils
 	{
 	public:
-		GlslWriter_API Utils( GlslWriter & p_writer );
+		GlslWriter_API Utils( GlslWriter & writer );
 		GlslWriter_API void DeclareCalcTexCoord();
 		GlslWriter_API void DeclareCalcVSPosition();
 		GlslWriter_API void DeclareCalcVSDepth();
@@ -43,44 +43,44 @@ namespace GLSL
 		GlslWriter_API void DeclareComputeMetallicIBL();
 		GlslWriter_API void DeclareComputeSpecularIBL();
 		GlslWriter_API Vec2 CalcTexCoord();
-		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & p_uv
-			, Mat4 const & p_invProj );
-		GlslWriter_API Float CalcVSDepth( Vec2 const & p_uv
-			, Mat4 const & p_proj );
-		GlslWriter_API Vec3 CalcWSPosition( Vec2 const & p_uv
-			, Mat4 const & p_invViewProj );
-		GlslWriter_API Vec3 ApplyGamma( Float const & p_gamma
-			, Vec3 const & p_HDR );
-		GlslWriter_API Vec3 RemoveGamma( Float const & p_gamma
-			, Vec3 const & p_sRGB );
-		GlslWriter_API Vec3 GetMapNormal( Vec2 const & p_uv
-			, Vec3 const & p_normal
-			, Vec3 const & p_position );
-		GlslWriter_API Float LineariseDepth( Float const & p_depth
-			, Mat4 const & p_invProj );
-		GlslWriter_API Vec3 FresnelSchlick( Float const & p_product
-			, Vec3 const & p_f0
-			, Float const & p_roughness );
-		GlslWriter_API Vec3 ComputeMetallicIBL( Vec3 const & p_normal
-			, Vec3 const & p_position
-			, Vec3 const & p_albedo
-			, Float const & p_metalness
-			, Float const & p_roughness
-			, Vec3 const & p_worldEye
-			, SamplerCube const & p_irradiance
-			, SamplerCube const & p_prefiltered
-			, Sampler2D const & p_brdf
-			, Int const & p_invertY );
-		GlslWriter_API Vec3 ComputeSpecularIBL( Vec3 const & p_normal
-			, Vec3 const & p_position
-			, Vec3 const & p_diffuse
-			, Vec3 const & p_specular
-			, Float const & p_glossiness
-			, Vec3 const & p_worldEye
-			, SamplerCube const & p_irradiance
-			, SamplerCube const & p_prefiltered
-			, Sampler2D const & p_brdf
-			, Int const & p_invertY );
+		GlslWriter_API Vec3 CalcVSPosition( Vec2 const & uv
+			, Mat4 const & invProj );
+		GlslWriter_API Float CalcVSDepth( Vec2 const & uv
+			, Mat4 const & proj );
+		GlslWriter_API Vec3 CalcWSPosition( Vec2 const & uv
+			, Mat4 const & invViewProj );
+		GlslWriter_API Vec3 ApplyGamma( Float const & gamma
+			, Vec3 const & HDR );
+		GlslWriter_API Vec3 RemoveGamma( Float const & gamma
+			, Vec3 const & sRGB );
+		GlslWriter_API Vec3 GetMapNormal( Vec2 const & uv
+			, Vec3 const & normal
+			, Vec3 const & position );
+		GlslWriter_API Float LineariseDepth( Float const & depth
+			, Mat4 const & invProj );
+		GlslWriter_API Vec3 FresnelSchlick( Float const & product
+			, Vec3 const & f0
+			, Float const & roughness );
+		GlslWriter_API Vec3 ComputeMetallicIBL( Vec3 const & normal
+			, Vec3 const & position
+			, Vec3 const & albedo
+			, Float const & metalness
+			, Float const & roughness
+			, Vec3 const & worldEye
+			, SamplerCube const & irradiance
+			, SamplerCube const & prefiltered
+			, Sampler2D const & brdf
+			, Int const & invertY );
+		GlslWriter_API Vec3 ComputeSpecularIBL( Vec3 const & normal
+			, Vec3 const & position
+			, Vec3 const & diffuse
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Vec3 const & worldEye
+			, SamplerCube const & irradiance
+			, SamplerCube const & prefiltered
+			, Sampler2D const & brdf
+			, Int const & invertY );
 
 	public:
 		static uint32_t constexpr MaxIblReflectionLod = 4u;

@@ -8,11 +8,11 @@ namespace Castor3D
 {
 	namespace
 	{
-		size_t GetImagesCount( TextureType p_type, uint32_t p_depth )
+		size_t GetImagesCount( TextureType type, uint32_t depth )
 		{
-			size_t result = p_depth;
+			size_t result = depth;
 
-			if ( p_type == TextureType::eCube || p_type == TextureType::eCubeArray )
+			if ( type == TextureType::eCube || type == TextureType::eCubeArray )
 			{
 				result *= size_t( CubeMapFace::eCount );
 			}
@@ -20,11 +20,11 @@ namespace Castor3D
 			return result;
 		}
 
-		TextureStorageType GetStorageType( TextureType p_type )
+		TextureStorageType GetStorageType( TextureType type )
 		{
 			TextureStorageType result = TextureStorageType::eCount;
 
-			switch ( p_type )
+			switch ( type )
 			{
 			case TextureType::eBuffer:
 				result = TextureStorageType::eBuffer;
@@ -72,16 +72,15 @@ namespace Castor3D
 		}
 	}
 
-	TextureLayout::TextureLayout(
-		RenderSystem & p_renderSystem,
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
-		, m_type{ p_type }
-		, m_images{ GetImagesCount( p_type, 1 ) }
-		, m_cpuAccess{ p_cpuAccess }
-		, m_gpuAccess{ p_gpuAccess }
+	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, TextureType type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess )
+		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_type{ type }
+		, m_images{ GetImagesCount( type, 1 ) }
+		, m_cpuAccess{ cpuAccess }
+		, m_gpuAccess{ gpuAccess }
 		, m_depth{ 1 }
 	{
 		uint32_t index = 0u;
@@ -92,20 +91,19 @@ namespace Castor3D
 		}
 	}
 
-	TextureLayout::TextureLayout(
-		RenderSystem & p_renderSystem,
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
-		PixelFormat p_format,
-		Size const & p_size )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
-		, m_type{ p_type }
-		, m_images{ GetImagesCount( p_type, 1 ) }
-		, m_cpuAccess{ p_cpuAccess }
-		, m_gpuAccess{ p_gpuAccess }
-		, m_format{ p_format }
-		, m_size{ p_size }
+	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, TextureType type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
+		, PixelFormat format
+		, Size const & size )
+		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_type{ type }
+		, m_images{ GetImagesCount( type, 1 ) }
+		, m_cpuAccess{ cpuAccess }
+		, m_gpuAccess{ gpuAccess }
+		, m_format{ format }
+		, m_size{ size }
 		, m_depth{ 1 }
 	{
 		REQUIRE( m_type != TextureType::eThreeDimensions
@@ -121,21 +119,20 @@ namespace Castor3D
 		}
 	}
 
-	TextureLayout::TextureLayout(
-		RenderSystem & p_renderSystem,
-		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
-		PixelFormat p_format,
-		Point3ui const & p_size )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
-		, m_type{ p_type }
-		, m_images{ GetImagesCount( p_type, p_size[2] ) }
-		, m_cpuAccess{ p_cpuAccess }
-		, m_gpuAccess{ p_gpuAccess }
-		, m_format{ p_format }
-		, m_size{ p_size[0], p_size[1] }
-		, m_depth{ p_size[2] }
+	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, TextureType type
+		, AccessTypes const & cpuAccess
+		, AccessTypes const & gpuAccess
+		, PixelFormat format
+		, Point3ui const & size )
+		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_type{ type }
+		, m_images{ GetImagesCount( type, size[2] ) }
+		, m_cpuAccess{ cpuAccess }
+		, m_gpuAccess{ gpuAccess }
+		, m_format{ format }
+		, m_size{ size[0], size[1] }
+		, m_depth{ size[2] }
 	{
 		REQUIRE( m_type == TextureType::eThreeDimensions
 				 || m_type == TextureType::eOneDimensionArray
@@ -184,23 +181,23 @@ namespace Castor3D
 		m_initialised = false;
 	}
 
-	void TextureLayout::Bind( uint32_t p_index )const
+	void TextureLayout::Bind( uint32_t index )const
 	{
 		REQUIRE( m_initialised );
-		DoBind( p_index );
+		DoBind( index );
 		REQUIRE( m_storage );
-		m_storage->Bind( p_index );
+		m_storage->Bind( index );
 	}
 
-	void TextureLayout::Unbind( uint32_t p_index )const
+	void TextureLayout::Unbind( uint32_t index )const
 	{
 		REQUIRE( m_initialised );
 		REQUIRE( m_storage );
-		m_storage->Unbind( p_index );
-		DoUnbind( p_index );
+		m_storage->Unbind( index );
+		DoUnbind( index );
 	}
 
-	void TextureLayout::Resize( Size const & p_size )
+	void TextureLayout::Resize( Size const & size )
 	{
 		REQUIRE( m_type != TextureType::eThreeDimensions
 				 && m_type != TextureType::eOneDimensionArray
@@ -212,11 +209,11 @@ namespace Castor3D
 
 		for ( auto & image : m_images )
 		{
-			image->Resize( p_size );
+			image->Resize( size );
 		}
 	}
 
-	void TextureLayout::Resize( Point3ui const & p_size )
+	void TextureLayout::Resize( Point3ui const & size )
 	{
 		REQUIRE( m_type == TextureType::eThreeDimensions
 				 || m_type == TextureType::eOneDimensionArray
@@ -228,15 +225,15 @@ namespace Castor3D
 
 		for ( auto & image : m_images )
 		{
-			image->Resize( p_size );
+			image->Resize( size );
 		}
 	}
 
-	uint8_t * TextureLayout::Lock( AccessTypes const & p_lock )
+	uint8_t * TextureLayout::Lock( AccessTypes const & lock )
 	{
 		DoBind( 0u );
 		REQUIRE( m_storage );
-		return m_storage->Lock( p_lock );
+		return m_storage->Lock( lock );
 	}
 
 	void TextureLayout::Unlock( bool p_modified )
@@ -246,21 +243,24 @@ namespace Castor3D
 		DoUnbind( 0u );
 	}
 
-	uint8_t * TextureLayout::Lock( AccessTypes const & p_lock, uint32_t p_index )
+	uint8_t * TextureLayout::Lock( AccessTypes const & lock
+		, uint32_t index )
 	{
 		REQUIRE( m_storage );
-		return m_storage->Lock( p_lock, p_index );
+		return m_storage->Lock( lock, index );
 	}
 
-	void TextureLayout::Unlock( bool p_modified, uint32_t p_index )
+	void TextureLayout::Unlock( bool modified
+		, uint32_t index )
 	{
 		REQUIRE( m_storage );
-		m_storage->Unlock( p_modified, p_index );
+		m_storage->Unlock( modified, index );
 	}
 
-	void TextureLayout::SetSource( Path const & p_folder, Path const & p_relative )
+	void TextureLayout::SetSource( Path const & folder
+		, Path const & relative )
 	{
-		m_images[0]->InitialiseSource( p_folder, p_relative );
+		m_images[0]->InitialiseSource( folder, relative );
 		auto buffer = m_images[0]->GetBuffer();
 
 		if ( m_size != buffer->dimensions()
@@ -271,20 +271,20 @@ namespace Castor3D
 		}
 	}
 
-	void TextureLayout::SetSource( PxBufferBaseSPtr p_buffer )
+	void TextureLayout::SetSource( PxBufferBaseSPtr buffer )
 	{
 		auto & image = m_images[0];
 
 		if ( !image->HasSource() )
 		{
-			image->InitialiseSource( p_buffer );
+			image->InitialiseSource( buffer );
 		}
 		else
 		{
-			image->SetBuffer( p_buffer );
+			image->SetBuffer( buffer );
 		}
 
-		auto buffer = image->GetBuffer();
+		buffer = image->GetBuffer();
 
 		if ( m_size != buffer->dimensions()
 			 || m_format != buffer->format() )
@@ -294,12 +294,15 @@ namespace Castor3D
 		}
 	}
 
-	void TextureLayout::DoUpdateFromFirstImage( Castor::Size const & p_size, Castor::PixelFormat p_format )
+	void TextureLayout::DoUpdateFromFirstImage( Castor::Size const & size
+		, Castor::PixelFormat format )
 	{
-		if ( m_size == Size{} )
+		if ( m_size == Size{}
+			|| m_size != size
+			|| m_format != format )
 		{
-			m_size = p_size;
-			m_format = p_format;
+			m_size = size;
+			m_format = format;
 		}
 	}
 
@@ -317,7 +320,7 @@ namespace Castor3D
 		return result;
 	}
 
-	bool TextureLayout::DoCreateStorage( TextureStorageType p_type )
+	bool TextureLayout::DoCreateStorage( TextureStorageType type )
 	{
 		bool result = false;
 
@@ -325,7 +328,10 @@ namespace Castor3D
 		{
 			try
 			{
-				m_storage = GetRenderSystem()->CreateTextureStorage( p_type, *this, m_cpuAccess, m_gpuAccess );
+				m_storage = GetRenderSystem()->CreateTextureStorage( type
+					, *this
+					, m_cpuAccess
+					, m_gpuAccess );
 				result = true;
 			}
 			catch ( std::exception & p_exc )

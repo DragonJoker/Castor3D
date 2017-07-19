@@ -1,4 +1,4 @@
-﻿#include "TextureUnit.hpp"
+#include "TextureUnit.hpp"
 
 #include "Engine.hpp"
 
@@ -14,93 +14,148 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureUnit::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< TextureUnit >{ p_tabs }
+	TextureUnit::TextWriter::TextWriter( String const & tabs, MaterialType type )
+		: Castor::TextWriter< TextureUnit >{ tabs }
+		, m_type{ type }
 	{
 	}
 
-	bool TextureUnit::TextWriter::operator()( TextureUnit const & p_unit, TextFile & p_file )
+	bool TextureUnit::TextWriter::operator()( TextureUnit const & unit, TextFile & file )
 	{
 		bool result = true;
 
-		if ( p_unit.IsTextured() && p_unit.GetTexture() )
+		if ( unit.IsTextured() && unit.GetTexture() )
 		{
-			auto texture = p_unit.GetTexture();
+			auto texture = unit.GetTexture();
 			auto image = texture->GetImage().ToString();
 
 			if ( !image.empty() || !texture->GetImage().IsStaticSource() )
 			{
 				if ( result )
 				{
-					result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
-							   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+					result = file.WriteText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
+							   && file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 
-				if ( result && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
+				if ( result && unit.GetSampler() && unit.GetSampler()->GetName() != cuT( "Default" ) )
 				{
-					result = p_file.WriteText( m_tabs + cuT( "\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
+					result = file.WriteText( m_tabs + cuT( "\tsampler \"" ) + unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
 					Castor::TextWriter< TextureUnit >::CheckError( result, "TextureUnit sampler" );
 				}
 
-				if ( result && p_unit.GetChannel() != TextureChannel::eUndefined )
+				if ( result && unit.GetChannel() != TextureChannel::eUndefined )
 				{
-					switch ( p_unit.GetChannel() )
+					switch ( m_type )
 					{
-					case TextureChannel::eDiffuse:
-						result = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
+					case MaterialType::eLegacy:
+					case MaterialType::ePbrSpecularGlossiness:
+						switch ( unit.GetChannel() )
+						{
+						case TextureChannel::eDiffuse:
+							result = file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eNormal:
+							result = file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eOpacity:
+							result = file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eSpecular:
+							result = file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eEmissive:
+							result = file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eHeight:
+							result = file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eGloss:
+							result = file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
+							break;
+
+						case TextureChannel::eAmbientOcclusion:
+							result = file.WriteText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
+							break;
+
+						default:
+							break;
+						}
 						break;
 
-					case TextureChannel::eNormal:
-						result = p_file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
-						break;
+					case MaterialType::ePbrMetallicRoughness:
+						switch ( unit.GetChannel() )
+						{
+						case TextureChannel::eAlbedo:
+							result = file.WriteText( m_tabs + cuT( "\tchannel albedo\n" ) ) > 0;
+							break;
 
-					case TextureChannel::eOpacity:
-						result = p_file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
-						break;
+						case TextureChannel::eNormal:
+							result = file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
+							break;
 
-					case TextureChannel::eSpecular:
-						result = p_file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
-						break;
+						case TextureChannel::eOpacity:
+							result = file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
+							break;
 
-					case TextureChannel::eEmissive:
-						result = p_file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
-						break;
+						case TextureChannel::eMetallic:
+							result = file.WriteText( m_tabs + cuT( "\tchannel metallic\n" ) ) > 0;
+							break;
 
-					case TextureChannel::eHeight:
-						result = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
-						break;
+						case TextureChannel::eEmissive:
+							result = file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
+							break;
 
-					case TextureChannel::eGloss:
-						result = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
-						break;
+						case TextureChannel::eHeight:
+							result = file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
+							break;
 
-					case TextureChannel::eAmbientOcclusion:
-						result = p_file.WriteText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
-						break;
+						case TextureChannel::eRoughness:
+							result = file.WriteText( m_tabs + cuT( "\tchannel roughness\n" ) ) > 0;
+							break;
 
-					default:
+						case TextureChannel::eAmbientOcclusion:
+							result = file.WriteText( m_tabs + cuT( "\tchannel ambient_occlusion\n" ) ) > 0;
+							break;
+
+						default:
+							break;
+						}
 						break;
 					}
 
 					if ( !texture->GetImage().IsStaticSource() )
 					{
-						if ( result && p_unit.GetRenderTarget() )
+						if ( result && unit.GetRenderTarget() )
 						{
-							result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
+							result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.GetRenderTarget(), file );
 						}
 					}
 					else
 					{
-						Path relative{ Scene::TextWriter::CopyFile( Path{ image }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } ) };
+						Path relative{ Scene::TextWriter::CopyFile( Path{ image }, file.GetFilePath(), Path{ cuT( "Textures" ) } ) };
 						String path = relative;
 						string::replace( path, cuT( "\\" ), cuT( "/" ) );
-						result = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\"\n" ) ) > 0;
+
+						if ( unit.GetChannel() == TextureChannel::eOpacity )
+						{
+							result = file.WriteText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" a\n" ) ) > 0;
+						}
+						else
+						{
+							result = file.WriteText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" rgb\n" ) ) > 0;
+						}
 						Castor::TextWriter< TextureUnit >::CheckError( result, "TextureUnit image" );
 					}
 
 					if ( result )
 					{
-						result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+						result = file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 					}
 				}
 			}
@@ -111,13 +166,13 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	TextureUnit::TextureUnit( Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+	TextureUnit::TextureUnit( Engine & engine )
+		: OwnedBy< Engine >( engine )
 		, m_index( 0 )
 		, m_channel( TextureChannel::eDiffuse )
 		, m_autoMipmaps( false )
 		, m_changed( false )
-		, m_sampler( p_engine.GetDefaultSampler() )
+		, m_sampler( engine.GetDefaultSampler() )
 	{
 		m_transformations.set_identity();
 	}
@@ -130,9 +185,9 @@ namespace Castor3D
 		}
 	}
 
-	void TextureUnit::SetTexture( TextureLayoutSPtr p_texture )
+	void TextureUnit::SetTexture( TextureLayoutSPtr texture )
 	{
-		m_texture = p_texture;
+		m_texture = texture;
 		m_changed = true;
 	}
 

@@ -122,7 +122,7 @@ namespace Castor3D
 	const String ShaderProgram::BackgroundColour = cuT( "c3d_v4BackgroundColour" );
 	const String ShaderProgram::FogType = cuT( "c3d_iFogType" );
 	const String ShaderProgram::FogDensity = cuT( "c3d_fFogDensity" );
-	const String ShaderProgram::LightsCount = cuT( "c3d_iLightsCount" );
+	const String ShaderProgram::LightsCount = cuT( "c3d_lightsCount" );
 	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
 	const String ShaderProgram::Exposure = cuT( "c3d_fExposure" );
 	const String ShaderProgram::Gamma = cuT( "c3d_fGamma" );

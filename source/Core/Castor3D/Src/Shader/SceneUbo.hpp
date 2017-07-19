@@ -158,7 +158,7 @@ namespace Castor3D
 	GLSL::Ubo scene{ writer, Castor3D::ShaderProgram::BufferScene, Castor3D::SceneUbo::BindingPoint };\
 	auto c3d_v4AmbientLight = scene.DeclMember< GLSL::Vec4 >( Castor3D::ShaderProgram::AmbientLight );\
 	auto c3d_v4BackgroundColour = scene.DeclMember< GLSL::Vec4 >( Castor3D::ShaderProgram::BackgroundColour );\
-	auto c3d_iLightsCount = scene.DeclMember< GLSL::IVec4 >( Castor3D::ShaderProgram::LightsCount );\
+	auto c3d_lightsCount = scene.DeclMember< GLSL::IVec4 >( Castor3D::ShaderProgram::LightsCount );\
 	auto c3d_v3CameraPosition = scene.DeclMember< GLSL::Vec3 >( Castor3D::ShaderProgram::CameraPos );\
 	auto c3d_v3CameraNearPlane = scene.DeclMember< GLSL::Float >( Castor3D::ShaderProgram::CameraNearPlane ); \
 	auto c3d_v3CameraFarPlane = scene.DeclMember< GLSL::Float >( Castor3D::ShaderProgram::CameraFarPlane );\

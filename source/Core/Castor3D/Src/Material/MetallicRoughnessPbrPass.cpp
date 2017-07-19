@@ -1,4 +1,4 @@
-#include "MetallicRoughnessPbrPass.hpp"
+﻿#include "MetallicRoughnessPbrPass.hpp"
 
 #include "Engine.hpp"
 #include "Cache/CameraCache.hpp"
@@ -24,49 +24,49 @@ namespace Castor3D
 {
 	//*********************************************************************************************
 
-	MetallicRoughnessPbrPass::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< MetallicRoughnessPbrPass >{ p_tabs }
+	MetallicRoughnessPbrPass::TextWriter::TextWriter( String const & tabs )
+		: Castor::TextWriter< MetallicRoughnessPbrPass >{ tabs }
 	{
 	}
 
-	bool MetallicRoughnessPbrPass::TextWriter::operator()( MetallicRoughnessPbrPass const & p_pass, TextFile & p_file )
+	bool MetallicRoughnessPbrPass::TextWriter::operator()( MetallicRoughnessPbrPass const & pass, TextFile & file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing MetallicRoughnessPbrPass " ) );
-		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		bool result = file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
+						&& file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		
 		if ( result )
 		{
-			result = p_file.Print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
-					   && Colour::TextWriter( String() )( p_pass.GetAlbedo(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
+			result = file.Print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
+					   && Colour::TextWriter( String() )( pass.GetAlbedo(), file )
+					   && file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( result, "MetallicRoughnessPbrPass albedo" );
 		}
 
-		if ( result )
+		if ( result && pass.GetRoughness() != 1 )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "\troughness " )
-				+ string::to_string( p_pass.GetRoughness() )
+			result = file.WriteText( m_tabs + cuT( "\troughness " )
+				+ string::to_string( pass.GetRoughness() )
 				+ cuT( "\n" ) ) > 0;
 			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( result, "MetallicRoughnessPbrPass roughness" );
 		}
 
-		if ( result )
+		if ( result && pass.GetMetallic() != 0 )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "\tmetallic " )
-				+ string::to_string( p_pass.GetMetallic() )
+			result = file.WriteText( m_tabs + cuT( "\tmetallic " )
+				+ string::to_string( pass.GetMetallic() )
 				+ cuT( "\n" ) ) > 0;
 			Castor::TextWriter< MetallicRoughnessPbrPass >::CheckError( result, "MetallicRoughnessPbrPass reflectance" );
 		}
 
 		if ( result )
 		{
-			result = Castor::TextWriter< Pass >{ m_tabs }( p_pass, p_file );
+			result = Pass::TextWriter{ m_tabs }( pass, file );
 		}
 
 		if ( result )
 		{
-			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
@@ -74,8 +74,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & p_parent )
-		: Pass{ p_parent }
+	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent )
+		: Pass{ parent }
 		, m_albedo{ Colour::from_rgba( 0xFFFFFFFF ) }
 	{
 	}
@@ -92,26 +92,26 @@ namespace Castor3D
 	{
 	}
 
-	void MetallicRoughnessPbrPass::DoUpdate( PassBuffer & p_buffer )const
+	void MetallicRoughnessPbrPass::DoUpdate( PassBuffer & buffer )const
 	{
-		p_buffer.SetComponents( GetId() - 1
+		buffer.SetComponents( GetId() - 1
 			, 0u
 			, GetRefractionRatio()
 			, CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f
 			, CheckFlag( GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f
 			, GetOpacity() );
-		p_buffer.SetComponents( GetId() - 1
+		buffer.SetComponents( GetId() - 1
 			, 1u
 			, GetAlbedo()
 			, GetRoughness() );
-		p_buffer.SetComponents( GetId() - 1
+		buffer.SetComponents( GetId() - 1
 			, 2u
 			, GetMetallic()
 			, GetEmissive()
 			// TODO: store gamma correction and exposure per pass ? or remove from pass
 			, NeedsGammaCorrection() ? 2.2f : 1.0f //gamma correction
 			, 1.0f );//exposure
-		p_buffer.SetComponents( GetId() - 1
+		buffer.SetComponents( GetId() - 1
 			, 3u
 			, GetAlphaValue()
 			, 0.0f
@@ -119,8 +119,8 @@ namespace Castor3D
 			, 0.0f );
 	}
 
-	void MetallicRoughnessPbrPass::DoSetOpacity( float p_value )
+	void MetallicRoughnessPbrPass::DoSetOpacity( float value )
 	{
-		m_albedo.alpha() = p_value;
+		m_albedo.alpha() = value;
 	}
 }
