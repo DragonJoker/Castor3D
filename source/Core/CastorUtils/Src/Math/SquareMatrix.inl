@@ -1,4 +1,4 @@
-﻿#include "Simd.hpp"
+#include "Simd.hpp"
 
 namespace Castor
 {
@@ -457,7 +457,7 @@ namespace Castor
 				{
 					if ( j != y )
 					{
-						result[i][l_j++] = this->m_columns[i][j];
+						result[i][j++] = this->m_columns[i][j];
 					}
 				}
 

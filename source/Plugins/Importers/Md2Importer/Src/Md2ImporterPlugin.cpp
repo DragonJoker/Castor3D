@@ -20,9 +20,9 @@ using namespace Castor;
 
 ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
-	ImporterPlugin::Extension l_extension( cuT( "MD2" ), cuT( "Quake II" ) );
-	ImporterPlugin::ExtensionArray l_arrayReturn( 1, l_extension );
-	return l_arrayReturn;
+	ImporterPlugin::Extension extension( cuT( "MD2" ), cuT( "Quake II" ) );
+	ImporterPlugin::ExtensionArray arrayReturn( 1, extension );
+	return arrayReturn;
 }
 
 extern "C"
@@ -45,23 +45,23 @@ extern "C"
 
 	C3D_Md2_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
 	{
-		auto l_plugin = static_cast< Castor3D::ImporterPlugin * >( p_plugin );
-		auto l_extensions = GetExtensions( p_engine );
+		auto plugin = static_cast< Castor3D::ImporterPlugin * >( p_plugin );
+		auto extensions = GetExtensions( p_engine );
 
-		for ( auto const & l_extension : l_extensions )
+		for ( auto const & extension : extensions )
 		{
-			l_plugin->AddExtension( l_extension );
-			p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &C3DMd2::Md2Importer::Create );
+			plugin->AddExtension( extension );
+			p_engine->GetImporterFactory().Register( Castor::string::lower_case( extension.first ), &C3DMd2::Md2Importer::Create );
 		}
 	}
 
 	C3D_Md2_API void OnUnload( Castor3D::Engine * p_engine )
 	{
-		auto l_extensions = GetExtensions( p_engine );
+		auto extensions = GetExtensions( p_engine );
 
-		for ( auto const & l_extension : l_extensions )
+		for ( auto const & extension : extensions )
 		{
-			p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+			p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( extension.first ) );
 		}
 	}
 }

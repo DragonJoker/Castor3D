@@ -1,4 +1,4 @@
-﻿#include "Design/Templates.hpp"
+#include "Design/Templates.hpp"
 
 #include "Miscellaneous/Utils.hpp"
 
@@ -223,7 +223,7 @@ namespace Castor
 				{
 					if ( j != y )
 					{
-						result[i][l_j++] = m_columns[i][j];
+						result[i][j++] = m_columns[i][j];
 					}
 				}
 

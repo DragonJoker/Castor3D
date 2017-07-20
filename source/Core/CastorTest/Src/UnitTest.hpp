@@ -81,6 +81,19 @@ namespace Testing
 		return stream.str();
 	}
 
+	inline std::string to_string( std::pair< uint8_t const *, uint32_t > const & p_value )
+	{
+		std::stringstream stream;
+		stream << p_value.second << ": ";
+
+		std::for_each( p_value.first, p_value.first + p_value.second, [&stream]( uint8_t const & p_val )
+		{
+			stream << " " << std::hex << uint16_t( p_val );
+		} );
+
+		return stream.str();
+	}
+
 	template< class Value >
 	class Lazy
 	{
