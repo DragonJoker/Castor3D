@@ -35,15 +35,15 @@ namespace Castor3D
 		{
 			if ( CheckFlag( p_flags, ProgramFlag::eInstantiation ) )
 			{
-				GLSL::Ssbo l_skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
-				auto c3d_mtxBones = l_skinning.DeclMemberArray< GLSL::Mat4 >( ShaderProgram::Bones, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
-				l_skinning.End();
+				GLSL::Ssbo skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
+				auto c3d_mtxBones = skinning.DeclMemberArray< GLSL::Mat4 >( ShaderProgram::Bones, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
+				skinning.End();
 			}
 			else
 			{
-				GLSL::Ubo l_skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
-				auto c3d_mtxBones = l_skinning.DeclMember< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
-				l_skinning.End();
+				GLSL::Ubo skinning{ p_writer, ShaderProgram::BufferSkinning, SkinningUbo::BindingPoint };
+				auto c3d_mtxBones = skinning.DeclMember< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( p_flags, ProgramFlag::eSkinning ) );
+				skinning.End();
 			}
 		}
 	}
@@ -58,37 +58,37 @@ namespace Castor3D
 		auto weights1 = p_writer.GetBuiltin< Vec4 >( ShaderProgram::Weights1 );
 		auto c3d_mtxModel = p_writer.GetBuiltin< GLSL::Mat4 >( RenderPipeline::MtxModel );
 		auto c3d_mtxBones = p_writer.GetBuiltinArray< GLSL::Mat4 >( ShaderProgram::Bones );
-		auto l_mtxBoneTransform = p_writer.DeclLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
+		auto mtxBoneTransform = p_writer.DeclLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
 		if ( CheckFlag( p_flags, ProgramFlag::eInstantiation ) )
 		{
 			auto gl_InstanceID = p_writer.GetBuiltin< GLSL::Int >( cuT( "gl_InstanceID" ) );
 			auto transform = p_writer.GetBuiltin< GLSL::Mat4 >( cuT( "transform" ) );
-			auto l_mtxInstanceOffset = p_writer.DeclLocale< Int >( cuT( "l_mtxInstanceOffset" )
+			auto mtxInstanceOffset = p_writer.DeclLocale< Int >( cuT( "mtxInstanceOffset" )
 				, gl_InstanceID * 400_i );
-			l_mtxBoneTransform = c3d_mtxBones[l_mtxInstanceOffset + bone_ids0[0_i]] * weights0[0_i];
-			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids0[1_i]] * weights0[1_i];
-			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids0[2_i]] * weights0[2_i];
-			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids0[3_i]] * weights0[3_i];
-			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids1[0_i]] * weights1[0_i];
-			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids1[1_i]] * weights1[1_i];
-			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids1[2_i]] * weights1[2_i];
-			l_mtxBoneTransform += c3d_mtxBones[l_mtxInstanceOffset + bone_ids1[3_i]] * weights1[3_i];
-			l_mtxBoneTransform = transform * l_mtxBoneTransform;
+			mtxBoneTransform = c3d_mtxBones[mtxInstanceOffset + bone_ids0[0_i]] * weights0[0_i];
+			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids0[1_i]] * weights0[1_i];
+			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids0[2_i]] * weights0[2_i];
+			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids0[3_i]] * weights0[3_i];
+			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids1[0_i]] * weights1[0_i];
+			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids1[1_i]] * weights1[1_i];
+			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids1[2_i]] * weights1[2_i];
+			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids1[3_i]] * weights1[3_i];
+			mtxBoneTransform = transform * mtxBoneTransform;
 		}
 		else
 		{
-			l_mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
-			l_mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
-			l_mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
-			l_mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
-			l_mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
-			l_mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
-			l_mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
-			l_mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
-			l_mtxBoneTransform = c3d_mtxModel * l_mtxBoneTransform;
+			mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
+			mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
+			mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
+			mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
+			mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
+			mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
+			mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
+			mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
+			mtxBoneTransform = c3d_mtxModel * mtxBoneTransform;
 		}
 
-		return l_mtxBoneTransform;
+		return mtxBoneTransform;
 	}
 }

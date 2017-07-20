@@ -45,14 +45,14 @@ namespace GuiCommon
 		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
-		wxBusyCursor l_wait;
+		wxBusyCursor wait;
 		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
 		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
 		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
 		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
 		ImagesLoader::WaitAsyncLoads();
 
-		wxImage * l_icons[] =
+		wxImage * icons[] =
 		{
 			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE ),
 			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE_SEL ),
@@ -60,21 +60,21 @@ namespace GuiCommon
 			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL ),
 		};
 
-		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
+		wxImageList * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto l_image : l_icons )
+		for ( auto image : icons )
 		{
-			int l_sizeOrig = l_image->GetWidth();
+			int sizeOrig = image->GetWidth();
 
-			if ( l_sizeOrig != GC_IMG_SIZE )
+			if ( sizeOrig != GC_IMG_SIZE )
 			{
-				l_image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
+				image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
 			}
 
-			l_imageList->Add( wxImage( *l_image ) );
+			imageList->Add( wxImage( *image ) );
 		}
 
-		AssignImageList( l_imageList );
+		AssignImageList( imageList );
 	}
 
 	FrameVariablesList::~FrameVariablesList()
@@ -87,18 +87,18 @@ namespace GuiCommon
 		, RenderPipeline & p_pipeline )
 	{
 		m_program = p_program;
-		wxTreeItemId l_root = AddRoot( _( "Root" ) );
+		wxTreeItemId root = AddRoot( _( "Root" ) );
 
-		for ( auto & l_binding : p_pipeline.GetBindings() )
+		for ( auto & binding : p_pipeline.GetBindings() )
 		{
-			DoAddBuffer( l_root, *l_binding.get().GetOwner() );
+			DoAddBuffer( root, *binding.get().GetOwner() );
 		}
 
 		if ( p_program->GetObjectStatus( p_type ) != ShaderStatus::eDontExist )
 		{
-			for ( auto l_variable : p_program->GetUniforms( p_type ) )
+			for ( auto variable : p_program->GetUniforms( p_type ) )
 			{
-				DoAddVariable( l_root, l_variable, p_type );
+				DoAddVariable( root, variable, p_type );
 			}
 		}
 	}
@@ -111,17 +111,17 @@ namespace GuiCommon
 	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id
 		, UniformBuffer & p_buffer )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_buffer.GetName()
+		wxTreeItemId id = AppendItem( p_id, p_buffer.GetName()
 			, eID_FRAME_VARIABLE_BUFFER
 			, eID_FRAME_VARIABLE_BUFFER_SEL
 			, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine()
 				, m_propertiesHolder->IsEditable()
 				, p_buffer ) );
-		uint32_t l_index = 0;
+		uint32_t index = 0;
 
-		for ( auto l_variable : p_buffer )
+		for ( auto variable : p_buffer )
 		{
-			DoAddVariable( l_id, l_variable, p_buffer );
+			DoAddVariable( id, variable, p_buffer );
 		}
 	}
 
@@ -129,15 +129,15 @@ namespace GuiCommon
 		, UniformSPtr p_variable
 		, UniformBuffer & p_buffer )
 	{
-		wxString l_displayName = p_variable->GetName();
+		wxString displayName = p_variable->GetName();
 
 		if ( p_variable->GetOccCount() > 1 )
 		{
-			l_displayName << wxT( "[" ) << p_variable->GetOccCount() << wxT( "]" );
+			displayName << wxT( "[" ) << p_variable->GetOccCount() << wxT( "]" );
 		}
 
 		AppendItem( p_id
-			, l_displayName
+			, displayName
 			, eID_FRAME_VARIABLE
 			, eID_FRAME_VARIABLE_SEL
 			, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable()
@@ -149,15 +149,15 @@ namespace GuiCommon
 		, PushUniformSPtr p_variable
 		, ShaderType p_type )
 	{
-		wxString l_displayName = p_variable->GetBaseUniform().GetName();
+		wxString displayName = p_variable->GetBaseUniform().GetName();
 
 		if ( p_variable->GetBaseUniform().GetOccCount() > 1 )
 		{
-			l_displayName << wxT( "[" ) << p_variable->GetBaseUniform().GetOccCount() << wxT( "]" );
+			displayName << wxT( "[" ) << p_variable->GetBaseUniform().GetOccCount() << wxT( "]" );
 		}
 
 		AppendItem( p_id
-			, l_displayName
+			, displayName
 			, eID_FRAME_VARIABLE
 			, eID_FRAME_VARIABLE_SEL
 			, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable()
@@ -179,8 +179,8 @@ namespace GuiCommon
 
 	void FrameVariablesList::OnSelectItem( wxTreeEvent & p_event )
 	{
-		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
-		m_propertiesHolder->SetPropertyData( l_data );
+		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
+		m_propertiesHolder->SetPropertyData( data );
 		p_event.Skip();
 	}
 

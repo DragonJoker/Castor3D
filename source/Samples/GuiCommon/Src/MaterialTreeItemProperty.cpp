@@ -30,20 +30,20 @@ namespace GuiCommon
 
 	void MaterialTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		MaterialSPtr l_material = GetMaterial();
+		MaterialSPtr material = GetMaterial();
 
-		if ( l_material )
+		if ( material )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_MATERIAL + wxString( l_material->GetName() ) ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_MATERIAL + wxString( material->GetName() ) ) );
 		}
 	}
 
 	void MaterialTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		MaterialSPtr l_material = GetMaterial();
-		wxPGProperty * l_property = p_event.GetProperty();
+		MaterialSPtr material = GetMaterial();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_material )
+		if ( property && material )
 		{
 		}
 	}

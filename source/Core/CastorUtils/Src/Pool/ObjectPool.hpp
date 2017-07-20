@@ -124,14 +124,14 @@ namespace Castor
 		template< typename ... TParams >
 		Object * Allocate( TParams ... p_params )
 		{
-			Object * l_space = MemoryData::Allocate();
+			Object * space = MemoryData::Allocate();
 
-			if ( !l_space )
+			if ( !space )
 			{
 				return nullptr;
 			}
 
-			return new( l_space )Object( p_params... );
+			return new( space )Object( p_params... );
 		}
 		/**
 		 *\~english
@@ -236,14 +236,14 @@ namespace Castor
 		template< typename ... TParams >
 		Object * Allocate( TParams ... p_params )
 		{
-			Object * l_space = MemoryData::Allocate();
+			Object * space = MemoryData::Allocate();
 
-			if ( !l_space )
+			if ( !space )
 			{
 				return nullptr;
 			}
 
-			return NewDeletePolicy< Object >::Ctor( l_space );
+			return NewDeletePolicy< Object >::Ctor( space );
 		}
 		/**
 		 *\~english

@@ -94,44 +94,44 @@ namespace Castor3D
 
 	ContextSPtr RenderLoop::DoCreateContext( RenderWindow & p_window )
 	{
-		ContextSPtr l_context;
+		ContextSPtr context;
 
 		try
 		{
-			l_context = m_renderSystem.CreateContext();
+			context = m_renderSystem.CreateContext();
 
-			if ( l_context && l_context->Initialise( &p_window ) )
+			if ( context && context->Initialise( &p_window ) )
 			{
-				p_window.SetContext( l_context );
+				p_window.SetContext( context );
 			}
 			else
 			{
-				l_context.reset();
+				context.reset();
 			}
 		}
 		catch ( Castor::Exception & p_exc )
 		{
 			Logger::LogError( cuT( "CreateContext - " ) + p_exc.GetFullDescription() );
-			l_context.reset();
+			context.reset();
 		}
 		catch ( std::exception & p_exc )
 		{
 			Logger::LogError( std::string( "CreateContext - " ) + p_exc.what() );
-			l_context.reset();
+			context.reset();
 		}
 
-		return l_context;
+		return context;
 	}
 
 	void RenderLoop::DoRenderFrame()
 	{
 		if ( m_renderSystem.GetMainContext() )
 		{
-			RenderInfo l_info;
+			RenderInfo info;
 			m_debugOverlays->StartFrame();
-			DoGpuStep( l_info );
+			DoGpuStep( info );
 			DoCpuStep();
-			m_debugOverlays->EndFrame( l_info );
+			m_debugOverlays->EndFrame( info );
 		}
 	}
 
@@ -146,7 +146,7 @@ namespace Castor3D
 	void RenderLoop::DoGpuStep( RenderInfo & p_info )
 	{
 		{
-			auto l_guard = make_block_guard(
+			auto guard = make_block_guard(
 				[this]()
 				{
 					m_renderSystem.GetMainContext()->SetCurrent();
@@ -180,12 +180,12 @@ namespace Castor3D
 		{
 			p_scene.Update();
 		} );
-		RenderQueueArray l_queues;
-		GetEngine()->GetRenderTechniqueCache().ForEach( [&l_queues]( RenderTechnique & p_technique )
+		RenderQueueArray queues;
+		GetEngine()->GetRenderTechniqueCache().ForEach( [&queues]( RenderTechnique & p_technique )
 		{
-			p_technique.Update( l_queues );
+			p_technique.Update( queues );
 		} );
-		DoUpdateQueues( l_queues );
+		DoUpdateQueues( queues );
 		GetEngine()->GetOverlayCache().Update();
 		m_debugOverlays->EndCpuTask();
 	}
@@ -194,11 +194,11 @@ namespace Castor3D
 	{
 		if ( p_queues.size() > m_queueUpdater.GetCount() )
 		{
-			for ( auto & l_queue : p_queues )
+			for ( auto & queue : p_queues )
 			{
-				m_queueUpdater.PushJob( [&l_queue]()
+				m_queueUpdater.PushJob( [&queue]()
 				{
-					l_queue.get().Update();
+					queue.get().Update();
 				} );
 			}
 
@@ -206,9 +206,9 @@ namespace Castor3D
 		}
 		else
 		{
-			for ( auto & l_queue : p_queues )
+			for ( auto & queue : p_queues )
 			{
-				l_queue.get().Update();
+				queue.get().Update();
 			}
 		}
 	}

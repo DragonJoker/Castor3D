@@ -35,30 +35,30 @@ namespace Castor3D
 		, m_perObjectLighting( true )
 		, m_threaded( false )
 	{
-		auto l_dummy = []( auto p_element )
+		auto dummy = []( auto p_element )
 		{
 		};
-		auto l_eventInit = [this]( auto p_element )
+		auto eventInit = [this]( auto p_element )
 		{
 			this->PostEvent( MakeInitialiseEvent( *p_element ) );
 		};
-		auto l_eventClean = [this]( auto p_element )
+		auto eventClean = [this]( auto p_element )
 		{
 			this->PostEvent( MakeCleanupEvent( *p_element ) );
 		};
-		auto l_instantInit = [this]( auto p_element )
+		auto instantInit = [this]( auto p_element )
 		{
 			p_element->Initialise();
 		};
-		auto l_instantClean = [this]( auto p_element )
+		auto instantClean = [this]( auto p_element )
 		{
 			p_element->Cleanup();
 		};
-		auto l_listenerClean = [this]( auto p_element )
+		auto listenerClean = [this]( auto p_element )
 		{
 			p_element->Flush();
 		};
-		auto l_mergeResource = []( auto const & p_source
+		auto mergeResource = []( auto const & p_source
 		   , auto & p_destination
 		   , auto p_element )
 		{
@@ -72,9 +72,9 @@ namespace Castor3D
 			{
 				return std::make_shared< FrameListener >( p_name );
 			}
-			, l_dummy
-			, l_listenerClean
-			, l_mergeResource );
+			, dummy
+			, listenerClean
+			, mergeResource );
 		m_defaultListener = m_listenerCache->Add( cuT( "Default" ) );
 
 		m_shaderCache = MakeCache( *this );
@@ -83,17 +83,17 @@ namespace Castor3D
 			{
 				return GetRenderSystem()->CreateSampler( p_name );
 			}
-			, l_eventInit
-			, l_eventClean
-			, l_mergeResource );
+			, eventInit
+			, eventClean
+			, mergeResource );
 		m_materialCache = MakeCache< Material, String >( *this
 			, [this]( String const & p_name, MaterialType p_type )
 			{
 				return std::make_shared< Material >( p_name, *this, p_type );
 			}
-			, l_eventInit
-			, l_eventClean
-			, l_mergeResource );
+			, eventInit
+			, eventClean
+			, mergeResource );
 		m_pluginCache = MakeCache< Plugin, String >( *this
 			, []( String const & p_name, PluginType p_type, Castor::DynamicLibrarySPtr p_library )
 			{
@@ -102,21 +102,21 @@ namespace Castor3D
 		m_overlayCache = MakeCache< Overlay, String >(	*this
 			, [this]( String const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
 			{
-				auto l_return = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
-				l_return->SetName( p_name );
-				return l_return;
+				auto result = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
+				result->SetName( p_name );
+				return result;
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeResource );
+			, dummy
+			, dummy
+			, mergeResource );
 		m_sceneCache = MakeCache< Scene, String >(	*this
 			, [this]( Castor::String const & p_name )
 			{
 				return std::make_shared< Scene >( p_name, *this );
 			}
-			, l_instantInit
-			, l_instantClean
-			, l_mergeResource );
+			, instantInit
+			, instantClean
+			, mergeResource );
 		m_targetCache = std::make_unique< RenderTargetCache >( *this );
 		m_techniqueCache = MakeCache< RenderTechnique, String >( *this
 			, [this]( String const & p_name
@@ -127,18 +127,18 @@ namespace Castor3D
 			{
 				return std::make_shared< RenderTechnique >( p_name, p_renderTarget, *GetRenderSystem(), p_parameters, p_config );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeResource );
+			, dummy
+			, dummy
+			, mergeResource );
 		m_windowCache = MakeCache < RenderWindow, String >(	*this
 			, [this]( Castor::String const & p_name )
 			{
 				return std::make_shared< RenderWindow >( p_name
 					, *this );
 			}
-			, l_dummy
-			, l_eventClean
-			, l_mergeResource );
+			, dummy
+			, eventClean
+			, mergeResource );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{
@@ -281,22 +281,22 @@ namespace Castor3D
 
 	void Engine::PostEvent( FrameEventUPtr && p_event )
 	{
-		auto l_lock = make_unique_lock( *m_listenerCache );
-		FrameListenerSPtr l_listener = m_defaultListener.lock();
+		auto lock = make_unique_lock( *m_listenerCache );
+		FrameListenerSPtr listener = m_defaultListener.lock();
 
-		if ( l_listener )
+		if ( listener )
 		{
-			l_listener->PostEvent( std::move( p_event ) );
+			listener->PostEvent( std::move( p_event ) );
 		}
 	}
 
 	Path Engine::GetPluginsDirectory()
 	{
-		Path l_pathReturn;
-		Path l_pathBin = File::GetExecutableDirectory();
-		Path l_pathUsr = l_pathBin.GetPath();
-		l_pathReturn = l_pathUsr / cuT( "lib" ) / cuT( "Castor3D" );
-		return l_pathReturn;
+		Path pathReturn;
+		Path pathBin = File::GetExecutableDirectory();
+		Path pathUsr = pathBin.GetPath();
+		pathReturn = pathUsr / cuT( "lib" ) / cuT( "Castor3D" );
+		return pathReturn;
 	}
 
 	Castor::Path Engine::GetEngineDirectory()
@@ -306,11 +306,11 @@ namespace Castor3D
 
 	Path Engine::GetDataDirectory()
 	{
-		Path l_pathReturn;
-		Path l_pathBin = File::GetExecutableDirectory();
-		Path l_pathUsr = l_pathBin.GetPath();
-		l_pathReturn = l_pathUsr / cuT( "share" );
-		return l_pathReturn;
+		Path pathReturn;
+		Path pathBin = File::GetExecutableDirectory();
+		Path pathUsr = pathBin.GetPath();
+		pathReturn = pathUsr / cuT( "share" );
+		return pathReturn;
 	}
 
 	bool Engine::IsCleaned()
@@ -325,21 +325,21 @@ namespace Castor3D
 
 	bool Engine::SupportsShaderModel( ShaderModel p_eShaderModel )
 	{
-		bool l_return = false;
+		bool result = false;
 
 		if ( m_renderSystem )
 		{
-			l_return = m_renderSystem->GetGpuInformations().CheckSupport( p_eShaderModel );
+			result = m_renderSystem->GetGpuInformations().CheckSupport( p_eShaderModel );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void Engine::RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers )
 	{
-		auto && l_it = m_additionalParsers.find( p_name );
+		auto && it = m_additionalParsers.find( p_name );
 
-		if ( l_it != m_additionalParsers.end() )
+		if ( it != m_additionalParsers.end() )
 		{
 			CASTOR_EXCEPTION( "RegisterParsers - Duplicate entry for " + p_name );
 		}
@@ -349,9 +349,9 @@ namespace Castor3D
 
 	void Engine::RegisterSections( Castor::String const & p_name, Castor::StrUIntMap const & p_sections )
 	{
-		auto && l_it = m_additionalSections.find( p_name );
+		auto && it = m_additionalSections.find( p_name );
 
-		if ( l_it != m_additionalSections.end() )
+		if ( it != m_additionalSections.end() )
 		{
 			CASTOR_EXCEPTION( "RegisterSections - Duplicate entry for " + p_name );
 		}
@@ -361,37 +361,37 @@ namespace Castor3D
 
 	void Engine::UnregisterParsers( Castor::String const & p_name )
 	{
-		auto && l_it = m_additionalParsers.find( p_name );
+		auto && it = m_additionalParsers.find( p_name );
 
-		if ( l_it == m_additionalParsers.end() )
+		if ( it == m_additionalParsers.end() )
 		{
 			CASTOR_EXCEPTION( "UnregisterParsers - Unregistered entry " + p_name );
 		}
 
-		m_additionalParsers.erase( l_it );
+		m_additionalParsers.erase( it );
 	}
 
 	void Engine::UnregisterSections( Castor::String const & p_name )
 	{
-		auto && l_it = m_additionalSections.find( p_name );
+		auto && it = m_additionalSections.find( p_name );
 
-		if ( l_it == m_additionalSections.end() )
+		if ( it == m_additionalSections.end() )
 		{
 			CASTOR_EXCEPTION( "UnregisterSections - Unregistered entry " + p_name );
 		}
 
-		m_additionalSections.erase( l_it );
+		m_additionalSections.erase( it );
 	}
 
 	void Engine::DoLoadCoreData()
 	{
-		Path l_path = Engine::GetDataDirectory() / cuT( "Castor3D" );
+		Path path = Engine::GetDataDirectory() / cuT( "Castor3D" );
 
-		if ( File::FileExists( l_path / cuT( "Core.zip" ) ) )
+		if ( File::FileExists( path / cuT( "Core.zip" ) ) )
 		{
-			SceneFileParser l_parser( *this );
+			SceneFileParser parser( *this );
 
-			if ( !l_parser.ParseFile( l_path / cuT( "Core.zip" ) ) )
+			if ( !parser.ParseFile( path / cuT( "Core.zip" ) ) )
 			{
 				Logger::LogError( cuT( "Can't read Core.zip data file" ) );
 			}

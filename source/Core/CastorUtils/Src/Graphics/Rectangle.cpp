@@ -40,34 +40,34 @@ namespace Castor
 
 	Intersection Rectangle::intersects( Position const & p_point )const
 	{
-		Intersection l_eReturn = Intersection::eOut;
+		Intersection eReturn = Intersection::eOut;
 
 		if ( ( p_point.x() >= left() ) && ( p_point.y() >= top() ) && ( p_point.x() <= right() ) && ( p_point.y() <= bottom() ) )
 		{
-			l_eReturn = Intersection::eIn;
+			eReturn = Intersection::eIn;
 		}
 
-		return l_eReturn;
+		return eReturn;
 	}
 
 	Intersection Rectangle::intersects( Rectangle const & p_rcRect ) const
 	{
 		// Calcul du rectangle d'intersection
-		Point2i l_ptStart( std::max( left(), p_rcRect.left() ), std::max( top(), p_rcRect.top() ) );
-		Point2i l_ptEnd( std::min( right(), p_rcRect.right() ), std::min( bottom(), p_rcRect.bottom() ) );
-		Rectangle l_rcOverlap( l_ptStart[0], l_ptStart[1], l_ptEnd[0], l_ptEnd[1] );
-		Intersection l_eReturn = Intersection::eIntersect;
+		Point2i ptStart( std::max( left(), p_rcRect.left() ), std::max( top(), p_rcRect.top() ) );
+		Point2i ptEnd( std::min( right(), p_rcRect.right() ), std::min( bottom(), p_rcRect.bottom() ) );
+		Rectangle rcOverlap( ptStart[0], ptStart[1], ptEnd[0], ptEnd[1] );
+		Intersection eReturn = Intersection::eIntersect;
 
-		if ( ( l_ptStart[0] > right() ) || ( l_ptStart[1] > bottom() ) )
+		if ( ( ptStart[0] > right() ) || ( ptStart[1] > bottom() ) )
 		{
-			l_eReturn = Intersection::eOut;
+			eReturn = Intersection::eOut;
 		}
-		else if ( ( l_rcOverlap == * this ) || ( l_rcOverlap == p_rcRect ) )
+		else if ( ( rcOverlap == * this ) || ( rcOverlap == p_rcRect ) )
 		{
-			l_eReturn = Intersection::eIn;
+			eReturn = Intersection::eIn;
 		}
 
-		return l_eReturn;
+		return eReturn;
 	}
 
 	void Rectangle::set( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom )

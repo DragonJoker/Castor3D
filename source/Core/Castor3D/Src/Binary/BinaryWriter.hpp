@@ -55,20 +55,20 @@ namespace Castor3D
 		 */
 		inline bool Write( TWritten const & p_obj, Castor::BinaryFile & p_file )
 		{
-			BinaryChunk l_chunk{ ChunkType::eCmshFile };
-			bool l_return = DoWriteHeader( l_chunk );
+			BinaryChunk chunk{ ChunkType::eCmshFile };
+			bool result = DoWriteHeader( chunk );
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = Write( p_obj, l_chunk );
+				result = Write( p_obj, chunk );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = l_chunk.Write( p_file );
+				result = chunk.Write( p_file );
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -84,15 +84,15 @@ namespace Castor3D
 		 */
 		inline bool Write( TWritten const & p_obj, BinaryChunk & p_chunk )
 		{
-			bool l_return{ DoWrite( p_obj ) };
+			bool result{ DoWrite( p_obj ) };
 
-			if ( l_return )
+			if ( result )
 			{
 				m_chunk.Finalise();
 				p_chunk.AddSubChunk( m_chunk );
 			}
 
-			return l_return;
+			return result;
 		}
 
 	protected:
@@ -108,23 +108,23 @@ namespace Castor3D
 		 */
 		inline bool DoWriteHeader( BinaryChunk & p_chunk )const
 		{
-			BinaryChunk l_chunk{ ChunkType::eCmshHeader };
-			bool l_return = DoWriteChunk( CMSH_VERSION, ChunkType::eCmshVersion, l_chunk );
+			BinaryChunk chunk{ ChunkType::eCmshHeader };
+			bool result = DoWriteChunk( CMSH_VERSION, ChunkType::eCmshVersion, chunk );
 
-			if ( l_return )
+			if ( result )
 			{
-				Castor::StringStream l_stream;
-				l_stream << cuT( "Castor 3D - Version " ) << Castor3D::Version{};
-				l_return = DoWriteChunk( l_stream.str(), ChunkType::eName, l_chunk );
+				Castor::StringStream stream;
+				stream << cuT( "Castor 3D - Version " ) << Castor3D::Version{};
+				result = DoWriteChunk( stream.str(), ChunkType::eName, chunk );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_chunk.Finalise();
-				l_return = p_chunk.AddSubChunk( l_chunk );
+				chunk.Finalise();
+				result = p_chunk.AddSubChunk( chunk );
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english

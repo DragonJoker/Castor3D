@@ -62,30 +62,34 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & tabs
+				, MaterialType type );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureUnit into a text file.
-			 *\param[in]	p_file	The file.
-			 *\param[in]	p_unit	The TextureUnit.
+			 *\param[in]	file	The file.
+			 *\param[in]	unit	The TextureUnit.
 			 *\~french
 			 *\brief		Ecrit une TextureUnit dans un fichier texte.
-			 *\param[in]	p_file	Le fichier.
-			 *\param[in]	p_unit	La TextureUnit.
+			 *\param[in]	file	Le fichier.
+			 *\param[in]	unit	La TextureUnit.
 			 */
-			C3D_API bool operator()( TextureUnit const & p_unit, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( TextureUnit const & unit, Castor::TextFile & file )override;
+
+		private:
+			MaterialType m_type;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param		p_engine	The engine.
+		 *\param		engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param		p_engine	Le moteur.
+		 *\param		engine	Le moteur.
 		 */
-		C3D_API explicit TextureUnit( Engine & p_engine );
+		C3D_API explicit TextureUnit( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -110,12 +114,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the texture.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Definit la texture.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void SetTexture( TextureLayoutSPtr p_texture );
+		C3D_API void SetTexture( TextureLayoutSPtr texture );
 		/**
 		 *\~english
 		 *\brief		Applies the texture unit.
@@ -162,14 +166,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the texture channel.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le canal de la texture.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetChannel( Castor3D::TextureChannel p_value )
+		inline void SetChannel( Castor3D::TextureChannel value )
 		{
-			m_channel = p_value;
+			m_channel = value;
 		}
 		/**
 		 *\~english
@@ -189,33 +193,33 @@ namespace Castor3D
 		 *\brief		Définit l'index de l'unité.
 		 *\param[in]	p_index	La nouvelle valeur.
 		 */
-		inline void SetIndex( uint32_t p_value )
+		inline void SetIndex( uint32_t value )
 		{
-			m_index = p_value;
+			m_index = value;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the target holding the texture.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la cible contenant la texture.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetRenderTarget( RenderTargetSPtr p_value )
+		inline void SetRenderTarget( RenderTargetSPtr value )
 		{
-			m_renderTarget = p_value;
+			m_renderTarget = value;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the texture sampler.
-		 *\param[in]	p_value	The sampler.
+		 *\param[in]	value	The sampler.
 		 *\~french
 		 *\brief		Définit le sampler de la texture.
-		 *\param[in]	p_value	Le sampler.
+		 *\param[in]	value	Le sampler.
 		 */
-		inline void SetSampler( SamplerSPtr p_value )
+		inline void SetSampler( SamplerSPtr value )
 		{
-			m_sampler = p_value;
+			m_sampler = value;
 		}
 		/**
 		 *\~english
@@ -240,14 +244,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the auto mipmaps generation status.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'auto génération des mipmaps.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetAutoMipmaps( bool p_value )
+		inline void SetAutoMipmaps( bool value )
 		{
-			m_autoMipmaps = p_value;
+			m_autoMipmaps = value;
 		}
 		/**
 		 *\~english
@@ -310,10 +314,10 @@ namespace Castor3D
 	 *\param[in]		p_texture	La texture.
 	 *\return			Une référence sur le flux.
 	 */
-	inline std::ostream & operator<<( std::ostream & p_streamOut, TextureUnitSPtr const & p_texture )
+	inline std::ostream & operator<<( std::ostream & streamOut, TextureUnitSPtr const & texture )
 	{
-		p_streamOut << p_texture->GetIndex();
-		return p_streamOut;
+		streamOut << texture->GetIndex();
+		return streamOut;
 	}
 }
 

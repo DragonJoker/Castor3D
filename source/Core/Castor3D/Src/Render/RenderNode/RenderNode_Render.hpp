@@ -32,43 +32,43 @@ namespace Castor3D
 	inline uint32_t DoFillShaderDepthMaps( RenderPipeline & p_pipeline
 		, DepthMapArray & p_depthMaps )
 	{
-		uint32_t l_index = p_pipeline.GetTexturesCount() + Pass::MinTextureIndex;
+		uint32_t index = p_pipeline.GetTexturesCount() + Pass::MinTextureIndex;
 
 		if ( !p_depthMaps.empty() )
 		{
-			auto l_layer = 0u;
+			auto layer = 0u;
 
 			if ( GetShadowType( p_pipeline.GetFlags().m_sceneFlags ) != GLSL::ShadowType::eNone )
 			{
-				for ( auto & l_depthMap : p_depthMaps )
+				for ( auto & depthMap : p_depthMaps )
 				{
-					switch ( l_depthMap.get().GetType() )
+					switch ( depthMap.get().GetType() )
 					{
 					case TextureType::eTwoDimensions:
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetDirectionalShadowMapsVariable().SetValue( l_index++ );
+						depthMap.get().SetIndex( index );
+						p_pipeline.GetDirectionalShadowMapsVariable().SetValue( index++ );
 						break;
 
 					case TextureType::eTwoDimensionsArray:
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetSpotShadowMapsVariable().SetValue( l_index++ );
+						depthMap.get().SetIndex( index );
+						p_pipeline.GetSpotShadowMapsVariable().SetValue( index++ );
 						break;
 
 					case TextureType::eCube:
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++, l_layer++ );
+						depthMap.get().SetIndex( index );
+						p_pipeline.GetPointShadowMapsVariable().SetValue( index++, layer++ );
 						break;
 
 					case TextureType::eCubeArray:
-						l_depthMap.get().SetIndex( l_index );
-						p_pipeline.GetPointShadowMapsVariable().SetValue( l_index++ );
+						depthMap.get().SetIndex( index );
+						p_pipeline.GetPointShadowMapsVariable().SetValue( index++ );
 						break;
 					}
 				}
 			}
 		}
 
-		return l_index;
+		return index;
 	}
 
 	inline uint32_t DoFillShaderPbrMaps( RenderPipeline & p_pipeline
@@ -96,33 +96,34 @@ namespace Castor3D
 		, ModelUbo & p_model
 		, EnvironmentMap *& p_envMap )
 	{
-		auto l_index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
+		auto index = DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 
 		p_node.m_pass.BindTextures();
 
-		if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::ePbr )
+		if ( ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::ePbrMetallicRoughness )
+				|| CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
 			&& CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			l_index = DoFillShaderPbrMaps( p_pipeline
+			index = DoFillShaderPbrMaps( p_pipeline
 				, p_scene
 				, p_sceneNode
-				, l_index );
+				, index );
 		}
 
-		for ( auto l_pair : p_node.m_textures )
+		for ( auto pair : p_node.m_textures )
 		{
-			auto l_texture = l_pair.first;
-			auto & l_variable = l_pair.second;
+			auto texture = pair.first;
+			auto & variable = pair.second;
 
-			if ( l_texture )
+			if ( texture )
 			{
-				l_variable.get().SetValue( l_texture );
+				variable.get().SetValue( texture );
 			}
 		}
 
-		for ( auto & l_depthMap : p_depthMaps )
+		for ( auto & depthMap : p_depthMaps )
 		{
-			l_depthMap.get().Bind();
+			depthMap.get().Bind();
 		}
 
 		if ( p_node.m_pass.HasEnvironmentMapping() )
@@ -131,8 +132,8 @@ namespace Castor3D
 
 			if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 			{
-				p_pipeline.GetEnvironmentMapVariable().SetValue( l_index );
-				p_envMap->GetTexture().SetIndex( l_index );
+				p_pipeline.GetEnvironmentMapVariable().SetValue( index );
+				p_envMap->GetTexture().SetIndex( index );
 				p_envMap->GetTexture().Bind();
 			}
 			else
@@ -159,9 +160,9 @@ namespace Castor3D
 			p_envMap->GetTexture().Unbind();
 		}
 
-		for ( auto & l_depthMap : p_depthMaps )
+		for ( auto & depthMap : p_depthMaps )
 		{
-			l_depthMap.get().Unbind();
+			depthMap.get().Unbind();
 		}
 
 		p_node.m_pass.UnbindTextures();
@@ -170,33 +171,33 @@ namespace Castor3D
 	inline void DoBindPassOpacityMap( PassRenderNode & p_node
 		, Pass & p_pass )
 	{
-		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
+		auto unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
 
-		if ( l_unit )
+		if ( unit )
 		{
-			p_node.m_textures.find( l_unit->GetIndex() )->second.get().SetValue( 0 );
-			l_unit->GetTexture()->Bind( 0u );
-			l_unit->GetSampler()->Bind( 0u );
+			p_node.m_textures.find( unit->GetIndex() )->second.get().SetValue( 0 );
+			unit->GetTexture()->Bind( 0u );
+			unit->GetSampler()->Bind( 0u );
 		}
 	}
 
 	inline void DoUnbindPassOpacityMap( PassRenderNode & p_node
 		, Pass & p_pass )
 	{
-		auto l_unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
+		auto unit = p_pass.GetTextureUnit( TextureChannel::eOpacity );
 
-		if ( l_unit )
+		if ( unit )
 		{
-			l_unit->GetSampler()->Unbind( 0u );
-			l_unit->GetTexture()->Unbind( 0u );
+			unit->GetSampler()->Unbind( 0u );
+			unit->GetTexture()->Unbind( 0u );
 		}
 	}
 
 	template< typename DataType, typename InstanceType >
 	inline void DoRenderObjectNode( ObjectRenderNode< DataType, InstanceType > & p_node )
 	{
-		auto & l_model = p_node.m_sceneNode.GetDerivedTransformationMatrix();
-		p_node.m_modelMatrixUbo.Update( l_model );
+		auto & model = p_node.m_sceneNode.GetDerivedTransformationMatrix();
+		p_node.m_modelMatrixUbo.Update( model );
 		p_node.m_data.Draw( p_node.m_buffers );
 	}
 
@@ -215,11 +216,11 @@ namespace Castor3D
 	{
 		if ( p_node.m_mesh.IsPlayingAnimation() )
 		{
-			auto l_submesh = p_node.m_mesh.GetPlayingAnimation().GetAnimationSubmesh( p_node.m_data.GetId() );
+			auto submesh = p_node.m_mesh.GetPlayingAnimation().GetAnimationSubmesh( p_node.m_data.GetId() );
 
-			if ( l_submesh )
+			if ( submesh )
 			{
-				p_node.m_morphingUbo.Update( l_submesh->GetCurrentFactor() );
+				p_node.m_morphingUbo.Update( submesh->GetCurrentFactor() );
 			}
 			else
 			{

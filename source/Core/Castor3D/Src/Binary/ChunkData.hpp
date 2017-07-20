@@ -1017,9 +1017,9 @@ namespace Castor3D
 	{
 		if ( !Castor::IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				Castor::SwitchEndianness( l_value );
+				Castor::SwitchEndianness( value );
 			}
 		}
 	}
@@ -1036,9 +1036,9 @@ namespace Castor3D
 	{
 		if ( !Castor::IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				Castor::SwitchEndianness( l_value );
+				Castor::SwitchEndianness( value );
 			}
 		}
 	}
@@ -1074,9 +1074,9 @@ namespace Castor3D
 	{
 		if ( !Castor::IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				Castor::SwitchEndianness( l_value );
+				Castor::SwitchEndianness( value );
 			}
 		}
 	}
@@ -1093,9 +1093,9 @@ namespace Castor3D
 	{
 		if ( !Castor::IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				Castor::SwitchEndianness( l_value );
+				Castor::SwitchEndianness( value );
 			}
 		}
 	}
@@ -1112,9 +1112,9 @@ namespace Castor3D
 	{
 		if ( !Castor::IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				Castor::SwitchEndianness( l_value );
+				Castor::SwitchEndianness( value );
 			}
 		}
 	}
@@ -1145,9 +1145,9 @@ namespace Castor3D
 	{
 		if ( !Castor::IsBigEndian() )
 		{
-			for ( auto & l_value : p_value )
+			for ( auto & value : p_value )
 			{
-				Castor::SwitchEndianness( l_value );
+				Castor::SwitchEndianness( value );
 			}
 		}
 	}

@@ -43,24 +43,24 @@ namespace GlRender
 
 		uint32_t GetVideoMemorySizeBytes()
 		{
-			uint32_t l_return{ 0u };
-			HDC l_hdc = ::CreateDC( "DISPLAY", 0, 0, 0 );
+			uint32_t result{ 0u };
+			HDC hdc = ::CreateDC( "DISPLAY", 0, 0, 0 );
 
-			if ( l_hdc )
+			if ( hdc )
 			{
-				std::array< uint32_t, 5 > l_input = { 0, 0, 0x27, 0, 0 };
-				std::array< uint32_t, 5 > l_output = { 0, 0, 0, 0, 0 };
-				int const l_size = int( l_input.size() * sizeof( uint32_t ) );
+				std::array< uint32_t, 5 > input = { 0, 0, 0x27, 0, 0 };
+				std::array< uint32_t, 5 > output = { 0, 0, 0, 0, 0 };
+				int const size = int( input.size() * sizeof( uint32_t ) );
 
-				if ( ::ExtEscape( l_hdc, 0x7032, l_size, LPCSTR( l_input.data() ), l_size, LPSTR( l_output.data() ) ) > 0 )
+				if ( ::ExtEscape( hdc, 0x7032, size, LPCSTR( input.data() ), size, LPSTR( output.data() ) ) > 0 )
 				{
-					l_return = l_output[3] * 1048576;
+					result = output[3] * 1048576;
 				}
 
-				::DeleteDC( l_hdc );
+				::DeleteDC( hdc );
 			}
 
-			return l_return;
+			return result;
 		}
 
 #else
@@ -131,282 +131,282 @@ namespace GlRender
 				m_gpuInformations.UseShaderType( ShaderType::ePixel, GetOpenGl().HasPSh() );
 				m_gpuInformations.UseShaderType( ShaderType::eVertex, GetOpenGl().HasVSh() );
 
-				std::array< int, 3 > l_value{};
-				GetOpenGl().GetIntegerv( GlMin::eMapBufferAlignment, l_value.data() );
-				m_gpuInformations.SetMinValue( GpuMin::eMapBufferAlignment, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMin::eProgramTexelOffset, l_value.data() );
-				m_gpuInformations.SetMinValue( GpuMin::eProgramTexelOffset, l_value[0] );
-				l_value = { 0, 0, 0 };
+				std::array< int, 3 > value{};
+				GetOpenGl().GetIntegerv( GlMin::eMapBufferAlignment, value.data() );
+				m_gpuInformations.SetMinValue( GpuMin::eMapBufferAlignment, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMin::eProgramTexelOffset, value.data() );
+				m_gpuInformations.SetMinValue( GpuMin::eProgramTexelOffset, value[0] );
+				value = { 0, 0, 0 };
 
 				if ( m_gpuInformations.HasShaderType( ShaderType::eCompute ) )
 				{
-					GetOpenGl().GetIntegerv( GlMax::eComputeUniformBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eComputeUniformBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eComputeTextureImageUnits, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eComputeTextureImageUnits, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eComputeUniformComponents, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eComputeUniformComponents, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eComputeAtomicCounters, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eComputeAtomicCounters, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eComputeAtomicCounterBuffers, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eComputeAtomicCounterBuffers, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eCombinedComputeUniformComponents, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eComputeCombinedUniformComponents, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eComputeWorkGroupInvocations, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eComputeWorkGroupInvocations, l_value[0] );
-					l_value = { 0, 0, 0 };
-					//GetOpenGl().GetIntegerv( GlMax::eComputeWorkGroupCount, l_value.data() );
-					//m_gpuInformations.SetMaxValue( GpuMax::eComputeWorkGroupCount, l_value[0] );l_value = { 0, 0, 0 };
-					//GetOpenGl().GetIntegerv( GlMax::eComputeWorkGroupSize, l_value.data() );
-					//m_gpuInformations.SetMaxValue( GpuMax::eComputeWorkGroupSize, l_value[0] );l_value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eComputeUniformBlocks, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eComputeUniformBlocks, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eComputeTextureImageUnits, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eComputeTextureImageUnits, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eComputeUniformComponents, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eComputeUniformComponents, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eComputeAtomicCounters, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eComputeAtomicCounters, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eComputeAtomicCounterBuffers, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eComputeAtomicCounterBuffers, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eCombinedComputeUniformComponents, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eComputeCombinedUniformComponents, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eComputeWorkGroupInvocations, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eComputeWorkGroupInvocations, value[0] );
+					value = { 0, 0, 0 };
+					//GetOpenGl().GetIntegerv( GlMax::eComputeWorkGroupCount, value.data() );
+					//m_gpuInformations.SetMaxValue( GpuMax::eComputeWorkGroupCount, value[0] );l_value = { 0, 0, 0 };
+					//GetOpenGl().GetIntegerv( GlMax::eComputeWorkGroupSize, value.data() );
+					//m_gpuInformations.SetMaxValue( GpuMax::eComputeWorkGroupSize, value[0] );l_value = { 0, 0, 0 };
 				}
 
 				if ( GetOpenGl().HasExtension( ARB_shader_storage_buffer_object ) )
 				{
 					if ( m_gpuInformations.HasShaderType( ShaderType::eCompute ) )
 					{
-						GetOpenGl().GetIntegerv( GlMax::eComputeShaderStorageBlocks, l_value.data() );
-						m_gpuInformations.SetMaxValue( GpuMax::eComputeShaderStorageBlocks, l_value[0] );
-						l_value = { 0, 0, 0 };
-						GetOpenGl().GetIntegerv( GlMax::eCombinedShaderStorageBlocks, l_value.data() );
-						m_gpuInformations.SetMaxValue( GpuMax::eCombinedShaderStorageBlocks, l_value[0] );
-						l_value = { 0, 0, 0 };
+						GetOpenGl().GetIntegerv( GlMax::eComputeShaderStorageBlocks, value.data() );
+						m_gpuInformations.SetMaxValue( GpuMax::eComputeShaderStorageBlocks, value[0] );
+						value = { 0, 0, 0 };
+						GetOpenGl().GetIntegerv( GlMax::eCombinedShaderStorageBlocks, value.data() );
+						m_gpuInformations.SetMaxValue( GpuMax::eCombinedShaderStorageBlocks, value[0] );
+						value = { 0, 0, 0 };
 					}
 
-					GetOpenGl().GetIntegerv( GlMax::eFragmentShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eFragmentShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eGeometryShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eGeometryShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eTessControlShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eTessControlShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eTessEvaluationShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eTessEvaluationShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eVertexShaderStorageBlocks, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eVertexShaderStorageBlocks, l_value[0] );
-					l_value = { 0, 0, 0 };
-					GetOpenGl().GetIntegerv( GlMax::eShaderStorageBufferBindings, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eShaderStorageBufferBindings, l_value[0] );
-					l_value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eFragmentShaderStorageBlocks, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eFragmentShaderStorageBlocks, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eGeometryShaderStorageBlocks, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eGeometryShaderStorageBlocks, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eTessControlShaderStorageBlocks, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eTessControlShaderStorageBlocks, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eTessEvaluationShaderStorageBlocks, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eTessEvaluationShaderStorageBlocks, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eVertexShaderStorageBlocks, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eVertexShaderStorageBlocks, value[0] );
+					value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eShaderStorageBufferBindings, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eShaderStorageBufferBindings, value[0] );
+					value = { 0, 0, 0 };
 				}
 
 				if ( GetOpenGl().HasExtension( ARB_explicit_uniform_location ) )
 				{
-					GetOpenGl().GetIntegerv( GlMax::eUniformLocations, l_value.data() );
-					m_gpuInformations.SetMaxValue( GpuMax::eUniformLocations, l_value[0] );
-					l_value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlMax::eUniformLocations, value.data() );
+					m_gpuInformations.SetMaxValue( GpuMax::eUniformLocations, value[0] );
+					value = { 0, 0, 0 };
 				}
 
 				if ( GetOpenGl().HasExtension( ATI_meminfo ) )
 				{
-					GetOpenGl().GetIntegerv( GlGpuInfo::eVBOFreeMemoryATI, &l_value[0] );
-					GetOpenGl().GetIntegerv( GlGpuInfo::eTextureFreeMemoryATI, &l_value[1] );
-					GetOpenGl().GetIntegerv( GlGpuInfo::eRenderbufferFreeMemoryATI, &l_value[2] );
-					m_gpuInformations.SetTotalMemorySize( l_value[0] + l_value[1] + l_value[2] );
-					l_value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlGpuInfo::eVBOFreeMemoryATI, &value[0] );
+					GetOpenGl().GetIntegerv( GlGpuInfo::eTextureFreeMemoryATI, &value[1] );
+					GetOpenGl().GetIntegerv( GlGpuInfo::eRenderbufferFreeMemoryATI, &value[2] );
+					m_gpuInformations.SetTotalMemorySize( value[0] + value[1] + value[2] );
+					value = { 0, 0, 0 };
 				}
 				else if ( GetOpenGl().HasExtension( NVX_gpu_memory_info ) )
 				{
-					GetOpenGl().GetIntegerv( GlGpuInfo::eTotalAvailableMemNVX, l_value.data() );
-					m_gpuInformations.SetTotalMemorySize( l_value[0] );
-					l_value = { 0, 0, 0 };
+					GetOpenGl().GetIntegerv( GlGpuInfo::eTotalAvailableMemNVX, value.data() );
+					m_gpuInformations.SetTotalMemorySize( value[0] );
+					value = { 0, 0, 0 };
 				}
 				else
 				{
 					m_gpuInformations.SetTotalMemorySize( GetVideoMemorySizeBytes() );
 				}
 
-				GetOpenGl().GetIntegerv( GlMax::eDebugGroupStackDepth, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eDebugGroupStackDepth, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTexture3DSize, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTexture3DSize, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTextureArrayLayers, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eArrayTextureLayers, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eClipDistances, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eClipDistances, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eColorTextureSamples, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eColourTextureSamples, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eCombinedAtomicCounters, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eCombinedAtomicCounters, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eCombinedFragmentUniformComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFragmentCombinedUniformComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eCombinedGeometryUniformComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eGeometryCombinedUniformComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eCombinedTextureImageUnits, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eCombinedTextureImageUnits, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eCombinedUniformBlocks, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eCombinedUniformBlocks, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eCombinedVertexUniformComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVertexCombinedUniformComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTextureCubeSize, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTextureCubeMapSize, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eDepthTextureSamples, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eDepthTextureSamples, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eDrawBuffers, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eDrawBuffers, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eDualSourceDrawBuffers, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eDualSourceDrawBuffers, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eElementsIndices, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eElementIndices, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eElementsVertices, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eElementVertices, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFragmentAtomicCounters, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFragmentAtomicCounters, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFragmentInputComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFragmentInputComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFragmentUniformComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFragmentUniformComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFragmentUniformVectors, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFragmentUniformVectors, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFragmentUniformBlocks, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFragmentUniformBlocks, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFramebufferWidth, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFramebufferWidth, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFramebufferHeight, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFramebufferHeight, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFramebufferLayers, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFramebufferLayers, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eFramebufferSamples, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eFramebufferSamples, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eGeometryAtomicCounters, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eGeometryAtomicCounters, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eGeometryInputComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eGeometryInputComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eGeometryOutputComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eGeometryOutputComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eGeometryTextureImageUnits, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eGeometryTextureImageUnits, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eGeometryUniformBlocks, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eGeometryUniformBlocks, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eGeometryUniformComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eGeometryUniformComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eIntegerSamples, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eIntegerSamples, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eLabelLength, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eLabelLength, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eProgramTexelOffset, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eProgramTexelOffset, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eRectangleTextureSize, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTextureRectangleSize, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eRenderbufferSize, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eRenderbufferSize, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eSampleMaskWords, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eSampleMaskWords, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eServerWaitTimeout, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eServerWaitTimeout, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTessControlAtomicCounters, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTessControlAtomicCounters, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTessEvaluationAtomicCounters, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTessEvaluationAtomicCounters, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTextureBufferSize, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTextureBufferSize, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTextureImageUnits, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTextureImageUnits, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTextureLODBias, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTextureLodBias, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eTextureSize, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eTextureSize, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eUniformBufferBindings, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eUniformBufferBindings, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eUniformBlockSize, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eUniformBlockSize, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVaryingComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVaryingComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVaryingVectors, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVaryingVectors, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVaryingFloats, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVaryingFloats, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVertexAtomicCounters, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVertexAtomicCounters, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVertexAttribs, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVertexAttribs, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVertexTextureImageUnits, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVertexTextureImageUnits, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVertexUniformComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVertexUniformComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVertexUniformVectors, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVertexUniformVectors, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVertexOutputComponents, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVertexOutputComponents, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eVertexUniformBlocks, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eVertexUniformBlocks, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eViewportDims, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eViewportWidth, l_value[0] );
-				m_gpuInformations.SetMaxValue( GpuMax::eViewportHeight, l_value[1] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eViewports, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eViewports, l_value[0] );
-				l_value = { 0, 0, 0 };
-				GetOpenGl().GetIntegerv( GlMax::eSamples, l_value.data() );
-				m_gpuInformations.SetMaxValue( GpuMax::eSamples, l_value[0] );
-				l_value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eDebugGroupStackDepth, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eDebugGroupStackDepth, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTexture3DSize, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTexture3DSize, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTextureArrayLayers, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eArrayTextureLayers, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eClipDistances, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eClipDistances, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eColorTextureSamples, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eColourTextureSamples, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eCombinedAtomicCounters, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eCombinedAtomicCounters, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eCombinedFragmentUniformComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFragmentCombinedUniformComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eCombinedGeometryUniformComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eGeometryCombinedUniformComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eCombinedTextureImageUnits, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eCombinedTextureImageUnits, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eCombinedUniformBlocks, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eCombinedUniformBlocks, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eCombinedVertexUniformComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVertexCombinedUniformComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTextureCubeSize, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTextureCubeMapSize, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eDepthTextureSamples, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eDepthTextureSamples, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eDrawBuffers, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eDrawBuffers, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eDualSourceDrawBuffers, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eDualSourceDrawBuffers, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eElementsIndices, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eElementIndices, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eElementsVertices, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eElementVertices, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFragmentAtomicCounters, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFragmentAtomicCounters, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFragmentInputComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFragmentInputComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFragmentUniformComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFragmentUniformComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFragmentUniformVectors, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFragmentUniformVectors, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFragmentUniformBlocks, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFragmentUniformBlocks, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFramebufferWidth, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFramebufferWidth, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFramebufferHeight, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFramebufferHeight, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFramebufferLayers, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFramebufferLayers, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eFramebufferSamples, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eFramebufferSamples, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eGeometryAtomicCounters, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eGeometryAtomicCounters, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eGeometryInputComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eGeometryInputComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eGeometryOutputComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eGeometryOutputComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eGeometryTextureImageUnits, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eGeometryTextureImageUnits, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eGeometryUniformBlocks, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eGeometryUniformBlocks, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eGeometryUniformComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eGeometryUniformComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eIntegerSamples, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eIntegerSamples, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eLabelLength, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eLabelLength, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eProgramTexelOffset, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eProgramTexelOffset, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eRectangleTextureSize, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTextureRectangleSize, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eRenderbufferSize, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eRenderbufferSize, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eSampleMaskWords, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eSampleMaskWords, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eServerWaitTimeout, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eServerWaitTimeout, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTessControlAtomicCounters, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTessControlAtomicCounters, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTessEvaluationAtomicCounters, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTessEvaluationAtomicCounters, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTextureBufferSize, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTextureBufferSize, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTextureImageUnits, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTextureImageUnits, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTextureLODBias, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTextureLodBias, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eTextureSize, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eTextureSize, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eUniformBufferBindings, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eUniformBufferBindings, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eUniformBlockSize, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eUniformBlockSize, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVaryingComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVaryingComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVaryingVectors, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVaryingVectors, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVaryingFloats, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVaryingFloats, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVertexAtomicCounters, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVertexAtomicCounters, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVertexAttribs, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVertexAttribs, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVertexTextureImageUnits, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVertexTextureImageUnits, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVertexUniformComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVertexUniformComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVertexUniformVectors, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVertexUniformVectors, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVertexOutputComponents, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVertexOutputComponents, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eVertexUniformBlocks, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eVertexUniformBlocks, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eViewportDims, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eViewportWidth, value[0] );
+				m_gpuInformations.SetMaxValue( GpuMax::eViewportHeight, value[1] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eViewports, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eViewports, value[0] );
+				value = { 0, 0, 0 };
+				GetOpenGl().GetIntegerv( GlMax::eSamples, value.data() );
+				m_gpuInformations.SetMaxValue( GpuMax::eSamples, value[0] );
+				value = { 0, 0, 0 };
 			}
 		}
 
@@ -459,24 +459,24 @@ namespace GlRender
 
 	GpuBufferUPtr GlRenderSystem::CreateBuffer( BufferType p_type )
 	{
-		GpuBufferUPtr l_return;
+		GpuBufferUPtr result;
 
 		switch ( p_type )
 		{
 		case BufferType::eArray:
-			l_return = std::make_unique< GlBuffer >( *this
+			result = std::make_unique< GlBuffer >( *this
 				, GetOpenGl()
 				, GlBufferTarget::eArray );
 			break;
 
 		case BufferType::eElementArray:
-			l_return = std::make_unique< GlBuffer >( *this
+			result = std::make_unique< GlBuffer >( *this
 				, GetOpenGl()
 				, GlBufferTarget::eElementArray );
 			break;
 
 		case BufferType::eUniform:
-			l_return = std::make_unique< GlBuffer >( *this
+			result = std::make_unique< GlBuffer >( *this
 				, GetOpenGl()
 				, GlBufferTarget::eUniform );
 			break;
@@ -484,7 +484,7 @@ namespace GlRender
 		case BufferType::eAtomicCounter:
 			if ( GetOpenGl().HasSsbo() )
 			{
-				l_return = std::make_unique< GlBuffer >( *this
+				result = std::make_unique< GlBuffer >( *this
 					, GetOpenGl()
 					, GlBufferTarget::eAtomicCounter );
 			}
@@ -493,14 +493,14 @@ namespace GlRender
 		case BufferType::eShaderStorage:
 			if ( GetOpenGl().HasSsbo() )
 			{
-				l_return = std::make_unique< GlBuffer >( *this
+				result = std::make_unique< GlBuffer >( *this
 					, GetOpenGl()
 					, GlBufferTarget::eShaderStorage );
 			}
 			break;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed
@@ -540,38 +540,38 @@ namespace GlRender
 		, AccessTypes const & p_cpuAccess
 		, AccessTypes const & p_gpuAccess )
 	{
-		TextureStorageUPtr l_return;
+		TextureStorageUPtr result;
 
 		if ( p_type == TextureStorageType::eBuffer )
 		{
-			l_return = std::make_unique< GlTextureStorage< GlTboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+			result = std::make_unique< GlTextureStorage< GlTboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 		}
 
-		if ( !l_return )
+		if ( !result )
 		{
 			if ( !CheckFlag( p_gpuAccess, AccessType::eWrite ) )
 			{
 				if ( GetOpenGl().HasExtension( ARB_texture_storage, false )
 					 && p_cpuAccess == AccessType::eNone )
 				{
-					l_return = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					result = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 				else
 				{
-					l_return = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					result = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 			}
 			else if ( p_cpuAccess != AccessType::eNone )
 			{
-				l_return = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				result = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 			}
 			else
 			{
-				l_return = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, AccessType::eNone, p_gpuAccess );
+				result = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, AccessType::eNone, p_gpuAccess );
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	FrameBufferSPtr GlRenderSystem::CreateFrameBuffer()
@@ -616,14 +616,14 @@ namespace GlRender
 
 	bool GlRenderSystem::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )
 	{
-		std::string l_name;
-		return m_tracker.Track( p_object, p_name, p_file, p_line, l_name );
+		std::string name;
+		return m_tracker.Track( p_object, p_name, p_file, p_line, name );
 	}
 
 	bool GlRenderSystem::Untrack( void * p_object )
 	{
-		GpuObjectTracker::ObjectDeclaration l_decl;
-		return m_tracker.Untrack( p_object, l_decl );
+		GpuObjectTracker::ObjectDeclaration decl;
+		return m_tracker.Untrack( p_object, decl );
 	}
 
 #endif

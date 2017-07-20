@@ -68,7 +68,7 @@ namespace GuiCommon
 
 	void RectangleProperty::SetValueI( Castor::Rectangle const & value )
 	{
-		Castor::Point4i l_value( value.left(), value.top(), value.right(), value.bottom() );
-		m_value = WXVARIANT( l_value );
+		Castor::Point4i var( value.left(), value.top(), value.right(), value.bottom() );
+		m_value = WXVARIANT( var );
 	}
 }

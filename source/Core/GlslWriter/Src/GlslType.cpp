@@ -53,17 +53,17 @@ namespace GLSL
 
 	Type::operator String()const
 	{
-		String l_return = m_value.str();
+		String result = m_value.str();
 
-		if ( l_return.empty() )
+		if ( result.empty() )
 		{
 			if ( m_name.empty() )
 			{
-				l_return = m_type;
+				result = m_type;
 			}
 			else
 			{
-				l_return = m_name;
+				result = m_name;
 			}
 		}
 		else
@@ -71,7 +71,7 @@ namespace GLSL
 			m_value.str( String() );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	Type & Type::operator+=( Type const & p_type )
@@ -179,10 +179,10 @@ namespace GLSL
 
 	String ParamToString( Castor::String & p_sep, Type const & p_value )
 	{
-		StringStream l_stream;
-		l_stream << p_sep << p_value.m_type << p_value.m_name;
+		StringStream stream;
+		stream << p_sep << p_value.m_type << p_value.m_name;
 		p_sep = cuT( ",\n\t" );
-		return String( l_stream.str() );
+		return String( stream.str() );
 	}
 
 	//*****************************************************************************************

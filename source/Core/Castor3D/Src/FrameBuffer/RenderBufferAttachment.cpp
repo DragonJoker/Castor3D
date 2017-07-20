@@ -20,7 +20,7 @@ namespace Castor3D
 
 	PxBufferBaseSPtr RenderBufferAttachment::GetBuffer()const
 	{
-		RenderBufferSPtr l_renderBuffer = this->GetRenderBuffer();
-		return PxBufferBase::create( l_renderBuffer->GetDimensions(), l_renderBuffer->GetPixelFormat() );
+		RenderBufferSPtr renderBuffer = this->GetRenderBuffer();
+		return PxBufferBase::create( renderBuffer->GetDimensions(), renderBuffer->GetPixelFormat() );
 	}
 }

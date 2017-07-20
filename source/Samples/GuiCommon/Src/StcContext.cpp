@@ -30,7 +30,7 @@ namespace GuiCommon
 
 	void StcContext::ParseFile( wxString const & p_strFileName )
 	{
-		LanguageFileParser l_parser( this );
-		l_parser.ParseFile( make_Path( p_strFileName ) );
+		LanguageFileParser parser( this );
+		parser.ParseFile( make_Path( p_strFileName ) );
 	}
 }

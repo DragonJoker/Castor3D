@@ -21,26 +21,26 @@ namespace Castor3D
 	bool Camera::TextWriter::operator()( Camera const & p_camera, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Camera " ) + p_camera.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n" ) ) > 0
+		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< Camera >::CheckError( l_return, "Camera name" );
+		Castor::TextWriter< Camera >::CheckError( result, "Camera name" );
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_camera, p_file );
+			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_camera, p_file );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( p_camera.GetViewport(), p_file );
+			result = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( p_camera.GetViewport(), p_file );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -89,49 +89,49 @@ namespace Castor3D
 
 	void Camera::ResetOrientation()
 	{
-		SceneNodeSPtr l_node = GetParent();
+		SceneNodeSPtr node = GetParent();
 
-		if ( l_node )
+		if ( node )
 		{
-			l_node->SetOrientation( Quaternion::identity() );
-			OnNodeChanged( *l_node );
+			node->SetOrientation( Quaternion::identity() );
+			OnNodeChanged( *node );
 		}
 	}
 
 	void Camera::ResetPosition()
 	{
-		SceneNodeSPtr l_node = GetParent();
+		SceneNodeSPtr node = GetParent();
 
-		if ( l_node )
+		if ( node )
 		{
-			l_node->SetPosition( Point3r( 0, 0, 0 ) );
-			OnNodeChanged( *l_node );
+			node->SetPosition( Point3r( 0, 0, 0 ) );
+			OnNodeChanged( *node );
 		}
 	}
 
 	void Camera::Update()
 	{
-		bool l_modified = m_viewport.Update();
-		SceneNodeSPtr l_node = GetParent();
+		bool modified = m_viewport.Update();
+		SceneNodeSPtr node = GetParent();
 
-		if ( l_node )
+		if ( node )
 		{
-			if ( l_modified || m_nodeChanged )
+			if ( modified || m_nodeChanged )
 			{
-				l_node->GetTransformationMatrix();
-				auto l_position = l_node->GetDerivedPosition();
-				auto const & l_orientation = l_node->GetDerivedOrientation();
-				Point3r l_right{ 1.0_r, 0.0_r, 0.0_r };
-				Point3r l_up{ 0.0_r, 1.0_r, 0.0_r };
-				l_orientation.transform( l_right, l_right );
-				l_orientation.transform( l_up, l_up );
-				Point3r l_front{ l_right ^ l_up };
-				l_up = l_front ^ l_right;
+				node->GetTransformationMatrix();
+				auto position = node->GetDerivedPosition();
+				auto const & orientation = node->GetDerivedOrientation();
+				Point3r right{ 1.0_r, 0.0_r, 0.0_r };
+				Point3r up{ 0.0_r, 1.0_r, 0.0_r };
+				orientation.transform( right, right );
+				orientation.transform( up, up );
+				Point3r front{ right ^ up };
+				up = front ^ right;
 
-				m_frustum.Update( l_position, l_right, l_up, l_front );
+				m_frustum.Update( position, right, up, front );
 
 				// Update view matrix
-				matrix::look_at( m_view, l_position, l_position + l_front, l_up );
+				matrix::look_at( m_view, position, position + front, up );
 				m_nodeChanged = false;
 			}
 		}

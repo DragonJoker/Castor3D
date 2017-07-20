@@ -45,18 +45,18 @@ namespace GuiCommon
 
 	void BillboardTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
-			if ( l_property->GetName() == PROPERTY_BILLBOARD_MATERIAL )
+			if ( property->GetName() == PROPERTY_BILLBOARD_MATERIAL )
 			{
-				OnMaterialChange( String( l_property->GetValueAsString().c_str() ) );
+				OnMaterialChange( String( property->GetValueAsString().c_str() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_BILLBOARD_MATERIAL )
+			else if ( property->GetName() == PROPERTY_BILLBOARD_MATERIAL )
 			{
-				const Size & l_size = SizeRefFromVariant( l_property->GetValue() );
-				OnSizeChange( l_size );
+				const Size & size = SizeRefFromVariant( property->GetValue() );
+				OnSizeChange( size );
 			}
 		}
 	}
@@ -65,12 +65,12 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_name, this]()
 		{
-			auto & l_cache = m_billboard.GetParentScene().GetEngine()->GetMaterialCache();
-			MaterialSPtr l_material = l_cache.Find( p_name );
+			auto & cache = m_billboard.GetParentScene().GetEngine()->GetMaterialCache();
+			MaterialSPtr material = cache.Find( p_name );
 
-			if ( l_material )
+			if ( material )
 			{
-				m_billboard.SetMaterial( l_material );
+				m_billboard.SetMaterial( material );
 				m_billboard.GetParentScene().SetChanged();
 			}
 		} );

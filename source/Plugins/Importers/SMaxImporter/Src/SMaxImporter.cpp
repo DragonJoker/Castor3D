@@ -46,73 +46,73 @@ namespace C3dSMax
 
 	bool SMaxImporter::DoImportScene( Scene & p_scene )
 	{
-		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_3DS" ) );
-		bool l_return = DoImportMesh( *l_mesh );
+		auto mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_3DS" ) );
+		bool result = DoImportMesh( *mesh );
 
-		if ( l_return )
+		if ( result )
 		{
-			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
-			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
-			l_geometry->SetMesh( l_mesh );
-			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
+			SceneNodeSPtr node = p_scene.GetSceneNodeCache().Add( mesh->GetName(), p_scene.GetObjectRootNode() );
+			GeometrySPtr geometry = p_scene.GetGeometryCache().Add( mesh->GetName(), node, nullptr );
+			geometry->SetMesh( mesh );
+			m_geometries.insert( { geometry->GetName(), geometry } );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool SMaxImporter::DoImportMesh( Mesh & p_mesh )
 	{
-		bool l_return{ false };
-		UIntArray l_faces;
-		RealArray l_sizes;
-		String l_nodeName = m_fileName.GetFileName();
-		String l_meshName = m_fileName.GetFileName();
-		String l_materialName = m_fileName.GetFileName();
-		SMaxChunk l_currentChunk;
+		bool result{ false };
+		UIntArray faces;
+		RealArray sizes;
+		String nodeName = m_fileName.GetFileName();
+		String meshName = m_fileName.GetFileName();
+		String materialName = m_fileName.GetFileName();
+		SMaxChunk currentChunk;
 		m_pFile = new BinaryFile( m_fileName, File::OpenMode::eRead );
 
 		if ( m_pFile->IsOk() )
 		{
-			DoReadChunk( &l_currentChunk );
+			DoReadChunk( &currentChunk );
 
-			if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )
+			if ( currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )
 			{
-				DoProcessNextChunk( *p_mesh.GetScene(), &l_currentChunk, p_mesh );
+				DoProcessNextChunk( *p_mesh.GetScene(), &currentChunk, p_mesh );
 				p_mesh.ComputeNormals();
-				l_return = true;
+				result = true;
 			}
 		}
 
 		delete m_pFile;
-		return l_return;
+		return result;
 	}
 
 	void SMaxImporter::DoProcessNextChunk( Scene & p_scene, SMaxChunk * p_chunk, Mesh & p_mesh )
 	{
-		std::vector< uint8_t > l_buffer;
-		SMaxChunk l_currentChunk;
-		bool l_bContinue = true;
-		String l_strName;
+		std::vector< uint8_t > buffer;
+		SMaxChunk currentChunk;
+		bool ok = true;
+		String strName;
 
-		while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && l_bContinue )
+		while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && ok )
 		{
-			DoReadChunk( &l_currentChunk );
+			DoReadChunk( &currentChunk );
 
-			if ( !DoIsValidChunk( &l_currentChunk, p_chunk ) )
+			if ( !DoIsValidChunk( &currentChunk, p_chunk ) )
 			{
-				l_bContinue = false;
+				ok = false;
 			}
 			else
 			{
-				switch ( l_currentChunk.m_eChunkId )
+				switch ( currentChunk.m_eChunkId )
 				{
 				case eSMAX_CHUNK_M3D_VERSION:
 					try
 					{
-						l_buffer.resize( l_currentChunk.m_ulLength - l_currentChunk.m_ulBytesRead );
-						l_currentChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( &l_buffer[0], l_currentChunk.m_ulLength - l_currentChunk.m_ulBytesRead ) );
+						buffer.resize( currentChunk.m_ulLength - currentChunk.m_ulBytesRead );
+						currentChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( &buffer[0], currentChunk.m_ulLength - currentChunk.m_ulBytesRead ) );
 
-						if ( ( l_currentChunk.m_ulLength - l_currentChunk.m_ulBytesRead == 4 ) && ( ( ( int * )&l_buffer[0] )[0] > 0x03 ) )
+						if ( ( currentChunk.m_ulLength - currentChunk.m_ulBytesRead == 4 ) && ( ( ( int * )&buffer[0] )[0] > 0x03 ) )
 						{
 							Logger::LogDebug( cuT( "File version is over version 3 and may load incorrectly" ) );
 						}
@@ -120,43 +120,43 @@ namespace C3dSMax
 					catch ( ... )
 					{
 						Logger::LogDebug( cuT( "Exception caught while retrieving file version" ) );
-						l_currentChunk.m_ulBytesRead = l_currentChunk.m_ulLength;
+						currentChunk.m_ulBytesRead = currentChunk.m_ulLength;
 					}
 
 					break;
 
 				case eSMAX_CHUNK_MDATA:
-					DoProcessNextChunk( p_scene, &l_currentChunk, p_mesh );
+					DoProcessNextChunk( p_scene, &currentChunk, p_mesh );
 					break;
 
 				case eSMAX_CHUNK_MAT_ENTRY:
 					m_iNumOfMaterials++;
-					DoProcessNextMaterialChunk( p_scene, &l_currentChunk );
+					DoProcessNextMaterialChunk( p_scene, &currentChunk );
 					break;
 
 				case eSMAX_CHUNK_NAMED_OBJECT:
-					l_currentChunk.m_ulBytesRead += DoGetString( l_strName );
-					p_mesh.ChangeName( l_strName );
+					currentChunk.m_ulBytesRead += DoGetString( strName );
+					p_mesh.ChangeName( strName );
 					break;
 
 				case eSMAX_CHUNK_N_TRI_OBJECT:
-					DoProcessNextObjectChunk( p_scene, &l_currentChunk, p_mesh );
+					DoProcessNextObjectChunk( p_scene, &currentChunk, p_mesh );
 					break;
 
 				case eSMAX_CHUNK_KFDATA:
-					DoDiscardChunk( &l_currentChunk );
+					DoDiscardChunk( &currentChunk );
 					break;
 
 				default:
-					DoDiscardChunk( &l_currentChunk );
+					DoDiscardChunk( &currentChunk );
 					break;
 				}
 			}
 
-			p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+			p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 		}
 
-		if ( !l_bContinue )
+		if ( !ok )
 		{
 			DoDiscardChunk( p_chunk );
 		}
@@ -164,60 +164,60 @@ namespace C3dSMax
 
 	void SMaxImporter::DoProcessNextObjectChunk( Scene & p_scene, SMaxChunk * p_chunk, Mesh & p_mesh )
 	{
-		SMaxChunk l_currentChunk;
-		bool l_bContinue = true;
-		SubmeshSPtr l_submesh = p_mesh.CreateSubmesh();
+		SMaxChunk currentChunk;
+		bool ok = true;
+		SubmeshSPtr submesh = p_mesh.CreateSubmesh();
 
-		while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && l_bContinue )
+		while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && ok )
 		{
-			DoReadChunk( &l_currentChunk );
+			DoReadChunk( &currentChunk );
 
-			if ( !DoIsValidChunk( &l_currentChunk, p_chunk ) )
+			if ( !DoIsValidChunk( &currentChunk, p_chunk ) )
 			{
-				l_bContinue = false;
+				ok = false;
 			}
 			else
 			{
-				switch ( l_currentChunk.m_eChunkId )
+				switch ( currentChunk.m_eChunkId )
 				{
 				case eSMAX_CHUNK_POINT_ARRAY:
-					DoReadVertices( &l_currentChunk, *l_submesh );
+					DoReadVertices( &currentChunk, *submesh );
 					break;
 
 				case eSMAX_CHUNK_FACE_ARRAY:
-					DoReadVertexIndices( p_scene, &l_currentChunk, *l_submesh );
+					DoReadVertexIndices( p_scene, &currentChunk, *submesh );
 					break;
 
 				case eSMAX_CHUNK_MSH_MAT_GROUP:
-					DoReadObjectMaterial( p_scene, &l_currentChunk, *l_submesh );
+					DoReadObjectMaterial( p_scene, &currentChunk, *submesh );
 					break;
 
 				case eSMAX_CHUNK_TEX_VERTS:
-					DoReadUVCoordinates( &l_currentChunk, *l_submesh );
+					DoReadUVCoordinates( &currentChunk, *submesh );
 					break;
 
 				default:
-					DoDiscardChunk( &l_currentChunk );
+					DoDiscardChunk( &currentChunk );
 					break;
 				}
 			}
 
-			p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+			p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 		}
 
-		if ( l_submesh->GetPointsCount() && l_submesh->GetFaceCount() )
+		if ( submesh->GetPointsCount() && submesh->GetFaceCount() )
 		{
 			if ( !m_bIndicesFound )
 			{
-				l_submesh->ComputeFacesFromPolygonVertex();
+				submesh->ComputeFacesFromPolygonVertex();
 			}
 
-			l_submesh->ComputeContainers();
+			submesh->ComputeContainers();
 		}
 
 		m_bIndicesFound = false;
 
-		if ( !l_bContinue )
+		if ( !ok )
 		{
 			DoDiscardChunk( p_chunk );
 		}
@@ -225,156 +225,156 @@ namespace C3dSMax
 
 	void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_chunk )
 	{
-		SMaxChunk l_currentChunk;
-		MaterialSPtr l_pMaterial;
-		Colour l_crDiffuse( Colour::from_rgb( 0 ) );
-		Colour l_crAmbient( Colour::from_rgb( 0 ) );
-		Colour l_crSpecular( Colour::from_rgb( 0 ) );
-		String l_strMatName;
-		std::map< TextureChannel, Path > l_strTextures;
-		bool l_bContinue = true;
-		bool l_bTwoSided = false;
+		SMaxChunk currentChunk;
+		MaterialSPtr pMaterial;
+		Colour crDiffuse( Colour::from_rgb( 0 ) );
+		Colour crAmbient( Colour::from_rgb( 0 ) );
+		Colour crSpecular( Colour::from_rgb( 0 ) );
+		String strMatName;
+		std::map< TextureChannel, Path > strTextures;
+		bool ok = true;
+		bool bTwoSided = false;
 
-		while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && l_bContinue )
+		while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && ok )
 		{
-			DoReadChunk( &l_currentChunk );
+			DoReadChunk( &currentChunk );
 
-			if ( !DoIsValidChunk( &l_currentChunk, p_chunk ) )
+			if ( !DoIsValidChunk( &currentChunk, p_chunk ) )
 			{
-				l_bContinue = false;
+				ok = false;
 			}
 			else
 			{
-				switch ( l_currentChunk.m_eChunkId )
+				switch ( currentChunk.m_eChunkId )
 				{
 				case eSMAX_CHUNK_MAT_NAME:
-					l_currentChunk.m_ulBytesRead += DoGetString( l_strMatName );
-					l_currentChunk.m_ulBytesRead = l_currentChunk.m_ulLength;
+					currentChunk.m_ulBytesRead += DoGetString( strMatName );
+					currentChunk.m_ulBytesRead = currentChunk.m_ulLength;
 					break;
 
 				case eSMAX_CHUNK_MAT_AMBIENT:
-					DoReadColorChunk( &l_currentChunk, l_crAmbient );
+					DoReadColorChunk( &currentChunk, crAmbient );
 					break;
 
 				case eSMAX_CHUNK_MAT_DIFFUSE:
-					DoReadColorChunk( &l_currentChunk, l_crDiffuse );
+					DoReadColorChunk( &currentChunk, crDiffuse );
 					break;
 
 				case eSMAX_CHUNK_MAT_SPECULAR:
-					DoReadColorChunk( &l_currentChunk, l_crSpecular );
+					DoReadColorChunk( &currentChunk, crSpecular );
 					break;
 
 				case eSMAX_CHUNK_MAT_SHININESS:
 					break;
 
 				case eSMAX_CHUNK_MAT_TWO_SIDE:
-					l_bTwoSided = true;
+					bTwoSided = true;
 					break;
 
 				case eSMAX_CHUNK_MAT_TEXMAP:
-					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::eDiffuse] );
-					Logger::LogDebug( cuT( "Diffuse map: " ) + l_strTextures[TextureChannel::eDiffuse] );
+					DoProcessMaterialMapChunk( &currentChunk, strTextures[TextureChannel::eDiffuse] );
+					Logger::LogDebug( cuT( "Diffuse map: " ) + strTextures[TextureChannel::eDiffuse] );
 					break;
 
 				case eSMAX_CHUNK_MAT_SPECMAP:
-					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::eSpecular] );
-					Logger::LogDebug( cuT( "Specular map: " ) + l_strTextures[TextureChannel::eSpecular] );
+					DoProcessMaterialMapChunk( &currentChunk, strTextures[TextureChannel::eSpecular] );
+					Logger::LogDebug( cuT( "Specular map: " ) + strTextures[TextureChannel::eSpecular] );
 					break;
 
 				case eSMAX_CHUNK_MAT_OPACMAP:
-					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::eOpacity] );
-					Logger::LogDebug( cuT( "Opacity map: " ) + l_strTextures[TextureChannel::eOpacity] );
+					DoProcessMaterialMapChunk( &currentChunk, strTextures[TextureChannel::eOpacity] );
+					Logger::LogDebug( cuT( "Opacity map: " ) + strTextures[TextureChannel::eOpacity] );
 					break;
 
 				case eSMAX_CHUNK_MAT_BUMPMAP:
-					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::eNormal] );
-					Logger::LogDebug( cuT( "Normal map: " ) + l_strTextures[TextureChannel::eNormal] );
+					DoProcessMaterialMapChunk( &currentChunk, strTextures[TextureChannel::eNormal] );
+					Logger::LogDebug( cuT( "Normal map: " ) + strTextures[TextureChannel::eNormal] );
 					break;
 
 				case eSMAX_CHUNK_MAT_MAPNAME:
-					l_currentChunk.m_ulBytesRead += DoGetString( l_strTextures[TextureChannel::eDiffuse] );
-					l_currentChunk.m_ulBytesRead = l_currentChunk.m_ulLength;
-					Logger::LogDebug( cuT( "Texture: " ) + l_strTextures[TextureChannel::eDiffuse] );
+					currentChunk.m_ulBytesRead += DoGetString( strTextures[TextureChannel::eDiffuse] );
+					currentChunk.m_ulBytesRead = currentChunk.m_ulLength;
+					Logger::LogDebug( cuT( "Texture: " ) + strTextures[TextureChannel::eDiffuse] );
 					break;
 
 				default:
-					DoDiscardChunk( &l_currentChunk );
+					DoDiscardChunk( &currentChunk );
 					break;
 				}
 			}
 
-			p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+			p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 		}
 
-		if ( !l_bContinue )
+		if ( !ok )
 		{
 			DoDiscardChunk( p_chunk );
 		}
 
-		if ( !l_strMatName.empty() )
+		if ( !strMatName.empty() )
 		{
-			auto & l_cache = p_scene.GetMaterialView();
-			l_pMaterial = l_cache.Find( l_strMatName );
+			auto & cache = p_scene.GetMaterialView();
+			pMaterial = cache.Find( strMatName );
 
-			if ( !l_pMaterial )
+			if ( !pMaterial )
 			{
-				l_pMaterial = l_cache.Add( l_strMatName, MaterialType::eLegacy );
-				l_pMaterial->CreatePass();
+				pMaterial = cache.Add( strMatName, MaterialType::eLegacy );
+				pMaterial->CreatePass();
 			}
 			
-			REQUIRE( l_pMaterial->GetType() == MaterialType::eLegacy );
-			auto l_pass = l_pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
-			l_pass->SetDiffuse( l_crDiffuse );
-			l_pass->SetSpecular( l_crSpecular );
-			l_pass->SetTwoSided( l_bTwoSided );
-			String l_strTexture;
+			REQUIRE( pMaterial->GetType() == MaterialType::eLegacy );
+			auto pass = pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
+			pass->SetDiffuse( crDiffuse );
+			pass->SetSpecular( crSpecular );
+			pass->SetTwoSided( bTwoSided );
+			String strTexture;
 
-			for ( auto l_it : l_strTextures )
+			for ( auto it : strTextures )
 			{
-				auto l_strTexture = l_it.second;
+				auto strTexture = it.second;
 
-				if ( !l_strTexture.empty() )
+				if ( !strTexture.empty() )
 				{
-					LoadTexture( l_strTexture, *l_pass, l_it.first );
+					LoadTexture( strTexture, *pass, it.first );
 				}
 			}
 
-			p_scene.GetListener().PostEvent( MakeInitialiseEvent( *l_pMaterial ) );
+			p_scene.GetListener().PostEvent( MakeInitialiseEvent( *pMaterial ) );
 		}
 	}
 
 	void SMaxImporter::DoProcessMaterialMapChunk( SMaxChunk * p_chunk, String & p_strName )
 	{
-		SMaxChunk l_currentChunk;
-		bool l_bContinue = true;
+		SMaxChunk currentChunk;
+		bool ok = true;
 
-		while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && l_bContinue )
+		while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength && ok )
 		{
-			DoReadChunk( &l_currentChunk );
+			DoReadChunk( &currentChunk );
 
-			if ( !DoIsValidChunk( &l_currentChunk, p_chunk ) )
+			if ( !DoIsValidChunk( &currentChunk, p_chunk ) )
 			{
-				l_bContinue = false;
+				ok = false;
 			}
 			else
 			{
-				switch ( l_currentChunk.m_eChunkId )
+				switch ( currentChunk.m_eChunkId )
 				{
 				case eSMAX_CHUNK_MAT_MAPNAME:
-					l_currentChunk.m_ulBytesRead += DoGetString( p_strName );
-					l_currentChunk.m_ulBytesRead = l_currentChunk.m_ulLength;
+					currentChunk.m_ulBytesRead += DoGetString( p_strName );
+					currentChunk.m_ulBytesRead = currentChunk.m_ulLength;
 					break;
 
 				default:
-					DoDiscardChunk( &l_currentChunk );
+					DoDiscardChunk( &currentChunk );
 					break;
 				}
 			}
 
-			p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+			p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 		}
 
-		if ( !l_bContinue )
+		if ( !ok )
 		{
 			DoDiscardChunk( p_chunk );
 		}
@@ -384,9 +384,9 @@ namespace C3dSMax
 	{
 		try
 		{
-			uint16_t l_usId;
-			p_chunk->m_ulBytesRead = uint32_t( m_pFile->Read( l_usId ) );
-			p_chunk->m_eChunkId = eSMAX_CHUNK( l_usId );
+			uint16_t usId;
+			p_chunk->m_ulBytesRead = uint32_t( m_pFile->Read( usId ) );
+			p_chunk->m_eChunkId = eSMAX_CHUNK( usId );
 			p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( p_chunk->m_ulLength ) );
 		}
 		catch ( ... )
@@ -397,54 +397,54 @@ namespace C3dSMax
 
 	int SMaxImporter::DoGetString( String & p_strString )
 	{
-		char l_pBuffer[255];
+		char pBuffer[255];
 
 		try
 		{
 			int index = 0;
-			m_pFile->Read( *l_pBuffer );
+			m_pFile->Read( *pBuffer );
 
-			while ( m_pFile->IsOk() && *( l_pBuffer + index++ ) != 0 )
+			while ( m_pFile->IsOk() && *( pBuffer + index++ ) != 0 )
 			{
-				m_pFile->Read( *( l_pBuffer + index ) );
+				m_pFile->Read( *( pBuffer + index ) );
 			}
 
-			p_strString = string::string_cast< xchar >( l_pBuffer );
+			p_strString = string::string_cast< xchar >( pBuffer );
 		}
 		catch ( ... )
 		{
 			Logger::LogWarning( cuT( "Exception caught when loading string" ) );
 		}
 
-		return int( strlen( l_pBuffer ) + 1 );
+		return int( strlen( pBuffer ) + 1 );
 	}
 
 	void SMaxImporter::DoReadColorChunk( SMaxChunk * p_chunk, Colour & p_colour )
 	{
-		SMaxChunk l_tempChunk;
+		SMaxChunk tempChunk;
 
 		try
 		{
-			DoReadChunk( &l_tempChunk );
+			DoReadChunk( &tempChunk );
 
-			if ( l_tempChunk.m_eChunkId == eSMAX_CHUNK_COLOR_F )
+			if ( tempChunk.m_eChunkId == eSMAX_CHUNK_COLOR_F )
 			{
-				float l_pColour[3];
-				l_tempChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( l_pColour, 3 ) );
-				p_colour.red() = l_pColour[0];
-				p_colour.green() = l_pColour[1];
-				p_colour.blue() = l_pColour[2];
+				float pColour[3];
+				tempChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( pColour, 3 ) );
+				p_colour.red() = pColour[0];
+				p_colour.green() = pColour[1];
+				p_colour.blue() = pColour[2];
 			}
-			else if ( l_tempChunk.m_eChunkId == eSMAX_CHUNK_COLOR_24 )
+			else if ( tempChunk.m_eChunkId == eSMAX_CHUNK_COLOR_24 )
 			{
-				uint8_t l_pColour[3];
-				l_tempChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( l_pColour, 3 ) );
-				p_colour.red() = l_pColour[0];
-				p_colour.green() = l_pColour[1];
-				p_colour.blue() = l_pColour[2];
+				uint8_t pColour[3];
+				tempChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( pColour, 3 ) );
+				p_colour.red() = pColour[0];
+				p_colour.green() = pColour[1];
+				p_colour.blue() = pColour[2];
 			}
 
-			p_chunk->m_ulBytesRead += l_tempChunk.m_ulBytesRead;
+			p_chunk->m_ulBytesRead += tempChunk.m_ulBytesRead;
 		}
 		catch ( ... )
 		{
@@ -455,156 +455,156 @@ namespace C3dSMax
 
 	void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_chunk, Submesh & p_submesh )
 	{
-		std::vector< uint32_t > l_arrayGroups;
-		std::vector< FaceIndices > l_arrayFaces;
-		BufferElementGroupSPtr l_pV1;
-		BufferElementGroupSPtr l_pV2;
-		BufferElementGroupSPtr l_pV3;
-		uint16_t l_usIndices[4];
-		FaceIndices l_face = { 0 };
-		FaceSPtr l_pFace;
-		SMaxChunk l_currentChunk;
-		String l_strMatName;
+		std::vector< uint32_t > arrayGroups;
+		std::vector< FaceIndices > arrayFaces;
+		BufferElementGroupSPtr pV1;
+		BufferElementGroupSPtr pV2;
+		BufferElementGroupSPtr pV3;
+		uint16_t usIndices[4];
+		FaceIndices face = { 0 };
+		FaceSPtr pFace;
+		SMaxChunk currentChunk;
+		String strMatName;
 
 		try
 		{
-			uint16_t l_usNumOfFaces = 0;
-			p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( l_usNumOfFaces ) );
-			l_arrayFaces.resize( l_usNumOfFaces );
-			Logger::LogDebug( StringStream() << cuT( "VertexIndices: " ) << l_usNumOfFaces );
+			uint16_t usNumOfFaces = 0;
+			p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( usNumOfFaces ) );
+			arrayFaces.resize( usNumOfFaces );
+			Logger::LogDebug( StringStream() << cuT( "VertexIndices: " ) << usNumOfFaces );
 
-			for ( uint16_t i = 0; i < l_usNumOfFaces && m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength; i++ )
+			for ( uint16_t i = 0; i < usNumOfFaces && m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength; i++ )
 			{
-				p_chunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( l_usIndices ) );
-				l_arrayFaces[i].m_index[0] = l_usIndices[0];
-				l_arrayFaces[i].m_index[1] = l_usIndices[2];
-				l_arrayFaces[i].m_index[2] = l_usIndices[1];
+				p_chunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( usIndices ) );
+				arrayFaces[i].m_index[0] = usIndices[0];
+				arrayFaces[i].m_index[1] = usIndices[2];
+				arrayFaces[i].m_index[2] = usIndices[1];
 			}
 
 			m_bIndicesFound = true;
 
 			if ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength )
 			{
-				bool l_bFace = true;
+				bool bFace = true;
 
 				// We have not reached the end of the chunk, so we try to retrieve remaining informations, beginning with uncounted faces (???)
-				while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead + 6 < p_chunk->m_ulLength && l_bFace )
+				while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead + 6 < p_chunk->m_ulLength && bFace )
 				{
-					DoReadChunk( &l_currentChunk );
+					DoReadChunk( &currentChunk );
 
-					if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_SMOOTH_GROUP )
+					if ( currentChunk.m_eChunkId == eSMAX_CHUNK_SMOOTH_GROUP )
 					{
 						// The retrieved id tells the chunk might describe a smoothing group, so we check the length of the chunk
 						// That length must be equal to (Faces count) * 4, as a smoothing group is a bitfield with 4 bytes for each face
-						if ( DoIsValidChunk( &l_currentChunk, p_chunk ) && l_currentChunk.m_ulLength == l_usNumOfFaces * sizeof( int ) )
+						if ( DoIsValidChunk( &currentChunk, p_chunk ) && currentChunk.m_ulLength == usNumOfFaces * sizeof( int ) )
 						{
 							// The chunk effectively describes a smoothing group
-							l_bFace = false;
+							bFace = false;
 						}
 						else
 						{
 							// The chunk doesn't describe a smoothing group, we suppose it is a face
-							l_bFace = true;
+							bFace = true;
 						}
 					}
-					else if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_MSH_MAT_GROUP )
+					else if ( currentChunk.m_eChunkId == eSMAX_CHUNK_MSH_MAT_GROUP )
 					{
 						// The retrieved id tells the chunk might describe a material group, so we try to parse it
-						if ( DoIsValidChunk( &l_currentChunk, p_chunk ) )
+						if ( DoIsValidChunk( &currentChunk, p_chunk ) )
 						{
-							l_bFace = false;
+							bFace = false;
 						}
 						else
 						{
 							// The chunk isn't valid, we suppose it is a face
-							l_bFace = true;
+							bFace = true;
 						}
 					}
 
-					if ( l_bFace )
+					if ( bFace )
 					{
 						// The chunk describes a triangle
-						l_face.m_index[0] = l_currentChunk.m_eChunkId;
-						l_face.m_index[1] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0x0000FFFF ) >> 0 );
-						l_face.m_index[2] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0xFFFF0000 ) >> 16 );
+						face.m_index[0] = currentChunk.m_eChunkId;
+						face.m_index[1] = static_cast< uint16_t >( ( currentChunk.m_ulLength & 0x0000FFFF ) >> 0 );
+						face.m_index[2] = static_cast< uint16_t >( ( currentChunk.m_ulLength & 0xFFFF0000 ) >> 16 );
 
 						if ( p_chunk->m_ulBytesRead + 8 >= p_chunk->m_ulLength )
 						{
 							// We can't read a face, we discard the chunk
-							p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+							p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 							DoDiscardChunk( p_chunk );
-							l_bFace = false;
+							bFace = false;
 						}
-						else if ( l_face.m_index[0] < m_uiNbVertex && l_face.m_index[1] < m_uiNbVertex && l_face.m_index[2] < m_uiNbVertex )
+						else if ( face.m_index[0] < m_uiNbVertex && face.m_index[1] < m_uiNbVertex && face.m_index[2] < m_uiNbVertex )
 						{
 							// Vertex indices are correct, so we consider we really are processing a face
-							l_arrayFaces.push_back( l_face );
-							p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( l_usIndices[3] ) );
-							p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+							arrayFaces.push_back( face );
+							p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( usIndices[3] ) );
+							p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 						}
 						else
 						{
 							// Vertex indices retrieved are incorrect, we get out from this loop, keeping the chunk for further processing
-							l_bFace = false;
+							bFace = false;
 						}
 					}
 				}
 
-				std::size_t l_uiNbFaces = l_arrayFaces.size();
-				l_arrayGroups.resize( l_uiNbFaces );
+				std::size_t uiNbFaces = arrayFaces.size();
+				arrayGroups.resize( uiNbFaces );
 
 				if ( p_chunk->m_ulBytesRead < p_chunk->m_ulLength )
 				{
 					// We have finished parsing remaining faces, and we have a chunk waiting for it's processing
 					do
 					{
-						if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_SMOOTH_GROUP )
+						if ( currentChunk.m_eChunkId == eSMAX_CHUNK_SMOOTH_GROUP )
 						{
-							l_currentChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( &l_arrayGroups[0], l_uiNbFaces ) );
+							currentChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( &arrayGroups[0], uiNbFaces ) );
 
-							//for( std::size_t i = 0 ; i < l_uiNbFaces && p_chunk->m_ulBytesRead < p_chunk->m_ulLength ; ++i )
+							//for( std::size_t i = 0 ; i < uiNbFaces && p_chunk->m_ulBytesRead < p_chunk->m_ulLength ; ++i )
 							//{
-							//	l_itGroups = l_mapGroupsById.find( l_arrayGroups[i] );
+							//	itGroups = mapGroupsById.find( arrayGroups[i] );
 
-							//	if( l_itGroups == l_mapGroupsById.end() )
+							//	if( itGroups == mapGroupsById.end() )
 							//	{
-							//		l_mapGroupsById.insert( std::make_pair( l_arrayGroups[i], p_submesh.AddSmoothingGroup() ) );
+							//		mapGroupsById.insert( std::make_pair( arrayGroups[i], p_submesh.AddSmoothingGroup() ) );
 							//	}
 							//}
 
-							p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+							p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 
 							if ( p_chunk->m_ulBytesRead + 6 < p_chunk->m_ulLength )
 							{
-								DoReadChunk( &l_currentChunk );
+								DoReadChunk( &currentChunk );
 							}
 							else
 							{
 								DoDiscardChunk( p_chunk );
 							}
 						}
-						else if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_MSH_MAT_GROUP )
+						else if ( currentChunk.m_eChunkId == eSMAX_CHUNK_MSH_MAT_GROUP )
 						{
-							DoReadObjectMaterial( p_scene, &l_currentChunk, p_submesh );
-							p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+							DoReadObjectMaterial( p_scene, &currentChunk, p_submesh );
+							p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 
 							if ( p_chunk->m_ulBytesRead + 6 < p_chunk->m_ulLength )
 							{
-								DoReadChunk( &l_currentChunk );
+								DoReadChunk( &currentChunk );
 							}
 							else
 							{
 								DoDiscardChunk( p_chunk );
 							}
 						}
-						else if ( DoIsValidChunk( &l_currentChunk, p_chunk ) )
+						else if ( DoIsValidChunk( &currentChunk, p_chunk ) )
 						{
-							DoDiscardChunk( &l_currentChunk );
-							p_chunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
+							DoDiscardChunk( &currentChunk );
+							p_chunk->m_ulBytesRead += currentChunk.m_ulBytesRead;
 
 							if ( p_chunk->m_ulBytesRead + 6 < p_chunk->m_ulLength )
 							{
-								DoReadChunk( &l_currentChunk );
+								DoReadChunk( &currentChunk );
 							}
 							else
 							{
@@ -614,33 +614,33 @@ namespace C3dSMax
 						else
 						{
 							// We decal the chunk of 2 bytes on the right
-							uint16_t l_usDump = 0;
+							uint16_t usDump = 0;
 							p_chunk->m_ulBytesRead += 2;
-							l_currentChunk.m_eChunkId = eSMAX_CHUNK( static_cast< uint16_t >( l_currentChunk.m_ulLength & 0xFFFF0000 >> 16 ) );
-							m_pFile->Read( l_usDump );
-							l_currentChunk.m_ulLength = ( ( l_currentChunk.m_ulLength & 0x0000FFFF ) << 16 ) + l_usDump;
+							currentChunk.m_eChunkId = eSMAX_CHUNK( static_cast< uint16_t >( currentChunk.m_ulLength & 0xFFFF0000 >> 16 ) );
+							m_pFile->Read( usDump );
+							currentChunk.m_ulLength = ( ( currentChunk.m_ulLength & 0x0000FFFF ) << 16 ) + usDump;
 						}
 					}
 					while ( m_pFile->IsOk() && p_chunk->m_ulBytesRead < p_chunk->m_ulLength );
 				}
 			}
 
-			for ( std::vector< FaceIndices >::const_iterator l_it = l_arrayFaces.begin(); l_it != l_arrayFaces.end(); ++l_it )
+			for ( std::vector< FaceIndices >::const_iterator it = arrayFaces.begin(); it != arrayFaces.end(); ++it )
 			{
 				// It seems faces are inverted in 3DS so I invert the indices to fall back in a good order
-				uint32_t l_uiV1 = l_it->m_index[0];
-				uint32_t l_uiV2 = l_it->m_index[1];
-				uint32_t l_uiV3 = l_it->m_index[2];
-				l_pV1 = p_submesh.GetPoint( l_uiV1 );
-				l_pV2 = p_submesh.GetPoint( l_uiV2 );
-				l_pV3 = p_submesh.GetPoint( l_uiV3 );
-				p_submesh.AddFace( l_uiV1, l_uiV2, l_uiV3 );
+				uint32_t uiV1 = it->m_index[0];
+				uint32_t uiV2 = it->m_index[1];
+				uint32_t uiV3 = it->m_index[2];
+				pV1 = p_submesh.GetPoint( uiV1 );
+				pV2 = p_submesh.GetPoint( uiV2 );
+				pV3 = p_submesh.GetPoint( uiV3 );
+				p_submesh.AddFace( uiV1, uiV2, uiV3 );
 
 				if ( m_arrayTexVerts.size() )
 				{
-					Vertex::SetTexCoord( l_pV1, m_arrayTexVerts[( l_uiV1 * 2 ) + 0], m_arrayTexVerts[( l_uiV1 * 2 ) + 1] );
-					Vertex::SetTexCoord( l_pV2, m_arrayTexVerts[( l_uiV2 * 2 ) + 0], m_arrayTexVerts[( l_uiV2 * 2 ) + 1] );
-					Vertex::SetTexCoord( l_pV3, m_arrayTexVerts[( l_uiV3 * 2 ) + 0], m_arrayTexVerts[( l_uiV3 * 2 ) + 1] );
+					Vertex::SetTexCoord( pV1, m_arrayTexVerts[( uiV1 * 2 ) + 0], m_arrayTexVerts[( uiV1 * 2 ) + 1] );
+					Vertex::SetTexCoord( pV2, m_arrayTexVerts[( uiV2 * 2 ) + 0], m_arrayTexVerts[( uiV2 * 2 ) + 1] );
+					Vertex::SetTexCoord( pV3, m_arrayTexVerts[( uiV3 * 2 ) + 0], m_arrayTexVerts[( uiV3 * 2 ) + 1] );
 				}
 			}
 		}
@@ -660,13 +660,13 @@ namespace C3dSMax
 	{
 		try
 		{
-			uint16_t l_usNumTexVertex = 0;
-			uint32_t l_uiNumTexVertex = 0;
-			p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( l_usNumTexVertex ) );
-			l_uiNumTexVertex = l_usNumTexVertex;
-			m_arrayTexVerts.resize( l_uiNumTexVertex * 2 );
-			Logger::LogDebug( StringStream() << cuT( "TexCoords: " ) << l_usNumTexVertex );
-			p_chunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( &m_arrayTexVerts[0], l_uiNumTexVertex * 2 ) );
+			uint16_t usNumTexVertex = 0;
+			uint32_t uiNumTexVertex = 0;
+			p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( usNumTexVertex ) );
+			uiNumTexVertex = usNumTexVertex;
+			m_arrayTexVerts.resize( uiNumTexVertex * 2 );
+			Logger::LogDebug( StringStream() << cuT( "TexCoords: " ) << usNumTexVertex );
+			p_chunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( &m_arrayTexVerts[0], uiNumTexVertex * 2 ) );
 		}
 		catch ( std::exception & exc )
 		{
@@ -684,25 +684,25 @@ namespace C3dSMax
 	{
 		try
 		{
-			float * l_pTmp = NULL;
-			std::vector< float > l_pVertex;
-			uint16_t l_usNumOfVerts = 0;
-			p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( l_usNumOfVerts ) );
-			m_uiNbVertex = l_usNumOfVerts;
+			float * pTmp = NULL;
+			std::vector< float > pVertex;
+			uint16_t usNumOfVerts = 0;
+			p_chunk->m_ulBytesRead += uint32_t( m_pFile->Read( usNumOfVerts ) );
+			m_uiNbVertex = usNumOfVerts;
 
 			if ( m_uiNbVertex > 0 )
 			{
-				l_pVertex.resize( m_uiNbVertex * 3 );
-				l_pTmp = &l_pVertex[0];
-				p_chunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( l_pTmp, m_uiNbVertex * 3 ) );
+				pVertex.resize( m_uiNbVertex * 3 );
+				pTmp = &pVertex[0];
+				p_chunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( pTmp, m_uiNbVertex * 3 ) );
 			}
 
-			Logger::LogDebug( StringStream() << cuT( "Vertices: " ) << l_usNumOfVerts );
+			Logger::LogDebug( StringStream() << cuT( "Vertices: " ) << usNumOfVerts );
 
-			for ( uint16_t i = 0; i < l_usNumOfVerts; i++ )
+			for ( uint16_t i = 0; i < usNumOfVerts; i++ )
 			{
-				p_submesh.AddPoint( l_pTmp[0], l_pTmp[2], -l_pTmp[1] );
-				l_pTmp += 3;
+				p_submesh.AddPoint( pTmp[0], pTmp[2], -pTmp[1] );
+				pTmp += 3;
 			}
 		}
 		catch ( std::exception & exc )
@@ -719,15 +719,15 @@ namespace C3dSMax
 
 	void SMaxImporter::DoReadObjectMaterial( Scene & p_scene, SMaxChunk * p_chunk, Submesh & p_submesh )
 	{
-		String l_materialName;
-		MaterialSPtr l_pMaterial;
-		p_chunk->m_ulBytesRead += DoGetString( l_materialName );
-		auto & l_cache = p_scene.GetMaterialView();
-		l_pMaterial = l_cache.Find( l_materialName );
+		String materialName;
+		MaterialSPtr pMaterial;
+		p_chunk->m_ulBytesRead += DoGetString( materialName );
+		auto & cache = p_scene.GetMaterialView();
+		pMaterial = cache.Find( materialName );
 
-		if ( l_pMaterial && !p_submesh.GetDefaultMaterial() )
+		if ( pMaterial && !p_submesh.GetDefaultMaterial() )
 		{
-			p_submesh.SetDefaultMaterial( l_pMaterial );
+			p_submesh.SetDefaultMaterial( pMaterial );
 		}
 
 		DoDiscardChunk( p_chunk );
@@ -737,18 +737,18 @@ namespace C3dSMax
 	{
 		if ( p_chunk->m_ulLength > p_chunk->m_ulBytesRead )
 		{
-			uint32_t l_uiSize = p_chunk->m_ulLength - p_chunk->m_ulBytesRead;
-			std::vector< uint8_t > l_buffer( l_uiSize );
+			uint32_t uiSize = p_chunk->m_ulLength - p_chunk->m_ulBytesRead;
+			std::vector< uint8_t > buffer( uiSize );
 
 			try
 			{
-				if ( l_uiSize <= uint32_t( m_pFile->GetLength() - m_pFile->Tell() ) && l_uiSize > 0 )
+				if ( uiSize <= uint32_t( m_pFile->GetLength() - m_pFile->Tell() ) && uiSize > 0 )
 				{
-					m_pFile->ReadArray( &l_buffer[0], l_uiSize );
+					m_pFile->ReadArray( &buffer[0], uiSize );
 				}
 				else
 				{
-					m_pFile->ReadArray( &l_buffer[0], std::size_t( m_pFile->GetLength() - m_pFile->Tell() ) );
+					m_pFile->ReadArray( &buffer[0], std::size_t( m_pFile->GetLength() - m_pFile->Tell() ) );
 					throw std::range_error( "Bad chunk size" );
 				}
 			}
@@ -767,12 +767,12 @@ namespace C3dSMax
 
 	bool SMaxImporter::DoIsValidChunk( SMaxChunk * p_chunk, SMaxChunk * p_pParent )
 	{
-		bool l_bReturn = false;
+		bool bReturn = false;
 
 		switch ( p_chunk->m_eChunkId )
 		{
 		default:
-			l_bReturn = false;
+			bReturn = false;
 			break;
 
 		case eSMAX_CHUNK_NULL_CHUNK:
@@ -1366,15 +1366,15 @@ namespace C3dSMax
 		case eSMAX_CHUNK_TEX_VERTS_ENTRY:
 		case eSMAX_CHUNK_SMOOTH_GROUP_ENTRY:
 		case eSMAX_CHUNK_DUMMY:
-			l_bReturn = true;
+			bReturn = true;
 			break;
 		}
 
-		if ( l_bReturn )
+		if ( bReturn )
 		{
-			l_bReturn = p_chunk->m_ulLength + p_pParent->m_ulBytesRead <= p_pParent->m_ulLength;
+			bReturn = p_chunk->m_ulLength + p_pParent->m_ulBytesRead <= p_pParent->m_ulLength;
 		}
 
-		return l_bReturn;
+		return bReturn;
 	}
 }

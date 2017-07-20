@@ -34,23 +34,23 @@ namespace Castor
 
 	bool WorkerThread::Wait( std::chrono::milliseconds const & p_timeout )const
 	{
-		bool l_result = IsEnded() && !m_terminate;
+		bool result = IsEnded() && !m_terminate;
 
-		if ( !l_result )
+		if ( !result )
 		{
-			auto l_begin = std::chrono::high_resolution_clock::now();
-			std::chrono::milliseconds l_wait{ 0 };
+			auto begin = std::chrono::high_resolution_clock::now();
+			std::chrono::milliseconds wait{ 0 };
 
 			do
 			{
 				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-				l_result = IsEnded();
-				l_wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - l_begin );
+				result = IsEnded();
+				wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
-			while ( l_wait < p_timeout && !l_result && !m_terminate );
+			while ( wait < p_timeout && !result && !m_terminate );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void WorkerThread::DoRun()

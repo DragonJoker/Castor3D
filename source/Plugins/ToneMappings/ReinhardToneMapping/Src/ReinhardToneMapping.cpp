@@ -24,11 +24,11 @@ namespace Reinhard
 	ToneMapping::ToneMapping( Engine & p_engine, Parameters const & p_parameters )
 		: Castor3D::ToneMapping{ Name, p_engine, p_parameters }
 	{
-		String l_param;
+		String param;
 
-		if ( p_parameters.Get( cuT( "Gamma" ), l_param ) )
+		if ( p_parameters.Get( cuT( "Gamma" ), param ) )
 		{
-			m_config.SetGamma( string::to_float( l_param ) );
+			m_config.SetGamma( string::to_float( param ) );
 		}
 	}
 
@@ -45,37 +45,37 @@ namespace Reinhard
 	{
 		m_gammaVar = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma );
 
-		GLSL::Shader l_pxl;
+		GLSL::Shader pxl;
 		{
-			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+			auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };
-			auto c3d_fExposure = l_config.DeclMember< Float >( ShaderProgram::Exposure );
-			auto c3d_fGamma = l_config.DeclMember< Float >( ShaderProgram::Gamma );
-			l_config.End();
-			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+			Ubo config{ writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };
+			auto c3d_fExposure = config.DeclMember< Float >( ShaderProgram::Exposure );
+			auto c3d_fGamma = config.DeclMember< Float >( ShaderProgram::Gamma );
+			config.End();
+			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
-			GLSL::Utils l_utils{ l_writer };
-			l_utils.DeclareApplyGamma();
+			GLSL::Utils utils{ writer };
+			utils.DeclareApplyGamma();
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_hdrColor = l_writer.DeclLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				auto hdrColor = writer.DeclLocale( cuT( "hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				// Exposure tone mapping
-				auto l_mapped = l_writer.DeclLocale( cuT( "l_mapped" ), vec3( Float( 1.0f ) ) - exp( -l_hdrColor * c3d_fExposure ) );
+				auto mapped = writer.DeclLocale( cuT( "mapped" ), vec3( Float( 1.0f ) ) - exp( -hdrColor * c3d_fExposure ) );
 				// Gamma correction
-				plx_v4FragColor = vec4( l_utils.ApplyGamma( c3d_fGamma, l_mapped ), 1.0 );
+				plx_v4FragColor = vec4( utils.ApplyGamma( c3d_fGamma, mapped ), 1.0 );
 			} );
 
-			l_pxl = l_writer.Finalise();
+			pxl = writer.Finalise();
 		}
 
-		return l_pxl;
+		return pxl;
 	}
 
 	void ToneMapping::DoDestroy()

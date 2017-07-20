@@ -166,8 +166,8 @@ namespace GLSL
 		m_getRandom = m_writer.ImplementFunction< Float >( cuT( "GetRandom" )
 			, [this]( Vec4 const & p_seed )
 			{
-				auto l_dot = m_writer.DeclLocale( cuT( "l_dot" ), dot( p_seed, vec4( 12.9898_f, 78.233, 45.164, 94.673 ) ) );
-				m_writer.Return( fract( sin( l_dot ) * 43758.5453 ) );
+				auto p = m_writer.DeclLocale( cuT( "p" ), dot( p_seed, vec4( 12.9898_f, 78.233, 45.164, 94.673 ) ) );
+				m_writer.Return( fract( sin( p ) * 43758.5453 ) );
 			}
 			, InVec4( &m_writer, cuT( "p_seed" ) ) );
 	}
@@ -195,15 +195,15 @@ namespace GLSL
 				{
 					auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), Float( 4000.0 ) );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), Float( 4000.0 ) );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[i] / l_diffusion, p_depth ) ) );
+						visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[i] / diffusion, p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec2( &m_writer, cuT( "p_uv" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) ) );
@@ -217,17 +217,17 @@ namespace GLSL
 					auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 					auto gl_FragCoord = m_writer.DeclBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-					auto l_pindex = m_writer.DeclLocale( cuT( "l_pindex" ), Int( 0 ) );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), Float( 2800.0 ) );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto pindex = m_writer.DeclLocale( cuT( "pindex" ), Int( 0 ) );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), Float( 2800.0 ) );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-						l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_depth ) ) );
+						pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( p_uv + c3d_poissonDisk[pindex] / diffusion, p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec2( &m_writer, cuT( "p_uv" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) ) );
@@ -265,15 +265,15 @@ namespace GLSL
 				{
 					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), 500.0_f );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), 500.0_f );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[i] / l_diffusion, p_index, p_depth ) ) );
+						visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[i] / diffusion, p_index, p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec2( &m_writer, cuT( "p_uv" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) )
@@ -289,17 +289,17 @@ namespace GLSL
 					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 					auto gl_FragCoord = m_writer.DeclBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-					auto l_pindex = m_writer.DeclLocale( cuT( "l_pindex" ), 0_i );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), 700.0_f );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto pindex = m_writer.DeclLocale( cuT( "pindex" ), 0_i );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), 700.0_f );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_index, p_depth ) ) );
+						pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( p_uv + c3d_poissonDisk[pindex] / diffusion, p_index, p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec2( &m_writer, cuT( "p_uv" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) )
@@ -338,15 +338,15 @@ namespace GLSL
 				{
 					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), 500.0_f );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), 500.0_f );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint[p_index], vec4( p_direction.xy() + c3d_poissonDisk[i] / l_diffusion, p_direction.z(), p_depth ) ) );
+						visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint[p_index], vec4( p_direction.xy() + c3d_poissonDisk[i] / diffusion, p_direction.z(), p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec3( &m_writer, cuT( "p_direction" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) )
@@ -362,17 +362,17 @@ namespace GLSL
 					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 					auto gl_FragCoord = m_writer.DeclBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-					auto l_pindex = m_writer.DeclLocale( cuT( "l_pindex" ), 0_i );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), 700.0_f );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto pindex = m_writer.DeclLocale( cuT( "pindex" ), 0_i );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), 700.0_f );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint[p_index], vec4( p_direction.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, p_direction.z(), p_depth ) ) );
+						pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint[p_index], vec4( p_direction.xy() + c3d_poissonDisk[pindex] / diffusion, p_direction.z(), p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec3( &m_writer, cuT( "p_direction" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) )
@@ -408,15 +408,15 @@ namespace GLSL
 				{
 					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), 500.0_f );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), 500.0_f );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec3( p_uv + c3d_poissonDisk[i] / l_diffusion, p_depth ) ) );
+						visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec3( p_uv + c3d_poissonDisk[i] / diffusion, p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec2( &m_writer, cuT( "p_uv" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) ) );
@@ -430,17 +430,17 @@ namespace GLSL
 					auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 					auto gl_FragCoord = m_writer.DeclBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-					auto l_pindex = m_writer.DeclLocale( cuT( "l_pindex" ), 0_i );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), 700.0_f );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto pindex = m_writer.DeclLocale( cuT( "pindex" ), 0_i );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), 700.0_f );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec3( p_uv + c3d_poissonDisk[l_pindex] / l_diffusion, p_depth ) ) );
+						pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec3( p_uv + c3d_poissonDisk[pindex] / diffusion, p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec2( &m_writer, cuT( "p_uv" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) ) );
@@ -475,15 +475,15 @@ namespace GLSL
 				{
 					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( MapShadowPoint );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), 500.0_f );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), 500.0_f );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[i] / l_diffusion, p_direction.z(), p_depth ) ) );
+						visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[i] / diffusion, p_direction.z(), p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec3( &m_writer, cuT( "p_direction" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) ) );
@@ -497,17 +497,17 @@ namespace GLSL
 					auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( MapShadowPoint );
 					auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 					auto gl_FragCoord = m_writer.DeclBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-					auto l_pindex = m_writer.DeclLocale( cuT( "l_pindex" ), 0_i );
-					auto l_diffusion = m_writer.DeclLocale( cuT( "l_diffusion" ), 700.0_f );
-					auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
+					auto pindex = m_writer.DeclLocale( cuT( "pindex" ), 0_i );
+					auto diffusion = m_writer.DeclLocale( cuT( "diffusion" ), 700.0_f );
+					auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
 
 					for ( int i = 0; i < 4; i++ )
 					{
-						l_pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-						l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, p_direction.z(), p_depth ) ) );
+						pindex = m_writer.Cast< Int >( 16.0 * m_getRandom( vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+						visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowPoint, vec4( p_direction.xy() + c3d_poissonDisk[pindex] / diffusion, p_direction.z(), p_depth ) ) );
 					}
 
-					m_writer.Return( l_visibility );
+					m_writer.Return( visibility );
 				}
 				, InVec3( &m_writer, cuT( "p_direction" ) )
 				, InFloat( &m_writer, cuT( "p_depth" ) ) );
@@ -525,10 +525,10 @@ namespace GLSL
 			, [this]( Vec3 const & p_normal
 				, Vec3 const & p_lightDirection )
 			{
-				auto l_cosAlpha = m_writer.DeclLocale( cuT( "l_cosAlpha" ), clamp( dot( p_normal, p_lightDirection ), 0.0_f, 1.0_f ) );
-				auto l_offsetScaleN = m_writer.DeclLocale( cuT( "l_offsetScaleN" ), sqrt( 1.0_f - l_cosAlpha * l_cosAlpha ) ); // sin( acos( l_cosAlpha ) )
-				auto l_offsetScaleL = m_writer.DeclLocale( cuT( "l_offsetScaleL" ), l_offsetScaleN / l_cosAlpha ); // tan( acos( l_cosAlpha ) )
-				m_writer.Return( vec2( l_offsetScaleN, min( 2.0_f, l_offsetScaleL ) ) );
+				auto cosAlpha = m_writer.DeclLocale( cuT( "cosAlpha" ), clamp( dot( p_normal, p_lightDirection ), 0.0_f, 1.0_f ) );
+				auto offsetScaleN = m_writer.DeclLocale( cuT( "offsetScaleN" ), sqrt( 1.0_f - cosAlpha * cosAlpha ) ); // sin( acos( cosAlpha ) )
+				auto offsetScaleL = m_writer.DeclLocale( cuT( "offsetScaleL" ), offsetScaleN / cosAlpha ); // tan( acos( cosAlpha ) )
+				m_writer.Return( vec2( offsetScaleN, min( 2.0_f, offsetScaleL ) ) );
 			}
 			, InVec3( &m_writer, cuT( "p_normal" ) )
 			, InVec3( &m_writer, cuT( "p_lightDirection" ) ) );
@@ -543,15 +543,15 @@ namespace GLSL
 				, Vec3 const & p_normal )
 			{
 				// Offset the vertex position along its normal.
-				auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), m_getShadowOffset( p_normal, p_lightDirection ) * 2.0_f );
-				auto l_worldSpace = m_writer.DeclLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
-				auto l_lightSpacePosition = m_writer.DeclLocale( cuT( "l_lightSpacePosition" ), p_lightMatrix * vec4( l_worldSpace, 1.0_f ) );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), m_getShadowOffset( p_normal, p_lightDirection ) * 2.0_f );
+				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * offset.x() ) );
+				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" ), p_lightMatrix * vec4( worldSpace, 1.0_f ) );
 				// Perspective divide (result in range [-1,1]).
-				l_lightSpacePosition.xyz() = l_lightSpacePosition.xyz() / l_lightSpacePosition.w();
+				lightSpacePosition.xyz() = lightSpacePosition.xyz() / lightSpacePosition.w();
 				// Now put the position in range [0,1].
-				l_lightSpacePosition.xyz() = m_writer.Paren( l_lightSpacePosition.xyz() * Float( 0.5 ) ) + Float( 0.5 );
+				lightSpacePosition.xyz() = m_writer.Paren( lightSpacePosition.xyz() * Float( 0.5 ) ) + Float( 0.5 );
 
-				m_writer.Return( l_lightSpacePosition.xyz() );
+				m_writer.Return( lightSpacePosition.xyz() );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
@@ -567,10 +567,10 @@ namespace GLSL
 				, Vec3 const & p_lightDirection
 				, Vec3 const & p_normal )
 			{
-				auto l_lightSpacePosition = m_writer.DeclLocale( cuT( "l_lightSpacePosition" ), m_getLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
-				auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), Float( 1 ) );
-				l_visibility = m_filterDirectional( l_lightSpacePosition.xy(), l_lightSpacePosition.z() );
-				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
+				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" ), m_getLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
+				auto visibility = m_writer.DeclLocale( cuT( "visibility" ), Float( 1 ) );
+				visibility = m_filterDirectional( lightSpacePosition.xy(), lightSpacePosition.z() );
+				m_writer.Return( 1.0_f - clamp( visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
@@ -587,11 +587,11 @@ namespace GLSL
 				, Vec3 const & p_normal
 				, Int const & p_index )
 			{
-				auto l_lightSpacePosition = m_writer.DeclLocale( cuT( "l_lightSpacePosition" ), m_getLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
-				auto l_index = m_writer.DeclLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) );
-				auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), 1.0_f );
-				l_visibility = m_filterSpot( l_lightSpacePosition.xy(), l_lightSpacePosition.z(), l_index );
-				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
+				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" ), m_getLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
+				auto index = m_writer.DeclLocale( cuT( "index" ), m_writer.Cast< Float >( p_index ) );
+				auto visibility = m_writer.DeclLocale( cuT( "visibility" ), 1.0_f );
+				visibility = m_filterSpot( lightSpacePosition.xy(), lightSpacePosition.z(), index );
+				m_writer.Return( 1.0_f - clamp( visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
@@ -608,13 +608,13 @@ namespace GLSL
 			, Vec3 const & p_normal
 			, Int const & p_index )
 			{
-				auto l_vertexToLight = m_writer.DeclLocale( cuT( "l_vertexToLight" ), normalize( p_worldSpacePosition - p_lightPosition ) );
-				auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), m_getShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) );
-				auto l_worldSpace = m_writer.DeclLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
-				auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), 1.0_f );
-				l_vertexToLight = l_worldSpace - p_lightPosition;
-				l_visibility = m_filterPoint( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f, p_index );
-				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
+				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" ), normalize( p_worldSpacePosition - p_lightPosition ) );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), m_getShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) );
+				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * offset.x() ) );
+				auto visibility = m_writer.DeclLocale( cuT( "visibility" ), 1.0_f );
+				vertexToLight = worldSpace - p_lightPosition;
+				visibility = m_filterPoint( vertexToLight, length( vertexToLight ) / 4000.0_f, p_index );
+				m_writer.Return( 1.0_f - clamp( visibility, 0.0, 1.0 ) );
 			}
 			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
 			, InVec3( &m_writer, cuT( "p_lightPosition" ) )
@@ -630,10 +630,10 @@ namespace GLSL
 				, Vec3 const & p_lightDirection
 				, Vec3 const & p_normal )
 			{
-				auto l_lightSpacePosition = m_writer.DeclLocale( cuT( "l_lightSpacePosition" ), m_getLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
-				auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), 1.0_f );
-				l_visibility = m_filterOneSpot( l_lightSpacePosition.xy(), l_lightSpacePosition.z() );
-				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
+				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" ), m_getLightSpacePosition( p_lightMatrix, p_worldSpacePosition, p_lightDirection, p_normal ) );
+				auto visibility = m_writer.DeclLocale( cuT( "visibility" ), 1.0_f );
+				visibility = m_filterOneSpot( lightSpacePosition.xy(), lightSpacePosition.z() );
+				m_writer.Return( 1.0_f - clamp( visibility, 0.0, 1.0 ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "p_lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
@@ -648,13 +648,13 @@ namespace GLSL
 			, Vec3 const & p_lightPosition
 			, Vec3 const & p_normal )
 			{
-				auto l_vertexToLight = m_writer.DeclLocale( cuT( "l_vertexToLight" ), normalize( p_worldSpacePosition - p_lightPosition ) );
-				auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), m_getShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) );
-				auto l_worldSpace = m_writer.DeclLocale( cuT( "l_worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * l_offset.x() ) );
-				auto l_visibility = m_writer.DeclLocale( cuT( "l_visibility" ), 1.0_f );
-				l_vertexToLight = l_worldSpace - p_lightPosition;
-				l_visibility = m_filterOnePoint( l_vertexToLight, length( l_vertexToLight ) / 4000.0_f );
-				m_writer.Return( 1.0_f - clamp( l_visibility, 0.0, 1.0 ) );
+				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" ), normalize( p_worldSpacePosition - p_lightPosition ) );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), m_getShadowOffset( p_normal, p_worldSpacePosition - p_lightPosition ) );
+				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" ), p_worldSpacePosition + m_writer.Paren( p_normal * offset.x() ) );
+				auto visibility = m_writer.DeclLocale( cuT( "visibility" ), 1.0_f );
+				vertexToLight = worldSpace - p_lightPosition;
+				visibility = m_filterOnePoint( vertexToLight, length( vertexToLight ) / 4000.0_f );
+				m_writer.Return( 1.0_f - clamp( visibility, 0.0, 1.0 ) );
 			}
 			, InVec3( &m_writer, cuT( "p_worldSpacePosition" ) )
 			, InVec3( &m_writer, cuT( "p_lightPosition" ) )

@@ -1,7 +1,8 @@
-#include "Material.hpp"
+﻿#include "Material.hpp"
 
 #include "LegacyPass.hpp"
-#include "PbrPass.hpp"
+#include "MetallicRoughnessPbrPass.hpp"
+#include "SpecularGlossinessPbrPass.hpp"
 
 #include "Scene/SceneFileParser.hpp"
 
@@ -17,25 +18,32 @@ namespace Castor3D
 	bool Material::TextWriter::operator()( Material const & p_material, TextFile & p_file )
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Material " ) + p_material.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
+		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< Material >::CheckError( l_return, "Material name" );
+		Castor::TextWriter< Material >::CheckError( result, "Material name" );
 
-		if ( l_return )
+		if ( result )
 		{
 			switch ( p_material.GetType() )
 			{
 			case MaterialType::eLegacy:
-				for ( auto l_pass : p_material )
+				for ( auto pass : p_material )
 				{
-					l_return &= LegacyPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< LegacyPass >( l_pass ), p_file );
+					result &= LegacyPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< LegacyPass >( pass ), p_file );
 				}
 				break;
 
-			case MaterialType::ePbr:
-				for ( auto l_pass : p_material )
+			case MaterialType::ePbrMetallicRoughness:
+				for ( auto pass : p_material )
 				{
-					l_return &= PbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< PbrPass >( l_pass ), p_file );
+					result &= MetallicRoughnessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), p_file );
+				}
+				break;
+
+			case MaterialType::ePbrSpecularGlossiness:
+				for ( auto pass : p_material )
+				{
+					result &= SpecularGlossinessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), p_file );
 				}
 				break;
 
@@ -45,12 +53,12 @@ namespace Castor3D
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*********************************************************************************************
@@ -72,32 +80,36 @@ namespace Castor3D
 	{
 		Logger::LogDebug( cuT( "Initialising material [" ) + GetName() + cuT( "]" ) );
 
-		for ( auto l_pass : m_passes )
+		for ( auto pass : m_passes )
 		{
-			l_pass->Initialise();
+			pass->Initialise();
 		}
 	}
 
 	void Material::Cleanup()
 	{
-		for ( auto l_pass : m_passes )
+		for ( auto pass : m_passes )
 		{
-			l_pass->Cleanup();
+			pass->Cleanup();
 		}
 	}
 
 	PassSPtr Material::CreatePass()
 	{
-		PassSPtr l_newPass;
+		PassSPtr newPass;
 
 		switch ( GetType() )
 		{
 		case MaterialType::eLegacy:
-			l_newPass = std::make_shared< LegacyPass >( *this );
+			newPass = std::make_shared< LegacyPass >( *this );
 			break;
 
-		case MaterialType::ePbr:
-			l_newPass = std::make_shared< PbrPass >( *this );
+		case MaterialType::ePbrMetallicRoughness:
+			newPass = std::make_shared< MetallicRoughnessPbrPass >( *this );
+			break;
+
+		case MaterialType::ePbrSpecularGlossiness:
+			newPass = std::make_shared< SpecularGlossinessPbrPass >( *this );
 			break;
 
 		default:
@@ -105,18 +117,18 @@ namespace Castor3D
 			break;
 		}
 
-		REQUIRE( l_newPass );
-		m_passes.push_back( l_newPass );
-		return l_newPass;
+		REQUIRE( newPass );
+		m_passes.push_back( newPass );
+		return newPass;
 	}
 
 	void Material::RemovePass( PassSPtr p_pass )
 	{
-		auto l_it = std::find( m_passes.begin(), m_passes.end(), p_pass );
+		auto it = std::find( m_passes.begin(), m_passes.end(), p_pass );
 
-		if ( l_it != m_passes.end() )
+		if ( it != m_passes.end() )
 		{
-			m_passes.erase( l_it );
+			m_passes.erase( it );
 		}
 	}
 

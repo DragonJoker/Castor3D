@@ -54,38 +54,38 @@ namespace Castor3D
 		 */
 		inline bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )
 		{
-			BinaryChunk l_header;
-			bool l_return = l_header.Read( p_file );
+			BinaryChunk header;
+			bool result = header.Read( p_file );
 
-			if ( l_header.GetChunkType() != ChunkType::eCmshFile )
+			if ( header.GetChunkType() != ChunkType::eCmshFile )
 			{
 				Castor::Logger::LogError( cuT( "Not a valid CMSH file." ) );
-				l_return = false;
+				result = false;
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = DoParseHeader( l_header );
+				result = DoParseHeader( header );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = l_header.CheckAvailable( 1 );
+				result = header.CheckAvailable( 1 );
 			}
 
-			BinaryChunk l_chunk;
+			BinaryChunk chunk;
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = l_header.GetSubChunk( l_chunk );
+				result = header.GetSubChunk( chunk );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = Parse( p_obj, l_chunk );
+				result = Parse( p_obj, chunk );
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -101,7 +101,7 @@ namespace Castor3D
 		 */
 		inline bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )
 		{
-			bool l_return = true;
+			bool result = true;
 
 			if ( p_chunk.GetChunkType() == ChunkTyper< TParsed >::Value )
 			{
@@ -110,20 +110,20 @@ namespace Castor3D
 			else
 			{
 				Castor::Logger::LogError( cuT( "Not a valid chunk for parsed type." ) );
-				l_return = false;
+				result = false;
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = DoParse( p_obj );
+				result = DoParse( p_obj );
 
-				if ( !l_return )
+				if ( !result )
 				{
 					m_chunk->EndParse();
 				}
 			}
 
-			return l_return;
+			return result;
 		}
 
 	protected:
@@ -139,41 +139,41 @@ namespace Castor3D
 		 */
 		inline bool DoParseHeader( BinaryChunk & p_chunk )const
 		{
-			BinaryChunk l_chunk;
-			bool l_return = p_chunk.GetSubChunk( l_chunk );
+			BinaryChunk chunk;
+			bool result = p_chunk.GetSubChunk( chunk );
 
-			if ( l_chunk.GetChunkType() != ChunkType::eCmshHeader )
+			if ( chunk.GetChunkType() != ChunkType::eCmshHeader )
 			{
 				Castor::Logger::LogError( cuT( "Missing header chunk." ) );
-				l_return = false;
+				result = false;
 			}
 
-			Castor::String l_name;
-			uint32_t l_version{ 0 };
+			Castor::String name;
+			uint32_t version{ 0 };
 
-			while ( l_return && l_chunk.CheckAvailable( 1 ) )
+			while ( result && chunk.CheckAvailable( 1 ) )
 			{
-				BinaryChunk l_subchunk;
-				l_return = l_chunk.GetSubChunk( l_subchunk );
+				BinaryChunk subchunk;
+				result = chunk.GetSubChunk( subchunk );
 
-				switch ( l_subchunk.GetChunkType() )
+				switch ( subchunk.GetChunkType() )
 				{
 				case ChunkType::eName:
-					l_return = DoParseChunk( l_name, l_subchunk );
+					result = DoParseChunk( name, subchunk );
 					break;
 
 				case ChunkType::eCmshVersion:
-					l_return = DoParseChunk( l_version, l_subchunk );
+					result = DoParseChunk( version, subchunk );
 					break;
 				}
 			}
 
-			if ( !l_return )
+			if ( !result )
 			{
 				p_chunk.EndParse();
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -275,14 +275,14 @@ namespace Castor3D
 		inline bool DoGetSubChunk( BinaryChunk & p_chunk )
 		{
 			REQUIRE( m_chunk );
-			bool l_return = m_chunk->CheckAvailable( 1 );
+			bool result = m_chunk->CheckAvailable( 1 );
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = m_chunk->GetSubChunk( p_chunk );
+				result = m_chunk->GetSubChunk( p_chunk );
 			}
 
-			return l_return;
+			return result;
 		}
 
 	private:

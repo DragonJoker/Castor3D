@@ -67,14 +67,14 @@ namespace Castor
 			m_free = new uint8_t * [m_total];
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
-			size_t l_size = sizeof( Object ) + 1;
+			size_t size = sizeof( Object ) + 1;
 
 			for ( size_t i = 0; i < m_total; ++i )
 			{
 				*m_freeIndex++ = m_bufferEnd;
 				// On marque le premier octet de la mémoire
 				*m_bufferEnd = NEVER_ALLOCATED;
-				m_bufferEnd += l_size;
+				m_bufferEnd += size;
 			}
 
 			m_freeEnd = m_freeIndex;
@@ -90,17 +90,17 @@ namespace Castor
 			if ( m_freeIndex != m_freeEnd )
 			{
 				ReportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
-				uint8_t * l_buffer = m_buffer;
-				size_t l_size = sizeof( Object ) + 1;
+				uint8_t * buffer = m_buffer;
+				size_t size = sizeof( Object ) + 1;
 
 				for ( size_t i = 0; i < m_total; ++i )
 				{
-					if ( *l_buffer == ALLOCATED )
+					if ( *buffer == ALLOCATED )
 					{
-						ReportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( l_buffer + 1 ) );
+						ReportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( buffer + 1 ) );
 					}
 
-					l_buffer += l_size;
+					buffer += size;
 				}
 			}
 
@@ -129,9 +129,9 @@ namespace Castor
 				return nullptr;
 			}
 
-			uint8_t * l_space = *--m_freeIndex;
-			* l_space = ALLOCATED;
-			return reinterpret_cast< Object * >( ++l_space );
+			uint8_t * space = *--m_freeIndex;
+			* space = ALLOCATED;
+			return reinterpret_cast< Object * >( ++space );
 		}
 		/**
 		 *\~english
@@ -163,12 +163,12 @@ namespace Castor
 					return false;
 				}
 
-				uint8_t * l_marked = reinterpret_cast< uint8_t * >( p_space );
-				--l_marked;
+				uint8_t * marked = reinterpret_cast< uint8_t * >( p_space );
+				--marked;
 
-				if ( *l_marked != ALLOCATED )
+				if ( *marked != ALLOCATED )
 				{
-					if ( *l_marked == FREED )
+					if ( *marked == FREED )
 					{
 						ReportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )p_space );
 						return false;
@@ -178,8 +178,8 @@ namespace Castor
 					return false;
 				}
 
-				*l_marked = FREED;
-				*m_freeIndex++ = l_marked;
+				*marked = FREED;
+				*m_freeIndex++ = marked;
 				return true;
 			}
 			else

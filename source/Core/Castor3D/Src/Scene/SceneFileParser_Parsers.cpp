@@ -12,7 +12,8 @@
 #include "Cache/CacheView.hpp"
 #include "Material/Material.hpp"
 #include "Material/LegacyPass.hpp"
-#include "Material/PbrPass.hpp"
+#include "Material/MetallicRoughnessPbrPass.hpp"
+#include "Material/SpecularGlossinessPbrPass.hpp"
 #include "Mesh/Face.hpp"
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
@@ -53,27 +54,27 @@ namespace Castor3D
 	{
 		InterleavedVertexArray Convert( VertexPtrArray const & p_points )
 		{
-			InterleavedVertexArray l_return;
-			l_return.reserve( p_points.size() );
+			InterleavedVertexArray result;
+			result.reserve( p_points.size() );
 
-			for ( auto l_point : p_points )
+			for ( auto point : p_points )
 			{
-				InterleavedVertex l_vertex;
-				Vertex::GetPosition( *l_point, l_vertex.m_pos );
-				Vertex::GetNormal( *l_point, l_vertex.m_nml );
-				Vertex::GetTangent( *l_point, l_vertex.m_tan );
-				Vertex::GetBitangent( *l_point, l_vertex.m_bin );
-				Vertex::GetTexCoord( *l_point, l_vertex.m_tex );
-				l_return.push_back( l_vertex );
+				InterleavedVertex vertex;
+				Vertex::GetPosition( *point, vertex.m_pos );
+				Vertex::GetNormal( *point, vertex.m_nml );
+				Vertex::GetTangent( *point, vertex.m_tan );
+				Vertex::GetBitangent( *point, vertex.m_bin );
+				Vertex::GetTexCoord( *point, vertex.m_tex );
+				result.push_back( vertex );
 			}
 
-			return l_return;
+			return result;
 		}
 	}
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootMtlFile )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
@@ -81,15 +82,15 @@ namespace Castor3D
 		}
 		else
 		{
-			Path l_path;
-			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+			Path path;
+			path = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
 
-			if ( File::FileExists( l_path ) )
+			if ( File::FileExists( path ) )
 			{
-				TextFile l_fileMat( l_path, File::OpenMode::eRead, File::EncodingMode::eASCII );
-				Logger::LogInfo( cuT( "Loading materials file : " ) + l_path );
+				TextFile fileMat( path, File::OpenMode::eRead, File::EncodingMode::eASCII );
+				Logger::LogInfo( cuT( "Loading materials file : " ) + path );
 
-				if ( l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Read( l_fileMat ) )
+				if ( parsingContext->m_pParser->GetEngine()->GetMaterialCache().Read( fileMat ) )
 				{
 					Logger::LogInfo( cuT( "Materials read" ) );
 				}
@@ -104,7 +105,7 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootScene )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
@@ -112,18 +113,18 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			l_parsingContext->pScene = l_parsingContext->m_pParser->GetEngine()->GetSceneCache().Add( l_name );
-			l_parsingContext->mapScenes.insert( std::make_pair( l_name, l_parsingContext->pScene ) );
+			String name;
+			p_params[0]->Get( name );
+			parsingContext->pScene = parsingContext->m_pParser->GetEngine()->GetSceneCache().Add( name );
+			parsingContext->mapScenes.insert( std::make_pair( name, parsingContext->pScene ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eScene )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootFont )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->path.clear();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->path.clear();
 
 		if ( p_params.empty() )
 		{
@@ -131,14 +132,14 @@ namespace Castor3D
 		}
 		else
 		{
-			p_params[0]->Get( l_parsingContext->strName );
+			p_params[0]->Get( parsingContext->strName );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eFont )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootMaterial )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
@@ -146,8 +147,8 @@ namespace Castor3D
 		}
 		else
 		{
-			p_params[0]->Get( l_parsingContext->strName );
-			l_parsingContext->pMaterial = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Add( l_parsingContext->strName
+			p_params[0]->Get( parsingContext->strName );
+			parsingContext->pMaterial = parsingContext->m_pParser->GetEngine()->GetMaterialCache().Add( parsingContext->strName
 				, MaterialType::eLegacy );
 		}
 	}
@@ -155,7 +156,7 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootPanelOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
@@ -163,16 +164,16 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_name;
-			l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::ePanel, nullptr, l_parsingContext->pOverlay );
-			l_parsingContext->pOverlay->SetVisible( false );
+			String name;
+			parsingContext->pOverlay = parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( name ), OverlayType::ePanel, nullptr, parsingContext->pOverlay );
+			parsingContext->pOverlay->SetVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::ePanelOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootBorderPanelOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
@@ -180,16 +181,16 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_name;
-			l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::eBorderPanel, nullptr, l_parsingContext->pOverlay );
-			l_parsingContext->pOverlay->SetVisible( false );
+			String name;
+			parsingContext->pOverlay = parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( name ), OverlayType::eBorderPanel, nullptr, parsingContext->pOverlay );
+			parsingContext->pOverlay->SetVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBorderPanelOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootTextOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
@@ -197,16 +198,16 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_name;
-			l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::eText, nullptr, l_parsingContext->pOverlay );
-			l_parsingContext->pOverlay->SetVisible( false );
+			String name;
+			parsingContext->pOverlay = parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( name ), OverlayType::eText, nullptr, parsingContext->pOverlay );
+			parsingContext->pOverlay->SetVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eTextOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootSamplerState )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
@@ -214,15 +215,15 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_name;
-			l_parsingContext->pSampler = l_parsingContext->m_pParser->GetEngine()->GetSamplerCache().Add( p_params[0]->Get( l_name ) );
+			String name;
+			parsingContext->pSampler = parsingContext->m_pParser->GetEngine()->GetSamplerCache().Add( p_params[0]->Get( name ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSampler )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootDebugOverlays )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
@@ -230,31 +231,31 @@ namespace Castor3D
 		}
 		else
 		{
-			bool l_value;
-			l_parsingContext->m_pParser->GetEngine()->GetRenderLoop().ShowDebugOverlays( p_params[0]->Get( l_value ) );
+			bool value;
+			parsingContext->m_pParser->GetEngine()->GetRenderLoop().ShowDebugOverlays( p_params[0]->Get( value ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eScene )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootWindow )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( l_parsingContext->pWindow )
+			if ( parsingContext->pWindow )
 			{
 				PARSING_ERROR( cuT( "Can't create more than one render window" ) );
 			}
 			else
 			{
-				String l_name;
-				p_params[0]->Get( l_name );
-				l_parsingContext->pWindow = l_parsingContext->pScene->GetEngine()->GetRenderWindowCache().Add( l_name );
+				String name;
+				p_params[0]->Get( name );
+				parsingContext->pWindow = parsingContext->pScene->GetEngine()->GetRenderWindowCache().Add( name );
 			}
 		}
 	}
@@ -262,12 +263,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_WindowRenderTarget )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pWindow )
+		if ( parsingContext->pWindow )
 		{
-			l_parsingContext->pRenderTarget = l_parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( TargetType::eWindow );
-			l_parsingContext->iInt16 = 0;
+			parsingContext->pRenderTarget = parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( TargetType::eWindow );
+			parsingContext->iInt16 = 0;
 		}
 		else
 		{
@@ -278,59 +279,59 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_WindowVSync )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pWindow )
+		if ( !parsingContext->pWindow )
 		{
 			PARSING_ERROR( cuT( "No window initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			bool l_bValue;
-			p_params[0]->Get( l_bValue );
-			l_parsingContext->pWindow->SetVSync( l_bValue );
+			bool bValue;
+			p_params[0]->Get( bValue );
+			parsingContext->pWindow->SetVSync( bValue );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_WindowFullscreen )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pWindow )
+		if ( !parsingContext->pWindow )
 		{
 			PARSING_ERROR( cuT( "No window initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 
-			bool l_bValue;
-			p_params[0]->Get( l_bValue );
-			l_parsingContext->pWindow->SetFullscreen( l_bValue );
+			bool bValue;
+			p_params[0]->Get( bValue );
+			parsingContext->pWindow->SetFullscreen( bValue );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetScene )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
 
-		if ( !l_parsingContext->pRenderTarget )
+		if ( !parsingContext->pRenderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			ScenePtrStrMap::iterator l_it = l_parsingContext->mapScenes.find( p_params[0]->Get( l_name ) );
+			ScenePtrStrMap::iterator it = parsingContext->mapScenes.find( p_params[0]->Get( name ) );
 
-			if ( l_it != l_parsingContext->mapScenes.end() )
+			if ( it != parsingContext->mapScenes.end() )
 			{
-				l_parsingContext->pRenderTarget->SetScene( l_it->second );
+				parsingContext->pRenderTarget->SetScene( it->second );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "No scene found with name : [" ) + l_name + cuT( "]." ) );
+				PARSING_ERROR( cuT( "No scene found with name : [" ) + name + cuT( "]." ) );
 			}
 		}
 	}
@@ -338,18 +339,18 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetCamera )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
 
-		if ( !l_parsingContext->pRenderTarget )
+		if ( !parsingContext->pRenderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( l_parsingContext->pRenderTarget->GetScene() )
+			if ( parsingContext->pRenderTarget->GetScene() )
 			{
-				l_parsingContext->pRenderTarget->SetCamera( l_parsingContext->pRenderTarget->GetScene()->GetCameraCache().Find( p_params[0]->Get( l_name ) ) );
+				parsingContext->pRenderTarget->SetCamera( parsingContext->pRenderTarget->GetScene()->GetCameraCache().Find( p_params[0]->Get( name ) ) );
 			}
 			else
 			{
@@ -361,36 +362,36 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetSize )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pRenderTarget )
+		if ( !parsingContext->pRenderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Size l_size;
-			l_parsingContext->pRenderTarget->SetSize( p_params[0]->Get( l_size ) );
+			Size size;
+			parsingContext->pRenderTarget->SetSize( p_params[0]->Get( size ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetFormat )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pRenderTarget )
+		if ( !parsingContext->pRenderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			PixelFormat l_ePF;
-			p_params[0]->Get( l_ePF );
+			PixelFormat ePF;
+			p_params[0]->Get( ePF );
 
-			if ( l_ePF < PixelFormat::eD16 )
+			if ( ePF < PixelFormat::eD16 )
 			{
-				l_parsingContext->pRenderTarget->SetPixelFormat( l_ePF );
+				parsingContext->pRenderTarget->SetPixelFormat( ePF );
 			}
 			else
 			{
@@ -402,21 +403,21 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetStereo )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pRenderTarget )
+		if ( !parsingContext->pRenderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			real l_rIntraOcularDistance;
-			p_params[0]->Get( l_rIntraOcularDistance );
+			real rIntraOcularDistance;
+			p_params[0]->Get( rIntraOcularDistance );
 
-			if ( l_rIntraOcularDistance > 0 )
+			if ( rIntraOcularDistance > 0 )
 			{
 				//l_parsingContext->pRenderTarget->SetStereo( true );
-				//l_parsingContext->pRenderTarget->SetIntraOcularDistance( l_rIntraOcularDistance );
+				//l_parsingContext->pRenderTarget->SetIntraOcularDistance( rIntraOcularDistance );
 			}
 		}
 	}
@@ -424,34 +425,34 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetPostEffect )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pRenderTarget )
+		if ( !parsingContext->pRenderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			Parameters l_parameters;
+			String name;
+			p_params[0]->Get( name );
+			Parameters parameters;
 
 			if ( p_params.size() > 1 )
 			{
-				String l_tmp;
-				l_parameters.Parse( p_params[1]->Get( l_tmp ) );
+				String tmp;
+				parameters.Parse( p_params[1]->Get( tmp ) );
 			}
 
-			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
+			Engine * engine = parsingContext->m_pParser->GetEngine();
 
-			if ( !l_engine->GetRenderTargetCache().GetPostEffectFactory().IsRegistered( string::lower_case( l_name ) ) )
+			if ( !engine->GetRenderTargetCache().GetPostEffectFactory().IsRegistered( string::lower_case( name ) ) )
 			{
-				PARSING_ERROR( cuT( "PostEffect [" ) + l_name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+				PARSING_ERROR( cuT( "PostEffect [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				PostEffectSPtr l_effect = l_engine->GetRenderTargetCache().GetPostEffectFactory().Create( l_name, *l_parsingContext->pRenderTarget, *l_engine->GetRenderSystem(), l_parameters );
-				l_parsingContext->pRenderTarget->AddPostEffect( l_effect );
+				PostEffectSPtr effect = engine->GetRenderTargetCache().GetPostEffectFactory().Create( name, *parsingContext->pRenderTarget, *engine->GetRenderSystem(), parameters );
+				parsingContext->pRenderTarget->AddPostEffect( effect );
 			}
 		}
 	}
@@ -459,9 +460,9 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetToneMapping )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pRenderTarget )
+		if ( !parsingContext->pRenderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
@@ -471,26 +472,26 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			Parameters l_parameters;
+			String name;
+			p_params[0]->Get( name );
+			Parameters parameters;
 
 			if ( p_params.size() > 1 )
 			{
-				String l_tmp;
-				l_parameters.Parse( p_params[1]->Get( l_tmp ) );
+				String tmp;
+				parameters.Parse( p_params[1]->Get( tmp ) );
 			}
 
-			l_parsingContext->pRenderTarget->SetToneMappingType( l_name, l_parameters );
+			parsingContext->pRenderTarget->SetToneMappingType( name, parameters );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetSsao )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pRenderTarget )
+		if ( !parsingContext->pRenderTarget )
 		{
 			PARSING_ERROR( cuT( "No render target initialised." ) );
 		}
@@ -499,90 +500,90 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RenderTargetEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pRenderTarget->GetTargetType() == TargetType::eTexture )
+		if ( parsingContext->pRenderTarget->GetTargetType() == TargetType::eTexture )
 		{
-			l_parsingContext->pTextureUnit->SetRenderTarget( l_parsingContext->pRenderTarget );
+			parsingContext->pTextureUnit->SetRenderTarget( parsingContext->pRenderTarget );
 		}
 		else
 		{
-			l_parsingContext->pWindow->SetRenderTarget( l_parsingContext->pRenderTarget );
+			parsingContext->pWindow->SetRenderTarget( parsingContext->pRenderTarget );
 		}
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerMinFilter )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			l_parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode( l_uiMode ) );
+			uint32_t uiMode;
+			p_params[0]->Get( uiMode );
+			parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerMagFilter )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			l_parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode( l_uiMode ) );
+			uint32_t uiMode;
+			p_params[0]->Get( uiMode );
+			parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerMipFilter )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			l_parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::eMip, InterpolationMode( l_uiMode ) );
+			uint32_t uiMode;
+			p_params[0]->Get( uiMode );
+			parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::eMip, InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerMinLod )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			real l_rValue = -1000;
-			p_params[0]->Get( l_rValue );
+			real rValue = -1000;
+			p_params[0]->Get( rValue );
 
-			if ( l_rValue >= -1000 && l_rValue <= 1000 )
+			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				l_parsingContext->pSampler->SetMinLod( l_rValue );
+				parsingContext->pSampler->SetMinLod( rValue );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
+				PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( rValue ) );
 			}
 		}
 	}
@@ -590,24 +591,24 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerMaxLod )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			real l_rValue = 1000;
-			p_params[0]->Get( l_rValue );
+			real rValue = 1000;
+			p_params[0]->Get( rValue );
 
-			if ( l_rValue >= -1000 && l_rValue <= 1000 )
+			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				l_parsingContext->pSampler->SetMaxLod( l_rValue );
+				parsingContext->pSampler->SetMaxLod( rValue );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
+				PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( rValue ) );
 			}
 		}
 	}
@@ -615,24 +616,24 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerLodBias )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			real l_rValue = 1000;
-			p_params[0]->Get( l_rValue );
+			real rValue = 1000;
+			p_params[0]->Get( rValue );
 
-			if ( l_rValue >= -1000 && l_rValue <= 1000 )
+			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				l_parsingContext->pSampler->SetLodBias( l_rValue );
+				parsingContext->pSampler->SetLodBias( rValue );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
+				PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( rValue ) );
 			}
 		}
 	}
@@ -640,213 +641,213 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerUWrapMode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			l_parsingContext->pSampler->SetWrappingMode( TextureUVW::eU, WrapMode( l_uiMode ) );
+			uint32_t uiMode;
+			p_params[0]->Get( uiMode );
+			parsingContext->pSampler->SetWrappingMode( TextureUVW::eU, WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerVWrapMode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			l_parsingContext->pSampler->SetWrappingMode( TextureUVW::eV, WrapMode( l_uiMode ) );
+			uint32_t uiMode;
+			p_params[0]->Get( uiMode );
+			parsingContext->pSampler->SetWrappingMode( TextureUVW::eV, WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerWWrapMode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			l_parsingContext->pSampler->SetWrappingMode( TextureUVW::eW, WrapMode( l_uiMode ) );
+			uint32_t uiMode;
+			p_params[0]->Get( uiMode );
+			parsingContext->pSampler->SetWrappingMode( TextureUVW::eW, WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerBorderColour )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour l_colour;
-			p_params[0]->Get( l_colour );
-			l_parsingContext->pSampler->SetBorderColour( l_colour );
+			Colour colour;
+			p_params[0]->Get( colour );
+			parsingContext->pSampler->SetBorderColour( colour );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerMaxAnisotropy )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			real l_rValue = 1000;
-			p_params[0]->Get( l_rValue );
-			l_parsingContext->pSampler->SetMaxAnisotropy( l_rValue );
+			real rValue = 1000;
+			p_params[0]->Get( rValue );
+			parsingContext->pSampler->SetMaxAnisotropy( rValue );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerComparisonMode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			l_parsingContext->pSampler->SetComparisonMode( ComparisonMode( l_uiMode ) );
+			uint32_t uiMode;
+			p_params[0]->Get( uiMode );
+			parsingContext->pSampler->SetComparisonMode( ComparisonMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerComparisonFunc )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSampler )
+		if ( !parsingContext->pSampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiMode;
-			p_params[0]->Get( l_uiMode );
-			l_parsingContext->pSampler->SetComparisonFunc( ComparisonFunc( l_uiMode ) );
+			uint32_t uiMode;
+			p_params[0]->Get( uiMode );
+			parsingContext->pSampler->SetComparisonFunc( ComparisonFunc( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneInclude )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Path l_path;
-			p_params[0]->Get( l_path );
-			SceneFileParser l_parser{ *l_parsingContext->m_pParser->GetEngine() };
-			l_parser.ParseFile( l_parsingContext->m_file->GetFilePath() / l_path, l_parsingContext );
+			Path path;
+			p_params[0]->Get( path );
+			SceneFileParser parser{ *parsingContext->m_pParser->GetEngine() };
+			parser.ParseFile( parsingContext->m_file->GetFilePath() / path, parsingContext );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneMaterials )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pScene->SetMaterialsType( MaterialType( l_value ) );
+			uint32_t value;
+			p_params[0]->Get( value );
+			parsingContext->pScene->SetMaterialsType( MaterialType( value ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneBkColour )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour l_clrBackground;
-			p_params[0]->Get( l_clrBackground );
-			l_parsingContext->pScene->SetBackgroundColour( l_clrBackground );
+			Colour clrBackground;
+			p_params[0]->Get( clrBackground );
+			parsingContext->pScene->SetBackgroundColour( clrBackground );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneBkImage )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Path l_path;
-			l_parsingContext->pScene->SetBackground( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			Path path;
+			parsingContext->pScene->SetBackground( p_context->m_file->GetFilePath(), p_params[0]->Get( path ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneFont )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-			l_parsingContext->path.clear();
-			p_params[0]->Get( l_parsingContext->strName );
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+			parsingContext->path.clear();
+			p_params[0]->Get( parsingContext->strName );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eFont )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneMaterial )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -856,298 +857,298 @@ namespace Castor3D
 		}
 		else
 		{
-			p_params[0]->Get( l_parsingContext->strName );
-			l_parsingContext->pMaterial = l_parsingContext->pScene->GetMaterialView().Add( l_parsingContext->strName, l_parsingContext->pScene->GetMaterialsType() );
+			p_params[0]->Get( parsingContext->strName );
+			parsingContext->pMaterial = parsingContext->pScene->GetMaterialView().Add( parsingContext->strName, parsingContext->pScene->GetMaterialsType() );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eMaterial )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneSamplerState )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			l_parsingContext->pSampler = l_parsingContext->pScene->GetSamplerView().Add( p_params[0]->Get( l_name ) );
+			String name;
+			parsingContext->pSampler = parsingContext->pScene->GetSamplerView().Add( p_params[0]->Get( name ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSampler )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneCamera )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pViewport.reset();
-		l_parsingContext->pSceneNode.reset();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pViewport.reset();
+		parsingContext->pSceneNode.reset();
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			l_parsingContext->pSceneNode.reset();
-			p_params[0]->Get( l_parsingContext->strName );
+			parsingContext->pSceneNode.reset();
+			p_params[0]->Get( parsingContext->strName );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eCamera )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneLight )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pLight.reset();
-		l_parsingContext->strName.clear();
-		l_parsingContext->pSceneNode.reset();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pLight.reset();
+		parsingContext->strName.clear();
+		parsingContext->pSceneNode.reset();
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			p_params[0]->Get( l_parsingContext->strName );
+			p_params[0]->Get( parsingContext->strName );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eLight )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneCameraNode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pSceneNode.reset();
-		String l_name;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pSceneNode.reset();
+		String name;
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			p_params[0]->Get( l_name );
-			l_parsingContext->pSceneNode = l_parsingContext->pScene->GetSceneNodeCache().Add( l_name, l_parsingContext->pScene->GetCameraRootNode() );
+			p_params[0]->Get( name );
+			parsingContext->pSceneNode = parsingContext->pScene->GetSceneNodeCache().Add( name, parsingContext->pScene->GetCameraRootNode() );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eNode )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneSceneNode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pSceneNode.reset();
-		String l_name;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pSceneNode.reset();
+		String name;
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			p_params[0]->Get( l_name );
-			l_parsingContext->pSceneNode = l_parsingContext->pScene->GetSceneNodeCache().Add( l_name, l_parsingContext->pScene->GetObjectRootNode() );
+			p_params[0]->Get( name );
+			parsingContext->pSceneNode = parsingContext->pScene->GetSceneNodeCache().Add( name, parsingContext->pScene->GetObjectRootNode() );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eNode )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneObject )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pGeometry.reset();
-		String l_name;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pGeometry.reset();
+		String name;
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			p_params[0]->Get( l_name );
-			l_parsingContext->pGeometry = l_parsingContext->pScene->GetGeometryCache().Add( l_name, nullptr, nullptr );
+			p_params[0]->Get( name );
+			parsingContext->pGeometry = parsingContext->pScene->GetGeometryCache().Add( name, nullptr, nullptr );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eObject )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneAmbientLight )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour l_clColour;
-			p_params[0]->Get( l_clColour );
-			l_parsingContext->pScene->SetAmbientLight( l_clColour );
+			Colour clColour;
+			p_params[0]->Get( clColour );
+			parsingContext->pScene->SetAmbientLight( clColour );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneImport )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		Path l_path;
-		Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		Path path;
+		Path pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
 
-		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
-		auto l_extension = string::lower_case( l_pathFile.GetExtension() );
+		Engine * engine = parsingContext->m_pParser->GetEngine();
+		auto extension = string::lower_case( pathFile.GetExtension() );
 
-		if ( !l_engine->GetImporterFactory().IsRegistered( l_extension ) )
+		if ( !engine->GetImporterFactory().IsRegistered( extension ) )
 		{
-			PARSING_ERROR( cuT( "Importer for [" ) + l_extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+			PARSING_ERROR( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
 		}
 		else
 		{
-			auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
-			l_parsingContext->pScene->ImportExternal( l_pathFile, *l_importer );
+			auto importer = engine->GetImporterFactory().Create( extension, *engine );
+			parsingContext->pScene->ImportExternal( pathFile, *importer );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneBillboard )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			l_parsingContext->pBillboards = l_parsingContext->pScene->GetBillboardListCache().Add( l_name, SceneNodeSPtr{} );
+			String name;
+			p_params[0]->Get( name );
+			parsingContext->pBillboards = parsingContext->pScene->GetBillboardListCache().Add( name, SceneNodeSPtr{} );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBillboard )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneAnimatedObjectGroup )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			l_parsingContext->pAnimGroup = l_parsingContext->pScene->GetAnimatedObjectGroupCache().Add( l_name );
+			String name;
+			p_params[0]->Get( name );
+			parsingContext->pAnimGroup = parsingContext->pScene->GetAnimatedObjectGroupCache().Add( name );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eAnimGroup )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ScenePanelOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			l_parsingContext->pOverlay = l_parsingContext->pScene->GetOverlayView().Add( p_params[0]->Get( l_name )
+			String name;
+			parsingContext->pOverlay = parsingContext->pScene->GetOverlayView().Add( p_params[0]->Get( name )
 				, OverlayType::ePanel
-				, l_parsingContext->pScene
-				, l_parsingContext->pOverlay );
-			l_parsingContext->pOverlay->SetVisible( false );
+				, parsingContext->pScene
+				, parsingContext->pOverlay );
+			parsingContext->pOverlay->SetVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::ePanelOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneBorderPanelOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			l_parsingContext->pOverlay = l_parsingContext->pScene->GetOverlayView().Add( p_params[0]->Get( l_name ), OverlayType::eBorderPanel, l_parsingContext->pScene, l_parsingContext->pOverlay );
-			l_parsingContext->pOverlay->SetVisible( false );
+			String name;
+			parsingContext->pOverlay = parsingContext->pScene->GetOverlayView().Add( p_params[0]->Get( name ), OverlayType::eBorderPanel, parsingContext->pScene, parsingContext->pOverlay );
+			parsingContext->pOverlay->SetVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBorderPanelOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneTextOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			l_parsingContext->pOverlay = l_parsingContext->pScene->GetOverlayView().Add( p_params[0]->Get( l_name ), OverlayType::eText, l_parsingContext->pScene, l_parsingContext->pOverlay );
-			l_parsingContext->pOverlay->SetVisible( false );
+			String name;
+			parsingContext->pOverlay = parsingContext->pScene->GetOverlayView().Add( p_params[0]->Get( name ), OverlayType::eText, parsingContext->pScene, parsingContext->pOverlay );
+			parsingContext->pOverlay->SetVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eTextOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneSkybox )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			l_parsingContext->pSkybox = std::make_unique< Skybox >( *l_parsingContext->m_pParser->GetEngine() );
+			parsingContext->pSkybox = std::make_unique< Skybox >( *parsingContext->m_pParser->GetEngine() );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSkybox )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneFogType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pScene->GetFog().SetType( GLSL::FogType( l_value ) );
+			uint32_t value;
+			p_params[0]->Get( value );
+			parsingContext->pScene->GetFog().SetType( GLSL::FogType( value ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneFogDensity )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			float l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pScene->GetFog().SetDensity( l_value );
+			float value;
+			p_params[0]->Get( value );
+			parsingContext->pScene->GetFog().SetDensity( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneParticleSystem )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1157,21 +1158,21 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->strName = l_value;
-			l_parsingContext->uiUInt32 = 0;
-			l_parsingContext->pSceneNode.reset();
-			l_parsingContext->pMaterial.reset();
+			String value;
+			p_params[0]->Get( value );
+			parsingContext->strName = value;
+			parsingContext->uiUInt32 = 0;
+			parsingContext->pSceneNode.reset();
+			parsingContext->pMaterial.reset();
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticleSystem )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemParent )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1181,16 +1182,16 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_value;
-			p_params[0]->Get( l_value );
+			String value;
+			p_params[0]->Get( value );
 
-			if ( !l_parsingContext->pScene->GetSceneNodeCache().Has( l_value ) )
+			if ( !parsingContext->pScene->GetSceneNodeCache().Has( value ) )
 			{
-				PARSING_ERROR( cuT( "No scene node named " ) + l_value );
+				PARSING_ERROR( cuT( "No scene node named " ) + value );
 			}
 			else
 			{
-				l_parsingContext->pSceneNode = l_parsingContext->pScene->GetSceneNodeCache().Find( l_value );
+				parsingContext->pSceneNode = parsingContext->pScene->GetSceneNodeCache().Find( value );
 			}
 		}
 	}
@@ -1198,9 +1199,9 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemCount )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1210,18 +1211,18 @@ namespace Castor3D
 		}
 		else
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->uiUInt32 = l_value;
+			uint32_t value;
+			p_params[0]->Get( value );
+			parsingContext->uiUInt32 = value;
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemMaterial )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1231,17 +1232,17 @@ namespace Castor3D
 		}
 		else
 		{
-			auto & l_cache = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache();
-			String l_name;
-			p_params[0]->Get( l_name );
+			auto & cache = parsingContext->m_pParser->GetEngine()->GetMaterialCache();
+			String name;
+			p_params[0]->Get( name );
 
-			if ( l_cache.Has( l_name ) )
+			if ( cache.Has( name ) )
 			{
-				l_parsingContext->pMaterial = l_cache.Find( l_name );
+				parsingContext->pMaterial = cache.Find( name );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material " ) + l_name + cuT( " does not exist" ) );
+				PARSING_ERROR( cuT( "Material " ) + name + cuT( " does not exist" ) );
 			}
 		}
 	}
@@ -1249,9 +1250,9 @@ namespace Castor3D
 
 		IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemDimensions )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1261,83 +1262,83 @@ namespace Castor3D
 		}
 		else
 		{
-			p_params[0]->Get( l_parsingContext->size );
+			p_params[0]->Get( parsingContext->size );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemParticle )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
-		else if ( l_parsingContext->uiUInt32 == 0 )
+		else if ( parsingContext->uiUInt32 == 0 )
 		{
 			PARSING_ERROR( cuT( "particles_count has not been specified." ) );
 		}
-		else if ( l_parsingContext->size.width() == 0 || l_parsingContext->size.height() == 0 )
+		else if ( parsingContext->size.width() == 0 || parsingContext->size.height() == 0 )
 		{
 			PARSING_ERROR( cuT( "one component of the particles dimensions is 0." ) );
 		}
 		else
 		{
-			if ( !l_parsingContext->pMaterial )
+			if ( !parsingContext->pMaterial )
 			{
-				l_parsingContext->pMaterial = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().GetDefaultMaterial();
+				parsingContext->pMaterial = parsingContext->m_pParser->GetEngine()->GetMaterialCache().GetDefaultMaterial();
 			}
 
-			l_parsingContext->particleSystem = l_parsingContext->pScene->GetParticleSystemCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, l_parsingContext->uiUInt32 );
-			l_parsingContext->particleSystem->SetMaterial( l_parsingContext->pMaterial );
-			l_parsingContext->particleSystem->SetDimensions( l_parsingContext->size );
+			parsingContext->particleSystem = parsingContext->pScene->GetParticleSystemCache().Add( parsingContext->strName, parsingContext->pSceneNode, parsingContext->uiUInt32 );
+			parsingContext->particleSystem->SetMaterial( parsingContext->pMaterial );
+			parsingContext->particleSystem->SetDimensions( parsingContext->size );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticle )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemTFShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pShaderProgram.reset();
-		l_parsingContext->eShaderObject = ShaderType::eCount;
-		l_parsingContext->bBool1 = true;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pShaderProgram.reset();
+		parsingContext->eShaderObject = ShaderType::eCount;
+		parsingContext->bBool1 = true;
 		
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
+			parsingContext->pShaderProgram = parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemCSShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pShaderProgram.reset();
-		l_parsingContext->eShaderObject = ShaderType::eCount;
-		l_parsingContext->bBool1 = false;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pShaderProgram.reset();
+		parsingContext->eShaderObject = ShaderType::eCount;
+		parsingContext->bBool1 = false;
 		
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
+			parsingContext->pShaderProgram = parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pUniform.reset();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pUniform.reset();
 
-		if ( !l_parsingContext->particleSystem )
+		if ( !parsingContext->particleSystem )
 		{
 			PARSING_ERROR( cuT( "Particle system not initialised" ) );
 		}
@@ -1347,17 +1348,17 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_value;
-			p_params[0]->Get( l_value );
-			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
+			String value;
+			p_params[0]->Get( value );
+			Engine * engine = parsingContext->m_pParser->GetEngine();
 
-			if ( !l_engine->GetParticleFactory().IsRegistered( string::lower_case( l_value ) ) )
+			if ( !engine->GetParticleFactory().IsRegistered( string::lower_case( value ) ) )
 			{
-				PARSING_ERROR( cuT( "Particle type [" ) + l_value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+				PARSING_ERROR( cuT( "Particle type [" ) + value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				l_parsingContext->particleSystem->SetParticleType( l_value );
+				parsingContext->particleSystem->SetParticleType( value );
 			}
 		}
 	}
@@ -1365,11 +1366,11 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleVariable )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pUniform.reset();
-		p_params[0]->Get( l_parsingContext->strName2 );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pUniform.reset();
+		p_params[0]->Get( parsingContext->strName2 );
 
-		if ( !l_parsingContext->particleSystem )
+		if ( !parsingContext->particleSystem )
 		{
 			PARSING_ERROR( cuT( "Particle system not initialised" ) );
 		}
@@ -1379,49 +1380,49 @@ namespace Castor3D
 		}
 		else
 		{
-			String l_name;
-			uint32_t l_type;
-			String l_value;
-			p_params[0]->Get( l_name );
-			p_params[1]->Get( l_type );
+			String name;
+			uint32_t type;
+			String value;
+			p_params[0]->Get( name );
+			p_params[1]->Get( type );
 
 			if ( p_params.size() > 2 )
 			{
-				p_params[2]->Get( l_value );
+				p_params[2]->Get( value );
 			}
 
-			l_parsingContext->particleSystem->AddParticleVariable( l_name, ElementType( l_type ), l_value );
+			parsingContext->particleSystem->AddParticleVariable( name, ElementType( type ), value );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eUBOVariable )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightParent )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			SceneNodeSPtr l_pParent = l_parsingContext->pScene->GetSceneNodeCache().Find( l_name );
+			String name;
+			p_params[0]->Get( name );
+			SceneNodeSPtr pParent = parsingContext->pScene->GetSceneNodeCache().Find( name );
 
-			if ( l_pParent )
+			if ( pParent )
 			{
-				l_parsingContext->pSceneNode = l_pParent;
+				parsingContext->pSceneNode = pParent;
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
+				PARSING_ERROR( cuT( "Node " ) + name + cuT( " does not exist" ) );
 			}
 
-			if ( l_parsingContext->pLight )
+			if ( parsingContext->pLight )
 			{
-				l_parsingContext->pLight->Detach();
-				l_parsingContext->pSceneNode->AttachObject( *l_parsingContext->pLight );
+				parsingContext->pLight->Detach();
+				parsingContext->pSceneNode->AttachObject( *parsingContext->pLight );
 			}
 		}
 	}
@@ -1429,76 +1430,76 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiType;
-			p_params[0]->Get( l_uiType );
-			l_parsingContext->eLightType = LightType( l_uiType );
-			l_parsingContext->pLight = l_parsingContext->pScene->GetLightCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, l_parsingContext->eLightType );
+			uint32_t uiType;
+			p_params[0]->Get( uiType );
+			parsingContext->eLightType = LightType( uiType );
+			parsingContext->pLight = parsingContext->pScene->GetLightCache().Add( parsingContext->strName, parsingContext->pSceneNode, parsingContext->eLightType );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightColour )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pLight )
+		if ( !parsingContext->pLight )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pLight->SetColour( l_value.ptr() );
+			Point3f value;
+			p_params[0]->Get( value );
+			parsingContext->pLight->SetColour( value.ptr() );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightIntensity )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pLight )
+		if ( !parsingContext->pLight )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point2f l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pLight->SetIntensity( l_value.ptr() );
+			Point2f value;
+			p_params[0]->Get( value );
+			parsingContext->pLight->SetIntensity( value.ptr() );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightAttenuation )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pLight )
+		if ( !parsingContext->pLight )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_value;
-			p_params[0]->Get( l_value );
+			Point3f value;
+			p_params[0]->Get( value );
 
-			if ( l_parsingContext->eLightType == LightType::ePoint )
+			if ( parsingContext->eLightType == LightType::ePoint )
 			{
-				l_parsingContext->pLight->GetPointLight()->SetAttenuation( l_value );
+				parsingContext->pLight->GetPointLight()->SetAttenuation( value );
 			}
-			else if ( l_parsingContext->eLightType == LightType::eSpot )
+			else if ( parsingContext->eLightType == LightType::eSpot )
 			{
-				l_parsingContext->pLight->GetSpotLight()->SetAttenuation( l_value );
+				parsingContext->pLight->GetSpotLight()->SetAttenuation( value );
 			}
 			else
 			{
@@ -1510,20 +1511,20 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightCutOff )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pLight )
+		if ( !parsingContext->pLight )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_fFloat;
-			p_params[0]->Get( l_fFloat );
+			float fFloat;
+			p_params[0]->Get( fFloat );
 
-			if ( l_parsingContext->eLightType == LightType::eSpot )
+			if ( parsingContext->eLightType == LightType::eSpot )
 			{
-				l_parsingContext->pLight->GetSpotLight()->SetCutOff( Angle::from_degrees( l_fFloat ) );
+				parsingContext->pLight->GetSpotLight()->SetCutOff( Angle::from_degrees( fFloat ) );
 			}
 			else
 			{
@@ -1535,20 +1536,20 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightExponent )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pLight )
+		if ( !parsingContext->pLight )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_fFloat;
-			p_params[0]->Get( l_fFloat );
+			float fFloat;
+			p_params[0]->Get( fFloat );
 
-			if ( l_parsingContext->eLightType == LightType::eSpot )
+			if ( parsingContext->eLightType == LightType::eSpot )
 			{
-				l_parsingContext->pLight->GetSpotLight()->SetExponent( l_fFloat );
+				parsingContext->pLight->GetSpotLight()->SetExponent( fFloat );
 			}
 			else
 			{
@@ -1560,59 +1561,59 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightShadowProducer )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pLight )
+		if ( !parsingContext->pLight )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			bool l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pLight->SetShadowProducer( l_value );
+			bool value;
+			p_params[0]->Get( value );
+			parsingContext->pLight->SetShadowProducer( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeParent )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSceneNode )
+		if ( !parsingContext->pSceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			SceneNodeSPtr l_parent;
+			String name;
+			p_params[0]->Get( name );
+			SceneNodeSPtr parent;
 
-			if ( l_name == Scene::ObjectRootNode )
+			if ( name == Scene::ObjectRootNode )
 			{
-				l_parent = l_parsingContext->pScene->GetObjectRootNode();
+				parent = parsingContext->pScene->GetObjectRootNode();
 			}
-			else if ( l_name == Scene::CameraRootNode )
+			else if ( name == Scene::CameraRootNode )
 			{
-				l_parent = l_parsingContext->pScene->GetCameraRootNode();
+				parent = parsingContext->pScene->GetCameraRootNode();
 			}
-			else if ( l_name == Scene::RootNode )
+			else if ( name == Scene::RootNode )
 			{
-				l_parent = l_parsingContext->pScene->GetRootNode();
+				parent = parsingContext->pScene->GetRootNode();
 			}
 			else
 			{
-				l_parent = l_parsingContext->pScene->GetSceneNodeCache().Find( l_name );
+				parent = parsingContext->pScene->GetSceneNodeCache().Find( name );
 			}
 
-			if ( l_parent )
+			if ( parent )
 			{
-				l_parsingContext->pSceneNode->AttachTo( l_parent );
+				parsingContext->pSceneNode->AttachTo( parent );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
+				PARSING_ERROR( cuT( "Node " ) + name + cuT( " does not exist" ) );
 			}
 		}
 	}
@@ -1620,95 +1621,95 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodePosition )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSceneNode )
+		if ( !parsingContext->pSceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pSceneNode->SetPosition( l_value );
+			Point3f value;
+			p_params[0]->Get( value );
+			parsingContext->pSceneNode->SetPosition( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeOrientation )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSceneNode )
+		if ( !parsingContext->pSceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3r l_axis;
-			float l_angle;
-			p_params[0]->Get( l_axis );
-			p_params[1]->Get( l_angle );
-			l_parsingContext->pSceneNode->SetOrientation( Quaternion::from_axis_angle( l_axis, Angle::from_degrees( l_angle ) ) );
+			Point3r axis;
+			float angle;
+			p_params[0]->Get( axis );
+			p_params[1]->Get( angle );
+			parsingContext->pSceneNode->SetOrientation( Quaternion::from_axis_angle( axis, Angle::from_degrees( angle ) ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeScale )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSceneNode )
+		if ( !parsingContext->pSceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3r l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pSceneNode->SetScale( l_value );
+			Point3r value;
+			p_params[0]->Get( value );
+			parsingContext->pSceneNode->SetScale( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectParent )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pGeometry )
+		if ( !parsingContext->pGeometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			SceneNodeSPtr l_parent;
+			String name;
+			p_params[0]->Get( name );
+			SceneNodeSPtr parent;
 
-			if ( l_name == Scene::ObjectRootNode )
+			if ( name == Scene::ObjectRootNode )
 			{
-				l_parent = l_parsingContext->pScene->GetObjectRootNode();
+				parent = parsingContext->pScene->GetObjectRootNode();
 			}
-			else if ( l_name == Scene::CameraRootNode )
+			else if ( name == Scene::CameraRootNode )
 			{
-				l_parent = l_parsingContext->pScene->GetCameraRootNode();
+				parent = parsingContext->pScene->GetCameraRootNode();
 			}
-			else if ( l_name == Scene::RootNode )
+			else if ( name == Scene::RootNode )
 			{
-				l_parent = l_parsingContext->pScene->GetRootNode();
+				parent = parsingContext->pScene->GetRootNode();
 			}
 			else
 			{
-				l_parent = l_parsingContext->pScene->GetSceneNodeCache().Find( l_name );
+				parent = parsingContext->pScene->GetSceneNodeCache().Find( name );
 			}
 
-			if ( l_parent )
+			if ( parent )
 			{
-				l_parent->AttachObject( *l_parsingContext->pGeometry );
+				parent->AttachObject( *parsingContext->pGeometry );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
+				PARSING_ERROR( cuT( "Node " ) + name + cuT( " does not exist" ) );
 			}
 		}
 		else
@@ -1720,21 +1721,21 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectMesh )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->bBool1 = false;
-		p_params[0]->Get( l_parsingContext->strName2 );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->bBool1 = false;
+		p_params[0]->Get( parsingContext->strName2 );
 
-		if ( l_parsingContext->pScene )
+		if ( parsingContext->pScene )
 		{
-			auto const & l_cache = l_parsingContext->pScene->GetMeshCache();
+			auto const & cache = parsingContext->pScene->GetMeshCache();
 
-			if ( l_cache.Has( l_parsingContext->strName2 ) )
+			if ( cache.Has( parsingContext->strName2 ) )
 			{
-				l_parsingContext->pMesh = l_cache.Find( l_parsingContext->strName2 );
+				parsingContext->pMesh = cache.Find( parsingContext->strName2 );
 			}
 			else
 			{
-				l_parsingContext->pMesh.reset();
+				parsingContext->pMesh.reset();
 			}
 		}
 		else
@@ -1746,31 +1747,31 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectMaterial )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pGeometry )
+		if ( !parsingContext->pGeometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( l_parsingContext->pGeometry->GetMesh() )
+			if ( parsingContext->pGeometry->GetMesh() )
 			{
-				auto & l_cache = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache();
-				String l_name;
-				p_params[0]->Get( l_name );
+				auto & cache = parsingContext->m_pParser->GetEngine()->GetMaterialCache();
+				String name;
+				p_params[0]->Get( name );
 
-				if ( l_cache.Has( l_name ) )
+				if ( cache.Has( name ) )
 				{
-					for ( auto l_submesh : *l_parsingContext->pGeometry->GetMesh() )
+					for ( auto submesh : *parsingContext->pGeometry->GetMesh() )
 					{
-						MaterialSPtr l_material = l_cache.Find( l_name );
-						l_parsingContext->pGeometry->SetMaterial( *l_submesh, l_material );
+						MaterialSPtr material = cache.Find( name );
+						parsingContext->pGeometry->SetMaterial( *submesh, material );
 					}
 				}
 				else
 				{
-					PARSING_ERROR( cuT( "Material " ) + l_name + cuT( " does not exist" ) );
+					PARSING_ERROR( cuT( "Material " ) + name + cuT( " does not exist" ) );
 				}
 			}
 			else
@@ -1788,72 +1789,72 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectCastShadows )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pGeometry )
+		if ( !parsingContext->pGeometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			bool l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pGeometry->SetShadowCaster( l_value );
+			bool value;
+			p_params[0]->Get( value );
+			parsingContext->pGeometry->SetShadowCaster( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectReceivesShadows )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pGeometry )
+		if ( !parsingContext->pGeometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			bool l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pGeometry->SetShadowReceiver( l_value );
+			bool value;
+			p_params[0]->Get( value );
+			parsingContext->pGeometry->SetShadowReceiver( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pGeometry.reset();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pGeometry.reset();
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectMaterialsMaterial )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pGeometry )
+		if ( !parsingContext->pGeometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( l_parsingContext->pGeometry->GetMesh() )
+			if ( parsingContext->pGeometry->GetMesh() )
 			{
-				auto & l_cache = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache();
-				String l_name;
-				uint16_t l_index;
-				p_params[0]->Get( l_index );
-				p_params[1]->Get( l_name );
+				auto & cache = parsingContext->m_pParser->GetEngine()->GetMaterialCache();
+				String name;
+				uint16_t index;
+				p_params[0]->Get( index );
+				p_params[1]->Get( name );
 
-				if ( l_cache.Has( l_name ) )
+				if ( cache.Has( name ) )
 				{
-					SubmeshSPtr l_submesh = l_parsingContext->pGeometry->GetMesh()->GetSubmesh( l_index );
-					MaterialSPtr l_material = l_cache.Find( l_name );
-					l_parsingContext->pGeometry->SetMaterial( *l_submesh, l_material );
+					SubmeshSPtr submesh = parsingContext->pGeometry->GetMesh()->GetSubmesh( index );
+					MaterialSPtr material = cache.Find( name );
+					parsingContext->pGeometry->SetMaterial( *submesh, material );
 				}
 				else
 				{
-					PARSING_ERROR( cuT( "Material " ) + l_name + cuT( " does not exist" ) );
+					PARSING_ERROR( cuT( "Material " ) + name + cuT( " does not exist" ) );
 				}
 			}
 			else
@@ -1871,23 +1872,23 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_type;
-		p_params[0]->Get( l_type );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String type;
+		p_params[0]->Get( type );
 
-		if ( !l_parsingContext->pMesh )
+		if ( !parsingContext->pMesh )
 		{
-			Parameters l_parameters;
+			Parameters parameters;
 			if ( p_params.size() > 1 )
 			{
-				String l_tmp;
-				l_parameters.Parse( p_params[1]->Get( l_tmp ) );
+				String tmp;
+				parameters.Parse( p_params[1]->Get( tmp ) );
 			}
 
-			if ( l_parsingContext->pScene )
+			if ( parsingContext->pScene )
 			{
-				l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshCache().Add( l_parsingContext->strName2 );
-				l_parsingContext->pScene->GetEngine()->GetMeshFactory().Create( l_type )->Generate( *l_parsingContext->pMesh, l_parameters );
+				parsingContext->pMesh = parsingContext->pScene->GetMeshCache().Add( parsingContext->strName2 );
+				parsingContext->pScene->GetEngine()->GetMeshFactory().Create( type )->Generate( *parsingContext->pMesh, parameters );
 			}
 			else
 			{
@@ -1903,78 +1904,78 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshSubmesh )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->bBool2 = false;
-		l_parsingContext->bBool1 = true;
-		l_parsingContext->iFace1 = -1;
-		l_parsingContext->iFace2 = -1;
-		l_parsingContext->pSubmesh.reset();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->bBool2 = false;
+		parsingContext->bBool1 = true;
+		parsingContext->iFace1 = -1;
+		parsingContext->iFace2 = -1;
+		parsingContext->pSubmesh.reset();
 
-		if ( !l_parsingContext->pMesh )
+		if ( !parsingContext->pMesh )
 		{
 			PARSING_ERROR( cuT( "No Mesh initialised." ) );
 		}
 		else
 		{
-			l_parsingContext->pSubmesh = l_parsingContext->pMesh->CreateSubmesh();
+			parsingContext->pSubmesh = parsingContext->pMesh->CreateSubmesh();
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSubmesh )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshImport )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pScene )
+		if ( !parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			Path l_path;
-			Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			Parameters l_parameters;
+			Path path;
+			Path pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
+			Parameters parameters;
 
 			if ( p_params.size() > 1 )
 			{
-				String l_tmp;
-				StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
+				String tmp;
+				StringArray arrayStrParams = string::split( p_params[1]->Get( tmp ), cuT( "-" ), 20, false );
 
-				if ( l_arrayStrParams.size() )
+				if ( arrayStrParams.size() )
 				{
-					for ( StringArrayConstIt l_it = l_arrayStrParams.begin(); l_it != l_arrayStrParams.end(); ++l_it )
+					for ( StringArrayConstIt it = arrayStrParams.begin(); it != arrayStrParams.end(); ++it )
 					{
-						if ( l_it->find( cuT( "smooth_normals" ) ) == 0 )
+						if ( it->find( cuT( "smooth_normals" ) ) == 0 )
 						{
-							String l_strNml = cuT( "smooth" );
-							l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
+							String strNml = cuT( "smooth" );
+							parameters.Add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
 						}
-						else if ( l_it->find( cuT( "flat_normals" ) ) == 0 )
+						else if ( it->find( cuT( "flat_normals" ) ) == 0 )
 						{
-							String l_strNml = cuT( "flat" );
-							l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
+							String strNml = cuT( "flat" );
+							parameters.Add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
 						}
-						else if ( l_it->find( cuT( "tangent_space" ) ) == 0 )
+						else if ( it->find( cuT( "tangent_space" ) ) == 0 )
 						{
-							l_parameters.Add( cuT( "tangent_space" ), true );
+							parameters.Add( cuT( "tangent_space" ), true );
 						}
 					}
 				}
 			}
 
-			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
-			auto l_extension = string::lower_case( l_pathFile.GetExtension() );
+			Engine * engine = parsingContext->m_pParser->GetEngine();
+			auto extension = string::lower_case( pathFile.GetExtension() );
 
-			if ( !l_engine->GetImporterFactory().IsRegistered( l_extension ) )
+			if ( !engine->GetImporterFactory().IsRegistered( extension ) )
 			{
-				PARSING_ERROR( cuT( "Importer for [" ) + l_extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+				PARSING_ERROR( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshCache().Add( l_parsingContext->strName2 );
-				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
+				parsingContext->pMesh = parsingContext->pScene->GetMeshCache().Add( parsingContext->strName2 );
+				auto importer = engine->GetImporterFactory().Create( extension, *engine );
 
-				if ( !l_importer->ImportMesh( *l_parsingContext->pMesh, l_pathFile, l_parameters, true ) )
+				if ( !importer->ImportMesh( *parsingContext->pMesh, pathFile, parameters, true ) )
 				{
 					PARSING_ERROR( cuT( "Mesh Import failed" ) );
 				}
@@ -1985,95 +1986,95 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshMorphImport )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pMesh )
+		if ( !parsingContext->pMesh )
 		{
 			PARSING_ERROR( cuT( "No mesh initialised." ) );
 		}
 		else
 		{
-			real l_timeIndex;
-			p_params[1]->Get( l_timeIndex );
-			Path l_path;
-			Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			Parameters l_parameters;
+			real timeIndex;
+			p_params[1]->Get( timeIndex );
+			Path path;
+			Path pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
+			Parameters parameters;
 
 			if ( p_params.size() > 2 )
 			{
-				String l_tmp;
-				StringArray l_arrayStrParams = string::split( p_params[2]->Get( l_tmp ), cuT( "-" ), 20, false );
+				String tmp;
+				StringArray arrayStrParams = string::split( p_params[2]->Get( tmp ), cuT( "-" ), 20, false );
 
-				if ( l_arrayStrParams.size() )
+				if ( arrayStrParams.size() )
 				{
-					for ( StringArrayConstIt l_it = l_arrayStrParams.begin(); l_it != l_arrayStrParams.end(); ++l_it )
+					for ( StringArrayConstIt it = arrayStrParams.begin(); it != arrayStrParams.end(); ++it )
 					{
-						if ( l_it->find( cuT( "smooth_normals" ) ) == 0 )
+						if ( it->find( cuT( "smooth_normals" ) ) == 0 )
 						{
-							String l_strNml = cuT( "smooth" );
-							l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
+							String strNml = cuT( "smooth" );
+							parameters.Add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
 						}
-						else if ( l_it->find( cuT( "flat_normals" ) ) == 0 )
+						else if ( it->find( cuT( "flat_normals" ) ) == 0 )
 						{
-							String l_strNml = cuT( "flat" );
-							l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
+							String strNml = cuT( "flat" );
+							parameters.Add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
 						}
-						else if ( l_it->find( cuT( "tangent_space" ) ) == 0 )
+						else if ( it->find( cuT( "tangent_space" ) ) == 0 )
 						{
-							l_parameters.Add( cuT( "tangent_space" ), true );
+							parameters.Add( cuT( "tangent_space" ), true );
 						}
 					}
 				}
 			}
 
-			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
-			auto l_extension = string::lower_case( l_pathFile.GetExtension() );
+			Engine * engine = parsingContext->m_pParser->GetEngine();
+			auto extension = string::lower_case( pathFile.GetExtension() );
 
-			if ( !l_engine->GetImporterFactory().IsRegistered( l_extension ) )
+			if ( !engine->GetImporterFactory().IsRegistered( extension ) )
 			{
-				PARSING_ERROR( cuT( "Importer for [" ) + l_extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+				PARSING_ERROR( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
-				Mesh l_mesh{ cuT( "MorphImport" ), *l_parsingContext->pScene };
+				auto importer = engine->GetImporterFactory().Create( extension, *engine );
+				Mesh mesh{ cuT( "MorphImport" ), *parsingContext->pScene };
 
-				if ( !l_importer->ImportMesh( l_mesh, l_pathFile, l_parameters, false ) )
+				if ( !importer->ImportMesh( mesh, pathFile, parameters, false ) )
 				{
 					PARSING_ERROR( cuT( "Mesh Import failed" ) );
 				}
-				else if ( l_mesh.GetSubmeshCount() == l_parsingContext->pMesh->GetSubmeshCount() )
+				else if ( mesh.GetSubmeshCount() == parsingContext->pMesh->GetSubmeshCount() )
 				{
-					String l_animName{ "Morph" };
+					String animName{ "Morph" };
 
-					if ( !l_parsingContext->pMesh->HasAnimation( l_animName ) )
+					if ( !parsingContext->pMesh->HasAnimation( animName ) )
 					{
-						auto & l_animation = l_parsingContext->pMesh->CreateAnimation( l_animName );
+						auto & animation = parsingContext->pMesh->CreateAnimation( animName );
 
-						for ( auto l_submesh : *l_parsingContext->pMesh )
+						for ( auto submesh : *parsingContext->pMesh )
 						{
-							l_submesh->SetAnimated( true );
-							l_animation.AddChild( MeshAnimationSubmesh{ l_animation, *l_submesh } );
+							submesh->SetAnimated( true );
+							animation.AddChild( MeshAnimationSubmesh{ animation, *submesh } );
 						}
 					}
 
-					MeshAnimation & l_animation{ static_cast< MeshAnimation & >( l_parsingContext->pMesh->GetAnimation( l_animName ) ) };
-					uint32_t l_index = 0u;
+					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext->pMesh->GetAnimation( animName ) ) };
+					uint32_t index = 0u;
 
-					for ( auto l_submesh : l_mesh )
+					for ( auto submesh : mesh )
 					{
-						auto & l_submeshAnim = l_animation.GetSubmesh( l_index );
-						std::clog << "Source: " << l_submeshAnim.GetSubmesh().GetPointsCount() << " - Anim: " << l_submesh->GetPointsCount() << std::endl;
+						auto & submeshAnim = animation.GetSubmesh( index );
+						std::clog << "Source: " << submeshAnim.GetSubmesh().GetPointsCount() << " - Anim: " << submesh->GetPointsCount() << std::endl;
 
-						if ( l_submesh->GetPointsCount() == l_submeshAnim.GetSubmesh().GetPointsCount() )
+						if ( submesh->GetPointsCount() == submeshAnim.GetSubmesh().GetPointsCount() )
 						{
-							l_submeshAnim.AddBuffer( std::chrono::milliseconds{ int64_t( l_timeIndex * 1000 ) }, Convert( l_submesh->GetPoints() ) );
+							submeshAnim.AddBuffer( std::chrono::milliseconds{ int64_t( timeIndex * 1000 ) }, Convert( submesh->GetPoints() ) );
 						}
 
-						++l_index;
+						++index;
 					}
 
-					l_animation.UpdateLength();
+					animation.UpdateLength();
 				}
 				else
 				{
@@ -2086,33 +2087,33 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshDivide )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		Engine * engine = parsingContext->m_pParser->GetEngine();
 
-		if ( !l_parsingContext->pMesh )
+		if ( !parsingContext->pMesh )
 		{
 			PARSING_ERROR( cuT( "No Mesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			uint16_t l_count;
-			p_params[0]->Get( l_name );
-			p_params[1]->Get( l_count );
+			String name;
+			uint16_t count;
+			p_params[0]->Get( name );
+			p_params[1]->Get( count );
 
-			if ( !l_engine->GetSubdividerFactory().IsRegistered( string::lower_case( l_name ) ) )
+			if ( !engine->GetSubdividerFactory().IsRegistered( string::lower_case( name ) ) )
 			{
-				PARSING_ERROR( cuT( "Subdivider [" ) + l_name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+				PARSING_ERROR( cuT( "Subdivider [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				auto l_divider = l_engine->GetSubdividerFactory().Create( l_name );
-				l_parsingContext->pMesh->ComputeContainers();
-				Point3r l_ptCenter = l_parsingContext->pMesh->GetCollisionBox().GetCenter();
+				auto divider = engine->GetSubdividerFactory().Create( name );
+				parsingContext->pMesh->ComputeContainers();
+				Point3r ptCenter = parsingContext->pMesh->GetCollisionBox().GetCenter();
 
-				for ( auto l_submesh : *l_parsingContext->pMesh )
+				for ( auto submesh : *parsingContext->pMesh )
 				{
-					l_divider->Subdivide( l_submesh, l_count, false );
+					divider->Subdivide( submesh, count, false );
 				}
 			}
 		}
@@ -2121,150 +2122,150 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pMesh )
+		if ( parsingContext->pMesh )
 		{
-			l_parsingContext->pGeometry->SetMesh( l_parsingContext->pMesh );
-			l_parsingContext->pMesh.reset();
+			parsingContext->pGeometry->SetMesh( parsingContext->pMesh );
+			parsingContext->pMesh.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshVertex )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->vertexPos.push_back( l_value[0] );
-			l_parsingContext->vertexPos.push_back( l_value[1] );
-			l_parsingContext->vertexPos.push_back( l_value[2] );
+			Point3f value;
+			p_params[0]->Get( value );
+			parsingContext->vertexPos.push_back( value[0] );
+			parsingContext->vertexPos.push_back( value[1] );
+			parsingContext->vertexPos.push_back( value[2] );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshUV )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point2f l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->vertexTex.push_back( l_value[0] );
-			l_parsingContext->vertexTex.push_back( l_value[1] );
-			l_parsingContext->vertexTex.push_back( 0.0 );
+			Point2f value;
+			p_params[0]->Get( value );
+			parsingContext->vertexTex.push_back( value[0] );
+			parsingContext->vertexTex.push_back( value[1] );
+			parsingContext->vertexTex.push_back( 0.0 );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshUVW )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->vertexTex.push_back( l_value[0] );
-			l_parsingContext->vertexTex.push_back( l_value[1] );
-			l_parsingContext->vertexTex.push_back( l_value[2] );
+			Point3f value;
+			p_params[0]->Get( value );
+			parsingContext->vertexTex.push_back( value[0] );
+			parsingContext->vertexTex.push_back( value[1] );
+			parsingContext->vertexTex.push_back( value[2] );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshNormal )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->vertexNml.push_back( l_value[0] );
-			l_parsingContext->vertexNml.push_back( l_value[1] );
-			l_parsingContext->vertexNml.push_back( l_value[2] );
+			Point3f value;
+			p_params[0]->Get( value );
+			parsingContext->vertexNml.push_back( value[0] );
+			parsingContext->vertexNml.push_back( value[1] );
+			parsingContext->vertexNml.push_back( value[2] );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshTangent )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Point3f l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->vertexTan.push_back( l_value[0] );
-			l_parsingContext->vertexTan.push_back( l_value[1] );
-			l_parsingContext->vertexTan.push_back( l_value[2] );
+			Point3f value;
+			p_params[0]->Get( value );
+			parsingContext->vertexTan.push_back( value[0] );
+			parsingContext->vertexTan.push_back( value[1] );
+			parsingContext->vertexTan.push_back( value[2] );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshFace )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_strParams;
-			p_params[0]->Get( l_strParams );
-			Point3i l_pt3Indices;
-			StringArray l_arrayValues = string::split( l_strParams, cuT( " " ) );
-			l_parsingContext->iFace1 = -1;
-			l_parsingContext->iFace2 = -1;
+			String strParams;
+			p_params[0]->Get( strParams );
+			Point3i pt3Indices;
+			StringArray arrayValues = string::split( strParams, cuT( " " ) );
+			parsingContext->iFace1 = -1;
+			parsingContext->iFace2 = -1;
 
-			if ( l_arrayValues.size() >= 4 )
+			if ( arrayValues.size() >= 4 )
 			{
-				Point4i l_pt4Indices;
+				Point4i pt4Indices;
 
-				if ( Castor::ParseValues( l_strParams, l_pt4Indices ) )
+				if ( Castor::ParseValues( strParams, pt4Indices ) )
 				{
-					l_parsingContext->iFace1 = int( l_parsingContext->faces.size() );
-					l_parsingContext->faces.push_back( l_pt4Indices[0] );
-					l_parsingContext->faces.push_back( l_pt4Indices[1] );
-					l_parsingContext->faces.push_back( l_pt4Indices[2] );
-					l_parsingContext->iFace2 = int( l_parsingContext->faces.size() );
-					l_parsingContext->faces.push_back( l_pt4Indices[0] );
-					l_parsingContext->faces.push_back( l_pt4Indices[2] );
-					l_parsingContext->faces.push_back( l_pt4Indices[3] );
+					parsingContext->iFace1 = int( parsingContext->faces.size() );
+					parsingContext->faces.push_back( pt4Indices[0] );
+					parsingContext->faces.push_back( pt4Indices[1] );
+					parsingContext->faces.push_back( pt4Indices[2] );
+					parsingContext->iFace2 = int( parsingContext->faces.size() );
+					parsingContext->faces.push_back( pt4Indices[0] );
+					parsingContext->faces.push_back( pt4Indices[2] );
+					parsingContext->faces.push_back( pt4Indices[3] );
 				}
 			}
-			else if ( Castor::ParseValues( l_strParams, l_pt3Indices ) )
+			else if ( Castor::ParseValues( strParams, pt3Indices ) )
 			{
-				l_parsingContext->iFace1 = int( l_parsingContext->faces.size() );
-				l_parsingContext->faces.push_back( l_pt3Indices[0] );
-				l_parsingContext->faces.push_back( l_pt3Indices[1] );
-				l_parsingContext->faces.push_back( l_pt3Indices[2] );
+				parsingContext->iFace1 = int( parsingContext->faces.size() );
+				parsingContext->faces.push_back( pt3Indices[0] );
+				parsingContext->faces.push_back( pt3Indices[1] );
+				parsingContext->faces.push_back( pt3Indices[2] );
 			}
 		}
 	}
@@ -2272,44 +2273,44 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshFaceUV )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_strParams;
-			p_params[0]->Get( l_strParams );
-			SubmeshSPtr l_submesh = l_parsingContext->pSubmesh;
+			String strParams;
+			p_params[0]->Get( strParams );
+			SubmeshSPtr submesh = parsingContext->pSubmesh;
 
-			if ( !l_parsingContext->vertexTex.size() )
+			if ( !parsingContext->vertexTex.size() )
 			{
-				l_parsingContext->vertexTex.resize( l_parsingContext->vertexPos.size() );
+				parsingContext->vertexTex.resize( parsingContext->vertexPos.size() );
 			}
 
-			Point3i l_pt3Indices;
-			StringArray l_arrayValues = string::split( l_strParams, cuT( " " ), 20 );
+			Point3i pt3Indices;
+			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
 
-			if ( l_arrayValues.size() >= 6 && l_parsingContext->iFace1 != -1 )
+			if ( arrayValues.size() >= 6 && parsingContext->iFace1 != -1 )
 			{
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[0] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[1] );
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[2] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[3] );
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[4] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[1] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[2] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[3] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[4] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[5] );
 			}
 
-			if ( l_arrayValues.size() >= 8 && l_parsingContext->iFace2 != -1 )
+			if ( arrayValues.size() >= 8 && parsingContext->iFace2 != -1 )
 			{
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[0] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[1] );
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[4] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[5] );
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[6] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[7] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[1] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::to_real( arrayValues[4] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::to_real( arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[7] );
 			}
 		}
 	}
@@ -2317,50 +2318,50 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshFaceUVW )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_strParams;
-			p_params[0]->Get( l_strParams );
-			SubmeshSPtr l_submesh = l_parsingContext->pSubmesh;
+			String strParams;
+			p_params[0]->Get( strParams );
+			SubmeshSPtr submesh = parsingContext->pSubmesh;
 
-			if ( !l_parsingContext->vertexTex.size() )
+			if ( !parsingContext->vertexTex.size() )
 			{
-				l_parsingContext->vertexTex.resize( l_parsingContext->vertexPos.size() );
+				parsingContext->vertexTex.resize( parsingContext->vertexPos.size() );
 			}
 
-			Point3i l_pt3Indices;
-			StringArray l_arrayValues = string::split( l_strParams, cuT( " " ), 20 );
+			Point3i pt3Indices;
+			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
 
-			if ( l_arrayValues.size() >= 9 && l_parsingContext->iFace1 != -1 )
+			if ( arrayValues.size() >= 9 && parsingContext->iFace1 != -1 )
 			{
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[0] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[1] );
-				l_parsingContext->vertexTex[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[2] );
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[3] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[4] );
-				l_parsingContext->vertexTex[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[5] );
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[6] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[7] );
-				l_parsingContext->vertexTex[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[8] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[1] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[2] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[3] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[4] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[7] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[8] );
 			}
 
-			if ( l_arrayValues.size() >= 12 && l_parsingContext->iFace2 != -1 )
+			if ( arrayValues.size() >= 12 && parsingContext->iFace2 != -1 )
 			{
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[0] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[1] );
-				l_parsingContext->vertexTex[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[2] );
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[6] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[7] );
-				l_parsingContext->vertexTex[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[8] );
-				l_parsingContext->vertexTex[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[ 9] );
-				l_parsingContext->vertexTex[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[10] );
-				l_parsingContext->vertexTex[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[11] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[1] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[2] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[7] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[8] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[ 9] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[10] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[11] );
 			}
 		}
 	}
@@ -2368,50 +2369,50 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshFaceNormals )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_strParams;
-			p_params[0]->Get( l_strParams );
-			SubmeshSPtr l_submesh = l_parsingContext->pSubmesh;
+			String strParams;
+			p_params[0]->Get( strParams );
+			SubmeshSPtr submesh = parsingContext->pSubmesh;
 
-			if ( !l_parsingContext->vertexNml.size() )
+			if ( !parsingContext->vertexNml.size() )
 			{
-				l_parsingContext->vertexNml.resize( l_parsingContext->vertexPos.size() );
+				parsingContext->vertexNml.resize( parsingContext->vertexPos.size() );
 			}
 
-			Point3i l_pt3Indices;
-			StringArray l_arrayValues = string::split( l_strParams, cuT( " " ), 20 );
+			Point3i pt3Indices;
+			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
 
-			if ( l_arrayValues.size() >= 9 && l_parsingContext->iFace1 != -1 )
+			if ( arrayValues.size() >= 9 && parsingContext->iFace1 != -1 )
 			{
-				l_parsingContext->vertexNml[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[0] );
-				l_parsingContext->vertexNml[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[1] );
-				l_parsingContext->vertexNml[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[2] );
-				l_parsingContext->vertexNml[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[3] );
-				l_parsingContext->vertexNml[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[4] );
-				l_parsingContext->vertexNml[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[5] );
-				l_parsingContext->vertexNml[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[6] );
-				l_parsingContext->vertexNml[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[7] );
-				l_parsingContext->vertexNml[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[8] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[0] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[1] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[2] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[3] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[4] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[5] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[6] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[7] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[8] );
 			}
 
-			if ( l_arrayValues.size() >= 12 && l_parsingContext->iFace2 != -1 )
+			if ( arrayValues.size() >= 12 && parsingContext->iFace2 != -1 )
 			{
-				l_parsingContext->vertexNml[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 0] );
-				l_parsingContext->vertexNml[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 1] );
-				l_parsingContext->vertexNml[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 2] );
-				l_parsingContext->vertexNml[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 6] );
-				l_parsingContext->vertexNml[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 7] );
-				l_parsingContext->vertexNml[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 8] );
-				l_parsingContext->vertexNml[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[ 9] );
-				l_parsingContext->vertexNml[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[10] );
-				l_parsingContext->vertexNml[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[11] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[ 0] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[ 1] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[ 2] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::to_real( arrayValues[ 6] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::to_real( arrayValues[ 7] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::to_real( arrayValues[ 8] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[ 9] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[10] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[11] );
 			}
 		}
 	}
@@ -2419,50 +2420,50 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshFaceTangents )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pSubmesh )
+		if ( !parsingContext->pSubmesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_strParams;
-			p_params[0]->Get( l_strParams );
-			SubmeshSPtr l_submesh = l_parsingContext->pSubmesh;
+			String strParams;
+			p_params[0]->Get( strParams );
+			SubmeshSPtr submesh = parsingContext->pSubmesh;
 
-			if ( !l_parsingContext->vertexTan.size() )
+			if ( !parsingContext->vertexTan.size() )
 			{
-				l_parsingContext->vertexTan.resize( l_parsingContext->vertexPos.size() );
+				parsingContext->vertexTan.resize( parsingContext->vertexPos.size() );
 			}
 
-			Point3i l_pt3Indices;
-			StringArray l_arrayValues = string::split( l_strParams, cuT( " " ), 20 );
+			Point3i pt3Indices;
+			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
 
-			if ( l_arrayValues.size() >= 9 && l_parsingContext->iFace1 != -1 )
+			if ( arrayValues.size() >= 9 && parsingContext->iFace1 != -1 )
 			{
-				l_parsingContext->vertexTan[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[0] );
-				l_parsingContext->vertexTan[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[1] );
-				l_parsingContext->vertexTan[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[2] );
-				l_parsingContext->vertexTan[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[3] );
-				l_parsingContext->vertexTan[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[4] );
-				l_parsingContext->vertexTan[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[5] );
-				l_parsingContext->vertexTan[0 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[6] );
-				l_parsingContext->vertexTan[1 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[7] );
-				l_parsingContext->vertexTan[2 + l_parsingContext->faces[l_parsingContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[8] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[0] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[1] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::to_real( arrayValues[2] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[3] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[4] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::to_real( arrayValues[5] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[6] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[7] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::to_real( arrayValues[8] );
 			}
 
-			if ( l_arrayValues.size() >= 12 && l_parsingContext->iFace2 != -1 )
+			if ( arrayValues.size() >= 12 && parsingContext->iFace2 != -1 )
 			{
-				l_parsingContext->vertexTan[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 0] );
-				l_parsingContext->vertexTan[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 1] );
-				l_parsingContext->vertexTan[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 2] );
-				l_parsingContext->vertexTan[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 6] );
-				l_parsingContext->vertexTan[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 7] );
-				l_parsingContext->vertexTan[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 8] );
-				l_parsingContext->vertexTan[0 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[ 9] );
-				l_parsingContext->vertexTan[1 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[10] );
-				l_parsingContext->vertexTan[2 + l_parsingContext->faces[l_parsingContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[11] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[ 0] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[ 1] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::to_real( arrayValues[ 2] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::to_real( arrayValues[ 6] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::to_real( arrayValues[ 7] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::to_real( arrayValues[ 8] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[ 9] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[10] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::to_real( arrayValues[11] );
 			}
 		}
 	}
@@ -2470,86 +2471,90 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->vertexPos.empty() )
+		if ( !parsingContext->vertexPos.empty() )
 		{
-			std::vector< InterleavedVertex > l_vertices{ l_parsingContext->vertexPos.size() / 3 };
-			uint32_t l_index{ 0u };
+			std::vector< InterleavedVertex > vertices{ parsingContext->vertexPos.size() / 3 };
+			uint32_t index{ 0u };
 
-			for ( auto & l_vertex : l_vertices )
+			for ( auto & vertex : vertices )
 			{
-				std::memcpy( l_vertex.m_pos.data(), &l_parsingContext->vertexPos[l_index], sizeof( l_vertex.m_pos ) );
+				std::memcpy( vertex.m_pos.data(), &parsingContext->vertexPos[index], sizeof( vertex.m_pos ) );
 
-				if ( !l_parsingContext->vertexNml.empty() )
+				if ( !parsingContext->vertexNml.empty() )
 				{
-					std::memcpy( l_vertex.m_nml.data(), &l_parsingContext->vertexNml[l_index], sizeof( l_vertex.m_nml ) );
+					std::memcpy( vertex.m_nml.data(), &parsingContext->vertexNml[index], sizeof( vertex.m_nml ) );
 				}
 
-				if ( !l_parsingContext->vertexTan.empty() )
+				if ( !parsingContext->vertexTan.empty() )
 				{
-					std::memcpy( l_vertex.m_tan.data(), &l_parsingContext->vertexTan[l_index], sizeof( l_vertex.m_tan ) );
+					std::memcpy( vertex.m_tan.data(), &parsingContext->vertexTan[index], sizeof( vertex.m_tan ) );
 				}
 
-				if ( !l_parsingContext->vertexTex.empty() )
+				if ( !parsingContext->vertexTex.empty() )
 				{
-					std::memcpy( l_vertex.m_tex.data(), &l_parsingContext->vertexTex[l_index], sizeof( l_vertex.m_tex ) );
+					std::memcpy( vertex.m_tex.data(), &parsingContext->vertexTex[index], sizeof( vertex.m_tex ) );
 				}
 
-				l_index += 3;
+				index += 3;
 			}
 
-			l_parsingContext->pSubmesh->AddPoints( l_vertices );
+			parsingContext->pSubmesh->AddPoints( vertices );
 
-			if ( l_parsingContext->faces.size() )
+			if ( parsingContext->faces.size() )
 			{
-				auto l_indices = reinterpret_cast< FaceIndices * >( &l_parsingContext->faces[0] );
-				l_parsingContext->pSubmesh->AddFaceGroup( l_indices, l_indices + ( l_parsingContext->faces.size() / 3 ) );
+				auto indices = reinterpret_cast< FaceIndices * >( &parsingContext->faces[0] );
+				parsingContext->pSubmesh->AddFaceGroup( indices, indices + ( parsingContext->faces.size() / 3 ) );
 
-				if ( !l_parsingContext->vertexNml.empty() )
+				if ( !parsingContext->vertexNml.empty() )
 				{
-					if ( !l_parsingContext->vertexTan.empty() )
+					if ( !parsingContext->vertexTan.empty() )
 					{
-						l_parsingContext->pSubmesh->ComputeBitangents();
+						parsingContext->pSubmesh->ComputeBitangents();
 					}
 					else
 					{
-						l_parsingContext->pSubmesh->ComputeTangentsFromNormals();
+						parsingContext->pSubmesh->ComputeTangentsFromNormals();
 					}
 				}
 				else
 				{
-					l_parsingContext->pSubmesh->ComputeNormals();
+					parsingContext->pSubmesh->ComputeNormals();
 				}
 			}
 
-			l_parsingContext->vertexPos.clear();
-			l_parsingContext->vertexNml.clear();
-			l_parsingContext->vertexTan.clear();
-			l_parsingContext->vertexTex.clear();
-			l_parsingContext->faces.clear();
-			l_parsingContext->pSubmesh->GetParent().GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_parsingContext->pSubmesh ) );
+			parsingContext->vertexPos.clear();
+			parsingContext->vertexNml.clear();
+			parsingContext->vertexTan.clear();
+			parsingContext->vertexTex.clear();
+			parsingContext->faces.clear();
+			parsingContext->pSubmesh->GetParent().GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *parsingContext->pSubmesh ) );
 		}
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MaterialPass )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->strName.clear();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->strName.clear();
 
-		if ( l_parsingContext->pMaterial )
+		if ( parsingContext->pMaterial )
 		{
-			l_parsingContext->pass = l_parsingContext->pMaterial->CreatePass();
+			parsingContext->pass = parsingContext->pMaterial->CreatePass();
 
-			switch ( l_parsingContext->pass->GetType() )
+			switch ( parsingContext->pass->GetType() )
 			{
 			case MaterialType::eLegacy:
-				l_parsingContext->legacyPass = std::static_pointer_cast< LegacyPass >( l_parsingContext->pass );
+				parsingContext->legacyPass = std::static_pointer_cast< LegacyPass >( parsingContext->pass );
 				break;
 
-			case MaterialType::ePbr:
-				l_parsingContext->pbrPass = std::static_pointer_cast< PbrPass >( l_parsingContext->pass );
+			case MaterialType::ePbrMetallicRoughness:
+				parsingContext->pbrMRPass = std::static_pointer_cast< MetallicRoughnessPbrPass >( parsingContext->pass );
+				break;
+
+			case MaterialType::ePbrSpecularGlossiness:
+				parsingContext->pbrSGPass = std::static_pointer_cast< SpecularGlossinessPbrPass >( parsingContext->pass );
 				break;
 
 			default:
@@ -2571,182 +2576,219 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDiffuse )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->legacyPass )
+		if ( !parsingContext->legacyPass
+			&& !parsingContext->pbrSGPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour l_crColour;
-			p_params[0]->Get( l_crColour );
-			l_parsingContext->legacyPass->SetDiffuse( l_crColour );
+			if ( parsingContext->legacyPass )
+			{
+				Colour crColour;
+				p_params[0]->Get( crColour );
+				parsingContext->legacyPass->SetDiffuse( crColour );
+			}
+			else
+			{
+				Colour crColour;
+				p_params[0]->Get( crColour );
+				parsingContext->pbrSGPass->SetDiffuse( crColour );
+			}
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassSpecular )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->legacyPass )
+		if ( !parsingContext->legacyPass
+			&& !parsingContext->pbrSGPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour l_crColour;
-			p_params[0]->Get( l_crColour );
-			l_parsingContext->legacyPass->SetSpecular( l_crColour );
+			if ( parsingContext->legacyPass )
+			{
+				Colour crColour;
+				p_params[0]->Get( crColour );
+				parsingContext->legacyPass->SetSpecular( crColour );
+			}
+			else
+			{
+				Colour crColour;
+				p_params[0]->Get( crColour );
+				parsingContext->pbrSGPass->SetSpecular( crColour );
+			}
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAmbient )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->legacyPass )
+		if ( !parsingContext->legacyPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->legacyPass->SetAmbient( l_value );
+			float value;
+			p_params[0]->Get( value );
+			parsingContext->legacyPass->SetAmbient( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEmissive )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->legacyPass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->legacyPass->SetEmissive( l_value );
+			float value;
+			p_params[0]->Get( value );
+			parsingContext->pass->SetEmissive( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassShininess )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->legacyPass )
+		if ( !parsingContext->legacyPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_fFloat;
-			p_params[0]->Get( l_fFloat );
-			l_parsingContext->legacyPass->SetShininess( l_fFloat );
+			float fFloat;
+			p_params[0]->Get( fFloat );
+			parsingContext->legacyPass->SetShininess( fFloat );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlbedo )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pbrPass )
+		if ( !parsingContext->pbrMRPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pbrPass->SetAlbedo( l_value );
+			Colour value;
+			p_params[0]->Get( value );
+			parsingContext->pbrMRPass->SetAlbedo( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassRoughness )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pbrPass )
+		if ( !parsingContext->pbrMRPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pbrPass->SetRoughness( l_value );
+			float value;
+			p_params[0]->Get( value );
+			parsingContext->pbrMRPass->SetRoughness( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassMetallic )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pbrPass )
+		if ( !parsingContext->pbrMRPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pbrPass->SetMetallic( l_value );
+			float value;
+			p_params[0]->Get( value );
+			parsingContext->pbrMRPass->SetMetallic( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassGlossiness )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->pbrSGPass )
+		{
+			PARSING_ERROR( cuT( "No Pass initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			float value;
+			p_params[0]->Get( value );
+			parsingContext->pbrSGPass->SetGlossiness( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlpha )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_fFloat;
-			p_params[0]->Get( l_fFloat );
-			l_parsingContext->pass->SetOpacity( l_fFloat );
+			float fFloat;
+			p_params[0]->Get( fFloat );
+			parsingContext->pass->SetOpacity( fFloat );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDoubleFace )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			bool l_value;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pass->SetTwoSided( l_value );
+			bool value;
+			p_params[0]->Get( value );
+			parsingContext->pass->SetTwoSided( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassTextureUnit )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pTextureUnit.reset();
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pTextureUnit.reset();
 
-		if ( l_parsingContext->pass )
+		if ( parsingContext->pass )
 		{
-			l_parsingContext->pTextureUnit = std::make_shared< TextureUnit >( *l_parsingContext->m_pParser->GetEngine() );
+			parsingContext->pTextureUnit = std::make_shared< TextureUnit >( *parsingContext->m_pParser->GetEngine() );
 		}
 		else
 		{
@@ -2757,13 +2799,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pShaderProgram.reset();
-		l_parsingContext->eShaderObject = ShaderType::eCount;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pShaderProgram.reset();
+		parsingContext->eShaderObject = ShaderType::eCount;
 
-		if ( l_parsingContext->pass )
+		if ( parsingContext->pass )
 		{
-			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
+			parsingContext->pShaderProgram = parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
 		else
 		{
@@ -2774,144 +2816,144 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_mode = 0;
-			p_params[0]->Get( l_mode );
-			l_parsingContext->pass->SetAlphaBlendMode( BlendMode( l_mode ) );
+			uint32_t mode = 0;
+			p_params[0]->Get( mode );
+			parsingContext->pass->SetAlphaBlendMode( BlendMode( mode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_mode = 0;
-			p_params[0]->Get( l_mode );
-			l_parsingContext->pass->SetColourBlendMode( BlendMode( l_mode ) );
+			uint32_t mode = 0;
+			p_params[0]->Get( mode );
+			parsingContext->pass->SetColourBlendMode( BlendMode( mode ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlphaFunc )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiFunc;
-			float l_fFloat;
-			p_params[0]->Get( l_uiFunc );
-			p_params[1]->Get( l_fFloat );
-			l_parsingContext->pass->SetAlphaFunc( ComparisonFunc( l_uiFunc ) );
-			l_parsingContext->pass->SetAlphaValue( l_fFloat );
+			uint32_t uiFunc;
+			float fFloat;
+			p_params[0]->Get( uiFunc );
+			p_params[1]->Get( fFloat );
+			parsingContext->pass->SetAlphaFunc( ComparisonFunc( uiFunc ) );
+			parsingContext->pass->SetAlphaValue( fFloat );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassRefractionRatio )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			float l_value = 0;
-			p_params[0]->Get( l_value );
-			l_parsingContext->pass->SetRefractionRatio( l_value );
+			float value = 0;
+			p_params[0]->Get( value );
+			parsingContext->pass->SetRefractionRatio( value );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pass )
+		if ( !parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else
 		{
-			l_parsingContext->pass.reset();
-			l_parsingContext->legacyPass.reset();
+			parsingContext->pass.reset();
+			parsingContext->legacyPass.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitImage )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pTextureUnit )
+		if ( !parsingContext->pTextureUnit )
 		{
 			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			Path l_folder;
-			Path l_relative;
-			p_params[0]->Get( l_relative );
+			Path folder;
+			Path relative;
+			p_params[0]->Get( relative );
 
-			if ( File::FileExists( p_context->m_file->GetFilePath() / l_relative ) )
+			if ( File::FileExists( p_context->m_file->GetFilePath() / relative ) )
 			{
-				l_folder = p_context->m_file->GetFilePath();
+				folder = p_context->m_file->GetFilePath();
 			}
-			else if ( !File::FileExists( l_relative ) )
+			else if ( !File::FileExists( relative ) )
 			{
-				PARSING_ERROR( cuT( "File [" ) + l_relative + cuT( "] not found, check the relativeness of the path" ) );
-				l_relative.clear();
+				PARSING_ERROR( cuT( "File [" ) + relative + cuT( "] not found, check the relativeness of the path" ) );
+				relative.clear();
 			}
 
-			if ( !l_relative.empty() )
+			if ( !relative.empty() )
 			{
-				l_parsingContext->pTextureUnit->SetAutoMipmaps( true );
-				auto l_texture = l_parsingContext->m_pParser->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
-				l_texture->SetSource( l_folder, l_relative );
+				parsingContext->pTextureUnit->SetAutoMipmaps( true );
+				auto texture = parsingContext->m_pParser->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
+				texture->SetSource( folder, relative );
 
 				if ( p_params.size() >= 2 )
 				{
-					String l_channels;
-					p_params[1]->Get( l_channels );
-					auto l_buffer = l_texture->GetImage().GetBuffer();
+					String channels;
+					p_params[1]->Get( channels );
+					auto buffer = texture->GetImage().GetBuffer();
 
-					if ( l_channels == cuT( "rgb" ) )
+					if ( channels == cuT( "rgb" ) )
 					{
-						l_buffer = PxBufferBase::create( l_buffer->dimensions()
-							, PF::GetPFWithoutAlpha( l_buffer->format() )
-							, l_buffer->const_ptr()
-							, l_buffer->format() );
+						buffer = PxBufferBase::create( buffer->dimensions()
+							, PF::GetPFWithoutAlpha( buffer->format() )
+							, buffer->const_ptr()
+							, buffer->format() );
 					}
-					else if ( l_channels == cuT( "a" ) )
+					else if ( channels == cuT( "a" ) )
 					{
-						auto l_tmp = PF::ExtractAlpha( l_buffer );
-						l_buffer = l_tmp;
+						auto tmp = PF::ExtractAlpha( buffer );
+						buffer = tmp;
 					}
 
-					l_texture->SetSource( l_buffer );
+					texture->GetImage().SetBuffer( buffer );
 				}
 
-				l_parsingContext->pTextureUnit->SetTexture( l_texture );
+				parsingContext->pTextureUnit->SetTexture( texture );
 			}
 		}
 	}
@@ -2919,56 +2961,56 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitRenderTarget )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pTextureUnit )
+		if ( !parsingContext->pTextureUnit )
 		{
 			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 		}
 		else
 		{
-			l_parsingContext->pRenderTarget = l_parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( TargetType::eTexture );
+			parsingContext->pRenderTarget = parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( TargetType::eTexture );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eRenderTarget )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitChannel )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pTextureUnit )
+		if ( !parsingContext->pTextureUnit )
 		{
 			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiChannel;
-			p_params[0]->Get( l_uiChannel );
-			l_parsingContext->pTextureUnit->SetChannel( TextureChannel( l_uiChannel ) );
+			uint32_t uiChannel;
+			p_params[0]->Get( uiChannel );
+			parsingContext->pTextureUnit->SetChannel( TextureChannel( uiChannel ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitSampler )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pTextureUnit )
+		if ( !parsingContext->pTextureUnit )
 		{
 			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			SamplerSPtr l_sampler = l_parsingContext->m_pParser->GetEngine()->GetSamplerCache().Find( p_params[0]->Get( l_name ) );
+			String name;
+			SamplerSPtr sampler = parsingContext->m_pParser->GetEngine()->GetSamplerCache().Find( p_params[0]->Get( name ) );
 
-			if ( l_sampler )
+			if ( sampler )
 			{
-				l_parsingContext->pTextureUnit->SetSampler( l_sampler );
+				parsingContext->pTextureUnit->SetSampler( sampler );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Unknown sampler : [" ) + l_name + cuT( "]" ) );
+				PARSING_ERROR( cuT( "Unknown sampler : [" ) + name + cuT( "]" ) );
 			}
 		}
 	}
@@ -2976,13 +3018,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pass )
+		if ( parsingContext->pass )
 		{
-			if ( l_parsingContext->pTextureUnit )
+			if ( parsingContext->pTextureUnit )
 			{
-				l_parsingContext->pass->AddTextureUnit( l_parsingContext->pTextureUnit );
+				parsingContext->pass->AddTextureUnit( parsingContext->pTextureUnit );
 			}
 			else
 			{
@@ -2998,12 +3040,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_VertexShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pShaderProgram )
+		if ( parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( ShaderType::eVertex );
-			l_parsingContext->eShaderObject = ShaderType::eVertex;
+			parsingContext->pShaderProgram->CreateObject( ShaderType::eVertex );
+			parsingContext->eShaderObject = ShaderType::eVertex;
 		}
 		else
 		{
@@ -3014,12 +3056,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PixelShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pShaderProgram )
+		if ( parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( ShaderType::ePixel );
-			l_parsingContext->eShaderObject = ShaderType::ePixel;
+			parsingContext->pShaderProgram->CreateObject( ShaderType::ePixel );
+			parsingContext->eShaderObject = ShaderType::ePixel;
 		}
 		else
 		{
@@ -3030,12 +3072,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_GeometryShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pShaderProgram )
+		if ( parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( ShaderType::eGeometry );
-			l_parsingContext->eShaderObject = ShaderType::eGeometry;
+			parsingContext->pShaderProgram->CreateObject( ShaderType::eGeometry );
+			parsingContext->eShaderObject = ShaderType::eGeometry;
 		}
 		else
 		{
@@ -3046,12 +3088,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_HullShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pShaderProgram )
+		if ( parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( ShaderType::eHull );
-			l_parsingContext->eShaderObject = ShaderType::eHull;
+			parsingContext->pShaderProgram->CreateObject( ShaderType::eHull );
+			parsingContext->eShaderObject = ShaderType::eHull;
 		}
 		else
 		{
@@ -3062,12 +3104,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_DomainShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pShaderProgram )
+		if ( parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( ShaderType::eDomain );
-			l_parsingContext->eShaderObject = ShaderType::eDomain;
+			parsingContext->pShaderProgram->CreateObject( ShaderType::eDomain );
+			parsingContext->eShaderObject = ShaderType::eDomain;
 		}
 		else
 		{
@@ -3078,12 +3120,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComputeShader )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pShaderProgram )
+		if ( parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( ShaderType::eCompute );
-			l_parsingContext->eShaderObject = ShaderType::eCompute;
+			parsingContext->pShaderProgram->CreateObject( ShaderType::eCompute );
+			parsingContext->eShaderObject = ShaderType::eCompute;
 		}
 		else
 		{
@@ -3094,17 +3136,17 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ConstantsBuffer )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pShaderProgram )
+		if ( !parsingContext->pShaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			p_params[0]->Get( l_parsingContext->strName );
+			p_params[0]->Get( parsingContext->strName );
 
-			if ( l_parsingContext->strName.empty() )
+			if ( parsingContext->strName.empty() )
 			{
 				PARSING_ERROR( cuT( "Invalid empty name" ) );
 			}
@@ -3114,46 +3156,46 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pShaderProgram )
+		if ( parsingContext->pShaderProgram )
 		{
-			if ( l_parsingContext->particleSystem )
+			if ( parsingContext->particleSystem )
 			{
-				if ( l_parsingContext->bBool1 )
+				if ( parsingContext->bBool1 )
 				{
-					l_parsingContext->particleSystem->SetTFUpdateProgram( l_parsingContext->pShaderProgram );
+					parsingContext->particleSystem->SetTFUpdateProgram( parsingContext->pShaderProgram );
 				}
 				else
 				{
-					l_parsingContext->particleSystem->SetCSUpdateProgram( l_parsingContext->pShaderProgram );
+					parsingContext->particleSystem->SetCSUpdateProgram( parsingContext->pShaderProgram );
 				}
 
-				l_parsingContext->bBool1 = false;
+				parsingContext->bBool1 = false;
 			}
-			//l_parsingContext->pPass->SetShader( l_parsingContext->pShaderProgram );
-			l_parsingContext->pShaderProgram.reset();
+			//l_parsingContext->pPass->SetShader( parsingContext->pShaderProgram );
+			parsingContext->pShaderProgram.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderProgramFile )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pShaderProgram )
+		if ( !parsingContext->pShaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( l_parsingContext->eShaderObject != ShaderType::eCount )
+			if ( parsingContext->eShaderObject != ShaderType::eCount )
 			{
-				uint32_t l_uiModel;
-				Path l_path;
-				p_params[0]->Get( l_uiModel );
-				p_params[1]->Get( l_path );
-				l_parsingContext->pShaderProgram->SetFile( l_parsingContext->eShaderObject, p_context->m_file->GetFilePath() / l_path );
+				uint32_t uiModel;
+				Path path;
+				p_params[0]->Get( uiModel );
+				p_params[1]->Get( path );
+				parsingContext->pShaderProgram->SetFile( parsingContext->eShaderObject, p_context->m_file->GetFilePath() / path );
 			}
 			else
 			{
@@ -3165,20 +3207,20 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderProgramSampler )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pShaderProgram )
+		if ( !parsingContext->pShaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
+			String name;
+			p_params[0]->Get( name );
 
-			if ( l_parsingContext->eShaderObject != ShaderType::eCount )
+			if ( parsingContext->eShaderObject != ShaderType::eCount )
 			{
-				l_parsingContext->pSamplerUniform = l_parsingContext->pShaderProgram->CreateUniform< UniformType::eSampler >( l_name, l_parsingContext->eShaderObject );
+				parsingContext->pSamplerUniform = parsingContext->pShaderProgram->CreateUniform< UniformType::eSampler >( name, parsingContext->eShaderObject );
 			}
 			else
 			{
@@ -3194,16 +3236,16 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderUboShaders )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( !p_params.empty() )
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
+			uint32_t value;
+			p_params[0]->Get( value );
 
-			if ( l_value )
+			if ( value )
 			{
-				l_parsingContext->pUniformBuffer = std::make_unique< UniformBuffer >( l_parsingContext->strName, *l_parsingContext->pShaderProgram->GetRenderSystem() );
+				parsingContext->pUniformBuffer = std::make_unique< UniformBuffer >( parsingContext->strName, *parsingContext->pShaderProgram->GetRenderSystem() );
 			}
 			else
 			{
@@ -3215,22 +3257,22 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_GeometryInputType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pShaderProgram )
+		if ( !parsingContext->pShaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiType;
-			p_params[0]->Get( l_uiType );
+			uint32_t uiType;
+			p_params[0]->Get( uiType );
 
-			if ( l_parsingContext->eShaderObject != ShaderType::eCount )
+			if ( parsingContext->eShaderObject != ShaderType::eCount )
 			{
-				if ( l_parsingContext->eShaderObject == ShaderType::eGeometry )
+				if ( parsingContext->eShaderObject == ShaderType::eGeometry )
 				{
-					l_parsingContext->pShaderProgram->SetInputType( l_parsingContext->eShaderObject, Topology( l_uiType ) );
+					parsingContext->pShaderProgram->SetInputType( parsingContext->eShaderObject, Topology( uiType ) );
 				}
 				else
 				{
@@ -3247,22 +3289,22 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_GeometryOutputType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pShaderProgram )
+		if ( !parsingContext->pShaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t l_uiType;
-			p_params[0]->Get( l_uiType );
+			uint32_t uiType;
+			p_params[0]->Get( uiType );
 
-			if ( l_parsingContext->eShaderObject != ShaderType::eCount )
+			if ( parsingContext->eShaderObject != ShaderType::eCount )
 			{
-				if ( l_parsingContext->eShaderObject == ShaderType::eGeometry )
+				if ( parsingContext->eShaderObject == ShaderType::eGeometry )
 				{
-					l_parsingContext->pShaderProgram->SetOutputType( l_parsingContext->eShaderObject, Topology( l_uiType ) );
+					parsingContext->pShaderProgram->SetOutputType( parsingContext->eShaderObject, Topology( uiType ) );
 				}
 				else
 				{
@@ -3279,15 +3321,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_GeometryOutputVtxCount )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->eShaderObject != ShaderType::eCount )
+		if ( parsingContext->eShaderObject != ShaderType::eCount )
 		{
-			if ( l_parsingContext->eShaderObject == ShaderType::eGeometry )
+			if ( parsingContext->eShaderObject == ShaderType::eGeometry )
 			{
-				uint8_t l_count;
-				p_params[0]->Get( l_count );
-				l_parsingContext->pShaderProgram->SetOutputVtxCount( l_parsingContext->eShaderObject, l_count );
+				uint8_t count;
+				p_params[0]->Get( count );
+				parsingContext->pShaderProgram->SetOutputVtxCount( parsingContext->eShaderObject, count );
 			}
 			else
 			{
@@ -3303,34 +3345,34 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderUboVariable )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pUniform.reset();
-		p_params[0]->Get( l_parsingContext->strName2 );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pUniform.reset();
+		p_params[0]->Get( parsingContext->strName2 );
 
-		if ( !l_parsingContext->pUniformBuffer )
+		if ( !parsingContext->pUniformBuffer )
 		{
 			PARSING_ERROR( cuT( "Shader constants buffer not initialised" ) );
 		}
-		else if ( l_parsingContext->strName2.empty() )
+		else if ( parsingContext->strName2.empty() )
 		{
 			PARSING_ERROR( cuT( "Invalid empty name" ) );
 		}
 		else
 		{
-			l_parsingContext->uiUInt32 = 1;
+			parsingContext->uiUInt32 = 1;
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eUBOVariable )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableCount )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		uint32_t l_param;
-		p_params[0]->Get( l_param );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		uint32_t param;
+		p_params[0]->Get( param );
 
-		if ( l_parsingContext->pUniformBuffer )
+		if ( parsingContext->pUniformBuffer )
 		{
-			l_parsingContext->uiUInt32 = l_param;
+			parsingContext->uiUInt32 = param;
 		}
 		else
 		{
@@ -3341,15 +3383,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		uint32_t l_uiType;
-		p_params[0]->Get( l_uiType );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		uint32_t uiType;
+		p_params[0]->Get( uiType );
 
-		if ( l_parsingContext->pUniformBuffer )
+		if ( parsingContext->pUniformBuffer )
 		{
-			if ( !l_parsingContext->pUniform )
+			if ( !parsingContext->pUniform )
 			{
-				l_parsingContext->pUniform = l_parsingContext->pUniformBuffer->CreateUniform( UniformType( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
+				parsingContext->pUniform = parsingContext->pUniformBuffer->CreateUniform( UniformType( uiType ), parsingContext->strName2, parsingContext->uiUInt32 );
 			}
 			else
 			{
@@ -3365,13 +3407,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableValue )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_strParams;
-		p_params[0]->Get( l_strParams );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String strParams;
+		p_params[0]->Get( strParams );
 
-		if ( l_parsingContext->pUniform )
+		if ( parsingContext->pUniform )
 		{
-			l_parsingContext->pUniform->SetStrValue( l_strParams );
+			parsingContext->pUniform->SetStrValue( strParams );
 		}
 		else
 		{
@@ -3382,31 +3424,31 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_FontFile )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		p_params[0]->Get( l_parsingContext->path );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		p_params[0]->Get( parsingContext->path );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_FontHeight )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		p_params[0]->Get( l_parsingContext->iInt16 );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		p_params[0]->Get( parsingContext->iInt16 );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_FontEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->strName.empty() && !l_parsingContext->path.empty() )
+		if ( !parsingContext->strName.empty() && !parsingContext->path.empty() )
 		{
-			if ( l_parsingContext->pScene )
+			if ( parsingContext->pScene )
 			{
-				l_parsingContext->pScene->GetFontView().Add( l_parsingContext->strName, l_parsingContext->iInt16, p_context->m_file->GetFilePath() / l_parsingContext->path );
+				parsingContext->pScene->GetFontView().Add( parsingContext->strName, parsingContext->iInt16, p_context->m_file->GetFilePath() / parsingContext->path );
 			}
 			else
 			{
-				l_parsingContext->m_pParser->GetEngine()->GetFontCache().Add( l_parsingContext->strName, l_parsingContext->iInt16, p_context->m_file->GetFilePath() / l_parsingContext->path );
+				parsingContext->m_pParser->GetEngine()->GetFontCache().Add( parsingContext->strName, parsingContext->iInt16, p_context->m_file->GetFilePath() / parsingContext->path );
 			}
 		}
 	}
@@ -3414,13 +3456,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlayPosition )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pOverlay )
+		if ( parsingContext->pOverlay )
 		{
-			Point2d l_ptPosition;
-			p_params[0]->Get( l_ptPosition );
-			l_parsingContext->pOverlay->SetPosition( l_ptPosition );
+			Point2d ptPosition;
+			p_params[0]->Get( ptPosition );
+			parsingContext->pOverlay->SetPosition( ptPosition );
 		}
 		else
 		{
@@ -3431,13 +3473,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlaySize )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pOverlay )
+		if ( parsingContext->pOverlay )
 		{
-			Point2d l_ptSize;
-			p_params[0]->Get( l_ptSize );
-			l_parsingContext->pOverlay->SetSize( l_ptSize );
+			Point2d ptSize;
+			p_params[0]->Get( ptSize );
+			parsingContext->pOverlay->SetSize( ptSize );
 		}
 		else
 		{
@@ -3448,13 +3490,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlayPixelSize )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pOverlay )
+		if ( parsingContext->pOverlay )
 		{
-			Size l_size;
-			p_params[0]->Get( l_size );
-			l_parsingContext->pOverlay->SetPixelSize( l_size );
+			Size size;
+			p_params[0]->Get( size );
+			parsingContext->pOverlay->SetPixelSize( size );
 		}
 		else
 		{
@@ -3465,13 +3507,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlayPixelPosition )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pOverlay )
+		if ( parsingContext->pOverlay )
 		{
-			Position l_position;
-			p_params[0]->Get( l_position );
-			l_parsingContext->pOverlay->SetPixelPosition( l_position );
+			Position position;
+			p_params[0]->Get( position );
+			parsingContext->pOverlay->SetPixelPosition( position );
 		}
 		else
 		{
@@ -3482,14 +3524,14 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlayMaterial )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pOverlay )
+		if ( parsingContext->pOverlay )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			auto & l_cache = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache();
-			l_parsingContext->pOverlay->SetMaterial( l_cache.Find( l_name ) );
+			String name;
+			p_params[0]->Get( name );
+			auto & cache = parsingContext->m_pParser->GetEngine()->GetMaterialCache();
+			parsingContext->pOverlay->SetMaterial( cache.Find( name ) );
 		}
 		else
 		{
@@ -3500,68 +3542,68 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlayPanelOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::ePanel, l_parsingContext->pOverlay->GetScene(), l_parsingContext->pOverlay );
-		l_parsingContext->pOverlay->SetVisible( false );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
+		parsingContext->pOverlay = parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( name ), OverlayType::ePanel, parsingContext->pOverlay->GetScene(), parsingContext->pOverlay );
+		parsingContext->pOverlay->SetVisible( false );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::ePanelOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlayBorderPanelOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::eBorderPanel, l_parsingContext->pOverlay->GetScene(), l_parsingContext->pOverlay );
-		l_parsingContext->pOverlay->SetVisible( false );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
+		parsingContext->pOverlay = parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( name ), OverlayType::eBorderPanel, parsingContext->pOverlay->GetScene(), parsingContext->pOverlay );
+		parsingContext->pOverlay->SetVisible( false );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBorderPanelOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlayTextOverlay )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::eText, l_parsingContext->pOverlay->GetScene(), l_parsingContext->pOverlay );
-		l_parsingContext->pOverlay->SetVisible( false );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
+		parsingContext->pOverlay = parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( name ), OverlayType::eText, parsingContext->pOverlay->GetScene(), parsingContext->pOverlay );
+		parsingContext->pOverlay->SetVisible( false );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eTextOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_OverlayEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pOverlay->GetType() == OverlayType::eText )
+		if ( parsingContext->pOverlay->GetType() == OverlayType::eText )
 		{
-			auto l_textOverlay = l_parsingContext->pOverlay->GetTextOverlay();
+			auto textOverlay = parsingContext->pOverlay->GetTextOverlay();
 
-			if ( l_textOverlay->GetFontTexture() )
+			if ( textOverlay->GetFontTexture() )
 			{
-				l_parsingContext->pOverlay->SetVisible( true );
+				parsingContext->pOverlay->SetVisible( true );
 			}
 			else
 			{
-				l_parsingContext->pOverlay->SetVisible( false );
+				parsingContext->pOverlay->SetVisible( false );
 				PARSING_ERROR( cuT( "TextOverlay's font has not been set, it will not be rendered" ) );
 			}
 		}
 		else
 		{
-			l_parsingContext->pOverlay->SetVisible( true );
+			parsingContext->pOverlay->SetVisible( true );
 		}
 
-		l_parsingContext->pOverlay = l_parsingContext->pOverlay->GetParent();
+		parsingContext->pOverlay = parsingContext->pOverlay->GetParent();
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PanelOverlayUvs )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::ePanel )
+		if ( overlay && overlay->GetType() == OverlayType::ePanel )
 		{
-			Point4d l_uvs;
-			p_params[0]->Get( l_uvs );
-			l_overlay->GetPanelOverlay()->SetUV( l_uvs );
+			Point4d uvs;
+			p_params[0]->Get( uvs );
+			overlay->GetPanelOverlay()->SetUV( uvs );
 		}
 		else
 		{
@@ -3572,14 +3614,14 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BorderPanelOverlaySizes )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eBorderPanel )
+		if ( overlay && overlay->GetType() == OverlayType::eBorderPanel )
 		{
-			Point4d l_ptSize;
-			p_params[0]->Get( l_ptSize );
-			l_overlay->GetBorderPanelOverlay()->SetBorderSize( l_ptSize );
+			Point4d ptSize;
+			p_params[0]->Get( ptSize );
+			overlay->GetBorderPanelOverlay()->SetBorderSize( ptSize );
 		}
 		else
 		{
@@ -3590,14 +3632,14 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BorderPanelOverlayPixelSizes )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eBorderPanel )
+		if ( overlay && overlay->GetType() == OverlayType::eBorderPanel )
 		{
-			Rectangle l_size;
-			p_params[0]->Get( l_size );
-			l_overlay->GetBorderPanelOverlay()->SetBorderPixelSize( l_size );
+			Rectangle size;
+			p_params[0]->Get( size );
+			overlay->GetBorderPanelOverlay()->SetBorderPixelSize( size );
 		}
 		else
 		{
@@ -3608,15 +3650,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BorderPanelOverlayMaterial )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eBorderPanel )
+		if ( overlay && overlay->GetType() == OverlayType::eBorderPanel )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			auto & l_cache = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache();
-			l_overlay->GetBorderPanelOverlay()->SetBorderMaterial( l_cache.Find( l_name ) );
+			String name;
+			p_params[0]->Get( name );
+			auto & cache = parsingContext->m_pParser->GetEngine()->GetMaterialCache();
+			overlay->GetBorderPanelOverlay()->SetBorderMaterial( cache.Find( name ) );
 		}
 		else
 		{
@@ -3627,14 +3669,14 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BorderPanelOverlayPosition )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eBorderPanel )
+		if ( overlay && overlay->GetType() == OverlayType::eBorderPanel )
 		{
-			uint32_t l_position;
-			p_params[0]->Get( l_position );
-			l_overlay->GetBorderPanelOverlay()->SetBorderPosition( BorderPosition( l_position ) );
+			uint32_t position;
+			p_params[0]->Get( position );
+			overlay->GetBorderPanelOverlay()->SetBorderPosition( BorderPosition( position ) );
 		}
 		else
 		{
@@ -3645,14 +3687,14 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BorderPanelOverlayCenterUvs )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eBorderPanel )
+		if ( overlay && overlay->GetType() == OverlayType::eBorderPanel )
 		{
-			Point4d l_uvs;
-			p_params[0]->Get( l_uvs );
-			l_overlay->GetBorderPanelOverlay()->SetUV( l_uvs );
+			Point4d uvs;
+			p_params[0]->Get( uvs );
+			overlay->GetBorderPanelOverlay()->SetUV( uvs );
 		}
 		else
 		{
@@ -3663,14 +3705,14 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BorderPanelOverlayOuterUvs )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eBorderPanel )
+		if ( overlay && overlay->GetType() == OverlayType::eBorderPanel )
 		{
-			Point4d l_uvs;
-			p_params[0]->Get( l_uvs );
-			l_overlay->GetBorderPanelOverlay()->SetBorderOuterUV( l_uvs );
+			Point4d uvs;
+			p_params[0]->Get( uvs );
+			overlay->GetBorderPanelOverlay()->SetBorderOuterUV( uvs );
 		}
 		else
 		{
@@ -3681,14 +3723,14 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BorderPanelOverlayInnerUvs )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eBorderPanel )
+		if ( overlay && overlay->GetType() == OverlayType::eBorderPanel )
 		{
-			Point4d l_uvs;
-			p_params[0]->Get( l_uvs );
-			l_overlay->GetBorderPanelOverlay()->SetBorderInnerUV( l_uvs );
+			Point4d uvs;
+			p_params[0]->Get( uvs );
+			overlay->GetBorderPanelOverlay()->SetBorderInnerUV( uvs );
 		}
 		else
 		{
@@ -3699,18 +3741,18 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_TextOverlayFont )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		if ( overlay && overlay->GetType() == OverlayType::eText )
 		{
-			auto & l_cache = l_parsingContext->m_pParser->GetEngine()->GetFontCache();
-			String l_name;
-			p_params[0]->Get( l_name );
+			auto & cache = parsingContext->m_pParser->GetEngine()->GetFontCache();
+			String name;
+			p_params[0]->Get( name );
 
-			if ( l_cache.Find( l_name ) )
+			if ( cache.Find( name ) )
 			{
-				l_overlay->GetTextOverlay()->SetFont( l_name );
+				overlay->GetTextOverlay()->SetFont( name );
 			}
 			else
 			{
@@ -3726,15 +3768,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_TextOverlayTextWrapping )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		if ( overlay && overlay->GetType() == OverlayType::eText )
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
+			uint32_t value;
+			p_params[0]->Get( value );
 
-			l_overlay->GetTextOverlay()->SetTextWrappingMode( TextWrappingMode( l_value ) );
+			overlay->GetTextOverlay()->SetTextWrappingMode( TextWrappingMode( value ) );
 		}
 		else
 		{
@@ -3745,15 +3787,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_TextOverlayVerticalAlign )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		if ( overlay && overlay->GetType() == OverlayType::eText )
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
+			uint32_t value;
+			p_params[0]->Get( value );
 
-			l_overlay->GetTextOverlay()->SetVAlign( VAlign( l_value ) );
+			overlay->GetTextOverlay()->SetVAlign( VAlign( value ) );
 		}
 		else
 		{
@@ -3764,15 +3806,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_TextOverlayHorizontalAlign )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		if ( overlay && overlay->GetType() == OverlayType::eText )
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
+			uint32_t value;
+			p_params[0]->Get( value );
 
-			l_overlay->GetTextOverlay()->SetHAlign( HAlign( l_value ) );
+			overlay->GetTextOverlay()->SetHAlign( HAlign( value ) );
 		}
 		else
 		{
@@ -3783,15 +3825,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_TextOverlayTexturingMode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		if ( overlay && overlay->GetType() == OverlayType::eText )
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
+			uint32_t value;
+			p_params[0]->Get( value );
 
-			l_overlay->GetTextOverlay()->SetTexturingMode( TextTexturingMode( l_value ) );
+			overlay->GetTextOverlay()->SetTexturingMode( TextTexturingMode( value ) );
 		}
 		else
 		{
@@ -3802,15 +3844,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_TextOverlayLineSpacingMode )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		if ( overlay && overlay->GetType() == OverlayType::eText )
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
+			uint32_t value;
+			p_params[0]->Get( value );
 
-			l_overlay->GetTextOverlay()->SetLineSpacingMode( TextLineSpacingMode( l_value ) );
+			overlay->GetTextOverlay()->SetLineSpacingMode( TextLineSpacingMode( value ) );
 		}
 		else
 		{
@@ -3821,15 +3863,15 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_TextOverlayText )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr l_overlay = l_parsingContext->pOverlay;
-		String l_strParams;
-		p_params[0]->Get( l_strParams );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		OverlaySPtr overlay = parsingContext->pOverlay;
+		String strParams;
+		p_params[0]->Get( strParams );
 
-		if ( l_overlay && l_overlay->GetType() == OverlayType::eText )
+		if ( overlay && overlay->GetType() == OverlayType::eText )
 		{
-			string::replace( l_strParams, cuT( "\\n" ), cuT( "\n" ) );
-			l_overlay->GetTextOverlay()->SetCaption( l_strParams );
+			string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
+			overlay->GetTextOverlay()->SetCaption( strParams );
 		}
 		else
 		{
@@ -3840,67 +3882,67 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_CameraParent )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		SceneNodeSPtr l_pParent = l_parsingContext->pScene->GetSceneNodeCache().Find( p_params[0]->Get( l_name ) );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
+		SceneNodeSPtr pParent = parsingContext->pScene->GetSceneNodeCache().Find( p_params[0]->Get( name ) );
 
-		if ( l_pParent )
+		if ( pParent )
 		{
-			l_parsingContext->pSceneNode = l_pParent;
+			parsingContext->pSceneNode = pParent;
 
-			while ( l_pParent->GetParent() && l_pParent->GetParent() != l_parsingContext->pScene->GetObjectRootNode() && l_pParent->GetParent() != l_parsingContext->pScene->GetCameraRootNode() )
+			while ( pParent->GetParent() && pParent->GetParent() != parsingContext->pScene->GetObjectRootNode() && pParent->GetParent() != parsingContext->pScene->GetCameraRootNode() )
 			{
-				l_pParent = l_pParent->GetParent();
+				pParent = pParent->GetParent();
 			}
 
-			if ( !l_pParent->GetParent() || l_pParent->GetParent() == l_parsingContext->pScene->GetObjectRootNode() )
+			if ( !pParent->GetParent() || pParent->GetParent() == parsingContext->pScene->GetObjectRootNode() )
 			{
-				l_pParent->AttachTo( l_parsingContext->pScene->GetCameraRootNode() );
+				pParent->AttachTo( parsingContext->pScene->GetCameraRootNode() );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
+			PARSING_ERROR( cuT( "Node " ) + name + cuT( " does not exist" ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_CameraViewport )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pViewport = std::make_shared< Viewport >( *l_parsingContext->m_pParser->GetEngine() );
-		l_parsingContext->pViewport->SetPerspective( Angle::from_degrees( 0 ), 1, 0, 1 );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pViewport = std::make_shared< Viewport >( *parsingContext->m_pParser->GetEngine() );
+		parsingContext->pViewport->SetPerspective( Angle::from_degrees( 0 ), 1, 0, 1 );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eViewport )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_CameraPrimitive )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		uint32_t l_uiType;
-		l_parsingContext->ePrimitiveType = Topology( p_params[0]->Get( l_uiType ) );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		uint32_t uiType;
+		parsingContext->ePrimitiveType = Topology( p_params[0]->Get( uiType ) );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_CameraEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSceneNode && l_parsingContext->pViewport )
+		if ( parsingContext->pSceneNode && parsingContext->pViewport )
 		{
-			l_parsingContext->pScene->GetCameraCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, std::move( *l_parsingContext->pViewport ) );
-			l_parsingContext->pViewport.reset();
+			parsingContext->pScene->GetCameraCache().Add( parsingContext->strName, parsingContext->pSceneNode, std::move( *parsingContext->pViewport ) );
+			parsingContext->pViewport.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.size() > 0 )
 		{
-			uint32_t l_uiType;
-			l_parsingContext->pViewport->UpdateType( ViewportType( p_params[0]->Get( l_uiType ) ) );
+			uint32_t uiType;
+			parsingContext->pViewport->UpdateType( ViewportType( p_params[0]->Get( uiType ) ) );
 		}
 		else
 		{
@@ -3911,102 +3953,102 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportLeft )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		real l_rValue;
-		p_params[0]->Get( l_rValue );
-		l_parsingContext->pViewport->UpdateLeft( l_rValue );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		real rValue;
+		p_params[0]->Get( rValue );
+		parsingContext->pViewport->UpdateLeft( rValue );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportRight )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		real l_rValue;
-		p_params[0]->Get( l_rValue );
-		l_parsingContext->pViewport->UpdateRight( l_rValue );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		real rValue;
+		p_params[0]->Get( rValue );
+		parsingContext->pViewport->UpdateRight( rValue );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportTop )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		real l_rValue;
-		p_params[0]->Get( l_rValue );
-		l_parsingContext->pViewport->UpdateTop( l_rValue );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		real rValue;
+		p_params[0]->Get( rValue );
+		parsingContext->pViewport->UpdateTop( rValue );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportBottom )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		real l_rValue;
-		p_params[0]->Get( l_rValue );
-		l_parsingContext->pViewport->UpdateBottom( l_rValue );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		real rValue;
+		p_params[0]->Get( rValue );
+		parsingContext->pViewport->UpdateBottom( rValue );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportNear )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		real l_rValue;
-		p_params[0]->Get( l_rValue );
-		l_parsingContext->pViewport->UpdateNear( l_rValue );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		real rValue;
+		p_params[0]->Get( rValue );
+		parsingContext->pViewport->UpdateNear( rValue );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportFar )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		real l_rValue;
-		p_params[0]->Get( l_rValue );
-		l_parsingContext->pViewport->UpdateFar( l_rValue );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		real rValue;
+		p_params[0]->Get( rValue );
+		parsingContext->pViewport->UpdateFar( rValue );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportSize )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		Size l_size;
-		p_params[0]->Get( l_size );
-		l_parsingContext->pViewport->Resize( l_size );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		Size size;
+		p_params[0]->Get( size );
+		parsingContext->pViewport->Resize( size );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportFovY )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		float l_fFovY;
-		p_params[0]->Get( l_fFovY );
-		l_parsingContext->pViewport->UpdateFovY( Angle::from_degrees( l_fFovY ) );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		float fFovY;
+		p_params[0]->Get( fFovY );
+		parsingContext->pViewport->UpdateFovY( Angle::from_degrees( fFovY ) );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportAspectRatio )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		float l_fRatio;
-		p_params[0]->Get( l_fRatio );
-		l_parsingContext->pViewport->UpdateRatio( l_fRatio );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		float fRatio;
+		p_params[0]->Get( fRatio );
+		parsingContext->pViewport->UpdateRatio( fRatio );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardParent )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pBillboards )
+		if ( parsingContext->pBillboards )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			SceneNodeSPtr l_pParent = l_parsingContext->pScene->GetSceneNodeCache().Find( l_name );
+			String name;
+			p_params[0]->Get( name );
+			SceneNodeSPtr pParent = parsingContext->pScene->GetSceneNodeCache().Find( name );
 
-			if ( l_pParent )
+			if ( pParent )
 			{
-				l_pParent->AttachObject( *l_parsingContext->pBillboards );
+				pParent->AttachObject( *parsingContext->pBillboards );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
+				PARSING_ERROR( cuT( "Node " ) + name + cuT( " does not exist" ) );
 			}
 		}
 		else
@@ -4018,9 +4060,9 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardType )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pBillboards )
+		if ( !parsingContext->pBillboards )
 		{
 			PARSING_ERROR( cuT( "Billboard not initialised" ) );
 		}
@@ -4030,19 +4072,19 @@ namespace Castor3D
 		}
 		else
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
+			uint32_t value;
+			p_params[0]->Get( value );
 
-			l_parsingContext->pBillboards->SetBillboardType( BillboardType( l_value ) );
+			parsingContext->pBillboards->SetBillboardType( BillboardType( value ) );
 		}
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardSize )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pBillboards )
+		if ( !parsingContext->pBillboards )
 		{
 			PARSING_ERROR( cuT( "Billboard not initialised" ) );
 		}
@@ -4052,10 +4094,10 @@ namespace Castor3D
 		}
 		else
 		{
-			uint32_t l_value;
-			p_params[0]->Get( l_value );
+			uint32_t value;
+			p_params[0]->Get( value );
 
-			l_parsingContext->pBillboards->SetBillboardSize( BillboardSize( l_value ) );
+			parsingContext->pBillboards->SetBillboardSize( BillboardSize( value ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -4067,21 +4109,21 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardMaterial )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pBillboards )
+		if ( parsingContext->pBillboards )
 		{
-			auto & l_cache = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache();
-			String l_name;
-			p_params[0]->Get( l_name );
+			auto & cache = parsingContext->m_pParser->GetEngine()->GetMaterialCache();
+			String name;
+			p_params[0]->Get( name );
 
-			if ( l_cache.Has( l_name ) )
+			if ( cache.Has( name ) )
 			{
-				l_parsingContext->pBillboards->SetMaterial( l_cache.Find( l_name ) );
+				parsingContext->pBillboards->SetMaterial( cache.Find( name ) );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material " ) + l_name + cuT( " does not exist" ) );
+				PARSING_ERROR( cuT( "Material " ) + name + cuT( " does not exist" ) );
 			}
 		}
 		else
@@ -4093,69 +4135,69 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardDimensions )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		Size l_dimensions;
-		p_params[0]->Get( l_dimensions );
-		l_parsingContext->pBillboards->SetDimensions( l_dimensions );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		Size dimensions;
+		p_params[0]->Get( dimensions );
+		parsingContext->pBillboards->SetDimensions( dimensions );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->pBillboards = nullptr;
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->pBillboards = nullptr;
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardPoint )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		Point3r l_position;
-		p_params[0]->Get( l_position );
-		l_parsingContext->pBillboards->AddPoint( l_position );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		Point3r position;
+		p_params[0]->Get( position );
+		parsingContext->pBillboards->AddPoint( position );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimatedObject )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		p_params[0]->Get( l_name );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
+		p_params[0]->Get( name );
 
-		if ( l_parsingContext->pAnimGroup )
+		if ( parsingContext->pAnimGroup )
 		{
-			GeometrySPtr l_geometry = l_parsingContext->pScene->GetGeometryCache().Find( l_name );
+			GeometrySPtr geometry = parsingContext->pScene->GetGeometryCache().Find( name );
 
-			if ( l_geometry )
+			if ( geometry )
 			{
-				if ( !l_geometry->GetAnimations().empty() )
+				if ( !geometry->GetAnimations().empty() )
 				{
-					l_parsingContext->pAnimMovable = l_parsingContext->pAnimGroup->AddObject( *l_geometry, l_geometry->GetName() + cuT( "_Movable" ) );
+					parsingContext->pAnimMovable = parsingContext->pAnimGroup->AddObject( *geometry, geometry->GetName() + cuT( "_Movable" ) );
 				}
 
-				if ( l_geometry->GetMesh() )
+				if ( geometry->GetMesh() )
 				{
-					auto l_mesh = l_geometry->GetMesh();
+					auto mesh = geometry->GetMesh();
 
-					if ( !l_mesh->GetAnimations().empty() )
+					if ( !mesh->GetAnimations().empty() )
 					{
-						l_parsingContext->pAnimMesh = l_parsingContext->pAnimGroup->AddObject( *l_mesh, l_geometry->GetName() + cuT( "_Mesh" ) );
+						parsingContext->pAnimMesh = parsingContext->pAnimGroup->AddObject( *mesh, geometry->GetName() + cuT( "_Mesh" ) );
 					}
 
-					auto l_skeleton = l_mesh->GetSkeleton();
+					auto skeleton = mesh->GetSkeleton();
 
-					if ( l_skeleton )
+					if ( skeleton )
 					{
-						if ( !l_skeleton->GetAnimations().empty() )
+						if ( !skeleton->GetAnimations().empty() )
 						{
-							l_parsingContext->pAnimSkeleton = l_parsingContext->pAnimGroup->AddObject( *l_skeleton, l_geometry->GetName() + cuT( "_Skeleton" ) );
+							parsingContext->pAnimSkeleton = parsingContext->pAnimGroup->AddObject( *skeleton, geometry->GetName() + cuT( "_Skeleton" ) );
 						}
 					}
 				}
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "No geometry with name " ) + l_name );
+				PARSING_ERROR( cuT( "No geometry with name " ) + name );
 			}
 		}
 		else
@@ -4167,12 +4209,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimation )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		p_params[0]->Get( l_parsingContext->strName2 );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		p_params[0]->Get( parsingContext->strName2 );
 
-		if ( l_parsingContext->pAnimGroup )
+		if ( parsingContext->pAnimGroup )
 		{
-			l_parsingContext->pAnimGroup->AddAnimation( l_parsingContext->strName2 );
+			parsingContext->pAnimGroup->AddAnimation( parsingContext->strName2 );
 		}
 		else
 		{
@@ -4183,13 +4225,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimationStart )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		p_params[0]->Get( l_name );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		String name;
+		p_params[0]->Get( name );
 
-		if ( l_parsingContext->pAnimGroup )
+		if ( parsingContext->pAnimGroup )
 		{
-			l_parsingContext->pAnimGroup->StartAnimation( l_name );
+			parsingContext->pAnimGroup->StartAnimation( name );
 		}
 		else
 		{
@@ -4200,11 +4242,11 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pAnimGroup )
+		if ( parsingContext->pAnimGroup )
 		{
-			l_parsingContext->pAnimGroup.reset();
+			parsingContext->pAnimGroup.reset();
 		}
 		else
 		{
@@ -4215,13 +4257,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_AnimationLooped )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		bool l_value;
-		p_params[0]->Get( l_value );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		bool value;
+		p_params[0]->Get( value );
 
-		if ( l_parsingContext->pAnimGroup )
+		if ( parsingContext->pAnimGroup )
 		{
-			l_parsingContext->pAnimGroup->SetAnimationLooped( l_parsingContext->strName2, l_value );
+			parsingContext->pAnimGroup->SetAnimationLooped( parsingContext->strName2, value );
 		}
 		else
 		{
@@ -4232,13 +4274,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_AnimationScale )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		float l_value;
-		p_params[0]->Get( l_value );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		float value;
+		p_params[0]->Get( value );
 
-		if ( l_parsingContext->pAnimGroup )
+		if ( parsingContext->pAnimGroup )
 		{
-			l_parsingContext->pAnimGroup->SetAnimationScale( l_parsingContext->strName2, l_value );
+			parsingContext->pAnimGroup->SetAnimationScale( parsingContext->strName2, value );
 		}
 		else
 		{
@@ -4254,39 +4296,32 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxEqui )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 		if ( p_params.size() <= 1 )
 		{
 			PARSING_ERROR( cuT( "Missing parameter." ) );
 		}
-		else if ( !l_parsingContext->pSkybox )
+		else if ( !parsingContext->pSkybox )
 		{
 			PARSING_ERROR( cuT( "No skybox initialised." ) );
 		}
 		else
 		{
-			Path l_path;
-			Path l_filePath = p_context->m_file->GetFilePath();
-			p_params[0]->Get( l_path );
-			PxBufferBaseSPtr l_buffer;
+			Path path;
+			Path filePath = p_context->m_file->GetFilePath();
+			p_params[0]->Get( path );
 
-			if ( File::FileExists( l_filePath / l_path ) )
+			if ( File::FileExists( filePath / path ) )
 			{
-				Image l_image{ l_path.GetFileName(), l_filePath / l_path };
-				l_buffer = l_image.GetPixels();
-			}
-
-			if ( l_buffer )
-			{
-				Size l_size;
-				p_params[1]->Get( l_size );
-				auto l_texture = l_parsingContext->pScene->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+				Size size;
+				p_params[1]->Get( size );
+				auto texture = parsingContext->pScene->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 					, AccessType::eNone
 					, AccessType::eRead );
-				l_texture->GetImage().InitialiseSource( l_buffer );
-				l_parsingContext->pSkybox->SetEquiTexture( l_texture
-					, l_size );
+				texture->GetImage().InitialiseSource( filePath, path );
+				parsingContext->pSkybox->SetEquiTexture( texture
+					, size );
 			}
 			else
 			{
@@ -4298,12 +4333,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxLeft )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSkybox )
+		if ( parsingContext->pSkybox )
 		{
-			Path l_path;
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::eNegativeX ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			Path path;
+			parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::eNegativeX ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( path ) );
 		}
 		else
 		{
@@ -4314,13 +4349,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxRight )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSkybox )
+		if ( parsingContext->pSkybox )
 		{
-			Path l_path;
-			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::ePositiveX ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			Path path;
+			path = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
+			parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::ePositiveX ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( path ) );
 		}
 		else
 		{
@@ -4331,13 +4366,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxTop )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSkybox )
+		if ( parsingContext->pSkybox )
 		{
-			Path l_path;
-			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::eNegativeY ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			Path path;
+			path = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
+			parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::eNegativeY ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( path ) );
 		}
 		else
 		{
@@ -4348,13 +4383,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxBottom )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSkybox )
+		if ( parsingContext->pSkybox )
 		{
-			Path l_path;
-			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::ePositiveY ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			Path path;
+			path = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
+			parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::ePositiveY ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( path ) );
 		}
 		else
 		{
@@ -4365,13 +4400,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxFront )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSkybox )
+		if ( parsingContext->pSkybox )
 		{
-			Path l_path;
-			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::eNegativeZ ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			Path path;
+			path = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
+			parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::eNegativeZ ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( path ) );
 		}
 		else
 		{
@@ -4382,13 +4417,13 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxBack )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSkybox )
+		if ( parsingContext->pSkybox )
 		{
-			Path l_path;
-			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::ePositiveZ ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			Path path;
+			path = p_context->m_file->GetFilePath() / p_params[0]->Get( path );
+			parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::ePositiveZ ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( path ) );
 		}
 		else
 		{
@@ -4399,12 +4434,12 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SkyboxEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pSkybox )
+		if ( parsingContext->pSkybox )
 		{
-			l_parsingContext->pScene->SetForeground( std::move( l_parsingContext->pSkybox ) );
-			l_parsingContext->pSkybox.reset();
+			parsingContext->pScene->SetForeground( std::move( parsingContext->pSkybox ) );
+			parsingContext->pSkybox.reset();
 		}
 		else
 		{
@@ -4415,9 +4450,9 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SsaoEnabled )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pRenderTarget )
+		if ( parsingContext->pRenderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4425,9 +4460,9 @@ namespace Castor3D
 			}
 			else
 			{
-				bool l_value;
-				p_params[0]->Get( l_value );
-				l_parsingContext->ssaoConfig.m_enabled = l_value;
+				bool value;
+				p_params[0]->Get( value );
+				parsingContext->ssaoConfig.m_enabled = value;
 			}
 		}
 		else
@@ -4439,9 +4474,9 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SsaoRadius )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pRenderTarget )
+		if ( parsingContext->pRenderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4449,9 +4484,9 @@ namespace Castor3D
 			}
 			else
 			{
-				float l_value;
-				p_params[0]->Get( l_value );
-				l_parsingContext->ssaoConfig.m_radius = l_value;
+				float value;
+				p_params[0]->Get( value );
+				parsingContext->ssaoConfig.m_radius = value;
 			}
 		}
 		else
@@ -4463,9 +4498,9 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SsaoBias )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pRenderTarget )
+		if ( parsingContext->pRenderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4473,9 +4508,9 @@ namespace Castor3D
 			}
 			else
 			{
-				float l_value;
-				p_params[0]->Get( l_value );
-				l_parsingContext->ssaoConfig.m_bias = l_value;
+				float value;
+				p_params[0]->Get( value );
+				parsingContext->ssaoConfig.m_bias = value;
 			}
 		}
 		else
@@ -4487,11 +4522,11 @@ namespace Castor3D
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SsaoEnd )
 	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pRenderTarget )
+		if ( parsingContext->pRenderTarget )
 		{
-			l_parsingContext->pRenderTarget->SetSsaoConfig( l_parsingContext->ssaoConfig );
+			parsingContext->pRenderTarget->SetSsaoConfig( parsingContext->ssaoConfig );
 		}
 		else
 		{

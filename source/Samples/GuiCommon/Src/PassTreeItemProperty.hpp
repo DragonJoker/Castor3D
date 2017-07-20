@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -87,9 +87,9 @@ namespace GuiCommon
 		template< Castor3D::MaterialType Type >
 		inline std::shared_ptr< typename Castor3D::PassTyper< Type >::Type > GetTypedPass()
 		{
-			auto l_pass = m_pass.lock();
-			REQUIRE( l_pass && l_pass->GetType() == Type );
-			return std::static_pointer_cast< typename Castor3D::PassTyper< Type >::Type >( l_pass );
+			auto pass = m_pass.lock();
+			REQUIRE( pass && pass->GetType() == Type );
+			return std::static_pointer_cast< typename Castor3D::PassTyper< Type >::Type >( pass );
 		}
 
 	private:
@@ -114,6 +114,7 @@ namespace GuiCommon
 		void OnAlbedoChange( Castor::Colour const & p_value );
 		void OnRoughnessChange( double p_value );
 		void OnMetallicChange( double p_value );
+		void OnGlossinessChange( double p_value );
 		bool OnEditShader( wxPGProperty * p_property );
 
 	private:

@@ -88,29 +88,29 @@ namespace GlRender
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	void GlMatAttribute< T, Columns, Rows >::Bind( bool p_bNormalised )
 	{
-		uint32_t l_offset = m_offset;
-		const uint32_t l_off = Rows * sizeof( T );
+		uint32_t offset = m_offset;
+		const uint32_t off = Rows * sizeof( T );
 
 		if ( m_glType == GlType::eInt )
 		{
 			for ( int i = 0; i < Columns; ++i )
 			{
-				uint32_t l_location = uint32_t( m_attributeLocation + i );
-				GetOpenGl().EnableVertexAttribArray( l_location );
-				GetOpenGl().VertexAttribPointer( l_location, int( Rows ), m_glType, int( m_stride ), BUFFER_OFFSET( l_offset ) );
-				GetOpenGl().VertexAttribDivisor( l_location, m_divisor );
-				l_offset += l_off;
+				uint32_t location = uint32_t( m_attributeLocation + i );
+				GetOpenGl().EnableVertexAttribArray( location );
+				GetOpenGl().VertexAttribPointer( location, int( Rows ), m_glType, int( m_stride ), BUFFER_OFFSET( offset ) );
+				GetOpenGl().VertexAttribDivisor( location, m_divisor );
+				offset += off;
 			}
 		}
 		else
 		{
 			for ( int i = 0; i < Columns; ++i )
 			{
-				uint32_t l_location = uint32_t( m_attributeLocation + i );
-				GetOpenGl().EnableVertexAttribArray( l_location );
-				GetOpenGl().VertexAttribPointer( l_location, int( Rows ), m_glType, p_bNormalised, int( m_stride ), BUFFER_OFFSET( l_offset ) );
-				GetOpenGl().VertexAttribDivisor( l_location, m_divisor );
-				l_offset += l_off;
+				uint32_t location = uint32_t( m_attributeLocation + i );
+				GetOpenGl().EnableVertexAttribArray( location );
+				GetOpenGl().VertexAttribPointer( location, int( Rows ), m_glType, p_bNormalised, int( m_stride ), BUFFER_OFFSET( offset ) );
+				GetOpenGl().VertexAttribDivisor( location, m_divisor );
+				offset += off;
 			}
 		}
 	}

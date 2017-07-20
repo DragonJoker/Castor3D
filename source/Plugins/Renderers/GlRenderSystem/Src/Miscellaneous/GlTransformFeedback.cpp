@@ -30,23 +30,23 @@ namespace GlRender
 
 	bool GlTransformFeedback::DoInitialise()
 	{
-		bool l_return = BindableType::Create();
+		bool result = BindableType::Create();
 
-		if ( l_return )
+		if ( result )
 		{
 			BindableType::Bind();
-			uint32_t l_index{ 0u };
+			uint32_t index{ 0u };
 
-			for ( auto & l_buffer : m_buffers )
+			for ( auto & buffer : m_buffers )
 			{
-				auto & l_tb = static_cast< GlBuffer const & >( l_buffer.get().GetGpuBuffer() );
-				GetOpenGl().BindBufferBase( GlBufferTarget::eTransformFeedbackBuffer, l_index++, l_tb.GetGlName() );
+				auto & tb = static_cast< GlBuffer const & >( buffer.get().GetGpuBuffer() );
+				GetOpenGl().BindBufferBase( GlBufferTarget::eTransformFeedbackBuffer, index++, tb.GetGlName() );
 			}
 
 			BindableType::Unbind();
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void GlTransformFeedback::DoCleanup()

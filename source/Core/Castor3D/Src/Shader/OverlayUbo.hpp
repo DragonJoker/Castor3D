@@ -119,9 +119,9 @@ namespace Castor3D
 }
 
 #define UBO_OVERLAY( Writer )\
-	GLSL::Ubo l_overlay{ l_writer, ShaderProgram::BufferOverlay, OverlayUbo::BindingPoint };\
-	auto c3d_position = l_overlay.DeclMember< GLSL::IVec2 >( ShaderProgram::OvPosition );\
-	auto c3d_materialIndex = l_overlay.DeclMember< GLSL::Int >( ShaderProgram::MaterialIndex );\
-	l_overlay.End()
+	GLSL::Ubo overlay{ writer, Castor3D::ShaderProgram::BufferOverlay, Castor3D::OverlayUbo::BindingPoint };\
+	auto c3d_position = overlay.DeclMember< GLSL::IVec2 >( Castor3D::ShaderProgram::OvPosition );\
+	auto c3d_materialIndex = overlay.DeclMember< GLSL::Int >( Castor3D::ShaderProgram::MaterialIndex );\
+	overlay.End()
 
 #endif

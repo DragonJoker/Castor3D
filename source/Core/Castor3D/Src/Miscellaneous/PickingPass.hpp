@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -229,9 +229,16 @@ namespace Castor3D
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoGetPbrPixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoGetPbrMRPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
+		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
+			, ProgramFlags const & p_programFlags
+			, SceneFlags const & p_sceneFlags
+			, ComparisonFunc p_alphaFunc )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetPbrSGPixelShaderSource
+		 */
+		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
 			, ProgramFlags const & p_programFlags
 			, SceneFlags const & p_sceneFlags
 			, ComparisonFunc p_alphaFunc )const override;

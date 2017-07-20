@@ -79,7 +79,7 @@ namespace Castor
 		 */
 		static inline Path CopyFile( Path const & p_path, Path const & p_folder, Path const & p_subfolder )
 		{
-			Path l_relative{ p_subfolder.empty() ? p_path.GetFileName( true ) : p_subfolder / p_path.GetFileName( true ) };
+			Path relative{ p_subfolder.empty() ? p_path.GetFileName( true ) : p_subfolder / p_path.GetFileName( true ) };
 
 			if ( !File::DirectoryExists( p_folder / p_subfolder ) )
 			{
@@ -87,7 +87,7 @@ namespace Castor
 			}
 
 			File::CopyFile( p_path, p_folder / p_subfolder );
-			return l_relative;
+			return relative;
 		}
 		/**
 		 *\~english

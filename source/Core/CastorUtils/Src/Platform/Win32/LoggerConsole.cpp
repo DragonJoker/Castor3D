@@ -32,20 +32,20 @@ namespace Castor
 			if ( m_screenBuffer != INVALID_HANDLE_VALUE && ::SetConsoleActiveScreenBuffer( m_screenBuffer ) )
 			{
 				m_oldInfos = new CONSOLE_FONT_INFOEX;
-				CONSOLE_FONT_INFOEX * l_oldInfos = m_oldInfos;
-				l_oldInfos->cbSize = sizeof( CONSOLE_FONT_INFOEX );
+				CONSOLE_FONT_INFOEX * oldInfos = m_oldInfos;
+				oldInfos->cbSize = sizeof( CONSOLE_FONT_INFOEX );
 
-				if ( ::GetCurrentConsoleFontEx( m_screenBuffer, FALSE, l_oldInfos ) )
+				if ( ::GetCurrentConsoleFontEx( m_screenBuffer, FALSE, oldInfos ) )
 				{
-					CONSOLE_FONT_INFOEX l_newInfos = { 0 };
-					l_newInfos.cbSize = sizeof( CONSOLE_FONT_INFOEX );
-					l_newInfos.dwFontSize = l_oldInfos->dwFontSize;
-					l_newInfos.FontWeight = l_oldInfos->FontWeight;
-					l_newInfos.nFont = 6;
-					l_newInfos.FontFamily = 54;
-					wcscpy( l_newInfos.FaceName, L"Lucida Console" );
+					CONSOLE_FONT_INFOEX newInfos = { 0 };
+					newInfos.cbSize = sizeof( CONSOLE_FONT_INFOEX );
+					newInfos.dwFontSize = oldInfos->dwFontSize;
+					newInfos.FontWeight = oldInfos->FontWeight;
+					newInfos.nFont = 6;
+					newInfos.FontFamily = 54;
+					wcscpy( newInfos.FaceName, L"Lucida Console" );
 
-					if ( !::SetCurrentConsoleFontEx( m_screenBuffer, FALSE, &l_newInfos ) )
+					if ( !::SetCurrentConsoleFontEx( m_screenBuffer, FALSE, &newInfos ) )
 					{
 						delete m_oldInfos;
 						m_oldInfos = nullptr;
@@ -59,16 +59,16 @@ namespace Castor
 
 				SHORT minX{ SHORT( ::GetSystemMetrics( SM_CXMIN ) ) };
 				SHORT minY{ SHORT( ::GetSystemMetrics( SM_CYMIN ) ) };
-				COORD l_coord = { std::max< SHORT >( 210, minX ), std::max< SHORT >( minX, 32766 ) };
+				COORD coord = { std::max< SHORT >( 210, minX ), std::max< SHORT >( minX, 32766 ) };
 
-				if ( ::SetConsoleScreenBufferSize( m_screenBuffer, l_coord ) )
+				if ( ::SetConsoleScreenBufferSize( m_screenBuffer, coord ) )
 				{
-					COORD l_size = ::GetLargestConsoleWindowSize( m_screenBuffer );
-					SMALL_RECT l_windowRect = { 0 };
-					l_windowRect.Right = std::min( l_size.X, l_coord.X ) - 1;
-					l_windowRect.Bottom = std::min( l_size.Y, l_coord.Y ) - 1;
+					COORD size = ::GetLargestConsoleWindowSize( m_screenBuffer );
+					SMALL_RECT windowRect = { 0 };
+					windowRect.Right = std::min( size.X, coord.X ) - 1;
+					windowRect.Bottom = std::min( size.Y, coord.Y ) - 1;
 
-					if ( !::SetConsoleWindowInfo( m_screenBuffer, TRUE, &l_windowRect ) )
+					if ( !::SetConsoleWindowInfo( m_screenBuffer, TRUE, &windowRect ) )
 					{
 						StringStream text;
 						text << cuT( "Couldn't set console window size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
@@ -119,9 +119,9 @@ namespace Castor
 		{
 			if ( ::IsDebuggerPresent() )
 			{
-				std::wstring_convert< std::codecvt_utf8_utf16< wchar_t >, wchar_t > l_conversion;
-				auto l_converted = l_conversion.from_bytes( p_text );
-				::OutputDebugStringW( l_converted.c_str() );
+				std::wstring_convert< std::codecvt_utf8_utf16< wchar_t >, wchar_t > conversion;
+				auto converted = conversion.from_bytes( p_text );
+				::OutputDebugStringW( converted.c_str() );
 
 				if ( p_newLine )
 				{
@@ -129,78 +129,78 @@ namespace Castor
 				}
 			}
 
-			CONSOLE_SCREEN_BUFFER_INFO l_csbiInfo;
+			CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 
-			if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &l_csbiInfo ) )
+			if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &csbiInfo ) )
 			{
 				// Manually managed screen buffer.
-				l_csbiInfo.dwCursorPosition.X = 0;
-				DWORD l_written = 0;
-				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &l_written, nullptr );
+				csbiInfo.dwCursorPosition.X = 0;
+				DWORD written = 0;
+				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &written, nullptr );
 
 				if ( p_newLine )
 				{
-					SHORT l_offsetY = SHORT( 1 + l_written / l_csbiInfo.dwSize.X );
+					SHORT offsetY = SHORT( 1 + written / csbiInfo.dwSize.X );
 
-					if ( ( l_csbiInfo.dwSize.Y - l_offsetY ) <= l_csbiInfo.dwCursorPosition.Y )
+					if ( ( csbiInfo.dwSize.Y - offsetY ) <= csbiInfo.dwCursorPosition.Y )
 					{
 						// The cursor is on the last row
 						// The scroll rectangle is from second row to last displayed row
-						SMALL_RECT l_scrollRect;
-						l_scrollRect.Top = 1;
-						l_scrollRect.Bottom = l_csbiInfo.dwSize.Y - 1;
-						l_scrollRect.Left = 0;
-						l_scrollRect.Right = l_csbiInfo.dwSize.X - 1;
+						SMALL_RECT scrollRect;
+						scrollRect.Top = 1;
+						scrollRect.Bottom = csbiInfo.dwSize.Y - 1;
+						scrollRect.Left = 0;
+						scrollRect.Right = csbiInfo.dwSize.X - 1;
 						// The destination for the scroll rectangle is one row up.
-						COORD l_coordDest;
-						l_coordDest.X = 0;
-						l_coordDest.Y = 0;
+						COORD coordDest;
+						coordDest.X = 0;
+						coordDest.Y = 0;
 						// Set the fill character and attributes.
-						CHAR_INFO l_fill;
-						l_fill.Attributes = 0;
-						l_fill.Char.AsciiChar = ' ';
-						l_fill.Char.UnicodeChar = L' ';
+						CHAR_INFO fill;
+						fill.Attributes = 0;
+						fill.Char.AsciiChar = ' ';
+						fill.Char.UnicodeChar = L' ';
 						// Scroll
-						::ScrollConsoleScreenBuffer( m_screenBuffer, &l_scrollRect, nullptr, l_coordDest, &l_fill );
+						::ScrollConsoleScreenBuffer( m_screenBuffer, &scrollRect, nullptr, coordDest, &fill );
 					}
 					else
 					{
 						// The cursor isn't on the last row
-						l_csbiInfo.dwCursorPosition.Y += l_offsetY;
+						csbiInfo.dwCursorPosition.Y += offsetY;
 					}
 
-					::SetConsoleCursorPosition( m_screenBuffer, l_csbiInfo.dwCursorPosition );
+					::SetConsoleCursorPosition( m_screenBuffer, csbiInfo.dwCursorPosition );
 				}
 			}
 			else
 			{
 				// Automatically managed screen buffer.
-				DWORD l_written = 0;
+				DWORD written = 0;
 
 				if ( p_newLine )
 				{
 					p_text += cuT( "\n" );
 				}
 
-				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &l_written, nullptr );
+				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &written, nullptr );
 			}
 		}
 
 	private:
 		static BOOL __stdcall DoCodePageProc( xchar * szCodePage )
 		{
-			BOOL l_result = TRUE;
-			String l_codePage( szCodePage );
-			int l_cp = stoi( l_codePage );
+			BOOL result = TRUE;
+			String codePage( szCodePage );
+			int cp = stoi( codePage );
 
-			if ( l_cp == CP_UTF8 )
+			if ( cp == CP_UTF8 )
 			{
-				::SetConsoleCP( l_cp );
-				::SetConsoleOutputCP( l_cp );
-				l_result = FALSE;
+				::SetConsoleCP( cp );
+				::SetConsoleOutputCP( cp );
+				result = FALSE;
 			}
 
-			return l_result;
+			return result;
 		}
 
 	private:
@@ -220,8 +220,8 @@ namespace Castor
 
 			if ( m_screenBuffer != INVALID_HANDLE_VALUE && ::SetConsoleActiveScreenBuffer( m_screenBuffer ) )
 			{
-				COORD l_coord = { 160, 9999 };
-				::SetConsoleScreenBufferSize( m_screenBuffer, l_coord );
+				COORD coord = { 160, 9999 };
+				::SetConsoleScreenBufferSize( m_screenBuffer, coord );
 			}
 
 			m_oldCodePage = ::GetConsoleOutputCP();
@@ -251,61 +251,61 @@ namespace Castor
 
 		void WriteText( String const & p_text, bool p_newLine )
 		{
-			CONSOLE_SCREEN_BUFFER_INFO l_csbiInfo;
+			CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 
-			if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &l_csbiInfo ) )
+			if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &csbiInfo ) )
 			{
-				l_csbiInfo.dwCursorPosition.X = 0;
-				DWORD l_written = 0;
-				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &l_written, nullptr );
-				SHORT l_offsetY = SHORT( 1 + l_written / l_csbiInfo.dwSize.X );
+				csbiInfo.dwCursorPosition.X = 0;
+				DWORD written = 0;
+				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &written, nullptr );
+				SHORT offsetY = SHORT( 1 + written / csbiInfo.dwSize.X );
 
-				if ( ( l_csbiInfo.dwSize.Y - l_offsetY ) <= l_csbiInfo.dwCursorPosition.Y )
+				if ( ( csbiInfo.dwSize.Y - offsetY ) <= csbiInfo.dwCursorPosition.Y )
 				{
 					// The cursor is on the last row
 					// The scroll rectangle is from second row to last displayed row
-					SMALL_RECT l_scrollRect;
-					l_scrollRect.Top = 1;
-					l_scrollRect.Bottom = l_csbiInfo.dwSize.Y - 1;
-					l_scrollRect.Left = 0;
-					l_scrollRect.Right = l_csbiInfo.dwSize.X - 1;
+					SMALL_RECT scrollRect;
+					scrollRect.Top = 1;
+					scrollRect.Bottom = csbiInfo.dwSize.Y - 1;
+					scrollRect.Left = 0;
+					scrollRect.Right = csbiInfo.dwSize.X - 1;
 					// The destination for the scroll rectangle is one row up.
-					COORD l_coordDest;
-					l_coordDest.X = 0;
-					l_coordDest.Y = 0;
+					COORD coordDest;
+					coordDest.X = 0;
+					coordDest.Y = 0;
 					// Set the fill character and attributes.
-					CHAR_INFO l_fill;
-					l_fill.Attributes = 0;
-					l_fill.Char.AsciiChar = ' ';
-					l_fill.Char.UnicodeChar = L' ';
+					CHAR_INFO fill;
+					fill.Attributes = 0;
+					fill.Char.AsciiChar = ' ';
+					fill.Char.UnicodeChar = L' ';
 					// Scroll
-					::ScrollConsoleScreenBuffer( m_screenBuffer, &l_scrollRect, nullptr, l_coordDest, &l_fill );
+					::ScrollConsoleScreenBuffer( m_screenBuffer, &scrollRect, nullptr, coordDest, &fill );
 				}
 				else
 				{
 					// The cursor isn't on the last row
-					l_csbiInfo.dwCursorPosition.Y += l_offsetY;
+					csbiInfo.dwCursorPosition.Y += offsetY;
 				}
 
-				::SetConsoleCursorPosition( m_screenBuffer, l_csbiInfo.dwCursorPosition );
+				::SetConsoleCursorPosition( m_screenBuffer, csbiInfo.dwCursorPosition );
 			}
 		}
 
 	private:
 		static BOOL __stdcall DoCodePageProc( xchar * szCodePage )
 		{
-			BOOL l_result = TRUE;
-			String l_codePage( szCodePage );
-			int l_cp = stoi( l_codePage );
+			BOOL result = TRUE;
+			String codePage( szCodePage );
+			int cp = stoi( codePage );
 
-			if ( l_cp == CP_UTF8 )
+			if ( cp == CP_UTF8 )
 			{
-				::SetConsoleCP( l_cp );
-				::SetConsoleOutputCP( l_cp );
-				l_result = FALSE;
+				::SetConsoleCP( cp );
+				::SetConsoleOutputCP( cp );
+				result = FALSE;
 			}
 
-			return l_result;
+			return result;
 		}
 
 	private:
@@ -353,32 +353,32 @@ namespace Castor
 
 		void BeginLog( LogType logLevel )
 		{
-			WORD l_attributes;
+			WORD attributes;
 
 			switch ( logLevel )
 			{
 			case LogType::eTrace:
-				l_attributes = FOREGROUND_BLUE | FOREGROUND_GREEN;
+				attributes = FOREGROUND_BLUE | FOREGROUND_GREEN;
 				break;
 
 			case LogType::eDebug:
-				l_attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+				attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 				break;
 
 			case LogType::eWarning:
-				l_attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+				attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 				break;
 
 			case LogType::eError:
-				l_attributes = FOREGROUND_RED | FOREGROUND_INTENSITY;
+				attributes = FOREGROUND_RED | FOREGROUND_INTENSITY;
 				break;
 
 			default:
-				l_attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+				attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 				break;
 			}
 
-			m_handle.SetAttributes( l_attributes );
+			m_handle.SetAttributes( attributes );
 		}
 
 		void Print( String const & p_toLog, bool p_newLine )
@@ -391,9 +391,9 @@ namespace Castor
 		{
 			if ( m_handle.Initialise( p_handle ) )
 			{
-				FILE * l_dump;
-				freopen_s( &l_dump, "conout$", "w", stdout );
-				freopen_s( &l_dump, "conout$", "w", stderr );
+				FILE * dump;
+				freopen_s( &dump, "conout$", "w", stdout );
+				freopen_s( &dump, "conout$", "w", stderr );
 			}
 		}
 
@@ -456,9 +456,9 @@ namespace Castor
 	private:
 		void DoInitialiseConsole( HANDLE p_handle )
 		{
-			FILE * l_dump;
-			freopen_s( &l_dump, "conout$", "w", stdout );
-			freopen_s( &l_dump, "conout$", "w", stderr );
+			FILE * dump;
+			freopen_s( &dump, "conout$", "w", stdout );
+			freopen_s( &dump, "conout$", "w", stderr );
 		}
 
 	private:

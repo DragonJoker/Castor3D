@@ -9,25 +9,25 @@ namespace Castor3D
 {
 	void SubmeshUtils::ComputeFacesFromPolygonVertex( Submesh & p_submesh )
 	{
-		auto & l_points = p_submesh.GetPoints();
+		auto & points = p_submesh.GetPoints();
 
-		if ( l_points.size() )
+		if ( points.size() )
 		{
-			BufferElementGroupSPtr l_v1 = l_points[0];
-			BufferElementGroupSPtr l_v2 = l_points[1];
-			BufferElementGroupSPtr l_v3 = l_points[2];
+			BufferElementGroupSPtr v1 = points[0];
+			BufferElementGroupSPtr v2 = points[1];
+			BufferElementGroupSPtr v3 = points[2];
 			p_submesh.AddFace( 0, 1, 2 );
-			Vertex::SetTexCoord( l_v1, 0.0, 0.0 );
-			Vertex::SetTexCoord( l_v2, 0.0, 0.0 );
-			Vertex::SetTexCoord( l_v3, 0.0, 0.0 );
+			Vertex::SetTexCoord( v1, 0.0, 0.0 );
+			Vertex::SetTexCoord( v2, 0.0, 0.0 );
+			Vertex::SetTexCoord( v3, 0.0, 0.0 );
 
-			for ( uint32_t i = 2; i < uint32_t( l_points.size() - 1 ); i++ )
+			for ( uint32_t i = 2; i < uint32_t( points.size() - 1 ); i++ )
 			{
-				l_v2 = l_points[i];
-				l_v3 = l_points[i + 1];
+				v2 = points[i];
+				v3 = points[i + 1];
 				p_submesh.AddFace( 0, i, i + 1 );
-				Vertex::SetTexCoord( l_v2, 0.0, 0.0 );
-				Vertex::SetTexCoord( l_v3, 0.0, 0.0 );
+				Vertex::SetTexCoord( v2, 0.0, 0.0 );
+				Vertex::SetTexCoord( v3, 0.0, 0.0 );
 			}
 		}
 	}
@@ -35,247 +35,247 @@ namespace Castor3D
 	void SubmeshUtils::ComputeNormals( Submesh & p_submesh
 		, bool p_reverted )
 	{
-		auto & l_points = p_submesh.GetPoints();
-		auto & l_faces = p_submesh.GetFaces();
+		auto & points = p_submesh.GetPoints();
+		auto & faces = p_submesh.GetFaces();
 
-		Point3r l_vec2m1;
-		Point3r l_vec3m1;
-		Point3r l_tex2m1;
-		Point3r l_tex3m1;
-		Point3r l_pt1;
-		Point3r l_pt2;
-		Point3r l_pt3;
-		Point3r l_uv1;
-		Point3r l_uv2;
-		Point3r l_uv3;
-		BufferElementGroupSPtr l_pVtx1;
-		BufferElementGroupSPtr l_pVtx2;
-		BufferElementGroupSPtr l_pVtx3;
-		Point3r l_vFaceNormal;
-		Point3r l_vFaceTangent;
+		Point3r vec2m1;
+		Point3r vec3m1;
+		Point3r tex2m1;
+		Point3r tex3m1;
+		Point3r pt1;
+		Point3r pt2;
+		Point3r pt3;
+		Point3r uv1;
+		Point3r uv2;
+		Point3r uv3;
+		BufferElementGroupSPtr pVtx1;
+		BufferElementGroupSPtr pVtx2;
+		BufferElementGroupSPtr pVtx3;
+		Point3r vFaceNormal;
+		Point3r vFaceTangent;
 
 		// First we flush normals and tangents
-		for ( auto & l_pt : l_points )
+		for ( auto & pt : points )
 		{
-			Vertex::SetNormal( l_pt, l_pt1 );
-			Vertex::SetTangent( l_pt, l_pt1 );
+			Vertex::SetNormal( pt, pt1 );
+			Vertex::SetTangent( pt, pt1 );
 		}
 
-		Coords3r l_coord;
+		Coords3r coord;
 
 		// Then we compute normals and tangents
 		if ( p_reverted )
 		{
-			for ( auto const & l_face : l_faces )
+			for ( auto const & face : faces )
 			{
-				l_pVtx1 = l_points[l_face[0]];
-				l_pVtx2 = l_points[l_face[1]];
-				l_pVtx3 = l_points[l_face[2]];
-				Vertex::GetPosition( l_pVtx1, l_pt1 );
-				Vertex::GetPosition( l_pVtx2, l_pt2 );
-				Vertex::GetPosition( l_pVtx3, l_pt3 );
-				Vertex::GetTexCoord( l_pVtx1, l_uv1 );
-				Vertex::GetTexCoord( l_pVtx2, l_uv2 );
-				Vertex::GetTexCoord( l_pVtx3, l_uv3 );
-				l_vec2m1 = l_pt2 - l_pt1;
-				l_vec3m1 = l_pt3 - l_pt1;
-				l_tex2m1 = l_uv2 - l_uv1;
-				l_tex3m1 = l_uv3 - l_uv1;
-				l_vFaceNormal = -( l_vec3m1 ^ l_vec2m1 );
-				l_vFaceTangent = ( l_vec2m1 * l_tex3m1[1] ) - ( l_vec3m1 * l_tex2m1[1] );
-				Vertex::GetNormal( l_pVtx1, l_coord ) += l_vFaceNormal;
-				Vertex::GetNormal( l_pVtx2, l_coord ) += l_vFaceNormal;
-				Vertex::GetNormal( l_pVtx3, l_coord ) += l_vFaceNormal;
-				Vertex::GetTangent( l_pVtx1, l_coord ) += l_vFaceTangent;
-				Vertex::GetTangent( l_pVtx2, l_coord ) += l_vFaceTangent;
-				Vertex::GetTangent( l_pVtx3, l_coord ) += l_vFaceTangent;
+				pVtx1 = points[face[0]];
+				pVtx2 = points[face[1]];
+				pVtx3 = points[face[2]];
+				Vertex::GetPosition( pVtx1, pt1 );
+				Vertex::GetPosition( pVtx2, pt2 );
+				Vertex::GetPosition( pVtx3, pt3 );
+				Vertex::GetTexCoord( pVtx1, uv1 );
+				Vertex::GetTexCoord( pVtx2, uv2 );
+				Vertex::GetTexCoord( pVtx3, uv3 );
+				vec2m1 = pt2 - pt1;
+				vec3m1 = pt3 - pt1;
+				tex2m1 = uv2 - uv1;
+				tex3m1 = uv3 - uv1;
+				vFaceNormal = -( vec3m1 ^ vec2m1 );
+				vFaceTangent = ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] );
+				Vertex::GetNormal( pVtx1, coord ) += vFaceNormal;
+				Vertex::GetNormal( pVtx2, coord ) += vFaceNormal;
+				Vertex::GetNormal( pVtx3, coord ) += vFaceNormal;
+				Vertex::GetTangent( pVtx1, coord ) += vFaceTangent;
+				Vertex::GetTangent( pVtx2, coord ) += vFaceTangent;
+				Vertex::GetTangent( pVtx3, coord ) += vFaceTangent;
 			}
 		}
 		else
 		{
-			for ( auto const & l_face : l_faces )
+			for ( auto const & face : faces )
 			{
-				l_pVtx1 = l_points[l_face[0]];
-				l_pVtx2 = l_points[l_face[1]];
-				l_pVtx3 = l_points[l_face[2]];
-				Vertex::GetPosition( l_pVtx1, l_pt1 );
-				Vertex::GetPosition( l_pVtx2, l_pt2 );
-				Vertex::GetPosition( l_pVtx3, l_pt3 );
-				Vertex::GetTexCoord( l_pVtx1, l_uv1 );
-				Vertex::GetTexCoord( l_pVtx2, l_uv2 );
-				Vertex::GetTexCoord( l_pVtx3, l_uv3 );
-				l_vec2m1 = l_pt2 - l_pt1;
-				l_vec3m1 = l_pt3 - l_pt1;
-				l_tex2m1 = l_uv2 - l_uv1;
-				l_tex3m1 = l_uv3 - l_uv1;
-				l_vFaceNormal = l_vec3m1 ^ l_vec2m1;
-				l_vFaceTangent = ( l_vec3m1 * l_tex2m1[1] ) - ( l_vec2m1 * l_tex3m1[1] );
-				Vertex::GetNormal( l_pVtx1, l_coord ) += l_vFaceNormal;
-				Vertex::GetNormal( l_pVtx2, l_coord ) += l_vFaceNormal;
-				Vertex::GetNormal( l_pVtx3, l_coord ) += l_vFaceNormal;
-				Vertex::GetTangent( l_pVtx1, l_coord ) += l_vFaceTangent;
-				Vertex::GetTangent( l_pVtx2, l_coord ) += l_vFaceTangent;
-				Vertex::GetTangent( l_pVtx3, l_coord ) += l_vFaceTangent;
+				pVtx1 = points[face[0]];
+				pVtx2 = points[face[1]];
+				pVtx3 = points[face[2]];
+				Vertex::GetPosition( pVtx1, pt1 );
+				Vertex::GetPosition( pVtx2, pt2 );
+				Vertex::GetPosition( pVtx3, pt3 );
+				Vertex::GetTexCoord( pVtx1, uv1 );
+				Vertex::GetTexCoord( pVtx2, uv2 );
+				Vertex::GetTexCoord( pVtx3, uv3 );
+				vec2m1 = pt2 - pt1;
+				vec3m1 = pt3 - pt1;
+				tex2m1 = uv2 - uv1;
+				tex3m1 = uv3 - uv1;
+				vFaceNormal = vec3m1 ^ vec2m1;
+				vFaceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
+				Vertex::GetNormal( pVtx1, coord ) += vFaceNormal;
+				Vertex::GetNormal( pVtx2, coord ) += vFaceNormal;
+				Vertex::GetNormal( pVtx3, coord ) += vFaceNormal;
+				Vertex::GetTangent( pVtx1, coord ) += vFaceTangent;
+				Vertex::GetTangent( pVtx2, coord ) += vFaceTangent;
+				Vertex::GetTangent( pVtx3, coord ) += vFaceTangent;
 			}
 		}
 
 		// Eventually we normalize the normals and tangents
-		for ( auto l_vtx : l_points )
+		for ( auto vtx : points )
 		{
-			Coords3r l_value;
-			Vertex::GetNormal( l_vtx, l_value );
-			point::normalise( l_value );
-			Vertex::GetTangent( l_vtx, l_value );
-			point::normalise( l_value );
+			Coords3r value;
+			Vertex::GetNormal( vtx, value );
+			point::normalise( value );
+			Vertex::GetTangent( vtx, value );
+			point::normalise( value );
 		}
 	}
 
 	void SubmeshUtils::ComputeNormals( Submesh & p_submesh
 		, Face const & p_face )
 	{
-		auto & l_points = p_submesh.GetPoints();
-		BufferElementGroupSPtr l_pVtx1, l_pVtx2, l_pVtx3;
-		Point3r l_vec2m1;
-		Point3r l_vec3m1;
-		Point3r l_vFaceNormal;
-		Point3r l_pt1;
-		Point3r l_pt2;
-		Point3r l_pt3;
-		l_pVtx1 = l_points[p_face[0]];
-		l_pVtx2 = l_points[p_face[1]];
-		l_pVtx3 = l_points[p_face[2]];
-		Vertex::GetPosition( l_pVtx1, l_pt1 );
-		Vertex::GetPosition( l_pVtx2, l_pt2 );
-		Vertex::GetPosition( l_pVtx3, l_pt3 );
-		l_vec2m1 = l_pt2 - l_pt1;
-		l_vec3m1 = l_pt3 - l_pt1;
-		l_vFaceNormal = point::get_normalised( l_vec2m1 ^ l_vec3m1 );
-		Vertex::SetNormal( l_pVtx1, l_vFaceNormal );
-		Vertex::SetNormal( l_pVtx2, l_vFaceNormal );
-		Vertex::SetNormal( l_pVtx3, l_vFaceNormal );
+		auto & points = p_submesh.GetPoints();
+		BufferElementGroupSPtr pVtx1, pVtx2, pVtx3;
+		Point3r vec2m1;
+		Point3r vec3m1;
+		Point3r vFaceNormal;
+		Point3r pt1;
+		Point3r pt2;
+		Point3r pt3;
+		pVtx1 = points[p_face[0]];
+		pVtx2 = points[p_face[1]];
+		pVtx3 = points[p_face[2]];
+		Vertex::GetPosition( pVtx1, pt1 );
+		Vertex::GetPosition( pVtx2, pt2 );
+		Vertex::GetPosition( pVtx3, pt3 );
+		vec2m1 = pt2 - pt1;
+		vec3m1 = pt3 - pt1;
+		vFaceNormal = point::get_normalised( vec2m1 ^ vec3m1 );
+		Vertex::SetNormal( pVtx1, vFaceNormal );
+		Vertex::SetNormal( pVtx2, vFaceNormal );
+		Vertex::SetNormal( pVtx3, vFaceNormal );
 		ComputeTangents( p_submesh, p_face );
 	}
 
 	void SubmeshUtils::ComputeTangents( Submesh & p_submesh
 		, Face const & p_face )
 	{
-		auto & l_points = p_submesh.GetPoints();
-		BufferElementGroupSPtr l_pVtx1, l_pVtx2, l_pVtx3;
-		Point3r l_vec2m1;
-		Point3r l_vec3m1;
-		Point3r l_vFaceTangent;
-		Point3r l_tex2m1;
-		Point3r l_tex3m1;
-		Point3r l_uv1;
-		Point3r l_uv2;
-		Point3r l_uv3;
-		Point3r l_pt1;
-		Point3r l_pt2;
-		Point3r l_pt3;
-		l_pVtx1 = l_points[p_face[0]];
-		l_pVtx2 = l_points[p_face[1]];
-		l_pVtx3 = l_points[p_face[2]];
-		Vertex::GetPosition( l_pVtx1, l_pt1 );
-		Vertex::GetPosition( l_pVtx2, l_pt2 );
-		Vertex::GetPosition( l_pVtx3, l_pt3 );
-		Vertex::GetTexCoord( l_pVtx1, l_uv1 );
-		Vertex::GetTexCoord( l_pVtx2, l_uv2 );
-		Vertex::GetTexCoord( l_pVtx3, l_uv3 );
-		l_vec2m1 = l_pt2 - l_pt1;
-		l_vec3m1 = l_pt3 - l_pt1;
-		l_tex2m1 = l_uv2 - l_uv1;
-		l_tex3m1 = l_uv3 - l_uv1;
-		l_vFaceTangent = point::get_normalised( ( l_vec2m1 * l_tex3m1[1] ) - ( l_vec3m1 * l_tex2m1[1] ) );
-		Vertex::SetTangent( l_pVtx1, l_vFaceTangent );
-		Vertex::SetTangent( l_pVtx2, l_vFaceTangent );
-		Vertex::SetTangent( l_pVtx3, l_vFaceTangent );
+		auto & points = p_submesh.GetPoints();
+		BufferElementGroupSPtr pVtx1, pVtx2, pVtx3;
+		Point3r vec2m1;
+		Point3r vec3m1;
+		Point3r vFaceTangent;
+		Point3r tex2m1;
+		Point3r tex3m1;
+		Point3r uv1;
+		Point3r uv2;
+		Point3r uv3;
+		Point3r pt1;
+		Point3r pt2;
+		Point3r pt3;
+		pVtx1 = points[p_face[0]];
+		pVtx2 = points[p_face[1]];
+		pVtx3 = points[p_face[2]];
+		Vertex::GetPosition( pVtx1, pt1 );
+		Vertex::GetPosition( pVtx2, pt2 );
+		Vertex::GetPosition( pVtx3, pt3 );
+		Vertex::GetTexCoord( pVtx1, uv1 );
+		Vertex::GetTexCoord( pVtx2, uv2 );
+		Vertex::GetTexCoord( pVtx3, uv3 );
+		vec2m1 = pt2 - pt1;
+		vec3m1 = pt3 - pt1;
+		tex2m1 = uv2 - uv1;
+		tex3m1 = uv3 - uv1;
+		vFaceTangent = point::get_normalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
+		Vertex::SetTangent( pVtx1, vFaceTangent );
+		Vertex::SetTangent( pVtx2, vFaceTangent );
+		Vertex::SetTangent( pVtx3, vFaceTangent );
 	}
 
 	void SubmeshUtils::ComputeTangentsFromNormals( Submesh & p_submesh )
 	{
-		auto & l_points = p_submesh.GetPoints();
-		auto & l_faces = p_submesh.GetFaces();
-		Point3rArray l_arrayTangents( l_points.size() );
+		auto & points = p_submesh.GetPoints();
+		auto & faces = p_submesh.GetFaces();
+		Point3rArray arrayTangents( points.size() );
 
 		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées
-		for ( auto const & l_face : l_faces )
+		for ( auto const & face : faces )
 		{
-			BufferElementGroupSPtr	l_pVtx1 = l_points[l_face[0]];
-			BufferElementGroupSPtr	l_pVtx2 = l_points[l_face[1]];
-			BufferElementGroupSPtr	l_pVtx3 = l_points[l_face[2]];
-			Point3r l_pt1;
-			Point3r l_pt2;
-			Point3r l_pt3;
-			Point3r l_uv1;
-			Point3r l_uv2;
-			Point3r l_uv3;
-			Vertex::GetPosition( l_pVtx1, l_pt1 );
-			Vertex::GetPosition( l_pVtx2, l_pt2 );
-			Vertex::GetPosition( l_pVtx3, l_pt3 );
-			Vertex::GetTexCoord( l_pVtx1, l_uv1 );
-			Vertex::GetTexCoord( l_pVtx2, l_uv2 );
-			Vertex::GetTexCoord( l_pVtx3, l_uv3 );
-			Point3r l_vec2m1 = l_pt2 - l_pt1;
-			Point3r l_vec3m1 = l_pt3 - l_pt1;
-			Point3r l_vec3m2 = l_pt3 - l_pt2;
-			Point3r l_tex2m1 = l_uv2 - l_uv1;
-			Point3r l_tex3m1 = l_uv3 - l_uv1;
+			BufferElementGroupSPtr	pVtx1 = points[face[0]];
+			BufferElementGroupSPtr	pVtx2 = points[face[1]];
+			BufferElementGroupSPtr	pVtx3 = points[face[2]];
+			Point3r pt1;
+			Point3r pt2;
+			Point3r pt3;
+			Point3r uv1;
+			Point3r uv2;
+			Point3r uv3;
+			Vertex::GetPosition( pVtx1, pt1 );
+			Vertex::GetPosition( pVtx2, pt2 );
+			Vertex::GetPosition( pVtx3, pt3 );
+			Vertex::GetTexCoord( pVtx1, uv1 );
+			Vertex::GetTexCoord( pVtx2, uv2 );
+			Vertex::GetTexCoord( pVtx3, uv3 );
+			Point3r vec2m1 = pt2 - pt1;
+			Point3r vec3m1 = pt3 - pt1;
+			Point3r vec3m2 = pt3 - pt2;
+			Point3r tex2m1 = uv2 - uv1;
+			Point3r tex3m1 = uv3 - uv1;
 			// Calculates the triangle's area.
-			real l_rDirCorrection = l_tex2m1[0] * l_tex3m1[1] - l_tex2m1[1] * l_tex3m1[0];
-			Point3r l_vFaceTangent;
+			real rDirCorrection = tex2m1[0] * tex3m1[1] - tex2m1[1] * tex3m1[0];
+			Point3r vFaceTangent;
 
-			if ( l_rDirCorrection )
+			if ( rDirCorrection )
 			{
-				l_rDirCorrection = 1 / l_rDirCorrection;
+				rDirCorrection = 1 / rDirCorrection;
 				// Calculates the face tangent to the current triangle.
-				l_vFaceTangent[0] = l_rDirCorrection * ( ( l_vec2m1[0] * l_tex3m1[1] ) + ( l_vec3m1[0] * -l_tex2m1[1] ) );
-				l_vFaceTangent[1] = l_rDirCorrection * ( ( l_vec2m1[1] * l_tex3m1[1] ) + ( l_vec3m1[1] * -l_tex2m1[1] ) );
-				l_vFaceTangent[2] = l_rDirCorrection * ( ( l_vec2m1[2] * l_tex3m1[1] ) + ( l_vec3m1[2] * -l_tex2m1[1] ) );
+				vFaceTangent[0] = rDirCorrection * ( ( vec2m1[0] * tex3m1[1] ) + ( vec3m1[0] * -tex2m1[1] ) );
+				vFaceTangent[1] = rDirCorrection * ( ( vec2m1[1] * tex3m1[1] ) + ( vec3m1[1] * -tex2m1[1] ) );
+				vFaceTangent[2] = rDirCorrection * ( ( vec2m1[2] * tex3m1[1] ) + ( vec3m1[2] * -tex2m1[1] ) );
 			}
 
-			l_arrayTangents[l_face[0]] += l_vFaceTangent;
-			l_arrayTangents[l_face[1]] += l_vFaceTangent;
-			l_arrayTangents[l_face[2]] += l_vFaceTangent;
+			arrayTangents[face[0]] += vFaceTangent;
+			arrayTangents[face[1]] += vFaceTangent;
+			arrayTangents[face[2]] += vFaceTangent;
 		}
 
 		uint32_t i = 0;
 		//On effectue la moyennes des tangentes
-		for ( auto & l_value : l_arrayTangents )
+		for ( auto & value : arrayTangents )
 		{
-			Point3r l_normal;
-			Vertex::GetNormal( l_points[i], l_normal );
-			Point3r l_tangent = point::get_normalised( l_value );
-			l_tangent -= l_normal * point::dot( l_tangent, l_normal );
-			Point3r l_bitangent = l_normal ^ l_tangent;
-			Vertex::SetTangent( l_points[i], l_tangent );
-			Vertex::SetBitangent( l_points[i], l_bitangent );
+			Point3r normal;
+			Vertex::GetNormal( points[i], normal );
+			Point3r tangent = point::get_normalised( value );
+			tangent -= normal * point::dot( tangent, normal );
+			Point3r bitangent = normal ^ tangent;
+			Vertex::SetTangent( points[i], tangent );
+			Vertex::SetBitangent( points[i], bitangent );
 			i++;
 		}
 	}
 
 	void SubmeshUtils::ComputeTangentsFromBitangents( Submesh & p_submesh )
 	{
-		for ( auto & l_point : p_submesh.GetPoints() )
+		for ( auto & point : p_submesh.GetPoints() )
 		{
-			Point3r l_normal;
-			Point3r l_bitangent;
-			Vertex::GetNormal( l_point, l_normal );
-			Vertex::GetBitangent( l_point, l_bitangent );
-			Point3r l_tangent = l_normal ^ l_bitangent;
-			Vertex::SetTangent( l_point, l_tangent );
+			Point3r normal;
+			Point3r bitangent;
+			Vertex::GetNormal( point, normal );
+			Vertex::GetBitangent( point, bitangent );
+			Point3r tangent = normal ^ bitangent;
+			Vertex::SetTangent( point, tangent );
 		}
 	}
 
 	void SubmeshUtils::ComputeBitangents( Submesh & p_submesh )
 	{
-		for ( auto & l_point : p_submesh.GetPoints() )
+		for ( auto & point : p_submesh.GetPoints() )
 		{
-			Point3r l_normal;
-			Point3r l_tangent;
-			Vertex::GetNormal( l_point, l_normal );
-			Vertex::GetTangent( l_point, l_tangent );
-			Point3r l_bitangent = l_tangent ^ l_normal;
-			Vertex::SetBitangent( l_point, l_bitangent );
+			Point3r normal;
+			Point3r tangent;
+			Vertex::GetNormal( point, normal );
+			Vertex::GetTangent( point, tangent );
+			Point3r bitangent = tangent ^ normal;
+			Vertex::SetBitangent( point, bitangent );
 		}
 	}
 }

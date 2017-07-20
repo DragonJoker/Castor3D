@@ -48,14 +48,14 @@ namespace GuiCommon
 
 		inline bool StartRecord( Castor::Size const & p_size, int p_wantedFPS )
 		{
-			bool l_result = !IsRecording();
+			bool result = !IsRecording();
 
-			if ( l_result )
+			if ( result )
 			{
-				l_result = m_impl->StartRecord( p_size, p_wantedFPS );
+				result = m_impl->StartRecord( p_size, p_wantedFPS );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		inline bool IsRecording()

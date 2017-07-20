@@ -11,108 +11,108 @@ namespace Castor
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & p_lhs, T2 const & p_rhs )
 	{
-		Point< T1, C1 > l_result( p_lhs );
-		T1 * l_pBuffer = l_result.ptr();
-		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		Point< T1, C1 > result( p_lhs );
+		T1 * pBuffer = result.ptr();
+		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value += p_rhs;
 		} );
-		return l_result;
+		return result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & p_lhs, T2 const & p_rhs )
 	{
-		Point< T1, C1 > l_result( p_lhs );
-		T1 * l_pBuffer = l_result.ptr();
-		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		Point< T1, C1 > result( p_lhs );
+		T1 * pBuffer = result.ptr();
+		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value -= p_rhs;
 		} );
-		return l_result;
+		return result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & p_lhs, T2 const & p_rhs )
 	{
-		Point< T1, C1 > l_result( p_lhs );
-		T1 * l_pBuffer = l_result.ptr();
-		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		Point< T1, C1 > result( p_lhs );
+		T1 * pBuffer = result.ptr();
+		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value *= p_rhs;
 		} );
-		return l_result;
+		return result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & p_lhs, T2 const & p_rhs )
 	{
-		Point< T1, C1 > l_result( p_lhs );
-		T1 * l_pBuffer = l_result.ptr();
-		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		Point< T1, C1 > result( p_lhs );
+		T1 * pBuffer = result.ptr();
+		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value /= p_rhs;
 		} );
-		return l_result;
+		return result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & p_lhs, T2 const * p_rhs )
 	{
-		Point< T1, C1 > l_result( p_lhs );
-		T1 * l_pBuffer = l_result.ptr();
+		Point< T1, C1 > result( p_lhs );
+		T1 * pBuffer = result.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
-			*l_pBuffer += p_pVal;
-			l_pBuffer++;
+			*pBuffer += p_pVal;
+			pBuffer++;
 		} );
-		return l_result;
+		return result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & p_lhs, T2 const * p_rhs )
 	{
-		Point< T1, C1 > l_result( p_lhs );
-		T1 * l_pBuffer = l_result.ptr();
+		Point< T1, C1 > result( p_lhs );
+		T1 * pBuffer = result.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
-			*l_pBuffer -= p_pVal;
-			l_pBuffer++;
+			*pBuffer -= p_pVal;
+			pBuffer++;
 		} );
-		return l_result;
+		return result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & p_lhs, T2 const * p_rhs )
 	{
-		Point< T1, C1 > l_result( p_lhs );
-		T1 * l_pBuffer = l_result.ptr();
+		Point< T1, C1 > result( p_lhs );
+		T1 * pBuffer = result.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
-			*l_pBuffer *= p_pVal;
-			l_pBuffer++;
+			*pBuffer *= p_pVal;
+			pBuffer++;
 		} );
-		return l_result;
+		return result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
 	inline Point< T1, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & p_lhs, T2 const * p_rhs )
 	{
-		Point< T1, C1 > l_result( p_lhs );
-		T1 * l_pBuffer = l_result.ptr();
+		Point< T1, C1 > result( p_lhs );
+		T1 * pBuffer = result.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
-			*l_pBuffer /= p_pVal;
-			l_pBuffer++;
+			*pBuffer /= p_pVal;
+			pBuffer++;
 		} );
-		return l_result;
+		return result;
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
@@ -147,8 +147,8 @@ namespace Castor
 	template< typename PtType1 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::add( PtType1 & p_lhs, T2 const & p_rhs )
 	{
-		T1 * l_pBuffer = p_lhs.ptr();
-		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		T1 * pBuffer = p_lhs.ptr();
+		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value += p_rhs;
 		} );
@@ -159,8 +159,8 @@ namespace Castor
 	template< typename PtType1 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::sub( PtType1 & p_lhs, T2 const & p_rhs )
 	{
-		T1 * l_pBuffer = p_lhs.ptr();
-		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		T1 * pBuffer = p_lhs.ptr();
+		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value -= p_rhs;
 		} );
@@ -171,8 +171,8 @@ namespace Castor
 	template< typename PtType1 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::mul( PtType1 & p_lhs, T2 const & p_rhs )
 	{
-		T1 * l_pBuffer = p_lhs.ptr();
-		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		T1 * pBuffer = p_lhs.ptr();
+		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value *= p_rhs;
 		} );
@@ -183,8 +183,8 @@ namespace Castor
 	template< typename PtType1 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::div( PtType1 & p_lhs, T2 const & p_rhs )
 	{
-		T1 * l_pBuffer = p_lhs.ptr();
-		std::for_each( l_pBuffer, l_pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
+		T1 * pBuffer = p_lhs.ptr();
+		std::for_each( pBuffer, pBuffer + min_value< C1, C2 >::value, [&]( T1 & p_value )
 		{
 			p_value /= p_rhs;
 		} );
@@ -195,11 +195,11 @@ namespace Castor
 	template< typename PtType1 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::add( PtType1 & p_lhs, T2 const * p_rhs )
 	{
-		T1 * l_pBuffer = p_lhs.ptr();
+		T1 * pBuffer = p_lhs.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
-			*l_pBuffer = T1( *l_pBuffer + p_pVal );
-			l_pBuffer++;
+			*pBuffer = T1( *pBuffer + p_pVal );
+			pBuffer++;
 		} );
 		return p_lhs;
 	}
@@ -208,11 +208,11 @@ namespace Castor
 	template< typename PtType1 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::sub( PtType1 & p_lhs, T2 const * p_rhs )
 	{
-		T1 * l_pBuffer = p_lhs.ptr();
+		T1 * pBuffer = p_lhs.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
-			*l_pBuffer = T1( *l_pBuffer - p_pVal );
-			l_pBuffer++;
+			*pBuffer = T1( *pBuffer - p_pVal );
+			pBuffer++;
 		} );
 		return p_lhs;
 	}
@@ -221,11 +221,11 @@ namespace Castor
 	template< typename PtType1 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::mul( PtType1 & p_lhs, T2 const * p_rhs )
 	{
-		T1 * l_pBuffer = p_lhs.ptr();
+		T1 * pBuffer = p_lhs.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
-			*l_pBuffer = T1( *l_pBuffer * p_pVal );
-			l_pBuffer++;
+			*pBuffer = T1( *pBuffer * p_pVal );
+			pBuffer++;
 		} );
 		return p_lhs;
 	}
@@ -234,11 +234,11 @@ namespace Castor
 	template< typename PtType1 >
 	inline PtType1 & PtAssignOperators< T1, T2, C1, C2 >::div( PtType1 & p_lhs, T2 const * p_rhs )
 	{
-		T1 * l_pBuffer = p_lhs.ptr();
+		T1 * pBuffer = p_lhs.ptr();
 		std::for_each( p_rhs, p_rhs + min_value< C1, C2 >::value, [&]( T2 p_pVal )
 		{
-			*l_pBuffer = T1( *l_pBuffer / p_pVal );
-			l_pBuffer++;
+			*pBuffer = T1( *pBuffer / p_pVal );
+			pBuffer++;
 		} );
 		return p_lhs;
 	}
@@ -278,244 +278,244 @@ namespace Castor
 
 		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
-			l_lhs += l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs };				// rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
+			lhs += rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
-			l_lhs -= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs };				// rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
+			lhs -= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
-			l_lhs *= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs };				// rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
+			lhs *= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
-			l_lhs /= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs };				// rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
+			lhs /= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
-			l_lhs += l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs };				// rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
+			lhs += rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
-			l_lhs -= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs };				// rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
+			lhs -= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
-			l_lhs *= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs };				// rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
+			lhs *= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
-			l_lhs /= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs };				// rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
+			lhs /= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs.const_ptr() };	// l_rhs = p_rhs
-			l_lhs += l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs.const_ptr() };	// rhs = p_rhs
+			lhs += rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs.const_ptr() };	// l_rhs = p_rhs
-			l_lhs -= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs.const_ptr() };	// rhs = p_rhs
+			lhs -= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs.const_ptr() };	// l_rhs = p_rhs
-			l_lhs *= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs.const_ptr() };	// rhs = p_rhs
+			lhs *= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
 		{
-			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
-			Float4 l_rhs{ p_rhs.const_ptr() };	// l_rhs = p_rhs
-			l_lhs /= l_rhs;						// l_lhs = p_lhs + p_rhs
-			Castor::Point< float, 4 > l_res;
-			l_lhs.to_ptr( l_res.ptr() );
-			return l_res;
+			Float4 lhs{ p_lhs.const_ptr() };	// lhs = p_lhs
+			Float4 rhs{ p_rhs.const_ptr() };	// rhs = p_rhs
+			lhs /= rhs;						// lhs = p_lhs + p_rhs
+			Castor::Point< float, 4 > res;
+			lhs.to_ptr( res.ptr() );
+			return res;
 		}
 
 #else
 
 		static inline Point4f add( Point4f const & p_lhs, float const & p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] += p_rhs;
-			l_result[1] += p_rhs;
-			l_result[2] += p_rhs;
-			l_result[3] += p_rhs;
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] += p_rhs;
+			result[1] += p_rhs;
+			result[2] += p_rhs;
+			result[3] += p_rhs;
+			return result;
 		}
 
 		static inline Point4f sub( Point4f const & p_lhs, float const & p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] -= p_rhs;
-			l_result[1] -= p_rhs;
-			l_result[2] -= p_rhs;
-			l_result[3] -= p_rhs;
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] -= p_rhs;
+			result[1] -= p_rhs;
+			result[2] -= p_rhs;
+			result[3] -= p_rhs;
+			return result;
 		}
 
 		static inline Point4f mul( Point4f const & p_lhs, float const & p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] *= p_rhs;
-			l_result[1] *= p_rhs;
-			l_result[2] *= p_rhs;
-			l_result[3] *= p_rhs;
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] *= p_rhs;
+			result[1] *= p_rhs;
+			result[2] *= p_rhs;
+			result[3] *= p_rhs;
+			return result;
 		}
 
 		static inline Point4f div( Point4f const & p_lhs, float const & p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] /= p_rhs;
-			l_result[1] /= p_rhs;
-			l_result[2] /= p_rhs;
-			l_result[3] /= p_rhs;
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] /= p_rhs;
+			result[1] /= p_rhs;
+			result[2] /= p_rhs;
+			result[3] /= p_rhs;
+			return result;
 		}
 
 		static inline Point4f add( Point4f const & p_lhs, float const * p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] += p_rhs[0];
-			l_result[1] += p_rhs[1];
-			l_result[2] += p_rhs[2];
-			l_result[3] += p_rhs[3];
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] += p_rhs[0];
+			result[1] += p_rhs[1];
+			result[2] += p_rhs[2];
+			result[3] += p_rhs[3];
+			return result;
 		}
 
 		static inline Point4f sub( Point4f const & p_lhs, float const * p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] -= p_rhs[0];
-			l_result[1] -= p_rhs[1];
-			l_result[2] -= p_rhs[2];
-			l_result[3] -= p_rhs[3];
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] -= p_rhs[0];
+			result[1] -= p_rhs[1];
+			result[2] -= p_rhs[2];
+			result[3] -= p_rhs[3];
+			return result;
 		}
 
 		static inline Point4f mul( Point4f const & p_lhs, float const * p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] *= p_rhs[0];
-			l_result[1] *= p_rhs[1];
-			l_result[2] *= p_rhs[2];
-			l_result[3] *= p_rhs[3];
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] *= p_rhs[0];
+			result[1] *= p_rhs[1];
+			result[2] *= p_rhs[2];
+			result[3] *= p_rhs[3];
+			return result;
 		}
 
 		static inline Point4f div( Point4f const & p_lhs, float const * p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] /= p_rhs[0];
-			l_result[1] /= p_rhs[1];
-			l_result[2] /= p_rhs[2];
-			l_result[3] /= p_rhs[3];
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] /= p_rhs[0];
+			result[1] /= p_rhs[1];
+			result[2] /= p_rhs[2];
+			result[3] /= p_rhs[3];
+			return result;
 		}
 
 		static inline Point4f add( Point4f const & p_lhs, Point4f const & p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] += p_rhs[0];
-			l_result[1] += p_rhs[1];
-			l_result[2] += p_rhs[2];
-			l_result[3] += p_rhs[3];
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] += p_rhs[0];
+			result[1] += p_rhs[1];
+			result[2] += p_rhs[2];
+			result[3] += p_rhs[3];
+			return result;
 		}
 
 		static inline Point4f sub( Point4f const & p_lhs, Point4f const & p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] -= p_rhs[0];
-			l_result[1] -= p_rhs[1];
-			l_result[2] -= p_rhs[2];
-			l_result[3] -= p_rhs[3];
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] -= p_rhs[0];
+			result[1] -= p_rhs[1];
+			result[2] -= p_rhs[2];
+			result[3] -= p_rhs[3];
+			return result;
 		}
 
 		static inline Point4f mul( Point4f const & p_lhs, Point4f const & p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] *= p_rhs[0];
-			l_result[1] *= p_rhs[1];
-			l_result[2] *= p_rhs[2];
-			l_result[3] *= p_rhs[3];
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] *= p_rhs[0];
+			result[1] *= p_rhs[1];
+			result[2] *= p_rhs[2];
+			result[3] *= p_rhs[3];
+			return result;
 		}
 
 		static inline Point4f div( Point4f const & p_lhs, Point4f const & p_rhs )
 		{
-			Point4f l_result( p_lhs );
-			l_result[0] /= p_rhs[0];
-			l_result[1] /= p_rhs[1];
-			l_result[2] /= p_rhs[2];
-			l_result[3] /= p_rhs[3];
-			return l_result;
+			Point4f result( p_lhs );
+			result[0] /= p_rhs[0];
+			result[1] /= p_rhs[1];
+			result[2] /= p_rhs[2];
+			result[3] /= p_rhs[3];
+			return result;
 		}
 
 #endif

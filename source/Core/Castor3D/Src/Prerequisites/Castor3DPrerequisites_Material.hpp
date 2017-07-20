@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,9 +42,12 @@ namespace Castor3D
 		//!\~english	Traditional (pre-PBR).
 		//!\~french		Traditionnel (pré-PBR).
 		eLegacy,
-		//!\~english	PBR.
-		//!\~french		PBR.
-		ePbr,
+		//!\~english	Metallic/Roughness PBR.
+		//!\~french		PBR Metallic/Roughness.
+		ePbrMetallicRoughness,
+		//!\~english	Specular/Glossiness PBR.
+		//!\~french		PBR Specular/Glossiness.
+		ePbrSpecularGlossiness,
 		CASTOR_SCOPED_ENUM_BOUNDS( eLegacy )
 	};
 	/*!
@@ -491,7 +494,8 @@ namespace Castor3D
 	class Material;
 	class Pass;
 	class LegacyPass;
-	class PbrPass;
+	class MetallicRoughnessPbrPass;
+	class SpecularGlossinessPbrPass;
 	class Sampler;
 
 	DECLARE_SMART_PTR( TextureImage );
@@ -501,7 +505,8 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );
 	DECLARE_SMART_PTR( LegacyPass );
-	DECLARE_SMART_PTR( PbrPass );
+	DECLARE_SMART_PTR( MetallicRoughnessPbrPass );
+	DECLARE_SMART_PTR( SpecularGlossinessPbrPass );
 	DECLARE_SMART_PTR( Sampler );
 
 	//! Material pointer array

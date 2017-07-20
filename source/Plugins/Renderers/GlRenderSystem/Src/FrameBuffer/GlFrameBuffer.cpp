@@ -43,26 +43,26 @@ namespace GlRender
 
 	void GlFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )const
 	{
-		bool l_return = false;
+		bool result = false;
 
 		if ( !p_attaches.empty() )
 		{
-			UIntArray l_arrayAttaches;
-			l_arrayAttaches.reserve( p_attaches.size() );
+			UIntArray arrayAttaches;
+			arrayAttaches.reserve( p_attaches.size() );
 
-			for ( auto l_attach : p_attaches )
+			for ( auto attach : p_attaches )
 			{
-				AttachmentPoint l_eAttach = l_attach->GetAttachmentPoint();
+				AttachmentPoint eAttach = attach->GetAttachmentPoint();
 
-				if ( l_eAttach == AttachmentPoint::eColour )
+				if ( eAttach == AttachmentPoint::eColour )
 				{
-					l_arrayAttaches.push_back( uint32_t( GetOpenGl().Get( l_eAttach ) ) + l_attach->GetAttachmentIndex() );
+					arrayAttaches.push_back( uint32_t( GetOpenGl().Get( eAttach ) ) + attach->GetAttachmentIndex() );
 				}
 			}
 
-			if ( !l_arrayAttaches.empty() )
+			if ( !arrayAttaches.empty() )
 			{
-				GetOpenGl().DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
+				GetOpenGl().DrawBuffers( int( arrayAttaches.size() ), &arrayAttaches[0] );
 			}
 			else
 			{
@@ -77,12 +77,12 @@ namespace GlRender
 
 	void GlFrameBuffer::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
 	{
-		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [p_eAttach]( FrameBufferAttachmentSPtr p_attach )
+		auto it = std::find_if( m_attaches.begin(), m_attaches.end(), [p_eAttach]( FrameBufferAttachmentSPtr p_attach )
 		{
 			return p_attach->GetAttachmentPoint() == p_eAttach;
 		} );
 
-		if ( l_it != m_attaches.end() )
+		if ( it != m_attaches.end() )
 		{
 			GetOpenGl().ReadBuffer( GetOpenGl().Get( GetOpenGl().Get( p_eAttach ) ) );
 		}
@@ -97,8 +97,8 @@ namespace GlRender
 	{
 		DoBind( FrameBufferTarget::eRead );
 		GetOpenGl().ReadBuffer( GlBufferBinding( uint32_t( GetOpenGl().Get( GetOpenGl().Get( p_point ) ) ) + p_index ) );
-		OpenGl::PixelFmt l_pxFmt = GetOpenGl().Get( p_buffer->format() );
-		GetOpenGl().ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
+		OpenGl::PixelFmt pxFmt = GetOpenGl().Get( p_buffer->format() );
+		GetOpenGl().ReadPixels( Position(), p_buffer->dimensions(), pxFmt.Format, pxFmt.Type, p_buffer->ptr() );
 		DoUnbind();
 	}
 

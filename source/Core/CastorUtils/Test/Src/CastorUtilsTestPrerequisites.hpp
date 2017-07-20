@@ -44,7 +44,7 @@ namespace Testing
 	template< typename StreamT, typename T, uint32_t Columns, uint32_t Rows >
 	inline StreamT & operator<<( StreamT & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
 	{
-		auto l_precision = p_streamOut.precision( 10 );
+		auto precision = p_streamOut.precision( 10 );
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
@@ -57,27 +57,27 @@ namespace Testing
 			p_streamOut << std::endl;
 		}
 
-		p_streamOut.precision( l_precision );
+		p_streamOut.precision( precision );
 		return p_streamOut;
 	}
 
 	template< typename T, size_t Rows >
 	Castor::String PrintMatrix( Castor::SquareMatrix< T, Rows > const & p_matrix )
 	{
-		Castor::StringStream l_stream;
-		l_stream << p_matrix;
-		return l_stream.str();
+		Castor::StringStream stream;
+		stream << p_matrix;
+		return stream.str();
 	}
 
 	template< typename T >
 	inline void randomInit( T * p_pData1, T * p_pData2, uint32_t size )
 	{
-		std::random_device l_generator;
-		std::uniform_real_distribution< T > l_distribution( T( 0.0 ), T( 1.0 ) );
+		std::random_device generator;
+		std::uniform_real_distribution< T > distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
 		{
-			p_pData1[i] = l_distribution( l_generator );
+			p_pData1[i] = distribution( generator );
 			p_pData2[i] = p_pData1[i];
 		}
 	}
@@ -85,55 +85,55 @@ namespace Testing
 	template< typename T >
 	inline void randomInit( T * p_pData, uint32_t size )
 	{
-		std::random_device l_generator;
-		std::uniform_real_distribution< T > l_distribution( T( 0.0 ), T( 1.0 ) );
+		std::random_device generator;
+		std::uniform_real_distribution< T > distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
 		{
-			p_pData[i] = l_distribution( l_generator );
+			p_pData[i] = distribution( generator );
 		}
 	}
 
 	inline bool compare( Castor::SquareMatrix< float, 4 > const & a, Castor::SquareMatrix< float, 4 > const & b )
 	{
-		float l_epsilon = 0.001f;
-		return std::abs( a[0][0] - b[0][0] ) < l_epsilon
-			&& std::abs( a[0][1] - b[0][1] ) < l_epsilon
-			&& std::abs( a[0][2] - b[0][2] ) < l_epsilon
-			&& std::abs( a[0][3] - b[0][3] ) < l_epsilon
-			&& std::abs( a[1][0] - b[1][0] ) < l_epsilon
-			&& std::abs( a[1][1] - b[1][1] ) < l_epsilon
-			&& std::abs( a[1][2] - b[1][2] ) < l_epsilon
-			&& std::abs( a[1][3] - b[1][3] ) < l_epsilon
-			&& std::abs( a[2][0] - b[2][0] ) < l_epsilon
-			&& std::abs( a[2][1] - b[2][1] ) < l_epsilon
-			&& std::abs( a[2][2] - b[2][2] ) < l_epsilon
-			&& std::abs( a[2][3] - b[2][3] ) < l_epsilon
-			&& std::abs( a[3][0] - b[3][0] ) < l_epsilon
-			&& std::abs( a[3][1] - b[3][1] ) < l_epsilon
-			&& std::abs( a[3][2] - b[3][2] ) < l_epsilon
-			&& std::abs( a[3][3] - b[3][3] ) < l_epsilon;
+		float epsilon = 0.001f;
+		return std::abs( a[0][0] - b[0][0] ) < epsilon
+			&& std::abs( a[0][1] - b[0][1] ) < epsilon
+			&& std::abs( a[0][2] - b[0][2] ) < epsilon
+			&& std::abs( a[0][3] - b[0][3] ) < epsilon
+			&& std::abs( a[1][0] - b[1][0] ) < epsilon
+			&& std::abs( a[1][1] - b[1][1] ) < epsilon
+			&& std::abs( a[1][2] - b[1][2] ) < epsilon
+			&& std::abs( a[1][3] - b[1][3] ) < epsilon
+			&& std::abs( a[2][0] - b[2][0] ) < epsilon
+			&& std::abs( a[2][1] - b[2][1] ) < epsilon
+			&& std::abs( a[2][2] - b[2][2] ) < epsilon
+			&& std::abs( a[2][3] - b[2][3] ) < epsilon
+			&& std::abs( a[3][0] - b[3][0] ) < epsilon
+			&& std::abs( a[3][1] - b[3][1] ) < epsilon
+			&& std::abs( a[3][2] - b[3][2] ) < epsilon
+			&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 	}
 
 	inline bool compare( Castor::SquareMatrix< double, 4 > const & a, Castor::SquareMatrix< double, 4 > const & b )
 	{
-		double l_epsilon = 0.001;
-		return std::abs( a[0][0] - b[0][0] ) < l_epsilon
-			&& std::abs( a[0][1] - b[0][1] ) < l_epsilon
-			&& std::abs( a[0][2] - b[0][2] ) < l_epsilon
-			&& std::abs( a[0][3] - b[0][3] ) < l_epsilon
-			&& std::abs( a[1][0] - b[1][0] ) < l_epsilon
-			&& std::abs( a[1][1] - b[1][1] ) < l_epsilon
-			&& std::abs( a[1][2] - b[1][2] ) < l_epsilon
-			&& std::abs( a[1][3] - b[1][3] ) < l_epsilon
-			&& std::abs( a[2][0] - b[2][0] ) < l_epsilon
-			&& std::abs( a[2][1] - b[2][1] ) < l_epsilon
-			&& std::abs( a[2][2] - b[2][2] ) < l_epsilon
-			&& std::abs( a[2][3] - b[2][3] ) < l_epsilon
-			&& std::abs( a[3][0] - b[3][0] ) < l_epsilon
-			&& std::abs( a[3][1] - b[3][1] ) < l_epsilon
-			&& std::abs( a[3][2] - b[3][2] ) < l_epsilon
-			&& std::abs( a[3][3] - b[3][3] ) < l_epsilon;
+		double epsilon = 0.001;
+		return std::abs( a[0][0] - b[0][0] ) < epsilon
+			&& std::abs( a[0][1] - b[0][1] ) < epsilon
+			&& std::abs( a[0][2] - b[0][2] ) < epsilon
+			&& std::abs( a[0][3] - b[0][3] ) < epsilon
+			&& std::abs( a[1][0] - b[1][0] ) < epsilon
+			&& std::abs( a[1][1] - b[1][1] ) < epsilon
+			&& std::abs( a[1][2] - b[1][2] ) < epsilon
+			&& std::abs( a[1][3] - b[1][3] ) < epsilon
+			&& std::abs( a[2][0] - b[2][0] ) < epsilon
+			&& std::abs( a[2][1] - b[2][1] ) < epsilon
+			&& std::abs( a[2][2] - b[2][2] ) < epsilon
+			&& std::abs( a[2][3] - b[2][3] ) < epsilon
+			&& std::abs( a[3][0] - b[3][0] ) < epsilon
+			&& std::abs( a[3][1] - b[3][1] ) < epsilon
+			&& std::abs( a[3][2] - b[3][2] ) < epsilon
+			&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 	}
 
 #if defined( CASTOR_USE_GLM )
@@ -141,29 +141,29 @@ namespace Testing
 	template< typename T >
 	inline bool operator==( Castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
 	{
-		T l_epsilon = T( 0.001 );
-		return std::abs( a[0][0] - b[0][0] ) < l_epsilon
-			&& std::abs( a[0][1] - b[0][1] ) < l_epsilon
-			&& std::abs( a[0][2] - b[0][2] ) < l_epsilon
-			&& std::abs( a[0][3] - b[0][3] ) < l_epsilon
-			&& std::abs( a[1][0] - b[1][0] ) < l_epsilon
-			&& std::abs( a[1][1] - b[1][1] ) < l_epsilon
-			&& std::abs( a[1][2] - b[1][2] ) < l_epsilon
-			&& std::abs( a[1][3] - b[1][3] ) < l_epsilon
-			&& std::abs( a[2][0] - b[2][0] ) < l_epsilon
-			&& std::abs( a[2][1] - b[2][1] ) < l_epsilon
-			&& std::abs( a[2][2] - b[2][2] ) < l_epsilon
-			&& std::abs( a[2][3] - b[2][3] ) < l_epsilon
-			&& std::abs( a[3][0] - b[3][0] ) < l_epsilon
-			&& std::abs( a[3][1] - b[3][1] ) < l_epsilon
-			&& std::abs( a[3][2] - b[3][2] ) < l_epsilon
-			&& std::abs( a[3][3] - b[3][3] ) < l_epsilon;
+		T epsilon = T( 0.001 );
+		return std::abs( a[0][0] - b[0][0] ) < epsilon
+			&& std::abs( a[0][1] - b[0][1] ) < epsilon
+			&& std::abs( a[0][2] - b[0][2] ) < epsilon
+			&& std::abs( a[0][3] - b[0][3] ) < epsilon
+			&& std::abs( a[1][0] - b[1][0] ) < epsilon
+			&& std::abs( a[1][1] - b[1][1] ) < epsilon
+			&& std::abs( a[1][2] - b[1][2] ) < epsilon
+			&& std::abs( a[1][3] - b[1][3] ) < epsilon
+			&& std::abs( a[2][0] - b[2][0] ) < epsilon
+			&& std::abs( a[2][1] - b[2][1] ) < epsilon
+			&& std::abs( a[2][2] - b[2][2] ) < epsilon
+			&& std::abs( a[2][3] - b[2][3] ) < epsilon
+			&& std::abs( a[3][0] - b[3][0] ) < epsilon
+			&& std::abs( a[3][1] - b[3][1] ) < epsilon
+			&& std::abs( a[3][2] - b[3][2] ) < epsilon
+			&& std::abs( a[3][3] - b[3][3] ) < epsilon;
 	}
 
 	template< typename CharType >
 	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_stream, glm::mat4 const & p_mtx )
 	{
-		auto l_precision = p_stream.precision( 10 );
+		auto precision = p_stream.precision( 10 );
 
 		for ( int i = 0; i < 4; ++i )
 		{
@@ -176,14 +176,14 @@ namespace Testing
 			p_stream << std::endl;
 		}
 
-		p_stream.precision( l_precision );
+		p_stream.precision( precision );
 		return p_stream;
 	}
 
 	template< typename CharType >
 	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_stream, glm::mat3 const & p_mtx )
 	{
-		auto l_precision = p_stream.precision( 10 );
+		auto precision = p_stream.precision( 10 );
 
 		for ( int i = 0; i < 3; ++i )
 		{
@@ -196,22 +196,22 @@ namespace Testing
 			p_stream << std::endl;
 		}
 
-		p_stream.precision( l_precision );
+		p_stream.precision( precision );
 		return p_stream;
 	}
 
 	inline Castor::String PrintMatrix( glm::mat4 const & p_matrix )
 	{
-		Castor::StringStream l_stream;
-		l_stream << p_matrix;
-		return l_stream.str();
+		Castor::StringStream stream;
+		stream << p_matrix;
+		return stream.str();
 	}
 
 	inline Castor::String PrintMatrix( glm::mat3 const & p_matrix )
 	{
-		Castor::StringStream l_stream;
-		l_stream << p_matrix;
-		return l_stream.str();
+		Castor::StringStream stream;
+		stream << p_matrix;
+		return stream.str();
 	}
 
 #endif
@@ -221,37 +221,37 @@ namespace Testing
 	template<>
 	inline std::string to_string< Castor::Matrix4x4f >( Castor::Matrix4x4f const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << std::endl;
-		Castor::operator<<( l_stream, p_value );
-		return l_stream.str();
+		std::stringstream stream;
+		stream << std::endl;
+		Castor::operator<<( stream, p_value );
+		return stream.str();
 	}
 
 	template<>
 	inline std::string to_string< Castor::Matrix4x4d >( Castor::Matrix4x4d const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << std::endl;
-		Castor::operator<<( l_stream, p_value );
-		return l_stream.str();
+		std::stringstream stream;
+		stream << std::endl;
+		Castor::operator<<( stream, p_value );
+		return stream.str();
 	}
 
 	template<>
 	inline std::string to_string< Castor::Matrix3x3f >( Castor::Matrix3x3f const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << std::endl;
-		Castor::operator<<( l_stream, p_value );
-		return l_stream.str();
+		std::stringstream stream;
+		stream << std::endl;
+		Castor::operator<<( stream, p_value );
+		return stream.str();
 	}
 
 	template<>
 	inline std::string to_string< Castor::Matrix3x3d >( Castor::Matrix3x3d const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << std::endl;
-		Castor::operator<<( l_stream, p_value );
-		return l_stream.str();
+		std::stringstream stream;
+		stream << std::endl;
+		Castor::operator<<( stream, p_value );
+		return stream.str();
 	}
 
 #if defined( CASTOR_USE_GLM )
@@ -259,19 +259,19 @@ namespace Testing
 	template<>
 	inline std::string to_string< glm::mat4x4 >( glm::mat4x4 const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << std::endl;
-		l_stream << p_value;
-		return l_stream.str();
+		std::stringstream stream;
+		stream << std::endl;
+		stream << p_value;
+		return stream.str();
 	}
 
 	template<>
 	inline std::string to_string< glm::mat3x3 >( glm::mat3x3 const & p_value )
 	{
-		std::stringstream l_stream;
-		l_stream << std::endl;
-		l_stream << p_value;
-		return l_stream.str();
+		std::stringstream stream;
+		stream << std::endl;
+		stream << p_value;
+		return stream.str();
 	}
 
 #endif

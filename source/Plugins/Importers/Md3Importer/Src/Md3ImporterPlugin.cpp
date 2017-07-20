@@ -18,44 +18,50 @@ using namespace Castor;
 #	endif
 #endif
 
-C3D_Md3_API void GetRequiredVersion( Version & p_version )
+ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
-	p_version = Version();
+	ImporterPlugin::Extension extension( cuT( "MD3" ), cuT( "Quake III" ) );
+	ImporterPlugin::ExtensionArray arrayReturn( 1, extension );
+	return arrayReturn;
 }
 
-C3D_Md3_API PluginType GetType()
+extern "C"
 {
-	return PluginType::eImporter;
-}
-
-C3D_Md3_API String GetName()
-{
-	return cuT( "MD3 Importer" );
-}
-
-C3D_Md3_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
-{
-	ImporterPlugin::Extension l_extension( cuT( "MD3" ), cuT( "Quake III" ) );
-	ImporterPlugin::ExtensionArray l_arrayReturn( 1, l_extension );
-	return l_arrayReturn;
-}
-
-C3D_Md3_API void OnLoad( Castor3D::Engine * p_engine )
-{
-	auto l_extensions = GetExtensions( p_engine );
-
-	for ( auto const & l_extension : l_extensions )
+	C3D_Md3_API void GetRequiredVersion( Castor3D::Version * p_version )
 	{
-		p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &C3DMd3::Md3Importer::Create );
+		*p_version = Castor3D::Version();
 	}
-}
 
-C3D_Md3_API void OnUnload( Castor3D::Engine * p_engine )
-{
-	auto l_extensions = GetExtensions( p_engine );
-
-	for ( auto const & l_extension : l_extensions )
+	C3D_Md3_API void GetType( Castor3D::PluginType * p_type )
 	{
-		p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+		*p_type = Castor3D::PluginType::eImporter;
+	}
+
+	C3D_Md3_API void GetName( char const ** p_name )
+	{
+		static Castor::String Name = cuT( "MD3 Importer" );
+		*p_name = Name.c_str();
+	}
+
+	C3D_Md3_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	{
+		auto plugin = static_cast< Castor3D::ImporterPlugin * >( p_plugin );
+		auto extensions = GetExtensions( p_engine );
+
+		for ( auto const & extension : extensions )
+		{
+			plugin->AddExtension( extension );
+			p_engine->GetImporterFactory().Register( Castor::string::lower_case( extension.first ), &C3DMd3::Md3Importer::Create );
+		}
+	}
+
+	C3D_Md3_API void OnUnload( Castor3D::Engine * p_engine )
+	{
+		auto extensions = GetExtensions( p_engine );
+
+		for ( auto const & extension : extensions )
+		{
+			p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( extension.first ) );
+		}
 	}
 }

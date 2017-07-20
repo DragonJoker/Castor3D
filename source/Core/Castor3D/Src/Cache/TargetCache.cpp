@@ -21,57 +21,57 @@ namespace Castor3D
 
 	RenderTargetSPtr RenderTargetCache::Add( TargetType p_type )
 	{
-		auto l_lock = make_unique_lock( *this );
-		RenderTargetSPtr l_return = std::make_shared< RenderTarget >( *GetEngine(), p_type );
-		m_renderTargets[size_t( p_type )].push_back( l_return );
-		return l_return;
+		auto lock = make_unique_lock( *this );
+		RenderTargetSPtr result = std::make_shared< RenderTarget >( *GetEngine(), p_type );
+		m_renderTargets[size_t( p_type )].push_back( result );
+		return result;
 	}
 
 	void RenderTargetCache::AddShadowProducer( Light & p_light )
 	{
-		auto l_lock = make_unique_lock( *this );
+		auto lock = make_unique_lock( *this );
 
-		for ( auto l_target : m_renderTargets[size_t( TargetType::eWindow )] )
+		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
-			if ( l_target->GetScene()->GetName() == p_light.GetScene()->GetName() )
+			if ( target->GetScene()->GetName() == p_light.GetScene()->GetName() )
 			{
-				l_target->AddShadowProducer( p_light );
+				target->AddShadowProducer( p_light );
 			}
 		}
 	}
 
 	void RenderTargetCache::Remove( RenderTargetSPtr p_target )
 	{
-		auto l_lock = make_unique_lock( *this );
-		auto l_v = m_renderTargets.begin() + size_t( p_target->GetTargetType() );
-		auto l_it = std::find( l_v->begin(), l_v->end(), p_target );
+		auto lock = make_unique_lock( *this );
+		auto v = m_renderTargets.begin() + size_t( p_target->GetTargetType() );
+		auto it = std::find( v->begin(), v->end(), p_target );
 
-		if ( l_it != l_v->end() )
+		if ( it != v->end() )
 		{
-			l_v->erase( l_it );
+			v->erase( it );
 		}
 	}
 
 	void RenderTargetCache::Render( RenderInfo & p_info )
 	{
-		auto l_lock = make_unique_lock( *this );
+		auto lock = make_unique_lock( *this );
 
-		for ( auto l_target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			l_target->Render( p_info );
+			target->Render( p_info );
 		}
 
-		for ( auto l_target : m_renderTargets[size_t( TargetType::eWindow )] )
+		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
-			l_target->Render( p_info );
+			target->Render( p_info );
 		}
 	}
 
 	void RenderTargetCache::Clear()
 	{
-		for ( auto & l_array : m_renderTargets )
+		for ( auto & array : m_renderTargets )
 		{
-			l_array.clear();
+			array.clear();
 		}
 	}
 }

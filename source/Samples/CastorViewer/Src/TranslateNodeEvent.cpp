@@ -18,18 +18,18 @@ namespace CastorViewer
 
 	bool TranslateNodeEvent::Apply()
 	{
-		SceneNodeSPtr l_node = m_node.lock();
+		SceneNodeSPtr node = m_node.lock();
 
-		if ( l_node )
+		if ( node )
 		{
-			Quaternion l_orientation = l_node->GetOrientation();
-			Point3r l_right{ 1.0_r, 0.0_r, 0.0_r };
-			Point3r l_up{ 0.0_r, 1.0_r, 0.0_r };
-			Point3r l_front{ 0.0_r, 0.0_r, 1.0_r };
-			l_orientation.transform( l_right, l_right );
-			l_orientation.transform( l_up, l_up );
-			l_orientation.transform( l_front, l_front );
-			l_node->Translate( ( l_right * m_dx ) + ( l_up * m_dy ) + ( l_front * m_dz ) );
+			Quaternion orientation = node->GetOrientation();
+			Point3r right{ 1.0_r, 0.0_r, 0.0_r };
+			Point3r up{ 0.0_r, 1.0_r, 0.0_r };
+			Point3r front{ 0.0_r, 0.0_r, 1.0_r };
+			orientation.transform( right, right );
+			orientation.transform( up, up );
+			orientation.transform( front, front );
+			node->Translate( ( right * m_dx ) + ( up * m_dy ) + ( front * m_dz ) );
 		}
 
 		m_dx = 0;

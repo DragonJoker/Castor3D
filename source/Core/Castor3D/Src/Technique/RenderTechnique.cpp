@@ -52,9 +52,9 @@ namespace Castor3D
 		m_colourTexture->GetImage().InitialiseSource();
 		p_size = m_colourTexture->GetDimensions();
 
-		bool l_return = m_colourTexture->Initialise();
+		bool result = m_colourTexture->Initialise();
 
-		if ( l_return )
+		if ( result )
 		{
 			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			m_depthBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
@@ -63,27 +63,27 @@ namespace Castor3D
 				, PixelFormat::eD24S8
 				, p_size );
 			m_depthBuffer->GetImage().InitialiseSource();
-			l_return = m_depthBuffer->Initialise();
+			result = m_depthBuffer->Initialise();
 		}
 
-		if ( l_return )
+		if ( result )
 		{
 			m_colourAttach = m_frameBuffer->CreateAttachment( m_colourTexture );
 			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
-			l_return = m_frameBuffer->Create();
+			result = m_frameBuffer->Create();
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = m_frameBuffer->Initialise( p_size );
+			result = m_frameBuffer->Initialise( p_size );
 
-			if ( l_return )
+			if ( result )
 			{
 				m_frameBuffer->Bind();
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( AttachmentPoint::eDepthStencil, m_depthAttach, m_depthBuffer->GetType() );
 				m_frameBuffer->SetDrawBuffer( m_colourAttach );
-				l_return = m_frameBuffer->IsComplete();
+				result = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
 			else
@@ -92,7 +92,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void RenderTechnique::TechniqueFbo::Cleanup()
@@ -233,30 +233,30 @@ namespace Castor3D
 		m_transparentPass->Update( p_queues );
 		m_opaquePass->UpdateShadowMaps( p_queues );
 		m_transparentPass->UpdateShadowMaps( p_queues );
-		auto & l_maps = m_renderTarget.GetScene()->GetEnvironmentMaps();
+		auto & maps = m_renderTarget.GetScene()->GetEnvironmentMaps();
 
-		for ( auto & l_map : l_maps )
+		for ( auto & map : maps )
 		{
-			l_map.get().Update( p_queues );
+			map.get().Update( p_queues );
 		}
 	}
 
 	void RenderTechnique::Render( RenderInfo & p_info )
 	{
-		auto & l_scene = *m_renderTarget.GetScene();
-		l_scene.GetLightCache().UpdateLights();
-		m_renderSystem.PushScene( &l_scene );
+		auto & scene = *m_renderTarget.GetScene();
+		scene.GetLightCache().UpdateLights();
+		m_renderSystem.PushScene( &scene );
 		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
-		auto & l_maps = l_scene.GetEnvironmentMaps();
+		auto & maps = scene.GetEnvironmentMaps();
 
-		for ( auto & l_map : l_maps )
+		for ( auto & map : maps )
 		{
-			l_map.get().Render();
+			map.get().Render();
 		}
 
-		auto & l_camera = *m_renderTarget.GetCamera();
-		l_camera.Resize( m_size );
-		l_camera.Update();
+		auto & camera = *m_renderTarget.GetCamera();
+		camera.Resize( m_size );
+		camera.Update();
 
 #if DEBUG_FORWARD_RENDERING
 
@@ -271,15 +271,15 @@ namespace Castor3D
 #else
 
 		m_deferredRendering->Render( p_info
-			, l_scene
-			, l_camera );
+			, scene
+			, camera );
 
 #endif
 
-		l_scene.RenderBackground( GetSize(), l_camera );
+		scene.RenderBackground( GetSize(), camera );
 
 		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
-		l_scene.GetParticleSystemCache().ForEach( [this, &p_info]( ParticleSystem & p_particleSystem )
+		scene.GetParticleSystemCache().ForEach( [this, &p_info]( ParticleSystem & p_particleSystem )
 		{
 			p_particleSystem.Update();
 			p_info.m_particlesCount += p_particleSystem.GetParticlesCount();
@@ -296,8 +296,8 @@ namespace Castor3D
 #	endif
 
 		m_weightedBlendRendering->Render( p_info
-			, l_scene
-			, l_camera );
+			, scene
+			, camera );
 
 #else
 
@@ -312,23 +312,23 @@ namespace Castor3D
 #endif
 
 #if DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING && !defined( NDEBUG )
-		m_deferredRendering->Debug( l_camera );
+		m_deferredRendering->Debug( camera );
 #endif
 
 #if USE_WEIGHTED_BLEND && DEBUG_WEIGHTED_BLEND_BUFFERS && !defined( NDEBUG )
-		m_weightedBlendRendering->Debug( l_camera );
+		m_weightedBlendRendering->Debug( camera );
 #endif
 
 #if DEBUG_IBL_BUFFERS && !defined( NDEBUG )
 		m_frameBuffer.m_frameBuffer->Bind();
-		l_scene.GetSkybox().GetIbl().Debug( l_camera );
+		scene.GetSkybox().GetIbl().Debug( camera );
 		m_frameBuffer.m_frameBuffer->Unbind();
 #endif
 
 		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
-		for ( auto l_effect : m_renderTarget.GetPostEffects() )
+		for ( auto effect : m_renderTarget.GetPostEffects() )
 		{
-			l_effect->Apply( *m_frameBuffer.m_frameBuffer );
+			effect->Apply( *m_frameBuffer.m_frameBuffer );
 		}
 
 		m_renderSystem.PopScene();

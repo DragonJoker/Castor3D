@@ -69,9 +69,9 @@ namespace Castor3D
 		 */
 		InitialiseEvent & operator=( InitialiseEvent const & p_copy )
 		{
-			InitialiseEvent l_evt( p_copy );
-			std::swap( m_object, l_evt.m_object );
-			std::swap( m_type, l_evt.m_type );
+			InitialiseEvent evt( p_copy );
+			std::swap( m_object, evt.m_object );
+			std::swap( m_type, evt.m_type );
 			return *this;
 		}
 

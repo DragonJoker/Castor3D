@@ -69,11 +69,11 @@ namespace Castor
 	template< PixelFormat FT >
 	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_buffer, PixelFormat p_bufferFormat )
 	{
-		uint8_t l_size = PF::GetBytesPerPixel( p_bufferFormat );
-		uint32_t l_dstMax = count();
-		uint32_t l_srcMax = uint32_t( p_buffer.size() / l_size );
+		uint8_t newSize = PF::GetBytesPerPixel( p_bufferFormat );
+		uint32_t dstMax = count();
+		uint32_t srcMax = uint32_t( p_buffer.size() / newSize );
 
-		if ( p_buffer.size() > 0 && l_srcMax == l_dstMax )
+		if ( p_buffer.size() > 0 && srcMax == dstMax )
 		{
 			PF::ConvertBuffer( p_bufferFormat, p_buffer.data(), uint32_t( p_buffer.size() ), format(), m_buffer.data(), size() );
 		}
@@ -134,23 +134,23 @@ namespace Castor
 	template< PixelFormat FT >
 	void PxBuffer< FT >::mirror()
 	{
-		uint32_t l_width = width() * pixel_definitions< FT >::Size;
-		uint32_t l_height = height();
+		uint32_t mwidth = width() * pixel_definitions< FT >::Size;
+		uint32_t mheight = height();
 
-		for ( uint32_t i = 0; i < l_height; i++ )
+		for ( uint32_t i = 0; i < mheight; i++ )
 		{
-			uint8_t * l_pxA = &m_buffer[i * l_width];
-			uint8_t * l_rhs = &m_buffer[( i + 1 ) * l_width - 1];
+			uint8_t * pxA = &m_buffer[i * mwidth];
+			uint8_t * rhs = &m_buffer[( i + 1 ) * mwidth - 1];
 
-			for ( uint32_t j = 0; j < l_width / 2; j += pixel_definitions< FT >::Size )
+			for ( uint32_t j = 0; j < mwidth / 2; j += pixel_definitions< FT >::Size )
 			{
 				for ( uint32_t k = 0; k < pixel_definitions< FT >::Size; k++ )
 				{
-					std::swap( l_pxA[k], l_rhs[k] );
+					std::swap( pxA[k], rhs[k] );
 				}
 
-				l_pxA += pixel_definitions< FT >::Size;
-				l_rhs -= pixel_definitions< FT >::Size;
+				pxA += pixel_definitions< FT >::Size;
+				rhs -= pixel_definitions< FT >::Size;
 			}
 		}
 	}
@@ -166,14 +166,14 @@ namespace Castor
 	{
 		if ( p_column < width() )
 		{
-			uint8_t const * l_buffer = &m_buffer[p_column * width() * pixel_definitions< FT >::Size];
+			uint8_t const * buffer = &m_buffer[p_column * width() * pixel_definitions< FT >::Size];
 			m_column = column( height() );
 
 			for ( uint32_t j = 0; j < height(); j++ )
 			{
 				m_column[j].unlink();
-				m_column[j].template set< FT >( l_buffer );
-				l_buffer += pixel_definitions< FT >::Size;
+				m_column[j].template set< FT >( buffer );
+				buffer += pixel_definitions< FT >::Size;
 			}
 		}
 	}
@@ -183,13 +183,13 @@ namespace Castor
 	{
 		if ( p_column < width() )
 		{
-			uint8_t * l_buffer = &m_buffer[p_column * width() * pixel_definitions< FT >::Size];
+			uint8_t * buffer = &m_buffer[p_column * width() * pixel_definitions< FT >::Size];
 			m_column = column( height() );
 
 			for ( uint32_t j = 0; j < height(); j++ )
 			{
-				m_column[j].link( l_buffer );
-				l_buffer += pixel_definitions< FT >::Size;
+				m_column[j].link( buffer );
+				buffer += pixel_definitions< FT >::Size;
 			}
 		}
 	}

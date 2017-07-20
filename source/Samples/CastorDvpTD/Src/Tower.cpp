@@ -15,15 +15,15 @@ namespace castortd
 	//// Nearest enemy
 	//EnemyArray DoSortNearest( EnemyArray const & p_enemies, Point3r const & p_position )
 	//{
-	//	EnemyArray l_result{ p_enemies };
-	//	std::sort( std::begin( l_result )
-	//		, std::end( l_result )
-	//		, [&p_position]( EnemyPtr l_a, EnemyPtr l_b )
+	//	EnemyArray result{ p_enemies };
+	//	std::sort( std::begin( result )
+	//		, std::end( result )
+	//		, [&p_position]( EnemyPtr a, EnemyPtr b )
 	//		{
-	//			return point::distance_squared( l_a->GetNode().GetPosition(), p_position )
-	//				< point::distance_squared( l_b->GetNode().GetPosition(), p_position );
+	//			return point::distance_squared( a->GetNode().GetPosition(), p_position )
+	//				< point::distance_squared( b->GetNode().GetPosition(), p_position );
 	//		} );
-	//	return l_result;
+	//	return result;
 	//}
 
 	// First enemy
@@ -85,12 +85,12 @@ namespace castortd
 
 	bool Tower::DoLookForEnemy( EnemyArray & p_enemies )
 	{
-		for ( auto & l_enemy : p_enemies )
+		for ( auto & enemy : p_enemies )
 		{
-			if ( l_enemy->IsAlive()
-				&& DoIsInRange( *l_enemy ) )
+			if ( enemy->IsAlive()
+				&& DoIsInRange( *enemy ) )
 			{
-				m_target = l_enemy;
+				m_target = enemy;
 				m_state = State::Spotted;
 			}
 		}
@@ -121,9 +121,9 @@ namespace castortd
 
 	bool Tower::DoAnimEnded( EnemyArray & p_enemies )
 	{
-		bool l_result = m_animRemain <= std::chrono::milliseconds{};
+		bool result = m_animRemain <= std::chrono::milliseconds{};
 
-		if ( !l_result
+		if ( !result
 			&& ( !m_target->IsAlive()
 			|| !DoIsInRange( *m_target ) ) )
 		{
@@ -138,26 +138,26 @@ namespace castortd
 			m_state = State::Shooting;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Tower::DoUpdateTimes( std::chrono::milliseconds const & p_elapsed )
 	{
-		static std::chrono::milliseconds l_zeroTime;
+		static std::chrono::milliseconds zeroTime;
 		m_remaining -= p_elapsed;
 
-		if ( m_remaining < l_zeroTime )
+		if ( m_remaining < zeroTime )
 		{
-			m_remaining = l_zeroTime;
+			m_remaining = zeroTime;
 		}
 
 		if ( m_state == State::Shooting )
 		{
 			m_animRemain -= p_elapsed;
 
-			if ( m_animRemain <= l_zeroTime )
+			if ( m_animRemain <= zeroTime )
 			{
-				m_animRemain = l_zeroTime;
+				m_animRemain = zeroTime;
 				m_anim.StopAnimation( m_category->GetAttackAnimationName() );
 				m_anim.StartAnimation( m_category->GetAttackAnimationName() );
 				m_anim.PauseAnimation( m_category->GetAttackAnimationName() );
@@ -178,13 +178,13 @@ namespace castortd
 
 	void Tower::DoTurnToTarget()
 	{
-		auto l_targetPosition = m_target->GetNode().GetDerivedPosition();
-		l_targetPosition[1] = m_node.GetPosition()[1];
-		auto l_direction = l_targetPosition - m_node.GetDerivedPosition();
-		l_direction = point::get_normalised( l_direction );
-		Point3r l_up{ 0, 1, 0 };
-		auto l_right = l_direction ^ l_up;
-		auto l_transform = matrix::look_at( m_node.GetDerivedPosition(), m_node.GetDerivedPosition() - l_direction, l_up );
-		m_node.SetOrientation( Quaternion::from_matrix( l_transform ) );
+		auto targetPosition = m_target->GetNode().GetDerivedPosition();
+		targetPosition[1] = m_node.GetPosition()[1];
+		auto direction = targetPosition - m_node.GetDerivedPosition();
+		direction = point::get_normalised( direction );
+		Point3r up{ 0, 1, 0 };
+		auto right = direction ^ up;
+		auto transform = matrix::look_at( m_node.GetDerivedPosition(), m_node.GetDerivedPosition() - direction, up );
+		m_node.SetOrientation( Quaternion::from_matrix( transform ) );
 	}
 }

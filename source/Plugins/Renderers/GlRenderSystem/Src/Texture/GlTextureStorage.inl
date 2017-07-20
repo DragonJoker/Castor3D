@@ -17,9 +17,9 @@ namespace GlRender
 		, m_glType{ p_gl.Get( p_type ) }
 		, m_impl{ *this }
 	{
-		for ( auto & l_image : p_layout )
+		for ( auto & image : p_layout )
 		{
-			m_impl.Fill( *this, *l_image );
+			m_impl.Fill( *this, *image );
 		}
 	}
 

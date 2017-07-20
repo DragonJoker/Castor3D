@@ -6,100 +6,100 @@ namespace GLSL
 {
 	Vec4 operator*( Vec4 const & p_a, Mat4 const & p_b )
 	{
-		Vec4 l_return( p_a.m_writer );
-		l_return.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
-		return l_return;
+		Vec4 result( p_a.m_writer );
+		result.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
+		return result;
 	}
 
 	Vec4 operator*( Mat4 const & p_a, Vec4 const & p_b )
 	{
-		Vec4 l_return( p_a.m_writer );
-		l_return.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
-		return l_return;
+		Vec4 result( p_a.m_writer );
+		result.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
+		return result;
 	}
 
 	Vec3 operator*( Mat3 const & p_a, Vec3 const & p_b )
 	{
-		Vec3 l_return( p_a.m_writer );
-		l_return.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
-		return l_return;
+		Vec3 result( p_a.m_writer );
+		result.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
+		return result;
 	}
 
 	Float operator+( float p_a, Float const & p_b )
 	{
-		Float l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " + " ) << String( p_b );
-		return l_return;
+		Float result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " + " ) << String( p_b );
+		return result;
 	}
 
 	Float operator-( float p_a, Float const & p_b )
 	{
-		Float l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " - " ) << String( p_b );
-		return l_return;
+		Float result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " - " ) << String( p_b );
+		return result;
 	}
 
 	Float operator*( float p_a, Float const & p_b )
 	{
-		Float l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " * " ) << String( p_b );
-		return l_return;
+		Float result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " * " ) << String( p_b );
+		return result;
 	}
 
 	Float operator/( float p_a, Float const & p_b )
 	{
-		Float l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " / " ) << String( p_b );
-		return l_return;
+		Float result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " / " ) << String( p_b );
+		return result;
 	}
 
 	Int operator+( int p_a, Int const & p_b )
 	{
-		Int l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " + " ) << String( p_b );
-		return l_return;
+		Int result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " + " ) << String( p_b );
+		return result;
 	}
 
 	Int operator-( int p_a, Int const & p_b )
 	{
-		Int l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " - " ) << String( p_b );
-		return l_return;
+		Int result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " - " ) << String( p_b );
+		return result;
 	}
 
 	Int operator*( int p_a, Int const & p_b )
 	{
-		Int l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " * " ) << String( p_b );
-		return l_return;
+		Int result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " * " ) << String( p_b );
+		return result;
 	}
 
 	Int operator/( int p_a, Int const & p_b )
 	{
-		Int l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " / " ) << String( p_b );
-		return l_return;
+		Int result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " / " ) << String( p_b );
+		return result;
 	}
 
 	Int operator%( Int const & p_a, int p_b )
 	{
-		Int l_return( p_a.m_writer );
-		l_return.m_value << String( p_a ) << cuT( " % " ) << ToString( p_b );
-		return l_return;
+		Int result( p_a.m_writer );
+		result.m_value << String( p_a ) << cuT( " % " ) << ToString( p_b );
+		return result;
 	}
 
 	Int operator%( int p_a, Int const & p_b )
 	{
-		Int l_return( p_b.m_writer );
-		l_return.m_value << ToString( p_a ) << cuT( " % " ) << String( p_b );
-		return l_return;
+		Int result( p_b.m_writer );
+		result.m_value << ToString( p_a ) << cuT( " % " ) << String( p_b );
+		return result;
 	}
 
 	Int operator%( Int const & p_a, Int const & p_b )
 	{
-		Int l_return( p_a.m_writer );
-		l_return.m_value << String( p_a ) << cuT( " % " ) << String( p_b );
-		return l_return;
+		Int result( p_a.m_writer );
+		result.m_value << String( p_a ) << cuT( " % " ) << String( p_b );
+		return result;
 	}
 
 	Int textureSize( Sampler1D const & p_sampler, Int const p_lod )

@@ -59,11 +59,11 @@ namespace Castor3D
 	{
 		if ( p_lights )
 		{
-			auto & l_cache = p_scene.GetLightCache();
-			auto l_lock = make_unique_lock( l_cache );
-			m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = l_cache.GetLightsCount( LightType::eSpot );
-			m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = l_cache.GetLightsCount( LightType::ePoint );
-			m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = l_cache.GetLightsCount( LightType::eDirectional );
+			auto & cache = p_scene.GetLightCache();
+			auto lock = make_unique_lock( cache );
+			m_lightsCount.GetValue( 0 )[size_t( LightType::eSpot )] = cache.GetLightsCount( LightType::eSpot );
+			m_lightsCount.GetValue( 0 )[size_t( LightType::ePoint )] = cache.GetLightsCount( LightType::ePoint );
+			m_lightsCount.GetValue( 0 )[size_t( LightType::eDirectional )] = cache.GetLightsCount( LightType::eDirectional );
 		}
 
 		Update( p_camera, p_scene.GetFog() );

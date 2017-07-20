@@ -1,4 +1,4 @@
-﻿#include "DiamondSquareTerrain.hpp"
+#include "DiamondSquareTerrain.hpp"
 
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
@@ -22,40 +22,40 @@ namespace diamond_square_terrain
 				m_map.resize( m_size * m_size );
 			}
 
-			inline uint32_t index( uint32_t x, uint32_t y, uint32_t l_size )const
+			inline uint32_t getIndex( uint32_t x, uint32_t y, uint32_t size )const
 			{
-				return x * l_size + y;
+				return x * size + y;
 			}
 
-			inline uint32_t index( uint32_t x, uint32_t y )const
+			inline uint32_t getIndex( uint32_t x, uint32_t y )const
 			{
-				return index( x, y,  m_size );
+				return getIndex( x, y,  m_size );
 			}
 
 			inline float & operator()( uint32_t x, uint32_t y )
 			{
-				static float l_dummy = -1;
-				auto l_index = index( x, y );
+				static float dummy = -1;
+				auto index = getIndex( x, y );
 
-				if ( l_index >= m_map.size() )
+				if ( index >= m_map.size() )
 				{
-					return l_dummy;
+					return dummy;
 				}
 
-				return m_map[index( x, y )];
+				return m_map[getIndex( x, y )];
 			}
 
 			inline float const & operator()( uint32_t x, uint32_t y )const
 			{
-				static float l_dummy = -1;
-				auto l_index = index( x, y );
+				static float dummy = -1;
+				auto index = getIndex( x, y );
 
-				if ( l_index >= m_map.size() )
+				if ( index >= m_map.size() )
 				{
-					return l_dummy;
+					return dummy;
 				}
 
-				return m_map[index( x, y )];
+				return m_map[getIndex( x, y )];
 			}
 
 
@@ -86,29 +86,29 @@ namespace diamond_square_terrain
 	void Generator::DoGenerate( Mesh & p_mesh
 		, Parameters const & p_parameters )
 	{
-		String l_param;
-		uint32_t l_size = 0u;
-		float l_roughness = 0.0f;
+		String param;
+		uint32_t size = 0u;
+		float roughness = 0.0f;
 
-		if ( p_parameters.Get( cuT( "roughness" ), l_param ) )
+		if ( p_parameters.Get( cuT( "roughness" ), param ) )
 		{
-			l_roughness = string::to_float( l_param );
+			roughness = string::to_float( param );
 		}
 
-		if ( p_parameters.Get( cuT( "detail" ), l_param ) )
+		if ( p_parameters.Get( cuT( "detail" ), param ) )
 		{
-			l_size = uint32_t( pow( 2, string::to_uint( l_param ) ) + 1u );
+			size = uint32_t( pow( 2, string::to_uint( param ) ) + 1u );
 		}
 
-		if ( l_size )
+		if ( size )
 		{
-			Matrix l_map{ l_size };
-			auto l_max = l_size - 1;
-			std::random_device l_device;
+			Matrix map{ size };
+			auto max = size - 1;
+			std::random_device device;
 
-			auto l_average = []( std::vector< float > p_values )
+			auto average = []( std::vector< float > p_values )
 			{
-				auto l_total = std::accumulate( p_values.begin()
+				auto total = std::accumulate( p_values.begin()
 					, p_values.end()
 					, 0.0f
 					, []( float p_accum, float p_value )
@@ -121,96 +121,96 @@ namespace diamond_square_terrain
 					return p_accum;
 				} );
 
-				return l_total / 4;
+				return total / 4;
 			};
 
-			auto l_square = [&l_average, &l_map]( uint32_t p_x
+			auto square = [&average, &map]( uint32_t p_x
 				, uint32_t p_y
 				, uint32_t p_size
 				, float p_offset )
 			{
-				auto l_ave = l_average( { {
-						l_map( p_x - p_size, p_y - p_size ),   // upper left
-						l_map( p_x + p_size, p_y - p_size ),   // upper right
-						l_map( p_x + p_size, p_y + p_size ),   // lower right
-						l_map( p_x - p_size, p_y + p_size )    // lower left
+				auto ave = average( { {
+						map( p_x - p_size, p_y - p_size ),   // upper left
+						map( p_x + p_size, p_y - p_size ),   // upper right
+						map( p_x + p_size, p_y + p_size ),   // lower right
+						map( p_x - p_size, p_y + p_size )    // lower left
 					} } );
-				l_map( p_x, p_y ) = l_ave + p_offset;
+				map( p_x, p_y ) = ave + p_offset;
 			};
 
-			auto l_diamond = [&l_average, &l_map]( uint32_t p_x
+			auto diamond = [&average, &map]( uint32_t p_x
 				, uint32_t p_y
 				, uint32_t p_size
 				, float p_offset )
 			{
-				auto l_ave = l_average( { {
-						l_map( p_x, p_y - p_size ),      // top
-						l_map( p_x + p_size, p_y ),      // right
-						l_map( p_x, p_y + p_size ),      // bottom
-						l_map( p_x - p_size, p_y )       // left
+				auto ave = average( { {
+						map( p_x, p_y - p_size ),      // top
+						map( p_x + p_size, p_y ),      // right
+						map( p_x, p_y + p_size ),      // bottom
+						map( p_x - p_size, p_y )       // left
 					} } );
-				l_map( p_x, p_y ) = l_ave + p_offset;
+				map( p_x, p_y ) = ave + p_offset;
 			};
 
-			std::function< void( uint32_t, float ) > l_divide = [&l_max
-				, &l_square
-				, &l_diamond
-				, &l_device
-				, &l_divide]( uint32_t p_size
+			std::function< void( uint32_t, float ) > divide = [&max
+				, &square
+				, &diamond
+				, &device
+				, &divide]( uint32_t p_size
 				, float p_roughness )
 			{
-				uint32_t l_half = p_size / 2;
-				auto l_scale = p_roughness * p_size;
-				std::uniform_real_distribution< float > l_distribution;
+				uint32_t half = p_size / 2;
+				auto scale = p_roughness * p_size;
+				std::uniform_real_distribution< float > distribution;
 
-				if ( l_half < 1 ) return;
+				if ( half < 1 ) return;
 
-				for ( auto y = l_half; y < l_max; y += p_size )
+				for ( auto y = half; y < max; y += p_size )
 				{
-					for ( auto x = l_half; x < l_max; x += p_size )
+					for ( auto x = half; x < max; x += p_size )
 					{
-						l_square( x, y, l_half, l_distribution( l_device ) * l_scale * 2 - l_scale );
+						square( x, y, half, distribution( device ) * scale * 2 - scale );
 					}
 				}
 
-				for ( auto y = 0u; y <= l_max; y += l_half )
+				for ( auto y = 0u; y <= max; y += half )
 				{
-					for ( auto x = ( y + l_half ) % p_size; x <= l_max; x += p_size )
+					for ( auto x = ( y + half ) % p_size; x <= max; x += p_size )
 					{
-						l_diamond( x, y, l_half, l_distribution( l_device ) * l_scale * 2 - l_scale );
+						diamond( x, y, half, distribution( device ) * scale * 2 - scale );
 					}
 				}
 
-				l_divide( p_size / 2, p_roughness );
+				divide( p_size / 2, p_roughness );
 			};
 
-			l_divide( l_size, l_roughness );
+			divide( size, roughness );
 
-			auto l_submesh = p_mesh.CreateSubmesh();
+			auto submesh = p_mesh.CreateSubmesh();
 
-			for ( auto y = 1u; y < l_max; y++ )
+			for ( auto y = 1u; y < max; y++ )
 			{
-				for ( auto x = 1u; x < l_max; x++ )
+				for ( auto x = 1u; x < max; x++ )
 				{
-					l_submesh->AddPoint( real( x ), l_map( x, y ), real( y ) );
+					submesh->AddPoint( real( x ), map( x, y ), real( y ) );
 				}
 			}
 
 			// Generate quads 
-			for ( auto y = 0u; y < l_max - 2; y++ )
+			for ( auto y = 0u; y < max - 2; y++ )
 			{
-				for ( auto x = 0u; x < l_max - 2; x++ )
+				for ( auto x = 0u; x < max - 2; x++ )
 				{
-					l_submesh->AddFace( l_map.index( x, y, l_size - 2 )
-						, l_map.index( x + 1, y, l_size - 2 )
-						, l_map.index( x, y + 1, l_size - 2 ) );
-					l_submesh->AddFace( l_map.index( x + 1, y, l_size - 2 )
-						, l_map.index( x + 1, y + 1, l_size - 2 )
-						, l_map.index( x, y + 1, l_size - 2 ) );
+					submesh->AddFace( map.getIndex( x, y, size - 2 )
+						, map.getIndex( x + 1, y, size - 2 )
+						, map.getIndex( x, y + 1, size - 2 ) );
+					submesh->AddFace( map.getIndex( x + 1, y, size - 2 )
+						, map.getIndex( x + 1, y + 1, size - 2 )
+						, map.getIndex( x, y + 1, size - 2 ) );
 				}
 			}
 
-			l_submesh->ComputeNormals( true );
+			submesh->ComputeNormals( true );
 			p_mesh.ComputeContainers();
 		}
 	}

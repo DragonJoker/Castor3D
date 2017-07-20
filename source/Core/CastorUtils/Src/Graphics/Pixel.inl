@@ -10,38 +10,38 @@ namespace Castor
 
 		static void Add( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & l_rhs( p_rhs );
-			PxOperators< FT, FT >::Add( p_lhs, l_rhs );
+			LhsPixel & rhs( p_rhs );
+			PxOperators< FT, FT >::Add( p_lhs, rhs );
 		}
 
 		static void Substract( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & l_rhs( p_rhs );
-			PxOperators< FT, FT >::Substract( p_lhs, l_rhs );
+			LhsPixel & rhs( p_rhs );
+			PxOperators< FT, FT >::Substract( p_lhs, rhs );
 		}
 
 		static void Multiply( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & l_rhs( p_rhs );
-			PxOperators< FT, FT >::Multiply( p_lhs, l_rhs );
+			LhsPixel & rhs( p_rhs );
+			PxOperators< FT, FT >::Multiply( p_lhs, rhs );
 		}
 
 		static void Divide( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & l_rhs( p_rhs );
-			PxOperators< FT, FT >::Divide( p_lhs, l_rhs );
+			LhsPixel & rhs( p_rhs );
+			PxOperators< FT, FT >::Divide( p_lhs, rhs );
 		}
 
 		static void Assign( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & l_rhs( p_rhs );
-			PxOperators< FT, FT >::Assign( p_lhs, l_rhs );
+			LhsPixel & rhs( p_rhs );
+			PxOperators< FT, FT >::Assign( p_lhs, rhs );
 		}
 
 		static bool Equals( LhsPixel const & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & l_rhs( p_rhs );
-			return PxOperators< FT, FT >::Equals( p_lhs, l_rhs );
+			LhsPixel & rhs( p_rhs );
+			return PxOperators< FT, FT >::Equals( p_lhs, rhs );
 		}
 	};
 
@@ -91,14 +91,14 @@ namespace Castor
 
 		static bool Equals( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			bool l_result = true;
+			bool result = true;
 
 			for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
 			{
-				l_result = p_lhs[i] == p_rhs[i];
+				result = p_lhs[i] == p_rhs[i];
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 
@@ -125,9 +125,9 @@ namespace Castor
 	Pixel< FT >::Pixel( std::array< uint8_t, pixel_definitions< FU >::Size > const & p_components )
 		:	m_components( new uint8_t[pixel_definitions< FT >::Size] )
 	{
-		uint8_t const * l_src = &p_components[0];
-		uint8_t * l_dst = m_components.get();
-		pixel_definitions< FU >::template convert< FT >( l_src, l_dst );
+		uint8_t const * src = &p_components[0];
+		uint8_t * dst = m_components.get();
+		pixel_definitions< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
@@ -154,9 +154,9 @@ namespace Castor
 		if ( p_pxl.const_ptr() )
 		{
 			m_components.reset( new uint8_t[pixel_definitions< FT >::Size] );
-			uint8_t const * l_src = p_pxl.const_ptr();
-			uint8_t * l_dst = m_components.get();
-			pixel_definitions< FU >::template convert< FT >( l_src, l_dst );
+			uint8_t const * src = p_pxl.const_ptr();
+			uint8_t * dst = m_components.get();
+			pixel_definitions< FU >::template convert< FT >( src, dst );
 		}
 	}
 
@@ -210,9 +210,9 @@ namespace Castor
 		{
 			if ( p_pxl.const_ptr() )
 			{
-				uint8_t const * l_src = p_pxl.const_ptr();
-				uint8_t * l_dst = m_components.get();
-				pixel_definitions< FU >::template convert< FT >( l_src, l_dst );
+				uint8_t const * src = p_pxl.const_ptr();
+				uint8_t * dst = m_components.get();
+				pixel_definitions< FU >::template convert< FT >( src, dst );
 			}
 			else
 			{
@@ -222,9 +222,9 @@ namespace Castor
 		else if ( p_pxl.const_ptr() )
 		{
 			m_components.reset( new uint8_t[pixel_definitions< FT >::Size] );
-			uint8_t const * l_src = p_pxl.const_ptr();
-			uint8_t * l_dst = m_components.get();
-			pixel_definitions< FU >::template convert< FT >( l_src, l_dst );
+			uint8_t const * src = p_pxl.const_ptr();
+			uint8_t * dst = m_components.get();
+			pixel_definitions< FU >::template convert< FT >( src, dst );
 		}
 
 		return *this;
@@ -334,53 +334,53 @@ namespace Castor
 	template< typename U >
 	void Pixel< FT >::sum( U & p_result )const
 	{
-		U l_base = 0;
-		p_result = std::accumulate( begin(), end(), l_base );
+		U base = 0;
+		p_result = std::accumulate( begin(), end(), base );
 	}
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
 	Pixel< FU > Pixel< FT >::mul( Pixel< FU > const & p_px )const
 	{
-		Pixel< FU > l_pxReturn( *this );
-		l_pxReturn *= p_px;
-		return l_pxReturn;
+		Pixel< FU > pxReturn( *this );
+		pxReturn *= p_px;
+		return pxReturn;
 	}
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
 	Pixel< FU > Pixel< FT >::mul( uint8_t const & p_val )const
 	{
-		Pixel< FU > l_pxReturn( *this );
-		l_pxReturn *= p_val;
-		return l_pxReturn;
+		Pixel< FU > pxReturn( *this );
+		pxReturn *= p_val;
+		return pxReturn;
 	}
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
 	void Pixel< FT >::set( std::array< uint8_t, pixel_definitions< FU >::Size > const & p_components )
 	{
-		uint8_t const * l_src = &p_components[0];
-		uint8_t * l_dst = m_components.get();
-		pixel_definitions< FU >::template convert< FT >( l_src, l_dst );
+		uint8_t const * src = &p_components[0];
+		uint8_t * dst = m_components.get();
+		pixel_definitions< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
 	void Pixel< FT >::set( uint8_t const * p_components )
 	{
-		uint8_t const * l_src = &p_components[0];
-		uint8_t * l_dst = m_components.get();
-		pixel_definitions< FU >::template convert< FT >( l_src, l_dst );
+		uint8_t const * src = &p_components[0];
+		uint8_t * dst = m_components.get();
+		pixel_definitions< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
 	void Pixel< FT >::set( Pixel< FU > const & p_px )
 	{
-		uint8_t const * l_src = p_px.const_ptr();
-		uint8_t * l_dst = m_components.get();
-		pixel_definitions< FU >::template convert< FT >( l_src, l_dst );
+		uint8_t const * src = p_px.const_ptr();
+		uint8_t * dst = m_components.get();
+		pixel_definitions< FU >::template convert< FT >( src, dst );
 	}
 
 	template < PixelFormat FT, PixelFormat FU >
@@ -392,64 +392,64 @@ namespace Castor
 	template < PixelFormat FT, PixelFormat FU >
 	Pixel< FT > operator+( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
-		Pixel< FT > l_pxReturn( p_pixel );
-		l_pxReturn += p_px;
-		return l_pxReturn;
+		Pixel< FT > pxReturn( p_pixel );
+		pxReturn += p_px;
+		return pxReturn;
 	}
 
 	template < PixelFormat FT, typename U >
 	Pixel< FT > operator+( Pixel< FT > const & p_pixel, U const & p_t )
 	{
-		Pixel< FT > l_pxReturn( p_pixel );
-		l_pxReturn += p_t;
-		return l_pxReturn;
+		Pixel< FT > pxReturn( p_pixel );
+		pxReturn += p_t;
+		return pxReturn;
 	}
 
 	template < PixelFormat FT, PixelFormat FU >
 	Pixel< FT > operator-( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
-		Pixel< FT > l_pxReturn( p_pixel );
-		l_pxReturn -= p_px;
-		return l_pxReturn;
+		Pixel< FT > pxReturn( p_pixel );
+		pxReturn -= p_px;
+		return pxReturn;
 	}
 
 	template < PixelFormat FT, typename U >
 	Pixel< FT > operator-( Pixel< FT > const & p_pixel, U const & p_t )
 	{
-		Pixel< FT > l_pxReturn( p_pixel );
-		l_pxReturn -= p_t;
-		return l_pxReturn;
+		Pixel< FT > pxReturn( p_pixel );
+		pxReturn -= p_t;
+		return pxReturn;
 	}
 
 	template < PixelFormat FT, PixelFormat FU >
 	Pixel< FT > operator/( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
-		Pixel< FT > l_pxReturn( p_pixel );
-		l_pxReturn /= p_px;
-		return l_pxReturn;
+		Pixel< FT > pxReturn( p_pixel );
+		pxReturn /= p_px;
+		return pxReturn;
 	}
 
 	template < PixelFormat FT, typename U >
 	Pixel< FT > operator/( Pixel< FT > const & p_pixel, U const & p_t )
 	{
-		Pixel< FT > l_pxReturn( p_pixel );
-		l_pxReturn /= p_t;
-		return l_pxReturn;
+		Pixel< FT > pxReturn( p_pixel );
+		pxReturn /= p_t;
+		return pxReturn;
 	}
 
 	template < PixelFormat FT, PixelFormat FU >
 	Pixel< FT > operator*( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
-		Pixel< FT > l_pxReturn( p_pixel );
-		l_pxReturn *= p_px;
-		return l_pxReturn;
+		Pixel< FT > pxReturn( p_pixel );
+		pxReturn *= p_px;
+		return pxReturn;
 	}
 
 	template < PixelFormat FT, typename U >
 	Pixel< FT > operator*( Pixel< FT > const & p_pixel, U const & p_t )
 	{
-		Pixel< FT > l_pxReturn( p_pixel );
-		l_pxReturn *= p_t;
-		return l_pxReturn;
+		Pixel< FT > pxReturn( p_pixel );
+		pxReturn *= p_t;
+		return pxReturn;
 	}
 }

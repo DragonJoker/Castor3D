@@ -1,4 +1,4 @@
-﻿#include "Design/Templates.hpp"
+#include "Design/Templates.hpp"
 
 #include "Miscellaneous/Utils.hpp"
 
@@ -38,9 +38,9 @@ namespace Castor
 	inline Matrix< T, Columns, Rows >::Matrix( Type const * p_matrix )
 		: Matrix( NoInit() )
 	{
-		uint64_t l_count = Rows * Columns;
+		uint64_t count = Rows * Columns;
 
-		for ( uint64_t i = 0; i < l_count; i++ )
+		for ( uint64_t i = 0; i < count; i++ )
 		{
 			this->m_data[i] = T( p_matrix[i] );
 		}
@@ -65,9 +65,9 @@ namespace Castor
 	inline Matrix< T, Columns, Rows >::Matrix( Matrix< Type, Columns, Rows > const & p_matrix )
 		: Matrix( NoInit() )
 	{
-		uint64_t l_count = Rows * Columns;
+		uint64_t count = Rows * Columns;
 
-		for ( uint64_t i = 0; i < l_count; i++ )
+		for ( uint64_t i = 0; i < count; i++ )
 		{
 			this->m_data[i] = T( p_matrix.m_data[i] );
 		}
@@ -117,9 +117,9 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Point< T, Columns > Matrix< T, Columns, Rows >::get_row( uint32_t p_index )const
 	{
-		Point< T, Columns > l_result;
-		get_row( p_index, l_result );
-		return l_result;
+		Point< T, Columns > result;
+		get_row( p_index, result );
+		return result;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::get_row( uint32_t p_index, Point< T, Columns > & p_result )const
@@ -189,82 +189,82 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Rows, Columns > Matrix< T, Columns, Rows >::get_transposed()const
 	{
-		Matrix< T, Rows, Columns > l_result;
-		get_transposed( l_result );
-		return l_result;
+		Matrix< T, Rows, Columns > result;
+		get_transposed( result );
+		return result;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::get_transposed( Matrix< T, Rows, Columns > & p_mtxResult )const
 	{
-		T const * l_buffer = const_ptr();
+		T const * buffer = const_ptr();
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				p_mtxResult[j][i] = *l_buffer++;
+				p_mtxResult[j][i] = *buffer++;
 			}
 		}
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > Matrix< T, Columns, Rows >::rec_get_minor( uint32_t x, uint32_t y, uint32_t p_rows, uint32_t p_cols )const
 	{
-		Matrix< T, Columns, Rows > l_result;
-		l_result.set_identity();
-		uint32_t l_i = 0, l_j = 0;
+		Matrix< T, Columns, Rows > result;
+		result.set_identity();
+		uint32_t i = 0, j = 0;
 
 		for ( uint32_t i = 0; i < p_cols; i++ )
 		{
 			if ( i != x )
 			{
-				l_j = 0;
+				j = 0;
 
 				for ( uint32_t j = 0; j < p_rows; j++ )
 				{
 					if ( j != y )
 					{
-						l_result[l_i][l_j++] = m_columns[i][j];
+						result[i][j++] = m_columns[i][j];
 					}
 				}
 
-				l_i++;
+				i++;
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline T Matrix< T, Columns, Rows >::get_trace()const
 	{
-		T l_sum = T();
-		T * l_buffer = this->m_data;
+		T sum = T();
+		T * buffer = this->m_data;
 
 		for ( int i = 0; i < min_value< Columns, Rows >::value; i++ )
 		{
-			l_sum += *l_buffer;
-			l_buffer += Rows + 1;
+			sum += *buffer;
+			buffer += Rows + 1;
 		}
 
-		return l_sum;
+		return sum;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::set_identity()
 	{
 		std::memset( this->m_data, 0, size );
-		T * l_buffer = this->m_data;
+		T * buffer = this->m_data;
 
 		for ( int i = 0; i < min_value< Columns, Rows >::value; i++ )
 		{
-			*l_buffer = T( 1 );
-			l_buffer += Rows + 1;
+			*buffer = T( 1 );
+			buffer += Rows + 1;
 		}
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > Matrix< T, Columns, Rows >::get_identity()const
 	{
-		Matrix< T, Columns, Rows > l_result( * this );
-		l_result.set_identity();
-		return l_result;
+		Matrix< T, Columns, Rows > result( * this );
+		result.set_identity();
+		return result;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator=( Matrix< T, Columns, Rows > const & p_matrix )
@@ -295,12 +295,12 @@ namespace Castor
 	template< typename Type >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator=( Matrix< Type, Columns, Rows > const & p_matrix )
 	{
-		Type const * l_buffer = p_matrix.const_ptr();
-		T * l_mine = this->m_data;
+		Type const * buffer = p_matrix.const_ptr();
+		T * mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
-			*l_mine++ = T( *l_buffer++ );
+			*mine++ = T( *buffer++ );
 		}
 
 		return *this;
@@ -309,11 +309,11 @@ namespace Castor
 	template< typename Type >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator=( Type const * p_matrix )
 	{
-		T * l_mine = this->m_data;
+		T * mine = this->m_data;
 
 		for ( uint64_t i = 0; i < count; i++ )
 		{
-			*l_mine++ = T( *p_matrix++ );
+			*mine++ = T( *p_matrix++ );
 		}
 
 		return *this;
@@ -322,12 +322,12 @@ namespace Castor
 	template< typename Type >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator+=( Matrix< Type, Columns, Rows > const & p_matrix )
 	{
-		Type const * l_buffer = p_matrix.const_ptr();
-		T * l_mine = this->m_data;
+		Type const * buffer = p_matrix.const_ptr();
+		T * mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
-			*l_mine++ += T( *l_buffer++ );
+			*mine++ += T( *buffer++ );
 		}
 
 		return *this;
@@ -336,12 +336,12 @@ namespace Castor
 	template< typename Type >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator-=( Matrix< Type, Columns, Rows > const & p_matrix )
 	{
-		Type const * l_buffer = p_matrix.const_ptr();
-		T * l_mine = this->m_data;
+		Type const * buffer = p_matrix.const_ptr();
+		T * mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
-			*l_mine++ -= T( *l_buffer++ );
+			*mine++ -= T( *buffer++ );
 		}
 
 		return *this;
@@ -349,11 +349,11 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator+=( T const & p_value )
 	{
-		T * l_mine = this->m_data;
+		T * mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
-			*l_mine++ += p_value;
+			*mine++ += p_value;
 		}
 
 		return *this;
@@ -361,11 +361,11 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator-=( T const & p_value )
 	{
-		T * l_mine = this->m_data;
+		T * mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
-			*l_mine++ -= p_value;
+			*mine++ -= p_value;
 		}
 
 		return *this;
@@ -373,11 +373,11 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator*=( T const & p_value )
 	{
-		T * l_mine = this->m_data;
+		T * mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
-			*l_mine++ *= p_value;
+			*mine++ *= p_value;
 		}
 
 		return *this;
@@ -385,11 +385,11 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator/=( T const & p_value )
 	{
-		T * l_mine = this->m_data;
+		T * mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
-			*l_mine++ /= p_value;
+			*mine++ /= p_value;
 		}
 
 		return *this;
@@ -443,22 +443,22 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::do_update_columns()const
 	{
-		value_type * l_buffer = this->m_data;
+		value_type * buffer = this->m_data;
 
 		for ( uint32_t i = 0; i < Columns; ++i )
 		{
-			m_columns[i] = col_type( l_buffer );
+			m_columns[i] = col_type( buffer );
 
 #if !defined( NDEBUG )
 
 			for ( uint32_t j = 0; j < Rows; ++j )
 			{
-				m_debugData[i][j] = l_buffer++;
+				m_debugData[i][j] = buffer++;
 			}
 
 #else
 
-			l_buffer += Rows;
+			buffer += Rows;
 
 #endif
 
@@ -470,17 +470,17 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline bool operator==( Matrix< T, Columns, Rows > const & p_mtxA, Matrix< T, Columns, Rows > const & p_mtxB )
 	{
-		bool l_result = true;
+		bool result = true;
 
-		for ( uint32_t i = 0; i < Columns && l_result; i++ )
+		for ( uint32_t i = 0; i < Columns && result; i++ )
 		{
-			for ( uint32_t j = 0; j < Rows && l_result; j++ )
+			for ( uint32_t j = 0; j < Rows && result; j++ )
 			{
-				l_result = Castor::Policy< T >::equals( p_mtxA[i][j], p_mtxB[i][j] );
+				result = Castor::Policy< T >::equals( p_mtxA[i][j], p_mtxB[i][j] );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline bool operator!=( Matrix< T, Columns, Rows > const & p_mtxA, Matrix< T, Columns, Rows > const & p_mtxB )
@@ -490,21 +490,21 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
 	Matrix< T, Columns, Rows > operator+( Matrix< T, Columns, Rows > const & p_mtxA, Matrix< U, Columns, Rows > const & p_mtxB )
 	{
-		Matrix< T, Columns, Rows > l_mtx( p_mtxA );
-		l_mtx += p_mtxB;
-		return l_mtx;
+		Matrix< T, Columns, Rows > mtx( p_mtxA );
+		mtx += p_mtxB;
+		return mtx;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
 	Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & p_mtxA, Matrix< U, Columns, Rows > const & p_mtxB )
 	{
-		Matrix< T, Columns, Rows > l_mtx( p_mtxA );
-		l_mtx -= p_mtxB;
-		return l_mtx;
+		Matrix< T, Columns, Rows > mtx( p_mtxA );
+		mtx -= p_mtxB;
+		return mtx;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows, typename U, uint32_t _Columns >
 	Matrix< T, _Columns, Rows > operator*( Matrix< T, Columns, Rows > const & p_mtxA, Matrix< U, _Columns, Columns > const & p_mtxB )
 	{
-		Matrix< T, _Columns, Rows > l_result;
+		Matrix< T, _Columns, Rows > result;
 
 		for ( uint32_t i = 0; i < _Columns; i++ )
 		{
@@ -512,84 +512,84 @@ namespace Castor
 			{
 				for ( uint32_t k = 0; k < Rows; k++ )
 				{
-					l_result[i][k] += T( p_mtxA[j][k] * p_mtxB[i][j] );
+					result[i][k] += T( p_mtxA[j][k] * p_mtxB[i][j] );
 				}
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
 	inline Point< T, Rows > operator*( Matrix< T, Columns, Rows > const & p_matrix, Point< U, Columns > const & p_vector )
 	{
-		Point< T, Rows > l_result;
+		Point< T, Rows > result;
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				l_result[j] += T( p_matrix[i][j] * p_vector[i] );
+				result[j] += T( p_matrix[i][j] * p_vector[i] );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
 	inline Point< T, Columns > operator*( Point< T, Rows > const & p_vector, Matrix< U, Columns, Rows > const & p_matrix )
 	{
-		Point< T, Columns > l_result;
+		Point< T, Columns > result;
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				l_result[i] += T( p_matrix[i][j] * p_vector[j] );
+				result[i] += T( p_matrix[i][j] * p_vector[j] );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
 	Matrix <T, Columns, Rows> operator+( Matrix< T, Columns, Rows > const & p_mtxA, U const * p_mtxB )
 	{
-		Matrix< T, Columns, Rows > l_mtx( p_mtxA );
-		l_mtx += p_mtxB;
-		return l_mtx;
+		Matrix< T, Columns, Rows > mtx( p_mtxA );
+		mtx += p_mtxB;
+		return mtx;
 	}
 	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
 	Matrix <T, Columns, Rows> operator-( Matrix< T, Columns, Rows > const & p_mtxA, U const * p_mtxB )
 	{
-		Matrix< T, Columns, Rows > l_mtx( p_mtxA );
-		l_mtx -= p_mtxB;
-		return l_mtx;
+		Matrix< T, Columns, Rows > mtx( p_mtxA );
+		mtx -= p_mtxB;
+		return mtx;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix <T, Columns, Rows> operator+( Matrix< T, Columns, Rows > const & p_matrix, T const & p_uValue )
 	{
-		Matrix< T, Columns, Rows > l_mtx( p_matrix );
-		l_mtx += p_uValue;
-		return l_mtx;
+		Matrix< T, Columns, Rows > mtx( p_matrix );
+		mtx += p_uValue;
+		return mtx;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix <T, Columns, Rows> operator-( Matrix< T, Columns, Rows > const & p_matrix, T const & p_uValue )
 	{
-		Matrix< T, Columns, Rows > l_mtx( p_matrix );
-		l_mtx -= p_uValue;
-		return l_mtx;
+		Matrix< T, Columns, Rows > mtx( p_matrix );
+		mtx -= p_uValue;
+		return mtx;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix <T, Columns, Rows> operator*( Matrix< T, Columns, Rows > const & p_matrix, T const & p_uValue )
 	{
-		Matrix< T, Columns, Rows > l_mtx( p_matrix );
-		l_mtx *= p_uValue;
-		return l_mtx;
+		Matrix< T, Columns, Rows > mtx( p_matrix );
+		mtx *= p_uValue;
+		return mtx;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix <T, Columns, Rows> operator/( Matrix< T, Columns, Rows > const & p_matrix, T const & p_uValue )
 	{
-		Matrix< T, Columns, Rows > l_mtx( p_matrix );
-		l_mtx /= p_uValue;
-		return l_mtx;
+		Matrix< T, Columns, Rows > mtx( p_matrix );
+		mtx /= p_uValue;
+		return mtx;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix <T, Columns, Rows> operator+( T const & p_scalar, Matrix< T, Columns, Rows > const & p_matrix )
@@ -609,17 +609,17 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix <T, Columns, Rows> operator-( Matrix< T, Columns, Rows > const & p_matrix )
 	{
-		Matrix< T, Columns, Rows > l_result;
+		Matrix< T, Columns, Rows > result;
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				l_result[i][j] = -p_matrix[i][j];
+				result[i][j] = -p_matrix[i][j];
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 //*************************************************************************************************
@@ -627,45 +627,45 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Castor::String & operator<<( Castor::String & p_strOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
 	{
-		Castor::StringStream l_streamOut;
-		l_streamOut.precision( 10 );
+		Castor::StringStream streamOut;
+		streamOut.precision( 10 );
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				l_streamOut.width( 15 );
-				l_streamOut << std::right << p_matrix[i][j];
+				streamOut.width( 15 );
+				streamOut << std::right << p_matrix[i][j];
 			}
 
-			l_streamOut << std::endl;
+			streamOut << std::endl;
 		}
 
-		p_strOut += l_streamOut.str();
+		p_strOut += streamOut.str();
 		return p_strOut;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Castor::String & operator>>( Castor::String & p_strIn, Castor::Matrix <T, Columns, Rows> & p_matrix )
 	{
-		Castor::StringStream l_streamIn( p_strIn );
+		Castor::StringStream streamIn( p_strIn );
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				l_streamIn >> p_matrix[i][j];
+				streamIn >> p_matrix[i][j];
 			}
 
-			l_streamIn.ignore();
+			streamIn.ignore();
 		}
 
-		p_strIn = l_streamIn.str();
+		p_strIn = streamIn.str();
 		return p_strIn;
 	}
 	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
 	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
 	{
-		auto l_precision = p_streamOut.precision( 10 );
+		auto precision = p_streamOut.precision( 10 );
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
@@ -678,7 +678,7 @@ namespace Castor
 			p_streamOut << std::endl;
 		}
 
-		p_streamOut.precision( l_precision );
+		p_streamOut.precision( precision );
 		return p_streamOut;
 	}
 	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >

@@ -32,9 +32,9 @@ namespace GlRender
 
 	bool GlRenderBuffer::Initialise( Size const & p_size )
 	{
-		bool l_return = m_size == p_size;
+		bool result = m_size == p_size;
 
-		if ( !l_return )
+		if ( !result )
 		{
 			Bind();
 			m_size = p_size;
@@ -49,10 +49,10 @@ namespace GlRender
 			}
 
 			Unbind();
-			l_return = true;
+			result = true;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void GlRenderBuffer::Cleanup()
@@ -61,9 +61,9 @@ namespace GlRender
 
 	bool GlRenderBuffer::Resize( Size const & p_size )
 	{
-		bool l_return = m_size == p_size;
+		bool result = m_size == p_size;
 
-		if ( !l_return )
+		if ( !result )
 		{
 			Bind();
 			m_size = p_size;
@@ -80,6 +80,6 @@ namespace GlRender
 			Unbind();
 		}
 
-		return l_return;
+		return result;
 	}
 }

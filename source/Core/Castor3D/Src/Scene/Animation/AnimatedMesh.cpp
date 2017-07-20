@@ -30,15 +30,15 @@ namespace Castor3D
 
 	void AnimatedMesh::DoAddAnimation( String const & p_name )
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( p_name );
 
-		if ( l_it == m_animations.end() )
+		if ( it == m_animations.end() )
 		{
 			if ( m_mesh.HasAnimation( p_name ) )
 			{
-				auto & l_animation = static_cast< MeshAnimation & >( m_mesh.GetAnimation( p_name ) );
-				auto l_instance = std::make_unique< MeshAnimationInstance >( *this, l_animation );
-				m_animations.emplace( p_name, std::move( l_instance ) );
+				auto & animation = static_cast< MeshAnimation & >( m_mesh.GetAnimation( p_name ) );
+				auto instance = std::make_unique< MeshAnimationInstance >( *this, animation );
+				m_animations.emplace( p_name, std::move( instance ) );
 			}
 		}
 	}

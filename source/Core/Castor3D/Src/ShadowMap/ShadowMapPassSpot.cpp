@@ -17,11 +17,11 @@ namespace Castor3D
 
 	bool ShadowMapPassSpot::DoInitialise( Size const & p_size )
 	{
-		Viewport l_viewport{ *GetEngine() };
+		Viewport viewport{ *GetEngine() };
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
 			, *m_light.GetScene()
 			, m_light.GetParent()
-			, std::move( l_viewport ) );
+			, std::move( viewport ) );
 		m_camera->Resize( p_size );
 
 		m_renderQueue.Initialise( *m_light.GetScene(), *m_camera );

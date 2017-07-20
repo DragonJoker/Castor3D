@@ -35,23 +35,23 @@ namespace Castor
 
 	Point3r operator*( Matrix4x4r const & p_mtx, Point3r const & p_pt )
 	{
-		real const * l_mtx = p_mtx.const_ptr();
+		real const * mtx = p_mtx.const_ptr();
 		return Point3r
 		{
-			l_mtx[0] * p_pt[0] + l_mtx[4] * p_pt[1] + l_mtx[ 8] * p_pt[2] + l_mtx[12],
-			l_mtx[1] * p_pt[0] + l_mtx[5] * p_pt[1] + l_mtx[ 9] * p_pt[2] + l_mtx[13],
-			l_mtx[2] * p_pt[0] + l_mtx[6] * p_pt[1] + l_mtx[10] * p_pt[2] + l_mtx[14]
+			mtx[0] * p_pt[0] + mtx[4] * p_pt[1] + mtx[ 8] * p_pt[2] + mtx[12],
+			mtx[1] * p_pt[0] + mtx[5] * p_pt[1] + mtx[ 9] * p_pt[2] + mtx[13],
+			mtx[2] * p_pt[0] + mtx[6] * p_pt[1] + mtx[10] * p_pt[2] + mtx[14]
 		};
 	}
 
 	Point3r operator*( Point3r const & p_pt, Matrix4x4r const & p_mtx )
 	{
-		real const * l_mtx = p_mtx.const_ptr();
+		real const * mtx = p_mtx.const_ptr();
 		return Point3r
 		{
-			l_mtx[0] * p_pt[0] + l_mtx[1] * p_pt[1] + l_mtx[ 2] * p_pt[2] + l_mtx[ 3],
-			l_mtx[4] * p_pt[0] + l_mtx[5] * p_pt[1] + l_mtx[ 6] * p_pt[2] + l_mtx[ 7],
-			l_mtx[8] * p_pt[0] + l_mtx[9] * p_pt[1] + l_mtx[10] * p_pt[2] + l_mtx[11]
+			mtx[0] * p_pt[0] + mtx[1] * p_pt[1] + mtx[ 2] * p_pt[2] + mtx[ 3],
+			mtx[4] * p_pt[0] + mtx[5] * p_pt[1] + mtx[ 6] * p_pt[2] + mtx[ 7],
+			mtx[8] * p_pt[0] + mtx[9] * p_pt[1] + mtx[10] * p_pt[2] + mtx[11]
 		};
 	}
 
@@ -115,14 +115,14 @@ namespace Castor
 			1u << 31
 		};
 
-		uint32_t l_result = 0;
+		uint32_t result = 0;
 
-		for ( uint32_t i = 0; i < TwoPows.size() && l_result < p_value; i++ )
+		for ( uint32_t i = 0; i < TwoPows.size() && result < p_value; i++ )
 		{
-			l_result = TwoPows[i];
+			result = TwoPows[i];
 		}
 
-		return l_result;
+		return result;
 	}
 }
 

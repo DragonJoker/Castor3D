@@ -1410,21 +1410,21 @@ namespace Castor
 		}
 		static inline float R32F( uint8_t const * p_pSrc )
 		{
-			float l_result{};
-			HalfToFloat( l_result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
-			return l_result;
+			float result{};
+			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
+			return result;
 		}
 		static inline float G32F( uint8_t const * p_pSrc )
 		{
-			float l_result{};
-			HalfToFloat( l_result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
-			return l_result;
+			float result{};
+			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
+			return result;
 		}
 		static inline float B32F( uint8_t const * p_pSrc )
 		{
-			float l_result{};
-			HalfToFloat( l_result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
-			return l_result;
+			float result{};
+			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
+			return result;
 		}
 		static inline float A32F( uint8_t const * )
 		{
@@ -1674,27 +1674,27 @@ namespace Castor
 		}
 		static inline float R32F( uint8_t const * p_pSrc )
 		{
-			float l_result{};
-			HalfToFloat( l_result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
-			return l_result;
+			float result{};
+			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
+			return result;
 		}
 		static inline float G32F( uint8_t const * p_pSrc )
 		{
-			float l_result{};
-			HalfToFloat( l_result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
-			return l_result;
+			float result{};
+			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
+			return result;
 		}
 		static inline float B32F( uint8_t const * p_pSrc )
 		{
-			float l_result{};
-			HalfToFloat( l_result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
-			return l_result;
+			float result{};
+			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
+			return result;
 		}
 		static inline float A32F( uint8_t const * p_pSrc )
 		{
-			float l_result{};
-			HalfToFloat( l_result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 3 );
-			return l_result;
+			float result{};
+			HalfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 3 );
+			return result;
 		}
 		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
 		{
@@ -3467,15 +3467,15 @@ namespace Castor
 
 			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 			{
-				uint32_t * l_pDst = reinterpret_cast< uint32_t * >( &p_pDst[0] );
-				l_pDst[0] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 0 ) << 0 ) | ( BIT( *p_pSrc, 0 ) << 1 ) | ( BIT( *p_pSrc, 0 ) << 2 ) | ( BIT( *p_pSrc, 0 ) << 3 ) | ( BIT( *p_pSrc, 0 ) << 4 ) | ( BIT( *p_pSrc, 0 ) << 5 ) | ( BIT( *p_pSrc, 0 ) << 6 ) | ( BIT( *p_pSrc, 0 ) << 7 ) );
-				l_pDst[1] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 1 ) << 0 ) | ( BIT( *p_pSrc, 1 ) << 1 ) | ( BIT( *p_pSrc, 1 ) << 2 ) | ( BIT( *p_pSrc, 1 ) << 3 ) | ( BIT( *p_pSrc, 1 ) << 4 ) | ( BIT( *p_pSrc, 1 ) << 5 ) | ( BIT( *p_pSrc, 1 ) << 6 ) | ( BIT( *p_pSrc, 1 ) << 7 ) );
-				l_pDst[2] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 2 ) << 0 ) | ( BIT( *p_pSrc, 2 ) << 1 ) | ( BIT( *p_pSrc, 2 ) << 2 ) | ( BIT( *p_pSrc, 2 ) << 3 ) | ( BIT( *p_pSrc, 2 ) << 4 ) | ( BIT( *p_pSrc, 2 ) << 5 ) | ( BIT( *p_pSrc, 2 ) << 6 ) | ( BIT( *p_pSrc, 2 ) << 7 ) );
-				l_pDst[3] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 3 ) << 0 ) | ( BIT( *p_pSrc, 3 ) << 1 ) | ( BIT( *p_pSrc, 3 ) << 2 ) | ( BIT( *p_pSrc, 3 ) << 3 ) | ( BIT( *p_pSrc, 3 ) << 4 ) | ( BIT( *p_pSrc, 3 ) << 5 ) | ( BIT( *p_pSrc, 3 ) << 6 ) | ( BIT( *p_pSrc, 3 ) << 7 ) );
-				l_pDst[4] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 4 ) << 0 ) | ( BIT( *p_pSrc, 4 ) << 1 ) | ( BIT( *p_pSrc, 4 ) << 2 ) | ( BIT( *p_pSrc, 4 ) << 3 ) | ( BIT( *p_pSrc, 4 ) << 4 ) | ( BIT( *p_pSrc, 4 ) << 5 ) | ( BIT( *p_pSrc, 4 ) << 6 ) | ( BIT( *p_pSrc, 4 ) << 7 ) );
-				l_pDst[5] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 5 ) << 0 ) | ( BIT( *p_pSrc, 5 ) << 1 ) | ( BIT( *p_pSrc, 5 ) << 2 ) | ( BIT( *p_pSrc, 5 ) << 3 ) | ( BIT( *p_pSrc, 5 ) << 4 ) | ( BIT( *p_pSrc, 5 ) << 5 ) | ( BIT( *p_pSrc, 5 ) << 6 ) | ( BIT( *p_pSrc, 5 ) << 7 ) );
-				l_pDst[6] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 6 ) << 0 ) | ( BIT( *p_pSrc, 6 ) << 1 ) | ( BIT( *p_pSrc, 6 ) << 2 ) | ( BIT( *p_pSrc, 6 ) << 3 ) | ( BIT( *p_pSrc, 6 ) << 4 ) | ( BIT( *p_pSrc, 6 ) << 5 ) | ( BIT( *p_pSrc, 6 ) << 6 ) | ( BIT( *p_pSrc, 6 ) << 7 ) );
-				l_pDst[7] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 7 ) << 0 ) | ( BIT( *p_pSrc, 7 ) << 1 ) | ( BIT( *p_pSrc, 7 ) << 2 ) | ( BIT( *p_pSrc, 7 ) << 3 ) | ( BIT( *p_pSrc, 7 ) << 4 ) | ( BIT( *p_pSrc, 7 ) << 5 ) | ( BIT( *p_pSrc, 7 ) << 6 ) | ( BIT( *p_pSrc, 7 ) << 7 ) );
+				uint32_t * pDst = reinterpret_cast< uint32_t * >( &p_pDst[0] );
+				pDst[0] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 0 ) << 0 ) | ( BIT( *p_pSrc, 0 ) << 1 ) | ( BIT( *p_pSrc, 0 ) << 2 ) | ( BIT( *p_pSrc, 0 ) << 3 ) | ( BIT( *p_pSrc, 0 ) << 4 ) | ( BIT( *p_pSrc, 0 ) << 5 ) | ( BIT( *p_pSrc, 0 ) << 6 ) | ( BIT( *p_pSrc, 0 ) << 7 ) );
+				pDst[1] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 1 ) << 0 ) | ( BIT( *p_pSrc, 1 ) << 1 ) | ( BIT( *p_pSrc, 1 ) << 2 ) | ( BIT( *p_pSrc, 1 ) << 3 ) | ( BIT( *p_pSrc, 1 ) << 4 ) | ( BIT( *p_pSrc, 1 ) << 5 ) | ( BIT( *p_pSrc, 1 ) << 6 ) | ( BIT( *p_pSrc, 1 ) << 7 ) );
+				pDst[2] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 2 ) << 0 ) | ( BIT( *p_pSrc, 2 ) << 1 ) | ( BIT( *p_pSrc, 2 ) << 2 ) | ( BIT( *p_pSrc, 2 ) << 3 ) | ( BIT( *p_pSrc, 2 ) << 4 ) | ( BIT( *p_pSrc, 2 ) << 5 ) | ( BIT( *p_pSrc, 2 ) << 6 ) | ( BIT( *p_pSrc, 2 ) << 7 ) );
+				pDst[3] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 3 ) << 0 ) | ( BIT( *p_pSrc, 3 ) << 1 ) | ( BIT( *p_pSrc, 3 ) << 2 ) | ( BIT( *p_pSrc, 3 ) << 3 ) | ( BIT( *p_pSrc, 3 ) << 4 ) | ( BIT( *p_pSrc, 3 ) << 5 ) | ( BIT( *p_pSrc, 3 ) << 6 ) | ( BIT( *p_pSrc, 3 ) << 7 ) );
+				pDst[4] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 4 ) << 0 ) | ( BIT( *p_pSrc, 4 ) << 1 ) | ( BIT( *p_pSrc, 4 ) << 2 ) | ( BIT( *p_pSrc, 4 ) << 3 ) | ( BIT( *p_pSrc, 4 ) << 4 ) | ( BIT( *p_pSrc, 4 ) << 5 ) | ( BIT( *p_pSrc, 4 ) << 6 ) | ( BIT( *p_pSrc, 4 ) << 7 ) );
+				pDst[5] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 5 ) << 0 ) | ( BIT( *p_pSrc, 5 ) << 1 ) | ( BIT( *p_pSrc, 5 ) << 2 ) | ( BIT( *p_pSrc, 5 ) << 3 ) | ( BIT( *p_pSrc, 5 ) << 4 ) | ( BIT( *p_pSrc, 5 ) << 5 ) | ( BIT( *p_pSrc, 5 ) << 6 ) | ( BIT( *p_pSrc, 5 ) << 7 ) );
+				pDst[6] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 6 ) << 0 ) | ( BIT( *p_pSrc, 6 ) << 1 ) | ( BIT( *p_pSrc, 6 ) << 2 ) | ( BIT( *p_pSrc, 6 ) << 3 ) | ( BIT( *p_pSrc, 6 ) << 4 ) | ( BIT( *p_pSrc, 6 ) << 5 ) | ( BIT( *p_pSrc, 6 ) << 6 ) | ( BIT( *p_pSrc, 6 ) << 7 ) );
+				pDst[7] = 0xFFFFFF00 + ( ( BIT( *p_pSrc, 7 ) << 0 ) | ( BIT( *p_pSrc, 7 ) << 1 ) | ( BIT( *p_pSrc, 7 ) << 2 ) | ( BIT( *p_pSrc, 7 ) << 3 ) | ( BIT( *p_pSrc, 7 ) << 4 ) | ( BIT( *p_pSrc, 7 ) << 5 ) | ( BIT( *p_pSrc, 7 ) << 6 ) | ( BIT( *p_pSrc, 7 ) << 7 ) );
 				p_pSrc += pixel_definitions< PFSrc >::Size;
 				p_pDst += pixel_definitions< PFDst >::Size;
 			}
@@ -3493,16 +3493,16 @@ namespace Castor
 		{
 			inline void operator()( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
 			{
-				uint8_t const * l_pSrc = &p_pSrcBuffer[0];
-				uint8_t * l_pDst = &p_pDstBuffer[0];
-				uint32_t l_uiSrcCount = 0;
-				uint32_t l_count = p_uiSrcSize / pixel_definitions< PFSrc >::Size;
+				uint8_t const * pSrc = &p_pSrcBuffer[0];
+				uint8_t * pDst = &p_pDstBuffer[0];
+				uint32_t uiSrcCount = 0;
+				uint32_t count = p_uiSrcSize / pixel_definitions< PFSrc >::Size;
 				REQUIRE( p_uiSrcSize / pixel_definitions< PFSrc >::Size == p_uiDstSize / pixel_definitions< PFDst >::Size );
-				pixel_converter< PFSrc, PFDst > l_converter;
+				pixel_converter< PFSrc, PFDst > converter;
 
-				for ( uint32_t i = 0; i < l_count; i++ )
+				for ( uint32_t i = 0; i < count; i++ )
 				{
-					l_converter( l_pSrc, l_pDst );
+					converter( pSrc, pDst );
 				}
 			}
 		};
@@ -3550,15 +3550,15 @@ namespace Castor
 				__m128i gb;
 				__m128i argb0123;
 				__m128i argb4567;
-				__m128i const *	l_pBufferIn		= l_pBufferIn = reinterpret_cast< __m128i const * >( p_pSrcBuffer );
-				__m128i const *	l_pBufferInEnd	= reinterpret_cast< __m128i const * >( p_pSrcBuffer + p_uiSrcSize );
-				__m128i const *	l_pLineIn		= l_pBufferIn;
-				__m128i 	*	l_pBufferOut	= reinterpret_cast< __m128i * >( p_pDstBuffer );
+				__m128i const *	pBufferIn		= pBufferIn = reinterpret_cast< __m128i const * >( p_pSrcBuffer );
+				__m128i const *	pBufferInEnd	= reinterpret_cast< __m128i const * >( p_pSrcBuffer + p_uiSrcSize );
+				__m128i const *	pLineIn		= pBufferIn;
+				__m128i 	*	pBufferOut	= reinterpret_cast< __m128i * >( p_pDstBuffer );
 
-				while ( l_pBufferIn != l_pBufferInEnd )
+				while ( pBufferIn != pBufferInEnd )
 				{
 					// On récupère les composantes YUV
-					yuv			= _mm_load_si128( l_pLineIn++ );
+					yuv			= _mm_load_si128( pLineIn++ );
 					// On récupère dans Y les Y uniquement
 					y			= _mm_and_si128( yuv, ymask );
 					y			= _mm_sub_epi16( y, ysub );
@@ -3594,10 +3594,10 @@ namespace Castor
 					argb0123	= _mm_or_si128( amask, argb0123 );	// rgbFrgbFrgbFrgbF
 					argb4567	= _mm_or_si128( amask, argb4567 );	// rgbFrgbFrgbFrgbF
 					// Enfin on fout tout ce bordel dans le buffer
-					std::memcpy( l_pBufferOut, &argb0123, sizeof( __m128i ) );
-					l_pBufferOut++;
-					std::memcpy( l_pBufferOut, &argb4567, sizeof( __m128i ) );
-					l_pBufferOut++;
+					std::memcpy( pBufferOut, &argb0123, sizeof( __m128i ) );
+					pBufferOut++;
+					std::memcpy( pBufferOut, &argb4567, sizeof( __m128i ) );
+					pBufferOut++;
 				}
 			}
 		};
@@ -3641,15 +3641,15 @@ namespace Castor
 				__m128i gb;
 				__m128i argb0123;
 				__m128i argb4567;
-				__m128i const *	l_pBufferIn		= l_pBufferIn = reinterpret_cast< __m128i const * >( p_pSrcBuffer );
-				__m128i const *	l_pBufferInEnd	= reinterpret_cast< __m128i const * >( p_pSrcBuffer + p_uiSrcSize );
-				__m128i const *	l_pLineIn		= l_pBufferIn;
-				uint8_t 	*	l_pBufferOut	= p_pDstBuffer;
+				__m128i const *	pBufferIn		= pBufferIn = reinterpret_cast< __m128i const * >( p_pSrcBuffer );
+				__m128i const *	pBufferInEnd	= reinterpret_cast< __m128i const * >( p_pSrcBuffer + p_uiSrcSize );
+				__m128i const *	pLineIn		= pBufferIn;
+				uint8_t 	*	pBufferOut	= p_pDstBuffer;
 
-				while ( l_pBufferIn != l_pBufferInEnd )
+				while ( pBufferIn != pBufferInEnd )
 				{
 					// On récupère les composantes YUV
-					yuv			= _mm_load_si128( l_pLineIn++ );
+					yuv			= _mm_load_si128( pLineIn++ );
 					// On récupère dans Y les Y uniquement
 					y			= _mm_and_si128( yuv, ymask );
 					y			= _mm_sub_epi16( y, ysub );
@@ -3684,29 +3684,29 @@ namespace Castor
 					argb4567	= _mm_unpackhi_epi16( r1, gb );		// rgb0rgb0rgb0rgb0
 					// Enfin on fout tout ce bordel dans le buffer
 					argb0123 = _mm_srli_si128( argb0123, 1 );
-					std::memcpy( l_pBufferOut, &argb0123, 3 );
-					l_pBufferOut += 3;
+					std::memcpy( pBufferOut, &argb0123, 3 );
+					pBufferOut += 3;
 					argb0123 = _mm_srli_si128( argb0123, 4 );
-					std::memcpy( l_pBufferOut, &argb0123, 3 );
-					l_pBufferOut += 3;
+					std::memcpy( pBufferOut, &argb0123, 3 );
+					pBufferOut += 3;
 					argb0123 = _mm_srli_si128( argb0123, 4 );
-					std::memcpy( l_pBufferOut, &argb0123, 3 );
-					l_pBufferOut += 3;
+					std::memcpy( pBufferOut, &argb0123, 3 );
+					pBufferOut += 3;
 					argb0123 = _mm_srli_si128( argb0123, 4 );
-					std::memcpy( l_pBufferOut, &argb0123, 3 );
-					l_pBufferOut += 3;
+					std::memcpy( pBufferOut, &argb0123, 3 );
+					pBufferOut += 3;
 					argb4567 = _mm_srli_si128( argb4567, 1 );
-					std::memcpy( l_pBufferOut, &argb4567, 3 );
-					l_pBufferOut += 3;
+					std::memcpy( pBufferOut, &argb4567, 3 );
+					pBufferOut += 3;
 					argb4567 = _mm_srli_si128( argb4567, 4 );
-					std::memcpy( l_pBufferOut, &argb4567, 3 );
-					l_pBufferOut += 3;
+					std::memcpy( pBufferOut, &argb4567, 3 );
+					pBufferOut += 3;
 					argb4567 = _mm_srli_si128( argb4567, 4 );
-					std::memcpy( l_pBufferOut, &argb4567, 3 );
-					l_pBufferOut += 3;
+					std::memcpy( pBufferOut, &argb4567, 3 );
+					pBufferOut += 3;
 					argb4567 = _mm_srli_si128( argb4567, 4 );
-					std::memcpy( l_pBufferOut, &argb4567, 3 );
-					l_pBufferOut += 3;
+					std::memcpy( pBufferOut, &argb4567, 3 );
+					pBufferOut += 3;
 				}
 			}
 		};
@@ -4122,36 +4122,36 @@ namespace Castor
 			{
 				static float GetFloat( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
-					float l_result = 0.0f;
+					float result = 0.0f;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eRed:
-						l_result = component< PF >::R32F( p_pixel.const_ptr() );
+						result = component< PF >::R32F( p_pixel.const_ptr() );
 						break;
 
 					case PixelComponent::eGreen:
-						l_result = component< PF >::G32F( p_pixel.const_ptr() );
+						result = component< PF >::G32F( p_pixel.const_ptr() );
 						break;
 
 					case PixelComponent::eBlue:
-						l_result = component< PF >::B32F( p_pixel.const_ptr() );
+						result = component< PF >::B32F( p_pixel.const_ptr() );
 						break;
 
 					case PixelComponent::eAlpha:
-						l_result = component< PF >::A32F( p_pixel.const_ptr() );
+						result = component< PF >::A32F( p_pixel.const_ptr() );
 						break;
 
 					case PixelComponent::eLuminance:
-						l_result = component< PF >::L32F( p_pixel.const_ptr() );
+						result = component< PF >::L32F( p_pixel.const_ptr() );
 						break;
 
 					default:
-						l_result = 0;
+						result = 0;
 						break;
 					}
 
-					return l_result;
+					return result;
 				}
 
 				static void SetFloat( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
@@ -4185,36 +4185,36 @@ namespace Castor
 
 				static uint8_t GetByte( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
-					uint8_t l_result = 0;
+					uint8_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eRed:
-						l_result = component< PF >::R8( p_pixel.const_ptr() );
+						result = component< PF >::R8( p_pixel.const_ptr() );
 						break;
 
 					case PixelComponent::eGreen:
-						l_result = component< PF >::G8( p_pixel.const_ptr() );
+						result = component< PF >::G8( p_pixel.const_ptr() );
 						break;
 
 					case PixelComponent::eBlue:
-						l_result = component< PF >::B8( p_pixel.const_ptr() );
+						result = component< PF >::B8( p_pixel.const_ptr() );
 						break;
 
 					case PixelComponent::eAlpha:
-						l_result = component< PF >::A8( p_pixel.const_ptr() );
+						result = component< PF >::A8( p_pixel.const_ptr() );
 						break;
 
 					case PixelComponent::eLuminance:
-						l_result = component< PF >::L8( p_pixel.const_ptr() );
+						result = component< PF >::L8( p_pixel.const_ptr() );
 						break;
 
 					default:
-						l_result = 0;
+						result = 0;
 						break;
 					}
 
-					return l_result;
+					return result;
 				}
 
 				static void SetByte( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
@@ -4252,24 +4252,24 @@ namespace Castor
 			{
 				static float GetFloat( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
-					float l_result = 0.0f;
+					float result = 0.0f;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						l_result = float( component< PF >::D32F( p_pixel.const_ptr() ) );
+						result = float( component< PF >::D32F( p_pixel.const_ptr() ) );
 						break;
 
 					case PixelComponent::eStencil:
-						l_result = float( component< PF >::S32F( p_pixel.const_ptr() ) );
+						result = float( component< PF >::S32F( p_pixel.const_ptr() ) );
 						break;
 
 					default:
-						l_result = 0;
+						result = 0;
 						break;
 					}
 
-					return l_result;
+					return result;
 				}
 
 				static void SetFloat( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
@@ -4291,24 +4291,24 @@ namespace Castor
 
 				static uint8_t GetByte( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
-					uint8_t l_result = 0;
+					uint8_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						l_result = uint8_t( component< PF >::D32( p_pixel.const_ptr() ) >> 24 );
+						result = uint8_t( component< PF >::D32( p_pixel.const_ptr() ) >> 24 );
 						break;
 
 					case PixelComponent::eStencil:
-						l_result = uint8_t( component< PF >::S8( p_pixel.const_ptr() ) );
+						result = uint8_t( component< PF >::S8( p_pixel.const_ptr() ) );
 						break;
 
 					default:
-						l_result = 0;
+						result = 0;
 						break;
 					}
 
-					return l_result;
+					return result;
 				}
 
 				static void SetByte( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
@@ -4330,20 +4330,20 @@ namespace Castor
 
 				static uint16_t GetUInt16( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
-					uint32_t l_result = 0;
+					uint32_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						l_result = component< PF >::D16( p_pixel.const_ptr() );
+						result = component< PF >::D16( p_pixel.const_ptr() );
 						break;
 
 					default:
-						l_result = 0;
+						result = 0;
 						break;
 					}
 
-					return l_result;
+					return result;
 				}
 
 				static void SetUInt16( Pixel< PF > & p_pixel, PixelComponent p_component, uint16_t p_value )
@@ -4361,20 +4361,20 @@ namespace Castor
 
 				static uint32_t GetUInt24( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
-					uint32_t l_result = 0;
+					uint32_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						l_result = component< PF >::D24( p_pixel.const_ptr() );
+						result = component< PF >::D24( p_pixel.const_ptr() );
 						break;
 
 					default:
-						l_result = 0;
+						result = 0;
 						break;
 					}
 
-					return l_result;
+					return result;
 				}
 
 				static void SetUInt24( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
@@ -4392,20 +4392,20 @@ namespace Castor
 
 				static uint32_t GetUInt32( Pixel< PF > const & p_pixel, PixelComponent p_component )
 				{
-					uint32_t l_result = 0;
+					uint32_t result = 0;
 
 					switch ( p_component )
 					{
 					case PixelComponent::eDepth:
-						l_result = component< PF >::D32( p_pixel.const_ptr() );
+						result = component< PF >::D32( p_pixel.const_ptr() );
 						break;
 
 					default:
-						l_result = 0;
+						result = 0;
 						break;
 					}
 
-					return l_result;
+					return result;
 				}
 
 				static void SetUInt32( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )

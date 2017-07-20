@@ -45,8 +45,8 @@ namespace Castor
 
 	Path & Path::operator=( Path const & p_data )
 	{
-		Path l_path( p_data );
-		std::swap( *this, l_path );
+		Path path( p_data );
+		std::swap( *this, path );
 		return *this;
 	}
 
@@ -117,184 +117,184 @@ namespace Castor
 
 	Path Path::GetPath()const
 	{
-		Path l_result;
-		std::size_t l_index = find_last_of( Separator );
+		Path result;
+		std::size_t index = find_last_of( Separator );
 
-		if ( l_index != String::npos )
+		if ( index != String::npos )
 		{
-			l_result = Path{ substr( 0, l_index ) };
+			result = Path{ substr( 0, index ) };
 		}
 
-		return l_result;
+		return result;
 	}
 
 	Path Path::GetFileName( bool p_withExtension )const
 	{
-		Path l_result = ( * this );
-		std::size_t l_index = find_last_of( Separator );
+		Path result = ( * this );
+		std::size_t index = find_last_of( Separator );
 
-		if ( l_index != String::npos )
+		if ( index != String::npos )
 		{
-			l_result = Path{ substr( l_index + 1, String::npos ) };
+			result = Path{ substr( index + 1, String::npos ) };
 		}
 
 		if ( !p_withExtension )
 		{
-			l_index = l_result.find_last_of( cuT( "." ) );
+			index = result.find_last_of( cuT( "." ) );
 
-			if ( l_index != String::npos )
+			if ( index != String::npos )
 			{
-				l_result = Path{ l_result.substr( 0, l_index ) };
+				result = Path{ result.substr( 0, index ) };
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	Path Path::GetFullFileName()const
 	{
-		Path l_result = ( * this );
-		std::size_t l_index = find_last_of( Separator );
+		Path result = ( * this );
+		std::size_t index = find_last_of( Separator );
 
-		if ( l_index != String::npos )
+		if ( index != String::npos )
 		{
-			l_result = Path{ substr( l_index + 1, String::npos ) };
+			result = Path{ substr( index + 1, String::npos ) };
 		}
 
-		return l_result;
+		return result;
 	}
 
 	String Path::GetExtension()const
 	{
-		String l_result = ( * this );
-		std::size_t l_index = find_last_of( cuT( "." ) );
+		String result = ( * this );
+		std::size_t index = find_last_of( cuT( "." ) );
 
-		if ( l_index != String::npos )
+		if ( index != String::npos )
 		{
-			l_result = substr( l_index + 1, String::npos );
+			result = substr( index + 1, String::npos );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Path::DoNormalise()
 	{
 		if ( !empty() )
 		{
-			String l_begin;
-			String l_end;
+			String begin;
+			String end;
 
 			if ( substr( 0, 2 ) == cuT( "\\\\" ) )
 			{
-				l_begin = cuT( "\\\\" );
+				begin = cuT( "\\\\" );
 				assign( substr( 2 ) );
 			}
 			else if ( substr( 0, 2 ) == cuT( "//" ) )
 			{
-				l_begin = cuT( "/" );
+				begin = cuT( "/" );
 				assign( substr( 2 ) );
 			}
 			else if ( substr( 0, 1 ) == cuT( "/" ) )
 			{
-				l_begin = cuT( "/" );
+				begin = cuT( "/" );
 				assign( substr( 1 ) );
 			}
 
-			xchar l_sep[3] = { Separator, 0 };
-			String l_tmp( *this );
-			string::replace( l_tmp, cuT( "/" ), l_sep );
-			string::replace( l_tmp, cuT( "\\" ), l_sep );
+			xchar sep[3] = { Separator, 0 };
+			String tmp( *this );
+			string::replace( tmp, cuT( "/" ), sep );
+			string::replace( tmp, cuT( "\\" ), sep );
 
 			if ( this->at( this->size() - 1 ) == Separator )
 			{
-				l_end = Separator;
+				end = Separator;
 			}
 
-			StringArray l_folders = string::split( l_tmp, l_sep, 1000, false );
-			std::list< String > l_list( l_folders.begin(), l_folders.end() );
-			l_tmp.clear();
-			std::list< String >::iterator l_it = std::find( l_list.begin(), l_list.end(), cuT( ".." ) );
+			StringArray folders = string::split( tmp, sep, 1000, false );
+			std::list< String > list( folders.begin(), folders.end() );
+			tmp.clear();
+			std::list< String >::iterator it = std::find( list.begin(), list.end(), cuT( ".." ) );
 
-			while ( l_list.size() > 1 && l_it != l_list.end() )
+			while ( list.size() > 1 && it != list.end() )
 			{
-				if ( l_it == l_list.begin() )
+				if ( it == list.begin() )
 				{
 					// The folder looks like ../<something>, stop here.
-					l_it = l_list.end();
+					it = list.end();
 				}
 				else
 				{
 					// The folder looks like <something>/../<something else> remove the previous folder
-					std::list< String >::iterator l_itPrv = l_it;
-					l_itPrv--;
-					l_list.erase( l_it );
-					l_list.erase( l_itPrv );
-					l_it = std::find( l_list.begin(), l_list.end(), cuT( ".." ) );
+					std::list< String >::iterator itPrv = it;
+					itPrv--;
+					list.erase( it );
+					list.erase( itPrv );
+					it = std::find( list.begin(), list.end(), cuT( ".." ) );
 				}
 			}
 
-			l_tmp = l_begin;
+			tmp = begin;
 
-			for ( auto l_folder : l_list )
+			for ( auto folder : list )
 			{
-				if ( !l_tmp.empty() )
+				if ( !tmp.empty() )
 				{
-					l_tmp += Separator;
+					tmp += Separator;
 				}
 
-				l_tmp += l_folder;
+				tmp += folder;
 			}
 
-			assign( l_tmp + l_end );
+			assign( tmp + end );
 		}
 	}
 
 	Path operator/( Path const & p_lhs, Path const & p_rhs )
 	{
-		Path l_path{ p_lhs };
-		l_path /= p_rhs;
-		return l_path;
+		Path path{ p_lhs };
+		path /= p_rhs;
+		return path;
 	}
 
 	Path operator/( Path const & p_lhs, String const & p_rhs )
 	{
-		Path l_path{ p_lhs };
-		l_path /= p_rhs;
-		return l_path;
+		Path path{ p_lhs };
+		path /= p_rhs;
+		return path;
 	}
 
 	Path operator/( Path const & p_lhs, char const * p_rhs )
 	{
-		Path l_path{ p_lhs };
-		l_path /= p_rhs;
-		return l_path;
+		Path path{ p_lhs };
+		path /= p_rhs;
+		return path;
 	}
 
 	Path operator/( Path const & p_lhs, wchar_t const * p_rhs )
 	{
-		Path l_path{ p_lhs };
-		l_path /= p_rhs;
-		return l_path;
+		Path path{ p_lhs };
+		path /= p_rhs;
+		return path;
 	}
 
 	Path operator/( String const & p_lhs, Path const & p_rhs )
 	{
-		Path l_path{ p_lhs };
-		l_path /= p_rhs;
-		return l_path;
+		Path path{ p_lhs };
+		path /= p_rhs;
+		return path;
 	}
 
 	Path operator/( char const * p_lhs, Path const & p_rhs )
 	{
-		Path l_path{ p_lhs };
-		l_path /= p_rhs;
-		return l_path;
+		Path path{ p_lhs };
+		path /= p_rhs;
+		return path;
 	}
 
 	Path operator/( wchar_t const * p_lhs, Path const & p_rhs )
 	{
-		Path l_path{ p_lhs };
-		l_path /= p_rhs;
-		return l_path;
+		Path path{ p_lhs };
+		path /= p_rhs;
+		return path;
 	}
 }

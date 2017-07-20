@@ -9,7 +9,7 @@ namespace Castor3D
 		template< typename T, typename U >
 		SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat )
 		{
-			SquareMatrix< T, 4 > l_rotate;
+			SquareMatrix< T, 4 > rotate;
 			auto const qxx( p_quat.quat.x * p_quat.quat.x );
 			auto const qyy( p_quat.quat.y * p_quat.quat.y );
 			auto const qzz( p_quat.quat.z * p_quat.quat.z );
@@ -20,27 +20,27 @@ namespace Castor3D
 			auto const qwy( p_quat.quat.w * p_quat.quat.y );
 			auto const qwz( p_quat.quat.w * p_quat.quat.z );
 
-			l_rotate[0][0] = T( 1 - 2 * ( qyy + qzz ) );
-			l_rotate[0][1] = T( 2 * ( qxy - qwz ) );
-			l_rotate[0][2] = T( 2 * ( qxz + qwy ) );
-			l_rotate[0][3] = T( 0 );
+			rotate[0][0] = T( 1 - 2 * ( qyy + qzz ) );
+			rotate[0][1] = T( 2 * ( qxy - qwz ) );
+			rotate[0][2] = T( 2 * ( qxz + qwy ) );
+			rotate[0][3] = T( 0 );
 
-			l_rotate[1][0] = T( 2 * ( qxy + qwz ) );
-			l_rotate[1][1] = T( 1 - 2 * ( qxx + qzz ) );
-			l_rotate[1][2] = T( 2 * ( qyz - qwx ) );
-			l_rotate[1][3] = T( 0 );
+			rotate[1][0] = T( 2 * ( qxy + qwz ) );
+			rotate[1][1] = T( 1 - 2 * ( qxx + qzz ) );
+			rotate[1][2] = T( 2 * ( qyz - qwx ) );
+			rotate[1][3] = T( 0 );
 
-			l_rotate[2][0] = T( 2 * ( qxz - qwy ) );
-			l_rotate[2][1] = T( 2 * ( qyz + qwx ) );
-			l_rotate[2][2] = T( 1 - 2 * ( qxx + qyy ) );
-			l_rotate[3][3] = T( 0 );
+			rotate[2][0] = T( 2 * ( qxz - qwy ) );
+			rotate[2][1] = T( 2 * ( qyz + qwx ) );
+			rotate[2][2] = T( 1 - 2 * ( qxx + qyy ) );
+			rotate[3][3] = T( 0 );
 
-			l_rotate[3][0] = T( 0 );
-			l_rotate[3][1] = T( 0 );
-			l_rotate[3][2] = T( 0 );
-			l_rotate[3][3] = T( 1 );
+			rotate[3][0] = T( 0 );
+			rotate[3][1] = T( 0 );
+			rotate[3][2] = T( 0 );
+			rotate[3][3] = T( 1 );
 
-			return p_matrix *= l_rotate;
+			return p_matrix *= rotate;
 		}
 	}
 

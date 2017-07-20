@@ -13,9 +13,9 @@ namespace GLSL
 
 			static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
 			{
-				Ret l_return( p_a.m_writer );
-				l_return.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
-				return l_return;
+				Ret result( p_a.m_writer );
+				result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+				return result;
 			}
 		};
 
@@ -28,9 +28,9 @@ namespace GLSL
 
 			static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
 			{
-				Ret l_return( p_a.m_writer, Castor::String(), p_a.IsEnabled() );
-				l_return.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
-				return l_return;
+				Ret result( p_a.m_writer, Castor::String(), p_a.IsEnabled() );
+				result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+				return result;
 			}
 		};
 
@@ -43,9 +43,9 @@ namespace GLSL
 
 			static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
 			{
-				Ret l_return( p_a.m_writer, Castor::String(), p_b.IsEnabled() );
-				l_return.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
-				return l_return;
+				Ret result( p_a.m_writer, Castor::String(), p_b.IsEnabled() );
+				result.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+				return result;
 			}
 		};
 
@@ -399,7 +399,7 @@ namespace GLSL
 	template< typename Value >
 	inline Value log( Value const & p_value )
 	{
-		return WriteFunctionCall< Value >( p_value.m_input->m_writer, cuT( "log" ), p_value );
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "log" ), p_value );
 	}
 
 	template< typename Value >

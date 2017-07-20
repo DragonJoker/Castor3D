@@ -46,9 +46,9 @@ namespace GlRender
 
 		static inline uint32_t Apply( CreateFunction p_creator )
 		{
-			uint32_t l_return = -1;
-			p_creator( 1, &l_return );
-			return l_return;
+			uint32_t result = -1;
+			p_creator( 1, &result );
+			return result;
 		}
 	};
 
@@ -173,14 +173,14 @@ namespace GlRender
 		*/
 		inline bool Create()
 		{
-			bool l_return = IsValid();
+			bool result = IsValid();
 
-			if ( !l_return )
+			if ( !result )
 			{
-				l_return = DoCreate();
+				result = DoCreate();
 			}
 
-			if ( l_return )
+			if ( result )
 			{
 				glTrack( Holder::GetOpenGl(), m_typeName, this );
 
@@ -191,7 +191,7 @@ namespace GlRender
 #endif
 			}
 
-			return l_return;
+			return result;
 		}
 
 		/** Destroys the object on GPU, if valid.

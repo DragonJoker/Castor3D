@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -31,49 +31,49 @@ namespace GLSL
 		: public LightingModel
 	{
 	public:
-		GlslWriter_API PhongLightingModel( ShadowType p_shadows, GlslWriter & p_writer );
-		GlslWriter_API static std::shared_ptr< LightingModel > Create( ShadowType p_shadows, GlslWriter & p_writer );
-		GlslWriter_API void ComputeCombinedLighting( Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeDirectionalLight( DirectionalLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputePointLight( PointLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeSpotLight( SpotLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOneDirectionalLight( DirectionalLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOnePointLight( PointLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
-		GlslWriter_API void ComputeOneSpotLight( SpotLight const & p_light
-			, Vec3 const & p_worldEye
-			, Float const & p_shininess
-			, Int const & p_receivesShadows
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
+		GlslWriter_API PhongLightingModel( ShadowType shadows, GlslWriter & writer );
+		GlslWriter_API static std::shared_ptr< LightingModel > Create( ShadowType shadows, GlslWriter & writer );
+		GlslWriter_API void ComputeCombinedLighting( Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output );
+		GlslWriter_API void ComputeDirectionalLight( DirectionalLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output );
+		GlslWriter_API void ComputePointLight( PointLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output );
+		GlslWriter_API void ComputeSpotLight( SpotLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output );
+		GlslWriter_API void ComputeOneDirectionalLight( DirectionalLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output );
+		GlslWriter_API void ComputeOnePointLight( PointLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output );
+		GlslWriter_API void ComputeOneSpotLight( SpotLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output );
 
 	protected:
 		void DoDeclareModel();
@@ -84,13 +84,13 @@ namespace GLSL
 		void Declare_ComputeOnePointLight()override;
 		void Declare_ComputeOneSpotLight()override;
 
-		void DoComputeLight( Light const & p_light
-			, Vec3 const & p_worldEye
-			, Vec3 const & p_lightDirection
-			, Float const & p_shininess
-			, Float const & p_shadowFactor
-			, FragmentInput const & p_fragmentIn
-			, OutputComponents & p_output );
+		void DoComputeLight( Light const & light
+			, Vec3 const & worldEye
+			, Vec3 const & lightDirection
+			, Float const & shininess
+			, Float const & shadowFactor
+			, FragmentInput const & fragmentIn
+			, OutputComponents & output );
 		void DoDeclare_ComputeLight();
 
 	public:

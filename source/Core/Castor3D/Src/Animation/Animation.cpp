@@ -10,19 +10,19 @@ namespace Castor3D
 
 	bool BinaryWriter< Animation >::DoWrite( Animation const & p_obj )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( real( p_obj.GetLength().count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
+			result = DoWriteChunk( real( p_obj.GetLength().count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
 			switch ( p_obj.GetType() )
 			{
@@ -35,44 +35,44 @@ namespace Castor3D
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< Animation >::DoParse( Animation & p_obj )
 	{
-		bool l_return = true;
-		String l_name;
-		BinaryChunk l_chunk;
-		real l_length{ 0.0_r };
+		bool result = true;
+		String name;
+		BinaryChunk chunk;
+		real length{ 0.0_r };
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( result && DoGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.GetChunkType() )
 			{
 			case ChunkType::eName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				result = DoParseChunk( name, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_obj.m_name = l_name;
+					p_obj.m_name = name;
 				}
 
 				break;
 
 			case ChunkType::eAnimLength:
-				l_return = DoParseChunk( l_length, l_chunk );
-				p_obj.m_length = std::chrono::milliseconds( uint64_t( l_length * 1000 ) );
+				result = DoParseChunk( length, chunk );
+				p_obj.m_length = std::chrono::milliseconds( uint64_t( length * 1000 ) );
 				break;
 
 			case ChunkType::eSkeletonAnimation:
-				BinaryParser< SkeletonAnimation >{}.Parse( static_cast< SkeletonAnimation & >( p_obj ), l_chunk );
+				BinaryParser< SkeletonAnimation >{}.Parse( static_cast< SkeletonAnimation & >( p_obj ), chunk );
 				break;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************

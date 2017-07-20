@@ -25,23 +25,23 @@ namespace GlRender
 
 	bool GlSampler::Initialise()
 	{
-		bool l_return = IsValid();
+		bool result = IsValid();
 
-		if ( !l_return )
+		if ( !result )
 		{
-			l_return = ObjectType::Create();
+			result = ObjectType::Create();
 
-			if ( l_return )
+			if ( result )
 			{
-				GlInterpolationMode l_minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMin ) );
-				GlInterpolationMode l_mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMip ) );
-				DoAdjustMinMipModes( l_minMode, l_mipMode );
+				GlInterpolationMode minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMin ) );
+				GlInterpolationMode mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMip ) );
+				DoAdjustMinMipModes( minMode, mipMode );
 
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eLODBias, float( GetLodBias() ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eUWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eU ) ) ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eVWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eV ) ) ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eWWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eW ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMinFilter, int( l_minMode ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMinFilter, int( minMode ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMagFilter, int( GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMag ) ) ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eBorderColour, GetBorderColour().const_ptr() );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMaxAnisotropy, float( GetMaxAnisotropy() ) );
@@ -50,7 +50,7 @@ namespace GlRender
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void GlSampler::Cleanup()

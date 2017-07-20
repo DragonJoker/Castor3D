@@ -237,9 +237,9 @@ namespace Castor3D
 				m_minValues.insert( { GpuMin( i ), std::numeric_limits< int32_t >::max() } );
 			}
 
-			for ( auto & l_value : m_useShader )
+			for ( auto & value : m_useShader )
 			{
-				l_value = false;
+				value = false;
 			}
 		}
 		/**

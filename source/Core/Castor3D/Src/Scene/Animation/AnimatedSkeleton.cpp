@@ -24,91 +24,91 @@ namespace Castor3D
 
 	void AnimatedSkeleton::Update( std::chrono::milliseconds const & p_tslf )
 	{
-		for ( auto & l_animation : m_playingAnimations )
+		for ( auto & animation : m_playingAnimations )
 		{
-			l_animation.get().Update( p_tslf );
+			animation.get().Update( p_tslf );
 		}
 	}
 
 	void AnimatedSkeleton::FillShader( Uniform4x4r & p_variable )const
 	{
-		Skeleton & l_skeleton = m_skeleton;
+		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
 
 		if ( m_playingAnimations.empty() )
 		{
-			for ( auto l_bone : l_skeleton )
+			for ( auto bone : skeleton )
 			{
-				p_variable.SetValue( l_skeleton.GetGlobalInverseTransform(), i++ );
+				p_variable.SetValue( skeleton.GetGlobalInverseTransform(), i++ );
 			}
 		}
 		else
 		{
-			for ( auto l_bone : l_skeleton )
+			for ( auto bone : skeleton )
 			{
-				Matrix4x4r l_final{ 1.0_r };
+				Matrix4x4r final{ 1.0_r };
 
-				for ( auto & l_animation : m_playingAnimations )
+				for ( auto & animation : m_playingAnimations )
 				{
-					auto l_object = l_animation.get().GetObject( *l_bone );
+					auto object = animation.get().GetObject( *bone );
 
-					if ( l_object )
+					if ( object )
 					{
-						l_final *= l_object->GetFinalTransform();
+						final *= object->GetFinalTransform();
 					}
 				}
 
-				p_variable.SetValue( l_final, i++ );
+				p_variable.SetValue( final, i++ );
 			}
 		}
 	}
 
 	void AnimatedSkeleton::FillBuffer( uint8_t * p_buffer )const
 	{
-		Skeleton & l_skeleton = m_skeleton;
+		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
-		auto l_buffer = p_buffer;
-		auto l_stride = 16u * sizeof( float );
+		auto buffer = p_buffer;
+		auto stride = 16u * sizeof( float );
 
 		if ( m_playingAnimations.empty() )
 		{
-			for ( auto l_bone : l_skeleton )
+			for ( auto bone : skeleton )
 			{
-				std::memcpy( l_buffer, l_skeleton.GetGlobalInverseTransform().const_ptr(), l_stride );
-				l_buffer += l_stride;
+				std::memcpy( buffer, skeleton.GetGlobalInverseTransform().const_ptr(), stride );
+				buffer += stride;
 			}
 		}
 		else
 		{
-			for ( auto l_bone : l_skeleton )
+			for ( auto bone : skeleton )
 			{
-				Matrix4x4r l_final{ 1.0_r };
+				Matrix4x4r final{ 1.0_r };
 
-				for ( auto & l_animation : m_playingAnimations )
+				for ( auto & animation : m_playingAnimations )
 				{
-					auto l_object = l_animation.get().GetObject( *l_bone );
+					auto object = animation.get().GetObject( *bone );
 
-					if ( l_object )
+					if ( object )
 					{
-						l_final *= l_object->GetFinalTransform();
+						final *= object->GetFinalTransform();
 					}
 				}
 
-				std::memcpy( l_buffer, l_final.const_ptr (), l_stride );
-				l_buffer += l_stride;
+				std::memcpy( buffer, final.const_ptr (), stride );
+				buffer += stride;
 			}
 		}
 	}
 
 	void AnimatedSkeleton::DoAddAnimation( String const & p_name )
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( p_name );
 
-		if ( l_it == m_animations.end() )
+		if ( it == m_animations.end() )
 		{
-			auto & l_animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
-			auto l_instance = std::make_unique< SkeletonAnimationInstance >( *this, l_animation );
-			m_animations.emplace( p_name, std::move( l_instance ) );
+			auto & animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
+			auto instance = std::make_unique< SkeletonAnimationInstance >( *this, animation );
+			m_animations.emplace( p_name, std::move( instance ) );
 		}
 	}
 

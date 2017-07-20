@@ -18,12 +18,12 @@
 
 int main( int argc, char const * argv[] )
 {
-	int l_iReturn = EXIT_SUCCESS;
-	int l_iCount = 1;
+	int iReturn = EXIT_SUCCESS;
+	int iCount = 1;
 
 	if ( argc == 2 )
 	{
-		l_iCount = std::max< int >( 1, atoi( argv[2] ) );
+		iCount = std::max< int >( 1, atoi( argv[2] ) );
 	}
 
 #if defined( NDEBUG )
@@ -47,7 +47,7 @@ int main( int argc, char const * argv[] )
 	Testing::Register( std::make_unique< Testing::CastorUtilsZipTest >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsObjectsPoolTest >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsQuaternionTest >() );
-	BENCHLOOP( l_iCount, l_iReturn );
+	BENCHLOOP( iCount, iReturn );
 	Castor::Logger::Cleanup();
-	return l_iReturn;
+	return iReturn;
 }

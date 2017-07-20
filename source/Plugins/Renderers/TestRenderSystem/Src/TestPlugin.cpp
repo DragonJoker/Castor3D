@@ -27,8 +27,8 @@ extern "C"
 
 	C3D_Test_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
 	{
-		auto l_plugin = static_cast< Castor3D::RendererPlugin * >( p_plugin );
-		l_plugin->SetRendererType( TestRenderSystem::Type );
+		auto plugin = static_cast< Castor3D::RendererPlugin * >( p_plugin );
+		plugin->SetRendererType( TestRenderSystem::Type );
 		p_engine->GetRenderSystemFactory().Register( TestRenderSystem::Type
 			, &TestRenderSystem::Create );
 	}

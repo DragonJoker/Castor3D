@@ -72,36 +72,36 @@ namespace GuiCommon
 
 	void LightTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
-			wxColour l_colour;
+			wxColour colour;
 
-			if ( l_property->GetName() == PROPERTY_LIGHT_COLOUR )
+			if ( property->GetName() == PROPERTY_LIGHT_COLOUR )
 			{
-				l_colour << l_property->GetValue();
-				OnColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+				colour << property->GetValue();
+				OnColourChange( Colour::from_bgr( colour.GetRGB() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_LIGHT_INTENSITY )
+			else if ( property->GetName() == PROPERTY_LIGHT_INTENSITY )
 			{
-				OnIntensityChange( Point2fRefFromVariant( l_property->GetValue() ) );
+				OnIntensityChange( Point2fRefFromVariant( property->GetValue() ) );
 			}
 			else if ( m_light.GetLightType() != LightType::eDirectional )
 			{
-				if ( l_property->GetName() == PROPERTY_LIGHT_ATTENUATION )
+				if ( property->GetName() == PROPERTY_LIGHT_ATTENUATION )
 				{
-					OnAttenuationChange( Point3fRefFromVariant( l_property->GetValue() ) );
+					OnAttenuationChange( Point3fRefFromVariant( property->GetValue() ) );
 				}
 				else if ( m_light.GetLightType() == LightType::eSpot )
 				{
-					if ( l_property->GetName() == PROPERTY_LIGHT_CUT_OFF )
+					if ( property->GetName() == PROPERTY_LIGHT_CUT_OFF )
 					{
-						OnCutOffChange( l_property->GetValue() );
+						OnCutOffChange( property->GetValue() );
 					}
-					else if ( l_property->GetName() == PROPERTY_LIGHT_EXPONENT )
+					else if ( property->GetName() == PROPERTY_LIGHT_EXPONENT )
 					{
-						OnExponentChange( l_property->GetValue() );
+						OnExponentChange( property->GetValue() );
 					}
 				}
 			}
@@ -153,15 +153,15 @@ namespace GuiCommon
 
 		DoApplyChange( [x, y, z, this]()
 		{
-			Point3f l_value( x, y, z );
+			Point3f value( x, y, z );
 
 			if ( m_light.GetLightType() == LightType::ePoint )
 			{
-				m_light.GetPointLight()->SetAttenuation( l_value );
+				m_light.GetPointLight()->SetAttenuation( value );
 			}
 			else
 			{
-				m_light.GetSpotLight()->SetAttenuation( l_value );
+				m_light.GetSpotLight()->SetAttenuation( value );
 			}
 		} );
 	}

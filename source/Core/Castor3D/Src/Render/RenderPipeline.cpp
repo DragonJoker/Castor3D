@@ -43,18 +43,18 @@ namespace Castor3D
 		, m_program{ p_program }
 		, m_flags( p_flags )
 	{
-		auto l_textures = m_flags.m_textureFlags & uint16_t( TextureChannel::eAll );
+		auto textures = m_flags.m_textureFlags & uint16_t( TextureChannel::eAll );
 
-		while ( l_textures )
+		while ( textures )
 		{
 			m_textureCount++;
 
-			while ( !( l_textures & 0x01 ) )
+			while ( !( textures & 0x01 ) )
 			{
-				l_textures >>= 1;
+				textures >>= 1;
 			}
 
-			l_textures >>= 1;
+			textures >>= 1;
 		}
 
 		if ( m_program.HasObject( ShaderType::ePixel ) )
@@ -64,7 +64,8 @@ namespace Castor3D
 			m_pointShadowMaps = m_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
 			m_environmentMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
 
-			if ( CheckFlag( m_flags.m_programFlags, ProgramFlag::ePbr )
+			if ( ( CheckFlag( m_flags.m_programFlags, ProgramFlag::ePbrMetallicRoughness )
+					|| CheckFlag( m_flags.m_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
 				&& CheckFlag( m_flags.m_programFlags, ProgramFlag::eLighting ) )
 			{
 				m_irradianceMap = m_program.FindUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel );

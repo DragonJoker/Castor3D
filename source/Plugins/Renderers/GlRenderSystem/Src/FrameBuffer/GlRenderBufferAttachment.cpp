@@ -28,41 +28,41 @@ namespace GlRender
 		, Castor::PxBufferBase & p_buffer )const
 	{
 		GetOpenGl().ReadBuffer( GlBufferBinding( int( GlBufferBinding::eColor0 ) + GetAttachmentIndex() ) );
-		auto l_format = GetOpenGl().Get( p_buffer.format() );
+		auto format = GetOpenGl().Get( p_buffer.format() );
 		GetOpenGl().ReadPixels( p_offset
 			, p_buffer.dimensions()
-			, l_format.Format
-			, l_format.Type
+			, format.Format
+			, format.Type
 			, p_buffer.ptr() );
 	}
 
 	void GlRenderBufferAttachment::DoAttach()
 	{
 		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
-		uint32_t l_uiGlName;
+		uint32_t uiGlName;
 
 		switch ( GetRenderBuffer()->GetComponent() )
 		{
 		case BufferComponent::eColour:
-			l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( GetRenderBuffer() )->GetGlName();
 			break;
 
 		case BufferComponent::eDepth:
-			l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
 			break;
 
 		case BufferComponent::eStencil:
-			l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
 			break;
 
 		default:
-			l_uiGlName = uint32_t( GlInvalidIndex );
+			uiGlName = uint32_t( GlInvalidIndex );
 			break;
 		}
 
-		if ( l_uiGlName != GlInvalidIndex )
+		if ( uiGlName != GlInvalidIndex )
 		{
-			GetOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, l_uiGlName );
+			GetOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, uiGlName );
 			m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
 
 			if ( m_glStatus != GlFramebufferStatus::eUnsupported )

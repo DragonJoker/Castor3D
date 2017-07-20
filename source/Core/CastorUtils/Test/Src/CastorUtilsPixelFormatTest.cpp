@@ -98,33 +98,33 @@ namespace
 		template< typename CharType >
 		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 		{
-			uint8_t const * l_data = p_buffer.const_ptr();
-			uint32_t l_width = p_buffer.dimensions().width();
-			uint32_t l_height = p_buffer.dimensions().height();
-			CharType l_fill = p_stream.fill( '0' );
+			uint8_t const * data = p_buffer.const_ptr();
+			uint32_t width = p_buffer.dimensions().width();
+			uint32_t height = p_buffer.dimensions().height();
+			CharType fill = p_stream.fill( '0' );
 
-			for ( uint32_t x = 0; x < l_width; ++x )
+			for ( uint32_t x = 0; x < width; ++x )
 			{
-				typename PxBuffer< PF >::column const & l_column = p_buffer[x];
+				typename PxBuffer< PF >::column const & column = p_buffer[x];
 
-				for ( uint32_t y = 0; y < l_height; ++y )
+				for ( uint32_t y = 0; y < height; ++y )
 				{
-					typename PxBuffer< PF >::pixel const & l_pixel = l_column[y];
+					typename PxBuffer< PF >::pixel const & pixel = column[y];
 					p_stream << "0x";
 					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::GetByteAlpha( l_pixel ) );
+					p_stream << std::hex << int( PF::GetByteAlpha( pixel ) );
 					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::GetByteRed( l_pixel ) );
+					p_stream << std::hex << int( PF::GetByteRed( pixel ) );
 					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::GetByteGreen( l_pixel ) );
+					p_stream << std::hex << int( PF::GetByteGreen( pixel ) );
 					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::GetByteBlue( l_pixel ) ) << " ";
+					p_stream << std::hex << int( PF::GetByteBlue( pixel ) ) << " ";
 				}
 
 				p_stream << std::endl;
 			}
 
-			p_stream.fill( l_fill );
+			p_stream.fill( fill );
 			return p_stream;
 		}
 	};
@@ -135,29 +135,29 @@ namespace
 		template< typename CharType >
 		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 		{
-			uint8_t const * l_data = p_buffer.const_ptr();
-			uint32_t l_width = p_buffer.dimensions().width();
-			uint32_t l_height = p_buffer.dimensions().height();
-			CharType l_fill = p_stream.fill( '0' );
+			uint8_t const * data = p_buffer.const_ptr();
+			uint32_t width = p_buffer.dimensions().width();
+			uint32_t height = p_buffer.dimensions().height();
+			CharType fill = p_stream.fill( '0' );
 
-			for ( uint32_t x = 0; x < l_width; ++x )
+			for ( uint32_t x = 0; x < width; ++x )
 			{
-				typename PxBuffer< PF >::column const & l_column = p_buffer[x];
+				typename PxBuffer< PF >::column const & column = p_buffer[x];
 
-				for ( uint32_t y = 0; y < l_height; ++y )
+				for ( uint32_t y = 0; y < height; ++y )
 				{
-					typename PxBuffer< PF >::pixel const & l_pixel = l_column[y];
+					typename PxBuffer< PF >::pixel const & pixel = column[y];
 					p_stream << "0x";
 					p_stream.width( 6 );
-					p_stream << std::hex << int( PF::GetUInt24Depth( l_pixel ) );
+					p_stream << std::hex << int( PF::GetUInt24Depth( pixel ) );
 					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::GetByteStencil( l_pixel ) ) << " ";
+					p_stream << std::hex << int( PF::GetByteStencil( pixel ) ) << " ";
 				}
 
 				p_stream << std::endl;
 			}
 
-			p_stream.fill( l_fill );
+			p_stream.fill( fill );
 			return p_stream;
 		}
 	};
@@ -186,11 +186,11 @@ namespace
 	{
 		void operator()( Pixel< PFSrc > const & p_source )
 		{
-			Pixel< PFDst > l_dest( p_source );
-			StringStream l_stream;
-			l_stream.width( 20 );
-			l_stream << "Converted pixel : " << l_dest;
-			Logger::LogTrace( l_stream );
+			Pixel< PFDst > dest( p_source );
+			StringStream stream;
+			stream.width( 20 );
+			stream << "Converted pixel : " << dest;
+			Logger::LogTrace( stream );
 		}
 	};
 
@@ -215,26 +215,26 @@ namespace
 	{
 		void operator()()
 		{
-			Pixel< PFSrc > l_source( true );
-			PF::SetByteRed( l_source, 0x40 );
-			PF::SetByteGreen( l_source, 0x80 );
-			PF::SetByteBlue( l_source, 0xBF );
-			PF::SetByteAlpha( l_source, 0xFF );
-			StringStream l_stream;
-			l_stream.width( 20 );
-			l_stream << "Source pixel : " << l_source;
-			Logger::LogTrace( l_stream );
-			ConvertPixel< PixelFormat::eL8 >( l_source );
-			ConvertPixel< PixelFormat::eL32F >( l_source );
-			ConvertPixel< PixelFormat::eA8L8 >( l_source );
-			ConvertPixel< PixelFormat::eAL32F >( l_source );
-			ConvertPixel< PixelFormat::eA1R5G5B5 >( l_source );
-			ConvertPixel< PixelFormat::eA4R4G4B4 >( l_source );
-			ConvertPixel< PixelFormat::eR5G6B5 >( l_source );
-			ConvertPixel< PixelFormat::eR8G8B8 >( l_source );
-			ConvertPixel< PixelFormat::eA8R8G8B8 >( l_source );
-			ConvertPixel< PixelFormat::eRGB32F >( l_source );
-			ConvertPixel< PixelFormat::eRGBA32F >( l_source );
+			Pixel< PFSrc > source( true );
+			PF::SetByteRed( source, 0x40 );
+			PF::SetByteGreen( source, 0x80 );
+			PF::SetByteBlue( source, 0xBF );
+			PF::SetByteAlpha( source, 0xFF );
+			StringStream stream;
+			stream.width( 20 );
+			stream << "Source pixel : " << source;
+			Logger::LogTrace( stream );
+			ConvertPixel< PixelFormat::eL8 >( source );
+			ConvertPixel< PixelFormat::eL32F >( source );
+			ConvertPixel< PixelFormat::eA8L8 >( source );
+			ConvertPixel< PixelFormat::eAL32F >( source );
+			ConvertPixel< PixelFormat::eA1R5G5B5 >( source );
+			ConvertPixel< PixelFormat::eA4R4G4B4 >( source );
+			ConvertPixel< PixelFormat::eR5G6B5 >( source );
+			ConvertPixel< PixelFormat::eR8G8B8 >( source );
+			ConvertPixel< PixelFormat::eA8R8G8B8 >( source );
+			ConvertPixel< PixelFormat::eRGB32F >( source );
+			ConvertPixel< PixelFormat::eRGBA32F >( source );
 			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
@@ -244,18 +244,18 @@ namespace
 	{
 		void operator()()
 		{
-			Pixel< PFSrc > l_source( true );
-			PF::SetUInt32Depth( l_source, 0x10204080 );
-			PF::SetByteStencil( l_source, 0x80 );
-			StringStream l_stream;
-			l_stream.width( 20 );
-			l_stream << "Source pixel : " << l_source;
-			Logger::LogTrace( l_stream );
-			ConvertPixel< PixelFormat::eD16 >( l_source );
-			ConvertPixel< PixelFormat::eD24 >( l_source );
-			ConvertPixel< PixelFormat::eD32 >( l_source );
-			ConvertPixel< PixelFormat::eD24S8 >( l_source );
-			ConvertPixel< PixelFormat::eS8 >( l_source );
+			Pixel< PFSrc > source( true );
+			PF::SetUInt32Depth( source, 0x10204080 );
+			PF::SetByteStencil( source, 0x80 );
+			StringStream stream;
+			stream.width( 20 );
+			stream << "Source pixel : " << source;
+			Logger::LogTrace( stream );
+			ConvertPixel< PixelFormat::eD16 >( source );
+			ConvertPixel< PixelFormat::eD24 >( source );
+			ConvertPixel< PixelFormat::eD32 >( source );
+			ConvertPixel< PixelFormat::eD24S8 >( source );
+			ConvertPixel< PixelFormat::eS8 >( source );
 			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
@@ -271,11 +271,11 @@ namespace
 	{
 		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
 		{
-			std::shared_ptr< PxBuffer< PFDst > > l_dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( p_source->dimensions(), PixelFormat( PFDst ), p_source->ptr(), PixelFormat( PFSrc ) ) );
-			StringStream l_stream;
-			l_stream.width( 20 );
-			l_stream << "Converted buffer : " << *l_dest;
-			Logger::LogTrace( l_stream );
+			std::shared_ptr< PxBuffer< PFDst > > dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( p_source->dimensions(), PixelFormat( PFDst ), p_source->ptr(), PixelFormat( PFSrc ) ) );
+			StringStream stream;
+			stream.width( 20 );
+			stream << "Converted buffer : " << *dest;
+			Logger::LogTrace( stream );
 		}
 	};
 
@@ -300,38 +300,38 @@ namespace
 	{
 		void operator()()
 		{
-			Size l_size = { 16, 16 };
-			std::vector< uint8_t > l_buffer;
-			size_t l_count = l_size.width() * l_size.height() * pixel_definitions< PFSrc >::Size;
-			l_buffer.resize( l_count );
-			uint8_t l_value = 0;
-			Pixel< PFSrc > l_pixel;
+			Size size = { 16, 16 };
+			std::vector< uint8_t > buffer;
+			size_t count = size.width() * size.height() * pixel_definitions< PFSrc >::Size;
+			buffer.resize( count );
+			uint8_t value = 0;
+			Pixel< PFSrc > pixel;
 
-			for ( size_t i = 0; i < l_count; i += pixel_definitions< PFSrc >::Size )
+			for ( size_t i = 0; i < count; i += pixel_definitions< PFSrc >::Size )
 			{
-				l_pixel.link( l_buffer.data() + i );
-				PF::SetByteAlpha( l_pixel, l_value++ );
-				PF::SetByteRed( l_pixel, l_value++ );
-				PF::SetByteGreen( l_pixel, l_value++ );
-				PF::SetByteBlue( l_pixel, l_value++ );
+				pixel.link( buffer.data() + i );
+				PF::SetByteAlpha( pixel, value++ );
+				PF::SetByteRed( pixel, value++ );
+				PF::SetByteGreen( pixel, value++ );
+				PF::SetByteBlue( pixel, value++ );
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
-			StringStream l_stream;
-			l_stream.width( 20 );
-			l_stream << "Source buffer : " << *l_source;
-			Logger::LogTrace( l_stream );
-			ConvertBuffer< PixelFormat::eL8 >( l_source );
-			ConvertBuffer< PixelFormat::eL32F >( l_source );
-			ConvertBuffer< PixelFormat::eA8L8 >( l_source );
-			ConvertBuffer< PixelFormat::eAL32F >( l_source );
-			ConvertBuffer< PixelFormat::eA1R5G5B5 >( l_source );
-			ConvertBuffer< PixelFormat::eA4R4G4B4 >( l_source );
-			ConvertBuffer< PixelFormat::eR5G6B5 >( l_source );
-			ConvertBuffer< PixelFormat::eR8G8B8 >( l_source );
-			ConvertBuffer< PixelFormat::eA8R8G8B8 >( l_source );
-			ConvertBuffer< PixelFormat::eRGB32F >( l_source );
-			ConvertBuffer< PixelFormat::eRGBA32F >( l_source );
+			std::shared_ptr< PxBuffer< PFSrc > > source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size, PixelFormat( PFSrc ), buffer.data(), PixelFormat( PFSrc ) ) );
+			StringStream stream;
+			stream.width( 20 );
+			stream << "Source buffer : " << *source;
+			Logger::LogTrace( stream );
+			ConvertBuffer< PixelFormat::eL8 >( source );
+			ConvertBuffer< PixelFormat::eL32F >( source );
+			ConvertBuffer< PixelFormat::eA8L8 >( source );
+			ConvertBuffer< PixelFormat::eAL32F >( source );
+			ConvertBuffer< PixelFormat::eA1R5G5B5 >( source );
+			ConvertBuffer< PixelFormat::eA4R4G4B4 >( source );
+			ConvertBuffer< PixelFormat::eR5G6B5 >( source );
+			ConvertBuffer< PixelFormat::eR8G8B8 >( source );
+			ConvertBuffer< PixelFormat::eA8R8G8B8 >( source );
+			ConvertBuffer< PixelFormat::eRGB32F >( source );
+			ConvertBuffer< PixelFormat::eRGBA32F >( source );
 			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
@@ -341,32 +341,32 @@ namespace
 	{
 		void operator()()
 		{
-			Size l_size = { 16, 16 };
-			std::vector< uint8_t > l_buffer;
-			size_t l_count = l_size.width() * l_size.height() * pixel_definitions< PFSrc >::Size;
-			l_buffer.resize( l_count );
-			uint32_t l_depth = 0;
-			uint8_t l_stencil = 0;
-			Pixel< PFSrc > l_pixel;
+			Size size = { 16, 16 };
+			std::vector< uint8_t > buffer;
+			size_t count = size.width() * size.height() * pixel_definitions< PFSrc >::Size;
+			buffer.resize( count );
+			uint32_t depth = 0;
+			uint8_t stencil = 0;
+			Pixel< PFSrc > pixel;
 
-			for ( size_t i = 0; i < l_count; i += pixel_definitions< PFSrc >::Size )
+			for ( size_t i = 0; i < count; i += pixel_definitions< PFSrc >::Size )
 			{
-				l_pixel.link( l_buffer.data() + i );
-				PF::SetUInt32Depth( l_pixel, l_depth );
-				PF::SetByteStencil( l_pixel, l_stencil );
-				l_depth += 0x02468ACE;
-				l_stencil++;
+				pixel.link( buffer.data() + i );
+				PF::SetUInt32Depth( pixel, depth );
+				PF::SetByteStencil( pixel, stencil );
+				depth += 0x02468ACE;
+				stencil++;
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
-			StringStream l_stream;
-			l_stream.width( 20 );
-			l_stream << "Source buffer : " << *l_source;
-			Logger::LogTrace( l_stream );
-			ConvertBuffer< PixelFormat::eD16 >( l_source );
-			ConvertBuffer< PixelFormat::eD24 >( l_source );
-			ConvertBuffer< PixelFormat::eD32 >( l_source );
-			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
+			std::shared_ptr< PxBuffer< PFSrc > > source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size, PixelFormat( PFSrc ), buffer.data(), PixelFormat( PFSrc ) ) );
+			StringStream stream;
+			stream.width( 20 );
+			stream << "Source buffer : " << *source;
+			Logger::LogTrace( stream );
+			ConvertBuffer< PixelFormat::eD16 >( source );
+			ConvertBuffer< PixelFormat::eD24 >( source );
+			ConvertBuffer< PixelFormat::eD32 >( source );
+			ConvertBuffer< PixelFormat::eD24S8 >( source );
 			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
@@ -376,33 +376,33 @@ namespace
 	{
 		void operator()()
 		{
-			Size l_size = { 16, 16 };
-			std::vector< uint8_t > l_buffer;
-			size_t l_count = l_size.width() * l_size.height() * pixel_definitions< PFSrc >::Size;
-			l_buffer.resize( l_count );
-			uint32_t l_depth = 0;
-			uint8_t l_stencil = 0;
-			Pixel< PFSrc > l_pixel;
+			Size size = { 16, 16 };
+			std::vector< uint8_t > buffer;
+			size_t count = size.width() * size.height() * pixel_definitions< PFSrc >::Size;
+			buffer.resize( count );
+			uint32_t depth = 0;
+			uint8_t stencil = 0;
+			Pixel< PFSrc > pixel;
 
-			for ( size_t i = 0; i < l_count; i += pixel_definitions< PFSrc >::Size )
+			for ( size_t i = 0; i < count; i += pixel_definitions< PFSrc >::Size )
 			{
-				l_pixel.link( l_buffer.data() + i );
-				PF::SetUInt32Depth( l_pixel, l_depth );
-				PF::SetByteStencil( l_pixel, l_stencil );
-				l_depth += 0x02468ACE;
-				l_stencil++;
+				pixel.link( buffer.data() + i );
+				PF::SetUInt32Depth( pixel, depth );
+				PF::SetByteStencil( pixel, stencil );
+				depth += 0x02468ACE;
+				stencil++;
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
-			StringStream l_stream;
-			l_stream.width( 20 );
-			l_stream << "Source buffer : " << *l_source;
-			Logger::LogTrace( l_stream );
-			ConvertBuffer< PixelFormat::eD16 >( l_source );
-			ConvertBuffer< PixelFormat::eD24 >( l_source );
-			ConvertBuffer< PixelFormat::eD32 >( l_source );
-			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
-			ConvertBuffer< PixelFormat::eS8 >( l_source );
+			std::shared_ptr< PxBuffer< PFSrc > > source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size, PixelFormat( PFSrc ), buffer.data(), PixelFormat( PFSrc ) ) );
+			StringStream stream;
+			stream.width( 20 );
+			stream << "Source buffer : " << *source;
+			Logger::LogTrace( stream );
+			ConvertBuffer< PixelFormat::eD16 >( source );
+			ConvertBuffer< PixelFormat::eD24 >( source );
+			ConvertBuffer< PixelFormat::eD32 >( source );
+			ConvertBuffer< PixelFormat::eD24S8 >( source );
+			ConvertBuffer< PixelFormat::eS8 >( source );
 			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};
@@ -412,27 +412,27 @@ namespace
 	{
 		void operator()()
 		{
-			Size l_size = { 16, 16 };
-			std::vector< uint8_t > l_buffer;
-			size_t l_count = l_size.width() * l_size.height() * pixel_definitions< PFSrc >::Size;
-			l_buffer.resize( l_count );
-			uint8_t l_value = 0;
-			Pixel< PFSrc > l_pixel;
+			Size size = { 16, 16 };
+			std::vector< uint8_t > buffer;
+			size_t count = size.width() * size.height() * pixel_definitions< PFSrc >::Size;
+			buffer.resize( count );
+			uint8_t value = 0;
+			Pixel< PFSrc > pixel;
 
-			for ( size_t i = 0; i < l_count; i += pixel_definitions< PFSrc >::Size )
+			for ( size_t i = 0; i < count; i += pixel_definitions< PFSrc >::Size )
 			{
-				l_pixel.link( l_buffer.data() + i );
-				PF::SetUInt32Depth( l_pixel, l_value++ );
-				PF::SetByteStencil( l_pixel, l_value++ );
+				pixel.link( buffer.data() + i );
+				PF::SetUInt32Depth( pixel, value++ );
+				PF::SetByteStencil( pixel, value++ );
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
-			StringStream l_stream;
-			l_stream.width( 20 );
-			l_stream << "Source buffer : " << *l_source;
-			Logger::LogTrace( l_stream );
-			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
-			ConvertBuffer< PixelFormat::eS8 >( l_source );
+			std::shared_ptr< PxBuffer< PFSrc > > source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size, PixelFormat( PFSrc ), buffer.data(), PixelFormat( PFSrc ) ) );
+			StringStream stream;
+			stream.width( 20 );
+			stream << "Source buffer : " << *source;
+			Logger::LogTrace( stream );
+			ConvertBuffer< PixelFormat::eD24S8 >( source );
+			ConvertBuffer< PixelFormat::eS8 >( source );
 			Logger::LogTrace( StringStream() << std::endl );
 		}
 	};

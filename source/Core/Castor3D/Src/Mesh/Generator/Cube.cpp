@@ -27,21 +27,21 @@ namespace Castor3D
 
 	void Cube::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		String l_param;
+		String param;
 
-		if ( p_parameters.Get( cuT( "width" ), l_param ) )
+		if ( p_parameters.Get( cuT( "width" ), param ) )
 		{
-			m_width = string::to_float( l_param );
+			m_width = string::to_float( param );
 		}
 
-		if ( p_parameters.Get( cuT( "height" ), l_param ) )
+		if ( p_parameters.Get( cuT( "height" ), param ) )
 		{
-			m_height = string::to_float( l_param );
+			m_height = string::to_float( param );
 		}
 
-		if ( p_parameters.Get( cuT( "depth" ), l_param ) )
+		if ( p_parameters.Get( cuT( "depth" ), param ) )
 		{
-			m_depth = string::to_float( l_param );
+			m_depth = string::to_float( param );
 		}
 
 		int CptNegatif = 0;
@@ -61,138 +61,138 @@ namespace Castor3D
 			CptNegatif++;
 		}
 
-		BufferElementGroupSPtr l_vertex;
-		SubmeshSPtr l_pSubmesh1 = p_mesh.CreateSubmesh();
-		SubmeshSPtr l_pSubmesh2 = p_mesh.CreateSubmesh();
-		SubmeshSPtr l_pSubmesh3 = p_mesh.CreateSubmesh();
-		SubmeshSPtr l_pSubmesh4 = p_mesh.CreateSubmesh();
-		SubmeshSPtr l_pSubmesh5 = p_mesh.CreateSubmesh();
-		SubmeshSPtr l_pSubmesh6 = p_mesh.CreateSubmesh();
+		BufferElementGroupSPtr vertex;
+		SubmeshSPtr pSubmesh1 = p_mesh.CreateSubmesh();
+		SubmeshSPtr pSubmesh2 = p_mesh.CreateSubmesh();
+		SubmeshSPtr pSubmesh3 = p_mesh.CreateSubmesh();
+		SubmeshSPtr pSubmesh4 = p_mesh.CreateSubmesh();
+		SubmeshSPtr pSubmesh5 = p_mesh.CreateSubmesh();
+		SubmeshSPtr pSubmesh6 = p_mesh.CreateSubmesh();
 		//Calcul des coordonnées des 8 sommets du pavé
-		l_vertex = l_pSubmesh1->AddPoint( m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 0.0, 1.0 );
-		l_vertex = l_pSubmesh1->AddPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 0.0, 1.0 );
-		l_vertex = l_pSubmesh1->AddPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 0.0, 1.0 );
-		l_vertex = l_pSubmesh1->AddPoint( m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 0.0, 1.0 );
-		l_vertex = l_pSubmesh2->AddPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 0.0, -1.0 );
-		l_vertex = l_pSubmesh2->AddPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 0.0, -1.0 );
-		l_vertex = l_pSubmesh2->AddPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 0.0, -1.0 );
-		l_vertex = l_pSubmesh2->AddPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 0.0, -1.0 );
-		l_vertex = l_pSubmesh3->AddPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 0.0 );
-		Vertex::SetNormal( l_vertex, -1.0, 0.0, 0.0 );
-		l_vertex = l_pSubmesh3->AddPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 0.0 );
-		Vertex::SetNormal( l_vertex, -1.0, 0.0, 0.0 );
-		l_vertex = l_pSubmesh3->AddPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 1.0 );
-		Vertex::SetNormal( l_vertex, -1.0, 0.0, 0.0 );
-		l_vertex = l_pSubmesh3->AddPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 1.0 );
-		Vertex::SetNormal( l_vertex, -1.0, 0.0, 0.0 );
-		l_vertex = l_pSubmesh4->AddPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 1.0, 0.0, 0.0 );
-		l_vertex = l_pSubmesh4->AddPoint( m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 1.0, 0.0, 0.0 );
-		l_vertex = l_pSubmesh4->AddPoint( m_width / 2,  m_height / 2,  m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 1.0, 0.0, 0.0 );
-		l_vertex = l_pSubmesh4->AddPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 1.0, 0.0, 0.0 );
-		l_vertex = l_pSubmesh5->AddPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 0.0, -1.0, 0.0 );
-		l_vertex = l_pSubmesh5->AddPoint( m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 0.0, -1.0, 0.0 );
-		l_vertex = l_pSubmesh5->AddPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 0.0, -1.0, 0.0 );
-		l_vertex = l_pSubmesh5->AddPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 0.0, -1.0, 0.0 );
-		l_vertex = l_pSubmesh6->AddPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 1.0, 0.0 );
-		l_vertex = l_pSubmesh6->AddPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 0.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 1.0, 0.0 );
-		l_vertex = l_pSubmesh6->AddPoint( m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 0.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 1.0, 0.0 );
-		l_vertex = l_pSubmesh6->AddPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::SetTexCoord( l_vertex, 1.0, 1.0 );
-		Vertex::SetNormal( l_vertex, 0.0, 1.0, 0.0 );
+		vertex = pSubmesh1->AddPoint( m_width / 2, -m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 0.0 );
+		Vertex::SetNormal( vertex, 0.0, 0.0, 1.0 );
+		vertex = pSubmesh1->AddPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 0.0 );
+		Vertex::SetNormal( vertex, 0.0, 0.0, 1.0 );
+		vertex = pSubmesh1->AddPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 1.0 );
+		Vertex::SetNormal( vertex, 0.0, 0.0, 1.0 );
+		vertex = pSubmesh1->AddPoint( m_width / 2,  m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 1.0 );
+		Vertex::SetNormal( vertex, 0.0, 0.0, 1.0 );
+		vertex = pSubmesh2->AddPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 0.0 );
+		Vertex::SetNormal( vertex, 0.0, 0.0, -1.0 );
+		vertex = pSubmesh2->AddPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 0.0 );
+		Vertex::SetNormal( vertex, 0.0, 0.0, -1.0 );
+		vertex = pSubmesh2->AddPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 1.0 );
+		Vertex::SetNormal( vertex, 0.0, 0.0, -1.0 );
+		vertex = pSubmesh2->AddPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 1.0 );
+		Vertex::SetNormal( vertex, 0.0, 0.0, -1.0 );
+		vertex = pSubmesh3->AddPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 0.0 );
+		Vertex::SetNormal( vertex, -1.0, 0.0, 0.0 );
+		vertex = pSubmesh3->AddPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 0.0 );
+		Vertex::SetNormal( vertex, -1.0, 0.0, 0.0 );
+		vertex = pSubmesh3->AddPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 1.0 );
+		Vertex::SetNormal( vertex, -1.0, 0.0, 0.0 );
+		vertex = pSubmesh3->AddPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 1.0 );
+		Vertex::SetNormal( vertex, -1.0, 0.0, 0.0 );
+		vertex = pSubmesh4->AddPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 0.0 );
+		Vertex::SetNormal( vertex, 1.0, 0.0, 0.0 );
+		vertex = pSubmesh4->AddPoint( m_width / 2, -m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 0.0 );
+		Vertex::SetNormal( vertex, 1.0, 0.0, 0.0 );
+		vertex = pSubmesh4->AddPoint( m_width / 2,  m_height / 2,  m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 1.0 );
+		Vertex::SetNormal( vertex, 1.0, 0.0, 0.0 );
+		vertex = pSubmesh4->AddPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 1.0 );
+		Vertex::SetNormal( vertex, 1.0, 0.0, 0.0 );
+		vertex = pSubmesh5->AddPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 0.0 );
+		Vertex::SetNormal( vertex, 0.0, -1.0, 0.0 );
+		vertex = pSubmesh5->AddPoint( m_width / 2, -m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 0.0 );
+		Vertex::SetNormal( vertex, 0.0, -1.0, 0.0 );
+		vertex = pSubmesh5->AddPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 1.0 );
+		Vertex::SetNormal( vertex, 0.0, -1.0, 0.0 );
+		vertex = pSubmesh5->AddPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 1.0 );
+		Vertex::SetNormal( vertex, 0.0, -1.0, 0.0 );
+		vertex = pSubmesh6->AddPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 0.0 );
+		Vertex::SetNormal( vertex, 0.0, 1.0, 0.0 );
+		vertex = pSubmesh6->AddPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 0.0 );
+		Vertex::SetNormal( vertex, 0.0, 1.0, 0.0 );
+		vertex = pSubmesh6->AddPoint( m_width / 2,  m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 0.0, 1.0 );
+		Vertex::SetNormal( vertex, 0.0, 1.0, 0.0 );
+		vertex = pSubmesh6->AddPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
+		Vertex::SetTexCoord( vertex, 1.0, 1.0 );
+		Vertex::SetNormal( vertex, 0.0, 1.0, 0.0 );
 
 		//CONSTRUCTION FACES /!\ Pour OpenGL le Z est inversé
 
 		if ( CptNegatif == 1 || CptNegatif == 3 )
 		{
 			// Faces du bas
-			l_pSubmesh1->AddFace( 0, 1, 2 );
-			l_pSubmesh1->AddFace( 2, 3, 0 );
+			pSubmesh1->AddFace( 0, 1, 2 );
+			pSubmesh1->AddFace( 2, 3, 0 );
 			// Face du haut
-			l_pSubmesh2->AddFace( 0, 1, 2 );
-			l_pSubmesh2->AddFace( 2, 3, 0 );
+			pSubmesh2->AddFace( 0, 1, 2 );
+			pSubmesh2->AddFace( 2, 3, 0 );
 			// Face de derrière
-			l_pSubmesh3->AddFace( 0, 1, 2 );
-			l_pSubmesh3->AddFace( 2, 3, 0 );
+			pSubmesh3->AddFace( 0, 1, 2 );
+			pSubmesh3->AddFace( 2, 3, 0 );
 			// Face de devant
-			l_pSubmesh4->AddFace( 0, 1, 2 );
-			l_pSubmesh4->AddFace( 2, 3, 0 );
+			pSubmesh4->AddFace( 0, 1, 2 );
+			pSubmesh4->AddFace( 2, 3, 0 );
 			// Faces de droite
-			l_pSubmesh5->AddFace( 0, 1, 2 );
-			l_pSubmesh5->AddFace( 2, 3, 0 );
+			pSubmesh5->AddFace( 0, 1, 2 );
+			pSubmesh5->AddFace( 2, 3, 0 );
 			// Face de gauche
-			l_pSubmesh6->AddFace( 0, 1, 2 );
-			l_pSubmesh6->AddFace( 2, 3, 0 );
+			pSubmesh6->AddFace( 0, 1, 2 );
+			pSubmesh6->AddFace( 2, 3, 0 );
 		}
 		else
 		{
 			// Faces du bas
-			l_pSubmesh1->AddFace( 3, 2, 1 );
-			l_pSubmesh1->AddFace( 1, 0, 3 );
+			pSubmesh1->AddFace( 3, 2, 1 );
+			pSubmesh1->AddFace( 1, 0, 3 );
 			// Face du haut
-			l_pSubmesh2->AddFace( 3, 2, 1 );
-			l_pSubmesh2->AddFace( 1, 0, 3 );
+			pSubmesh2->AddFace( 3, 2, 1 );
+			pSubmesh2->AddFace( 1, 0, 3 );
 			// Face de derrière
-			l_pSubmesh3->AddFace( 3, 2, 1 );
-			l_pSubmesh3->AddFace( 1, 0, 3 );
+			pSubmesh3->AddFace( 3, 2, 1 );
+			pSubmesh3->AddFace( 1, 0, 3 );
 			// Face de devant
-			l_pSubmesh4->AddFace( 3, 2, 1 );
-			l_pSubmesh4->AddFace( 1, 0, 3 );
+			pSubmesh4->AddFace( 3, 2, 1 );
+			pSubmesh4->AddFace( 1, 0, 3 );
 			// Faces de droite
-			l_pSubmesh5->AddFace( 3, 2, 1 );
-			l_pSubmesh5->AddFace( 1, 0, 3 );
+			pSubmesh5->AddFace( 3, 2, 1 );
+			pSubmesh5->AddFace( 1, 0, 3 );
 			// Face de gauche
-			l_pSubmesh6->AddFace( 3, 2, 1 );
-			l_pSubmesh6->AddFace( 1, 0, 3 );
+			pSubmesh6->AddFace( 3, 2, 1 );
+			pSubmesh6->AddFace( 1, 0, 3 );
 		}
 
-		l_pSubmesh1->ComputeTangentsFromNormals();
-		l_pSubmesh2->ComputeTangentsFromNormals();
-		l_pSubmesh3->ComputeTangentsFromNormals();
-		l_pSubmesh4->ComputeTangentsFromNormals();
-		l_pSubmesh5->ComputeTangentsFromNormals();
-		l_pSubmesh6->ComputeTangentsFromNormals();
+		pSubmesh1->ComputeTangentsFromNormals();
+		pSubmesh2->ComputeTangentsFromNormals();
+		pSubmesh3->ComputeTangentsFromNormals();
+		pSubmesh4->ComputeTangentsFromNormals();
+		pSubmesh5->ComputeTangentsFromNormals();
+		pSubmesh6->ComputeTangentsFromNormals();
 		p_mesh.ComputeContainers();
 	}
 }

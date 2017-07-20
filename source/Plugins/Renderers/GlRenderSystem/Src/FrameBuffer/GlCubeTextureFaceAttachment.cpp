@@ -28,28 +28,28 @@ namespace GlRender
 		, Castor::PxBufferBase & p_buffer )const
 	{
 		GetOpenGl().ReadBuffer( GlBufferBinding( int( GlBufferBinding::eColor0 ) + GetAttachmentIndex() ) );
-		auto l_format = GetOpenGl().Get( p_buffer.format() );
+		auto format = GetOpenGl().Get( p_buffer.format() );
 		GetOpenGl().ReadPixels( p_offset
 			, p_buffer.dimensions()
-			, l_format.Format
-			, l_format.Type
+			, format.Format
+			, format.Type
 			, p_buffer.ptr() );
 	}
 
 	void GlCubeTextureFaceAttachment::DoAttach()
 	{
 		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
-		auto l_texture = std::static_pointer_cast< GlTexture >( GetTexture() );
+		auto texture = std::static_pointer_cast< GlTexture >( GetTexture() );
 
-		switch ( l_texture->GetType() )
+		switch ( texture->GetType() )
 		{
 		case TextureType::eCube:
-			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), m_mipLevel );
+			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, texture->GetGlName(), m_mipLevel );
 			break;
 
 		case TextureType::eCubeArray:
 			REQUIRE( m_mipLevel == 0u );
-			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
+			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
 			break;
 
 		default:
@@ -74,7 +74,7 @@ namespace GlRender
 
 	void GlCubeTextureFaceAttachment::DoDetach()
 	{
-		auto l_pTexture = GetTexture();
+		auto pTexture = GetTexture();
 
 		if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 		{

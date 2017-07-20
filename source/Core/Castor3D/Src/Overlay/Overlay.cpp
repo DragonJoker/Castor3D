@@ -54,43 +54,43 @@ namespace Castor3D
 		{
 			m_category->Render();
 
-			for ( auto l_overlay : m_overlays )
+			for ( auto overlay : m_overlays )
 			{
-				l_overlay->Render( p_size );
+				overlay->Render( p_size );
 			}
 		}
 	}
 
 	void Overlay::AddChild( OverlaySPtr p_overlay )
 	{
-		int l_index = 1;
+		int index = 1;
 
 		if ( !m_overlays.empty() )
 		{
-			l_index = ( *( m_overlays.end() - 1 ) )->GetIndex() + 1;
+			index = ( *( m_overlays.end() - 1 ) )->GetIndex() + 1;
 		}
 
-		p_overlay->SetOrder( l_index, GetLevel() + 1 );
+		p_overlay->SetOrder( index, GetLevel() + 1 );
 		m_overlays.push_back( p_overlay );
 	}
 
 	uint32_t Overlay::GetChildrenCount( int p_level )const
 	{
-		uint32_t l_return{ 0 };
+		uint32_t result{ 0 };
 
 		if ( p_level == GetLevel() + 1 )
 		{
-			l_return = int( m_overlays.size() );
+			result = int( m_overlays.size() );
 		}
 		else if ( p_level > GetLevel() )
 		{
-			for ( auto l_overlay : m_overlays )
+			for ( auto overlay : m_overlays )
 			{
-				l_return += l_overlay->GetChildrenCount( p_level );
+				result += overlay->GetChildrenCount( p_level );
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	PanelOverlaySPtr Overlay::GetPanelOverlay()const
@@ -125,13 +125,13 @@ namespace Castor3D
 
 	bool Overlay::IsVisible()const
 	{
-		bool l_return = m_category->IsVisible();
+		bool result = m_category->IsVisible();
 
-		if ( l_return && GetParent() )
+		if ( result && GetParent() )
 		{
-			l_return = GetParent()->IsVisible();
+			result = GetParent()->IsVisible();
 		}
 
-		return l_return;
+		return result;
 	}
 }
