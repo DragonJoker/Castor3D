@@ -1,4 +1,4 @@
-﻿#include "Point.hpp"
+#include "Point.hpp"
 
 namespace Castor
 {
@@ -76,7 +76,7 @@ namespace Castor
 		if ( ! IsParallel( p_plane ) )
 		{
 			Point< T, 3 > normal( m_normal ^ p_plane.m_normal );
-			T default{};
+			T constexpr zero{};
 			T b1 = m_normal[1];
 			T c1 = m_normal[2];
 			T d1 = m_d;
@@ -85,7 +85,7 @@ namespace Castor
 			T d2 = m_d;
 			T div = ( b1 * c2 ) - ( b2 * c1 );
 
-			if ( !policy::equals( b1, default ) && !policy::equals( div, default ) )
+			if ( !policy::equals( b1, zero ) && !policy::equals( div, zero ) )
 			{
 				Point< T, 3 > point;
 				point[2] = ( ( b2 * d1 ) - ( b1 * d2 ) ) / div;
@@ -116,9 +116,9 @@ namespace Castor
 			T alpha, beta;
 			alpha = ( a3 - ( a2 * ( b3 - ( a3 / a1 ) ) / ( b2 - ( a2 / a1 ) ) ) ) / a1;
 			beta = ( b3 - ( a3 / a1 ) ) / ( b2 - ( a2 / a1 ) );
-			T c3 = ( c1 * alpha ) + ( c2 * beta );
+			T comp = ( c1 * alpha ) + ( c2 * beta );
 
-			if ( ! policy::equals( c3, c3 ) )
+			if ( ! policy::equals( c3, comp ) )
 			{
 				alpha = ( ( a2 * c1 ) / ( a1 * ( b2 - ( a2 * b1 ) / a1 ) ) ) - ( c2 / ( b2 - ( a2 * b1 ) / a1 ) );
 				beta = ( ( a2 * d ) / ( a1 * ( b2 - ( a2 * b1 ) / a1 ) ) ) - ( d1 / ( b2 - ( a2 * b1 ) / a1 ) );
