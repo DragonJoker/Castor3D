@@ -215,9 +215,9 @@ namespace GlRender
 	XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_window, IntArray p_arrayAttribs, int p_screen )
 	{
 		Logger::LogDebug( cuT( "GlXContext::Create - Using FBConfig" ) );
-		XVisualInfo * result = nullptr;
-		int result = 0;
-		m_fbConfig = glXChooseFBConfig( m_display, p_screen, p_arrayAttribs.data(), &result );
+		XVisualInfo * visualInfo = nullptr;
+		int nbElements = 0;
+		m_fbConfig = glXChooseFBConfig( m_display, p_screen, p_arrayAttribs.data(), &nbElements );
 
 		if ( !m_fbConfig )
 		{
@@ -239,20 +239,20 @@ namespace GlRender
 					GLX_BLUE_SIZE, 1,
 					0
 				};
-				m_fbConfig = glXChooseFBConfig( m_display, p_screen, attribList.data(), &result );
+				m_fbConfig = glXChooseFBConfig( m_display, p_screen, attribList.data(), &nbElements );
 
 				if ( !m_fbConfig )
 				{
 					// Second try failed, we try a default FBConfig
 					Logger::LogWarning( cuT( "GlXContext::Create - Mono glXChooseFBConfig failed, using default FB config" ) );
 					int data = 0;
-					m_fbConfig = glXChooseFBConfig( m_display, p_screen, &data, &result );
+					m_fbConfig = glXChooseFBConfig( m_display, p_screen, &data, &nbElements );
 
 					if ( !m_fbConfig )
 					{
 						// Last FBConfig try failed
 						Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
-						result = DoCreateVisualInfoWithoutFBConfig( attribList, p_screen );
+						visualInfo = DoCreateVisualInfoWithoutFBConfig( attribList, p_screen );
 					}
 					else
 					{
@@ -269,13 +269,13 @@ namespace GlRender
 				// Can't be because of stereo, we try a default FBConfig
 				Logger::LogWarning( cuT( "GlXContext::Create - glXChooseFBConfig failed, using default FB config" ) );
 				int data = 0;
-				m_fbConfig = glXChooseFBConfig( m_display, p_screen, &data, &result );
+				m_fbConfig = glXChooseFBConfig( m_display, p_screen, &data, &nbElements );
 
 				if ( !m_fbConfig )
 				{
 					// Last FBConfig try failed, we try from XVisualInfo
 					Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
-					result = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_screen );
+					visualInfo = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_screen );
 				}
 				else
 				{
@@ -298,9 +298,9 @@ namespace GlRender
 
 		if ( m_fbConfig )
 		{
-			result = glXGetVisualFromFBConfig( m_display, m_fbConfig[0] );
+			visualInfo = glXGetVisualFromFBConfig( m_display, m_fbConfig[0] );
 
-			if ( !result )
+			if ( !visualInfo )
 			{
 				Logger::LogError( cuT( "GlXContext::Create - glXGetVisualFromFBConfig failed" ) );
 			}
@@ -310,7 +310,7 @@ namespace GlRender
 			}
 		}
 
-		return result;
+		return visualInfo;
 	}
 
 	XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray p_arrayAttribs, int p_screen )
