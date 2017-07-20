@@ -22,14 +22,14 @@ namespace Castor3D
 			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateBuffer( BufferType::eElementArray );
 		}
 
-		bool l_return = m_gpuBuffer != nullptr;
+		bool result = m_gpuBuffer != nullptr;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoInitialise( p_type, p_nature );
+			result = DoInitialise( p_type, p_nature );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void IndexBuffer::Cleanup()

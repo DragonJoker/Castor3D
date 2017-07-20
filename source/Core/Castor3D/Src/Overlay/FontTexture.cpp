@@ -16,17 +16,17 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_font( p_font )
 	{
-		uint32_t const l_maxWidth = p_font->GetMaxWidth();
-		uint32_t const l_maxHeight = p_font->GetMaxHeight();
-		uint32_t const l_count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
+		uint32_t const maxWidth = p_font->GetMaxWidth();
+		uint32_t const maxHeight = p_font->GetMaxHeight();
+		uint32_t const count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
 
-		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( p_font->GetName() );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		m_sampler = l_sampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ l_maxWidth * 16, l_maxHeight * l_count } );
+		SamplerSPtr sampler = GetEngine()->GetSamplerCache().Add( p_font->GetName() );
+		sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		m_sampler = sampler;
+		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ maxWidth * 16, maxHeight * count } );
 		m_texture->GetImage().InitialiseSource();
 	}
 
@@ -45,49 +45,49 @@ namespace Castor3D
 
 	void FontTexture::Update()
 	{
-		FontSPtr l_font = GetFont();
+		FontSPtr font = GetFont();
 
-		if ( l_font )
+		if ( font )
 		{
-			uint32_t const l_maxWidth = l_font->GetMaxWidth();
-			uint32_t const l_maxHeight = l_font->GetMaxHeight();
-			uint32_t const l_count = uint32_t( std::ceil( std::distance( l_font->begin(), l_font->end() ) / 16.0 ) );
-			Size l_size{ l_maxWidth * 16, l_maxHeight * l_count };
-			auto & l_image = m_texture->GetImage();
-			l_image.InitialiseSource( PxBufferBase::create( Size( l_maxWidth * 16, l_maxHeight * l_count ), PixelFormat::eL8 ) );
+			uint32_t const maxWidth = font->GetMaxWidth();
+			uint32_t const maxHeight = font->GetMaxHeight();
+			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
+			Size size{ maxWidth * 16, maxHeight * count };
+			auto & image = m_texture->GetImage();
+			image.InitialiseSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eL8 ) );
 
-			auto l_it = l_font->begin();
-			Size const & l_sizeImg = l_size;
-			uint32_t const l_uiTotalWidth = l_sizeImg.width();
-			uint32_t l_uiOffY = l_sizeImg.height() - l_maxHeight;
-			uint8_t * l_pBuffer = l_image.GetBuffer()->ptr();
-			size_t const l_bufsize = l_image.GetBuffer()->size();
+			auto it = font->begin();
+			Size const & sizeImg = size;
+			uint32_t const uiTotalWidth = sizeImg.width();
+			uint32_t uiOffY = sizeImg.height() - maxHeight;
+			uint8_t * pBuffer = image.GetBuffer()->ptr();
+			size_t const bufsize = image.GetBuffer()->size();
 
-			for ( uint32_t y = 0; y < l_count && l_it != l_font->end(); ++y )
+			for ( uint32_t y = 0; y < count && it != font->end(); ++y )
 			{
-				uint32_t l_uiOffX = 0;
+				uint32_t uiOffX = 0;
 
-				for ( uint32_t x = 0; x < 16 && l_it != l_font->end(); ++x )
+				for ( uint32_t x = 0; x < 16 && it != font->end(); ++x )
 				{
-					Glyph const & l_glyph = *l_it;
-					Size const & l_size = l_glyph.GetSize();
-					ByteArray const & l_buffer = l_glyph.GetBitmap();
-					uint32_t const l_dstLineIndex = ( l_uiTotalWidth * l_uiOffY ) + l_uiOffX;
-					uint8_t * l_dstLineBuffer = &l_pBuffer[l_dstLineIndex];
+					Glyph const & glyph = *it;
+					Size const & size = glyph.GetSize();
+					ByteArray const & buffer = glyph.GetBitmap();
+					uint32_t const dstLineIndex = ( uiTotalWidth * uiOffY ) + uiOffX;
+					uint8_t * dstLineBuffer = &pBuffer[dstLineIndex];
 
-					for ( uint32_t i = 0; i < l_size.height(); ++i )
+					for ( uint32_t i = 0; i < size.height(); ++i )
 					{
-						ENSURE( l_dstLineIndex + l_size.width() <= l_bufsize );
-						std::memcpy( l_dstLineBuffer, &l_buffer[i * l_size.width()], l_size.width() );
-						l_dstLineBuffer += l_uiTotalWidth;
+						ENSURE( dstLineIndex + size.width() <= bufsize );
+						std::memcpy( dstLineBuffer, &buffer[i * size.width()], size.width() );
+						dstLineBuffer += uiTotalWidth;
 					}
 
-					m_glyphsPositions[l_glyph.GetCharacter()] = Position( l_uiOffX, l_uiOffY );
-					l_uiOffX += l_maxWidth;
-					++l_it;
+					m_glyphsPositions[glyph.GetCharacter()] = Position( uiOffX, uiOffY );
+					uiOffX += maxWidth;
+					++it;
 				}
 
-				l_uiOffY -= l_maxHeight;
+				uiOffY -= maxHeight;
 			}
 		}
 
@@ -108,13 +108,13 @@ namespace Castor3D
 
 	Position const & FontTexture::GetGlyphPosition( char32_t p_char )const
 	{
-		GlyphPositionMapConstIt l_it = m_glyphsPositions.find( p_char );
+		GlyphPositionMapConstIt it = m_glyphsPositions.find( p_char );
 
-		if ( l_it == m_glyphsPositions.end() )
+		if ( it == m_glyphsPositions.end() )
 		{
 			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::string_cast< char >( string::to_string( p_char ) ) );
 		}
 
-		return l_it->second;
+		return it->second;
 	}
 }

@@ -46,18 +46,18 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	bool Point< T, Count >::TextLoader::operator()( Point< T, Count > & p_object, TextFile & p_file )
 	{
-		String l_strWord;
+		String strWord;
 
 		for ( uint32_t i = 0; i < Count; ++i )
 		{
-			if ( p_file.ReadLine( l_strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
+			if ( p_file.ReadLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
 			{
-				StringStream l_streamWord( l_strWord );
-				l_streamWord >> p_object[i];
+				StringStream streamWord( strWord );
+				streamWord >> p_object[i];
 			}
 
-			xchar l_cDump;
-			p_file.ReadChar( l_cDump );
+			xchar cDump;
+			p_file.ReadChar( cDump );
 		}
 
 		return true;
@@ -74,21 +74,21 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	bool Point< T, Count >::TextWriter::operator()( Point< T, Count > const & p_object, TextFile & p_file )
 	{
-		StringStream l_streamWord;
+		StringStream streamWord;
 
 		for ( uint32_t i = 0; i < Count; ++i )
 		{
-			if ( !l_streamWord.str().empty() )
+			if ( !streamWord.str().empty() )
 			{
-				l_streamWord << cuT( " " );
+				streamWord << cuT( " " );
 			}
 
-			l_streamWord << p_object[i];
+			streamWord << p_object[i];
 		}
 
-		bool l_result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
-		Castor::TextWriter< Point< T, Count > >::CheckError( l_result, "Point value" );
-		return l_result;
+		bool result = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
+		Castor::TextWriter< Point< T, Count > >::CheckError( result, "Point value" );
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -339,14 +339,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator==( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_result = ( Count == _Count );
+		bool result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_result; i++ )
+		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			l_result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator!=( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -416,14 +416,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator==( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_result = ( Count == _Count );
+		bool result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_result; i++ )
+		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			l_result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator!=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -463,14 +463,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator==( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_result = ( Count == _Count );
+		bool result = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_result; i++ )
+		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			l_result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			result = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator!=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
@@ -509,14 +509,14 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > operator-( Point< T, Count > const & p_pt )
 	{
-		Point< T, Count > l_result;
+		Point< T, Count > result;
 
 		for ( uint32_t i = 0; i < Count; ++i )
 		{
-			l_result[i] = -p_pt[i];
+			result[i] = -p_pt[i];
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -535,64 +535,64 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		void normalise( Point< T, Count > & p_point )
 		{
-			T l_tLength = T( length( p_point ) );
+			T tLength = T( length( p_point ) );
 
-			if ( !Policy< T >::is_null( l_tLength ) )
+			if ( !Policy< T >::is_null( tLength ) )
 			{
-				p_point /= l_tLength;
+				p_point /= tLength;
 			}
 		}
 
 		template< typename T, uint32_t Count >
 		Point< T, Count > get_normalised( Point< T, Count > const & p_point )
 		{
-			Point< T, Count > l_result( p_point );
-			normalise( l_result );
-			return l_result;
+			Point< T, Count > result( p_point );
+			normalise( result );
+			return result;
 		}
 
 		template< typename T, typename U, uint32_t Count >
 		T dot( Point< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
-			T l_result;
-			Policy< T >::init( l_result );
+			T result;
+			Policy< T >::init( result );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result += T( p_ptA[i] * p_ptB[i] );
+				result += T( p_ptA[i] * p_ptB[i] );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
 		double cos_theta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
 		{
-			double l_result = double( length( p_ptA ) * length( p_ptB ) );
+			double result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_result != 0 )
+			if ( result != 0 )
 			{
-				l_result = dot( p_ptA, p_ptB ) / l_result;
+				result = dot( p_ptA, p_ptB ) / result;
 			}
 			else
 			{
-				l_result = dot( p_ptA, p_ptB );
+				result = dot( p_ptA, p_ptB );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
 		double length_squared( Point< T, Count > const & p_point )
 		{
-			double l_result = 0.0;
+			double result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result += p_point[i] * p_point[i];
+				result += p_point[i] * p_point[i];
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
@@ -604,41 +604,41 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		inline double length_manhattan( Point< T, Count > const & p_point )
 		{
-			double l_result = 0.0;
+			double result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result += abs( p_point[i] );
+				result += abs( p_point[i] );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
 		double length_minkowski( Point< T, Count > const & p_point, double p_order )
 		{
-			double l_result = 0.0;
+			double result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result += pow( double( abs( p_point[i] ) ), p_order );
+				result += pow( double( abs( p_point[i] ) ), p_order );
 			}
 
-			l_result = pow( l_result, 1.0 / p_order );
-			return l_result;
+			result = pow( result, 1.0 / p_order );
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
 		double length_chebychev( Point< T, Count > const & p_point )
 		{
-			double l_result = 0.0;
+			double result = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result = std::max( l_result, double( abs( p_point[i] ) ) );
+				result = std::max( result, double( abs( p_point[i] ) ) );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
@@ -674,123 +674,123 @@ namespace Castor
 		template< typename T, typename U, uint32_t Count >
 		T dot( Point< T, Count > const & p_ptA, Coords< U, Count > const & p_ptB )
 		{
-			T l_result = T();
+			T result = T();
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result += T( p_ptA[i] * p_ptB[i] );
+				result += T( p_ptA[i] * p_ptB[i] );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
 		double cos_theta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
 		{
-			double l_result = double( length( p_ptA ) * length( p_ptB ) );
+			double result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_result != 0 )
+			if ( result != 0 )
 			{
-				l_result = dot( p_ptA, p_ptB ) / l_result;
+				result = dot( p_ptA, p_ptB ) / result;
 			}
 			else
 			{
-				l_result = dot( p_ptA, p_ptB );
+				result = dot( p_ptA, p_ptB );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, typename U, uint32_t Count >
 		T dot( Coords< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
-			T l_result;
-			Policy< T >::init( l_result );
+			T result;
+			Policy< T >::init( result );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result += T( p_ptA[i] * p_ptB[i] );
+				result += T( p_ptA[i] * p_ptB[i] );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
 		double cos_theta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
 		{
-			double l_result = double( length( p_ptA ) * length( p_ptB ) );
+			double result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_result != 0 )
+			if ( result != 0 )
 			{
-				l_result = dot( p_ptA, p_ptB ) / l_result;
+				result = dot( p_ptA, p_ptB ) / result;
 			}
 			else
 			{
-				l_result = dot( p_ptA, p_ptB );
+				result = dot( p_ptA, p_ptB );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, typename U, uint32_t Count >
 		T dot( Point< T, Count > const & p_ptA, Coords< U const, Count > const & p_ptB )
 		{
-			T l_result = T();
+			T result = T();
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result += T( p_ptA[i] * p_ptB[i] );
+				result += T( p_ptA[i] * p_ptB[i] );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
 		double cos_theta( Point< T, Count > const & p_ptA, Coords< T const, Count > const & p_ptB )
 		{
-			double l_result = double( length( p_ptA ) * length( p_ptB ) );
+			double result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_result != 0 )
+			if ( result != 0 )
 			{
-				l_result = dot( p_ptA, p_ptB ) / l_result;
+				result = dot( p_ptA, p_ptB ) / result;
 			}
 			else
 			{
-				l_result = dot( p_ptA, p_ptB );
+				result = dot( p_ptA, p_ptB );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, typename U, uint32_t Count >
 		T dot( Coords< T const, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
-			T l_result;
-			Policy< T >::init( l_result );
+			T result;
+			Policy< T >::init( result );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_result += T( p_ptA[i] * p_ptB[i] );
+				result += T( p_ptA[i] * p_ptB[i] );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, uint32_t Count >
 		double cos_theta( Coords< T const, Count > const & p_ptA, Point< T, Count > const & p_ptB )
 		{
-			double l_result = double( length( p_ptA ) * length( p_ptB ) );
+			double result = double( length( p_ptA ) * length( p_ptB ) );
 
-			if ( l_result != 0 )
+			if ( result != 0 )
 			{
-				l_result = dot( p_ptA, p_ptB ) / l_result;
+				result = dot( p_ptA, p_ptB ) / result;
 			}
 			else
 			{
-				l_result = dot( p_ptA, p_ptB );
+				result = dot( p_ptA, p_ptB );
 			}
 
-			return l_result;
+			return result;
 		}
 	}
 }
@@ -800,33 +800,33 @@ namespace Castor
 template< typename T, uint32_t Count >
 inline Castor::String & operator<<( Castor::String & p_strOut, Castor::Point< T, Count > const & p_pt )
 {
-	Castor::StringStream l_streamOut;
+	Castor::StringStream streamOut;
 
 	if ( Count )
 	{
-		l_streamOut << p_pt[0];
+		streamOut << p_pt[0];
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_streamOut << cuT( "\t" ) << p_pt[i];
+			streamOut << cuT( "\t" ) << p_pt[i];
 		}
 	}
 
-	p_strOut += l_streamOut.str();
+	p_strOut += streamOut.str();
 	return p_strOut;
 }
 
 template< typename T, uint32_t Count >
 inline Castor::String & operator>>( Castor::String & p_strIn, Castor::Point< T, Count > & p_pt )
 {
-	Castor::StringStream l_streamIn( p_strIn );
+	Castor::StringStream streamIn( p_strIn );
 
 	for ( uint32_t i = 0; i < Count; i++ )
 	{
-		l_streamIn >> p_pt[i];
+		streamIn >> p_pt[i];
 	}
 
-	p_strIn = l_streamIn.str();
+	p_strIn = streamIn.str();
 	return p_strIn;
 }
 

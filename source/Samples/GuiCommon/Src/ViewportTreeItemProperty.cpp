@@ -58,29 +58,29 @@ namespace GuiCommon
 
 	void ViewportTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		wxString l_selected;
-		wxPGChoices l_choices;
-		l_choices.Add( PROPERTY_VIEWPORT_TYPE_PERSPECTIVE );
-		l_choices.Add( PROPERTY_VIEWPORT_TYPE_FRUSTUM );
-		l_choices.Add( PROPERTY_VIEWPORT_TYPE_ORTHO );
+		wxString selected;
+		wxPGChoices choices;
+		choices.Add( PROPERTY_VIEWPORT_TYPE_PERSPECTIVE );
+		choices.Add( PROPERTY_VIEWPORT_TYPE_FRUSTUM );
+		choices.Add( PROPERTY_VIEWPORT_TYPE_ORTHO );
 
 		switch ( m_viewport.GetType() )
 		{
 		case ViewportType::ePerspective:
-			l_selected = PROPERTY_VIEWPORT_TYPE_PERSPECTIVE;
+			selected = PROPERTY_VIEWPORT_TYPE_PERSPECTIVE;
 			break;
 
 		case ViewportType::eFrustum:
-			l_selected = PROPERTY_VIEWPORT_TYPE_FRUSTUM;
+			selected = PROPERTY_VIEWPORT_TYPE_FRUSTUM;
 			break;
 
 		case ViewportType::eOrtho:
-			l_selected = PROPERTY_VIEWPORT_TYPE_ORTHO;
+			selected = PROPERTY_VIEWPORT_TYPE_ORTHO;
 			break;
 		}
 
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_VIEWPORT ) );
-		p_grid->Append( new wxEnumProperty( PROPERTY_VIEWPORT_TYPE, PROPERTY_VIEWPORT_TYPE, l_choices ) )->SetValue( l_selected );
+		p_grid->Append( new wxEnumProperty( PROPERTY_VIEWPORT_TYPE, PROPERTY_VIEWPORT_TYPE, choices ) )->SetValue( selected );
 		p_grid->Append( new SizeProperty( PROPERTY_VIEWPORT_SIZE ) )->SetValue( WXVARIANT( m_viewport.GetSize() ) );
 		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_TOP ) )->SetValue( m_viewport.GetTop() );
 		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_BOTTOM ) )->SetValue( m_viewport.GetBottom() );
@@ -94,60 +94,60 @@ namespace GuiCommon
 
 	void ViewportTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
-			if ( l_property->GetName() == PROPERTY_VIEWPORT_TYPE )
+			if ( property->GetName() == PROPERTY_VIEWPORT_TYPE )
 			{
-				if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_PERSPECTIVE )
+				if ( property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_PERSPECTIVE )
 				{
 					OnTypeChange( ViewportType::ePerspective );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_ORTHO )
+				else if ( property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_ORTHO )
 				{
 					OnTypeChange( ViewportType::eOrtho );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_FRUSTUM )
+				else if ( property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_FRUSTUM )
 				{
 					OnTypeChange( ViewportType::eFrustum );
 				}
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_SIZE )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_SIZE )
 			{
-				OnSizeChange( SizeRefFromVariant( l_property->GetValue() ) );
+				OnSizeChange( SizeRefFromVariant( property->GetValue() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_TOP )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_TOP )
 			{
-				OnTopChange( l_property->GetValue() );
+				OnTopChange( property->GetValue() );
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_BOTTOM )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_BOTTOM )
 			{
-				OnBottomChange( l_property->GetValue() );
+				OnBottomChange( property->GetValue() );
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_LEFT )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_LEFT )
 			{
-				OnLeftChange( l_property->GetValue() );
+				OnLeftChange( property->GetValue() );
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_RIGHT )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_RIGHT )
 			{
-				OnRightChange( l_property->GetValue() );
+				OnRightChange( property->GetValue() );
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_NEAR )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_NEAR )
 			{
-				OnNearChange( l_property->GetValue() );
+				OnNearChange( property->GetValue() );
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_FAR )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_FAR )
 			{
-				OnFarChange( l_property->GetValue() );
+				OnFarChange( property->GetValue() );
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_FOVY )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_FOVY )
 			{
-				OnFovYChange( l_property->GetValue() );
+				OnFovYChange( property->GetValue() );
 			}
-			else if ( l_property->GetName() == PROPERTY_VIEWPORT_RATIO )
+			else if ( property->GetName() == PROPERTY_VIEWPORT_RATIO )
 			{
-				OnRatioChange( l_property->GetValue() );
+				OnRatioChange( property->GetValue() );
 			}
 		}
 	}

@@ -67,64 +67,64 @@ namespace Castor
 		template< typename T >
 		inline void parse( String const & p_str, T & p_val, std::locale const & p_locale )
 		{
-			StringStream l_out( p_str );
-			l_out.imbue( p_locale );
-			l_out >> p_val;
+			StringStream out( p_str );
+			out.imbue( p_locale );
+			out >> p_val;
 		}
 
 		template< typename T >
 		inline void extract( String & p_str, T & p_val, std::locale const & p_locale )
 		{
-			StringStream l_out( p_str );
-			l_out.imbue( p_locale );
-			l_out >> p_val;
-			p_str = l_out.str();
+			StringStream out( p_str );
+			out.imbue( p_locale );
+			out >> p_val;
+			p_str = out.str();
 		}
 
 		template< typename T >
 		inline String to_string( T const & p_value, int p_base, std::locale const & p_locale )
 		{
-			StringStream l_result;
-			l_result.imbue( p_locale );
-			l_result << manip::xbase( p_base ) << p_value;
-			return l_result.str();
+			StringStream result;
+			result.imbue( p_locale );
+			result << manip::xbase( p_base ) << p_value;
+			return result.str();
 		}
 
 		template< typename T, typename U >
 		std::basic_string< T > string_cast( std::basic_string< U > const & p_src )
 		{
-			std::basic_string< T > l_result;
-			StringConverter< U, T >::Convert( p_src, l_result );
-			return l_result;
+			std::basic_string< T > result;
+			StringConverter< U, T >::Convert( p_src, result );
+			return result;
 		}
 
 		template< typename T, typename U >
 		std::basic_string< T > string_cast( U const * p_src )
 		{
-			std::basic_string< T > l_result;
+			std::basic_string< T > result;
 
 			if ( p_src )
 			{
-				StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), l_result );
+				StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), result );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		template< typename T, typename U >
 		std::basic_string< T > string_cast( U const * p_begin, U const * p_end )
 		{
-			std::basic_string< T > l_result;
-			StringConverter< U, T >::Convert( std::basic_string< U >( p_begin, p_end ), l_result );
-			return l_result;
+			std::basic_string< T > result;
+			StringConverter< U, T >::Convert( std::basic_string< U >( p_begin, p_end ), result );
+			return result;
 		}
 
 		template< typename T, typename U >
 		std::basic_string< T > string_cast( std::initializer_list< U > const & p_src )
 		{
-			std::basic_string< T > l_result;
-			StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), l_result );
-			return l_result;
+			std::basic_string< T > result;
+			StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), result );
+			return result;
 		}
 
 		namespace utf8
@@ -140,45 +140,45 @@ namespace Castor
 				static const unsigned char FourthBitMask = 0x10; // 0001000
 				static const unsigned char FifthBitMask = 0x08; // 0000100
 
-				char32_t l_result;
-				char l_firstByte = *p_value;
+				char32_t result;
+				char firstByte = *p_value;
 
-				if ( l_firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
+				if ( firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
 				{
-					if ( l_firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 191, and so it must be at least a three-octet code point.
+					if ( firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 191, and so it must be at least a three-octet code point.
 					{
-						if ( l_firstByte & FourthBitMask ) // This means that the first byte has a value greater than 224, and so it must be a four-octet code point.
+						if ( firstByte & FourthBitMask ) // This means that the first byte has a value greater than 224, and so it must be a four-octet code point.
 						{
-							l_result = ( l_firstByte & 0x07 ) << 18;
-							char l_secondByte = *( p_value + 1 );
-							l_result += ( l_secondByte & 0x3f ) << 12;
-							char l_thirdByte = *( p_value + 2 );
-							l_result += ( l_thirdByte & 0x3f ) << 6;;
-							char l_fourthByte = *( p_value + 3 );
-							l_result += ( l_fourthByte & 0x3f );
+							result = ( firstByte & 0x07 ) << 18;
+							char secondByte = *( p_value + 1 );
+							result += ( secondByte & 0x3f ) << 12;
+							char thirdByte = *( p_value + 2 );
+							result += ( thirdByte & 0x3f ) << 6;;
+							char fourthByte = *( p_value + 3 );
+							result += ( fourthByte & 0x3f );
 						}
 						else
 						{
-							l_result = ( l_firstByte & 0x0f ) << 12;
-							char l_secondByte = *( p_value + 1 );
-							l_result += ( l_secondByte & 0x3f ) << 6;
-							char l_thirdByte = *( p_value + 2 );
-							l_result += ( l_thirdByte & 0x3f );
+							result = ( firstByte & 0x0f ) << 12;
+							char secondByte = *( p_value + 1 );
+							result += ( secondByte & 0x3f ) << 6;
+							char thirdByte = *( p_value + 2 );
+							result += ( thirdByte & 0x3f );
 						}
 					}
 					else
 					{
-						l_result = ( l_firstByte & 0x1f ) << 6;
-						char l_secondByte = *( p_value + 1 );
-						l_result += ( l_secondByte & 0x3f );
+						result = ( firstByte & 0x1f ) << 6;
+						char secondByte = *( p_value + 1 );
+						result += ( secondByte & 0x3f );
 					}
 				}
 				else
 				{
-					l_result = l_firstByte;
+					result = firstByte;
 				}
 
-				return l_result;
+				return result;
 			}
 
 			//*************************************************************************************************
@@ -244,18 +244,18 @@ namespace Castor
 				static const unsigned char FourthBitMask = 0x10; // 0001000
 				static const unsigned char FifthBitMask = 0x08; // 0000100
 
-				char l_firstByte = *m_it;
+				char firstByte = *m_it;
 				++m_it;
 
-				if ( l_firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
+				if ( firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
 				{
 					++m_it;
 
-					if ( l_firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
+					if ( firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
 					{
 						++m_it;
 
-						if ( l_firstByte & FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
+						if ( firstByte & FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
 						{
 							++m_it;
 						}
@@ -353,16 +353,16 @@ namespace Castor
 
 			inline iterator operator+( iterator p_it, size_t p_offset )
 			{
-				iterator l_it( p_it );
-				l_it += p_offset;
-				return l_it;
+				iterator it( p_it );
+				it += p_offset;
+				return it;
 			}
 
 			iterator operator-( iterator p_it, size_t p_offset )
 			{
-				iterator l_it( p_it );
-				l_it -= p_offset;
-				return l_it;
+				iterator it( p_it );
+				it -= p_offset;
+				return it;
 			}
 
 			//*************************************************************************************************
@@ -429,18 +429,18 @@ namespace Castor
 				static const unsigned char FourthBitMask = 0x10; // 0001000
 				static const unsigned char FifthBitMask = 0x08; // 0000100
 
-				char l_firstByte = *m_it;
+				char firstByte = *m_it;
 				++m_it;
 
-				if ( l_firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
+				if ( firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
 				{
 					++m_it;
 
-					if ( l_firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
+					if ( firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
 					{
 						++m_it;
 
-						if ( l_firstByte & FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
+						if ( firstByte & FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
 						{
 							++m_it;
 						}
@@ -538,16 +538,16 @@ namespace Castor
 
 			inline const_iterator operator+( const_iterator p_it, size_t p_offset )
 			{
-				const_iterator l_it( p_it );
-				l_it += p_offset;
-				return l_it;
+				const_iterator it( p_it );
+				it += p_offset;
+				return it;
 			}
 
 			const_iterator operator-( const_iterator p_it, size_t p_offset )
 			{
-				const_iterator l_it( p_it );
-				l_it -= p_offset;
-				return l_it;
+				const_iterator it( p_it );
+				it -= p_offset;
+				return it;
 			}
 
 			//*************************************************************************************************

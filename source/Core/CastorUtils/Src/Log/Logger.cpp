@@ -138,7 +138,7 @@ namespace Castor
 	Logger::Logger()
 		: m_impl( nullptr )
 	{
-		auto l_lock = make_unique_lock( m_mutex );
+		auto lock = make_unique_lock( m_mutex );
 		m_headers[size_t( LogType::eTrace )] = cuT( "***TRACE*** " );
 		m_headers[size_t( LogType::eDebug )] = cuT( "***DEBUG*** " );
 		m_headers[size_t( LogType::eInfo )] = String();
@@ -164,7 +164,7 @@ namespace Castor
 		delete m_wcerr;
 		delete m_wclog;
 		{
-			auto l_lock = make_unique_lock( m_mutex );
+			auto lock = make_unique_lock( m_mutex );
 			m_impl->Cleanup();
 			delete m_impl;
 			m_impl = nullptr;
@@ -180,15 +180,15 @@ namespace Castor
 		else
 		{
 			m_singleton = new Logger();
-			Logger & l_logger = GetSingleton();
+			Logger & logger = GetSingleton();
 			{
-				auto l_lock = make_unique_lock( l_logger.m_mutex );
-				delete l_logger.m_impl;
-				l_logger.m_impl = new LoggerImpl{ p_eLogLevel };
-				l_logger.m_impl->Initialise( l_logger );
+				auto lock = make_unique_lock( logger.m_mutex );
+				delete logger.m_impl;
+				logger.m_impl = new LoggerImpl{ p_eLogLevel };
+				logger.m_impl->Initialise( logger );
 			}
-			l_logger.m_logLevel = p_eLogLevel;
-			l_logger.DoInitialiseThread();
+			logger.m_logLevel = p_eLogLevel;
+			logger.DoInitialiseThread();
 		}
 	}
 
@@ -227,10 +227,10 @@ namespace Castor
 
 	void Logger::LogTrace( std::ostream const & p_msg )
 	{
-		auto l_sbuf = p_msg.rdbuf();
-		std::stringstream l_ss;
-		l_ss << l_sbuf;
-		LogTrace( l_ss.str() );
+		auto sbuf = p_msg.rdbuf();
+		std::stringstream ss;
+		ss << sbuf;
+		LogTrace( ss.str() );
 	}
 
 	void Logger::LogTrace( std::wstring const & p_msg )
@@ -240,9 +240,9 @@ namespace Castor
 
 	void Logger::LogTrace( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogTrace( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogTrace( ss.str() );
 	}
 
 	void Logger::LogDebug( std::string const & p_msg )
@@ -252,10 +252,10 @@ namespace Castor
 
 	void Logger::LogDebug( std::ostream const & p_msg )
 	{
-		auto l_sbuf = p_msg.rdbuf();
-		std::stringstream l_ss;
-		l_ss << l_sbuf;
-		LogDebug( l_ss.str() );
+		auto sbuf = p_msg.rdbuf();
+		std::stringstream ss;
+		ss << sbuf;
+		LogDebug( ss.str() );
 	}
 
 	void Logger::LogDebug( std::wstring const & p_msg )
@@ -265,9 +265,9 @@ namespace Castor
 
 	void Logger::LogDebug( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogDebug( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogDebug( ss.str() );
 	}
 
 	void Logger::LogInfo( std::string const & p_msg )
@@ -277,9 +277,9 @@ namespace Castor
 
 	void Logger::LogInfo( std::ostream const & p_msg )
 	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogInfo( l_ss.str() );
+		std::stringstream ss;
+		ss << p_msg.rdbuf();
+		LogInfo( ss.str() );
 	}
 
 	void Logger::LogInfo( std::wstring const & p_msg )
@@ -289,9 +289,9 @@ namespace Castor
 
 	void Logger::LogInfo( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogInfo( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogInfo( ss.str() );
 	}
 
 	void Logger::LogWarning( std::string const & p_msg )
@@ -301,9 +301,9 @@ namespace Castor
 
 	void Logger::LogWarning( std::ostream const & p_msg )
 	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogWarning( l_ss.str() );
+		std::stringstream ss;
+		ss << p_msg.rdbuf();
+		LogWarning( ss.str() );
 	}
 
 	void Logger::LogWarning( std::wstring const & p_msg )
@@ -313,9 +313,9 @@ namespace Castor
 
 	void Logger::LogWarning( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogWarning( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogWarning( ss.str() );
 	}
 
 	void Logger::LogError( std::string const & p_msg )
@@ -325,9 +325,9 @@ namespace Castor
 
 	void Logger::LogError( std::ostream const & p_msg )
 	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogError( l_ss.str() );
+		std::stringstream ss;
+		ss << p_msg.rdbuf();
+		LogError( ss.str() );
 	}
 
 	void Logger::LogError( std::wstring const & p_msg )
@@ -337,9 +337,9 @@ namespace Castor
 
 	void Logger::LogError( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogError( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogError( ss.str() );
 	}
 
 	void Logger::LogTraceNoNL( std::string const & p_msg )
@@ -349,10 +349,10 @@ namespace Castor
 
 	void Logger::LogTraceNoNL( std::ostream const & p_msg )
 	{
-		auto l_sbuf = p_msg.rdbuf();
-		std::stringstream l_ss;
-		l_ss << l_sbuf;
-		LogTraceNoNL( l_ss.str() );
+		auto sbuf = p_msg.rdbuf();
+		std::stringstream ss;
+		ss << sbuf;
+		LogTraceNoNL( ss.str() );
 	}
 
 	void Logger::LogTraceNoNL( std::wstring const & p_msg )
@@ -362,9 +362,9 @@ namespace Castor
 
 	void Logger::LogTraceNoNL( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogTraceNoNL( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogTraceNoNL( ss.str() );
 	}
 
 	void Logger::LogDebugNoNL( std::string const & p_msg )
@@ -374,10 +374,10 @@ namespace Castor
 
 	void Logger::LogDebugNoNL( std::ostream const & p_msg )
 	{
-		auto l_sbuf = p_msg.rdbuf();
-		std::stringstream l_ss;
-		l_ss << l_sbuf;
-		LogDebugNoNL( l_ss.str() );
+		auto sbuf = p_msg.rdbuf();
+		std::stringstream ss;
+		ss << sbuf;
+		LogDebugNoNL( ss.str() );
 	}
 
 	void Logger::LogDebugNoNL( std::wstring const & p_msg )
@@ -387,9 +387,9 @@ namespace Castor
 
 	void Logger::LogDebugNoNL( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogDebugNoNL( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogDebugNoNL( ss.str() );
 	}
 
 	void Logger::LogInfoNoNL( std::string const & p_msg )
@@ -399,9 +399,9 @@ namespace Castor
 
 	void Logger::LogInfoNoNL( std::ostream const & p_msg )
 	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogInfoNoNL( l_ss.str() );
+		std::stringstream ss;
+		ss << p_msg.rdbuf();
+		LogInfoNoNL( ss.str() );
 	}
 
 	void Logger::LogInfoNoNL( std::wstring const & p_msg )
@@ -411,9 +411,9 @@ namespace Castor
 
 	void Logger::LogInfoNoNL( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogInfoNoNL( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogInfoNoNL( ss.str() );
 	}
 
 	void Logger::LogWarningNoNL( std::string const & p_msg )
@@ -423,9 +423,9 @@ namespace Castor
 
 	void Logger::LogWarningNoNL( std::ostream const & p_msg )
 	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogWarningNoNL( l_ss.str() );
+		std::stringstream ss;
+		ss << p_msg.rdbuf();
+		LogWarningNoNL( ss.str() );
 	}
 
 	void Logger::LogWarningNoNL( std::wstring const & p_msg )
@@ -435,9 +435,9 @@ namespace Castor
 
 	void Logger::LogWarningNoNL( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogWarningNoNL( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogWarningNoNL( ss.str() );
 	}
 
 	void Logger::LogErrorNoNL( std::string const & p_msg )
@@ -447,9 +447,9 @@ namespace Castor
 
 	void Logger::LogErrorNoNL( std::ostream const & p_msg )
 	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogErrorNoNL( l_ss.str() );
+		std::stringstream ss;
+		ss << p_msg.rdbuf();
+		LogErrorNoNL( ss.str() );
 	}
 
 	void Logger::LogErrorNoNL( std::wstring const & p_msg )
@@ -459,9 +459,9 @@ namespace Castor
 
 	void Logger::LogErrorNoNL( std::wostream const & p_msg )
 	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogError( l_ss.str() );
+		std::wstringstream ss;
+		ss << p_msg.rdbuf();
+		LogError( ss.str() );
 	}
 
 	Logger & Logger::GetSingleton()
@@ -481,13 +481,13 @@ namespace Castor
 
 	void Logger::DoRegisterCallback( LogCallback p_pfnCallback, void * p_pCaller )
 	{
-		auto l_lock = make_unique_lock( m_mutex );
+		auto lock = make_unique_lock( m_mutex );
 		m_impl->RegisterCallback( p_pfnCallback, p_pCaller );
 	}
 
 	void Logger::DoUnregisterCallback( void * p_pCaller )
 	{
-		auto l_lock = make_unique_lock( m_mutex );
+		auto lock = make_unique_lock( m_mutex );
 		m_impl->UnregisterCallback( p_pCaller );
 	}
 
@@ -495,7 +495,7 @@ namespace Castor
 	{
 		m_initialised = true;
 		{
-			auto l_lock = make_unique_lock( m_mutex );
+			auto lock = make_unique_lock( m_mutex );
 			m_impl->SetFileName( logFilePath, logLevel );
 		}
 	}
@@ -506,11 +506,11 @@ namespace Castor
 		{
 #if !defined( NDEBUG )
 			{
-				auto l_lock = make_unique_lock( m_mutex );
+				auto lock = make_unique_lock( m_mutex );
 				m_impl->PrintMessage( logLevel, message, p_newLine );
 			}
 #endif
-			auto l_lock = make_unique_lock( m_mutexQueue );
+			auto lock = make_unique_lock( m_mutexQueue );
 			m_queue.push_back( { logLevel, message, p_newLine } );
 		}
 	}
@@ -521,11 +521,11 @@ namespace Castor
 		{
 #if !defined( NDEBUG )
 			{
-				auto l_lock = make_unique_lock( m_mutex );
+				auto lock = make_unique_lock( m_mutex );
 				m_impl->PrintMessage( logLevel, message, p_newLine );
 			}
 #endif
-			auto l_lock = make_unique_lock( m_mutexQueue );
+			auto lock = make_unique_lock( m_mutexQueue );
 			m_queue.push_back( { logLevel, string::string_cast< char >( message ), p_newLine } );
 		}
 	}
@@ -537,12 +537,12 @@ namespace Castor
 			MessageQueue queue;
 
 			{
-				auto l_lock = make_unique_lock( m_mutexQueue );
+				auto lock = make_unique_lock( m_mutexQueue );
 				std::swap( queue, m_queue );
 			}
 
 			{
-				auto l_lock = make_unique_lock( m_mutex );
+				auto lock = make_unique_lock( m_mutex );
 				m_impl->LogMessageQueue( queue );
 			}
 		}
@@ -570,7 +570,7 @@ namespace Castor
 			}
 
 			{
-				auto l_lock = make_unique_lock( m_mutexThreadEnded );
+				auto lock = make_unique_lock( m_mutexThreadEnded );
 				m_threadEnded.notify_all();
 			}
 		} );
@@ -582,8 +582,8 @@ namespace Castor
 		{
 			m_stopped = true;
 			{
-				auto l_lock = make_unique_lock( m_mutexThreadEnded );
-				m_threadEnded.wait( l_lock );
+				auto lock = make_unique_lock( m_mutexThreadEnded );
+				m_threadEnded.wait( lock );
 			}
 			m_logThread.join();
 		}

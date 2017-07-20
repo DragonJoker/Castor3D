@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -173,6 +173,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlbedo )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassRoughness )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassMetallic )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassGlossiness )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlpha )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassDoubleFace )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit )

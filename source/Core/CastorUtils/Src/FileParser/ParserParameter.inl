@@ -33,47 +33,47 @@ namespace Castor
 	template< typename T >
 	inline bool ParseValues( String & p_params, size_t p_count, T * p_value )
 	{
-		bool l_result = false;
+		bool result = false;
 
 		try
 		{
-			String l_regexString = RegexFormat< T >::Value;
+			String regexString = RegexFormat< T >::Value;
 
 			for ( size_t i = 1; i < p_count; ++i )
 			{
-				l_regexString += String( details::VALUE_SEPARATOR ) + RegexFormat< T >::Value;
+				regexString += String( details::VALUE_SEPARATOR ) + RegexFormat< T >::Value;
 			}
 
-			l_regexString += details::IGNORED_END;
+			regexString += details::IGNORED_END;
 
-			const Regex l_regex{ l_regexString };
-			auto l_begin = std::begin( p_params );
-			auto l_end = std::end( p_params );
-			const SRegexIterator l_it( l_begin, l_end, l_regex );
-			const SRegexIterator l_endit;
-			l_result = l_it != l_endit && l_it->size() >= p_count;
+			const Regex regex{ regexString };
+			auto begin = std::begin( p_params );
+			auto end = std::end( p_params );
+			const SRegexIterator it( begin, end, regex );
+			const SRegexIterator endit;
+			result = it != endit && it->size() >= p_count;
 
-			if ( l_result )
+			if ( result )
 			{
 				for ( size_t i = 1; i <= p_count; ++i )
 				{
-					std::basic_istringstream< xchar > l_stream( ( *l_it )[i] );
-					l_stream >> p_value[i - 1];
+					std::basic_istringstream< xchar > stream( ( *it )[i] );
+					stream >> p_value[i - 1];
 				}
 
-				if ( l_it->size() > p_count )
+				if ( it->size() > p_count )
 				{
-					String l_params;
+					String params;
 
-					for ( size_t i = p_count + 1; i < l_it->size(); ++i )
+					for ( size_t i = p_count + 1; i < it->size(); ++i )
 					{
-						if ( ( *l_it )[i].matched )
+						if ( ( *it )[i].matched )
 						{
-							l_params += ( *l_it )[i];
+							params += ( *it )[i];
 						}
 					}
 
-					p_params = l_params;
+					p_params = params;
 				}
 			}
 			else
@@ -86,7 +86,7 @@ namespace Castor
 			Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
 		}
 
-		return l_result;
+		return result;
 	}
 	/**
 		*\~english
@@ -315,17 +315,17 @@ namespace Castor
 
 					if ( !p_value.empty() )
 					{
-						std::size_t l_index = p_value.find( cuT( '\"' ) );
+						std::size_t index = p_value.find( cuT( '\"' ) );
 
-						if ( l_index != String::npos )
+						if ( index != String::npos )
 						{
-							if ( l_index != p_value.size() - 1 )
+							if ( index != p_value.size() - 1 )
 							{
-								p_params = p_value.substr( l_index + 1 );
+								p_params = p_value.substr( index + 1 );
 								string::trim( p_params );
 							}
 
-							p_value = Path{ p_value.substr( 0, l_index ) };
+							p_value = Path{ p_value.substr( 0, index ) };
 						}
 					}
 				}
@@ -359,22 +359,22 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			bool l_result = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
+			bool result = false;
+			StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
 			p_params.clear();
 
-			if ( !l_values.empty() )
+			if ( !values.empty() )
 			{
-				p_value = string::to_lower_case( l_values[0] ) == cuT( "true" );
-				l_result = l_values[0] == cuT( "true" ) || l_values[0] == cuT( "false" );
+				p_value = string::to_lower_case( values[0] ) == cuT( "true" );
+				result = values[0] == cuT( "true" ) || values[0] == cuT( "false" );
 
-				if ( l_values.size() > 1 )
+				if ( values.size() > 1 )
 				{
-					p_params = l_values[1];
+					p_params = values[1];
 				}
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 	/*!
@@ -402,22 +402,22 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			bool l_result = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
+			bool result = false;
+			StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
 			p_params.clear();
 
-			if ( l_values.size() )
+			if ( values.size() )
 			{
-				p_value = PF::GetFormatByName( l_values[0] );
-				l_result = p_value != PixelFormat::eCount;
+				p_value = PF::GetFormatByName( values[0] );
+				result = p_value != PixelFormat::eCount;
 
-				if ( l_values.size() > 1 )
+				if ( values.size() > 1 )
 				{
-					p_params = l_values[1];
+					p_params = values[1];
 				}
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 	/*!
@@ -445,18 +445,18 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			bool l_result = false;
+			bool result = false;
 
 			if ( p_params == cuT( "screen_size" ) )
 			{
-				l_result = Castor::System::GetScreenSize( 0, p_value );
+				result = Castor::System::GetScreenSize( 0, p_value );
 			}
 			else
 			{
-				l_result = ParseValues( p_params, p_value );
+				result = ParseValues( p_params, p_value );
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 	/*!
@@ -484,32 +484,32 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			bool l_result = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 5, false );
+			bool result = false;
+			StringArray values = string::split( p_params, cuT( " \t,;" ), 5, false );
 
-			if ( l_values.size() >= size_t( Component::eCount ) )
+			if ( values.size() >= size_t( Component::eCount ) )
 			{
-				Point4f l_value;
-				l_result = ParseValues( p_params, l_value );
+				Point4f value;
+				result = ParseValues( p_params, value );
 
-				if ( l_result )
+				if ( result )
 				{
 					for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 					{
-						p_value[Component( i )] = l_value[i];
+						p_value[Component( i )] = value[i];
 					}
 				}
 			}
-			else if ( l_values.size() == 3 )
+			else if ( values.size() == 3 )
 			{
-				Point3f l_value;
-				l_result = ParseValues( p_params, l_value );
+				Point3f value;
+				result = ParseValues( p_params, value );
 
-				if ( l_result )
+				if ( result )
 				{
 					for ( uint8_t i = 0; i < 3; i++ )
 					{
-						p_value[Component( i )] = l_value[i];
+						p_value[Component( i )] = value[i];
 					}
 
 					p_value[Component::eAlpha] = 1.0;
@@ -519,39 +519,39 @@ namespace Castor
 			{
 				try
 				{
-					String l_regexString = RegexFormat< Colour >::Value;
-					l_regexString += details::IGNORED_END;
+					String regexString = RegexFormat< Colour >::Value;
+					regexString += details::IGNORED_END;
 
-					const Regex l_regex{ l_regexString };
-					auto l_begin = std::begin( p_params );
-					auto l_end = std::end( p_params );
-					const SRegexIterator l_it( l_begin, l_end, l_regex );
-					const SRegexIterator l_endit;
-					l_result = l_it != l_endit && l_it->size() >= 1;
+					const Regex regex{ regexString };
+					auto begin = std::begin( p_params );
+					auto end = std::end( p_params );
+					const SRegexIterator it( begin, end, regex );
+					const SRegexIterator endit;
+					result = it != endit && it->size() >= 1;
 
-					if ( l_result )
+					if ( result )
 					{
-						uint32_t l_value{ 0u };
+						uint32_t value{ 0u };
 
-						for ( size_t i = 0; i < l_it->size() && l_value == 0u; ++i )
+						for ( size_t i = 0; i < it->size() && value == 0u; ++i )
 						{
-							auto l_match = ( *l_it )[i];
+							auto match = ( *it )[i];
 
-							if ( l_match.matched )
+							if ( match.matched )
 							{
-								String l_text = l_match;
+								String text = match;
 
-								if ( l_text.size() == 6 )
+								if ( text.size() == 6 )
 								{
-									l_text = "FF" + l_text;
+									text = "FF" + text;
 								}
 
-								std::basic_istringstream< xchar > l_stream{ l_text };
-								l_stream >> std::hex >> l_value;
+								std::basic_istringstream< xchar > stream{ text };
+								stream >> std::hex >> value;
 							}
 						}
 
-						p_value = Colour::from_argb( l_value );
+						p_value = Colour::from_argb( value );
 					}
 					else
 					{
@@ -563,10 +563,10 @@ namespace Castor
 					Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
 				}
 
-				return l_result;
+				return result;
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 	/*!
@@ -594,32 +594,32 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			bool l_result = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 5, false );
+			bool result = false;
+			StringArray values = string::split( p_params, cuT( " \t,;" ), 5, false );
 
-			if ( l_values.size() >= size_t( Component::eCount ) )
+			if ( values.size() >= size_t( Component::eCount ) )
 			{
-				Point4f l_value;
-				l_result = ParseValues( p_params, l_value );
+				Point4f value;
+				result = ParseValues( p_params, value );
 
-				if ( l_result )
+				if ( result )
 				{
 					for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 					{
-						p_value[Component( i )] = l_value[i];
+						p_value[Component( i )] = value[i];
 					}
 				}
 			}
-			else if ( l_values.size() == 3 )
+			else if ( values.size() == 3 )
 			{
-				Point3f l_value;
-				l_result = ParseValues( p_params, l_value );
+				Point3f value;
+				result = ParseValues( p_params, value );
 
-				if ( l_result )
+				if ( result )
 				{
 					for ( uint8_t i = 0; i < 3; i++ )
 					{
-						p_value[Component( i )] = l_value[i];
+						p_value[Component( i )] = value[i];
 					}
 
 					p_value[Component::eAlpha] = 1.0;
@@ -629,39 +629,39 @@ namespace Castor
 			{
 				try
 				{
-					String l_regexString = RegexFormat< HdrColour >::Value;
-					l_regexString += details::IGNORED_END;
+					String regexString = RegexFormat< HdrColour >::Value;
+					regexString += details::IGNORED_END;
 
-					const Regex l_regex{ l_regexString };
-					auto l_begin = std::begin( p_params );
-					auto l_end = std::end( p_params );
-					const SRegexIterator l_it( l_begin, l_end, l_regex );
-					const SRegexIterator l_endit;
-					l_result = l_it != l_endit && l_it->size() >= 1;
+					const Regex regex{ regexString };
+					auto begin = std::begin( p_params );
+					auto end = std::end( p_params );
+					const SRegexIterator it( begin, end, regex );
+					const SRegexIterator endit;
+					result = it != endit && it->size() >= 1;
 
-					if ( l_result )
+					if ( result )
 					{
-						uint32_t l_value{ 0u };
+						uint32_t value{ 0u };
 
-						for ( size_t i = 0; i < l_it->size() && l_value == 0u; ++i )
+						for ( size_t i = 0; i < it->size() && value == 0u; ++i )
 						{
-							auto l_match = ( *l_it )[i];
+							auto match = ( *it )[i];
 
-							if ( l_match.matched )
+							if ( match.matched )
 							{
-								String l_text = l_match;
+								String text = match;
 
-								if ( l_text.size() == 6 )
+								if ( text.size() == 6 )
 								{
-									l_text = "FF" + l_text;
+									text = "FF" + text;
 								}
 
-								std::basic_istringstream< xchar > l_stream{ l_text };
-								l_stream >> std::hex >> l_value;
+								std::basic_istringstream< xchar > stream{ text };
+								stream >> std::hex >> value;
 							}
 						}
 
-						p_value = HdrColour::from_argb( l_value );
+						p_value = HdrColour::from_argb( value );
 					}
 					else
 					{
@@ -673,10 +673,10 @@ namespace Castor
 					Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
 				}
 
-				return l_result;
+				return result;
 			}
 
-			return l_result;
+			return result;
 		}
 	};
 
@@ -709,16 +709,16 @@ namespace Castor
 
 	inline bool ParserParameter< ParameterType::eName >::Parse( String & p_params )
 	{
-		Regex l_regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
-		auto l_begin = std::begin( p_params );
-		auto l_end = std::end( p_params );
-		SRegexIterator l_it( l_begin, l_end, l_regex );
-		SRegexIterator l_endit;
+		Regex regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
+		auto begin = std::begin( p_params );
+		auto end = std::end( p_params );
+		SRegexIterator it( begin, end, regex );
+		SRegexIterator endit;
 
-		if ( l_it != l_endit && l_it->size() > 2 )
+		if ( it != endit && it->size() > 2 )
 		{
-			m_value = ( *l_it )[1];
-			p_params = ( *l_it )[2];
+			m_value = ( *it )[1];
+			p_params = ( *it )[2];
 		}
 
 		return !m_value.empty();
@@ -754,27 +754,27 @@ namespace Castor
 
 	inline bool ParserParameter< ParameterType::eCheckedText >::Parse( String & p_params )
 	{
-		bool l_result = false;
-		StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
+		bool result = false;
+		StringArray values = string::split( p_params, cuT( " \t,;" ), 1, false );
 		p_params.clear();
 
-		if ( !l_values.empty() )
+		if ( !values.empty() )
 		{
-			auto l_it = m_values.find( l_values[0] );
+			auto it = m_values.find( values[0] );
 
-			if ( l_it != m_values.end() )
+			if ( it != m_values.end() )
 			{
-				m_value = l_it->second;
-				l_result = true;
+				m_value = it->second;
+				result = true;
 			}
 
-			if ( l_values.size() > 1 )
+			if ( values.size() > 1 )
 			{
-				p_params = l_values[1];
+				p_params = values[1];
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -807,33 +807,33 @@ namespace Castor
 
 	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::Parse( String & p_params )
 	{
-		bool l_result = false;
+		bool result = false;
 		m_value = 0;
-		StringArray l_parameters = string::split( p_params, cuT( " \t,;" ), 1, false );
+		StringArray parameters = string::split( p_params, cuT( " \t,;" ), 1, false );
 		p_params.clear();
 
-		if ( !l_parameters.empty() )
+		if ( !parameters.empty() )
 		{
-			StringArray l_values = string::split( l_parameters[0], cuT( "|" ), uint32_t( std::count( l_parameters[0].begin(), l_parameters[0].end(), cuT( '|' ) ) + 1 ), false );
+			StringArray values = string::split( parameters[0], cuT( "|" ), uint32_t( std::count( parameters[0].begin(), parameters[0].end(), cuT( '|' ) ) + 1 ), false );
 
-			for ( auto l_value : l_values )
+			for ( auto value : values )
 			{
-				auto l_it = m_values.find( l_value );
+				auto it = m_values.find( value );
 
-				if ( l_it != m_values.end() )
+				if ( it != m_values.end() )
 				{
-					m_value |= l_it->second;
-					l_result = true;
+					m_value |= it->second;
+					result = true;
 				}
 			}
 
-			if ( l_parameters.size() > 1 )
+			if ( parameters.size() > 1 )
 			{
-				p_params = l_parameters[1];
+				p_params = parameters[1];
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -866,33 +866,33 @@ namespace Castor
 
 	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::Parse( String & p_params )
 	{
-		bool l_result = false;
+		bool result = false;
 		m_value = 0;
-		StringArray l_parameters = string::split( p_params, cuT( " \t,;" ), 1, false );
+		StringArray parameters = string::split( p_params, cuT( " \t,;" ), 1, false );
 		p_params.clear();
 
-		if ( !l_parameters.empty() )
+		if ( !parameters.empty() )
 		{
-			StringArray l_values = string::split( l_parameters[0], cuT( "|" ), uint32_t( std::count( l_parameters[0].begin(), l_parameters[0].end(), cuT( '|' ) ) + 1 ), false );
+			StringArray values = string::split( parameters[0], cuT( "|" ), uint32_t( std::count( parameters[0].begin(), parameters[0].end(), cuT( '|' ) ) + 1 ), false );
 
-			for ( auto l_value : l_values )
+			for ( auto value : values )
 			{
-				auto l_it = m_values.find( l_value );
+				auto it = m_values.find( value );
 
-				if ( l_it != m_values.end() )
+				if ( it != m_values.end() )
 				{
-					m_value |= l_it->second;
-					l_result = true;
+					m_value |= it->second;
+					result = true;
 				}
 			}
 
-			if ( l_parameters.size() > 1 )
+			if ( parameters.size() > 1 )
 			{
-				p_params = l_parameters[1];
+				p_params = parameters[1];
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -900,16 +900,16 @@ namespace Castor
 	template< typename T >
 	T const & ParserParameterBase::Get( T & p_value )
 	{
-		static const ParameterType l_given = ParserValueTyper< T >::Type;
-		static const ParameterType l_expected = GetBaseType();
+		static const ParameterType given = ParserValueTyper< T >::Type;
+		static const ParameterType expected = GetBaseType();
 
-		if ( l_given == l_expected )
+		if ( given == expected )
 		{
-			p_value = static_cast< ParserParameter< l_given >* >( this )->m_value;
+			p_value = static_cast< ParserParameter< given >* >( this )->m_value;
 		}
 		else
 		{
-			throw ParserParameterTypeException< l_given >( l_expected );
+			throw ParserParameterTypeException< given >( expected );
 		}
 
 		return p_value;

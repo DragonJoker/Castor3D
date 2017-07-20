@@ -53,15 +53,15 @@ namespace CastorGui
 	{
 		SetBackgroundBorders( Rectangle() );
 
-		TextOverlaySPtr l_text = GetEngine().GetOverlayCache().Add( cuT( "T_CtrlStatic_" ) + string::to_string( GetId() )
+		TextOverlaySPtr text = GetEngine().GetOverlayCache().Add( cuT( "T_CtrlStatic_" ) + string::to_string( GetId() )
 			, OverlayType::eText
 			, nullptr
 			, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
-		l_text->SetPixelSize( GetSize() );
-		m_text = l_text;
-		l_text->SetCaption( m_caption );
-		l_text->SetVisible( DoIsVisible() );
-		l_text->SetVAlign( VAlign::eCenter );
+		text->SetPixelSize( GetSize() );
+		m_text = text;
+		text->SetCaption( m_caption );
+		text->SetVisible( DoIsVisible() );
+		text->SetVAlign( VAlign::eCenter );
 		DoUpdateStyle();
 	}
 
@@ -71,31 +71,31 @@ namespace CastorGui
 
 	void StaticCtrl::SetFont( String const & p_font )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetFont( p_font );
+			text->SetFont( p_font );
 		}
 	}
 
 	void StaticCtrl::SetHAlign( HAlign p_align )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetHAlign( p_align );
+			text->SetHAlign( p_align );
 		}
 	}
 
 	void StaticCtrl::SetVAlign( VAlign p_align )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetVAlign( p_align );
+			text->SetVAlign( p_align );
 		}
 	}
 
@@ -106,12 +106,12 @@ namespace CastorGui
 			m_foregroundMaterial = CreateMaterial( GetEngine(), cuT( "CtrlStatic_FG_" ) + string::to_string( GetId() ), Colour::from_components( 1.0, 1.0, 1.0, 1.0 ) );
 		}
 
-		TextOverlaySPtr l_text = m_text.lock();
-		l_text->SetMaterial( GetForegroundMaterial() );
+		TextOverlaySPtr text = m_text.lock();
+		text->SetMaterial( GetForegroundMaterial() );
 
-		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
+		if ( !text->GetFontTexture() || !text->GetFontTexture()->GetFont() )
 		{
-			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
+			text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
 		}
 	}
 
@@ -121,21 +121,21 @@ namespace CastorGui
 
 	void StaticCtrl::DoSetPosition( Position const & p_value )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetPixelPosition( Position() );
+			text->SetPixelPosition( Position() );
 		}
 	}
 
 	void StaticCtrl::DoSetSize( Size const & p_value )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetPixelSize( p_value );
+			text->SetPixelSize( p_value );
 		}
 	}
 
@@ -145,66 +145,66 @@ namespace CastorGui
 
 	void StaticCtrl::DoSetForegroundMaterial( MaterialSPtr p_material )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetMaterial( p_material );
+			text->SetMaterial( p_material );
 		}
 	}
 
 	void StaticCtrl::DoSetCaption( String const & p_value )
 	{
 		m_caption = p_value;
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetCaption( p_value );
-			l_text.reset();
+			text->SetCaption( p_value );
+			text.reset();
 		}
 	}
 
 	void StaticCtrl::DoSetVisible( bool p_visible )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetVisible( p_visible );
+			text->SetVisible( p_visible );
 		}
 	}
 
 	void StaticCtrl::DoUpdateStyle()
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
 			if ( CheckFlag( GetStyle(), StaticStyle::eHAlignCenter ) )
 			{
-				l_text->SetHAlign( HAlign::eCenter );
+				text->SetHAlign( HAlign::eCenter );
 			}
 			else if ( CheckFlag( GetStyle(), StaticStyle::eHAlignRight ) )
 			{
-				l_text->SetHAlign( HAlign::eRight );
+				text->SetHAlign( HAlign::eRight );
 			}
 			else
 			{
-				l_text->SetHAlign( HAlign::eLeft );
+				text->SetHAlign( HAlign::eLeft );
 			}
 
 			if ( CheckFlag( GetStyle(), StaticStyle::eVAlignCenter ) )
 			{
-				l_text->SetVAlign( VAlign::eCenter );
+				text->SetVAlign( VAlign::eCenter );
 			}
 			else if ( CheckFlag( GetStyle(), StaticStyle::eVAlignBottom ) )
 			{
-				l_text->SetVAlign( VAlign::eBottom );
+				text->SetVAlign( VAlign::eBottom );
 			}
 			else
 			{
-				l_text->SetVAlign( VAlign::eTop );
+				text->SetVAlign( VAlign::eTop );
 			}
 		}
 	}

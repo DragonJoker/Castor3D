@@ -32,24 +32,24 @@ namespace Castor3D
 			, MapType & p_nodes
 			, FuncType p_function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				l_itPipelines.first->Apply();
+				itPipelines.first->Apply();
 
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						DoBindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
-							, l_itSubmeshes.second[0].m_passNode.m_pass );
+						DoBindPassOpacityMap( itSubmeshes.second[0].m_passNode
+							, itSubmeshes.second[0].m_passNode.m_pass );
 
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
+						p_function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.second );
 
-						DoUnbindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
-							, l_itSubmeshes.second[0].m_passNode.m_pass );
+						DoUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
+							, itSubmeshes.second[0].m_passNode.m_pass );
 					}
 				}
 			}
@@ -62,34 +62,34 @@ namespace Castor3D
 			, DepthMapArray & p_depthMaps
 			, FuncType p_function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				l_itPipelines.first->Apply();
+				itPipelines.first->Apply();
 
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						EnvironmentMap * l_envMap = nullptr;
-						DoBindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
-							, l_itSubmeshes.second[0].m_passNode
+						EnvironmentMap * envMap = nullptr;
+						DoBindPass( details::GetParentNode( itSubmeshes.second[0].m_instance )
+							, itSubmeshes.second[0].m_passNode
 							, p_scene
-							, *l_itPipelines.first
+							, *itPipelines.first
 							, p_depthMaps
-							, l_itSubmeshes.second[0].m_modelUbo
-							, l_envMap );
+							, itSubmeshes.second[0].m_modelUbo
+							, envMap );
 
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
+						p_function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.second );
 
-						DoUnbindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
-							, l_itSubmeshes.second[0].m_passNode
+						DoUnbindPass( details::GetParentNode( itSubmeshes.second[0].m_instance )
+							, itSubmeshes.second[0].m_passNode
 							, p_scene
-							, *l_itPipelines.first
+							, *itPipelines.first
 							, p_depthMaps
-							, l_envMap );
+							, envMap );
 					}
 				}
 			}
@@ -101,25 +101,25 @@ namespace Castor3D
 			, MapType & p_nodes
 			, FuncType p_function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				p_pass.UpdatePipeline( *itPipelines.first );
+				itPipelines.first->Apply();
 
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						DoBindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
-							, l_itSubmeshes.second[0].m_passNode.m_pass );
+						DoBindPassOpacityMap( itSubmeshes.second[0].m_passNode
+							, itSubmeshes.second[0].m_passNode.m_pass );
 
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
+						p_function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.second );
 
-						DoUnbindPassOpacityMap( l_itSubmeshes.second[0].m_passNode
-							, l_itSubmeshes.second[0].m_passNode.m_pass );
+						DoUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
+							, itSubmeshes.second[0].m_passNode.m_pass );
 					}
 				}
 			}
@@ -133,35 +133,35 @@ namespace Castor3D
 			, DepthMapArray & p_depthMaps
 			, FuncType p_function )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				p_pass.UpdatePipeline( *itPipelines.first );
+				itPipelines.first->Apply();
 
-				for ( auto l_itPass : l_itPipelines.second )
+				for ( auto itPass : itPipelines.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
+					for ( auto itSubmeshes : itPass.second )
 					{
-						EnvironmentMap * l_envMap = nullptr;
-						DoBindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
-							, l_itSubmeshes.second[0].m_passNode
+						EnvironmentMap * envMap = nullptr;
+						DoBindPass( details::GetParentNode( itSubmeshes.second[0].m_instance )
+							, itSubmeshes.second[0].m_passNode
 							, p_scene
-							, *l_itPipelines.first
+							, *itPipelines.first
 							, p_depthMaps
-							, l_itSubmeshes.second[0].m_modelUbo
-							, l_envMap );
+							, itSubmeshes.second[0].m_modelUbo
+							, envMap );
 
-						p_function( *l_itPipelines.first
-							, *l_itPass.first
-							, *l_itSubmeshes.first
-							, l_itSubmeshes.second );
+						p_function( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.second );
 
-						DoUnbindPass( details::GetParentNode( l_itSubmeshes.second[0].m_instance )
-							, l_itSubmeshes.second[0].m_passNode
+						DoUnbindPass( details::GetParentNode( itSubmeshes.second[0].m_instance )
+							, itSubmeshes.second[0].m_passNode
 							, p_scene
-							, *l_itPipelines.first
+							, *itPipelines.first
 							, p_depthMaps
-							, l_envMap );
+							, envMap );
 					}
 				}
 			}
@@ -171,19 +171,19 @@ namespace Castor3D
 		inline void DoRenderNonInstanced( RenderPass const & p_pass
 			, MapType & p_nodes )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				l_itPipelines.first->Apply();
+				itPipelines.first->Apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					DoBindPassOpacityMap( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass );
+					DoBindPassOpacityMap( renderNode.m_passNode
+						, renderNode.m_passNode.m_pass );
 
-					DoRenderNodeNoPass( l_renderNode );
+					DoRenderNodeNoPass( renderNode );
 
-					DoUnbindPassOpacityMap( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass );
+					DoUnbindPassOpacityMap( renderNode.m_passNode
+						, renderNode.m_passNode.m_pass );
 				}
 			}
 		}
@@ -194,29 +194,29 @@ namespace Castor3D
 			, Scene & p_scene
 			, DepthMapArray & p_depthMaps )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				l_itPipelines.first->Apply();
+				itPipelines.first->Apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					EnvironmentMap * l_envMap = nullptr;
-					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode
+					EnvironmentMap * envMap = nullptr;
+					DoBindPass( details::GetParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
 						, p_scene
-						, *l_itPipelines.first
+						, *itPipelines.first
 						, p_depthMaps
-						, l_renderNode.m_modelUbo
-						, l_envMap );
+						, renderNode.m_modelUbo
+						, envMap );
 
-					DoRenderNode( l_renderNode );
+					DoRenderNode( renderNode );
 
-					DoUnbindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode
+					DoUnbindPass( details::GetParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
 						, p_scene
-						, *l_itPipelines.first
+						, *itPipelines.first
 						, p_depthMaps
-						, l_envMap );
+						, envMap );
 				}
 			}
 		}
@@ -226,20 +226,20 @@ namespace Castor3D
 			, Camera const & p_camera
 			, MapType & p_nodes )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				p_pass.UpdatePipeline( *itPipelines.first );
+				itPipelines.first->Apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					DoBindPassOpacityMap( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass );
+					DoBindPassOpacityMap( renderNode.m_passNode
+						, renderNode.m_passNode.m_pass );
 
-					DoRenderNodeNoPass( l_renderNode );
+					DoRenderNodeNoPass( renderNode );
 
-					DoUnbindPassOpacityMap( l_renderNode.m_passNode
-						, l_renderNode.m_passNode.m_pass );
+					DoUnbindPassOpacityMap( renderNode.m_passNode
+						, renderNode.m_passNode.m_pass );
 				}
 			}
 		}
@@ -251,30 +251,30 @@ namespace Castor3D
 			, Scene & p_scene
 			, DepthMapArray & p_depthMaps )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				p_pass.UpdatePipeline( *itPipelines.first );
+				itPipelines.first->Apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					EnvironmentMap * l_envMap = nullptr;
-					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode
+					EnvironmentMap * envMap = nullptr;
+					DoBindPass( details::GetParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
 						, p_scene
-						, *l_itPipelines.first
+						, *itPipelines.first
 						, p_depthMaps
-						, l_renderNode.m_modelUbo
-						, l_envMap );
+						, renderNode.m_modelUbo
+						, envMap );
 
-					DoRenderNode( l_renderNode );
+					DoRenderNode( renderNode );
 
-					DoUnbindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode
+					DoUnbindPass( details::GetParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
 						, p_scene
-						, *l_itPipelines.first
+						, *itPipelines.first
 						, p_depthMaps
-						, l_envMap );
+						, envMap );
 				}
 			}
 		}
@@ -287,31 +287,31 @@ namespace Castor3D
 			, DepthMapArray & p_depthMaps
 			, RenderInfo & p_info )
 		{
-			for ( auto l_itPipelines : p_nodes )
+			for ( auto itPipelines : p_nodes )
 			{
-				p_pass.UpdatePipeline( *l_itPipelines.first );
-				l_itPipelines.first->Apply();
+				p_pass.UpdatePipeline( *itPipelines.first );
+				itPipelines.first->Apply();
 
-				for ( auto & l_renderNode : l_itPipelines.second )
+				for ( auto & renderNode : itPipelines.second )
 				{
-					EnvironmentMap * l_envMap = nullptr;
-					DoBindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode
+					EnvironmentMap * envMap = nullptr;
+					DoBindPass( details::GetParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
 						, p_scene
-						, *l_itPipelines.first
+						, *itPipelines.first
 						, p_depthMaps
-						, l_renderNode.m_modelUbo
-						, l_envMap );
+						, renderNode.m_modelUbo
+						, envMap );
 
-					DoRenderNode( l_renderNode );
+					DoRenderNode( renderNode );
 					++p_info.m_drawCalls;
 
-					DoUnbindPass( details::GetParentNode( l_renderNode.m_instance )
-						, l_renderNode.m_passNode
+					DoUnbindPass( details::GetParentNode( renderNode.m_instance )
+						, renderNode.m_passNode
 						, p_scene
-						, *l_itPipelines.first
+						, *itPipelines.first
 						, p_depthMaps
-						, l_envMap );
+						, envMap );
 
 					++p_info.m_visibleObjectsCount;
 				}
@@ -322,26 +322,26 @@ namespace Castor3D
 		uint32_t CopyNodesMatrices( ArrayT const & p_renderNodes
 			, VertexBuffer & p_matrixBuffer )
 		{
-			auto const l_mtxSize = sizeof( float ) * 16;
-			auto const l_stride = p_matrixBuffer.GetDeclaration().stride();
-			auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-			REQUIRE( l_count <= p_renderNodes.size() );
-			auto l_buffer = p_matrixBuffer.GetData();
-			auto l_it = p_renderNodes.begin();
+			auto const mtxSize = sizeof( float ) * 16;
+			auto const stride = p_matrixBuffer.GetDeclaration().stride();
+			auto const count = std::min( p_matrixBuffer.GetSize() / stride, uint32_t( p_renderNodes.size() ) );
+			REQUIRE( count <= p_renderNodes.size() );
+			auto buffer = p_matrixBuffer.GetData();
+			auto it = p_renderNodes.begin();
 			auto i = 0u;
 
-			while ( i < l_count )
+			while ( i < count )
 			{
-				std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_mtxSize );
-				auto l_id = l_it->m_passNode.m_pass.GetId() - 1;
-				std::memcpy( l_buffer + l_mtxSize, &l_id, sizeof( int ) );
-				l_buffer += l_stride;
+				std::memcpy( buffer, it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), mtxSize );
+				auto id = it->m_passNode.m_pass.GetId() - 1;
+				std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
+				buffer += stride;
 				++i;
-				++l_it;
+				++it;
 			}
 
-			p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.GetData() );
-			return l_count;
+			p_matrixBuffer.Upload( 0u, stride * count, p_matrixBuffer.GetData() );
+			return count;
 		}
 	}
 
@@ -406,9 +406,9 @@ namespace Castor3D
 		m_sceneUbo.GetUbo().Cleanup();
 		DoCleanup();
 
-		for ( auto & l_buffers : m_geometryBuffers )
+		for ( auto & buffers : m_geometryBuffers )
 		{
-			l_buffers->Cleanup();
+			buffers->Cleanup();
 		}
 
 		m_geometryBuffers.clear();
@@ -444,24 +444,31 @@ namespace Castor3D
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const
 	{
-		GLSL::Shader l_result;
+		GLSL::Shader result;
 
-		if ( CheckFlag( p_programFlags, ProgramFlag::ePbr ) )
+		if ( CheckFlag( p_programFlags, ProgramFlag::ePbrMetallicRoughness ) )
 		{
-			l_result = DoGetPbrPixelShaderSource( p_textureFlags
+			result = DoGetPbrMRPixelShaderSource( p_textureFlags
+				, p_programFlags
+				, p_sceneFlags
+				, p_alphaFunc );
+		}
+		else if ( CheckFlag( p_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+		{
+			result = DoGetPbrSGPixelShaderSource( p_textureFlags
 				, p_programFlags
 				, p_sceneFlags
 				, p_alphaFunc );
 		}
 		else
 		{
-			l_result = DoGetLegacyPixelShaderSource( p_textureFlags
+			result = DoGetLegacyPixelShaderSource( p_textureFlags
 				, p_programFlags
 				, p_sceneFlags
 				, p_alphaFunc );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void RenderPass::PreparePipeline( BlendMode p_colourBlendMode
@@ -485,7 +492,7 @@ namespace Castor3D
 				p_alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			auto l_backProgram = DoGetProgram( p_textureFlags
+			auto backProgram = DoGetProgram( p_textureFlags
 				, p_programFlags
 				, p_sceneFlags
 				, p_alphaFunc
@@ -493,30 +500,30 @@ namespace Castor3D
 
 			if ( !m_opaque )
 			{
-				auto l_frontProgram = DoGetProgram( p_textureFlags
+				auto frontProgram = DoGetProgram( p_textureFlags
 					, p_programFlags
 					, p_sceneFlags
 					, p_alphaFunc
 					, true );
-				auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
-				DoPrepareFrontPipeline( *l_frontProgram, l_flags );
-				DoPrepareBackPipeline( *l_backProgram, l_flags );
+				auto flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
+				DoPrepareFrontPipeline( *frontProgram, flags );
+				DoPrepareBackPipeline( *backProgram, flags );
 			}
 			else
 			{
-				auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
+				auto flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
 
 				if ( p_twoSided || CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto l_frontProgram = DoGetProgram( p_textureFlags
+					auto frontProgram = DoGetProgram( p_textureFlags
 						, p_programFlags
 						, p_sceneFlags
 						, p_alphaFunc
 						, true );
-					DoPrepareFrontPipeline( *l_frontProgram, l_flags );
+					DoPrepareFrontPipeline( *frontProgram, flags );
 				}
 
-				DoPrepareBackPipeline( *l_backProgram, l_flags );
+				DoPrepareBackPipeline( *backProgram, flags );
 			}
 		}
 	}
@@ -533,15 +540,15 @@ namespace Castor3D
 			p_alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto l_it = m_frontPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		RenderPipeline * l_return{ nullptr };
+		auto it = m_frontPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
+		RenderPipeline * result{ nullptr };
 
-		if ( l_it != m_frontPipelines.end() )
+		if ( it != m_frontPipelines.end() )
 		{
-			l_return = l_it->second.get();
+			result = it->second.get();
 		}
 
-		return l_return;
+		return result;
 	}
 
 	RenderPipeline * RenderPass::GetPipelineBack( BlendMode p_colourBlendMode
@@ -556,15 +563,15 @@ namespace Castor3D
 			p_alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto l_it = m_backPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		RenderPipeline * l_return{ nullptr };
+		auto it = m_backPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
+		RenderPipeline * result{ nullptr };
 
-		if ( l_it != m_backPipelines.end() )
+		if ( it != m_backPipelines.end() )
 		{
-			l_return = l_it->second.get();
+			result = it->second.get();
 		}
 
-		return l_return;
+		return result;
 	}
 
 	SkinningRenderNode RenderPass::CreateSkinningNode( Pass & p_pass
@@ -573,8 +580,8 @@ namespace Castor3D
 		, Geometry & p_primitive
 		, AnimatedSkeleton & p_skeleton )
 	{
-		auto l_buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffers );
+		auto buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
+		m_geometryBuffers.insert( buffers );
 
 		return SkinningRenderNode
 		{
@@ -582,7 +589,7 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			m_modelMatrixUbo,
 			m_modelUbo,
-			*l_buffers,
+			*buffers,
 			*p_primitive.GetParent(),
 			p_submesh,
 			p_primitive,
@@ -597,8 +604,8 @@ namespace Castor3D
 		, Geometry & p_primitive
 		, AnimatedMesh & p_mesh )
 	{
-		auto l_buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffers );
+		auto buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
+		m_geometryBuffers.insert( buffers );
 
 		return MorphingRenderNode
 		{
@@ -606,7 +613,7 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			m_modelMatrixUbo,
 			m_modelUbo,
-			*l_buffers,
+			*buffers,
 			*p_primitive.GetParent(),
 			p_submesh,
 			p_primitive,
@@ -620,8 +627,8 @@ namespace Castor3D
 		, Submesh & p_submesh
 		, Geometry & p_primitive )
 	{
-		auto l_buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffers );
+		auto buffers = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
+		m_geometryBuffers.insert( buffers );
 
 		return StaticRenderNode
 		{
@@ -629,7 +636,7 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			m_modelMatrixUbo,
 			m_modelUbo,
-			*l_buffers,
+			*buffers,
 			*p_primitive.GetParent(),
 			p_submesh,
 			p_primitive,
@@ -640,8 +647,8 @@ namespace Castor3D
 		, RenderPipeline & p_pipeline
 		, BillboardBase & p_billboard )
 	{
-		auto l_buffers = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
-		m_geometryBuffers.insert( l_buffers );
+		auto buffers = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
+		m_geometryBuffers.insert( buffers );
 
 		return BillboardRenderNode
 		{
@@ -649,7 +656,7 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			m_modelMatrixUbo,
 			m_modelUbo,
-			*l_buffers,
+			*buffers,
 			*p_billboard.GetNode(),
 			p_billboard,
 			m_billboardUbo,
@@ -708,9 +715,9 @@ namespace Castor3D
 		, VertexBuffer & p_matrixBuffer
 		, RenderInfo & p_info )const
 	{
-		auto l_count = CopyNodesMatrices( p_renderNodes, p_matrixBuffer );
-		p_info.m_visibleObjectsCount += l_count;
-		return l_count;
+		auto count = CopyNodesMatrices( p_renderNodes, p_matrixBuffer );
+		p_info.m_visibleObjectsCount += count;
+		return count;
 	}
 
 	uint32_t RenderPass::DoCopyNodesMatrices( SkinningRenderNodeArray const & p_renderNodes
@@ -723,42 +730,42 @@ namespace Castor3D
 		, VertexBuffer & p_matrixBuffer
 		, RenderInfo & p_info )const
 	{
-		auto l_count = CopyNodesMatrices( p_renderNodes, p_matrixBuffer );
-		p_info.m_visibleObjectsCount += l_count;
-		return l_count;
+		auto count = CopyNodesMatrices( p_renderNodes, p_matrixBuffer );
+		p_info.m_visibleObjectsCount += count;
+		return count;
 	}
 	
 	uint32_t RenderPass::DoCopyNodesBones( SkinningRenderNodeArray const & p_renderNodes
 		, ShaderStorageBuffer & p_bonesBuffer )const
 	{
-		uint32_t const l_mtxSize = sizeof( float ) * 16;
-		uint32_t const l_stride = l_mtxSize * 400u;
-		auto const l_count = std::min( p_bonesBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
-		REQUIRE( l_count <= p_renderNodes.size() );
-		auto l_buffer = p_bonesBuffer.GetData();
-		auto l_it = p_renderNodes.begin();
+		uint32_t const mtxSize = sizeof( float ) * 16;
+		uint32_t const stride = mtxSize * 400u;
+		auto const count = std::min( p_bonesBuffer.GetSize() / stride, uint32_t( p_renderNodes.size() ) );
+		REQUIRE( count <= p_renderNodes.size() );
+		auto buffer = p_bonesBuffer.GetData();
+		auto it = p_renderNodes.begin();
 		auto i = 0u;
 
-		while ( i < l_count )
+		while ( i < count )
 		{
-			auto & l_node = *l_it;
-			l_node.m_skeleton.FillBuffer( l_buffer );
-			l_buffer += l_stride;
+			auto & node = *it;
+			node.m_skeleton.FillBuffer( buffer );
+			buffer += stride;
 			++i;
-			++l_it;
+			++it;
 		}
 
-		p_bonesBuffer.Upload( 0u, l_stride * l_count, p_bonesBuffer.GetData() );
-		return l_count;
+		p_bonesBuffer.Upload( 0u, stride * count, p_bonesBuffer.GetData() );
+		return count;
 	}
 
 	uint32_t RenderPass::DoCopyNodesBones( SkinningRenderNodeArray const & p_renderNodes
 		, ShaderStorageBuffer & p_bonesBuffer
 		, RenderInfo & p_info )const
 	{
-		auto l_count = DoCopyNodesBones( p_renderNodes, p_bonesBuffer );
-		p_info.m_visibleObjectsCount += l_count;
-		return l_count;
+		auto count = DoCopyNodesBones( p_renderNodes, p_bonesBuffer );
+		p_info.m_visibleObjectsCount += count;
+		return count;
 	}
 
 	void RenderPass::DoRender( SubmeshStaticRenderNodesByPipelineMap & p_nodes )const
@@ -772,8 +779,8 @@ namespace Castor3D
 			{
 				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
@@ -792,8 +799,8 @@ namespace Castor3D
 			{
 				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
@@ -811,8 +818,8 @@ namespace Castor3D
 			{
 				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
@@ -833,8 +840,8 @@ namespace Castor3D
 			{
 				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
@@ -856,8 +863,8 @@ namespace Castor3D
 			{
 				if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_info );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					uint32_t count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_info );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count );
 					++p_info.m_drawCalls;
 				}
 			} );
@@ -970,11 +977,11 @@ namespace Castor3D
 					&& p_submesh.HasInstancedBonesBuffer() 
 					&& p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
-					REQUIRE( l_count1 == l_count2 );
+					uint32_t count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					uint32_t count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					REQUIRE( count1 == count2 );
 					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
@@ -995,11 +1002,11 @@ namespace Castor3D
 					&& p_submesh.HasInstancedBonesBuffer() 
 					&& p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
-					REQUIRE( l_count1 == l_count2 );
+					uint32_t count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					uint32_t count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					REQUIRE( count1 == count2 );
 					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
@@ -1019,11 +1026,11 @@ namespace Castor3D
 					&& p_submesh.HasInstancedBonesBuffer() 
 					&& p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
-					REQUIRE( l_count1 == l_count2 );
+					uint32_t count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					uint32_t count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					REQUIRE( count1 == count2 );
 					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
@@ -1046,11 +1053,11 @@ namespace Castor3D
 					&& p_submesh.HasInstancedBonesBuffer() 
 					&& p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
-					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
-					REQUIRE( l_count1 == l_count2 );
+					uint32_t count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+					uint32_t count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer() );
+					REQUIRE( count1 == count2 );
 					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
@@ -1074,11 +1081,11 @@ namespace Castor3D
 					&& p_submesh.HasInstancedBonesBuffer() 
 					&& p_submesh.HasMatrixBuffer() )
 				{
-					uint32_t l_count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_info );
-					uint32_t l_count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer(), p_info );
-					REQUIRE( l_count1 == l_count2 );
+					uint32_t count1 = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer(), p_info );
+					uint32_t count2 = DoCopyNodesBones( p_renderNodes, p_submesh.GetInstancedBonesBuffer(), p_info );
+					REQUIRE( count1 == count2 );
 					p_submesh.GetInstancedBonesBuffer().BindTo( SkinningUbo::BindingPoint );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count1 );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, count1 );
 					++p_info.m_drawCalls;
 				}
 			} );
@@ -1184,99 +1191,99 @@ namespace Castor3D
 		, bool p_invertNormals )const
 	{
 		using namespace GLSL;
-		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 		// Vertex inputs
-		auto position = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
-		auto normal = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent );
-		auto texture = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = l_writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = l_writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = l_writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( l_writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto position = writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
+		auto normal = writer.DeclAttribute< Vec3 >( ShaderProgram::Normal );
+		auto tangent = writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent );
+		auto bitangent = writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent );
+		auto texture = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture );
+		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto normal2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto tangent2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto bitangent2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( l_writer );
-		UBO_MODEL_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		SkinningUbo::Declare( l_writer, p_programFlags );
-		UBO_MORPHING( l_writer, p_programFlags );
+		UBO_MATRIX( writer );
+		UBO_MODEL_MATRIX( writer );
+		UBO_SCENE( writer );
+		SkinningUbo::Declare( writer, p_programFlags );
+		UBO_MORPHING( writer, p_programFlags );
 
 		// Outputs
-		auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_tangentSpaceFragPosition = l_writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = l_writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = l_writer.DeclOutput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.DeclOutput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.DeclOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.DeclOutput< Int >( cuT( "vtx_instance" ) );
-		auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto vtx_position = writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_tangentSpaceFragPosition = writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
+		auto vtx_normal = writer.DeclOutput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = writer.DeclOutput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = writer.DeclOutput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = writer.DeclOutput< Int >( cuT( "vtx_instance" ) );
+		auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-		std::function< void() > l_main = [&]()
+		std::function< void() > main = [&]()
 		{
-			auto l_v4Vertex = l_writer.DeclLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_v4Normal = l_writer.DeclLocale( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
-			auto l_v4Tangent = l_writer.DeclLocale( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto l_v3Texture = l_writer.DeclLocale( cuT( "l_v3Texture" ), texture );
-			auto l_mtxModel = l_writer.DeclLocale< Mat4 >( cuT( "l_mtxModel" ) );
+			auto v4Vertex = writer.DeclLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
+			auto v4Normal = writer.DeclLocale( cuT( "v4Normal" ), vec4( normal, 0.0 ) );
+			auto v4Tangent = writer.DeclLocale( cuT( "v4Tangent" ), vec4( tangent, 0.0 ) );
+			auto v3Texture = writer.DeclLocale( cuT( "v3Texture" ), texture );
+			auto mtxModel = writer.DeclLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
-				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
+				mtxModel = SkinningUbo::ComputeTransform( writer, p_programFlags );
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
-				l_mtxModel = transform;
+				mtxModel = transform;
 			}
 			else
 			{
-				l_mtxModel = c3d_mtxModel;
+				mtxModel = c3d_mtxModel;
 			}
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto l_time = l_writer.DeclLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
+				auto time = writer.DeclLocale( cuT( "time" ), 1.0_f - c3d_fTime );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
+				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_fTime, 1.0 );
+				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_fTime, 1.0 );
+				v3Texture = v3Texture * writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
-			vtx_texture = l_v3Texture;
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_position = l_v4Vertex.xyz();
-			l_v4Vertex = c3d_mtxView * l_v4Vertex;
-			l_mtxModel = transpose( inverse( l_mtxModel ) );
+			vtx_texture = v3Texture;
+			v4Vertex = mtxModel * v4Vertex;
+			vtx_position = v4Vertex.xyz();
+			v4Vertex = c3d_mtxView * v4Vertex;
+			mtxModel = transpose( inverse( mtxModel ) );
 
 			if ( p_invertNormals )
 			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * -l_v4Normal ).xyz() );
+				vtx_normal = normalize( writer.Paren( mtxModel * -v4Normal ).xyz() );
 			}
 			else
 			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+				vtx_normal = normalize( writer.Paren( mtxModel * v4Normal ).xyz() );
 			}
 
-			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
+			vtx_tangent = normalize( writer.Paren( mtxModel * v4Tangent ).xyz() );
 			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * l_v4Vertex;
+			gl_Position = c3d_mtxProjection * v4Vertex;
 
-			auto l_tbn = l_writer.DeclLocale( cuT( "l_tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = l_tbn * vtx_position;
-			vtx_tangentSpaceViewPosition = l_tbn * c3d_v3CameraPosition;
+			auto tbn = writer.DeclLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+			vtx_tangentSpaceFragPosition = tbn * vtx_position;
+			vtx_tangentSpaceViewPosition = tbn * c3d_v3CameraPosition;
 		};
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
+		writer.ImplementFunction< void >( cuT( "main" ), main );
+		return writer.Finalise();
 	}
 }

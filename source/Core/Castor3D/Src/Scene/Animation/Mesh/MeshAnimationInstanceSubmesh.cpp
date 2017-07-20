@@ -66,18 +66,18 @@ namespace Castor3D
 		if ( m_first != m_last
 			 && m_animationObject.GetSubmesh().HasAnimationBuffer() )
 		{
-			auto l_curr = m_curr;
-			real l_time = real( p_time.count() );
-			DoFind( l_time, m_first, m_last, m_prev, m_curr );
-			m_currentFactor = float( ( l_time - m_prev->m_timeIndex ) / ( m_curr->m_timeIndex - m_prev->m_timeIndex ) );
+			auto curr = m_curr;
+			real time = real( p_time.count() );
+			DoFind( time, m_first, m_last, m_prev, m_curr );
+			m_currentFactor = float( ( time - m_prev->m_timeIndex ) / ( m_curr->m_timeIndex - m_prev->m_timeIndex ) );
 
-			if ( l_curr != m_curr )
+			if ( curr != m_curr )
 			{
-				uint32_t const l_size = uint32_t( m_curr->m_buffer.size() * sizeof( InterleavedVertex ) );
-				auto & l_vertexBuffer = m_animationObject.GetSubmesh().GetVertexBuffer();
-				auto & l_animBuffer = m_animationObject.GetSubmesh().GetAnimationBuffer();
-				std::memcpy( l_vertexBuffer.GetData(), m_prev->m_buffer.data(), l_vertexBuffer.GetSize() );
-				std::memcpy( l_animBuffer.GetData(), m_curr->m_buffer.data(), l_animBuffer.GetSize() );
+				uint32_t const size = uint32_t( m_curr->m_buffer.size() * sizeof( InterleavedVertex ) );
+				auto & vertexBuffer = m_animationObject.GetSubmesh().GetVertexBuffer();
+				auto & animBuffer = m_animationObject.GetSubmesh().GetAnimationBuffer();
+				std::memcpy( vertexBuffer.GetData(), m_prev->m_buffer.data(), vertexBuffer.GetSize() );
+				std::memcpy( animBuffer.GetData(), m_curr->m_buffer.data(), animBuffer.GetSize() );
 				m_animationObject.GetSubmesh().NeedUpdate();
 			}
 		}

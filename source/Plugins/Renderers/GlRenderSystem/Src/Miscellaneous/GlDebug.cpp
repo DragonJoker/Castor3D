@@ -28,17 +28,17 @@ namespace GlRender
 
 	void GlDebug::Initialise()
 	{
-		auto & l_gl = GetOpenGl();
+		auto & gl = GetOpenGl();
 
-		if ( l_gl.HasExtension( KHR_debug ) )
+		if ( gl.HasExtension( KHR_debug ) )
 		{
 			gl_api::GetFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "KHR" ) );
 		}
-		else if ( l_gl.HasExtension( ARB_debug_output ) )
+		else if ( gl.HasExtension( ARB_debug_output ) )
 		{
 			gl_api::GetFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "ARB" ) );
 		}
-		else if ( l_gl.HasExtension( AMDX_debug_output ) )
+		else if ( gl.HasExtension( AMDX_debug_output ) )
 		{
 			gl_api::GetFunction( m_pfnDebugMessageCallbackAMD, cuT( "glDebugMessageCallbackAMD" ), cuT( "" ) );
 		}
@@ -92,20 +92,20 @@ namespace GlRender
 
 	void GlDebug::BindTexture( uint32_t p_name, uint32_t p_index )const
 	{
-		auto l_it = m_textureUnits.find( p_index );
+		auto it = m_textureUnits.find( p_index );
 
 		if ( !p_name )
 		{
-			if ( l_it == m_textureUnits.end()
-				|| l_it->second.m_texture.m_name == 0u )
+			if ( it == m_textureUnits.end()
+				|| it->second.m_texture.m_name == 0u )
 			{
 				Logger::LogError( std::stringstream{} << "Double texture unbind for index " << p_index );
 			}
 		}
-		else if ( l_it != m_textureUnits.end()
-			&& l_it->second.m_texture.m_name != 0u )
+		else if ( it != m_textureUnits.end()
+			&& it->second.m_texture.m_name != 0u )
 		{
-			Logger::LogError( std::stringstream{} << "Previous texture " << l_it->second.m_texture.m_name << " at index " << p_index << " has not been unbound " );
+			Logger::LogError( std::stringstream{} << "Previous texture " << it->second.m_texture.m_name << " at index " << p_index << " has not been unbound " );
 		}
 
 		m_textureUnits[p_index].m_texture = Binding{ p_name };
@@ -118,20 +118,20 @@ namespace GlRender
 
 	void GlDebug::BindSampler( uint32_t p_name, uint32_t p_index )const
 	{
-		auto l_it = m_textureUnits.find( p_index );
+		auto it = m_textureUnits.find( p_index );
 
 		if ( !p_name )
 		{
-			if ( l_it == m_textureUnits.end()
-				|| l_it->second.m_sampler.m_name == 0u )
+			if ( it == m_textureUnits.end()
+				|| it->second.m_sampler.m_name == 0u )
 			{
 				Logger::LogError( std::stringstream{} << "Double sampler unbind for index " << p_index );
 			}
 		}
-		else if ( l_it != m_textureUnits.end()
-			&& l_it->second.m_sampler.m_name != 0u )
+		else if ( it != m_textureUnits.end()
+			&& it->second.m_sampler.m_name != 0u )
 		{
-			Logger::LogError( std::stringstream{} << "Previous sampler " << l_it->second.m_sampler.m_name << " at index " << p_index << " has not been unbound " );
+			Logger::LogError( std::stringstream{} << "Previous sampler " << it->second.m_sampler.m_name << " at index " << p_index << " has not been unbound " );
 		}
 
 		m_textureUnits[p_index].m_sampler = Binding{ p_name };
@@ -144,30 +144,30 @@ namespace GlRender
 
 	void GlDebug::CheckTextureUnits()const
 	{
-		for ( auto & l_it : m_textureUnits )
+		for ( auto & it : m_textureUnits )
 		{
-			if ( !l_it.second.m_sampler.m_name
-				|| !l_it.second.m_texture.m_name )
+			if ( !it.second.m_sampler.m_name
+				|| !it.second.m_texture.m_name )
 			{
-				Logger::LogError( std::stringstream{} << "Texture unit at index " << l_it.first << " is incomplete" );
+				Logger::LogError( std::stringstream{} << "Texture unit at index " << it.first << " is incomplete" );
 			}
 		}
 	}
 
 	void GlDebug::DoUpdateTextureUnits()const
 	{
-		auto l_it = m_textureUnits.begin();
+		auto it = m_textureUnits.begin();
 
-		while ( l_it != m_textureUnits.end() )
+		while ( it != m_textureUnits.end() )
 		{
-			if ( !l_it->second.m_sampler.m_name
-				&& !l_it->second.m_texture.m_name )
+			if ( !it->second.m_sampler.m_name
+				&& !it->second.m_texture.m_name )
 			{
-				l_it = m_textureUnits.erase( l_it );
+				it = m_textureUnits.erase( it );
 			}
 			else
 			{
-				++l_it;
+				++it;
 			}
 		}
 	}
@@ -223,39 +223,39 @@ namespace GlRender
 			{ GL_INVALID_FRAMEBUFFER_OPERATION, cuT( "Invalid frame buffer operation" ) },
 		};
 
-		bool l_return = true;
-		uint32_t l_errorCode = m_pfnGetError();
+		bool result = true;
+		uint32_t errorCode = m_pfnGetError();
 
-		if ( l_errorCode )
+		if ( errorCode )
 		{
-			//auto l_it = Errors.find( l_errorCode );
-			//StringStream l_error;
+			//auto it = Errors.find( errorCode );
+			//StringStream error;
 			//l_error << cuT( "OpenGL Error, on function: " ) << p_text << std::endl;
-			//l_error << cuT( "  ID: 0x" ) << std::hex << l_errorCode << std::endl;
+			//l_error << cuT( "  ID: 0x" ) << std::hex << errorCode << std::endl;
 
-			//if ( l_it == Errors.end() )
+			//if ( it == Errors.end() )
 			//{
-			//	l_error << cuT( "  Message: Unknown error" ) << std::endl;
+			//	error << cuT( "  Message: Unknown error" ) << std::endl;
 			//}
 			//else
 			//{
-			//	l_error << cuT( "  Message: " ) << l_it->second << std::endl;
+			//	error << cuT( "  Message: " ) << it->second << std::endl;
 			//}
 
-			//String l_sysError = System::GetLastErrorText();
+			//String sysError = System::GetLastErrorText();
 
-			//if ( !l_sysError.empty() )
+			//if ( !sysError.empty() )
 			//{
-			//	l_error << cuT( "  System: " ) << l_sysError << std::endl;
+			//	error << cuT( "  System: " ) << sysError << std::endl;
 			//}
 
 			//l_error << Debug::Backtrace{ 20, 4 };
-			//Logger::LogError( l_error );
-			l_return = false;
-			l_errorCode = m_pfnGetError();
+			//Logger::LogError( error );
+			result = false;
+			errorCode = m_pfnGetError();
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void GlDebug::DebugLog( GlDebugSource source
@@ -298,37 +298,37 @@ namespace GlRender
 
 		if ( !IsFiltered( id ) )
 		{
-			StringStream l_toLog;
-			auto l_message = string::string_cast< xchar >( message );
-			string::replace( l_message, '\n', ' ' );
-			l_toLog << cuT( "OpenGl Debug\n " );
-			l_toLog << cuT( "  Source: " ) << SourceName[source] << cuT( "\n" );
-			l_toLog << cuT( "  Type: " ) << TypeName[type] << cuT( "\n" );
-			l_toLog << cuT( "  Severity: " ) << SeverityName[severity] << cuT( "\n" );
-			l_toLog << cuT( "  ID: 0x" ) << std::hex << std::setfill( '0' ) << std::setw( 8 ) << id << cuT( "\n" );
-			l_toLog << cuT( "  Message: " ) << l_message;
+			StringStream toLog;
+			auto msg = string::string_cast< xchar >( message );
+			string::replace( msg, '\n', ' ' );
+			toLog << cuT( "OpenGl Debug\n " );
+			toLog << cuT( "  Source: " ) << SourceName[source] << cuT( "\n" );
+			toLog << cuT( "  Type: " ) << TypeName[type] << cuT( "\n" );
+			toLog << cuT( "  Severity: " ) << SeverityName[severity] << cuT( "\n" );
+			toLog << cuT( "  ID: 0x" ) << std::hex << std::setfill( '0' ) << std::setw( 8 ) << id << cuT( "\n" );
+			toLog << cuT( "  Message: " ) << message;
 
 			switch ( severity )
 			{
 			case GlDebugSeverity::eHigh:
-				l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
-				Logger::LogError( l_toLog );
+				toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
+				Logger::LogError( toLog );
 				break;
 
 			case GlDebugSeverity::eMedium:
-				Logger::LogWarning( l_toLog );
+				Logger::LogWarning( toLog );
 				break;
 
 			case GlDebugSeverity::eLow:
-				Logger::LogInfo( l_toLog );
+				Logger::LogInfo( toLog );
 				break;
 
 			case GlDebugSeverity::eNotification:
-				Logger::LogTrace( l_toLog );
+				Logger::LogTrace( toLog );
 				break;
 
 			default:
-				Logger::LogWarning( l_toLog );
+				Logger::LogWarning( toLog );
 				break;
 			}
 		}
@@ -360,36 +360,36 @@ namespace GlRender
 			{ GlDebugSeverity::eNotification, cuT( "Notification" ) }
 		};
 
-		StringStream l_toLog;
-		auto l_message = string::string_cast< xchar >( message );
-		string::replace( l_message, '\n', ' ' );
-		l_toLog << cuT( "OpenGl Debug\n" );
-		l_toLog << cuT( "  Category: " ) << CategoryName[category] << cuT( "\n" );
-		l_toLog << cuT( "  Severity: " ) << SeverityName[severity] << cuT( "\n" );
-		l_toLog << cuT( "  ID: 0x" ) << std::hex << std::setfill( '0' ) << std::setw( 8 ) << id << cuT( "\n" );
-		l_toLog << cuT( "  Message: " ) << l_message;
+		StringStream toLog;
+		auto msg = string::string_cast< xchar >( message );
+		string::replace( msg, '\n', ' ' );
+		toLog << cuT( "OpenGl Debug\n" );
+		toLog << cuT( "  Category: " ) << CategoryName[category] << cuT( "\n" );
+		toLog << cuT( "  Severity: " ) << SeverityName[severity] << cuT( "\n" );
+		toLog << cuT( "  ID: 0x" ) << std::hex << std::setfill( '0' ) << std::setw( 8 ) << id << cuT( "\n" );
+		toLog << cuT( "  Message: " ) << message;
 
 		switch ( severity )
 		{
 		case GlDebugSeverity::eHigh:
-			l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
-			Logger::LogError( l_toLog );
+			toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
+			Logger::LogError( toLog );
 			break;
 
 		case GlDebugSeverity::eMedium:
-			Logger::LogWarning( l_toLog );
+			Logger::LogWarning( toLog );
 			break;
 
 		case GlDebugSeverity::eLow:
-			Logger::LogInfo( l_toLog );
+			Logger::LogInfo( toLog );
 			break;
 
 		case GlDebugSeverity::eNotification:
-			Logger::LogTrace( l_toLog );
+			Logger::LogTrace( toLog );
 			break;
 
 		default:
-			Logger::LogWarning( l_toLog );
+			Logger::LogWarning( toLog );
 			break;
 		}
 	}

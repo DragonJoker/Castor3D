@@ -62,116 +62,116 @@ namespace GuiCommon
 
 	void SubmeshTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		wxPGChoices l_choices;
-		l_choices.Add( PROPERTY_TOPOLOGY_POINTS );
-		l_choices.Add( PROPERTY_TOPOLOGY_LINES );
-		l_choices.Add( PROPERTY_TOPOLOGY_LINE_LOOP );
-		l_choices.Add( PROPERTY_TOPOLOGY_LINE_STRIP );
-		l_choices.Add( PROPERTY_TOPOLOGY_TRIANGLES );
-		l_choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_STRIP );
-		l_choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_FAN );
-		l_choices.Add( PROPERTY_TOPOLOGY_QUADS );
-		l_choices.Add( PROPERTY_TOPOLOGY_QUAD_STRIP );
-		l_choices.Add( PROPERTY_TOPOLOGY_POLYGON );
-		wxString l_selected;
+		wxPGChoices choices;
+		choices.Add( PROPERTY_TOPOLOGY_POINTS );
+		choices.Add( PROPERTY_TOPOLOGY_LINES );
+		choices.Add( PROPERTY_TOPOLOGY_LINE_LOOP );
+		choices.Add( PROPERTY_TOPOLOGY_LINE_STRIP );
+		choices.Add( PROPERTY_TOPOLOGY_TRIANGLES );
+		choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_STRIP );
+		choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_FAN );
+		choices.Add( PROPERTY_TOPOLOGY_QUADS );
+		choices.Add( PROPERTY_TOPOLOGY_QUAD_STRIP );
+		choices.Add( PROPERTY_TOPOLOGY_POLYGON );
+		wxString selected;
 
 		switch ( m_submesh.GetTopology() )
 		{
 		case Topology::ePoints:
-			l_selected = PROPERTY_TOPOLOGY_POINTS;
+			selected = PROPERTY_TOPOLOGY_POINTS;
 			break;
 
 		case Topology::eLines:
-			l_selected = PROPERTY_TOPOLOGY_LINES;
+			selected = PROPERTY_TOPOLOGY_LINES;
 			break;
 
 		case Topology::eLineLoop:
-			l_selected = PROPERTY_TOPOLOGY_LINE_LOOP;
+			selected = PROPERTY_TOPOLOGY_LINE_LOOP;
 			break;
 
 		case Topology::eLineStrip:
-			l_selected = PROPERTY_TOPOLOGY_LINE_STRIP;
+			selected = PROPERTY_TOPOLOGY_LINE_STRIP;
 			break;
 
 		case Topology::eTriangles:
-			l_selected = PROPERTY_TOPOLOGY_TRIANGLES;
+			selected = PROPERTY_TOPOLOGY_TRIANGLES;
 			break;
 
 		case Topology::eTriangleStrips:
-			l_selected = PROPERTY_TOPOLOGY_TRIANGLE_STRIP;
+			selected = PROPERTY_TOPOLOGY_TRIANGLE_STRIP;
 			break;
 
 		case Topology::eTriangleFan:
-			l_selected = PROPERTY_TOPOLOGY_TRIANGLE_FAN;
+			selected = PROPERTY_TOPOLOGY_TRIANGLE_FAN;
 			break;
 
 		case Topology::eQuads:
-			l_selected = PROPERTY_TOPOLOGY_QUADS;
+			selected = PROPERTY_TOPOLOGY_QUADS;
 			break;
 
 		case Topology::eQuadStrips:
-			l_selected = PROPERTY_TOPOLOGY_QUAD_STRIP;
+			selected = PROPERTY_TOPOLOGY_QUAD_STRIP;
 			break;
 
 		case Topology::ePolygon:
-			l_selected = PROPERTY_TOPOLOGY_POLYGON;
+			selected = PROPERTY_TOPOLOGY_POLYGON;
 			break;
 		}
 
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.GetName() ) ) );
-		p_grid->Append( new wxEnumProperty( PROPERTY_TOPOLOGY, PROPERTY_TOPOLOGY, l_choices ) )->SetValue( l_selected );
+		p_grid->Append( new wxEnumProperty( PROPERTY_TOPOLOGY, PROPERTY_TOPOLOGY, choices ) )->SetValue( selected );
 		p_grid->Append( DoCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL ) )->SetValue( wxVariant( make_wxString( m_geometry.GetMaterial( m_submesh )->GetName() ) ) );
 	}
 
 	void SubmeshTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
-			if ( l_property->GetName() == PROPERTY_SUBMESH_MATERIAL )
+			if ( property->GetName() == PROPERTY_SUBMESH_MATERIAL )
 			{
-				OnMaterialChange( String( l_property->GetValueAsString().c_str() ) );
+				OnMaterialChange( String( property->GetValueAsString().c_str() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_TOPOLOGY )
+			else if ( property->GetName() == PROPERTY_TOPOLOGY )
 			{
-				if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_POINTS )
+				if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_POINTS )
 				{
 					OnTopologyChange( Topology::ePoints );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINES )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINES )
 				{
 					OnTopologyChange( Topology::eLines );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LOOP )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LOOP )
 				{
 					OnTopologyChange( Topology::eLineLoop );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_STRIP )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_STRIP )
 				{
 					OnTopologyChange( Topology::eLineStrip );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLES )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLES )
 				{
 					OnTopologyChange( Topology::eTriangles );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_STRIP )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_STRIP )
 				{
 					OnTopologyChange( Topology::eTriangleStrips );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_FAN )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_FAN )
 				{
 					OnTopologyChange( Topology::eTriangleFan );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_QUADS )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_QUADS )
 				{
 					OnTopologyChange( Topology::eQuads );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_QUAD_STRIP )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_QUAD_STRIP )
 				{
 					OnTopologyChange( Topology::eQuadStrips );
 				}
-				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_POLYGON )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_POLYGON )
 				{
 					OnTopologyChange( Topology::ePolygon );
 				}
@@ -183,12 +183,12 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_name, this]()
 		{
-			auto & l_cache = m_submesh.GetScene()->GetEngine()->GetMaterialCache();
-			MaterialSPtr l_material = l_cache.Find( p_name );
+			auto & cache = m_submesh.GetScene()->GetEngine()->GetMaterialCache();
+			MaterialSPtr material = cache.Find( p_name );
 
-			if ( l_material )
+			if ( material )
 			{
-				m_geometry.SetMaterial( m_submesh, l_material );
+				m_geometry.SetMaterial( m_submesh, material );
 				m_geometry.GetScene()->SetChanged();
 			}
 		} );

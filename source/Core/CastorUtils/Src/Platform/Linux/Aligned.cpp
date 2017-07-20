@@ -18,14 +18,14 @@
 #	else
 #		include <cstdlib>
 #		define CU_ALIGNED_ALLOC( m, a, s )\
-	int l_error = posix_memalign( &m, a, s );\
-	if ( l_error )\
+	int error = posix_memalign( &m, a, s );\
+	if ( error )\
 	{\
-		if ( l_error == EINVAL )\
+		if ( error == EINVAL )\
 		{\
 			Logger::LogError( StringStream() << cuT( "Aligned allocation failed, alignment of " ) << a << cuT( " is not a power of two times sizeof( void * )" ) );\
 		}\
-		else if ( l_error == ENOMEM )\
+		else if ( error == ENOMEM )\
 		{\
 			Logger::LogError( StringStream() << cuT( "Aligned allocation failed, no memory available" ) );\
 		}\
@@ -39,9 +39,9 @@ namespace Castor
 {
 	void * AlignedAlloc( size_t p_alignment, size_t p_size )
 	{
-		void * l_mem = nullptr;
-		CU_ALIGNED_ALLOC( l_mem, p_alignment, p_size );
-		return l_mem;
+		void * mem = nullptr;
+		CU_ALIGNED_ALLOC( mem, p_alignment, p_size );
+		return mem;
 	}
 
 	void AlignedFree( void * p_memory )

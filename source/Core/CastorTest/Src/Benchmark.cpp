@@ -14,10 +14,10 @@ namespace Testing
 
 	void BenchCase::DoBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls )
 	{
-		std::stringstream l_benchSep;
-		l_benchSep.width( BENCH_TITLE_WIDTH );
-		l_benchSep.fill( '*' );
-		l_benchSep << '*';
+		std::stringstream benchSep;
+		benchSep.width( BENCH_TITLE_WIDTH );
+		benchSep.fill( '*' );
+		benchSep << '*';
 
 		try
 		{
@@ -32,24 +32,24 @@ namespace Testing
 				m_totalExecutions++;
 			}
 
-			std::stringstream l_stream;
-			l_stream.precision( 4 );
-			l_stream << "*	" << p_name << " global results :" << std::endl;
-			l_stream << "*		- Executed " << p_ui64Calls << " times" << std::endl;
-			l_stream << "*		- Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes ).count() / 1000.0 << "s" << std::endl;
-			l_stream << "*		- Average time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes / m_totalExecutions ).count() << "ms" << std::endl;
-			l_stream << l_benchSep.rdbuf() << std::endl;
-			m_summary += l_stream.str();
+			std::stringstream stream;
+			stream.precision( 4 );
+			stream << "*	" << p_name << " global results :" << std::endl;
+			stream << "*		- Executed " << p_ui64Calls << " times" << std::endl;
+			stream << "*		- Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes ).count() / 1000.0 << "s" << std::endl;
+			stream << "*		- Average time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes / m_totalExecutions ).count() << "ms" << std::endl;
+			stream << benchSep.rdbuf() << std::endl;
+			m_summary += stream.str();
 			std::cout << "*	Bench ended for: " << p_name.c_str() << std::endl;
 			std::cout << "*		- Executed " << p_ui64Calls << " times" << std::endl;
 			std::cout << "*		- Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes ).count() / 1000.0 << "s" << std::endl;
 			std::cout << "*		- Average time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes / m_totalExecutions ).count() << "ms" << std::endl;
-			std::cout << l_benchSep.str() << std::endl;
+			std::cout << benchSep.str() << std::endl;
 		}
 		catch ( ... )
 		{
 			std::cout << "*	Bench " << p_name.c_str() << " failed" << std::endl;
-			std::cout << l_benchSep.str() << std::endl;
+			std::cout << benchSep.str() << std::endl;
 		}
 	}
 }

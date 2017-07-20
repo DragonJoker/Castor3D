@@ -24,11 +24,11 @@ namespace HaarmPieterDuiker
 	ToneMapping::ToneMapping( Engine & p_engine, Parameters const & p_parameters )
 		: Castor3D::ToneMapping{ Name, p_engine, p_parameters }
 	{
-		String l_param;
+		String param;
 
-		if ( p_parameters.Get( cuT( "Gamma" ), l_param ) )
+		if ( p_parameters.Get( cuT( "Gamma" ), param ) )
 		{
-			m_config.SetGamma( string::to_float( l_param ) );
+			m_config.SetGamma( string::to_float( param ) );
 		}
 	}
 
@@ -45,55 +45,55 @@ namespace HaarmPieterDuiker
 	{
 		m_gammaVar = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma );
 
-		GLSL::Shader l_pxl;
+		GLSL::Shader pxl;
 		{
-			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+			auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config{ l_writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };
-			auto c3d_fExposure = l_config.DeclMember< Float >( ShaderProgram::Exposure );
-			auto c3d_fGamma = l_config.DeclMember< Float >( ShaderProgram::Gamma );
-			l_config.End();
-			auto c3d_mapDiffuse = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-			auto vtx_texture = l_writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
+			Ubo config{ writer, ShaderProgram::BufferHdrConfig, HdrConfigUbo::BindingPoint };
+			auto c3d_fExposure = config.DeclMember< Float >( ShaderProgram::Exposure );
+			auto c3d_fGamma = config.DeclMember< Float >( ShaderProgram::Gamma );
+			config.End();
+			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto plx_v4FragColor = writer.DeclFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
-			auto log10 = l_writer.ImplementFunction< Vec3 >( cuT( "log10" )
+			auto log10 = writer.ImplementFunction< Vec3 >( cuT( "log10" )
 				, [&]( Vec3 const & p_in )
 				{
-					l_writer.Return( GLSL::log2( p_in ) / GLSL::log2( 10.0_f ) );
-				}, InVec3{ &l_writer, cuT( "p_in" ) } );
+					writer.Return( GLSL::log2( p_in ) / GLSL::log2( 10.0_f ) );
+				}, InVec3{ &writer, cuT( "p_in" ) } );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_hdrColor = l_writer.DeclLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
-				l_hdrColor *= c3d_fExposure;
-				auto ld = l_writer.DeclLocale( cuT( "ld" ), vec3( 0.002_f ) );
-				auto linReference = l_writer.DeclLocale( cuT( "linReference" ), 0.18_f );
-				auto logReference = l_writer.DeclLocale( cuT( "logReference" ), 444.0_f );
-				auto logGamma = l_writer.DeclLocale( cuT( "logGamma" ), 1.0_f / c3d_fGamma );
+				auto hdrColor = writer.DeclLocale( cuT( "hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				hdrColor *= c3d_fExposure;
+				auto ld = writer.DeclLocale( cuT( "ld" ), vec3( 0.002_f ) );
+				auto linReference = writer.DeclLocale( cuT( "linReference" ), 0.18_f );
+				auto logReference = writer.DeclLocale( cuT( "logReference" ), 444.0_f );
+				auto logGamma = writer.DeclLocale( cuT( "logGamma" ), 1.0_f / c3d_fGamma );
 
-				auto l_logColor = l_writer.DeclLocale( cuT( "LogColor" )
-					, l_writer.Paren( log10( vec3( 0.4_f ) * l_hdrColor.rgb() / linReference )
+				auto logColor = writer.DeclLocale( cuT( "LogColor" )
+					, writer.Paren( log10( vec3( 0.4_f ) * hdrColor.rgb() / linReference )
 						/ ld * logGamma + 444.0_f ) / 1023.0f );
-				l_logColor = clamp( l_logColor, 0.0, 1.0 );
+				logColor = clamp( logColor, 0.0, 1.0 );
 
-				auto l_filmLutWidth = l_writer.DeclLocale( cuT( "FilmLutWidth" ), Float( 256 ) );
-				auto l_padding = l_writer.DeclLocale( cuT( "Padding" ), Float( 0.5 ) / l_filmLutWidth );
+				auto filmLutWidth = writer.DeclLocale( cuT( "FilmLutWidth" ), Float( 256 ) );
+				auto padding = writer.DeclLocale( cuT( "Padding" ), Float( 0.5 ) / filmLutWidth );
 
 				//  apply response lookup and color grading for target display
-				plx_v4FragColor.r() = mix( l_padding, 1.0f - l_padding, l_logColor.r() );
-				plx_v4FragColor.g() = mix( l_padding, 1.0f - l_padding, l_logColor.g() );
-				plx_v4FragColor.b() = mix( l_padding, 1.0f - l_padding, l_logColor.b() );
+				plx_v4FragColor.r() = mix( padding, 1.0f - padding, logColor.r() );
+				plx_v4FragColor.g() = mix( padding, 1.0f - padding, logColor.g() );
+				plx_v4FragColor.b() = mix( padding, 1.0f - padding, logColor.b() );
 				plx_v4FragColor.a() = 1.0f;
 			} );
 
-			l_pxl = l_writer.Finalise();
+			pxl = writer.Finalise();
 		}
 
-		return l_pxl;
+		return pxl;
 	}
 
 	void ToneMapping::DoDestroy()

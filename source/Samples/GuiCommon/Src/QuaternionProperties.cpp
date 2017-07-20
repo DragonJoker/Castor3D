@@ -30,8 +30,8 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			const Quaternion & l_quat = QuaternionRefFromVariant( m_value );
-			l_quat.to_axis_angle( m_axis, m_angle );
+			const Quaternion & quat = QuaternionRefFromVariant( m_value );
+			quat.to_axis_angle( m_axis, m_angle );
 			Item( 0 )->SetValue( m_axis[0] );
 			Item( 1 )->SetValue( m_axis[1] );
 			Item( 2 )->SetValue( m_axis[2] );
@@ -41,33 +41,33 @@ namespace GuiCommon
 
 	wxVariant QuaternionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		Quaternion & l_quat = QuaternionRefFromVariant( thisValue );
-		auto l_axis = m_axis;
-		auto l_angle = m_angle;
+		Quaternion & quat = QuaternionRefFromVariant( thisValue );
+		auto axis = m_axis;
+		auto angle = m_angle;
 		float val = float( childValue.GetDouble() );
 
 		switch ( childIndex )
 		{
 		case 0:
-			l_axis[0] = val;
+			axis[0] = val;
 			break;
 
 		case 1:
-			l_axis[1] = val;
+			axis[1] = val;
 			break;
 
 		case 2:
-			l_axis[2] = val;
+			axis[2] = val;
 			break;
 
 		case 3:
-			l_angle.degrees( val );
+			angle.degrees( val );
 			break;
 		}
 
-		l_quat.from_axis_angle( l_axis, l_angle );
+		quat.from_axis_angle( axis, angle );
 		wxVariant newVariant;
-		newVariant << l_quat;
+		newVariant << quat;
 		return newVariant;
 	}
 }

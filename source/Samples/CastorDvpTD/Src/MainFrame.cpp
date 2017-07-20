@@ -48,10 +48,10 @@ namespace castortd
 		{
 			wxGetApp().GetCastor()->Initialise( 120, CASTOR3D_THREADED );
 			DoLoadScene();
-			wxBoxSizer * l_sizer{ new wxBoxSizer{ wxHORIZONTAL } };
-			l_sizer->Add( m_panel.get(), wxSizerFlags( 1 ).Shaped().Centre() );
-			l_sizer->SetSizeHints( this );
-			SetSizer( l_sizer );
+			wxBoxSizer * sizer{ new wxBoxSizer{ wxHORIZONTAL } };
+			sizer->Add( m_panel.get(), wxSizerFlags( 1 ).Shaped().Centre() );
+			sizer->SetSizeHints( this );
+			SetSizer( sizer );
 		}
 		catch ( std::exception & p_exc )
 		{
@@ -65,33 +65,33 @@ namespace castortd
 
 	void MainFrame::DoLoadScene()
 	{
-		auto & l_engine = *wxGetApp().GetCastor();
-		auto l_window = GuiCommon::LoadScene( l_engine
+		auto & engine = *wxGetApp().GetCastor();
+		auto window = GuiCommon::LoadScene( engine
 			, File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
-			, l_engine.GetRenderLoop().GetWantedFps()
-			, l_engine.IsThreaded() );
+			, engine.GetRenderLoop().GetWantedFps()
+			, engine.IsThreaded() );
 
-		if ( l_window )
+		if ( window )
 		{
-			m_game = std::make_unique< Game >( *l_window->GetScene() );
+			m_game = std::make_unique< Game >( *window->GetScene() );
 			m_panel = wxMakeWindowPtr< RenderPanel >( this, MainFrameSize, *m_game );
-			m_panel->SetRenderWindow( l_window );
+			m_panel->SetRenderWindow( window );
 
-			if ( l_window->IsInitialised() )
+			if ( window->IsInitialised() )
 			{
-				if ( l_window->IsFullscreen() )
+				if ( window->IsFullscreen() )
 				{
 					ShowFullScreen( true, wxFULLSCREEN_ALL );
 				}
 
 				if ( !IsMaximized() )
 				{
-					SetClientSize( l_window->GetSize().width(), l_window->GetSize().height() );
+					SetClientSize( window->GetSize().width(), window->GetSize().height() );
 				}
 				else
 				{
 					Maximize( false );
-					SetClientSize( l_window->GetSize().width(), l_window->GetSize().height() );
+					SetClientSize( window->GetSize().width(), window->GetSize().height() );
 					Maximize();
 				}
 
@@ -104,8 +104,8 @@ namespace castortd
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 
-			wxSize l_size = GetClientSize();
-			SetMinClientSize( l_size );
+			wxSize size = GetClientSize();
+			SetMinClientSize( size );
 
 #endif
 
@@ -134,7 +134,7 @@ namespace castortd
 
 	void MainFrame::OnPaint( wxPaintEvent & p_event )
 	{
-		wxPaintDC l_paintDC( this );
+		wxPaintDC paintDC( this );
 		p_event.Skip();
 	}
 
@@ -188,15 +188,15 @@ namespace castortd
 	{
 		if ( wxGetApp().GetCastor() )
 		{
-			auto & l_castor = *wxGetApp().GetCastor();
+			auto & castor = *wxGetApp().GetCastor();
 
-			if ( !l_castor.IsCleaned() )
+			if ( !castor.IsCleaned() )
 			{
-				if ( !l_castor.IsThreaded() )
+				if ( !castor.IsThreaded() )
 				{
-					l_castor.GetRenderLoop().RenderSyncFrame();
+					castor.GetRenderLoop().RenderSyncFrame();
 					m_game->Update();
-					m_timer->Start( 1000 / l_castor.GetRenderLoop().GetWantedFps(), true );
+					m_timer->Start( 1000 / castor.GetRenderLoop().GetWantedFps(), true );
 				}
 			}
 		}

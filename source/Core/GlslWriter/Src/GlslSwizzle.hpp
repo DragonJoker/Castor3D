@@ -224,10 +224,10 @@ namespace GLSL
 #	define GLSL_SWIZZLE( Input, Output, Name )\
 	inline Output Name()const\
 	{\
-		Castor::String l_me( *this );\
-		Output l_return( m_writer, l_me );\
-		l_return.m_value << l_me << cuT( "."#Name );\
-		return l_return;\
+		Castor::String me( *this );\
+		Output result( m_writer, me );\
+		result.m_value << me << cuT( "."#Name );\
+		return result;\
 	}
 
 #	define GLSL_FIRST_SWIZZLE( Input, Output, Name )\

@@ -139,16 +139,16 @@ namespace Castor
 		 */
 		bool Intersects( Line2D const & p_line, T & x, T & y )
 		{
-			bool l_result = false;
+			bool result = false;
 
 			if ( policy::equals( a, p_line.a ) )
 			{
 				x = ( p_line.b - b ) / ( a - p_line.a );
 				y = a * x + b;
-				l_result = true;
+				result = true;
 			}
 
-			return l_result;
+			return result;
 		}
 
 	public:

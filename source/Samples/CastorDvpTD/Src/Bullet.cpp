@@ -29,23 +29,23 @@ namespace castortd
 
 	bool Bullet::Accept( Game & p_game )
 	{
-		bool l_reachDst{ true };
+		bool reachDst{ true };
 
 		if ( m_target.get().IsAlive() )
 		{
-			auto l_speed = p_game.GetElapsed().count() * m_speed / 1000;
-			Point3r l_result = m_target.get().GetNode().GetPosition();
-			Point3r l_position{ m_node.get().GetPosition() };
-			Point3r l_direction{ l_result - l_position };
-			auto l_distanceToDst = point::length( l_direction );
-			l_direction[0] *= l_speed / l_distanceToDst;
-			l_direction[2] *= l_speed / l_distanceToDst;
-			l_reachDst = l_distanceToDst <= l_speed;
+			auto speed = p_game.GetElapsed().count() * m_speed / 1000;
+			Point3r result = m_target.get().GetNode().GetPosition();
+			Point3r position{ m_node.get().GetPosition() };
+			Point3r direction{ result - position };
+			auto distanceToDst = point::length( direction );
+			direction[0] *= speed / distanceToDst;
+			direction[2] *= speed / distanceToDst;
+			reachDst = distanceToDst <= speed;
 
-			if ( !l_reachDst )
+			if ( !reachDst )
 			{
-				l_result = l_position + l_direction;
-				m_node.get().SetPosition( l_result );
+				result = position + direction;
+				m_node.get().SetPosition( result );
 			}
 			else
 			{
@@ -53,11 +53,11 @@ namespace castortd
 			}
 		}
 
-		if ( l_reachDst )
+		if ( reachDst )
 		{
 			m_node.get().SetPosition( Point3r{ 0, -10, 0 } );
 		}
 
-		return l_reachDst;
+		return reachDst;
 	}
 }

@@ -67,8 +67,8 @@ namespace Castor3D
 
 	Castor::String & operator<<( Castor::String & p_stream, Castor3D::Version const & p_version )
 	{
-		StringStream l_stream;
-		l_stream << p_version;
-		return p_stream += l_stream.str();
+		StringStream stream;
+		stream << p_version;
+		return p_stream += stream.str();
 	}
 }

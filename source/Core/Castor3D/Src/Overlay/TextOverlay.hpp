@@ -221,9 +221,9 @@ namespace Castor3D
 		 */
 		inline void SetCaption( Castor::OutputStream const & p_value )
 		{
-			Castor::StringStream l_ss;
-			l_ss << p_value.rdbuf();
-			SetCaption( l_ss.str() );
+			Castor::StringStream ss;
+			ss << p_value.rdbuf();
+			SetCaption( ss.str() );
 		}
 		/**
 		 *\~english

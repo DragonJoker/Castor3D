@@ -19,11 +19,11 @@ namespace Castor3D
 
 	void SkeletonAnimationInstanceBone::DoApply()
 	{
-		BoneSPtr l_bone = m_animationBone.GetBone();
+		BoneSPtr bone = m_animationBone.GetBone();
 
-		if ( l_bone )
+		if ( bone )
 		{
-			m_finalTransform = m_cumulativeTransform * l_bone->GetOffsetMatrix();
+			m_finalTransform = m_cumulativeTransform * bone->GetOffsetMatrix();
 		}
 	}
 }

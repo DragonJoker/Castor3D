@@ -8,78 +8,78 @@ namespace GLSL
 {
 	std::unique_ptr< KeywordsBase > KeywordsBase::Get( GlslWriterConfig const & p_rs )
 	{
-		std::unique_ptr< KeywordsBase > l_return;
+		std::unique_ptr< KeywordsBase > result;
 
 		switch ( p_rs.m_shaderLanguageVersion )
 		{
 		case 110:
-			l_return = std::make_unique< Keywords< 110 > >();
+			result = std::make_unique< Keywords< 110 > >();
 			break;
 
 		case 120:
-			l_return = std::make_unique< Keywords< 120 > >();
+			result = std::make_unique< Keywords< 120 > >();
 			break;
 
 		case 130:
 			if ( p_rs.m_hasConstantsBuffers )
 			{
-				l_return = std::make_unique< Keywords< 140 > >();
+				result = std::make_unique< Keywords< 140 > >();
 			}
 			else
 			{
-				l_return = std::make_unique< Keywords< 130 > >();
+				result = std::make_unique< Keywords< 130 > >();
 			}
 			break;
 
 		case 140:
-			l_return = std::make_unique< Keywords< 140 > >();
+			result = std::make_unique< Keywords< 140 > >();
 			break;
 
 		case 150:
-			l_return = std::make_unique< Keywords< 150 > >();
+			result = std::make_unique< Keywords< 150 > >();
 			break;
 
 		case 330:
-			l_return = std::make_unique< Keywords< 330 > >();
+			result = std::make_unique< Keywords< 330 > >();
 			break;
 
 		case 400:
-			l_return = std::make_unique< Keywords< 400 > >();
+			result = std::make_unique< Keywords< 400 > >();
 			break;
 
 		case 410:
-			l_return = std::make_unique< Keywords< 410 > >();
+			result = std::make_unique< Keywords< 410 > >();
 			break;
 
 		case 420:
-			l_return = std::make_unique< Keywords< 420 > >();
+			result = std::make_unique< Keywords< 420 > >();
 			break;
 
 		case 430:
-			l_return = std::make_unique< Keywords< 430 > >();
+			result = std::make_unique< Keywords< 430 > >();
 			break;
 
 		case 440:
-			l_return = std::make_unique< Keywords< 440 > >();
+			result = std::make_unique< Keywords< 440 > >();
 			break;
 
 		case 450:
-			l_return = std::make_unique< Keywords< 450 > >();
+			result = std::make_unique< Keywords< 450 > >();
 			break;
 
 		default:
 			if ( p_rs.m_shaderLanguageVersion > 450 )
 			{
-				l_return = std::make_unique< Keywords< 450 > >();
+				result = std::make_unique< Keywords< 450 > >();
 			}
 			else
 			{
-				l_return = std::make_unique< Keywords< 110 > >();
+				result = std::make_unique< Keywords< 110 > >();
 			}
 			break;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	String KeywordsBase::GetAttribute( uint32_t p_index )const
@@ -96,21 +96,21 @@ namespace GLSL
 			{ Ubo::Layout::ePacked, cuT( "packed" ) },
 		};
 
-		String l_return;
+		String result;
 
 		if ( !m_strUboLayout.empty() )
 		{
-			l_return = m_strUboLayout + cuT( "( " ) + LayoutName[p_layout];
+			result = m_strUboLayout + cuT( "( " ) + LayoutName[p_layout];
 
 			if ( !m_strUboBinding.empty() )
 			{
-				l_return += cuT( ", " ) + m_strUboBinding + cuT( " = " ) + string::to_string( p_index );
+				result += cuT( ", " ) + m_strUboBinding + cuT( " = " ) + string::to_string( p_index );
 			}
 
-			l_return += cuT( " ) " );
+			result += cuT( " ) " );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	String KeywordsBase::GetLayout( Ssbo::Layout p_layout, uint32_t p_index )const
@@ -123,20 +123,20 @@ namespace GLSL
 			{ Ssbo::Layout::ePacked, cuT( "packed" ) },
 		};
 
-		String l_return;
+		String result;
 
 		if ( !m_strSsboLayout.empty() )
 		{
-			l_return = m_strSsboLayout + cuT( "( " ) + LayoutName[p_layout];
+			result = m_strSsboLayout + cuT( "( " ) + LayoutName[p_layout];
 
 			if ( !m_strSsboBinding.empty() )
 			{
-				l_return += cuT( ", " ) + m_strSsboBinding + cuT( " = " ) + string::to_string( p_index );
+				result += cuT( ", " ) + m_strSsboBinding + cuT( " = " ) + string::to_string( p_index );
 			}
 
-			l_return += cuT( " ) " );
+			result += cuT( " ) " );
 		}
 
-		return l_return;
+		return result;
 	}
 }

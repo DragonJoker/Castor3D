@@ -13,46 +13,46 @@ namespace Castor3D
 	{
 		Point3r GetVertexP( Point3r const & p_min, Point3r const & p_max, Point3r const & p_normal )
 		{
-			Point3r l_return{ p_min };
+			Point3r result{ p_min };
 
 			if ( p_normal[0] >= 0 )
 			{
-				l_return[0] = p_max[0];
+				result[0] = p_max[0];
 			}
 
 			if ( p_normal[1] >= 0 )
 			{
-				l_return[1] = p_max[1];
+				result[1] = p_max[1];
 			}
 
 			if ( p_normal[2] >= 0 )
 			{
-				l_return[2] = p_max[2];
+				result[2] = p_max[2];
 			}
 
-			return l_return;
+			return result;
 		}
 
 		Point3r GetVertexN( Point3r const & p_min, Point3r const & p_max, Point3r const & p_normal )
 		{
-			Point3r l_return{ p_max };
+			Point3r result{ p_max };
 
 			if ( p_normal[0] >= 0 )
 			{
-				l_return[0] = p_min[0];
+				result[0] = p_min[0];
 			}
 
 			if ( p_normal[1] >= 0 )
 			{
-				l_return[1] = p_min[1];
+				result[1] = p_min[1];
 			}
 
 			if ( p_normal[2] >= 0 )
 			{
-				l_return[2] = p_min[2];
+				result[2] = p_min[2];
 			}
 
-			return l_return;
+			return result;
 		}
 	}
 
@@ -66,145 +66,145 @@ namespace Castor3D
 	void Frustum::Update( Point3r const & p_position, Point3r const & p_x, Point3r const & p_y, Point3r const & p_z )
 	{
 		// Retrieve near and far planes' dimensions
-		real l_farHeight{ 0.0_r };
-		real l_farWidth{ 0.0_r };
-		real l_nearHeight{ 0.0_r };
-		real l_nearWidth{ 0.0_r };
+		real farHeight{ 0.0_r };
+		real farWidth{ 0.0_r };
+		real nearHeight{ 0.0_r };
+		real nearWidth{ 0.0_r };
 
 		if ( m_viewport.GetType() == ViewportType::eOrtho )
 		{
-			l_nearHeight = ( m_viewport.GetBottom() - m_viewport.GetTop() );
-			l_nearWidth = ( m_viewport.GetRight() - m_viewport.GetLeft() );
-			l_farHeight = l_nearHeight;
-			l_farWidth = l_nearWidth;
+			nearHeight = ( m_viewport.GetBottom() - m_viewport.GetTop() );
+			nearWidth = ( m_viewport.GetRight() - m_viewport.GetLeft() );
+			farHeight = nearHeight;
+			farWidth = nearWidth;
 		}
 		else
 		{
-			real l_tan = real( m_viewport.GetFovY().tan() );
-			l_nearHeight = 2 * l_tan * m_viewport.GetNear();
-			l_nearWidth = l_nearHeight * m_viewport.GetRatio();
-			l_farHeight = 2 * l_tan * m_viewport.GetFar();
-			l_farWidth = l_farHeight * m_viewport.GetRatio();
+			real tan = real( m_viewport.GetFovY().tan() );
+			nearHeight = 2 * tan * m_viewport.GetNear();
+			nearWidth = nearHeight * m_viewport.GetRatio();
+			farHeight = 2 * tan * m_viewport.GetFar();
+			farWidth = farHeight * m_viewport.GetRatio();
 		}
 
 		// Compute planes' points
 		// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
-		Point3r l_rn{ p_x * l_nearWidth / 2 };
-		Point3r l_rf{ p_x * l_farWidth / 2 };
-		Point3r l_tn{ p_y * l_nearHeight / 2 };
-		Point3r l_tf{ p_y * l_farHeight / 2 };
-		Point3r l_nc{ p_position + p_z * m_viewport.GetNear() };
-		Point3r l_ntl{ l_nc + l_tn - l_rn };
-		Point3r l_ntr{ l_nc + l_tn + l_rn };
-		Point3r l_nbl{ l_nc - l_tn - l_rn };
-		Point3r l_nbr{ l_nc - l_tn + l_rn };
-		Point3r l_fc{ p_position + p_z * m_viewport.GetFar() };
-		Point3r l_ftl{ l_fc + l_tf - l_rf };
-		Point3r l_ftr{ l_fc + l_tf + l_rf };
-		Point3r l_fbl{ l_fc - l_tf - l_rf };
-		Point3r l_fbr{ l_fc - l_tf + l_rf };
+		Point3r rn{ p_x * nearWidth / 2 };
+		Point3r rf{ p_x * farWidth / 2 };
+		Point3r tn{ p_y * nearHeight / 2 };
+		Point3r tf{ p_y * farHeight / 2 };
+		Point3r nc{ p_position + p_z * m_viewport.GetNear() };
+		Point3r ntl{ nc + tn - rn };
+		Point3r ntr{ nc + tn + rn };
+		Point3r nbl{ nc - tn - rn };
+		Point3r nbr{ nc - tn + rn };
+		Point3r fc{ p_position + p_z * m_viewport.GetFar() };
+		Point3r ftl{ fc + tf - rf };
+		Point3r ftr{ fc + tf + rf };
+		Point3r fbl{ fc - tf - rf };
+		Point3r fbr{ fc - tf + rf };
 
 		// Fill planes
-		m_planes[size_t( FrustumPlane::eNear )].Set( l_ntl, l_ntr, l_nbr );
-		m_planes[size_t( FrustumPlane::eFar )].Set( l_ftr, l_ftl, l_fbl );
-		m_planes[size_t( FrustumPlane::eLeft )].Set( l_ntl, l_nbl, l_fbl );
-		m_planes[size_t( FrustumPlane::eRight )].Set( l_nbr, l_ntr, l_fbr );
-		m_planes[size_t( FrustumPlane::eTop )].Set( l_ntr, l_ntl, l_ftl );
-		m_planes[size_t( FrustumPlane::eBottom )].Set( l_nbl, l_nbr, l_fbr );
+		m_planes[size_t( FrustumPlane::eNear )].Set( ntl, ntr, nbr );
+		m_planes[size_t( FrustumPlane::eFar )].Set( ftr, ftl, fbl );
+		m_planes[size_t( FrustumPlane::eLeft )].Set( ntl, nbl, fbl );
+		m_planes[size_t( FrustumPlane::eRight )].Set( nbr, ntr, fbr );
+		m_planes[size_t( FrustumPlane::eTop )].Set( ntr, ntl, ftl );
+		m_planes[size_t( FrustumPlane::eBottom )].Set( nbl, nbr, fbr );
 	}
 
 	bool Frustum::IsVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-		Point3r l_corners[8];
-		l_corners[0] = p_box.GetMin();
-		l_corners[1] = p_box.GetMax();
+		Point3r corners[8];
+		corners[0] = p_box.GetMin();
+		corners[1] = p_box.GetMax();
 
 		// Express object box in world coordinates
-		l_corners[2] = p_transformations * Point3r{ l_corners[0][0], l_corners[1][1], l_corners[0][2] };
-		l_corners[3] = p_transformations * Point3r{ l_corners[1][0], l_corners[1][1], l_corners[0][2] };
-		l_corners[4] = p_transformations * Point3r{ l_corners[1][0], l_corners[0][1], l_corners[0][2] };
-		l_corners[5] = p_transformations * Point3r{ l_corners[0][0], l_corners[1][1], l_corners[1][2] };
-		l_corners[6] = p_transformations * Point3r{ l_corners[0][0], l_corners[0][1], l_corners[1][2] };
-		l_corners[7] = p_transformations * Point3r{ l_corners[1][0], l_corners[0][1], l_corners[1][2] };
-		l_corners[0] = p_transformations * l_corners[0];
-		l_corners[1] = p_transformations * l_corners[1];
+		corners[2] = p_transformations * Point3r{ corners[0][0], corners[1][1], corners[0][2] };
+		corners[3] = p_transformations * Point3r{ corners[1][0], corners[1][1], corners[0][2] };
+		corners[4] = p_transformations * Point3r{ corners[1][0], corners[0][1], corners[0][2] };
+		corners[5] = p_transformations * Point3r{ corners[0][0], corners[1][1], corners[1][2] };
+		corners[6] = p_transformations * Point3r{ corners[0][0], corners[0][1], corners[1][2] };
+		corners[7] = p_transformations * Point3r{ corners[1][0], corners[0][1], corners[1][2] };
+		corners[0] = p_transformations * corners[0];
+		corners[1] = p_transformations * corners[1];
 
 		// Retrieve axis aligned box boundaries
-		Point3r l_min( l_corners[0] );
-		Point3r l_max( l_corners[1] );
+		Point3r min( corners[0] );
+		Point3r max( corners[1] );
 
 		for ( int j = 0; j < 8; ++j )
 		{
-			l_min[0] = std::min( l_corners[j][0], l_min[0] );
-			l_min[1] = std::min( l_corners[j][1], l_min[1] );
-			l_min[2] = std::min( l_corners[j][2], l_min[2] );
+			min[0] = std::min( corners[j][0], min[0] );
+			min[1] = std::min( corners[j][1], min[1] );
+			min[2] = std::min( corners[j][2], min[2] );
 
-			l_max[0] = std::max( l_corners[j][0], l_max[0] );
-			l_max[1] = std::max( l_corners[j][1], l_max[1] );
-			l_max[2] = std::max( l_corners[j][2], l_max[2] );
+			max[0] = std::max( corners[j][0], max[0] );
+			max[1] = std::max( corners[j][1], max[1] );
+			max[2] = std::max( corners[j][2], max[2] );
 		}
 
-		Intersection l_return{ Intersection::eIn };
+		Intersection result{ Intersection::eIn };
 		size_t i{ 0u };
 
-		while ( i < size_t( FrustumPlane::eCount ) && l_return != Intersection::eOut )
+		while ( i < size_t( FrustumPlane::eCount ) && result != Intersection::eOut )
 		{
-			auto & l_plane = m_planes[i];
+			auto & plane = m_planes[i];
 
-			if ( l_plane.Distance( GetVertexP( l_min, l_max, m_planes[i].GetNormal() ) ) < 0 )
+			if ( plane.Distance( GetVertexP( min, max, m_planes[i].GetNormal() ) ) < 0 )
 			{
 				// The positive vertex outside?
-				l_return = Intersection::eOut;
+				result = Intersection::eOut;
 			}
-			else if ( l_plane.Distance( GetVertexN( l_min, l_max, m_planes[i].GetNormal() ) ) < 0 )
+			else if ( plane.Distance( GetVertexN( min, max, m_planes[i].GetNormal() ) ) < 0 )
 			{
 				// The negative vertex outside?
-				l_return = Intersection::eIntersect;
+				result = Intersection::eIntersect;
 			}
 
 			++i;
 		}
 
-		return l_return != Intersection::eOut;
+		return result != Intersection::eOut;
 	}
 
 	bool Frustum::IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-		Intersection l_return{ Intersection::eIn };
-		Point3r l_center = p_box.GetCenter() + Point3r{ m_transformations[3][0], m_transformations[3][1], m_transformations[3][2] };
+		Intersection result{ Intersection::eIn };
+		Point3r center = p_box.GetCenter() + Point3r{ m_transformations[3][0], m_transformations[3][1], m_transformations[3][2] };
 		size_t i{ 0u };
 
-		while ( i < size_t( FrustumPlane::eCount ) && l_return != Intersection::eOut )
+		while ( i < size_t( FrustumPlane::eCount ) && result != Intersection::eOut )
 		{
-			float l_distance = m_planes[i].Distance( l_center );
+			float distance = m_planes[i].Distance( center );
 
-			if ( l_distance < -p_box.GetRadius() )
+			if ( distance < -p_box.GetRadius() )
 			{
-				l_return = Intersection::eOut;
+				result = Intersection::eOut;
 			}
-			else if ( l_distance < p_box.GetRadius() )
+			else if ( distance < p_box.GetRadius() )
 			{
-				l_return = Intersection::eIntersect;
+				result = Intersection::eIntersect;
 			}
 
 			++i;
 		}
 
-		return l_return != Intersection::eOut;
+		return result != Intersection::eOut;
 	}
 
 	bool Frustum::IsVisible( Point3r const & p_point )const
 	{
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
-		auto l_it = std::find_if( m_planes.begin()
+		auto it = std::find_if( m_planes.begin()
 			, m_planes.end()
 			, [&p_point]( auto const & p_plane )
 		{
 			return p_plane.Distance( p_point ) < 0;
 		} );
 
-		return l_it == m_planes.end();
+		return it == m_planes.end();
 	}
 }

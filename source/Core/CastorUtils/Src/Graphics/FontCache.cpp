@@ -28,20 +28,20 @@ namespace Castor
 
 	FontSPtr FontCache::Create( String const & p_name, uint32_t p_height, Path const & p_path )
 	{
-		String l_name = p_path.GetFileName() + cuT( "." ) + p_path.GetExtension();
-		FontSPtr l_result;
+		String name = p_path.GetFileName() + cuT( "." ) + p_path.GetExtension();
+		FontSPtr result;
 
 		if ( File::FileExists( p_path ) )
 		{
-			l_result = std::make_shared< Font >( p_name, p_height, p_path );
+			result = std::make_shared< Font >( p_name, p_height, p_path );
 		}
 		else
 		{
-			auto l_it = m_paths.find( l_name );
+			auto it = m_paths.find( name );
 
-			if ( l_it != m_paths.end() )
+			if ( it != m_paths.end() )
 			{
-				l_result = std::make_shared< Font >( p_name, p_height, l_it->second );
+				result = std::make_shared< Font >( p_name, p_height, it->second );
 			}
 			else
 			{
@@ -49,42 +49,42 @@ namespace Castor
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	FontSPtr FontCache::Add( String const & p_name, uint32_t p_height, Path const & p_path )
 	{
-		auto l_lock = make_unique_lock( *this );
-		FontSPtr l_result;
+		auto lock = make_unique_lock( *this );
+		FontSPtr result;
 
 		if ( Collection< Font, String >::has( p_name ) )
 		{
-			l_result = Collection< Font, String >::find( p_name );
+			result = Collection< Font, String >::find( p_name );
 			Logger::LogWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
 		}
 		else
 		{
-			String l_name = p_path.GetFileName() + cuT( "." ) + p_path.GetExtension();
+			String name = p_path.GetFileName() + cuT( "." ) + p_path.GetExtension();
 
 			if ( File::FileExists( p_path ) )
 			{
-				l_result = std::make_shared< Font >( p_name, p_height, p_path );
+				result = std::make_shared< Font >( p_name, p_height, p_path );
 				Logger::LogInfo( StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Font: " ) << p_name );
-				Collection< Font, String >::insert( p_name, l_result );
+				Collection< Font, String >::insert( p_name, result );
 
-				if ( m_paths.find( l_name ) == m_paths.end() )
+				if ( m_paths.find( name ) == m_paths.end() )
 				{
-					m_paths.insert( std::make_pair( l_name, p_path ) );
+					m_paths.insert( std::make_pair( name, p_path ) );
 				}
 			}
 			else
 			{
-				auto l_it = m_paths.find( l_name );
+				auto it = m_paths.find( name );
 
-				if ( l_it != m_paths.end() )
+				if ( it != m_paths.end() )
 				{
-					l_result = std::make_shared< Font >( p_name, p_height, l_it->second );
-					Collection< Font, String >::insert( p_name, l_result );
+					result = std::make_shared< Font >( p_name, p_height, it->second );
+					Collection< Font, String >::insert( p_name, result );
 				}
 				else
 				{
@@ -93,32 +93,32 @@ namespace Castor
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	FontSPtr FontCache::Add( Castor::String const & p_name, FontSPtr p_font )
 	{
-		auto l_lock = make_unique_lock( *this );
-		FontSPtr l_result{ p_font };
+		auto lock = make_unique_lock( *this );
+		FontSPtr result{ p_font };
 
 		if ( Collection< Font, String >::has( p_name ) )
 		{
-			l_result = Collection< Font, String >::find( p_name );
+			result = Collection< Font, String >::find( p_name );
 			Logger::LogWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
 		}
 		else
 		{
-			auto l_path = p_font->GetFilePath();
-			String l_name = l_path.GetFileName() + cuT( "." ) + l_path.GetExtension();
-			Collection< Font, String >::insert( p_name, l_result );
+			auto path = p_font->GetFilePath();
+			String name = path.GetFileName() + cuT( "." ) + path.GetExtension();
+			Collection< Font, String >::insert( p_name, result );
 
-			if ( m_paths.find( l_name ) == m_paths.end() )
+			if ( m_paths.find( name ) == m_paths.end() )
 			{
-				m_paths.insert( std::make_pair( l_name, l_path ) );
+				m_paths.insert( std::make_pair( name, path ) );
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	FontSPtr FontCache::Find( String const & p_name )

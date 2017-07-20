@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -104,11 +104,11 @@ namespace GLSL
 		Function< Float, InInt > m_shininess;
 	};
 
-	class PbrMaterials
+	class PbrMRMaterials
 		: public Materials
 	{
 	public:
-		GlslWriter_API PbrMaterials( GlslWriter & p_writer );
+		GlslWriter_API PbrMRMaterials( GlslWriter & p_writer );
 		GlslWriter_API void Declare()override;
 		GlslWriter_API Vec3 GetAlbedo( Int const & p_index )const;
 		GlslWriter_API Float GetRoughness( Int const & p_index )const;
@@ -126,6 +126,30 @@ namespace GLSL
 		Function< Vec3, InInt > m_albedo;
 		Function< Float, InInt > m_roughness;
 		Function< Float, InInt > m_metallic;
+	};
+
+	class PbrSGMaterials
+		: public Materials
+	{
+	public:
+		GlslWriter_API PbrSGMaterials( GlslWriter & p_writer );
+		GlslWriter_API void Declare()override;
+		GlslWriter_API Vec3 GetDiffuse( Int const & p_index )const;
+		GlslWriter_API Vec3 GetSpecular( Int const & p_index )const;
+		GlslWriter_API Float GetGlossiness( Int const & p_index )const;
+
+		static uint32_t constexpr Size = 4u;
+
+	private:
+		inline int DoGetMaterialSize()const override
+		{
+			return int( Size );
+		}
+
+	private:
+		Function< Vec3, InInt > m_diffuse;
+		Function< Float, InInt > m_glossiness;
+		Function< Vec3, InInt > m_specular;
 	};
 }
 

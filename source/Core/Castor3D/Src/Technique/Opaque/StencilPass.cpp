@@ -30,34 +30,34 @@ namespace Castor3D
 		GLSL::Shader DoGetVertexShader( Engine const & p_engine )
 		{
 			using namespace GLSL;
-			GlslWriter l_writer = p_engine.GetRenderSystem()->CreateGlslWriter();
+			GlslWriter writer = p_engine.GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( l_writer );
-			UBO_MODEL_MATRIX( l_writer );
-			auto vertex = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
+			UBO_MATRIX( writer );
+			UBO_MODEL_MATRIX( writer );
+			auto vertex = writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
 
 			// Shader outputs
-			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				gl_Position = c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( vertex, 1.0 );
 			} );
 
-			return l_writer.Finalise();
+			return writer.Finalise();
 		}
 
 		GLSL::Shader DoGetPixelShader( Engine const & p_engine )
 		{
 			using namespace GLSL;
-			GlslWriter l_writer = p_engine.GetRenderSystem()->CreateGlslWriter();
+			GlslWriter writer = p_engine.GetRenderSystem()->CreateGlslWriter();
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 			} );
 
-			return l_writer.Finalise();
+			return writer.Finalise();
 		}
 	}
 
@@ -77,32 +77,32 @@ namespace Castor3D
 	void StencilPass::Initialise( Castor3D::VertexBuffer & p_vbo
 		, Castor3D::IndexBufferSPtr p_ibo )
 	{
-		auto & l_engine = *p_vbo.GetEngine();
-		auto & l_renderSystem = *l_engine.GetRenderSystem();
+		auto & engine = *p_vbo.GetEngine();
+		auto & renderSystem = *engine.GetRenderSystem();
 
-		m_program = l_engine.GetShaderProgramCache().GetNewProgram( false );
+		m_program = engine.GetShaderProgramCache().GetNewProgram( false );
 		m_program->CreateObject( ShaderType::eVertex );
 		m_program->CreateObject( ShaderType::ePixel );
-		m_program->SetSource( ShaderType::eVertex, DoGetVertexShader( l_engine ) );
-		m_program->SetSource( ShaderType::ePixel, DoGetPixelShader( l_engine ) );
+		m_program->SetSource( ShaderType::eVertex, DoGetVertexShader( engine ) );
+		m_program->SetSource( ShaderType::ePixel, DoGetPixelShader( engine ) );
 		m_program->Initialise();
 
 		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
 		m_geometryBuffers->Initialise( { p_vbo }, p_ibo.get() );
 
-		DepthStencilState l_dsstate;
-		l_dsstate.SetDepthTest( true );
-		l_dsstate.SetDepthMask( WritingMask::eZero );
-		l_dsstate.SetStencilTest( true );
-		l_dsstate.SetStencilReadMask( 0 );
-		l_dsstate.SetStencilRef( 0 );
-		l_dsstate.SetStencilFunc( StencilFunc::eAlways );
-		l_dsstate.SetStencilBackOps( StencilOp::eKeep, StencilOp::eIncrWrap, StencilOp::eKeep );
-		l_dsstate.SetStencilFrontOps( StencilOp::eKeep, StencilOp::eDecrWrap, StencilOp::eKeep );
-		RasteriserState l_rsstate;
-		l_rsstate.SetCulledFaces( Culling::eNone );
-		m_pipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate )
-			, std::move( l_rsstate )
+		DepthStencilState dsstate;
+		dsstate.SetDepthTest( true );
+		dsstate.SetDepthMask( WritingMask::eZero );
+		dsstate.SetStencilTest( true );
+		dsstate.SetStencilReadMask( 0 );
+		dsstate.SetStencilRef( 0 );
+		dsstate.SetStencilFunc( StencilFunc::eAlways );
+		dsstate.SetStencilBackOps( StencilOp::eKeep, StencilOp::eIncrWrap, StencilOp::eKeep );
+		dsstate.SetStencilFrontOps( StencilOp::eKeep, StencilOp::eDecrWrap, StencilOp::eKeep );
+		RasteriserState rsstate;
+		rsstate.SetCulledFaces( Culling::eNone );
+		m_pipeline = m_program->GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
+			, std::move( rsstate )
 			, BlendState{}
 			, MultisampleState{}
 			, *m_program

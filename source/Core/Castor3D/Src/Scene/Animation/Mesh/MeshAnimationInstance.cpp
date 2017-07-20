@@ -18,10 +18,10 @@ namespace Castor3D
 		, m_animatedMesh{ p_object }
 		, m_meshAnimation{ p_animation }
 	{
-		for ( auto & l_submesh : p_animation.m_submeshes )
+		for ( auto & submesh : p_animation.m_submeshes )
 		{
 			// using std::make_pair to prevent GCC from using copy ctor...
-			m_submeshes.insert( std::make_pair( l_submesh.GetSubmesh().GetId(), MeshAnimationInstanceSubmesh{ *this, l_submesh } ) );
+			m_submeshes.insert( std::make_pair( submesh.GetSubmesh().GetId(), MeshAnimationInstanceSubmesh{ *this, submesh } ) );
 		}
 	}
 
@@ -31,22 +31,22 @@ namespace Castor3D
 
 	MeshAnimationInstanceSubmesh const * MeshAnimationInstance::GetAnimationSubmesh( uint32_t p_index )const
 	{
-		auto l_it = m_submeshes.find( p_index );
-		MeshAnimationInstanceSubmesh const * l_return = nullptr;
+		auto it = m_submeshes.find( p_index );
+		MeshAnimationInstanceSubmesh const * result = nullptr;
 
-		if ( l_it != m_submeshes.end() )
+		if ( it != m_submeshes.end() )
 		{
-			l_return = &l_it->second;
+			result = &it->second;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void MeshAnimationInstance::DoUpdate()
 	{
-		for ( auto & l_submesh : m_submeshes )
+		for ( auto & submesh : m_submeshes )
 		{
-			l_submesh.second.Update( m_currentTime );
+			submesh.second.Update( m_currentTime );
 		}
 	}
 

@@ -60,11 +60,11 @@ namespace Loop
 		 * Constructor
 		 *\param[in]	p_submesh	The submesh holding the face
 		 *\param[in]	p_face	The face
-		 *\param[in]	l_ab	Edge between 1st and 2nd vertex
-		 *\param[in]	l_bc	Edge between 2nd and 3rd vertex
-		 *\param[in]	l_ca	Edge between 3rd and 1st vertex
+		 *\param[in]	ab	Edge between 1st and 2nd vertex
+		 *\param[in]	bc	Edge between 2nd and 3rd vertex
+		 *\param[in]	ca	Edge between 3rd and 1st vertex
 		 */
-		FaceEdges( Subdivider * p_pDivider, Castor3D::Face p_face, EdgeSPtr l_ab, EdgeSPtr l_bc, EdgeSPtr l_ca );
+		FaceEdges( Subdivider * p_pDivider, Castor3D::Face p_face, EdgeSPtr ab, EdgeSPtr bc, EdgeSPtr ca );
 		/**
 		 * Divides the edges held, creates needed faces to complete the division
 		 *\param[in]	p_value	The weight of division (if 0.5, divides all edges in the middle)

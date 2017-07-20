@@ -29,26 +29,26 @@ namespace Castor3D
 
 	Animation const & Animable::GetAnimation( Castor::String const & p_name )const
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( p_name );
 
-		if ( l_it == m_animations.end() )
+		if ( it == m_animations.end() )
 		{
 			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
 		}
 
-		return *l_it->second;
+		return *it->second;
 	}
 
 	Animation & Animable::GetAnimation( Castor::String const & p_name )
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( p_name );
 
-		if ( l_it == m_animations.end() )
+		if ( it == m_animations.end() )
 		{
 			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
 		}
 
-		return *l_it->second;
+		return *it->second;
 	}
 
 	void Animable::DoAddAnimation( AnimationSPtr && p_animation )

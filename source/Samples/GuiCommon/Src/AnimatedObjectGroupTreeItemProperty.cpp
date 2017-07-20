@@ -31,20 +31,20 @@ namespace GuiCommon
 
 	void AnimatedObjectGroupTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		auto l_group = GetGroup();
+		auto group = GetGroup();
 
-		if ( l_group )
+		if ( group )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP + wxString( l_group->GetName() ) ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP + wxString( group->GetName() ) ) );
 		}
 	}
 
 	void AnimatedObjectGroupTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		auto l_group = GetGroup();
-		wxPGProperty * l_property = p_event.GetProperty();
+		auto group = GetGroup();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_group )
+		if ( group )
 		{
 		}
 	}

@@ -23,11 +23,11 @@ namespace Castor
 
 			BOOL CALLBACK MonitorEnum( HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData )
 			{
-				stSCREEN * l_screen = reinterpret_cast< stSCREEN * >( dwData );
+				stSCREEN * screen = reinterpret_cast< stSCREEN * >( dwData );
 
-				if ( l_screen && l_screen->m_current++ == l_screen->m_wanted )
+				if ( screen && screen->m_current++ == screen->m_wanted )
 				{
-					l_screen->m_size.set( lprcMonitor->right - lprcMonitor->left, lprcMonitor->bottom - lprcMonitor->top );
+					screen->m_size.set( lprcMonitor->right - lprcMonitor->left, lprcMonitor->bottom - lprcMonitor->top );
 				}
 
 				return FALSE;
@@ -36,40 +36,40 @@ namespace Castor
 
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
-			stSCREEN l_screen = { p_screen, 0, p_size };
-			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &l_screen ) );
+			stSCREEN screen = { p_screen, 0, p_size };
+			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &screen ) );
 			return true;
 		}
 
 		Castor::String GetLastErrorText()
 		{
-			DWORD l_dwError = ::GetLastError();
-			String l_strReturn = string::to_string( l_dwError );;
+			DWORD dwError = ::GetLastError();
+			String strReturn = string::to_string( dwError );;
 
-			if ( l_dwError != ERROR_SUCCESS )
+			if ( dwError != ERROR_SUCCESS )
 			{
-				LPWSTR l_szError = nullptr;
+				LPWSTR szError = nullptr;
 
-				if ( ::FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, l_dwError, 0, LPWSTR( &l_szError ), 0, nullptr ) != 0 )
+				if ( ::FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, dwError, 0, LPWSTR( &szError ), 0, nullptr ) != 0 )
 				{
-					std::wstring_convert< std::codecvt_utf8_utf16< wchar_t >, wchar_t > l_conversion;
-					String l_converted = l_conversion.to_bytes( l_szError );
-					l_strReturn += cuT( " (" ) + l_converted + cuT( ")" );
-					string::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
-					string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
-					::LocalFree( l_szError );
+					std::wstring_convert< std::codecvt_utf8_utf16< wchar_t >, wchar_t > conversion;
+					String converted = conversion.to_bytes( szError );
+					strReturn += cuT( " (" ) + converted + cuT( ")" );
+					string::replace( strReturn, cuT( "\r" ), cuT( "" ) );
+					string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
+					::LocalFree( szError );
 				}
 				else
 				{
-					l_strReturn += cuT( " (Unable to retrieve error text)" );
+					strReturn += cuT( " (Unable to retrieve error text)" );
 				}
 			}
 			else
 			{
-				l_strReturn += cuT( " (No error)" );
+				strReturn += cuT( " (No error)" );
 			}
 
-			return l_strReturn;
+			return strReturn;
 		}
 
 		uint8_t GetCPUCount()

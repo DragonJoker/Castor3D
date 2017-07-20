@@ -43,11 +43,11 @@ namespace GlRender
 
 	bool GlContext::DoInitialise()
 	{
-		auto l_engine = m_window->GetEngine();
-		auto l_renderSystem = static_cast< GlRenderSystem * >( l_engine->GetRenderSystem() );
-		auto l_mainContext = l_renderSystem->GetMainContext();
+		auto engine = m_window->GetEngine();
+		auto renderSystem = static_cast< GlRenderSystem * >( engine->GetRenderSystem() );
+		auto mainContext = renderSystem->GetMainContext();
 
-		if ( !l_mainContext )
+		if ( !mainContext )
 		{
 			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
@@ -57,11 +57,11 @@ namespace GlRender
 
 		if ( m_initialised )
 		{
-			if ( !l_mainContext )
+			if ( !mainContext )
 			{
 				GetImpl().SetCurrent();
-				l_renderSystem->Initialise( std::move( GetImpl().GetGpuInformations() ) );
-				l_engine->GetMaterialCache().Initialise();
+				renderSystem->Initialise( std::move( GetImpl().GetGpuInformations() ) );
+				engine->GetMaterialCache().Initialise();
 
 #if !defined( NDEBUG )
 
@@ -75,7 +75,7 @@ namespace GlRender
 			}
 
 			GetImpl().UpdateVSync( m_window->GetVSync() );
-			l_engine->GetRenderLoop().UpdateVSync( m_window->GetVSync() );
+			engine->GetRenderLoop().UpdateVSync( m_window->GetVSync() );
 
 			if ( m_glRenderSystem->GetOpenGlMajor() < 4 )
 			{
@@ -83,10 +83,10 @@ namespace GlRender
 			}
 
 			GetImpl().SetCurrent();
-			l_renderSystem->GetOpenGl().Enable( GlTweak::eSeamlessCubeMaps );
+			renderSystem->GetOpenGl().Enable( GlTweak::eSeamlessCubeMaps );
 			GetImpl().EndCurrent();
 		}
-		else if ( !l_mainContext )
+		else if ( !mainContext )
 		{
 			Logger::LogError( cuT( "OpenGL Initialisation Failed" ) );
 			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );

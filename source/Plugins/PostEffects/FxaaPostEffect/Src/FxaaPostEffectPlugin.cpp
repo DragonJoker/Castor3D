@@ -1,4 +1,4 @@
-﻿#include <Log/Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <Engine.hpp>
 #include <Cache/TargetCache.hpp>
@@ -33,17 +33,17 @@ extern "C"
 
 	C3D_Fxaa_API void GetName( char const ** p_name )
 	{
-		*p_name = Fxaa::FxaaPostEffect::Name.c_str();
+		*p_name = fxaa::PostEffect::Name.c_str();
 	}
 
 	C3D_Fxaa_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
 	{
-		p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( Fxaa::FxaaPostEffect::Type
-			, &Fxaa::FxaaPostEffect::Create );
+		p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( fxaa::PostEffect::Type
+			, &fxaa::PostEffect::Create );
 	}
 
 	C3D_Fxaa_API void OnUnload( Castor3D::Engine * p_engine )
 	{
-		p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( Fxaa::FxaaPostEffect::Type );
+		p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( fxaa::PostEffect::Type );
 	}
 }

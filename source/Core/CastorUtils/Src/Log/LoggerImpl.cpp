@@ -33,18 +33,18 @@ namespace Castor
 
 	void LoggerImpl::RegisterCallback( LogCallback p_pfnCallback, void * p_pCaller )
 	{
-		std::lock_guard< std::mutex > l_lock( m_mutexCallbacks );
+		std::lock_guard< std::mutex > lock( m_mutexCallbacks );
 		m_mapCallbacks[p_pCaller] = p_pfnCallback;
 	}
 
 	void LoggerImpl::UnregisterCallback( void * p_pCaller )
 	{
-		std::lock_guard< std::mutex > l_lock( m_mutexCallbacks );
-		auto l_it = m_mapCallbacks.find( p_pCaller );
+		std::lock_guard< std::mutex > lock( m_mutexCallbacks );
+		auto it = m_mapCallbacks.find( p_pCaller );
 
-		if ( l_it != m_mapCallbacks.end() )
+		if ( it != m_mapCallbacks.end() )
 		{
-			m_mapCallbacks.erase( l_it );
+			m_mapCallbacks.erase( it );
 		}
 	}
 
@@ -83,53 +83,53 @@ namespace Castor
 
 	void LoggerImpl::LogMessageQueue( MessageQueue const & p_queue )
 	{
-		std::tm l_dtToday = { 0 };
-		time_t l_tTime;
-		time( &l_tTime );
-		Castor::Localtime( &l_dtToday, &l_tTime );
-		char l_buffer[33] = { 0 };
-		strftime( l_buffer, 32, "%Y-%m-%d %H:%M:%S", &l_dtToday );
-		String l_timeStamp = string::string_cast< xchar >( l_buffer );
-		StringStream l_logs[size_t( LogType::eCount )];
+		std::tm dtToday = { 0 };
+		time_t tTime;
+		time( &tTime );
+		Castor::Localtime( &dtToday, &tTime );
+		char buffer[33] = { 0 };
+		strftime( buffer, 32, "%Y-%m-%d %H:%M:%S", &dtToday );
+		String timeStamp = string::string_cast< xchar >( buffer );
+		StringStream logs[size_t( LogType::eCount )];
 
 		try
 		{
 			for ( auto & message : p_queue )
 			{
-				StringStream & l_stream = l_logs[size_t( message.m_type )];
-				String l_toLog = message.m_message;
+				StringStream & stream = logs[size_t( message.m_type )];
+				String toLog = message.m_message;
 
-				if ( l_toLog.find( cuT( '\n' ) ) != String::npos )
+				if ( toLog.find( cuT( '\n' ) ) != String::npos )
 				{
-					StringArray l_array = string::split( l_toLog, cuT( "\n" ), uint32_t( std::count( l_toLog.begin(), l_toLog.end(), cuT( '\n' ) ) + 1 ) );
-					auto l_it = l_array.begin();
+					StringArray array = string::split( toLog, cuT( "\n" ), uint32_t( std::count( toLog.begin(), toLog.end(), cuT( '\n' ) ) + 1 ) );
+					auto it = array.begin();
 
-					for ( size_t i = 0; i < l_array.size() - 1; ++i )
+					for ( size_t i = 0; i < array.size() - 1; ++i )
 					{
-						DoLogLine( l_timeStamp, *l_it, l_stream, message.m_type, true );
-						++l_it;
+						DoLogLine( timeStamp, *it, stream, message.m_type, true );
+						++it;
 					}
 
-					DoLogLine( l_timeStamp, *l_it, l_stream, message.m_type, message.m_newLine );
+					DoLogLine( timeStamp, *it, stream, message.m_type, message.m_newLine );
 				}
 				else
 				{
-					DoLogLine( l_timeStamp, l_toLog, l_stream, message.m_type, message.m_newLine );
+					DoLogLine( timeStamp, toLog, stream, message.m_type, message.m_newLine );
 				}
 			}
 
 			int i = 0;
 
-			for ( auto const & l_stream : l_logs )
+			for ( auto const & stream : logs )
 			{
-				String l_text = l_stream.str();
+				String text = stream.str();
 
-				if ( !l_text.empty() )
+				if ( !text.empty() )
 				{
 					try
 					{
-						TextFile l_file{ Path{ m_logFilePath[i++] }, File::OpenMode::eAppend };
-						l_file.WriteText( l_text );
+						TextFile file{ Path{ m_logFilePath[i++] }, File::OpenMode::eAppend };
+						file.WriteText( text );
 					}
 					catch ( Exception & )
 					{
@@ -147,16 +147,16 @@ namespace Castor
 	{
 		if ( message.find( cuT( '\n' ) ) != String::npos )
 		{
-			StringArray l_array = string::split( message, cuT( "\n" ), uint32_t( std::count( message.begin(), message.end(), cuT( '\n' ) ) + 1 ) );
-			auto l_it = l_array.begin();
+			StringArray array = string::split( message, cuT( "\n" ), uint32_t( std::count( message.begin(), message.end(), cuT( '\n' ) ) + 1 ) );
+			auto it = array.begin();
 
-			for ( size_t i = 0; i < l_array.size() - 1; ++i )
+			for ( size_t i = 0; i < array.size() - 1; ++i )
 			{
-				DoPrintLine( *l_it, logLevel, true );
-				++l_it;
+				DoPrintLine( *it, logLevel, true );
+				++it;
 			}
 
-			DoPrintLine( *l_it, logLevel, p_newLine );
+			DoPrintLine( *it, logLevel, p_newLine );
 		}
 		else
 		{
@@ -177,13 +177,13 @@ namespace Castor
 #endif
 
 		{
-			std::lock_guard< std::mutex > l_lock( m_mutexCallbacks );
+			std::lock_guard< std::mutex > lock( m_mutexCallbacks );
 
 			if ( !m_mapCallbacks.empty() )
 			{
-				for ( auto l_it : m_mapCallbacks )
+				for ( auto it : m_mapCallbacks )
 				{
-					l_it.second( line, logLevel, p_newLine );
+					it.second( line, logLevel, p_newLine );
 				}
 			}
 		}

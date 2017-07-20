@@ -22,36 +22,36 @@ namespace Castor
 
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
-			bool l_result = false;
-			auto l_display = XOpenDisplay( nullptr );
+			bool result = false;
+			auto display = XOpenDisplay( nullptr );
 
-			if ( !l_display )
+			if ( !display )
 			{
 				Logger::LogError( "Failed to open default display." );
 			}
 			else
 			{
-				auto l_screenIndex = DefaultScreen( l_display );
-				int l_dummy1, l_dummy2;
+				auto screenIndex = DefaultScreen( display );
+				int dummy1, dummy2;
 
-				if ( XineramaQueryExtension( l_display, &l_dummy1, &l_dummy2 ) )
+				if ( XineramaQueryExtension( display, &dummy1, &dummy2 ) )
 				{
-					if ( XineramaIsActive( l_display ) )
+					if ( XineramaIsActive( display ) )
 					{
-						int l_heads = 0;
-						XineramaScreenInfo * l_screenInfo = XineramaQueryScreens( l_display, &l_heads );
+						int heads = 0;
+						XineramaScreenInfo * screenInfo = XineramaQueryScreens( display, &heads );
 
-						if ( l_heads > 0 && l_screenIndex < l_heads )
+						if ( heads > 0 && screenIndex < heads )
 						{
-							p_size.set( l_screenInfo[l_screenIndex].width, l_screenInfo[l_screenIndex].height );
-							l_result = true;
+							p_size.set( screenInfo[screenIndex].width, screenInfo[screenIndex].height );
+							result = true;
 						}
 						else
 						{
 							std::cout << "XineramaQueryScreens says there aren't any" << std::endl;
 						}
 
-						XFree( l_screenInfo );
+						XFree( screenInfo );
 					}
 					else
 					{
@@ -63,73 +63,73 @@ namespace Castor
 					std::cout << "No Xinerama extension" << std::endl;
 				}
 
-				if ( !l_result )
+				if ( !result )
 				{
-					auto l_screen = ScreenOfDisplay( l_display, l_screenIndex );
+					auto screen = ScreenOfDisplay( display, screenIndex );
 
-					if ( !l_screen )
+					if ( !screen )
 					{
 						Logger::LogError( "Failed to obtain the default screen of given display." );
 					}
 					else
 					{
-						p_size.set( l_screen->width, l_screen->height );
-						l_result = true;
+						p_size.set( screen->width, screen->height );
+						result = true;
 					}
 				}
 
-				XCloseDisplay( l_display );
+				XCloseDisplay( display );
 			}
 
-			return l_result;
+			return result;
 		}
 
 #	else
 
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
-			bool l_result = false;
-			auto l_display = XOpenDisplay( nullptr );
+			bool result = false;
+			auto display = XOpenDisplay( nullptr );
 
-			if ( !l_display )
+			if ( !display )
 			{
 				Logger::LogError( "Failed to open default display." );
 			}
 			else
 			{
-				auto l_screenIndex = DefaultScreen( l_display );
-				auto l_screen = ScreenOfDisplay( l_display, l_screenIndex );
+				auto screenIndex = DefaultScreen( display );
+				auto screen = ScreenOfDisplay( display, screenIndex );
 
-				if ( !l_screen )
+				if ( !screen )
 				{
 					Logger::LogError( "Failed to obtain the default screen of given display." );
 				}
 				else
 				{
-					p_size.set( l_screen->width, l_screen->height );
-					l_result = true;
+					p_size.set( screen->width, screen->height );
+					result = true;
 				}
 			}
 
-			XCloseDisplay( l_display );
-			return l_result;
+			XCloseDisplay( display );
+			return result;
 		}
 
 #	endif
 
 		String GetLastErrorText()
 		{
-			String l_strReturn;
-			int l_error = errno;
-			char * l_szError = nullptr;
+			String strReturn;
+			int error = errno;
+			char * szError = nullptr;
 
-			if ( l_error != 0 && ( l_szError = strerror( l_error ) ) != nullptr )
+			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
-				l_strReturn = string::to_string( l_error ) + cuT( " (" ) + string::string_cast< xchar >( l_szError ) + cuT( ")" );
-				string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+				strReturn = string::to_string( error ) + cuT( " (" ) + string::string_cast< xchar >( szError ) + cuT( ")" );
+				string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
 			}
 
-			return l_strReturn;
+			return strReturn;
 		}
 
 		uint8_t GetCPUCount()
@@ -147,12 +147,12 @@ namespace Castor
 				FILE * m_file;
 			};
 
-			char l_res[128];
+			char res[128];
 			{
-				ProcessFile l_file{ popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" ) };
-				ENSURE( fread( l_res, 1, sizeof( l_res ) - 1, l_file ) < sizeof( l_res ) );
+				ProcessFile file{ popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" ) };
+				ENSURE( fread( res, 1, sizeof( res ) - 1, file ) < sizeof( res ) );
 			}
-			return l_res[0];
+			return res[0];
 		}
 	}
 

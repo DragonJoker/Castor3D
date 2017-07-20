@@ -37,40 +37,40 @@ namespace GuiCommon
 
 	void SceneTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		SceneSPtr l_scene = GetScene();
+		SceneSPtr scene = GetScene();
 
-		if ( l_scene )
+		if ( scene )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SCENE + l_scene->GetName() ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_AMBIENT_LIGHT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_scene->GetAmbientLight() ) ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_BACKGROUND_COLOUR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_scene->GetBackgroundColour() ) ) ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SCENE + scene->GetName() ) );
+			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_AMBIENT_LIGHT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( scene->GetAmbientLight() ) ) ) );
+			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_BACKGROUND_COLOUR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( scene->GetBackgroundColour() ) ) ) );
 
-			if ( l_scene->GetBackgroundImage() )
+			if ( scene->GetBackgroundImage() )
 			{
-				p_grid->Append( DoCreateTextureImageProperty( PROPERTY_SCENE_BACKGROUND_COLOUR, l_scene->GetBackgroundImage() ) );
+				p_grid->Append( DoCreateTextureImageProperty( PROPERTY_SCENE_BACKGROUND_COLOUR, scene->GetBackgroundImage() ) );
 			}
 		}
 	}
 
 	void SceneTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		SceneSPtr l_scene = GetScene();
-		wxPGProperty * l_property = p_event.GetProperty();
+		SceneSPtr scene = GetScene();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_scene )
+		if ( property && scene )
 		{
 		}
 	}
 
 	wxPGProperty * SceneTreeItemProperty::DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureLayoutSPtr p_texture )
 	{
-		wxPGProperty * l_property = nullptr;
+		wxPGProperty * property = nullptr;
 
 		if ( p_texture->GetImage().IsStaticSource() )
 		{
-			l_property = new wxImageFileProperty( PROPERTY_SCENE_BACKGROUND_IMAGE );
+			property = new wxImageFileProperty( PROPERTY_SCENE_BACKGROUND_IMAGE );
 		}
 
-		return l_property;
+		return property;
 	}
 }

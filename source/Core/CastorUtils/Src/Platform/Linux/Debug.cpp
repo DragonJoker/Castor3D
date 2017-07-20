@@ -22,45 +22,45 @@ namespace Castor
 		template< typename CharU, typename CharT >
 		inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 		{
-			std::string l_ret = string::string_cast< char >( p_name );
-			size_t l_lindex = p_name.find( "(" );
-			size_t l_rindex = p_name.find( "+" );
+			std::string ret = string::string_cast< char >( p_name );
+			size_t lindex = p_name.find( "(" );
+			size_t rindex = p_name.find( "+" );
 
-			if ( l_lindex != std::string::npos && l_rindex != std::string::npos )
+			if ( lindex != std::string::npos && rindex != std::string::npos )
 			{
-				l_ret = p_name.substr( l_lindex + 1, l_rindex - 1 - l_lindex );
+				ret = p_name.substr( lindex + 1, rindex - 1 - lindex );
 			}
 
-			int l_status;
-			auto l_real = abi::__cxa_demangle( l_ret.c_str(), 0, 0, &l_status );
+			int status;
+			auto real = abi::__cxa_demangle( ret.c_str(), 0, 0, &status );
 
-			if ( !l_status )
+			if ( !status )
 			{
-				l_ret = p_name.substr( 0, l_lindex + 1 ) + l_real + p_name.substr( l_rindex );
+				ret = p_name.substr( 0, lindex + 1 ) + real + p_name.substr( rindex );
 			}
 			else
 			{
-				l_ret = p_name;
+				ret = p_name;
 			}
 
-			free( l_real );
-			return string::string_cast< CharU >( l_ret );
+			free( real );
+			return string::string_cast< CharU >( ret );
 		}
 
 		template< typename CharT >
 		inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 		{
 			p_stream << "CALL STACK:" << std::endl;
-			std::vector< void * > l_backTrace( p_toCapture );
-			unsigned int l_num( ::backtrace( l_backTrace.data(), p_toCapture ) );
-			char ** l_fnStrings( ::backtrace_symbols( l_backTrace.data(), l_num ) );
+			std::vector< void * > backTrace( p_toCapture );
+			unsigned int num( ::backtrace( backTrace.data(), p_toCapture ) );
+			char ** fnStrings( ::backtrace_symbols( backTrace.data(), num ) );
 
-			for ( unsigned i = p_toSkip; i < l_num; ++i )
+			for ( unsigned i = p_toSkip; i < num; ++i )
 			{
-				p_stream << "== " << Demangle< CharT >( string::string_cast< char >( l_fnStrings[i] ) ) << std::endl;
+				p_stream << "== " << Demangle< CharT >( string::string_cast< char >( fnStrings[i] ) ) << std::endl;
 			}
 
-			free( l_fnStrings );
+			free( fnStrings );
 		}
 
 #else

@@ -46,13 +46,13 @@ namespace libffmpeg
 	{
 		if ( p_error < 0 )
 		{
-			char l_err[AV_ERROR_MAX_STRING_SIZE] { 0 };
-			std::stringstream l_stream;
-			l_stream << ( char const * )_( "Failure on:" ).mb_str( wxConvUTF8 ) << "\n";
-			l_stream << "\t" << ( char const * )wxGetTranslation( p_action ).mb_str( wxConvUTF8 );
-			l_stream << av_make_error_string( l_err, AV_ERROR_MAX_STRING_SIZE, p_error );
+			char err[AV_ERROR_MAX_STRING_SIZE] { 0 };
+			std::stringstream stream;
+			stream << ( char const * )_( "Failure on:" ).mb_str( wxConvUTF8 ) << "\n";
+			stream << "\t" << ( char const * )wxGetTranslation( p_action ).mb_str( wxConvUTF8 );
+			stream << av_make_error_string( err, AV_ERROR_MAX_STRING_SIZE, p_error );
 
-			throw std::runtime_error( l_stream.str() );
+			throw std::runtime_error( stream.str() );
 		}
 	}
 }
@@ -86,62 +86,62 @@ namespace GuiCommon
 		public:
 			virtual bool UpdateTime()
 			{
-				auto l_now = clock::now();
-				uint64_t l_timeDiff = std::chrono::duration_cast< std::chrono::milliseconds >( l_now - m_saved ).count();
+				auto now = clock::now();
+				uint64_t timeDiff = std::chrono::duration_cast< std::chrono::milliseconds >( now - m_saved ).count();
 
 				if ( m_recordedCount )
 				{
-					m_recordedTime += l_timeDiff;
+					m_recordedTime += timeDiff;
 				}
 
-				return DoUpdateTime( l_timeDiff );
+				return DoUpdateTime( timeDiff );
 			}
 
 			virtual bool StartRecord( Size const & p_size, int p_wantedFPS )
 			{
-				bool l_result = false;
+				bool result = false;
 				m_wantedFPS = p_wantedFPS;
 				m_recordedCount = 0;
 				m_recordedTime = 0;
-				wxString l_strWildcard = _( "Supported Video files" );
-				l_strWildcard += wxT( "(*.avi;*.mkv)|*.avi;*.mkv" );
-				wxFileDialog l_dialog( nullptr, _( "Please choose a video file name" ), wxEmptyString, wxEmptyString, l_strWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+				wxString strWildcard = _( "Supported Video files" );
+				strWildcard += wxT( "(*.avi;*.mkv)|*.avi;*.mkv" );
+				wxFileDialog dialog( nullptr, _( "Please choose a video file name" ), wxEmptyString, wxEmptyString, strWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-				if ( l_dialog.ShowModal() == wxID_OK )
+				if ( dialog.ShowModal() == wxID_OK )
 				{
-					wxString l_strFileName = l_dialog.GetPath();
+					wxString strFileName = dialog.GetPath();
 
 					try
 					{
-						DoStartRecord( p_size, l_strFileName );
-						l_result = IsRecording();
+						DoStartRecord( p_size, strFileName );
+						result = IsRecording();
 					}
 					catch ( std::bad_alloc & )
 					{
 					}
 					catch ( std::exception & exc )
 					{
-						wxString l_strMsg = _( "Can't start recording file" );
-						l_strMsg += wxT( " " );
-						l_strMsg += l_strFileName;
-						l_strMsg += wxT( ":\n" );
-						l_strMsg += wxString( exc.what(), wxMBConvLibc() );
-						l_strMsg += wxT( ")" );
-						throw std::runtime_error( string::string_cast< char >( make_String( l_strMsg ) ) );
+						wxString strMsg = _( "Can't start recording file" );
+						strMsg += wxT( " " );
+						strMsg += strFileName;
+						strMsg += wxT( ":\n" );
+						strMsg += wxString( exc.what(), wxMBConvLibc() );
+						strMsg += wxT( ")" );
+						throw std::runtime_error( string::string_cast< char >( make_String( strMsg ) ) );
 					}
 				}
 
-				return l_result;
+				return result;
 			}
 
 			virtual bool RecordFrame( PxBufferBaseSPtr p_buffer )
 			{
-				bool l_result = false;
+				bool result = false;
 				DoRecordFrame( p_buffer );
 				m_saved = clock::now();
 				m_recordedCount++;
-				l_result = true;
-				return l_result;
+				result = true;
+				return result;
 			}
 
 		protected:
@@ -171,14 +171,14 @@ namespace GuiCommon
 
 			void Write( libffmpeg::AVPacket & p_packet )
 			{
-				auto l_timestamp = p_packet.pts;
+				auto timestamp = p_packet.pts;
 
 				if ( p_packet.pts != ( 0x8000000000000000LL ) )
 				{
-					l_timestamp = av_rescale_q( l_timestamp, m_codecContext->time_base, m_formatContext->streams[0]->time_base );
+					timestamp = av_rescale_q( timestamp, m_codecContext->time_base, m_formatContext->streams[0]->time_base );
 				}
 
-				p_packet.pts = l_timestamp;
+				p_packet.pts = timestamp;
 
 				if ( !( p_packet.pts % 10 ) )
 				{
@@ -326,17 +326,17 @@ namespace GuiCommon
 				if ( IsRecording() )
 				{
 					// We first write remaining frames.
-					libffmpeg::AVPacket l_pkt = { 0 };
-					libffmpeg::av_init_packet( &l_pkt );
-					int l_gotOutput = 1;
+					libffmpeg::AVPacket pkt = { 0 };
+					libffmpeg::av_init_packet( &pkt );
+					int gotOutput = 1;
 
-					while ( l_gotOutput )
+					while ( gotOutput )
 					{
-						int iRet = libffmpeg::avcodec_encode_video2( m_codecContext, &l_pkt, nullptr, &l_gotOutput );
+						int iRet = libffmpeg::avcodec_encode_video2( m_codecContext, &pkt, nullptr, &gotOutput );
 
-						if ( iRet >= 0 && l_gotOutput )
+						if ( iRet >= 0 && gotOutput )
 						{
-							Write( l_pkt );
+							Write( pkt );
 						}
 					}
 				}
@@ -372,7 +372,7 @@ namespace GuiCommon
 
 			virtual bool DoStartRecord( Size const & p_size, wxString const & p_name )
 			{
-				wxSize l_size( p_size.width(), p_size.height() );
+				wxSize size( p_size.width(), p_size.height() );
 				GetFormat( p_name );
 
 				try
@@ -387,8 +387,8 @@ namespace GuiCommon
 					// Sample parameters
 					m_codecContext->bit_rate = m_bitRate;
 					// Resolution
-					m_codecContext->width = l_size.x;
-					m_codecContext->height = l_size.y;
+					m_codecContext->width = size.x;
+					m_codecContext->height = size.y;
 					// Frames per second
 					m_codecContext->time_base = { 1, m_wantedFPS };
 					// Emit one intra frame every thirty frames
@@ -433,30 +433,30 @@ namespace GuiCommon
 				{
 					try
 					{
-						auto l_buffer = p_buffer->const_ptr();
-						int l_lineSize[8] = { m_codecContext->width * 4, 0, 0, 0, 0, 0, 0, 0 };
-						auto l_outputHeight = libffmpeg::sws_scale( m_swsContext, &l_buffer, l_lineSize, 0, p_buffer->dimensions().height(), m_frame->data, m_frame->linesize );
-						libffmpeg::AVPacket l_packet{ 0 };
-						libffmpeg::av_init_packet( &l_packet );
-						std::vector< uint8_t > l_outbuf( l_packet.size );
-						l_packet.pts = m_recordedCount;
-						l_packet.dts = m_recordedCount;
+						auto buffer = p_buffer->const_ptr();
+						int lineSize[8] = { m_codecContext->width * 4, 0, 0, 0, 0, 0, 0, 0 };
+						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, p_buffer->dimensions().height(), m_frame->data, m_frame->linesize );
+						libffmpeg::AVPacket packet{ 0 };
+						libffmpeg::av_init_packet( &packet );
+						std::vector< uint8_t > outbuf( packet.size );
+						packet.pts = m_recordedCount;
+						packet.dts = m_recordedCount;
 #	if LIBAVUTIL_VERSION_INT > AV_VERSION_INT(54, 6, 0)
-						l_packet.size = libffmpeg::av_image_get_buffer_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height, 1 );
+						packet.size = libffmpeg::av_image_get_buffer_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height, 1 );
 #	else
-						l_packet.size = libffmpeg::avpicture_get_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height );
+						packet.size = libffmpeg::avpicture_get_size( m_codecContext->pix_fmt, m_codecContext->width, m_codecContext->height );
 #	endif
-						l_packet.data = l_outbuf.data();
-						FillPacket( l_packet );
+						packet.data = outbuf.data();
+						FillPacket( packet );
 						m_frame->pts = m_recordedCount++;
-						int l_gotOutput = 0;
+						int gotOutput = 0;
 
-						libffmpeg::CheckError( libffmpeg::avcodec_encode_video2( m_codecContext, &l_packet, m_frame, &l_gotOutput )
+						libffmpeg::CheckError( libffmpeg::avcodec_encode_video2( m_codecContext, &packet, m_frame, &gotOutput )
 											   , "Frame encoding" );
 
-						if ( l_gotOutput )
+						if ( gotOutput )
 						{
-							Write( l_packet );
+							Write( packet );
 						}
 					}
 					catch ( std::exception & )

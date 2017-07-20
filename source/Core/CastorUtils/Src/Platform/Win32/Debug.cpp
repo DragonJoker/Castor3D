@@ -26,15 +26,15 @@ namespace Castor
 			template< typename CharU, typename CharT >
 			inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
-				std::string l_ret = string::string_cast< char >( p_name );
+				std::string ret = string::string_cast< char >( p_name );
 
 				try
 				{
-					char l_real[2048] = { 0 };
+					char real[2048] = { 0 };
 
-					if ( ::UnDecorateSymbolName( l_ret.c_str(), l_real, sizeof( l_real ), UNDNAME_COMPLETE ) )
+					if ( ::UnDecorateSymbolName( ret.c_str(), real, sizeof( real ), UNDNAME_COMPLETE ) )
 					{
-						l_ret = l_real;
+						ret = real;
 					}
 				}
 				catch ( ... )
@@ -42,43 +42,43 @@ namespace Castor
 					// What to do...
 				}
 
-				return string::string_cast< CharU >( l_ret );
+				return string::string_cast< CharU >( ret );
 			}
 
 			template< typename CharT >
 			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 			{
-				static std::mutex l_mutex;
-				auto l_lock = make_unique_lock( l_mutex );
+				static std::mutex mutex;
+				auto lock = make_unique_lock( mutex );
 				static bool SymbolsInitialised = false;
 				const int MaxFnNameLen( 255 );
 
-				std::vector< void * > l_backTrace( p_toCapture - p_toSkip );
-				unsigned int l_num( ::RtlCaptureStackBackTrace( p_toSkip, p_toCapture - p_toSkip, l_backTrace.data(), nullptr ) );
+				std::vector< void * > backTrace( p_toCapture - p_toSkip );
+				unsigned int num( ::RtlCaptureStackBackTrace( p_toSkip, p_toCapture - p_toSkip, backTrace.data(), nullptr ) );
 
-				::HANDLE l_process( ::GetCurrentProcess() );
+				::HANDLE process( ::GetCurrentProcess() );
 				p_stream << "CALL STACK:" << std::endl;
 
 				// symbol->Name type is char [1] so there is space for \0 already
-				SYMBOL_INFO * l_symbol( ( SYMBOL_INFO * )malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
+				SYMBOL_INFO * symbol( ( SYMBOL_INFO * )malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
 
-				if ( l_symbol )
+				if ( symbol )
 				{
-					l_symbol->MaxNameLen = MaxFnNameLen;
-					l_symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
+					symbol->MaxNameLen = MaxFnNameLen;
+					symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
 
 					if ( !SymbolsInitialised )
 					{
-						SymbolsInitialised = ::SymInitialize( l_process, nullptr, TRUE ) == TRUE;
+						SymbolsInitialised = ::SymInitialize( process, nullptr, TRUE ) == TRUE;
 					}
 
 					if ( SymbolsInitialised )
 					{
-						for ( unsigned int i = 0; i < l_num; ++i )
+						for ( unsigned int i = 0; i < num; ++i )
 						{
-							if ( ::SymFromAddr( l_process, reinterpret_cast< DWORD64 >( l_backTrace[i] ), 0, l_symbol ) )
+							if ( ::SymFromAddr( process, reinterpret_cast< DWORD64 >( backTrace[i] ), 0, symbol ) )
 							{
-								p_stream << "== " << Demangle< CharT >( string::string_cast< char >( l_symbol->Name, l_symbol->Name + l_symbol->NameLen ) ) << std::endl;
+								p_stream << "== " << Demangle< CharT >( string::string_cast< char >( symbol->Name, symbol->Name + symbol->NameLen ) ) << std::endl;
 							}
 						}
 					}
@@ -87,7 +87,7 @@ namespace Castor
 						p_stream << "== Unable to retrieve the call stack" << std::endl;
 					}
 
-					free( l_symbol );
+					free( symbol );
 				}
 			}
 		}

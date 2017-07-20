@@ -71,24 +71,24 @@ namespace Castor3D
 		 */
 		C3D_API void Parse( Castor::String const & p_text )
 		{
-			Castor::StringArray l_params = Castor::string::split( p_text, cuT( " " ), 0xFFFFFFFF, false );
+			Castor::StringArray params = Castor::string::split( p_text, cuT( " " ), 0xFFFFFFFF, false );
 
-			for ( auto l_param : l_params )
+			for ( auto param : params )
 			{
-				if ( l_param.find( cuT( "-" ) ) != Castor::String::npos )
+				if ( param.find( cuT( "-" ) ) != Castor::String::npos )
 				{
-					l_param = l_param.substr( 1 );
+					param = param.substr( 1 );
 				}
 
-				Castor::StringArray l_paramNameValue = Castor::string::split( l_param, cuT( "=" ), 2, false );
+				Castor::StringArray paramNameValue = Castor::string::split( param, cuT( "=" ), 2, false );
 
-				if ( l_paramNameValue.size() > 1 )
+				if ( paramNameValue.size() > 1 )
 				{
-					Add( l_paramNameValue[0], l_paramNameValue[1] );
+					Add( paramNameValue[0], paramNameValue[1] );
 				}
 				else
 				{
-					Add( l_param, true );
+					Add( param, true );
 				}
 			}
 		}
@@ -111,18 +111,18 @@ namespace Castor3D
 		template< typename T >
 		inline bool Add( Castor::String const & p_name, T * p_values, uint32_t p_count )
 		{
-			bool l_return = false;
-			ParamNameMapIt l_it = m_mapParameters.find( p_name );
+			bool result = false;
+			ParamNameMapIt it = m_mapParameters.find( p_name );
 
-			if ( l_it == m_mapParameters.end() )
+			if ( it == m_mapParameters.end() )
 			{
-				ByteArray l_param( sizeof( T ) * p_count, 0 );
-				std::memcpy( &l_param[0], p_values, sizeof( T ) * p_count );
-				m_mapParameters.insert( std::make_pair( p_name, l_param ) );
-				l_return = true;
+				ByteArray param( sizeof( T ) * p_count, 0 );
+				std::memcpy( &param[0], p_values, sizeof( T ) * p_count );
+				m_mapParameters.insert( std::make_pair( p_name, param ) );
+				result = true;
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -134,9 +134,9 @@ namespace Castor3D
 		 */
 		inline void Add( Parameters const & p_parameters )
 		{
-			for ( auto l_parameter : p_parameters.m_mapParameters )
+			for ( auto parameter : p_parameters.m_mapParameters )
 			{
-				m_mapParameters.insert( { l_parameter.first, l_parameter.second } );
+				m_mapParameters.insert( { parameter.first, parameter.second } );
 			}
 		}
 		/**
@@ -193,19 +193,19 @@ namespace Castor3D
 		 */
 		inline bool Add( Castor::String const & p_name, Castor::String const & p_value )
 		{
-			bool l_return = false;
-			ParamNameMapIt l_it = m_mapParameters.find( p_name );
+			bool result = false;
+			ParamNameMapIt it = m_mapParameters.find( p_name );
 
-			if ( l_it == m_mapParameters.end() )
+			if ( it == m_mapParameters.end() )
 			{
-				size_t l_size = sizeof( xchar ) * p_value.size();
-				ByteArray l_param( l_size + 1, 0 );
-				std::memcpy( &l_param[0], p_value.data(), l_size );
-				m_mapParameters.insert( std::make_pair( p_name, l_param ) );
-				l_return = true;
+				size_t size = sizeof( xchar ) * p_value.size();
+				ByteArray param( size + 1, 0 );
+				std::memcpy( &param[0], p_value.data(), size );
+				m_mapParameters.insert( std::make_pair( p_name, param ) );
+				result = true;
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -222,16 +222,16 @@ namespace Castor3D
 		template< typename T >
 		inline bool Set( Castor::String const & p_name, T const & p_value )
 		{
-			bool l_return = false;
-			ParamNameMapIt l_it = m_mapParameters.find( p_name );
+			bool result = false;
+			ParamNameMapIt it = m_mapParameters.find( p_name );
 
-			if ( l_it != m_mapParameters.end() )
+			if ( it != m_mapParameters.end() )
 			{
-				std::memcpy( &l_it->second[0], &p_value, sizeof( T ) );
-				l_return = true;
+				std::memcpy( &it->second[0], &p_value, sizeof( T ) );
+				result = true;
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -250,19 +250,19 @@ namespace Castor3D
 		template< typename T >
 		inline bool Get( Castor::String const & p_name, T * p_values, uint32_t p_count )const
 		{
-			bool l_return = false;
-			ParamNameMapConstIt l_it = m_mapParameters.find( p_name );
+			bool result = false;
+			ParamNameMapConstIt it = m_mapParameters.find( p_name );
 
-			if ( l_it != m_mapParameters.end() )
+			if ( it != m_mapParameters.end() )
 			{
-				if ( sizeof( T ) * p_count >= l_it->second.size() )
+				if ( sizeof( T ) * p_count >= it->second.size() )
 				{
-					std::memcpy( p_values, &l_it->second[0], l_it->second.size() );
-					l_return = true;
+					std::memcpy( p_values, &it->second[0], it->second.size() );
+					result = true;
 				}
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -312,16 +312,16 @@ namespace Castor3D
 		 */
 		inline bool Get( Castor::String const & p_name, Castor::String & p_value )const
 		{
-			bool l_return = false;
-			ParamNameMapConstIt l_it = m_mapParameters.find( p_name );
+			bool result = false;
+			ParamNameMapConstIt it = m_mapParameters.find( p_name );
 
-			if ( l_it != m_mapParameters.end() )
+			if ( it != m_mapParameters.end() )
 			{
-				p_value = reinterpret_cast< xchar const * const >( l_it->second.data() );
-				l_return = true;
+				p_value = reinterpret_cast< xchar const * const >( it->second.data() );
+				result = true;
 			}
 
-			return l_return;
+			return result;
 		}
 
 	private:

@@ -14,7 +14,7 @@ namespace Castor3D
 
 	bool Sampler::TextWriter::operator()( Sampler const & p_sampler, TextFile & p_file )
 	{
-		bool l_return = true;
+		bool result = true;
 
 		Logger::LogInfo( m_tabs + cuT( "Writing Sampler " ) + p_sampler.GetName() );
 
@@ -49,97 +49,97 @@ namespace Castor3D
 				{ ComparisonFunc::eNever, cuT( "never" ) },
 			};
 
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n" ) ) > 0
+			result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler name" );
+			Castor::TextWriter< Sampler >::CheckError( result, "Sampler name" );
 
-			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::eMin ) != InterpolationMode::eUndefined )
+			if ( result && p_sampler.GetInterpolationMode( InterpolationFilter::eMin ) != InterpolationMode::eUndefined )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tmin_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::eMin )] + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler min filter" );
+				result = p_file.WriteText( m_tabs + cuT( "\tmin_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::eMin )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler min filter" );
 			}
 
-			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::eMag ) != InterpolationMode::eUndefined )
+			if ( result && p_sampler.GetInterpolationMode( InterpolationFilter::eMag ) != InterpolationMode::eUndefined )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tmag_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::eMag )] + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler mag filter" );
+				result = p_file.WriteText( m_tabs + cuT( "\tmag_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::eMag )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler mag filter" );
 			}
 
-			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::eMip ) != InterpolationMode::eUndefined )
+			if ( result && p_sampler.GetInterpolationMode( InterpolationFilter::eMip ) != InterpolationMode::eUndefined )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tmip_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::eMip )] + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler mip filter" );
+				result = p_file.WriteText( m_tabs + cuT( "\tmip_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::eMip )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler mip filter" );
 			}
 
-			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::eU ) != WrapMode::eCount )
+			if ( result && p_sampler.GetWrappingMode( TextureUVW::eU ) != WrapMode::eCount )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tu_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::eU )] + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler U wrap mode" );
+				result = p_file.WriteText( m_tabs + cuT( "\tu_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::eU )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler U wrap mode" );
 			}
 
-			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::eV ) != WrapMode::eCount )
+			if ( result && p_sampler.GetWrappingMode( TextureUVW::eV ) != WrapMode::eCount )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tv_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::eV )] + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler V wrap mode" );
+				result = p_file.WriteText( m_tabs + cuT( "\tv_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::eV )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler V wrap mode" );
 			}
 
-			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::eW ) != WrapMode::eCount )
+			if ( result && p_sampler.GetWrappingMode( TextureUVW::eW ) != WrapMode::eCount )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tw_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::eW )] + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler W wrap mode" );
+				result = p_file.WriteText( m_tabs + cuT( "\tw_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::eW )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler W wrap mode" );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\tmin_lod %.2f\n" ), m_tabs.c_str(), p_sampler.GetMinLod() ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler min lod" );
+				result = p_file.Print( 256, cuT( "%s\tmin_lod %.2f\n" ), m_tabs.c_str(), p_sampler.GetMinLod() ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler min lod" );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\tmax_lod %.2f\n" ), m_tabs.c_str(), p_sampler.GetMaxLod() ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler max lod" );
+				result = p_file.Print( 256, cuT( "%s\tmax_lod %.2f\n" ), m_tabs.c_str(), p_sampler.GetMaxLod() ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler max lod" );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\tlod_bias %.2f\n" ), m_tabs.c_str(), p_sampler.GetLodBias() ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler lod bias" );
+				result = p_file.Print( 256, cuT( "%s\tlod_bias %.2f\n" ), m_tabs.c_str(), p_sampler.GetLodBias() ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler lod bias" );
 			}
 
-			if ( l_return && p_sampler.GetComparisonMode() != ComparisonMode::eNone )
+			if ( result && p_sampler.GetComparisonMode() != ComparisonMode::eNone )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tcomparison_mode " ) + ComparisonModes[p_sampler.GetComparisonMode()] + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler comparison mode" );
+				result = p_file.WriteText( m_tabs + cuT( "\tcomparison_mode " ) + ComparisonModes[p_sampler.GetComparisonMode()] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler comparison mode" );
 
-				if ( l_return )
+				if ( result )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\tcomparison_func " ) + ComparisonFunctions[p_sampler.GetComparisonFunc()] + cuT( "\n" ) ) > 0;
-					Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler comparison function" );
+					result = p_file.WriteText( m_tabs + cuT( "\tcomparison_func " ) + ComparisonFunctions[p_sampler.GetComparisonFunc()] + cuT( "\n" ) ) > 0;
+					Castor::TextWriter< Sampler >::CheckError( result, "Sampler comparison function" );
 				}
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\tborder_colour " ), m_tabs.c_str() ) > 0
+				result = p_file.Print( 256, cuT( "%s\tborder_colour " ), m_tabs.c_str() ) > 0
 						   && Colour::TextWriter( String() )( p_sampler.GetBorderColour(), p_file )
 						   && p_file.WriteText( cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler border colour" );
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler border colour" );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\tmax_anisotropy %.2f\n" ), m_tabs.c_str(), p_sampler.GetMaxAnisotropy() ) > 0;
-				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler max anisotropy" );
+				result = p_file.Print( 256, cuT( "%s\tmax_anisotropy %.2f\n" ), m_tabs.c_str(), p_sampler.GetMaxAnisotropy() ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( result, "Sampler max anisotropy" );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*********************************************************************************************

@@ -42,7 +42,7 @@ namespace GuiCommon
 		, m_engine( nullptr )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
-		wxBusyCursor l_wait;
+		wxBusyCursor wait;
 		ImagesLoader::AddBitmap( eBMP_MATERIAL, material_xpm );
 		ImagesLoader::AddBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
 		ImagesLoader::AddBitmap( eBMP_PASS, pass_xpm );
@@ -51,7 +51,7 @@ namespace GuiCommon
 		ImagesLoader::AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
 		ImagesLoader::WaitAsyncLoads();
 
-		wxImage * l_icons[] =
+		wxImage * icons[] =
 		{
 			ImagesLoader::GetBitmap( eBMP_MATERIAL ),
 			ImagesLoader::GetBitmap( eBMP_MATERIAL_SEL ),
@@ -61,21 +61,21 @@ namespace GuiCommon
 			ImagesLoader::GetBitmap( eBMP_TEXTURE_SEL ),
 		};
 
-		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
+		wxImageList * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto l_image : l_icons )
+		for ( auto image : icons )
 		{
-			int l_sizeOrig = l_image->GetWidth();
+			int sizeOrig = image->GetWidth();
 
-			if ( l_sizeOrig != GC_IMG_SIZE )
+			if ( sizeOrig != GC_IMG_SIZE )
 			{
-				l_image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
+				image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
 			}
 
-			l_imageList->Add( wxImage( *l_image ) );
+			imageList->Add( wxImage( *image ) );
 		}
 
-		AssignImageList( l_imageList );
+		AssignImageList( imageList );
 	}
 
 	MaterialsList::~MaterialsList()
@@ -88,12 +88,12 @@ namespace GuiCommon
 	{
 		m_engine = p_engine;
 		m_scene = &p_scene;
-		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
-		auto l_lock = Castor::make_unique_lock( m_engine->GetMaterialCache() );
+		wxTreeItemId root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
+		auto lock = Castor::make_unique_lock( m_engine->GetMaterialCache() );
 
-		for ( auto l_pair : m_engine->GetMaterialCache() )
+		for ( auto pair : m_engine->GetMaterialCache() )
 		{
-			DoAddMaterial( l_root, l_pair.second );
+			DoAddMaterial( root, pair.second );
 		}
 	}
 
@@ -105,17 +105,17 @@ namespace GuiCommon
 	void MaterialsList::DoAddMaterial( wxTreeItemId p_id
 		, Castor3D::MaterialSPtr p_material )
 	{
-		wxTreeItemId l_id = AppendItem( p_id
+		wxTreeItemId id = AppendItem( p_id
 			, p_material->GetName()
 			, eBMP_MATERIAL - eBMP_MATERIAL
 			, eBMP_MATERIAL_SEL - eBMP_MATERIAL
 			, new MaterialTreeItemProperty( m_propertiesHolder->IsEditable()
 				, p_material ) );
-		uint32_t l_index = 0;
+		uint32_t index = 0;
 
-		for ( auto l_pass : *p_material )
+		for ( auto pass : *p_material )
 		{
-			DoAddPass( l_id, l_index++, l_pass );
+			DoAddPass( id, index++, pass );
 		}
 	}
 
@@ -123,18 +123,18 @@ namespace GuiCommon
 		, uint32_t p_index
 		, Castor3D::PassSPtr p_pass )
 	{
-		wxTreeItemId l_id = AppendItem( p_id
+		wxTreeItemId id = AppendItem( p_id
 			, wxString( _( "Pass " ) ) << p_index
 			, eBMP_PASS - eBMP_MATERIAL
 			, eBMP_PASS_SEL - eBMP_MATERIAL
 			, new PassTreeItemProperty( m_propertiesHolder->IsEditable()
 				, p_pass
 				, *m_scene ) );
-		uint32_t l_index = 0;
+		uint32_t index = 0;
 
-		for ( auto l_unit : *p_pass )
+		for ( auto unit : *p_pass )
 		{
-			DoAddTexture( l_id, l_index++, l_unit, p_pass->GetType() );
+			DoAddTexture( id, index++, unit, p_pass->GetType() );
 		}
 	}
 
@@ -143,7 +143,7 @@ namespace GuiCommon
 		, Castor3D::TextureUnitSPtr p_texture
 		, Castor3D::MaterialType p_type )
 	{
-		wxTreeItemId l_id = AppendItem( p_id
+		wxTreeItemId id = AppendItem( p_id
 			, wxString( _( "Texture Unit " ) ) << p_index
 			, eBMP_TEXTURE - eBMP_MATERIAL
 			, eBMP_TEXTURE_SEL - eBMP_MATERIAL
@@ -153,17 +153,17 @@ namespace GuiCommon
 
 		if ( p_texture->GetRenderTarget() )
 		{
-			RenderTargetSPtr l_target = p_texture->GetRenderTarget();
+			RenderTargetSPtr target = p_texture->GetRenderTarget();
 
-			if ( l_target )
+			if ( target )
 			{
-				wxString l_name = _( "Render Target" );
-				AppendItem( l_id
-					, l_name
+				wxString name = _( "Render Target" );
+				AppendItem( id
+					, name
 					, eBMP_RENDER_TARGET
 					, eBMP_RENDER_TARGET_SEL
 					, new RenderTargetTreeItemProperty( m_propertiesHolder->IsEditable()
-						, l_target ) );
+						, target ) );
 			}
 		}
 	}
@@ -182,115 +182,115 @@ namespace GuiCommon
 
 	void MaterialsList::OnSelectItem( wxTreeEvent & p_event )
 	{
-		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
-		m_propertiesHolder->SetPropertyData( l_data );
+		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
+		m_propertiesHolder->SetPropertyData( data );
 		p_event.Skip();
 	}
 
 	void MaterialsList::OnMouseRButtonUp( wxTreeEvent & p_event )
 	{
-		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
-		wxPoint l_position = wxGetMousePosition();
-		l_data->DisplayTreeItemMenu( this, l_position.x, l_position.y );
+		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
+		wxPoint position = wxGetMousePosition();
+		data->DisplayTreeItemMenu( this, position.x, position.y );
 	}
 
 	//void MaterialsList::AddItem( String const & p_strMaterialName )
 	//{
-	//	MaterialSPtr l_pMaterial = m_engine->GetMaterialCache().find( p_strMaterialName );
-	//	int l_iIndex = m_pListImages->GetImageCount();
-	//	wxListItem l_item;
-	//	l_item.SetColumn( 0 );
-	//	l_item.SetMask( wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE );
-	//	l_item.SetId( l_iIndex );
-	//	l_item.SetImage( l_iIndex );
-	//	l_item.SetAlign( wxLIST_FORMAT_LEFT );
-	//	l_item.SetText( p_strMaterialName );
-	//	l_item.SetWidth( m_iImgWidth + 2 );
-	//	wxImage * l_pImage = CreateMaterialImage( l_pMaterial, m_iImgWidth, m_iImgWidth );
-	//	wxBitmap l_bitmap( * l_pImage );
-	//	m_pListImages->Add( l_bitmap );
-	//	m_arrayImages.push_back( l_pImage );
+	//	MaterialSPtr pMaterial = m_engine->GetMaterialCache().find( p_strMaterialName );
+	//	int iIndex = m_pListImages->GetImageCount();
+	//	wxListItem item;
+	//	item.SetColumn( 0 );
+	//	item.SetMask( wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE );
+	//	item.SetId( iIndex );
+	//	item.SetImage( iIndex );
+	//	item.SetAlign( wxLIST_FORMAT_LEFT );
+	//	item.SetText( p_strMaterialName );
+	//	item.SetWidth( m_iImgWidth + 2 );
+	//	wxImage * pImage = CreateMaterialImage( pMaterial, m_iImgWidth, m_iImgWidth );
+	//	wxBitmap bitmap( * pImage );
+	//	m_pListImages->Add( bitmap );
+	//	m_arrayImages.push_back( pImage );
 	//
-	//	if ( InsertItem( l_item ) == -1 )
+	//	if ( InsertItem( item ) == -1 )
 	//	{
 	//		Logger::LogWarning( cuT( "MaterialsList::AddItem - Item not inserted" ) );
 	//	}
 	//	else
 	//	{
-	//		SetItemColumnImage( l_iIndex, 0, l_iIndex );
+	//		SetItemColumnImage( iIndex, 0, iIndex );
 	//	}
 	//}
 	//
 	//wxImage * MaterialsList::CreateMaterialImage( MaterialSPtr p_material, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxBitmap l_bmpReturn( p_width, p_height, 32 );
-	//	wxMemoryDC l_dcReturn( l_bmpReturn );
+	//	wxBitmap bmpReturn( p_width, p_height, 32 );
+	//	wxMemoryDC dcReturn( bmpReturn );
 	//
 	//	if ( p_material )
 	//	{
 	//		if ( p_material->GetPassCount() )
 	//		{
-	//			wxImage * l_pPassImage = CreatePassImage( p_material->GetPass( 0 ), p_width, p_height );
-	//			wxBitmap l_bmpPass( *l_pPassImage, 32 );
-	//			l_dcReturn.DrawBitmap( l_bmpPass, 0, 0, true );
-	//			delete l_pPassImage;
+	//			wxImage * pPassImage = CreatePassImage( p_material->GetPass( 0 ), p_width, p_height );
+	//			wxBitmap bmpPass( *pPassImage, 32 );
+	//			dcReturn.DrawBitmap( bmpPass, 0, 0, true );
+	//			delete pPassImage;
 	//		}
 	//	}
 	//
-	//	return new wxImage( l_bmpReturn.ConvertToImage() );
+	//	return new wxImage( bmpReturn.ConvertToImage() );
 	//}
 	//
 	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pass, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxImage * l_return = nullptr;
+	//	wxImage * result = nullptr;
 	//
 	//	if ( p_pass )
 	//	{
-	//		wxBitmap l_bmpReturn( p_width, p_height, 32 );
-	//		wxMemoryDC l_dcReturn( l_bmpReturn );
-	//		wxImage * l_pMask = nullptr;
+	//		wxBitmap bmpReturn( p_width, p_height, 32 );
+	//		wxMemoryDC dcReturn( bmpReturn );
+	//		wxImage * pMask = nullptr;
 	//		typedef uint32_t uint;
-	//		l_pMask = new wxImage( p_width, p_height );
-	//		l_pMask->InitAlpha();
-	//		uint8_t l_byRe;
-	//		uint8_t l_byGe;
-	//		uint8_t l_byBe;
-	//		uint8_t l_byRm;
-	//		uint8_t l_byGm;
-	//		uint8_t l_byBm;
-	//		uint8_t l_byRc;
-	//		uint8_t l_byGc;
-	//		uint8_t l_byBc;
-	//		uint8_t l_byR;
-	//		uint8_t l_byG;
-	//		uint8_t l_byB;
-	//		uint8_t l_byA = 255;
-	//		double l_dMiddleX = double( p_width ) / 2.0;
-	//		double l_dMiddleY = double( p_height ) / 2.0;
-	//		double l_dMaxRadius = std::sqrt( ( l_dMiddleX * l_dMiddleX ) + ( l_dMiddleY * l_dMiddleY ) );
-	//		double l_dMinRadius = 0.0;
-	//		double l_dMidRadius1 = l_dMaxRadius / 3.0;
-	//		double l_dMidRadius2 = l_dMidRadius1 * 2.0;
-	//		double l_dStep = l_dMidRadius1;
-	//		double l_dX, l_dY;
-	//		double l_dRadius = 0;
-	//		p_pass->GetDiffuse().red().convert_to( l_byRm );
-	//		p_pass->GetDiffuse().green().convert_to( l_byGm );
-	//		p_pass->GetDiffuse().blue().convert_to( l_byBm );
-	//		p_pass->GetSpecular().red().convert_to( l_byRc );
-	//		p_pass->GetSpecular().green().convert_to( l_byGc );
-	//		p_pass->GetSpecular().blue().convert_to( l_byBc );
+	//		pMask = new wxImage( p_width, p_height );
+	//		pMask->InitAlpha();
+	//		uint8_t byRe;
+	//		uint8_t byGe;
+	//		uint8_t byBe;
+	//		uint8_t byRm;
+	//		uint8_t byGm;
+	//		uint8_t byBm;
+	//		uint8_t byRc;
+	//		uint8_t byGc;
+	//		uint8_t byBc;
+	//		uint8_t byR;
+	//		uint8_t byG;
+	//		uint8_t byB;
+	//		uint8_t byA = 255;
+	//		double dMiddleX = double( p_width ) / 2.0;
+	//		double dMiddleY = double( p_height ) / 2.0;
+	//		double dMaxRadius = std::sqrt( ( dMiddleX * dMiddleX ) + ( dMiddleY * dMiddleY ) );
+	//		double dMinRadius = 0.0;
+	//		double dMidRadius1 = dMaxRadius / 3.0;
+	//		double dMidRadius2 = dMidRadius1 * 2.0;
+	//		double dStep = dMidRadius1;
+	//		double dX, dY;
+	//		double dRadius = 0;
+	//		p_pass->GetDiffuse().red().convert_to( byRm );
+	//		p_pass->GetDiffuse().green().convert_to( byGm );
+	//		p_pass->GetDiffuse().blue().convert_to( byBm );
+	//		p_pass->GetSpecular().red().convert_to( byRc );
+	//		p_pass->GetSpecular().green().convert_to( byGc );
+	//		p_pass->GetSpecular().blue().convert_to( byBc );
 	//
 	//		if ( p_pass->GetTextureUnitsCount() )
 	//		{
-	//			l_byA = 127;
-	//			wxImage * l_pImage = CreateTextureUnitImage( p_pass->GetTextureUnit( TextureChannel::eDiffuse ), p_width, p_height );
+	//			byA = 127;
+	//			wxImage * pImage = CreateTextureUnitImage( p_pass->GetTextureUnit( TextureChannel::eDiffuse ), p_width, p_height );
 	//
-	//			if ( l_pImage )
+	//			if ( pImage )
 	//			{
-	//				wxBitmap l_bmpImage( *l_pImage );
-	//				l_dcReturn.DrawBitmap( l_bmpImage, 0, 0, true );
-	//				delete l_pImage;
+	//				wxBitmap bmpImage( *pImage );
+	//				dcReturn.DrawBitmap( bmpImage, 0, 0, true );
+	//				delete pImage;
 	//			}
 	//		}
 	//
@@ -298,61 +298,61 @@ namespace GuiCommon
 	//		{
 	//			for ( uint y = 0; y < p_height; ++y )
 	//			{
-	//				l_dX = double( x ) - l_dMiddleX;
-	//				l_dY = double( y ) - l_dMiddleY;
-	//				l_dRadius = std::sqrt( ( l_dX * l_dX ) + ( l_dY * l_dY ) );
+	//				dX = double( x ) - dMiddleX;
+	//				dY = double( y ) - dMiddleY;
+	//				dRadius = std::sqrt( ( dX * dX ) + ( dY * dY ) );
 	//
-	//				if ( l_dRadius < l_dMidRadius1 )
+	//				if ( dRadius < dMidRadius1 )
 	//				{
-	//					l_byR = uint8_t( ( ( l_dMidRadius1 - l_dRadius ) * double( l_byRc ) / l_dStep ) + ( ( l_dRadius - l_dMinRadius ) * double( l_byRm ) / l_dStep ) );
-	//					l_byG = uint8_t( ( ( l_dMidRadius1 - l_dRadius ) * double( l_byGc ) / l_dStep ) + ( ( l_dRadius - l_dMinRadius ) * double( l_byGm ) / l_dStep ) );
-	//					l_byB = uint8_t( ( ( l_dMidRadius1 - l_dRadius ) * double( l_byBc ) / l_dStep ) + ( ( l_dRadius - l_dMinRadius ) * double( l_byBm ) / l_dStep ) );
-	//					//l_byA = uint8_t( ((l_dMidRadius1 - l_dRadius) * double( l_byAc ) / l_dStep) + ((l_dRadius - l_dMinRadius) * double( l_byAm ) / l_dStep) );
+	//					byR = uint8_t( ( ( dMidRadius1 - dRadius ) * double( byRc ) / dStep ) + ( ( dRadius - dMinRadius ) * double( byRm ) / dStep ) );
+	//					byG = uint8_t( ( ( dMidRadius1 - dRadius ) * double( byGc ) / dStep ) + ( ( dRadius - dMinRadius ) * double( byGm ) / dStep ) );
+	//					byB = uint8_t( ( ( dMidRadius1 - dRadius ) * double( byBc ) / dStep ) + ( ( dRadius - dMinRadius ) * double( byBm ) / dStep ) );
+	//					//l_byA = uint8_t( ((dMidRadius1 - dRadius) * double( byAc ) / dStep) + ((dRadius - dMinRadius) * double( byAm ) / dStep) );
 	//				}
-	//				else if ( l_dRadius < l_dMidRadius2 )
+	//				else if ( dRadius < dMidRadius2 )
 	//				{
-	//					l_byR = l_byRm;
-	//					l_byG = l_byGm;
-	//					l_byB = l_byBm;
-	//					//l_byA = l_byAm;
+	//					byR = byRm;
+	//					byG = byGm;
+	//					byB = byBm;
+	//					//l_byA = byAm;
 	//				}
 	//				else
 	//				{
-	//					l_byR = uint8_t( ( ( l_dMaxRadius - l_dRadius ) * double( l_byRm ) / l_dStep ) + ( ( l_dRadius - l_dMidRadius2 ) * double( l_byRe ) / l_dStep ) );
-	//					l_byG = uint8_t( ( ( l_dMaxRadius - l_dRadius ) * double( l_byGm ) / l_dStep ) + ( ( l_dRadius - l_dMidRadius2 ) * double( l_byGe ) / l_dStep ) );
-	//					l_byB = uint8_t( ( ( l_dMaxRadius - l_dRadius ) * double( l_byBm ) / l_dStep ) + ( ( l_dRadius - l_dMidRadius2 ) * double( l_byBe ) / l_dStep ) );
-	//					//l_byA = uint8_t( ((l_dMaxRadius - l_dRadius) * double( l_byAm ) / l_dStep) +  ((l_dRadius - l_dMidRadius2) * double( l_byAe ) / l_dStep) );
+	//					byR = uint8_t( ( ( dMaxRadius - dRadius ) * double( byRm ) / dStep ) + ( ( dRadius - dMidRadius2 ) * double( byRe ) / dStep ) );
+	//					byG = uint8_t( ( ( dMaxRadius - dRadius ) * double( byGm ) / dStep ) + ( ( dRadius - dMidRadius2 ) * double( byGe ) / dStep ) );
+	//					byB = uint8_t( ( ( dMaxRadius - dRadius ) * double( byBm ) / dStep ) + ( ( dRadius - dMidRadius2 ) * double( byBe ) / dStep ) );
+	//					//l_byA = uint8_t( ((dMaxRadius - dRadius) * double( byAm ) / dStep) +  ((dRadius - dMidRadius2) * double( byAe ) / dStep) );
 	//				}
 	//
-	//				l_pMask->SetRGB( x, y, l_byR, l_byG, l_byB );
-	//				l_pMask->SetAlpha( x, y, l_byA / 2 );
+	//				pMask->SetRGB( x, y, byR, byG, byB );
+	//				pMask->SetAlpha( x, y, byA / 2 );
 	//			}
 	//		}
 	//
-	//		wxBitmap l_bmpMask( *l_pMask );
-	//		delete l_pMask;
-	//		l_dcReturn.DrawBitmap( l_bmpMask, 0, 0, true );
-	//		l_return = new wxImage( l_bmpReturn.ConvertToImage() );
+	//		wxBitmap bmpMask( *pMask );
+	//		delete pMask;
+	//		dcReturn.DrawBitmap( bmpMask, 0, 0, true );
+	//		result = new wxImage( bmpReturn.ConvertToImage() );
 	//	}
 	//
-	//	return l_return;
+	//	return result;
 	//}
 	//
 	//wxImage * MaterialsList::CreateTextureUnitImage( TextureUnitSPtr p_pUnit, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxImage * l_return = nullptr;
+	//	wxImage * result = nullptr;
 	//
 	//	if ( p_pUnit )
 	//	{
-	//		wxBitmap l_bmp;
-	//		CreateBitmapFromBuffer( p_pUnit, l_bmp );
+	//		wxBitmap bmp;
+	//		CreateBitmapFromBuffer( p_pUnit, bmp );
 	//
 	//		try
 	//		{
-	//			if ( l_bmp.IsOk() )
+	//			if ( bmp.IsOk() )
 	//			{
-	//				l_return = new wxImage( l_bmp.ConvertToImage() );
-	//				l_return->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST );
+	//				result = new wxImage( bmp.ConvertToImage() );
+	//				result->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST );
 	//			}
 	//		}
 	//		catch ( ... )
@@ -361,6 +361,6 @@ namespace GuiCommon
 	//		}
 	//	}
 	//
-	//	return l_return;
+	//	return result;
 	//}
 }

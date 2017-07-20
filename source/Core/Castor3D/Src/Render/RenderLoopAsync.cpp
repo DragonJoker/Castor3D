@@ -64,14 +64,14 @@ namespace Castor3D
 	void RenderLoopAsync::UpdateVSync( bool p_enable )
 	{
 		using type = decltype( m_savedTime );
-		static auto l_zero = type::zero();
+		static auto zero = type::zero();
 
-		if ( p_enable && m_savedTime != l_zero )
+		if ( p_enable && m_savedTime != zero )
 		{
 			m_frameTime = m_savedTime;
-			m_savedTime = l_zero;
+			m_savedTime = zero;
 		}
-		else if ( m_savedTime == l_zero )
+		else if ( m_savedTime == zero )
 		{
 			m_savedTime = m_frameTime;
 			m_frameTime = type{ 1 };
@@ -142,7 +142,7 @@ namespace Castor3D
 
 	ContextSPtr RenderLoopAsync::DoCreateMainContext( RenderWindow & p_window )
 	{
-		ContextSPtr l_return;
+		ContextSPtr result;
 
 		if ( !m_createContext )
 		{
@@ -156,17 +156,17 @@ namespace Castor3D
 
 			m_createContext = false;
 			DoSetWindow( nullptr );
-			l_return = m_renderSystem.GetMainContext();
+			result = m_renderSystem.GetMainContext();
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void RenderLoopAsync::DoMainLoop()
 	{
-		PreciseTimer l_timer;
+		PreciseTimer timer;
 		m_frameEnded = true;
-		auto l_scopeGuard{ make_scope_guard( [this]()
+		auto scopeGuard{ make_scope_guard( [this]()
 		{
 			Cleanup();
 			m_renderSystem.Cleanup();
@@ -186,11 +186,11 @@ namespace Castor3D
 				if ( !IsInterrupted() && m_createContext && !IsCreated() )
 				{
 					// On nous a demandé de créer le contexte principal, on le crée
-					ContextSPtr l_context = DoCreateContext( *DoGetWindow() );
+					ContextSPtr context = DoCreateContext( *DoGetWindow() );
 
-					if ( l_context )
+					if ( context )
 					{
-						m_renderSystem.SetMainContext( l_context );
+						m_renderSystem.SetMainContext( context );
 						m_created = true;
 					}
 					else
@@ -209,11 +209,11 @@ namespace Castor3D
 				while ( !IsInterrupted() && IsRendering() && !IsPaused() )
 				{
 					m_frameEnded = false;
-					l_timer.Time();
+					timer.Time();
 					DoRenderFrame();
-					auto l_endTime = std::chrono::duration_cast< std::chrono::milliseconds >( l_timer.Time() );
+					auto endTime = std::chrono::duration_cast< std::chrono::milliseconds >( timer.Time() );
 					m_frameEnded = true;
-					std::this_thread::sleep_for( std::max( 0_ms, GetFrameTime() - l_endTime ) );
+					std::this_thread::sleep_for( std::max( 0_ms, GetFrameTime() - endTime ) );
 				}
 
 				m_ended = true;
@@ -235,13 +235,13 @@ namespace Castor3D
 
 	void RenderLoopAsync::DoSetWindow( RenderWindow * p_window )
 	{
-		auto l_lock = make_unique_lock( m_mutexWindow );
+		auto lock = make_unique_lock( m_mutexWindow );
 		m_window = p_window;
 	}
 
 	RenderWindow * RenderLoopAsync::DoGetWindow()const
 	{
-		auto l_lock = make_unique_lock( m_mutexWindow );
+		auto lock = make_unique_lock( m_mutexWindow );
 		return m_window;
 	}
 }

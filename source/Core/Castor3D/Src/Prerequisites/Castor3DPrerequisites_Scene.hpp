@@ -61,9 +61,12 @@ namespace Castor3D
 		//!\~english	Stratified poisson filtering.
 		//!\~french		Filtrage poisson stratifié.
 		eShadowFilterStratifiedPoisson = 0x00C,
-		//!\~english	PBR materials.
-		//!\~french		Matériaux PBR.
-		ePbr = 0x010,
+		//!\~english	Metallic/Roughness PBR materials.
+		//\~french		Matériaux PBR Metallic/Roughness.
+		ePbrMetallicRoughness = 0x010,
+		//!\~english	Specular/Glossiness PBR materials.
+		//\~french		Matériaux PBR Specular/Glossiness.
+		ePbrSpecularGlossiness = 0x020,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	IMPLEMENT_FLAGS( SceneFlag )

@@ -25,70 +25,70 @@ namespace GlRender
 		, Castor::PxBufferBase & p_buffer )const
 	{
 		GetOpenGl().ReadBuffer( GlBufferBinding( int( GlBufferBinding::eColor0 ) + GetAttachmentIndex() ) );
-		auto l_format = GetOpenGl().Get( p_buffer.format() );
+		auto format = GetOpenGl().Get( p_buffer.format() );
 		GetOpenGl().ReadPixels( p_offset
 			, p_buffer.dimensions()
-			, l_format.Format
-			, l_format.Type
+			, format.Format
+			, format.Type
 			, p_buffer.ptr() );
 	}
 
 	void GlTextureAttachment::DoAttach()
 	{
 		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
-		auto l_pTexture = std::static_pointer_cast< GlTexture >( GetTexture() );
+		auto pTexture = std::static_pointer_cast< GlTexture >( GetTexture() );
 
 		switch ( GetTarget() )
 		{
 		case TextureType::eOneDimension:
 
-			if ( l_pTexture->GetType() == TextureType::eOneDimension )
+			if ( pTexture->GetType() == TextureType::eOneDimension )
 			{
-				GetOpenGl().FramebufferTexture1D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), l_pTexture->GetGlName(), 0 );
+				GetOpenGl().FramebufferTexture1D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( pTexture->GetType() ), pTexture->GetGlName(), 0 );
 			}
 			else
 			{
-				GetOpenGl().FramebufferTexture( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlName(), 0 );
+				GetOpenGl().FramebufferTexture( GlFrameBufferMode::eDefault, m_glAttachmentPoint, pTexture->GetGlName(), 0 );
 			}
 
 			break;
 
 		case TextureType::eTwoDimensions:
 
-			if ( l_pTexture->GetType() == TextureType::eTwoDimensions )
+			if ( pTexture->GetType() == TextureType::eTwoDimensions )
 			{
-				GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), l_pTexture->GetGlName(), 0 );
+				GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( pTexture->GetType() ), pTexture->GetGlName(), 0 );
 			}
 			else
 			{
-				GetOpenGl().FramebufferTexture( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlName(), 0 );
+				GetOpenGl().FramebufferTexture( GlFrameBufferMode::eDefault, m_glAttachmentPoint, pTexture->GetGlName(), 0 );
 			}
 
 			break;
 
 		case TextureType::eThreeDimensions:
 
-			if ( l_pTexture->GetType() == TextureType::eThreeDimensions )
+			if ( pTexture->GetType() == TextureType::eThreeDimensions )
 			{
-				GetOpenGl().FramebufferTexture3D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), l_pTexture->GetGlName(), 0, GetLayer() );
+				GetOpenGl().FramebufferTexture3D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( pTexture->GetType() ), pTexture->GetGlName(), 0, GetLayer() );
 			}
 			else
 			{
-				GetOpenGl().FramebufferTexture( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlName(), 0 );
+				GetOpenGl().FramebufferTexture( GlFrameBufferMode::eDefault, m_glAttachmentPoint, pTexture->GetGlName(), 0 );
 			}
 
 			break;
 
 		case TextureType::eTwoDimensionsArray:
-			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlName(), 0, GetLayer() );
+			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, pTexture->GetGlName(), 0, GetLayer() );
 			break;
 
 		case TextureType::eCube:
-			GetOpenGl().FramebufferTexture( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlName(), 0 );
+			GetOpenGl().FramebufferTexture( GlFrameBufferMode::eDefault, m_glAttachmentPoint, pTexture->GetGlName(), 0 );
 			break;
 
 		case TextureType::eCubeArray:
-			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_pTexture->GetGlName(), 0, GetLayer() );
+			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, pTexture->GetGlName(), 0, GetLayer() );
 			break;
 
 		default:
@@ -108,22 +108,22 @@ namespace GlRender
 	{
 		if ( GetOpenGl().HasFbo() )
 		{
-			auto l_pTexture = GetTexture();
+			auto pTexture = GetTexture();
 
 			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 			{
 				switch ( GetTarget() )
 				{
 				case TextureType::eOneDimension:
-					GetOpenGl().FramebufferTexture1D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), 0, 0 );
+					GetOpenGl().FramebufferTexture1D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( pTexture->GetType() ), 0, 0 );
 					break;
 
 				case TextureType::eTwoDimensions:
-					GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), 0, 0 );
+					GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( pTexture->GetType() ), 0, 0 );
 					break;
 
 				case TextureType::eThreeDimensions:
-					GetOpenGl().FramebufferTexture3D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), 0, 0, GetLayer() );
+					GetOpenGl().FramebufferTexture3D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GetOpenGl().Get( pTexture->GetType() ), 0, 0, GetLayer() );
 					break;
 
 				case TextureType::eTwoDimensionsArray:

@@ -26,89 +26,89 @@ namespace Testing
 
 	void CastorUtilsZipTest::ZipFile()
 	{
-		Path l_folder1{ cuT( "test1" ) };
-		Path l_folder2{ l_folder1 / cuT( "test2" ) };
+		Path folder1{ cuT( "test1" ) };
+		Path folder2{ folder1 / cuT( "test2" ) };
 
 		std::cout << "	First folder creation" << std::endl;
 
-		if ( File::DirectoryExists( l_folder1 ) || File::DirectoryCreate( l_folder1 ) )
+		if ( File::DirectoryExists( folder1 ) || File::DirectoryCreate( folder1 ) )
 		{
 			std::cout << "	Second folder creation" << std::endl;
 
-			if ( File::DirectoryExists( l_folder2 ) || File::DirectoryCreate( l_folder2 ) )
+			if ( File::DirectoryExists( folder2 ) || File::DirectoryCreate( folder2 ) )
 			{
-				Path l_binName = l_folder1 / cuT( "binFile.bin" );
-				Path l_txtName = l_folder2 / cuT( "txtFile.txt" );
-				Path l_zipName{ cuT( "zipFile.zip" ) };
+				Path binName = folder1 / cuT( "binFile.bin" );
+				Path txtName = folder2 / cuT( "txtFile.txt" );
+				Path zipName{ cuT( "zipFile.zip" ) };
 
-				std::vector< uint8_t > l_inBinData( 1024 );
-				String l_inTxtData( cuT( "Coucou, comment allez-vous?" ) );
+				std::vector< uint8_t > inBinData( 1024 );
+				String inTxtData( cuT( "Coucou, comment allez-vous?" ) );
 
-				if ( !File::FileExists( l_binName ) )
+				if ( !File::FileExists( binName ) )
 				{
 					std::cout << "	Binary file creation" << std::endl;
-					BinaryFile l_binary( l_binName, File::OpenMode::eWrite );
-					l_binary.WriteArray( l_inBinData.data(), l_inBinData.size() );
+					BinaryFile binary( binName, File::OpenMode::eWrite );
+					binary.WriteArray( inBinData.data(), inBinData.size() );
 				}
 
-				if ( !File::FileExists( l_txtName ) )
+				if ( !File::FileExists( txtName ) )
 				{
 					std::cout << "	Text file creation" << std::endl;
-					TextFile l_text( l_txtName, File::OpenMode::eWrite );
-					l_text.WriteText( l_inTxtData );
+					TextFile text( txtName, File::OpenMode::eWrite );
+					text.WriteText( inTxtData );
 				}
 
 				{
 					std::cout << "	Deflate the archive" << std::endl;
-					ZipArchive l_def( l_zipName, File::OpenMode::eWrite );
-					l_def.AddFile( l_binName );
-					l_def.AddFile( l_txtName );
-					l_def.Deflate();
+					ZipArchive def( zipName, File::OpenMode::eWrite );
+					def.AddFile( binName );
+					def.AddFile( txtName );
+					def.Deflate();
 				}
 
 				{
 					std::cout << "	Inflate the archive" << std::endl;
-					Path l_folder( cuT( "inflated" ) );
+					Path folder( cuT( "inflated" ) );
 
-					if ( File::DirectoryExists( l_folder ) || File::DirectoryCreate( l_folder ) )
+					if ( File::DirectoryExists( folder ) || File::DirectoryCreate( folder ) )
 					{
-						ZipArchive l_inf( l_zipName, File::OpenMode::eRead );
-						l_inf.Inflate( l_folder );
+						ZipArchive inf( zipName, File::OpenMode::eRead );
+						inf.Inflate( folder );
 
-						String l_outTxtData;
+						String outTxtData;
 
 						{
 							std::cout << "	Check binary file content" << std::endl;
-							BinaryFile l_binary( l_folder / l_binName, File::OpenMode::eRead );
-							std::vector< uint8_t > l_outBinData( size_t( l_binary.GetLength() ) );
-							l_binary.ReadArray( l_outBinData.data(), l_outBinData.size() );
-							CT_EQUAL( l_outBinData.size(), l_inBinData.size() );
-							CT_CHECK( !std::memcmp( l_outBinData.data(), l_inBinData.data(), std::min( l_outBinData.size(), l_inBinData.size() ) ) );
+							BinaryFile binary( folder / binName, File::OpenMode::eRead );
+							std::vector< uint8_t > outBinData( size_t( binary.GetLength() ) );
+							binary.ReadArray( outBinData.data(), outBinData.size() );
+							CT_EQUAL( outBinData.size(), inBinData.size() );
+							CT_CHECK( !std::memcmp( outBinData.data(), inBinData.data(), std::min( outBinData.size(), inBinData.size() ) ) );
 						}
 
 						{
 							std::cout << "	Check text file content" << std::endl;
-							TextFile l_text( l_folder / l_txtName, File::OpenMode::eRead );
-							l_text.ReadLine( l_outTxtData, l_inTxtData.size() * sizeof( xchar ) );
-							CT_EQUAL( l_outTxtData, l_inTxtData );
+							TextFile text( folder / txtName, File::OpenMode::eRead );
+							text.ReadLine( outTxtData, inTxtData.size() * sizeof( xchar ) );
+							CT_EQUAL( outTxtData, inTxtData );
 						}
 
-						std::remove( string::string_cast< char >( l_folder / l_binName ).c_str() );
-						std::remove( string::string_cast< char >( l_folder / l_txtName ).c_str() );
-						File::DirectoryDelete( l_folder / l_folder2 );
-						File::DirectoryDelete( l_folder / l_folder1 );
-						File::DirectoryDelete( l_folder );
+						std::remove( string::string_cast< char >( folder / binName ).c_str() );
+						std::remove( string::string_cast< char >( folder / txtName ).c_str() );
+						File::DirectoryDelete( folder / folder2 );
+						File::DirectoryDelete( folder / folder1 );
+						File::DirectoryDelete( folder );
 					}
 					else
 					{
-						CT_CHECK( File::DirectoryExists( l_folder ) );
+						CT_CHECK( File::DirectoryExists( folder ) );
 					}
 
-					std::remove( string::string_cast< char >( l_binName ).c_str() );
-					std::remove( string::string_cast< char >( l_txtName ).c_str() );
-					std::remove( string::string_cast< char >( l_zipName ).c_str() );
-					File::DirectoryDelete( l_folder2 );
-					File::DirectoryDelete( l_folder1 );
+					std::remove( string::string_cast< char >( binName ).c_str() );
+					std::remove( string::string_cast< char >( txtName ).c_str() );
+					std::remove( string::string_cast< char >( zipName ).c_str() );
+					File::DirectoryDelete( folder2 );
+					File::DirectoryDelete( folder1 );
 				}
 			}
 			else

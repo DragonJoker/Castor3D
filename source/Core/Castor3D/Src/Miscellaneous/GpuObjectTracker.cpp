@@ -6,39 +6,39 @@ namespace Castor3D
 {
 	bool GpuObjectTracker::Track( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
 	{
-		auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & l_object )
+		auto it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & object )
 		{
-			return p_object == l_object.m_object;
+			return p_object == object.m_object;
 		} );
 
-		bool l_return = l_it == m_allocated.end();
+		bool result = it == m_allocated.end();
 
-		std::stringstream l_ptr;
-		l_ptr.width( 16 );
-		l_ptr.fill( '0' );
-		l_ptr << std::hex << std::right << uint64_t( p_object );
-		std::stringstream l_type;
-		l_type.width( 20 );
-		l_type << std::left << p_type;
+		std::stringstream ptr;
+		ptr.width( 16 );
+		ptr.fill( '0' );
+		ptr << std::hex << std::right << uint64_t( p_object );
+		std::stringstream type;
+		type.width( 20 );
+		type << std::left << p_type;
 
-		if ( l_return )
+		if ( result )
 		{
-			std::stringstream l_stream;
-			l_stream << Castor::Debug::Backtrace();
-			m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, l_stream.str() } );
-			std::stringstream l_name;
-			l_name << "(" << m_id << ") " << l_type.str() << " [0x" << l_ptr.str() << "]";
-			Castor::Logger::LogDebug( l_name );
-			p_name = l_name.str();
+			std::stringstream stream;
+			stream << Castor::Debug::Backtrace();
+			m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, stream.str() } );
+			std::stringstream name;
+			name << "(" << m_id << ") " << type.str() << " [0x" << ptr.str() << "]";
+			Castor::Logger::LogDebug( name );
+			p_name = name.str();
 		}
 		else
 		{
-			std::stringstream l_name;
-			l_name << "(" << l_it->m_id << ") " << l_type.str() << " [0x" << l_ptr.str() << "]";
-			Castor::Logger::LogDebug( std::stringstream() << "Rereferencing object: " << l_name.str() );
+			std::stringstream name;
+			name << "(" << it->m_id << ") " << type.str() << " [0x" << ptr.str() << "]";
+			Castor::Logger::LogDebug( std::stringstream() << "Rereferencing object: " << name.str() );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool GpuObjectTracker::Track( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
@@ -48,44 +48,44 @@ namespace Castor3D
 
 	bool GpuObjectTracker::Untrack( void * p_object, ObjectDeclaration & p_declaration )
 	{
-		auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl )
+		auto it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl )
 		{
 			return p_object == p_decl.m_object;
 		} );
 
-		bool l_return = false;
-		char l_szName[1024] = { 0 };
-		std::stringstream l_ptr;
-		l_ptr.width( 16 );
-		l_ptr.fill( '0' );
-		l_ptr << std::hex << std::right << uint64_t( p_object );
+		bool result = false;
+		char szName[1024] = { 0 };
+		std::stringstream ptr;
+		ptr.width( 16 );
+		ptr.fill( '0' );
+		ptr << std::hex << std::right << uint64_t( p_object );
 
-		if ( l_it != m_allocated.end() )
+		if ( it != m_allocated.end() )
 		{
-			std::stringstream l_type;
-			l_type.width( 20 );
-			l_type << std::left << l_it->m_name;
-			p_declaration = *l_it;
-			l_return = true;
-			Castor::Logger::LogWarning( std::stringstream() << "Released " << l_type.str() << " [0x" << l_ptr.str() << "]" );
-			m_allocated.erase( l_it );
+			std::stringstream type;
+			type.width( 20 );
+			type << std::left << it->m_name;
+			p_declaration = *it;
+			result = true;
+			Castor::Logger::LogWarning( std::stringstream() << "Released " << type.str() << " [0x" << ptr.str() << "]" );
+			m_allocated.erase( it );
 		}
 		else
 		{
-			Castor::Logger::LogWarning( std::stringstream() << "Untracked [0x" << l_ptr.str() << cuT( "]" ) );
+			Castor::Logger::LogWarning( std::stringstream() << "Untracked [0x" << ptr.str() << cuT( "]" ) );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void GpuObjectTracker::ReportTracked()
 	{
-		for ( auto const & l_decl : m_allocated )
+		for ( auto const & decl : m_allocated )
 		{
-			std::stringstream l_stream;
-			l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
-			l_stream << Castor::string::string_cast< char >( l_decl.m_stack ) << std::endl;
-			Castor::Logger::LogError( l_stream.str() );
+			std::stringstream stream;
+			stream << "Leaked 0x" << std::hex << decl.m_object << std::dec << " (" << decl.m_name << "), from file " << decl.m_file << ", line " << decl.m_line << std::endl;
+			stream << Castor::string::string_cast< char >( decl.m_stack ) << std::endl;
+			Castor::Logger::LogError( stream.str() );
 		}
 	}
 }

@@ -26,20 +26,20 @@ namespace Castor3D
 
 	bool ShadowMap::Initialise()
 	{
-		bool l_return = true;
+		bool result = true;
 
 		if ( !m_frameBuffer )
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			l_return = m_frameBuffer->Create();
-			auto l_size = DoGetSize();
+			result = m_frameBuffer->Create();
+			auto size = DoGetSize();
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = m_frameBuffer->Initialise( l_size );
+				result = m_frameBuffer->Initialise( size );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
 				DoInitialise();
 			}
@@ -49,14 +49,14 @@ namespace Castor3D
 			m_frameBuffer->Unbind();
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void ShadowMap::Cleanup()
 	{
-		for ( auto & l_it : m_passes )
+		for ( auto & it : m_passes )
 		{
-			l_it.second->Cleanup();
+			it.second->Cleanup();
 		}
 
 		if ( m_frameBuffer )
@@ -72,9 +72,9 @@ namespace Castor3D
 			m_frameBuffer.reset();
 		}
 
-		for ( auto l_buffer : m_geometryBuffers )
+		for ( auto buffer : m_geometryBuffers )
 		{
-			l_buffer->Cleanup();
+			buffer->Cleanup();
 		}
 
 		m_geometryBuffers.clear();
@@ -82,14 +82,14 @@ namespace Castor3D
 
 	void ShadowMap::AddLight( Light & p_light )
 	{
-		auto l_pass = DoCreatePass( p_light );
-		auto l_size = DoGetSize();
+		auto pass = DoCreatePass( p_light );
+		auto size = DoGetSize();
 		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-			, [l_pass, l_size]()
+			, [pass, size]()
 			{
-				l_pass->Initialise( l_size );
+				pass->Initialise( size );
 			} ) );
-		m_passes.emplace( &p_light, l_pass );
+		m_passes.emplace( &p_light, pass );
 	}
 
 	void ShadowMap::UpdateFlags( TextureChannels & p_textureFlags
@@ -139,66 +139,66 @@ namespace Castor3D
 		, bool p_invertNormals )const
 	{
 		using namespace GLSL;
-		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Vertex inputs
-		auto position = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
-		auto texture = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = l_writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = l_writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = l_writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( l_writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto position = writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
+		auto texture = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture );
+		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( l_writer );
-		UBO_MODEL_MATRIX( l_writer );
-		SkinningUbo::Declare( l_writer, p_programFlags );
-		UBO_MORPHING( l_writer, p_programFlags );
+		UBO_MATRIX( writer );
+		UBO_MODEL_MATRIX( writer );
+		SkinningUbo::Declare( writer, p_programFlags );
+		UBO_MORPHING( writer, p_programFlags );
 
 		// Outputs
-		auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_texture = l_writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.DeclOutput< Int >( cuT( "vtx_instance" ) );
-		auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto vtx_position = writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_texture = writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = writer.DeclOutput< Int >( cuT( "vtx_instance" ) );
+		auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-		std::function< void() > l_main = [&]()
+		std::function< void() > main = [&]()
 		{
-			auto l_v4Vertex = l_writer.DeclLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_v3Texture = l_writer.DeclLocale( cuT( "l_v3Texture" ), texture );
-			auto l_mtxModel = l_writer.DeclLocale< Mat4 >( cuT( "l_mtxModel" ) );
+			auto v4Vertex = writer.DeclLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
+			auto v3Texture = writer.DeclLocale( cuT( "v3Texture" ), texture );
+			auto mtxModel = writer.DeclLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
-				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
+				mtxModel = SkinningUbo::ComputeTransform( writer, p_programFlags );
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
-				l_mtxModel = transform;
+				mtxModel = transform;
 			}
 			else
 			{
-				l_mtxModel = c3d_mtxModel;
+				mtxModel = c3d_mtxModel;
 			}
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto l_time = l_writer.DeclLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
+				auto time = writer.DeclLocale( cuT( "time" ), 1.0_f - c3d_fTime );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
+				v3Texture = v3Texture * writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
-			vtx_texture = l_v3Texture;
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_position = l_v4Vertex.xyz();
+			vtx_texture = v3Texture;
+			v4Vertex = mtxModel * v4Vertex;
+			vtx_position = v4Vertex.xyz();
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * c3d_mtxView * l_v4Vertex;
+			gl_Position = c3d_mtxProjection * c3d_mtxView * v4Vertex;
 		};
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
+		writer.ImplementFunction< void >( cuT( "main" ), main );
+		return writer.Finalise();
 	}
 
 	GLSL::Shader ShadowMap::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags

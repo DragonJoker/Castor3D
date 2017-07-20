@@ -26,85 +26,85 @@ MeshGeneratorSPtr Sphere::Create()
 
 void Sphere::DoGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 {
-	String l_param;
+	String param;
 
-	if ( p_parameters.Get( cuT( "subdiv" ), l_param ) )
+	if ( p_parameters.Get( cuT( "subdiv" ), param ) )
 	{
-		m_nbFaces = string::to_uint( l_param );
+		m_nbFaces = string::to_uint( param );
 	}
 
-	if ( p_parameters.Get( cuT( "radius" ), l_param ) )
+	if ( p_parameters.Get( cuT( "radius" ), param ) )
 	{
-		m_radius = string::to_float( l_param );
+		m_radius = string::to_float( param );
 	}
 
 	if ( m_nbFaces >= 3 )
 	{
-		Submesh & l_submesh = *p_mesh.CreateSubmesh();
-		real l_rAngle = real( Angle::PiMult2 ) / m_nbFaces;
-		std::vector< Point2r > l_arc( m_nbFaces + 1 );
-		real l_rAlpha = 0;
-		uint32_t l_iCur = 0;
-		uint32_t l_iPrv = 0;
-		real l_rAlphaI = 0;
-		Point3r l_ptPos;
+		Submesh & submesh = *p_mesh.CreateSubmesh();
+		real rAngle = real( Angle::PiMult2 ) / m_nbFaces;
+		std::vector< Point2r > arc( m_nbFaces + 1 );
+		real rAlpha = 0;
+		uint32_t iCur = 0;
+		uint32_t iPrv = 0;
+		real rAlphaI = 0;
+		Point3r ptPos;
 
 		for ( uint32_t i = 0; i <= m_nbFaces; i++ )
 		{
-			real l_x =  m_radius * sin( l_rAlpha );
-			real l_y = -m_radius * cos( l_rAlpha );
-			l_arc[i][0] = l_x;
-			l_arc[i][1] = l_y;
-			l_rAlpha += l_rAngle / 2;
+			real x =  m_radius * sin( rAlpha );
+			real y = -m_radius * cos( rAlpha );
+			arc[i][0] = x;
+			arc[i][1] = y;
+			rAlpha += rAngle / 2;
 		}
 
 		for ( uint32_t k = 0; k < m_nbFaces; k++ )
 		{
-			Point2r l_ptT = l_arc[k + 0];
-			Point2r l_ptB = l_arc[k + 1];
+			Point2r ptT = arc[k + 0];
+			Point2r ptB = arc[k + 1];
 
 			if ( k == 0 )
 			{
 				// Calcul de la position des points du haut
-				for ( uint32_t i = 0; i <= m_nbFaces; l_rAlphaI += l_rAngle, i++ )
+				for ( uint32_t i = 0; i <= m_nbFaces; rAlphaI += rAngle, i++ )
 				{
-					real l_rCos = cos( l_rAlphaI );
-					real l_rSin = sin( l_rAlphaI );
-					BufferElementGroupSPtr l_vertex = l_submesh.AddPoint( l_ptT[0] * l_rCos, l_ptT[1], l_ptT[0] * l_rSin );
-					Vertex::SetTexCoord( l_vertex, real( i ) / m_nbFaces, real( 1.0 + l_ptT[1] / m_radius ) / 2 );
-					Vertex::SetNormal( l_vertex, point::get_normalised( Vertex::GetPosition( l_vertex, l_ptPos ) ) );
+					real rCos = cos( rAlphaI );
+					real rSin = sin( rAlphaI );
+					BufferElementGroupSPtr vertex = submesh.AddPoint( ptT[0] * rCos, ptT[1], ptT[0] * rSin );
+					Vertex::SetTexCoord( vertex, real( i ) / m_nbFaces, real( 1.0 + ptT[1] / m_radius ) / 2 );
+					Vertex::SetNormal( vertex, point::get_normalised( Vertex::GetPosition( vertex, ptPos ) ) );
 					//l_vertex->SetTangent( point::get_normalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ), real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
-					l_iCur++;
+					iCur++;
 				}
 			}
 
 			// Calcul de la position des points
-			l_rAlphaI = 0;
+			rAlphaI = 0;
 
-			for ( uint32_t i = 0; i <= m_nbFaces; l_rAlphaI += l_rAngle, i++ )
+			for ( uint32_t i = 0; i <= m_nbFaces; rAlphaI += rAngle, i++ )
 			{
-				real l_rCos = cos( l_rAlphaI );
-				real l_rSin = sin( l_rAlphaI );
-				BufferElementGroupSPtr l_vertex = l_submesh.AddPoint( l_ptB[0] * l_rCos, l_ptB[1], l_ptB[0] * l_rSin );
-				Vertex::SetTexCoord( l_vertex, real( i ) / m_nbFaces, real( 1.0 + l_ptB[1] / m_radius ) / 2 );
-				Vertex::SetNormal( l_vertex, point::get_normalised( Vertex::GetPosition( l_vertex, l_ptPos ) ) );
-				// l_vertex->SetTangent( point::get_normalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ), real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
+				real rCos = cos( rAlphaI );
+				real rSin = sin( rAlphaI );
+				BufferElementGroupSPtr vertex = submesh.AddPoint( ptB[0] * rCos, ptB[1], ptB[0] * rSin );
+				Vertex::SetTexCoord( vertex, real( i ) / m_nbFaces, real( 1.0 + ptB[1] / m_radius ) / 2 );
+				Vertex::SetNormal( vertex, point::get_normalised( Vertex::GetPosition( vertex, ptPos ) ) );
+				// vertex->SetTangent( point::get_normalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ), real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
 			}
 
 			// Reconstition des faces
 			for ( uint32_t i = 0; i < m_nbFaces; i++ )
 			{
-				l_submesh.AddFace( l_iPrv + 0, l_iCur + 0, l_iPrv + 1 );
-				l_submesh.AddFace( l_iCur + 0, l_iCur + 1, l_iPrv + 1 );
-				l_iPrv++;
-				l_iCur++;
+				submesh.AddFace( iPrv + 0, iCur + 0, iPrv + 1 );
+				submesh.AddFace( iCur + 0, iCur + 1, iPrv + 1 );
+				iPrv++;
+				iCur++;
 			}
 
-			l_iPrv++;
-			l_iCur++;
+			iPrv++;
+			iCur++;
 		}
 
-		l_submesh.ComputeTangentsFromNormals();
+		submesh.ComputeTangentsFromNormals();
 	}
 
 	p_mesh.ComputeContainers();

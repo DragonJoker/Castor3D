@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -63,15 +63,31 @@ namespace Castor3D
 	\date		02/12/2016
 	\~english
 	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\remarks	Specialisation for MaterialType::ePbr.
+	\remarks	Specialisation for MaterialType::ePbrMetallicRoughness.
 	\~french
 	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	\remarks	Spécialisation pour MaterialType::ePbr.
+	\remarks	Spécialisation pour MaterialType::ePbrMetallicRoughness.
 	*/
 	template<>
-	struct PassTyper< MaterialType::ePbr >
+	struct PassTyper< MaterialType::ePbrMetallicRoughness >
 	{
-		using Type = PbrPass;
+		using Type = MetallicRoughnessPbrPass;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::ePbrMetallicRoughness.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::ePbrMetallicRoughness.
+	*/
+	template<>
+	struct PassTyper< MaterialType::ePbrSpecularGlossiness >
+	{
+		using Type = SpecularGlossinessPbrPass;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -284,9 +300,9 @@ namespace Castor3D
 		template< MaterialType Type >
 		inline std::shared_ptr< typename PassTyper< Type >::Type > GetTypedPass( uint32_t p_index )const
 		{
-			auto l_pass = GetPass( p_index );
+			auto pass = GetPass( p_index );
 			REQUIRE( m_type == Type );
-			return std::static_pointer_cast< typename PassTyper< Type >::Type >( l_pass );
+			return std::static_pointer_cast< typename PassTyper< Type >::Type >( pass );
 		}
 
 	public:

@@ -59,20 +59,20 @@ namespace castortd
 	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_window )
 	{
 		m_renderWindow.reset();
-		Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
+		Castor::Size sizeWnd = GuiCommon::make_Size( GetClientSize() );
 
-		if ( p_window && p_window->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
+		if ( p_window && p_window->Initialise( sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 		{
-			Castor::Size l_sizeScreen;
-			Castor::System::GetScreenSize( 0, l_sizeScreen );
-			GetParent()->SetClientSize( l_sizeWnd.width(), l_sizeWnd.height() );
-			l_sizeWnd = GuiCommon::make_Size( GetParent()->GetClientSize() );
-			GetParent()->SetPosition( wxPoint( std::abs( int( l_sizeScreen.width() ) - int( l_sizeWnd.width() ) ) / 2, std::abs( int( l_sizeScreen.height() ) - int( l_sizeWnd.height() ) ) / 2 ) );
-			SceneSPtr l_scene = p_window->GetScene();
+			Castor::Size sizeScreen;
+			Castor::System::GetScreenSize( 0, sizeScreen );
+			GetParent()->SetClientSize( sizeWnd.width(), sizeWnd.height() );
+			sizeWnd = GuiCommon::make_Size( GetParent()->GetClientSize() );
+			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.width() ) - int( sizeWnd.width() ) ) / 2, std::abs( int( sizeScreen.height() ) - int( sizeWnd.height() ) ) / 2 ) );
+			SceneSPtr scene = p_window->GetScene();
 
-			if ( l_scene )
+			if ( scene )
 			{
-				m_marker = l_scene->GetSceneNodeCache().Find( cuT( "MapMouse" ) );
+				m_marker = scene->GetSceneNodeCache().Find( cuT( "MapMouse" ) );
 				m_marker->SetVisible( false );
 
 				m_listener = p_window->GetListener();
@@ -80,10 +80,10 @@ namespace castortd
 
 				if ( p_window )
 				{
-					auto l_lock = make_unique_lock( l_scene->GetCameraCache() );
-					auto l_camera = l_scene->GetCameraCache().begin()->second;
-					p_window->GetPickingPass().AddScene( *l_scene, *l_camera );
-					m_cameraState = std::make_unique< GuiCommon::NodeState >( l_scene->GetListener(), l_camera->GetParent() );
+					auto lock = make_unique_lock( scene->GetCameraCache() );
+					auto camera = scene->GetCameraCache().begin()->second;
+					p_window->GetPickingPass().AddScene( *scene, *camera );
+					m_cameraState = std::make_unique< GuiCommon::NodeState >( scene->GetListener(), camera->GetParent() );
 					m_timers[size_t( TimerID::eMouse )]->Start( 30 );
 				}
 			}
@@ -96,63 +96,63 @@ namespace castortd
 
 	real RenderPanel::DoTransformX( int x )
 	{
-		real l_result = real( x );
-		RenderWindowSPtr l_window = m_renderWindow.lock();
+		real result = real( x );
+		RenderWindowSPtr window = m_renderWindow.lock();
 
-		if ( l_window )
+		if ( window )
 		{
-			l_result *= real( l_window->GetCamera()->GetWidth() ) / GetClientSize().x;
+			result *= real( window->GetCamera()->GetWidth() ) / GetClientSize().x;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	real RenderPanel::DoTransformY( int y )
 	{
-		real l_result = real( y );
-		RenderWindowSPtr l_window = m_renderWindow.lock();
+		real result = real( y );
+		RenderWindowSPtr window = m_renderWindow.lock();
 
-		if ( l_window )
+		if ( window )
 		{
-			l_result *= real( l_window->GetCamera()->GetHeight() ) / GetClientSize().y;
+			result *= real( window->GetCamera()->GetHeight() ) / GetClientSize().y;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	int RenderPanel::DoTransformX( real x )
 	{
-		int l_result = int( x );
-		RenderWindowSPtr l_window = m_renderWindow.lock();
+		int result = int( x );
+		RenderWindowSPtr window = m_renderWindow.lock();
 
-		if ( l_window )
+		if ( window )
 		{
-			l_result = int( x * GetClientSize().x / real( l_window->GetCamera()->GetWidth() ) );
+			result = int( x * GetClientSize().x / real( window->GetCamera()->GetWidth() ) );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	int RenderPanel::DoTransformY( real y )
 	{
-		int l_result = int( y );
-		RenderWindowSPtr l_window = m_renderWindow.lock();
+		int result = int( y );
+		RenderWindowSPtr window = m_renderWindow.lock();
 
-		if ( l_window )
+		if ( window )
 		{
-			l_result = int( y * GetClientSize().y / real( l_window->GetCamera()->GetHeight() ) );
+			result = int( y * GetClientSize().y / real( window->GetCamera()->GetHeight() ) );
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void RenderPanel::DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry )
 	{
-		auto l_geometry = m_selectedGeometry.lock();
+		auto geometry = m_selectedGeometry.lock();
 
-		if ( p_geometry != l_geometry )
+		if ( p_geometry != geometry )
 		{
-			bool l_freeCell = false;
+			bool freeCell = false;
 
 			if ( !p_geometry || p_geometry->GetName() == cuT( "MapBase" ) )
 			{
@@ -160,34 +160,34 @@ namespace castortd
 			}
 			else
 			{
-				Cell l_cell{ 0u, 0u, Cell::State::Invalid };
+				Cell cell{ 0u, 0u, Cell::State::Invalid };
 
 				if ( p_geometry->GetName().find( cuT( "Tower" ) ) == String::npos )
 				{
-					l_cell = m_game.GetCell( p_geometry->GetParent()->GetPosition() );
+					cell = m_game.GetCell( p_geometry->GetParent()->GetPosition() );
 				}
 				else
 				{
-					l_cell = m_game.GetCell( p_geometry->GetParent()->GetParent()->GetPosition() );
+					cell = m_game.GetCell( p_geometry->GetParent()->GetParent()->GetPosition() );
 				}
 
-				if ( l_cell.m_state != Cell::State::Invalid )
+				if ( cell.m_state != Cell::State::Invalid )
 				{
-					switch ( l_cell.m_state )
+					switch ( cell.m_state )
 					{
 					case Cell::State::Empty:
-						l_freeCell = true;
+						freeCell = true;
 						m_listener->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry]()
 						{
-							Point3r l_position = p_geometry->GetParent()->GetPosition();
-							auto l_height = p_geometry->GetMesh()->GetCollisionBox().GetMax()[1] - p_geometry->GetMesh()->GetCollisionBox().GetMin()[1];
-							m_marker->SetPosition( Point3r{ l_position[0], l_height + 1, l_position[2] } );
+							Point3r position = p_geometry->GetParent()->GetPosition();
+							auto height = p_geometry->GetMesh()->GetCollisionBox().GetMax()[1] - p_geometry->GetMesh()->GetCollisionBox().GetMin()[1];
+							m_marker->SetPosition( Point3r{ position[0], height + 1, position[2] } );
 						} ) );
 						m_selectedTower = nullptr;
 						break;
 
 					case Cell::State::Tower:
-						m_selectedTower = m_game.SelectTower( l_cell );
+						m_selectedTower = m_game.SelectTower( cell );
 						break;
 
 					case Cell::State::Target:
@@ -201,9 +201,9 @@ namespace castortd
 				}
 			}
 
-			m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_freeCell]()
+			m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, freeCell]()
 			{
-				m_marker->SetVisible( l_freeCell );
+				m_marker->SetVisible( freeCell );
 			} ) );
 		}
 	}
@@ -286,18 +286,18 @@ namespace castortd
 
 	void RenderPanel::OnSize( wxSizeEvent & p_event )
 	{
-		RenderWindowSPtr l_window = m_renderWindow.lock();
+		RenderWindowSPtr window = m_renderWindow.lock();
 
-		if ( l_window )
+		if ( window )
 		{
-			l_window->Resize( p_event.GetSize().x, p_event.GetSize().y );
+			window->Resize( p_event.GetSize().x, p_event.GetSize().y );
 		}
 		else
 		{
-			wxClientDC l_dc( this );
-			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			l_dc.DrawRectangle( 0, 0, p_event.GetSize().x, p_event.GetSize().y );
+			wxClientDC dc( this );
+			dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			dc.DrawRectangle( 0, 0, p_event.GetSize().x, p_event.GetSize().y );
 		}
 
 		p_event.Skip();
@@ -305,14 +305,14 @@ namespace castortd
 
 	void RenderPanel::OnMove( wxMoveEvent & p_event )
 	{
-		RenderWindowSPtr l_window = m_renderWindow.lock();
+		RenderWindowSPtr window = m_renderWindow.lock();
 
-		if ( !l_window )
+		if ( !window )
 		{
-			wxClientDC l_dc( this );
-			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
+			wxClientDC dc( this );
+			dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
 		}
 
 		p_event.Skip();
@@ -320,14 +320,14 @@ namespace castortd
 
 	void RenderPanel::OnPaint( wxPaintEvent & p_event )
 	{
-		RenderWindowSPtr l_window = m_renderWindow.lock();
+		RenderWindowSPtr window = m_renderWindow.lock();
 
-		if ( !l_window )
+		if ( !window )
 		{
-			wxPaintDC l_dc( this );
-			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
+			wxPaintDC dc( this );
+			dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
 		}
 
 		p_event.Skip();
@@ -464,9 +464,9 @@ namespace castortd
 	void RenderPanel::OnMouseLDown( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = true;
-		auto l_window = GetRenderWindow();
+		auto window = GetRenderWindow();
 
-		if ( l_window )
+		if ( window )
 		{
 			if ( m_game.IsRunning() )
 			{
@@ -481,9 +481,9 @@ namespace castortd
 	void RenderPanel::OnMouseLUp( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = false;
-		auto l_window = GetRenderWindow();
+		auto window = GetRenderWindow();
 
-		if ( l_window )
+		if ( window )
 		{
 			if ( m_game.IsRunning() )
 			{
@@ -491,16 +491,16 @@ namespace castortd
 				m_y = DoTransformY( p_event.GetY() );
 				m_oldX = m_x;
 				m_oldY = m_y;
-				m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_window]()
+				m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, window]()
 				{
-					Camera & l_camera = *l_window->GetCamera();
-					l_camera.Update();
-					auto l_type = l_window->GetPickingPass().Pick( Position{ int( m_x ), int( m_y ) }, l_camera );
+					Camera & camera = *window->GetCamera();
+					camera.Update();
+					auto type = window->GetPickingPass().Pick( Position{ int( m_x ), int( m_y ) }, camera );
 
-					if ( l_type != PickingPass::NodeType::eNone
-						&& l_type != PickingPass::NodeType::eBillboard )
+					if ( type != PickingPass::NodeType::eNone
+						&& type != PickingPass::NodeType::eBillboard )
 					{
-						DoUpdateSelectedGeometry( l_window->GetPickingPass().GetPickedGeometry() );
+						DoUpdateSelectedGeometry( window->GetPickingPass().GetPickedGeometry() );
 					}
 					else
 					{
@@ -515,57 +515,57 @@ namespace castortd
 
 	void RenderPanel::OnMouseRUp( wxMouseEvent & p_event )
 	{
-		auto l_window = GetRenderWindow();
+		auto window = GetRenderWindow();
 
-		if ( l_window )
+		if ( window )
 		{
 			if ( m_game.IsRunning() && m_selectedTower )
 			{
-				wxMenu l_menu;
+				wxMenu menu;
 
 				if ( m_selectedTower->CanUpgradeSpeed() )
 				{
-					l_menu.Append( int( MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (" ) } << m_selectedTower->GetSpeedUpgradeCost() << wxT( ")" ) );
-					l_menu.Enable( int( MenuID::eUpgradeSpeed ), m_game.CanAfford( m_selectedTower->GetSpeedUpgradeCost() ) );
+					menu.Append( int( MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (" ) } << m_selectedTower->GetSpeedUpgradeCost() << wxT( ")" ) );
+					menu.Enable( int( MenuID::eUpgradeSpeed ), m_game.CanAfford( m_selectedTower->GetSpeedUpgradeCost() ) );
 				}
 				else
 				{
-					l_menu.Append( int( MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (Max)" ) } );
-					l_menu.Enable( int( MenuID::eUpgradeSpeed ), false );
+					menu.Append( int( MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (Max)" ) } );
+					menu.Enable( int( MenuID::eUpgradeSpeed ), false );
 				}
 
 				if ( m_selectedTower->CanUpgradeRange() )
 				{
-					l_menu.Append( int( MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (" ) } << m_selectedTower->GetRangeUpgradeCost() << wxT( ")" ) );
-					l_menu.Enable( int( MenuID::eUpgradeRange ), m_game.CanAfford( m_selectedTower->GetRangeUpgradeCost() ) );
+					menu.Append( int( MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (" ) } << m_selectedTower->GetRangeUpgradeCost() << wxT( ")" ) );
+					menu.Enable( int( MenuID::eUpgradeRange ), m_game.CanAfford( m_selectedTower->GetRangeUpgradeCost() ) );
 				}
 				else
 				{
-					l_menu.Append( int( MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (Max)" ) } );
-					l_menu.Enable( int( MenuID::eUpgradeRange ), false );
+					menu.Append( int( MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (Max)" ) } );
+					menu.Enable( int( MenuID::eUpgradeRange ), false );
 				}
 
 				if ( m_selectedTower->CanUpgradeDamage() )
 				{
-					l_menu.Append( int( MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (" ) } << m_selectedTower->GetDamageUpgradeCost() << wxT( ")" ) );
-					l_menu.Enable( int( MenuID::eUpgradeDamage ), m_game.CanAfford( m_selectedTower->GetDamageUpgradeCost() ) );
+					menu.Append( int( MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (" ) } << m_selectedTower->GetDamageUpgradeCost() << wxT( ")" ) );
+					menu.Enable( int( MenuID::eUpgradeDamage ), m_game.CanAfford( m_selectedTower->GetDamageUpgradeCost() ) );
 				}
 				else
 				{
-					l_menu.Append( int( MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (Max)" ) } );
-					l_menu.Enable( int( MenuID::eUpgradeDamage ), false );
+					menu.Append( int( MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (Max)" ) } );
+					menu.Enable( int( MenuID::eUpgradeDamage ), false );
 				}
 
-				PopupMenu( &l_menu, p_event.GetPosition() );
+				PopupMenu( &menu, p_event.GetPosition() );
 			}
 			else if ( !m_selectedGeometry.expired() )
 			{
-				wxMenu l_menu;
-				l_menu.Append( int( MenuID::eNewLRTower ), wxString( "Nouvelle Tour Longue Distance (" ) << m_longRange.GetTowerCost() << wxT( ")" ) );
-				l_menu.Append( int( MenuID::eNewSRTower ), wxString( "Nouvelle Tour Courte Distance (" ) << m_shortRange.GetTowerCost() << wxT( ")" ) );
-				l_menu.Enable( int( MenuID::eNewLRTower ), m_game.CanAfford( m_longRange.GetTowerCost() ) );
-				l_menu.Enable( int( MenuID::eNewSRTower ), m_game.CanAfford( m_shortRange.GetTowerCost() ) );
-				PopupMenu( &l_menu, p_event.GetPosition() );
+				wxMenu menu;
+				menu.Append( int( MenuID::eNewLRTower ), wxString( "Nouvelle Tour Longue Distance (" ) << m_longRange.GetTowerCost() << wxT( ")" ) );
+				menu.Append( int( MenuID::eNewSRTower ), wxString( "Nouvelle Tour Courte Distance (" ) << m_shortRange.GetTowerCost() << wxT( ")" ) );
+				menu.Enable( int( MenuID::eNewLRTower ), m_game.CanAfford( m_longRange.GetTowerCost() ) );
+				menu.Enable( int( MenuID::eNewSRTower ), m_game.CanAfford( m_shortRange.GetTowerCost() ) );
+				PopupMenu( &menu, p_event.GetPosition() );
 			}
 		}
 
@@ -576,19 +576,19 @@ namespace castortd
 	{
 		m_x = DoTransformX( p_event.GetX() );
 		m_y = DoTransformY( p_event.GetY() );
-		auto l_window = GetRenderWindow();
+		auto window = GetRenderWindow();
 
-		if ( l_window )
+		if ( window )
 		{
 			if ( m_game.IsRunning() )
 			{
-				static real constexpr l_mult = 4.0_r;
-				real l_deltaX = 0.0_r;
-				real l_deltaY = std::min( 1.0_r / l_mult, 1.0_r ) * ( m_oldY - m_y ) / l_mult;
+				static real constexpr mult = 4.0_r;
+				real deltaX = 0.0_r;
+				real deltaY = std::min( 1.0_r / mult, 1.0_r ) * ( m_oldY - m_y ) / mult;
 
 				if ( m_mouseLeftDown )
 				{
-					m_cameraState->AddAngularVelocity( Point2r{ -l_deltaY, l_deltaX } );
+					m_cameraState->AddAngularVelocity( Point2r{ -deltaY, deltaX } );
 				}
 			}
 		}
@@ -600,13 +600,13 @@ namespace castortd
 
 	void RenderPanel::OnMouseWheel( wxMouseEvent & p_event )
 	{
-		int l_wheelRotation = p_event.GetWheelRotation();
+		int wheelRotation = p_event.GetWheelRotation();
 
-		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
+		auto inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseWheel( Position( 0, l_wheelRotation ) ) )
+		if ( !inputListener || !inputListener->FireMouseWheel( Position( 0, wheelRotation ) ) )
 		{
-			if ( l_wheelRotation < 0 )
+			if ( wheelRotation < 0 )
 			{
 				m_cameraState->AddScalarVelocity( Point3r{ 0.0_r, 0.0_r, -g_camSpeed } );
 			}

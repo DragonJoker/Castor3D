@@ -47,9 +47,9 @@ namespace Castor3D
 		m_timerQuery[0] = GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed );
 		m_timerQuery[1] = GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed );
 		m_bMultiSampling = p_window->IsMultisampling();
-		bool l_return = DoInitialise();
+		bool result = DoInitialise();
 
-		if ( l_return )
+		if ( result )
 		{
 			DoSetCurrent();
 			m_timerQuery[0]->Initialise();
@@ -70,7 +70,7 @@ namespace Castor3D
 			DoEndCurrent();
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void Context::Cleanup()
@@ -112,9 +112,9 @@ namespace Castor3D
 	{
 		m_timerQuery[m_queryIndex]->End();
 		m_queryIndex = 1 - m_queryIndex;
-		uint64_t l_time = 0;
-		m_timerQuery[m_queryIndex]->GetInfos( QueryInfo::eResult, l_time );
-		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
+		uint64_t time = 0;
+		m_timerQuery[m_queryIndex]->GetInfos( QueryInfo::eResult, time );
+		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( time ) );
 		GetRenderSystem()->SetCurrentContext( nullptr );
 		DoEndCurrent();
 	}

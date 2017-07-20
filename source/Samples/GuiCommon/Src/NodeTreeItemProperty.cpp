@@ -44,38 +44,38 @@ namespace GuiCommon
 
 	void NodeTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		SceneNodeSPtr l_node = GetNode();
+		SceneNodeSPtr node = GetNode();
 
-		if ( l_node )
+		if ( node )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_NODE + wxString( l_node->GetName() ) ) );
-			p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_NODE_POSITION ) )->SetValue( WXVARIANT( l_node->GetPosition() ) );
-			p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_NODE_SCALE ) )->SetValue( WXVARIANT( l_node->GetScale() ) );
-			p_grid->Append( new QuaternionProperty( PROPERTY_NODE_ORIENTATION ) )->SetValue( WXVARIANT( l_node->GetOrientation() ) );
-			p_grid->Append( CreateProperty( PROPERTY_NODE_VISIBLE, l_node->IsVisible(), true ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_NODE + wxString( node->GetName() ) ) );
+			p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_NODE_POSITION ) )->SetValue( WXVARIANT( node->GetPosition() ) );
+			p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_NODE_SCALE ) )->SetValue( WXVARIANT( node->GetScale() ) );
+			p_grid->Append( new QuaternionProperty( PROPERTY_NODE_ORIENTATION ) )->SetValue( WXVARIANT( node->GetOrientation() ) );
+			p_grid->Append( CreateProperty( PROPERTY_NODE_VISIBLE, node->IsVisible(), true ) );
 		}
 	}
 
 	void NodeTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		SceneNodeSPtr l_node = GetNode();
-		wxPGProperty * l_property = p_event.GetProperty();
+		SceneNodeSPtr node = GetNode();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_node )
+		if ( property && node )
 		{
-			if ( l_property->GetName() == PROPERTY_NODE_POSITION )
+			if ( property->GetName() == PROPERTY_NODE_POSITION )
 			{
 				OnPositionChange( PointRefFromVariant< real, 3 >( p_event.GetValue() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_NODE_SCALE )
+			else if ( property->GetName() == PROPERTY_NODE_SCALE )
 			{
 				OnScaleChange( PointRefFromVariant< real, 3 >( p_event.GetValue() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_NODE_ORIENTATION )
+			else if ( property->GetName() == PROPERTY_NODE_ORIENTATION )
 			{
 				OnOrientationChange( QuaternionRefFromVariant( p_event.GetValue() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_NODE_VISIBLE )
+			else if ( property->GetName() == PROPERTY_NODE_VISIBLE )
 			{
 				OnVisibilityChange( p_event.GetValue() );
 			}
@@ -84,47 +84,47 @@ namespace GuiCommon
 
 	void NodeTreeItemProperty::OnPositionChange( Point3r const & p_value )
 	{
-		SceneNodeSPtr l_node = GetNode();
+		SceneNodeSPtr node = GetNode();
 		float x = p_value[0];
 		float y = p_value[1];
 		float z = p_value[2];
 
-		DoApplyChange( [x, y, z, l_node]()
+		DoApplyChange( [x, y, z, node]()
 		{
-			l_node->SetPosition( Point3r( x, y, z ) );
+			node->SetPosition( Point3r( x, y, z ) );
 		} );
 	}
 
 	void NodeTreeItemProperty::OnScaleChange( Point3r const & p_value )
 	{
-		SceneNodeSPtr l_node = GetNode();
+		SceneNodeSPtr node = GetNode();
 		float x = p_value[0];
 		float y = p_value[1];
 		float z = p_value[2];
 
-		DoApplyChange( [x, y, z, l_node]()
+		DoApplyChange( [x, y, z, node]()
 		{
-			l_node->SetScale( Point3r( x, y, z ) );
+			node->SetScale( Point3r( x, y, z ) );
 		} );
 	}
 
 	void NodeTreeItemProperty::OnOrientationChange( Quaternion const & p_value )
 	{
-		SceneNodeSPtr l_node = GetNode();
+		SceneNodeSPtr node = GetNode();
 
-		DoApplyChange( [p_value, l_node]()
+		DoApplyChange( [p_value, node]()
 		{
-			l_node->SetOrientation( p_value );
+			node->SetOrientation( p_value );
 		} );
 	}
 
 	void NodeTreeItemProperty::OnVisibilityChange( bool p_value )
 	{
-		SceneNodeSPtr l_node = GetNode();
+		SceneNodeSPtr node = GetNode();
 
-		DoApplyChange( [p_value, l_node]()
+		DoApplyChange( [p_value, node]()
 		{
-			l_node->SetVisible( p_value );
+			node->SetVisible( p_value );
 		} );
 	}
 }

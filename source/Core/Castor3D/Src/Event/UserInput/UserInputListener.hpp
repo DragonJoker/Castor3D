@@ -374,7 +374,7 @@ namespace Castor3D
 		 */
 		inline std::vector< EventHandlerSPtr > DoGetHandlers()const
 		{
-			auto l_lock = Castor::make_unique_lock( m_mutexHandlers );
+			auto lock = Castor::make_unique_lock( m_mutexHandlers );
 			return m_handlers;
 		}
 		/**
@@ -389,7 +389,7 @@ namespace Castor3D
 		 */
 		inline void DoAddHandler( EventHandlerSPtr p_handler )
 		{
-			auto l_lock = Castor::make_unique_lock( m_mutexHandlers );
+			auto lock = Castor::make_unique_lock( m_mutexHandlers );
 
 			if ( std::find( std::begin( m_handlers ), std::end( m_handlers ), p_handler ) != std::end( m_handlers ) )
 			{
@@ -410,7 +410,7 @@ namespace Castor3D
 		 */
 		inline void DoRemoveHandler( EventHandlerSPtr p_handler )
 		{
-			auto l_lock = Castor::make_unique_lock( m_mutexHandlers );
+			auto lock = Castor::make_unique_lock( m_mutexHandlers );
 			m_handlers.erase( std::find( std::begin( m_handlers ), std::end( m_handlers ), p_handler ) );
 		}
 

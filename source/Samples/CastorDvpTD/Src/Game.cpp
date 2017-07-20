@@ -68,20 +68,20 @@ namespace castortd
 			, Tower::Category::Kind p_kind
 			, CacheView< Material, MaterialCache, EventType::ePreRender > const & p_materials )
 		{
-			auto & l_mesh = *p_geometry.GetMesh();
+			auto & mesh = *p_geometry.GetMesh();
 
 			switch ( p_kind )
 			{
 			case Tower::Category::Kind::eLongRange:
-				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 0u ), p_materials.Find( cuT( "splash_accessories" ) ) );
-				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 1u ), p_materials.Find( cuT( "splash_accessories" ) ) );
-				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 2u ), p_materials.Find( cuT( "splash_body" ) ) );
+				p_geometry.SetMaterial( *mesh.GetSubmesh( 0u ), p_materials.Find( cuT( "splash_accessories" ) ) );
+				p_geometry.SetMaterial( *mesh.GetSubmesh( 1u ), p_materials.Find( cuT( "splash_accessories" ) ) );
+				p_geometry.SetMaterial( *mesh.GetSubmesh( 2u ), p_materials.Find( cuT( "splash_body" ) ) );
 				break;
 
 			case Tower::Category::Kind::eShortRange:
-				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 0u ), p_materials.Find( cuT( "short_range_accessories" ) ) );
-				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 1u ), p_materials.Find( cuT( "short_range_accessories" ) ) );
-				p_geometry.SetMaterial( *l_mesh.GetSubmesh( 2u ), p_materials.Find( cuT( "short_range_body" ) ) );
+				p_geometry.SetMaterial( *mesh.GetSubmesh( 0u ), p_materials.Find( cuT( "short_range_accessories" ) ) );
+				p_geometry.SetMaterial( *mesh.GetSubmesh( 1u ), p_materials.Find( cuT( "short_range_accessories" ) ) );
+				p_geometry.SetMaterial( *mesh.GetSubmesh( 2u ), p_materials.Find( cuT( "short_range_body" ) ) );
 				break;
 			}
 		}
@@ -132,8 +132,8 @@ namespace castortd
 
 	void Game::Reset()
 	{
-		Grid l_grid;
-		std::swap( m_grid, l_grid );
+		Grid grid;
+		std::swap( m_grid, grid );
 
 		m_totalBullets = 0ull;
 		m_lives = InitialLives;
@@ -143,24 +143,24 @@ namespace castortd
 		m_paused = false;
 		m_ended = false;
 
-		for ( auto & l_bullet : m_bullets )
+		for ( auto & bullet : m_bullets )
 		{
-			l_bullet.GetNode().SetPosition( Point3r{ 0, -10, 0 } );
-			m_bulletsCache.push_back( l_bullet );
+			bullet.GetNode().SetPosition( Point3r{ 0, -10, 0 } );
+			m_bulletsCache.push_back( bullet );
 		}
 
 		m_bullets.clear();
 
-		for ( auto & l_enemy : m_enemies )
+		for ( auto & enemy : m_enemies )
 		{
-			m_spawner.KillEnemy( *this, std::move( l_enemy ) );
+			m_spawner.KillEnemy( *this, std::move( enemy ) );
 		}
 
 		m_enemies.clear();
 
-		for ( auto & l_tower : m_towers )
+		for ( auto & tower : m_towers )
 		{
-			l_tower->GetNode().SetPosition( Point3r{ 0, -1000, 0 } );
+			tower->GetNode().SetPosition( Point3r{ 0, -1000, 0 } );
 		}
 
 		m_towers.clear();
@@ -172,28 +172,28 @@ namespace castortd
 	{
 		DoPrepareGrid();
 
-		for ( auto & l_cell : m_grid )
+		for ( auto & cell : m_grid )
 		{
-			if ( l_cell.m_state == Cell::State::Empty )
+			if ( cell.m_state == Cell::State::Empty )
 			{
-				DoAddMapCube( l_cell );
+				DoAddMapCube( cell );
 			}
 		}
 
-		for ( auto l_submesh : *m_lastMapCube->GetMesh() )
+		for ( auto submesh : *m_lastMapCube->GetMesh() )
 		{
 			// We need to update the render nodes (since the submesh's geometry buffers are now invalid).
 			m_scene.SetChanged();
 			m_scene.GetListener().PostEvent( MakeFunctorEvent( EventType::eQueueRender
-				, [this, l_submesh]()
+				, [this, submesh]()
 			{
 				// TODO: Find a better way, since this forbids the suppression of RAM storage of the VBO data.
-				l_submesh->ResetGpuBuffers();
+				submesh->ResetGpuBuffers();
 			} ) );
 		}
 
-		auto & l_node = *m_path.rbegin();
-		DoAddTarget( GetCell( l_node.m_x, l_node.m_y ) );
+		auto & node = *m_path.rbegin();
+		DoAddTarget( GetCell( node.m_x, node.m_y ) );
 
 		m_started = true;
 		m_hud.Start();
@@ -248,17 +248,17 @@ namespace castortd
 
 	Cell & Game::GetCell( Point3r const & p_position )
 	{
-		static Cell l_dummy;
-		l_dummy.m_state = Cell::State::Invalid;
-		auto l_coords = Convert( p_position );
+		static Cell dummy;
+		dummy.m_state = Cell::State::Invalid;
+		auto coords = Convert( p_position );
 
-		if ( l_coords[0] >= 0 && l_coords[0] < int( m_grid.GetWidth() )
-			 && l_coords[1] >= 0 && l_coords[1] < int( m_grid.GetHeight() ) )
+		if ( coords[0] >= 0 && coords[0] < int( m_grid.GetWidth() )
+			 && coords[1] >= 0 && coords[1] < int( m_grid.GetHeight() ) )
 		{
-			return GetCell( l_coords );
+			return GetCell( coords );
 		}
 
-		return l_dummy;
+		return dummy;
 	}
 
 	Cell const & Game::GetCell( int p_x, int p_y )const
@@ -273,38 +273,38 @@ namespace castortd
 
 	Cell const & Game::GetCell( Point3r const & p_position )const
 	{
-		static Cell l_dummy;
-		l_dummy.m_state = Cell::State::Invalid;
-		auto l_coords = Convert( p_position );
-		Cell & l_return = l_dummy;
+		static Cell dummy;
+		dummy.m_state = Cell::State::Invalid;
+		auto coords = Convert( p_position );
+		Cell & result = dummy;
 
-		if ( l_coords[0] >= 0 && l_coords[0] < int( m_grid.GetWidth() )
-			 && l_coords[1] >= 0 && l_coords[1] < int( m_grid.GetHeight() ) )
+		if ( coords[0] >= 0 && coords[0] < int( m_grid.GetWidth() )
+			 && coords[1] >= 0 && coords[1] < int( m_grid.GetHeight() ) )
 		{
-			l_return = GetCell( l_coords );
+			result = GetCell( coords );
 		}
 
-		return l_dummy;
+		return dummy;
 	}
 
 	bool Game::BuildTower( Castor::Point3r const & p_position, Tower::CategoryPtr && p_category )
 	{
-		bool l_return = false;
+		bool result = false;
 
 		if ( CanAfford( p_category->GetTowerCost() ) )
 		{
-			Cell & l_cell = GetCell( p_position );
+			Cell & cell = GetCell( p_position );
 
-			if ( l_cell.m_state == Cell::State::Empty )
+			if ( cell.m_state == Cell::State::Empty )
 			{
-				l_cell.m_state = Cell::State::Tower;
+				cell.m_state = Cell::State::Tower;
 				Spend( p_category->GetTowerCost() );
-				DoAddTower( l_cell, std::move( p_category ) );
-				l_return = true;
+				DoAddTower( cell, std::move( p_category ) );
+				result = true;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	Point3r Game::Convert( Castor::Point2i const & p_position )const
@@ -324,24 +324,24 @@ namespace castortd
 	{
 		if ( m_bulletsCache.empty() )
 		{
-			String l_name = cuT( "Bullet_" ) + std::to_string( ++m_totalBullets );
-			auto l_node = m_scene.GetSceneNodeCache().Add( l_name );
-			auto l_geometry = m_scene.GetGeometryCache().Add( l_name, l_node, m_bulletMesh );
-			l_node->SetPosition( p_origin );
-			l_node->AttachTo( m_mapNode );
+			String name = cuT( "Bullet_" ) + std::to_string( ++m_totalBullets );
+			auto node = m_scene.GetSceneNodeCache().Add( name );
+			auto geometry = m_scene.GetGeometryCache().Add( name, node, m_bulletMesh );
+			node->SetPosition( p_origin );
+			node->AttachTo( m_mapNode );
 
-			for ( auto l_submesh : *l_geometry->GetMesh() )
+			for ( auto submesh : *geometry->GetMesh() )
 			{
-				l_geometry->SetMaterial( *l_submesh, m_bulletMaterial );
+				geometry->SetMaterial( *submesh, m_bulletMaterial );
 			}
 
-			m_bullets.emplace_back( p_speed, p_damage, *l_node, p_target );
+			m_bullets.emplace_back( p_speed, p_damage, *node, p_target );
 		}
 		else
 		{
-			auto l_bullet = *m_bulletsCache.begin();
-			l_bullet.Load( p_speed, p_damage, p_origin, p_target );
-			m_bullets.insert( m_bullets.end(), l_bullet );
+			auto bullet = *m_bulletsCache.begin();
+			bullet.Load( p_speed, p_damage, p_origin, p_target );
+			m_bullets.insert( m_bullets.end(), bullet );
 			m_bulletsCache.erase( m_bulletsCache.begin() );
 		}
 	}
@@ -378,11 +378,11 @@ namespace castortd
 
 	TowerPtr Game::SelectTower( Cell const & p_cell )
 	{
-		TowerPtr l_return;
+		TowerPtr result;
 
 		if ( p_cell.m_state == Cell::State::Tower )
 		{
-			auto l_it = std::find_if( m_towers.begin()
+			auto it = std::find_if( m_towers.begin()
 				, m_towers.end()
 				, [&p_cell]( TowerPtr p_tower )
 				{
@@ -390,14 +390,14 @@ namespace castortd
 						&& p_tower->GetCell().m_y == p_cell.m_y;
 				} );
 
-			if ( l_it != m_towers.end() )
+			if ( it != m_towers.end() )
 			{
-				l_return = *l_it;
-				m_selectedTower = l_return;
+				result = *it;
+				m_selectedTower = result;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void Game::UpgradeTowerSpeed( Tower & p_tower )
@@ -437,9 +437,9 @@ namespace castortd
 
 	void Game::DoUpdateTowers()
 	{
-		for ( auto & l_tower : m_towers )
+		for ( auto & tower : m_towers )
 		{
-			l_tower->Accept( *this );
+			tower->Accept( *this );
 		}
 	}
 
@@ -460,110 +460,110 @@ namespace castortd
 			m_enemies.push_back( m_spawner.Spawn( *this, m_path ) );
 		}
 
-		Angle const l_angle{ Angle::from_degrees( -m_elapsed.count() * 120 / 1000.0_r ) };
-		auto l_it = m_enemies.begin();
+		Angle const angle{ Angle::from_degrees( -m_elapsed.count() * 120 / 1000.0_r ) };
+		auto it = m_enemies.begin();
 
-		while ( l_it != m_enemies.end() )
+		while ( it != m_enemies.end() )
 		{
-			auto l_enemy = *l_it;
+			auto enemy = *it;
 
-			if ( l_enemy->IsAlive() )
+			if ( enemy->IsAlive() )
 			{
-				if ( l_enemy->GetState() == Enemy::State::Walking )
+				if ( enemy->GetState() == Enemy::State::Walking )
 				{
-					l_enemy->GetNode().Yaw( l_angle );
+					enemy->GetNode().Yaw( angle );
 
-					if ( l_enemy->Accept( *this ) )
+					if ( enemy->Accept( *this ) )
 					{
 						LoseLife( 1u );
-						m_spawner.KillEnemy( *this, std::move( l_enemy ) );
-						l_it = m_enemies.erase( l_it );
+						m_spawner.KillEnemy( *this, std::move( enemy ) );
+						it = m_enemies.erase( it );
 					}
 					else
 					{
-						++l_it;
+						++it;
 					}
 				}
 				else
 				{
-					++l_it;
+					++it;
 				}
 
 			}
-			else if ( l_enemy->GetState() == Enemy::State::Dying )
+			else if ( enemy->GetState() == Enemy::State::Dying )
 			{
-				l_enemy->Die();
-				Gain( l_enemy->GetBounty() );
-				m_spawner.KillEnemy( *this, std::move( l_enemy ) );
-				l_it = m_enemies.erase( l_it );
+				enemy->Die();
+				Gain( enemy->GetBounty() );
+				m_spawner.KillEnemy( *this, std::move( enemy ) );
+				it = m_enemies.erase( it );
 				++m_kills;
 			}
 			else
 			{
 				// Dead?
-				++l_it;
+				++it;
 			}
 		}
 	}
 
 	void Game::DoUpdateBullets()
 	{
-		auto l_it = m_bullets.begin();
+		auto it = m_bullets.begin();
 
-		while ( l_it != m_bullets.end() )
+		while ( it != m_bullets.end() )
 		{
-			if ( l_it->Accept( *this ) )
+			if ( it->Accept( *this ) )
 			{
-				m_bulletsCache.push_back( *l_it );
-				l_it = m_bullets.erase( l_it );
+				m_bulletsCache.push_back( *it );
+				it = m_bullets.erase( it );
 			}
 			else
 			{
-				++l_it;
+				++it;
 			}
 		}
 	}
 
 	void Game::DoPrepareGrid()
 	{
-		auto l_prv = m_path.begin();
+		auto prv = m_path.begin();
 
-		if ( l_prv != m_path.end() )
+		if ( prv != m_path.end() )
 		{
-			auto l_cur = l_prv + 1;
+			auto cur = prv + 1;
 
-			while ( l_cur != m_path.end() )
+			while ( cur != m_path.end() )
 			{
-				DoPrepareGridLine( *l_prv, *l_cur, m_grid );
+				DoPrepareGridLine( *prv, *cur, m_grid );
 
-				if ( l_prv == m_path.begin() )
+				if ( prv == m_path.begin() )
 				{
-					GetCell( l_prv->m_x, l_prv->m_y ).m_state = Cell::State::Start;
+					GetCell( prv->m_x, prv->m_y ).m_state = Cell::State::Start;
 				}
 
-				++l_prv;
-				++l_cur;
+				++prv;
+				++cur;
 			}
 
-			DoPrepareTarget( *l_prv, m_scene, m_grid );
+			DoPrepareTarget( *prv, m_scene, m_grid );
 		}
 	}
 
 	void Game::DoAddMapCube( Cell & p_cell )
 	{
-		String l_name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto l_node = m_scene.GetSceneNodeCache().Add( l_name );
-		auto l_geometry = m_scene.GetGeometryCache().Add( l_name, l_node, m_mapCubeMesh );
-		l_node->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1] / 2, 0 } );
-		l_node->AttachTo( m_mapNode );
-		uint32_t l_index{ 0u };
+		String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
+		auto node = m_scene.GetSceneNodeCache().Add( name );
+		auto geometry = m_scene.GetGeometryCache().Add( name, node, m_mapCubeMesh );
+		node->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1] / 2, 0 } );
+		node->AttachTo( m_mapNode );
+		uint32_t index{ 0u };
 
-		for ( auto l_submesh : *l_geometry->GetMesh() )
+		for ( auto submesh : *geometry->GetMesh() )
 		{
-			l_geometry->SetMaterial( *l_submesh, m_mapCubeMaterial, false );
+			geometry->SetMaterial( *submesh, m_mapCubeMaterial, false );
 		}
 
-		m_lastMapCube = l_geometry;
+		m_lastMapCube = geometry;
 		p_cell.m_state = Cell::State::Empty;
 	}
 
@@ -575,74 +575,74 @@ namespace castortd
 
 	MeshSPtr Game::DoSelectMesh( Tower::Category & p_category )
 	{
-		MeshSPtr l_result;
+		MeshSPtr result;
 
 		switch ( p_category.GetKind() )
 		{
 		case Tower::Category::Kind::eLongRange:
-			l_result = m_longRangeTowerMesh;
+			result = m_longRangeTowerMesh;
 			break;
 
 		case Tower::Category::Kind::eShortRange:
-			l_result = m_shortRangeTowerMesh;
+			result = m_shortRangeTowerMesh;
 			break;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	void Game::DoAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
 	{
-		String l_name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto l_node = m_scene.GetSceneNodeCache().Add( l_name );
-		l_node->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1], 0 } );
-		l_node->AttachTo( m_mapNode );
-		MeshSPtr l_mesh = DoSelectMesh( *p_category );
-		auto l_tower = m_scene.GetGeometryCache().Add( l_name, l_node, l_mesh );
-		auto l_animGroup = m_scene.GetAnimatedObjectGroupCache().Add( l_name );
-		std::chrono::milliseconds l_time{ 0 };
+		String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
+		auto node = m_scene.GetSceneNodeCache().Add( name );
+		node->SetPosition( Convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1], 0 } );
+		node->AttachTo( m_mapNode );
+		MeshSPtr mesh = DoSelectMesh( *p_category );
+		auto tower = m_scene.GetGeometryCache().Add( name, node, mesh );
+		auto animGroup = m_scene.GetAnimatedObjectGroupCache().Add( name );
+		std::chrono::milliseconds time{ 0 };
 
-		if ( !l_tower->GetAnimations().empty() )
+		if ( !tower->GetAnimations().empty() )
 		{
-			auto l_object = l_animGroup->AddObject( *l_tower, l_tower->GetName() + cuT( "_Movable" ) );
+			auto object = animGroup->AddObject( *tower, tower->GetName() + cuT( "_Movable" ) );
 		}
 
-		if ( l_tower->GetMesh() )
+		if ( tower->GetMesh() )
 		{
-			auto l_mesh = l_tower->GetMesh();
+			auto mesh = tower->GetMesh();
 
-			if ( !l_mesh->GetAnimations().empty() )
+			if ( !mesh->GetAnimations().empty() )
 			{
-				auto l_object = l_animGroup->AddObject( *l_mesh, l_tower->GetName() + cuT( "_Mesh" ) );
-				l_time = std::max( l_time
-					, l_mesh->GetAnimation( p_category->GetAttackAnimationName() ).GetLength() );
+				auto object = animGroup->AddObject( *mesh, tower->GetName() + cuT( "_Mesh" ) );
+				time = std::max( time
+					, mesh->GetAnimation( p_category->GetAttackAnimationName() ).GetLength() );
 			}
 
-			auto l_skeleton = l_mesh->GetSkeleton();
+			auto skeleton = mesh->GetSkeleton();
 
-			if ( l_skeleton )
+			if ( skeleton )
 			{
-				if ( !l_skeleton->GetAnimations().empty() )
+				if ( !skeleton->GetAnimations().empty() )
 				{
-					auto l_object = l_animGroup->AddObject( *l_skeleton, l_tower->GetName() + cuT( "_Skeleton" ) );
-					l_time = std::max( l_time
-						, l_skeleton->GetAnimation( p_category->GetAttackAnimationName() ).GetLength() );
+					auto object = animGroup->AddObject( *skeleton, tower->GetName() + cuT( "_Skeleton" ) );
+					time = std::max( time
+						, skeleton->GetAnimation( p_category->GetAttackAnimationName() ).GetLength() );
 				}
 			}
 		}
 
-		l_animGroup->AddAnimation( p_category->GetAttackAnimationName() );
-		l_animGroup->SetAnimationLooped( p_category->GetAttackAnimationName(), false );
-		DoUpdateMaterials( *l_tower
+		animGroup->AddAnimation( p_category->GetAttackAnimationName() );
+		animGroup->SetAnimationLooped( p_category->GetAttackAnimationName(), false );
+		DoUpdateMaterials( *tower
 			, p_category->GetKind()
 			, m_scene.GetMaterialView() );
 		p_cell.m_state = Cell::State::Tower;
-		p_category->SetAttackAnimationTime( l_time );
-		l_animGroup->StartAnimation( p_category->GetAttackAnimationName() );
-		l_animGroup->PauseAnimation( p_category->GetAttackAnimationName() );
-		l_node->SetScale( Point3r{ 0.15, 0.15, 0.15 } );
-		std::clog << "Animation time: " << l_time.count() << std::endl;
-		m_towers.push_back( std::make_shared< Tower >( std::move( p_category ), *l_node, *l_animGroup, p_cell ) );
+		p_category->SetAttackAnimationTime( time );
+		animGroup->StartAnimation( p_category->GetAttackAnimationName() );
+		animGroup->PauseAnimation( p_category->GetAttackAnimationName() );
+		node->SetScale( Point3r{ 0.15, 0.15, 0.15 } );
+		std::clog << "Animation time: " << time.count() << std::endl;
+		m_towers.push_back( std::make_shared< Tower >( std::move( p_category ), *node, *animGroup, p_cell ) );
 	}
 
 	void Game::DoGameOver()

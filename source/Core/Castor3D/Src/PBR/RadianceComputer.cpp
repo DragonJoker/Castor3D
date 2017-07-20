@@ -46,17 +46,17 @@ namespace Castor3D
 	{
 		uint32_t i = 0;
 
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
 		}
 
 		m_viewport.Initialise();
 		m_viewport.SetPerspective( Angle::from_degrees( 90.0_r ), 1.0_r, 0.1_r, 10.0_r );
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
-		auto & l_program = *DoCreateProgram();
-		auto & l_renderSystem = *GetEngine()->GetRenderSystem();
+		auto & program = *DoCreateProgram();
+		auto & renderSystem = *GetEngine()->GetRenderSystem();
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetEngine()
 			, m_declaration );
 		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size()
@@ -65,28 +65,28 @@ namespace Castor3D
 			m_arrayVertex.end() );
 		m_vertexBuffer->Initialise( BufferAccessType::eStatic
 			, BufferAccessNature::eDraw );
-		m_geometryBuffers = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
-			, l_program );
+		m_geometryBuffers = renderSystem.CreateGeometryBuffers( Topology::eTriangles
+			, program );
 		m_geometryBuffers->Initialise( { *m_vertexBuffer }
 		, nullptr );
 
-		DepthStencilState l_dsState;
-		l_dsState.SetDepthFunc( DepthFunc::eLEqual );
-		l_dsState.SetDepthTest( false );
-		l_dsState.SetDepthMask( WritingMask::eAll );
+		DepthStencilState dsState;
+		dsState.SetDepthFunc( DepthFunc::eLEqual );
+		dsState.SetDepthTest( false );
+		dsState.SetDepthMask( WritingMask::eAll );
 
-		RasteriserState l_rsState;
-		l_rsState.SetCulledFaces( Culling::eFront );
+		RasteriserState rsState;
+		rsState.SetCulledFaces( Culling::eFront );
 
-		m_pipeline = l_renderSystem.CreateRenderPipeline( std::move( l_dsState )
-			, std::move( l_rsState )
+		m_pipeline = renderSystem.CreateRenderPipeline( std::move( dsState )
+			, std::move( rsState )
 			, BlendState{}
 			, MultisampleState{}
-			, l_program
+			, program
 			, PipelineFlags{} );
 		m_pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 
-		m_frameBuffer = l_renderSystem.CreateFrameBuffer();
+		m_frameBuffer = renderSystem.CreateFrameBuffer();
 
 		m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24 );
 		m_depthBuffer->Create();
@@ -138,16 +138,16 @@ namespace Castor3D
 		m_viewport.Cleanup();
 		m_matrixUbo.GetUbo().Cleanup();
 
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex.reset();
+			vertex.reset();
 		}
 	}
 
 	void RadianceComputer::Render( TextureLayout const & p_srcTexture
 		, TextureLayoutSPtr p_dstTexture )
 	{
-		static Matrix4x4r const l_views[] =
+		static Matrix4x4r const views[] =
 		{
 			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
 			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ -1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
@@ -157,7 +157,7 @@ namespace Castor3D
 			matrix::look_at( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
 		};
 		REQUIRE( p_dstTexture->GetDimensions() == m_size );
-		std::array< FrameBufferAttachmentSPtr, 6 > l_attachs
+		std::array< FrameBufferAttachmentSPtr, 6 > attachs
 		{
 			{
 				m_frameBuffer->CreateAttachment( p_dstTexture, CubeMapFace::ePositiveX ),
@@ -176,11 +176,11 @@ namespace Castor3D
 
 		for ( uint32_t i = 0u; i < 6u; ++i )
 		{
-			l_attachs[i]->Attach( AttachmentPoint::eColour, 0u );
-			m_frameBuffer->SetDrawBuffer( l_attachs[i] );
+			attachs[i]->Attach( AttachmentPoint::eColour, 0u );
+			m_frameBuffer->SetDrawBuffer( attachs[i] );
 			m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth );
 			REQUIRE( m_frameBuffer->IsComplete() );
-			m_matrixUbo.Update( l_views[i], m_viewport.GetProjection() );
+			m_matrixUbo.Update( views[i], m_viewport.GetProjection() );
 			m_pipeline->Apply();
 			m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0u );
 		}
@@ -192,100 +192,100 @@ namespace Castor3D
 
 	ShaderProgramSPtr RadianceComputer::DoCreateProgram()
 	{
-		auto & l_renderSystem = *GetEngine()->GetRenderSystem();
-		GLSL::Shader l_vtx;
+		auto & renderSystem = *GetEngine()->GetRenderSystem();
+		GLSL::Shader vtx;
 		{
 			using namespace GLSL;
-			GlslWriter l_writer{ l_renderSystem.CreateGlslWriter() };
+			GlslWriter writer{ renderSystem.CreateGlslWriter() };
 
 			// Inputs
-			auto position = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( l_writer );
+			auto position = writer.DeclAttribute< Vec3 >( ShaderProgram::Position );
+			UBO_MATRIX( writer );
 
 			// Outputs
-			auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
-			auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_position = writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
+			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			std::function< void() > l_main = [&]()
+			std::function< void() > main = [&]()
 			{
 				vtx_position = position;
-				auto l_view = l_writer.DeclLocale( cuT( "l_normal" )
+				auto view = writer.DeclLocale( cuT( "normal" )
 					, mat4( mat3( c3d_mtxView ) ) );
-				gl_Position = l_writer.Paren( c3d_mtxProjection * l_view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+				gl_Position = writer.Paren( c3d_mtxProjection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 			};
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-			l_vtx = l_writer.Finalise();
+			writer.ImplementFunction< void >( cuT( "main" ), main );
+			vtx = writer.Finalise();
 		}
 
-		GLSL::Shader l_pxl;
+		GLSL::Shader pxl;
 		{
 			using namespace GLSL;
-			GlslWriter l_writer{ l_renderSystem.CreateGlslWriter() };
+			GlslWriter writer{ renderSystem.CreateGlslWriter() };
 
 			// Inputs
-			auto vtx_position = l_writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
-			auto c3d_mapDiffuse = l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapDiffuse );
+			auto vtx_position = writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
+			auto c3d_mapDiffuse = writer.DeclUniform< SamplerCube >( ShaderProgram::MapDiffuse );
 
 			// Outputs
-			auto plx_v4FragColor = l_writer.DeclOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto plx_v4FragColor = writer.DeclOutput< Vec4 >( cuT( "pxl_FragColor" ) );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
 				// the sample direction equals the hemisphere's orientation 
-				auto l_normal = l_writer.DeclLocale( cuT( "l_normal" )
+				auto normal = writer.DeclLocale( cuT( "normal" )
 					, normalize( vtx_position ) );
 
-				auto l_irradiance = l_writer.DeclLocale( cuT( "l_irradiance" )
+				auto irradiance = writer.DeclLocale( cuT( "irradiance" )
 					, vec3( 0.0_f ) );
 
-				auto l_up = l_writer.DeclLocale( cuT( "l_up" )
+				auto up = writer.DeclLocale( cuT( "up" )
 					, vec3( 0.0_f, 1.0, 0.0 ) );
-				auto l_right = l_writer.DeclLocale( cuT( "l_right" )
-					, cross( l_up, l_normal ) );
-				l_up = cross( l_normal, l_right );
+				auto right = writer.DeclLocale( cuT( "right" )
+					, cross( up, normal ) );
+				up = cross( normal, right );
 
-				auto l_sampleDelta = l_writer.DeclLocale( cuT( "l_sampleDelta" )
+				auto sampleDelta = writer.DeclLocale( cuT( "sampleDelta" )
 					, 0.025_f );
-				auto l_nrSamples = l_writer.DeclLocale( cuT( "l_nrSamples" )
+				auto nrSamples = writer.DeclLocale( cuT( "nrSamples" )
 					, 0_i );
-				auto PI = l_writer.DeclLocale( cuT( "PI" )
+				auto PI = writer.DeclLocale( cuT( "PI" )
 					, 3.14159265359_f );
 
-				FOR( l_writer, Float, phi, 0.0, "phi < 2.0 * PI", "phi += l_sampleDelta" )
+				FOR( writer, Float, phi, 0.0, "phi < 2.0 * PI", "phi += sampleDelta" )
 				{
-					FOR( l_writer, Float, theta, 0.0, "theta < 0.5 * PI", "theta += l_sampleDelta" )
+					FOR( writer, Float, theta, 0.0, "theta < 0.5 * PI", "theta += sampleDelta" )
 					{
 						// spherical to cartesian (in tangent space)
-						auto l_tangentSample = l_writer.DeclLocale( cuT( "l_tangentSample" )
+						auto tangentSample = writer.DeclLocale( cuT( "tangentSample" )
 							, vec3( sin( theta ) * cos( phi ), sin( theta ) * sin( phi ), cos( theta ) ) );
 						// tangent space to world
-						auto l_sampleVec = l_writer.DeclLocale( cuT( "l_sampleVec" )
-							, l_right * l_tangentSample.x() + l_up * l_tangentSample.y() + l_normal * l_tangentSample.z() );
+						auto sampleVec = writer.DeclLocale( cuT( "sampleVec" )
+							, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
 
-						l_irradiance += texture( c3d_mapDiffuse, l_sampleVec ).rgb() * cos( theta ) * sin( theta );
-						l_nrSamples = l_nrSamples + 1;
+						irradiance += texture( c3d_mapDiffuse, sampleVec ).rgb() * cos( theta ) * sin( theta );
+						nrSamples = nrSamples + 1;
 					}
 					ROF;
 				}
 				ROF;
 
-				l_irradiance = l_irradiance * PI * l_writer.Paren( 1.0_f / l_writer.Cast< Float >( l_nrSamples ) );
-				plx_v4FragColor = vec4( l_irradiance, 1.0 );
+				irradiance = irradiance * PI * writer.Paren( 1.0_f / writer.Cast< Float >( nrSamples ) );
+				plx_v4FragColor = vec4( irradiance, 1.0 );
 			} );
 
-			l_pxl = l_writer.Finalise();
+			pxl = writer.Finalise();
 		}
 
-		auto & l_cache = GetEngine()->GetShaderProgramCache();
-		auto l_program = l_cache.GetNewProgram( false );
-		l_program->CreateObject( ShaderType::eVertex );
-		l_program->CreateObject( ShaderType::ePixel );
-		l_program->SetSource( ShaderType::eVertex, l_vtx );
-		l_program->SetSource( ShaderType::ePixel, l_pxl );
-		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-		l_program->Initialise();
-		return l_program;
+		auto & cache = GetEngine()->GetShaderProgramCache();
+		auto program = cache.GetNewProgram( false );
+		program->CreateObject( ShaderType::eVertex );
+		program->CreateObject( ShaderType::ePixel );
+		program->SetSource( ShaderType::eVertex, vtx );
+		program->SetSource( ShaderType::ePixel, pxl );
+		program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		program->Initialise();
+		return program;
 	}
 }

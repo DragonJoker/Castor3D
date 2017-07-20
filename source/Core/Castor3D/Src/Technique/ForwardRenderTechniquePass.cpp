@@ -11,7 +11,8 @@
 #include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
 #include <GlslPhongLighting.hpp>
-#include <GlslCookTorranceLighting.hpp>
+#include <GlslMetallicBrdfLighting.hpp>
+#include <GlslSpecularBrdfLighting.hpp>
 
 using namespace Castor;
 
@@ -94,20 +95,20 @@ namespace Castor3D
 			AddShadowProducer( p_light );
 		} );
 
-		bool l_result = m_directionalShadowMap.Initialise();
+		bool result = m_directionalShadowMap.Initialise();
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = m_spotShadowMap.Initialise();
+			result = m_spotShadowMap.Initialise();
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = m_pointShadowMap.Initialise();
+			result = m_pointShadowMap.Initialise();
 		}
 
-		ENSURE( l_result );
-		return l_result;
+		ENSURE( result );
+		return result;
 	}
 
 	void ForwardRenderTechniquePass::CleanupShadowMaps()
@@ -136,9 +137,9 @@ namespace Castor3D
 		p_depthMaps.push_back( std::ref( m_directionalShadowMap.GetTexture() ) );
 		p_depthMaps.push_back( std::ref( m_spotShadowMap.GetTexture() ) );
 
-		for ( auto & l_map : m_pointShadowMap.GetTextures() )
+		for ( auto & map : m_pointShadowMap.GetTextures() )
 		{
-			p_depthMaps.push_back( std::ref( l_map ) );
+			p_depthMaps.push_back( std::ref( map ) );
 		}
 	}
 	
@@ -149,56 +150,56 @@ namespace Castor3D
 		, bool p_invertNormals )const
 	{
 		using namespace GLSL;
-		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 		// Vertex inputs
-		auto position = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
-		auto normal = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent );
-		auto texture = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = l_writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = l_writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = l_writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto material = l_writer.DeclAttribute< Int >( ShaderProgram::Material, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = l_writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = l_writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( l_writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto position = writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
+		auto normal = writer.DeclAttribute< Vec3 >( ShaderProgram::Normal );
+		auto tangent = writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent );
+		auto bitangent = writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent );
+		auto texture = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture );
+		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.DeclAttribute< Int >( ShaderProgram::Material, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto normal2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto tangent2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto bitangent2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( l_writer );
-		UBO_MODEL_MATRIX( l_writer );
-		SkinningUbo::Declare( l_writer, p_programFlags );
-		UBO_MORPHING( l_writer, p_programFlags );
-		UBO_SCENE( l_writer );
-		UBO_MODEL( l_writer );
+		UBO_MATRIX( writer );
+		UBO_MODEL_MATRIX( writer );
+		SkinningUbo::Declare( writer, p_programFlags );
+		UBO_MORPHING( writer, p_programFlags );
+		UBO_SCENE( writer );
+		UBO_MODEL( writer );
 
 		// Outputs
-		auto vtx_position = l_writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_tangentSpaceFragPosition = l_writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = l_writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = l_writer.DeclOutput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.DeclOutput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.DeclOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.DeclOutput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = l_writer.DeclOutput< Int >( cuT( "vtx_material" ) );
-		auto gl_Position = l_writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto vtx_position = writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_tangentSpaceFragPosition = writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = writer.DeclOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
+		auto vtx_normal = writer.DeclOutput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = writer.DeclOutput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = writer.DeclOutput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = writer.DeclOutput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = writer.DeclOutput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_material = writer.DeclOutput< Int >( cuT( "vtx_material" ) );
+		auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-		std::function< void() > l_main = [&]()
+		std::function< void() > main = [&]()
 		{
-			auto l_v4Vertex = l_writer.DeclLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_v4Normal = l_writer.DeclLocale( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
-			auto l_v4Tangent = l_writer.DeclLocale( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto l_v3Texture = l_writer.DeclLocale( cuT( "l_v3Texture" ), texture );
-			auto l_mtxModel = l_writer.DeclLocale< Mat4 >( cuT( "l_mtxModel" ) );
+			auto v4Vertex = writer.DeclLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
+			auto v4Normal = writer.DeclLocale( cuT( "v4Normal" ), vec4( normal, 0.0 ) );
+			auto v4Tangent = writer.DeclLocale( cuT( "v4Tangent" ), vec4( tangent, 0.0 ) );
+			auto v3Texture = writer.DeclLocale( cuT( "v3Texture" ), texture );
+			auto mtxModel = writer.DeclLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
-				l_mtxModel = SkinningUbo::ComputeTransform( l_writer, p_programFlags );
+				mtxModel = SkinningUbo::ComputeTransform( writer, p_programFlags );
 
 				if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 				{
@@ -211,52 +212,52 @@ namespace Castor3D
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
-				l_mtxModel = transform;
+				mtxModel = transform;
 				vtx_material = material;
 			}
 			else
 			{
-				l_mtxModel = c3d_mtxModel;
+				mtxModel = c3d_mtxModel;
 				vtx_material = c3d_materialIndex;
 			}
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto l_time = l_writer.DeclLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
+				auto time = writer.DeclLocale( cuT( "time" ), 1.0_f - c3d_fTime );
+				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
+				v4Normal = vec4( v4Normal.xyz() * time + normal2.xyz() * c3d_fTime, 1.0 );
+				v4Tangent = vec4( v4Tangent.xyz() * time + tangent2.xyz() * c3d_fTime, 1.0 );
+				v3Texture = v3Texture * writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
-			vtx_texture = l_v3Texture;
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_position = l_v4Vertex.xyz();
-			l_v4Vertex = c3d_mtxView * l_v4Vertex;
-			l_mtxModel = transpose( inverse( l_mtxModel ) );
+			vtx_texture = v3Texture;
+			v4Vertex = mtxModel * v4Vertex;
+			vtx_position = v4Vertex.xyz();
+			v4Vertex = c3d_mtxView * v4Vertex;
+			mtxModel = transpose( inverse( mtxModel ) );
 
 			if ( p_invertNormals )
 			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * -l_v4Normal ).xyz() );
+				vtx_normal = normalize( writer.Paren( mtxModel * -v4Normal ).xyz() );
 			}
 			else
 			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+				vtx_normal = normalize( writer.Paren( mtxModel * v4Normal ).xyz() );
 			}
 
-			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
+			vtx_tangent = normalize( writer.Paren( mtxModel * v4Tangent ).xyz() );
 			vtx_tangent = normalize( vtx_tangent - vtx_normal * dot( vtx_tangent, vtx_normal ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * l_v4Vertex;
+			gl_Position = c3d_mtxProjection * v4Vertex;
 
-			auto l_tbn = l_writer.DeclLocale( cuT( "l_tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = l_tbn * vtx_position;
-			vtx_tangentSpaceViewPosition = l_tbn * c3d_v3CameraPosition;
+			auto tbn = writer.DeclLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+			vtx_tangentSpaceFragPosition = tbn * vtx_position;
+			vtx_tangentSpaceViewPosition = tbn * c3d_v3CameraPosition;
 		};
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
+		writer.ImplementFunction< void >( cuT( "main" ), main );
+		return writer.Finalise();
 	}
 
 	GLSL::Shader ForwardRenderTechniquePass::DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
@@ -265,283 +266,274 @@ namespace Castor3D
 		, ComparisonFunc p_alphaFunc )const
 	{
 		using namespace GLSL;
-		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
+		GlslWriter writer = m_renderSystem.CreateGlslWriter();
 
 		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_MODEL( l_writer );
+		UBO_MATRIX( writer );
+		UBO_SCENE( writer );
+		UBO_MODEL( writer );
 
 		// Fragment Intputs
-		auto vtx_position = l_writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_tangentSpaceFragPosition = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = l_writer.DeclInput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.DeclInput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.DeclInput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = l_writer.DeclInput< Int >( cuT( "vtx_material" ) );
+		auto vtx_position = writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_tangentSpaceFragPosition = writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
+		auto vtx_normal = writer.DeclInput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = writer.DeclInput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = writer.DeclInput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = writer.DeclInput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_material = writer.DeclInput< Int >( cuT( "vtx_material" ) );
 
-		LegacyMaterials l_materials{ l_writer };
-		l_materials.Declare();
+		LegacyMaterials materials{ writer };
+		materials.Declare();
 
-		if ( l_writer.HasTextureBuffers() )
+		if ( writer.HasTextureBuffers() )
 		{
-			auto c3d_sLights = l_writer.DeclUniform< SamplerBuffer >( ShaderProgram::Lights );
+			auto c3d_sLights = writer.DeclUniform< SamplerBuffer >( ShaderProgram::Lights );
 		}
 		else
 		{
-			auto c3d_sLights = l_writer.DeclUniform< Sampler1D >( ShaderProgram::Lights );
+			auto c3d_sLights = writer.DeclUniform< Sampler1D >( ShaderProgram::Lights );
 		}
 
-		auto c3d_mapDiffuse( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse
+		auto c3d_mapDiffuse( writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse
 			, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal
+		auto c3d_mapNormal( writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal
 			, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
+		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
 			, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
-		auto c3d_mapSpecular( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapSpecular
+		auto c3d_mapSpecular( writer.DeclUniform< Sampler2D >( ShaderProgram::MapSpecular
 			, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapEmissive( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive
+		auto c3d_mapEmissive( writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive
 			, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapHeight( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapHeight
+		auto c3d_mapHeight( writer.DeclUniform< Sampler2D >( ShaderProgram::MapHeight
 			, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapGloss( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapGloss
+		auto c3d_mapGloss( writer.DeclUniform< Sampler2D >( ShaderProgram::MapGloss
 			, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_fresnelBias = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelBias" )
+		auto c3d_fresnelBias = writer.DeclUniform< Float >( cuT( "c3d_fresnelBias" )
 			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
 			, 0.10_f );
-		auto c3d_fresnelScale = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelScale" )
+		auto c3d_fresnelScale = writer.DeclUniform< Float >( cuT( "c3d_fresnelScale" )
 			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
 			, 0.25_f );
-		auto c3d_fresnelPower = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelPower" )
+		auto c3d_fresnelPower = writer.DeclUniform< Float >( cuT( "c3d_fresnelPower" )
 			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
 			, 0.30_f );
-		auto c3d_mapEnvironment( l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment
+		auto c3d_mapEnvironment( writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment
 			, CheckFlag( p_textureFlags, TextureChannel::eReflection )
 			|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ) );
 
-		auto c3d_fheightScale( l_writer.DeclUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_fheightScale( writer.DeclUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
-		auto gl_FragCoord( l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		auto gl_FragCoord( writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto l_lighting = legacy::CreateLightingModel( l_writer
+		auto lighting = legacy::CreateLightingModel( writer
 			, GetShadowType( p_sceneFlags ) );
-		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
-		GLSL::Utils l_utils{ l_writer };
-		l_utils.DeclareApplyGamma();
-		l_utils.DeclareRemoveGamma();
+		GLSL::Fog fog{ GetFogType( p_sceneFlags ), writer };
+		GLSL::Utils utils{ writer };
+		utils.DeclareApplyGamma();
+		utils.DeclareRemoveGamma();
 
-		auto l_parallaxMapping = DeclareParallaxMappingFunc( l_writer, p_textureFlags, p_programFlags );
+		auto parallaxMapping = DeclareParallaxMappingFunc( writer, p_textureFlags, p_programFlags );
 
 		// Fragment Outputs
-		auto pxl_v4FragColor( l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
+		auto pxl_v4FragColor( writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_v3Normal = l_writer.DeclLocale( cuT( "l_v3Normal" ), normalize( vtx_normal ) );
-			auto l_v3Ambient = l_writer.DeclLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.DeclLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_v3Specular = l_writer.DeclLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
-			auto l_fMatShininess = l_writer.DeclLocale( cuT( "l_fMatShininess" ), l_materials.GetShininess( vtx_material ) );
-			auto l_gamma = l_writer.DeclLocale( cuT( "l_gamma" ), l_materials.GetGamma( vtx_material ) );
-			auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" ), l_utils.RemoveGamma(l_gamma, l_materials.GetDiffuse( vtx_material ) ) );
-			auto l_emissive = l_writer.DeclLocale( cuT( "l_emissive" ), l_diffuse * l_materials.GetEmissive( vtx_material ) );
-			auto l_worldEye = l_writer.DeclLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-			auto l_envAmbient = l_writer.DeclLocale( cuT( "l_envAmbient" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
-			auto l_envDiffuse = l_writer.DeclLocale( cuT( "l_envDiffuse" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
-			auto l_texCoord = l_writer.DeclLocale( cuT( "l_texCoord" ), vtx_texture );
+			auto v3Normal = writer.DeclLocale( cuT( "v3Normal" ), normalize( vtx_normal ) );
+			auto v3Ambient = writer.DeclLocale( cuT( "v3Ambient" ), c3d_v4AmbientLight.xyz() );
+			auto v3Diffuse = writer.DeclLocale( cuT( "v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
+			auto v3Specular = writer.DeclLocale( cuT( "v3Specular" ), vec3( 0.0_f, 0, 0 ) );
+			auto fMatShininess = writer.DeclLocale( cuT( "fMatShininess" ), materials.GetShininess( vtx_material ) );
+			auto gamma = writer.DeclLocale( cuT( "gamma" ), materials.GetGamma( vtx_material ) );
+			auto diffuse = writer.DeclLocale( cuT( "diffuse" ), utils.RemoveGamma(gamma, materials.GetDiffuse( vtx_material ) ) );
+			auto emissive = writer.DeclLocale( cuT( "emissive" ), diffuse * materials.GetEmissive( vtx_material ) );
+			auto worldEye = writer.DeclLocale( cuT( "worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			auto envAmbient = writer.DeclLocale( cuT( "envAmbient" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
+			auto envDiffuse = writer.DeclLocale( cuT( "envDiffuse" ), vec3( 1.0_f, 1.0_f, 1.0_f ) );
+			auto texCoord = writer.DeclLocale( cuT( "texCoord" ), vtx_texture );
 
 			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 1.0f );
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
 				&& CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
 			{
-				auto l_viewDir = -l_writer.DeclLocale( cuT( "l_viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
-				l_texCoord.xy() = l_parallaxMapping( l_texCoord.xy(), l_viewDir );
+				auto viewDir = -writer.DeclLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			legacy::ComputePreLightingMapContributions( l_writer
-				, l_v3Normal
-				, l_fMatShininess
+			legacy::ComputePreLightingMapContributions( writer
+				, v3Normal
+				, fMatShininess
 				, p_textureFlags
 				, p_programFlags
 				, p_sceneFlags );
-			OutputComponents l_output{ l_v3Diffuse, l_v3Specular };
-			l_lighting->ComputeCombinedLighting( l_worldEye
-				, l_fMatShininess
+			OutputComponents output{ v3Diffuse, v3Specular };
+			lighting->ComputeCombinedLighting( worldEye
+				, fMatShininess
 				, c3d_shadowReceiver
-				, FragmentInput( vtx_position, l_v3Normal )
-				, l_output );
-			legacy::ComputePostLightingMapContributions( l_writer
-				, l_diffuse
-				, l_v3Specular
-				, l_emissive
-				, l_gamma
+				, FragmentInput( vtx_position, v3Normal )
+				, output );
+			legacy::ComputePostLightingMapContributions( writer
+				, diffuse
+				, v3Specular
+				, emissive
+				, gamma
 				, p_textureFlags
 				, p_programFlags
 				, p_sceneFlags );
 
-			pxl_v4FragColor.xyz() = l_writer.Paren( l_v3Ambient + l_v3Diffuse + l_emissive ) * l_diffuse
-				+ l_v3Specular * l_materials.GetSpecular( vtx_material );
+			pxl_v4FragColor.xyz() = writer.Paren( v3Ambient + v3Diffuse + emissive ) * diffuse
+				+ v3Specular * materials.GetSpecular( vtx_material );
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
 				|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
 			{
-				auto l_incident = l_writer.DeclLocale( cuT( "l_i" ), normalize( vtx_position - c3d_v3CameraPosition ) );
-				auto l_reflectedColour = l_writer.DeclLocale( cuT( "l_reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
-				auto l_refractedColour = l_writer.DeclLocale( cuT( "l_refractedColour" ), l_diffuse / 2.0 );
+				auto incident = writer.DeclLocale( cuT( "i" ), normalize( vtx_position - c3d_v3CameraPosition ) );
+				auto reflectedColour = writer.DeclLocale( cuT( "reflectedColour" ), vec3( 0.0_f, 0, 0 ) );
+				auto refractedColour = writer.DeclLocale( cuT( "refractedColour" ), diffuse / 2.0 );
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eReflection ) )
 				{
-					auto l_reflect = l_writer.DeclLocale( cuT( "l_reflect" )
-						, reflect( l_incident, l_v3Normal ) );
-					l_reflectedColour = texture( c3d_mapEnvironment, l_reflect ).xyz() * length( pxl_v4FragColor.xyz() );
+					auto reflected = writer.DeclLocale( cuT( "reflected" )
+						, reflect( incident, v3Normal ) );
+					reflectedColour = texture( c3d_mapEnvironment, reflected ).xyz() * length( pxl_v4FragColor.xyz() );
 				}
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
 				{
-					auto l_refract = l_writer.DeclLocale( cuT( "l_refract" ), refract( l_incident, l_v3Normal, l_materials.GetRefractionRatio( vtx_material ) ) );
-					l_refractedColour = texture( c3d_mapEnvironment, l_refract ).xyz() * l_diffuse / length( l_diffuse );
+					auto refracted = writer.DeclLocale( cuT( "refracted" ), refract( incident, v3Normal, materials.GetRefractionRatio( vtx_material ) ) );
+					refractedColour = texture( c3d_mapEnvironment, refracted ).xyz() * diffuse / length( diffuse );
 				}
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eReflection )
 					&& !CheckFlag( p_textureFlags, TextureChannel::eRefraction ) )
 				{
-					pxl_v4FragColor.xyz() = l_reflectedColour * l_diffuse / length( l_diffuse );
+					pxl_v4FragColor.xyz() = reflectedColour * diffuse / length( diffuse );
 				}
 				else
 				{
-					auto l_refFactor = l_writer.DeclLocale( cuT( "l_refFactor" )
-						, c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( l_incident, l_v3Normal ), c3d_fresnelPower ) );
-					pxl_v4FragColor.xyz() = mix( l_refractedColour, l_reflectedColour, l_refFactor );
+					auto refFactor = writer.DeclLocale( cuT( "refFactor" )
+						, c3d_fresnelBias + c3d_fresnelScale * pow( 1.0_f + dot( incident, v3Normal ), c3d_fresnelPower ) );
+					pxl_v4FragColor.xyz() = mix( refractedColour, reflectedColour, refFactor );
 				}
 			}
 
 			if ( !m_opaque )
 			{
-				auto l_alpha = l_writer.DeclLocale( cuT( "l_alpha" ), l_materials.GetOpacity( vtx_material ) );
+				auto alpha = writer.DeclLocale( cuT( "alpha" ), materials.GetOpacity( vtx_material ) );
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 				{
-					l_alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
 
-				pxl_v4FragColor.a() = l_alpha;
+				pxl_v4FragColor.a() = alpha;
 			}
 
 			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
 			{
-				auto l_wvPosition = l_writer.DeclLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
-				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
+				auto wvPosition = writer.DeclLocale( cuT( "wvPosition" ), writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+				fog.ApplyFog( pxl_v4FragColor, length( wvPosition ), wvPosition.y() );
 			}
 		} );
 
-		return l_writer.Finalise();
+		return writer.Finalise();
 	}
 
-	GLSL::Shader ForwardRenderTechniquePass::DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader ForwardRenderTechniquePass::DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const
 	{
 		using namespace GLSL;
-		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
+		GlslWriter writer = m_renderSystem.CreateGlslWriter();
 
 		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_MODEL( l_writer );
+		UBO_MATRIX( writer );
+		UBO_SCENE( writer );
+		UBO_MODEL( writer );
 
 		// Fragment Intputs
-		auto vtx_position = l_writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
-		auto vtx_tangentSpaceFragPosition = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = l_writer.DeclInput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.DeclInput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.DeclInput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.DeclInput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = l_writer.DeclInput< Int >( cuT( "vtx_material" ) );
+		auto vtx_position = writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_tangentSpaceFragPosition = writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
+		auto vtx_normal = writer.DeclInput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = writer.DeclInput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = writer.DeclInput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = writer.DeclInput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_material = writer.DeclInput< Int >( cuT( "vtx_material" ) );
 
-		PbrMaterials l_materials{ l_writer };
-		l_materials.Declare();
+		PbrMRMaterials materials{ writer };
+		materials.Declare();
 
-		if ( l_writer.HasTextureBuffers() )
+		if ( writer.HasTextureBuffers() )
 		{
-			auto c3d_sLights = l_writer.DeclUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
+			auto c3d_sLights = writer.DeclUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
 		}
 		else
 		{
-			auto c3d_sLights = l_writer.DeclUniform< Sampler1D >( cuT( "c3d_sLights" ) );
+			auto c3d_sLights = writer.DeclUniform< Sampler1D >( cuT( "c3d_sLights" ) );
 		}
 
-		auto c3d_mapAlbedo( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapAlbedo
+		auto c3d_mapAlbedo( writer.DeclUniform< Sampler2D >( ShaderProgram::MapAlbedo
 			, CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) ) );
-		auto c3d_mapRoughness( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapRoughness
+		auto c3d_mapRoughness( writer.DeclUniform< Sampler2D >( ShaderProgram::MapRoughness
 			, CheckFlag( p_textureFlags, TextureChannel::eRoughness ) ) );
-		auto c3d_mapNormal( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal
+		auto c3d_mapNormal( writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal
 			, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
+		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
 			, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
-		auto c3d_mapMetallic( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapMetallic
+		auto c3d_mapMetallic( writer.DeclUniform< Sampler2D >( ShaderProgram::MapMetallic
 			, CheckFlag( p_textureFlags, TextureChannel::eMetallic ) ) );
-		auto c3d_mapAmbientOcclusion( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.DeclUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
 			, CheckFlag( p_textureFlags, TextureChannel::eAmbientOcclusion ) ) );
-		auto c3d_mapEmissive( l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive
+		auto c3d_mapEmissive( writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive
 			, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapEnvironment( l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment
+		auto c3d_mapEnvironment( writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment
 			, CheckFlag( p_textureFlags, TextureChannel::eReflection )
 			|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ) );
-		auto c3d_mapIrradiance = l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapIrradiance );
-		auto c3d_mapPrefiltered = l_writer.DeclUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
-		auto c3d_mapBrdf = l_writer.DeclUniform< Sampler2D >( ShaderProgram::MapBrdf );
-		auto c3d_fresnelBias = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelBias" )
-			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
-			, 0.10_f );
-		auto c3d_fresnelScale = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelScale" )
-			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
-			, 0.25_f );
-		auto c3d_fresnelPower = l_writer.DeclUniform< Float >( cuT( "c3d_fresnelPower" )
-			, CheckFlag( p_textureFlags, TextureChannel::eReflection ) || CheckFlag( p_textureFlags, TextureChannel::eRefraction )
-			, 0.30_f );
-		auto c3d_fheightScale( l_writer.DeclUniform< Float >( cuT( "c3d_fheightScale" )
+		auto c3d_mapIrradiance = writer.DeclUniform< SamplerCube >( ShaderProgram::MapIrradiance );
+		auto c3d_mapPrefiltered = writer.DeclUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
+		auto c3d_mapBrdf = writer.DeclUniform< Sampler2D >( ShaderProgram::MapBrdf );
+		auto c3d_fheightScale( writer.DeclUniform< Float >( cuT( "c3d_fheightScale" )
 			, CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
-		auto gl_FragCoord( l_writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		auto gl_FragCoord( writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto l_lighting = pbr::CreateLightingModel( l_writer
+		auto lighting = pbr::mr::CreateLightingModel( writer
 			, GetShadowType( p_sceneFlags ) );
-		GLSL::Fog l_fog{ GetFogType( p_sceneFlags ), l_writer };
-		GLSL::Utils l_utils{ l_writer };
-		l_utils.DeclareApplyGamma();
-		l_utils.DeclareRemoveGamma();
-		l_utils.DeclareFresnelSchlick();
-		l_utils.DeclareComputeIBL();
+		GLSL::Fog fog{ GetFogType( p_sceneFlags ), writer };
+		GLSL::Utils utils{ writer };
+		utils.DeclareApplyGamma();
+		utils.DeclareRemoveGamma();
+		utils.DeclareFresnelSchlick();
+		utils.DeclareComputeMetallicIBL();
 
-		auto l_parallaxMapping = DeclareParallaxMappingFunc( l_writer, p_textureFlags, p_programFlags );
+		auto parallaxMapping = DeclareParallaxMappingFunc( writer, p_textureFlags, p_programFlags );
 
 		// Fragment Outputs
-		auto pxl_v4FragColor( l_writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
+		auto pxl_v4FragColor( writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_normal = l_writer.DeclLocale( cuT( "l_v3Normal" ), normalize( vtx_normal ) );
-			auto l_ambient = l_writer.DeclLocale( cuT( "l_ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_metalness = l_writer.DeclLocale( cuT( "l_metallic" ), l_materials.GetMetallic( vtx_material ) );
-			auto l_gamma = l_writer.DeclLocale( cuT( "l_gamma" ), l_materials.GetGamma( vtx_material ) );
-			auto l_albedo = l_writer.DeclLocale( cuT( "l_albedo" ), l_utils.RemoveGamma( l_gamma, l_materials.GetAlbedo( vtx_material ) ) );
-			auto l_roughness = l_writer.DeclLocale( cuT( "l_roughness" ), l_materials.GetRoughness( vtx_material ) );
-			auto l_emissive = l_writer.DeclLocale( cuT( "l_emissive" ), l_albedo * l_materials.GetEmissive( vtx_material ) );
-			auto l_worldEye = l_writer.DeclLocale( cuT( "l_worldEye" ), c3d_v3CameraPosition );
-			auto l_texCoord = l_writer.DeclLocale( cuT( "l_texCoord" ), vtx_texture );
-			auto l_occlusion = l_writer.DeclLocale( cuT( "l_occlusion" )
+			auto normal = writer.DeclLocale( cuT( "v3Normal" ), normalize( vtx_normal ) );
+			auto ambient = writer.DeclLocale( cuT( "ambient" ), c3d_v4AmbientLight.xyz() );
+			auto metalness = writer.DeclLocale( cuT( "metallic" ), materials.GetMetallic( vtx_material ) );
+			auto gamma = writer.DeclLocale( cuT( "gamma" ), materials.GetGamma( vtx_material ) );
+			auto albedo = writer.DeclLocale( cuT( "albedo" ), utils.RemoveGamma( gamma, materials.GetAlbedo( vtx_material ) ) );
+			auto roughness = writer.DeclLocale( cuT( "roughness" ), materials.GetRoughness( vtx_material ) );
+			auto emissive = writer.DeclLocale( cuT( "emissive" ), albedo * materials.GetEmissive( vtx_material ) );
+			auto worldEye = writer.DeclLocale( cuT( "worldEye" ), c3d_v3CameraPosition );
+			auto texCoord = writer.DeclLocale( cuT( "texCoord" ), vtx_texture );
+			auto occlusion = writer.DeclLocale( cuT( "occlusion" )
 				, 1.0_f );
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::eAmbientOcclusion ) )
 			{
-				l_occlusion = texture( c3d_mapAmbientOcclusion, l_texCoord.xy() ).r();
+				occlusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
 			}
 
 			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 1.0f );
@@ -549,63 +541,222 @@ namespace Castor3D
 			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
 				&& CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
 			{
-				auto l_viewDir = -l_writer.DeclLocale( cuT( "l_viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
-				l_texCoord.xy() = l_parallaxMapping( l_texCoord.xy(), l_viewDir );
+				auto viewDir = -writer.DeclLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			pbr::ComputePreLightingMapContributions( l_writer
-				, l_normal
-				, l_metalness
-				, l_roughness
+			pbr::mr::ComputePreLightingMapContributions( writer
+				, normal
+				, metalness
+				, roughness
 				, p_textureFlags
 				, p_programFlags
 				, p_sceneFlags );
-			pbr::ComputePostLightingMapContributions( l_writer
-				, l_albedo
-				, l_emissive
-				, l_gamma
+			pbr::mr::ComputePostLightingMapContributions( writer
+				, albedo
+				, emissive
+				, gamma
 				, p_textureFlags
 				, p_programFlags
 				, p_sceneFlags );
-			auto l_diffuse = l_writer.DeclLocale( cuT( "l_diffuse" )
-				, l_lighting->ComputeCombinedLighting( l_worldEye
-					, l_albedo
-					, l_metalness
-					, l_roughness
+			auto diffuse = writer.DeclLocale( cuT( "diffuse" )
+				, lighting->ComputeCombinedLighting( worldEye
+					, albedo
+					, metalness
+					, roughness
 					, c3d_shadowReceiver
-					, FragmentInput( vtx_position, l_normal ) ) );
+					, FragmentInput( vtx_position, normal ) ) );
 
-			l_ambient *= l_occlusion * l_utils.ComputeIBL( l_normal
+			ambient *= occlusion * utils.ComputeMetallicIBL( normal
 				, vtx_position
-				, l_albedo
-				, l_metalness
-				, l_roughness
+				, albedo
+				, metalness
+				, roughness
 				, c3d_v3CameraPosition
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf
 				, 0_i );
-			pxl_v4FragColor.xyz() = l_diffuse + l_emissive + l_ambient;
+			pxl_v4FragColor.xyz() = diffuse + emissive + ambient;
 
 			if ( !m_opaque )
 			{
-				auto l_alpha = l_writer.DeclLocale( cuT( "l_alpha" ), l_materials.GetOpacity( vtx_material ) );
+				auto alpha = writer.DeclLocale( cuT( "alpha" ), materials.GetOpacity( vtx_material ) );
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 				{
-					l_alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
 
-				pxl_v4FragColor.a() = l_alpha;
+				pxl_v4FragColor.a() = alpha;
 			}
 
 			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
 			{
-				auto l_wvPosition = l_writer.DeclLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
-				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
+				auto wvPosition = writer.DeclLocale( cuT( "wvPosition" ), writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+				fog.ApplyFog( pxl_v4FragColor, length( wvPosition ), wvPosition.y() );
 			}
 		} );
 
-		return l_writer.Finalise();
+		return writer.Finalise();
+	}
+
+	GLSL::Shader ForwardRenderTechniquePass::DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
+	{
+		using namespace GLSL;
+		GlslWriter writer = m_renderSystem.CreateGlslWriter();
+
+		// UBOs
+		UBO_MATRIX( writer );
+		UBO_SCENE( writer );
+		UBO_MODEL( writer );
+
+		// Fragment Intputs
+		auto vtx_position = writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
+		auto vtx_tangentSpaceFragPosition = writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
+		auto vtx_tangentSpaceViewPosition = writer.DeclInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
+		auto vtx_normal = writer.DeclInput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = writer.DeclInput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = writer.DeclInput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = writer.DeclInput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_material = writer.DeclInput< Int >( cuT( "vtx_material" ) );
+
+		PbrSGMaterials materials{ writer };
+		materials.Declare();
+
+		if ( writer.HasTextureBuffers() )
+		{
+			auto c3d_sLights = writer.DeclUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
+		}
+		else
+		{
+			auto c3d_sLights = writer.DeclUniform< Sampler1D >( cuT( "c3d_sLights" ) );
+		}
+
+		auto c3d_mapDiffuse( writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse
+			, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
+		auto c3d_mapSpecular( writer.DeclUniform< Sampler2D >( ShaderProgram::MapSpecular
+			, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
+		auto c3d_mapGlossiness( writer.DeclUniform< Sampler2D >( ShaderProgram::MapGloss
+			, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
+		auto c3d_mapNormal( writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal
+			, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
+			, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) && !m_opaque ) );
+		auto c3d_mapAmbientOcclusion( writer.DeclUniform< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+			, CheckFlag( p_textureFlags, TextureChannel::eAmbientOcclusion ) ) );
+		auto c3d_mapEmissive( writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive
+			, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapEnvironment( writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment
+			, CheckFlag( p_textureFlags, TextureChannel::eReflection )
+			|| CheckFlag( p_textureFlags, TextureChannel::eRefraction ) ) );
+		auto c3d_mapIrradiance = writer.DeclUniform< SamplerCube >( ShaderProgram::MapIrradiance );
+		auto c3d_mapPrefiltered = writer.DeclUniform< SamplerCube >( ShaderProgram::MapPrefiltered );
+		auto c3d_mapBrdf = writer.DeclUniform< Sampler2D >( ShaderProgram::MapBrdf );
+		auto c3d_fheightScale( writer.DeclUniform< Float >( cuT( "c3d_fheightScale" )
+			, CheckFlag( p_textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+
+		auto gl_FragCoord( writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+
+		auto lighting = pbr::sg::CreateLightingModel( writer
+			, GetShadowType( p_sceneFlags ) );
+		GLSL::Fog fog{ GetFogType( p_sceneFlags ), writer };
+		GLSL::Utils utils{ writer };
+		utils.DeclareApplyGamma();
+		utils.DeclareRemoveGamma();
+		utils.DeclareFresnelSchlick();
+		utils.DeclareComputeSpecularIBL();
+
+		auto parallaxMapping = DeclareParallaxMappingFunc( writer, p_textureFlags, p_programFlags );
+
+		// Fragment Outputs
+		auto pxl_v4FragColor( writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
+
+		writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		{
+			auto normal = writer.DeclLocale( cuT( "v3Normal" ), normalize( vtx_normal ) );
+			auto ambient = writer.DeclLocale( cuT( "ambient" ), c3d_v4AmbientLight.xyz() );
+			auto specular = writer.DeclLocale( cuT( "specular" ), materials.GetSpecular( vtx_material ) );
+			auto gamma = writer.DeclLocale( cuT( "gamma" ), materials.GetGamma( vtx_material ) );
+			auto diffuse = writer.DeclLocale( cuT( "diffuse" ), utils.RemoveGamma( gamma, materials.GetDiffuse( vtx_material ) ) );
+			auto glossiness = writer.DeclLocale( cuT( "glossiness" ), materials.GetGlossiness( vtx_material ) );
+			auto emissive = writer.DeclLocale( cuT( "emissive" ), diffuse * materials.GetEmissive( vtx_material ) );
+			auto worldEye = writer.DeclLocale( cuT( "worldEye" ), c3d_v3CameraPosition );
+			auto texCoord = writer.DeclLocale( cuT( "texCoord" ), vtx_texture );
+			auto occlusion = writer.DeclLocale( cuT( "occlusion" )
+				, 1.0_f );
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eAmbientOcclusion ) )
+			{
+				occlusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
+			}
+
+			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 1.0f );
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
+				&& CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+			{
+				auto viewDir = -writer.DeclLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
+			}
+
+			pbr::sg::ComputePreLightingMapContributions( writer
+				, normal
+				, specular
+				, glossiness
+				, p_textureFlags
+				, p_programFlags
+				, p_sceneFlags );
+			pbr::sg::ComputePostLightingMapContributions( writer
+				, diffuse
+				, emissive
+				, gamma
+				, p_textureFlags
+				, p_programFlags
+				, p_sceneFlags );
+			auto light = writer.DeclLocale( cuT( "light" )
+				, lighting->ComputeCombinedLighting( worldEye
+					, diffuse
+					, specular
+					, glossiness
+					, c3d_shadowReceiver
+					, FragmentInput( vtx_position, normal ) ) );
+
+			ambient *= occlusion * utils.ComputeSpecularIBL( normal
+				, vtx_position
+				, diffuse
+				, specular
+				, glossiness
+				, c3d_v3CameraPosition
+				, c3d_mapIrradiance
+				, c3d_mapPrefiltered
+				, c3d_mapBrdf
+				, 0_i );
+			pxl_v4FragColor.xyz() = light + emissive + ambient;
+
+			if ( !m_opaque )
+			{
+				auto alpha = writer.DeclLocale( cuT( "alpha" ), materials.GetOpacity( vtx_material ) );
+
+				if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+				{
+					alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+				}
+
+				pxl_v4FragColor.a() = alpha;
+			}
+
+			if ( GetFogType( p_sceneFlags ) != GLSL::FogType::eDisabled )
+			{
+				auto wvPosition = writer.DeclLocale( cuT( "wvPosition" ), writer.Paren( c3d_mtxView * vec4( vtx_position, 1.0 ) ).xyz() );
+				fog.ApplyFog( pxl_v4FragColor, length( wvPosition ), wvPosition.y() );
+			}
+		} );
+
+		return writer.Finalise();
 	}
 }

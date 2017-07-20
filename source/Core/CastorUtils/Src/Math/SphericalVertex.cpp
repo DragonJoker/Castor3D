@@ -13,15 +13,15 @@ namespace Castor
 	{
 		m_radius = real( point::length( p_vertex ) );
 		m_phi = acos( p_vertex[2] / m_radius );
-		real l_tmp = m_radius * sin( m_phi );
+		real tmp = m_radius * sin( m_phi );
 
-		if ( l_tmp == 0.0 || p_vertex[0] - l_tmp < 0.001 )
+		if ( tmp == 0.0 || p_vertex[0] - tmp < 0.001 )
 		{
-			m_theta = asin( p_vertex[1] / l_tmp );
+			m_theta = asin( p_vertex[1] / tmp );
 		}
 		else
 		{
-			m_theta = acos( p_vertex[0] / l_tmp );
+			m_theta = acos( p_vertex[0] / tmp );
 		}
 	}
 

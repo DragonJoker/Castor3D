@@ -67,9 +67,9 @@ namespace Castor3D
 	Face Subdivider::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
 		REQUIRE( a < GetPointsCount() && b < GetPointsCount() && c < GetPointsCount() );
-		Face l_return{ a, b, c };
-		m_arrayFaces.push_back( l_return );
-		return l_return;
+		Face result{ a, b, c };
+		m_arrayFaces.push_back( result );
+		return result;
 	}
 
 	int Subdivider::IsInMyPoints( Point3r const & p_vertex, double p_precision )
@@ -94,27 +94,27 @@ namespace Castor3D
 
 	Castor3D::BufferElementGroupSPtr Subdivider::DoTryAddPoint( Point3r const & p_point )
 	{
-		std::unique_lock< std::recursive_mutex > l_lock( m_mutex );
-		int l_index = -1;
-		Castor3D::BufferElementGroupSPtr l_return;
+		std::unique_lock< std::recursive_mutex > lock( m_mutex );
+		int index = -1;
+		Castor3D::BufferElementGroupSPtr result;
 
-		if ( ( l_index = IsInMyPoints( p_point, 0.00001 ) ) < 0 )
+		if ( ( index = IsInMyPoints( p_point, 0.00001 ) ) < 0 )
 		{
-			l_return = AddPoint( p_point );
+			result = AddPoint( p_point );
 		}
 		else
 		{
-			l_return = GetPoint( l_index );
-			Coords3r l_coords;
-			Castor3D::Vertex::GetPosition( *l_return, l_coords );
+			result = GetPoint( index );
+			Coords3r coords;
+			Castor3D::Vertex::GetPosition( *result, coords );
 
-			if ( l_coords != p_point )
+			if ( coords != p_point )
 			{
-				Castor3D::Vertex::SetPosition( *l_return, ( l_coords + p_point ) / real( 2 ) );
+				Castor3D::Vertex::SetPosition( *result, ( coords + p_point ) / real( 2 ) );
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void Subdivider::DoSubdivide( SubmeshSPtr p_submesh, bool p_generateBuffers, bool p_threaded )
@@ -148,9 +148,9 @@ namespace Castor3D
 
 	void Subdivider::DoSwapBuffers()
 	{
-		for ( auto const & l_face : m_arrayFaces )
+		for ( auto const & face : m_arrayFaces )
 		{
-			m_submesh->AddFace( l_face[0], l_face[1], l_face[2] );
+			m_submesh->AddFace( face[0], face[1], face[2] );
 		}
 
 		m_submesh->ComputeNormals( true );
@@ -165,7 +165,7 @@ namespace Castor3D
 
 	uint32_t Subdivider::DoSubdivideThreaded()
 	{
-		auto l_lock = Castor::make_unique_lock( m_mutex );
+		auto lock = Castor::make_unique_lock( m_mutex );
 		DoSubdivide();
 		DoSwapBuffers();
 
@@ -188,15 +188,15 @@ namespace Castor3D
 
 	void Subdivider::DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f )
 	{
-		Point3r l_aTex;
-		Point3r l_bTex;
-		Point3r l_cTex;
-		Vertex::GetTexCoord( p_a, l_aTex );
-		Vertex::GetTexCoord( p_b, l_bTex );
-		Vertex::GetTexCoord( p_c, l_cTex );
-		Vertex::SetTexCoord( p_d, ( l_aTex + l_bTex ) / real( 2.0 ) );
-		Vertex::SetTexCoord( p_e, ( l_bTex + l_cTex ) / real( 2.0 ) );
-		Vertex::SetTexCoord( p_f, ( l_aTex + l_cTex ) / real( 2.0 ) );
+		Point3r aTex;
+		Point3r bTex;
+		Point3r cTex;
+		Vertex::GetTexCoord( p_a, aTex );
+		Vertex::GetTexCoord( p_b, bTex );
+		Vertex::GetTexCoord( p_c, cTex );
+		Vertex::SetTexCoord( p_d, ( aTex + bTex ) / real( 2.0 ) );
+		Vertex::SetTexCoord( p_e, ( bTex + cTex ) / real( 2.0 ) );
+		Vertex::SetTexCoord( p_f, ( aTex + cTex ) / real( 2.0 ) );
 		AddFace( p_a.GetIndex(), p_d.GetIndex(), p_f.GetIndex() );
 		AddFace( p_b.GetIndex(), p_e.GetIndex(), p_d.GetIndex() );
 		AddFace( p_c.GetIndex(), p_f.GetIndex(), p_e.GetIndex() );
@@ -205,13 +205,13 @@ namespace Castor3D
 
 	void Subdivider::DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p )
 	{
-		Point3r l_aTex;
-		Point3r l_bTex;
-		Point3r l_cTex;
-		Vertex::GetTexCoord( p_a, l_aTex );
-		Vertex::GetTexCoord( p_b, l_bTex );
-		Vertex::GetTexCoord( p_c, l_cTex );
-		Vertex::SetTexCoord( p_p, ( l_aTex + l_bTex + l_cTex ) / real( 3.0 ) );
+		Point3r aTex;
+		Point3r bTex;
+		Point3r cTex;
+		Vertex::GetTexCoord( p_a, aTex );
+		Vertex::GetTexCoord( p_b, bTex );
+		Vertex::GetTexCoord( p_c, cTex );
+		Vertex::SetTexCoord( p_p, ( aTex + bTex + cTex ) / real( 3.0 ) );
 		AddFace( p_a.GetIndex(), p_b.GetIndex(), p_p.GetIndex() );
 		AddFace( p_b.GetIndex(), p_c.GetIndex(), p_p.GetIndex() );
 		AddFace( p_c.GetIndex(), p_a.GetIndex(), p_p.GetIndex() );
@@ -220,17 +220,17 @@ namespace Castor3D
 
 String & operator << ( String & p_stream, Castor3D::BufferElementGroup const & p_vertex )
 {
-	Point3r l_ptPos( reinterpret_cast< real const * >( p_vertex.const_ptr() ) );
+	Point3r ptPos( reinterpret_cast< real const * >( p_vertex.const_ptr() ) );
 	p_stream += cuT( "Vertex[" );
 	p_stream += string::to_string( p_vertex.GetIndex() );
 	p_stream += cuT( "] - Buffer : [" );
-	p_stream += string::to_string( l_ptPos.const_ptr() );
+	p_stream += string::to_string( ptPos.const_ptr() );
 	p_stream += cuT( "] - (" );
-	p_stream += string::to_string( l_ptPos[0] );
+	p_stream += string::to_string( ptPos[0] );
 	p_stream += cuT( "," );
-	p_stream += string::to_string( l_ptPos[1] );
+	p_stream += string::to_string( ptPos[1] );
 	p_stream += cuT( "," );
-	p_stream += string::to_string( l_ptPos[2] );
+	p_stream += string::to_string( ptPos[2] );
 	p_stream += cuT( ")" );
 	return p_stream;
 }

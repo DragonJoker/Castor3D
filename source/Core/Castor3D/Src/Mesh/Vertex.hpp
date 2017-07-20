@@ -689,10 +689,10 @@ namespace Castor3D
 		 */
 		static void GetPosition( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto l_position = GetPosition( p_buffer );
-			p_coord[0] = l_position[0];
-			p_coord[1] = l_position[1];
-			p_coord[2] = l_position[2];
+			auto position = GetPosition( p_buffer );
+			p_coord[0] = position[0];
+			p_coord[1] = position[1];
+			p_coord[2] = position[2];
 		}
 		/**
 		 *\~english
@@ -762,10 +762,10 @@ namespace Castor3D
 		 */
 		static void GetNormal( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto l_normal = GetNormal( p_buffer );
-			p_coord[0] = l_normal[0];
-			p_coord[1] = l_normal[1];
-			p_coord[2] = l_normal[2];
+			auto normal = GetNormal( p_buffer );
+			p_coord[0] = normal[0];
+			p_coord[1] = normal[1];
+			p_coord[2] = normal[2];
 		}
 		/**
 		 *\~english
@@ -819,10 +819,10 @@ namespace Castor3D
 		 */
 		static void GetTangent( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto l_tangent = GetTangent( p_buffer );
-			p_coord[0] = l_tangent[0];
-			p_coord[1] = l_tangent[1];
-			p_coord[2] = l_tangent[2];
+			auto tangent = GetTangent( p_buffer );
+			p_coord[0] = tangent[0];
+			p_coord[1] = tangent[1];
+			p_coord[2] = tangent[2];
 		}
 		/**
 		 *\~english
@@ -908,10 +908,10 @@ namespace Castor3D
 		 */
 		static void GetBitangent( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto l_bitangent = GetBitangent( p_buffer );
-			p_coord[0] = l_bitangent[0];
-			p_coord[1] = l_bitangent[1];
-			p_coord[2] = l_bitangent[2];
+			auto bitangent = GetBitangent( p_buffer );
+			p_coord[0] = bitangent[0];
+			p_coord[1] = bitangent[1];
+			p_coord[2] = bitangent[2];
 		}
 		/**
 		 *\~english
@@ -981,10 +981,10 @@ namespace Castor3D
 		 */
 		static void GetTexCoord( void const * p_buffer, std::array< real, 3 > & p_coord )
 		{
-			auto l_texcoord = GetTexCoord( p_buffer );
-			p_coord[0] = l_texcoord[0];
-			p_coord[1] = l_texcoord[1];
-			p_coord[2] = l_texcoord[2];
+			auto texcoord = GetTexCoord( p_buffer );
+			p_coord[0] = texcoord[0];
+			p_coord[1] = texcoord[1];
+			p_coord[2] = texcoord[2];
 		}
 		/**
 		 *\~english

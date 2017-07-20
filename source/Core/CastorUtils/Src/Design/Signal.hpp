@@ -81,9 +81,9 @@ namespace Castor
 
 #if !defined( NDEBUG )
 
-			StringStream l_stream;
-			l_stream << Debug::Backtrace{};
-			m_stack = l_stream.str();
+			StringStream stream;
+			stream << Debug::Backtrace{};
+			m_stack = stream.str();
 
 #endif
 		}
@@ -147,7 +147,7 @@ namespace Castor
 		 */
 		bool disconnect()
 		{
-			bool l_result{ false };
+			bool result{ false };
 
 			if ( m_signal && m_connection )
 			{
@@ -155,10 +155,10 @@ namespace Castor
 				m_signal->rem_connection( *this );
 				m_signal = nullptr;
 				m_connection = 0u;
-				l_result = true;
+				result = true;
 			}
 
-			return l_result;
+			return result;
 		}
 
 	private:
@@ -233,13 +233,13 @@ namespace Castor
 			// supprime la connection de m_connections, invalidant ainsi
 			// l'itérateur, donc on ne peut pas utiliser un for_each, ni
 			// un range for loop.
-			auto l_it = m_connections.begin();
+			auto it = m_connections.begin();
 
-			while ( l_it != m_connections.end() )
+			while ( it != m_connections.end() )
 			{
-				auto l_disco = ( *l_it )->disconnect();
-				REQUIRE( l_disco );
-				l_it = m_connections.begin();
+				auto disco = ( *it )->disconnect();
+				REQUIRE( disco );
+				it = m_connections.begin();
 			}
 		}
 		/**

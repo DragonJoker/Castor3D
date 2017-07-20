@@ -127,10 +127,10 @@ namespace Castor3D
 }
 
 #define UBO_MATRIX( Writer )\
-	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix, MatrixUbo::BindingPoint };\
-	auto c3d_mtxProjection = l_matrices.DeclMember< GLSL::Mat4 >( RenderPipeline::MtxProjection );\
-	auto c3d_mtxView = l_matrices.DeclMember< GLSL::Mat4 >( RenderPipeline::MtxView );\
-	auto c3d_mtxInvProjection = l_matrices.DeclMember< GLSL::Mat4 >( RenderPipeline::MtxInvProjection );\
-	l_matrices.End()
+	GLSL::Ubo matrices{ writer, Castor3D::ShaderProgram::BufferMatrix, Castor3D::MatrixUbo::BindingPoint };\
+	auto c3d_mtxProjection = matrices.DeclMember< GLSL::Mat4 >( Castor3D::RenderPipeline::MtxProjection );\
+	auto c3d_mtxView = matrices.DeclMember< GLSL::Mat4 >( Castor3D::RenderPipeline::MtxView );\
+	auto c3d_mtxInvProjection = matrices.DeclMember< GLSL::Mat4 >( Castor3D::RenderPipeline::MtxInvProjection );\
+	matrices.End()
 
 #endif

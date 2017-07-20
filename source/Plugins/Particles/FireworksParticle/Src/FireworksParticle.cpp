@@ -25,9 +25,9 @@ namespace Fireworks
 
 		inline float GetRandomFloat()
 		{
-			static std::minstd_rand l_device;
-			std::uniform_real_distribution< float > l_distribution{ -1.0f, 1.0f };
-			return l_distribution( l_device );
+			static std::minstd_rand device;
+			std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
+			return distribution( device );
 		}
 
 		inline Point3f DoGetRandomDirection()
@@ -44,16 +44,16 @@ namespace Fireworks
 		{
 			if ( p_age >= g_launcherCooldown.count() )
 			{
-				Point3f l_velocity{ DoGetRandomDirection() * 5.0f };
-				l_velocity[1] = std::max( l_velocity[1] * 7.0f, 10.0f );
-				p_system.EmitParticle( g_shell, p_position, l_velocity, 0.0f );
+				Point3f velocity{ DoGetRandomDirection() * 5.0f };
+				velocity[1] = std::max( velocity[1] * 7.0f, 10.0f );
+				p_system.EmitParticle( g_shell, p_position, velocity, 0.0f );
 				p_age = 0.0f;
 			}
 
-			auto l_position = p_system.GetParent().GetParent()->GetDerivedPosition();
-			p_position[0] = float( l_position[0] );
-			p_position[1] = float( l_position[1] );
-			p_position[2] = float( l_position[2] );
+			auto position = p_system.GetParent().GetParent()->GetDerivedPosition();
+			p_position[0] = float( position[0] );
+			p_position[1] = float( position[1] );
+			p_position[2] = float( position[2] );
 		}
 
 		inline void DoUpdateShell( ParticleSystem & p_system
@@ -63,14 +63,14 @@ namespace Fireworks
 			, Coords3f & p_velocity
 			, float & p_age )
 		{
-			Point3f l_delta{ p_time.count() / 1000.0, p_time.count() / 1000.0, p_time.count() / 1000.0 };
-			Point3f l_deltaP = l_delta * p_velocity;
-			Point3f l_deltaV = l_delta * Point3f{ 0.0f, -0.981f, 0.0f };
+			Point3f delta{ p_time.count() / 1000.0, p_time.count() / 1000.0, p_time.count() / 1000.0 };
+			Point3f deltaP = delta * p_velocity;
+			Point3f deltaV = delta * Point3f{ 0.0f, -0.981f, 0.0f };
 
 			if ( p_age < g_shellLifetime.count() )
 			{
-				p_position += l_deltaP;
-				p_velocity += l_deltaV;
+				p_position += deltaP;
+				p_velocity += deltaV;
 			}
 			else
 			{
@@ -95,11 +95,11 @@ namespace Fireworks
 		{
 			if ( p_age < g_secondaryShellLifetime.count() )
 			{
-				Point3f l_delta{ p_time.count() / 1000.0, p_time.count() / 1000.0, p_time.count() / 1000.0 };
-				Point3f l_deltaP = l_delta * p_velocity;
-				Point3f l_deltaV = l_delta * Point3f{ 0.0f, -0.981f, 0.0f };
-				p_position += l_deltaP;
-				p_velocity += l_deltaV;
+				Point3f delta{ p_time.count() / 1000.0, p_time.count() / 1000.0, p_time.count() / 1000.0 };
+				Point3f deltaP = delta * p_velocity;
+				Point3f deltaV = delta * Point3f{ 0.0f, -0.981f, 0.0f };
+				p_position += deltaP;
+				p_velocity += deltaV;
 			}
 			else
 			{
@@ -134,11 +134,11 @@ namespace Fireworks
 		{
 			for ( auto i = 1u; i < p_firstUnused && p_firstUnused > 1u; ++i )
 			{
-				auto & l_particle = p_particles[i];
+				auto & particle = p_particles[i];
 
-				if ( l_particle.GetValue< ElementType::eFloat >( 0u ) == 0.0f )
+				if ( particle.GetValue< ElementType::eFloat >( 0u ) == 0.0f )
 				{
-					l_particle = std::move( p_particles[p_firstUnused - 1] );
+					particle = std::move( p_particles[p_firstUnused - 1] );
 					--p_firstUnused;
 				}
 			}
@@ -164,73 +164,73 @@ namespace Fireworks
 
 	void ParticleSystem::EmitParticle( float p_type, Castor::Point3f const & p_position, Castor::Point3f const & p_velocity, float p_age )
 	{
-		Particle l_particle{ m_inputs };
-		l_particle.SetValue< ElementType::eFloat >( 0u, p_type );
-		l_particle.SetValue< ElementType::eVec3 >( 1u, p_position );
-		l_particle.SetValue< ElementType::eVec3 >( 2u, p_velocity );
-		l_particle.SetValue< ElementType::eFloat >( 3u, p_age );
-		m_particles[m_firstUnused++] = l_particle;
+		Particle particle{ m_inputs };
+		particle.SetValue< ElementType::eFloat >( 0u, p_type );
+		particle.SetValue< ElementType::eVec3 >( 1u, p_position );
+		particle.SetValue< ElementType::eVec3 >( 2u, p_velocity );
+		particle.SetValue< ElementType::eFloat >( 3u, p_age );
+		m_particles[m_firstUnused++] = particle;
 	}
 
 	uint32_t ParticleSystem::Update( std::chrono::milliseconds const & p_time
 		, std::chrono::milliseconds const & p_total )
 	{
-		auto const l_type = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
+		auto const type = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
 		{
 			return p_element.m_name == cuT( "type" );
 		} );
 
-		auto const l_position = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
+		auto const position = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
 		{
 			return p_element.m_name == cuT( "position" );
 		} );
 
-		auto const l_velocity = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
+		auto const velocity = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
 		{
 			return p_element.m_name == cuT( "velocity" );
 		} );
 
-		auto const l_age = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
+		auto const age = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
 		{
 			return p_element.m_name == cuT( "age" );
 		} );
 
-		REQUIRE( l_type != m_inputs.end() && l_position != m_inputs.end() && l_velocity != m_inputs.end() && l_age != m_inputs.end() );
-		auto l_firstUnused = m_firstUnused;
+		REQUIRE( type != m_inputs.end() && position != m_inputs.end() && velocity != m_inputs.end() && age != m_inputs.end() );
+		auto firstUnused = m_firstUnused;
 
-		for ( auto i = 0u; i < l_firstUnused; ++i )
+		for ( auto i = 0u; i < firstUnused; ++i )
 		{
-			auto & l_particle = m_particles[i];
-			Coords3f l_pos{ reinterpret_cast< float * >( l_particle.GetData() + l_position->m_offset ) };
-			Coords3f l_vel{ reinterpret_cast< float * >( l_particle.GetData() + l_velocity->m_offset ) };
+			auto & particle = m_particles[i];
+			Coords3f pos{ reinterpret_cast< float * >( particle.GetData() + position->m_offset ) };
+			Coords3f vel{ reinterpret_cast< float * >( particle.GetData() + velocity->m_offset ) };
 			DoUpdateParticle(
 				*this,
 				p_time,
-				*reinterpret_cast< float * >( l_particle.GetData() + l_type->m_offset ),
-				l_pos,
-				l_vel,
-				*reinterpret_cast< float * >( l_particle.GetData() + l_age->m_offset ) );
+				*reinterpret_cast< float * >( particle.GetData() + type->m_offset ),
+				pos,
+				vel,
+				*reinterpret_cast< float * >( particle.GetData() + age->m_offset ) );
 		}
 
 		DoPackParticles( m_particles, m_firstUnused );
-		auto & l_vbo = m_parent.GetBillboards()->GetVertexBuffer();
+		auto & vbo = m_parent.GetBillboards()->GetVertexBuffer();
 
-		l_vbo.Bind();
-		auto l_stride = m_inputs.stride();
-		auto l_dst = m_parent.GetBillboards()->GetVertexBuffer().Lock( 0, m_firstUnused * l_stride, AccessType::eWrite );
+		vbo.Bind();
+		auto stride = m_inputs.stride();
+		auto dst = m_parent.GetBillboards()->GetVertexBuffer().Lock( 0, m_firstUnused * stride, AccessType::eWrite );
 
-		if ( l_dst )
+		if ( dst )
 		{
 			for ( auto i = 0u; i < m_firstUnused; ++i )
 			{
-				std::memcpy( l_dst, m_particles[i].GetData(), l_stride );
-				l_dst += l_stride;
+				std::memcpy( dst, m_particles[i].GetData(), stride );
+				dst += stride;
 			}
 
-			l_vbo.Unlock();
+			vbo.Unlock();
 		}
 
-		l_vbo.Unbind();
+		vbo.Unbind();
 
 		return m_firstUnused;
 	}

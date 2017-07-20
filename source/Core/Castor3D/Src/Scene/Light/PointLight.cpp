@@ -14,22 +14,22 @@ namespace Castor3D
 
 	bool PointLight::TextWriter::operator()( PointLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextWriter::operator()( p_light, p_file );
+		bool result = LightCategory::TextWriter::operator()( p_light, p_file );
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
+			result = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
 					   && Point3f::TextWriter( String() )( p_light.GetAttenuation(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			LightCategory::TextWriter::CheckError( l_return, "PointLight attenuation" );
+			LightCategory::TextWriter::CheckError( result, "PointLight attenuation" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool PointLight::TextWriter::WriteInto( Castor::TextFile & p_file )
@@ -62,9 +62,9 @@ namespace Castor3D
 
 	void PointLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		auto l_pos = GetLight().GetParent()->GetDerivedPosition();
-		Point4r l_position{ l_pos[0], l_pos[1], l_pos[2], float( m_shadowMapIndex ) };
-		DoCopyComponent( l_position, p_index, p_offset, p_texture );
+		auto pos = GetLight().GetParent()->GetDerivedPosition();
+		Point4r position{ pos[0], pos[1], pos[2], float( m_shadowMapIndex ) };
+		DoCopyComponent( position, p_index, p_offset, p_texture );
 		DoCopyComponent( m_attenuation, p_index, p_offset, p_texture );
 	}
 

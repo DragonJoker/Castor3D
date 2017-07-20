@@ -11,59 +11,59 @@ namespace Castor3D
 
 	bool BinaryWriter< SkeletonAnimationBone >::DoWrite( SkeletonAnimationBone const & p_obj )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
+			result = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
+			result = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
 	bool BinaryParser< SkeletonAnimationBone >::DoParse( SkeletonAnimationBone & p_obj )
 	{
-		bool l_return = true;
-		String l_name;
-		BinaryChunk l_chunk;
+		bool result = true;
+		String name;
+		BinaryChunk chunk;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( result && DoGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.GetChunkType() )
 			{
 			case ChunkType::eName:
-				l_return = DoParseChunk( l_name, l_chunk );
+				result = DoParseChunk( name, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					auto l_bone = static_cast< Skeleton * >( p_obj.GetOwner()->GetOwner() )->FindBone( l_name );
+					auto bone = static_cast< Skeleton * >( p_obj.GetOwner()->GetOwner() )->FindBone( name );
 
-					if ( l_bone )
+					if ( bone )
 					{
-						p_obj.SetBone( l_bone );
+						p_obj.SetBone( bone );
 					}
 					else
 					{
-						Logger::LogError( cuT( "Couldn't find bone " ) + l_name + cuT( " in skeleton" ) );
+						Logger::LogError( cuT( "Couldn't find bone " ) + name + cuT( " in skeleton" ) );
 					}
 				}
 
 				break;
 
 			case ChunkType::eAnimationObject:
-				l_return = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, l_chunk );
+				result = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, chunk );
 				break;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************

@@ -18,69 +18,69 @@ namespace
 {
 	void DoLoadPlugins( Engine & p_engine )
 	{
-		PathArray l_arrayFiles;
-		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
-		PathArray l_arrayKept;
+		PathArray arrayFiles;
+		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), arrayFiles );
+		PathArray arrayKept;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-		for ( auto l_file : l_arrayFiles )
+		for ( auto file : arrayFiles )
 		{
 #if defined( NDEBUG )
 
-			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
+			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
 #else
 
-			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
+			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
 
 #endif
 			{
-				l_arrayKept.push_back( l_file );
+				arrayKept.push_back( file );
 			}
 		}
 
-		if ( !l_arrayKept.empty() )
+		if ( !arrayKept.empty() )
 		{
-			PathArray l_arrayFailed;
-			PathArray l_otherPlugins;
+			PathArray arrayFailed;
+			PathArray otherPlugins;
 
-			for ( auto l_file : l_arrayKept )
+			for ( auto file : arrayKept )
 			{
-				if ( l_file.GetExtension() == CASTOR_DLL_EXT )
+				if ( file.GetExtension() == CASTOR_DLL_EXT )
 				{
 					// Since techniques depend on renderers, we load these first
-					if ( l_file.find( cuT( "RenderSystem" ) ) != String::npos )
+					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
+						if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
 						{
-							l_arrayFailed.push_back( l_file );
+							arrayFailed.push_back( file );
 						}
 					}
 					else
 					{
-						l_otherPlugins.push_back( l_file );
+						otherPlugins.push_back( file );
 					}
 				}
 			}
 
 			// Then we load other plug-ins
-			for ( auto l_file : l_otherPlugins )
+			for ( auto file : otherPlugins )
 			{
-				if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
+				if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
 				{
-					l_arrayFailed.push_back( l_file );
+					arrayFailed.push_back( file );
 				}
 			}
 
-			if ( !l_arrayFailed.empty() )
+			if ( !arrayFailed.empty() )
 			{
 				Logger::LogWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
-				for ( auto l_file : l_arrayFailed )
+				for ( auto file : arrayFailed )
 				{
-					Logger::LogWarning( Path( l_file ).GetFileName() );
+					Logger::LogWarning( Path( file ).GetFileName() );
 				}
 
-				l_arrayFailed.clear();
+				arrayFailed.clear();
 			}
 		}
 
@@ -94,37 +94,37 @@ namespace
 			File::DirectoryCreate( Engine::GetEngineDirectory() );
 		}
 
-		std::unique_ptr< Engine > l_return = std::make_unique< Engine >();
-		DoLoadPlugins( *l_return );
+		std::unique_ptr< Engine > result = std::make_unique< Engine >();
+		DoLoadPlugins( *result );
 
-		auto l_renderers = l_return->GetPluginCache().GetPlugins( PluginType::eRenderer );
+		auto renderers = result->GetPluginCache().GetPlugins( PluginType::eRenderer );
 
-		if ( l_renderers.empty() )
+		if ( renderers.empty() )
 		{
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( l_return->LoadRenderer( TestRender::TestRenderSystem::Type ) )
+		if ( result->LoadRenderer( TestRender::TestRenderSystem::Type ) )
 		{
-			l_return->Initialise( 1, false );
+			result->Initialise( 1, false );
 		}
 		else
 		{
 			CASTOR_EXCEPTION( "Couldn't load renderer." );
 		}
 
-		return l_return;
+		return result;
 	}
 }
 
 int main( int argc, char const * argv[] )
 {
-	int l_return = EXIT_SUCCESS;
-	int l_count = 1;
+	int result = EXIT_SUCCESS;
+	int count = 1;
 
 	if ( argc == 2 )
 	{
-		l_count = std::max< int >( 1, atoi( argv[2] ) );
+		count = std::max< int >( 1, atoi( argv[2] ) );
 	}
 
 #if defined( NDEBUG )
@@ -135,17 +135,17 @@ int main( int argc, char const * argv[] )
 
 	Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "Castor3DTests.log" ) );
 	{
-		std::unique_ptr< Engine > l_engine = DoInitialiseCastor();
+		std::unique_ptr< Engine > engine = DoInitialiseCastor();
 
 		// Test cases.
-		Testing::Register( std::make_unique< Testing::BinaryExportTest >( *l_engine ) );
-		Testing::Register( std::make_unique< Testing::SceneExportTest >( *l_engine ) );
+		Testing::Register( std::make_unique< Testing::BinaryExportTest >( *engine ) );
+		Testing::Register( std::make_unique< Testing::SceneExportTest >( *engine ) );
 
 		// Tests loop.
-		BENCHLOOP( l_count, l_return );
+		BENCHLOOP( count, result );
 
-		l_engine->Cleanup();
+		engine->Cleanup();
 	}
 	Logger::Cleanup();
-	return l_return;
+	return result;
 }

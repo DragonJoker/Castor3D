@@ -531,388 +531,388 @@ namespace GuiCommon
 	{
 		int operator()( eSTC_LEX p_eLexer )
 		{
-			int l_iReturn = wxSTC_STYLE_DEFAULT;
+			int iReturn = wxSTC_STYLE_DEFAULT;
 
 			switch ( p_eLexer )
 			{
 			case eSTC_LEX_CONTAINER:
-				l_iReturn = LexAttribute< eSTC_LEX_CONTAINER, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_CONTAINER, Type >::Value;
 				break;
 
 			case eSTC_LEX_NULL:
-				l_iReturn = LexAttribute< eSTC_LEX_NULL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_NULL, Type >::Value;
 				break;
 
 			case eSTC_LEX_PYTHON:
-				l_iReturn = LexAttribute< eSTC_LEX_PYTHON, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PYTHON, Type >::Value;
 				break;
 
 			case eSTC_LEX_CPP:
-				l_iReturn = LexAttribute< eSTC_LEX_CPP, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_CPP, Type >::Value;
 				break;
 
 			case eSTC_LEX_HTML:
-				l_iReturn = LexAttribute< eSTC_LEX_HTML, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_HTML, Type >::Value;
 				break;
 
 			case eSTC_LEX_XML:
-				l_iReturn = LexAttribute< eSTC_LEX_XML, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_XML, Type >::Value;
 				break;
 
 			case eSTC_LEX_PERL:
-				l_iReturn = LexAttribute< eSTC_LEX_PERL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PERL, Type >::Value;
 				break;
 
 			case eSTC_LEX_SQL:
-				l_iReturn = LexAttribute< eSTC_LEX_SQL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_SQL, Type >::Value;
 				break;
 
 			case eSTC_LEX_VB:
-				l_iReturn = LexAttribute< eSTC_LEX_VB, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_VB, Type >::Value;
 				break;
 
 			case eSTC_LEX_PROPERTIES:
-				l_iReturn = LexAttribute< eSTC_LEX_PROPERTIES, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PROPERTIES, Type >::Value;
 				break;
 
 			case eSTC_LEX_ERRORLIST:
-				l_iReturn = LexAttribute< eSTC_LEX_ERRORLIST, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_ERRORLIST, Type >::Value;
 				break;
 
 			case eSTC_LEX_MAKEFILE:
-				l_iReturn = LexAttribute< eSTC_LEX_MAKEFILE, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_MAKEFILE, Type >::Value;
 				break;
 
 			case eSTC_LEX_BATCH:
-				l_iReturn = LexAttribute< eSTC_LEX_BATCH, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_BATCH, Type >::Value;
 				break;
 
 			case eSTC_LEX_XCODE:
-				l_iReturn = LexAttribute< eSTC_LEX_XCODE, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_XCODE, Type >::Value;
 				break;
 
 			case eSTC_LEX_LATEX:
-				l_iReturn = LexAttribute< eSTC_LEX_LATEX, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_LATEX, Type >::Value;
 				break;
 
 			case eSTC_LEX_LUA:
-				l_iReturn = LexAttribute< eSTC_LEX_LUA, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_LUA, Type >::Value;
 				break;
 
 			case eSTC_LEX_DIFF:
-				l_iReturn = LexAttribute< eSTC_LEX_DIFF, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_DIFF, Type >::Value;
 				break;
 
 			case eSTC_LEX_CONF:
-				l_iReturn = LexAttribute< eSTC_LEX_CONF, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_CONF, Type >::Value;
 				break;
 
 			case eSTC_LEX_PASCAL:
-				l_iReturn = LexAttribute< eSTC_LEX_PASCAL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PASCAL, Type >::Value;
 				break;
 
 			case eSTC_LEX_AVE:
-				l_iReturn = LexAttribute< eSTC_LEX_AVE, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_AVE, Type >::Value;
 				break;
 
 			case eSTC_LEX_ADA:
-				l_iReturn = LexAttribute< eSTC_LEX_ADA, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_ADA, Type >::Value;
 				break;
 
 			case eSTC_LEX_LISP:
-				l_iReturn = LexAttribute< eSTC_LEX_LISP, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_LISP, Type >::Value;
 				break;
 
 			case eSTC_LEX_RUBY:
-				l_iReturn = LexAttribute< eSTC_LEX_RUBY, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_RUBY, Type >::Value;
 				break;
 
 			case eSTC_LEX_EIFFEL:
-				l_iReturn = LexAttribute< eSTC_LEX_EIFFEL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_EIFFEL, Type >::Value;
 				break;
 
 			case eSTC_LEX_TCL:
-				l_iReturn = LexAttribute< eSTC_LEX_TCL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_TCL, Type >::Value;
 				break;
 
 			case eSTC_LEX_NNCRONTAB:
-				l_iReturn = LexAttribute< eSTC_LEX_NNCRONTAB, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_NNCRONTAB, Type >::Value;
 				break;
 
 			case eSTC_LEX_BULLANT:
-				l_iReturn = LexAttribute< eSTC_LEX_BULLANT, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_BULLANT, Type >::Value;
 				break;
 
 			case eSTC_LEX_VBSCRIPT:
-				l_iReturn = LexAttribute< eSTC_LEX_VBSCRIPT, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_VBSCRIPT, Type >::Value;
 				break;
 
 			case eSTC_LEX_BAAN:
-				l_iReturn = LexAttribute< eSTC_LEX_BAAN, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_BAAN, Type >::Value;
 				break;
 
 			case eSTC_LEX_MATLAB:
-				l_iReturn = LexAttribute< eSTC_LEX_MATLAB, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_MATLAB, Type >::Value;
 				break;
 
 			case eSTC_LEX_SCRIPTOL:
-				l_iReturn = LexAttribute< eSTC_LEX_SCRIPTOL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_SCRIPTOL, Type >::Value;
 				break;
 
 			case eSTC_LEX_ASM:
-				l_iReturn = LexAttribute< eSTC_LEX_ASM, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_ASM, Type >::Value;
 				break;
 
 			case eSTC_LEX_FORTRAN:
-				l_iReturn = LexAttribute< eSTC_LEX_FORTRAN, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_FORTRAN, Type >::Value;
 				break;
 
 			case eSTC_LEX_F77:
-				l_iReturn = LexAttribute< eSTC_LEX_F77, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_F77, Type >::Value;
 				break;
 
 			case eSTC_LEX_CSS:
-				l_iReturn = LexAttribute< eSTC_LEX_CSS, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_CSS, Type >::Value;
 				break;
 
 			case eSTC_LEX_POV:
-				l_iReturn = LexAttribute< eSTC_LEX_POV, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_POV, Type >::Value;
 				break;
 
 			case eSTC_LEX_LOUT:
-				l_iReturn = LexAttribute< eSTC_LEX_LOUT, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_LOUT, Type >::Value;
 				break;
 
 			case eSTC_LEX_ESCRIPT:
-				l_iReturn = LexAttribute< eSTC_LEX_ESCRIPT, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_ESCRIPT, Type >::Value;
 				break;
 
 			case eSTC_LEX_PS:
-				l_iReturn = LexAttribute< eSTC_LEX_PS, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PS, Type >::Value;
 				break;
 
 			case eSTC_LEX_NSIS:
-				l_iReturn = LexAttribute< eSTC_LEX_NSIS, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_NSIS, Type >::Value;
 				break;
 
 			case eSTC_LEX_MMIXAL:
-				l_iReturn = LexAttribute< eSTC_LEX_MMIXAL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_MMIXAL, Type >::Value;
 				break;
 
 			case eSTC_LEX_CLW:
-				l_iReturn = LexAttribute< eSTC_LEX_CLW, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_CLW, Type >::Value;
 				break;
 
 			case eSTC_LEX_LOT:
-				l_iReturn = LexAttribute< eSTC_LEX_LOT, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_LOT, Type >::Value;
 				break;
 
 			case eSTC_LEX_YAML:
-				l_iReturn = LexAttribute< eSTC_LEX_YAML, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_YAML, Type >::Value;
 				break;
 
 			case eSTC_LEX_TEX:
-				l_iReturn = LexAttribute< eSTC_LEX_TEX, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_TEX, Type >::Value;
 				break;
 
 			case eSTC_LEX_METAPOST:
-				l_iReturn = LexAttribute< eSTC_LEX_METAPOST, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_METAPOST, Type >::Value;
 				break;
 
 			case eSTC_LEX_POWERBASIC:
-				l_iReturn = LexAttribute< eSTC_LEX_POWERBASIC, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_POWERBASIC, Type >::Value;
 				break;
 
 			case eSTC_LEX_FORTH:
-				l_iReturn = LexAttribute< eSTC_LEX_FORTH, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_FORTH, Type >::Value;
 				break;
 
 			case eSTC_LEX_ERLANG:
-				l_iReturn = LexAttribute< eSTC_LEX_ERLANG, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_ERLANG, Type >::Value;
 				break;
 
 			case eSTC_LEX_OCTAVE:
-				l_iReturn = LexAttribute< eSTC_LEX_OCTAVE, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_OCTAVE, Type >::Value;
 				break;
 
 			case eSTC_LEX_MSSQL:
-				l_iReturn = LexAttribute< eSTC_LEX_MSSQL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_MSSQL, Type >::Value;
 				break;
 
 			case eSTC_LEX_VERILOG:
-				l_iReturn = LexAttribute< eSTC_LEX_VERILOG, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_VERILOG, Type >::Value;
 				break;
 
 			case eSTC_LEX_KIX:
-				l_iReturn = LexAttribute< eSTC_LEX_KIX, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_KIX, Type >::Value;
 				break;
 
 			case eSTC_LEX_GUI4CLI:
-				l_iReturn = LexAttribute< eSTC_LEX_GUI4CLI, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_GUI4CLI, Type >::Value;
 				break;
 
 			case eSTC_LEX_SPECMAN:
-				l_iReturn = LexAttribute< eSTC_LEX_SPECMAN, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_SPECMAN, Type >::Value;
 				break;
 
 			case eSTC_LEX_AU3:
-				l_iReturn = LexAttribute< eSTC_LEX_AU3, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_AU3, Type >::Value;
 				break;
 
 			case eSTC_LEX_APDL:
-				l_iReturn = LexAttribute< eSTC_LEX_APDL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_APDL, Type >::Value;
 				break;
 
 			case eSTC_LEX_BASH:
-				l_iReturn = LexAttribute< eSTC_LEX_BASH, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_BASH, Type >::Value;
 				break;
 
 			case eSTC_LEX_ASN1:
-				l_iReturn = LexAttribute< eSTC_LEX_ASN1, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_ASN1, Type >::Value;
 				break;
 
 			case eSTC_LEX_VHDL:
-				l_iReturn = LexAttribute< eSTC_LEX_VHDL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_VHDL, Type >::Value;
 				break;
 
 			case eSTC_LEX_CAML:
-				l_iReturn = LexAttribute< eSTC_LEX_CAML, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_CAML, Type >::Value;
 				break;
 
 			case eSTC_LEX_BLITZBASIC:
-				l_iReturn = LexAttribute< eSTC_LEX_BLITZBASIC, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_BLITZBASIC, Type >::Value;
 				break;
 
 			case eSTC_LEX_PUREBASIC:
-				l_iReturn = LexAttribute< eSTC_LEX_PUREBASIC, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PUREBASIC, Type >::Value;
 				break;
 
 			case eSTC_LEX_HASKELL:
-				l_iReturn = LexAttribute< eSTC_LEX_HASKELL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_HASKELL, Type >::Value;
 				break;
 
 			case eSTC_LEX_PHPSCRIPT:
-				l_iReturn = LexAttribute< eSTC_LEX_PHPSCRIPT, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PHPSCRIPT, Type >::Value;
 				break;
 
 			case eSTC_LEX_TADS3:
-				l_iReturn = LexAttribute< eSTC_LEX_TADS3, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_TADS3, Type >::Value;
 				break;
 
 			case eSTC_LEX_REBOL:
-				l_iReturn = LexAttribute< eSTC_LEX_REBOL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_REBOL, Type >::Value;
 				break;
 
 			case eSTC_LEX_SMALLTALK:
-				l_iReturn = LexAttribute< eSTC_LEX_SMALLTALK, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_SMALLTALK, Type >::Value;
 				break;
 
 			case eSTC_LEX_FLAGSHIP:
-				l_iReturn = LexAttribute< eSTC_LEX_FLAGSHIP, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_FLAGSHIP, Type >::Value;
 				break;
 
 			case eSTC_LEX_CSOUND:
-				l_iReturn = LexAttribute< eSTC_LEX_CSOUND, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_CSOUND, Type >::Value;
 				break;
 
 			case eSTC_LEX_FREEBASIC:
-				l_iReturn = LexAttribute< eSTC_LEX_FREEBASIC, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_FREEBASIC, Type >::Value;
 				break;
 
 			case eSTC_LEX_INNOSETUP:
-				l_iReturn = LexAttribute< eSTC_LEX_INNOSETUP, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_INNOSETUP, Type >::Value;
 				break;
 
 			case eSTC_LEX_OPAL:
-				l_iReturn = LexAttribute< eSTC_LEX_OPAL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_OPAL, Type >::Value;
 				break;
 
 			case eSTC_LEX_SPICE:
-				l_iReturn = LexAttribute< eSTC_LEX_SPICE, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_SPICE, Type >::Value;
 				break;
 
 			case eSTC_LEX_D:
-				l_iReturn = LexAttribute< eSTC_LEX_D, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_D, Type >::Value;
 				break;
 
 			case eSTC_LEX_CMAKE:
-				l_iReturn = LexAttribute< eSTC_LEX_CMAKE, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_CMAKE, Type >::Value;
 				break;
 
 			case eSTC_LEX_GAP:
-				l_iReturn = LexAttribute< eSTC_LEX_GAP, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_GAP, Type >::Value;
 				break;
 
 			case eSTC_LEX_PLM:
-				l_iReturn = LexAttribute< eSTC_LEX_PLM, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PLM, Type >::Value;
 				break;
 
 			case eSTC_LEX_PROGRESS:
-				l_iReturn = LexAttribute< eSTC_LEX_PROGRESS, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PROGRESS, Type >::Value;
 				break;
 
 			case eSTC_LEX_ABAQUS:
-				l_iReturn = LexAttribute< eSTC_LEX_ABAQUS, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_ABAQUS, Type >::Value;
 				break;
 
 			case eSTC_LEX_ASYMPTOTE:
-				l_iReturn = LexAttribute< eSTC_LEX_ASYMPTOTE, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_ASYMPTOTE, Type >::Value;
 				break;
 
 			case eSTC_LEX_R:
-				l_iReturn = LexAttribute< eSTC_LEX_R, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_R, Type >::Value;
 				break;
 
 			case eSTC_LEX_MAGIK:
-				l_iReturn = LexAttribute< eSTC_LEX_MAGIK, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_MAGIK, Type >::Value;
 				break;
 
 			case eSTC_LEX_POWERSHELL:
-				l_iReturn = LexAttribute< eSTC_LEX_POWERSHELL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_POWERSHELL, Type >::Value;
 				break;
 
 			case eSTC_LEX_MYSQL:
-				l_iReturn = LexAttribute< eSTC_LEX_MYSQL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_MYSQL, Type >::Value;
 				break;
 
 			case eSTC_LEX_PO:
-				l_iReturn = LexAttribute< eSTC_LEX_PO, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_PO, Type >::Value;
 				break;
 
 			case eSTC_LEX_TAL:
-				l_iReturn = LexAttribute< eSTC_LEX_TAL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_TAL, Type >::Value;
 				break;
 
 			case eSTC_LEX_COBOL:
-				l_iReturn = LexAttribute< eSTC_LEX_COBOL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_COBOL, Type >::Value;
 				break;
 
 			case eSTC_LEX_TACL:
-				l_iReturn = LexAttribute< eSTC_LEX_TACL, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_TACL, Type >::Value;
 				break;
 
 			case eSTC_LEX_SORCUS:
-				l_iReturn = LexAttribute< eSTC_LEX_SORCUS, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_SORCUS, Type >::Value;
 				break;
 
 			case eSTC_LEX_POWERPRO:
-				l_iReturn = LexAttribute< eSTC_LEX_POWERPRO, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_POWERPRO, Type >::Value;
 				break;
 
 			case eSTC_LEX_NIMROD:
-				l_iReturn = LexAttribute< eSTC_LEX_NIMROD, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_NIMROD, Type >::Value;
 				break;
 
 			case eSTC_LEX_SML:
-				l_iReturn = LexAttribute< eSTC_LEX_SML, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_SML, Type >::Value;
 				break;
 
 			case eSTC_LEX_MARKDOWN:
-				l_iReturn = LexAttribute< eSTC_LEX_MARKDOWN, Type >::Value;
+				iReturn = LexAttribute< eSTC_LEX_MARKDOWN, Type >::Value;
 				break;
 			}
 
-			return l_iReturn;
+			return iReturn;
 		}
 	};
 }

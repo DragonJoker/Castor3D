@@ -11,9 +11,9 @@ namespace GlRender
 	{
 		static inline RetT Call( OpenGl const & p_gl, GlFunction< RetT, ParamsT ... > const & p_function, char const * const p_name, ParamsT ... p_params )
 		{
-			RetT l_return = p_function( p_params... );
+			RetT result = p_function( p_params... );
 			glCheckError( p_gl, p_name );
-			return l_return;
+			return result;
 		}
 	};
 
@@ -584,11 +584,11 @@ namespace GlRender
 
 	inline Castor::FlagCombination< GlBufferBit > OpenGl::GetComponents( Castor3D::BufferComponents const & p_components )const
 	{
-		Castor::FlagCombination< GlBufferBit > l_return;
-		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eColour ) ? GlBufferBit::eColour : GlBufferBit( 0u ) );
-		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eDepth ) ? GlBufferBit::eDepth : GlBufferBit( 0u ) );
-		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eStencil ) ? GlBufferBit::eStencil : GlBufferBit( 0u ) );
-		return l_return;
+		Castor::FlagCombination< GlBufferBit > result;
+		result |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eColour ) ? GlBufferBit::eColour : GlBufferBit( 0u ) );
+		result |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eDepth ) ? GlBufferBit::eDepth : GlBufferBit( 0u ) );
+		result |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eStencil ) ? GlBufferBit::eStencil : GlBufferBit( 0u ) );
+		return result;
 	}
 
 	inline GlComponent OpenGl::GetComponent( Castor3D::AttachmentPoint p_component )const
@@ -683,44 +683,44 @@ namespace GlRender
 
 	inline Castor::FlagCombination< GlBarrierBit > OpenGl::Get( Castor3D::MemoryBarriers const & p_barriers )const
 	{
-		Castor::FlagCombination< GlBarrierBit > l_return;
+		Castor::FlagCombination< GlBarrierBit > result;
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eVertexBuffer ) )
 		{
-			l_return |= GlBarrierBit::eVertexArrayAttrib;
+			result |= GlBarrierBit::eVertexArrayAttrib;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eIndexBuffer ) )
 		{
-			l_return |= GlBarrierBit::eElementArray;
+			result |= GlBarrierBit::eElementArray;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eUniformBuffer ) )
 		{
-			l_return |= GlBarrierBit::eUniform;
+			result |= GlBarrierBit::eUniform;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eAtomicCounterBuffer ) )
 		{
-			l_return |= GlBarrierBit::eAtomicCounter;
+			result |= GlBarrierBit::eAtomicCounter;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eQueryBuffer ) )
 		{
-			l_return |= GlBarrierBit::eQueryBuffer;
+			result |= GlBarrierBit::eQueryBuffer;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eShaderStorageBuffer ) )
 		{
-			l_return |= GlBarrierBit::eShaderStorage;
+			result |= GlBarrierBit::eShaderStorage;
 		}
 
 		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eTextureFetch ) )
 		{
-			l_return |= GlBarrierBit::eTextureFetch;
+			result |= GlBarrierBit::eTextureFetch;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	inline Castor::String const & OpenGl::GetVendor()const
@@ -760,55 +760,55 @@ namespace GlRender
 
 	inline GlBufferMode OpenGl::GetBufferFlags( uint32_t p_flags )const
 	{
-		GlBufferMode l_eReturn = GlBufferMode( 0 );
+		GlBufferMode eReturn = GlBufferMode( 0 );
 
 		if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::eDynamic ) )
 		{
 			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eRead ) )
 			{
-				l_eReturn = GlBufferMode::eDynamicRead;
+				eReturn = GlBufferMode::eDynamicRead;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eDraw ) )
 			{
-				l_eReturn = GlBufferMode::eDynamicDraw;
+				eReturn = GlBufferMode::eDynamicDraw;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eCopy ) )
 			{
-				l_eReturn = GlBufferMode::eDynamicCopy;
+				eReturn = GlBufferMode::eDynamicCopy;
 			}
 		}
 		else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::eStatic ) )
 		{
 			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eRead ) )
 			{
-				l_eReturn = GlBufferMode::eStaticRead;
+				eReturn = GlBufferMode::eStaticRead;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eDraw ) )
 			{
-				l_eReturn = GlBufferMode::eStaticDraw;
+				eReturn = GlBufferMode::eStaticDraw;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eCopy ) )
 			{
-				l_eReturn = GlBufferMode::eStaticCopy;
+				eReturn = GlBufferMode::eStaticCopy;
 			}
 		}
 		else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::eStream ) )
 		{
 			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eRead ) )
 			{
-				l_eReturn = GlBufferMode::eStreamRead;
+				eReturn = GlBufferMode::eStreamRead;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eDraw ) )
 			{
-				l_eReturn = GlBufferMode::eStreamDraw;
+				eReturn = GlBufferMode::eStreamDraw;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eCopy ) )
 			{
-				l_eReturn = GlBufferMode::eStreamCopy;
+				eReturn = GlBufferMode::eStreamCopy;
 			}
 		}
 
-		return l_eReturn;
+		return eReturn;
 	}
 
 	GlProvider OpenGl::GetProvider()const
@@ -818,56 +818,56 @@ namespace GlRender
 
 	GlAccessType OpenGl::GetLockFlags( Castor3D::AccessTypes const & p_flags )const
 	{
-		GlAccessType l_eLockFlags = GlAccessType::eReadWrite;
+		GlAccessType eLockFlags = GlAccessType::eReadWrite;
 
 		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eRead ) )
 		{
 			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eWrite ) )
 			{
-				l_eLockFlags = GlAccessType::eReadWrite;
+				eLockFlags = GlAccessType::eReadWrite;
 			}
 			else
 			{
-				l_eLockFlags = GlAccessType::eRead;
+				eLockFlags = GlAccessType::eRead;
 			}
 		}
 		else if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eWrite ) )
 		{
-			l_eLockFlags = GlAccessType::eWrite;
+			eLockFlags = GlAccessType::eWrite;
 		}
 
-		return l_eLockFlags;
+		return eLockFlags;
 	}
 
 	Castor::FlagCombination< GlBufferMappingBit > OpenGl::GetBitfieldFlags( Castor3D::AccessTypes const & p_flags )const
 	{
-		Castor::FlagCombination< GlBufferMappingBit > l_uiFlags = 0;
+		Castor::FlagCombination< GlBufferMappingBit > uiFlags = 0;
 
 		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eRead ) )
 		{
-			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eRead );
+			Castor::AddFlag( uiFlags, GlBufferMappingBit::eRead );
 
 			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eWrite ) )
 			{
-				Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eWrite );
+				Castor::AddFlag( uiFlags, GlBufferMappingBit::eWrite );
 			}
 		}
 		else if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eWrite ) )
 		{
-			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eWrite );
-			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eInvalidateRange );
+			Castor::AddFlag( uiFlags, GlBufferMappingBit::eWrite );
+			Castor::AddFlag( uiFlags, GlBufferMappingBit::eInvalidateRange );
 		}
 
-		return l_uiFlags;
+		return uiFlags;
 	}
 
 	bool OpenGl::HasExtension( Castor::String const & p_strExtName, bool p_log )const
 	{
-		bool l_return = m_extensions.find( p_strExtName ) != Castor::String::npos;
+		bool result = m_extensions.find( p_strExtName ) != Castor::String::npos;
 
 		if ( p_log )
 		{
-			if ( l_return )
+			if ( result )
 			{
 				Castor::Logger::LogDebug( cuT( "Extension [" ) + p_strExtName + cuT( "] available" ) );
 			}
@@ -877,7 +877,7 @@ namespace GlRender
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void OpenGl::ClearColor( float red, float green, float blue, float alpha )const
@@ -1673,25 +1673,25 @@ namespace GlRender
 
 	void OpenGl::RenderbufferStorageMultisample( GlRenderBufferMode p_eBindingMode, int p_iSamples, GlInternal p_format, int width, int height )const
 	{
-		int l_iMaxSamples;
-		int l_iMaxSize;
-		OpenGl::GetIntegerv( GlMax::eSamples, &l_iMaxSamples );
-		OpenGl::GetIntegerv( GlMax::eRenderbufferSize, &l_iMaxSize );
+		int iMaxSamples;
+		int iMaxSize;
+		OpenGl::GetIntegerv( GlMax::eSamples, &iMaxSamples );
+		OpenGl::GetIntegerv( GlMax::eRenderbufferSize, &iMaxSize );
 
-		if ( p_iSamples <= l_iMaxSamples && width <= l_iMaxSize && height < l_iMaxSize )
+		if ( p_iSamples <= iMaxSamples && width <= iMaxSize && height < iMaxSize )
 		{
 			EXEC_FUNCTION( RenderbufferStorageMultisample, uint32_t( p_eBindingMode ), p_iSamples, uint32_t( p_format ), width, height );
 		}
-		else if ( p_iSamples > l_iMaxSamples )
+		else if ( p_iSamples > iMaxSamples )
 		{
 			Castor::Logger::LogWarning( cuT( "glRenderbufferStorageMultisample - Asked for more samples than available, setting it to max available" ) );
-			EXEC_FUNCTION( RenderbufferStorageMultisample, uint32_t( p_eBindingMode ), l_iMaxSamples, uint32_t( p_format ), width, height );
+			EXEC_FUNCTION( RenderbufferStorageMultisample, uint32_t( p_eBindingMode ), iMaxSamples, uint32_t( p_format ), width, height );
 		}
-		else if ( width > l_iMaxSize )
+		else if ( width > iMaxSize )
 		{
 			Castor::Logger::LogError( cuT( "glRenderbufferStorageMultisample - Asked for greater width than available" ) );
 		}
-		else if ( height > l_iMaxSize )
+		else if ( height > iMaxSize )
 		{
 			Castor::Logger::LogError( cuT( "glRenderbufferStorageMultisample - Asked for greater height than available" ) );
 		}
@@ -1704,25 +1704,25 @@ namespace GlRender
 
 	void OpenGl::RenderbufferStorageMultisample( GlRenderBufferMode p_eBindingMode, int p_iSamples, GlInternal p_format, Castor::Size const & size )const
 	{
-		int l_iMaxSamples;
-		int l_iMaxSize;
-		OpenGl::GetIntegerv( GlMax::eSamples, &l_iMaxSamples );
-		OpenGl::GetIntegerv( GlMax::eRenderbufferSize, &l_iMaxSize );
+		int iMaxSamples;
+		int iMaxSize;
+		OpenGl::GetIntegerv( GlMax::eSamples, &iMaxSamples );
+		OpenGl::GetIntegerv( GlMax::eRenderbufferSize, &iMaxSize );
 
-		if ( p_iSamples <= l_iMaxSamples && int( size.width() ) <= l_iMaxSize && int( size.height() ) < l_iMaxSize )
+		if ( p_iSamples <= iMaxSamples && int( size.width() ) <= iMaxSize && int( size.height() ) < iMaxSize )
 		{
 			EXEC_FUNCTION( RenderbufferStorageMultisample, uint32_t( p_eBindingMode ), p_iSamples, uint32_t( p_format ), int( size.width() ), int( size.height() ) );
 		}
-		else if ( p_iSamples > l_iMaxSamples )
+		else if ( p_iSamples > iMaxSamples )
 		{
 			Castor::Logger::LogWarning( cuT( "glRenderbufferStorageMultisample - Asked for more samples than available, setting it to max available" ) );
-			EXEC_FUNCTION( RenderbufferStorageMultisample, uint32_t( p_eBindingMode ), l_iMaxSamples, uint32_t( p_format ), int( size.width() ), int( size.height() ) );
+			EXEC_FUNCTION( RenderbufferStorageMultisample, uint32_t( p_eBindingMode ), iMaxSamples, uint32_t( p_format ), int( size.width() ), int( size.height() ) );
 		}
-		else if ( int( size.width() ) > l_iMaxSize )
+		else if ( int( size.width() ) > iMaxSize )
 		{
 			Castor::Logger::LogError( cuT( "glRenderbufferStorageMultisample - Asked for greater width than available" ) );
 		}
-		else if ( int( size.height() ) > l_iMaxSize )
+		else if ( int( size.height() ) > iMaxSize )
 		{
 			Castor::Logger::LogError( cuT( "glRenderbufferStorageMultisample - Asked for greater height than available" ) );
 		}

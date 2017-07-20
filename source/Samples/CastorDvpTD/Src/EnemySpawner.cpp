@@ -51,41 +51,41 @@ namespace castortd
 		--m_count;
 		m_timeSinceLastSpawn = std::chrono::milliseconds{};
 		++m_totalSpawned;
-		auto & l_pathNode = *p_path.begin();
-		auto & l_cell = p_game.GetCell( Point2i{ l_pathNode.m_x, l_pathNode.m_y } );
-		EnemyPtr l_return;
+		auto & pathNode = *p_path.begin();
+		auto & cell = p_game.GetCell( Point2i{ pathNode.m_x, pathNode.m_y } );
+		EnemyPtr result;
 
 		if ( m_enemiesCache.empty() )
 		{
-			String l_name = cuT( "EnemyCube_" ) + std::to_string( m_totalSpawned );
-			auto l_baseNode = p_game.GetScene().GetSceneNodeCache().Add( l_name + cuT( "_Base" ) );
-			l_baseNode->SetPosition( p_game.Convert( Point2i{ l_cell.m_x, l_cell.m_y - 1 } ) + Point3r{ 0, p_game.GetCellHeight(), 0 } );
-			l_baseNode->AttachTo( p_game.GetMapNode() );
-			auto l_node = p_game.GetScene().GetSceneNodeCache().Add( l_name );
-			l_node->SetOrientation( Quaternion::from_axis_angle( Point3r{ 1, 0, 1 }, Angle::from_degrees( 45 ) ) );
-			l_node->AttachTo( l_baseNode );
-			auto l_geometry = p_game.GetScene().GetGeometryCache().Add( l_name, l_node, p_game.GetEnemyMesh() );
+			String name = cuT( "EnemyCube_" ) + std::to_string( m_totalSpawned );
+			auto baseNode = p_game.GetScene().GetSceneNodeCache().Add( name + cuT( "_Base" ) );
+			baseNode->SetPosition( p_game.Convert( Point2i{ cell.m_x, cell.m_y - 1 } ) + Point3r{ 0, p_game.GetCellHeight(), 0 } );
+			baseNode->AttachTo( p_game.GetMapNode() );
+			auto node = p_game.GetScene().GetSceneNodeCache().Add( name );
+			node->SetOrientation( Quaternion::from_axis_angle( Point3r{ 1, 0, 1 }, Angle::from_degrees( 45 ) ) );
+			node->AttachTo( baseNode );
+			auto geometry = p_game.GetScene().GetGeometryCache().Add( name, node, p_game.GetEnemyMesh() );
 
-			for ( auto l_submesh : *l_geometry->GetMesh() )
+			for ( auto submesh : *geometry->GetMesh() )
 			{
-				l_geometry->SetMaterial( *l_submesh, p_game.GetEnemyMaterial() );
+				geometry->SetMaterial( *submesh, p_game.GetEnemyMaterial() );
 			}
 
-			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, LightType::ePoint );
-			l_light->SetColour( Colour::from_predef( PredefinedColour::eOpaqueRed ) );
-			l_light->SetIntensity( 0.8f, 1.0f );
-			l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );
-			l_return = std::make_shared< Enemy >( *l_baseNode, p_game, p_path, m_category );
+			auto light = p_game.GetScene().GetLightCache().Add( name, node, LightType::ePoint );
+			light->SetColour( Colour::from_predef( PredefinedColour::eOpaqueRed ) );
+			light->SetIntensity( 0.8f, 1.0f );
+			light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );
+			result = std::make_shared< Enemy >( *baseNode, p_game, p_path, m_category );
 		}
 		else
 		{
-			l_return = m_enemiesCache.front();
+			result = m_enemiesCache.front();
 			m_enemiesCache.erase( m_enemiesCache.begin() );
-			l_return->GetNode().SetPosition( p_game.Convert( Point2i{ l_cell.m_x, l_cell.m_y - 1 } ) + Point3r{ 0, p_game.GetCellHeight(), 0 } );
-			l_return->Load( p_game );
+			result->GetNode().SetPosition( p_game.Convert( Point2i{ cell.m_x, cell.m_y - 1 } ) + Point3r{ 0, p_game.GetCellHeight(), 0 } );
+			result->Load( p_game );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void EnemySpawner::KillEnemy( Game & p_game, EnemyPtr && p_enemy )

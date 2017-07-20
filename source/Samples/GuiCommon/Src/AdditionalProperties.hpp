@@ -195,10 +195,10 @@ namespace GuiCommon
 	template< typename PropertyType >
 	PropertyType * CreateProperty( wxString const & p_name, wxVariant && p_value, wxString const & p_help )
 	{
-		auto l_return = new PropertyType( p_name );
-		l_return->SetValue( p_value );
-		l_return->SetHelpString( p_help );
-		return l_return;
+		auto result = new PropertyType( p_name );
+		result->SetValue( p_value );
+		result->SetHelpString( p_help );
+		return result;
 	}
 }
 

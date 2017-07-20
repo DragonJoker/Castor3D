@@ -30,24 +30,24 @@ namespace Castor3D
 		m_parameters = p_parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		bool l_return = DoImportScene( p_scene );
+		bool result = DoImportScene( p_scene );
 
-		if ( l_return )
+		if ( result )
 		{
-			for ( auto l_it : m_geometries )
+			for ( auto it : m_geometries )
 			{
-				auto l_mesh = l_it.second->GetMesh();
-				l_mesh->ComputeContainers();
-				l_mesh->ComputeNormals();
+				auto mesh = it.second->GetMesh();
+				mesh->ComputeContainers();
+				mesh->ComputeNormals();
 
-				for ( auto l_submesh : *l_mesh )
+				for ( auto submesh : *mesh )
 				{
-					p_scene.GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
+					p_scene.GetListener().PostEvent( MakeInitialiseEvent( *submesh ) );
 				}
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool Importer::ImportMesh( Mesh & p_mesh, Path const & p_fileName, Parameters const & p_parameters, bool p_initialise )
@@ -57,87 +57,87 @@ namespace Castor3D
 		m_parameters = p_parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		bool l_return = true;
+		bool result = true;
 
 		if ( !p_mesh.GetSubmeshCount() )
 		{
-			l_return = DoImportMesh( p_mesh );
+			result = DoImportMesh( p_mesh );
 
-			if ( l_return && p_initialise )
+			if ( result && p_initialise )
 			{
 				p_mesh.ComputeContainers();
 
-				for ( auto l_submesh : p_mesh )
+				for ( auto submesh : p_mesh )
 				{
-					p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
+					p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *submesh ) );
 				}
 			}
 		}
 		else
 		{
-			for ( auto l_submesh : p_mesh )
+			for ( auto submesh : p_mesh )
 			{
-				l_submesh->Ref( l_submesh->GetDefaultMaterial() );
+				submesh->Ref( submesh->GetDefaultMaterial() );
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	TextureUnitSPtr Importer::LoadTexture( Path const & p_path, Pass & p_pass, TextureChannel p_channel )const
 	{
-		TextureUnitSPtr l_unit;
-		Path l_relative;
-		Path l_folder;
+		TextureUnitSPtr unit;
+		Path relative;
+		Path folder;
 
 		if ( File::FileExists( p_path ) )
 		{
-			l_relative = p_path;
+			relative = p_path;
 		}
 		else
 		{
-			PathArray l_files;
-			String l_fileName = p_path.GetFileName( true );
-			File::ListDirectoryFiles( m_filePath, l_files, true );
-			auto l_it = std::find_if( l_files.begin(), l_files.end(), [&l_fileName]( Path const & p_file )
+			PathArray files;
+			String fileName = p_path.GetFileName( true );
+			File::ListDirectoryFiles( m_filePath, files, true );
+			auto it = std::find_if( files.begin(), files.end(), [&fileName]( Path const & p_file )
 			{
-				return p_file.GetFileName( true ) == l_fileName
-					   || p_file.GetFileName( true ).find( l_fileName ) == 0;
+				return p_file.GetFileName( true ) == fileName
+					   || p_file.GetFileName( true ).find( fileName ) == 0;
 			} );
 
-			l_folder = m_filePath;
+			folder = m_filePath;
 
-			if ( l_it != l_files.end() )
+			if ( it != files.end() )
 			{
-				l_relative = *l_it;
-				l_relative = Path{ l_relative.substr( l_folder.size() + 1 ) };
+				relative = *it;
+				relative = Path{ relative.substr( folder.size() + 1 ) };
 			}
 			else
 			{
-				l_relative = Path{ l_fileName };
+				relative = Path{ fileName };
 			}
 		}
 
-		if ( File::FileExists( l_folder / l_relative ) )
+		if ( File::FileExists( folder / relative ) )
 		{
 			try
 			{
-				TextureUnitSPtr l_unit = std::make_shared< TextureUnit >( *p_pass.GetOwner()->GetEngine() );
-				l_unit->SetAutoMipmaps( true );
-				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
-				l_texture->SetSource( l_folder, l_relative );
-				l_unit->SetTexture( l_texture );
-				l_unit->SetChannel( p_channel );
-				p_pass.AddTextureUnit( l_unit );
+				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *p_pass.GetOwner()->GetEngine() );
+				unit->SetAutoMipmaps( true );
+				auto texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
+				texture->SetSource( folder, relative );
+				unit->SetTexture( texture );
+				unit->SetChannel( p_channel );
+				p_pass.AddTextureUnit( unit );
 			}
 			catch ( std::exception & p_exc )
 			{
-				l_unit.reset();
+				unit.reset();
 				Logger::LogWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << p_path << cuT( ":\n" ) << p_exc.what() );
 			}
 			catch ( ... )
 			{
-				l_unit.reset();
+				unit.reset();
 				Logger::LogWarning( cuT( "Unknown error encountered while loading texture file " ) + p_path );
 			}
 		}
@@ -146,6 +146,6 @@ namespace Castor3D
 			Logger::LogWarning( StringStream() << cuT( "Couldn't load texture file " ) << p_path << cuT( ":\nFile does not exist." ) );
 		}
 
-		return l_unit;
+		return unit;
 	}
 }

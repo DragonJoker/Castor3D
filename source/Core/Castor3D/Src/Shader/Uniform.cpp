@@ -157,33 +157,33 @@ namespace Castor3D
 
 	bool Uniform::TextWriter::operator()( Uniform const & p_variable, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "variable\n" ) ) > 0
+		bool result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "variable\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Uniform >::CheckError( l_return, "Uniform type" );
+			result = p_file.WriteText( m_tabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Uniform >::CheckError( result, "Uniform type" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Uniform >::CheckError( l_return, "Uniform name" );
+			result = p_file.WriteText( m_tabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Uniform >::CheckError( result, "Uniform name" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Uniform >::CheckError( l_return, "Uniform value" );
+			result = p_file.WriteText( m_tabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Uniform >::CheckError( result, "Uniform value" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -213,15 +213,15 @@ namespace Castor3D
 
 	void Uniform::SetStrValues( String const & p_value )
 	{
-		StringArray l_values = string::split( p_value, cuT( "|" ) );
-		REQUIRE( l_values.size() == m_occurences );
-		uint32_t l_index = 0u;
+		StringArray values = string::split( p_value, cuT( "|" ) );
+		REQUIRE( values.size() == m_occurences );
+		uint32_t index = 0u;
 
-		for ( auto l_value : l_values )
+		for ( auto value : values )
 		{
-			if ( l_index < m_occurences )
+			if ( index < m_occurences )
 			{
-				SetStrValue( l_value, l_index++ );
+				SetStrValue( value, index++ );
 			}
 		}
 
@@ -230,15 +230,15 @@ namespace Castor3D
 
 	String Uniform::GetStrValues()const
 	{
-		String l_return;
-		String l_separator;
+		String result;
+		String separator;
 
 		for ( uint32_t i = 0u; i < m_occurences; ++i )
 		{
-			l_return += l_separator + GetStrValue( i );
-			l_separator = "|";
+			result += separator + GetStrValue( i );
+			separator = "|";
 		}
 
-		return l_return;
+		return result;
 	}
 }

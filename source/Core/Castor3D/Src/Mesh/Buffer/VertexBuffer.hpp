@@ -105,13 +105,13 @@ namespace Castor3D
 		template< typename ItType >
 		inline void LinkCoords( ItType p_begin, ItType p_end )
 		{
-			uint32_t l_stride = m_bufferDeclaration.stride();
-			uint8_t * l_buffer = CpuBuffer< uint8_t >::GetData();
+			uint32_t stride = m_bufferDeclaration.stride();
+			uint8_t * buffer = CpuBuffer< uint8_t >::GetData();
 
-			for ( auto l_it = p_begin; l_it != p_end; ++l_it )
+			for ( auto it = p_begin; it != p_end; ++it )
 			{
-				( *l_it )->LinkCoords( l_buffer, l_stride );
-				l_buffer += l_stride;
+				( *it )->LinkCoords( buffer, stride );
+				buffer += stride;
 			}
 		}
 

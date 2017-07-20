@@ -86,11 +86,11 @@ namespace Castor
 		{
 			std::basic_string< char_type > to_string()
 			{
-				std::basic_stringstream< char_type > l_prefix;
-				l_prefix.width( 8 );
-				l_prefix.fill( ' ' );
-				l_prefix << std::left << ++m_line;
-				return l_prefix.str();
+				std::basic_stringstream< char_type > prefix;
+				prefix.width( 8 );
+				prefix.fill( ' ' );
+				prefix << std::left << ++m_line;
+				return prefix.str();
 			}
 
 			uint32_t m_line = 0;

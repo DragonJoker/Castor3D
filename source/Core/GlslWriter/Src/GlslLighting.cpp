@@ -11,34 +11,34 @@ namespace GLSL
 
 	String ParamToString( String & p_sep, FragmentInput const & p_value )
 	{
-		StringStream l_return;
-		l_return << ParamToString( p_sep, p_value.m_v3Vertex );
-		l_return << ParamToString( p_sep, p_value.m_v3Normal );
-		return l_return.str();
+		StringStream result;
+		result << ParamToString( p_sep, p_value.m_v3Vertex );
+		result << ParamToString( p_sep, p_value.m_v3Normal );
+		return result.str();
 	}
 
 	String ParamToString( String & p_sep, OutputComponents const & p_value )
 	{
-		StringStream l_return;
-		l_return << ParamToString( p_sep, p_value.m_v3Diffuse );
-		l_return << ParamToString( p_sep, p_value.m_v3Specular );
-		return l_return.str();
+		StringStream result;
+		result << ParamToString( p_sep, p_value.m_v3Diffuse );
+		result << ParamToString( p_sep, p_value.m_v3Specular );
+		return result.str();
 	}
 
 	String ToString( FragmentInput const & p_value )
 	{
-		StringStream l_return;
-		l_return << ToString( p_value.m_v3Vertex ) << ", ";
-		l_return << ToString( p_value.m_v3Normal );
-		return l_return.str();
+		StringStream result;
+		result << ToString( p_value.m_v3Vertex ) << ", ";
+		result << ToString( p_value.m_v3Normal );
+		return result.str();
 	}
 
 	String ToString( OutputComponents const & p_value )
 	{
-		StringStream l_return;
-		l_return << ToString( p_value.m_v3Diffuse ) << ", ";
-		l_return << ToString( p_value.m_v3Specular );
-		return l_return.str();
+		StringStream result;
+		result << ToString( p_value.m_v3Diffuse ) << ", ";
+		result << ToString( p_value.m_v3Specular );
+		return result.str();
 	}
 
 	//***********************************************************************************************
@@ -163,272 +163,272 @@ namespace GLSL
 
 	void LightingModel::Declare_Light()
 	{
-		Struct l_lightDecl = m_writer.GetStruct( cuT( "Light" ) );
-		l_lightDecl.DeclMember< Vec3 >( cuT( "m_colour" ) );
-		l_lightDecl.DeclMember< Vec2 >( cuT( "m_intensity" ) );
-		l_lightDecl.End();
+		Struct lightDecl = m_writer.GetStruct( cuT( "Light" ) );
+		lightDecl.DeclMember< Vec3 >( cuT( "m_colour" ) );
+		lightDecl.DeclMember< Vec2 >( cuT( "m_intensity" ) );
+		lightDecl.End();
 	}
 
 	void LightingModel::Declare_DirectionalLight()
 	{
-		Struct l_lightDecl = m_writer.GetStruct( cuT( "DirectionalLight" ) );
-		l_lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.DeclMember< Vec3 >( cuT( "m_direction" ) );
-		l_lightDecl.DeclMember< Mat4 >( cuT( "m_transform" ) );
-		l_lightDecl.End();
+		Struct lightDecl = m_writer.GetStruct( cuT( "DirectionalLight" ) );
+		lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
+		lightDecl.DeclMember< Vec3 >( cuT( "m_direction" ) );
+		lightDecl.DeclMember< Mat4 >( cuT( "m_transform" ) );
+		lightDecl.End();
 	}
 
 	void LightingModel::Declare_PointLight()
 	{
-		Struct l_lightDecl = m_writer.GetStruct( cuT( "PointLight" ) );
-		l_lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.DeclMember< Vec3 >( cuT( "m_position" ) );
-		l_lightDecl.DeclMember< Vec3 >( cuT( "m_attenuation" ) );
-		l_lightDecl.DeclMember< Int >( cuT( "m_index" ) );
-		l_lightDecl.End();
+		Struct lightDecl = m_writer.GetStruct( cuT( "PointLight" ) );
+		lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
+		lightDecl.DeclMember< Vec3 >( cuT( "m_position" ) );
+		lightDecl.DeclMember< Vec3 >( cuT( "m_attenuation" ) );
+		lightDecl.DeclMember< Int >( cuT( "m_index" ) );
+		lightDecl.End();
 	}
 
 	void LightingModel::Declare_SpotLight()
 	{
-		Struct l_lightDecl = m_writer.GetStruct( cuT( "SpotLight" ) );
-		l_lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
-		l_lightDecl.DeclMember< Vec3 >( cuT( "m_position" ) );
-		l_lightDecl.DeclMember< Vec3 >( cuT( "m_attenuation" ) );
-		l_lightDecl.DeclMember< Int >( cuT( "m_index" ) );
-		l_lightDecl.DeclMember< Vec3 >( cuT( "m_direction" ) );
-		l_lightDecl.DeclMember< Float >( cuT( "m_exponent" ) );
-		l_lightDecl.DeclMember< Float >( cuT( "m_cutOff" ) );
-		l_lightDecl.DeclMember< Mat4 >( cuT( "m_transform" ) );
-		l_lightDecl.End();
+		Struct lightDecl = m_writer.GetStruct( cuT( "SpotLight" ) );
+		lightDecl.DeclMember< Light >( cuT( "m_lightBase" ) );
+		lightDecl.DeclMember< Vec3 >( cuT( "m_position" ) );
+		lightDecl.DeclMember< Vec3 >( cuT( "m_attenuation" ) );
+		lightDecl.DeclMember< Int >( cuT( "m_index" ) );
+		lightDecl.DeclMember< Vec3 >( cuT( "m_direction" ) );
+		lightDecl.DeclMember< Float >( cuT( "m_exponent" ) );
+		lightDecl.DeclMember< Float >( cuT( "m_cutOff" ) );
+		lightDecl.DeclMember< Mat4 >( cuT( "m_transform" ) );
+		lightDecl.End();
 	}
 
 	void LightingModel::Declare_GetBaseLight()
 	{
-		auto l_get = [this]( Int const & p_index )
+		auto get = [this]( Int const & p_index )
 		{
-			auto l_lightReturn = m_writer.DeclLocale< Light >( cuT( "l_lightReturn" ) );
+			auto lightReturn = m_writer.DeclLocale< Light >( cuT( "lightReturn" ) );
 
 			if ( m_writer.HasTexelFetch() )
 			{
 				if ( m_writer.HasTextureBuffers() )
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-					auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) );
-					l_lightReturn.m_colour() = texelFetch( c3d_sLights, l_offset++ ).rgb();
-					l_lightReturn.m_intensity() = texelFetch( c3d_sLights, l_offset++ ).rg();
+					auto offset = m_writer.DeclLocale( cuT( "offset" ), p_index * Int( MaxLightComponentsCount ) );
+					lightReturn.m_colour() = texelFetch( c3d_sLights, offset++ ).rgb();
+					lightReturn.m_intensity() = texelFetch( c3d_sLights, offset++ ).rg();
 				}
 				else
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-					auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) );
-					l_lightReturn.m_colour() = texelFetch( c3d_sLights, l_offset++, 0 ).rgb();
-					l_lightReturn.m_intensity() = texelFetch( c3d_sLights, l_offset++, 0 ).rg();
+					auto offset = m_writer.DeclLocale( cuT( "offset" ), p_index * Int( MaxLightComponentsCount ) );
+					lightReturn.m_colour() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+					lightReturn.m_intensity() = texelFetch( c3d_sLights, offset++, 0 ).rg();
 				}
 			}
 			else
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-				auto l_factor = m_writer.DeclLocale( cuT( "l_factor" ), p_index * Int( LightComponentsOffset ) );
-				auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), 0.0_f );
-				auto l_decal = m_writer.DeclLocale( cuT( "l_decal" ), 0.0005_f );
-				auto l_mult = m_writer.DeclLocale( cuT( "l_mult" ), 0.001_f );
-				l_lightReturn.m_colour() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
-				l_offset += l_mult;
-				l_lightReturn.m_intensity() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rg();
-				l_offset += l_mult;
+				auto factor = m_writer.DeclLocale( cuT( "factor" ), p_index * Int( LightComponentsOffset ) );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), 0.0_f );
+				auto decal = m_writer.DeclLocale( cuT( "decal" ), 0.0005_f );
+				auto mult = m_writer.DeclLocale( cuT( "mult" ), 0.001_f );
+				lightReturn.m_colour() = texture( c3d_sLights, factor + offset + decal ).rgb();
+				offset += mult;
+				lightReturn.m_intensity() = texture( c3d_sLights, factor + offset + decal ).rg();
+				offset += mult;
 			}
 
-			m_writer.Return( l_lightReturn );
+			m_writer.Return( lightReturn );
 		};
-		m_writer.ImplementFunction< Light >( cuT( "GetBaseLight" ), l_get, Int( &m_writer, cuT( "p_index" ) ) );
+		m_writer.ImplementFunction< Light >( cuT( "GetBaseLight" ), get, Int( &m_writer, cuT( "p_index" ) ) );
 	}
 
 	void LightingModel::Declare_GetDirectionalLight()
 	{
-		auto l_get = [this]( Int const & p_index )
+		auto get = [this]( Int const & p_index )
 		{
-			DirectionalLight l_lightReturn = m_writer.DeclLocale< DirectionalLight >( cuT( "l_lightReturn" ) );
-			l_lightReturn.m_lightBase() = GetBaseLight( p_index );
+			DirectionalLight lightReturn = m_writer.DeclLocale< DirectionalLight >( cuT( "lightReturn" ) );
+			lightReturn.m_lightBase() = GetBaseLight( p_index );
 
 			if ( m_writer.HasTexelFetch() )
 			{
 				if ( m_writer.HasTextureBuffers() )
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-					auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-					l_lightReturn.m_direction() = texelFetch( c3d_sLights, l_offset++ ).rgb();
-					auto l_v4MtxCol1 = m_writer.DeclLocale( cuT( "l_v4MtxCol1" ), texelFetch( c3d_sLights, l_offset++ ) );
-					auto l_v4MtxCol2 = m_writer.DeclLocale( cuT( "l_v4MtxCol2" ), texelFetch( c3d_sLights, l_offset++ ) );
-					auto l_v4MtxCol3 = m_writer.DeclLocale( cuT( "l_v4MtxCol3" ), texelFetch( c3d_sLights, l_offset++ ) );
-					auto l_v4MtxCol4 = m_writer.DeclLocale( cuT( "l_v4MtxCol4" ), texelFetch( c3d_sLights, l_offset++ ) );
-					l_lightReturn.m_transform() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
+					auto offset = m_writer.DeclLocale( cuT( "offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					lightReturn.m_direction() = texelFetch( c3d_sLights, offset++ ).rgb();
+					auto v4MtxCol1 = m_writer.DeclLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
+					auto v4MtxCol2 = m_writer.DeclLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
+					auto v4MtxCol3 = m_writer.DeclLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
+					auto v4MtxCol4 = m_writer.DeclLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++ ) );
+					lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
 				}
 				else
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-					auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-					l_lightReturn.m_direction() = texelFetch( c3d_sLights, l_offset++, 0 ).rgb();
-					auto l_v4MtxCol1 = m_writer.DeclLocale( cuT( "l_v4MtxCol1" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					auto l_v4MtxCol2 = m_writer.DeclLocale( cuT( "l_v4MtxCol2" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					auto l_v4MtxCol3 = m_writer.DeclLocale( cuT( "l_v4MtxCol3" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					auto l_v4MtxCol4 = m_writer.DeclLocale( cuT( "l_v4MtxCol4" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					l_lightReturn.m_transform() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
+					auto offset = m_writer.DeclLocale( cuT( "offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					lightReturn.m_direction() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+					auto v4MtxCol1 = m_writer.DeclLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					auto v4MtxCol2 = m_writer.DeclLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					auto v4MtxCol3 = m_writer.DeclLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					auto v4MtxCol4 = m_writer.DeclLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
 				}
 			}
 			else
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-				auto l_factor = m_writer.DeclLocale( cuT( "l_factor" ), Float( LightComponentsOffset ) * p_index );
-				auto l_decal = m_writer.DeclLocale( cuT( "l_decal" ), 0.0005_f );
-				auto l_mult = m_writer.DeclLocale( cuT( "l_mult" ), 0.001_f );
-				auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), l_mult * Float( BaseLightComponentsCount ) );
-				l_lightReturn.m_direction() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
-				l_offset += l_mult;
-				auto l_v4MtxCol1 = m_writer.DeclLocale( cuT( "l_v4MtxCol1" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_offset += l_mult;
-				auto l_v4MtxCol2 = m_writer.DeclLocale( cuT( "l_v4MtxCol2" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_offset += l_mult;
-				auto l_v4MtxCol3 = m_writer.DeclLocale( cuT( "l_v4MtxCol3" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_offset += l_mult;
-				auto l_v4MtxCol4 = m_writer.DeclLocale( cuT( "l_v4MtxCol4" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_offset += l_mult;
-				l_lightReturn.m_transform() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
+				auto factor = m_writer.DeclLocale( cuT( "factor" ), Float( LightComponentsOffset ) * p_index );
+				auto decal = m_writer.DeclLocale( cuT( "decal" ), 0.0005_f );
+				auto mult = m_writer.DeclLocale( cuT( "mult" ), 0.001_f );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
+				lightReturn.m_direction() = texture( c3d_sLights, factor + offset + decal ).rgb();
+				offset += mult;
+				auto v4MtxCol1 = m_writer.DeclLocale( cuT( "v4MtxCol1" ), texture( c3d_sLights, factor + offset + decal ) );
+				offset += mult;
+				auto v4MtxCol2 = m_writer.DeclLocale( cuT( "v4MtxCol2" ), texture( c3d_sLights, factor + offset + decal ) );
+				offset += mult;
+				auto v4MtxCol3 = m_writer.DeclLocale( cuT( "v4MtxCol3" ), texture( c3d_sLights, factor + offset + decal ) );
+				offset += mult;
+				auto v4MtxCol4 = m_writer.DeclLocale( cuT( "v4MtxCol4" ), texture( c3d_sLights, factor + offset + decal ) );
+				offset += mult;
+				lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
 			}
 
-			m_writer.Return( l_lightReturn );
+			m_writer.Return( lightReturn );
 		};
-		m_writer.ImplementFunction< DirectionalLight >( cuT( "GetDirectionalLight" ), l_get, Int( &m_writer, cuT( "p_index" ) ) );
+		m_writer.ImplementFunction< DirectionalLight >( cuT( "GetDirectionalLight" ), get, Int( &m_writer, cuT( "p_index" ) ) );
 	}
 
 	void LightingModel::Declare_GetPointLight()
 	{
-		auto l_get = [this]( Int const & p_index )
+		auto get = [this]( Int const & p_index )
 		{
-			PointLight l_lightReturn = m_writer.DeclLocale< PointLight >( cuT( "l_lightReturn" ) );
-			l_lightReturn.m_lightBase() = GetBaseLight( p_index );
+			PointLight lightReturn = m_writer.DeclLocale< PointLight >( cuT( "lightReturn" ) );
+			lightReturn.m_lightBase() = GetBaseLight( p_index );
 
 			if ( m_writer.HasTexelFetch() )
 			{
 				if ( m_writer.HasTextureBuffers() )
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-					auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-					auto l_v4PosIndex = m_writer.DeclLocale( cuT( "l_v4PosIndex" ), texelFetch( c3d_sLights, l_offset++ ) );
-					l_lightReturn.m_position() = l_v4PosIndex.rgb();
-					l_lightReturn.m_index() = m_writer.Cast< Int >( l_v4PosIndex.a() );
-					l_lightReturn.m_attenuation() = texelFetch( c3d_sLights, l_offset++ ).rgb();
+					auto offset = m_writer.DeclLocale( cuT( "offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					auto v4PosIndex = m_writer.DeclLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
+					lightReturn.m_position() = v4PosIndex.rgb();
+					lightReturn.m_index() = m_writer.Cast< Int >( v4PosIndex.a() );
+					lightReturn.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
 				}
 				else
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-					auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-					auto l_v4PosIndex = m_writer.DeclLocale( cuT( "l_v4PosIndex" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					l_lightReturn.m_position() = l_v4PosIndex.rgb();
-					l_lightReturn.m_index() = m_writer.Cast< Int >( l_v4PosIndex.a() );
-					l_lightReturn.m_attenuation() = texelFetch( c3d_sLights, l_offset++, 0 ).rgb();
+					auto offset = m_writer.DeclLocale( cuT( "offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					auto v4PosIndex = m_writer.DeclLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					lightReturn.m_position() = v4PosIndex.rgb();
+					lightReturn.m_index() = m_writer.Cast< Int >( v4PosIndex.a() );
+					lightReturn.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 				}
 			}
 			else
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-				auto l_factor = m_writer.DeclLocale( cuT( "l_factor" ), Float( LightComponentsOffset ) * p_index );
-				auto l_decal = m_writer.DeclLocale( cuT( "l_decal" ), 0.0005_f );
-				auto l_mult = m_writer.DeclLocale( cuT( "l_mult" ), 0.001_f );
-				auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), l_mult * Float( BaseLightComponentsCount ) );
-				auto l_v4PosIndex = m_writer.DeclLocale( cuT( "l_v4PosIndex" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_lightReturn.m_position() = l_v4PosIndex.rgb();
-				l_lightReturn.m_index() = m_writer.Cast< Int >( l_v4PosIndex.a() );
-				l_offset += l_mult;
-				l_lightReturn.m_attenuation() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
-				l_offset += l_mult;
+				auto factor = m_writer.DeclLocale( cuT( "factor" ), Float( LightComponentsOffset ) * p_index );
+				auto decal = m_writer.DeclLocale( cuT( "decal" ), 0.0005_f );
+				auto mult = m_writer.DeclLocale( cuT( "mult" ), 0.001_f );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
+				auto v4PosIndex = m_writer.DeclLocale( cuT( "v4PosIndex" ), texture( c3d_sLights, factor + offset + decal ) );
+				lightReturn.m_position() = v4PosIndex.rgb();
+				lightReturn.m_index() = m_writer.Cast< Int >( v4PosIndex.a() );
+				offset += mult;
+				lightReturn.m_attenuation() = texture( c3d_sLights, factor + offset + decal ).rgb();
+				offset += mult;
 			}
 
-			m_writer.Return( l_lightReturn );
+			m_writer.Return( lightReturn );
 		};
-		m_writer.ImplementFunction< PointLight >( cuT( "GetPointLight" ), l_get, Int( &m_writer, cuT( "p_index" ) ) );
+		m_writer.ImplementFunction< PointLight >( cuT( "GetPointLight" ), get, Int( &m_writer, cuT( "p_index" ) ) );
 	}
 
 	void LightingModel::Declare_GetSpotLight()
 	{
-		auto l_get = [this]( Int const & p_index )
+		auto get = [this]( Int const & p_index )
 		{
-			SpotLight l_lightReturn = m_writer.DeclLocale< SpotLight >( cuT( "l_lightReturn" ) );
-			l_lightReturn.m_lightBase() = GetBaseLight( p_index );
+			SpotLight lightReturn = m_writer.DeclLocale< SpotLight >( cuT( "lightReturn" ) );
+			lightReturn.m_lightBase() = GetBaseLight( p_index );
 
 			if ( m_writer.HasTexelFetch() )
 			{
 				if ( m_writer.HasTextureBuffers() )
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-					auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-					auto l_v4PosIndex = m_writer.DeclLocale( cuT( "l_v4PosIndex" ), texelFetch( c3d_sLights, l_offset++ ) );
-					l_lightReturn.m_position() = l_v4PosIndex.rgb();
-					l_lightReturn.m_index() = m_writer.Cast< Int >( l_v4PosIndex.a() );
-					l_lightReturn.m_attenuation() = texelFetch( c3d_sLights, l_offset++ ).rgb();
-					l_lightReturn.m_direction() = normalize( texelFetch( c3d_sLights, l_offset++ ).rgb() );
-					auto l_v2Spot = m_writer.DeclLocale( cuT( "l_v2Spot" ), texelFetch( c3d_sLights, l_offset++ ).rg() );
-					l_lightReturn.m_exponent() = l_v2Spot.x();
-					l_lightReturn.m_cutOff() = l_v2Spot.y();
-					auto l_v4MtxCol1 = m_writer.DeclLocale( cuT( "l_v4MtxCol1" ), texelFetch( c3d_sLights, l_offset++ ) );
-					auto l_v4MtxCol2 = m_writer.DeclLocale( cuT( "l_v4MtxCol2" ), texelFetch( c3d_sLights, l_offset++ ) );
-					auto l_v4MtxCol3 = m_writer.DeclLocale( cuT( "l_v4MtxCol3" ), texelFetch( c3d_sLights, l_offset++ ) );
-					auto l_v4MtxCol4 = m_writer.DeclLocale( cuT( "l_v4MtxCol4" ), texelFetch( c3d_sLights, l_offset++ ) );
-					l_lightReturn.m_transform() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
+					auto offset = m_writer.DeclLocale( cuT( "offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					auto v4PosIndex = m_writer.DeclLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
+					lightReturn.m_position() = v4PosIndex.rgb();
+					lightReturn.m_index() = m_writer.Cast< Int >( v4PosIndex.a() );
+					lightReturn.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
+					lightReturn.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
+					auto v2Spot = m_writer.DeclLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++ ).rg() );
+					lightReturn.m_exponent() = v2Spot.x();
+					lightReturn.m_cutOff() = v2Spot.y();
+					auto v4MtxCol1 = m_writer.DeclLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
+					auto v4MtxCol2 = m_writer.DeclLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
+					auto v4MtxCol3 = m_writer.DeclLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
+					auto v4MtxCol4 = m_writer.DeclLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++ ) );
+					lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
 				}
 				else
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-					auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-					auto l_v4PosIndex = m_writer.DeclLocale( cuT( "l_v4PosIndex" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					l_lightReturn.m_position() = l_v4PosIndex.rgb();
-					l_lightReturn.m_index() = m_writer.Cast< Int >( l_v4PosIndex.a() );
-					l_lightReturn.m_attenuation() = texelFetch( c3d_sLights, l_offset++, 0 ).rgb();
-					l_lightReturn.m_direction() = normalize( texelFetch( c3d_sLights, l_offset++, 0 ).rgb() );
-					auto l_v2Spot = m_writer.DeclLocale( cuT( "l_v2Spot" ), texelFetch( c3d_sLights, l_offset++, 0 ).rg() );
-					l_lightReturn.m_exponent() = l_v2Spot.x();
-					l_lightReturn.m_cutOff() = l_v2Spot.y();
-					auto l_v4MtxCol1 = m_writer.DeclLocale( cuT( "l_v4MtxCol1" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					auto l_v4MtxCol2 = m_writer.DeclLocale( cuT( "l_v4MtxCol2" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					auto l_v4MtxCol3 = m_writer.DeclLocale( cuT( "l_v4MtxCol3" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					auto l_v4MtxCol4 = m_writer.DeclLocale( cuT( "l_v4MtxCol4" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
-					l_lightReturn.m_transform() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
-					l_lightReturn.m_index() = m_writer.Cast< Int >( texelFetch( c3d_sLights, l_offset++, 0 ).r() );
+					auto offset = m_writer.DeclLocale( cuT( "offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					auto v4PosIndex = m_writer.DeclLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					lightReturn.m_position() = v4PosIndex.rgb();
+					lightReturn.m_index() = m_writer.Cast< Int >( v4PosIndex.a() );
+					lightReturn.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+					lightReturn.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
+					auto v2Spot = m_writer.DeclLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++, 0 ).rg() );
+					lightReturn.m_exponent() = v2Spot.x();
+					lightReturn.m_cutOff() = v2Spot.y();
+					auto v4MtxCol1 = m_writer.DeclLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					auto v4MtxCol2 = m_writer.DeclLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					auto v4MtxCol3 = m_writer.DeclLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					auto v4MtxCol4 = m_writer.DeclLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
+					lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+					lightReturn.m_index() = m_writer.Cast< Int >( texelFetch( c3d_sLights, offset++, 0 ).r() );
 				}
 			}
 			else
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-				auto l_factor = m_writer.DeclLocale( cuT( "l_factor" ), Float( LightComponentsOffset ) * p_index );
-				auto l_decal = m_writer.DeclLocale( cuT( "l_decal" ), 0.0005_f );
-				auto l_mult = m_writer.DeclLocale( cuT( "l_mult" ), 0.001_f );
-				auto l_offset = m_writer.DeclLocale( cuT( "l_offset" ), l_mult * Float( BaseLightComponentsCount ) );
-				auto l_v4PosIndex = m_writer.DeclLocale( cuT( "l_v4PosIndex" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_lightReturn.m_position() = l_v4PosIndex.rgb();
-				l_lightReturn.m_index() = m_writer.Cast< Int >( l_v4PosIndex.a() );
-				l_offset += l_mult;
-				l_lightReturn.m_attenuation() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
-				l_offset += l_mult;
-				l_lightReturn.m_direction() = normalize( texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb() );
-				l_offset += l_mult;
-				auto l_v2Spot = m_writer.DeclLocale( cuT( "l_v2Spot" ), texture( c3d_sLights, l_factor + l_offset + l_decal ).rg() );
-				l_lightReturn.m_exponent() = l_v2Spot.x();
-				l_lightReturn.m_cutOff() = l_v2Spot.y();
-				auto l_v4MtxCol1 = m_writer.DeclLocale( cuT( "l_v4MtxCol1" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_offset += l_mult;
-				auto l_v4MtxCol2 = m_writer.DeclLocale( cuT( "l_v4MtxCol2" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_offset += l_mult;
-				auto l_v4MtxCol3 = m_writer.DeclLocale( cuT( "l_v4MtxCol3" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_offset += l_mult;
-				auto l_v4MtxCol4 = m_writer.DeclLocale( cuT( "l_v4MtxCol4" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
-				l_offset += l_mult;
-				l_lightReturn.m_transform() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
-				l_lightReturn.m_index() = m_writer.Cast< Int >( texture( c3d_sLights, l_offset + l_decal ).r() );
-				l_offset += l_mult;
+				auto factor = m_writer.DeclLocale( cuT( "factor" ), Float( LightComponentsOffset ) * p_index );
+				auto decal = m_writer.DeclLocale( cuT( "decal" ), 0.0005_f );
+				auto mult = m_writer.DeclLocale( cuT( "mult" ), 0.001_f );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), mult * Float( BaseLightComponentsCount ) );
+				auto v4PosIndex = m_writer.DeclLocale( cuT( "v4PosIndex" ), texture( c3d_sLights, factor + offset + decal ) );
+				lightReturn.m_position() = v4PosIndex.rgb();
+				lightReturn.m_index() = m_writer.Cast< Int >( v4PosIndex.a() );
+				offset += mult;
+				lightReturn.m_attenuation() = texture( c3d_sLights, factor + offset + decal ).rgb();
+				offset += mult;
+				lightReturn.m_direction() = normalize( texture( c3d_sLights, factor + offset + decal ).rgb() );
+				offset += mult;
+				auto v2Spot = m_writer.DeclLocale( cuT( "v2Spot" ), texture( c3d_sLights, factor + offset + decal ).rg() );
+				lightReturn.m_exponent() = v2Spot.x();
+				lightReturn.m_cutOff() = v2Spot.y();
+				auto v4MtxCol1 = m_writer.DeclLocale( cuT( "v4MtxCol1" ), texture( c3d_sLights, factor + offset + decal ) );
+				offset += mult;
+				auto v4MtxCol2 = m_writer.DeclLocale( cuT( "v4MtxCol2" ), texture( c3d_sLights, factor + offset + decal ) );
+				offset += mult;
+				auto v4MtxCol3 = m_writer.DeclLocale( cuT( "v4MtxCol3" ), texture( c3d_sLights, factor + offset + decal ) );
+				offset += mult;
+				auto v4MtxCol4 = m_writer.DeclLocale( cuT( "v4MtxCol4" ), texture( c3d_sLights, factor + offset + decal ) );
+				offset += mult;
+				lightReturn.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+				lightReturn.m_index() = m_writer.Cast< Int >( texture( c3d_sLights, offset + decal ).r() );
+				offset += mult;
 			}
 
-			m_writer.Return( l_lightReturn );
+			m_writer.Return( lightReturn );
 		};
-		m_writer.ImplementFunction< SpotLight >( cuT( "GetSpotLight" ), l_get, Int( &m_writer, cuT( "p_index" ) ) );
+		m_writer.ImplementFunction< SpotLight >( cuT( "GetSpotLight" ), get, Int( &m_writer, cuT( "p_index" ) ) );
 	}
 
 	Light LightingModel::GetBaseLight( Type const & p_value )

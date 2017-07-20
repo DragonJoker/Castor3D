@@ -35,46 +35,46 @@ namespace Castor3D
 
 	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0
+		bool result = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );
+		Path pathFile = p_file.GetFilePath() / cuT( "Shaders" );
 
-		if ( !File::DirectoryExists( l_pathFile ) )
+		if ( !File::DirectoryExists( pathFile ) )
 		{
-			File::DirectoryCreate( l_pathFile );
+			File::DirectoryCreate( pathFile );
 		}
 
-		bool l_hasFile = false;
+		bool hasFile = false;
 
-		if ( l_return )
+		if ( result )
 		{
-			Path l_file = p_shaderObject.GetFile();
+			Path file = p_shaderObject.GetFile();
 
-			if ( !l_file.empty() )
+			if ( !file.empty() )
 			{
-				File::CopyFile( l_file, l_pathFile );
-				String l_fileName = Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
-				string::replace( l_fileName, cuT( "\\" ), cuT( "/" ) );
-				l_return = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_fileName + cuT( "\"\n" ) ) > 0;
-				Castor::TextWriter< ShaderObject >::CheckError( l_return, "ShaderObject file" );
+				File::CopyFile( file, pathFile );
+				String fileName = Path{ cuT( "Shaders" ) } / file.GetFileName() + cuT( "." ) + file.GetExtension();
+				string::replace( fileName, cuT( "\\" ), cuT( "/" ) );
+				result = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + fileName + cuT( "\"\n" ) ) > 0;
+				Castor::TextWriter< ShaderObject >::CheckError( result, "ShaderObject file" );
 			}
 		}
 
-		if ( l_hasFile )
+		if ( hasFile )
 		{
-			for ( auto l_it : p_shaderObject.GetUniforms() )
+			for ( auto it : p_shaderObject.GetUniforms() )
 			{
-				l_return = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( l_it->GetBaseUniform(), p_file );
+				result = Uniform::TextWriter( m_tabs + cuT( "\t" ) )( it->GetBaseUniform(), p_file );
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -106,9 +106,9 @@ namespace Castor3D
 
 	void ShaderObject::Bind()
 	{
-		for ( auto l_variable : m_listUniforms )
+		for ( auto variable : m_listUniforms )
 		{
-			l_variable->Update();
+			variable->Update();
 		}
 	}
 
@@ -124,16 +124,16 @@ namespace Castor3D
 
 		if ( !p_filename.empty() && File::FileExists( p_filename ) )
 		{
-			TextFile l_file( p_filename, File::OpenMode::eRead );
+			TextFile file( p_filename, File::OpenMode::eRead );
 
-			if ( l_file.IsOk() )
+			if ( file.IsOk() )
 			{
-				if ( l_file.GetLength() > 0 )
+				if ( file.GetLength() > 0 )
 				{
 					m_file = p_filename;
-					String l_source;
-					l_file.CopyToString( l_source );
-					m_source.SetSource( l_source );
+					String source;
+					file.CopyToString( source );
+					m_source.SetSource( source );
 				}
 			}
 		}
@@ -171,15 +171,15 @@ namespace Castor3D
 
 	PushUniformSPtr ShaderObject::FindUniform( Castor::String const & p_name )const
 	{
-		PushUniformSPtr l_return;
-		auto l_it = m_mapUniforms.find( p_name );
+		PushUniformSPtr result;
+		auto it = m_mapUniforms.find( p_name );
 
-		if ( l_it != m_mapUniforms.end() )
+		if ( it != m_mapUniforms.end() )
 		{
-			l_return = l_it->second.lock();
+			result = it->second.lock();
 		}
 
-		return l_return;
+		return result;
 	}
 
 	void ShaderObject::FlushUniforms()
@@ -190,31 +190,31 @@ namespace Castor3D
 
 	bool ShaderObject::DoCheckErrors()
 	{
-		String l_compilerLog = DoRetrieveCompilerLog();
+		String compilerLog = DoRetrieveCompilerLog();
 
-		if ( !l_compilerLog.empty() )
+		if ( !compilerLog.empty() )
 		{
 			if ( m_status == ShaderStatus::eError )
 			{
-				Logger::LogError( l_compilerLog );
+				Logger::LogError( compilerLog );
 			}
 			else
 			{
-				Logger::LogWarning( l_compilerLog );
+				Logger::LogWarning( compilerLog );
 			}
 
-			StringStream l_source;
-			l_source << format::line_prefix();
-			l_source << GetSource();
-			Logger::LogInfo( l_source.str() );
+			StringStream source;
+			source << format::line_prefix();
+			source << GetSource();
+			Logger::LogInfo( source.str() );
 		}
 		else if ( m_status == ShaderStatus::eError )
 		{
 			Logger::LogWarning( cuT( "ShaderObject::Compile - Compilaton failed but shader may be usable to link." ) );
-			StringStream l_source;
-			l_source << format::line_prefix();
-			l_source << GetSource();
-			Logger::LogInfo( l_source.str() );
+			StringStream source;
+			source << format::line_prefix();
+			source << GetSource();
+			Logger::LogInfo( source.str() );
 			m_status = ShaderStatus::eNotCompiled;
 		}
 

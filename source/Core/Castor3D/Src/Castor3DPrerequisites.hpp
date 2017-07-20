@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -767,28 +767,57 @@ namespace Castor3D
 
 	namespace pbr
 	{
-		C3D_API void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_normal
-			, GLSL::Float & p_metallic
-			, GLSL::Float & p_roughness
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags );
+		namespace mr
+		{
+			C3D_API void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
+				, GLSL::Vec3 & p_normal
+				, GLSL::Float & p_metallic
+				, GLSL::Float & p_roughness
+				, TextureChannels const & p_textureFlags
+				, ProgramFlags const & p_programFlags
+				, SceneFlags const & p_sceneFlags );
 
-		C3D_API void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
-			, GLSL::Vec3 & p_albedo
-			, GLSL::Vec3 & p_emissive
-			, GLSL::Float const & p_gamma
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags );
+			C3D_API void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
+				, GLSL::Vec3 & p_albedo
+				, GLSL::Vec3 & p_emissive
+				, GLSL::Float const & p_gamma
+				, TextureChannels const & p_textureFlags
+				, ProgramFlags const & p_programFlags
+				, SceneFlags const & p_sceneFlags );
 
-		C3D_API std::shared_ptr< GLSL::CookTorranceLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
-			, GLSL::ShadowType p_shadows );
+			C3D_API std::shared_ptr< GLSL::MetallicBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+				, GLSL::ShadowType p_shadows );
 
-		C3D_API std::shared_ptr< GLSL::CookTorranceLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
-			, LightType p_light
-			, GLSL::ShadowType p_shadows );
+			C3D_API std::shared_ptr< GLSL::MetallicBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+				, LightType p_light
+				, GLSL::ShadowType p_shadows );
+		}
+
+		namespace sg
+		{
+			C3D_API void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
+				, GLSL::Vec3 & p_normal
+				, GLSL::Vec3 & p_specular
+				, GLSL::Float & p_glossiness
+				, TextureChannels const & p_textureFlags
+				, ProgramFlags const & p_programFlags
+				, SceneFlags const & p_sceneFlags );
+
+			C3D_API void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
+				, GLSL::Vec3 & p_diffuse
+				, GLSL::Vec3 & p_emissive
+				, GLSL::Float const & p_gamma
+				, TextureChannels const & p_textureFlags
+				, ProgramFlags const & p_programFlags
+				, SceneFlags const & p_sceneFlags );
+
+			C3D_API std::shared_ptr< GLSL::SpecularBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+				, GLSL::ShadowType p_shadows );
+
+			C3D_API std::shared_ptr< GLSL::SpecularBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
+				, LightType p_light
+				, GLSL::ShadowType p_shadows );
+		}
 	}
 
 	using ParallaxFunction = GLSL::Function< GLSL::Vec2, GLSL::InParam< GLSL::Vec2 >, GLSL::InParam< GLSL::Vec3 > >;

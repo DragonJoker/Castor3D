@@ -53,7 +53,7 @@ namespace Castor3D
 
 	void Light::Bind( PxBufferBase & p_texture, uint32_t p_index )
 	{
-		SceneNodeSPtr l_node = GetParent();
+		SceneNodeSPtr node = GetParent();
 
 		switch ( m_category->GetLightType() )
 		{
@@ -74,12 +74,12 @@ namespace Castor3D
 	void Light::AttachTo( SceneNodeSPtr p_node )
 	{
 		MovableObject::AttachTo( p_node );
-		auto l_node = GetParent();
+		auto node = GetParent();
 
-		if ( l_node )
+		if ( node )
 		{
 			m_notifyIndex = p_node->onChanged.connect( std::bind( &Light::OnNodeChanged, this, std::placeholders::_1 ) );
-			OnNodeChanged( *l_node );
+			OnNodeChanged( *node );
 		}
 	}
 

@@ -73,38 +73,38 @@ namespace Castor3D
 	{
 		if ( m_backPipelines.find( p_flags ) == m_backPipelines.end() )
 		{
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::eNone );
-			DepthStencilState l_dsState;
-			l_dsState.SetDepthTest( true );
-			auto & l_pipeline = *m_backPipelines.emplace( p_flags
-				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState )
-					, std::move( l_rsState )
+			RasteriserState rsState;
+			rsState.SetCulledFaces( Culling::eNone );
+			DepthStencilState dsState;
+			dsState.SetDepthTest( true );
+			auto & pipeline = *m_backPipelines.emplace( p_flags
+				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
+					, std::move( rsState )
 					, BlendState{}
 					, MultisampleState{}
 					, p_program
 					, p_flags ) ).first->second;
 
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &l_pipeline, p_flags]()
+				, [this, &pipeline, p_flags]()
 				{
-					l_pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
-					l_pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
+					pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
+					pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
-						l_pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
+						pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
 						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
-						l_pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
+						pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
 
 					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
-						l_pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
+						pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 					}
 
 					m_initialised = true;
@@ -143,7 +143,18 @@ namespace Castor3D
 			, p_alphaFunc );
 	}
 
-	GLSL::Shader ShadowMapPass::DoGetPbrPixelShaderSource( TextureChannels const & p_textureFlags
+	GLSL::Shader ShadowMapPass::DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
+		, ProgramFlags const & p_programFlags
+		, SceneFlags const & p_sceneFlags
+		, ComparisonFunc p_alphaFunc )const
+	{
+		return m_shadowMap.GetPixelShaderSource( p_textureFlags
+			, p_programFlags
+			, p_sceneFlags
+			, p_alphaFunc );
+	}
+
+	GLSL::Shader ShadowMapPass::DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
 		, ProgramFlags const & p_programFlags
 		, SceneFlags const & p_sceneFlags
 		, ComparisonFunc p_alphaFunc )const

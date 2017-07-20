@@ -17,26 +17,26 @@ namespace Castor3D
 		SamplerSPtr DoCreateSampler( Engine & p_engine
 			, String const & p_name )
 		{
-			SamplerSPtr l_result;
-			auto & l_cache = p_engine.GetSamplerCache();
+			SamplerSPtr result;
+			auto & cache = p_engine.GetSamplerCache();
 
-			if ( l_cache.Has( p_name ) )
+			if ( cache.Has( p_name ) )
 			{
-				l_result = l_cache.Find( p_name );
+				result = cache.Find( p_name );
 			}
 			else
 			{
-				l_result = p_engine.GetRenderSystem()->CreateSampler( p_name );
-				l_result->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-				l_result->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-				l_result->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				l_result->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				l_result->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				l_result->Initialise();
-				l_cache.Add( p_name, l_result );
+				result = p_engine.GetRenderSystem()->CreateSampler( p_name );
+				result->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+				result->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+				result->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+				result->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+				result->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+				result->Initialise();
+				cache.Add( p_name, result );
 			}
 
-			return l_result;
+			return result;
 		}
 	}
 
@@ -56,38 +56,38 @@ namespace Castor3D
 		, m_size{ p_size }
 		, m_sceneUbo{ p_engine }
 	{
-		auto & l_renderSystem = *p_engine.GetRenderSystem();
-		m_geometryPassFrameBuffer = l_renderSystem.CreateFrameBuffer();
-		bool l_result = m_geometryPassFrameBuffer->Create();
+		auto & renderSystem = *p_engine.GetRenderSystem();
+		m_geometryPassFrameBuffer = renderSystem.CreateFrameBuffer();
+		bool result = m_geometryPassFrameBuffer->Create();
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = m_geometryPassFrameBuffer->Initialise( m_size );
+			result = m_geometryPassFrameBuffer->Initialise( m_size );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
 			{
-				auto l_texture = l_renderSystem.CreateTexture( TextureType::eTwoDimensions
+				auto texture = renderSystem.CreateTexture( TextureType::eTwoDimensions
 					, AccessType::eNone
 					, AccessType::eRead | AccessType::eWrite
 					, GetTextureFormat( DsTexture( i ) )
 					, m_size );
-				l_texture->GetImage().InitialiseSource();
+				texture->GetImage().InitialiseSource();
 
 				m_geometryPassResult[i] = std::make_unique< TextureUnit >( p_engine );
 				m_geometryPassResult[i]->SetIndex( i );
-				m_geometryPassResult[i]->SetTexture( l_texture );
+				m_geometryPassResult[i]->SetTexture( texture );
 				m_geometryPassResult[i]->SetSampler( DoCreateSampler( p_engine, GetTextureName( DsTexture( i ) ) ) );
 				m_geometryPassResult[i]->Initialise();
 
-				m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
+				m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( texture );
 			}
 
 			m_geometryPassFrameBuffer->Bind();
 
-			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_result; i++ )
+			for ( int i = 0; i < size_t( DsTexture::eCount ) && result; i++ )
 			{
 				m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
 					, GetTextureAttachmentIndex( DsTexture( i ) )
@@ -100,7 +100,7 @@ namespace Castor3D
 			m_geometryPassFrameBuffer->Unbind();
 		}
 
-		if ( l_result )
+		if ( result )
 		{
 			m_lightingPass = std::make_unique< LightingPass >( p_engine
 				, m_size
@@ -117,7 +117,7 @@ namespace Castor3D
 				, m_ssaoConfig );
 		}
 
-		ENSURE( l_result );
+		ENSURE( result );
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -127,15 +127,15 @@ namespace Castor3D
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();
 
-		for ( auto & l_attach : m_geometryPassTexAttachs )
+		for ( auto & attach : m_geometryPassTexAttachs )
 		{
-			l_attach.reset();
+			attach.reset();
 		}
 
-		for ( auto & l_texture : m_geometryPassResult )
+		for ( auto & texture : m_geometryPassResult )
 		{
-			l_texture->Cleanup();
-			l_texture.reset();
+			texture->Cleanup();
+			texture.reset();
 		}
 
 		m_geometryPassFrameBuffer->Destroy();
@@ -158,9 +158,9 @@ namespace Castor3D
 		, Camera const & p_camera )
 	{
 		m_engine.SetPerObjectLighting( false );
-		auto l_invView = p_camera.GetView().get_inverse().get_transposed();
-		auto l_invProj = p_camera.GetViewport().GetProjection().get_inverse();
-		auto l_invViewProj = ( p_camera.GetViewport().GetProjection() * p_camera.GetView() ).get_inverse();
+		auto invView = p_camera.GetView().get_inverse().get_transposed();
+		auto invProj = p_camera.GetViewport().GetProjection().get_inverse();
+		auto invViewProj = ( p_camera.GetViewport().GetProjection() * p_camera.GetView() ).get_inverse();
 		p_camera.Apply();
 		m_geometryPassFrameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_geometryPassTexAttachs[size_t( DsTexture::eDepth )]->Attach( AttachmentPoint::eDepth );
@@ -174,19 +174,20 @@ namespace Castor3D
 		m_lightingPass->Render( p_scene
 			, p_camera
 			, m_geometryPassResult
-			, l_invViewProj
-			, l_invView
-			, l_invProj );
+			, invViewProj
+			, invView
+			, invProj );
 
 		m_reflection->Render( m_geometryPassResult
 			, m_lightingPass->GetResult()
 			, p_scene
 			, p_camera
-			, l_invViewProj
-			, l_invView
-			, l_invProj );
+			, invViewProj
+			, invView
+			, invProj );
 
-		if ( p_scene.GetMaterialsType() == MaterialType::ePbr )
+		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+			|| p_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 		{
 			m_combinePass->Render( m_geometryPassResult
 				, m_lightingPass->GetResult()
@@ -194,9 +195,9 @@ namespace Castor3D
 				, m_reflection->GetRefraction()
 				, p_scene.GetSkybox().GetIbl()
 				, p_camera
-				, l_invViewProj
-				, l_invView
-				, l_invProj
+				, invViewProj
+				, invView
+				, invProj
 				, p_scene.GetFog()
 				, m_frameBuffer );
 		}
@@ -207,9 +208,9 @@ namespace Castor3D
 				, m_reflection->GetReflection()
 				, m_reflection->GetRefraction()
 				, p_camera
-				, l_invViewProj
-				, l_invView
-				, l_invProj
+				, invViewProj
+				, invView
+				, invProj
 				, p_scene.GetFog()
 				, m_frameBuffer );
 		}
@@ -217,25 +218,25 @@ namespace Castor3D
 
 	void DeferredRendering::Debug( Camera const & p_camera )
 	{
-		auto l_count = 6 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
-		int l_width = int( m_size.width() ) / l_count;
-		int l_height = int( m_size.height() ) / l_count;
-		int l_left = int( m_size.width() ) - l_width;
-		auto l_size = Size( l_width, l_height );
-		auto & l_context = *m_engine.GetRenderSystem()->GetCurrentContext();
+		auto count = 6 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
+		int width = int( m_size.width() ) / count;
+		int height = int( m_size.height() ) / count;
+		int left = int( m_size.width() ) - width;
+		auto size = Size( width, height );
+		auto & context = *m_engine.GetRenderSystem()->GetCurrentContext();
 		p_camera.Apply();
 		m_frameBuffer.Bind();
-		auto l_index = 0;
-		l_context.RenderDepth( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eDepth )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eData1 )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eData2 )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eData3 )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_geometryPassResult[size_t( DsTexture::eData4 )]->GetTexture() );
-		l_context.RenderTexture( Position{ l_width * l_index++, 0 }, l_size, *m_lightingPass->GetResult().GetTexture() );
+		auto index = 0;
+		context.RenderDepth( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eDepth )]->GetTexture() );
+		context.RenderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData1 )]->GetTexture() );
+		context.RenderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData2 )]->GetTexture() );
+		context.RenderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData3 )]->GetTexture() );
+		context.RenderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData4 )]->GetTexture() );
+		context.RenderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->GetResult().GetTexture() );
 
 		if ( m_ssaoConfig.m_enabled )
 		{
-			l_context.RenderTexture( Position{ l_width * ( l_index++ ), 0 }, l_size, m_combinePass->GetSsao() );
+			context.RenderTexture( Position{ width * ( index++ ), 0 }, size, m_combinePass->GetSsao() );
 		}
 
 		m_frameBuffer.Unbind();

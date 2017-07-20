@@ -73,25 +73,25 @@ namespace GlRender
 			m_display = p_window->GetHandle().GetInternal< IXWindowHandle >()->GetDisplay();
 		}
 
-		auto l_engine = p_window->GetEngine();
-		auto l_renderSystem = static_cast< GlRenderSystem * >( l_engine->GetRenderSystem() );
-		auto l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+		auto engine = p_window->GetEngine();
+		auto renderSystem = static_cast< GlRenderSystem * >( engine->GetRenderSystem() );
+		auto mainContext = std::static_pointer_cast< GlContext >( renderSystem->GetMainContext() );
 
 		try
 		{
-			int l_screen = DefaultScreen( m_display );
-			int l_major{ 0 };
-			int l_minor{ 0 };
-			bool l_ok = glXQueryVersion( m_display, &l_major, &l_minor );
-			XVisualInfo * l_visualInfo = nullptr;
+			int screen = DefaultScreen( m_display );
+			int major{ 0 };
+			int minor{ 0 };
+			bool ok = glXQueryVersion( m_display, &major, &minor );
+			XVisualInfo * visualInfo = nullptr;
 
-			if ( l_ok )
+			if ( ok )
 			{
-				m_glxVersion = l_major * 10 + l_minor;
+				m_glxVersion = major * 10 + minor;
 				Logger::LogDebug( StringStream() << cuT( "GlXContext::Create - glx version: " ) << m_glxVersion );
 			}
 
-			IntArray l_attribList
+			IntArray attribList
 			{
 				GLX_RENDER_TYPE, GLX_RGBA_BIT,
 				GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
@@ -104,35 +104,35 @@ namespace GlRender
 
 			if ( p_window->IsUsingStereo() )
 			{
-				l_attribList.push_back( GLX_STEREO );
-				l_attribList.push_back( 1 );
+				attribList.push_back( GLX_STEREO );
+				attribList.push_back( 1 );
 			}
 
-			l_attribList.push_back( 0 );
+			attribList.push_back( 0 );
 
 			if ( glXChooseFBConfig )
 			{
-				l_visualInfo = DoCreateVisualInfoWithFBConfig( p_window, l_attribList, l_screen );
+				visualInfo = DoCreateVisualInfoWithFBConfig( p_window, attribList, screen );
 			}
 			else
 			{
-				l_visualInfo = DoCreateVisualInfoWithoutFBConfig( l_attribList, l_screen );
+				visualInfo = DoCreateVisualInfoWithoutFBConfig( attribList, screen );
 			}
 
-			if ( l_visualInfo )
+			if ( visualInfo )
 			{
-				if ( l_mainContext )
+				if ( mainContext )
 				{
-					m_glxContext = glXCreateContext( m_display, l_visualInfo, l_mainContext->GetImpl().GetContext(), GL_TRUE );
+					m_glxContext = glXCreateContext( m_display, visualInfo, mainContext->GetImpl().GetContext(), GL_TRUE );
 				}
 				else
 				{
-					m_glxContext = glXCreateContext( m_display, l_visualInfo, nullptr, GL_TRUE );
+					m_glxContext = glXCreateContext( m_display, visualInfo, nullptr, GL_TRUE );
 				}
 
 				if ( m_glxContext )
 				{
-					if ( !l_renderSystem->IsInitialised() )
+					if ( !renderSystem->IsInitialised() )
 					{
 						Logger::LogDebug( StringStream() << cuT( "Display: " ) << std::hex << cuT( "0x" ) << m_display );
 						Logger::LogDebug( StringStream() << cuT( "Drawable: " ) << std::hex << cuT( "0x" ) << m_drawable );
@@ -152,7 +152,7 @@ namespace GlRender
 					}
 				}
 
-				XFree( l_visualInfo );
+				XFree( visualInfo );
 			}
 		}
 		catch ( ... )
@@ -215,9 +215,9 @@ namespace GlRender
 	XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_window, IntArray p_arrayAttribs, int p_screen )
 	{
 		Logger::LogDebug( cuT( "GlXContext::Create - Using FBConfig" ) );
-		XVisualInfo * l_return = nullptr;
-		int l_result = 0;
-		m_fbConfig = glXChooseFBConfig( m_display, p_screen, p_arrayAttribs.data(), &l_result );
+		XVisualInfo * visualInfo = nullptr;
+		int nbElements = 0;
+		m_fbConfig = glXChooseFBConfig( m_display, p_screen, p_arrayAttribs.data(), &nbElements );
 
 		if ( !m_fbConfig )
 		{
@@ -229,7 +229,7 @@ namespace GlRender
 				m_gpuInformations.RemoveFeature( GpuFeature::eStereo );
 				Logger::LogWarning( cuT( "GlXContext::Create - Stereo glXChooseFBConfig failed, using mono FB config" ) );
 
-				IntArray l_attribList
+				IntArray attribList
 				{
 					GLX_RENDER_TYPE, GLX_RGBA_BIT,
 					GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
@@ -239,20 +239,20 @@ namespace GlRender
 					GLX_BLUE_SIZE, 1,
 					0
 				};
-				m_fbConfig = glXChooseFBConfig( m_display, p_screen, l_attribList.data(), &l_result );
+				m_fbConfig = glXChooseFBConfig( m_display, p_screen, attribList.data(), &nbElements );
 
 				if ( !m_fbConfig )
 				{
 					// Second try failed, we try a default FBConfig
 					Logger::LogWarning( cuT( "GlXContext::Create - Mono glXChooseFBConfig failed, using default FB config" ) );
-					int l_data = 0;
-					m_fbConfig = glXChooseFBConfig( m_display, p_screen, &l_data, &l_result );
+					int data = 0;
+					m_fbConfig = glXChooseFBConfig( m_display, p_screen, &data, &nbElements );
 
 					if ( !m_fbConfig )
 					{
 						// Last FBConfig try failed
 						Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
-						l_return = DoCreateVisualInfoWithoutFBConfig( l_attribList, p_screen );
+						visualInfo = DoCreateVisualInfoWithoutFBConfig( attribList, p_screen );
 					}
 					else
 					{
@@ -268,14 +268,14 @@ namespace GlRender
 			{
 				// Can't be because of stereo, we try a default FBConfig
 				Logger::LogWarning( cuT( "GlXContext::Create - glXChooseFBConfig failed, using default FB config" ) );
-				int l_data = 0;
-				m_fbConfig = glXChooseFBConfig( m_display, p_screen, &l_data, &l_result );
+				int data = 0;
+				m_fbConfig = glXChooseFBConfig( m_display, p_screen, &data, &nbElements );
 
 				if ( !m_fbConfig )
 				{
 					// Last FBConfig try failed, we try from XVisualInfo
 					Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
-					l_return = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_screen );
+					visualInfo = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_screen );
 				}
 				else
 				{
@@ -298,9 +298,9 @@ namespace GlRender
 
 		if ( m_fbConfig )
 		{
-			l_return = glXGetVisualFromFBConfig( m_display, m_fbConfig[0] );
+			visualInfo = glXGetVisualFromFBConfig( m_display, m_fbConfig[0] );
 
-			if ( !l_return )
+			if ( !visualInfo )
 			{
 				Logger::LogError( cuT( "GlXContext::Create - glXGetVisualFromFBConfig failed" ) );
 			}
@@ -310,71 +310,71 @@ namespace GlRender
 			}
 		}
 
-		return l_return;
+		return visualInfo;
 	}
 
 	XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray p_arrayAttribs, int p_screen )
 	{
 		Logger::LogInfo( cuT( "GlXContext::Create - Not using FBConfig" ) );
-		XVisualInfo * l_return = glXChooseVisual( m_display, p_screen, p_arrayAttribs.data() );
+		XVisualInfo * result = glXChooseVisual( m_display, p_screen, p_arrayAttribs.data() );
 
-		if ( !l_return )
+		if ( !result )
 		{
 			Logger::LogError( cuT( "GlXContext::Create - glXChooseVisual failed" ) );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_window )
 	{
-		bool l_return = false;
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
-		GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+		bool result = false;
+		GlRenderSystem * renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+		GlContextSPtr mainContext = std::static_pointer_cast< GlContext >( renderSystem->GetMainContext() );
 
 		if ( GetOpenGl().HasCreateContextAttribs() )
 		{
-			int l_major = GetOpenGl().GetVersion() / 10;
-			int l_minor = GetOpenGl().GetVersion() % 10;
-			IntArray l_attribList
+			int major = GetOpenGl().GetVersion() / 10;
+			int minor = GetOpenGl().GetVersion() % 10;
+			IntArray attribList
 			{
-				int( GlContextAttribute::eMajorVersion ), l_major,
-				int( GlContextAttribute::eMinorVersion ), l_minor,
+				int( GlContextAttribute::eMajorVersion ), major,
+				int( GlContextAttribute::eMinorVersion ), minor,
 				int( GlContextAttribute::eFlags ), C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS,
 				int( GlProfileAttribute::eMask ), C3D_GL_CONTEXT_CREATION_DEFAULT_MASK,
 				0
 			};
 			GetOpenGl().DeleteContext( m_display, m_glxContext );
 
-			if ( l_mainContext )
+			if ( mainContext )
 			{
-				m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], l_mainContext->GetImpl().GetContext(), true, l_attribList.data() );
+				m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], mainContext->GetImpl().GetContext(), true, attribList.data() );
 			}
 			else
 			{
-				m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], nullptr, true, l_attribList.data() );
+				m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], nullptr, true, attribList.data() );
 			}
 
-			l_return = m_glxContext != nullptr;
+			result = m_glxContext != nullptr;
 
-			if ( l_return )
+			if ( result )
 			{
-				Logger::LogInfo( StringStream() << cuT( "GlContext::Create - " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context created." ) );
+				Logger::LogInfo( StringStream() << cuT( "GlContext::Create - " ) << major << cuT( "." ) << minor << cuT( " OpenGL context created." ) );
 			}
 			else
 			{
-				Logger::LogError( StringStream() << cuT( "GlContext::Create - Failed to create a " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context." ) );
+				Logger::LogError( StringStream() << cuT( "GlContext::Create - Failed to create a " ) << major << cuT( "." ) << minor << cuT( " OpenGL context." ) );
 			}
 		}
 		else
 		{
 			//It's not possible to make a GL 3.x and later context. Use the old style context (GL 2.1 and before)
-			l_renderSystem->SetOpenGlVersion( 2, 1 );
+			renderSystem->SetOpenGlVersion( 2, 1 );
 			Logger::LogWarning( cuT( "GlContext::Create - Can't create OpenGL >= 3.x context, since glCreateContextAttribs is not supported." ) );
-			l_return = true;
+			result = true;
 		}
 
-		return l_return;
+		return result;
 	}
 }
 

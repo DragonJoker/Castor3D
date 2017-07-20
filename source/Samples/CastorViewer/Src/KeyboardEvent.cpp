@@ -23,11 +23,11 @@ namespace CastorViewer
 
 	bool KeyboardEvent::Apply()
 	{
-		RenderWindowSPtr l_pWindow = m_window.lock();
+		RenderWindowSPtr pWindow = m_window.lock();
 
-		if ( l_pWindow )
+		if ( pWindow )
 		{
-			l_pWindow->UpdateFullScreen( !l_pWindow->IsFullscreen() );
+			pWindow->UpdateFullScreen( !pWindow->IsFullscreen() );
 		}
 
 		return true;

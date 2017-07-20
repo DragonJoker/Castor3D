@@ -58,9 +58,9 @@ namespace GuiCommon
 	template< size_t Count >
 	wxArrayInt make_wxArrayInt( std::array< int, Count > p_values )
 	{
-		wxArrayInt l_return{ Count };
-		std::memcpy( &l_return[0], p_values.data(), Count * sizeof( int ) );
-		return l_return;
+		wxArrayInt result{ Count };
+		std::memcpy( &result[0], p_values.data(), Count * sizeof( int ) );
+		return result;
 	}
 	/*!
 	\author 	Sylvain DOREMUS

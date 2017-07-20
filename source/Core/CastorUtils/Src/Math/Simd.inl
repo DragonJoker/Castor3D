@@ -41,25 +41,25 @@ namespace Castor
 
 	inline Float4 operator+( Float4 const & p_lhs, Float4 const & p_rhs )
 	{
-		Float4 l_lhs{ p_lhs };
-		return l_lhs += p_rhs;
+		Float4 lhs{ p_lhs };
+		return lhs += p_rhs;
 	}
 
 	inline Float4 operator-( Float4 const & p_lhs, Float4 const & p_rhs )
 	{
-		Float4 l_lhs{ p_lhs };
-		return l_lhs -= p_rhs;
+		Float4 lhs{ p_lhs };
+		return lhs -= p_rhs;
 	}
 
 	inline Float4 operator*( Float4 const & p_lhs, Float4 const & p_rhs )
 	{
-		Float4 l_lhs{ p_lhs };
-		return l_lhs *= p_rhs;
+		Float4 lhs{ p_lhs };
+		return lhs *= p_rhs;
 	}
 
 	inline Float4 operator/( Float4 const & p_lhs, Float4 const & p_rhs )
 	{
-		Float4 l_lhs{ p_lhs };
-		return l_lhs /= p_rhs;
+		Float4 lhs{ p_lhs };
+		return lhs /= p_rhs;
 	}
 }

@@ -23,20 +23,22 @@ SOFTWARE.
 #ifndef ___C3D_FxaaPostEffect_H___
 #define ___C3D_FxaaPostEffect_H___
 
+#include "FxaaUbo.hpp"
+
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/MatrixUbo.hpp>
 
-namespace Fxaa
+namespace fxaa
 {
-	class FxaaPostEffect
+	class PostEffect
 		: public Castor3D::PostEffect
 	{
 	public:
-		FxaaPostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
-		~FxaaPostEffect();
+		PostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
+		~PostEffect();
 		static Castor3D::PostEffectSPtr Create( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
 		/**
 		 *\copydoc		Castor3D::PostEffect::Initialise
@@ -50,6 +52,21 @@ namespace Fxaa
 		 *\copydoc		Castor3D::PostEffect::Apply
 		 */
 		bool Apply( Castor3D::FrameBuffer & p_framebuffer ) override;
+
+		inline void SetSubpixShift( float p_value )
+		{
+			m_subpixShift = p_value;
+		}
+
+		inline void SetMaxSpan( float p_value )
+		{
+			m_spanMax = p_value;
+		}
+
+		inline void SetReduceMul( float p_value )
+		{
+			m_reduceMul = p_value;
+		}
 
 	private:
 		/**
@@ -67,12 +84,7 @@ namespace Fxaa
 		Castor3D::RenderPipelineSPtr m_pipeline;
 		PostEffectSurface m_surface;
 		Castor3D::MatrixUbo m_matrixUbo;
-		Castor3D::UniformBuffer m_fxaaUbo;
-		Castor3D::Uniform1fSPtr m_uniformSubpixShift;
-		Castor3D::Uniform1fSPtr m_uniformSpanMax;
-		Castor3D::Uniform1fSPtr m_uniformReduceMul;
-		Castor3D::Uniform1fSPtr m_uniformRenderTargetWidth;
-		Castor3D::Uniform1fSPtr m_uniformRenderTargetHeight;
+		FxaaUbo m_fxaaUbo;
 		float m_subpixShift{ 1.0f / 4.0f };
 		float m_spanMax{ 8.0f };
 		float m_reduceMul{ 1.0f / 8.0f };

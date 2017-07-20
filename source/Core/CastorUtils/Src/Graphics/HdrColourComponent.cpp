@@ -4,11 +4,11 @@ namespace Castor
 {
 	bool operator==( HdrColourComponent const & p_cpnA, HdrColourComponent const & p_cpnB )
 	{
-		float l_uiA;
-		float l_uiB;
-		p_cpnA.convert_to( l_uiA );
-		p_cpnB.convert_to( l_uiB );
-		return l_uiA == l_uiB;
+		float uiA;
+		float uiB;
+		p_cpnA.convert_to( uiA );
+		p_cpnB.convert_to( uiB );
+		return uiA == uiB;
 	}
 
 	bool operator!=( HdrColourComponent const & p_cpnA, HdrColourComponent const & p_cpnB )
@@ -18,37 +18,37 @@ namespace Castor
 
 	float operator-( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
 	{
-		float l_fValue;
-		p_cpnt.convert_to( l_fValue );
-		HdrColourComponent l_cpnt( &l_fValue );
-		l_cpnt -= p_scalar;
-		return l_fValue;
+		float fValue;
+		p_cpnt.convert_to( fValue );
+		HdrColourComponent cpnt( &fValue );
+		cpnt -= p_scalar;
+		return fValue;
 	}
 
 	float operator+( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
 	{
-		float l_fValue;
-		p_cpnt.convert_to( l_fValue );
-		HdrColourComponent l_cpnt( &l_fValue );
-		l_cpnt += p_scalar;
-		return l_fValue;
+		float fValue;
+		p_cpnt.convert_to( fValue );
+		HdrColourComponent cpnt( &fValue );
+		cpnt += p_scalar;
+		return fValue;
 	}
 
 	float operator*( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
 	{
-		float l_fValue;
-		p_cpnt.convert_to( l_fValue );
-		HdrColourComponent l_cpnt( &l_fValue );
-		l_cpnt *= p_scalar;
-		return l_fValue;
+		float fValue;
+		p_cpnt.convert_to( fValue );
+		HdrColourComponent cpnt( &fValue );
+		cpnt *= p_scalar;
+		return fValue;
 	}
 
 	float operator/( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
 	{
-		float l_fValue;
-		p_cpnt.convert_to( l_fValue );
-		HdrColourComponent l_cpnt( &l_fValue );
-		l_cpnt /= p_scalar;
-		return l_fValue;
+		float fValue;
+		p_cpnt.convert_to( fValue );
+		HdrColourComponent cpnt( &fValue );
+		cpnt /= p_scalar;
+		return fValue;
 	}
 }
