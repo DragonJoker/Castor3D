@@ -178,28 +178,44 @@ namespace Castor3D
 			, invView
 			, invProj );
 
-		m_reflection->Render( m_geometryPassResult
-			, m_lightingPass->GetResult()
-			, p_scene
-			, p_camera
-			, invViewProj
-			, invView
-			, invProj );
-
-		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
-			|| p_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+		if ( p_scene.HasSkybox() )
 		{
-			m_combinePass->Render( m_geometryPassResult
+			m_reflection->Render( m_geometryPassResult
 				, m_lightingPass->GetResult()
-				, m_reflection->GetReflection()
-				, m_reflection->GetRefraction()
-				, p_scene.GetSkybox().GetIbl()
+				, p_scene
 				, p_camera
 				, invViewProj
 				, invView
-				, invProj
-				, p_scene.GetFog()
-				, m_frameBuffer );
+				, invProj );
+
+			if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
+				|| p_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+			{
+				m_combinePass->Render( m_geometryPassResult
+					, m_lightingPass->GetResult()
+					, m_reflection->GetReflection()
+					, m_reflection->GetRefraction()
+					, p_scene.GetSkybox().GetIbl()
+					, p_camera
+					, invViewProj
+					, invView
+					, invProj
+					, p_scene.GetFog()
+					, m_frameBuffer );
+			}
+			else
+			{
+				m_combinePass->Render( m_geometryPassResult
+					, m_lightingPass->GetResult()
+					, m_reflection->GetReflection()
+					, m_reflection->GetRefraction()
+					, p_camera
+					, invViewProj
+					, invView
+					, invProj
+					, p_scene.GetFog()
+					, m_frameBuffer );
+			}
 		}
 		else
 		{
@@ -218,7 +234,7 @@ namespace Castor3D
 
 	void DeferredRendering::Debug( Camera const & p_camera )
 	{
-		auto count = 6 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
+		auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		int width = int( m_size.width() ) / count;
 		int height = int( m_size.height() ) / count;
 		int left = int( m_size.width() ) - width;
@@ -233,6 +249,8 @@ namespace Castor3D
 		context.RenderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData3 )]->GetTexture() );
 		context.RenderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData4 )]->GetTexture() );
 		context.RenderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->GetResult().GetTexture() );
+		context.RenderTexture( Position{ width * index++, 0 }, size, *m_reflection->GetReflection().GetTexture() );
+		context.RenderTexture( Position{ width * index++, 0 }, size, *m_reflection->GetRefraction().GetTexture() );
 
 		if ( m_ssaoConfig.m_enabled )
 		{

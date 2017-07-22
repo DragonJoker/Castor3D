@@ -1,0 +1,97 @@
+
+material "Grayish"
+{
+	pass
+	{
+		albedo 0.75164 0.75164 0.75164 1.0
+		roughness 0.3
+		metallic 0.0
+		two_sided true
+	}
+}
+
+material "Yellowish"
+{
+	pass
+	{
+		albedo 1.0 1.0 0.0 1.0
+		roughness 0.3
+		metallic 0.0
+		two_sided true
+	}
+}
+
+material "Redish"
+{
+	pass
+	{
+		albedo 1.0 0.0 0.0 1.0
+		roughness 0.3
+		metallic 0.0
+		two_sided true
+	}
+}
+
+material "Silver"
+{
+	pass
+	{
+		albedo 0.75164 0.75164 0.75164 1.0
+		roughness 0.1
+		metallic 0.9
+		two_sided true
+	}
+}
+
+material "AlphaSilver"
+{
+	pass
+	{
+		albedo 0.75164 0.75164 0.75164 1.0
+		roughness 0.0
+		metallic 1.0
+		alpha 0.5
+	}
+}
+
+material "Gold"
+{
+	pass
+	{
+		albedo 1.000 0.766 0.336
+		roughness 0.0
+		metallic 1.0
+		two_sided true
+	}
+}
+
+material "AlphaGold"
+{
+	pass
+	{
+		albedo 1.000 0.766 0.336
+		roughness 0.0
+		metallic 1.0
+		two_sided true
+		alpha 0.5
+	}
+}
+
+material "Copper"
+{
+	pass
+	{
+		albedo 0.7038 0.27048 0.0828 1.0
+		roughness 0.0
+		metallic 1.0
+		two_sided true
+	}
+}
+
+material "WhiteEmit"
+{
+	pass
+	{
+		emissive 1.1 1.1 1.1 1.1
+	}
+}

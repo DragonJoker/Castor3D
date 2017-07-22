@@ -12,6 +12,7 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
+#include <GlslShadow.hpp>
 #include <GlslMaterial.hpp>
 #include <GlslUtils.hpp>
 #include <GlslPhongLighting.hpp>

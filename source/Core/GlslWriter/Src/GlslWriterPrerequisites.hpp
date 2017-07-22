@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -119,6 +119,7 @@ namespace GLSL
 	class LightingModel;
 	class PhongLightingModel;
 	class DeferredPhongLightingModel;
+	class Shadow;
 	struct Light;
 	struct DirectionalLight;
 	struct PointLight;

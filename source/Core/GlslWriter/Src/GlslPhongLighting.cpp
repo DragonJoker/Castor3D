@@ -192,7 +192,7 @@ namespace GLSL
 				if ( m_shadows != ShadowType::eNone )
 				{
 					shadowFactor = 1.0_f - min( receivesShadows
-						, m_shadowModel.ComputeDirectionalShadow( light.m_transform()
+						, m_shadowModel->ComputeDirectionalShadow( light.m_transform()
 							, fragmentIn.m_v3Vertex
 							, lightDirection
 							, fragmentIn.m_v3Normal ) );
@@ -242,7 +242,7 @@ namespace GLSL
 					IF( m_writer, light.m_index() >= 0_i )
 					{
 						shadowFactor = 1.0_f - min( receivesShadows
-							, m_shadowModel.ComputePointShadow( fragmentIn.m_v3Vertex
+							, m_shadowModel->ComputePointShadow( fragmentIn.m_v3Vertex
 								, light.m_position().xyz()
 								, fragmentIn.m_v3Normal
 								, light.m_index() ) );
@@ -302,7 +302,7 @@ namespace GLSL
 						IF( m_writer, light.m_index() >= 0_i )
 						{
 							shadowFactor = 1.0_f - min( receivesShadows
-								, m_shadowModel.ComputeSpotShadow( light.m_transform()
+								, m_shadowModel->ComputeSpotShadow( light.m_transform()
 									, fragmentIn.m_v3Vertex
 									, lightToVertex
 									, fragmentIn.m_v3Normal
@@ -358,7 +358,7 @@ namespace GLSL
 				if ( m_shadows != ShadowType::eNone )
 				{
 					shadowFactor = 1.0_f - min( receivesShadows
-						, m_shadowModel.ComputeDirectionalShadow( light.m_transform()
+						, m_shadowModel->ComputeDirectionalShadow( light.m_transform()
 							, fragmentIn.m_v3Vertex
 							, lightDirection
 							, fragmentIn.m_v3Normal ) );
@@ -406,7 +406,7 @@ namespace GLSL
 				if ( m_shadows != ShadowType::eNone )
 				{
 					shadowFactor = 1.0_f - min( receivesShadows
-						, m_shadowModel.ComputePointShadow( fragmentIn.m_v3Vertex
+						, m_shadowModel->ComputePointShadow( fragmentIn.m_v3Vertex
 							, light.m_position().xyz()
 							, fragmentIn.m_v3Normal ) );
 				}
@@ -461,7 +461,7 @@ namespace GLSL
 					if ( m_shadows != ShadowType::eNone )
 					{
 						shadowFactor = 1.0_f - min( receivesShadows
-							, m_shadowModel.ComputeSpotShadow( light.m_transform()
+							, m_shadowModel->ComputeSpotShadow( light.m_transform()
 								, fragmentIn.m_v3Vertex
 								, lightToVertex
 								, fragmentIn.m_v3Normal ) );

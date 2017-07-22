@@ -642,6 +642,7 @@ namespace Castor3D
 	{
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eColour );
+		m_viewport.Apply();
 		m_gpInfo.Update( m_size
 			, p_camera
 			, p_invViewProj

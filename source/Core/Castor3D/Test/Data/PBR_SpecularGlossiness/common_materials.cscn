@@ -1,0 +1,97 @@
+
+material "Grayish"
+{
+	pass
+	{
+		diffuse 0.75164 0.75164 0.75164 1.0
+		glossiness 0.7
+		specular 0.1 0.1 0.1 1.0
+		two_sided true
+	}
+}
+
+material "Yellowish"
+{
+	pass
+	{
+		diffuse 1.0 1.0 0.0 1.0
+		glossiness 0.7
+		specular 0.1 0.1 0.1 1.0
+		two_sided true
+	}
+}
+
+material "Redish"
+{
+	pass
+	{
+		diffuse 1.0 0.0 0.0 1.0
+		glossiness 0.7
+		specular 0.1 0.1 0.1 1.0
+		two_sided true
+	}
+}
+
+material "Silver"
+{
+	pass
+	{
+		diffuse 0.75164 0.75164 0.75164 1.0
+		glossiness 0.9
+		specular 0.75164 0.75164 0.75164 1.0
+		two_sided true
+	}
+}
+
+material "AlphaSilver"
+{
+	pass
+	{
+		diffuse 0.75164 0.75164 0.75164 1.0
+		glossiness 1.0
+		specular 0.75164 0.75164 0.75164 1.0
+		alpha 0.5
+	}
+}
+
+material "Gold"
+{
+	pass
+	{
+		diffuse 1.000 0.766 0.336
+		glossiness 1.0
+		specular 1.000 0.766 0.336
+		two_sided true
+	}
+}
+
+material "AlphaGold"
+{
+	pass
+	{
+		diffuse 1.000 0.766 0.336
+		glossiness 1.0
+		specular 1.000 0.766 0.336
+		two_sided true
+		alpha 0.5
+	}
+}
+
+material "Copper"
+{
+	pass
+	{
+		diffuse 0.7038 0.27048 0.0828 1.0
+		glossiness 1.0
+		specular 0.7038 0.27048 0.0828 1.0
+		two_sided true
+	}
+}
+
+material "WhiteEmit"
+{
+	pass
+	{
+		emissive 1.1 1.1 1.1 1.1
+	}
+}

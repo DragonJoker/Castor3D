@@ -1,4 +1,4 @@
-﻿#include "RenderTechniquePass.hpp"
+#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -7,6 +7,7 @@
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslShadow.hpp>
 
 using namespace Castor;
 
