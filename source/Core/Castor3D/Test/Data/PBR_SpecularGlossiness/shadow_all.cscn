@@ -1,0 +1,150 @@
+debug_overlays true
+
+scene "Scene"
+{
+	materials pbr_specular_glossiness
+	ambient_light 0.2 0.2 0.2
+	background_colour 0.5 0.5 0.5 1.0
+	include "common_materials.cscn"
+
+	scene_node "LightNode"
+	{
+		orientation 1 0 0 45
+	}
+
+	light "Light"
+	{
+		type directional
+		parent "LightNode"
+		colour 1.0 1.0 1.0
+		intensity 0.8 1.0
+		shadow_producer true
+	}
+
+	scene_node "SpotLightNode"
+	{
+		orientation 1 0 0 45
+		position 0.0 100.0 -100.0
+	}
+
+	light "SpotLight"
+	{
+		type spot
+		parent "SpotLightNode"
+		colour 1.0 1.0 1.0
+		intensity 0.8 1.0
+		attenuation 1.0 0.01 0.0
+		cut_off 20
+		shadow_producer true
+	}
+
+	scene_node "PointLightNode"
+	{
+		position 0.0 100.0 0.0
+	}
+
+	light "PointLight"
+	{
+		type point
+		parent "PointLightNode"
+		colour 1.0 1.0 1.0
+		intensity 0.8 1.0
+		attenuation 1.0 0.01 0.0
+		shadow_producer true
+	}
+
+	scene_node "Plane"
+	{
+		position 0.0 0.0 0.0
+		orientation 1.0 0.0 0.0 90.0
+	}
+
+	scene_node "Torus"
+	{
+		position 0.0 30.0 0.0
+	}
+
+	object "SpotLight"
+	{
+		parent "SpotLightNode"
+		cast_shadows false
+
+		mesh "SpotLightMesh"
+		{
+			type "cube" -width=1 -height=1 -depth=4
+		}
+
+		material "WhiteEmit"
+	}
+
+	object "PointLight"
+	{
+		parent "PointLightNode"
+		cast_shadows false
+
+		mesh "PointLightMesh"
+		{
+			type "sphere" -subdiv=20 -radius=1
+		}
+
+		material "WhiteEmit"
+	}
+
+	object "Plane"
+	{
+		parent "Plane"
+
+		mesh "Plane"
+		{
+			type "plane" -width_subdiv=0 -depth_subdiv=0 -width=200 -depth=200
+		}
+
+		material "Yellowish"
+	}
+
+	object "Torus"
+	{
+		parent "Torus"
+
+		mesh "Torus"
+		{
+			type "torus" -inner_count=30 -outer_count=30 -inner_size=15 -outer_size=30
+		}
+
+		material "Redish"
+	}
+
+	scene_node "MainCameraNode"
+	{
+		position 0.0 180.0 -200.0
+		orientation 0.320588 0 0 40.947219
+	}
+
+	camera "MainCamera"
+	{
+		parent "MainCameraNode"
+
+		viewport "MainViewport"
+		{
+			type perspective
+			fov_y 45.0
+			aspect_ratio 1.778
+			near 0.1
+			far 20000.0
+		}
+	}
+}
+
+window "Window"
+{
+	render_target
+	{
+		format argb32
+		size screen_size
+		scene "Scene"
+		camera "MainCamera"
+	}
+
+	fullscreen false
+	vsync false
+}

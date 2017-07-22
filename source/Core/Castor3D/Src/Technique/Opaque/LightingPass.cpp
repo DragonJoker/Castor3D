@@ -149,7 +149,7 @@ namespace Castor3D
 
 		if ( !cache.IsEmpty() )
 		{
-#if !defined( NDEBUG )
+#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
 			g_index = 0;
 

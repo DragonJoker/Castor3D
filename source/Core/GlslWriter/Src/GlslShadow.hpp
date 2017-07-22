@@ -64,7 +64,7 @@ namespace GLSL
 	private:
 		GlslWriter & m_writer;
 		Function< Float, InVec4 > m_getRandom;
-		Function< Vec2, InVec3, InVec3 > m_getShadowOffset;
+		Function< Float, InVec3, InVec3, InFloat, InFloat > m_getShadowOffset;
 		Function< Vec3, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_getLightSpacePosition;
 		Function< Float, InVec2, InFloat > m_filterDirectional;
 		Function< Float, InVec2, InFloat, InFloat > m_filterSpot;

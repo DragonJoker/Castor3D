@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___GLSL_LIGHTING_H___
 #define ___GLSL_LIGHTING_H___
 
-#include "GlslShadow.hpp"
+#include "GlslIntrinsics.hpp"
 
 namespace GLSL
 {
@@ -84,7 +84,7 @@ namespace GLSL
 	protected:
 		ShadowType m_shadows;
 		GlslWriter & m_writer;
-		Shadow m_shadowModel;
+		std::shared_ptr< Shadow > m_shadowModel;
 	};
 }
 

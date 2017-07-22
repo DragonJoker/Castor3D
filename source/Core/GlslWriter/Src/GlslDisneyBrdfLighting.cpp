@@ -361,7 +361,7 @@ namespace GLSL
 				if ( m_shadows != ShadowType::eNone )
 				{
 					shadowFactor = 1.0_f - min( p_receivesShadows
-						, m_shadowModel.ComputeDirectionalShadow( p_light.m_transform()
+						, m_shadowModel->ComputeDirectionalShadow( p_light.m_transform()
 							, p_fragmentIn.m_v3Vertex
 							, lightDirection
 							, p_fragmentIn.m_v3Normal ) );
@@ -406,7 +406,7 @@ namespace GLSL
 				if ( m_shadows != ShadowType::eNone )
 				{
 					shadowFactor = 1.0_f - min( p_receivesShadows
-						, m_shadowModel.ComputePointShadow( p_fragmentIn.m_v3Vertex
+						, m_shadowModel->ComputePointShadow( p_fragmentIn.m_v3Vertex
 							, p_light.m_position().xyz()
 							, p_fragmentIn.m_v3Normal ) );
 				}
@@ -460,7 +460,7 @@ namespace GLSL
 					if ( m_shadows != ShadowType::eNone )
 					{
 						shadowFactor = 1.0_f - min( p_receivesShadows
-							, m_shadowModel.ComputeSpotShadow( p_light.m_transform()
+							, m_shadowModel->ComputeSpotShadow( p_light.m_transform()
 								, p_fragmentIn.m_v3Vertex
 								, lightToVertex
 								, p_fragmentIn.m_v3Normal ) );

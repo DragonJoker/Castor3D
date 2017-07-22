@@ -40,9 +40,11 @@ SOFTWARE.
 
 #include <GlslShadow.hpp>
 
+#define DEBUG_SHADOW_MAPS 0
+
 namespace Castor3D
 {
-#if !defined( NDEBUG )
+#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
 	uint32_t g_index = 0u;
 
@@ -121,7 +123,7 @@ namespace Castor3D
 			return *p_light.GetDirectionalLight();
 		}
 
-#if !defined( NDEBUG )
+#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
 		static void DebugDisplay( TextureUnit & p_shadowMap )
 		{
@@ -197,7 +199,7 @@ namespace Castor3D
 			return *p_light.GetPointLight();
 		}
 
-#if !defined( NDEBUG )
+#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
 		static void DebugDisplay( TextureUnit & p_shadowMap )
 		{
@@ -273,7 +275,7 @@ namespace Castor3D
 			return *p_light.GetSpotLight();
 		}
 
-#if !defined( NDEBUG )
+#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
 		static void DebugDisplay( TextureUnit & p_shadowMap )
 		{
@@ -422,7 +424,7 @@ namespace Castor3D
 
 			m_shadowMapTexture.Unbind();
 
-#if !defined( NDEBUG )
+#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
 			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 			my_traits::DebugDisplay( m_shadowMapTexture );

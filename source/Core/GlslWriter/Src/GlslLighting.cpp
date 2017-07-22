@@ -1,4 +1,4 @@
-﻿#include "GlslLighting.hpp"
+#include "GlslLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -76,7 +76,7 @@ namespace GLSL
 	LightingModel::LightingModel( ShadowType p_shadows, GlslWriter & p_writer )
 		: m_shadows{ p_shadows }
 		, m_writer{ p_writer }
-		, m_shadowModel{ p_writer }
+		, m_shadowModel{ std::make_shared< Shadow >( p_writer ) }
 	{
 	}
 
@@ -84,7 +84,7 @@ namespace GLSL
 	{
 		if ( m_shadows != ShadowType::eNone )
 		{
-			m_shadowModel.Declare( m_shadows );
+			m_shadowModel->Declare( m_shadows );
 		}
 
 		Declare_Light();
@@ -105,7 +105,7 @@ namespace GLSL
 	{
 		if ( m_shadows != ShadowType::eNone )
 		{
-			m_shadowModel.DeclareDirectional( m_shadows );
+			m_shadowModel->DeclareDirectional( m_shadows );
 		}
 
 		Declare_Light();
@@ -118,7 +118,7 @@ namespace GLSL
 	{
 		if ( m_shadows != ShadowType::eNone )
 		{
-			m_shadowModel.DeclarePoint( m_shadows );
+			m_shadowModel->DeclarePoint( m_shadows );
 		}
 
 		Declare_Light();
@@ -131,7 +131,7 @@ namespace GLSL
 	{
 		if ( m_shadows != ShadowType::eNone )
 		{
-			m_shadowModel.DeclareSpot( m_shadows );
+			m_shadowModel->DeclareSpot( m_shadows );
 		}
 
 		Declare_Light();

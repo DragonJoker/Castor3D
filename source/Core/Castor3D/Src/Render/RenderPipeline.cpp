@@ -1,4 +1,4 @@
-﻿#include "RenderPipeline.hpp"
+#include "RenderPipeline.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
@@ -6,6 +6,7 @@
 #include "Shader/ShaderProgram.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslShadow.hpp>
 
 using namespace Castor;
 
