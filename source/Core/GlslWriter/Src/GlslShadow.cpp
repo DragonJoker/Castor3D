@@ -1,4 +1,4 @@
-﻿#include "GlslShadow.hpp"
+#include "GlslShadow.hpp"
 
 using namespace Castor;
 
@@ -29,6 +29,16 @@ namespace GLSL
 				vec2( 0.34495938_f, 0.29387760 )
 			} );
 		}
+
+		// offsets for rectangular PCF sampling
+		auto c3d_pcfNumSamplingPositions = m_writer.DeclUniform< Int >( cuT( "c3d_pcfNumSamplingPositions" ), 4_i );
+		auto c3d_pcfKernel = m_writer.DeclUniform< Vec2 >( cuT( "c3d_pcfKernel" ), 4u,
+		{
+			vec2( 1.0_f, 1.0_f ),
+			vec2( -1.0_f, 1.0_f ),
+			vec2( -1.0_f, -1.0_f ),
+			vec2( 1.0_f, -1.0_f )
+		} );
 
 		DoDeclare_GetRandom();
 		DoDeclare_GetShadowOffset();
@@ -419,18 +429,26 @@ namespace GLSL
 				auto c3d_pcfKernel = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_pcfKernel" ), 4u );
 				auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
-					, 1.0_f - texture( c3d_mapShadowPoint[index], vec4( direction, depth ) ) );
+					, 0.0_f );
+				auto samples = m_writer.DeclLocale( cuT( "samples" )
+					, 4.0_f );
+				auto offset = m_writer.DeclLocale( cuT( "offset" )
+					, 20.0_f * depth );
 				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
-					, 1.0_f );
-				auto pcfRadius = m_writer.DeclLocale( cuT( "pcfRadius" )
-					, 1.0_f );
-				auto shadowStep = m_writer.DeclLocale( cuT( "shadowStep" )
-					, 0.001_f );
+					, 0.0_f );
 
-				FOR( m_writer, Int, i, 0, "i < c3d_pcfNumSamplingPositions", "i++" )
+				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
 				{
-					shadowFactor += 1.0_f - texture( c3d_mapShadowPoint[index], vec4( direction.xy() + c3d_pcfKernel[i] * shadowStep * pcfRadius, direction.z(), depth ) );
-					numSamplesUsed += 1.0_f;
+					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
+					{
+						FOR( m_writer, Float, z, -offset, "z < offset", "z += offset / (samples * 0.5)" )
+						{
+							shadowFactor += 1.0_f - texture( c3d_mapShadowPoint[index], vec4( direction + vec3( x, y, z ), depth ) );
+							numSamplesUsed += 1.0_f;
+						}
+						ROF;
+					}
+					ROF;
 				}
 				ROF;
 
