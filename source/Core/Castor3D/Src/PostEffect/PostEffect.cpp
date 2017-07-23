@@ -1,4 +1,4 @@
-﻿#include "PostEffect.hpp"
+#include "PostEffect.hpp"
 
 #include "Engine.hpp"
 
@@ -24,7 +24,11 @@ namespace Castor3D
 		m_colourTexture.SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eA8R8G8B8, p_size );
+		auto colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			, AccessType::eRead
+			, AccessType::eRead | AccessType::eWrite
+			, PixelFormat::eRGBA32F
+			, p_size );
 
 		m_colourTexture.SetSampler( p_sampler );
 		colourTexture->GetImage().InitialiseSource();

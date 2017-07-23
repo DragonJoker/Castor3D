@@ -1,4 +1,4 @@
-﻿#include "Pass.hpp"
+#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -347,12 +347,23 @@ namespace Castor3D
 		if ( HasAlphaBlending()
 			&& !CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) )
 		{
-			AddFlag( result, ProgramFlag::eAlphaBlending );
+			result |= ProgramFlag::eAlphaBlending;
 		}
 
 		if ( GetAlphaFunc() != ComparisonFunc::eAlways )
 		{
-			AddFlag( result, ProgramFlag::eAlphaTest );
+			result |= ProgramFlag::eAlphaTest;
+		}
+
+		switch ( GetType() )
+		{
+		case MaterialType::ePbrMetallicRoughness:
+			result |= ProgramFlag::ePbrMetallicRoughness;
+			break;
+
+		case MaterialType::ePbrSpecularGlossiness:
+			result |= ProgramFlag::ePbrSpecularGlossiness;
+			break;
 		}
 
 		return result;

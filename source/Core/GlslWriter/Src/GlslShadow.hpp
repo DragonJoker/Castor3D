@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -48,34 +48,33 @@ namespace GLSL
 
 	private:
 		void DoDeclare_GetRandom();
-		void DoDeclare_FilterDirectional( ShadowType p_type );
-		void DoDeclare_FilterSpot( ShadowType p_type );
-		void DoDeclare_FilterPoint( ShadowType p_type );
 		void DoDeclare_GetShadowOffset();
 		void DoDeclare_GetLightSpacePosition();
 		void DoDeclare_ComputeDirectionalShadow();
 		void DoDeclare_ComputeSpotShadow();
 		void DoDeclare_ComputePointShadow();
-		void DoDeclare_FilterOneSpot( ShadowType p_type );
-		void DoDeclare_FilterOnePoint( ShadowType p_type );
 		void DoDeclare_ComputeOneSpotShadow();
 		void DoDeclare_ComputeOnePointShadow();
+		void DoDeclare_PcfSample();
+		void DoDeclare_PcfSampleDirectional();
+		void DoDeclare_PcfSampleSpot();
+		void DoDeclare_PcfSamplePoint();
 
 	private:
 		GlslWriter & m_writer;
 		Function< Float, InVec4 > m_getRandom;
 		Function< Float, InVec3, InVec3, InFloat, InFloat > m_getShadowOffset;
 		Function< Vec3, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_getLightSpacePosition;
-		Function< Float, InVec2, InFloat > m_filterDirectional;
-		Function< Float, InVec2, InFloat, InFloat > m_filterSpot;
-		Function< Float, InVec3, InFloat, InInt > m_filterPoint;
 		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_computeDirectional;
 		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3, InInt > m_computeSpot;
 		Function< Float, InVec3, InVec3, InVec3, InInt > m_computePoint;
-		Function< Float, InVec2, InFloat > m_filterOneSpot;
-		Function< Float, InVec3, InFloat > m_filterOnePoint;
 		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_computeOneSpot;
 		Function< Float, InVec3, InVec3, InVec3 > m_computeOnePoint;
+		Function< Float, InVec3 > m_sampleDirectional;
+		Function< Float, InVec3, InInt > m_sampleSpot;
+		Function< Float, InVec3, InFloat, InInt > m_samplePoint;
+		Function< Float, InVec3 > m_sampleOneSpot;
+		Function< Float, InVec3, InFloat > m_sampleOnePoint;
 	};
 }
 

@@ -105,7 +105,7 @@ namespace Castor3D
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		auto colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
-			, AccessType::eNone
+			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
 			, m_renderTarget.GetPixelFormat(), p_size );
 		m_colourAttach = m_frameBuffer->CreateAttachment( colourTexture );
