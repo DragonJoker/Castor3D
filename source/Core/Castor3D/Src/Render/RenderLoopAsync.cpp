@@ -1,4 +1,4 @@
-﻿#include "RenderLoopAsync.hpp"
+#include "RenderLoopAsync.hpp"
 
 #include "Engine.hpp"
 
@@ -94,6 +94,7 @@ namespace Castor3D
 		{
 			// trick pour éviter les problèmes de contexte dans des threads différents:
 			// On enlève la pause le temps de dessiner une frame.
+			m_frameEnded = false;
 			m_paused = false;
 
 			while ( !m_frameEnded )
