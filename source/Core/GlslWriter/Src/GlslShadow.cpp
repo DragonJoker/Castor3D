@@ -1,4 +1,4 @@
-#include "GlslShadow.hpp"
+﻿#include "GlslShadow.hpp"
 
 using namespace Castor;
 
@@ -18,28 +18,6 @@ namespace GLSL
 		auto c3d_mapShadowDirectional = m_writer.DeclUniform< Sampler2DShadow >( MapShadowDirectional );
 		auto c3d_mapShadowSpot = m_writer.DeclUniform< Sampler2DArrayShadow >( MapShadowSpot );
 		auto c3d_mapShadowPoint = m_writer.DeclUniform< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
-
-		if ( type == ShadowType::ePoisson || type == ShadowType::eStratifiedPoisson )
-		{
-			auto c3d_poissonDisk = m_writer.DeclUniform< Vec2 >( cuT( "c3d_poissonDisk" ), 4,
-			{
-				vec2( -0.94201624_f, -0.39906216 ),
-				vec2( 0.94558609_f, -0.76890725 ),
-				vec2( -0.094184101_f, -0.92938870 ),
-				vec2( 0.34495938_f, 0.29387760 )
-			} );
-		}
-
-		// offsets for rectangular PCF sampling
-		auto c3d_pcfNumSamplingPositions = m_writer.DeclUniform< Int >( cuT( "c3d_pcfNumSamplingPositions" ), 4_i );
-		auto c3d_pcfKernel = m_writer.DeclUniform< Vec2 >( cuT( "c3d_pcfKernel" ), 4u,
-		{
-			vec2( 1.0_f, 1.0_f ),
-			vec2( -1.0_f, 1.0_f ),
-			vec2( -1.0_f, -1.0_f ),
-			vec2( 1.0_f, -1.0_f )
-		} );
-
 		DoDeclare_GetRandom();
 		DoDeclare_GetShadowOffset();
 		DoDeclare_GetLightSpacePosition();
@@ -52,28 +30,6 @@ namespace GLSL
 	void Shadow::DeclareDirectional( ShadowType type )
 	{
 		auto c3d_mapShadowDirectional = m_writer.DeclUniform< Sampler2DShadow >( MapShadowDirectional );
-
-		if ( type == ShadowType::ePoisson || type == ShadowType::eStratifiedPoisson )
-		{
-			auto c3d_poissonDisk = m_writer.DeclUniform< Vec2 >( cuT( "c3d_poissonDisk" ), 4,
-			{
-				vec2( -0.94201624_f, -0.39906216 ),
-				vec2( 0.94558609_f, -0.76890725 ),
-				vec2( -0.094184101_f, -0.92938870 ),
-				vec2( 0.34495938_f, 0.29387760 )
-			} );
-		}
-
-		// offsets for rectangular PCF sampling
-		auto c3d_pcfNumSamplingPositions = m_writer.DeclUniform< Int >( cuT( "c3d_pcfNumSamplingPositions" ), 4_i );
-		auto c3d_pcfKernel = m_writer.DeclUniform< Vec2 >( cuT( "c3d_pcfKernel" ), 4u,
-		{
-			vec2( 1.0_f, 1.0_f ),
-			vec2( -1.0_f, 1.0_f ),
-			vec2( -1.0_f, -1.0_f ),
-			vec2( 1.0_f, -1.0_f )
-		} );
-
 		DoDeclare_GetRandom();
 		DoDeclare_GetShadowOffset();
 		DoDeclare_GetLightSpacePosition();
@@ -84,28 +40,6 @@ namespace GLSL
 	void Shadow::DeclarePoint( ShadowType type )
 	{
 		auto c3d_mapShadowPoint = m_writer.DeclUniform< SamplerCubeShadow >( MapShadowPoint );
-
-		if ( type == ShadowType::ePoisson || type == ShadowType::eStratifiedPoisson )
-		{
-			auto c3d_poissonDisk = m_writer.DeclUniform< Vec2 >( cuT( "c3d_poissonDisk" ), 4,
-			{
-				vec2( -0.94201624_f, -0.39906216 ),
-				vec2( 0.94558609_f, -0.76890725 ),
-				vec2( -0.094184101_f, -0.92938870 ),
-				vec2( 0.34495938_f, 0.29387760 )
-			} );
-		}
-
-		// offsets for rectangular PCF sampling
-		auto c3d_pcfNumSamplingPositions = m_writer.DeclUniform< Int >( cuT( "c3d_pcfNumSamplingPositions" ), 4_i );
-		auto c3d_pcfKernel = m_writer.DeclUniform< Vec2 >( cuT( "c3d_pcfKernel" ), 4u,
-		{
-			vec2( 1.0_f, 1.0_f ),
-			vec2( -1.0_f, 1.0_f ),
-			vec2( -1.0_f, -1.0_f ),
-			vec2( 1.0_f, -1.0_f )
-		} );
-
 		DoDeclare_GetRandom();
 		DoDeclare_GetShadowOffset();
 		DoDeclare_PcfSamplePoint();
@@ -115,28 +49,6 @@ namespace GLSL
 	void Shadow::DeclareSpot( ShadowType type )
 	{
 		auto c3d_mapShadowSpot = m_writer.DeclUniform< Sampler2DShadow >( MapShadowSpot );
-
-		if ( type == ShadowType::ePoisson || type == ShadowType::eStratifiedPoisson )
-		{
-			auto c3d_poissonDisk = m_writer.DeclUniform< Vec2 >( cuT( "c3d_poissonDisk" ), 4,
-			{
-				vec2( -0.94201624_f, -0.39906216 ),
-				vec2( 0.94558609_f, -0.76890725 ),
-				vec2( -0.094184101_f, -0.92938870 ),
-				vec2( 0.34495938_f, 0.29387760 )
-			} );
-		}
-
-		// offsets for rectangular PCF sampling
-		auto c3d_pcfNumSamplingPositions = m_writer.DeclUniform< Int >( cuT( "c3d_pcfNumSamplingPositions" ), 4_i );
-		auto c3d_pcfKernel = m_writer.DeclUniform< Vec2 >( cuT( "c3d_pcfKernel" ), 4u,
-			{
-				vec2( 1.0_f, 1.0_f ),
-				vec2( -1.0_f, 1.0_f ),
-				vec2( -1.0_f, -1.0_f ),
-				vec2( 1.0_f, -1.0_f )
-			} );
-
 		DoDeclare_GetRandom();
 		DoDeclare_GetShadowOffset();
 		DoDeclare_GetLightSpacePosition();
@@ -264,7 +176,7 @@ namespace GLSL
 				, Vec3 const & normal )
 			{
 				auto constexpr minOffset = 0.0001f;
-				auto constexpr maxSlopeOffset = 0.005f;
+				auto constexpr maxSlopeOffset = 0.008f;
 				auto offset = m_writer.DeclLocale( cuT( "offset" )
 					, m_getShadowOffset( normal, lightDirection, Float( minOffset ), Float( maxSlopeOffset ) ) );
 				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" )
@@ -370,21 +282,26 @@ namespace GLSL
 		m_sampleDirectional = m_writer.ImplementFunction< Float >( cuT( "SampleDirectional" )
 			, [&]( Vec3 const & coords )
 			{
-				auto c3d_pcfKernel = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_pcfKernel" ), 4u );
-				auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
-					, 1.0_f - texture( c3d_mapShadowSpot, coords ) );
-				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
-					, 1.0_f );
-				auto pcfRadius = m_writer.DeclLocale( cuT( "pcfRadius" )
-					, 1.0_f );
+				auto c3d_mapShadowDirectional = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
 				auto shadowStep = m_writer.DeclLocale( cuT( "shadowStep" )
-					, 0.001_f );
+					, 0.0004_f );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 0.0_f );
+				auto samples = m_writer.DeclLocale( cuT( "samples" )
+					, 4.0_f );
+				auto offset = m_writer.DeclLocale( cuT( "offset" )
+					, shadowStep * 1.5 );
+				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
+					, 0.0_f );
 
-				FOR( m_writer, Int, i, 0, "i < c3d_pcfNumSamplingPositions", "i++" )
+				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
 				{
-					shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec3( coords.xy() + c3d_pcfKernel[i] * shadowStep * pcfRadius, coords.z() ) );
-					numSamplesUsed += 1.0_f;
+					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
+					{
+						shadowFactor += 1.0_f - texture( c3d_mapShadowDirectional, vec3( coords.xy() + vec2( x, y ), coords.z() ) );
+						numSamplesUsed += 1.0_f;
+					}
+					ROF;
 				}
 				ROF;
 
@@ -396,23 +313,28 @@ namespace GLSL
 			, [&]( Vec3 const & coords
 				, Int const & index )
 			{
-				auto c3d_pcfKernel = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_pcfKernel" ), 4u );
 				auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DArrayShadow >( Shadow::MapShadowSpot );
 				auto findex = m_writer.DeclLocale( cuT( "findex" )
 					, m_writer.Cast< Float >( index ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
-					, 1.0_f - texture( c3d_mapShadowSpot, vec4( coords.xy(), findex, coords.z() ) ) );
-				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
-					, 1.0_f );
-				auto pcfRadius = m_writer.DeclLocale( cuT( "pcfRadius" )
-					, 1.0_f );
 				auto shadowStep = m_writer.DeclLocale( cuT( "shadowStep" )
-					, 0.001_f );
+					, 0.002_f );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 0.0_f );
+				auto samples = m_writer.DeclLocale( cuT( "samples" )
+					, 4.0_f );
+				auto offset = m_writer.DeclLocale( cuT( "offset" )
+					, shadowStep * 1.5 );
+				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
+					, 0.0_f );
 
-				FOR( m_writer, Int, i, 0, "i < c3d_pcfNumSamplingPositions", "i++" )
+				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
 				{
-					shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec4( coords.xy() + c3d_pcfKernel[i] * shadowStep * pcfRadius, findex, coords.z() ) );
-					numSamplesUsed += 1.0_f;
+					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
+					{
+						shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec4( coords.xy() + vec2( x, y ), findex, coords.z() ) );
+						numSamplesUsed += 1.0_f;
+					}
+					ROF;
 				}
 				ROF;
 
@@ -426,7 +348,6 @@ namespace GLSL
 				, Float const & depth
 				, Int const & index )
 			{
-				auto c3d_pcfKernel = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_pcfKernel" ), 4u );
 				auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( MapShadowPoint, PointShadowMapCount );
 				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
 					, 0.0_f );
@@ -464,21 +385,26 @@ namespace GLSL
 		m_sampleDirectional = m_writer.ImplementFunction< Float >( cuT( "SampleDirectional" )
 			, [&]( Vec3 const & coords )
 			{
-				auto c3d_pcfKernel = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_pcfKernel" ), 4u );
 				auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowDirectional );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
-					, 1.0_f - texture( c3d_mapShadowSpot, coords ) );
-				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
-					, 1.0_f );
-				auto pcfRadius = m_writer.DeclLocale( cuT( "pcfRadius" )
-					, 1.0_f );
 				auto shadowStep = m_writer.DeclLocale( cuT( "shadowStep" )
-					, 0.0002_f );
+					, 0.0004_f );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 0.0_f );
+				auto samples = m_writer.DeclLocale( cuT( "samples" )
+					, 4.0_f );
+				auto offset = m_writer.DeclLocale( cuT( "offset" )
+					, shadowStep * 1.5 );
+				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
+					, 0.0_f );
 
-				FOR( m_writer, Int, i, 0, "i < c3d_pcfNumSamplingPositions", "i++" )
+				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
 				{
-					shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec3( coords.xy() + c3d_pcfKernel[i] * shadowStep * pcfRadius, coords.z() ) );
-					numSamplesUsed += 1.0_f;
+					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
+					{
+						shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec3( coords.xy() + vec2( x, y ), coords.z() ) );
+						numSamplesUsed += 1.0_f;
+					}
+					ROF;
 				}
 				ROF;
 
@@ -492,21 +418,26 @@ namespace GLSL
 		m_sampleOneSpot = m_writer.ImplementFunction< Float >( cuT( "SampleSpot" )
 			, [&]( Vec3 const & coords )
 			{
-				auto c3d_pcfKernel = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_pcfKernel" ), 4u );
 				auto c3d_mapShadowSpot = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadowSpot );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
-					, 1.0_f - texture( c3d_mapShadowSpot, coords ) );
-				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
-					, 1.0_f );
-				auto pcfRadius = m_writer.DeclLocale( cuT( "pcfRadius" )
-					, 1.0_f );
 				auto shadowStep = m_writer.DeclLocale( cuT( "shadowStep" )
 					, 0.002_f );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 0.0_f );
+				auto samples = m_writer.DeclLocale( cuT( "samples" )
+					, 4.0_f );
+				auto offset = m_writer.DeclLocale( cuT( "offset" )
+					, shadowStep * 1.5 );
+				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
+					, 0.0_f );
 
-				FOR( m_writer, Int, i, 0, "i < c3d_pcfNumSamplingPositions", "i++" )
+				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
 				{
-					shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec3( coords.xy() + c3d_pcfKernel[i] * shadowStep * pcfRadius, coords.z() ) );
-					numSamplesUsed += 1.0_f;
+					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
+					{
+						shadowFactor += 1.0_f - texture( c3d_mapShadowSpot, vec3( coords.xy() + vec2( x, y ), coords.z() ) );
+						numSamplesUsed += 1.0_f;
+					}
+					ROF;
 				}
 				ROF;
 
@@ -521,7 +452,6 @@ namespace GLSL
 			, [&]( Vec3 const & direction
 				, Float const & depth )
 			{
-				auto c3d_pcfKernel = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_pcfKernel" ), 4u );
 				auto c3d_mapShadowPoint = m_writer.GetBuiltin< SamplerCubeShadow >( Shadow::MapShadowPoint );
 				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
 					, 0.0_f );

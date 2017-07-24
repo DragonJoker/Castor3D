@@ -1,4 +1,4 @@
-#include "GlslSpecularBrdfLighting.hpp"
+﻿#include "GlslSpecularBrdfLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -199,8 +199,10 @@ namespace GLSL
 				, FragmentInput const & fragmentIn )
 			{
 				PbrMRMaterials materials{ m_writer };
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( light.m_direction().xyz() ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( -light.m_direction().xyz() ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
@@ -208,7 +210,11 @@ namespace GLSL
 
 					IF ( m_writer, receivesShadows != 0_i )
 					{
-						shadowFactor = shadows.ComputeDirectionalShadow( light.m_transform(), fragmentIn.m_v3Vertex, lightDirection, fragmentIn.m_v3Normal );
+						shadowFactor = 1.0_f - min( receivesShadows
+							, m_shadowModel->ComputeDirectionalShadow( light.m_transform()
+								, fragmentIn.m_v3Vertex
+								, lightDirection
+								, fragmentIn.m_v3Normal ) );
 					}
 					FI;
 				}
@@ -244,18 +250,24 @@ namespace GLSL
 				, FragmentInput const & fragmentIn )
 			{
 				PbrMRMaterials materials{ m_writer };
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+					, light.m_position().xyz() - fragmentIn.m_v3Vertex );
+				auto distance = m_writer.DeclLocale( cuT( "distance" )
+					, length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( lightToVertex ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
-					Shadow shadows{ m_writer };
-
-					IF ( m_writer, receivesShadows != 0_i )
+					IF( m_writer, receivesShadows != 0_i )
 					{
-						shadowFactor = shadows.ComputePointShadow( fragmentIn.m_v3Vertex, lightDirection, fragmentIn.m_v3Normal, 0_i );
+						shadowFactor = 1.0_f - min( receivesShadows
+							, m_shadowModel->ComputePointShadow( fragmentIn.m_v3Vertex
+								, light.m_position().xyz()
+								, fragmentIn.m_v3Normal
+								, light.m_index() ) );
 					}
 					FI;
 				}
@@ -294,10 +306,16 @@ namespace GLSL
 				, FragmentInput const & fragmentIn )
 			{
 				PbrMRMaterials materials{ m_writer };
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
-				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" ), dot( lightDirection, light.m_direction() ) );
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+					, light.m_position().xyz() - fragmentIn.m_v3Vertex );
+				auto distance = m_writer.DeclLocale( cuT( "distance" )
+					, length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( lightToVertex ) );
+				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" )
+					, dot( lightDirection, -light.m_direction() ) );
+				auto result = m_writer.DeclLocale( cuT( "result" )
+					, vec3( 0.0_f ) );
 
 				IF( m_writer, spotFactor > light.m_cutOff() )
 				{
@@ -305,33 +323,37 @@ namespace GLSL
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						Shadow shadows{ m_writer };
-
-						IF ( m_writer, receivesShadows != 0_i )
+						IF( m_writer, receivesShadows != 0_i )
 						{
-							shadowFactor = shadows.ComputeSpotShadow( light.m_transform(), fragmentIn.m_v3Vertex, lightToVertex, fragmentIn.m_v3Normal, Int( 0 ) );
+							shadowFactor = 1.0_f - min( receivesShadows
+								, m_shadowModel->ComputeSpotShadow( light.m_transform()
+									, fragmentIn.m_v3Vertex
+									, lightToVertex
+									, fragmentIn.m_v3Normal
+									, light.m_index() ) );
 						}
 						FI;
 					}
 
-					auto result = m_writer.DeclLocale( cuT( "result" )
-						, DoComputeLight( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, diffuse
-							, specular
-							, glossiness
-							, shadowFactor
-							, fragmentIn ) );
+					result = DoComputeLight( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, diffuse
+						, specular
+						, glossiness
+						, shadowFactor
+						, fragmentIn );
 					auto attenuation = m_writer.DeclLocale( cuT( "attenuation" )
 						, light.m_attenuation().x()
 						+ light.m_attenuation().y() * distance
 						+ light.m_attenuation().z() * distance * distance );
 					spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - light.m_cutOff() ) );
 
-					m_writer.Return( spotFactor * result / attenuation );
+					result = spotFactor * result / attenuation;
 				}
 				FI;
+
+				m_writer.Return( result );
 			}
 			, SpotLight( &m_writer, cuT( "light" ) )
 			, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -355,8 +377,10 @@ namespace GLSL
 				, FragmentInput const & fragmentIn )
 			{
 				PbrMRMaterials materials{ m_writer };
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( light.m_direction().xyz() ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( -light.m_direction().xyz() ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
@@ -369,7 +393,7 @@ namespace GLSL
 
 				m_writer.Return( DoComputeLight( light.m_lightBase()
 					, worldEye
-					, -lightDirection
+					, lightDirection
 					, diffuse
 					, specular
 					, glossiness
@@ -398,10 +422,14 @@ namespace GLSL
 				, FragmentInput const & fragmentIn )
 			{
 				PbrMRMaterials materials{ m_writer };
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), light.m_position().xyz() - fragmentIn.m_v3Vertex );
-				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+					, light.m_position().xyz() - fragmentIn.m_v3Vertex );
+				auto distance = m_writer.DeclLocale( cuT( "distance" )
+					, length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( lightToVertex ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
