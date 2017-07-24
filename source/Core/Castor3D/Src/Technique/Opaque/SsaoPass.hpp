@@ -26,6 +26,7 @@ SOFTWARE.
 #include "LightPass.hpp"
 
 #include "Miscellaneous/SsaoConfig.hpp"
+#include "Render/RenderInfo.hpp"
 #include "Shader/GpInfoUbo.hpp"
 #include "Shader/MatrixUbo.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -47,18 +48,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_size		The render area dimensions.
-		 *\param[in]	p_config	The SSAO configuration.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	config	The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_size		Les dimensions de la zone de rendu.
-		 *\param[in]	p_config	La configuration du SSAO.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	config	La configuration du SSAO.
 		 */
-		SsaoPass( Engine & p_engine
-			, Castor::Size const & p_size
-			, SsaoConfig const & p_config );
+		SsaoPass( Engine & engine
+			, Castor::Size const & size
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -69,24 +70,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass on currently bound framebuffer.
-		 *\param[in]	p_gp			The geometry pass result.
-		 *\param[in]	p_camera		The viewing camera.
-		 *\param[in]	p_invViewProj	The inverse view projection matrix.
-		 *\param[in]	p_invView		The inverse view matrix.
-		 *\param[in]	p_invProj		The inverse projection matrix.
+		 *\param[in]	gp			The geometry pass result.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	invViewProj	The inverse view projection matrix.
+		 *\param[in]	invView		The inverse view matrix.
+		 *\param[in]	invProj		The inverse projection matrix.
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image donné.
-		 *\param[in]	p_gp			Le résultat de la geometry pass.
-		 *\param[in]	p_camera		La caméra.
-		 *\param[in]	p_invViewProj	La matrice vue projection inversée.
-		 *\param[in]	p_invView		La matrice vue inversée.
-		 *\param[in]	p_invProj		La matrice projection inversée.
+		 *\param[in]	gp			Le résultat de la geometry pass.
+		 *\param[in]	camera		La caméra.
+		 *\param[in]	invViewProj	La matrice vue projection inversée.
+		 *\param[in]	invView		La matrice vue inversée.
+		 *\param[in]	invProj		La matrice projection inversée.
 		 */
-		void Render( GeometryPassResult const & p_gp
-			, Camera const & p_camera
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj );
+		void Render( GeometryPassResult const & gp
+			, Camera const & camera
+			, Castor::Matrix4x4r const & invViewProj
+			, Castor::Matrix4x4r const & invView
+			, Castor::Matrix4x4r const & invProj
+			, RenderInfo & info );
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.
@@ -105,7 +107,7 @@ namespace Castor3D
 		void DoCleanupQuadRendering();
 		void DoCleanupSsaoPass();
 		void DoCleanupBlurPass();
-		void DoRenderSsao( GeometryPassResult const & p_gp );
+		void DoRenderSsao( GeometryPassResult const & gp );
 		void DoRenderBlur();
 
 	private:
@@ -128,6 +130,7 @@ namespace Castor3D
 		UniformBuffer m_ssaoConfig;
 		Uniform3fSPtr m_kernelUniform;
 		std::unique_ptr< GpInfoUbo > m_gpInfo;
+		RenderPassTimerSPtr m_ssaoTimer;
 		// SSAO blur pass
 		VertexBufferSPtr m_blurVertexBuffer;
 		GeometryBuffersSPtr m_blurGeometryBuffers;
@@ -136,6 +139,7 @@ namespace Castor3D
 		TextureUnit m_blurResult;
 		FrameBufferSPtr m_blurFbo;
 		TextureAttachmentSPtr m_blurResultAttach;
+		RenderPassTimerSPtr m_blurTimer;
 
 	};
 }

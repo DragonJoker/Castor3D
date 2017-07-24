@@ -56,7 +56,7 @@ namespace GuiCommon
 		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
-		Castor3D::SceneWPtr m_pScene;
+		Castor3D::SceneWPtr m_scene;
 		Castor3D::Engine * m_engine;
 		PropertiesHolder * m_propertiesHolder;
 	};

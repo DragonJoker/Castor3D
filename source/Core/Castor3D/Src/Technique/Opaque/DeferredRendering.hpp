@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -49,13 +49,13 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 */
-		DeferredRendering( Engine & p_engine
-			, OpaquePass & p_opaquePass
-			, FrameBuffer & p_frameBuffer
-			, FrameBufferAttachment & p_depthAttach
-			, Castor::Size const & p_size
-			, Scene const & p_scene
-			, SsaoConfig const & p_config );
+		DeferredRendering( Engine & engine
+			, OpaquePass & opaquePass
+			, FrameBuffer & frameBuffer
+			, FrameBufferAttachment & depthAttach
+			, Castor::Size const & size
+			, Scene const & scene
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destroys deferred rendering related stuff.
@@ -66,21 +66,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
-		 *\param[out]	p_info	Receives the render informations.
+		 *\param[out]	info	Receives the render informations.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
+		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		void Render( RenderInfo & p_info
-			, Scene const & p_scene
-			, Camera const & p_camera );
+		void Render( RenderInfo & info
+			, Scene const & scene
+			, Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.
 		 *\~french
 		 *\brief		Dessine les données de débogage sur l'écran.
 		 */
-		void Debug( Camera const & p_camera );
+		void Debug( Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Blits the depth and stencil from the geometry pass into given framebuffer.
@@ -89,7 +89,7 @@ namespace Castor3D
 		 *\brief		Blitte la profondeur et le stencil de la geometry pass dans le tampon d'image donné.
 		 *\param[out]	p_fbo	Le tampon d'image cible.
 		 */
-		void BlitDepthInto( FrameBuffer & p_fbo );
+		void BlitDepthInto( FrameBuffer & fbo );
 
 	private:
 		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;

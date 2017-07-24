@@ -151,7 +151,7 @@ namespace Castor3D
 
 			case ChunkType::eAnimLength:
 				result = DoParseChunk( length, chunk );
-				p_obj.m_length = Castor::Milliseconds{ int64_t( length * 1000 ) };
+				p_obj.m_length = Milliseconds{ int64_t( length * 1000 ) };
 				break;
 			}
 		}
@@ -171,12 +171,12 @@ namespace Castor3D
 	{
 	}
 
-	bool MeshAnimationSubmesh::AddBuffer( Castor::Milliseconds const & p_from
+	bool MeshAnimationSubmesh::AddBuffer( Milliseconds const & p_from
 		, InterleavedVertexArray && p_buffer )
 	{
 		auto it = std::find_if( m_buffers.begin(), m_buffers.end(), [&p_from]( SubmeshAnimationBuffer const & p_keyframe )
 		{
-			return Castor::Milliseconds{ int64_t( p_keyframe.m_timeIndex ) } == p_from;
+			return Milliseconds{ int64_t( p_keyframe.m_timeIndex ) } == p_from;
 		} );
 
 		bool result = false;

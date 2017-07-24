@@ -14,10 +14,10 @@ namespace castortd
 {
 	namespace
 	{
-		TextOverlaySPtr GetTextOverlay( OverlayCache & p_cache, String const & p_name )
+		TextOverlaySPtr GetTextOverlay( OverlayCache & cache, String const & p_name )
 		{
 			TextOverlaySPtr result;
-			OverlaySPtr overlay = p_cache.Find( p_name );
+			OverlaySPtr overlay = cache.Find( p_name );
 
 			if ( overlay )
 			{

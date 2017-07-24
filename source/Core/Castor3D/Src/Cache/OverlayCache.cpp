@@ -23,9 +23,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	OverlayCache::OverlayInitialiser::OverlayInitialiser( Cache< Overlay, Castor::String > & p_cache )
-		: m_overlays{ p_cache.m_overlays }
-		, m_overlayCountPerLevel{ p_cache.m_overlayCountPerLevel }
+	OverlayCache::OverlayInitialiser::OverlayInitialiser( Cache< Overlay, Castor::String > & cache )
+		: m_overlays{ cache.m_overlays }
+		, m_overlayCountPerLevel{ cache.m_overlayCountPerLevel }
 	{
 	}
 
@@ -50,9 +50,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	OverlayCache::OverlayCleaner::OverlayCleaner( Cache< Overlay, Castor::String > & p_cache )
-		: m_overlays{ p_cache.m_overlays }
-		, m_overlayCountPerLevel{ p_cache.m_overlayCountPerLevel }
+	OverlayCache::OverlayCleaner::OverlayCleaner( Cache< Overlay, Castor::String > & cache )
+		: m_overlays{ cache.m_overlays }
+		, m_overlayCountPerLevel{ cache.m_overlayCountPerLevel }
 	{
 	}
 

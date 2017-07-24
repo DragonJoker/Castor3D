@@ -257,7 +257,8 @@ namespace Castor
 	class File;
 	class FileParser;
 	class FileParserContext;
-	template< typename FlagType, typename BaseType = typename BaseTypeFromSize< sizeof( FlagType ) >::Type >
+	template< typename FlagType
+		, typename BaseType = typename BaseTypeFromSize< sizeof( FlagType ) >::Type >
 	class FlagCombination;
 	class Font;
 	class FontCache;
@@ -306,11 +307,11 @@ namespace Castor
 	class TextFile;
 	template< class T >
 	class TextLoader;
-	template< class Obj,
-			  class Key,
-			  class PtrType = std::shared_ptr< Obj >,
-			  typename PFNCreate = std::function< PtrType() >,
-			  class Predicate = std::less< Key > >
+	template< class Obj
+		, class Key
+		, class PtrType = std::shared_ptr< Obj >
+		, typename PFNCreate = std::function< PtrType() >
+		, class Predicate = std::less< Key > >
 	class Factory;
 	class Path;
 	class DynamicLibrary;
@@ -326,7 +327,7 @@ namespace Castor
 	\~french
 	\brief		Typedef sur un buffer de pixels au format A8R8G8B8
 	*/
-	typedef PxBuffer< PixelFormat::eA8R8G8B8 > PixelBuffer;
+	using PixelBuffer = PxBuffer< PixelFormat::eA8R8G8B8 >;
 
 	template< typename T > using Point2 = Point< T, 2 >;
 	template< typename T > using Point3 = Point< T, 3 >;
@@ -555,7 +556,7 @@ namespace Castor
 	 *\param[in]	p_strLog	Le texte écrit
 	 *\param[in]	p_eLogType	Le type de log
 	 */
-	typedef std::function< void ( String const & p_strLog, LogType p_eLogType, bool p_newLine ) > LogCallback;
+	using LogCallback = std::function< void ( String const & p_strLog, LogType p_eLogType, bool p_newLine ) >;
 
 	/*!
 	\~english

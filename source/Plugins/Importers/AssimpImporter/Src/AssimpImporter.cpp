@@ -140,10 +140,10 @@ namespace C3dAssimp
 		}
 
 		template< typename T >
-		void DoFind( Castor::Milliseconds time
-			, typename std::map< Castor::Milliseconds, T > const & map
-			, typename std::map< Castor::Milliseconds, T >::const_iterator & prv
-			, typename std::map< Castor::Milliseconds, T >::const_iterator & cur )
+		void DoFind( Milliseconds time
+			, typename std::map< Milliseconds, T > const & map
+			, typename std::map< Milliseconds, T >::const_iterator & prv
+			, typename std::map< Milliseconds, T >::const_iterator & cur )
 		{
 			if ( map.empty() )
 			{
@@ -153,7 +153,7 @@ namespace C3dAssimp
 			{
 				cur = std::find_if( map.begin()
 					, map.end()
-					, [&time]( std::pair< Castor::Milliseconds, T > const & pair )
+					, [&time]( std::pair< Milliseconds, T > const & pair )
 					{
 						return pair.first > time;
 					} );
@@ -175,9 +175,9 @@ namespace C3dAssimp
 		}
 
 		template< typename T >
-		T DoCompute( Castor::Milliseconds const & from
+		T DoCompute( Milliseconds const & from
 			, Interpolator< T > const & interpolator
-			, std::map< Castor::Milliseconds, T > const & values )
+			, std::map< Milliseconds, T > const & values )
 		{
 			T result;
 
@@ -330,16 +330,16 @@ namespace C3dAssimp
 			}
 		}
 
-		std::map< Castor::Milliseconds, Point3r > DoProcessVec3Keys( aiVectorKey const * const keys
+		std::map< Milliseconds, Point3r > DoProcessVec3Keys( aiVectorKey const * const keys
 			, uint32_t count
 			, int64_t ticksPerMilliSecond
-			, std::set< Castor::Milliseconds > & times )
+			, std::set< Milliseconds > & times )
 		{
-			std::map< Castor::Milliseconds, Point3r > result;
+			std::map< Milliseconds, Point3r > result;
 
 			for ( auto const & key : make_array_view( keys, count ) )
 			{
-				auto time = Castor::Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
+				auto time = Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
 				times.insert( time );
 				result[time] = Point3r{ key.mValue.x, key.mValue.y, key.mValue.z };
 			}
@@ -347,16 +347,16 @@ namespace C3dAssimp
 			return result;
 		}
 
-		std::map< Castor::Milliseconds, Quaternion > DoProcessQuatKeys( aiQuatKey const * const keys
+		std::map< Milliseconds, Quaternion > DoProcessQuatKeys( aiQuatKey const * const keys
 			, uint32_t count
 			, int64_t ticksPerMilliSecond
-			, std::set< Castor::Milliseconds > & times )
+			, std::set< Milliseconds > & times )
 		{
-			std::map< Castor::Milliseconds, Quaternion > result;
+			std::map< Milliseconds, Quaternion > result;
 
 			for ( auto const & key : make_array_view( keys, count ) )
 			{
-				auto time = Castor::Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
+				auto time = Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
 				times.insert( time );
 				result[time] = Quaternion::from_matrix( Matrix4x4r{ Matrix3x3r{ &key.mValue.GetMatrix().Transpose().a1 } } );
 			}
@@ -364,10 +364,10 @@ namespace C3dAssimp
 			return result;
 		}
 
-		void DoSynchroniseKeys( std::map< Castor::Milliseconds, Point3r > const & translates
-			, std::map< Castor::Milliseconds, Point3r > const & scales
-			, std::map< Castor::Milliseconds, Quaternion > const & rotates
-			, std::set< Castor::Milliseconds > const & times
+		void DoSynchroniseKeys( std::map< Milliseconds, Point3r > const & translates
+			, std::map< Milliseconds, Point3r > const & scales
+			, std::map< Milliseconds, Quaternion > const & rotates
+			, std::set< Milliseconds > const & times
 			, uint32_t fps
 			, int64_t ticksPerMilliSecond
 			, SkeletonAnimationObject & object )
@@ -388,10 +388,10 @@ namespace C3dAssimp
 			else
 			{
 				// Limit the key frames per second to 60, to spare RAM...
-				Castor::Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
-				Castor::Milliseconds maxTime{ *times.rbegin() + step };
+				Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
+				Milliseconds maxTime{ *times.rbegin() + step };
 
-				for ( Castor::Milliseconds time{ 0 }; time < maxTime; time += step )
+				for ( Milliseconds time{ 0 }; time < maxTime; time += step )
 				{
 					Point3r translate = DoCompute( time, pointInterpolator, translates );
 					Point3r scale = DoCompute( time, pointInterpolator, scales );
@@ -647,7 +647,7 @@ namespace C3dAssimp
 
 			for ( auto aiKey : make_array_view( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
 			{
-				animSubmesh.AddBuffer( Castor::Milliseconds{ int64_t( aiKey.mTime * 1000 ) }
+				animSubmesh.AddBuffer( Milliseconds{ int64_t( aiKey.mTime * 1000 ) }
 					, DoCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
 			}
 
@@ -845,7 +845,7 @@ namespace C3dAssimp
 		, int64_t ticksPerMilliSecond
 		, Castor3D::SkeletonAnimationObject & object )
 	{
-		std::set< Castor::Milliseconds > times;
+		std::set< Milliseconds > times;
 
 		auto translates = DoProcessVec3Keys( aiNodeAnim.mPositionKeys
 			, aiNodeAnim.mNumPositionKeys

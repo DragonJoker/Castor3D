@@ -1,6 +1,7 @@
 #include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
@@ -16,65 +17,66 @@ namespace Castor3D
 	namespace
 	{
 		template< typename NodeType >
-		std::unique_ptr< DistanceRenderNodeBase > MakeDistanceNode( NodeType & p_node )
+		std::unique_ptr< DistanceRenderNodeBase > MakeDistanceNode( NodeType & node )
 		{
-			return std::make_unique< DistanceRenderNode< NodeType > >( p_node );
+			return std::make_unique< DistanceRenderNode< NodeType > >( node );
 		}
 
 		template< typename MapType >
-		void DoSortAlpha( MapType & p_input
-			, Camera const & p_camera
-			, RenderPass::DistanceSortedNodeMap & p_output )
+		void DoSortAlpha( MapType & input
+			, Camera const & camera
+			, RenderPass::DistanceSortedNodeMap & output )
 		{
-			for ( auto & itPipelines : p_input )
+			for ( auto & itPipelines : input )
 			{
 				for ( auto & renderNode : itPipelines.second )
 				{
 					Matrix4x4r mtxMeshGlobal = renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
-					Point3r position = p_camera.GetParent()->GetDerivedPosition();
+					Point3r position = camera.GetParent()->GetDerivedPosition();
 					Point3r ptCameraLocal = position * mtxMeshGlobal;
 					renderNode.m_data.SortByDistance( ptCameraLocal );
 					ptCameraLocal -= renderNode.m_sceneNode.GetPosition();
-					p_output.emplace( point::length_squared( ptCameraLocal ), MakeDistanceNode( renderNode ) );
+					output.emplace( point::length_squared( ptCameraLocal ), MakeDistanceNode( renderNode ) );
 				}
 			}
 		}
 
-		inline void DoUpdateProgram( ShaderProgram & p_program
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )
+		inline void DoUpdateProgram( ShaderProgram & program
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )
 		{
-			if ( GetShadowType( p_sceneFlags ) != GLSL::ShadowType::eNone
-				&& !p_program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+			if ( GetShadowType( sceneFlags ) != GLSL::ShadowType::eNone
+				&& !program.FindUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional
+				program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowDirectional
 					, ShaderType::ePixel );
-				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot
+				program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowSpot
 					, ShaderType::ePixel );
-				p_program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint
+				program.CreateUniform< UniformType::eSampler >( GLSL::Shadow::MapShadowPoint
 					, ShaderType::ePixel, 6u );
 			}
 
-			if ( ( CheckFlag( p_programFlags, ProgramFlag::ePbrMetallicRoughness )
-					|| CheckFlag( p_programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
-				&& CheckFlag( p_programFlags, ProgramFlag::eLighting ) )
+			if ( ( CheckFlag( programFlags, ProgramFlag::ePbrMetallicRoughness )
+					|| CheckFlag( programFlags, ProgramFlag::ePbrSpecularGlossiness ) )
+				&& CheckFlag( programFlags, ProgramFlag::eLighting ) )
 			{
-				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
+				program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
 					, ShaderType::ePixel );
-				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered
+				program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered
 					, ShaderType::ePixel );
-				p_program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapBrdf
+				program.CreateUniform< UniformType::eSampler >( ShaderProgram::MapBrdf
 					, ShaderType::ePixel );
 			}
 		}
 
-		inline BlendState DoCreateBlendState( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
+		inline BlendState DoCreateBlendState( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode )
 		{
 			BlendState state;
 			bool blend = false;
 
-			switch ( p_colourBlendMode )
+			switch ( colourBlendMode )
 			{
 			case BlendMode::eNoBlend:
 				state.SetRgbSrcBlend( BlendOperand::eOne );
@@ -106,7 +108,7 @@ namespace Castor3D
 				break;
 			}
 
-			switch ( p_alphaBlendMode )
+			switch ( alphaBlendMode )
 			{
 			case BlendMode::eNoBlend:
 				state.SetAlphaSrcBlend( BlendOperand::eOne );
@@ -151,34 +153,34 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	RenderTechniquePass::RenderTechniquePass( String const & p_name
-		, Scene & p_scene
-		, Camera * p_camera
-		, bool p_environment
-		, SceneNode const * p_ignored
-		, SsaoConfig const & p_config )
-		: RenderPass{ p_name, *p_scene.GetEngine(), p_ignored }
-		, m_scene{ p_scene }
-		, m_camera{ p_camera }
+	RenderTechniquePass::RenderTechniquePass( String const & name
+		, Scene & scene
+		, Camera * camera
+		, bool environment
+		, SceneNode const * ignored
+		, SsaoConfig const & config )
+		: RenderPass{ name, *scene.GetEngine(), ignored }
+		, m_scene{ scene }
+		, m_camera{ camera }
 		, m_sceneNode{}
-		, m_environment{ p_environment }
-		, m_ssaoConfig{ p_config }
+		, m_environment{ environment }
+		, m_ssaoConfig{ config }
 	{
 	}
 
-	RenderTechniquePass::RenderTechniquePass( String const & p_name
-		, Scene & p_scene
-		, Camera * p_camera
-		, bool p_oit
-		, bool p_environment
-		, SceneNode const * p_ignored
-		, SsaoConfig const & p_config )
-		: RenderPass{ p_name, *p_scene.GetEngine(), p_oit, p_ignored }
-		, m_scene{ p_scene }
-		, m_camera{ p_camera }
+	RenderTechniquePass::RenderTechniquePass( String const & name
+		, Scene & scene
+		, Camera * camera
+		, bool oit
+		, bool environment
+		, SceneNode const * ignored
+		, SsaoConfig const & config )
+		: RenderPass{ name, *scene.GetEngine(), oit, ignored }
+		, m_scene{ scene }
+		, m_camera{ camera }
 		, m_sceneNode{}
-		, m_environment{ p_environment }
-		, m_ssaoConfig{ p_config }
+		, m_environment{ environment }
+		, m_ssaoConfig{ config }
 	{
 	}
 
@@ -186,50 +188,55 @@ namespace Castor3D
 	{
 	}
 
-	void RenderTechniquePass::DoRender( RenderInfo & p_info, bool p_shadows )
+	void RenderTechniquePass::DoRender( RenderInfo & info, bool shadows )
 	{
 		auto & nodes = m_renderQueue.GetRenderNodes();
 		DepthMapArray depthMaps;
 
-		if ( p_shadows )
+		if ( shadows )
 		{
 			DoGetDepthMaps( depthMaps );
 		}
 
-		DoRenderNodes( nodes, *m_camera, depthMaps, p_info );
+		DoRenderNodes( nodes, *m_camera, depthMaps, info );
 	}
-	
-	void RenderTechniquePass::DoRenderNodes( SceneRenderNodes & p_nodes
-		, Camera const & p_camera
-		, DepthMapArray & p_depthMaps
-		, RenderInfo & p_info )const
-	{
-		if ( !p_nodes.m_staticNodes.m_backCulled.empty()
-			|| !p_nodes.m_instantiatedStaticNodes.m_backCulled.empty()
-			|| !p_nodes.m_skinnedNodes.m_backCulled.empty()
-			|| !p_nodes.m_instantiatedSkinnedNodes.m_backCulled.empty()
-			|| !p_nodes.m_morphingNodes.m_backCulled.empty()
-			|| !p_nodes.m_billboardNodes.m_backCulled.empty() )
-		{
-			m_matrixUbo.Update( p_camera.GetView()
-				, p_camera.GetViewport().GetProjection() );
-			RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_frontCulled, p_camera, p_depthMaps );
-			RenderPass::DoRender( p_nodes.m_staticNodes.m_frontCulled, p_camera, p_depthMaps );
-			RenderPass::DoRender( p_nodes.m_skinnedNodes.m_frontCulled, p_camera, p_depthMaps );
-			RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_frontCulled, p_camera, p_depthMaps );
-			RenderPass::DoRender( p_nodes.m_morphingNodes.m_frontCulled, p_camera, p_depthMaps );
-			RenderPass::DoRender( p_nodes.m_billboardNodes.m_frontCulled, p_camera, p_depthMaps );
 
-			RenderPass::DoRender( p_nodes.m_instantiatedStaticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			RenderPass::DoRender( p_nodes.m_staticNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			RenderPass::DoRender( p_nodes.m_skinnedNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			RenderPass::DoRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled, p_camera, p_depthMaps );
-			RenderPass::DoRender( p_nodes.m_morphingNodes.m_backCulled, p_camera, p_depthMaps, p_info );
-			RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera, p_depthMaps, p_info );
+	void RenderTechniquePass::DoRenderNodes( SceneRenderNodes & nodes
+		, Camera const & camera
+		, DepthMapArray & depthMaps
+		, RenderInfo & info )const
+	{
+		if ( !nodes.m_staticNodes.m_backCulled.empty()
+			|| !nodes.m_instantiatedStaticNodes.m_backCulled.empty()
+			|| !nodes.m_skinnedNodes.m_backCulled.empty()
+			|| !nodes.m_instantiatedSkinnedNodes.m_backCulled.empty()
+			|| !nodes.m_morphingNodes.m_backCulled.empty()
+			|| !nodes.m_billboardNodes.m_backCulled.empty() )
+		{
+			m_timer->Start();
+			m_matrixUbo.Update( camera.GetView()
+				, camera.GetViewport().GetProjection() );
+			RenderPass::DoRender( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, depthMaps );
+			RenderPass::DoRender( nodes.m_staticNodes.m_frontCulled, camera, depthMaps );
+			RenderPass::DoRender( nodes.m_skinnedNodes.m_frontCulled, camera, depthMaps );
+			RenderPass::DoRender( nodes.m_instantiatedSkinnedNodes.m_frontCulled, camera, depthMaps );
+			RenderPass::DoRender( nodes.m_morphingNodes.m_frontCulled, camera, depthMaps );
+			RenderPass::DoRender( nodes.m_billboardNodes.m_frontCulled, camera, depthMaps );
+
+			RenderPass::DoRender( nodes.m_instantiatedStaticNodes.m_backCulled, camera, depthMaps, info );
+			RenderPass::DoRender( nodes.m_staticNodes.m_backCulled, camera, depthMaps, info );
+			RenderPass::DoRender( nodes.m_skinnedNodes.m_backCulled, camera, depthMaps, info );
+			RenderPass::DoRender( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera, depthMaps );
+			RenderPass::DoRender( nodes.m_morphingNodes.m_backCulled, camera, depthMaps, info );
+			RenderPass::DoRender( nodes.m_billboardNodes.m_backCulled, camera, depthMaps, info );
+			m_timer->Stop();
+			info.m_times.push_back( { m_timer->GetName()
+				, m_timer->GetGpuTime()
+				, m_timer->GetCpuTime() } );
 		}
 	}
 
-	bool RenderTechniquePass::DoInitialise( Size const & CU_PARAM_UNUSED( p_size ) )
+	bool RenderTechniquePass::DoInitialise( Size const & CU_PARAM_UNUSED( size ) )
 	{
 		if ( m_camera )
 		{
@@ -247,46 +254,46 @@ namespace Castor3D
 	{
 	}
 
-	void RenderTechniquePass::DoUpdate( RenderQueueArray & p_queues )
+	void RenderTechniquePass::DoUpdate( RenderQueueArray & queues )
 	{
-		p_queues.push_back( m_renderQueue );
+		queues.push_back( m_renderQueue );
 	}
 
-	void RenderTechniquePass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
+	void RenderTechniquePass::DoUpdateFlags( TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		AddFlag( p_programFlags, ProgramFlag::eLighting );
+		AddFlag( programFlags, ProgramFlag::eLighting );
 
 		if ( m_environment )
 		{
-			AddFlag( p_programFlags, ProgramFlag::eEnvironmentMapping );
+			AddFlag( programFlags, ProgramFlag::eEnvironmentMapping );
 		}
 	}
 
-	GLSL::Shader RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	GLSL::Shader RenderTechniquePass::DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
 		return GLSL::Shader{};
 	}
 
-	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
+	void RenderTechniquePass::DoUpdatePipeline( RenderPipeline & pipeline )const
 	{
 		m_sceneUbo.Update( m_scene, *m_camera );
 	}
 
-	void RenderTechniquePass::DoPrepareFrontPipeline( ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
+	void RenderTechniquePass::DoPrepareFrontPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
 	{
-		auto it = m_frontPipelines.find( p_flags );
+		auto it = m_frontPipelines.find( flags );
 
 		if ( it == m_frontPipelines.end() )
 		{
-			DoUpdateProgram( p_program
-				, p_flags.m_textureFlags
-				, p_flags.m_programFlags
-				, p_flags.m_sceneFlags );
+			DoUpdateProgram( program
+				, flags.m_textureFlags
+				, flags.m_programFlags
+				, flags.m_sceneFlags );
 			DepthStencilState dsState;
 			dsState.SetDepthTest( true );
 
@@ -297,34 +304,34 @@ namespace Castor3D
 
 			RasteriserState rsState;
 			rsState.SetCulledFaces( Culling::eFront );
-			auto & pipeline = *m_frontPipelines.emplace( p_flags
+			auto & pipeline = *m_frontPipelines.emplace( flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
 					, std::move( rsState )
-					, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+					, DoCreateBlendState( flags.m_colourBlendMode, flags.m_alphaBlendMode )
 					, MultisampleState{}
-					, p_program
-					, p_flags ) ).first->second;
+					, program
+					, flags ) ).first->second;
 
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, p_flags]()
+				, [this, &pipeline, flags]()
 				{
 					pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
 					pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
 					pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
 					pipeline.AddUniformBuffer( m_modelUbo.GetUbo() );
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+					if ( CheckFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
 						pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
+					if ( CheckFlag( flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !CheckFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
 						pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+					if ( CheckFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
 						pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 					}
@@ -332,16 +339,17 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechniquePass::DoPrepareBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void RenderTechniquePass::DoPrepareBackPipeline( ShaderProgram & program
+		, PipelineFlags const & flags )
 	{
-		auto it = m_backPipelines.find( p_flags );
+		auto it = m_backPipelines.find( flags );
 
 		if ( it == m_backPipelines.end() )
 		{
-			DoUpdateProgram( p_program
-				, p_flags.m_textureFlags
-				, p_flags.m_programFlags
-				, p_flags.m_sceneFlags );
+			DoUpdateProgram( program
+				, flags.m_textureFlags
+				, flags.m_programFlags
+				, flags.m_sceneFlags );
 			DepthStencilState dsState;
 			dsState.SetDepthTest( true );
 
@@ -352,34 +360,34 @@ namespace Castor3D
 
 			RasteriserState rsState;
 			rsState.SetCulledFaces( Culling::eBack );
-			auto & pipeline = *m_backPipelines.emplace( p_flags
+			auto & pipeline = *m_backPipelines.emplace( flags
 				, GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
 				, std::move( rsState )
-				, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+				, DoCreateBlendState( flags.m_colourBlendMode, flags.m_alphaBlendMode )
 					, MultisampleState{}
-				, p_program
-				, p_flags ) ).first->second;
+				, program
+				, flags ) ).first->second;
 
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, p_flags]()
+				, [this, &pipeline, flags]()
 				{
 					pipeline.AddUniformBuffer( m_matrixUbo.GetUbo() );
 					pipeline.AddUniformBuffer( m_modelMatrixUbo.GetUbo() );
 					pipeline.AddUniformBuffer( m_sceneUbo.GetUbo() );
 					pipeline.AddUniformBuffer( m_modelUbo.GetUbo() );
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eBillboards ) )
+					if ( CheckFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
 					{
 						pipeline.AddUniformBuffer( m_billboardUbo.GetUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !CheckFlag( p_flags.m_programFlags, ProgramFlag::eInstantiation ) )
+					if ( CheckFlag( flags.m_programFlags, ProgramFlag::eSkinning )
+						&& !CheckFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
 					{
 						pipeline.AddUniformBuffer( m_skinningUbo.GetUbo() );
 					}
 
-					if ( CheckFlag( p_flags.m_programFlags, ProgramFlag::eMorphing ) )
+					if ( CheckFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
 					{
 						pipeline.AddUniformBuffer( m_morphingUbo.GetUbo() );
 					}

@@ -1,4 +1,4 @@
-#include "ReflectionPass.hpp"
+﻿#include "ReflectionPass.hpp"
 
 #include <Engine.hpp>
 
@@ -6,6 +6,7 @@
 #include <FrameBuffer/TextureAttachment.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Render/RenderPassTimer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Scene.hpp>
@@ -34,7 +35,7 @@ namespace Castor3D
 		static uint32_t constexpr c_pbrEnvironmentCount = 12u;
 		static uint32_t constexpr c_legEnvironmentCount = 16u;
 
-		VertexBufferSPtr DoCreateVbo( Engine & p_engine )
+		VertexBufferSPtr DoCreateVbo( Engine & engine )
 		{
 			auto declaration = BufferDeclaration(
 			{
@@ -52,8 +53,8 @@ namespace Castor3D
 				1, 1, 1, 1
 			};
 
-			auto & renderSystem = *p_engine.GetRenderSystem();
-			auto vertexBuffer = std::make_shared< VertexBuffer >( p_engine, declaration );
+			auto & renderSystem = *engine.GetRenderSystem();
+			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
 			uint32_t stride = declaration.stride();
 			vertexBuffer->Resize( uint32_t( sizeof( data ) ) );
 			uint8_t * buffer = vertexBuffer->GetData();
@@ -63,21 +64,21 @@ namespace Castor3D
 			return vertexBuffer;
 		}
 
-		GeometryBuffersSPtr DoCreateVao( Engine & p_engine
-			, ShaderProgram & p_program
-			, VertexBuffer & p_vbo )
+		GeometryBuffersSPtr DoCreateVao( Engine & engine
+			, ShaderProgram & program
+			, VertexBuffer & vbo )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			auto result = renderSystem.CreateGeometryBuffers( Topology::eTriangles
-				, p_program );
-			result->Initialise( { p_vbo }, nullptr );
+				, program );
+			result->Initialise( { vbo }, nullptr );
 			return result;
 		}
 
-		GLSL::Shader DoCreateVertexProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreateVertexProgram( RenderSystem & renderSystem )
 		{
 			using namespace GLSL;
-			auto writer = p_renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.CreateGlslWriter();
 
 			// Shader inputs
 			UBO_MATRIX( writer );
@@ -97,10 +98,10 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 
-		GLSL::Shader DoCreateLegacyPixelProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreateLegacyPixelProgram( RenderSystem & renderSystem )
 		{
 			using namespace GLSL;
-			auto writer = p_renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.CreateGlslWriter();
 
 			// Shader inputs
 			UBO_SCENE( writer );
@@ -199,10 +200,10 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 
-		GLSL::Shader DoCreatePbrMRPixelProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreatePbrMRPixelProgram( RenderSystem & renderSystem )
 		{
 			using namespace GLSL;
-			auto writer = p_renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.CreateGlslWriter();
 
 			// Shader inputs
 			UBO_SCENE( writer );
@@ -312,10 +313,10 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 
-		GLSL::Shader DoCreatePbrSGPixelProgram( RenderSystem & p_renderSystem )
+		GLSL::Shader DoCreatePbrSGPixelProgram( RenderSystem & renderSystem )
 		{
 			using namespace GLSL;
-			auto writer = p_renderSystem.CreateGlslWriter();
+			auto writer = renderSystem.CreateGlslWriter();
 
 			// Shader inputs
 			UBO_SCENE( writer );
@@ -427,18 +428,18 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 
-		ShaderProgramSPtr DoCreateProgram( Engine & p_engine
-			, bool p_pbr
-			, bool p_isMR )
+		ShaderProgramSPtr DoCreateProgram( Engine & engine
+			, bool isPbr
+			, bool isMetallic )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			auto vtx = DoCreateVertexProgram( renderSystem );
-			auto pxl = p_pbr
-				? p_isMR
+			auto pxl = isPbr
+				? isMetallic
 					? DoCreatePbrMRPixelProgram( renderSystem )
 					: DoCreatePbrSGPixelProgram( renderSystem )
 				: DoCreateLegacyPixelProgram( renderSystem );
-			auto result = p_engine.GetShaderProgramCache().GetNewProgram( false );
+			auto result = engine.GetShaderProgramCache().GetNewProgram( false );
 			result->CreateObject( ShaderType::eVertex );
 			result->CreateObject( ShaderType::ePixel );
 			result->SetSource( ShaderType::eVertex, vtx );
@@ -451,7 +452,7 @@ namespace Castor3D
 			result->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapPostLight" ), ShaderType::ePixel )->SetValue( 5u );
 			int c = int( c_environmentStart );
 
-			if ( p_pbr )
+			if ( isPbr )
 			{
 				result->CreateUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel )->SetValue( c );
 				++c;
@@ -478,12 +479,12 @@ namespace Castor3D
 			return result;
 		}
 
-		RenderPipelineUPtr DoCreateRenderPipeline( Engine & p_engine
-			, ShaderProgram & p_program
-			, MatrixUbo & p_matrixUbo
-			, SceneUbo & p_sceneUbo
-			, GpInfoUbo & p_gpInfoUbo
-			, HdrConfigUbo & p_configUbo )
+		RenderPipelineUPtr DoCreateRenderPipeline( Engine & engine
+			, ShaderProgram & program
+			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo
+			, HdrConfigUbo & configUbo )
 		{
 			RasteriserState rsState;
 			rsState.SetCulledFaces( Culling::eNone );
@@ -491,31 +492,31 @@ namespace Castor3D
 			dsState.SetDepthTest( false );
 			dsState.SetDepthMask( WritingMask::eZero );
 			BlendState blState;
-			auto result = p_engine.GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
+			auto result = engine.GetRenderSystem()->CreateRenderPipeline( std::move( dsState )
 				, std::move( rsState )
 				, std::move( blState )
 				, MultisampleState{}
-				, p_program
+				, program
 				, PipelineFlags{} );
-			result->AddUniformBuffer( p_matrixUbo.GetUbo() );
-			result->AddUniformBuffer( p_sceneUbo.GetUbo() );
-			result->AddUniformBuffer( p_gpInfoUbo.GetUbo() );
-			result->AddUniformBuffer( p_configUbo.GetUbo() );
+			result->AddUniformBuffer( matrixUbo.GetUbo() );
+			result->AddUniformBuffer( sceneUbo.GetUbo() );
+			result->AddUniformBuffer( gpInfoUbo.GetUbo() );
+			result->AddUniformBuffer( configUbo.GetUbo() );
 			return result;
 		}
 	}
 
-	ReflectionPass::ProgramPipeline::ProgramPipeline( Engine & p_engine
-		, VertexBuffer & p_vbo
-		, MatrixUbo & p_matrixUbo
-		, SceneUbo & p_sceneUbo
-		, GpInfoUbo & p_gpInfo
-		, HdrConfigUbo & p_configUbo
-		, bool p_pbr
-		, bool p_isMR )
-		: m_program{ DoCreateProgram( p_engine, p_pbr, p_isMR ) }
-		, m_geometryBuffers{ DoCreateVao( p_engine, *m_program, p_vbo ) }
-		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, p_matrixUbo, p_sceneUbo, p_gpInfo, p_configUbo ) }
+	ReflectionPass::ProgramPipeline::ProgramPipeline( Engine & engine
+		, VertexBuffer & vbo
+		, MatrixUbo & matrixUbo
+		, SceneUbo & sceneUbo
+		, GpInfoUbo & gpInfoUbo
+		, HdrConfigUbo & configUbo
+		, bool isPbr
+		, bool isMetallic )
+		: m_program{ DoCreateProgram( engine, isPbr, isMetallic ) }
+		, m_geometryBuffers{ DoCreateVao( engine, *m_program, vbo ) }
+		, m_pipeline{ DoCreateRenderPipeline( engine, *m_program, matrixUbo, sceneUbo, gpInfoUbo, configUbo ) }
 	{
 	}
 
@@ -534,27 +535,28 @@ namespace Castor3D
 		m_geometryBuffers->Draw( 6u, 0 );
 	}
 
-	ReflectionPass::ReflectionPass( Engine & p_engine
-		, Size const & p_size
-		, SceneUbo & p_sceneUbo )
-		: OwnedBy< Engine >{ p_engine }
-		, m_size{ p_size }
-		, m_reflection{ p_engine }
-		, m_refraction{ p_engine }
-		, m_frameBuffer{ p_engine.GetRenderSystem()->CreateFrameBuffer() }
-		, m_viewport{ p_engine }
-		, m_vertexBuffer{ DoCreateVbo( p_engine ) }
-		, m_matrixUbo{ p_engine }
-		, m_gpInfo{ p_engine }
-		, m_configUbo{ p_engine }
+	ReflectionPass::ReflectionPass( Engine & engine
+		, Size const & size
+		, SceneUbo & sceneUbo )
+		: OwnedBy< Engine >{ engine }
+		, m_size{ size }
+		, m_reflection{ engine }
+		, m_refraction{ engine }
+		, m_frameBuffer{ engine.GetRenderSystem()->CreateFrameBuffer() }
+		, m_viewport{ engine }
+		, m_vertexBuffer{ DoCreateVbo( engine ) }
+		, m_matrixUbo{ engine }
+		, m_gpInfo{ engine }
+		, m_configUbo{ engine }
 		, m_programs
 		{
 			{
-				ProgramPipeline{ p_engine, *m_vertexBuffer, m_matrixUbo, p_sceneUbo, m_gpInfo, m_configUbo, false, false },
-				ProgramPipeline{ p_engine, *m_vertexBuffer, m_matrixUbo, p_sceneUbo, m_gpInfo, m_configUbo, true, false },
-				ProgramPipeline{ p_engine, *m_vertexBuffer, m_matrixUbo, p_sceneUbo, m_gpInfo, m_configUbo, true, true },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, m_configUbo, false, false },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, m_configUbo, true, false },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, m_configUbo, true, true },
 			}
 		}
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ) ) }
 	{
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.Initialise();
@@ -567,35 +569,35 @@ namespace Castor3D
 
 		if ( result )
 		{
-			result = m_frameBuffer->Initialise( p_size );
+			result = m_frameBuffer->Initialise( size );
 		}
 
 		if ( result )
 		{
-			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGB32F
-				, p_size );
+				, size );
 			texture->GetImage().InitialiseSource();
 
 			m_reflection.SetIndex( 0u );
 			m_reflection.SetTexture( texture );
-			m_reflection.SetSampler( p_engine.GetLightsSampler() );
+			m_reflection.SetSampler( engine.GetLightsSampler() );
 			result = m_reflection.Initialise();
 			ENSURE( result );
 			m_reflectAttach = m_frameBuffer->CreateAttachment( texture );
 
-			texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGBA32F
-				, p_size );
+				, size );
 			texture->GetImage().InitialiseSource();
 
 			m_refraction.SetIndex( 1u );
 			m_refraction.SetTexture( texture );
-			m_refraction.SetSampler( p_engine.GetLightsSampler() );
+			m_refraction.SetSampler( engine.GetLightsSampler() );
 			result = m_refraction.Initialise();
 			ENSURE( result );
 			m_refractAttach = m_frameBuffer->CreateAttachment( texture );
@@ -638,8 +640,10 @@ namespace Castor3D
 		, Camera const & p_camera
 		, Matrix4x4r const & p_invViewProj
 		, Matrix4x4r const & p_invView
-		, Matrix4x4r const & p_invProj )
+		, Matrix4x4r const & p_invProj
+		, RenderInfo & info )
 	{
+		m_timer->Start();
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eColour );
 		m_viewport.Apply();
@@ -746,5 +750,9 @@ namespace Castor3D
 		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
 		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
 		m_frameBuffer->Unbind();
+		m_timer->Stop();
+		info.m_times.push_back( { m_timer->GetName()
+			, m_timer->GetGpuTime()
+			, m_timer->GetCpuTime() } );
 	}
 }

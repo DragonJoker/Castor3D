@@ -490,6 +490,7 @@ namespace Castor3D
 	class TransformFeedback;
 	class ComputePipeline;
 	struct SsaoConfig;
+	class RenderPassTimer;
 
 	DECLARE_SMART_PTR( RenderBuffer );
 	DECLARE_SMART_PTR( ColourRenderBuffer );
@@ -514,6 +515,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( PickingPass );
 	DECLARE_SMART_PTR( TransformFeedback );
 	DECLARE_SMART_PTR( ComputePipeline );
+	DECLARE_SMART_PTR( RenderPassTimer );
 
 	using ParticleFactory = Castor::Factory< CpuParticleSystem, Castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 

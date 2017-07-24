@@ -109,8 +109,8 @@ namespace Castor3D
 		}
 	}
 
-	uint32_t ComputeParticleSystem::Update( Castor::Milliseconds const & p_time
-		, Castor::Milliseconds const & p_totalTime )
+	uint32_t ComputeParticleSystem::Update( Milliseconds const & p_time
+		, Milliseconds const & p_totalTime )
 	{
 		m_deltaTime->SetValue( float( p_time.count() ) );
 		m_time->SetValue( float( p_totalTime.count() ) );

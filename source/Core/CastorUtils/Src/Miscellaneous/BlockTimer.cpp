@@ -15,6 +15,6 @@ namespace Castor
 		Logger::LogInfo( StringStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction
 			<< cuT( " in " ) << m_strFile
 			<< cuT( ", line " ) << m_uiLine
-			<< cuT( " - time: " ) << std::chrono::duration_cast< Castor::Milliseconds >( m_timer.Time() ).count() << cuT( " ms" ) );
+			<< cuT( " - time: " ) << std::chrono::duration_cast< Milliseconds >( m_timer.Time() ).count() << cuT( " ms" ) );
 	}
 }

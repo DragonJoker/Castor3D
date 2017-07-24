@@ -51,12 +51,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		explicit DebugOverlays( Engine & p_engine );
+		explicit DebugOverlays( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -67,12 +67,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function, retrieves the overlays from the given overlay cache.
-		 *\param[in]	p_cache	The overlay cache.
+		 *\param[in]	cache	The overlay cache.
 		 *\~french
 		 *\brief		Fonction d'initialisation, récupère les incrustations à partir du cache d'incrustations donné.
-		 *\param[in]	p_cache	Le cache d'incrustations.
+		 *\param[in]	cache	Le cache d'incrustations.
 		 */
-		void Initialise( OverlayCache & p_cache );
+		void Initialise( OverlayCache & cache );
 		/**
 		 *\~english
 		 *\brief		Clean up function.
@@ -90,12 +90,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the overlays texts.
-		 *\param[in]	p_info	The render informations.
+		 *\param[in]	info	The render informations.
 		 *\~french
 		 *\brief		Met à jour les textes des incrustations de débogage.
-		 *\param[in]	p_info	Les informations de rendu.
+		 *\param[in]	info	Les informations de rendu.
 		 */
-		void EndFrame( RenderInfo const & p_info );
+		void EndFrame( RenderInfo const & info );
 		/**
 		 *\~english
 		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either EndGpuTask or EndCpuTask
@@ -113,12 +113,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays.
-		 *\param[in]	p_show	The status.
+		 *\param[in]	show	The status.
 		 *\~french
 		 *\brief		Affiche ou cache les incrustations de débogage.
-		 *\param[in]	p_show	Le statut.
+		 *\param[in]	show	Le statut.
 		 */
-		void Show( bool p_show );
+		void Show( bool show );
+
+	private:
+		struct RenderPassOverlays
+		{
+			PanelOverlaySPtr m_panel;
+			TextOverlaySPtr m_title;
+			TextOverlaySPtr m_cpuName;
+			TextOverlaySPtr m_cpuValue;
+			TextOverlaySPtr m_gpuName;
+			TextOverlaySPtr m_gpuValue;
+		};
+
+		using RenderPassOverlaysArray = std::vector< RenderPassOverlays >;
+
+		void DoUpdateOverlays( OverlayCache & cache
+			, RenderTimes const & times
+			, uint32_t index );
 
 	private:
 #if defined( _NDEBUG )
@@ -177,6 +194,9 @@ namespace Castor3D
 		//!\~english	The particles count value overlay.
 		//!\~french		L'incrustation contenant la valeur du nombre de particules.
 		TextOverlaySPtr m_debugParticlesCount;
+		//!\~english	The render passes overlays.
+		//!\~french		Les incrustations des passes de rendu.
+		RenderPassOverlaysArray m_renderPasses;
 		//!\~english	The times of the 100 last frames.
 		//!\~french		Les temps des 100 dernières frames.
 		std::array< Castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes;

@@ -122,7 +122,7 @@ namespace GuiCommon
 
 	void SceneObjectsList::LoadScene( Engine * p_engine, SceneSPtr p_scene )
 	{
-		m_pScene = p_scene;
+		m_scene = p_scene;
 		m_engine = p_engine;
 
 		if ( p_scene )

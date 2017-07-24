@@ -59,7 +59,7 @@ namespace Castor3D
 	{
 	}
 
-	void MeshAnimationInstanceSubmesh::Update( Castor::Milliseconds const & p_time )
+	void MeshAnimationInstanceSubmesh::Update( Milliseconds const & p_time )
 	{
 		m_currentFactor = 0.0f;
 

@@ -108,7 +108,7 @@ namespace castortd
 			m_state = State::Idle;
 		}
 
-		return m_state != State::Idle && m_remaining == Castor::Milliseconds{};
+		return m_state != State::Idle && m_remaining == Milliseconds{};
 	}
 
 	void Tower::DoStartAttack()
@@ -121,7 +121,7 @@ namespace castortd
 
 	bool Tower::DoAnimEnded( EnemyArray & p_enemies )
 	{
-		bool result = m_animRemain <= Castor::Milliseconds{};
+		bool result = m_animRemain <= Milliseconds{};
 
 		if ( !result
 			&& ( !m_target->IsAlive()
@@ -141,9 +141,9 @@ namespace castortd
 		return result;
 	}
 
-	void Tower::DoUpdateTimes( Castor::Milliseconds const & p_elapsed )
+	void Tower::DoUpdateTimes( Milliseconds const & p_elapsed )
 	{
-		static Castor::Milliseconds zeroTime;
+		static Milliseconds zeroTime;
 		m_remaining -= p_elapsed;
 
 		if ( m_remaining < zeroTime )

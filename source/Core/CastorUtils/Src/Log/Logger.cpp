@@ -555,13 +555,13 @@ namespace Castor
 		{
 			while ( !m_initialised && !m_stopped )
 			{
-				std::this_thread::sleep_for( Castor::Milliseconds( 10 ) );
+				std::this_thread::sleep_for( Milliseconds( 10 ) );
 			}
 
 			while ( !m_stopped )
 			{
 				DoFlushQueue();
-				std::this_thread::sleep_for( Castor::Milliseconds( 100 ) );
+				std::this_thread::sleep_for( Milliseconds( 100 ) );
 			}
 
 			if ( m_initialised )

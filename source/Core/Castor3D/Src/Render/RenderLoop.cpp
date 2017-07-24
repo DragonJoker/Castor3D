@@ -202,7 +202,7 @@ namespace Castor3D
 				} );
 			}
 
-			m_queueUpdater.WaitAll( Castor::Milliseconds::max() );
+			m_queueUpdater.WaitAll( Milliseconds::max() );
 		}
 		else
 		{
