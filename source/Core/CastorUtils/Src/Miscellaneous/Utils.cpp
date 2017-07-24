@@ -8,7 +8,7 @@ namespace Castor
 	{
 		void Sleep( uint32_t p_uiTime )
 		{
-			std::this_thread::sleep_for( std::chrono::milliseconds( p_uiTime ) );
+			std::this_thread::sleep_for( Castor::Milliseconds( p_uiTime ) );
 		}
 	}
 }

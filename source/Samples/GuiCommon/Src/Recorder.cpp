@@ -87,7 +87,7 @@ namespace GuiCommon
 			virtual bool UpdateTime()
 			{
 				auto now = clock::now();
-				uint64_t timeDiff = std::chrono::duration_cast< std::chrono::milliseconds >( now - m_saved ).count();
+				uint64_t timeDiff = std::chrono::duration_cast< Castor::Milliseconds >( now - m_saved ).count();
 
 				if ( m_recordedCount )
 				{

@@ -12,12 +12,12 @@ namespace Castor
 	{
 	}
 
-	std::chrono::nanoseconds PreciseTimer::Time()
+	Castor::Nanoseconds PreciseTimer::Time()
 	{
 		auto current = DoGetTime();
 		auto diff( current - m_savedTime );
 		m_savedTime = current;
-		return std::chrono::duration_cast< std::chrono::nanoseconds >( diff );
+		return std::chrono::duration_cast< Castor::Nanoseconds >( diff );
 	}
 
 	PreciseTimer::clock::time_point PreciseTimer::DoGetTime()const

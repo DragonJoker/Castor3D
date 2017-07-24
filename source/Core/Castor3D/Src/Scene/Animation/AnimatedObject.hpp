@@ -174,7 +174,7 @@ namespace Castor3D
 		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
 		 *\param[in]	p_tslf		Le temps écoulé depuis la dernière frame
 		 */
-		C3D_API virtual void Update( std::chrono::milliseconds const & p_tslf ) = 0;
+		C3D_API virtual void Update( Castor::Milliseconds const & p_tslf ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the object is playing an animation.

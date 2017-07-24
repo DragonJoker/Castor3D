@@ -27,7 +27,7 @@ namespace castortd
 
 		m_totalsWaves = 0u;
 		m_totalSpawned = 0u;
-		m_timeSinceLastSpawn = std::chrono::milliseconds{};
+		m_timeSinceLastSpawn = Castor::Milliseconds{};
 		m_count = 0u;
 	}
 
@@ -36,11 +36,11 @@ namespace castortd
 		m_category.Upgrade();
 		m_count = p_count;
 		++m_totalsWaves;
-		m_timeBetweenTwoSpawns = std::chrono::milliseconds( 1000 );
+		m_timeBetweenTwoSpawns = Castor::Milliseconds( 1000 );
 		m_timeSinceLastSpawn = m_timeBetweenTwoSpawns;
 	}
 
-	bool EnemySpawner::CanSpawn( std::chrono::milliseconds const & p_elapsed )
+	bool EnemySpawner::CanSpawn( Castor::Milliseconds const & p_elapsed )
 	{
 		m_timeSinceLastSpawn += p_elapsed;
 		return m_count && m_timeSinceLastSpawn >= m_timeBetweenTwoSpawns;
@@ -49,7 +49,7 @@ namespace castortd
 	EnemyPtr EnemySpawner::Spawn( Game const & p_game, Path const & p_path )
 	{
 		--m_count;
-		m_timeSinceLastSpawn = std::chrono::milliseconds{};
+		m_timeSinceLastSpawn = Castor::Milliseconds{};
 		++m_totalSpawned;
 		auto & pathNode = *p_path.begin();
 		auto & cell = p_game.GetCell( Point2i{ pathNode.m_x, pathNode.m_y } );

@@ -174,7 +174,7 @@ namespace Castor3D
 	void ParticleSystem::Update()
 	{
 		REQUIRE( m_impl );
-		auto time = std::chrono::duration_cast< std::chrono::milliseconds >( m_timer.Time() );
+		auto time = std::chrono::duration_cast< Castor::Milliseconds >( m_timer.Time() );
 
 		if ( m_firstUpdate )
 		{

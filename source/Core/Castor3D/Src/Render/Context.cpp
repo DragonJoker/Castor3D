@@ -1,4 +1,4 @@
-﻿#include "Context.hpp"
+#include "Context.hpp"
 
 #include "Engine.hpp"
 
@@ -114,7 +114,7 @@ namespace Castor3D
 		m_queryIndex = 1 - m_queryIndex;
 		uint64_t time = 0;
 		m_timerQuery[m_queryIndex]->GetInfos( QueryInfo::eResult, time );
-		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( time ) );
+		GetRenderSystem()->IncGpuTime( Castor::Nanoseconds( time ) );
 		GetRenderSystem()->SetCurrentContext( nullptr );
 		DoEndCurrent();
 	}

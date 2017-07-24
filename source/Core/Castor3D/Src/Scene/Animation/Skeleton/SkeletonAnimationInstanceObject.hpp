@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\param[in]	p_time				Index de temps courant.
 		 *\param[in]	p_transformations	La matrice de transformation courante.
 		 */
-		C3D_API void Update( std::chrono::milliseconds const & p_time
+		C3D_API void Update( Castor::Milliseconds const & p_time
 			, Castor::Matrix4x4r const & p_transformations );
 		/**
 		 *\~english

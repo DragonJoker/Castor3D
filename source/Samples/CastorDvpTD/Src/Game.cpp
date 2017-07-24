@@ -224,9 +224,9 @@ namespace castortd
 		if ( m_started && !m_paused )
 		{
 #if !defined( NDEBUG )
-			m_elapsed = std::chrono::milliseconds{ 40 };
+			m_elapsed = Castor::Milliseconds{ 40 };
 #else
-			m_elapsed = std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - m_saved );
+			m_elapsed = std::chrono::duration_cast< Castor::Milliseconds >( Clock::now() - m_saved );
 #endif
 			DoUpdateBullets();
 			DoUpdateTowers();
@@ -600,7 +600,7 @@ namespace castortd
 		MeshSPtr mesh = DoSelectMesh( *p_category );
 		auto tower = m_scene.GetGeometryCache().Add( name, node, mesh );
 		auto animGroup = m_scene.GetAnimatedObjectGroupCache().Add( name );
-		std::chrono::milliseconds time{ 0 };
+		Castor::Milliseconds time{ 0 };
 
 		if ( !tower->GetAnimations().empty() )
 		{

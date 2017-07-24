@@ -215,7 +215,7 @@ namespace Castor3D
 	{
 #if defined( NDEBUG )
 
-		auto tslf = std::chrono::duration_cast< std::chrono::milliseconds >( m_timer.Time() );
+		auto tslf = std::chrono::duration_cast< Castor::Milliseconds >( m_timer.Time() );
 
 #else
 

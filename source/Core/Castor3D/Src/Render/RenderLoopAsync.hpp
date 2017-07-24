@@ -184,7 +184,7 @@ namespace Castor3D
 		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
 		RenderWindowRPtr m_window;
 		//!\~english The saved frame time, if V-Sync is disabled.	\~french Le temps par frame sauvegardé, si la synchronisation verticale est désactivée.
-		std::chrono::milliseconds m_savedTime{ 0 };
+		Castor::Milliseconds m_savedTime{ 0 };
 	};
 }
 

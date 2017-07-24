@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le temps voulu pour une frame, en millisecondes.
 		 */
-		inline std::chrono::milliseconds GetFrameTime()
+		inline Castor::Milliseconds GetFrameTime()
 		{
 			return m_frameTime;
 		}
@@ -222,7 +222,7 @@ namespace Castor3D
 		uint32_t m_wantedFPS;
 		//!\~english	The wanted time for a frame.
 		//!\~french		Le temps voulu pour une frame.
-		std::chrono::milliseconds m_frameTime;
+		Castor::Milliseconds m_frameTime;
 		//!\~english	The debug overlays.
 		//!\~french		Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;

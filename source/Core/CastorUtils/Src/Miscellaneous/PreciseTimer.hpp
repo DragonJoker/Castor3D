@@ -63,7 +63,7 @@ namespace Castor
 		 *\~french
 		 *\return		Le temps écoulé depuis le dernier appel.
 		 */
-		CU_API std::chrono::nanoseconds Time();
+		CU_API Castor::Nanoseconds Time();
 
 	private:
 		clock::time_point DoGetTime()const;

@@ -103,8 +103,8 @@ namespace Castor3D
 		}
 	}
 
-	uint32_t TransformFeedbackParticleSystem::Update( std::chrono::milliseconds const & p_time
-		, std::chrono::milliseconds const & p_totalTime )
+	uint32_t TransformFeedbackParticleSystem::Update( Castor::Milliseconds const & p_time
+		, Castor::Milliseconds const & p_totalTime )
 	{
 		m_deltaTime->SetValue( float( p_time.count() ) );
 		m_time->SetValue( float( p_totalTime.count() ) );

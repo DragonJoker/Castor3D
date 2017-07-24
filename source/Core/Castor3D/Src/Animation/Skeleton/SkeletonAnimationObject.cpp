@@ -52,7 +52,7 @@ namespace Castor3D
 			for ( auto & in : p_in )
 			{
 				size_t index{ 0u };
-				std::chrono::milliseconds timeIndex{ int64_t( in[index++] * 1000.0 ) };
+				Castor::Milliseconds timeIndex{ int64_t( in[index++] * 1000.0 ) };
 				Matrix4x4r transform{ &in[index] };
 				( *it ) = KeyFrame{ timeIndex, transform };
 				++it;
@@ -152,7 +152,7 @@ namespace Castor3D
 
 			case ChunkType::eAnimLength:
 				result = DoParseChunk( length, chunk );
-				p_obj.m_length = std::chrono::milliseconds{ int64_t( length / 1000 ) };
+				p_obj.m_length = Castor::Milliseconds{ int64_t( length / 1000 ) };
 				break;
 
 			case ChunkType::eSkeletonAnimationBone:
@@ -203,7 +203,7 @@ namespace Castor3D
 		m_children.push_back( p_object );
 	}
 
-	KeyFrame & SkeletonAnimationObject::AddKeyFrame( std::chrono::milliseconds const & p_from
+	KeyFrame & SkeletonAnimationObject::AddKeyFrame( Castor::Milliseconds const & p_from
 		, Point3r const & p_translate
 		, Quaternion const & p_rotate
 		, Point3r const & p_scale )
@@ -231,7 +231,7 @@ namespace Castor3D
 		return *it;
 	}
 
-	void SkeletonAnimationObject::RemoveKeyFrame( std::chrono::milliseconds const & p_time )
+	void SkeletonAnimationObject::RemoveKeyFrame( Castor::Milliseconds const & p_time )
 	{
 		auto it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_time]( KeyFrame const & p_keyframe )
 		{

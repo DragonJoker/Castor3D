@@ -214,17 +214,19 @@ namespace Castor
 	};
 
 #if CASTOR_USE_DOUBLE
-	typedef double real;
+	using real = double;
 #else
-	typedef float real;
+	using real = float;
 #endif
 
-	typedef std::basic_string< xchar > String;
-	typedef std::basic_regex< xchar > Regex;
-	typedef std::regex_iterator< String::const_iterator > SRegexIterator;
-	typedef std::match_results< String::const_iterator > MatchResults;
-	typedef std::basic_stringstream< xchar > StringStream;
-	typedef std::basic_ostream< xchar > OutputStream;
+	using String = std::basic_string< xchar >;
+	using Regex = std::basic_regex< xchar >;
+	using SRegexIterator = std::regex_iterator< String::const_iterator >;
+	using MatchResults = std::match_results< String::const_iterator >;
+	using StringStream = std::basic_stringstream< xchar >;
+	using OutputStream = std::basic_ostream< xchar >;
+	using Milliseconds = std::chrono::milliseconds;
+	using Nanoseconds = std::chrono::nanoseconds;
 
 	/*!
 	\author		Sylvain DOREMUS
@@ -591,9 +593,9 @@ constexpr std::chrono::seconds operator "" _s( unsigned long long p_value )
 	return std::chrono::seconds( int64_t( p_value ) );
 }
 
-constexpr std::chrono::milliseconds operator "" _ms( unsigned long long p_value )
+constexpr Castor::Milliseconds operator "" _ms( unsigned long long p_value )
 {
-	return std::chrono::milliseconds( int64_t( p_value ) );
+	return Castor::Milliseconds( int64_t( p_value ) );
 }
 
 constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value )
@@ -601,9 +603,9 @@ constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value 
 	return std::chrono::microseconds( int64_t( p_value ) );
 }
 
-constexpr std::chrono::nanoseconds operator "" _ns( unsigned long long p_value )
+constexpr Castor::Nanoseconds operator "" _ns( unsigned long long p_value )
 {
-	return std::chrono::nanoseconds( int64_t( p_value ) );
+	return Castor::Nanoseconds( int64_t( p_value ) );
 }
 
 #include "Miscellaneous/Debug.hpp"
