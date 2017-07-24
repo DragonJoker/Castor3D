@@ -45,27 +45,40 @@ namespace Obj
 		/**
 		 * Constructor
 		 */
-		ObjImporter( Castor3D::Engine & p_engine );
+		ObjImporter( Castor3D::Engine & engine );
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & engine );
 
 	private:
 		/**
 		 *\copydoc		Castor3D::Importer::DoImportScene
 		 */
-		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		bool DoImportScene( Castor3D::Scene & scene )override;
 		/**
 		 *\copydoc		Castor3D::Importer::DoImportMesh
 		 */
-		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
+		bool DoImportMesh( Castor3D::Mesh & mesh )override;
 
-		void DoReadObjFile( Castor3D::Mesh & p_mesh );
-		void DoCreateSubmesh( Castor3D::Mesh & p_mesh, Castor::String const & p_mtlName, std::vector< Castor3D::FaceIndices > && p_faces, Castor3D::InterleavedVertexArray && p_vertex );
-		void DoParseTexParams( Castor::String & p_strValue, float * p_offset, float * p_scale, float * p_turb );
-		void DoParseTexParam( Castor::String const & p_strParam, float * p_values );
-		bool DoIsValidValue( Castor::String const & p_strParam, Castor::String const & p_strSrc, uint32_t p_index );
-		void DoAddTexture( Castor::String const & p_strValue, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
-		void DoReadMaterials( Castor3D::Mesh & p_mesh, Castor::Path const & p_pathMatFile );
+		void DoReadObjFile( Castor3D::Mesh & mesh );
+		void DoCreateSubmesh( Castor3D::Mesh & mesh
+			, Castor::String const & mtlName
+			, bool normals
+			, std::vector< Castor3D::FaceIndices > && faces
+			, Castor3D::InterleavedVertexArray && vertex );
+		void DoParseTexParams( Castor::String & strValue
+			, float * offset
+			, float * scale
+			, float * turb );
+		void DoParseTexParam( Castor::String const & strParam
+			, float * values );
+		bool DoIsValidValue( Castor::String const & strParam
+			, Castor::String const & strSrc
+			, uint32_t index );
+		void DoAddTexture( Castor::String const & strValue
+			, Castor3D::Pass & pass
+			, Castor3D::TextureChannel channel );
+		void DoReadMaterials( Castor3D::Mesh & mesh
+			, Castor::Path const & pathMatFile );
 
 	private:
 		Castor::ImageCache & m_collImages;

@@ -1,4 +1,4 @@
-﻿#include "RenderTechnique.hpp"
+#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
