@@ -50,13 +50,13 @@ namespace Castor3D
 		RenderPass::DoRender( p_nodes.m_billboardNodes.m_backCulled, p_camera );
 	}
 
-	void ShadowMapPass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
+	void ShadowMapPass::DoUpdateFlags( TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		m_shadowMap.UpdateFlags( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags );
+		m_shadowMap.UpdateFlags( textureFlags
+			, programFlags
+			, sceneFlags );
 	}
 
 	void ShadowMapPass::DoUpdatePipeline( RenderPipeline & p_pipeline )const
@@ -112,56 +112,56 @@ namespace Castor3D
 		}
 	}
 
-	GLSL::Shader ShadowMapPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	GLSL::Shader ShadowMapPass::DoGetVertexShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
 	{
-		return m_shadowMap.GetVertexShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_invertNormals );
+		return m_shadowMap.GetVertexShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, invertNormals );
 	}
 
-	GLSL::Shader ShadowMapPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	GLSL::Shader ShadowMapPass::DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
-		return m_shadowMap.GetGeometryShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags );
+		return m_shadowMap.GetGeometryShaderSource( textureFlags
+			, programFlags
+			, sceneFlags );
 	}
 
-	GLSL::Shader ShadowMapPass::DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader ShadowMapPass::DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return m_shadowMap.GetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return m_shadowMap.GetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader ShadowMapPass::DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader ShadowMapPass::DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return m_shadowMap.GetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return m_shadowMap.GetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader ShadowMapPass::DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader ShadowMapPass::DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return m_shadowMap.GetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return m_shadowMap.GetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 }

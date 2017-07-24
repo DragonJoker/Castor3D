@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -50,12 +50,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API ShadowMap( Engine & p_engine );
+		C3D_API ShadowMap( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -80,76 +80,76 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a light source, creating a shadow map pass for it.
-		 *\param[in]	p_light	The light source.
+		 *\param[in]	light	The light source.
 		 *\~french
 		 *\brief		Ajoute une source lumineuse, créant une passe de shadow mapping pour elle.
-		 *\param[in]	p_light	La source lumineuse.
+		 *\param[in]	light	La source lumineuse.
 		 */
-		C3D_API void AddLight( Light & p_light );
+		C3D_API void AddLight( Light & light );
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
-		 *\param[in,out]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in,out]	p_sceneFlags	A combination of SceneFlag.
+		 *\param[in,out]	textureFlags	A combination of TextureChannel.
+		 *\param[in,out]	programFlags	A combination of ProgramFlag.
+		 *\param[in,out]	sceneFlags		A combination of SceneFlag.
 		 *\~french
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in,out]	p_sceneFlags	Une combinaison de SceneFlag.
+		 *\param[in,out]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
 		 */
-		C3D_API void UpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags )const;
+		C3D_API void UpdateFlags( TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
-		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
-		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	programFlags	Combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API GLSL::Shader GetVertexShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, bool p_invertNormals )const;
+		C3D_API GLSL::Shader GetVertexShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader qui correspond aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API GLSL::Shader GetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const;
+		C3D_API GLSL::Shader GetGeometryShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API GLSL::Shader GetPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const;
+		C3D_API GLSL::Shader GetPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const;
 		/**
 		 *\~english
 		 *\return		The sorted shadow mapping passes.
@@ -205,40 +205,46 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a light type specific shadow map pass.
-		 *\param[in]	p_light	The light source.
+		 *\param[in]	light	The light source.
 		 *\return		The shadow map pass.
 		 *\~french
 		 *\brief		Crée une passe de shadow mapping spécifique au type de source lumineuse.
-		 *\param[in]	p_light	La source lumineuse.
+		 *\param[in]	light	La source lumineuse.
 		 *\return		La passe de shadow mapping.
 		 */
-		C3D_API virtual ShadowMapPassSPtr DoCreatePass( Light & p_light )const = 0;
+		C3D_API virtual ShadowMapPassSPtr DoCreatePass( Light & light )const = 0;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::UpdateFlags
 		 */
-		C3D_API virtual void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags )const = 0;
+		C3D_API virtual void DoUpdateFlags( TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags )const = 0;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetVertexShaderSource
 		 */
-		C3D_API virtual GLSL::Shader DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, bool p_invertNormals )const;
+		C3D_API virtual GLSL::Shader DoGetVertexShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetGeometryShaderSource
 		 */
-		C3D_API virtual GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const;
+		C3D_API virtual GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::GetPixelShaderSource
 		 */
-		C3D_API virtual GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const = 0;
+		C3D_API virtual GLSL::Shader DoGetPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const = 0;
+
+		void DoApplyAlphaFunc( GLSL::GlslWriter & writer
+			, ComparisonFunc alphaFunc
+			, GLSL::Float const & alpha
+			, GLSL::Int const & material
+			, GLSL::Materials const & materials );
 
 	protected:
 		//!\~english	The frame buffer.

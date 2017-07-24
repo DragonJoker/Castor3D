@@ -38,7 +38,8 @@ namespace Castor3D
 		, Scene const & scene
 		, OpaquePass & opaque
 		, FrameBufferAttachment & depthAttach
-		, SceneUbo & sceneUbo )
+		, SceneUbo & sceneUbo
+		, GpInfoUbo & gpInfoUbo )
 		: m_size{ size }
 		, m_result{ engine }
 		, m_frameBuffer{ engine.GetRenderSystem()->CreateFrameBuffer() }
@@ -79,26 +80,32 @@ namespace Castor3D
 			m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( engine
 				, *m_frameBuffer
 				, depthAttach
+				, gpInfoUbo
 				, false );
 			m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( engine
 				, *m_frameBuffer
 				, depthAttach
+				, gpInfoUbo
 				, false );
 			m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( engine
 				, *m_frameBuffer
 				, depthAttach
+				, gpInfoUbo
 				, false );
 			m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
 				, *m_frameBuffer
 				, depthAttach
+				, gpInfoUbo
 				, opaque.GetDirectionalShadowMap() );
 			m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
 				, *m_frameBuffer
 				, depthAttach
+				, gpInfoUbo
 				, opaque.GetPointShadowMaps() );
 			m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
 				, *m_frameBuffer
 				, depthAttach
+				, gpInfoUbo
 				, opaque.GetSpotShadowMap() );
 
 			for ( auto & lightPass : m_lightPass )
@@ -139,9 +146,6 @@ namespace Castor3D
 	bool LightingPass::Render( Scene const & scene
 		, Camera const & camera
 		, GeometryPassResult const & gp
-		, Matrix4x4r const & invViewProj
-		, Matrix4x4r const & invView
-		, Matrix4x4r const & invProj
 		, RenderInfo & info )
 	{
 		auto & cache = scene.GetLightCache();
@@ -164,25 +168,16 @@ namespace Castor3D
 				, camera
 				, LightType::eDirectional
 				, gp
-				, invViewProj
-				, invView
-				, invProj
 				, first );
 			DoRenderLights( scene
 				, camera
 				, LightType::ePoint
 				, gp
-				, invViewProj
-				, invView
-				, invProj
 				, first );
 			DoRenderLights( scene
 				, camera
 				, LightType::eSpot
 				, gp
-				, invViewProj
-				, invView
-				, invProj
 				, first );
 			first = false;
 			m_timer->Stop();
@@ -198,9 +193,6 @@ namespace Castor3D
 		, Camera const & camera
 		, LightType p_type
 		, GeometryPassResult const & gp
-		, Matrix4x4r const & invViewProj
-		, Matrix4x4r const & invView
-		, Matrix4x4r const & invProj
 		, bool & p_first )
 	{
 		auto & cache = scene.GetLightCache();
@@ -218,9 +210,6 @@ namespace Castor3D
 						, gp
 						, *light
 						, camera
-						, invViewProj
-						, invView
-						, invProj
 						, p_first );
 				}
 				else
@@ -229,9 +218,6 @@ namespace Castor3D
 						, gp
 						, *light
 						, camera
-						, invViewProj
-						, invView
-						, invProj
 						, p_first );
 				}
 

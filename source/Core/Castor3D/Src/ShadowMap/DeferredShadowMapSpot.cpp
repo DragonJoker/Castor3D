@@ -143,24 +143,24 @@ namespace Castor3D
 		return std::make_shared< ShadowMapPassSpot >( *GetEngine(), p_light, *this );
 	}
 
-	void DeferredShadowMapSpot::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
+	void DeferredShadowMapSpot::DoUpdateFlags( TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		AddFlag( p_programFlags, ProgramFlag::eShadowMapSpot );
+		AddFlag( programFlags, ProgramFlag::eShadowMapSpot );
 	}
 
-	GLSL::Shader DeferredShadowMapSpot::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader DeferredShadowMapSpot::DoGetPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Fragment Intputs
 		auto vtx_texture = writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
+		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
@@ -168,7 +168,7 @@ namespace Castor3D
 
 		writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+			if ( CheckFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
 				auto alpha = writer.DeclLocale( cuT( "alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
 

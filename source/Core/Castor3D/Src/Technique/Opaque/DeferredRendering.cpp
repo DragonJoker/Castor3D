@@ -56,6 +56,7 @@ namespace Castor3D
 		, m_depthAttach{ depthAttach }
 		, m_size{ size }
 		, m_sceneUbo{ engine }
+		, m_gpInfoUbo{ engine }
 	{
 		auto & renderSystem = *engine.GetRenderSystem();
 		m_geometryPassFrameBuffer = renderSystem.CreateFrameBuffer();
@@ -108,13 +109,16 @@ namespace Castor3D
 				, scene
 				, m_opaquePass
 				, m_depthAttach
-				, m_sceneUbo );
+				, m_sceneUbo
+				, m_gpInfoUbo );
 			m_reflection = std::make_unique< ReflectionPass >( engine
 				, m_size
-				, m_sceneUbo );
+				, m_sceneUbo
+				, m_gpInfoUbo );
 			m_combinePass = std::make_unique< CombinePass >( engine
 				, m_size
 				, m_sceneUbo
+				, m_gpInfoUbo
 				, m_ssaoConfig );
 		}
 
@@ -172,12 +176,14 @@ namespace Castor3D
 		BlitDepthInto( m_frameBuffer );
 
 		m_sceneUbo.Update( scene, camera );
+		m_gpInfoUbo.Update( m_size
+			, camera
+			, invViewProj
+			, invView
+			, invProj );
 		m_lightingPass->Render( scene
 			, camera
 			, m_geometryPassResult
-			, invViewProj
-			, invView
-			, invProj
 			, info );
 
 		if ( scene.HasSkybox() )
@@ -185,10 +191,6 @@ namespace Castor3D
 			m_reflection->Render( m_geometryPassResult
 				, m_lightingPass->GetResult()
 				, scene
-				, camera
-				, invViewProj
-				, invView
-				, invProj
 				, info );
 
 			if ( scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
@@ -199,10 +201,6 @@ namespace Castor3D
 					, m_reflection->GetReflection()
 					, m_reflection->GetRefraction()
 					, scene.GetSkybox().GetIbl()
-					, camera
-					, invViewProj
-					, invView
-					, invProj
 					, scene.GetFog()
 					, m_frameBuffer
 					, info );
@@ -213,10 +211,6 @@ namespace Castor3D
 					, m_lightingPass->GetResult()
 					, m_reflection->GetReflection()
 					, m_reflection->GetRefraction()
-					, camera
-					, invViewProj
-					, invView
-					, invProj
 					, scene.GetFog()
 					, m_frameBuffer
 					, info );
@@ -228,10 +222,6 @@ namespace Castor3D
 				, m_lightingPass->GetResult()
 				, m_reflection->GetReflection()
 				, m_reflection->GetRefraction()
-				, camera
-				, invViewProj
-				, invView
-				, invProj
 				, scene.GetFog()
 				, m_frameBuffer
 				, info );

@@ -537,7 +537,8 @@ namespace Castor3D
 
 	ReflectionPass::ReflectionPass( Engine & engine
 		, Size const & size
-		, SceneUbo & sceneUbo )
+		, SceneUbo & sceneUbo
+		, GpInfoUbo & gpInfoUbo )
 		: OwnedBy< Engine >{ engine }
 		, m_size{ size }
 		, m_reflection{ engine }
@@ -546,14 +547,14 @@ namespace Castor3D
 		, m_viewport{ engine }
 		, m_vertexBuffer{ DoCreateVbo( engine ) }
 		, m_matrixUbo{ engine }
-		, m_gpInfo{ engine }
+		, m_gpInfoUbo{ gpInfoUbo }
 		, m_configUbo{ engine }
 		, m_programs
 		{
 			{
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, m_configUbo, false, false },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, m_configUbo, true, false },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, m_configUbo, true, true },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, false, false },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, true, false },
+				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, m_configUbo, true, true },
 			}
 		}
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ) ) }
@@ -634,38 +635,29 @@ namespace Castor3D
 		m_vertexBuffer->Cleanup();
 	}
 
-	void ReflectionPass::Render( GeometryPassResult & p_gp
-		, Castor3D::TextureUnit const & p_lp
+	void ReflectionPass::Render( GeometryPassResult & gp
+		, Castor3D::TextureUnit const & lp
 		, Scene const & p_scene
-		, Camera const & p_camera
-		, Matrix4x4r const & p_invViewProj
-		, Matrix4x4r const & p_invView
-		, Matrix4x4r const & p_invProj
 		, RenderInfo & info )
 	{
 		m_timer->Start();
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eColour );
 		m_viewport.Apply();
-		m_gpInfo.Update( m_size
-			, p_camera
-			, p_invViewProj
-			, p_invView
-			, p_invProj );
 		m_configUbo.Update( p_scene.GetHdrConfig() );
 		auto & maps = p_scene.GetEnvironmentMaps();
-		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
-		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
-		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 1u );
-		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Bind( 1u );
-		p_gp[size_t( DsTexture::eData2 )]->GetTexture()->Bind( 2u );
-		p_gp[size_t( DsTexture::eData2 )]->GetSampler()->Bind( 2u );
-		p_gp[size_t( DsTexture::eData3 )]->GetTexture()->Bind( 3u );
-		p_gp[size_t( DsTexture::eData3 )]->GetSampler()->Bind( 3u );
-		p_gp[size_t( DsTexture::eData4 )]->GetTexture()->Bind( 4u );
-		p_gp[size_t( DsTexture::eData4 )]->GetSampler()->Bind( 4u );
-		p_lp.GetTexture()->Bind( 5u );
-		p_lp.GetSampler()->Bind( 5u );
+		gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
+		gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
+		gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 1u );
+		gp[size_t( DsTexture::eData1 )]->GetSampler()->Bind( 1u );
+		gp[size_t( DsTexture::eData2 )]->GetTexture()->Bind( 2u );
+		gp[size_t( DsTexture::eData2 )]->GetSampler()->Bind( 2u );
+		gp[size_t( DsTexture::eData3 )]->GetTexture()->Bind( 3u );
+		gp[size_t( DsTexture::eData3 )]->GetSampler()->Bind( 3u );
+		gp[size_t( DsTexture::eData4 )]->GetTexture()->Bind( 4u );
+		gp[size_t( DsTexture::eData4 )]->GetSampler()->Bind( 4u );
+		lp.GetTexture()->Bind( 5u );
+		lp.GetSampler()->Bind( 5u );
 
 		if ( p_scene.GetMaterialsType() == MaterialType::ePbrMetallicRoughness
 			|| p_scene.GetMaterialsType() == MaterialType::ePbrSpecularGlossiness )
@@ -737,18 +729,18 @@ namespace Castor3D
 			}
 		}
 
-		p_lp.GetTexture()->Unbind( 5u );
-		p_lp.GetSampler()->Unbind( 5u );
-		p_gp[size_t( DsTexture::eData4 )]->GetTexture()->Unbind( 4u );
-		p_gp[size_t( DsTexture::eData4 )]->GetSampler()->Unbind( 4u );
-		p_gp[size_t( DsTexture::eData3 )]->GetTexture()->Unbind( 3u );
-		p_gp[size_t( DsTexture::eData3 )]->GetSampler()->Unbind( 3u );
-		p_gp[size_t( DsTexture::eData2 )]->GetTexture()->Unbind( 2u );
-		p_gp[size_t( DsTexture::eData2 )]->GetSampler()->Unbind( 2u );
-		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Unbind( 1u );
-		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 1u );
-		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
-		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
+		lp.GetTexture()->Unbind( 5u );
+		lp.GetSampler()->Unbind( 5u );
+		gp[size_t( DsTexture::eData4 )]->GetTexture()->Unbind( 4u );
+		gp[size_t( DsTexture::eData4 )]->GetSampler()->Unbind( 4u );
+		gp[size_t( DsTexture::eData3 )]->GetTexture()->Unbind( 3u );
+		gp[size_t( DsTexture::eData3 )]->GetSampler()->Unbind( 3u );
+		gp[size_t( DsTexture::eData2 )]->GetTexture()->Unbind( 2u );
+		gp[size_t( DsTexture::eData2 )]->GetSampler()->Unbind( 2u );
+		gp[size_t( DsTexture::eData1 )]->GetTexture()->Unbind( 1u );
+		gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 1u );
+		gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
+		gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
 		m_frameBuffer->Unbind();
 		m_timer->Stop();
 		info.m_times.push_back( { m_timer->GetName()

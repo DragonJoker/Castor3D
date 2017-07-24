@@ -414,7 +414,8 @@ namespace Castor3D
 
 	SsaoPass::SsaoPass( Engine & engine
 		, Size const & size
-		, SsaoConfig const & config )
+		, SsaoConfig const & config
+		, GpInfoUbo & gpInfoUbo )
 		: m_engine{ engine }
 		, m_size{ size }
 		, m_matrixUbo{ engine }
@@ -430,6 +431,7 @@ namespace Castor3D
 		, m_config{ config }
 		, m_ssaoTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao raw" ) ) }
 		, m_blurTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao blur" ) ) }
+		, m_gpInfoUbo{ gpInfoUbo }
 	{
 		DoInitialiseQuadRendering();
 		DoInitialiseSsaoPass();
@@ -444,17 +446,8 @@ namespace Castor3D
 	}
 
 	void SsaoPass::Render( GeometryPassResult const & gp
-		, Camera const & camera
-		, Matrix4x4r const & invViewProj
-		, Matrix4x4r const & invView
-		, Matrix4x4r const & invProj
 		, RenderInfo & info )
 	{
-		m_gpInfo->Update( m_size
-			, camera
-			, invViewProj
-			, invView
-			, invProj );
 		DoRenderSsao( gp );
 		DoRenderBlur();
 		info.m_times.push_back( { m_ssaoTimer->GetName()
@@ -507,12 +500,10 @@ namespace Castor3D
 		ENSURE( m_ssaoFbo->IsComplete() );
 		m_ssaoFbo->Unbind();
 
-		m_gpInfo = std::make_unique< GpInfoUbo >( m_engine );
-
 		m_ssaoPipeline = DoCreatePipeline( m_engine, *m_ssaoProgram );
 		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		m_ssaoPipeline->AddUniformBuffer( m_ssaoConfig );
-		m_ssaoPipeline->AddUniformBuffer( m_gpInfo->GetUbo() );
+		m_ssaoPipeline->AddUniformBuffer( m_gpInfoUbo.GetUbo() );
 
 		m_ssaoVertexBuffer = DoCreateVbo( m_engine );
 		m_ssaoGeometryBuffers = renderSystem.CreateGeometryBuffers( Topology::eTriangles
@@ -581,7 +572,6 @@ namespace Castor3D
 		m_ssaoFbo.reset();
 		m_ssaoResultAttach.reset();
 		m_ssaoResult.Cleanup();
-		m_gpInfo.reset();
 	}
 
 	void SsaoPass::DoCleanupBlurPass()

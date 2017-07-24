@@ -75,12 +75,12 @@ namespace Castor3D
 		p_queues.push_back( m_renderQueue );
 	}
 
-	void DepthPass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
+	void DepthPass::DoUpdateFlags( TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		RemFlag( p_programFlags, ProgramFlag::eLighting );
-		RemFlag( p_programFlags, ProgramFlag::eEnvironmentMapping );
+		RemFlag( programFlags, ProgramFlag::eLighting );
+		RemFlag( programFlags, ProgramFlag::eEnvironmentMapping );
 	}
 
 	void DepthPass::DoRenderNodes( SceneRenderNodes & p_nodes
@@ -165,26 +165,26 @@ namespace Castor3D
 		}
 	}
 
-	GLSL::Shader DepthPass::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	GLSL::Shader DepthPass::DoGetVertexShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
 	{
 		using namespace GLSL;
 		auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 		// Vertex inputs
 		auto position = writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
-		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
 
 		UBO_MATRIX( writer );
 		UBO_MODEL_MATRIX( writer );
-		SkinningUbo::Declare( writer, p_programFlags );
-		UBO_MORPHING( writer, p_programFlags );
+		SkinningUbo::Declare( writer, programFlags );
+		UBO_MORPHING( writer, programFlags );
 		UBO_MODEL( writer );
 
 		// Outputs
@@ -195,11 +195,11 @@ namespace Castor3D
 			auto v4Vertex = writer.DeclLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
 			auto mtxModel = writer.DeclLocale< Mat4 >( cuT( "mtxModel" ) );
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
+			if ( CheckFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				mtxModel = SkinningUbo::ComputeTransform( writer, p_programFlags );
+				mtxModel = SkinningUbo::ComputeTransform( writer, programFlags );
 			}
-			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+			else if ( CheckFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				mtxModel = transform;
 			}
@@ -208,7 +208,7 @@ namespace Castor3D
 				mtxModel = c3d_mtxModel;
 			}
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
+			if ( CheckFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto time = writer.DeclLocale( cuT( "time" ), 1.0_f - c3d_fTime );
 				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
@@ -223,50 +223,50 @@ namespace Castor3D
 		return writer.Finalise();
 	}
 
-	GLSL::Shader DepthPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	GLSL::Shader DepthPass::DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
 		return GLSL::Shader{};
 	}
 
-	GLSL::Shader DepthPass::DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader DepthPass::DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return DoGetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader DepthPass::DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader DepthPass::DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return DoGetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader DepthPass::DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader DepthPass::DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return DoGetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader DepthPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader DepthPass::DoGetPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

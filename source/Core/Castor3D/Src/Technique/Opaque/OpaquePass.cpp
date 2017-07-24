@@ -81,7 +81,6 @@ namespace Castor3D
 				break;
 			}
 		}
-
 	}
 
 	String const OpaquePass::Output1 = cuT( "c3d_output1" );
