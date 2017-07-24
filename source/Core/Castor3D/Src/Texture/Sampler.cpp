@@ -144,8 +144,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	Sampler::Sampler( Engine & p_engine, String const & p_name )
-		: OwnedBy< Engine >{ p_engine }
+	Sampler::Sampler( Engine & engine, String const & p_name )
+		: OwnedBy< Engine >{ engine }
 		, Named{ p_name }
 	{
 	}

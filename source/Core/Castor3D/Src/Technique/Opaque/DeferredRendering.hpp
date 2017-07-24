@@ -116,6 +116,9 @@ namespace Castor3D
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		SceneUbo m_sceneUbo;
+		//!\~english	The geometry pass informations.
+		//!\~french		Les informations de la passe de géométrie.
+		GpInfoUbo m_gpInfoUbo;
 		//!\~english	The fog pass.
 		//!\~french		La passe de brouillard.
 		std::unique_ptr< LightingPass > m_lightingPass;

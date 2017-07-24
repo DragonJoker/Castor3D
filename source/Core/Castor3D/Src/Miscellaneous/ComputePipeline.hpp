@@ -53,14 +53,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	renderSystem	The parent RenderSystem.
 		 *\param[in]	p_program		The shader program.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	renderSystem	Le RenderSystem parent.
 		 *\param[in]	p_program		Le programme shader.
 		 */
-		C3D_API explicit ComputePipeline( RenderSystem & p_renderSystem, ShaderProgram & p_program );
+		C3D_API explicit ComputePipeline( RenderSystem & renderSystem, ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.

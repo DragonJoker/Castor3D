@@ -183,9 +183,9 @@ namespace Castor3D
 		static int constexpr PickingOffset = int( PickingWidth / 2 );
 	}
 
-	PickingPass::PickingPass( Engine & p_engine )
-		: RenderPass{ cuT( "Picking" ), p_engine, nullptr }
-		, m_pickingUbo{ Picking, *p_engine.GetRenderSystem() }
+	PickingPass::PickingPass( Engine & engine )
+		: RenderPass{ cuT( "Picking" ), engine, nullptr }
+		, m_pickingUbo{ Picking, *engine.GetRenderSystem() }
 	{
 		m_pickingUbo.CreateUniform( UniformType::eUInt, DrawIndex );
 		m_pickingUbo.CreateUniform( UniformType::eUInt, NodeIndex );
@@ -476,50 +476,50 @@ namespace Castor3D
 	{
 	}
 
-	GLSL::Shader PickingPass::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	GLSL::Shader PickingPass::DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
 		return GLSL::Shader{};
 	}
 
-	GLSL::Shader PickingPass::DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader PickingPass::DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return DoGetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader PickingPass::DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader PickingPass::DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return DoGetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader PickingPass::DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader PickingPass::DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return DoGetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader PickingPass::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader PickingPass::DoGetPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = m_renderSystem.CreateGlslWriter();
@@ -545,15 +545,15 @@ namespace Castor3D
 		return writer.Finalise();
 	}
 
-	void PickingPass::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
+	void PickingPass::DoUpdateFlags( TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		RemFlag( p_programFlags, ProgramFlag::eLighting );
-		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
-		RemFlag( p_textureFlags, TextureChannel::eAll );
+		RemFlag( programFlags, ProgramFlag::eLighting );
+		RemFlag( programFlags, ProgramFlag::eAlphaBlending );
+		RemFlag( textureFlags, TextureChannel::eAll );
 
-		AddFlag( p_programFlags, ProgramFlag::ePicking );
+		AddFlag( programFlags, ProgramFlag::ePicking );
 	}
 
 	void PickingPass::DoUpdatePipeline( RenderPipeline & p_pipeline )const

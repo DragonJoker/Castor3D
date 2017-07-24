@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ParticlePlugin::ParticlePlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::eParticle, p_library, *p_engine )
+	ParticlePlugin::ParticlePlugin( DynamicLibrarySPtr p_library, Engine * engine )
+		: Plugin( PluginType::eParticle, p_library, *engine )
 	{
 		if ( m_pfnOnLoad )
 		{

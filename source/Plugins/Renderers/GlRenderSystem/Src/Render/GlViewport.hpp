@@ -46,14 +46,14 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_viewport		The parent viewport.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	p_viewport		Le viewport parent.
 		 */
-		GlViewport( GlRenderSystem & p_renderSystem, Castor3D::Viewport & p_viewport );
+		GlViewport( GlRenderSystem & renderSystem, Castor3D::Viewport & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -421,27 +421,28 @@ namespace Castor3D
 	CombinePass::CombinePass( Engine & engine
 		, Size const & size
 		, SceneUbo & sceneUbo
+		, GpInfoUbo & gpInfoUbo
 		, SsaoConfig const & config )
 		: m_size{ size }
 		, m_viewport{ engine }
 		, m_vertexBuffer{ DoCreateVbo( engine ) }
 		, m_matrixUbo{ engine }
-		, m_gpInfo{ engine }
+		, m_gpInfoUbo{ gpInfoUbo }
 		, m_programs
 		{
 			{
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, config.m_enabled, false, GLSL::FogType::eDisabled },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, config.m_enabled, false, GLSL::FogType::eLinear },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, config.m_enabled, false, GLSL::FogType::eExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, config.m_enabled, false, GLSL::FogType::eSquaredExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, config.m_enabled, true, GLSL::FogType::eDisabled },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, config.m_enabled, true, GLSL::FogType::eLinear },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, config.m_enabled, true, GLSL::FogType::eExponential },
-				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfo, config.m_enabled, true, GLSL::FogType::eSquaredExponential }
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, GLSL::FogType::eDisabled },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, GLSL::FogType::eLinear },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, GLSL::FogType::eExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, false, GLSL::FogType::eSquaredExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, GLSL::FogType::eDisabled },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, GLSL::FogType::eLinear },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, GLSL::FogType::eExponential },
+				CombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, true, GLSL::FogType::eSquaredExponential }
 			}
 		}
 		, m_ssaoEnabled{ config.m_enabled }
-		, m_ssao{ engine, size, config }
+		, m_ssao{ engine, size, config, gpInfoUbo }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Combine" ) ) }
 	{
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
@@ -461,10 +462,6 @@ namespace Castor3D
 		, TextureUnit const & light
 		, TextureUnit const & reflection
 		, TextureUnit const & refraction
-		, Camera const & camera
-		, Matrix4x4r const & invViewProj
-		, Matrix4x4r const & invView
-		, Matrix4x4r const & invProj
 		, Fog const & fog
 		, FrameBuffer const & frameBuffer
 		, RenderInfo & info )
@@ -473,12 +470,7 @@ namespace Castor3D
 
 		if ( m_ssaoEnabled )
 		{
-			m_ssao.Render( gp
-				, camera
-				, invViewProj
-				, invView
-				, invProj
-				, info );
+			m_ssao.Render( gp, info );
 			ssao = &m_ssao.GetResult();
 		}
 
@@ -487,11 +479,6 @@ namespace Castor3D
 		frameBuffer.SetDrawBuffers();
 
 		m_viewport.Apply();
-		m_gpInfo.Update( m_size
-			, camera
-			, invViewProj
-			, invView
-			, invProj );
 		uint32_t index{ 0u };
 		reflection.GetTexture()->Bind( index );
 		reflection.GetSampler()->Bind( index );
@@ -571,10 +558,6 @@ namespace Castor3D
 		, TextureUnit const & reflection
 		, TextureUnit const & refraction
 		, IblTextures const & ibl
-		, Camera const & camera
-		, Matrix4x4r const & invViewProj
-		, Matrix4x4r const & invView
-		, Matrix4x4r const & invProj
 		, Fog const & fog
 		, FrameBuffer const & frameBuffer
 		, RenderInfo & info )
@@ -583,12 +566,7 @@ namespace Castor3D
 
 		if ( m_ssaoEnabled )
 		{
-			m_ssao.Render( gp
-				, camera
-				, invViewProj
-				, invView
-				, invProj
-				, info );
+			m_ssao.Render( gp, info );
 			ssao = &m_ssao.GetResult();
 		}
 
@@ -597,11 +575,6 @@ namespace Castor3D
 		frameBuffer.SetDrawBuffers();
 
 		m_viewport.Apply();
-		m_gpInfo.Update( m_size
-			, camera
-			, invViewProj
-			, invView
-			, invProj );
 		uint32_t index{ 0u };
 		reflection.GetTexture()->Bind( index );
 		reflection.GetSampler()->Bind( index );

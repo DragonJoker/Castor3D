@@ -15,8 +15,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlComputePipeline::GlComputePipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem, ShaderProgram & p_program )
-		: ComputePipeline{ p_renderSystem, p_program }
+	GlComputePipeline::GlComputePipeline( OpenGl & p_gl, GlRenderSystem & renderSystem, ShaderProgram & p_program )
+		: ComputePipeline{ renderSystem, p_program }
 		, Holder{ p_gl }
 	{
 	}

@@ -112,7 +112,7 @@ namespace Castor3D
 		Engine * m_engine{ nullptr };
 
 	public:
-		C3D_API Generator( Engine * p_engine, int p_width, int p_height );
+		C3D_API Generator( Engine * engine, int p_width, int p_height );
 		C3D_API virtual ~Generator();
 
 		C3D_API virtual bool Step();

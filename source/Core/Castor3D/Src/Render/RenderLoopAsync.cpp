@@ -15,8 +15,8 @@ namespace Castor3D
 	static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
 	static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
 
-	RenderLoopAsync::RenderLoopAsync( Engine & p_engine, uint32_t p_wantedFPS )
-		: RenderLoop( p_engine, p_wantedFPS, true )
+	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t p_wantedFPS )
+		: RenderLoop( engine, p_wantedFPS, true )
 		, m_mainLoopThread( nullptr )
 		, m_paused( false )
 		, m_ended( false )

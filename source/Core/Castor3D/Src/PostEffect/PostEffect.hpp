@@ -64,12 +64,12 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	p_engine	The engine.
+			 *\param[in]	engine	The engine.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	p_engine	Le moteur.
+			 *\param[in]	engine	Le moteur.
 			 */
-			C3D_API PostEffectSurface( Castor3D::Engine & p_engine );
+			C3D_API PostEffectSurface( Castor3D::Engine & engine );
 			/**
 			 *\~english
 			 *\brief		Initialises the surface.
@@ -113,16 +113,16 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_name			The effect name.
 		 *\param[in]	p_renderTarget	The render target to which is attached this effect.
-		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	renderSystem	The render system.
 		 *\param[in]	p_params		The optional parameters.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			Le nom de l'effet.
 		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
-		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	p_params		Les paramètres optionnels.
 		 */
-		C3D_API PostEffect( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params );
+		C3D_API PostEffect( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_params );
 		/**
 		 *\~english
 		 *\brief		Destructor.

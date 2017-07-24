@@ -63,25 +63,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_produce		The element producer.
 		 *\param[in]	p_initialise	The element initialiser.
 		 *\param[in]	p_clean			The element cleaner.
 		 *\param[in]	p_merge			The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_produce		Le créateur d'objet.
 		 *\param[in]	p_initialise	L'initialiseur d'objet.
 		 *\param[in]	p_clean			Le nettoyeur d'objet.
 		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
 		 */
-		inline CacheBase( Engine & p_engine
+		inline CacheBase( Engine & engine
 			, Producer && p_produce
 			, Initialiser && p_initialise
 			, Cleaner && p_clean
 			, Merger && p_merge )
-			: m_engine{ p_engine }
+			: m_engine{ engine }
 			, m_produce{ std::move( p_produce ) }
 			, m_initialise{ std::move( p_initialise ) }
 			, m_clean{ std::move( p_clean ) }
@@ -449,25 +449,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_produce		The element producer.
 		 *\param[in]	p_initialise	The element initialiser.
 		 *\param[in]	p_clean			The element cleaner.
 		 *\param[in]	p_merge			The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_produce		Le créateur d'objet.
 		 *\param[in]	p_initialise	L'initialiseur d'objet.
 		 *\param[in]	p_clean			Le nettoyeur d'objet.
 		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
 		 */
-		inline Cache( Engine & p_engine
+		inline Cache( Engine & engine
 			, Producer && p_produce
 			, Initialiser && p_initialise = Initialiser{}
 			, Cleaner && p_clean = Cleaner{}
 			, Merger && p_merge = Merger{} )
-			: MyCacheType( p_engine
+			: MyCacheType( engine
 				, std::move( p_produce )
 				, std::move( p_initialise )
 				, std::move( p_clean )
@@ -487,14 +487,14 @@ namespace Castor3D
 	/**
 	 *\~english
 	 *\brief		Creates a cache.
-	 *\param[in]	p_engine		The engine.
+	 *\param[in]	engine		The engine.
 	 *\param[in]	p_produce		The element producer.
 	 *\param[in]	p_initialise	The element initialiser.
 	 *\param[in]	p_clean			The element cleaner.
 	 *\param[in]	p_merge			The element collection merger.
 	 *\~french
 	 *\brief		Crée un cache.
-	 *\param[in]	p_engine		Le moteur.
+	 *\param[in]	engine		Le moteur.
 	 *\param[in]	p_produce		Le créateur d'objet.
 	 *\param[in]	p_initialise	L'initialiseur d'objet.
 	 *\param[in]	p_clean			Le nettoyeur d'objet.
@@ -502,7 +502,7 @@ namespace Castor3D
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< Cache< ElementType, KeyType > >
-	MakeCache( Engine & p_engine
+	MakeCache( Engine & engine
 		, typename CacheTraits< ElementType, KeyType >::Producer && p_produce
 		, ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
 		, ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
@@ -510,7 +510,7 @@ namespace Castor3D
 			, Castor::Collection< ElementType, KeyType > &
 			, std::shared_ptr< ElementType > ){} )
 	{
-		return std::make_unique< Cache< ElementType, KeyType > >( p_engine
+		return std::make_unique< Cache< ElementType, KeyType > >( engine
 			, std::move( p_produce )
 			, std::move( p_initialise )
 			, std::move( p_clean )

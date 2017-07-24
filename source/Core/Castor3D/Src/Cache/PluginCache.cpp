@@ -22,12 +22,12 @@ namespace Castor3D
 	template<> const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
 	static const String GetTypeFunctionABIName = cuT( "GetType" );
 
-	PluginCache::Cache( Engine & p_engine
+	PluginCache::Cache( Engine & engine
 						, Producer && p_produce
 						, Initialiser && p_initialise
 						, Cleaner && p_clean
 						, Merger && p_merge )
-		: MyCacheType( p_engine
+		: MyCacheType( engine
 					   , std::move( p_produce )
 					   , std::move( p_initialise )
 					   , std::move( p_clean )

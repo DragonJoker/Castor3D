@@ -18,11 +18,11 @@ namespace CastorGui
 	int StaticCtrl::m_count = 0xFF000000;
 
 	StaticCtrl::StaticCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id )
 		: StaticCtrl( p_name
-			, p_engine
+			, engine
 			, p_parent
 			, String()
 			, Position()
@@ -33,7 +33,7 @@ namespace CastorGui
 	}
 
 	StaticCtrl::StaticCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, String const & p_caption
 		, Position const & p_position
@@ -42,7 +42,7 @@ namespace CastorGui
 		, bool p_visible )
 		: Control( ControlType::eStatic
 			, p_name
-			, p_engine
+			, engine
 			, p_parent
 			, m_count++
 			, p_position

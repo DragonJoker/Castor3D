@@ -55,14 +55,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_node		The scene node.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_node		Le noeud de scène.
 		 */
-		C3D_API EnvironmentMap( Engine & p_engine
+		C3D_API EnvironmentMap( Engine & engine
 			, SceneNode & p_node );
 		/**
 		 *\~english

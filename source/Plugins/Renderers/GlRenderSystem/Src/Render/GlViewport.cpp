@@ -8,9 +8,9 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlViewport::GlViewport( GlRenderSystem & p_renderSystem, Viewport & p_viewport )
-		: IViewportImpl{ p_renderSystem, p_viewport }
-		, Holder{ p_renderSystem.GetOpenGl() }
+	GlViewport::GlViewport( GlRenderSystem & renderSystem, Viewport & p_viewport )
+		: IViewportImpl{ renderSystem, p_viewport }
+		, Holder{ renderSystem.GetOpenGl() }
 	{
 	}
 

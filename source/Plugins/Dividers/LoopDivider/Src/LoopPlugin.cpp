@@ -33,13 +33,13 @@ extern "C"
 		*p_name = Subdivider::Name.c_str();
 	}
 
-	C3D_Loop_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	C3D_Loop_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
 	{
-		p_engine->GetSubdividerFactory().Register( Subdivider::Type, &Subdivider::Create );
+		engine->GetSubdividerFactory().Register( Subdivider::Type, &Subdivider::Create );
 	}
 
-	C3D_Loop_API void OnUnload( Castor3D::Engine * p_engine )
+	C3D_Loop_API void OnUnload( Castor3D::Engine * engine )
 	{
-		p_engine->GetSubdividerFactory().Unregister( Subdivider::Type );
+		engine->GetSubdividerFactory().Unregister( Subdivider::Type );
 	}
 }

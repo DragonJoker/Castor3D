@@ -52,14 +52,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_name		The renderer name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_name		Le nom du renderer.
 		 */
-		C3D_API RenderSystem( Engine & p_engine, Castor::String const & p_name );
+		C3D_API RenderSystem( Engine & engine, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor

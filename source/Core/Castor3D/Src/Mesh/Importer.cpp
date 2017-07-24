@@ -17,8 +17,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Importer::Importer( Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+	Importer::Importer( Engine & engine )
+		: OwnedBy< Engine >( engine )
 		, m_fileName()
 	{
 	}

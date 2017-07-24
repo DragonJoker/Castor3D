@@ -53,6 +53,7 @@ namespace Castor3D
 		 *\param[in]	opaque		The opaque pass.
 		 *\param[in]	depthAttach	The depth buffer attach.
 		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
@@ -61,13 +62,15 @@ namespace Castor3D
 		 *\param[in]	opaque		La passe opaque.
 		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
 		 *\param[in]	sceneUbo	L'UBO de scène.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightingPass( Engine & engine
 			, Castor::Size const & size
 			, Scene const & scene
 			, OpaquePass & opaque
 			, FrameBufferAttachment & depthAttach
-			, SceneUbo & sceneUbo );
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -78,27 +81,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the light passes on currently bound framebuffer.
-		 *\param[in]	scene		The scene.
-		 *\param[in]	camera		The viewing camera.
-		 *\param[in]	gp			The geometry pass result.
-		 *\param[in]	invViewProj	The inverse view projection matrix.
-		 *\param[in]	invView		The inverse view matrix.
-		 *\param[in]	invProj		The inverse projection matrix.
+		 *\param[in]	scene	The scene.
+		 *\param[in]	camera	The viewing camera.
+		 *\param[in]	gp		The geometry pass result.
 		 *\~french
 		 *\brief		Dessine les passes d'éclairage sur le tampon d'image donné.
-		 *\param[in]	scene		La scène.
-		 *\param[in]	camera		La caméra.
-		 *\param[in]	gp			Le résultat de la geometry pass.
-		 *\param[in]	invViewProj	La matrice vue projection inversée.
-		 *\param[in]	invView		La matrice vue inversée.
-		 *\param[in]	invProj		La matrice projection inversée.
+		 *\param[in]	scene	La scène.
+		 *\param[in]	camera	La caméra.
+		 *\param[in]	gp		Le résultat de la geometry pass.
 		 */
 		bool Render( Scene const & scene
 			, Camera const & camera
 			, GeometryPassResult const & gp
-			, Castor::Matrix4x4r const & invViewProj
-			, Castor::Matrix4x4r const & invView
-			, Castor::Matrix4x4r const & invProj
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -115,32 +109,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the light passes for a light sources type on currently bound framebuffer.
-		 *\param[in]		scene		The scene.
-		 *\param[in]		camera		The viewing camera.
-		 *\param[in]		type		The light sources type.
-		 *\param[in]		gp			The geometry pass result.
-		 *\param[in]		invViewProj	The inverse view projection matrix.
-		 *\param[in]		invView		The inverse view matrix.
-		 *\param[in]		invProj		The inverse projection matrix.
-		 *\param[in]		first		Tells if this is the first light pass (\p true) or not (\p false).
+		 *\param[in]		scene	The scene.
+		 *\param[in]		camera	The viewing camera.
+		 *\param[in]		type	The light sources type.
+		 *\param[in]		gp		The geometry pass result.
+		 *\param[in]		first	Tells if this is the first light pass (\p true) or not (\p false).
 		 *\~french
 		 *\brief			Dessine les passes d'éclairage d'un type de source sur le tampon d'image donné.
-		 *\param[in]		scene		La scène.
-		 *\param[in]		camera		La caméra.
-		 *\param[in]		type		Le type de sources lumineuse.
-		 *\param[in]		gp			Le résultat de la geometry pass.
-		 *\param[in]		invViewProj	La matrice vue projection inversée.
-		 *\param[in]		invView		La matrice vue inversée.
-		 *\param[in]		invProj		La matrice projection inversée.
-		 *\param[in,out]	first		Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+		 *\param[in]		scene	La scène.
+		 *\param[in]		camera	La caméra.
+		 *\param[in]		type	Le type de sources lumineuse.
+		 *\param[in]		gp		Le résultat de la geometry pass.
+		 *\param[in,out]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
 		void DoRenderLights( Scene const & scene
 			, Camera const & camera
 			, LightType type
 			, GeometryPassResult const & gp
-			, Castor::Matrix4x4r const & invViewProj
-			, Castor::Matrix4x4r const & invView
-			, Castor::Matrix4x4r const & invProj
 			, bool & first );
 
 	private:

@@ -24,7 +24,7 @@ namespace Castor3D
 	{
 		static Size const MapSize{ 1024, 1024 };
 
-		TextureUnit DoInitialisePoint( Engine & p_engine
+		TextureUnit DoInitialisePoint( Engine & engine
 			, Size const & p_size
 			, MaterialType p_type )
 		{
@@ -32,13 +32,13 @@ namespace Castor3D
 
 			SamplerSPtr sampler;
 
-			if ( p_engine.GetSamplerCache().Has( name ) )
+			if ( engine.GetSamplerCache().Has( name ) )
 			{
-				sampler = p_engine.GetSamplerCache().Find( name );
+				sampler = engine.GetSamplerCache().Find( name );
 			}
 			else
 			{
-				sampler = p_engine.GetSamplerCache().Add( name );
+				sampler = engine.GetSamplerCache().Add( name );
 				sampler->SetInterpolationMode( InterpolationFilter::eMin
 					, InterpolationMode::eLinear );
 				sampler->SetInterpolationMode( InterpolationFilter::eMag
@@ -59,12 +59,12 @@ namespace Castor3D
 					, WrapMode::eClampToEdge );
 			}
 
-			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eCube
+			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eA8R8G8B8
 				, p_size );
-			TextureUnit unit{ p_engine };
+			TextureUnit unit{ engine };
 			unit.SetTexture( texture );
 			unit.SetSampler( sampler );
 
@@ -123,10 +123,10 @@ namespace Castor3D
 
 	uint32_t EnvironmentMap::m_count = 0u;
 
-	EnvironmentMap::EnvironmentMap( Engine & p_engine
+	EnvironmentMap::EnvironmentMap( Engine & engine
 		, SceneNode  & p_node )
-		: OwnedBy< Engine >{ p_engine }
-		, m_environmentMap{ DoInitialisePoint( p_engine, MapSize, p_node.GetScene()->GetMaterialsType() ) }
+		: OwnedBy< Engine >{ engine }
+		, m_environmentMap{ DoInitialisePoint( engine, MapSize, p_node.GetScene()->GetMaterialsType() ) }
 		, m_node{ p_node }
 		, m_index{ ++m_count }
 		, m_passes( DoCreatePasses( *this, p_node ) )

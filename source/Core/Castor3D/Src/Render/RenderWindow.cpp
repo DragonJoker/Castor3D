@@ -47,13 +47,13 @@ namespace Castor3D
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( String const & p_name, Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
+	RenderWindow::RenderWindow( String const & p_name, Engine & engine )
+		: OwnedBy< Engine >{ engine }
 		, Named{ p_name }
 		, m_index{ s_nbRenderWindows++ }
-		, m_wpListener{ p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( m_index ) ) }
-		, m_backBuffers{ p_engine.GetRenderSystem()->CreateBackBuffers() }
-		, m_pickingPass{ std::make_unique< PickingPass >( p_engine ) }
+		, m_wpListener{ engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( m_index ) ) }
+		, m_backBuffers{ engine.GetRenderSystem()->CreateBackBuffers() }
+		, m_pickingPass{ std::make_unique< PickingPass >( engine ) }
 	{
 	}
 

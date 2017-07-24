@@ -14,11 +14,11 @@ namespace GuiCommon
 		eID_DELETE = 1
 	}	eID;
 
-	TreeItemProperty::TreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, ePROPERTY_DATA_TYPE p_type )
+	TreeItemProperty::TreeItemProperty( Castor3D::Engine * engine, bool p_editable, ePROPERTY_DATA_TYPE p_type )
 		: wxTreeItemData()
 		, m_type( p_type )
 		, m_editable( p_editable )
-		, m_engine( p_engine )
+		, m_engine( engine )
 		, m_menu( nullptr )
 	{
 	}

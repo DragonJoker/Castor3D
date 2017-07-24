@@ -8,8 +8,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	BackBuffers::BackBuffers( Engine & p_engine )
-		: FrameBuffer( p_engine )
+	BackBuffers::BackBuffers( Engine & engine )
+		: FrameBuffer( engine )
 	{
 	}
 

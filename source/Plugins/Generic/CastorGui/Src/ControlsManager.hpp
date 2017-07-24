@@ -55,10 +55,10 @@ namespace CastorGui
 		/**
 		*\brief
 		*	Constructor
-		*\param[in] p_engine
+		*\param[in] engine
 		*	The engine
 		*/
-		C3D_CGui_API ControlsManager( Castor3D::Engine & p_engine );
+		C3D_CGui_API ControlsManager( Castor3D::Engine & engine );
 		/**
 		*\brief
 		*	Destructor

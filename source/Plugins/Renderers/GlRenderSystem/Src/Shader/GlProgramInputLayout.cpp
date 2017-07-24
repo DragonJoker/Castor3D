@@ -13,8 +13,8 @@ using namespace Castor3D;
 
 namespace GlRender
 {
-	GlProgramInputLayout::GlProgramInputLayout( OpenGl & p_gl, RenderSystem & p_renderSystem )
-		: ProgramInputLayout( p_renderSystem )
+	GlProgramInputLayout::GlProgramInputLayout( OpenGl & p_gl, RenderSystem & renderSystem )
+		: ProgramInputLayout( renderSystem )
 		, Holder( p_gl )
 	{
 	}

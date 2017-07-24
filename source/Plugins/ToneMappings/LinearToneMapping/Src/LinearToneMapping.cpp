@@ -22,8 +22,8 @@ namespace Linear
 {
 	String ToneMapping::Name = cuT( "linear" );
 
-	ToneMapping::ToneMapping( Engine & p_engine, Parameters const & p_parameters )
-		: Castor3D::ToneMapping{ Name, p_engine, p_parameters }
+	ToneMapping::ToneMapping( Engine & engine, Parameters const & p_parameters )
+		: Castor3D::ToneMapping{ Name, engine, p_parameters }
 	{
 		String param;
 
@@ -38,9 +38,9 @@ namespace Linear
 	{
 	}
 
-	ToneMappingSPtr ToneMapping::Create( Engine & p_engine, Parameters const & p_parameters )
+	ToneMappingSPtr ToneMapping::Create( Engine & engine, Parameters const & p_parameters )
 	{
-		return std::make_shared< ToneMapping >( p_engine, p_parameters );
+		return std::make_shared< ToneMapping >( engine, p_parameters );
 	}
 
 	GLSL::Shader ToneMapping::DoCreate()

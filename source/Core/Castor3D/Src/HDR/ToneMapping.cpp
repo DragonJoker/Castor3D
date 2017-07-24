@@ -16,11 +16,11 @@ namespace Castor3D
 {
 	String const ToneMapping::HdrConfigUbo = cuT( "HdrConfig" );
 
-	ToneMapping::ToneMapping( Castor::String const & p_name, Engine & p_engine, Parameters const & p_parameters )
-		: OwnedBy< Engine >{ p_engine }
+	ToneMapping::ToneMapping( Castor::String const & p_name, Engine & engine, Parameters const & p_parameters )
+		: OwnedBy< Engine >{ engine }
 		, Named{ p_name }
-		, m_matrixUbo{ p_engine }
-		, m_configUbo{ ToneMapping::HdrConfigUbo, *p_engine.GetRenderSystem() }
+		, m_matrixUbo{ engine }
+		, m_configUbo{ ToneMapping::HdrConfigUbo, *engine.GetRenderSystem() }
 	{
 		m_exposureVar = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 		

@@ -61,7 +61,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	renderSystem	The parent RenderSystem.
 		 *\param[in]	p_dsState		The depth stencil state.
 		 *\param[in]	p_rsState		The rateriser state.
 		 *\param[in]	p_blState		The blend state.
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\param[in]	p_flags			The creation flags.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	renderSystem	Le RenderSystem parent.
 		 *\param[in]	p_dsState		L'état de stencil et profondeur.
 		 *\param[in]	p_rsState		L'état de rastériseur.
 		 *\param[in]	p_blState		L'état de mélange.
@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		C3D_API explicit RenderPipeline( RenderSystem & p_renderSystem
+		C3D_API explicit RenderPipeline( RenderSystem & renderSystem
 			, DepthStencilState && p_dsState
 			, RasteriserState && p_rsState
 			, BlendState && p_blState

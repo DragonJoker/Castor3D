@@ -24,22 +24,22 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Overlay::Overlay( Engine & p_engine, OverlayType p_type )
-		: OwnedBy< Engine >( p_engine )
+	Overlay::Overlay( Engine & engine, OverlayType p_type )
+		: OwnedBy< Engine >( engine )
 		, m_parent()
 		, m_scene()
-		, m_renderSystem( p_engine.GetRenderSystem() )
-		, m_category( p_engine.GetOverlayCache().GetFactory().Create( p_type ) )
+		, m_renderSystem( engine.GetRenderSystem() )
+		, m_category( engine.GetOverlayCache().GetFactory().Create( p_type ) )
 	{
 		m_category->SetOverlay( this );
 	}
 
-	Overlay::Overlay( Engine & p_engine, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
-		: OwnedBy< Engine >( p_engine )
+	Overlay::Overlay( Engine & engine, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		: OwnedBy< Engine >( engine )
 		, m_parent( p_parent )
 		, m_scene( p_scene )
-		, m_renderSystem( p_engine.GetRenderSystem() )
-		, m_category( p_engine.GetOverlayCache().GetFactory().Create( p_type ) )
+		, m_renderSystem( engine.GetRenderSystem() )
+		, m_category( engine.GetOverlayCache().GetFactory().Create( p_type ) )
 	{
 		m_category->SetOverlay( this );
 	}

@@ -11,14 +11,14 @@ namespace Castor3D
 {
 	String const CmshImporter::Type = cuT( "cmsh" );
 
-	CmshImporter::CmshImporter( Engine & p_engine )
-		: Importer{ p_engine }
+	CmshImporter::CmshImporter( Engine & engine )
+		: Importer{ engine }
 	{
 	}
 
-	ImporterUPtr CmshImporter::Create( Engine & p_engine )
+	ImporterUPtr CmshImporter::Create( Engine & engine )
 	{
-		return std::make_unique< CmshImporter >( p_engine );
+		return std::make_unique< CmshImporter >( engine );
 	}
 
 	bool CmshImporter::DoImportScene( Scene & p_scene )

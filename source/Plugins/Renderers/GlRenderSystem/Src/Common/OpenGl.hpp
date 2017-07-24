@@ -358,7 +358,7 @@ namespace GlRender
 		};
 
 	public:
-		C3D_Gl_API OpenGl( GlRenderSystem & p_renderSystem );
+		C3D_Gl_API OpenGl( GlRenderSystem & renderSystem );
 		C3D_Gl_API ~OpenGl();
 		C3D_Gl_API bool PreInitialise( Castor::String const & p_strExtensions );
 		C3D_Gl_API bool Initialise();

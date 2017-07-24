@@ -54,8 +54,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	IViewportImpl::IViewportImpl( RenderSystem & p_renderSystem, Viewport & p_viewport )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
+	IViewportImpl::IViewportImpl( RenderSystem & renderSystem, Viewport & p_viewport )
+		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_viewport{ p_viewport }
 	{
 	}
@@ -68,8 +68,8 @@ namespace Castor3D
 
 	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
 
-	Viewport::Viewport( Engine & p_engine, ViewportType p_type, Castor::Angle const & p_fovY, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
-		: OwnedBy< Engine >{ p_engine }
+	Viewport::Viewport( Engine & engine, ViewportType p_type, Castor::Angle const & p_fovY, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+		: OwnedBy< Engine >{ engine }
 		, m_type{ p_type }
 		, m_size{}
 		, m_fovY{ p_fovY }
@@ -88,8 +88,8 @@ namespace Castor3D
 		}
 	}
 
-	Viewport::Viewport( Engine & p_engine )
-		: Viewport{ p_engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
+	Viewport::Viewport( Engine & engine )
+		: Viewport{ engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
 	{
 	}
 

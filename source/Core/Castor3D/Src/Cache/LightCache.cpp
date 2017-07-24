@@ -70,7 +70,7 @@ namespace Castor3D
 		};
 	}
 
-	ObjectCache< Light, Castor::String >::ObjectCache( Engine & p_engine
+	ObjectCache< Light, Castor::String >::ObjectCache( Engine & engine
 		, Scene & p_scene
 		, SceneNodeSPtr p_rootNode
 		, SceneNodeSPtr p_rootCameraNode
@@ -81,7 +81,7 @@ namespace Castor3D
 		, Merger && p_merge
 		, Attacher && p_attach
 		, Detacher && p_detach )
-		: MyObjectCache( p_engine
+		: MyObjectCache( engine
 			, p_scene
 			, p_rootNode
 			, p_rootCameraNode

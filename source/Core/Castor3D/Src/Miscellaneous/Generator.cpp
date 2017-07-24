@@ -65,12 +65,12 @@ int Generator::Thread::Entry()
 
 //*************************************************************************************************
 
-Generator::Generator( Engine * p_engine, int p_width, int p_height )
+Generator::Generator( Engine * engine, int p_width, int p_height )
 	: m_iWidth( p_width )
 	, m_iHeight( p_height )
 	, m_frontBuffer( Size( p_width, p_height ) )
 	, m_backBuffer( Size( p_width, p_height ) )
-	, m_engine( p_engine )
+	, m_engine( engine )
 {
 	//uint8_t tmp[] = { 255, 255, 255, 255 };
 	//m_pxColour.set<PixelFormat::eA8R8G8B8>( tmp);

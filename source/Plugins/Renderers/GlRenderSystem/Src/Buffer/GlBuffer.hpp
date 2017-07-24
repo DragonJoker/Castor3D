@@ -52,7 +52,7 @@ namespace GlRender
 			std::function< void( uint32_t ) > >;
 
 	public:
-		GlBuffer( GlRenderSystem & p_renderSystem
+		GlBuffer( GlRenderSystem & renderSystem
 			, OpenGl & p_gl
 			, GlBufferTarget p_target );
 		virtual ~GlBuffer();

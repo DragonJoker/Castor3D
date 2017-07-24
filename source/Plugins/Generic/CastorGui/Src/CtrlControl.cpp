@@ -20,7 +20,7 @@ namespace CastorGui
 {
 	Control::Control( ControlType p_type
 		, String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id
 		, Position const & p_position
@@ -38,7 +38,7 @@ namespace CastorGui
 		, m_borders( 0, 0, 0, 0 )
 		, m_cursor( MouseCursor::eHand )
 		, m_parent( p_parent )
-		, m_engine( p_engine )
+		, m_engine( engine )
 	{
 		OverlaySPtr parentOv;
 		ControlRPtr parent = GetParent();

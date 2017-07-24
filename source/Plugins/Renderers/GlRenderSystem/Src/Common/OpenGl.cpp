@@ -131,14 +131,14 @@ namespace GlRender
 
 #define CASTOR_DBG_WIN32 0
 
-	OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
+	OpenGl::OpenGl( GlRenderSystem & renderSystem )
 		: m_pfnReadPixels{}
 		, m_pfnBlitFramebuffer{}
 		, m_pfnTexImage2DMultisample{}
 		, m_pfnGetActiveUniform{}
 		, m_pfnVertexAttribPointer{}
-		, m_renderSystem{ p_renderSystem }
-		, m_debug{ p_renderSystem }
+		, m_renderSystem{ renderSystem }
+		, m_debug{ renderSystem }
 	{
 		uint32_t index = 0;
 		GlslStrings[index++] = cuT( "[e00] GLSL is not available!" );

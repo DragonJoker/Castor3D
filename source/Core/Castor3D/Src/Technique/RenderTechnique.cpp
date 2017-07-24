@@ -120,14 +120,14 @@ namespace Castor3D
 
 	RenderTechnique::RenderTechnique( String const & p_name
 		, RenderTarget & p_renderTarget
-		, RenderSystem & p_renderSystem
+		, RenderSystem & renderSystem
 		, Parameters const & p_params
 		, SsaoConfig const & p_config )
 
-		: OwnedBy< Engine >{ *p_renderSystem.GetEngine() }
+		: OwnedBy< Engine >{ *renderSystem.GetEngine() }
 		, Named{ p_name }
 		, m_renderTarget{ p_renderTarget }
-		, m_renderSystem{ p_renderSystem }
+		, m_renderSystem{ renderSystem }
 #if DEBUG_FORWARD_RENDERING
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
 			, *p_renderTarget.GetScene()

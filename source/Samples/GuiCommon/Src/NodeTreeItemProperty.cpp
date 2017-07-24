@@ -24,10 +24,10 @@ namespace GuiCommon
 		static wxString PROPERTY_NODE_VISIBLE = _( "Visible" );
 	}
 
-	NodeTreeItemProperty::NodeTreeItemProperty( bool p_editable, Engine * p_engine, SceneNodeSPtr p_node )
+	NodeTreeItemProperty::NodeTreeItemProperty( bool p_editable, Engine * engine, SceneNodeSPtr p_node )
 		: TreeItemProperty( p_node->GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_NODE )
 		, m_node( p_node )
-		, m_engine( p_engine )
+		, m_engine( engine )
 	{
 		PROPERTY_CATEGORY_NODE = _( "Scene Node: " );
 		PROPERTY_NODE_POSITION = _( "Position" );

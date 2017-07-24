@@ -40,13 +40,13 @@ namespace GlRender
 		 *\~english
 		 *\brief		Constructor.
 		 *\para[in]		p_gl		The OpenGL APIs.
-		 *\para[in]		p_engine	The engine.
+		 *\para[in]		engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\para[in]		p_gl		Les APIs OpenGL.
-		 *\para[in]		p_engine	Le moteur.
+		 *\para[in]		engine	Le moteur.
 		 */
-		GlBackBuffers( OpenGl & p_gl, Castor3D::Engine & p_engine );
+		GlBackBuffers( OpenGl & p_gl, Castor3D::Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.

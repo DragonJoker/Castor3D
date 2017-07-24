@@ -59,7 +59,8 @@ namespace Castor3D
 		 */
 		SsaoPass( Engine & engine
 			, Castor::Size const & size
-			, SsaoConfig const & config );
+			, SsaoConfig const & config
+			, GpInfoUbo & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -70,24 +71,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass on currently bound framebuffer.
-		 *\param[in]	gp			The geometry pass result.
-		 *\param[in]	camera		The viewing camera.
-		 *\param[in]	invViewProj	The inverse view projection matrix.
-		 *\param[in]	invView		The inverse view matrix.
-		 *\param[in]	invProj		The inverse projection matrix.
+		 *\param[in]	gp		The geometry pass result.
+		 *\param[in]	info	Receives rendering info.
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image donné.
-		 *\param[in]	gp			Le résultat de la geometry pass.
-		 *\param[in]	camera		La caméra.
-		 *\param[in]	invViewProj	La matrice vue projection inversée.
-		 *\param[in]	invView		La matrice vue inversée.
-		 *\param[in]	invProj		La matrice projection inversée.
+		 *\param[in]	gp		Le résultat de la geometry pass.
+		 *\param[in]	info	Reçoit les informations de rendu.
 		 */
 		void Render( GeometryPassResult const & gp
-			, Camera const & camera
-			, Castor::Matrix4x4r const & invViewProj
-			, Castor::Matrix4x4r const & invView
-			, Castor::Matrix4x4r const & invProj
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -129,7 +120,7 @@ namespace Castor3D
 		TextureAttachmentSPtr m_ssaoResultAttach;
 		UniformBuffer m_ssaoConfig;
 		Uniform3fSPtr m_kernelUniform;
-		std::unique_ptr< GpInfoUbo > m_gpInfo;
+		GpInfoUbo & m_gpInfoUbo;
 		RenderPassTimerSPtr m_ssaoTimer;
 		// SSAO blur pass
 		VertexBufferSPtr m_blurVertexBuffer;

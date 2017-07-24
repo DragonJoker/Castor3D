@@ -746,18 +746,18 @@ namespace Castor3D
 		C3D_API void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
 			, GLSL::Vec3 & p_normal
 			, GLSL::Float & p_shininess
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags );
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags );
 
 		C3D_API void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
 			, GLSL::Vec3 & p_diffuse
 			, GLSL::Vec3 & p_specular
 			, GLSL::Vec3 & p_emissive
 			, GLSL::Float const & p_gamma
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags );
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags );
 
 		C3D_API std::shared_ptr< GLSL::PhongLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
 			, GLSL::ShadowType p_shadows );
@@ -775,17 +775,17 @@ namespace Castor3D
 				, GLSL::Vec3 & p_normal
 				, GLSL::Float & p_metallic
 				, GLSL::Float & p_roughness
-				, TextureChannels const & p_textureFlags
-				, ProgramFlags const & p_programFlags
-				, SceneFlags const & p_sceneFlags );
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags );
 
 			C3D_API void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
 				, GLSL::Vec3 & p_albedo
 				, GLSL::Vec3 & p_emissive
 				, GLSL::Float const & p_gamma
-				, TextureChannels const & p_textureFlags
-				, ProgramFlags const & p_programFlags
-				, SceneFlags const & p_sceneFlags );
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags );
 
 			C3D_API std::shared_ptr< GLSL::MetallicBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
 				, GLSL::ShadowType p_shadows );
@@ -801,17 +801,17 @@ namespace Castor3D
 				, GLSL::Vec3 & p_normal
 				, GLSL::Vec3 & p_specular
 				, GLSL::Float & p_glossiness
-				, TextureChannels const & p_textureFlags
-				, ProgramFlags const & p_programFlags
-				, SceneFlags const & p_sceneFlags );
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags );
 
 			C3D_API void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
 				, GLSL::Vec3 & p_diffuse
 				, GLSL::Vec3 & p_emissive
 				, GLSL::Float const & p_gamma
-				, TextureChannels const & p_textureFlags
-				, ProgramFlags const & p_programFlags
-				, SceneFlags const & p_sceneFlags );
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags );
 
 			C3D_API std::shared_ptr< GLSL::SpecularBrdfLightingModel > CreateLightingModel( GLSL::GlslWriter & p_writer
 				, GLSL::ShadowType p_shadows );
@@ -826,12 +826,12 @@ namespace Castor3D
 	using ParallaxShadowFunction = GLSL::Function< GLSL::Float, GLSL::InParam< GLSL::Vec3 >, GLSL::InParam< GLSL::Vec2 >, GLSL::InParam< GLSL::Float > >;
 
 	C3D_API ParallaxFunction DeclareParallaxMappingFunc( GLSL::GlslWriter & p_writer
-		, TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags );
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags );
 
 	C3D_API ParallaxShadowFunction DeclareParallaxShadowFunc( GLSL::GlslWriter & p_writer
-		, TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags );
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags );
 }
 
 DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine )

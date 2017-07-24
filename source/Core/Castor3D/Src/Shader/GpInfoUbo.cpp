@@ -15,8 +15,8 @@ namespace Castor3D
 	const String GpInfoUbo::Proj = cuT( "c3d_mtxGProj" );
 	const String GpInfoUbo::RenderSize = cuT( "c3d_renderSize" );
 
-	GpInfoUbo::GpInfoUbo( Engine & p_engine )
-		: m_gpInfoUbo{ GpInfoUbo::GPInfo, *p_engine.GetRenderSystem() }
+	GpInfoUbo::GpInfoUbo( Engine & engine )
+		: m_gpInfoUbo{ GpInfoUbo::GPInfo, *engine.GetRenderSystem() }
 		, m_invViewProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvViewProj ) }
 		, m_invViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvView ) }
 		, m_invProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvProj ) }

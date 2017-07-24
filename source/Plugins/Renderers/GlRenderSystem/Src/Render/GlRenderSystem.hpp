@@ -35,10 +35,10 @@ namespace GlRender
 		: public Castor3D::RenderSystem
 	{
 	public:
-		GlRenderSystem( Castor3D::Engine & p_engine );
+		GlRenderSystem( Castor3D::Engine & engine );
 		virtual ~GlRenderSystem();
 
-		static Castor3D::RenderSystemUPtr Create( Castor3D::Engine & p_engine );
+		static Castor3D::RenderSystemUPtr Create( Castor3D::Engine & engine );
 
 		//!< Initialize OpenGL Extensions
 		bool InitOpenGlExtensions();

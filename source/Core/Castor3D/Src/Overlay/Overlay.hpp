@@ -89,29 +89,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\param[in]	p_type		The overlay type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	engine	Le moteur
 		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		C3D_API Overlay( Engine & p_engine, OverlayType p_type );
+		C3D_API Overlay( Engine & engine, OverlayType p_type );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\param[in]	p_type		The overlay type
 		 *\param[in]	p_scene	The scene holding the overlay
 		 *\param[in]	p_parent	The parent overlay (if any)
 		 *\~english
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	engine	Le moteur
 		 *\param[in]	p_type		Le type de l'incrustation
 		 *\param[in]	p_scene	La scène parent
 		 *\param[in]	p_parent	L'incrustation parente
 		 */
-		C3D_API Overlay( Engine & p_engine, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
+		C3D_API Overlay( Engine & engine, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor

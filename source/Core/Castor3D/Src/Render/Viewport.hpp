@@ -49,14 +49,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_viewport		The parent viewport.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	p_viewport		Le viewport parent.
 		 */
-		C3D_API IViewportImpl( RenderSystem & p_renderSystem, Viewport & p_viewport );
+		C3D_API IViewportImpl( RenderSystem & renderSystem, Viewport & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -130,7 +130,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The core engine.
+		 *\param[in]	engine	The core engine.
 		 *\param[in]	p_type		Projection type.
 		 *\param[in]	p_fovy		Y Field of View.
 		 *\param[in]	p_aspect	Width / Height ratio.
@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_far		Far clipping plane value.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_type		Type de projection.
 		 *\param[in]	p_fovy		Angle de vision Y.
 		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
@@ -153,18 +153,18 @@ namespace Castor3D
 		 *\param[in]	p_near		Position du plan proche.
 		 *\param[in]	p_far		Position du plan éloigné.
 		 */
-		C3D_API Viewport( Engine & p_engine, ViewportType p_type, Castor::Angle const & p_fovy, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API Viewport( Engine & engine, ViewportType p_type, Castor::Angle const & p_fovy, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit Viewport( Engine & p_engine );
+		C3D_API explicit Viewport( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.

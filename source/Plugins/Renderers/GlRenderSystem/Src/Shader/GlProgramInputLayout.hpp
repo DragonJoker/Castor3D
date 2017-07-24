@@ -47,7 +47,7 @@ namespace GlRender
 		 *\brief		Constructor
 		 *\param[in]	p_gl	The OpenGL APIs.
 		 */
-		GlProgramInputLayout( OpenGl & p_gl, Castor3D::RenderSystem & p_renderSystem );
+		GlProgramInputLayout( OpenGl & p_gl, Castor3D::RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -18,11 +18,11 @@ using namespace Castor3D;
 namespace CastorGui
 {
 	ComboBoxCtrl::ComboBoxCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id )
 		: ComboBoxCtrl( p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, StringArray()
@@ -35,7 +35,7 @@ namespace CastorGui
 	}
 
 	ComboBoxCtrl::ComboBoxCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id
 		, StringArray const & p_values
@@ -46,7 +46,7 @@ namespace CastorGui
 		, bool p_visible )
 		: Control( ControlType::eComboBox
 			, p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, p_position
@@ -57,7 +57,7 @@ namespace CastorGui
 		, m_selected( p_selected )
 	{
 		m_expand = std::make_shared< ButtonCtrl >( p_name + cuT( "_Expand" )
-			, p_engine
+			, engine
 			, this
 			, GetId() << 12
 			, cuT( "+" )
@@ -67,7 +67,7 @@ namespace CastorGui
 		m_expandClickedConnection = m_expand->Connect( ButtonEvent::eClicked, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
 
 		m_choices = std::make_shared< ListBoxCtrl >( p_name + cuT( "_Choices" )
-			, p_engine
+			, engine
 			, this
 			, ( GetId() << 12 ) + 1
 			, m_values

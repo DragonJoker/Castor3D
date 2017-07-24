@@ -120,10 +120,10 @@ namespace GuiCommon
 	{
 	}
 
-	void SceneObjectsList::LoadScene( Engine * p_engine, SceneSPtr p_scene )
+	void SceneObjectsList::LoadScene( Engine * engine, SceneSPtr p_scene )
 	{
 		m_scene = p_scene;
-		m_engine = p_engine;
+		m_engine = engine;
 
 		if ( p_scene )
 		{
@@ -152,7 +152,7 @@ namespace GuiCommon
 
 			p_scene->GetAnimatedObjectGroupCache().unlock();
 
-			for ( auto overlay : p_engine->GetOverlayCache() )
+			for ( auto overlay : engine->GetOverlayCache() )
 			{
 				if ( overlay->GetOverlayName().find( cuT( "DebugPanel" ) ) != 0 )
 				{

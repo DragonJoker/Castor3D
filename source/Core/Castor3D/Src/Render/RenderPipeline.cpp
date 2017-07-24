@@ -29,14 +29,14 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	RenderPipeline::RenderPipeline( RenderSystem & p_renderSystem
+	RenderPipeline::RenderPipeline( RenderSystem & renderSystem
 		, DepthStencilState && p_dsState
 		, RasteriserState && p_rsState
 		, BlendState && p_blState
 		, MultisampleState && p_msState
 		, ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
+		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_dsState{ std::move( p_dsState ) }
 		, m_rsState{ std::move( p_rsState ) }
 		, m_blState{ std::move( p_blState ) }

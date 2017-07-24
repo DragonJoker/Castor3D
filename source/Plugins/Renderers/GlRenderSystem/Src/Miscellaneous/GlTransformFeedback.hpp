@@ -52,16 +52,16 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The RenderSystem
+		 *\param[in]	renderSystem	The RenderSystem
 		 *\param[in]	m_declaration	The buffer elements declaration.
 		 *\param[in]	m_program		The shader program.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	m_declaration	La déclaration des éléments du tampon.
 		 *\param[in]	m_program		Le programm shader.
 		 */
-		GlTransformFeedback( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program );
+		GlTransformFeedback( OpenGl & p_gl, GlRenderSystem & renderSystem, Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -95,12 +95,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The RenderSystem instance.
+		 *\param[in]	renderSystem	The RenderSystem instance.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	L'instance du RenderSystem.
+		 *\param[in]	renderSystem	L'instance du RenderSystem.
 		 */
-		C3D_API explicit ShaderProgram( RenderSystem & p_renderSystem );
+		C3D_API explicit ShaderProgram( RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.

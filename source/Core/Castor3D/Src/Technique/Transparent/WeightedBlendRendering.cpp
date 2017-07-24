@@ -11,17 +11,17 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	WeightedBlendRendering::WeightedBlendRendering( Engine & p_engine
+	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
 		, TransparentPass & p_transparentPass
 		, FrameBuffer & p_frameBuffer
 		, Castor::Size const & p_size
 		, Scene const & p_scene )
-		: m_engine{ p_engine }
+		: m_engine{ engine }
 		, m_transparentPass{ p_transparentPass }
 		, m_frameBuffer{ p_frameBuffer }
 		, m_size{ p_size }
 	{
-		auto & renderSystem = *p_engine.GetRenderSystem();
+		auto & renderSystem = *engine.GetRenderSystem();
 		m_weightedBlendPassFrameBuffer = renderSystem.CreateFrameBuffer();
 		m_weightedBlendPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 		bool result = m_weightedBlendPassFrameBuffer->Create();

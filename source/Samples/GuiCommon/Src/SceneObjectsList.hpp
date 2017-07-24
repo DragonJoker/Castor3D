@@ -37,7 +37,7 @@ namespace GuiCommon
 		SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~SceneObjectsList();
 
-		void LoadScene( Castor3D::Engine * p_engine, Castor3D::SceneSPtr p_scene );
+		void LoadScene( Castor3D::Engine * engine, Castor3D::SceneSPtr p_scene );
 		void UnloadScene();
 
 	protected:

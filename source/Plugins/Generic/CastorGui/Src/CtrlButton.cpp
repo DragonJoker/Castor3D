@@ -20,11 +20,11 @@ using namespace Castor3D;
 namespace CastorGui
 {
 	ButtonCtrl::ButtonCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id )
 		: ButtonCtrl( p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, cuT( "" )
@@ -36,7 +36,7 @@ namespace CastorGui
 	}
 
 	ButtonCtrl::ButtonCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id
 		, String const & p_caption
@@ -46,7 +46,7 @@ namespace CastorGui
 		, bool p_visible )
 		: Control( ControlType::eButton
 			, p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, p_position

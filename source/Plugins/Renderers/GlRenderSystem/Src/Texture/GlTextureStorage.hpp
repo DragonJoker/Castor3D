@@ -44,14 +44,14 @@ namespace GlRender
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_type			The storage texture type.
 		 *\param[in]	p_layout		The parent layout.
 		 *\param[in]	p_cpuAccess		The required CPU access.
 		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
 		GlTextureStorage( OpenGl & p_gl
-						  , GlRenderSystem & p_renderSystem
+						  , GlRenderSystem & renderSystem
 						  , Castor3D::TextureStorageType p_type
 						  , Castor3D::TextureLayout & p_layout
 						  , Castor3D::AccessTypes const & p_cpuAccess

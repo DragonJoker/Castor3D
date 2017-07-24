@@ -8,8 +8,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::eRenderer, p_library, *p_engine )
+	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * engine )
+		: Plugin( PluginType::eRenderer, p_library, *engine )
 	{
 		if ( m_pfnOnLoad )
 		{

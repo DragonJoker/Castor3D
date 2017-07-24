@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -48,14 +48,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
 		ReflectionPass( Engine & engine
 			, Castor::Size const & size
-			, SceneUbo & sceneUbo );
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -72,10 +73,6 @@ namespace Castor3D
 		void Render( GeometryPassResult & gp
 			, TextureUnit const & lp
 			, Scene const & scene
-			, Camera const & camera
-			, Castor::Matrix4x4r const & invViewProj
-			, Castor::Matrix4x4r const & invView
-			, Castor::Matrix4x4r const & invProj
 			, RenderInfo & info );
 
 		inline TextureUnit const & GetResult()const
@@ -100,7 +97,7 @@ namespace Castor3D
 			ProgramPipeline( ProgramPipeline && ) = default;
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
-			ProgramPipeline( Engine & p_engine
+			ProgramPipeline( Engine & engine
 				, VertexBuffer & p_vbo
 				, MatrixUbo & p_matrixUbo
 				, SceneUbo & p_sceneUbo
@@ -149,7 +146,7 @@ namespace Castor3D
 		MatrixUbo m_matrixUbo;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
-		GpInfoUbo m_gpInfo;
+		GpInfoUbo & m_gpInfoUbo;
 		//!\~english	The HDR configuration.
 		//!\~french		La configuration HDR.
 		HdrConfigUbo m_configUbo;

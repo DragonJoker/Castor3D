@@ -47,14 +47,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_declaration	The buffer declaration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_declaration	La déclaration du tampon.
 		 */
-		C3D_API VertexBuffer( Engine & p_engine, BufferDeclaration const & p_declaration );
+		C3D_API VertexBuffer( Engine & engine, BufferDeclaration const & p_declaration );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::eImporter, p_library, *p_engine )
+	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_library, Engine * engine )
+		: Plugin( PluginType::eImporter, p_library, *engine )
 	{
 		if ( m_pfnOnLoad )
 		{

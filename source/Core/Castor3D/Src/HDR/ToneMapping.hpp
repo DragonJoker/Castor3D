@@ -49,15 +49,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Specified constructor.
 		 *\param[in]	p_name			The tone mapping name.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
 		 *\brief		Constructeur spécifié.
 		 *\param[in]	p_name			Le nom du mappage de tons.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		C3D_API ToneMapping( Castor::String const & p_name, Engine & p_engine, Parameters const & p_parameters );
+		C3D_API ToneMapping( Castor::String const & p_name, Engine & engine, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Destructor

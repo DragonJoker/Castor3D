@@ -37,17 +37,17 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID.
 		*/
 		StaticCtrl( Castor::String const & p_name
-			, Castor3D::Engine & p_engine
+			, Castor3D::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id );
 
 		/** Constructor
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_caption	The static caption
 		 *\param[in]	p_position	The control position
@@ -56,7 +56,7 @@ namespace CastorGui
 		 *\param[in]	p_visible	Initial visibility status
 		 */
 		StaticCtrl( Castor::String const & p_name
-			, Castor3D::Engine & p_engine
+			, Castor3D::Engine & engine
 			, ControlRPtr p_parent
 			, Castor::String const & p_caption
 			, Castor::Position const & p_position

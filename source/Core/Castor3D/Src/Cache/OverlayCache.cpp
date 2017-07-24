@@ -70,12 +70,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Cache< Overlay, Castor::String >::Cache( Engine & p_engine
+	Cache< Overlay, Castor::String >::Cache( Engine & engine
 		 , Producer && p_produce
 		 , Initialiser && p_initialise
 		 , Cleaner && p_clean
 		 , Merger && p_merge )
-		: MyCacheType( p_engine
+		: MyCacheType( engine
 		   , std::move( p_produce )
 		   , std::bind( OverlayInitialiser{ *this }, std::placeholders::_1 )
 		   , std::bind( OverlayCleaner{ *this }, std::placeholders::_1 )

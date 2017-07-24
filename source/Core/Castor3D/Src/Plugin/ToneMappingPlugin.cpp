@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ToneMappingPlugin::ToneMappingPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin{ PluginType::eToneMapping, p_library, *p_engine }
+	ToneMappingPlugin::ToneMappingPlugin( DynamicLibrarySPtr p_library, Engine * engine )
+		: Plugin{ PluginType::eToneMapping, p_library, *engine }
 	{
 		if ( m_pfnOnLoad )
 		{

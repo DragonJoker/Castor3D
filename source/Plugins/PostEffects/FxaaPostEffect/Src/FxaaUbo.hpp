@@ -30,7 +30,7 @@ namespace fxaa
 	class FxaaUbo
 	{
 	public:
-		FxaaUbo( Castor3D::Engine & p_engine );
+		FxaaUbo( Castor3D::Engine & engine );
 		~FxaaUbo();
 		void Update( Castor::Size const & p_size
 			, float p_shift

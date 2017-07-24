@@ -145,15 +145,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_name		The material name.
-		 *\param[in]	p_engine	The core engine.
+		 *\param[in]	engine	The core engine.
 		 *\param[in]	p_type		The material type.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name		Le nom du matériau.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_type		Le type de matériau.
 		 */
-		C3D_API Material( Castor::String const & p_name, Engine & p_engine, MaterialType p_type );
+		C3D_API Material( Castor::String const & p_name, Engine & engine, MaterialType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -8,8 +8,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	OverlayUbo::OverlayUbo( Engine & p_engine )
-		: m_ubo{ ShaderProgram::BufferOverlay, *p_engine.GetRenderSystem() }
+	OverlayUbo::OverlayUbo( Engine & engine )
+		: m_ubo{ ShaderProgram::BufferOverlay, *engine.GetRenderSystem() }
 		, m_position{ *m_ubo.CreateUniform< UniformType::eVec2i >( ShaderProgram::OvPosition ) }
 		, m_material{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::MaterialIndex ) }
 	{

@@ -37,12 +37,12 @@ namespace Castor3D
 		}
 	}
 
-	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine
+	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
 		, Light & p_light
 		, ShadowMap const & p_shadowMap )
-		: ShadowMapPass{ p_engine, p_light, p_shadowMap }
-		, m_shadowConfig{ ShadowMapUbo, *p_engine.GetRenderSystem() }
-		, m_viewport{ p_engine }
+		: ShadowMapPass{ engine, p_light, p_shadowMap }
+		, m_shadowConfig{ ShadowMapUbo, *engine.GetRenderSystem() }
+		, m_viewport{ engine }
 	{
 		m_shadowConfig.CreateUniform< UniformType::eVec3f >( WorldLightPosition );
 		m_shadowConfig.CreateUniform< UniformType::eFloat >( FarPlane );

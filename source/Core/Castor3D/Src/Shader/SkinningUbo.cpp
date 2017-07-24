@@ -11,8 +11,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SkinningUbo::SkinningUbo( Engine & p_engine )
-		: m_ubo{ ShaderProgram::BufferSkinning, *p_engine.GetRenderSystem() }
+	SkinningUbo::SkinningUbo( Engine & engine )
+		: m_ubo{ ShaderProgram::BufferSkinning, *engine.GetRenderSystem() }
 		, m_bonesMatrix{ *m_ubo.CreateUniform< UniformType::eMat4x4f >( ShaderProgram::Bones, 400u ) }
 	{
 	}

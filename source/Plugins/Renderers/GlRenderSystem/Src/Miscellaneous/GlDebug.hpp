@@ -72,7 +72,7 @@ namespace GlRender
 		};
 
 	public:
-		GlDebug( GlRenderSystem & p_renderSystem );
+		GlDebug( GlRenderSystem & renderSystem );
 		~GlDebug();
 		void Initialise();
 		void Cleanup();

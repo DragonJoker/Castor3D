@@ -28,14 +28,14 @@ using namespace Castor;
 
 namespace C3dPly
 {
-	PlyImporter::PlyImporter( Engine & p_engine )
-		: Importer( p_engine )
+	PlyImporter::PlyImporter( Engine & engine )
+		: Importer( engine )
 	{
 	}
 
-	ImporterUPtr PlyImporter::Create( Engine & p_engine )
+	ImporterUPtr PlyImporter::Create( Engine & engine )
 	{
-		return std::make_unique< PlyImporter >( p_engine );
+		return std::make_unique< PlyImporter >( engine );
 	}
 
 	bool PlyImporter::DoImportScene( Scene & p_scene )

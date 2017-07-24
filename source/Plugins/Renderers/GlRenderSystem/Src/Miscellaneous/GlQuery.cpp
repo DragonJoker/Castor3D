@@ -8,13 +8,13 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlQuery::GlQuery( GlRenderSystem & p_renderSystem, QueryType p_query )
-		: GpuQuery( p_renderSystem, p_query )
-		, ObjectType( p_renderSystem.GetOpenGl(),
+	GlQuery::GlQuery( GlRenderSystem & renderSystem, QueryType p_query )
+		: GpuQuery( renderSystem, p_query )
+		, ObjectType( renderSystem.GetOpenGl(),
 					  "GlQuery",
-					  std::bind( &OpenGl::GenQueries, std::ref( p_renderSystem.GetOpenGl() ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::DeleteQueries, std::ref( p_renderSystem.GetOpenGl() ), std::placeholders::_1, std::placeholders::_2 ),
-					  std::bind( &OpenGl::IsQuery, std::ref( p_renderSystem.GetOpenGl() ), std::placeholders::_1 )
+					  std::bind( &OpenGl::GenQueries, std::ref( renderSystem.GetOpenGl() ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::DeleteQueries, std::ref( renderSystem.GetOpenGl() ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::IsQuery, std::ref( renderSystem.GetOpenGl() ), std::placeholders::_1 )
 					)
 	{
 	}

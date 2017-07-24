@@ -18,7 +18,7 @@ namespace GlRender
 {
 	GlTexture::GlTexture(
 		OpenGl & p_gl,
-		GlRenderSystem & p_renderSystem,
+		GlRenderSystem & renderSystem,
 		TextureType p_type,
 		AccessTypes const & p_cpuAccess,
 		AccessTypes const & p_gpuAccess )
@@ -28,15 +28,15 @@ namespace GlRender
 					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
 					}
-		, TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess }
-		, m_glRenderSystem{ &p_renderSystem }
+		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess }
+		, m_glRenderSystem{ &renderSystem }
 		, m_glDimension{ p_gl.Get( p_type ) }
 	{
 	}
 
 	GlTexture::GlTexture(
 		OpenGl & p_gl,
-		GlRenderSystem & p_renderSystem,
+		GlRenderSystem & renderSystem,
 		TextureType p_type,
 		AccessTypes const & p_cpuAccess,
 		AccessTypes const & p_gpuAccess,
@@ -48,15 +48,15 @@ namespace GlRender
 					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
 					}
-		, TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
-		, m_glRenderSystem{ &p_renderSystem }
+		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+		, m_glRenderSystem{ &renderSystem }
 		, m_glDimension{ p_gl.Get( p_type ) }
 	{
 	}
 
 	GlTexture::GlTexture(
 		OpenGl & p_gl,
-		GlRenderSystem & p_renderSystem,
+		GlRenderSystem & renderSystem,
 		TextureType p_type,
 		AccessTypes const & p_cpuAccess,
 		AccessTypes const & p_gpuAccess,
@@ -68,8 +68,8 @@ namespace GlRender
 					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
 					}
-		, TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
-		, m_glRenderSystem{ &p_renderSystem }
+		, TextureLayout{ renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+		, m_glRenderSystem{ &renderSystem }
 		, m_glDimension{ p_gl.Get( p_type ) }
 	{
 	}

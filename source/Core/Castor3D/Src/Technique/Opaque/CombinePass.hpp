@@ -50,27 +50,27 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_vbo		The vertex buffer containing the quad.
-		 *\param[in]	p_matrixUbo	The matrix UBO.
+		 *\param[in]	vbo			The vertex buffer containing the quad.
+		 *\param[in]	matrixUbo	The matrix UBO.
 		 *\param[in]	sceneUbo	The scene UBO.
-		 *\param[in]	p_gpInfo	The geometry pass UBO.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
 		 *\param[in]	hasSsao		The SSAO activation status.
 		 *\param[in]	fogType		The fog type.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_vbo		Le tampon de sommets contenant le quad.
-		 *\param[in]	p_matrixUbo	L'UBO des matrices.
+		 *\param[in]	vbo			Le tampon de sommets contenant le quad.
+		 *\param[in]	matrixUbo	L'UBO des matrices.
 		 *\param[in]	sceneUbo	L'UBO de la scène.
-		 *\param[in]	p_gpInfo	L'UBO de la geometry pass.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 *\param[in]	hasSsao		Le statut d'activation du SSAO.
 		 *\param[in]	fogType		Le type de brouillard.
 		 */
 		CombineProgram( Engine & engine
-			, VertexBuffer & p_vbo
-			, MatrixUbo & p_matrixUbo
+			, VertexBuffer & vbo
+			, MatrixUbo & matrixUbo
 			, SceneUbo & sceneUbo
-			, GpInfoUbo & p_gpInfo
+			, GpInfoUbo & gpInfoUbo
 			, bool hasSsao
 			, bool isPbr
 			, GLSL::FogType fogType );
@@ -118,18 +118,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	size	The render size.
-		 *\param[in]	config	The SSAO configuration.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	size		The render size.
+		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	size	La taille du rendu.
-		 *\param[in]	config	La configuration du SSAO.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	size		La taille du rendu.
+		 *\param[in]	sceneUbo	L'UBO de la scène.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	config		La configuration du SSAO.
 		 */
 		CombinePass( Engine & engine
 			, Castor::Size const & size
 			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo
 			, SsaoConfig const & config );
 		/**
 		 *\~english
@@ -164,10 +169,6 @@ namespace Castor3D
 			, TextureUnit const & light
 			, TextureUnit const & reflection
 			, TextureUnit const & refraction
-			, Camera const & camera
-			, Castor::Matrix4x4r const & invViewProj
-			, Castor::Matrix4x4r const & invView
-			, Castor::Matrix4x4r const & invProj
 			, Fog const & fog
 			, FrameBuffer const & frameBuffer
 			, RenderInfo & info );
@@ -198,10 +199,6 @@ namespace Castor3D
 			, TextureUnit const & reflection
 			, TextureUnit const & refraction
 			, IblTextures const & ibl
-			, Camera const & camera
-			, Castor::Matrix4x4r const & invViewProj
-			, Castor::Matrix4x4r const & invView
-			, Castor::Matrix4x4r const & invProj
 			, Fog const & fog
 			, FrameBuffer const & frameBuffer
 			, RenderInfo & info );
@@ -231,7 +228,7 @@ namespace Castor3D
 		MatrixUbo m_matrixUbo;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
-		GpInfoUbo m_gpInfo;
+		GpInfoUbo & m_gpInfoUbo;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
 		CombinePrograms m_programs;

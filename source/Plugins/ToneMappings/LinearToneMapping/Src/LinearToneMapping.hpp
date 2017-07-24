@@ -43,14 +43,14 @@ namespace Linear
 		/**
 		 *\~english
 		 * Specified constructor
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
 		 * Constructeur spécifié
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		ToneMapping( Castor3D::Engine & p_engine, Castor3D::Parameters const & p_parameters );
+		ToneMapping( Castor3D::Engine & engine, Castor3D::Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -61,14 +61,14 @@ namespace Linear
 		/**
 		 *\~english
 		 *\brief		Creator function, for the factory.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
 		 *\brief		Fonction de création, pour la fabrique.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		static Castor3D::ToneMappingSPtr Create( Castor3D::Engine & p_engine, Castor3D::Parameters const & p_parameters );
+		static Castor3D::ToneMappingSPtr Create( Castor3D::Engine & engine, Castor3D::Parameters const & p_parameters );
 
 	private:
 		/**

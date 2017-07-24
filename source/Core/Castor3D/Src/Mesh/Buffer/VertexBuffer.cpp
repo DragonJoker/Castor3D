@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	VertexBuffer::VertexBuffer( Engine & p_engine, BufferDeclaration const & p_declaration )
-		: CpuBuffer< uint8_t >( p_engine )
+	VertexBuffer::VertexBuffer( Engine & engine, BufferDeclaration const & p_declaration )
+		: CpuBuffer< uint8_t >( engine )
 		, m_bufferDeclaration( p_declaration )
 	{
 	}

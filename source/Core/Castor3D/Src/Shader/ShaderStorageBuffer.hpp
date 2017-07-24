@@ -46,14 +46,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_declaration	The buffer declaration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_declaration	La déclaration du tampon.
 		 */
-		C3D_API ShaderStorageBuffer( Engine & p_engine );
+		C3D_API ShaderStorageBuffer( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.

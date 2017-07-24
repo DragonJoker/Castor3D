@@ -9,8 +9,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ModelMatrixUbo::ModelMatrixUbo( Engine & p_engine )
-		: m_ubo{ ShaderProgram::BufferModelMatrix, *p_engine.GetRenderSystem() }
+	ModelMatrixUbo::ModelMatrixUbo( Engine & engine )
+		: m_ubo{ ShaderProgram::BufferModelMatrix, *engine.GetRenderSystem() }
 		, m_model{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxModel ) }
 		, m_normal{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxNormal ) }
 	{

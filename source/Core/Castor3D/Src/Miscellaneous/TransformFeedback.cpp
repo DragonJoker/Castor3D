@@ -6,10 +6,10 @@
 
 namespace Castor3D
 {
-	TransformFeedback::TransformFeedback( RenderSystem & p_renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
-		: Castor::OwnedBy< RenderSystem >( p_renderSystem )
+	TransformFeedback::TransformFeedback( RenderSystem & renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
+		: Castor::OwnedBy< RenderSystem >( renderSystem )
 		, m_program{ p_program }
-		, m_query{ p_renderSystem.CreateQuery( QueryType::eTransformFeedbackPrimitivesWritten ) }
+		, m_query{ renderSystem.CreateQuery( QueryType::eTransformFeedbackPrimitivesWritten ) }
 		, m_computed{ p_computed }
 	{
 	}

@@ -98,13 +98,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_name			The buffer name.
-		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	renderSystem	The render system.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			Le nom du tampon.
-		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	renderSystem	Le render system.
 		 */
-		C3D_API UniformBuffer( Castor::String const & p_name, RenderSystem & p_renderSystem );
+		C3D_API UniformBuffer( Castor::String const & p_name, RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.

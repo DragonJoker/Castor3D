@@ -27,10 +27,10 @@ namespace Castor3D
 
 	namespace
 	{
-		GLSL::Shader DoGetVertexShader( Engine const & p_engine )
+		GLSL::Shader DoGetVertexShader( Engine const & engine )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_engine.GetRenderSystem()->CreateGlslWriter();
+			GlslWriter writer = engine.GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
 			UBO_MATRIX( writer );
@@ -48,10 +48,10 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 
-		GLSL::Shader DoGetPixelShader( Engine const & p_engine )
+		GLSL::Shader DoGetPixelShader( Engine const & engine )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_engine.GetRenderSystem()->CreateGlslWriter();
+			GlslWriter writer = engine.GetRenderSystem()->CreateGlslWriter();
 
 			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -63,21 +63,21 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	StencilPass::StencilPass( FrameBuffer & p_frameBuffer
-		, FrameBufferAttachment & p_depthAttach
-		, MatrixUbo & p_matrixUbo
-		, ModelMatrixUbo & p_modelMatrixUbo )
-		: m_frameBuffer{ p_frameBuffer }
-		, m_depthAttach{ p_depthAttach }
-		, m_matrixUbo{ p_matrixUbo }
-		, m_modelMatrixUbo{ p_modelMatrixUbo }
+	StencilPass::StencilPass( FrameBuffer & frameBuffer
+		, FrameBufferAttachment & depthAttach
+		, MatrixUbo & matrixUbo
+		, ModelMatrixUbo & modelMatrixUbo )
+		: m_frameBuffer{ frameBuffer }
+		, m_depthAttach{ depthAttach }
+		, m_matrixUbo{ matrixUbo }
+		, m_modelMatrixUbo{ modelMatrixUbo }
 	{
 	}
 
-	void StencilPass::Initialise( Castor3D::VertexBuffer & p_vbo
-		, Castor3D::IndexBufferSPtr p_ibo )
+	void StencilPass::Initialise( Castor3D::VertexBuffer & vbo
+		, Castor3D::IndexBufferSPtr ibo )
 	{
-		auto & engine = *p_vbo.GetEngine();
+		auto & engine = *vbo.GetEngine();
 		auto & renderSystem = *engine.GetRenderSystem();
 
 		m_program = engine.GetShaderProgramCache().GetNewProgram( false );
@@ -88,7 +88,7 @@ namespace Castor3D
 		m_program->Initialise();
 
 		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->Initialise( { p_vbo }, p_ibo.get() );
+		m_geometryBuffers->Initialise( { vbo }, ibo.get() );
 
 		DepthStencilState dsstate;
 		dsstate.SetDepthTest( true );
@@ -120,13 +120,13 @@ namespace Castor3D
 		m_program.reset();
 	}
 
-	void StencilPass::Render( uint32_t p_count )
+	void StencilPass::Render( uint32_t count )
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.SetDrawBuffers( FrameBuffer::AttachArray{} );
 		m_depthAttach.Clear( 0 );
 		m_pipeline->Apply();
-		m_geometryBuffers->Draw( p_count, 0 );
+		m_geometryBuffers->Draw( count, 0 );
 		m_frameBuffer.Unbind();
 	}
 

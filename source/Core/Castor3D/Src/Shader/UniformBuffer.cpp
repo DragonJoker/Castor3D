@@ -104,8 +104,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	UniformBuffer::UniformBuffer( String const & p_name, RenderSystem & p_renderSystem )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
+	UniformBuffer::UniformBuffer( String const & p_name, RenderSystem & renderSystem )
+		: OwnedBy< RenderSystem >{ renderSystem }
 		, Named{ p_name }
 	{
 	}

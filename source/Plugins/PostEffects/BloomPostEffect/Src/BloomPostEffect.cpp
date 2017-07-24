@@ -38,10 +38,10 @@ namespace Bloom
 {
 	namespace
 	{
-		GLSL::Shader GetVertexProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetVertexProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			UBO_MATRIX( writer );
 
@@ -60,10 +60,10 @@ namespace Bloom
 			return writer.Finalise();
 		}
 
-		GLSL::Shader GetHiPassProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetHiPassProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
@@ -91,10 +91,10 @@ namespace Bloom
 			return writer.Finalise();
 		}
 
-		GLSL::Shader GetBlurXProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetBlurXProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			Ubo config{ writer, BloomPostEffect::FilterConfig, 2u };
@@ -124,10 +124,10 @@ namespace Bloom
 			return writer.Finalise();
 		}
 
-		GLSL::Shader GetBlurYProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetBlurYProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			Ubo config{ writer, BloomPostEffect::FilterConfig, 2u };
@@ -157,10 +157,10 @@ namespace Bloom
 			return writer.Finalise();
 		}
 
-		GLSL::Shader GetCombineProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetCombineProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			auto c3d_mapPass0 = writer.DeclUniform< Sampler2D >( BloomPostEffect::CombineMapPass0 );
@@ -221,17 +221,17 @@ namespace Bloom
 	String const BloomPostEffect::CombineMapScene = cuT( "c3d_mapScene" );
 
 	BloomPostEffect::BloomPostEffect( RenderTarget & p_renderTarget
-		, RenderSystem & p_renderSystem
+		, RenderSystem & renderSystem
 		, Parameters const & p_param )
 		: PostEffect( BloomPostEffect::Type
 			, p_renderTarget
-			, p_renderSystem
+			, renderSystem
 			, p_param )
-		, m_viewport{ *p_renderSystem.GetEngine() }
+		, m_viewport{ *renderSystem.GetEngine() }
 		, m_size( 5u )
-		, m_matrixUbo{ *p_renderSystem.GetEngine() }
-		, m_blurXUbo{ BloomPostEffect::FilterConfig, p_renderSystem }
-		, m_blurYUbo{ BloomPostEffect::FilterConfig, p_renderSystem }
+		, m_matrixUbo{ *renderSystem.GetEngine() }
+		, m_blurXUbo{ BloomPostEffect::FilterConfig, renderSystem }
+		, m_blurYUbo{ BloomPostEffect::FilterConfig, renderSystem }
 		, m_declaration(
 		{
 			BufferElementDeclaration( ShaderProgram::Position
@@ -241,19 +241,19 @@ namespace Bloom
 		, m_hiPassSurfaces(
 		{
 			{
-				PostEffectSurface{ *p_renderSystem.GetEngine() },
-				PostEffectSurface{ *p_renderSystem.GetEngine() },
-				PostEffectSurface{ *p_renderSystem.GetEngine() },
-				PostEffectSurface{ *p_renderSystem.GetEngine() }
+				PostEffectSurface{ *renderSystem.GetEngine() },
+				PostEffectSurface{ *renderSystem.GetEngine() },
+				PostEffectSurface{ *renderSystem.GetEngine() },
+				PostEffectSurface{ *renderSystem.GetEngine() }
 			}
 		} )
 		, m_blurSurfaces(
 		{
 			{
-				PostEffectSurface{ *p_renderSystem.GetEngine() },
-				PostEffectSurface{ *p_renderSystem.GetEngine() },
-				PostEffectSurface{ *p_renderSystem.GetEngine() },
-				PostEffectSurface{ *p_renderSystem.GetEngine() }
+				PostEffectSurface{ *renderSystem.GetEngine() },
+				PostEffectSurface{ *renderSystem.GetEngine() },
+				PostEffectSurface{ *renderSystem.GetEngine() },
+				PostEffectSurface{ *renderSystem.GetEngine() }
 			}
 		} )
 	{
@@ -316,11 +316,11 @@ namespace Bloom
 	}
 
 	PostEffectSPtr BloomPostEffect::Create( RenderTarget & p_renderTarget
-		, RenderSystem & p_renderSystem
+		, RenderSystem & renderSystem
 		, Parameters const & p_param )
 	{
 		return std::make_shared< BloomPostEffect >( p_renderTarget
-			, p_renderSystem
+			, renderSystem
 			, p_param );
 	}
 

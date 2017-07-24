@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderTargetCache::RenderTargetCache( Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
+	RenderTargetCache::RenderTargetCache( Engine & engine )
+		: OwnedBy< Engine >{ engine }
 	{
 	}
 

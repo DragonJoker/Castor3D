@@ -18,8 +18,8 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	ControlsManager::ControlsManager( Engine & p_engine )
-		: UserInputListener{ p_engine, PLUGIN_NAME }
+	ControlsManager::ControlsManager( Engine & engine )
+		: UserInputListener{ engine, PLUGIN_NAME }
 		, m_changed{ true }
 	{
 	}

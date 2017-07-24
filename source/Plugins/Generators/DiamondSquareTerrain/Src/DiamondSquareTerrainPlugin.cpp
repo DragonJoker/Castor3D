@@ -30,14 +30,14 @@ extern "C"
 		*p_name = diamond_square_terrain::Generator::Name.c_str();
 	}
 
-	C3D_DiamondSquareTerrain_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	C3D_DiamondSquareTerrain_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
 	{
-		p_engine->GetMeshFactory().Register( diamond_square_terrain::Generator::Type
+		engine->GetMeshFactory().Register( diamond_square_terrain::Generator::Type
 			, &diamond_square_terrain::Generator::Create );
 	}
 
-	C3D_DiamondSquareTerrain_API void OnUnload( Castor3D::Engine * p_engine )
+	C3D_DiamondSquareTerrain_API void OnUnload( Castor3D::Engine * engine )
 	{
-		p_engine->GetMeshFactory().Unregister( diamond_square_terrain::Generator::Type );
+		engine->GetMeshFactory().Unregister( diamond_square_terrain::Generator::Type );
 	}
 }

@@ -48,13 +48,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_library	The shared library holding the plug-in
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
-		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API GeneratorPlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
+		C3D_API GeneratorPlugin( Castor::DynamicLibrarySPtr p_library, Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

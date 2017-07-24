@@ -18,7 +18,7 @@ using namespace Castor;
 #	endif
 #endif
 
-Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
+Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Engine * engine )
 {
 	ImporterPlugin::ExtensionArray arrayReturn;
 	arrayReturn.push_back( ImporterPlugin::Extension( cuT( "OBJ" ), cuT( "Wavefront Object" ) ) );
@@ -43,25 +43,25 @@ extern "C"
 		*p_name = Name.c_str();
 	}
 
-	C3D_Obj_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	C3D_Obj_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
 	{
 		auto plugin = static_cast< Castor3D::ImporterPlugin * >( p_plugin );
-		auto extensions = GetExtensions( p_engine );
+		auto extensions = GetExtensions( engine );
 
 		for ( auto const & extension : extensions )
 		{
 			plugin->AddExtension( extension );
-			p_engine->GetImporterFactory().Register( Castor::string::lower_case( extension.first ), &Obj::ObjImporter::Create );
+			engine->GetImporterFactory().Register( Castor::string::lower_case( extension.first ), &Obj::ObjImporter::Create );
 		}
 	}
 
-	C3D_Obj_API void OnUnload( Castor3D::Engine * p_engine )
+	C3D_Obj_API void OnUnload( Castor3D::Engine * engine )
 	{
-		auto extensions = GetExtensions( p_engine );
+		auto extensions = GetExtensions( engine );
 
 		for ( auto const & extension : extensions )
 		{
-			p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( extension.first ) );
+			engine->GetImporterFactory().Unregister( Castor::string::lower_case( extension.first ) );
 		}
 	}
 }

@@ -280,20 +280,20 @@ namespace CastorGui
 	typedef std::vector< ControlSPtr > ControlArray;
 
 	/** Creates a colour material.
-	 *\param[in]	p_engine	The engine.
+	 *\param[in]	engine	The engine.
 	 *\param[in]	p_name		The material name.
 	 *\param[in]	p_colour	The material colour.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine & p_engine, Castor::String const & p_name, Castor::Colour const & p_colour );
+	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine & engine, Castor::String const & p_name, Castor::Colour const & p_colour );
 
 	/** Creates a texture material.
-	 *\param[in]	p_engine	The engine.
+	 *\param[in]	engine	The engine.
 	 *\param[in]	p_name		The material name.
 	 *\param[in]	p_texture	The material texture.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine & p_engine, Castor::String const & p_name, Castor3D::TextureLayoutSPtr p_texture );
+	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine & engine, Castor::String const & p_name, Castor3D::TextureLayoutSPtr p_texture );
 }
 
 #endif

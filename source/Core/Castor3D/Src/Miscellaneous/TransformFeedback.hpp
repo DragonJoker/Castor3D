@@ -47,18 +47,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The RenderSystem
+		 *\param[in]	renderSystem	The RenderSystem
 		 *\param[in]	p_computed		The computed elements description.
 		 *\param[in]	p_topology		The primitives type.
 		 *\param[in]	p_program		The shader program.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	p_computed		La description des éléments calculés.
 		 *\param[in]	p_topology		Le type de primitives.
 		 *\param[in]	p_program		Le programm shader.
 		 */
-		C3D_API TransformFeedback( RenderSystem & p_renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program );
+		C3D_API TransformFeedback( RenderSystem & renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor

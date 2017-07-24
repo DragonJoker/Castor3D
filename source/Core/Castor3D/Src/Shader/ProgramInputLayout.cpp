@@ -18,8 +18,8 @@ namespace Castor3D
 		}
 	}
 
-	ProgramInputLayout::ProgramInputLayout( RenderSystem & p_renderSystem )
-		: OwnedBy< RenderSystem >( p_renderSystem )
+	ProgramInputLayout::ProgramInputLayout( RenderSystem & renderSystem )
+		: OwnedBy< RenderSystem >( renderSystem )
 	{
 	}
 

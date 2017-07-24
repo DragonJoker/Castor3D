@@ -36,7 +36,7 @@ namespace Castor3D
 
 	namespace
 	{
-		VertexBufferSPtr DoCreateVbo( Engine & p_engine )
+		VertexBufferSPtr DoCreateVbo( Engine & engine )
 		{
 			auto declaration = BufferDeclaration(
 			{
@@ -54,8 +54,8 @@ namespace Castor3D
 				1, 1, 1, 1
 			};
 
-			auto & renderSystem = *p_engine.GetRenderSystem();
-			auto vertexBuffer = std::make_shared< VertexBuffer >( p_engine, declaration );
+			auto & renderSystem = *engine.GetRenderSystem();
+			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
 			uint32_t stride = declaration.stride();
 			vertexBuffer->Resize( uint32_t( sizeof( data ) ) );
 			uint8_t * buffer = vertexBuffer->GetData();
@@ -65,20 +65,20 @@ namespace Castor3D
 			return vertexBuffer;
 		}
 
-		GeometryBuffersSPtr DoCreateVao( Engine & p_engine
+		GeometryBuffersSPtr DoCreateVao( Engine & engine
 			, ShaderProgram & p_program
 			, VertexBuffer & p_vbo )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			auto result = renderSystem.CreateGeometryBuffers( Topology::eTriangles
 				, p_program );
 			result->Initialise( { p_vbo }, nullptr );
 			return result;
 		}
 
-		GLSL::Shader DoGetVertexProgram( Engine & p_engine )
+		GLSL::Shader DoGetVertexProgram( Engine & engine )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			using namespace GLSL;
 			auto writer = renderSystem.CreateGlslWriter();
 
@@ -100,10 +100,10 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 		
-		GLSL::Shader DoGetPixelProgram( Engine & p_engine
+		GLSL::Shader DoGetPixelProgram( Engine & engine
 			, GLSL::FogType p_fogType )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			using namespace GLSL;
 			auto writer = renderSystem.CreateGlslWriter();
 
@@ -169,13 +169,13 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 		
-		ShaderProgramSPtr DoCreateProgram( Engine & p_engine
+		ShaderProgramSPtr DoCreateProgram( Engine & engine
 			, GLSL::FogType p_fogType )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
-			auto vtx = DoGetVertexProgram( p_engine );
-			auto pxl = DoGetPixelProgram( p_engine, p_fogType );
-			ShaderProgramSPtr program = p_engine.GetShaderProgramCache().GetNewProgram( false );
+			auto & renderSystem = *engine.GetRenderSystem();
+			auto vtx = DoGetVertexProgram( engine );
+			auto pxl = DoGetPixelProgram( engine, p_fogType );
+			ShaderProgramSPtr program = engine.GetShaderProgramCache().GetNewProgram( false );
 			program->CreateObject( ShaderType::eVertex );
 			program->CreateObject( ShaderType::ePixel );
 			program->CreateUniform< UniformType::eSampler >( GetTextureName( WbTexture::eDepth ), ShaderType::ePixel )->SetValue( 0u );
@@ -188,7 +188,7 @@ namespace Castor3D
 			return program;
 		}
 
-		RenderPipelineUPtr DoCreateRenderPipeline( Engine & p_engine
+		RenderPipelineUPtr DoCreateRenderPipeline( Engine & engine
 			, ShaderProgram & p_program
 			, MatrixUbo & p_matrixUbo
 			, SceneUbo & p_sceneUbo
@@ -203,7 +203,7 @@ namespace Castor3D
 			bdState.EnableBlend( true );
 			bdState.SetAlphaBlend( BlendOperation::eAdd, BlendOperand::eSrcAlpha, BlendOperand::eInvSrcAlpha );
 			bdState.SetRgbBlend( BlendOperation::eAdd, BlendOperand::eSrcAlpha, BlendOperand::eInvSrcAlpha );
-			auto pipeline = p_engine.GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
+			auto pipeline = engine.GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
 				, std::move( rsstate )
 				, std::move( bdState )
 				, MultisampleState{}
@@ -218,15 +218,15 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	FinalCombineProgram::FinalCombineProgram( Engine & p_engine
+	FinalCombineProgram::FinalCombineProgram( Engine & engine
 		, VertexBuffer & p_vbo
 		, MatrixUbo & p_matrixUbo
 		, SceneUbo & p_sceneUbo
 		, GpInfoUbo & p_gpInfoUbo
 		, GLSL::FogType p_fogType )
-		: m_program{ DoCreateProgram( p_engine, p_fogType ) }
-		, m_geometryBuffers{ DoCreateVao( p_engine, *m_program, p_vbo ) }
-		, m_pipeline{ DoCreateRenderPipeline( p_engine, *m_program, p_matrixUbo, p_sceneUbo, p_gpInfoUbo ) }
+		: m_program{ DoCreateProgram( engine, p_fogType ) }
+		, m_geometryBuffers{ DoCreateVao( engine, *m_program, p_vbo ) }
+		, m_pipeline{ DoCreateRenderPipeline( engine, *m_program, p_matrixUbo, p_sceneUbo, p_gpInfoUbo ) }
 	{
 	}
 
@@ -248,20 +248,20 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	FinalCombinePass::FinalCombinePass( Engine & p_engine
+	FinalCombinePass::FinalCombinePass( Engine & engine
 		, Size const & p_size )
 		: m_size{ p_size }
-		, m_viewport{ p_engine }
-		, m_vertexBuffer{ DoCreateVbo( p_engine ) }
-		, m_matrixUbo{ p_engine }
-		, m_sceneUbo{ p_engine }
-		, m_gpInfo{ p_engine }
+		, m_viewport{ engine }
+		, m_vertexBuffer{ DoCreateVbo( engine ) }
+		, m_matrixUbo{ engine }
+		, m_sceneUbo{ engine }
+		, m_gpInfo{ engine }
 		, m_programs
 		{
-			FinalCombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eDisabled },
-			FinalCombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eLinear },
-			FinalCombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eExponential },
-			FinalCombineProgram{ p_engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eSquaredExponential }
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eDisabled },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eLinear },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eExponential },
+			FinalCombineProgram{ engine, *m_vertexBuffer, m_matrixUbo, m_sceneUbo, m_gpInfo, GLSL::FogType::eSquaredExponential }
 		}
 	{
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );

@@ -11,10 +11,10 @@ using namespace Castor3D;
 
 namespace GuiCommon
 {
-	RendererSelector::RendererSelector( Engine * p_engine, wxWindow * p_parent, wxString const & p_strTitle )
+	RendererSelector::RendererSelector( Engine * engine, wxWindow * p_parent, wxString const & p_strTitle )
 		: wxDialog( p_parent, wxID_ANY, p_strTitle + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 500 ), wxDEFAULT_DIALOG_STYLE )
 		, m_pImgCastor( ImagesLoader::GetBitmap( CV_IMG_CASTOR ) )
-		, m_engine( p_engine )
+		, m_engine( engine )
 	{
 		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
