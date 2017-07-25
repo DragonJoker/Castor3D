@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -86,6 +86,16 @@ namespace Castor
 		size_t size()const noexcept
 		{
 			return m_end - m_begin;
+		}
+
+		pointer data()noexcept
+		{
+			return m_begin;
+		}
+
+		pointer const data()const noexcept
+		{
+			return m_begin;
 		}
 
 		iterator begin()noexcept

@@ -1,4 +1,4 @@
-﻿#include "RenderTarget.hpp"
+#include "RenderTarget.hpp"
 
 #include "Engine.hpp"
 

@@ -519,6 +519,28 @@ namespace Castor3D
 		{
 			return m_cpuInformations;
 		}
+		/**
+		 *\~english
+		 *\return		The materials type.
+		 *\~french
+		 *\return		Le type des matériaux.
+		 */
+		inline MaterialType GetMaterialsType()const
+		{
+			return m_materialType;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the materials type.
+		 *\param[in]	p_type	The new value.
+		 *\~french
+		 *\brief		Définit le type des matériaux.
+		 *\param[in]	p_type	La nouvelle valeur.
+		 */
+		inline void SetMaterialsType( MaterialType p_type )
+		{
+			m_materialType = p_type;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -617,6 +639,9 @@ namespace Castor3D
 		//!\~english	The CPU informations.
 		//!\~french		Les informations sur le CPU.
 		Castor::CpuInformations m_cpuInformations;
+		//!\~english	The materials type.
+		//!\~french		Le type des matériaux.
+		MaterialType m_materialType;
 	};
 }
 

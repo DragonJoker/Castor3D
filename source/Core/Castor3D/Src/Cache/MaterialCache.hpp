@@ -44,8 +44,8 @@ namespace Castor3D
 		C3D_API static const Castor::String Name;
 		using Producer = std::function< std::shared_ptr< Material >( KeyType const &, MaterialType ) >;
 		using Merger = std::function< void( CacheBase< Material, KeyType > const &
-											, Castor::Collection< Material, KeyType > &
-											, std::shared_ptr< Material > ) >;
+			, Castor::Collection< Material, KeyType > &
+			, std::shared_ptr< Material > ) >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -77,24 +77,28 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_produce		The element producer.
-		 *\param[in]	p_initialise	The element initialiser.
-		 *\param[in]	p_clean			The element cleaner.
-		 *\param[in]	p_merge			The element collection merger.
+		 *\param[in]	produce		The element producer.
+		 *\param[in]	initialise	The element initialiser.
+		 *\param[in]	clean		The element cleaner.
+		 *\param[in]	merge		The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_produce		Le créateur d'objet.
-		 *\param[in]	p_initialise	L'initialiseur d'objet.
-		 *\param[in]	p_clean			Le nettoyeur d'objet.
-		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
+		 *\param[in]	produce		Le créateur d'objet.
+		 *\param[in]	initialise	L'initialiseur d'objet.
+		 *\param[in]	clean		Le nettoyeur d'objet.
+		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
 		inline Cache( Engine & engine
-					  , Producer && p_produce
-					  , Initialiser && p_initialise
-					  , Cleaner && p_clean
-					  , Merger && p_merge )
-			: MyCacheType( engine, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
+			, Producer && produce
+			, Initialiser && initialise
+			, Cleaner && clean
+			, Merger && merge )
+			: MyCacheType( engine
+				, std::move( produce )
+				, std::move( initialise )
+				, std::move( clean )
+				, std::move( merge ) )
 		{
 		}
 		/**
@@ -112,7 +116,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le matériau par défaut.
 		 */
-		C3D_API void Initialise();
+		C3D_API void Initialise( MaterialType type );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -137,58 +141,58 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.
-		 *\param[in]	p_name		The element name.
-		 *\param[in]	p_element	The element.
+		 *\param[in]	name	The element name.
+		 *\param[in]	element	The element.
 		 *\~french
 		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'élément.
-		 *\param[in]	p_element	L'élément.
+		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	element	L'élément.
 		 */
-		C3D_API MaterialSPtr Add( Key const & p_name, MaterialSPtr p_element );
+		C3D_API MaterialSPtr Add( Key const & name, MaterialSPtr element );
 		/**
 		 *\~english
 		 *\brief		Creates an element.
-		 *\param[in]	p_name			The element name.
+		 *\param[in]	name			The element name.
 		 *\param[in]	p_parameters	The other constructor parameters.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un élément.
-		 *\param[in]	p_name			Le nom d'élément.
+		 *\param[in]	name			Le nom d'élément.
 		 *\param[in]	p_parameters	Les autres paramètres de construction.
 		 *\return		L'élément créé.
 		 */
-		C3D_API MaterialSPtr Add( Key const & p_name, MaterialType p_type );
+		C3D_API MaterialSPtr Add( Key const & name, MaterialType type );
 		/**
 		 *\~english
 		 *\brief		Puts all the materials names in the given array
-		 *\param[out]	p_names	The array of names to be filled
+		 *\param[out]	names	The array of names to be filled
 		 *\~french
 		 *\brief		Remplit la liste des noms de tous les matériaux
-		 *\param[out]	p_names	La liste de noms
+		 *\param[out]	names	La liste de noms
 		 */
-		C3D_API void GetNames( Castor::StringArray & p_names );
+		C3D_API void GetNames( Castor::StringArray & names );
 		/**
 		 *\~english
 		 *\brief		Writes materials in a text file
-		 *\param[out]	p_file	The file
+		 *\param[out]	file	The file
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Ecrit les matériaux dans un fichier texte
-		 *\param[out]	p_file	Le fichier
+		 *\param[out]	file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Write( Castor::TextFile & p_file )const;
+		C3D_API bool Write( Castor::TextFile & file )const;
 		/**
 		 *\~english
 		 *\brief		Reads materials from a text file
-		 *\param[in]	p_file	The file
+		 *\param[in]	file	The file
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Lit les matériaux à partir d'un fichier texte
-		 *\param[in]	p_file	Le fichier
+		 *\param[in]	file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Read( Castor::TextFile & p_file );
+		C3D_API bool Read( Castor::TextFile & file );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material

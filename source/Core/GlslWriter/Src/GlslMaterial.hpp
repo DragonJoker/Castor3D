@@ -28,128 +28,62 @@ SOFTWARE.
 namespace GLSL
 {
 	static uint32_t constexpr MaxMaterialsCount = 2000u;
-	Castor::String const PassBufferName = cuT( "c3d_materials" );
+	Castor::String const PassBufferName = cuT( "Materials" );
 
 	class Materials
 	{
 	protected:
-		GlslWriter_API Materials( GlslWriter & p_writer );
-		GlslWriter_API virtual void Declare() = 0;
+		GlslWriter_API Materials( GlslWriter & writer );
 
 	public:
-		GlslWriter_API Float GetRefractionRatio( Int const & p_index )const;
-		GlslWriter_API Float GetOpacity( Int const & p_index )const;
-		GlslWriter_API Float GetEmissive( Int const & p_index )const;
-		GlslWriter_API Int GetRefraction( Int const & p_index )const;
-		GlslWriter_API Int GetReflection( Int const & p_index )const;
-		GlslWriter_API Float GetGamma( Int const & p_index )const;
-		GlslWriter_API Float GetExposure( Int const & p_index )const;
-		GlslWriter_API Float GetAlphaRef( Int const & p_index )const;
-
-	protected:
-		GlslWriter_API void DoDeclare( int p_offsetRR, int p_indexRR
-			, int p_offsetRF, int p_indexRF
-			, int p_offsetRL, int p_indexRL
-			, int p_offsetOP, int p_indexOP
-			, int p_offsetGM, int p_indexGM
-			, int p_offsetEX, int p_indexEX
-			, int p_offsetAR, int p_indexAR
-			, int p_offsetEM, int p_indexEM );
-
-	private:
-		// Materials are aligned on vec4, so the size of a material
-		// is the number of vec4 needed to contain it.
-		GlslWriter_API virtual int DoGetMaterialSize()const = 0;
+		GlslWriter_API virtual void Declare() = 0;
+		GlslWriter_API virtual Vec3 GetDiffuse( Int const & index )const = 0;
+		GlslWriter_API Float GetRefractionRatio( Int const & index )const;
+		GlslWriter_API Float GetOpacity( Int const & index )const;
+		GlslWriter_API Float GetEmissive( Int const & index )const;
+		GlslWriter_API Int GetRefraction( Int const & index )const;
+		GlslWriter_API Int GetReflection( Int const & index )const;
+		GlslWriter_API Float GetGamma( Int const & index )const;
+		GlslWriter_API Float GetExposure( Int const & index )const;
+		GlslWriter_API Float GetAlphaRef( Int const & index )const;
 
 	protected:
 		GlslWriter & m_writer;
-		Function< Int, InInt, InInt, InInt > m_int;
-		Function< Float, InInt, InInt, InInt > m_float;
-		Function< Vec3, InInt, InInt, InInt > m_vec3;
-
-	private:
-		Function< Float, InInt > m_refractionRatio;
-		Function< Int, InInt > m_refraction;
-		Function< Int, InInt > m_reflection;
-		Function< Float, InInt > m_opacity;
-		Function< Float, InInt > m_gamma;
-		Function< Float, InInt > m_exposure;
-		Function< Float, InInt > m_alphaRef;
-		Function< Float, InInt > m_emissive;
 	};
 
 	class LegacyMaterials
 		: public Materials
 	{
 	public:
-		GlslWriter_API LegacyMaterials( GlslWriter & p_writer );
+		GlslWriter_API LegacyMaterials( GlslWriter & writer );
 		GlslWriter_API void Declare()override;
-		GlslWriter_API Vec3 GetDiffuse( Int const & p_index )const;
-		GlslWriter_API Vec3 GetSpecular( Int const & p_index )const;
-		GlslWriter_API Float GetAmbient( Int const & p_index )const;
-		GlslWriter_API Float GetShininess( Int const & p_index )const;
-
-		static uint32_t constexpr Size = 4u;
-
-	private:
-		inline int DoGetMaterialSize()const override
-		{
-			return int( Size );
-		}
-
-	private:
-		Function< Vec3, InInt > m_diffuse;
-		Function< Float, InInt > m_ambient;
-		Function< Vec3, InInt > m_specular;
-		Function< Float, InInt > m_shininess;
+		GlslWriter_API Vec3 GetDiffuse( Int const & index )const override;
+		GlslWriter_API Vec3 GetSpecular( Int const & index )const;
+		GlslWriter_API Float GetAmbient( Int const & index )const;
+		GlslWriter_API Float GetShininess( Int const & index )const;
 	};
 
 	class PbrMRMaterials
 		: public Materials
 	{
 	public:
-		GlslWriter_API PbrMRMaterials( GlslWriter & p_writer );
+		GlslWriter_API PbrMRMaterials( GlslWriter & writer );
 		GlslWriter_API void Declare()override;
-		GlslWriter_API Vec3 GetAlbedo( Int const & p_index )const;
-		GlslWriter_API Float GetRoughness( Int const & p_index )const;
-		GlslWriter_API Float GetMetallic( Int const & p_index )const;
-
-		static uint32_t constexpr Size = 4u;
-
-	private:
-		inline int DoGetMaterialSize()const override
-		{
-			return int( Size );
-		}
-
-	private:
-		Function< Vec3, InInt > m_albedo;
-		Function< Float, InInt > m_roughness;
-		Function< Float, InInt > m_metallic;
+		GlslWriter_API Vec3 GetDiffuse( Int const & index )const override;
+		GlslWriter_API Vec3 GetAlbedo( Int const & index )const;
+		GlslWriter_API Float GetRoughness( Int const & index )const;
+		GlslWriter_API Float GetMetallic( Int const & index )const;
 	};
 
 	class PbrSGMaterials
 		: public Materials
 	{
 	public:
-		GlslWriter_API PbrSGMaterials( GlslWriter & p_writer );
+		GlslWriter_API PbrSGMaterials( GlslWriter & writer );
 		GlslWriter_API void Declare()override;
-		GlslWriter_API Vec3 GetDiffuse( Int const & p_index )const;
-		GlslWriter_API Vec3 GetSpecular( Int const & p_index )const;
-		GlslWriter_API Float GetGlossiness( Int const & p_index )const;
-
-		static uint32_t constexpr Size = 4u;
-
-	private:
-		inline int DoGetMaterialSize()const override
-		{
-			return int( Size );
-		}
-
-	private:
-		Function< Vec3, InInt > m_diffuse;
-		Function< Float, InInt > m_glossiness;
-		Function< Vec3, InInt > m_specular;
+		GlslWriter_API Vec3 GetDiffuse( Int const & index )const override;
+		GlslWriter_API Vec3 GetSpecular( Int const & index )const;
+		GlslWriter_API Float GetGlossiness( Int const & index )const;
 	};
 }
 

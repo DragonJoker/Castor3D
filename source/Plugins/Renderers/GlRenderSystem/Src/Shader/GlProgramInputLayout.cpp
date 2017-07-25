@@ -1,4 +1,4 @@
-﻿#include "Shader/GlProgramInputLayout.hpp"
+#include "Shader/GlProgramInputLayout.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
@@ -75,12 +75,15 @@ namespace GlRender
 			{
 				int length = 0;
 				int value = 0;
+				int variables = 0;
 				p_gl.GetProgramResourceName( p_name, p_interface, i, uint32_t( buffer.size() ), &length, buffer.data() );
 				std::string name( buffer.data(), length );
 				uint32_t prop = uint32_t( p_property );
 				p_gl.GetProgramResourceInfos( p_name, p_interface, i, 1, &prop, 1, &length, &value );
 				int index = p_gl.GetProgramResourceIndex( p_name, p_interface, name.c_str() );
-				p_function( name, value, index );
+				p_gl.GetProgramInterfaceInfos( p_name, p_interface, GlslDataName::eMaxNumActiveVariables, &variables );
+				p_function( name, value, index, variables );
+
 			}
 		}
 
@@ -178,11 +181,12 @@ namespace GlRender
 				program.GetGlName(),
 				GlslInterface::eShaderStorageBlock,
 				GlslProperty::eBufferBinding,
-				[this, &program]( std::string p_name, int p_point, int p_index )
+				[this, &program]( std::string p_name, int p_point, int p_index, int p_variables )
 				{
 					Logger::LogDebug( StringStream() << cuT( "   ShaderStorage block: " ) << string::string_cast< xchar >( p_name )
 						<< cuT( ", at point " ) << p_point
-						<< cuT( ", and index " ) << p_index );
+						<< cuT( ", and index " ) << p_index
+						<< cuT( ", active variables " ) << p_variables );
 				} );
 
 			GetUnnamedProgramInterfaceInfos(
@@ -200,11 +204,12 @@ namespace GlRender
 				program.GetGlName(),
 				GlslInterface::eUniformBlock,
 				GlslProperty::eBufferBinding,
-				[this, &program]( std::string p_name, int p_value, int p_index )
+				[this, &program]( std::string p_name, int p_value, int p_index, int p_variables )
 				{
 					Logger::LogDebug( StringStream() << cuT( "   Uniform block: " ) << string::string_cast< xchar >( p_name )
 						<< cuT( ", at point " ) << p_value
-						<< cuT( ", and index " ) << p_index );
+						<< cuT( ", and index " ) << p_index
+						<< cuT( ", active variables " ) << p_variables );
 				} );
 		}
 		else
