@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
 		 *\param[in]	p_time	Index de temps courant.
 		 */
-		C3D_API void Update( std::chrono::milliseconds const & p_time );
+		C3D_API void Update( Castor::Milliseconds const & p_time );
 		/**
 		 *\~english
 		 *\brief		The current factor.

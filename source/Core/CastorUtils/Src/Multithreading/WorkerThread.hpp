@@ -89,7 +89,7 @@ namespace Castor
 		 *\param[in]	p_timeout	Le temps maximal à attendre.
 		 *\return		\p true si la tâche est terminée.
 		 */
-		CU_API bool Wait( std::chrono::milliseconds const & p_timeout )const;
+		CU_API bool Wait( Castor::Milliseconds const & p_timeout )const;
 		/**
 		 *\~english
 		 *\return		The signal raised when the worker has ended his job.

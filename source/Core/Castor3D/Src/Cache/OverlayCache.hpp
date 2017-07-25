@@ -103,7 +103,7 @@ namespace Castor3D
 
 		struct OverlayInitialiser
 		{
-			OverlayInitialiser( Cache< Overlay, Castor::String > & p_cache );
+			OverlayInitialiser( Cache< Overlay, Castor::String > & cache );
 			void operator()( OverlaySPtr p_element );
 
 		private:
@@ -113,7 +113,7 @@ namespace Castor3D
 
 		struct OverlayCleaner
 		{
-			OverlayCleaner( Cache< Overlay, Castor::String > & p_cache );
+			OverlayCleaner( Cache< Overlay, Castor::String > & cache );
 			void operator()( OverlaySPtr p_element );
 
 		private:

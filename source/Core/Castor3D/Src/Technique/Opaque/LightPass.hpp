@@ -55,154 +55,154 @@ namespace Castor3D
 	/**
 	 *\~english
 	 *\brief		Retrieve the name for given texture enum value.
-	 *\param[in]	p_texture	The value.
+	 *\param[in]	texture	The value.
 	 *\return		The name.
 	 *\~french
 	 *\brief		Récupère le nom pour la valeur d'énumeration de texture.
-	 *\param[in]	p_texture	La valeur.
+	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	Castor::String GetTextureName( DsTexture p_texture );
+	Castor::String GetTextureName( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the pixel format for given texture enum value.
-	 *\param[in]	p_texture	The value.
+	 *\param[in]	texture	The value.
 	 *\return		The name.
 	 *\~french
 	 *\brief		Récupère le format de pixels pour la valeur d'énumeration de texture.
-	 *\param[in]	p_texture	La valeur.
+	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	Castor::PixelFormat GetTextureFormat( DsTexture p_texture );
+	Castor::PixelFormat GetTextureFormat( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment point for given texture enum value.
-	 *\param[in]	p_texture	The value.
+	 *\param[in]	texture	The value.
 	 *\return		The name.
 	 *\~french
 	 *\brief		Récupère le point d'attache pour la valeur d'énumeration de texture.
-	 *\param[in]	p_texture	La valeur.
+	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	AttachmentPoint GetTextureAttachmentPoint( DsTexture p_texture );
+	AttachmentPoint GetTextureAttachmentPoint( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
-	 *\param[in]	p_texture	The value.
+	 *\param[in]	texture	The value.
 	 *\return		The name.
 	 *\~french
 	 *\brief		Récupère l'indice d'attache pour la valeur d'énumeration de texture.
-	 *\param[in]	p_texture	La valeur.
+	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	uint32_t GetTextureAttachmentIndex( DsTexture p_texture );
+	uint32_t GetTextureAttachmentIndex( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the maximum litten distance for given light and attenuation.
-	 *\param[in]	p_light			The light source.
-	 *\param[in]	p_attenuation	The attenuation values.
-	 *\param[in]	p_max			The viewer max value.
+	 *\param[in]	light		The light source.
+	 *\param[in]	attenuation	The attenuation values.
+	 *\param[in]	max			The viewer max value.
 	 *\return		The value.
 	 *\~french
 	 *\brief		Récupère l'indice d'attache pour la valeur d'énumeration de texture.
-	 *\param[in]	p_light			La source lumineuse.
-	 *\param[in]	p_attenuation	Les valeurs d'atténuation.
-	 *\param[in]	p_max			La valeur maximale de l'observateur.
+	 *\param[in]	light		La source lumineuse.
+	 *\param[in]	attenuation	Les valeurs d'atténuation.
+	 *\param[in]	max			La valeur maximale de l'observateur.
 	 *\return		La valeur.
 	 */
-	float GetMaxDistance( LightCategory const & p_light
-		, Castor::Point3f const & p_attenuation
-		, float p_max );
+	float GetMaxDistance( LightCategory const & light
+		, Castor::Point3f const & attenuation
+		, float max );
 	/**
 	 *\~english
 	 *\brief		Declares the GLSL function used to encode the material specifics into a vec4.
-	 *\param[in]	p_writer	The GLSL writer.
+	 *\param[in]	writer	The GLSL writer.
 	 *\~french
 	 *\brief		Déclare la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
-	 *\param[in]	p_writer	Le writer GLSL.
+	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void Declare_EncodeMaterial( GLSL::GlslWriter & p_writer );
+	void Declare_EncodeMaterial( GLSL::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Declares the GLSL function used to decode the material specifics from a vec4.
-	 *\param[in]	p_writer	The GLSL writer.
+	 *\param[in]	writer	The GLSL writer.
 	 *\~french
 	 *\brief		Déclare la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
-	 *\param[in]	p_writer	Le writer GLSL.
+	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void Declare_DecodeMaterial( GLSL::GlslWriter & p_writer );
+	void Declare_DecodeMaterial( GLSL::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Declares the GLSL function used to decode the shadow receiver status from a vec4.
-	 *\param[in]	p_writer	The GLSL writer.
+	 *\param[in]	writer	The GLSL writer.
 	 *\~french
 	 *\brief		Déclare la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
-	 *\param[in]	p_writer	Le writer GLSL.
+	 *\param[in]	writer	Le writer GLSL.
 	 */
-	void Declare_DecodeReceiver( GLSL::GlslWriter & p_writer );
+	void Declare_DecodeReceiver( GLSL::GlslWriter & writer );
 	/**
 	 *\~english
 	 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
-	 *\param[in]	p_writer		The GLSL writer.
-	 *\param[in]	p_receiver		The shadow receiver status.
-	 *\param[in]	p_reflection	The reflection status.
-	 *\param[in]	p_refraction	The refraction status.
-	 *\param[in]	p_envMapIndex	The environment map index.
-	 *\param[in]	p_encoded		The variable that will receive the encoded value.
+	 *\param[in]	writer		The GLSL writer.
+	 *\param[in]	receiver	The shadow receiver status.
+	 *\param[in]	reflection	The reflection status.
+	 *\param[in]	refraction	The refraction status.
+	 *\param[in]	envMapIndex	The environment map index.
+	 *\param[in]	encoded		The variable that will receive the encoded value.
 	 *\~french
 	 *\brief		Appelle la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
-	 *\param[in]	p_writer		Le writer GLSL.
-	 *\param[in]	p_receiver		Le statut de receveur d'ombres.
-	 *\param[in]	p_reflection	Le statut de réflexion.
-	 *\param[in]	p_refraction	Le statut de réfraction.
-	 *\param[in]	p_envMapIndex	L'indice de la texture environnementale.
-	 *\param[in]	p_encoded		La variable qui recevra la valeur encodée.
+	 *\param[in]	writer		Le writer GLSL.
+	 *\param[in]	receiver	Le statut de receveur d'ombres.
+	 *\param[in]	reflection	Le statut de réflexion.
+	 *\param[in]	refraction	Le statut de réfraction.
+	 *\param[in]	envMapIndex	L'indice de la texture environnementale.
+	 *\param[in]	encoded		La variable qui recevra la valeur encodée.
 	 */
-	void EncodeMaterial( GLSL::GlslWriter & p_writer
-		, GLSL::Int const & p_receiver
-		, GLSL::Int const & p_reflection
-		, GLSL::Int const & p_refraction
-		, GLSL::Int const & p_envMapIndex
-		, GLSL::Float const & p_encoded );
+	void EncodeMaterial( GLSL::GlslWriter & writer
+		, GLSL::Int const & receiver
+		, GLSL::Int const & reflection
+		, GLSL::Int const & refraction
+		, GLSL::Int const & envMapIndex
+		, GLSL::Float const & encoded );
 	/**
 	 *\~english
 	 *\brief		Calls the GLSL function used to dencode the material specifics from a vec4.
-	 *\param[in]	p_writer		The GLSL writer.
-	 *\param[in]	p_encoded		The encoded value.
-	 *\param[in]	p_receiver		The variable that contains the shadow receiver status.
-	 *\param[in]	p_reflection	The variable that contains the reflection status.
-	 *\param[in]	p_refraction	The variable that contains the refraction status.
-	 *\param[in]	p_envMapIndex	The variable that contains the environment map index.
+	 *\param[in]	writer		The GLSL writer.
+	 *\param[in]	encoded		The encoded value.
+	 *\param[in]	receiver	The variable that contains the shadow receiver status.
+	 *\param[in]	reflection	The variable that contains the reflection status.
+	 *\param[in]	refraction	The variable that contains the refraction status.
+	 *\param[in]	envMapIndex	The variable that contains the environment map index.
 	 *\~french
 	 *\brief		Appelle la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
-	 *\param[in]	p_writer		Le writer GLSL.
-	 *\param[in]	p_encoded		La valeur encodée.
-	 *\param[in]	p_receiver		La variable qui recevra le statut de receveur d'ombres.
-	 *\param[in]	p_reflection	La variable qui recevra le statut de réflexion.
-	 *\param[in]	p_refraction	La variable qui recevra le statut de réfraction.
-	 *\param[in]	p_envMapIndex	La variable qui recevra l'indice de la texture environnementale.
+	 *\param[in]	writer		Le writer GLSL.
+	 *\param[in]	encoded		La valeur encodée.
+	 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
+	 *\param[in]	reflection	La variable qui recevra le statut de réflexion.
+	 *\param[in]	refraction	La variable qui recevra le statut de réfraction.
+	 *\param[in]	envMapIndex	La variable qui recevra l'indice de la texture environnementale.
 	 */
-	void DecodeMaterial( GLSL::GlslWriter & p_writer
-		, GLSL::Float const & p_encoded
-		, GLSL::Int const & p_receiver
-		, GLSL::Int const & p_reflection
-		, GLSL::Int const & p_refraction
-		, GLSL::Int const & p_envMapIndex );
+	void DecodeMaterial( GLSL::GlslWriter & writer
+		, GLSL::Float const & encoded
+		, GLSL::Int const & receiver
+		, GLSL::Int const & reflection
+		, GLSL::Int const & refraction
+		, GLSL::Int const & envMapIndex );
 	/**
 	 *\~english
 	 *\brief		Calls the GLSL function used to decode the shadow receiver status from a vec4.
-	 *\param[in]	p_writer		The GLSL writer.
-	 *\param[in]	p_encoded		The encoded value.
-	 *\param[in]	p_receiver		The variable that contains the shadow receiver status.
+	 *\param[in]	writer		The GLSL writer.
+	 *\param[in]	encoded		The encoded value.
+	 *\param[in]	receiver	The variable that contains the shadow receiver status.
 	 *\~french
 	 *\brief		Appelle la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
-	 *\param[in]	p_writer		Le writer GLSL.
-	 *\param[in]	p_encoded		La valeur encodée.
-	 *\param[in]	p_receiver		La variable qui recevra le statut de receveur d'ombres.
+	 *\param[in]	writer		Le writer GLSL.
+	 *\param[in]	encoded		La valeur encodée.
+	 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
 	 */
-	void DecodeReceiver( GLSL::GlslWriter & p_writer
-		, GLSL::Int & p_encoded
-		, GLSL::Int const & p_receiver );
+	void DecodeReceiver( GLSL::GlslWriter & writer
+		, GLSL::Int & encoded
+		, GLSL::Int const & receiver );
 	//!\~english	The geometry pass result.
 	//!\~french		Le résultat de la geometry pass.
 	using GeometryPassResult = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
@@ -235,18 +235,18 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	p_engine	The engine.
-			 *\param[in]	p_vtx		The vertex shader source.
-			 *\param[in]	p_pxl		The fragment shader source.
+			 *\param[in]	engine	The engine.
+			 *\param[in]	vtx		The vertex shader source.
+			 *\param[in]	pxl		The fragment shader source.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	p_engine	Le moteur.
-			 *\param[in]	p_vtx		Le source du vertex shader.
-			 *\param[in]	p_pxl		Le source du fagment shader.
+			 *\param[in]	engine	Le moteur.
+			 *\param[in]	vtx		Le source du vertex shader.
+			 *\param[in]	pxl		Le source du fagment shader.
 			 */
-			Program( Engine & p_engine
-				, GLSL::Shader const & p_vtx
-				, GLSL::Shader const & p_pxl );
+			Program( Engine & engine
+				, GLSL::Shader const & vtx
+				, GLSL::Shader const & pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -257,27 +257,27 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Initialises the program and its pipeline.
-			 *\param[in]	p_vbo				The vertex buffer containing the object to render.
-			 *\param[in]	p_ibo				An optional index buffer.
-			 *\param[in]	p_matrixUbo			The matrix UBO.
-			 *\param[in]	p_sceneUbo			The scene UBO.
-			 *\param[in]	p_gpInfo			The geometry pass UBO.
-			 *\param[in]	p_modelMatrixUbo	The optional model matrix UBO.
+			 *\param[in]	vbo				The vertex buffer containing the object to render.
+			 *\param[in]	ibo				An optional index buffer.
+			 *\param[in]	matrixUbo		The matrix UBO.
+			 *\param[in]	sceneUbo		The scene UBO.
+			 *\param[in]	gpInfoUbo		The geometry pass UBO.
+			 *\param[in]	modelMatrixUbo	The optional model matrix UBO.
 			 *\~french
 			 *\brief		Initialise le programme et son pipeline.
-			 *\param[in]	p_vbo				Le tampon de sommets contenant l'objet à dessiner.
-			 *\param[in]	p_ibo				Un tampon d'indices optionnel.
-			 *\param[in]	p_matrixUbo			L'UBO des matrices.
-			 *\param[in]	p_sceneUbo			L'UBO de la scène.
-			 *\param[in]	p_gpInfo			L'UBO de la geometry pass.
-			 *\param[in]	p_modelMatrixUbo	L'UBO optionnel de matrices modèle.
+			 *\param[in]	vbo				Le tampon de sommets contenant l'objet à dessiner.
+			 *\param[in]	ibo				Un tampon d'indices optionnel.
+			 *\param[in]	matrixUbo		L'UBO des matrices.
+			 *\param[in]	sceneUbo		L'UBO de la scène.
+			 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
+			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 			 */
-			void Initialise( VertexBuffer & p_vbo
-				, IndexBufferSPtr p_ibo
-				, MatrixUbo & p_matrixUbo
-				, SceneUbo & p_sceneUbo
-				, UniformBuffer & p_gpInfoUbo
-				, ModelMatrixUbo * p_modelMatrixUbo );
+			void Initialise( VertexBuffer & vbo
+				, IndexBufferSPtr ibo
+				, MatrixUbo & matrixUbo
+				, SceneUbo & sceneUbo
+				, UniformBuffer & gpInfoUbo
+				, ModelMatrixUbo * modelMatrixUbo );
 			/**
 			*\~english
 			*\brief		Cleans up the program and its pipeline.
@@ -288,52 +288,52 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Binds a light.
-			 *\param[in]	p_light	The light.
+			 *\param[in]	light	The light.
 			 *\~french
 			 *\brief		Active une source lumineuse.
-			 *\param[in]	p_light	La lumière.
+			 *\param[in]	light	La lumière.
 			 */
-			void Bind( Light const & p_light );
+			void Bind( Light const & light );
 			/**
 			 *\~english
 			 *\brief		Renders the light pass.
-			 *\param[in]	p_size		The render area dimensions.
-			 *\param[in]	p_colour	The light colour.
-			 *\param[in]	p_count		The number of primitives to draw.
-			 *\param[in]	p_first		Tells if this is the first light pass (\p true) or not (\p false).
+			 *\param[in]	size	The render area dimensions.
+			 *\param[in]	colour	The light colour.
+			 *\param[in]	count	The number of primitives to draw.
+			 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
 			 *\~french
 			 *\brief		Dessine la passe d'éclairage.
-			 *\param[in]	p_size		Les dimensions de la zone de rendu.
-			 *\param[in]	p_colour	La couleur de la souce lumineuse.
-			 *\param[in]	p_count		Le nombre de primitives à dessiner.
-			 *\param[in]	p_first		Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+			 *\param[in]	size	Les dimensions de la zone de rendu.
+			 *\param[in]	colour	La couleur de la souce lumineuse.
+			 *\param[in]	count	Le nombre de primitives à dessiner.
+			 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 			 */
-			void Render( Castor::Size const & p_size
-				, Castor::Point3f const & p_colour
-				, uint32_t p_count
-				, bool p_first )const;
+			void Render( Castor::Size const & size
+				, Castor::Point3f const & colour
+				, uint32_t count
+				, bool first )const;
 
 		private:
 			/**
 			 *\~english
 			 *\brief		Creates a pipeline.
-			 *\param[in]	p_blend	Tells if the pipeline must enable blending.
+			 *\param[in]	blend	Tells if the pipeline must enable blending.
 			 *\return		The created pipeline.
 			 *\~french
 			 *\brief		Crée un pipeline.
-			 *\param[in]	p_blend	Dit si le pipeline doit activer le blending.
+			 *\param[in]	blend	Dit si le pipeline doit activer le blending.
 			 *\return		Le pipeline créé.
 			 */
-			virtual RenderPipelineUPtr DoCreatePipeline( bool p_blend ) = 0;
+			virtual RenderPipelineUPtr DoCreatePipeline( bool blend ) = 0;
 			/**
 			 *\~english
 			 *\brief		Binds a light.
-			 *\param[in]	p_light	The light.
+			 *\param[in]	light	The light.
 			 *\~french
 			 *\brief		Active une source lumineuse.
-			 *\param[in]	p_light	La lumière.
+			 *\param[in]	light	La lumière.
 			 */
-			virtual void DoBind( Light const & p_light ) = 0;
+			virtual void DoBind( Light const & light ) = 0;
 
 		public:
 			//!\~english	The shader program used to render lights.
@@ -365,15 +365,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises the light pass.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_sceneUbo	The scene UBO.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	sceneUbo	The scene UBO.
 		 *\~french
 		 *\brief		Initialise la passe d'éclairage.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_sceneUbo	L'UBO de scène.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	sceneUbo	L'UBO de scène.
 		 */
-		virtual void Initialise( Scene const & p_scene
-			, SceneUbo & p_sceneUbo ) = 0;
+		virtual void Initialise( Scene const & scene
+			, SceneUbo & sceneUbo ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the light pass.
@@ -384,33 +384,24 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the light pass on currently bound framebuffer.
-		 *\param[in]	p_size			The render area dimensions.
-		 *\param[in]	p_gp			The geometry pass result.
-		 *\param[in]	p_light			The light.
-		 *\param[in]	p_camera		The viewing camera.
-		 *\param[in]	p_invViewProj	The inverse view projection matrix.
-		 *\param[in]	p_invView		The inverse view matrix.
-		 *\param[in]	p_invProj		The inverse projection matrix.
-		 *\param[in]	p_first			Tells if this is the first light pass (\p true) or not (\p false).
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	gp		The geometry pass result.
+		 *\param[in]	light	The light.
+		 *\param[in]	camera	The viewing camera.
+		 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
 		 *\~french
 		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
-		 *\param[in]	p_size			Les dimensions de la zone de rendu.
-		 *\param[in]	p_gp			Le résultat de la geometry pass.
-		 *\param[in]	p_light			La source lumineuse.
-		 *\param[in]	p_camera		La caméra.
-		 *\param[in]	p_invViewProj	La matrice vue projection inversée.
-		 *\param[in]	p_invView		La matrice vue inversée.
-		 *\param[in]	p_invProj		La matrice projection inversée.
-		 *\param[in]	p_first			Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	gp		Le résultat de la geometry pass.
+		 *\param[in]	light	La source lumineuse.
+		 *\param[in]	camera	La caméra.
+		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
-		virtual void Render( Castor::Size const & p_size
-			, GeometryPassResult const & p_gp
-			, Light const & p_light
-			, Camera const & p_camera
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj
-			, bool p_first );
+		virtual void Render( Castor::Size const & size
+			, GeometryPassResult const & gp
+			, Light const & light
+			, Camera const & camera
+			, bool first );
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
@@ -423,45 +414,48 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
-		 *\param[in]	p_frameBuffer	The target framebuffer.
-		 *\param[in]	p_depthAttach	The depth buffer attach.
-		 *\param[in]	p_shadows		Tells if shadows are enabled for this light pass.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	frameBuffer	The target framebuffer.
+		 *\param[in]	depthAttach	The depth buffer attach.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	hasShadows	Tells if shadows are enabled for this light pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
-		 *\param[in]	p_depthAttach	L'attache du tampon de profondeur.
-		 *\param[in]	p_shadows		Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	frameBuffer	Le tampon d'image cible.
+		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
-		LightPass( Engine & p_engine
-			, FrameBuffer & p_frameBuffer
-			, FrameBufferAttachment & p_depthAttach
-			, bool p_shadows );
+		LightPass( Engine & engine
+			, FrameBuffer & frameBuffer
+			, FrameBufferAttachment & depthAttach
+			, GpInfoUbo & gpInfoUbo
+			, bool hasShadows );
 		/**
 		 *\~english
 		 *\brief		Initialises the light pass.
-		 *\param[in]	p_scene				The scene.
-		 *\param[in]	p_type				The light source type.
-		 *\param[in]	p_vtx				The vertex shader source.
-		 *\param[in]	p_pxl				The fragment shader source.
-		 *\param[in]	p_sceneUbo			The scene UBO.
-		 *\param[in]	p_modelMatrixUbo	The optional model matrix UBO.
+		 *\param[in]	scene			The scene.
+		 *\param[in]	type			The light source type.
+		 *\param[in]	vtx				The vertex shader source.
+		 *\param[in]	pxl				The fragment shader source.
+		 *\param[in]	sceneUbo		The scene UBO.
+		 *\param[in]	modelMatrixUbo	The optional model matrix UBO.
 		 *\~french
 		 *\brief		Initialise la passe d'éclairage.
-		 *\param[in]	p_scene				La scène.
-		 *\param[in]	p_type				Le type de source lumineuse.
-		 *\param[in]	p_vtx				Le source du vertex shader.
-		 *\param[in]	p_pxl				Le source du fagment shader.
-		 *\param[in]	p_sceneUbo			L'UBO de scène.
-		 *\param[in]	p_modelMatrixUbo	L'UBO optionnel de matrices modèle.
+		 *\param[in]	scene			La scène.
+		 *\param[in]	type			Le type de source lumineuse.
+		 *\param[in]	vtx				Le source du vertex shader.
+		 *\param[in]	pxl				Le source du fagment shader.
+		 *\param[in]	sceneUbo		L'UBO de scène.
+		 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 		 */
-		void DoInitialise( Scene const & p_scene
-			, LightType p_type
-			, VertexBuffer & p_vbo
-			, IndexBufferSPtr p_ibo
-			, SceneUbo & p_sceneUbo
-			, ModelMatrixUbo * p_modelMatrixUbo );
+		void DoInitialise( Scene const & scene
+			, LightType type
+			, VertexBuffer & vbo
+			, IndexBufferSPtr ibo
+			, SceneUbo & sceneUbo
+			, ModelMatrixUbo * modelMatrixUbo );
 		/**
 		 *\~english
 		 *\brief		Cleans up the light pass.
@@ -472,103 +466,103 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the light pass.
-		 *\param[in]	p_size		The render area dimensions.
-		 *\param[in]	p_light		The light.
-		 *\param[in]	p_camera	The viewing camera.
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	light	The light.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Met à jour la passe d'éclairage.
-		 *\param[in]	p_size		Les dimensions de la zone de rendu.
-		 *\param[in]	p_light		La source lumineuse.
-		 *\param[in]	p_camera	La caméra.
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	light	La source lumineuse.
+		 *\param[in]	camera	La caméra.
 		 */
-		virtual void DoUpdate( Castor::Size const & p_size
-			, Light const & p_light
-			, Camera const & p_camera ) = 0;
+		virtual void DoUpdate( Castor::Size const & size
+			, Light const & light
+			, Camera const & camera ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the light pass on currently bound framebuffer.
-		 *\param[in]	p_size		The render area dimensions.
-		 *\param[in]	p_gp		Le résultat de la geometry pass.
-		 *\param[in]	p_colour	La couleur de la souce lumineuse.
-		 *\param[in]	p_first		Tells if this is the first light pass (\p true) or not (\p false).
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	gp		Le résultat de la geometry pass.
+		 *\param[in]	colour	La couleur de la souce lumineuse.
+		 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
 		 *\~french
 		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
-		 *\param[in]	p_size		Les dimensions de la zone de rendu.
-		 *\param[in]	p_gp		Le résultat de la geometry pass.
-		 *\param[in]	p_colour	La couleur de la souce lumineuse.
-		 *\param[in]	p_first		Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	gp		Le résultat de la geometry pass.
+		 *\param[in]	colour	La couleur de la souce lumineuse.
+		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
-		void DoRender( Castor::Size const & p_size
-			, GeometryPassResult const & p_gp
-			, Castor::Point3f const & p_colour
-			, bool p_first );
+		void DoRender( Castor::Size const & size
+			, GeometryPassResult const & gp
+			, Castor::Point3f const & colour
+			, bool first );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
-		 *\param[in]	p_sceneFlags	The scene flags.
-		 *\param[in]	p_type			The light source type.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\param[in]	type		The light source type.
 		 *\return		The source.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
-		 *\param[in]	p_sceneFlags	Les indicateurs de scène.
-		 *\param[in]	p_type			Le type de source lumineuse.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetLegacyPixelShaderSource( SceneFlags const & p_sceneFlags
-			, LightType p_type )const;
+		virtual GLSL::Shader DoGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+			, LightType type )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
-		 *\param[in]	p_sceneFlags	The scene flags.
-		 *\param[in]	p_type			The light source type.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\param[in]	type		The light source type.
 		 *\return		The source.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
-		 *\param[in]	p_sceneFlags	Les indicateurs de scène.
-		 *\param[in]	p_type			Le type de source lumineuse.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetPbrMRPixelShaderSource( SceneFlags const & p_sceneFlags
-			, LightType p_type )const;
+		virtual GLSL::Shader DoGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+			, LightType type )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
-		 *\param[in]	p_sceneFlags	The scene flags.
-		 *\param[in]	p_type			The light source type.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\param[in]	type		The light source type.
 		 *\return		The source.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
-		 *\param[in]	p_sceneFlags	Les indicateurs de scène.
-		 *\param[in]	p_type			Le type de source lumineuse.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetPbrSGPixelShaderSource( SceneFlags const & p_sceneFlags
-			, LightType p_type )const;
+		virtual GLSL::Shader DoGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+			, LightType type )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source for this light pass.
-		 *\param[in]	p_sceneFlags	The scene flags.
+		 *\param[in]	sceneFlags	The scene flags.
 		 *\return		The source.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader pour cette passe lumineuse.
-		 *\param[in]	p_sceneFlags	Les indicateurs de scène.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
 		 *\return		Le source.
 		 */
-		virtual GLSL::Shader DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const = 0;
+		virtual GLSL::Shader DoGetVertexShaderSource( SceneFlags const & sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a light pass program.
-		 *\param[in]	p_vtx		The vertex shader source.
-		 *\param[in]	p_pxl		The fragment shader source.
+		 *\param[in]	vtx		The vertex shader source.
+		 *\param[in]	pxl		The fragment shader source.
 		 *\return		The created program.
 		 *\~french
 		 *\brief		Crée un programme de passe d'éclairage.
-		 *\param[in]	p_vtx		Le source du vertex shader.
-		 *\param[in]	p_pxl		Le source du fagment shader.
+		 *\param[in]	vtx		Le source du vertex shader.
+		 *\param[in]	pxl		Le source du fagment shader.
 		 *\return		Le programme créé.
 		 */
-		virtual ProgramPtr DoCreateProgram( GLSL::Shader const & p_vtx
-			, GLSL::Shader const & p_pxl )const = 0;
+		virtual ProgramPtr DoCreateProgram( GLSL::Shader const & vtx
+			, GLSL::Shader const & pxl )const = 0;
 
 	protected:
 		//!\~english	The engine.
@@ -591,7 +585,7 @@ namespace Castor3D
 		ProgramPtr m_program;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
-		std::unique_ptr< GpInfoUbo > m_gpInfo;
+		GpInfoUbo & m_gpInfoUbo;
 	};
 }
 

@@ -218,37 +218,37 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
-		GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const override;
+		GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPbrMRPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPixelShaderSource
 		 */
-		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const;
+		GLSL::Shader DoGetPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
@@ -266,9 +266,9 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
-		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags )const override;
+		void DoUpdateFlags( TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags )const override;
 
 	private:
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;

@@ -19,9 +19,9 @@ namespace Fireworks
 		constexpr float g_shell = 1.0f;
 		constexpr float g_secondaryShell = 2.0f;
 
-		constexpr std::chrono::milliseconds g_launcherCooldown = 100_ms;
-		constexpr std::chrono::milliseconds g_shellLifetime = 10000_ms;
-		constexpr std::chrono::milliseconds g_secondaryShellLifetime = 2500_ms;
+		constexpr Milliseconds g_launcherCooldown = 100_ms;
+		constexpr Milliseconds g_shellLifetime = 10000_ms;
+		constexpr Milliseconds g_secondaryShellLifetime = 2500_ms;
 
 		inline float GetRandomFloat()
 		{
@@ -36,7 +36,7 @@ namespace Fireworks
 		}
 
 		inline void DoUpdateLauncher( ParticleSystem & p_system
-			, std::chrono::milliseconds const & p_time
+			, Milliseconds const & p_time
 			, float & p_type
 			, Coords3f & p_position
 			, Coords3f & p_velocity
@@ -57,7 +57,7 @@ namespace Fireworks
 		}
 
 		inline void DoUpdateShell( ParticleSystem & p_system
-			, std::chrono::milliseconds const & p_time
+			, Milliseconds const & p_time
 			, float & p_type
 			, Coords3f & p_position
 			, Coords3f & p_velocity
@@ -87,7 +87,7 @@ namespace Fireworks
 		}
 
 		inline void DoUpdateSecondaryShell( ParticleSystem & p_system
-			, std::chrono::milliseconds const & p_time
+			, Milliseconds const & p_time
 			, float & p_type
 			, Coords3f & p_position
 			, Coords3f & p_velocity
@@ -108,7 +108,7 @@ namespace Fireworks
 		}
 
 		inline void DoUpdateParticle( ParticleSystem & p_system
-			, std::chrono::milliseconds const & p_time
+			, Milliseconds const & p_time
 			, float & p_type
 			, Coords3f & p_position
 			, Coords3f & p_velocity
@@ -172,8 +172,8 @@ namespace Fireworks
 		m_particles[m_firstUnused++] = particle;
 	}
 
-	uint32_t ParticleSystem::Update( std::chrono::milliseconds const & p_time
-		, std::chrono::milliseconds const & p_total )
+	uint32_t ParticleSystem::Update( Milliseconds const & p_time
+		, Milliseconds const & p_total )
 	{
 		auto const type = std::find_if( m_inputs.begin(), m_inputs.end(), []( BufferElementDeclaration const & p_element )
 		{

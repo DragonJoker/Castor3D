@@ -23,7 +23,7 @@ namespace Castor
 
 	ThreadPool::~ThreadPool()noexcept
 	{
-		WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) );
+		WaitAll( Milliseconds( 0xFFFFFFFF ) );
 		auto lock = make_unique_lock( m_mutex );
 		m_endConnections.clear();
 		m_busy.clear();
@@ -42,20 +42,20 @@ namespace Castor
 		return m_busy.empty();
 	}
 
-	bool ThreadPool::WaitAll( std::chrono::milliseconds const & p_timeout )const
+	bool ThreadPool::WaitAll( Milliseconds const & p_timeout )const
 	{
 		bool result = IsFull();
 
 		if ( !result )
 		{
 			auto begin = std::chrono::high_resolution_clock::now();
-			std::chrono::milliseconds wait{ 0 };
+			Milliseconds wait{ 0 };
 
 			do
 			{
-				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+				std::this_thread::sleep_for( Milliseconds( 1 ) );
 				result = IsFull();
-				wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - begin );
+				wait = std::chrono::duration_cast< Milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
 			while ( wait < p_timeout && !result );
 		}
@@ -73,7 +73,7 @@ namespace Castor
 	{
 		while ( IsEmpty() )
 		{
-			std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+			std::this_thread::sleep_for( Milliseconds( 1 ) );
 		}
 
 		auto lock = make_unique_lock( m_mutex );

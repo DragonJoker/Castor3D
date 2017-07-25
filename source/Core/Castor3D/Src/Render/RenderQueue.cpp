@@ -100,9 +100,9 @@ namespace Castor3D
 
 		template< typename CreatorFunc, typename NodesType, typename ... Params >
 		void DoAddNode( RenderPass & p_renderPass
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
 			, Pass & p_pass
 			, NodesType & p_nodes
 			, CreatorFunc p_creator )
@@ -113,9 +113,9 @@ namespace Castor3D
 				auto pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
 					, p_pass.GetAlphaFunc()
-					, p_textureFlags
-					, p_programFlags
-					, p_sceneFlags );
+					, textureFlags
+					, programFlags
+					, sceneFlags );
 
 				if ( pipeline )
 				{
@@ -127,9 +127,9 @@ namespace Castor3D
 			auto pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 				, p_pass.GetAlphaBlendMode()
 				, p_pass.GetAlphaFunc()
-				, p_textureFlags
-				, p_programFlags
-				, p_sceneFlags );
+				, textureFlags
+				, programFlags
+				, sceneFlags );
 
 			if ( pipeline )
 			{
@@ -139,9 +139,9 @@ namespace Castor3D
 		}
 
 		void DoAddSkinningNode( RenderPass & p_renderPass
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
 			, Pass & p_pass
 			, Submesh & p_submesh
 			, Geometry & p_primitive
@@ -149,7 +149,7 @@ namespace Castor3D
 			, SceneRenderNodes::SkinnedNodesMap & p_animated
 			, SceneRenderNodes::InstantiatedSkinnedNodesMap & p_instanced )
 		{
-			if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+			if ( CheckFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				if ( p_pass.HasAlphaBlending() 
 					|| p_pass.IsTwoSided() )
@@ -157,9 +157,9 @@ namespace Castor3D
 					auto pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
 						, p_pass.GetAlphaFunc()
-						, p_textureFlags
-						, p_programFlags
-						, p_sceneFlags );
+						, textureFlags
+						, programFlags
+						, sceneFlags );
 
 					if ( pipeline )
 					{
@@ -171,9 +171,9 @@ namespace Castor3D
 				auto pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
 					, p_pass.GetAlphaFunc()
-					, p_textureFlags
-					, p_programFlags
-					, p_sceneFlags );
+					, textureFlags
+					, programFlags
+					, sceneFlags );
 
 				if ( pipeline )
 				{
@@ -184,9 +184,9 @@ namespace Castor3D
 			else
 			{
 				DoAddNode( p_renderPass
-					, p_textureFlags
-					, p_programFlags
-					, p_sceneFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags
 					, p_pass
 					, p_animated
 					, std::bind( &RenderPass::CreateSkinningNode
@@ -200,9 +200,9 @@ namespace Castor3D
 		}
 
 		void DoAddMorphingNode( RenderPass & p_renderPass
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
 			, Pass & p_pass
 			, Submesh & p_submesh
 			, Geometry & p_primitive
@@ -210,9 +210,9 @@ namespace Castor3D
 			, SceneRenderNodes::MorphingNodesMap & p_animated )
 		{
 			DoAddNode( p_renderPass
-				, p_textureFlags
-				, p_programFlags
-				, p_sceneFlags
+				, textureFlags
+				, programFlags
+				, sceneFlags
 				, p_pass
 				, p_animated
 				, std::bind( &RenderPass::CreateMorphingNode
@@ -225,16 +225,16 @@ namespace Castor3D
 		}
 
 		void DoAddStaticNode( RenderPass & p_renderPass
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
 			, Pass & p_pass
 			, Submesh & p_submesh
 			, Geometry & p_primitive
 			, SceneRenderNodes::StaticNodesMap & p_static
 			, SceneRenderNodes::InstantiatedStaticNodesMap & p_instanced )
 		{
-			if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+			if ( CheckFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				if ( p_pass.HasAlphaBlending() 
 					|| p_pass.IsTwoSided() )
@@ -242,9 +242,9 @@ namespace Castor3D
 					auto pipeline = p_renderPass.GetPipelineFront( p_pass.GetColourBlendMode()
 						, p_pass.GetAlphaBlendMode()
 						, p_pass.GetAlphaFunc()
-						, p_textureFlags
-						, p_programFlags
-						, p_sceneFlags );
+						, textureFlags
+						, programFlags
+						, sceneFlags );
 
 					if ( pipeline )
 					{
@@ -256,9 +256,9 @@ namespace Castor3D
 				auto pipeline = p_renderPass.GetPipelineBack( p_pass.GetColourBlendMode()
 					, p_pass.GetAlphaBlendMode()
 					, p_pass.GetAlphaFunc()
-					, p_textureFlags
-					, p_programFlags
-					, p_sceneFlags );
+					, textureFlags
+					, programFlags
+					, sceneFlags );
 
 				if ( pipeline )
 				{
@@ -269,9 +269,9 @@ namespace Castor3D
 			else
 			{
 				DoAddNode( p_renderPass
-					, p_textureFlags
-					, p_programFlags
-					, p_sceneFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags
 					, p_pass
 					, p_static
 					, std::bind( &RenderPass::CreateStaticNode
@@ -284,17 +284,17 @@ namespace Castor3D
 		}
 
 		void DoAddBillboardNode( RenderPass & p_renderPass
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
 			, Pass & p_pass
 			, BillboardBase & p_billboard
 			, SceneRenderNodes::BillboardNodesMap & p_nodes )
 		{
 			DoAddNode( p_renderPass
-				, p_textureFlags
-				, p_programFlags
-				, p_sceneFlags
+				, textureFlags
+				, programFlags
+				, sceneFlags
 				, p_pass
 				, p_nodes
 				, std::bind( &RenderPass::CreateBillboardNode

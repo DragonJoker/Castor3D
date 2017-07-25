@@ -119,7 +119,7 @@ namespace castortd
 			return m_spawner.GetEnemiesBounty();
 		}
 
-		inline std::chrono::milliseconds GetElapsed()const
+		inline Castor::Milliseconds GetElapsed()const
 		{
 			return m_elapsed;
 		}
@@ -163,7 +163,7 @@ namespace castortd
 		Castor3D::MaterialSPtr m_bulletMaterial;
 		// Varying data
 		Clock::time_point m_saved;
-		std::chrono::milliseconds m_elapsed;
+		Castor::Milliseconds m_elapsed;
 		EnemySpawner m_spawner;
 		Grid m_grid;
 		TowerArray m_towers;

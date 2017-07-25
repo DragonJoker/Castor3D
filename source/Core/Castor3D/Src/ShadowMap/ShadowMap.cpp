@@ -1,4 +1,4 @@
-﻿#include "ShadowMap.hpp"
+#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -10,13 +10,14 @@
 #include "ShadowMap/ShadowMapPass.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslMaterial.hpp>
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	ShadowMap::ShadowMap( Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
+	ShadowMap::ShadowMap( Engine & engine )
+		: OwnedBy< Engine >{ engine }
 	{
 	}
 
@@ -80,63 +81,63 @@ namespace Castor3D
 		m_geometryBuffers.clear();
 	}
 
-	void ShadowMap::AddLight( Light & p_light )
+	void ShadowMap::AddLight( Light & light )
 	{
-		auto pass = DoCreatePass( p_light );
+		auto pass = DoCreatePass( light );
 		auto size = DoGetSize();
 		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender
 			, [pass, size]()
 			{
 				pass->Initialise( size );
 			} ) );
-		m_passes.emplace( &p_light, pass );
+		m_passes.emplace( &light, pass );
 	}
 
-	void ShadowMap::UpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
+	void ShadowMap::UpdateFlags( TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		RemFlag( p_programFlags, ProgramFlag::eLighting );
-		RemFlag( p_programFlags, ProgramFlag::eAlphaBlending );
-		RemFlag( p_textureFlags, TextureChannel( uint16_t( TextureChannel::eAll )
+		RemFlag( programFlags, ProgramFlag::eLighting );
+		RemFlag( programFlags, ProgramFlag::eAlphaBlending );
+		RemFlag( textureFlags, TextureChannel( uint16_t( TextureChannel::eAll )
 			& ~uint16_t( TextureChannel::eOpacity ) ) );
-		DoUpdateFlags( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags );
+		DoUpdateFlags( textureFlags
+			, programFlags
+			, sceneFlags );
 	}
 
-	GLSL::Shader ShadowMap::GetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	GLSL::Shader ShadowMap::GetVertexShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
 	{
-		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
+		return DoGetVertexShaderSource( textureFlags, programFlags, sceneFlags, invertNormals );
 	}
 
-	GLSL::Shader ShadowMap::GetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	GLSL::Shader ShadowMap::GetGeometryShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
-		return DoGetGeometryShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags );
+		return DoGetGeometryShaderSource( textureFlags
+			, programFlags
+			, sceneFlags );
 	}
 
-	GLSL::Shader ShadowMap::GetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader ShadowMap::GetPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
-		return DoGetPixelShaderSource( p_textureFlags
-			, p_programFlags
-			, p_sceneFlags
-			, p_alphaFunc );
+		return DoGetPixelShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, alphaFunc );
 	}
 
-	GLSL::Shader ShadowMap::DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, bool p_invertNormals )const
+	GLSL::Shader ShadowMap::DoGetVertexShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
 	{
 		using namespace GLSL;
 		auto writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -144,19 +145,19 @@ namespace Castor3D
 		// Vertex inputs
 		auto position = writer.DeclAttribute< Vec4 >( ShaderProgram::Position );
 		auto texture = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( writer );
 		UBO_MODEL_MATRIX( writer );
-		SkinningUbo::Declare( writer, p_programFlags );
-		UBO_MORPHING( writer, p_programFlags );
+		SkinningUbo::Declare( writer, programFlags );
+		UBO_MORPHING( writer, programFlags );
 
 		// Outputs
 		auto vtx_position = writer.DeclOutput< Vec3 >( cuT( "vtx_position" ) );
@@ -170,11 +171,11 @@ namespace Castor3D
 			auto v3Texture = writer.DeclLocale( cuT( "v3Texture" ), texture );
 			auto mtxModel = writer.DeclLocale< Mat4 >( cuT( "mtxModel" ) );
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
+			if ( CheckFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				mtxModel = SkinningUbo::ComputeTransform( writer, p_programFlags );
+				mtxModel = SkinningUbo::ComputeTransform( writer, programFlags );
 			}
-			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
+			else if ( CheckFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				mtxModel = transform;
 			}
@@ -183,7 +184,7 @@ namespace Castor3D
 				mtxModel = c3d_mtxModel;
 			}
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
+			if ( CheckFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto time = writer.DeclLocale( cuT( "time" ), 1.0_f - c3d_fTime );
 				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
@@ -201,10 +202,77 @@ namespace Castor3D
 		return writer.Finalise();
 	}
 
-	GLSL::Shader ShadowMap::DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags )const
+	GLSL::Shader ShadowMap::DoGetGeometryShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags )const
 	{
 		return GLSL::Shader{};
 	}
-}
+
+	void ShadowMap::DoApplyAlphaFunc( GLSL::GlslWriter & writer
+		, ComparisonFunc alphaFunc
+		, GLSL::Float const & alpha
+		, GLSL::Int const & material
+		, GLSL::Materials const & materials )
+	{
+		using namespace GLSL;
+
+		switch ( alphaFunc )
+		{
+		case ComparisonFunc::eLess:
+			IF( writer, alpha >= materials.GetAlphaRef( material ) )
+			{
+				writer.Discard();
+			}
+			FI;
+			break;
+
+		case ComparisonFunc::eLEqual:
+			IF( writer, alpha > materials.GetAlphaRef( material ) )
+			{
+				writer.Discard();
+			}
+			FI;
+			break;
+
+		case ComparisonFunc::eEqual:
+			IF( writer, alpha != materials.GetAlphaRef( material ) )
+			{
+				writer.Discard();
+			}
+			FI;
+			break;
+
+		case ComparisonFunc::eNEqual:
+			IF( writer, alpha == materials.GetAlphaRef( material ) )
+			{
+				writer.Discard();
+			}
+			FI;
+			break;
+
+		case ComparisonFunc::eGEqual:
+			IF( writer, alpha < materials.GetAlphaRef( material ) )
+			{
+				writer.Discard();
+			}
+			FI;
+			break;
+
+		case ComparisonFunc::eGreater:
+			IF( writer, alpha <= materials.GetAlphaRef( material ) )
+			{
+				writer.Discard();
+			}
+			FI;
+			break;
+
+		default:
+			IF( writer, alpha <= 0.2 )
+			{
+				writer.Discard();
+			}
+			FI;
+			break;
+		}
+	}}

@@ -32,20 +32,20 @@ namespace Castor
 		return !m_start;
 	}
 
-	bool WorkerThread::Wait( std::chrono::milliseconds const & p_timeout )const
+	bool WorkerThread::Wait( Milliseconds const & p_timeout )const
 	{
 		bool result = IsEnded() && !m_terminate;
 
 		if ( !result )
 		{
 			auto begin = std::chrono::high_resolution_clock::now();
-			std::chrono::milliseconds wait{ 0 };
+			Milliseconds wait{ 0 };
 
 			do
 			{
-				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+				std::this_thread::sleep_for( Milliseconds( 1 ) );
 				result = IsEnded();
-				wait = std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::high_resolution_clock::now() - begin );
+				wait = std::chrono::duration_cast< Milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
 			while ( wait < p_timeout && !result && !m_terminate );
 		}
@@ -65,7 +65,7 @@ namespace Castor
 			}
 			else
 			{
-				std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+				std::this_thread::sleep_for( Milliseconds( 1 ) );
 			}
 		}
 	}

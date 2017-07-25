@@ -56,18 +56,18 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	p_engine	The engine.
-			 *\param[in]	p_vtx		The vertex shader source.
-			 *\param[in]	p_pxl		The fragment shader source.
+			 *\param[in]	engine	The engine.
+			 *\param[in]	vtx		The vertex shader source.
+			 *\param[in]	pxl		The fragment shader source.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	p_engine	Le moteur.
-			 *\param[in]	p_vtx		Le source du vertex shader.
-			 *\param[in]	p_pxl		Le source du fagment shader.
+			 *\param[in]	engine	Le moteur.
+			 *\param[in]	vtx		Le source du vertex shader.
+			 *\param[in]	pxl		Le source du fagment shader.
 			 */
-			Program( Engine & p_engine
-				, GLSL::Shader const & p_vtx
-				, GLSL::Shader const & p_pxl );
+			Program( Engine & engine
+				, GLSL::Shader const & vtx
+				, GLSL::Shader const & pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -80,11 +80,11 @@ namespace Castor3D
 			/**
 			 *\copydoc		Castor3D::LightPass::Program::DoCreatePipeline
 			 */
-			virtual RenderPipelineUPtr DoCreatePipeline( bool p_blend )override;
+			virtual RenderPipelineUPtr DoCreatePipeline( bool blend )override;
 			/**
 			 *\copydoc		Castor3D::LightPass::Program::DoBind
 			 */
-			void DoBind( Light const & p_light )override;
+			void DoBind( Light const & light )override;
 
 		private:
 			//!\~english	The variable containing the light intensities.
@@ -102,21 +102,24 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
-		 *\param[in]	p_frameBuffer	The target framebuffer.
-		 *\param[in]	p_depthAttach	The depth buffer attach.
-		 *\param[in]	p_shadows		Tells if shadows are enabled for this light pass.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	frameBuffer	The target framebuffer.
+		 *\param[in]	depthAttach	The depth buffer attach.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	hasShadows	Tells if shadows are enabled for this light pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
-		 *\param[in]	p_depthAttach	L'attache du tampon de profondeur.
-		 *\param[in]	p_shadows		Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	frameBuffer	Le tampon d'image cible.
+		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
-		DirectionalLightPass( Engine & p_engine
-			, FrameBuffer & p_frameBuffer
-			, FrameBufferAttachment & p_depthAttach
-			, bool p_shadows );
+		DirectionalLightPass( Engine & engine
+			, FrameBuffer & frameBuffer
+			, FrameBufferAttachment & depthAttach
+			, GpInfoUbo & gpInfoUbo
+			, bool hasShadows );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -127,15 +130,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises the light pass.
-		 *\param[in]	p_scene				The scene.
-		 *\param[in]	p_sceneUbo			The scene UBO.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	sceneUbo	The scene UBO.
 		 *\~french
 		 *\brief		Initialise la passe d'éclairage.
-		 *\param[in]	p_scene				La scène.
-		 *\param[in]	p_sceneUbo			L'UBO de scène.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	sceneUbo	L'UBO de scène.
 		 */
-		void Initialise( Scene const & p_scene
-			, SceneUbo & p_sceneUbo )override;
+		void Initialise( Scene const & scene
+			, SceneUbo & sceneUbo )override;
 		/**
 		 *\~english
 		 *\brief		Cleans up the light pass.
@@ -155,20 +158,20 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::LightPass::DoUpdate
 		 */
-		void DoUpdate( Castor::Size const & p_size
-			, Light const & p_light
-			, Camera const & p_camera )override;
+		void DoUpdate( Castor::Size const & size
+			, Light const & light
+			, Camera const & camera )override;
 
 	private:
 		/**
 		 *\copydoc		Castor3D::LightPass::DoGetVertexShaderSource
 		 */
-		GLSL::Shader DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const override;
+		GLSL::Shader DoGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::LightPass::DoCreateProgram
 		 */
-		LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & p_vtx
-			, GLSL::Shader const & p_pxl )const override;
+		LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & vtx
+			, GLSL::Shader const & pxl )const override;
 
 	private:
 		//!\~english	The vertex buffer.

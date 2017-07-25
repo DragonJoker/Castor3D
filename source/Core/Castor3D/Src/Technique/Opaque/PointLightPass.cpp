@@ -23,21 +23,21 @@ namespace Castor3D
 	{
 		uint32_t constexpr FaceCount = 20u;
 
-		float DoCalcPointLightBSphere( const Castor3D::PointLight & p_light
-			, float p_max )
+		float DoCalcPointLightBSphere( const Castor3D::PointLight & light
+			, float max )
 		{
-			return GetMaxDistance( p_light
-				, p_light.GetAttenuation()
-				, p_max );
+			return GetMaxDistance( light
+				, light.GetAttenuation()
+				, max );
 		}
 	}
 
 	//*********************************************************************************************
 
-	PointLightPass::Program::Program( Engine & p_engine
-		, GLSL::Shader const & p_vtx
-		, GLSL::Shader const & p_pxl )
-		: MeshLightPass::Program{ p_engine, p_vtx, p_pxl }
+	PointLightPass::Program::Program( Engine & engine
+		, GLSL::Shader const & vtx
+		, GLSL::Shader const & pxl )
+		: MeshLightPass::Program{ engine, vtx, pxl }
 		, m_lightPosition{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
 		, m_lightAttenuation{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
 	{
@@ -47,23 +47,25 @@ namespace Castor3D
 	{
 	}
 
-	void PointLightPass::Program::DoBind( Light const & p_light )
+	void PointLightPass::Program::DoBind( Light const & light )
 	{
-		auto & light = *p_light.GetPointLight();
-		m_lightIntensity->SetValue( light.GetIntensity() );
-		m_lightAttenuation->SetValue( light.GetAttenuation() );
-		m_lightPosition->SetValue( p_light.GetParent()->GetDerivedPosition() );
+		auto & pointLight = *light.GetPointLight();
+		m_lightIntensity->SetValue( pointLight.GetIntensity() );
+		m_lightAttenuation->SetValue( pointLight.GetAttenuation() );
+		m_lightPosition->SetValue( light.GetParent()->GetDerivedPosition() );
 	}
 
 	//*********************************************************************************************
 
-	PointLightPass::PointLightPass( Engine & p_engine
-		, FrameBuffer & p_frameBuffer
-		, FrameBufferAttachment & p_depthAttach
+	PointLightPass::PointLightPass( Engine & engine
+		, FrameBuffer & frameBuffer
+		, FrameBufferAttachment & depthAttach
+		, GpInfoUbo & gpInfoUbo
 		, bool p_shadows )
-		: MeshLightPass{ p_engine
-			, p_frameBuffer
-			, p_depthAttach
+		: MeshLightPass{ engine
+			, frameBuffer
+			, depthAttach
+			, gpInfoUbo
 			, LightType::ePoint
 			, p_shadows }
 	{
@@ -159,13 +161,13 @@ namespace Castor3D
 		return faces;
 	}
 
-	Matrix4x4r PointLightPass::DoComputeModelMatrix( Castor3D::Light const & p_light
-		, Camera const & p_camera )const
+	Matrix4x4r PointLightPass::DoComputeModelMatrix( Castor3D::Light const & light
+		, Camera const & camera )const
 	{
-		auto lightPos = p_light.GetParent()->GetDerivedPosition();
-		auto camPos = p_camera.GetParent()->GetDerivedPosition();
-		auto far = p_camera.GetViewport().GetFar();
-		auto scale = DoCalcPointLightBSphere( *p_light.GetPointLight()
+		auto lightPos = light.GetParent()->GetDerivedPosition();
+		auto camPos = camera.GetParent()->GetDerivedPosition();
+		auto far = camera.GetViewport().GetFar();
+		auto scale = DoCalcPointLightBSphere( *light.GetPointLight()
 			, float( far - point::distance( lightPos, camPos ) - ( far / 50.0f ) ) );
 		Matrix4x4r model{ 1.0f };
 		matrix::set_transform( model
@@ -175,10 +177,10 @@ namespace Castor3D
 		return model;
 	}
 
-	LightPass::ProgramPtr PointLightPass::DoCreateProgram( GLSL::Shader const & p_vtx
-		, GLSL::Shader const & p_pxl )const
+	LightPass::ProgramPtr PointLightPass::DoCreateProgram( GLSL::Shader const & vtx
+		, GLSL::Shader const & pxl )const
 	{
-		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
+		return std::make_unique< Program >( m_engine, vtx, pxl );
 	}
 
 	//*********************************************************************************************

@@ -23,23 +23,23 @@ namespace Castor3D
 	{
 		static uint32_t constexpr FaceCount = 40;
 
-		Point2f DoCalcSpotLightBCone( const Castor3D::SpotLight & p_light
-			, float p_max )
+		Point2f DoCalcSpotLightBCone( const Castor3D::SpotLight & light
+			, float max )
 		{
-			auto length = GetMaxDistance( p_light
-				, p_light.GetAttenuation()
-				, p_max );
-			auto width = p_light.GetCutOff().degrees() / 22.5f;
+			auto length = GetMaxDistance( light
+				, light.GetAttenuation()
+				, max );
+			auto width = light.GetCutOff().degrees() / 22.5f;
 			return Point2f{ length * width, length };
 		}
 	}
 
 	//*********************************************************************************************
 	
-	SpotLightPass::Program::Program( Engine & p_engine
-		, GLSL::Shader const & p_vtx
-		, GLSL::Shader const & p_pxl )
-		: MeshLightPass::Program{ p_engine, p_vtx, p_pxl }
+	SpotLightPass::Program::Program( Engine & engine
+		, GLSL::Shader const & vtx
+		, GLSL::Shader const & pxl )
+		: MeshLightPass::Program{ engine, vtx, pxl }
 		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
 		, m_lightTransform{ m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
 		, m_lightPosition{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
@@ -53,29 +53,31 @@ namespace Castor3D
 	{
 	}
 
-	void SpotLightPass::Program::DoBind( Light const & p_light )
+	void SpotLightPass::Program::DoBind( Light const & light )
 	{
-		auto & light = *p_light.GetSpotLight();
-		m_lightIntensity->SetValue( light.GetIntensity() );
-		m_lightAttenuation->SetValue( light.GetAttenuation() );
-		m_lightPosition->SetValue( light.GetLight().GetParent()->GetDerivedPosition() );
-		m_lightExponent->SetValue( light.GetExponent() );
-		m_lightCutOff->SetValue( light.GetCutOff().cos() );
-		m_lightDirection->SetValue( light.GetDirection() );
-		m_lightTransform->SetValue( light.GetLightSpaceTransform() );
+		auto & spotLight = *light.GetSpotLight();
+		m_lightIntensity->SetValue( spotLight.GetIntensity() );
+		m_lightAttenuation->SetValue( spotLight.GetAttenuation() );
+		m_lightPosition->SetValue( light.GetParent()->GetDerivedPosition() );
+		m_lightExponent->SetValue( spotLight.GetExponent() );
+		m_lightCutOff->SetValue( spotLight.GetCutOff().cos() );
+		m_lightDirection->SetValue( spotLight.GetDirection() );
+		m_lightTransform->SetValue( spotLight.GetLightSpaceTransform() );
 	}
 
 	//*********************************************************************************************
 
-	SpotLightPass::SpotLightPass( Engine & p_engine
-		, FrameBuffer & p_frameBuffer
-		, FrameBufferAttachment & p_depthAttach
-		, bool p_shadows )
-		: MeshLightPass{ p_engine
-			, p_frameBuffer
-			, p_depthAttach
+	SpotLightPass::SpotLightPass( Engine & engine
+		, FrameBuffer & frameBuffer
+		, FrameBufferAttachment & depthAttach
+		, GpInfoUbo & gpInfoUbo
+		, bool hasShadows )
+		: MeshLightPass{ engine
+			, frameBuffer
+			, depthAttach
+			, gpInfoUbo
 			, LightType::eSpot
-			, p_shadows }
+			, hasShadows }
 	{
 	}
 
@@ -159,26 +161,26 @@ namespace Castor3D
 		return faces;
 	}
 
-	Matrix4x4r SpotLightPass::DoComputeModelMatrix( Castor3D::Light const & p_light
-		, Camera const & p_camera )const
+	Matrix4x4r SpotLightPass::DoComputeModelMatrix( Castor3D::Light const & light
+		, Camera const & camera )const
 	{
-		auto lightPos = p_light.GetParent()->GetDerivedPosition();
-		auto camPos = p_camera.GetParent()->GetDerivedPosition();
-		auto far = p_camera.GetViewport().GetFar();
-		auto scale = DoCalcSpotLightBCone( *p_light.GetSpotLight()
+		auto lightPos = light.GetParent()->GetDerivedPosition();
+		auto camPos = camera.GetParent()->GetDerivedPosition();
+		auto far = camera.GetViewport().GetFar();
+		auto scale = DoCalcSpotLightBCone( *light.GetSpotLight()
 			, float( far - point::distance( lightPos, camPos ) - ( far / 50.0f ) ) );
 		Matrix4x4r model{ 1.0f };
 		matrix::set_transform( model
 			, lightPos
 			, Point3f{ scale[0], scale[0], scale[1] }
-		, p_light.GetParent()->GetDerivedOrientation() );
+		, light.GetParent()->GetDerivedOrientation() );
 		return model;
 	}
 
-	LightPass::ProgramPtr SpotLightPass::DoCreateProgram( GLSL::Shader const & p_vtx
-		, GLSL::Shader const & p_pxl )const
+	LightPass::ProgramPtr SpotLightPass::DoCreateProgram( GLSL::Shader const & vtx
+		, GLSL::Shader const & pxl )const
 	{
-		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
+		return std::make_unique< Program >( m_engine, vtx, pxl );
 	}
 
 	//*********************************************************************************************

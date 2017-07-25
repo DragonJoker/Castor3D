@@ -191,36 +191,36 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderPipeline & DoGetPanelPipeline( TextureChannels p_textureFlags );
+		C3D_API RenderPipeline & DoGetPanelPipeline( TextureChannels textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given texture flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de texte compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderPipeline & DoGetTextPipeline( TextureChannels p_textureFlags );
+		C3D_API RenderPipeline & DoGetTextPipeline( TextureChannels textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a program compiled using given flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The program
 		 *\~french
 		 *\brief		Récupère un programme compilé en utilisant les indicateurs donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme
 		 */
-		C3D_API RenderPipeline & DoGetPipeline( TextureChannels const & p_textureFlags );
+		C3D_API RenderPipeline & DoGetPipeline( TextureChannels const & textureFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
@@ -293,14 +293,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for overlays rendering use.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The created program.
 		 *\~french
 		 *\brief		Crée un programme shader pour les rendu d'incrustations.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( TextureChannels const & p_textureFlags );
+		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( TextureChannels const & textureFlags );
 
 	protected:
 		//!\~english	Vertex buffers for panels.

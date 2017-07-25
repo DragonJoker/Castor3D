@@ -214,17 +214,19 @@ namespace Castor
 	};
 
 #if CASTOR_USE_DOUBLE
-	typedef double real;
+	using real = double;
 #else
-	typedef float real;
+	using real = float;
 #endif
 
-	typedef std::basic_string< xchar > String;
-	typedef std::basic_regex< xchar > Regex;
-	typedef std::regex_iterator< String::const_iterator > SRegexIterator;
-	typedef std::match_results< String::const_iterator > MatchResults;
-	typedef std::basic_stringstream< xchar > StringStream;
-	typedef std::basic_ostream< xchar > OutputStream;
+	using String = std::basic_string< xchar >;
+	using Regex = std::basic_regex< xchar >;
+	using SRegexIterator = std::regex_iterator< String::const_iterator >;
+	using MatchResults = std::match_results< String::const_iterator >;
+	using StringStream = std::basic_stringstream< xchar >;
+	using OutputStream = std::basic_ostream< xchar >;
+	using Milliseconds = std::chrono::milliseconds;
+	using Nanoseconds = std::chrono::nanoseconds;
 
 	/*!
 	\author		Sylvain DOREMUS
@@ -255,7 +257,8 @@ namespace Castor
 	class File;
 	class FileParser;
 	class FileParserContext;
-	template< typename FlagType, typename BaseType = typename BaseTypeFromSize< sizeof( FlagType ) >::Type >
+	template< typename FlagType
+		, typename BaseType = typename BaseTypeFromSize< sizeof( FlagType ) >::Type >
 	class FlagCombination;
 	class Font;
 	class FontCache;
@@ -304,11 +307,11 @@ namespace Castor
 	class TextFile;
 	template< class T >
 	class TextLoader;
-	template< class Obj,
-			  class Key,
-			  class PtrType = std::shared_ptr< Obj >,
-			  typename PFNCreate = std::function< PtrType() >,
-			  class Predicate = std::less< Key > >
+	template< class Obj
+		, class Key
+		, class PtrType = std::shared_ptr< Obj >
+		, typename PFNCreate = std::function< PtrType() >
+		, class Predicate = std::less< Key > >
 	class Factory;
 	class Path;
 	class DynamicLibrary;
@@ -324,7 +327,7 @@ namespace Castor
 	\~french
 	\brief		Typedef sur un buffer de pixels au format A8R8G8B8
 	*/
-	typedef PxBuffer< PixelFormat::eA8R8G8B8 > PixelBuffer;
+	using PixelBuffer = PxBuffer< PixelFormat::eA8R8G8B8 >;
 
 	template< typename T > using Point2 = Point< T, 2 >;
 	template< typename T > using Point3 = Point< T, 3 >;
@@ -553,7 +556,7 @@ namespace Castor
 	 *\param[in]	p_strLog	Le texte écrit
 	 *\param[in]	p_eLogType	Le type de log
 	 */
-	typedef std::function< void ( String const & p_strLog, LogType p_eLogType, bool p_newLine ) > LogCallback;
+	using LogCallback = std::function< void ( String const & p_strLog, LogType p_eLogType, bool p_newLine ) >;
 
 	/*!
 	\~english
@@ -591,9 +594,9 @@ constexpr std::chrono::seconds operator "" _s( unsigned long long p_value )
 	return std::chrono::seconds( int64_t( p_value ) );
 }
 
-constexpr std::chrono::milliseconds operator "" _ms( unsigned long long p_value )
+constexpr Castor::Milliseconds operator "" _ms( unsigned long long p_value )
 {
-	return std::chrono::milliseconds( int64_t( p_value ) );
+	return Castor::Milliseconds( int64_t( p_value ) );
 }
 
 constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value )
@@ -601,9 +604,9 @@ constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value 
 	return std::chrono::microseconds( int64_t( p_value ) );
 }
 
-constexpr std::chrono::nanoseconds operator "" _ns( unsigned long long p_value )
+constexpr Castor::Nanoseconds operator "" _ns( unsigned long long p_value )
 {
-	return std::chrono::nanoseconds( int64_t( p_value ) );
+	return Castor::Nanoseconds( int64_t( p_value ) );
 }
 
 #include "Miscellaneous/Debug.hpp"

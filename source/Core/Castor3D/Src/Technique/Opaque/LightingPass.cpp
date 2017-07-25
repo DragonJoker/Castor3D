@@ -1,4 +1,4 @@
-#include "LightingPass.hpp"
+﻿#include "LightingPass.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -11,6 +11,7 @@
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <Render/RenderPassTimer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Scene.hpp>
@@ -32,36 +33,38 @@ using namespace Castor3D;
 
 namespace Castor3D
 {
-	LightingPass::LightingPass( Engine & p_engine
-		, Size const & p_size
-		, Scene const & p_scene
-		, OpaquePass & p_opaque
-		, FrameBufferAttachment & p_depthAttach
-		, SceneUbo & p_sceneUbo )
-		: m_size{ p_size }
-		, m_result{ p_engine }
-		, m_frameBuffer{ p_engine.GetRenderSystem()->CreateFrameBuffer() }
+	LightingPass::LightingPass( Engine & engine
+		, Size const & size
+		, Scene const & scene
+		, OpaquePass & opaque
+		, FrameBufferAttachment & depthAttach
+		, SceneUbo & sceneUbo
+		, GpInfoUbo & gpInfoUbo )
+		: m_size{ size }
+		, m_result{ engine }
+		, m_frameBuffer{ engine.GetRenderSystem()->CreateFrameBuffer() }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ) ) }
 	{
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eTransparentBlack ) );
 		bool result = m_frameBuffer->Create();
 
 		if ( result )
 		{
-			result = m_frameBuffer->Initialise( p_size );
+			result = m_frameBuffer->Initialise( size );
 		}
 
 		if ( result )
 		{
-			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGBA16F32F
-				, p_size );
+				, size );
 			texture->GetImage().InitialiseSource();
 
 			m_result.SetIndex( 0u );
 			m_result.SetTexture( texture );
-			m_result.SetSampler( p_engine.GetLightsSampler() );
+			m_result.SetSampler( engine.GetLightsSampler() );
 			m_result.Initialise();
 
 			m_resultAttach = m_frameBuffer->CreateAttachment( texture );
@@ -74,39 +77,45 @@ namespace Castor3D
 			m_frameBuffer->SetDrawBuffers();
 			m_frameBuffer->Unbind();
 
-			m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( p_engine
+			m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( engine
 				, *m_frameBuffer
-				, p_depthAttach
+				, depthAttach
+				, gpInfoUbo
 				, false );
-			m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( p_engine
+			m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( engine
 				, *m_frameBuffer
-				, p_depthAttach
+				, depthAttach
+				, gpInfoUbo
 				, false );
-			m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( p_engine
+			m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( engine
 				, *m_frameBuffer
-				, p_depthAttach
+				, depthAttach
+				, gpInfoUbo
 				, false );
-			m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( p_engine
+			m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
 				, *m_frameBuffer
-				, p_depthAttach
-				, p_opaque.GetDirectionalShadowMap() );
-			m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( p_engine
+				, depthAttach
+				, gpInfoUbo
+				, opaque.GetDirectionalShadowMap() );
+			m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
 				, *m_frameBuffer
-				, p_depthAttach
-				, p_opaque.GetPointShadowMaps() );
-			m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( p_engine
+				, depthAttach
+				, gpInfoUbo
+				, opaque.GetPointShadowMaps() );
+			m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
 				, *m_frameBuffer
-				, p_depthAttach
-				, p_opaque.GetSpotShadowMap() );
+				, depthAttach
+				, gpInfoUbo
+				, opaque.GetSpotShadowMap() );
 
 			for ( auto & lightPass : m_lightPass )
 			{
-				lightPass->Initialise( p_scene, p_sceneUbo );
+				lightPass->Initialise( scene, sceneUbo );
 			}
 
 			for ( auto & lightPass : m_lightPassShadow )
 			{
-				lightPass->Initialise( p_scene, p_sceneUbo );
+				lightPass->Initialise( scene, sceneUbo );
 			}
 		}
 	}
@@ -134,14 +143,12 @@ namespace Castor3D
 		}
 	}
 
-	bool LightingPass::Render( Scene const & p_scene
-		, Camera const & p_camera
-		, GeometryPassResult const & p_gp
-		, Matrix4x4r const & p_invViewProj
-		, Matrix4x4r const & p_invView
-		, Matrix4x4r const & p_invProj )
+	bool LightingPass::Render( Scene const & scene
+		, Camera const & camera
+		, GeometryPassResult const & gp
+		, RenderInfo & info )
 	{
-		auto & cache = p_scene.GetLightCache();
+		auto & cache = scene.GetLightCache();
 		m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer->Clear( BufferComponent::eColour );
 
@@ -149,6 +156,7 @@ namespace Castor3D
 
 		if ( !cache.IsEmpty() )
 		{
+			m_timer->Start();
 #if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
 			g_index = 0;
@@ -156,46 +164,38 @@ namespace Castor3D
 #endif
 
 			auto lock = make_unique_lock( cache );
-			DoRenderLights( p_scene
-				, p_camera
+			DoRenderLights( scene
+				, camera
 				, LightType::eDirectional
-				, p_gp
-				, p_invViewProj
-				, p_invView
-				, p_invProj
+				, gp
 				, first );
-			DoRenderLights( p_scene
-				, p_camera
+			DoRenderLights( scene
+				, camera
 				, LightType::ePoint
-				, p_gp
-				, p_invViewProj
-				, p_invView
-				, p_invProj
+				, gp
 				, first );
-			DoRenderLights( p_scene
-				, p_camera
+			DoRenderLights( scene
+				, camera
 				, LightType::eSpot
-				, p_gp
-				, p_invViewProj
-				, p_invView
-				, p_invProj
+				, gp
 				, first );
 			first = false;
+			m_timer->Stop();
+			info.m_times.push_back( { m_timer->GetName()
+				, m_timer->GetGpuTime()
+				, m_timer->GetCpuTime() } );
 		}
 
 		return first;
 	}
 
-	void LightingPass::DoRenderLights( Scene const & p_scene
-		, Camera const & p_camera
+	void LightingPass::DoRenderLights( Scene const & scene
+		, Camera const & camera
 		, LightType p_type
-		, GeometryPassResult const & p_gp
-		, Matrix4x4r const & p_invViewProj
-		, Matrix4x4r const & p_invView
-		, Matrix4x4r const & p_invProj
+		, GeometryPassResult const & gp
 		, bool & p_first )
 	{
-		auto & cache = p_scene.GetLightCache();
+		auto & cache = scene.GetLightCache();
 
 		if ( cache.GetLightsCount( p_type ) )
 		{
@@ -207,23 +207,17 @@ namespace Castor3D
 				if ( light->IsShadowProducer() )
 				{
 					lightPassShadow.Render( m_size
-						, p_gp
+						, gp
 						, *light
-						, p_camera
-						, p_invViewProj
-						, p_invView
-						, p_invProj
+						, camera
 						, p_first );
 				}
 				else
 				{
 					lightPass.Render( m_size
-						, p_gp
+						, gp
 						, *light
-						, p_camera
-						, p_invViewProj
-						, p_invView
-						, p_invProj
+						, camera
 						, p_first );
 				}
 

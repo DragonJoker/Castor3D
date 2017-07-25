@@ -424,7 +424,7 @@ namespace Castor3D
 		 */
 		inline SceneSPtr GetScene()const
 		{
-			return m_pScene.lock();
+			return m_scene.lock();
 		}
 		/**
 		 *\~english
@@ -619,7 +619,7 @@ namespace Castor3D
 		//!\~english The overlay category	\~french La catégorie de l'incrustation
 		OverlayCategorySPtr m_category;
 		//!\~english The parent scene	\~french La scène parente
-		SceneWPtr m_pScene;
+		SceneWPtr m_scene;
 		//!\~english The render system	\~french Le système de rendu
 		RenderSystem * m_renderSystem;
 	};

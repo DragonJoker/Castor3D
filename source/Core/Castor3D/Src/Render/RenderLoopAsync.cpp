@@ -212,7 +212,7 @@ namespace Castor3D
 					m_frameEnded = false;
 					timer.Time();
 					DoRenderFrame();
-					auto endTime = std::chrono::duration_cast< std::chrono::milliseconds >( timer.Time() );
+					auto endTime = std::chrono::duration_cast< Milliseconds >( timer.Time() );
 					m_frameEnded = true;
 					std::this_thread::sleep_for( std::max( 0_ms, GetFrameTime() - endTime ) );
 				}

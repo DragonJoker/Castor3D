@@ -8,9 +8,9 @@ namespace Castor3D
 	inline CacheView< ResourceType, CacheType, EventType >::CacheView( Castor::String const & p_name
 		, Initialiser && p_initialise
 		, Cleaner && p_clean
-		, CacheType & p_cache )
+		, CacheType & cache )
 		: Castor::Named( p_name )
-		, m_cache( p_cache )
+		, m_cache( cache )
 		, m_initialise{ p_initialise }
 		, m_clean{ p_clean }
 	{

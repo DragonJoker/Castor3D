@@ -57,13 +57,13 @@ namespace Castor3D
 		 *\param[in]	p_name			The view name.
 		 *\param[in]	p_initialise	The element initialiser.
 		 *\param[in]	p_clean			The element cleaner.
-		 *\param[in]	p_cache			The viewed cache.
+		 *\param[in]	cache			The viewed cache.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			The view name.
 		 *\param[in]	p_initialise	L'initialiseur d'objet.
 		 *\param[in]	p_clean			Le nettoyeur d'objet.
-		 *\param[in]	p_cache			The viewed cache.
+		 *\param[in]	cache			The viewed cache.
 		 */
 		/**
 		 *\~english
@@ -71,12 +71,12 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom de la vue.
-		 *\param[in]	p_cache	Le cache vu.
+		 *\param[in]	cache	Le cache vu.
 		 */
 		inline CacheView( Castor::String const & p_name
 			, Initialiser && p_initialise
 			, Cleaner && p_clean
-			, CacheType & p_cache );
+			, CacheType & cache );
 		/**
 		 *\~english
 		 *\brief		Destructor
