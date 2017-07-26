@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___CASTOR_PRECISE_TIMER_H___
 #define ___CASTOR_PRECISE_TIMER_H___
 
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtilsPrerequisites.hpp"
 #include <cstdint>
 #include <chrono>
 
@@ -63,7 +63,7 @@ namespace Castor
 		 *\~french
 		 *\return		Le temps écoulé depuis le dernier appel.
 		 */
-		CU_API Castor::Nanoseconds Time();
+		CU_API Nanoseconds Time();
 
 	private:
 		clock::time_point DoGetTime()const;
