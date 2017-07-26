@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -50,7 +50,7 @@ SOFTWARE.
 #	define GlslWriter_API
 #endif
 
-#define GLSL_MATERIALS_STRUCT_OF_ARRAY 1
+#define GLSL_MATERIALS_STRUCT_OF_ARRAY 0
 
 #define DECLARE_GLSL_PARAMETER( TypeName )\
 	using In##TypeName = InParam< TypeName >;\

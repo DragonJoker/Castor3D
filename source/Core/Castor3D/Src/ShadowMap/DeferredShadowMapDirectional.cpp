@@ -1,9 +1,10 @@
-#include "DeferredShadowMapDirectional.hpp"
+﻿#include "DeferredShadowMapDirectional.hpp"
 
 #include <Engine.hpp>
 
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
+#include <Miscellaneous/GaussianBlur.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Light/Light.hpp>
@@ -86,6 +87,8 @@ namespace Castor3D
 		m_frameBuffer->Clear( BufferComponent::eDepth );
 		it->second->Render();
 		m_frameBuffer->Unbind();
+
+		m_blur->Blur( m_shadowMap.GetTexture() );
 	}
 
 	int32_t DeferredShadowMapDirectional::DoGetMaxPasses()const
@@ -109,10 +112,16 @@ namespace Castor3D
 		m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach, m_shadowMap.GetTexture()->GetType() );
 		ENSURE( m_frameBuffer->IsComplete() );
 		m_frameBuffer->Unbind();
+
+		m_blur = std::make_shared< GaussianBlur >( *GetEngine()
+			, m_shadowMap.GetTexture()->GetDimensions()
+			, m_shadowMap.GetTexture()->GetPixelFormat()
+			, 5u );
 	}
 
 	void DeferredShadowMapDirectional::DoCleanup()
 	{
+		m_blur.reset();
 		m_depthAttach.reset();
 		m_shadowMap.Cleanup();
 	}

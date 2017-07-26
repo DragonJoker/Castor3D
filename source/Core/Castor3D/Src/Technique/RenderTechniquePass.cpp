@@ -1,4 +1,4 @@
-#include "RenderTechniquePass.hpp"
+﻿#include "RenderTechniquePass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPassTimer.hpp"
@@ -230,9 +230,6 @@ namespace Castor3D
 			RenderPass::DoRender( nodes.m_morphingNodes.m_backCulled, camera, depthMaps, info );
 			RenderPass::DoRender( nodes.m_billboardNodes.m_backCulled, camera, depthMaps, info );
 			m_timer->Stop();
-			info.m_times.push_back( { m_timer->GetName()
-				, m_timer->GetGpuTime()
-				, m_timer->GetCpuTime() } );
 		}
 	}
 

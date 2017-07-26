@@ -119,10 +119,29 @@ namespace Castor3D
 		 *\param[in]	show	Le statut.
 		 */
 		void Show( bool show );
+		/**
+		 *\~english
+		 *\brief		Registers a render pass timer.
+		 *\param[in]	timer	The timer to register.
+		 *\~french
+		 *\brief		Enregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à enregistrer.
+		 */
+		void RegisterTimer( RenderPassTimer const & timer );
+		/**
+		 *\~english
+		 *\brief		Unregisters a render pass timer.
+		 *\param[in]	timer	The timer to unregister.
+		 *\~french
+		 *\brief		Désenregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à désenregistrer.
+		 */
+		void UnregisterTimer( RenderPassTimer const & timer );
 
 	private:
 		struct RenderPassOverlays
 		{
+			std::reference_wrapper< RenderPassTimer const > m_timer;
 			PanelOverlaySPtr m_panel;
 			TextOverlaySPtr m_title;
 			TextOverlaySPtr m_cpuName;
@@ -130,12 +149,7 @@ namespace Castor3D
 			TextOverlaySPtr m_gpuName;
 			TextOverlaySPtr m_gpuValue;
 		};
-
 		using RenderPassOverlaysArray = std::vector< RenderPassOverlays >;
-
-		void DoUpdateOverlays( OverlayCache & cache
-			, RenderTimes const & times
-			, uint32_t index );
 
 	private:
 #if defined( _NDEBUG )

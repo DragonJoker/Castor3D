@@ -134,9 +134,6 @@ namespace Castor3D
 			, m_matrixUbo
 			, *m_pipeline );
 		m_timer->Stop();
-		info.m_times.push_back( { m_timer->GetName()
-			, m_timer->GetGpuTime()
-			, m_timer->GetCpuTime() } );
 	}
 
 	bool ToneMapping::WriteInto( Castor::TextFile & file )

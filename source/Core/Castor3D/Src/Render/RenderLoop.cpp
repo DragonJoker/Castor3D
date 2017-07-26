@@ -1,4 +1,4 @@
-﻿#include "RenderLoop.hpp"
+#include "RenderLoop.hpp"
 
 #include "Engine.hpp"
 
@@ -90,6 +90,16 @@ namespace Castor3D
 			p_listener.FlushEvents( EventType::eQueueRender );
 			p_listener.FlushEvents( EventType::ePostRender );
 		} );
+	}
+
+	void RenderLoop::RegisterTimer( RenderPassTimer const & timer )
+	{
+		m_debugOverlays->RegisterTimer( timer );
+	}
+
+	void RenderLoop::UnregisterTimer( RenderPassTimer const & timer )
+	{
+		m_debugOverlays->UnregisterTimer( timer );
 	}
 
 	ContextSPtr RenderLoop::DoCreateContext( RenderWindow & p_window )

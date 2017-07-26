@@ -1,6 +1,7 @@
-#include "RenderPassTimer.hpp"
+﻿#include "RenderPassTimer.hpp"
 
 #include "Engine.hpp"
+#include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Miscellaneous/GpuQuery.hpp"
 
@@ -11,6 +12,7 @@ namespace Castor3D
 	RenderPassTimer::RenderPassTimer( Engine & engine
 		, String const & name )
 		: Named{ name }
+		, m_engine{ engine }
 		, m_timerQuery
 		{
 			{
@@ -18,11 +20,14 @@ namespace Castor3D
 				engine.GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed )
 			}
 		}
+		, m_cpuTime{ 0_ns }
+		, m_gpuTime{ 0_ns }
 	{
 		m_timerQuery[0]->Initialise();
 		m_timerQuery[1]->Initialise();
 		m_timerQuery[1 - m_queryIndex]->Begin();
 		m_timerQuery[1 - m_queryIndex]->End();
+		engine.GetRenderLoop().RegisterTimer( *this );
 	}
 
 	RenderPassTimer::~RenderPassTimer()

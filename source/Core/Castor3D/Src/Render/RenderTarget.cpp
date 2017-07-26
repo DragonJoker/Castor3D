@@ -323,15 +323,5 @@ namespace Castor3D
 		Image::BinaryWriter()( tmp, Engine::GetEngineDirectory() / String( cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( fbo.m_colourTexture.GetTexture().get() ), 16 ) + cuT( ".png" ) ) );
 
 #endif
-
-		auto time = std::accumulate( info.m_times.begin()
-			, info.m_times.end()
-			, 0_ns
-			, []( Nanoseconds value
-				, RenderTimes const & times )
-			{
-				return value + times.m_gpu;
-			} );
-		GetEngine()->GetRenderSystem()->IncGpuTime( time );
 	}
 }

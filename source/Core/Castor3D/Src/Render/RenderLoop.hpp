@@ -112,6 +112,24 @@ namespace Castor3D
 		C3D_API void FlushEvents();
 		/**
 		 *\~english
+		 *\brief		Registers a render pass timer.
+		 *\param[in]	timer	The timer to register.
+		 *\~french
+		 *\brief		Enregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à enregistrer.
+		 */
+		C3D_API void RegisterTimer( RenderPassTimer const & timer );
+		/**
+		 *\~english
+		 *\brief		Unregisters a render pass timer.
+		 *\param[in]	timer	The timer to unregister.
+		 *\~french
+		 *\brief		Désenregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à désenregistrer.
+		 */
+		C3D_API void UnregisterTimer( RenderPassTimer const & timer );
+		/**
+		 *\~english
 		 *\brief		Starts threaded render loop.
 		 *\~french
 		 *\brief		Commence le rendu threadé.

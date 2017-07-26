@@ -338,12 +338,6 @@ namespace Castor3D
 
 		m_postFxTimer->Stop();
 		m_renderSystem.PopScene();
-		info.m_times.push_back( { m_particleTimer->GetName()
-			, m_particleTimer->GetGpuTime()
-			, m_particleTimer->GetCpuTime() } );
-		info.m_times.push_back( { m_postFxTimer->GetName()
-			, m_postFxTimer->GetGpuTime()
-			, m_postFxTimer->GetCpuTime() } );
 	}
 
 	bool RenderTechnique::WriteInto( Castor::TextFile & file )
