@@ -16,10 +16,10 @@ namespace GuiCommon
 		static wxString PROPERTY_NAME = _( "Name" );
 	}
 
-	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * p_engine
+	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * engine
 		, bool p_editable
 		, UniformBuffer & p_buffer )
-		: TreeItemProperty( p_engine, p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( engine, p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_buffer( p_buffer )
 	{
 		PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER = _( "Frame Variable Buffer: " );

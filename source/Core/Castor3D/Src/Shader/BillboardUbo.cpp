@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	BillboardUbo::BillboardUbo( Engine & p_engine )
-		: m_ubo{ ShaderProgram::BufferBillboards, *p_engine.GetRenderSystem() }
+	BillboardUbo::BillboardUbo( Engine & engine )
+		: m_ubo{ ShaderProgram::BufferBillboards, *engine.GetRenderSystem() }
 		, m_dimensions{ *m_ubo.CreateUniform< UniformType::eVec2i >( ShaderProgram::Dimensions ) }
 		, m_windowSize{ *m_ubo.CreateUniform< UniformType::eVec2i >( ShaderProgram::WindowSize ) }
 	{

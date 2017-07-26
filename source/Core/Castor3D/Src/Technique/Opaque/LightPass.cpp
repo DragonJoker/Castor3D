@@ -34,7 +34,7 @@ namespace Castor3D
 {
 	//************************************************************************************************
 
-	String GetTextureName( DsTexture p_texture )
+	String GetTextureName( DsTexture texture )
 	{
 		static std::array< String, size_t( DsTexture::eCount ) > Values
 		{
@@ -47,10 +47,10 @@ namespace Castor3D
 			}
 		};
 
-		return Values[size_t( p_texture )];
+		return Values[size_t( texture )];
 	}
 
-	PixelFormat GetTextureFormat( DsTexture p_texture )
+	PixelFormat GetTextureFormat( DsTexture texture )
 	{
 		static std::array< PixelFormat, size_t( DsTexture::eCount ) > Values
 		{
@@ -63,10 +63,10 @@ namespace Castor3D
 			}
 		};
 
-		return Values[size_t( p_texture )];
+		return Values[size_t( texture )];
 	}
 
-	AttachmentPoint GetTextureAttachmentPoint( DsTexture p_texture )
+	AttachmentPoint GetTextureAttachmentPoint( DsTexture texture )
 	{
 		static std::array< AttachmentPoint, size_t( DsTexture::eCount ) > Values
 		{
@@ -79,10 +79,10 @@ namespace Castor3D
 			}
 		};
 
-		return Values[size_t( p_texture )];
+		return Values[size_t( texture )];
 	}
 
-	uint32_t GetTextureAttachmentIndex( DsTexture p_texture )
+	uint32_t GetTextureAttachmentIndex( DsTexture texture )
 	{
 		static std::array< uint32_t, size_t( DsTexture::eCount ) > Values
 		{
@@ -95,27 +95,27 @@ namespace Castor3D
 			}
 		};
 
-		return Values[size_t( p_texture )];
+		return Values[size_t( texture )];
 	}
 
-	float GetMaxDistance( LightCategory const & p_light
-		, Point3f const & p_attenuation
-		, float p_max )
+	float GetMaxDistance( LightCategory const & light
+		, Point3f const & attenuation
+		, float max )
 	{
 		constexpr float threshold = 0.000001f;
-		auto constant = std::abs( p_attenuation[0] );
-		auto linear = std::abs( p_attenuation[1] );
-		auto quadratic = std::abs( p_attenuation[2] );
-		float result = p_max;
+		auto constant = std::abs( attenuation[0] );
+		auto linear = std::abs( attenuation[1] );
+		auto quadratic = std::abs( attenuation[2] );
+		float result = max;
 
 		if ( constant >= threshold
 			|| linear >= threshold
 			|| quadratic >= threshold )
 		{
-			float maxChannel = std::max( std::max( p_light.GetColour()[0]
-				, p_light.GetColour()[1] )
-				, p_light.GetColour()[2] );
-			auto c = 256.0f * maxChannel * p_light.GetDiffuseIntensity();
+			float maxChannel = std::max( std::max( light.GetColour()[0]
+				, light.GetColour()[1] )
+				, light.GetColour()[2] );
+			auto c = 256.0f * maxChannel * light.GetDiffuseIntensity();
 
 			if ( quadratic >= threshold )
 			{
@@ -137,132 +137,132 @@ namespace Castor3D
 			}
 		}
 
-		return std::min( p_max, result );
+		return std::min( max, result );
 	}
 
-	void Declare_EncodeMaterial( GLSL::GlslWriter & p_writer )
+	void Declare_EncodeMaterial( GLSL::GlslWriter & writer )
 	{
 		using namespace GLSL;
 		using GLSL::operator<<;
-		auto encodeMaterial = p_writer.ImplementFunction< Void >( cuT( "EncodeMaterial" )
-			, [&]( Int const & p_receiver
-				, Int const & p_reflection
-				, Int const & p_refraction
-				, Int const & p_envMapIndex
-				, Float p_encoded )
+		auto encodeMaterial = writer.ImplementFunction< Void >( cuT( "EncodeMaterial" )
+			, [&]( Int const & receiver
+				, Int const & reflection
+				, Int const & refraction
+				, Int const & envMapIndex
+				, Float encoded )
 			{
-				auto flags = p_writer.DeclLocale( cuT( "flags" )
-					, p_writer.Paren( p_receiver << 7 )
-						+ p_writer.Paren( p_refraction << 6 )
-						+ p_writer.Paren( p_reflection << 5 )
-						+ p_writer.Paren( p_envMapIndex ) );
-				p_encoded = p_writer.Cast< Float >( flags );
-			}, InInt{ &p_writer, cuT( "p_receiver" ) }
-			, InInt{ &p_writer, cuT( "p_reflection" ) }
-			, InInt{ &p_writer, cuT( "p_refraction" ) }
-			, InInt{ &p_writer, cuT( "p_envMapIndex" ) }
-			, OutFloat{ &p_writer, cuT( "p_encoded" ) } );
+				auto flags = writer.DeclLocale( cuT( "flags" )
+					, writer.Paren( receiver << 7 )
+						+ writer.Paren( refraction << 6 )
+						+ writer.Paren( reflection << 5 )
+						+ writer.Paren( envMapIndex ) );
+				encoded = writer.Cast< Float >( flags );
+			}, InInt{ &writer, cuT( "receiver" ) }
+			, InInt{ &writer, cuT( "reflection" ) }
+			, InInt{ &writer, cuT( "refraction" ) }
+			, InInt{ &writer, cuT( "envMapIndex" ) }
+			, OutFloat{ &writer, cuT( "encoded" ) } );
 	}
 	
-	void Declare_DecodeMaterial( GLSL::GlslWriter & p_writer )
+	void Declare_DecodeMaterial( GLSL::GlslWriter & writer )
 	{
 		using namespace GLSL;
-		auto decodeMaterial = p_writer.ImplementFunction< Void >( cuT( "DecodeMaterial" )
-			, [&]( Float const & p_encoded
-				, Int p_receiver
-				, Int p_reflection
-				, Int p_refraction
-				, Int p_envMapIndex )
+		auto decodeMaterial = writer.ImplementFunction< Void >( cuT( "DecodeMaterial" )
+			, [&]( Float const & encoded
+				, Int receiver
+				, Int reflection
+				, Int refraction
+				, Int envMapIndex )
 			{
-				auto flags = p_writer.DeclLocale( cuT( "flags" ), p_writer.Cast< Int >( p_encoded ) );
-				p_receiver = flags >> 7;
-				flags -= p_writer.Paren( p_receiver << 7 );
-				p_refraction = flags >> 6;
-				flags -= p_writer.Paren( p_refraction << 6 );
-				p_reflection = flags >> 5;
-				flags -= p_writer.Paren( p_reflection << 5 );
-				p_envMapIndex = flags;
-			}, InFloat{ &p_writer, cuT( "p_encoded" ) }
-			, OutInt{ &p_writer, cuT( "p_receiver" ) }
-			, OutInt{ &p_writer, cuT( "p_reflection" ) }
-			, OutInt{ &p_writer, cuT( "p_refraction" ) }
-			, OutInt{ &p_writer, cuT( "p_envMapIndex" ) } );
+				auto flags = writer.DeclLocale( cuT( "flags" ), writer.Cast< Int >( encoded ) );
+				receiver = flags >> 7;
+				flags -= writer.Paren( receiver << 7 );
+				refraction = flags >> 6;
+				flags -= writer.Paren( refraction << 6 );
+				reflection = flags >> 5;
+				flags -= writer.Paren( reflection << 5 );
+				envMapIndex = flags;
+			}, InFloat{ &writer, cuT( "encoded" ) }
+			, OutInt{ &writer, cuT( "receiver" ) }
+			, OutInt{ &writer, cuT( "reflection" ) }
+			, OutInt{ &writer, cuT( "refraction" ) }
+			, OutInt{ &writer, cuT( "envMapIndex" ) } );
 	}
 
-	void Declare_DecodeReceiver( GLSL::GlslWriter & p_writer )
+	void Declare_DecodeReceiver( GLSL::GlslWriter & writer )
 	{
 		using namespace GLSL;
-		auto decodeReceiver = p_writer.ImplementFunction< Void >( cuT( "DecodeReceiver" )
-			, [&]( Int const & p_encoded
-				, Int p_receiver )
+		auto decodeReceiver = writer.ImplementFunction< Void >( cuT( "DecodeReceiver" )
+			, [&]( Int const & encoded
+				, Int receiver )
 			{
-				auto flags = p_writer.DeclLocale( cuT( "flags" ), p_encoded );
-				p_receiver = flags >> 7;
-			}, InInt{ &p_writer, cuT( "p_encoded" ) }
-			, OutInt{ &p_writer, cuT( "p_receiver" ) } );
+				auto flags = writer.DeclLocale( cuT( "flags" ), encoded );
+				receiver = flags >> 7;
+			}, InInt{ &writer, cuT( "encoded" ) }
+			, OutInt{ &writer, cuT( "receiver" ) } );
 	}
 
-	void EncodeMaterial( GLSL::GlslWriter & p_writer
-		, GLSL::Int const & p_receiver
-		, GLSL::Int const & p_reflection
-		, GLSL::Int const & p_refraction
-		, GLSL::Int const & p_envMapIndex
-		, GLSL::Float const & p_encoded )
+	void EncodeMaterial( GLSL::GlslWriter & writer
+		, GLSL::Int const & receiver
+		, GLSL::Int const & reflection
+		, GLSL::Int const & refraction
+		, GLSL::Int const & envMapIndex
+		, GLSL::Float const & encoded )
 	{
 		using namespace GLSL;
-		p_writer << WriteFunctionCall< Void >( &p_writer
+		writer << WriteFunctionCall< Void >( &writer
 			, cuT( "EncodeMaterial" )
-			, InInt{ p_receiver }
-		, InInt{ p_reflection }
-		, InInt{ p_refraction }
-		, InInt{ p_envMapIndex }
-		, OutFloat{ p_encoded } );
-		p_writer << Endi{};
+			, InInt{ receiver }
+			, InInt{ reflection }
+			, InInt{ refraction }
+			, InInt{ envMapIndex }
+			, OutFloat{ encoded } );
+		writer << Endi{};
 	}
 
-	void DecodeMaterial( GLSL::GlslWriter & p_writer
-		, GLSL::Float const & p_encoded
-		, GLSL::Int const & p_receiver
-		, GLSL::Int const & p_reflection
-		, GLSL::Int const & p_refraction
-		, GLSL::Int const & p_envMapIndex )
+	void DecodeMaterial( GLSL::GlslWriter & writer
+		, GLSL::Float const & encoded
+		, GLSL::Int const & receiver
+		, GLSL::Int const & reflection
+		, GLSL::Int const & refraction
+		, GLSL::Int const & envMapIndex )
 	{
 		using namespace GLSL;
-		p_writer << WriteFunctionCall< Void >( &p_writer
+		writer << WriteFunctionCall< Void >( &writer
 			, cuT( "DecodeMaterial" )
-			, InFloat{ p_encoded }
-			, OutInt{ p_receiver }
-			, OutInt{ p_reflection }
-			, OutInt{ p_refraction }
-			, OutInt{ p_envMapIndex } );
-		p_writer << Endi{};
+			, InFloat{ encoded }
+			, OutInt{ receiver }
+			, OutInt{ reflection }
+			, OutInt{ refraction }
+			, OutInt{ envMapIndex } );
+		writer << Endi{};
 	}
 
-	void DecodeReceiver( GLSL::GlslWriter & p_writer
-		, GLSL::Int & p_encoded
-		, GLSL::Int const & p_receiver )
+	void DecodeReceiver( GLSL::GlslWriter & writer
+		, GLSL::Int & encoded
+		, GLSL::Int const & receiver )
 	{
 		using namespace GLSL;
-		p_writer << WriteFunctionCall< Void >( &p_writer
+		writer << WriteFunctionCall< Void >( &writer
 			, cuT( "DecodeReceiver" )
-			, InInt{ p_encoded }
-			, OutInt{ p_receiver } );
-		p_writer << Endi{};
+			, InInt{ encoded }
+			, OutInt{ receiver } );
+		writer << Endi{};
 	}
 
 	//************************************************************************************************
 
-	LightPass::Program::Program( Engine & p_engine
-		, GLSL::Shader const & p_vtx
-		, GLSL::Shader const & p_pxl )
+	LightPass::Program::Program( Engine & engine
+		, GLSL::Shader const & vtx
+		, GLSL::Shader const & pxl )
 	{
-		auto & renderSystem = *p_engine.GetRenderSystem();
+		auto & renderSystem = *engine.GetRenderSystem();
 
-		m_program = p_engine.GetShaderProgramCache().GetNewProgram( false );
+		m_program = engine.GetShaderProgramCache().GetNewProgram( false );
 		m_program->CreateObject( ShaderType::eVertex );
 		m_program->CreateObject( ShaderType::ePixel );
-		m_program->SetSource( ShaderType::eVertex, p_vtx );
-		m_program->SetSource( ShaderType::ePixel, p_pxl );
+		m_program->SetSource( ShaderType::eVertex, vtx );
+		m_program->SetSource( ShaderType::ePixel, pxl );
 
 		m_lightColour = m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), ShaderType::ePixel );
 
@@ -283,33 +283,33 @@ namespace Castor3D
 		m_program.reset();
 	}
 
-	void LightPass::Program::Initialise( VertexBuffer & p_vbo
-		, IndexBufferSPtr p_ibo
-		, MatrixUbo & p_matrixUbo
-		, SceneUbo & p_sceneUbo
-		, UniformBuffer & p_gpInfoUbo
-		, ModelMatrixUbo * p_modelMatrixUbo )
+	void LightPass::Program::Initialise( VertexBuffer & vbo
+		, IndexBufferSPtr ibo
+		, MatrixUbo & matrixUbo
+		, SceneUbo & sceneUbo
+		, UniformBuffer & gpInfoUbo
+		, ModelMatrixUbo * modelMatrixUbo )
 	{
 		m_program->Initialise();
 
 		m_firstPipeline = DoCreatePipeline( false );
-		m_firstPipeline->AddUniformBuffer( p_matrixUbo.GetUbo() );
-		m_firstPipeline->AddUniformBuffer( p_sceneUbo.GetUbo() );
-		m_firstPipeline->AddUniformBuffer( p_gpInfoUbo );
+		m_firstPipeline->AddUniformBuffer( matrixUbo.GetUbo() );
+		m_firstPipeline->AddUniformBuffer( sceneUbo.GetUbo() );
+		m_firstPipeline->AddUniformBuffer( gpInfoUbo );
 
 		m_blendPipeline = DoCreatePipeline( true );
-		m_blendPipeline->AddUniformBuffer( p_matrixUbo.GetUbo() );
-		m_blendPipeline->AddUniformBuffer( p_sceneUbo.GetUbo() );
-		m_blendPipeline->AddUniformBuffer( p_gpInfoUbo );
+		m_blendPipeline->AddUniformBuffer( matrixUbo.GetUbo() );
+		m_blendPipeline->AddUniformBuffer( sceneUbo.GetUbo() );
+		m_blendPipeline->AddUniformBuffer( gpInfoUbo );
 
-		if ( p_modelMatrixUbo )
+		if ( modelMatrixUbo )
 		{
-			m_firstPipeline->AddUniformBuffer( p_modelMatrixUbo->GetUbo() );
-			m_blendPipeline->AddUniformBuffer( p_modelMatrixUbo->GetUbo() );
+			m_firstPipeline->AddUniformBuffer( modelMatrixUbo->GetUbo() );
+			m_blendPipeline->AddUniformBuffer( modelMatrixUbo->GetUbo() );
 		}
 
 		m_geometryBuffers = m_program->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->Initialise( { p_vbo }, p_ibo.get() );
+		m_geometryBuffers->Initialise( { vbo }, ibo.get() );
 	}
 
 	void LightPass::Program::Cleanup()
@@ -319,19 +319,19 @@ namespace Castor3D
 		m_program->Cleanup();
 	}
 
-	void LightPass::Program::Bind( Light const & p_light )
+	void LightPass::Program::Bind( Light const & light )
 	{
-		DoBind( p_light );
+		DoBind( light );
 	}
 
-	void LightPass::Program::Render( Size const & p_size
-		, Point3f const & p_colour
-		, uint32_t p_count
-		, bool p_first )const
+	void LightPass::Program::Render( Size const & size
+		, Point3f const & colour
+		, uint32_t count
+		, bool first )const
 	{
-		m_lightColour->SetValue( p_colour );
+		m_lightColour->SetValue( colour );
 
-		if ( p_first )
+		if ( first )
 		{
 			m_firstPipeline->Apply();
 		}
@@ -340,121 +340,112 @@ namespace Castor3D
 			m_blendPipeline->Apply();
 		}
 
-		m_geometryBuffers->Draw( p_count, 0 );
+		m_geometryBuffers->Draw( count, 0 );
 	}
 
 	//************************************************************************************************
 
-	LightPass::LightPass( Engine & p_engine
-		, FrameBuffer & p_frameBuffer
-		, FrameBufferAttachment & p_depthAttach
-		, bool p_shadows )
-		: m_engine{ p_engine }
-		, m_shadows{ p_shadows }
-		, m_matrixUbo{ p_engine }
-		, m_frameBuffer{ p_frameBuffer }
-		, m_depthAttach{ p_depthAttach }
+	LightPass::LightPass( Engine & engine
+		, FrameBuffer & frameBuffer
+		, FrameBufferAttachment & depthAttach
+		, GpInfoUbo & gpInfoUbo
+		, bool hasShadows )
+		: m_engine{ engine }
+		, m_shadows{ hasShadows }
+		, m_matrixUbo{ engine }
+		, m_frameBuffer{ frameBuffer }
+		, m_depthAttach{ depthAttach }
+		, m_gpInfoUbo{ gpInfoUbo }
 	{
 	}
 
-	void LightPass::Render( Size const & p_size
-		, GeometryPassResult const & p_gp
-		, Light const & p_light
-		, Camera const & p_camera
-		, Matrix4x4r const & p_invViewProj
-		, Castor::Matrix4x4r const & p_invView
-		, Castor::Matrix4x4r const & p_invProj
-		, bool p_first )
+	void LightPass::Render( Size const & size
+		, GeometryPassResult const & gp
+		, Light const & light
+		, Camera const & camera
+		, bool first )
 	{
-		m_gpInfo->Update( p_size
-			, p_camera
-			, p_invViewProj
-			, p_invView
-			, p_invProj );
+		DoUpdate( size
+			, light
+			, camera );
 
-		DoUpdate( p_size
-			, p_light
-			, p_camera );
+		m_program->Bind( light );
 
-		m_program->Bind( p_light );
-
-		DoRender( p_size
-			, p_gp
-			, p_light.GetColour()
-			, p_first );
+		DoRender( size
+			, gp
+			, light.GetColour()
+			, first );
 	}
 
-	void LightPass::DoInitialise( Scene const & p_scene
-		, LightType p_type
-		, VertexBuffer & p_vbo
-		, IndexBufferSPtr p_ibo
-		, SceneUbo & p_sceneUbo
-		, ModelMatrixUbo * p_modelMatrixUbo )
+	void LightPass::DoInitialise( Scene const & scene
+		, LightType type
+		, VertexBuffer & vbo
+		, IndexBufferSPtr ibo
+		, SceneUbo & sceneUbo
+		, ModelMatrixUbo * modelMatrixUbo )
 	{
-		m_gpInfo = std::make_unique< GpInfoUbo >( m_engine );
-		SceneFlags sceneFlags{ p_scene.GetFlags() };
+		SceneFlags sceneFlags{ scene.GetFlags() };
 
 		if ( CheckFlag( sceneFlags, SceneFlag::ePbrMetallicRoughness ) )
 		{
 			m_program = DoCreateProgram( DoGetVertexShaderSource( sceneFlags )
-				, DoGetPbrMRPixelShaderSource( sceneFlags, p_type ) );
+				, DoGetPbrMRPixelShaderSource( sceneFlags, type ) );
 		}
 		else if ( CheckFlag( sceneFlags, SceneFlag::ePbrSpecularGlossiness ) )
 		{
 			m_program = DoCreateProgram( DoGetVertexShaderSource( sceneFlags )
-				, DoGetPbrSGPixelShaderSource( sceneFlags, p_type ) );
+				, DoGetPbrSGPixelShaderSource( sceneFlags, type ) );
 		}
 		else
 		{
 			m_program = DoCreateProgram( DoGetVertexShaderSource( sceneFlags )
-				, DoGetLegacyPixelShaderSource( sceneFlags, p_type ) );
+				, DoGetLegacyPixelShaderSource( sceneFlags, type ) );
 		}
 
-		m_program->Initialise( p_vbo
-			, p_ibo
+		m_program->Initialise( vbo
+			, ibo
 			, m_matrixUbo
-			, p_sceneUbo
-			, m_gpInfo->GetUbo()
-			, p_modelMatrixUbo );
+			, sceneUbo
+			, m_gpInfoUbo.GetUbo()
+			, modelMatrixUbo );
 	}
 
 	void LightPass::DoCleanup()
 	{
 		m_program->Cleanup();
 		m_program.reset();
-		m_gpInfo.reset();
 		m_matrixUbo.GetUbo().Cleanup();
 	}
 
-	void LightPass::DoRender( Castor::Size const & p_size
-		, GeometryPassResult const & p_gp
-		, Point3f const & p_colour
-		, bool p_first )
+	void LightPass::DoRender( Castor::Size const & size
+		, GeometryPassResult const & gp
+		, Point3f const & colour
+		, bool first )
 	{
 		m_frameBuffer.Bind( FrameBufferTarget::eDraw );
 		m_depthAttach.Attach( AttachmentPoint::eDepthStencil );
 		m_frameBuffer.SetDrawBuffers();
-		p_gp[size_t( DsTexture::eDepth )]->Bind();
-		p_gp[size_t( DsTexture::eData1 )]->Bind();
-		p_gp[size_t( DsTexture::eData2 )]->Bind();
-		p_gp[size_t( DsTexture::eData3 )]->Bind();
-		p_gp[size_t( DsTexture::eData4 )]->Bind();
+		gp[size_t( DsTexture::eDepth )]->Bind();
+		gp[size_t( DsTexture::eData1 )]->Bind();
+		gp[size_t( DsTexture::eData2 )]->Bind();
+		gp[size_t( DsTexture::eData3 )]->Bind();
+		gp[size_t( DsTexture::eData4 )]->Bind();
 
-		m_program->Render( p_size
-			, p_colour
+		m_program->Render( size
+			, colour
 			, GetCount()
-			, p_first );
+			, first );
 
-		p_gp[size_t( DsTexture::eData4 )]->Unbind();
-		p_gp[size_t( DsTexture::eData3 )]->Unbind();
-		p_gp[size_t( DsTexture::eData2 )]->Unbind();
-		p_gp[size_t( DsTexture::eData1 )]->Unbind();
-		p_gp[size_t( DsTexture::eDepth )]->Unbind();
+		gp[size_t( DsTexture::eData4 )]->Unbind();
+		gp[size_t( DsTexture::eData3 )]->Unbind();
+		gp[size_t( DsTexture::eData2 )]->Unbind();
+		gp[size_t( DsTexture::eData1 )]->Unbind();
+		gp[size_t( DsTexture::eDepth )]->Unbind();
 		m_frameBuffer.Unbind();
 	}
 	
-	GLSL::Shader LightPass::DoGetLegacyPixelShaderSource( SceneFlags const & p_sceneFlags
-		, LightType p_type )const
+	GLSL::Shader LightPass::DoGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+		, LightType type )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = m_engine.GetRenderSystem()->CreateGlslWriter();
@@ -475,9 +466,9 @@ namespace Castor3D
 
 		// Utility functions
 		auto lighting = legacy::CreateLightingModel( writer
-			, p_type
-			, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
-		GLSL::Fog fog{ GetFogType( p_sceneFlags ), writer };
+			, type
+			, m_shadows ? GetShadowType( sceneFlags ) : ShadowType::eNone );
+		GLSL::Fog fog{ GetFogType( sceneFlags ), writer };
 		GLSL::Utils utils{ writer };
 		utils.DeclareCalcTexCoord();
 		utils.DeclareCalcWSPosition();
@@ -505,7 +496,7 @@ namespace Castor3D
 
 			OutputComponents output{ v3Diffuse, v3Specular };
 
-			switch ( p_type )
+			switch ( type )
 			{
 			case LightType::eDirectional:
 				{
@@ -551,8 +542,8 @@ namespace Castor3D
 		return writer.Finalise();
 	}
 	
-	GLSL::Shader LightPass::DoGetPbrMRPixelShaderSource( SceneFlags const & p_sceneFlags
-		, LightType p_type )const
+	GLSL::Shader LightPass::DoGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+		, LightType type )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = m_engine.GetRenderSystem()->CreateGlslWriter();
@@ -573,9 +564,9 @@ namespace Castor3D
 
 		// Utility functions
 		auto lighting = pbr::mr::CreateLightingModel( writer
-			, p_type
-			, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
-		GLSL::Fog fog{ GetFogType( p_sceneFlags ), writer };
+			, type
+			, m_shadows ? GetShadowType( sceneFlags ) : ShadowType::eNone );
+		GLSL::Fog fog{ GetFogType( sceneFlags ), writer };
 		GLSL::Utils utils{ writer };
 		utils.DeclareCalcTexCoord();
 		utils.DeclareCalcWSPosition();
@@ -600,7 +591,7 @@ namespace Castor3D
 			auto wsPosition = writer.DeclLocale( cuT( "wsPosition" ), utils.CalcWSPosition( texCoord, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.DeclLocale( cuT( "wsNormal" ), data1.xyz() );
 
-			switch ( p_type )
+			switch ( type )
 			{
 			case LightType::eDirectional:
 				{
@@ -648,8 +639,8 @@ namespace Castor3D
 		return writer.Finalise();
 	}
 	
-	GLSL::Shader LightPass::DoGetPbrSGPixelShaderSource( SceneFlags const & p_sceneFlags
-		, LightType p_type )const
+	GLSL::Shader LightPass::DoGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+		, LightType type )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = m_engine.GetRenderSystem()->CreateGlslWriter();
@@ -670,9 +661,9 @@ namespace Castor3D
 
 		// Utility functions
 		auto lighting = pbr::sg::CreateLightingModel( writer
-			, p_type
-			, m_shadows ? GetShadowType( p_sceneFlags ) : ShadowType::eNone );
-		GLSL::Fog fog{ GetFogType( p_sceneFlags ), writer };
+			, type
+			, m_shadows ? GetShadowType( sceneFlags ) : ShadowType::eNone );
+		GLSL::Fog fog{ GetFogType( sceneFlags ), writer };
 		GLSL::Utils utils{ writer };
 		utils.DeclareCalcTexCoord();
 		utils.DeclareCalcWSPosition();
@@ -697,7 +688,7 @@ namespace Castor3D
 			auto wsPosition = writer.DeclLocale( cuT( "wsPosition" ), utils.CalcWSPosition( texCoord, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.DeclLocale( cuT( "wsNormal" ), data1.xyz() );
 
-			switch ( p_type )
+			switch ( type )
 			{
 			case LightType::eDirectional:
 				{

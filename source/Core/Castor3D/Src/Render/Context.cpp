@@ -19,12 +19,11 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Context::Context( RenderSystem & p_renderSystem )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
+	Context::Context( RenderSystem & renderSystem )
+		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_window{ nullptr }
 		, m_initialised{ false }
-		, m_bMultiSampling{ false }
-		, m_matrixUbo{ *p_renderSystem.GetEngine() }
+		, m_matrixUbo{ *renderSystem.GetEngine() }
 		, m_colour{ *this, m_matrixUbo }
 		, m_colourCube{ *this, m_matrixUbo }
 		, m_colourLayer{ *this, m_matrixUbo }
@@ -41,22 +40,14 @@ namespace Castor3D
 	{
 	}
 
-	bool Context::Initialise( RenderWindow * p_window )
+	bool Context::Initialise( RenderWindow * window )
 	{
-		m_window = p_window;
-		m_timerQuery[0] = GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed );
-		m_timerQuery[1] = GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed );
-		m_bMultiSampling = p_window->IsMultisampling();
+		m_window = window;
 		bool result = DoInitialise();
 
 		if ( result )
 		{
 			DoSetCurrent();
-			m_timerQuery[0]->Initialise();
-			m_timerQuery[1]->Initialise();
-			m_timerQuery[1 - m_queryIndex]->Begin();
-			m_timerQuery[1 - m_queryIndex]->End();
-
 			m_colour.Initialise();
 			m_colourCube.Initialise();
 			m_colourLayer.Initialise();
@@ -89,14 +80,9 @@ namespace Castor3D
 		m_depthLayerCube.Cleanup();
 		m_cube.Cleanup();
 
-		m_timerQuery[0]->Cleanup();
-		m_timerQuery[1]->Cleanup();
 		DoEndCurrent();
 		DoDestroy();
 
-		m_bMultiSampling = false;
-		m_timerQuery[0].reset();
-		m_timerQuery[1].reset();
 		m_window = nullptr;
 		m_matrixUbo.GetUbo().Cleanup();
 	}
@@ -105,16 +91,10 @@ namespace Castor3D
 	{
 		DoSetCurrent();
 		GetRenderSystem()->SetCurrentContext( this );
-		m_timerQuery[m_queryIndex]->Begin();
 	}
 
 	void Context::EndCurrent()
 	{
-		m_timerQuery[m_queryIndex]->End();
-		m_queryIndex = 1 - m_queryIndex;
-		uint64_t time = 0;
-		m_timerQuery[m_queryIndex]->GetInfos( QueryInfo::eResult, time );
-		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( time ) );
 		GetRenderSystem()->SetCurrentContext( nullptr );
 		DoEndCurrent();
 	}
@@ -124,99 +104,99 @@ namespace Castor3D
 		DoSwapBuffers();
 	}
 
-	void Context::Barrier( MemoryBarriers const & p_barriers )
+	void Context::Barrier( MemoryBarriers const & barriers )
 	{
-		DoBarrier( p_barriers );
+		DoBarrier( barriers );
 	}
 
-	void Context::RenderTextureCube( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture )
+	void Context::RenderTextureCube( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
 	{
-		m_colourCube.Render( p_position
-			, p_size
-			, p_texture );
+		m_colourCube.Render( position
+			, size
+			, texture );
 	}
 
-	void Context::RenderTextureCube( Size const & p_size
-		, TextureLayout const & p_texture
-		, uint32_t p_index )
+	void Context::RenderTextureCube( Size const & size
+		, TextureLayout const & texture
+		, uint32_t index )
 	{
-		m_colourLayerCube.Render( p_size
-			, p_texture
-			, p_index );
+		m_colourLayerCube.Render( size
+			, texture
+			, index );
 	}
 
-	void Context::RenderTexture( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, RenderPipeline & p_pipeline
-		, MatrixUbo & p_matrixUbo )
+	void Context::RenderTexture( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, RenderPipeline & pipeline
+		, MatrixUbo & matrixUbo )
 	{
-		m_colour.Render( p_position
-			, p_size
-			, p_texture
-			, p_matrixUbo
-			, p_pipeline );
+		m_colour.Render( position
+			, size
+			, texture
+			, matrixUbo
+			, pipeline );
 	}
 
-	void Context::RenderTexture( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture )
+	void Context::RenderTexture( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
 	{
-		m_colour.Render( p_position
-			, p_size
-			, p_texture );
+		m_colour.Render( position
+			, size
+			, texture );
 	}
 
-	void Context::RenderTexture( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, uint32_t p_index )
+	void Context::RenderTexture( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, uint32_t index )
 	{
-		m_colourLayer.Render( p_position
-			, p_size
-			, p_texture
-			, p_index );
+		m_colourLayer.Render( position
+			, size
+			, texture
+			, index );
 	}
 
-	void Context::RenderDepthCube( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture )
+	void Context::RenderDepthCube( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
 	{
-		m_depthCube.Render( p_position
-			, p_size
-			, p_texture );
+		m_depthCube.Render( position
+			, size
+			, texture );
 	}
 
-	void Context::RenderDepthCube( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, uint32_t p_index )
+	void Context::RenderDepthCube( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, uint32_t index )
 	{
-		m_depthLayerCube.Render( p_position
-			, p_size
-			, p_texture
-			, p_index );
+		m_depthLayerCube.Render( position
+			, size
+			, texture
+			, index );
 	}
 
-	void Context::RenderDepth( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture )
+	void Context::RenderDepth( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
 	{
-		m_depth.Render( p_position
-			, p_size
-			, p_texture );
+		m_depth.Render( position
+			, size
+			, texture );
 	}
 
-	void Context::RenderDepth( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, uint32_t p_index )
+	void Context::RenderDepth( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, uint32_t index )
 	{
-		m_depthLayer.Render( p_position
-			, p_size
-			, p_texture
-			, p_index );
+		m_depthLayer.Render( position
+			, size
+			, texture
+			, index );
 	}
 }

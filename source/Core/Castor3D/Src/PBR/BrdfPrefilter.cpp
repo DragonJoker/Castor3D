@@ -1,4 +1,4 @@
-﻿#include "BrdfPrefilter.hpp"
+#include "BrdfPrefilter.hpp"
 
 #include "Engine.hpp"
 
@@ -22,11 +22,11 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	BrdfPrefilter::BrdfPrefilter( Engine & p_engine
+	BrdfPrefilter::BrdfPrefilter( Engine & engine
 		, Castor::Size const & p_size )
-		: OwnedBy< Engine >{ p_engine }
-		, m_matrixUbo{ p_engine }
-		, m_viewport{ p_engine }
+		: OwnedBy< Engine >{ engine }
+		, m_matrixUbo{ engine }
+		, m_viewport{ engine }
 		, m_bufferVertex
 		{
 			{
@@ -57,7 +57,6 @@ namespace Castor3D
 		m_viewport.Resize( m_size );
 		m_viewport.Update();
 		auto & program = *DoCreateProgram();
-		auto & engine = *GetEngine();
 		auto & renderSystem = *engine.GetRenderSystem();
 		program.Initialise();
 		m_vertexBuffer = std::make_shared< VertexBuffer >( engine

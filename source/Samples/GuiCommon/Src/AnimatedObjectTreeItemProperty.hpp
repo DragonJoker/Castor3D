@@ -43,16 +43,16 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_editable	Tells if the properties are modifiable.
 		 *\param[in]	p_light		The target AnimatedObject.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	p_light		L"AnimatedObject cible.
 		 */
-		AnimatedObjectTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectSPtr p_light );
+		AnimatedObjectTreeItemProperty( Castor3D::Engine * engine, bool p_editable, Castor3D::AnimatedObjectSPtr p_light );
 		/**
 		 *\~english
 		 *\brief		Destructor.

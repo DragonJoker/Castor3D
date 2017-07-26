@@ -14,7 +14,7 @@ namespace Castor3D
 
 	namespace
 	{
-		inline void DoFind( std::chrono::milliseconds const & p_time
+		inline void DoFind( Milliseconds const & p_time
 			, typename KeyFrameArray::const_iterator const & p_first
 			, typename KeyFrameArray::const_iterator const & p_last
 			, typename KeyFrameArray::const_iterator & p_prv
@@ -85,7 +85,7 @@ namespace Castor3D
 		m_children.push_back( p_object );
 	}
 
-	void SkeletonAnimationInstanceObject::Update( std::chrono::milliseconds const & p_time
+	void SkeletonAnimationInstanceObject::Update( Milliseconds const & p_time
 		, Matrix4x4r const & p_transformations )
 	{
 		if ( m_animationObject.HasKeyFrames() )

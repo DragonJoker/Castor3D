@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ComputePipeline::ComputePipeline( RenderSystem & p_renderSystem, ShaderProgram & p_program )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
+	ComputePipeline::ComputePipeline( RenderSystem & renderSystem, ShaderProgram & p_program )
+		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_program{ p_program }
 	{
 	}

@@ -28,7 +28,7 @@ namespace Castor3D
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
 		static String const ShadowMatrix = cuT( "c3d_mtxShadowMatrix" );
 
-		std::vector< TextureUnit > DoInitialisePoint( Engine & p_engine, Size const & p_size )
+		std::vector< TextureUnit > DoInitialisePoint( Engine & engine, Size const & p_size )
 		{
 			std::vector< TextureUnit > result;
 			String const name = cuT( "ShadowMap_Point_" );
@@ -37,13 +37,13 @@ namespace Castor3D
 			{
 				SamplerSPtr sampler;
 
-				if ( p_engine.GetSamplerCache().Has( name + string::to_string( i ) ) )
+				if ( engine.GetSamplerCache().Has( name + string::to_string( i ) ) )
 				{
-					sampler = p_engine.GetSamplerCache().Find( name + string::to_string( i ) );
+					sampler = engine.GetSamplerCache().Find( name + string::to_string( i ) );
 				}
 				else
 				{
-					sampler = p_engine.GetSamplerCache().Add( name + string::to_string( i ) );
+					sampler = engine.GetSamplerCache().Add( name + string::to_string( i ) );
 					sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 					sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 					sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
@@ -53,13 +53,13 @@ namespace Castor3D
 					sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 				}
 
-				auto texture = p_engine.GetRenderSystem()->CreateTexture(
+				auto texture = engine.GetRenderSystem()->CreateTexture(
 					TextureType::eCube,
 					AccessType::eNone,
 					AccessType::eRead | AccessType::eWrite,
 					PixelFormat::eL32F,
 					p_size );
-				result.emplace_back( p_engine );
+				result.emplace_back( engine );
 				TextureUnit & unit = result.back();
 				unit.SetTexture( texture );
 				unit.SetSampler( sampler );
@@ -74,9 +74,9 @@ namespace Castor3D
 		}
 	}
 
-	ShadowMapPoint::ShadowMapPoint( Engine & p_engine )
-		: ShadowMap{ p_engine }
-		, m_shadowMaps{ DoInitialisePoint( p_engine, Size{ 1024, 1024 } ) }
+	ShadowMapPoint::ShadowMapPoint( Engine & engine )
+		: ShadowMap{ engine }
+		, m_shadowMaps{ DoInitialisePoint( engine, Size{ 1024, 1024 } ) }
 	{
 	}
 
@@ -201,17 +201,17 @@ namespace Castor3D
 		return std::make_shared< ShadowMapPassPoint >( *GetEngine(), p_light, *this );
 	}
 
-	void ShadowMapPoint::DoUpdateFlags( TextureChannels & p_textureFlags
-		, ProgramFlags & p_programFlags
-		, SceneFlags & p_sceneFlags )const
+	void ShadowMapPoint::DoUpdateFlags( TextureChannels & textureFlags
+		, ProgramFlags & programFlags
+		, SceneFlags & sceneFlags )const
 	{
-		AddFlag( p_programFlags, ProgramFlag::eShadowMapPoint );
+		AddFlag( programFlags, ProgramFlag::eShadowMapPoint );
 	}
 
-	GLSL::Shader ShadowMapPoint::DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags
-		, SceneFlags const & p_sceneFlags
-		, ComparisonFunc p_alphaFunc )const
+	GLSL::Shader ShadowMapPoint::DoGetPixelShaderSource( TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, ComparisonFunc alphaFunc )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -224,14 +224,14 @@ namespace Castor3D
 
 		auto vtx_texture = writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_position = writer.DeclInput< Vec3 >( cuT( "vtx_position" ) );
-		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
+		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		// Fragment Outputs
 		auto pxl_fFragColor = writer.DeclFragData< Float >( cuT( "pxl_fFragColor" ), 0u );
 
 		auto main = [&]()
 		{
-			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+			if ( CheckFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
 				auto alpha = writer.DeclLocale( cuT( "alpha" ), texture( c3d_mapOpacity, vtx_texture.xy() ).r() );
 

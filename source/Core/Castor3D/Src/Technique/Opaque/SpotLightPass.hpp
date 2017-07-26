@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -56,18 +56,18 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	p_engine	The engine.
-			 *\param[in]	p_vtx		The vertex shader source.
-			 *\param[in]	p_pxl		The fragment shader source.
+			 *\param[in]	engine	The engine.
+			 *\param[in]	vtx		The vertex shader source.
+			 *\param[in]	pxl		The fragment shader source.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	p_engine	Le moteur.
-			 *\param[in]	p_vtx		Le source du vertex shader.
-			 *\param[in]	p_pxl		Le source du fagment shader.
+			 *\param[in]	engine	Le moteur.
+			 *\param[in]	vtx		Le source du vertex shader.
+			 *\param[in]	pxl		Le source du fagment shader.
 			 */
-			Program( Engine & p_engine
-				, GLSL::Shader const & p_vtx
-				, GLSL::Shader const & p_pxl );
+			Program( Engine & engine
+				, GLSL::Shader const & vtx
+				, GLSL::Shader const & pxl );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -80,7 +80,7 @@ namespace Castor3D
 			/**
 			 *\copydoc		Castor3D::LightPass::Program::DoBind
 			 */
-			void DoBind( Light const & p_light )override;
+			void DoBind( Light const & light )override;
 
 		private:
 			//!\~english	The variable containing the light position.
@@ -107,21 +107,24 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
-		 *\param[in]	p_frameBuffer	The target framebuffer.
-		 *\param[in]	p_depthAttach	The depth buffer attach.
-		 *\param[in]	p_shadows		Tells if shadows are enabled for this light pass.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	frameBuffer	The target framebuffer.
+		 *\param[in]	depthAttach	The depth buffer attach.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	hasShadows	Tells if shadows are enabled for this light pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
-		 *\param[in]	p_depthAttach	L'attache du tampon de profondeur.
-		 *\param[in]	p_shadows		Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	frameBuffer	Le tampon d'image cible.
+		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
-		SpotLightPass( Engine & p_engine
-			, FrameBuffer & p_frameBuffer
-			, FrameBufferAttachment & p_depthAttach
-			, bool p_shadows );
+		SpotLightPass( Engine & engine
+			, FrameBuffer & frameBuffer
+			, FrameBufferAttachment & depthAttach
+			, GpInfoUbo & gpInfoUbo
+			, bool hasShadows );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -134,8 +137,8 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::LightPass::DoCreateProgram
 		 */
-		LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & p_vtx
-			, GLSL::Shader const & p_pxl )const override;
+		LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & vtx
+			, GLSL::Shader const & pxl )const override;
 		/**
 		 *\copydoc		Castor3D::MeshLightPass::DoGenerateVertices
 		 */
@@ -147,8 +150,8 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::MeshLightPass::DoComputeModelMatrix
 		 */
-		Castor::Matrix4x4r DoComputeModelMatrix( Light const & p_light
-			, Camera const & p_camera )const override;
+		Castor::Matrix4x4r DoComputeModelMatrix( Light const & light
+			, Camera const & camera )const override;
 	};
 }
 

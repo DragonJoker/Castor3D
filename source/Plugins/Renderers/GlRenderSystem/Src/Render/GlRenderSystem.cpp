@@ -76,8 +76,8 @@ namespace GlRender
 	String GlRenderSystem::Name = cuT( "OpenGL Renderer" );
 	String GlRenderSystem::Type = cuT( "opengl" );
 
-	GlRenderSystem::GlRenderSystem( Engine & p_engine )
-		: RenderSystem( p_engine, Name )
+	GlRenderSystem::GlRenderSystem( Engine & engine )
+		: RenderSystem( engine, Name )
 		, m_openGlMajor( 0 )
 		, m_openGlMinor( 0 )
 		, m_useVertexBufferObjects( false )
@@ -90,9 +90,9 @@ namespace GlRender
 	{
 	}
 
-	RenderSystemUPtr GlRenderSystem::Create( Engine & p_engine )
+	RenderSystemUPtr GlRenderSystem::Create( Engine & engine )
 	{
-		return std::make_unique< GlRenderSystem >( p_engine );
+		return std::make_unique< GlRenderSystem >( engine );
 	}
 
 	bool GlRenderSystem::InitOpenGlExtensions()

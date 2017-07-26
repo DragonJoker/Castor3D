@@ -40,9 +40,9 @@ namespace GlRender
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 */
-		GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
+		GlShaderProgram( OpenGl & p_gl, GlRenderSystem & renderSystem );
 		/**
 		 *\brief		Destructor.
 		 */

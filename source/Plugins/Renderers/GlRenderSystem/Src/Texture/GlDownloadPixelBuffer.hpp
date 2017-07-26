@@ -35,7 +35,7 @@ namespace GlRender
 		: public GlGpuIoBuffer
 	{
 	public:
-		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint32_t p_pixelsSize );
+		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * renderSystem, uint32_t p_pixelsSize );
 		virtual ~GlDownloadPixelBuffer();
 
 	private:

@@ -12,8 +12,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SceneUbo::SceneUbo( Engine & p_engine )
-		: m_ubo{ ShaderProgram::BufferScene, *p_engine.GetRenderSystem() }
+	SceneUbo::SceneUbo( Engine & engine )
+		: m_ubo{ ShaderProgram::BufferScene, *engine.GetRenderSystem() }
 		, m_ambientLight{ *m_ubo.CreateUniform< UniformType::eVec4f >( ShaderProgram::AmbientLight ) }
 		, m_backgroundColour{ *m_ubo.CreateUniform< UniformType::eVec4f >( ShaderProgram::BackgroundColour ) }
 		, m_lightsCount{ *m_ubo.CreateUniform< UniformType::eVec4i >( ShaderProgram::LightsCount ) }

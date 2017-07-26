@@ -51,14 +51,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_font		The font.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_font		La police.
 		 */
-		C3D_API FontTexture( Engine & p_engine, Castor::FontSPtr p_font );
+		C3D_API FontTexture( Engine & engine, Castor::FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Destructor.

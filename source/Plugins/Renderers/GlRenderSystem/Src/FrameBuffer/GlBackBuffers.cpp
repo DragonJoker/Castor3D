@@ -9,9 +9,9 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlBackBuffers::GlBackBuffers( OpenGl & p_gl, Engine & p_engine )
+	GlBackBuffers::GlBackBuffers( OpenGl & p_gl, Engine & engine )
 		: Holder( p_gl )
-		, BackBuffers( p_engine )
+		, BackBuffers( engine )
 	{
 	}
 

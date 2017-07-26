@@ -13,7 +13,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlFrameBuffer::GlFrameBuffer( OpenGl & p_gl, Engine & p_engine )
+	GlFrameBuffer::GlFrameBuffer( OpenGl & p_gl, Engine & engine )
 		: BindableType( p_gl,
 						"GlFrameBuffer",
 						std::bind( &OpenGl::GenFramebuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -23,7 +23,7 @@ namespace GlRender
 						{
 							return p_gl.BindFramebuffer( m_bindingMode, p_glName );
 						} )
-		, FrameBuffer( p_engine )
+		, FrameBuffer( engine )
 	{
 	}
 

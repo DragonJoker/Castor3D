@@ -21,10 +21,10 @@ namespace Castor3D
 {
 	//*********************************************************************************************
 
-	MeshLightPass::Program::Program( Engine & p_engine
-		, GLSL::Shader const & p_vtx
-		, GLSL::Shader const & p_pxl )
-		: LightPass::Program{ p_engine, p_vtx, p_pxl }
+	MeshLightPass::Program::Program( Engine & engine
+		, GLSL::Shader const & vtx
+		, GLSL::Shader const & pxl )
+		: LightPass::Program{ engine, vtx, pxl }
 		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 	{
 	}
@@ -33,7 +33,7 @@ namespace Castor3D
 	{
 	}
 
-	RenderPipelineUPtr MeshLightPass::Program::DoCreatePipeline( bool p_blend )
+	RenderPipelineUPtr MeshLightPass::Program::DoCreatePipeline( bool blend )
 	{
 		RasteriserState rsstate;
 		rsstate.SetCulledFaces( Culling::eFront );
@@ -47,7 +47,7 @@ namespace Castor3D
 
 		BlendState blstate;
 
-		if ( p_blend )
+		if ( blend )
 		{
 			blstate.EnableBlend( true );
 			blstate.SetRgbBlendOp( BlendOperation::eAdd );
@@ -65,15 +65,16 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	MeshLightPass::MeshLightPass( Engine & p_engine
-		, FrameBuffer & p_frameBuffer
-		, FrameBufferAttachment & p_depthAttach
-		, LightType p_type
-		, bool p_shadows )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
-		, m_modelMatrixUbo{ p_engine }
-		, m_stencilPass{ p_frameBuffer, p_depthAttach, m_matrixUbo, m_modelMatrixUbo }
-		, m_type{ p_type }
+	MeshLightPass::MeshLightPass( Engine & engine
+		, FrameBuffer & frameBuffer
+		, FrameBufferAttachment & depthAttach
+		, GpInfoUbo & gpInfoUbo
+		, LightType type
+		, bool hasShadows )
+		: LightPass{ engine, frameBuffer, depthAttach, gpInfoUbo, hasShadows }
+		, m_modelMatrixUbo{ engine }
+		, m_stencilPass{ frameBuffer, depthAttach, m_matrixUbo, m_modelMatrixUbo }
+		, m_type{ type }
 	{
 	}
 
@@ -88,8 +89,8 @@ namespace Castor3D
 		m_vertexBuffer.reset();
 	}
 
-	void MeshLightPass::Initialise( Scene const & p_scene
-		, SceneUbo & p_sceneUbo )
+	void MeshLightPass::Initialise( Scene const & scene
+		, SceneUbo & sceneUbo )
 	{
 		auto declaration = BufferDeclaration(
 		{
@@ -116,11 +117,11 @@ namespace Castor3D
 		m_stencilPass.Initialise( *m_vertexBuffer
 			, m_indexBuffer );
 
-		DoInitialise( p_scene
+		DoInitialise( scene
 			, m_type
 			, *m_vertexBuffer
 			, m_indexBuffer
-			, p_sceneUbo
+			, sceneUbo
 			, &m_modelMatrixUbo );
 	}
 
@@ -134,18 +135,18 @@ namespace Castor3D
 		return m_indexBuffer->GetSize();
 	}
 
-	void MeshLightPass::DoUpdate( Size const & p_size
-		, Light const & p_light
-		, Camera const & p_camera )
+	void MeshLightPass::DoUpdate( Size const & size
+		, Light const & light
+		, Camera const & camera )
 	{
-		auto model = DoComputeModelMatrix( p_light, p_camera );
-		m_matrixUbo.Update( p_camera.GetView(), p_camera.GetViewport().GetProjection() );
+		auto model = DoComputeModelMatrix( light, camera );
+		m_matrixUbo.Update( camera.GetView(), camera.GetViewport().GetProjection() );
 		m_modelMatrixUbo.Update( model );
-		p_camera.Apply();
+		camera.Apply();
 		m_stencilPass.Render( m_indexBuffer->GetSize() );
 	}
 	
-	GLSL::Shader MeshLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
+	GLSL::Shader MeshLightPass::DoGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = m_engine.GetRenderSystem()->CreateGlslWriter();

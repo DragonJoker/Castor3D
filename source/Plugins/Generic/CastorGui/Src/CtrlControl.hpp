@@ -49,7 +49,7 @@ namespace CastorGui
 		/** Constructor.
 		 *\param[in]	p_name		The control name.
 		 *\param[in]	p_type		The type.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_parent	The parent control, if any.
 		 *\param[in]	p_id		The control ID.
 		 *\param[in]	p_position	The position.
@@ -59,7 +59,7 @@ namespace CastorGui
 		 */
 		Control( ControlType p_type
 			, Castor::String const & p_name
-			, Castor3D::Engine & p_engine
+			, Castor3D::Engine & engine
 			, ControlRPtr p_parent
 			, uint32_t p_id
 			, Castor::Position const & p_position

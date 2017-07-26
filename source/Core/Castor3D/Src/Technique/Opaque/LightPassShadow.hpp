@@ -97,40 +97,40 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture from the shadow map.
-		 *\param[in]	p_shadowMap	The shadow map.
+		 *\param[in]	shadowMap	The shadow map.
 		 *\return		The shadow map texture.
 		 *\~french
 		 *\brief		Récupère la texture d'une shadow map.
-		 *\param[in]	p_shadowMap	La shadow map.
+		 *\param[in]	shadowMap	La shadow map.
 		 *\return		Le nom de la shadow map.
 		 */
-		static TextureUnit & GetTexture( shadow_pass_type & p_shadowMap )
+		static TextureUnit & GetTexture( shadow_pass_type & shadowMap )
 		{
-			return p_shadowMap.GetTexture();
+			return shadowMap.GetTexture();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the typed light source from a generic one.
-		 *\param[in]	p_light	The generic light source.
+		 *\param[in]	light	The generic light source.
 		 *\return		The typed light source.
 		 *\~french
 		 *\brief		Récupère la source lumineuse typée depuis une générique.
-		 *\param[in]	p_light	La source lumineuse générique.
+		 *\param[in]	light	La source lumineuse générique.
 		 *\return		La source lumineuse typée.
 		 */
-		static light_type const & GetTypedLight( Light const & p_light )
+		static light_type const & GetTypedLight( Light const & light )
 		{
-			return *p_light.GetDirectionalLight();
+			return *light.GetDirectionalLight();
 		}
 
 #if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
-		static void DebugDisplay( TextureUnit & p_shadowMap )
+		static void DebugDisplay( TextureUnit & shadowMap )
 		{
 			Castor::Size size{ 256u, 256u };
-			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), int32_t( size.height() ) }
+			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), int32_t( size.height() ) }
 				, size
-				, *p_shadowMap.GetTexture() );
+				, *shadowMap.GetTexture() );
 			++g_index;
 		}
 
@@ -173,40 +173,40 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture from the shadow map.
-		 *\param[in]	p_shadowMap	The shadow map.
+		 *\param[in]	shadowMap	The shadow map.
 		 *\return		The shadow map texture.
 		 *\~french
 		 *\brief		Récupère la texture d'une shadow map.
-		 *\param[in]	p_shadowMap	La shadow map.
+		 *\param[in]	shadowMap	La shadow map.
 		 *\return		Le nom de la shadow map.
 		 */
-		static TextureUnit & GetTexture( shadow_pass_type & p_shadowMap )
+		static TextureUnit & GetTexture( shadow_pass_type & shadowMap )
 		{
-			return p_shadowMap.GetTexture();
+			return shadowMap.GetTexture();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the typed light source from a generic one.
-		 *\param[in]	p_light	The generic light source.
+		 *\param[in]	light	The generic light source.
 		 *\return		The typed light source.
 		 *\~french
 		 *\brief		Récupère la source lumineuse typée depuis une générique.
-		 *\param[in]	p_light	La source lumineuse générique.
+		 *\param[in]	light	La source lumineuse générique.
 		 *\return		La source lumineuse typée.
 		 */
-		static light_type const & GetTypedLight( Light const & p_light )
+		static light_type const & GetTypedLight( Light const & light )
 		{
-			return *p_light.GetPointLight();
+			return *light.GetPointLight();
 		}
 
 #if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
-		static void DebugDisplay( TextureUnit & p_shadowMap )
+		static void DebugDisplay( TextureUnit & shadowMap )
 		{
 			Castor::Size size{ 128u, 128u };
-			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( Castor::Position{ 0, int32_t( g_index * 3 * size.height() ) }
+			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( Castor::Position{ 0, int32_t( g_index * 3 * size.height() ) }
 				, size
-				, *p_shadowMap.GetTexture() );
+				, *shadowMap.GetTexture() );
 			++g_index;
 		}
 
@@ -249,40 +249,40 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture from the shadow map.
-		 *\param[in]	p_shadowMap	The shadow map.
+		 *\param[in]	shadowMap	The shadow map.
 		 *\return		The shadow map texture.
 		 *\~french
 		 *\brief		Récupère la texture d'une shadow map.
-		 *\param[in]	p_shadowMap	La shadow map.
+		 *\param[in]	shadowMap	La shadow map.
 		 *\return		Le nom de la shadow map.
 		 */
-		static TextureUnit & GetTexture( shadow_pass_type & p_shadowMap )
+		static TextureUnit & GetTexture( shadow_pass_type & shadowMap )
 		{
-			return p_shadowMap.GetTexture();
+			return shadowMap.GetTexture();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the typed light source from a generic one.
-		 *\param[in]	p_light	The generic light source.
+		 *\param[in]	light	The generic light source.
 		 *\return		The typed light source.
 		 *\~french
 		 *\brief		Récupère la source lumineuse typée depuis une générique.
-		 *\param[in]	p_light	La source lumineuse générique.
+		 *\param[in]	light	La source lumineuse générique.
 		 *\return		La source lumineuse typée.
 		 */
-		static light_type const & GetTypedLight( Light const & p_light )
+		static light_type const & GetTypedLight( Light const & light )
 		{
-			return *p_light.GetSpotLight();
+			return *light.GetSpotLight();
 		}
 
 #if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
 
-		static void DebugDisplay( TextureUnit & p_shadowMap )
+		static void DebugDisplay( TextureUnit & shadowMap )
 		{
 			Castor::Size size{ 256u, 256u };
-			p_shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), 0 }
+			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), 0 }
 				, size
-				, *p_shadowMap.GetTexture() );
+				, *shadowMap.GetTexture() );
 			++g_index;
 		}
 
@@ -327,19 +327,19 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	p_engine	The engine.
-			 *\param[in]	p_vtx		The vertex shader source.
-			 *\param[in]	p_pxl		The fragment shader source.
+			 *\param[in]	engine	The engine.
+			 *\param[in]	vtx		The vertex shader source.
+			 *\param[in]	pxl		The fragment shader source.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	p_engine	Le moteur.
-			 *\param[in]	p_vtx		Le source du vertex shader.
-			 *\param[in]	p_pxl		Le source du fagment shader.
+			 *\param[in]	engine	Le moteur.
+			 *\param[in]	vtx		Le source du vertex shader.
+			 *\param[in]	pxl		Le source du fagment shader.
 			 */
-			Program( Engine & p_engine
-				, GLSL::Shader const & p_vtx
-				, GLSL::Shader const & p_pxl )
-				: my_program_type( p_engine, p_vtx, p_pxl )
+			Program( Engine & engine
+				, GLSL::Shader const & vtx
+				, GLSL::Shader const & pxl )
+				: my_program_type( engine, vtx, pxl )
 			{
 				this->m_program->template CreateUniform< UniformType::eSampler >( my_traits::GetName()
 					, ShaderType::ePixel )->SetValue( int( DsTexture::eCount ) );
@@ -350,77 +350,66 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
-		 *\param[in]	p_frameBuffer	The target framebuffer.
-		 *\param[in]	p_depthAttach	The depth buffer attach.
-		 *\param[in]	p_shadowMap		The shadow map.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	frameBuffer	The target framebuffer.
+		 *\param[in]	depthAttach	The depth buffer attach.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	shadowMap		The shadow map.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
-		 *\param[in]	p_depthAttach	L'attache du tampon de profondeur.
-		 *\param[in]	p_shadowMap		La map d'ombre.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	frameBuffer	Le tampon d'image cible.
+		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	shadowMap	La map d'ombre.
 		 */
-		LightPassShadow( Engine & p_engine
-			, FrameBuffer & p_frameBuffer
-			, FrameBufferAttachment & p_depthAttach
-			, my_shadow_map_type & p_shadowMap )
-			: my_pass_type{ p_engine
-				, p_frameBuffer
-				, p_depthAttach
+		LightPassShadow( Engine & engine
+			, FrameBuffer & frameBuffer
+			, FrameBufferAttachment & depthAttach
+			, GpInfoUbo & gpInfoUbo
+			, my_shadow_map_type & shadowMap )
+			: my_pass_type{ engine
+				, frameBuffer
+				, depthAttach
+				, gpInfoUbo
 				, true }
-			, m_shadowMap{ p_shadowMap }
-			, m_shadowMapTexture{ my_traits::GetTexture( p_shadowMap ) }
+			, m_shadowMap{ shadowMap }
+			, m_shadowMapTexture{ my_traits::GetTexture( shadowMap ) }
 		{
 			m_shadowMapTexture.SetIndex( uint32_t( DsTexture::eCount ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the light pass on currently bound framebuffer.
-		 *\param[in]	p_size			The render area dimensions.
-		 *\param[in]	p_gp			The geometry pass result.
-		 *\param[in]	p_light			The light.
-		 *\param[in]	p_camera		The viewing camera.
-		 *\param[in]	p_invViewProj	The inverse view projection matrix.
-		 *\param[in]	p_invView		The inverse view matrix.
-		 *\param[in]	p_invProj		The inverse projection matrix.
-		 *\param[in]	p_first			Tells if this is the first light pass (\p true) or not (\p false).
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	gp		The geometry pass result.
+		 *\param[in]	light	The light.
+		 *\param[in]	camera	The viewing camera.
+		 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
 		 *\~french
 		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
-		 *\param[in]	p_size			Les dimensions de la zone de rendu.
-		 *\param[in]	p_gp			Le résultat de la geometry pass.
-		 *\param[in]	p_light			La source lumineuse.
-		 *\param[in]	p_camera		La caméra.
-		 *\param[in]	p_invViewProj	La matrice vue projection inversée.
-		 *\param[in]	p_invView		La matrice vue inversée.
-		 *\param[in]	p_invProj		La matrice projection inversée.
-		 *\param[in]	p_first			Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	gp		Le résultat de la geometry pass.
+		 *\param[in]	light	La source lumineuse.
+		 *\param[in]	camera	La caméra.
+		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 		 */
-		void Render( Castor::Size const & p_size
-			, GeometryPassResult const & p_gp
-			, Light const & p_light
-			, Camera const & p_camera
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj
-			, bool p_first )override
+		void Render( Castor::Size const & size
+			, GeometryPassResult const & gp
+			, Light const & light
+			, Camera const & camera
+			, bool first )override
 		{
-			this->m_gpInfo->Update( p_size
-				, p_camera
-				, p_invViewProj
-				, p_invView
-				, p_invProj );
-
-			m_shadowMap.Render( my_traits::GetTypedLight( p_light ) );
-			my_pass_type::DoUpdate( p_size
-				, p_light
-				, p_camera );
+			m_shadowMap.Render( my_traits::GetTypedLight( light ) );
+			my_pass_type::DoUpdate( size
+				, light
+				, camera );
 			m_shadowMapTexture.Bind();
-			this->m_program->Bind( p_light );
-			my_pass_type::DoRender( p_size
-				, p_gp
-				, p_light.GetColour()
-				, p_first );
+			this->m_program->Bind( light );
+			my_pass_type::DoRender( size
+				, gp
+				, light.GetColour()
+				, first );
 
 			m_shadowMapTexture.Unbind();
 
@@ -437,12 +426,12 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::LightPass::DoCreateProgram
 		 */
-		typename LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & p_vtx
-			, GLSL::Shader const & p_pxl )const override
+		typename LightPass::ProgramPtr DoCreateProgram( GLSL::Shader const & vtx
+			, GLSL::Shader const & pxl )const override
 		{
 			return std::make_unique< LightPassShadow::Program >( this->m_engine
-				, p_vtx
-				, p_pxl );
+				, vtx
+				, pxl );
 		}
 
 	private:

@@ -37,7 +37,7 @@ namespace GuiCommon
 		SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~SceneObjectsList();
 
-		void LoadScene( Castor3D::Engine * p_engine, Castor3D::SceneSPtr p_scene );
+		void LoadScene( Castor3D::Engine * engine, Castor3D::SceneSPtr p_scene );
 		void UnloadScene();
 
 	protected:
@@ -56,7 +56,7 @@ namespace GuiCommon
 		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
-		Castor3D::SceneWPtr m_pScene;
+		Castor3D::SceneWPtr m_scene;
 		Castor3D::Engine * m_engine;
 		PropertiesHolder * m_propertiesHolder;
 	};

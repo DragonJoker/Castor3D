@@ -65,9 +65,9 @@ namespace Castor3D
 
 	const Castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
 
-	Material::Material( String const & p_name, Engine & p_engine, MaterialType p_type )
+	Material::Material( String const & p_name, Engine & engine, MaterialType p_type )
 		: Resource< Material >( p_name )
-		, OwnedBy< Engine >( p_engine )
+		, OwnedBy< Engine >( engine )
 		, m_type{ p_type }
 	{
 	}

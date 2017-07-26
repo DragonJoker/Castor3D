@@ -11,8 +11,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	FrameBuffer::FrameBuffer( Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+	FrameBuffer::FrameBuffer( Engine & engine )
+		: OwnedBy< Engine >( engine )
 	{
 	}
 

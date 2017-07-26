@@ -28,7 +28,7 @@ namespace GuiCommon
 	namespace
 	{
 		template< typename TObj, typename TKey >
-		bool ParseCollection( Engine * p_engine, Collection< TObj, TKey > & p_collection, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		bool ParseCollection( Engine * engine, Collection< TObj, TKey > & p_collection, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
 			bool result = true;
 			p_collection.lock();
@@ -45,7 +45,7 @@ namespace GuiCommon
 		}
 
 		template< typename TObj, typename TKey >
-		bool ParseManager( Engine * p_engine, Cache< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		bool ParseManager( Engine * engine, Cache< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
 			bool result = true;
 			auto lock = make_unique_lock( p_manager );

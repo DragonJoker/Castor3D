@@ -23,10 +23,10 @@ using namespace Castor3D;
 
 namespace GlRender
 {
-	GlContext::GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl )
-		: Context{ p_renderSystem }
+	GlContext::GlContext( GlRenderSystem & renderSystem, OpenGl & p_gl )
+		: Context{ renderSystem }
 		, Holder{ p_gl }
-		, m_glRenderSystem{ &p_renderSystem }
+		, m_glRenderSystem{ &renderSystem }
 		, m_implementation{ std::make_unique< GlContextImpl >( GetOpenGl(), this ) }
 	{
 	}

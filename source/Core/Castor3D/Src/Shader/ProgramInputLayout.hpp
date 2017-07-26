@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		C3D_API explicit ProgramInputLayout( RenderSystem & p_renderSystem );
+		C3D_API explicit ProgramInputLayout( RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.

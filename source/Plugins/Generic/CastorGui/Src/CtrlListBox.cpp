@@ -26,11 +26,11 @@ using namespace Castor3D;
 namespace CastorGui
 {
 	ListBoxCtrl::ListBoxCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id )
 		: ListBoxCtrl( p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, StringArray()
@@ -43,7 +43,7 @@ namespace CastorGui
 	}
 
 	ListBoxCtrl::ListBoxCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id
 		, StringArray const & p_values
@@ -54,7 +54,7 @@ namespace CastorGui
 		, bool p_visible )
 		: Control( ControlType::eListBox
 			, p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, p_position

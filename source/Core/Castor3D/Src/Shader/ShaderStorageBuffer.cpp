@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ShaderStorageBuffer::ShaderStorageBuffer( Engine & p_engine )
-		: CpuBuffer< uint8_t >{ p_engine }
+	ShaderStorageBuffer::ShaderStorageBuffer( Engine & engine )
+		: CpuBuffer< uint8_t >{ engine }
 	{
 	}
 

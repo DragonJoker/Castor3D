@@ -43,7 +43,7 @@ namespace GuiCommon
 		}	eID;
 
 	public:
-		RendererSelector( Castor3D::Engine * p_engine, wxWindow * p_parent, wxString const & p_strTitle );
+		RendererSelector( Castor3D::Engine * engine, wxWindow * p_parent, wxString const & p_strTitle );
 		virtual ~RendererSelector();
 
 		Castor::String GetSelectedRenderer()const;

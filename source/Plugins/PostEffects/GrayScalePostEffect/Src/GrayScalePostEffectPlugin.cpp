@@ -36,14 +36,14 @@ extern "C"
 		*p_name = GrayScale::GrayScalePostEffect::Name.c_str();
 	}
 
-	C3D_GrayScale_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	C3D_GrayScale_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
 	{
-		p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( GrayScale::GrayScalePostEffect::Type
+		engine->GetRenderTargetCache().GetPostEffectFactory().Register( GrayScale::GrayScalePostEffect::Type
 			, &GrayScale::GrayScalePostEffect::Create );
 	}
 
-	C3D_GrayScale_API void OnUnload( Castor3D::Engine * p_engine )
+	C3D_GrayScale_API void OnUnload( Castor3D::Engine * engine )
 	{
-		p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( GrayScale::GrayScalePostEffect::Type );
+		engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( GrayScale::GrayScalePostEffect::Type );
 	}
 }

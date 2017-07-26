@@ -118,7 +118,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La longueur de l'animation.
 		 */
-		inline std::chrono::milliseconds const & GetLength()const
+		inline Castor::Milliseconds const & GetLength()const
 		{
 			return m_length;
 		}
@@ -138,7 +138,7 @@ namespace Castor3D
 		AnimationType m_type{ AnimationType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
-		std::chrono::milliseconds m_length{ 0 };
+		Castor::Milliseconds m_length{ 0 };
 
 		friend class BinaryWriter< Animation >;
 		friend class BinaryParser< Animation >;

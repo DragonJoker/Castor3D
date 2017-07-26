@@ -30,6 +30,27 @@ namespace Castor3D
 {
 	/*!
 	\author		Sylvain DOREMUS
+	\version	0.10.0
+	\date		24/07/2017
+	\~english
+	\brief		Holds various render times.
+	\~french
+	\brief		Contient les divers temps de rendu.
+	*/
+	struct RenderTimes
+	{
+		//!\~english	The render pass name.
+		//!\~french		Le nom de la passe de rendu.
+		Castor::String m_name;
+		//!\~english	The render pass GPU time.
+		//!\~french		Le temps GPU de la passe de rendu.
+		Castor::Nanoseconds m_gpu;
+		//!\~english	The render pass CPU time.
+		//!\~french		Le temps CPU de la passe de rendu.
+		Castor::Nanoseconds m_cpu;
+	};
+	/*!
+	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		22/06/2017
 	\~english
@@ -57,6 +78,9 @@ namespace Castor3D
 		//!\~english	The draw calls count.
 		//!\~french		Le nombre d'appels aux fonctions de dessin.
 		uint32_t m_drawCalls{ 0u };
+		//!\~english	The render times.
+		//!\~french		Les temps de rendu.
+		std::vector< RenderTimes > m_times;
 	};
 }
 

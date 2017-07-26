@@ -445,14 +445,14 @@ namespace GlRender
 	}
 
 	GlRenderPipeline::GlRenderPipeline( OpenGl & p_gl
-		, GlRenderSystem & p_renderSystem
+		, GlRenderSystem & renderSystem
 		, DepthStencilState && p_dsState
 		, RasteriserState && p_rsState
 		, BlendState && p_bdState
 		, MultisampleState && p_msState
 		, ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
-		: RenderPipeline{ p_renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags }
+		: RenderPipeline{ renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags }
 		, Holder{ p_gl }
 	{
 	}

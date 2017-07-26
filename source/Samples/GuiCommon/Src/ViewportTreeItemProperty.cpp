@@ -30,8 +30,8 @@ namespace GuiCommon
 		static wxString PROPERTY_VIEWPORT_RATIO = _( "Ratio" );
 	}
 
-	ViewportTreeItemProperty::ViewportTreeItemProperty( bool p_editable, Castor3D::Engine & p_engine, Castor3D::Viewport & p_viewport )
-		: TreeItemProperty( &p_engine, p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
+	ViewportTreeItemProperty::ViewportTreeItemProperty( bool p_editable, Castor3D::Engine & engine, Castor3D::Viewport & p_viewport )
+		: TreeItemProperty( &engine, p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
 		, m_viewport( p_viewport )
 	{
 		PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );

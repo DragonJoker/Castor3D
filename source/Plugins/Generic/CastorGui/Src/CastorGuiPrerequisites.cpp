@@ -18,9 +18,9 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	MaterialSPtr CreateMaterial( Engine & p_engine, String const & p_name, Colour const & p_colour )
+	MaterialSPtr CreateMaterial( Engine & engine, String const & p_name, Colour const & p_colour )
 	{
-		auto & cache = p_engine.GetMaterialCache();
+		auto & cache = engine.GetMaterialCache();
 		MaterialSPtr result;
 
 		if ( cache.Has( p_name ) )
@@ -38,9 +38,9 @@ namespace CastorGui
 		return result;
 	}
 
-	MaterialSPtr CreateMaterial( Engine & p_engine, String const & p_name, TextureLayoutSPtr p_texture )
+	MaterialSPtr CreateMaterial( Engine & engine, String const & p_name, TextureLayoutSPtr p_texture )
 	{
-		auto & cache = p_engine.GetMaterialCache();
+		auto & cache = engine.GetMaterialCache();
 		MaterialSPtr result;
 
 		if ( cache.Has( p_name ) )
@@ -59,7 +59,7 @@ namespace CastorGui
 
 		if ( pass->GetTextureUnitsCount() == 0 )
 		{
-			auto unit = std::make_shared< TextureUnit >( p_engine );
+			auto unit = std::make_shared< TextureUnit >( engine );
 			unit->SetChannel( TextureChannel::eDiffuse );
 			pass->AddTextureUnit( unit );
 		}

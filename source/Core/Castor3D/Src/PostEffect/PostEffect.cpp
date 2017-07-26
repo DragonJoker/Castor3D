@@ -13,8 +13,8 @@ namespace Castor3D
 {
 	//*********************************************************************************************
 
-	PostEffect::PostEffectSurface::PostEffectSurface( Engine & p_engine )
-		: m_colourTexture( p_engine )
+	PostEffect::PostEffectSurface::PostEffectSurface( Engine & engine )
+		: m_colourTexture( engine )
 	{
 	}
 
@@ -65,8 +65,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	PostEffect::PostEffect( String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_param ) )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
+	PostEffect::PostEffect( String const & p_name, RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & CU_PARAM_UNUSED( p_param ) )
+		: OwnedBy< RenderSystem >{ renderSystem }
 		, Named{ p_name }
 		, m_renderTarget{ p_renderTarget }
 	{

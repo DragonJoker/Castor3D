@@ -18,11 +18,11 @@ using namespace Castor3D;
 namespace CastorGui
 {
 	EditCtrl::EditCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id )
 		: EditCtrl( p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, String()
@@ -34,7 +34,7 @@ namespace CastorGui
 	}
 
 	EditCtrl::EditCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id
 		, String const & p_caption
@@ -44,7 +44,7 @@ namespace CastorGui
 		, bool p_visible )
 		: Control( ControlType::eEdit
 			, p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, p_position

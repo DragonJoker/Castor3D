@@ -1,24 +1,25 @@
-#include "SsaoPass.hpp"
+﻿#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
-#include <Engine.hpp>
-#include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
-#include <Mesh/Buffer/BufferElementGroup.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Camera.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/DepthStencilState.hpp>
-#include <State/MultisampleState.hpp>
-#include <State/RasteriserState.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include "Engine.hpp"
+#include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/TextureAttachment.hpp"
+#include "Mesh/Buffer/BufferElementGroup.hpp"
+#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Render/RenderPassTimer.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
+#include "State/RasteriserState.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
 
 #include <GlslSource.hpp>
 #include <GlslLight.hpp>
@@ -62,7 +63,7 @@ namespace Castor3D
 			return result;
 		}
 
-		VertexBufferSPtr DoCreateVbo( Engine & p_engine )
+		VertexBufferSPtr DoCreateVbo( Engine & engine )
 		{
 			auto declaration = BufferDeclaration(
 			{
@@ -80,8 +81,8 @@ namespace Castor3D
 				1, 1, 1, 1
 			};
 
-			auto & renderSystem = *p_engine.GetRenderSystem();
-			auto vertexBuffer = std::make_shared< VertexBuffer >( p_engine, declaration );
+			auto & renderSystem = *engine.GetRenderSystem();
+			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
 			uint32_t stride = declaration.stride();
 			vertexBuffer->Resize( uint32_t( sizeof( data ) ) );
 			uint8_t * buffer = vertexBuffer->GetData();
@@ -91,7 +92,7 @@ namespace Castor3D
 			return vertexBuffer;
 		}
 
-		TextureUnit DoGetNoise( Engine & p_engine )
+		TextureUnit DoGetNoise( Engine & engine )
 		{
 			constexpr uint32_t size = 16;
 			std::uniform_real_distribution< float > distribution( 0.0f, 1.0f );
@@ -111,27 +112,27 @@ namespace Castor3D
 				, reinterpret_cast< uint8_t const * >( noise[0].const_ptr() )
 				, PixelFormat::eRGB32F );
 
-			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead );
 			texture->SetSource( buffer );
 
 			SamplerSPtr sampler;
 
-			if ( p_engine.GetSamplerCache().Has( cuT( "SSAO_Noise" ) ) )
+			if ( engine.GetSamplerCache().Has( cuT( "SSAO_Noise" ) ) )
 			{
-				sampler = p_engine.GetSamplerCache().Find( cuT( "SSAO_Noise" ) );
+				sampler = engine.GetSamplerCache().Find( cuT( "SSAO_Noise" ) );
 			}
 			else
 			{
-				sampler = p_engine.GetSamplerCache().Add( cuT( "SSAO_Noise" ) );
+				sampler = engine.GetSamplerCache().Add( cuT( "SSAO_Noise" ) );
 				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
 				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
 				sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
 				sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eRepeat );
 			}
 
-			TextureUnit result{ p_engine };
+			TextureUnit result{ engine };
 			result.SetSampler( sampler );
 			result.SetTexture( texture );
 			result.Initialise();
@@ -139,9 +140,9 @@ namespace Castor3D
 			return result;
 		}
 
-		GLSL::Shader DoGetSsaoVertexProgram( Engine & p_engine )
+		GLSL::Shader DoGetSsaoVertexProgram( Engine & engine )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			using namespace GLSL;
 			auto writer = renderSystem.CreateGlslWriter();
 
@@ -162,9 +163,9 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 		
-		GLSL::Shader DoGetSsaoPixelProgram( Engine & p_engine )
+		GLSL::Shader DoGetSsaoPixelProgram( Engine & engine )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			using namespace GLSL;
 			auto writer = renderSystem.CreateGlslWriter();
 
@@ -236,9 +237,9 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 		
-		GLSL::Shader DoGetBlurVertexProgram( Engine & p_engine )
+		GLSL::Shader DoGetBlurVertexProgram( Engine & engine )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			using namespace GLSL;
 			auto writer = renderSystem.CreateGlslWriter();
 
@@ -261,9 +262,9 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 
-		GLSL::Shader DoGetBlurPixelProgram( Engine & p_engine )
+		GLSL::Shader DoGetBlurPixelProgram( Engine & engine )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			using namespace GLSL;
 			auto writer = renderSystem.CreateGlslWriter();
 
@@ -297,12 +298,12 @@ namespace Castor3D
 			return writer.Finalise();
 		}
 
-		ShaderProgramSPtr DoGetSsaoProgram( Engine & p_engine )
+		ShaderProgramSPtr DoGetSsaoProgram( Engine & engine )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
-			auto vtx = DoGetSsaoVertexProgram( p_engine );
-			auto pxl = DoGetSsaoPixelProgram( p_engine );
-			ShaderProgramSPtr program = p_engine.GetShaderProgramCache().GetNewProgram( false );
+			auto & renderSystem = *engine.GetRenderSystem();
+			auto vtx = DoGetSsaoVertexProgram( engine );
+			auto pxl = DoGetSsaoPixelProgram( engine );
+			ShaderProgramSPtr program = engine.GetShaderProgramCache().GetNewProgram( false );
 			program->CreateObject( ShaderType::eVertex );
 			program->CreateObject( ShaderType::ePixel );
 			program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapDepth" ), ShaderType::ePixel )->SetValue( 0 );
@@ -314,12 +315,12 @@ namespace Castor3D
 			return program;
 		}
 
-		ShaderProgramSPtr DoGetBlurProgram( Engine & p_engine )
+		ShaderProgramSPtr DoGetBlurProgram( Engine & engine )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
-			auto vtx = DoGetBlurVertexProgram( p_engine );
-			auto pxl = DoGetBlurPixelProgram( p_engine );
-			ShaderProgramSPtr program = p_engine.GetShaderProgramCache().GetNewProgram( false );
+			auto & renderSystem = *engine.GetRenderSystem();
+			auto vtx = DoGetBlurVertexProgram( engine );
+			auto pxl = DoGetBlurPixelProgram( engine );
+			ShaderProgramSPtr program = engine.GetShaderProgramCache().GetNewProgram( false );
 			program->CreateObject( ShaderType::eVertex );
 			program->CreateObject( ShaderType::ePixel );
 			program->CreateUniform< UniformType::eSampler >( cuT( "c3d_mapColour" ), ShaderType::ePixel )->SetValue( 0 );
@@ -329,54 +330,56 @@ namespace Castor3D
 			return program;
 		}
 
-		RenderPipelineUPtr DoCreatePipeline( Engine & p_engine
-			, ShaderProgram & p_program )
+		RenderPipelineUPtr DoCreatePipeline( Engine & engine
+			, ShaderProgram & program )
 		{
 			DepthStencilState dsstate;
 			dsstate.SetDepthTest( false );
 			dsstate.SetDepthMask( WritingMask::eZero );
 			RasteriserState rsstate;
 			rsstate.SetCulledFaces( Culling::eNone );
-			return p_engine.GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
+			return engine.GetRenderSystem()->CreateRenderPipeline( std::move( dsstate )
 				, std::move( rsstate )
 				, BlendState{}
 				, MultisampleState{}
-				, p_program
+				, program
 				, PipelineFlags{} );
 		}
 
-		SamplerSPtr DoCreateSampler( Engine & p_engine, String const & p_name, WrapMode p_mode )
+		SamplerSPtr DoCreateSampler( Engine & engine
+			, String const & name
+			, WrapMode mode )
 		{
 			SamplerSPtr sampler;
 
-			if ( p_engine.GetSamplerCache().Has( p_name ) )
+			if ( engine.GetSamplerCache().Has( name ) )
 			{
-				sampler = p_engine.GetSamplerCache().Find( p_name );
+				sampler = engine.GetSamplerCache().Find( name );
 			}
 			else
 			{
-				sampler = p_engine.GetSamplerCache().Add( p_name );
+				sampler = engine.GetSamplerCache().Add( name );
 				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
 				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-				sampler->SetWrappingMode( TextureUVW::eU, p_mode );
-				sampler->SetWrappingMode( TextureUVW::eV, p_mode );
+				sampler->SetWrappingMode( TextureUVW::eU, mode );
+				sampler->SetWrappingMode( TextureUVW::eV, mode );
 			}
 
 			return sampler;
 		}
 
-		TextureUnit DoCreateTexture( Engine & p_engine
-			, Size const & p_size
-			, String const & p_name )
+		TextureUnit DoCreateTexture( Engine & engine
+			, Size const & size
+			, String const & name )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
-			auto sampler = DoCreateSampler( p_engine, p_name, WrapMode::eClampToEdge );
+			auto & renderSystem = *engine.GetRenderSystem();
+			auto sampler = DoCreateSampler( engine, name, WrapMode::eClampToEdge );
 			auto ssaoResult = renderSystem.CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite );
-			ssaoResult->SetSource( PxBufferBase::create( p_size
+			ssaoResult->SetSource( PxBufferBase::create( size
 				, PixelFormat::eL32F ) );
-			TextureUnit unit{ p_engine };
+			TextureUnit unit{ engine };
 			unit.SetTexture( ssaoResult );
 			unit.SetSampler( sampler );
 			unit.SetIndex( 0u );
@@ -384,22 +387,22 @@ namespace Castor3D
 			return unit;
 		}
 
-		FrameBufferSPtr DoCreateFbo( Engine & p_engine
-			, Size const & p_size )
+		FrameBufferSPtr DoCreateFbo( Engine & engine
+			, Size const & size )
 		{
-			auto & renderSystem = *p_engine.GetRenderSystem();
+			auto & renderSystem = *engine.GetRenderSystem();
 			auto fbo = renderSystem.CreateFrameBuffer();
 			fbo->Create();
-			fbo->Initialise( p_size );
+			fbo->Initialise( size );
 			return fbo;
 		}
 
 		TextureAttachmentSPtr DoCreateAttach( FrameBuffer & p_fbo
-			, TextureUnit const & p_unit )
+			, TextureUnit const & unit )
 		{
-			auto attach = p_fbo.CreateAttachment( p_unit.GetTexture() );
+			auto attach = p_fbo.CreateAttachment( unit.GetTexture() );
 			p_fbo.Bind();
-			p_fbo.Attach( AttachmentPoint::eColour, 0u, attach, p_unit.GetTexture()->GetType() );
+			p_fbo.Attach( AttachmentPoint::eColour, 0u, attach, unit.GetTexture()->GetType() );
 			p_fbo.SetDrawBuffer( attach );
 			ENSURE( p_fbo.IsComplete() );
 			p_fbo.Unbind();
@@ -409,28 +412,26 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	SsaoPass::SsaoPass( Engine & p_engine
-		, Size const & p_size
-		, SsaoConfig const & p_config )
-		: m_engine{ p_engine }
-		, m_size{ p_size }
-		, m_matrixUbo{ p_engine }
+	SsaoPass::SsaoPass( Engine & engine
+		, Size const & size
+		, SsaoConfig const & config
+		, GpInfoUbo & gpInfoUbo )
+		: m_engine{ engine }
+		, m_size{ size }
+		, m_matrixUbo{ engine }
 		, m_ssaoKernel{ DoGetKernel() }
-		, m_ssaoNoise{ DoGetNoise( p_engine ) }
-		, m_ssaoResult{ p_engine }
-		//, m_ssaoResult{ DoCreateTexture( p_engine, p_size, cuT( "SSAO_Result" ) ) }
-		//, m_ssaoFbo{ DoCreateFbo( p_engine, p_size ) }
-		//, m_ssaoResultAttach{ DoCreateAttach( *m_ssaoFbo, m_ssaoResult ) }
-		, m_ssaoProgram{ DoGetSsaoProgram( p_engine ) }
+		, m_ssaoNoise{ DoGetNoise( engine ) }
+		, m_ssaoResult{ engine }
+		, m_ssaoProgram{ DoGetSsaoProgram( engine ) }
 		, m_ssaoConfig{ cuT( "SsaoConfig" )
-			, *p_engine.GetRenderSystem() }
-		, m_blurProgram{ DoGetBlurProgram( p_engine ) }
-		, m_blurResult{ p_engine }
-		//, m_blurResult{ DoCreateTexture( p_engine, p_size, cuT( "SSAO_Blurred" ) ) }
-		//, m_blurFbo{ DoCreateFbo( p_engine, p_size ) }
-		//, m_blurResultAttach{ DoCreateAttach( *m_blurFbo, m_blurResult ) }
-		, m_viewport{ p_engine }
-		, m_config{ p_config }
+			, *engine.GetRenderSystem() }
+		, m_blurProgram{ DoGetBlurProgram( engine ) }
+		, m_blurResult{ engine }
+		, m_viewport{ engine }
+		, m_config{ config }
+		, m_ssaoTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao raw" ) ) }
+		, m_blurTimer{ std::make_shared< RenderPassTimer >( engine, cuT( "Ssao blur" ) ) }
+		, m_gpInfoUbo{ gpInfoUbo }
 	{
 		DoInitialiseQuadRendering();
 		DoInitialiseSsaoPass();
@@ -444,19 +445,17 @@ namespace Castor3D
 		DoCleanupQuadRendering();
 	}
 
-	void SsaoPass::Render( GeometryPassResult const & p_gp
-		, Camera const & p_camera
-		, Matrix4x4r const & p_invViewProj
-		, Matrix4x4r const & p_invView
-		, Matrix4x4r const & p_invProj )
+	void SsaoPass::Render( GeometryPassResult const & gp
+		, RenderInfo & info )
 	{
-		m_gpInfo->Update( m_size
-			, p_camera
-			, p_invViewProj
-			, p_invView
-			, p_invProj );
-		DoRenderSsao( p_gp );
+		DoRenderSsao( gp );
 		DoRenderBlur();
+		info.m_times.push_back( { m_ssaoTimer->GetName()
+			, m_ssaoTimer->GetGpuTime()
+			, m_ssaoTimer->GetCpuTime() } );
+		info.m_times.push_back( { m_blurTimer->GetName()
+			, m_blurTimer->GetGpuTime()
+			, m_blurTimer->GetCpuTime() } );
 	}
 
 	void SsaoPass::DoInitialiseQuadRendering()
@@ -501,12 +500,10 @@ namespace Castor3D
 		ENSURE( m_ssaoFbo->IsComplete() );
 		m_ssaoFbo->Unbind();
 
-		m_gpInfo = std::make_unique< GpInfoUbo >( m_engine );
-
 		m_ssaoPipeline = DoCreatePipeline( m_engine, *m_ssaoProgram );
 		m_ssaoPipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 		m_ssaoPipeline->AddUniformBuffer( m_ssaoConfig );
-		m_ssaoPipeline->AddUniformBuffer( m_gpInfo->GetUbo() );
+		m_ssaoPipeline->AddUniformBuffer( m_gpInfoUbo.GetUbo() );
 
 		m_ssaoVertexBuffer = DoCreateVbo( m_engine );
 		m_ssaoGeometryBuffers = renderSystem.CreateGeometryBuffers( Topology::eTriangles
@@ -575,7 +572,6 @@ namespace Castor3D
 		m_ssaoFbo.reset();
 		m_ssaoResultAttach.reset();
 		m_ssaoResult.Cleanup();
-		m_gpInfo.reset();
 	}
 
 	void SsaoPass::DoCleanupBlurPass()
@@ -597,28 +593,31 @@ namespace Castor3D
 		m_blurResult.Cleanup();
 	}
 
-	void SsaoPass::DoRenderSsao( GeometryPassResult const & p_gp )
+	void SsaoPass::DoRenderSsao( GeometryPassResult const & gp )
 	{
+		m_ssaoTimer->Start();
 		m_ssaoConfig.BindTo( 8u );
 		m_ssaoFbo->Bind( FrameBufferTarget::eDraw );
 		m_ssaoFbo->Clear( BufferComponent::eColour );
-		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
-		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
-		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 1u );
-		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Bind( 1u );
+		gp[size_t( DsTexture::eDepth )]->GetTexture()->Bind( 0u );
+		gp[size_t( DsTexture::eDepth )]->GetSampler()->Bind( 0u );
+		gp[size_t( DsTexture::eData1 )]->GetTexture()->Bind( 1u );
+		gp[size_t( DsTexture::eData1 )]->GetSampler()->Bind( 1u );
 		m_ssaoNoise.Bind();
 		m_ssaoPipeline->Apply();
 		m_ssaoGeometryBuffers->Draw( 6u, 0 );
 		m_ssaoNoise.Unbind();
-		p_gp[size_t( DsTexture::eData1 )]->GetTexture()->Unbind( 1u );
-		p_gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 1u );
-		p_gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
-		p_gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
+		gp[size_t( DsTexture::eData1 )]->GetTexture()->Unbind( 1u );
+		gp[size_t( DsTexture::eData1 )]->GetSampler()->Unbind( 1u );
+		gp[size_t( DsTexture::eDepth )]->GetTexture()->Unbind( 0u );
+		gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
 		m_ssaoFbo->Unbind();
+		m_ssaoTimer->Stop();
 	}
 
 	void SsaoPass::DoRenderBlur()
 	{
+		m_blurTimer->Start();
 		m_viewport.Apply();
 		m_blurFbo->Bind( FrameBufferTarget::eDraw );
 		m_blurFbo->Clear( BufferComponent::eColour );
@@ -627,5 +626,6 @@ namespace Castor3D
 		m_blurGeometryBuffers->Draw( 6u, 0 );
 		m_ssaoResult.Unbind();
 		m_blurFbo->Unbind();
+		m_blurTimer->Stop();
 	}
 }

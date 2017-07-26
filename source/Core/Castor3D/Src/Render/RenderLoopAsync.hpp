@@ -47,14 +47,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_wantedFPS		The wanted FPS count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_wantedFPS		Le nombre voulu du FPS.
 		 */
-		C3D_API RenderLoopAsync( Engine & p_engine, uint32_t p_wantedFPS = 100 );
+		C3D_API RenderLoopAsync( Engine & engine, uint32_t p_wantedFPS = 100 );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -184,7 +184,7 @@ namespace Castor3D
 		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
 		RenderWindowRPtr m_window;
 		//!\~english The saved frame time, if V-Sync is disabled.	\~french Le temps par frame sauvegardé, si la synchronisation verticale est désactivée.
-		std::chrono::milliseconds m_savedTime{ 0 };
+		Castor::Milliseconds m_savedTime{ 0 };
 	};
 }
 

@@ -14,7 +14,7 @@ namespace Castor3D
 	{
 	}
 
-	void AnimationInstance::Update( std::chrono::milliseconds const & p_tslf )
+	void AnimationInstance::Update( Milliseconds const & p_tslf )
 	{
 		auto length = m_animation.GetLength();
 		auto scale = m_scale;
@@ -24,7 +24,7 @@ namespace Castor3D
 		{
 			if ( m_state == AnimationState::ePlaying )
 			{
-				m_currentTime += std::chrono::milliseconds( int64_t( p_tslf.count() * scale ) );
+				m_currentTime += Milliseconds( int64_t( p_tslf.count() * scale ) );
 
 				if ( m_currentTime >= length )
 				{

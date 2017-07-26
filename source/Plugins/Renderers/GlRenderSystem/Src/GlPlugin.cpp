@@ -25,16 +25,16 @@ extern "C"
 		*p_name = GlRenderSystem::Name.c_str();
 	}
 
-	C3D_Gl_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	C3D_Gl_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
 	{
 		auto plugin = static_cast< Castor3D::RendererPlugin * >( p_plugin );
 		plugin->SetRendererType( GlRenderSystem::Type );
-		p_engine->GetRenderSystemFactory().Register( GlRenderSystem::Type
+		engine->GetRenderSystemFactory().Register( GlRenderSystem::Type
 			, &GlRenderSystem::Create );
 	}
 
-	C3D_Gl_API void OnUnload( Castor3D::Engine * p_engine )
+	C3D_Gl_API void OnUnload( Castor3D::Engine * engine )
 	{
-		p_engine->GetRenderSystemFactory().Unregister( GlRenderSystem::Type );
+		engine->GetRenderSystemFactory().Unregister( GlRenderSystem::Type );
 	}
 }

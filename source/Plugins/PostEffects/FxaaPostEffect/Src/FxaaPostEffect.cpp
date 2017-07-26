@@ -46,10 +46,10 @@ namespace fxaa
 		static String const ReduceMul = cuT( "c3d_fReduceMul" );
 		static String const PosPos = cuT( "vtx_posPos" );
 
-		GLSL::Shader GetVertexProgram( Castor3D::RenderSystem * p_renderSystem )
+		GLSL::Shader GetVertexProgram( Castor3D::RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			UBO_MATRIX( writer );
@@ -74,10 +74,10 @@ namespace fxaa
 			return writer.Finalise();
 		}
 
-		GLSL::Shader GetFragmentProgram( Castor3D::RenderSystem * p_renderSystem )
+		GLSL::Shader GetFragmentProgram( Castor3D::RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( Castor3D::ShaderProgram::MapDiffuse );
@@ -163,15 +163,15 @@ namespace fxaa
 	String PostEffect::Name = cuT( "FXAA PostEffect" );
 
 	PostEffect::PostEffect( Castor3D::RenderTarget & p_renderTarget
-		, Castor3D::RenderSystem & p_renderSystem
+		, Castor3D::RenderSystem & renderSystem
 		, Castor3D::Parameters const & p_parameters )
 		: Castor3D::PostEffect{ PostEffect::Type
 			, p_renderTarget
-			, p_renderSystem
+			, renderSystem
 			, p_parameters }
-		, m_surface{ *p_renderSystem.GetEngine() }
-		, m_matrixUbo{ *p_renderSystem.GetEngine() }
-		, m_fxaaUbo{ *p_renderSystem.GetEngine() }
+		, m_surface{ *renderSystem.GetEngine() }
+		, m_matrixUbo{ *renderSystem.GetEngine() }
+		, m_fxaaUbo{ *renderSystem.GetEngine() }
 	{
 		String param;
 
@@ -212,10 +212,10 @@ namespace fxaa
 	}
 
 	Castor3D::PostEffectSPtr PostEffect::Create( Castor3D::RenderTarget & p_renderTarget
-		, Castor3D::RenderSystem & p_renderSystem
+		, Castor3D::RenderSystem & renderSystem
 		, Castor3D::Parameters const & p_param )
 	{
-		return std::make_shared< PostEffect >( p_renderTarget, p_renderSystem, p_param );
+		return std::make_shared< PostEffect >( p_renderTarget, renderSystem, p_param );
 	}
 
 	bool PostEffect::Initialise()

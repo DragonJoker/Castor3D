@@ -43,16 +43,16 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine	The engine, to post events to.
+		 *\param[in]	engine	The engine, to post events to.
 		 *\param[in]	p_editable	Tells if the properties are modifiable
 		 *\param[in]	p_buffer	The target buffer
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements
+		 *\param[in]	engine	Le moteur, auquel on va poster les évènements
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_buffer	Le tampon cible
 		 */
-		FrameVariableBufferTreeItemProperty( Castor3D::Engine * p_engine
+		FrameVariableBufferTreeItemProperty( Castor3D::Engine * engine
 			, bool p_editable
 			, Castor3D::UniformBuffer & p_buffer );
 		/**

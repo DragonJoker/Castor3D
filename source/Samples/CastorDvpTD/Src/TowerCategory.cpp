@@ -27,8 +27,8 @@ namespace castortd
 		{
 			return p_value + p_inc;
 		};
-		auto decrement = []( std::chrono::milliseconds p_inc
-			, std::chrono::milliseconds p_value
+		auto decrement = []( Milliseconds p_inc
+			, Milliseconds p_value
 			, uint32_t p_level )
 		{
 			p_value -= p_inc;
@@ -46,9 +46,9 @@ namespace castortd
 			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 )
 			, 15u );
 
-		m_initialCooldown = std::chrono::milliseconds{ 6000u };
+		m_initialCooldown = Milliseconds{ 6000u };
 		m_cooldown.Initialise( m_initialCooldown
-			, std::bind( decrement, std::chrono::milliseconds{ 240u }, std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( decrement, Milliseconds{ 240u }, std::placeholders::_1, std::placeholders::_2 )
 			, 200u
 			, std::bind( costIncrement, 20u, std::placeholders::_1, std::placeholders::_2 ) );
 
@@ -85,8 +85,8 @@ namespace castortd
 		{
 			return p_value + p_inc;
 		};
-		auto decrement = []( std::chrono::milliseconds p_inc
-			, std::chrono::milliseconds p_value
+		auto decrement = []( Milliseconds p_inc
+			, Milliseconds p_value
 			, uint32_t p_level )
 		{
 			p_value -= p_inc;
@@ -103,9 +103,9 @@ namespace castortd
 			, 400u
 			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 ) );
 
-		m_initialCooldown = std::chrono::milliseconds{ 1000u };
+		m_initialCooldown = Milliseconds{ 1000u };
 		m_cooldown.Initialise( m_initialCooldown
-			, std::bind( decrement, std::chrono::milliseconds{ 50u }, std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( decrement, Milliseconds{ 50u }, std::placeholders::_1, std::placeholders::_2 )
 			, 150u
 			, std::bind( costIncrement, 10u, std::placeholders::_1, std::placeholders::_2 ) );
 

@@ -15,11 +15,11 @@ using namespace Castor3D;
 namespace CastorGui
 {
 	SliderCtrl::SliderCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id )
 		: SliderCtrl{ p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, makeRangedValue( 0, 0, 100 )
@@ -31,7 +31,7 @@ namespace CastorGui
 	}
 
 	SliderCtrl::SliderCtrl( String const & p_name
-		, Engine & p_engine
+		, Engine & engine
 		, ControlRPtr p_parent
 		, uint32_t p_id
 		, RangedValue< int32_t > const & p_value
@@ -41,7 +41,7 @@ namespace CastorGui
 		, bool p_visible )
 		: Control{ ControlType::eSlider
 			, p_name
-			, p_engine
+			, engine
 			, p_parent
 			, p_id
 			, p_position
@@ -71,7 +71,7 @@ namespace CastorGui
 		} );
 
 		StaticCtrlSPtr line = std::make_shared< StaticCtrl >( p_name + cuT( "_Line" )
-			, p_engine
+			, engine
 			, this
 			, cuT( "" )
 			, Position()
@@ -85,7 +85,7 @@ namespace CastorGui
 		m_line = line;
 
 		StaticCtrlSPtr tick = std::make_shared< StaticCtrl >( p_name + cuT( "_Tick" )
-			, p_engine
+			, engine
 			, this
 			, cuT( "" )
 			, Position()

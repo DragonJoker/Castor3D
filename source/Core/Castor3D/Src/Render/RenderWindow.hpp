@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -86,14 +86,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\param[in]	p_name		The window name
 		 *\~french
 		 *\brief		Constructor
-		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	engine	Le moteur
 		 *\param[in]	p_name		Le nom de la fenêtre
 		 */
-		C3D_API RenderWindow( Castor::String const & p_name, Engine & p_engine );
+		C3D_API RenderWindow( Castor::String const & p_name, Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -159,24 +159,6 @@ namespace Castor3D
 		C3D_API void SetCamera( CameraSPtr p_pCamera );
 		/**
 		 *\~english
-		 *\brief		Retrieves the multisampling status
-		 *\return		The multisampling status
-		 *\~french
-		 *\brief		Récupère le statut de multisampling
-		 *\return		Le statut de multisampling
-		 */
-		C3D_API bool IsMultisampling()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the samples count
-		 *\return		The samples count
-		 *\~french
-		 *\brief		Récupère le nombre de samples
-		 *\return		Le nombre de samples
-		 */
-		C3D_API int32_t GetSamplesCount()const;
-		/**
-		 *\~english
 		 *\brief		Changes fullscreen status from contex
 		 *\param[in]	val	The new fullscreen status
 		 *\~french
@@ -184,15 +166,6 @@ namespace Castor3D
 		 *\param[in]	val	Le nouveau statut de plein écran
 		 */
 		C3D_API void UpdateFullScreen( bool val );
-		/**
-		 *\~english
-		 *\brief		Sets the samples count
-		 *\param[in]	val	The new samples count
-		 *\~french
-		 *\brief		Définit le nombre de samples
-		 *\param[in]	val	Le nouveau nombre de samples
-		 */
-		C3D_API void SetSamplesCount( int32_t val );
 		/**
 		 *\~english
 		 *\brief		Retrieves the Scene

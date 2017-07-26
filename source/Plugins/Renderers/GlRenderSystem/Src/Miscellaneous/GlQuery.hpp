@@ -44,14 +44,14 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_invertFinal	Tells if the final render is to be inverted.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	p_invertFinal	Dit si on inverse l'image du rendu final.
 		 */
-		GlQuery( GlRenderSystem & p_renderSystem, Castor3D::QueryType p_query );
+		GlQuery( GlRenderSystem & renderSystem, Castor3D::QueryType p_query );
 		/**
 		 *\~english
 		 *\brief		Destructor.

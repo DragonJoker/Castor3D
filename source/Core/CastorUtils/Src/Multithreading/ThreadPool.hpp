@@ -82,7 +82,7 @@ namespace Castor
 		 *\param[in]	p_timeout	Le temps d'attente maximum.
 		 *\return		\p true Si tous les threads on terminé.
 		 */
-		CU_API bool WaitAll( std::chrono::milliseconds const & p_timeout )const;
+		CU_API bool WaitAll( Castor::Milliseconds const & p_timeout )const;
 		/**
 		 *\~english
 		 *\brief		Feeds a worker thread with the given job.

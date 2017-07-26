@@ -43,14 +43,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_query			The query type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	p_query			Le type de requête.
 		 */
-		C3D_API GpuQuery( RenderSystem & p_renderSystem, QueryType p_query );
+		C3D_API GpuQuery( RenderSystem & renderSystem, QueryType p_query );
 		/**
 		 *\~english
 		 *\brief		Destructor.

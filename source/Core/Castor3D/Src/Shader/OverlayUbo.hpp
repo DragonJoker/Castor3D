@@ -54,12 +54,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API OverlayUbo( Engine & p_engine );
+		C3D_API OverlayUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

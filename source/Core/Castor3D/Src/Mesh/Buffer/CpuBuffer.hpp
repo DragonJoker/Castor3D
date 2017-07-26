@@ -50,13 +50,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 */
-		inline explicit CpuBuffer( Engine & p_engine )
-			: Castor::OwnedBy< Engine >( p_engine )
+		inline explicit CpuBuffer( Engine & engine )
+			: Castor::OwnedBy< Engine >( engine )
 
 		{
 		}
@@ -89,7 +89,7 @@ namespace Castor3D
 		 */
 		inline T * Lock( uint32_t p_offset
 			, uint32_t p_count
-			, AccessTypes const & p_flags )
+			, AccessTypes const & p_flags )const
 		{
 			REQUIRE( m_gpuBuffer );
 			return reinterpret_cast< T * >( m_gpuBuffer->Lock( p_offset * sizeof( T )
@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus.
 		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU.
 		 */
-		inline void Unlock()
+		inline void Unlock()const
 		{
 			REQUIRE( m_gpuBuffer );
 			m_gpuBuffer->Unlock();
@@ -125,7 +125,7 @@ namespace Castor3D
 		 */
 		inline void Upload( uint32_t p_offset
 			, uint32_t p_count
-			, T const * p_buffer )
+			, T const * p_buffer )const
 		{
 			REQUIRE( m_gpuBuffer );
 			return m_gpuBuffer->Upload( p_offset * sizeof( T )
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Transfère toutes les données du tampon CPU vers le GPU.
 		 */
-		inline void Upload()
+		inline void Upload()const
 		{
 			return Upload( 0u
 				, uint32_t( m_data.size() )
@@ -185,7 +185,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 */
-		inline void Bind()
+		inline void Bind()const
 		{
 			REQUIRE( m_gpuBuffer );
 			m_gpuBuffer->Bind();
@@ -196,7 +196,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
 		 */
-		inline void Unbind()
+		inline void Unbind()const
 		{
 			REQUIRE( m_gpuBuffer );
 			m_gpuBuffer->Unbind();

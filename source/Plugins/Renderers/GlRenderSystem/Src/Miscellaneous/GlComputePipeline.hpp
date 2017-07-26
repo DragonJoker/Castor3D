@@ -47,7 +47,7 @@ namespace GlRender
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL api.
-		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	renderSystem	The parent RenderSystem.
 		 *\param[in]	p_dsState		The depth stencil state.
 		 *\param[in]	p_rsState		The rateriser state.
 		 *\param[in]	p_bdState		The blend state.
@@ -57,7 +57,7 @@ namespace GlRender
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_gl			L'api OpenGL.
-		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	renderSystem	Le RenderSystem parent.
 		 *\param[in]	p_dsState		L'état de stencil et profondeur.
 		 *\param[in]	p_rsState		L'état de rastériseur.
 		 *\param[in]	p_bdState		L'état de mélange.
@@ -65,7 +65,7 @@ namespace GlRender
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		GlComputePipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::ShaderProgram & p_program );
+		GlComputePipeline( OpenGl & p_gl, GlRenderSystem & renderSystem, Castor3D::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.

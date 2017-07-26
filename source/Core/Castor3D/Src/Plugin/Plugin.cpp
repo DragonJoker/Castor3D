@@ -13,8 +13,8 @@ namespace Castor3D
 	static const String GetOnLoadFunctionABIName = cuT( "OnLoad" );
 	static const String GetOnUnloadFunctionABIName = cuT( "OnUnload" );
 
-	Plugin::Plugin( PluginType p_type, DynamicLibrarySPtr p_library, Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+	Plugin::Plugin( PluginType p_type, DynamicLibrarySPtr p_library, Engine & engine )
+		: OwnedBy< Engine >( engine )
 		, m_pfnGetRequiredVersion( 0 )
 		, m_pfnGetName( 0 )
 		, m_type( p_type )

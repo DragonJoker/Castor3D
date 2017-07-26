@@ -48,16 +48,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_light		The light source.
 		 *\param[in]	p_shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_light		La source lumineuse.
 		 *\param[in]	p_shadowMap	La shadow map parente.
 		 */
-		C3D_API ShadowMapPass( Engine & p_engine
+		C3D_API ShadowMapPass( Engine & engine
 			, Light & p_light
 			, ShadowMap const & p_shadowMap );
 		/**
@@ -105,18 +105,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
-		 *\param[in,out]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in,out]	p_sceneFlags	A combination of SceneFlag.
+		 *\param[in,out]	textureFlags	A combination of TextureChannel.
+		 *\param[in,out]	programFlags	A combination of ProgramFlag.
+		 *\param[in,out]	sceneFlags	A combination of SceneFlag.
 		 *\~french
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in,out]	p_sceneFlags	Une combinaison de SceneFlag.
+		 *\param[in,out]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in,out]	sceneFlags	Une combinaison de SceneFlag.
 		 */
-		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags )const override;
+		void DoUpdateFlags( TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags )const override;
 
 	private:
 		/**
@@ -154,37 +154,37 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
 		 */
-		GLSL::Shader DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, bool p_invertNormals )const override;
+		GLSL::Shader DoGetVertexShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const override;
 		/**
 		 *\copydoc		Castor3D::ShadowMap::DoGetGeometryShaderSource
 		 */
-		GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const override;
+		GLSL::Shader DoGetGeometryShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPbrMRPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 
 	protected:
 		//!\~english	The parent shadow map.

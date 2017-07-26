@@ -43,16 +43,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_light		The light source.
 		 *\param[in]	p_shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_light		La source lumineuse.
 		 *\param[in]	p_shadowMap	La shadow map parente.
 		 */
-		C3D_API ShadowMapPassSpot( Engine & p_engine
+		C3D_API ShadowMapPassSpot( Engine & engine
 			, Light & p_light
 			, ShadowMap const & p_shadowMap );
 		/**

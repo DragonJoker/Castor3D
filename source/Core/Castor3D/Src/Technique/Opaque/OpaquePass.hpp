@@ -48,18 +48,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_scene		The scene for this technique.
-		 *\param[in]	p_camera	The camera for this technique (may be null).
-		 *\param[in]	p_config	The SSAO configuration.
+		 *\param[in]	scene	The scene for this technique.
+		 *\param[in]	camera	The camera for this technique (may be null).
+		 *\param[in]	config	The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_scene		La scène pour cette technique.
-		 *\param[in]	p_camera	La caméra pour cette technique (peut être nulle).
-		 *\param[in]	p_config	La configuration du SSAO.
+		 *\param[in]	scene	La scène pour cette technique.
+		 *\param[in]	camera	La caméra pour cette technique (peut être nulle).
+		 *\param[in]	config	La configuration du SSAO.
 		 */
-		OpaquePass( Scene & p_scene
-			, Camera * p_camera
-			, SsaoConfig const & p_config );
+		OpaquePass( Scene & scene
+			, Camera * camera
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -70,14 +70,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[out]	p_info		Receives the render informations.
-		 *\param[out]	p_shadows	Tells if the scene has shadow producing light sources.
+		 *\param[out]	info	Receives the render informations.
+		 *\param[out]	shadows	Tells if the scene has shadow producing light sources.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	p_info		Reçoit les informations de rendu.
-		 *\param[out]	p_shadows	Dit si la scène a des lumières produisant des ombres.
+		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\param[out]	shadows	Dit si la scène a des lumières produisant des ombres.
 		 */
-		void Render( RenderInfo & p_info, bool p_shadows )override;
+		void Render( RenderInfo & info, bool shadows )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::InitialiseShadowMaps
 		 */
@@ -89,7 +89,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::UpdateShadowMaps
 		 */
-		void UpdateShadowMaps( RenderQueueArray & p_queues )override;
+		void UpdateShadowMaps( RenderQueueArray & queues )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::RenderShadowMaps
 		 */
@@ -97,7 +97,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderTechniquePass::AddShadowProducer
 		 */
-		C3D_API void AddShadowProducer( Light & p_light )override;
+		C3D_API void AddShadowProducer( Light & light )override;
 		/**
 		 *\~english
 		 *\return		The directional light shadow map.
@@ -133,45 +133,45 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetDepthMaps
 		 */
-		void DoGetDepthMaps( DepthMapArray & p_depthMaps )override;
+		void DoGetDepthMaps( DepthMapArray & depthMaps )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateFlags
 		 */
-		void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags )const override;
+		void DoUpdateFlags( TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
 		 */
-		GLSL::Shader DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, bool p_invertNormals )const override;
+		GLSL::Shader DoGetVertexShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetLegacyPixelShaderSource
 		 */
-		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetLegacyPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPbrMRPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetPbrMRPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetPbrSGPixelShaderSource
 		 */
-		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, ComparisonFunc p_alphaFunc )const override;
+		GLSL::Shader DoGetPbrSGPixelShaderSource( TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdatePipeline
 		 */
-		void DoUpdatePipeline( RenderPipeline & p_pipeline )const override;
+		void DoUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	private:
 		//!\~english	The shadow map used for directional lights.

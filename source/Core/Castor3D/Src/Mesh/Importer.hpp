@@ -47,12 +47,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine		The core engine
+		 *\param[in]	engine		The core engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine		Le moteur
+		 *\param[in]	engine		Le moteur
 		 */
-		C3D_API explicit Importer( Engine & p_engine );
+		C3D_API explicit Importer( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Scene import Function.

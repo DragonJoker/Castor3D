@@ -82,7 +82,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine			The engine.
+		 *\param[in]	engine			The engine.
 		 *\param[in]	p_scene				The scene.
 		 *\param[in]	p_rootNode			The root node.
 		 *\param[in]	p_rootCameraNode	The cameras root node.
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\param[in]	p_detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine			Le moteur.
+		 *\param[in]	engine			Le moteur.
 		 *\param[in]	p_scene				La scène.
 		 *\param[in]	p_rootNode			Le noeud racine.
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
@@ -107,7 +107,7 @@ namespace Castor3D
 		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		C3D_API ObjectCache( Engine & p_engine
+		C3D_API ObjectCache( Engine & engine
 			, Scene & p_scene
 			, SceneNodeSPtr p_rootNode
 			, SceneNodeSPtr p_rootCameraNode

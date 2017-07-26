@@ -86,7 +86,7 @@ namespace castortd
 				return m_range.GetValue();
 			}
 
-			inline std::chrono::milliseconds GetSpeed()const
+			inline Castor::Milliseconds GetSpeed()const
 			{
 				return m_cooldown.GetValue();
 			}
@@ -111,7 +111,7 @@ namespace castortd
 				return m_attackAnimName;
 			}
 
-			inline std::chrono::milliseconds const & GetAttackAnimationTime()const
+			inline Castor::Milliseconds const & GetAttackAnimationTime()const
 			{
 				return m_attackAnimTime;
 			}
@@ -121,7 +121,7 @@ namespace castortd
 				return m_kind;
 			}
 
-			inline void SetAttackAnimationTime( std::chrono::milliseconds const & p_time )
+			inline void SetAttackAnimationTime( Castor::Milliseconds const & p_time )
 			{
 				m_attackAnimTime = p_time;
 			}
@@ -129,15 +129,15 @@ namespace castortd
 		protected:
 			Kind m_kind;
 			PaidAbility< uint32_t > m_damage;
-			PaidAbility< std::chrono::milliseconds > m_cooldown;
-			std::chrono::milliseconds m_initialCooldown;
+			PaidAbility< Castor::Milliseconds > m_cooldown;
+			Castor::Milliseconds m_initialCooldown;
 			PaidAbility< float > m_range;
 			float m_bulletSpeed{ 0.0f };
 			uint32_t m_towerCost{ 0u };
 			Castor::String m_material;
 			Castor::Colour m_colour;
 			Castor::String m_attackAnimName;
-			std::chrono::milliseconds m_attackAnimTime;
+			Castor::Milliseconds m_attackAnimTime;
 		};
 
 		using CategoryPtr = std::unique_ptr< Category >;
@@ -244,7 +244,7 @@ namespace castortd
 		void DoStartAttack();
 		bool DoAnimEnded( EnemyArray & p_enemies );
 		void DoShoot( Game & p_game );
-		void DoUpdateTimes( std::chrono::milliseconds const & p_elapsed );
+		void DoUpdateTimes( Castor::Milliseconds const & p_elapsed );
 		bool DoIsInRange( Enemy const & p_enemy )const;
 		void DoTurnToTarget();
 
@@ -258,8 +258,8 @@ namespace castortd
 		Castor3D::AnimatedObjectGroup & m_anim;
 		Cell const & m_cell;
 		State m_state{ State::Idle };
-		std::chrono::milliseconds m_remaining{ 0 };
-		std::chrono::milliseconds m_animRemain{ 0 };
+		Castor::Milliseconds m_remaining{ 0 };
+		Castor::Milliseconds m_animRemain{ 0 };
 		EnemyPtr m_target{ nullptr };
 		CategoryPtr m_category;
 		float m_animScale{ 1.0f };

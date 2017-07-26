@@ -38,8 +38,8 @@ namespace Fireworks
 		/**
 		 *\copydoc		Castor3D::CpuParticleSystem::Update
 		 */
-		uint32_t Update( std::chrono::milliseconds const & p_time
-			, std::chrono::milliseconds const & p_totalTime )override;
+		uint32_t Update( Castor::Milliseconds const & p_time
+			, Castor::Milliseconds const & p_totalTime )override;
 
 	private:
 		/**

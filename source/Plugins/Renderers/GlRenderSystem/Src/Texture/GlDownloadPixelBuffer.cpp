@@ -9,8 +9,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlDownloadPixelBuffer::GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint32_t p_pixelsSize )
-		: GlGpuIoBuffer( p_gl, p_renderSystem, p_pixelsSize, GlBufferTarget::ePixelPack, BufferAccessType::eStream, BufferAccessNature::eRead )
+	GlDownloadPixelBuffer::GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * renderSystem, uint32_t p_pixelsSize )
+		: GlGpuIoBuffer( p_gl, renderSystem, p_pixelsSize, GlBufferTarget::ePixelPack, BufferAccessType::eStream, BufferAccessNature::eRead )
 	{
 	}
 

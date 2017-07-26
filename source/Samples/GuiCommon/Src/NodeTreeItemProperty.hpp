@@ -44,15 +44,15 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_engine	The engine
+		 *\param[in]	engine	The engine
 		 *\param[in]	p_node		The target object
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	engine	Le moteur
 		 *\param[in]	p_node		L'objet cible
 		 */
-		NodeTreeItemProperty( bool p_editable, Castor3D::Engine * p_engine, Castor3D::SceneNodeSPtr p_node );
+		NodeTreeItemProperty( bool p_editable, Castor3D::Engine * engine, Castor3D::SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor

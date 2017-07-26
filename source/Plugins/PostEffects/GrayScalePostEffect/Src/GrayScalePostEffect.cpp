@@ -38,10 +38,10 @@ namespace GrayScale
 {
 	namespace
 	{
-		GLSL::Shader GetVertexProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetVertexProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			UBO_MATRIX( writer );
 
@@ -60,10 +60,10 @@ namespace GrayScale
 			return writer.Finalise();
 		}
 
-		GLSL::Shader GetFragmentProgram( RenderSystem * p_renderSystem )
+		GLSL::Shader GetFragmentProgram( RenderSystem * renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter writer = p_renderSystem->CreateGlslWriter();
+			GlslWriter writer = renderSystem->CreateGlslWriter();
 
 			// Shader inputs
 			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse );
@@ -87,10 +87,10 @@ namespace GrayScale
 	String GrayScalePostEffect::Type = cuT( "grayscale" );
 	String GrayScalePostEffect::Name = cuT( "GrayScale PostEffect" );
 
-	GrayScalePostEffect::GrayScalePostEffect( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
-		: PostEffect{ GrayScalePostEffect::Type, p_renderTarget, p_renderSystem, p_param }
-		, m_surface{ *p_renderSystem.GetEngine() }
-		, m_matrixUbo{ *p_renderSystem.GetEngine() }
+	GrayScalePostEffect::GrayScalePostEffect( RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_param )
+		: PostEffect{ GrayScalePostEffect::Type, p_renderTarget, renderSystem, p_param }
+		, m_surface{ *renderSystem.GetEngine() }
+		, m_matrixUbo{ *renderSystem.GetEngine() }
 	{
 		String name = cuT( "GrayScale" );
 
@@ -113,9 +113,9 @@ namespace GrayScale
 	{
 	}
 
-	PostEffectSPtr GrayScalePostEffect::Create( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
+	PostEffectSPtr GrayScalePostEffect::Create( RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_param )
 	{
-		return std::make_shared< GrayScalePostEffect >( p_renderTarget, p_renderSystem, p_param );
+		return std::make_shared< GrayScalePostEffect >( p_renderTarget, renderSystem, p_param );
 	}
 
 	bool GrayScalePostEffect::Initialise()

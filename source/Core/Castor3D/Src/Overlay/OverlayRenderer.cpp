@@ -67,8 +67,8 @@ namespace Castor3D
 		}
 	}
 
-	OverlayRenderer::OverlayRenderer( RenderSystem & p_renderSystem )
-		: OwnedBy< RenderSystem >( p_renderSystem )
+	OverlayRenderer::OverlayRenderer( RenderSystem & renderSystem )
+		: OwnedBy< RenderSystem >( renderSystem )
 		, m_declaration{
 			{
 				{
@@ -84,8 +84,8 @@ namespace Castor3D
 					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2, 1 )
 				}
 			} }
-		, m_matrixUbo{ *p_renderSystem.GetEngine() }
-		, m_overlayUbo{ *p_renderSystem.GetEngine() }
+		, m_matrixUbo{ *renderSystem.GetEngine() }
+		, m_overlayUbo{ *renderSystem.GetEngine() }
 	{
 	}
 
@@ -393,41 +393,41 @@ namespace Castor3D
 		return it->second;
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetPanelPipeline( TextureChannels p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetPanelPipeline( TextureChannels textureFlags )
 	{
 		// Remove unwanted flags
-		RemFlag( p_textureFlags, TextureChannel::eNormal );
-		RemFlag( p_textureFlags, TextureChannel::eSpecular );
-		RemFlag( p_textureFlags, TextureChannel::eGloss );
-		RemFlag( p_textureFlags, TextureChannel::eHeight );
-		RemFlag( p_textureFlags, TextureChannel::eEmissive );
+		RemFlag( textureFlags, TextureChannel::eNormal );
+		RemFlag( textureFlags, TextureChannel::eSpecular );
+		RemFlag( textureFlags, TextureChannel::eGloss );
+		RemFlag( textureFlags, TextureChannel::eHeight );
+		RemFlag( textureFlags, TextureChannel::eEmissive );
 
 		// Get shader
-		return DoGetPipeline( p_textureFlags );
+		return DoGetPipeline( textureFlags );
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetTextPipeline( TextureChannels p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetTextPipeline( TextureChannels textureFlags )
 	{
 		// Remove unwanted flags
-		RemFlag( p_textureFlags, TextureChannel::eNormal );
-		RemFlag( p_textureFlags, TextureChannel::eSpecular );
-		RemFlag( p_textureFlags, TextureChannel::eGloss );
-		RemFlag( p_textureFlags, TextureChannel::eHeight );
-		RemFlag( p_textureFlags, TextureChannel::eEmissive );
-		AddFlag( p_textureFlags, TextureChannel::eText );
+		RemFlag( textureFlags, TextureChannel::eNormal );
+		RemFlag( textureFlags, TextureChannel::eSpecular );
+		RemFlag( textureFlags, TextureChannel::eGloss );
+		RemFlag( textureFlags, TextureChannel::eHeight );
+		RemFlag( textureFlags, TextureChannel::eEmissive );
+		AddFlag( textureFlags, TextureChannel::eText );
 
 		// Get shader
-		return DoGetPipeline( p_textureFlags );
+		return DoGetPipeline( textureFlags );
 	}
 
-	RenderPipeline & OverlayRenderer::DoGetPipeline( TextureChannels const & p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetPipeline( TextureChannels const & textureFlags )
 	{
-		auto it = m_pipelines.find( p_textureFlags );
+		auto it = m_pipelines.find( textureFlags );
 
 		if ( it == m_pipelines.end() )
 		{
 			// Since it does not exist yet, create it and initialise it
-			auto program = DoCreateOverlayProgram( p_textureFlags );
+			auto program = DoCreateOverlayProgram( textureFlags );
 
 			if ( program )
 			{
@@ -452,7 +452,7 @@ namespace Castor3D
 				auto pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( dsState ), std::move( rsState ), std::move( blState ), std::move( msState ), *program, PipelineFlags{} );
 				pipeline->AddUniformBuffer( m_matrixUbo.GetUbo() );
 				pipeline->AddUniformBuffer( m_overlayUbo.GetUbo() );
-				it = m_pipelines.emplace( p_textureFlags, std::move( pipeline ) ).first;
+				it = m_pipelines.emplace( textureFlags, std::move( pipeline ) ).first;
 			}
 			else
 			{
@@ -559,7 +559,7 @@ namespace Castor3D
 		return geometryBuffers;
 	}
 
-	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( TextureChannels const & p_textureFlags )
+	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( TextureChannels const & textureFlags )
 	{
 		using namespace GLSL;
 
@@ -579,22 +579,22 @@ namespace Castor3D
 
 			// Shader inputs
 			auto position = writer.DeclAttribute< IVec2 >( ShaderProgram::Position );
-			auto text = writer.DeclAttribute< Vec2 >( ShaderProgram::Text, CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto texture = writer.DeclAttribute< Vec2 >( ShaderProgram::Texture, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
+			auto text = writer.DeclAttribute< Vec2 >( ShaderProgram::Text, CheckFlag( textureFlags, TextureChannel::eText ) );
+			auto texture = writer.DeclAttribute< Vec2 >( ShaderProgram::Texture, CheckFlag( textureFlags, TextureChannel::eDiffuse ) );
 
 			// Shader outputs
-			auto vtx_text = writer.DeclOutput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
+			auto vtx_text = writer.DeclOutput< Vec2 >( cuT( "vtx_text" ), CheckFlag( textureFlags, TextureChannel::eText ) );
+			auto vtx_texture = writer.DeclOutput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto gl_Position = writer.DeclBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				if ( CheckFlag( p_textureFlags, TextureChannel::eText ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eText ) )
 				{
 					vtx_text = text;
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eDiffuse ) )
 				{
 					vtx_texture = texture;
 				}
@@ -615,11 +615,11 @@ namespace Castor3D
 			UBO_OVERLAY( writer );
 
 			// Shader inputs
-			auto vtx_text = writer.DeclInput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapText = writer.DeclUniform< Sampler2D >( ShaderProgram::MapText, CheckFlag( p_textureFlags, TextureChannel::eText ) );
-			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapOpacity = writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) );
+			auto vtx_text = writer.DeclInput< Vec2 >( cuT( "vtx_text" ), CheckFlag( textureFlags, TextureChannel::eText ) );
+			auto vtx_texture = writer.DeclInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapText = writer.DeclUniform< Sampler2D >( ShaderProgram::MapText, CheckFlag( textureFlags, TextureChannel::eText ) );
+			auto c3d_mapDiffuse = writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto c3d_mapOpacity = writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
 			auto pxl_v4FragColor = writer.DeclFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
@@ -629,17 +629,17 @@ namespace Castor3D
 				auto diffuse = writer.DeclLocale( cuT( "diffuse" ), materials.GetDiffuse( c3d_materialIndex ) );
 				auto alpha = writer.DeclLocale( cuT( "alpha" ), materials.GetOpacity( c3d_materialIndex ) );
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eText ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eText ) )
 				{
 					alpha *= texture( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).r();
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eDiffuse ) )
 				{
 					diffuse = texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
 					alpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r();
 				}
@@ -650,19 +650,19 @@ namespace Castor3D
 			strPs = writer.Finalise();
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eText ) )
+		if ( CheckFlag( textureFlags, TextureChannel::eText ) )
 		{
 			program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->SetValue( Pass::LightBufferIndex );
 		}
 
 		auto index = Pass::MinTextureIndex;
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
+		if ( CheckFlag( textureFlags, TextureChannel::eDiffuse ) )
 		{
 			program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->SetValue( index++ );
 		}
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
+		if ( CheckFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
 			program->CreateUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel )->SetValue( index++ );
 		}

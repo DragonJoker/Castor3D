@@ -14,15 +14,15 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlShaderProgram::GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: ShaderProgram( p_renderSystem )
+	GlShaderProgram::GlShaderProgram( OpenGl & p_gl, GlRenderSystem & renderSystem )
+		: ShaderProgram( renderSystem )
 		, Object( p_gl,
 				  "GlShaderProgram",
 				  std::bind( &OpenGl::CreateProgram, std::ref( p_gl ) ),
 				  std::bind( &OpenGl::DeleteProgram, std::ref( p_gl ), std::placeholders::_1 ),
 				  std::bind( &OpenGl::IsProgram, std::ref( p_gl ), std::placeholders::_1 )
 				)
-		, m_layout( p_gl, p_renderSystem )
+		, m_layout( p_gl, renderSystem )
 	{
 	}
 

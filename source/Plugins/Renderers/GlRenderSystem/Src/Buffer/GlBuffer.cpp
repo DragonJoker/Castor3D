@@ -3,10 +3,10 @@
 
 namespace GlRender
 {
-	GlBuffer::GlBuffer( GlRenderSystem & p_renderSystem
+	GlBuffer::GlBuffer( GlRenderSystem & renderSystem
 		, OpenGl & p_gl
 		, GlBufferTarget p_target )
-		: Castor3D::GpuBuffer( p_renderSystem )
+		: Castor3D::GpuBuffer( renderSystem )
 		, BindableType{ p_gl,
 			"GlBuffer",
 			std::bind( &OpenGl::GenBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),

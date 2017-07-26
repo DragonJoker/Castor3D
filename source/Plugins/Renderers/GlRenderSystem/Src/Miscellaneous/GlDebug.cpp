@@ -15,9 +15,9 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlDebug::GlDebug( GlRenderSystem & p_renderSystem )
-		: Holder{ p_renderSystem.GetOpenGl() }
-		, m_renderSystem{ p_renderSystem }
+	GlDebug::GlDebug( GlRenderSystem & renderSystem )
+		: Holder{ renderSystem.GetOpenGl() }
+		, m_renderSystem{ renderSystem }
 	{
 		m_pfnGetError = &glGetError;
 	}

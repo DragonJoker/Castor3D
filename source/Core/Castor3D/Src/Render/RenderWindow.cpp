@@ -1,4 +1,4 @@
-﻿#include "RenderWindow.hpp"
+#include "RenderWindow.hpp"
 
 #include "FrameBuffer/BackBuffers.hpp"
 #include "Render/RenderLoop.hpp"
@@ -47,13 +47,13 @@ namespace Castor3D
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( String const & p_name, Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
+	RenderWindow::RenderWindow( String const & p_name, Engine & engine )
+		: OwnedBy< Engine >{ engine }
 		, Named{ p_name }
 		, m_index{ s_nbRenderWindows++ }
-		, m_wpListener{ p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( m_index ) ) }
-		, m_backBuffers{ p_engine.GetRenderSystem()->CreateBackBuffers() }
-		, m_pickingPass{ std::make_unique< PickingPass >( p_engine ) }
+		, m_wpListener{ engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( m_index ) ) }
+		, m_backBuffers{ engine.GetRenderSystem()->CreateBackBuffers() }
+		, m_pickingPass{ std::make_unique< PickingPass >( engine ) }
 	{
 	}
 
@@ -205,45 +205,9 @@ namespace Castor3D
 		}
 	}
 
-	bool RenderWindow::IsMultisampling()const
-	{
-		bool result = false;
-		RenderTargetSPtr target = GetRenderTarget();
-
-		if ( target )
-		{
-			result = target->IsMultisampling();
-		}
-
-		return result;
-	}
-
-	int32_t RenderWindow::GetSamplesCount()const
-	{
-		int32_t result = 0;
-		RenderTargetSPtr target = GetRenderTarget();
-
-		if ( target )
-		{
-			result = target->GetSamplesCount();
-		}
-
-		return result;
-	}
-
 	void RenderWindow::UpdateFullScreen( bool p_value )
 	{
 		m_bFullscreen = p_value;
-	}
-
-	void RenderWindow::SetSamplesCount( int32_t val )
-	{
-		RenderTargetSPtr target = GetRenderTarget();
-
-		if ( target )
-		{
-			target->SetSamplesCount( val );
-		}
 	}
 
 	SceneSPtr RenderWindow::GetScene()const

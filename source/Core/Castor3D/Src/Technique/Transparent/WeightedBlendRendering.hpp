@@ -46,7 +46,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 */
-		WeightedBlendRendering( Engine & p_engine
+		WeightedBlendRendering( Engine & engine
 			, TransparentPass & p_transparentPass
 			, FrameBuffer & p_frameBuffer
 			, Castor::Size const & p_size

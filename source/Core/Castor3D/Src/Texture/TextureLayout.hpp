@@ -45,18 +45,18 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_type			The texture type.
-		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	renderSystem	The render system.
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_type			Le type de texture.
-		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
 		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
 		 */
 		C3D_API TextureLayout(
-			RenderSystem & p_renderSystem,
+			RenderSystem & renderSystem,
 			TextureType p_type,
 			AccessTypes const & p_cpuAccess,
 			AccessTypes const & p_gpuAccess );
@@ -64,7 +64,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_type			The texture type.
-		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	renderSystem	The render system.
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 *\param[in]	p_format		The texture format.
@@ -72,14 +72,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_type			Le type de texture.
-		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
 		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
 		 *\param[in]	p_format		Le format de la texture.
 		 *\param[in]	p_size			Les dimensions de la texture.
 		 */
 		C3D_API TextureLayout(
-			RenderSystem & p_renderSystem,
+			RenderSystem & renderSystem,
 			TextureType p_type,
 			AccessTypes const & p_cpuAccess,
 			AccessTypes const & p_gpuAccess,
@@ -89,7 +89,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_type			The texture type.
-		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	renderSystem	The render system.
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 *\param[in]	p_format		The texture format.
@@ -97,14 +97,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_type			Le type de texture.
-		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
 		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
 		 *\param[in]	p_format		Le format de la texture.
 		 *\param[in]	p_size			Les dimensions de la texture.
 		 */
 		C3D_API TextureLayout(
-			RenderSystem & p_renderSystem,
+			RenderSystem & renderSystem,
 			TextureType p_type,
 			AccessTypes const & p_cpuAccess,
 			AccessTypes const & p_gpuAccess,

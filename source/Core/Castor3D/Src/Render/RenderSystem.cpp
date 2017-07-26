@@ -8,8 +8,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderSystem::RenderSystem( Engine & p_engine, String const & p_name )
-		: OwnedBy< Engine >{ p_engine }
+	RenderSystem::RenderSystem( Engine & engine, String const & p_name )
+		: OwnedBy< Engine >{ engine }
 		, m_name{ p_name }
 		, m_initialised{ false }
 		, m_gpuInformations{}

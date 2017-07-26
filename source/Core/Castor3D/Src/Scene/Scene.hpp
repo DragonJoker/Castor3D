@@ -109,13 +109,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_name		The scene name
-		 *\param[in]	p_engine	The core engine
+		 *\param[in]	engine	The core engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name		Le nom de la scène
-		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Scene( Castor::String const & p_name, Engine & p_engine );
+		C3D_API Scene( Castor::String const & p_name, Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

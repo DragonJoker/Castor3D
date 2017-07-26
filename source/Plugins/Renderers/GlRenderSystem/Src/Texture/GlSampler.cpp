@@ -8,8 +8,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlSampler::GlSampler( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_name )
-		: Sampler( *p_renderSystem->GetEngine(), p_name )
+	GlSampler::GlSampler( OpenGl & p_gl, GlRenderSystem * renderSystem, Castor::String const & p_name )
+		: Sampler( *renderSystem->GetEngine(), p_name )
 		, ObjectType( p_gl,
 					  "GlSampler",
 					  std::bind( &OpenGl::GenSamplers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),

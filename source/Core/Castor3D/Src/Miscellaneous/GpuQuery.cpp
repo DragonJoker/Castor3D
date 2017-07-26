@@ -4,8 +4,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	GpuQuery::GpuQuery( RenderSystem & p_renderSystem, QueryType p_query )
-		: OwnedBy< RenderSystem >( p_renderSystem )
+	GpuQuery::GpuQuery( RenderSystem & renderSystem, QueryType p_query )
+		: OwnedBy< RenderSystem >( renderSystem )
 		, m_type( p_query )
 	{
 	}

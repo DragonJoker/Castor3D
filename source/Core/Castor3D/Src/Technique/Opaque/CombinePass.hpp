@@ -42,38 +42,38 @@ namespace Castor3D
 	*/
 	struct CombineProgram
 	{
-		CombineProgram( CombineProgram const & p_rhs ) = delete;
-		CombineProgram & operator=( CombineProgram const & p_rhs ) = delete;
-		CombineProgram( CombineProgram && p_rhs ) = default;
-		CombineProgram & operator=( CombineProgram && p_rhs ) = default;
+		CombineProgram( CombineProgram const & ) = delete;
+		CombineProgram & operator=( CombineProgram const & ) = delete;
+		CombineProgram( CombineProgram && ) = default;
+		CombineProgram & operator=( CombineProgram && ) = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_vbo		The vertex buffer containing the quad.
-		 *\param[in]	p_matrixUbo	The matrix UBO.
-		 *\param[in]	p_sceneUbo	The scene UBO.
-		 *\param[in]	p_gpInfo	The geometry pass UBO.
-		 *\param[in]	p_ssao		The SSAO activation status.
-		 *\param[in]	p_fogType	The fog type.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	vbo			The vertex buffer containing the quad.
+		 *\param[in]	matrixUbo	The matrix UBO.
+		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	hasSsao		The SSAO activation status.
+		 *\param[in]	fogType		The fog type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_vbo		Le tampon de sommets contenant le quad.
-		 *\param[in]	p_matrixUbo	L'UBO des matrices.
-		 *\param[in]	p_sceneUbo	L'UBO de la scène.
-		 *\param[in]	p_gpInfo	L'UBO de la geometry pass.
-		 *\param[in]	p_ssao		Le statut d'activation du SSAO.
-		 *\param[in]	p_fogType	Le type de brouillard.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	vbo			Le tampon de sommets contenant le quad.
+		 *\param[in]	matrixUbo	L'UBO des matrices.
+		 *\param[in]	sceneUbo	L'UBO de la scène.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	hasSsao		Le statut d'activation du SSAO.
+		 *\param[in]	fogType		Le type de brouillard.
 		 */
-		CombineProgram( Engine & p_engine
-			, VertexBuffer & p_vbo
-			, MatrixUbo & p_matrixUbo
-			, SceneUbo & p_sceneUbo
-			, GpInfoUbo & p_gpInfo
-			, bool p_ssao
-			, bool p_pbr
-			, GLSL::FogType p_fogType );
+		CombineProgram( Engine & engine
+			, VertexBuffer & vbo
+			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo
+			, bool hasSsao
+			, bool isPbr
+			, GLSL::FogType fogType );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -118,19 +118,24 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_size		The render size.
-		 *\param[in]	p_config	The SSAO configuration.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	size		The render size.
+		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_size		La taille du rendu.
-		 *\param[in]	p_config	La configuration du SSAO.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	size		La taille du rendu.
+		 *\param[in]	sceneUbo	L'UBO de la scène.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	config		La configuration du SSAO.
 		 */
-		CombinePass( Engine & p_engine
-			, Castor::Size const & p_size
-			, SceneUbo & p_sceneUbo
-			, SsaoConfig const & p_config );
+		CombinePass( Engine & engine
+			, Castor::Size const & size
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -141,68 +146,62 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the combination on given framebuffer.
-		 *\param[in]	p_gp			The geometry pass result.
-		 *\param[in]	p_lp			The light pas result.
-		 *\param[in]	p_camera		The viewing camera.
-		 *\param[in]	p_invViewProj	The inverse view projection matrix.
-		 *\param[in]	p_invView		The inverse view matrix.
-		 *\param[in]	p_invProj		The inverse projection matrix.
-		 *\param[in]	p_fog			The fog.
-		 *\param[in]	p_frameBuffer	The target framebuffer.
+		 *\param[in]	gp			The geometry pass result.
+		 *\param[in]	lp		The light pas result.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	invViewProj	The inverse view projection matrix.
+		 *\param[in]	invView		The inverse view matrix.
+		 *\param[in]	invProj		The inverse projection matrix.
+		 *\param[in]	fog			The fog.
+		 *\param[in]	frameBuffer	The target framebuffer.
 		 *\~french
 		 *\brief		Dessine la combinaison sur le tampon d'image donné.
-		 *\param[in]	p_gp			Le résultat de la geometry pass.
-		 *\param[in]	p_lp			Le résultat de la light pass.
-		 *\param[in]	p_camera		La caméra.
-		 *\param[in]	p_invViewProj	La matrice vue projection inversée.
-		 *\param[in]	p_invView		La matrice vue inversée.
-		 *\param[in]	p_invProj		La matrice projection inversée.
-		 *\param[in]	p_fog			Le brouillard.
-		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
+		 *\param[in]	gp			Le résultat de la geometry pass.
+		 *\param[in]	lp		Le résultat de la light pass.
+		 *\param[in]	camera		La caméra.
+		 *\param[in]	invViewProj	La matrice vue projection inversée.
+		 *\param[in]	invView		La matrice vue inversée.
+		 *\param[in]	invProj		La matrice projection inversée.
+		 *\param[in]	fog			Le brouillard.
+		 *\param[in]	frameBuffer	Le tampon d'image cible.
 		 */
-		void Render( GeometryPassResult const & p_gp
-			, TextureUnit const & p_light
-			, TextureUnit const & p_reflection
-			, TextureUnit const & p_refraction
-			, Camera const & p_camera
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj
-			, Fog const & p_fog
-			, FrameBuffer const & p_frameBuffer );
+		void Render( GeometryPassResult const & gp
+			, TextureUnit const & light
+			, TextureUnit const & reflection
+			, TextureUnit const & refraction
+			, Fog const & fog
+			, FrameBuffer const & frameBuffer
+			, RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Renders the combination on given framebuffer.
-		 *\param[in]	p_gp			The geometry pass result.
-		 *\param[in]	p_lp			The light pas result.
-		 *\param[in]	p_camera		The viewing camera.
-		 *\param[in]	p_invViewProj	The inverse view projection matrix.
-		 *\param[in]	p_invView		The inverse view matrix.
-		 *\param[in]	p_invProj		The inverse projection matrix.
-		 *\param[in]	p_fog			The fog.
-		 *\param[in]	p_frameBuffer	The target framebuffer.
+		 *\param[in]	gp			The geometry pass result.
+		 *\param[in]	lp			The light pas result.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	invViewProj	The inverse view projection matrix.
+		 *\param[in]	invView		The inverse view matrix.
+		 *\param[in]	invProj		The inverse projection matrix.
+		 *\param[in]	fog			The fog.
+		 *\param[in]	frameBuffer	The target framebuffer.
 		 *\~french
 		 *\brief		Dessine la combinaison sur le tampon d'image donné.
-		 *\param[in]	p_gp			Le résultat de la geometry pass.
-		 *\param[in]	p_lp			Le résultat de la light pass.
-		 *\param[in]	p_camera		La caméra.
-		 *\param[in]	p_invViewProj	La matrice vue projection inversée.
-		 *\param[in]	p_invView		La matrice vue inversée.
-		 *\param[in]	p_invProj		La matrice projection inversée.
-		 *\param[in]	p_fog			Le brouillard.
-		 *\param[in]	p_frameBuffer	Le tampon d'image cible.
+		 *\param[in]	gp			Le résultat de la geometry pass.
+		 *\param[in]	lp			Le résultat de la light pass.
+		 *\param[in]	camera		La caméra.
+		 *\param[in]	invViewProj	La matrice vue projection inversée.
+		 *\param[in]	invView		La matrice vue inversée.
+		 *\param[in]	invProj		La matrice projection inversée.
+		 *\param[in]	fog			Le brouillard.
+		 *\param[in]	frameBuffer	Le tampon d'image cible.
 		 */
-		void Render( GeometryPassResult const & p_gp
-			, TextureUnit const & p_light
-			, TextureUnit const & p_reflection
-			, TextureUnit const & p_refraction
-			, IblTextures const & p_ibl
-			, Camera const & p_camera
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj
-			, Fog const & p_fog
-			, FrameBuffer const & p_frameBuffer );
+		void Render( GeometryPassResult const & gp
+			, TextureUnit const & light
+			, TextureUnit const & reflection
+			, TextureUnit const & refraction
+			, IblTextures const & ibl
+			, Fog const & fog
+			, FrameBuffer const & frameBuffer
+			, RenderInfo & info );
 		/**
 		 *\~english
 		 *\return		The SSAO texture.
@@ -229,7 +228,7 @@ namespace Castor3D
 		MatrixUbo m_matrixUbo;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
-		GpInfoUbo m_gpInfo;
+		GpInfoUbo & m_gpInfoUbo;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
 		CombinePrograms m_programs;
@@ -239,6 +238,9 @@ namespace Castor3D
 		//!\~english	The SSAO pass.
 		//!\~french		La passe SSAO.
 		SsaoPass m_ssao;
+		//!\~english	The render pass timer.
+		//!\~french		Le timer de la passe de rendu.
+		RenderPassTimerSPtr m_timer;
 	};
 }
 

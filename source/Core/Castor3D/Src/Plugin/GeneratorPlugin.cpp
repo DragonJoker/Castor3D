@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::eGenerator, p_library, *p_engine )
+	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_library, Engine * engine )
+		: Plugin( PluginType::eGenerator, p_library, *engine )
 	{
 		if ( m_pfnOnLoad )
 		{

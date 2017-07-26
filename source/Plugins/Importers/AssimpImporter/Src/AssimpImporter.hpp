@@ -70,10 +70,10 @@ namespace C3dAssimp
 		: public Castor3D::Importer
 	{
 	public:
-		AssimpImporter( Castor3D::Engine & p_engine );
+		AssimpImporter( Castor3D::Engine & engine );
 		~AssimpImporter();
 
-		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & engine );
 
 	private:
 		/**

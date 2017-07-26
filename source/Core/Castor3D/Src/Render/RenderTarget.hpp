@@ -71,23 +71,23 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor
-			 *\param[in]	p_tabs	The tabulations to put at the beginning of each line
+			 *\param[in]	tabs	The tabulations to put at the beginning of each line
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
+			 *\param[in]	tabs	Les tabulations à mettre à chaque début de ligne
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a render target into a text file
-			 *\param[in]	p_target	the render target
-			 *\param[in]	p_file		the file
+			 *\param[in]	target	the render target
+			 *\param[in]	file	the file
 			 *\~french
 			 *\brief		Ecrit une cible de rendu dans un fichier texte
-			 *\param[in]	p_target	La cible de rendu
-			 *\param[in]	p_file		Le fichier
+			 *\param[in]	target	La cible de rendu
+			 *\param[in]	file	Le fichier
 			 */
-			C3D_API bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Castor3D::RenderTarget const & target, Castor::TextFile & file )override;
 		};
 
 	private:
@@ -100,11 +100,11 @@ namespace Castor3D
 		\~french
 		\brief		Structure interne contenant un tampon d'image complet
 		*/
-		struct stFRAME_BUFFER
+		struct TargetFbo
 		{
 		public:
-			explicit stFRAME_BUFFER( RenderTarget & p_renderTarget );
-			bool Initialise( uint32_t p_index, Castor::Size const & p_size );
+			explicit TargetFbo( RenderTarget & renderTarget );
+			bool Initialise( uint32_t index, Castor::Size const & size );
 			void Cleanup();
 
 			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
@@ -121,15 +121,15 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 * Specified constructor
-		 *\param[in]	p_pRoot			The engine root
-		 *\param[in]	p_eTargetType	The render target type
+		 *\brief		Specified constructor.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	type	The render target type.
 		 *\~french
-		 * Constructeur spécifié
-		 *\param[in]	p_pRoot			Le moteur
-		 *\param[in]	p_eTargetType	Le type de render target
+		 *\brief		Constructeur spécifié.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	type	Le type de render target.
 		 */
-		C3D_API RenderTarget( Engine & p_pRoot, TargetType p_eTargetType = TargetType::eWindow );
+		C3D_API RenderTarget( Engine & engine, TargetType type = TargetType::eWindow );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -140,23 +140,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
-		 *\param[out]	p_info	Receives the render informations.
+		 *\param[out]	info	Receives the render informations.
 		 *\~french
 		 *\brief		Dessine une frame.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
+		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void Render( RenderInfo & p_info );
+		C3D_API void Render( RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
 		 *\remarks		Initialises the buffers
-		 *\param[in]	p_index	The base texture index
+		 *\param[in]	index	The base texture index
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 *\remarks		Initialise les buffers
-		 *\param[in]	p_index	L'index de texture de base
+		 *\param[in]	index	L'index de texture de base
 		 */
-		C3D_API void Initialise( uint32_t p_index );
+		C3D_API void Initialise( uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -168,22 +168,22 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the target dimensions.
 		 *\remarks		This method must be called before initialisation, otherwise it will have no effect.
-		 *\param[in]	p_size	The new dimensions.
+		 *\param[in]	size	The new dimensions.
 		 *\~english
 		 *\brief		Définit les dimensions la cible.
 		 *\remarks		Cette méthode doit être appelée avant l'initialisation, sinon elle n'aura aucun effet.
-		 *\param[in]	p_size	Les nouvelles dimensions.
+		 *\param[in]	size	Les nouvelles dimensions.
 		 */
-		C3D_API void SetSize( Castor::Size const & p_size );
+		C3D_API void SetSize( Castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		Adds RenderTechnique parameters.
-		 *\param[in]	p_parameters	The RenderTechnique parameters.
+		 *\param[in]	parameters	The RenderTechnique parameters.
 		 *\~french
 		 *\brief		Ajoute des paramètres de RenderTechnique.
-		 *\param[in]	p_parameters	Les paramètres de la RenderTechnique.
+		 *\param[in]	parameters	Les paramètres de la RenderTechnique.
 		 */
-		C3D_API void AddTechniqueParameters( Parameters const & p_parameters );
+		C3D_API void AddTechniqueParameters( Parameters const & parameters );
 		/**
 		 *\~english
 		 *\brief		Retrieves the ViewportType
@@ -196,43 +196,44 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the ViewportType
-		 *\param[in]	val	The new ViewportType
+		 *\param[in]	value	The new ViewportType
 		 *\~french
 		 *\brief		Définit le ViewportType
-		 *\param[in]	val	Le nouveau ViewportType
+		 *\param[in]	value	Le nouveau ViewportType
 		 */
-		C3D_API void SetViewportType( ViewportType val );
+		C3D_API void SetViewportType( ViewportType value );
 		/**
 		 *\~english
 		 *\brief		Sets the camera
 		 *\remarks		Defines also LEye and REye cameras
-		 *\param[in]	p_pCamera	The new camera
+		 *\param[in]	camera	The new camera
 		 *\~french
 		 *\brief		Définit la caméra
 		 *\remarks		Définit aussi les caméras des yeux gauche et droit
-		 *\param[in]	p_pCamera	La nouvelle caméra
+		 *\param[in]	camera	La nouvelle caméra
 		 */
-		C3D_API void SetCamera( CameraSPtr p_pCamera );
+		C3D_API void SetCamera( CameraSPtr camera );
 		/**
 		 *\~english
 		 *\brief		Sets the tone mapping implementation type.
-		 *\param[in]	p_name			The type.
-		 *\param[in]	p_parameters	The parameters.
+		 *\param[in]	name		The type.
+		 *\param[in]	parameters	The parameters.
 		 *\~french
 		 *\brief		Définit le type d'implémentation de mappage de tons.
-		 *\param[in]	p_name			Le type.
-		 *\param[in]	p_parameters	Les paramètres.
+		 *\param[in]	name		Le type.
+		 *\param[in]	parameters	Les paramètres.
 		 */
-		C3D_API void SetToneMappingType( Castor::String const & p_name, Parameters const & p_parameters );
+		C3D_API void SetToneMappingType( Castor::String const & name
+			, Parameters const & parameters );
 		/**
 		 *\~english
 		 *\brief		Adds a shadow producing light source.
-		 *\param[in]	p_light	The light source.
+		 *\param[in]	light	The light source.
 		 *\~french
 		 *\brief		Ajoute une source lumineuse produisant des ombres.
-		 *\param[in]	p_light	La source lumineuse.
+		 *\param[in]	light	La source lumineuse.
 		 */
-		C3D_API void AddShadowProducer( Light & p_light );
+		C3D_API void AddShadowProducer( Light & light );
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status
@@ -272,50 +273,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the RenderTechnique
-		 *\param[in]	p_pTechnique	The RenderTechnique
+		 *\param[in]	technique	The RenderTechnique
 		 *\~french
 		 *\brief		Définit la RenderTechnique
-		 *\param[in]	p_pTechnique	La RenderTechnique
+		 *\param[in]	technique	La RenderTechnique
 		 */
-		inline void SetTechnique( RenderTechniqueSPtr p_pTechnique )
+		inline void SetTechnique( RenderTechniqueSPtr technique )
 		{
-			m_renderTechnique = p_pTechnique;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the multisampling status
-		 *\return		The multisampling status
-		 *\~french
-		 *\brief		Récupère le statut de multisampling
-		 *\return		Le statut de multisampling
-		 */
-		inline bool IsMultisampling()const
-		{
-			return m_bMultisampling;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the samples count
-		 *\return		The samples count
-		 *\~french
-		 *\brief		Récupère le nombre de samples
-		 *\return		Le nombre de samples
-		 */
-		inline int32_t GetSamplesCount()const
-		{
-			return m_samplesCount;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the samples count
-		 *\param[in]	val	The new samples count
-		 *\~french
-		 *\brief		Définit le nombre de samples
-		 *\param[in]	val	Le nouveau nombre de samples
-		 */
-		inline void	SetSamplesCount( int32_t val )
-		{
-			m_samplesCount = val;
+			m_renderTechnique = technique;
 		}
 		/**
 		 *\~english
@@ -327,7 +292,7 @@ namespace Castor3D
 		 */
 		inline SceneSPtr GetScene()const
 		{
-			return m_pScene.lock();
+			return m_scene.lock();
 		}
 		/**
 		 *\~english
@@ -339,31 +304,31 @@ namespace Castor3D
 		 */
 		inline CameraSPtr GetCamera()const
 		{
-			return m_pCamera.lock();
+			return m_camera.lock();
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the Scene
-		 *\param[in]	p_scene	The new Scene
+		 *\param[in]	scene	The new Scene
 		 *\~french
 		 *\brief		Définit la Scene
-		 *\param[in]	p_scene	La nouvelle Scene
+		 *\param[in]	scene	La nouvelle Scene
 		 */
-		inline void SetScene( SceneSPtr p_scene )
+		inline void SetScene( SceneSPtr scene )
 		{
-			m_pScene = p_scene;
+			m_scene = scene;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the SSAO configuration.
-		 *\param[in]	p_config	The new value.
+		 *\param[in]	config	The new value.
 		 *\~french
 		 *\brief		Définit la configuration du SSAO.
-		 *\param[in]	p_config	La nouvelle value.
+		 *\param[in]	config	La nouvelle value.
 		 */
-		inline void SetSsaoConfig( SsaoConfig const & p_config )
+		inline void SetSsaoConfig( SsaoConfig const & config )
 		{
-			m_ssaoConfig = p_config;
+			m_ssaoConfig = config;
 		}
 		/**
 		 *\~english
@@ -404,14 +369,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the window pixel format
-		 *\param[in]	val	The new window pixel format
+		 *\param[in]	value	The new window pixel format
 		 *\~french
 		 *\brief		Définit le format des pixels de la fenêtre
-		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
+		 *\param[in]	value	Le nouveau format des pixels de la fenêtre
 		 */
-		inline void SetPixelFormat( Castor::PixelFormat val )
+		inline void SetPixelFormat( Castor::PixelFormat value )
 		{
-			m_pixelFormat = val;
+			m_pixelFormat = value;
 		}
 		/**
 		 *\~english
@@ -423,19 +388,19 @@ namespace Castor3D
 		 */
 		inline TargetType GetTargetType()const
 		{
-			return m_eTargetType;
+			return m_type;
 		}
 		/**
 		 *\~english
 		 *\brief		Adds a post effect to the list.
-		 *\param[in]	p_effect	The effect.
+		 *\param[in]	effect	The effect.
 		 *\~french
 		 *\brief		Ajoute un effet post rendu à la liste.
-		 *\param[in]	p_effect	L'effet.
+		 *\param[in]	effect	L'effet.
 		 */
-		inline void AddPostEffect( PostEffectSPtr p_effect )
+		inline void AddPostEffect( PostEffectSPtr effect )
 		{
-			m_postEffects.push_back( p_effect );
+			m_postEffects.push_back( effect );
 		}
 		/**
 		 *\~english
@@ -469,16 +434,21 @@ namespace Castor3D
 		}
 
 	private:
-		C3D_API void DoRender( RenderInfo & p_info, stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera );
+		C3D_API void DoRender( RenderInfo & info
+			, TargetFbo & fbo
+			, CameraSPtr camera );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
 		C3D_API static const Castor::String DefaultSamplerName;
 
-	protected:
+	private:
+		//!\~english	The number of actually created render targets.
+		//!\~french		Le compte de render target actuellement créées.
+		static uint32_t sm_uiCount;
 		//!\~english	The render target type.
 		//!\~french		Type de RenderTarget.
-		TargetType m_eTargetType;
+		TargetType m_type;
 		//!\~english	Tells if the target is initalised.
 		//!\~french		Dit si la cible est initialisée.
 		bool m_initialised;
@@ -488,27 +458,18 @@ namespace Castor3D
 		//!\~english	The technique used to render this target.
 		//!\~french		La technique utilisée pour rendre cette cible.
 		RenderTechniqueSPtr m_renderTechnique;
-		//!\~english	Tells whether or not to use multisampling.
-		//!\~french		Dit si on utilise le multisampling ou pas.
-		bool m_bMultisampling;
-		//!\~english	Defines the samples count if multisampling is activated.
-		//!\~french		Le nombre de samples utilisés pour le multisampling.
-		int32_t m_samplesCount;
 		//!\~english	The scene rendered in this render target.
 		//!\~french		La scène rendue par cette RenderTarget.
-		SceneWPtr m_pScene;
+		SceneWPtr m_scene;
 		//!\~english	The camera used to render the scene.
 		//!\~french		La caméra utilisée pour rendre la scène.
-		CameraWPtr m_pCamera;
+		CameraWPtr m_camera;
 		//!\~english	Frame buffer.
 		//!\~french		tampon d'image.
-		stFRAME_BUFFER m_frameBuffer;
+		TargetFbo m_frameBuffer;
 		//!\~english	The target display format.
 		//!\~french		Le format des pixels de la cible.
 		Castor::PixelFormat m_pixelFormat;
-		//!\~english	The number of actually created render targets.
-		//!\~french		Le compte de render target actuellement créées.
-		static uint32_t sm_uiCount;
 		//!\~english	This render target's index.
 		//!\~french		L'index de cette render target.
 		uint32_t m_index;
@@ -524,6 +485,9 @@ namespace Castor3D
 		//!\~english	The SSAO configuration.
 		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
+		//!\~english	The render pass timer.
+		//!\~french		Le timer de passe de rendu.
+		RenderPassTimerSPtr m_timer;
 	};
 }
 

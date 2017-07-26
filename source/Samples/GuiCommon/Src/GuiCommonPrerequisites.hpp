@@ -228,29 +228,29 @@ namespace GuiCommon
 	/**
 	 *\~english
 	 *\brief		Loads a scene.
-	 *\param[in]	p_engine	The engine.
+	 *\param[in]	engine	The engine.
 	 *\param[in]	p_fileName	The scene file name.
 	 *\param[in]	p_wantedFps	The wanted FPS.
 	 *\param[in]	p_threaded	Tells if the engine must initialise its threaded render loop.
 	 *\return		true if everything is ok.
 	 *\~french
 	 *\brief		Charge une scène.
-	 *\param[in]	p_engine	Le moteur.
+	 *\param[in]	engine	Le moteur.
 	 *\param[in]	p_fileName	Le nom du fichier de scène.
 	 *\param[in]	p_wantedFps	Les FPS voulues.
 	 *\param[in]	p_threaded	Dit si le moteur doit initialiser sa boucle de rendu threadée.
 	 *\return		true si tout s'est bien passé.
 	 */
-	Castor3D::RenderWindowSPtr LoadScene( Castor3D::Engine & p_engine, Castor::Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
+	Castor3D::RenderWindowSPtr LoadScene( Castor3D::Engine & engine, Castor::Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
 	/**
 	 *\~english
 	 *\brief		Loads the eingine plug-ins.
-	 *\param[in]	p_engine	The engine.
+	 *\param[in]	engine	The engine.
 	 *\~french
 	 *\brief		Charge les plug-ins du moteur.
-	 *\param[in]	p_engine	Le moteur.
+	 *\param[in]	engine	Le moteur.
 	 */
-	void LoadPlugins( Castor3D::Engine & p_engine );
+	void LoadPlugins( Castor3D::Engine & engine );
 	/**
 	 *\~english
 	 *\brief		Creates a WindowHandle from a wxWindow
@@ -266,17 +266,17 @@ namespace GuiCommon
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets
 	 *\remarks		Uses a custom SFontImpl
-	 *\param[in]	p_engine	The Castor3D engine, to check for font existence
+	 *\param[in]	engine	The Castor3D engine, to check for font existence
 	 *\param[in]	p_font		The wxWidgets font
 	 *\return		The loaded font
 	 *\~french
 	 *\brief		Charge les glyphes de la police en utilisant wxWidgets
 	 *\remarks		Utilise une version personnalisée de SFontImpl
-	 *\param[in]	p_engine	Le moteur, pour vérifier l'existance de la police
+	 *\param[in]	engine	Le moteur, pour vérifier l'existance de la police
 	 *\param[in]	p_font		La police wxWidgets
 	 *\return		La police chargée
 	 */
-	Castor::FontSPtr make_Font( Castor3D::Engine * p_engine, wxFont const & p_font );
+	Castor::FontSPtr make_Font( Castor3D::Engine * engine, wxFont const & p_font );
 	/**
 	 *\~english
 	 *\brief		Creates a Castor::String from a wxString

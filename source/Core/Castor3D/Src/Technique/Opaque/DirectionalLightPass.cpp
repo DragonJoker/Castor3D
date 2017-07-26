@@ -1,4 +1,4 @@
-﻿#include "DirectionalLightPass.hpp"
+#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -28,10 +28,10 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	DirectionalLightPass::Program::Program( Engine & p_engine
-		, GLSL::Shader const & p_vtx
-		, GLSL::Shader const & p_pxl )
-		: LightPass::Program{ p_engine, p_vtx, p_pxl }
+	DirectionalLightPass::Program::Program( Engine & engine
+		, GLSL::Shader const & vtx
+		, GLSL::Shader const & pxl )
+		: LightPass::Program{ engine, vtx, pxl }
 		, m_lightIntensity{ m_program->CreateUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
 		, m_lightDirection{ m_program->CreateUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
 		, m_lightTransform{ m_program->CreateUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
@@ -42,14 +42,14 @@ namespace Castor3D
 	{
 	}
 
-	RenderPipelineUPtr DirectionalLightPass::Program::DoCreatePipeline( bool p_blend )
+	RenderPipelineUPtr DirectionalLightPass::Program::DoCreatePipeline( bool blend )
 	{
 		DepthStencilState dsstate;
 		dsstate.SetDepthTest( false );
 		dsstate.SetDepthMask( WritingMask::eZero );
 		BlendState blstate;
 
-		if ( p_blend )
+		if ( blend )
 		{
 			blstate.EnableBlend( true );
 			blstate.SetBlendOp( BlendOperation::eAdd );
@@ -65,22 +65,23 @@ namespace Castor3D
 			, PipelineFlags{} );
 	}
 
-	void DirectionalLightPass::Program::DoBind( Light const & p_light )
+	void DirectionalLightPass::Program::DoBind( Light const & light )
 	{
-		auto & light = *p_light.GetDirectionalLight();
-		m_lightIntensity->SetValue( light.GetIntensity() );
-		m_lightDirection->SetValue( light.GetDirection() );
-		m_lightTransform->SetValue( light.GetLightSpaceTransform() );
+		auto & directionalLight = *light.GetDirectionalLight();
+		m_lightIntensity->SetValue( directionalLight.GetIntensity() );
+		m_lightDirection->SetValue( directionalLight.GetDirection() );
+		m_lightTransform->SetValue( directionalLight.GetLightSpaceTransform() );
 	}
 
 	//*********************************************************************************************
 
-	DirectionalLightPass::DirectionalLightPass( Engine & p_engine
-		, FrameBuffer & p_frameBuffer
-		, FrameBufferAttachment & p_depthAttach
-		, bool p_shadows )
-		: LightPass{ p_engine, p_frameBuffer, p_depthAttach, p_shadows }
-		, m_viewport{ p_engine }
+	DirectionalLightPass::DirectionalLightPass( Engine & engine
+		, FrameBuffer & frameBuffer
+		, FrameBufferAttachment & depthAttach
+		, GpInfoUbo & gpInfoUbo
+		, bool hasShadows )
+		: LightPass{ engine, frameBuffer, depthAttach, gpInfoUbo, hasShadows }
+		, m_viewport{ engine }
 	{
 		auto declaration = BufferDeclaration(
 		{
@@ -115,14 +116,14 @@ namespace Castor3D
 		m_matrixUbo.GetUbo().Cleanup();
 	}
 
-	void DirectionalLightPass::Initialise( Scene const & p_scene
-		, SceneUbo & p_sceneUbo )
+	void DirectionalLightPass::Initialise( Scene const & scene
+		, SceneUbo & sceneUbo )
 	{
-		DoInitialise( p_scene
+		DoInitialise( scene
 			, LightType::eDirectional
 			, *m_vertexBuffer
 			, nullptr
-			, p_sceneUbo
+			, sceneUbo
 			, nullptr );
 		m_viewport.Update();
 	}
@@ -137,15 +138,15 @@ namespace Castor3D
 		return VertexCount;
 	}
 
-	void DirectionalLightPass::DoUpdate( Size const & p_size
-		, Light const & p_light
-		, Camera const & p_camera )
+	void DirectionalLightPass::DoUpdate( Size const & size
+		, Light const & light
+		, Camera const & camera )
 	{
-		m_viewport.Resize( p_size );
-		m_matrixUbo.Update( p_camera.GetView(), m_viewport.GetProjection() );
+		m_viewport.Resize( size );
+		m_matrixUbo.Update( camera.GetView(), m_viewport.GetProjection() );
 	}
 
-	GLSL::Shader DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & p_sceneFlags )const
+	GLSL::Shader DirectionalLightPass::DoGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter writer = m_engine.GetRenderSystem()->CreateGlslWriter();
@@ -166,9 +167,9 @@ namespace Castor3D
 		return writer.Finalise();
 	}
 
-	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( GLSL::Shader const & p_vtx
-		, GLSL::Shader const & p_pxl )const
+	LightPass::ProgramPtr DirectionalLightPass::DoCreateProgram( GLSL::Shader const & vtx
+		, GLSL::Shader const & pxl )const
 	{
-		return std::make_unique< Program >( m_engine, p_vtx, p_pxl );
+		return std::make_unique< Program >( m_engine, vtx, pxl );
 	}
 }

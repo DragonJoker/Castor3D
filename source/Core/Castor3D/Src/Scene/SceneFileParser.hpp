@@ -170,7 +170,7 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		C3D_API explicit SceneFileParser( Engine & p_engine );
+		C3D_API explicit SceneFileParser( Engine & engine );
 		/**
 		 * Destructor
 		 */

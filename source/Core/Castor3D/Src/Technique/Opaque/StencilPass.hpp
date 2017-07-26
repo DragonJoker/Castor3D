@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -42,33 +42,33 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_frameBuffer		The target framebuffer.
-		 *\param[in]	p_depthAttach		The depth buffer attach.
-		 *\param[in]	p_matrixUbo			The matrix UBO.
-		 *\param[in]	p_modelMatrixUbo	The model matrix UBO.
+		 *\param[in]	frameBuffer		The target framebuffer.
+		 *\param[in]	depthAttach		The depth buffer attach.
+		 *\param[in]	matrixUbo		The matrix UBO.
+		 *\param[in]	modelMatrixUbo	The model matrix UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_frameBuffer		Le tampon d'image cible.
-		 *\param[in]	p_depthAttach		L'attache du tampon de profondeur.
-		 *\param[in]	p_matrixUbo			L'UBO des matrices.
-		 *\param[in]	p_modelMatrixUbo	L'UBO des matrices modèle.
+		 *\param[in]	frameBuffer		Le tampon d'image cible.
+		 *\param[in]	depthAttach		L'attache du tampon de profondeur.
+		 *\param[in]	matrixUbo		L'UBO des matrices.
+		 *\param[in]	modelMatrixUbo	L'UBO des matrices modèle.
 		 */
-		StencilPass( FrameBuffer & p_frameBuffer
-			, FrameBufferAttachment & p_depthAttach
-			, MatrixUbo & p_matrixUbo
-			, ModelMatrixUbo & p_modelMatrixUbo );
+		StencilPass( FrameBuffer & frameBuffer
+			, FrameBufferAttachment & depthAttach
+			, MatrixUbo & matrixUbo
+			, ModelMatrixUbo & modelMatrixUbo );
 		/**
 		 *\~english
 		 *\brief		Initialises the program and its pipeline.
-		 *\param[in]	p_vbo	The vertex buffer containing the object to render.
-		 *\param[in]	p_ibo	An optional index buffer.
+		 *\param[in]	vbo	The vertex buffer containing the object to render.
+		 *\param[in]	ibo	An optional index buffer.
 		 *\~french
 		 *\brief		Initialise le programme et son pipeline.
-		 *\param[in]	p_vbo	Le tampon de sommets contenant l'objet à dessiner.
-		 *\param[in]	p_ibo	Un tampon d'indices optionnel.
+		 *\param[in]	vbo	Le tampon de sommets contenant l'objet à dessiner.
+		 *\param[in]	ibo	Un tampon d'indices optionnel.
 		 */
-		void Initialise( VertexBuffer & p_vbo
-			, IndexBufferSPtr p_ibo );
+		void Initialise( VertexBuffer & vbo
+			, IndexBufferSPtr ibo );
 		/**
 		*\~english
 		*\brief		Cleans up the program and its pipeline.
@@ -79,12 +79,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the stencil pass.
-		 *\param[in]	p_count	The number of primitives to draw.
+		 *\param[in]	count	The number of primitives to draw.
 		 *\~french
 		 *\brief		Dessine la passe de stencil.
-		 *\param[in]	p_count	Le nombre de primitives à dessiner.
+		 *\param[in]	count	Le nombre de primitives à dessiner.
 		 */
-		void Render( uint32_t p_count );
+		void Render( uint32_t count );
 
 	private:
 		//!\~english	The target FBO.

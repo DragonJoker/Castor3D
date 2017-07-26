@@ -61,7 +61,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine			The engine.
+		 *\param[in]	engine			The engine.
 		 *\param[in]	p_scene				The scene.
 		 *\param[in]	p_rootNode			The root node.
 		 *\param[in]	p_rootCameraNode	The cameras root node.
@@ -74,7 +74,7 @@ namespace Castor3D
 		 *\param[in]	p_detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine			Le moteur.
+		 *\param[in]	engine			Le moteur.
 		 *\param[in]	p_scene				La scène.
 		 *\param[in]	p_rootNode			Le noeud racine.
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		inline ObjectCacheBase( Engine & p_engine
+		inline ObjectCacheBase( Engine & engine
 								, Scene & p_scene
 								, SceneNodeSPtr p_rootNode
 								, SceneNodeSPtr p_rootCameraNode
@@ -97,7 +97,7 @@ namespace Castor3D
 								, Merger && p_merge = Merger{}
 								, Attacher && p_attach = Attacher{}
 								, Detacher && p_detach = Detacher{} )
-			: m_engine( p_engine )
+			: m_engine( engine )
 			, m_scene( p_scene )
 			, m_rootNode( p_rootNode )
 			, m_rootCameraNode( p_rootCameraNode )
@@ -519,7 +519,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine			The engine.
+		 *\param[in]	engine			The engine.
 		 *\param[in]	p_scene				The scene.
 		 *\param[in]	p_rootNode			The root node.
 		 *\param[in]	p_rootCameraNode	The cameras root node.
@@ -532,7 +532,7 @@ namespace Castor3D
 		 *\param[in]	p_detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine			Le moteur.
+		 *\param[in]	engine			Le moteur.
 		 *\param[in]	p_scene				La scène.
 		 *\param[in]	p_rootNode			Le noeud racine.
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
@@ -544,7 +544,7 @@ namespace Castor3D
 		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		inline ObjectCache( Engine & p_engine
+		inline ObjectCache( Engine & engine
 							, Scene & p_scene
 							, SceneNodeSPtr p_rootNode
 							, SceneNodeSPtr p_rootCameraNode
@@ -555,7 +555,7 @@ namespace Castor3D
 							, Merger && p_merge = Merger{}
 							, Attacher && p_attach = Attacher{}
 							, Detacher && p_detach = Detacher{} )
-			: MyObjectCacheType( p_engine
+			: MyObjectCacheType( engine
 								 , p_scene
 								 , p_rootNode
 								 , p_rootCameraNode
@@ -581,7 +581,7 @@ namespace Castor3D
 	/**
 	 *\~english
 	 *\brief		Creates an object cache.
-	 *\param[in]	p_engine			The engine.
+	 *\param[in]	engine			The engine.
 	 *\param[in]	p_scene				The scene.
 	 *\param[in]	p_rootNode			The scene root node.
 	 *\param[in]	p_rootCameraNode	The root node for cameras.
@@ -594,7 +594,7 @@ namespace Castor3D
 	 *\param[in]	p_detach			The element detacher (from a scene node).
 	 *\~french
 	 *\brief		Crée un cache d'objets.
-	 *\param[in]	p_engine			Le moteur.
+	 *\param[in]	engine			Le moteur.
 	 *\param[in]	p_scene				La scène.
 	 *\param[in]	p_rootNode			Le noeud racine de la scène.
 	 *\param[in]	p_rootCameraNode	Le noeud racine pour les caméras.
@@ -608,7 +608,7 @@ namespace Castor3D
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< ObjectCache< ElementType, KeyType > >
-	MakeObjectCache( Engine & p_engine
+	MakeObjectCache( Engine & engine
 		, Scene & p_scene
 		, SceneNodeSPtr p_rootNode
 		, SceneNodeSPtr p_rootCameraNode
@@ -624,7 +624,7 @@ namespace Castor3D
 		, ElementAttacher< ElementType > && p_attach = []( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ){}
 		, ElementDetacher< ElementType > && p_detach = []( std::shared_ptr< ElementType > ){} )
 	{
-		return std::make_unique< ObjectCache< ElementType, KeyType > >( p_engine
+		return std::make_unique< ObjectCache< ElementType, KeyType > >( engine
 			, p_scene
 			, p_rootNode
 			, p_rootCameraNode

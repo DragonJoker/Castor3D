@@ -6,14 +6,14 @@ namespace GlRender
 {
 	template< typename Traits >
 	GlTextureStorage< Traits >::GlTextureStorage( OpenGl & p_gl
-												  , GlRenderSystem & p_renderSystem
+												  , GlRenderSystem & renderSystem
 												  , Castor3D::TextureStorageType p_type
 												  , Castor3D::TextureLayout & p_layout
 												  , Castor3D::AccessTypes const & p_cpuAccess
 												  , Castor3D::AccessTypes const & p_gpuAccess )
 		: Castor3D::TextureStorage{ p_type, p_layout, p_cpuAccess, p_gpuAccess }
 		, Holder{ p_gl }
-		, m_glRenderSystem{ &p_renderSystem }
+		, m_glRenderSystem{ &renderSystem }
 		, m_glType{ p_gl.Get( p_type ) }
 		, m_impl{ *this }
 	{

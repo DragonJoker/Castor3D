@@ -34,7 +34,7 @@ namespace GlRender
 		, public Holder
 	{
 	public:
-		GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl );
+		GlContext( GlRenderSystem & renderSystem, OpenGl & p_gl );
 		virtual ~GlContext();
 
 		GlContextImpl & GetImpl();

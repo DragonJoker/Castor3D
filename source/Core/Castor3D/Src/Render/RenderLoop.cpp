@@ -14,13 +14,13 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderLoop::RenderLoop( Engine & p_engine, uint32_t p_wantedFPS, bool p_isAsync )
-		: OwnedBy< Engine >( p_engine )
+	RenderLoop::RenderLoop( Engine & engine, uint32_t p_wantedFPS, bool p_isAsync )
+		: OwnedBy< Engine >( engine )
 		, m_wantedFPS{ p_wantedFPS }
 		, m_frameTime{ 1000 / p_wantedFPS }
-		, m_renderSystem{ *p_engine.GetRenderSystem() }
-		, m_debugOverlays{ std::make_unique< DebugOverlays >( p_engine ) }
-		, m_queueUpdater{ std::max( 2u, p_engine.GetCpuInformations().CoreCount() - ( p_isAsync ? 2u : 1u ) ) }
+		, m_renderSystem{ *engine.GetRenderSystem() }
+		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
+		, m_queueUpdater{ std::max( 2u, engine.GetCpuInformations().CoreCount() - ( p_isAsync ? 2u : 1u ) ) }
 	{
 		m_debugOverlays->Initialise( GetEngine()->GetOverlayCache() );
 	}
@@ -202,7 +202,7 @@ namespace Castor3D
 				} );
 			}
 
-			m_queueUpdater.WaitAll( std::chrono::milliseconds::max() );
+			m_queueUpdater.WaitAll( Milliseconds::max() );
 		}
 		else
 		{

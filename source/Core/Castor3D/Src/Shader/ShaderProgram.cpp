@@ -174,8 +174,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem )
-		: OwnedBy< RenderSystem >( p_renderSystem )
+	ShaderProgram::ShaderProgram( RenderSystem & renderSystem )
+		: OwnedBy< RenderSystem >( renderSystem )
 	{
 	}
 

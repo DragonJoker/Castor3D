@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "LightPass.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
+#include "Render/RenderInfo.hpp"
 #include "Shader/SceneUbo.hpp"
 #include "Shader/GpInfoUbo.hpp"
 #include "Shader/HdrConfigUbo.hpp"
@@ -47,14 +48,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		ReflectionPass( Engine & p_engine
-			, Castor::Size const & p_size
-			, SceneUbo & p_sceneUbo );
+		ReflectionPass( Engine & engine
+			, Castor::Size const & size
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -68,13 +70,10 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Dessine le mapping de réflexion.
 		 */
-		void Render( GeometryPassResult & p_gp
-			, TextureUnit const & p_lp
-			, Scene const & p_scene
-			, Camera const & p_camera
-			, Castor::Matrix4x4r const & p_invViewProj
-			, Castor::Matrix4x4r const & p_invView
-			, Castor::Matrix4x4r const & p_invProj );
+		void Render( GeometryPassResult & gp
+			, TextureUnit const & lp
+			, Scene const & scene
+			, RenderInfo & info );
 
 		inline TextureUnit const & GetResult()const
 		{
@@ -98,7 +97,7 @@ namespace Castor3D
 			ProgramPipeline( ProgramPipeline && ) = default;
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
-			ProgramPipeline( Engine & p_engine
+			ProgramPipeline( Engine & engine
 				, VertexBuffer & p_vbo
 				, MatrixUbo & p_matrixUbo
 				, SceneUbo & p_sceneUbo
@@ -147,13 +146,16 @@ namespace Castor3D
 		MatrixUbo m_matrixUbo;
 		//!\~english	The geometry pass informations.
 		//!\~french		Les informations de la passe de géométrie.
-		GpInfoUbo m_gpInfo;
+		GpInfoUbo & m_gpInfoUbo;
 		//!\~english	The HDR configuration.
 		//!\~french		La configuration HDR.
 		HdrConfigUbo m_configUbo;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
 		std::array< ProgramPipeline, 3u > m_programs;
+		//!\~english	The render pass timer.
+		//!\~french		Le timer de la passe de rendu.
+		RenderPassTimerSPtr m_timer;
 	};
 }
 

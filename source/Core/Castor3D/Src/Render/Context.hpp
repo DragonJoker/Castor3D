@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -53,12 +53,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
-		C3D_API explicit Context( RenderSystem & p_renderSystem );
+		C3D_API explicit Context( RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -69,14 +69,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises this context
-		 *\param[in]	p_window	The RenderWindow
+		 *\param[in]	window	The RenderWindow
 		 *\return		\p true if initialised, false if not
 		 *\~french
 		 *\brief		Initialise le contexte
-		 *\param[in]	p_window	La RenderWindow
+		 *\param[in]	window	La RenderWindow
 		 *\return		\p true si initialisé correctement
 		 */
-		C3D_API bool Initialise( RenderWindow * p_window );
+		C3D_API bool Initialise( RenderWindow * window );
 		/**
 		 *\~english
 		 *\brief		Cleans this context up
@@ -108,345 +108,345 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Raise a memory barrier.
-		 *\param[in]	p_barriers	The barrier to wait.
+		 *\param[in]	barriers	The barrier to wait.
 		 *\~french
 		 *\brief		Met en place un barrière mémoire.
-		 *\param[in]	p_barriers	La barrière à attendre.
+		 *\param[in]	barriers	La barrière à attendre.
 		 */
-		C3D_API void Barrier( MemoryBarriers const & p_barriers );
+		C3D_API void Barrier( MemoryBarriers const & barriers );
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Rend la texture cube donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void RenderTextureCube( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture );
+		C3D_API void RenderTextureCube( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given cube texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_index		The layer index.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	index	The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue du tableau de textures cube donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_index		L'index de la couche.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	index	L'index de la couche.
 		 */
-		C3D_API void RenderTextureCube( Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index );
+		C3D_API void RenderTextureCube( Castor::Size const & size
+			, TextureLayout const & texture
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_pipeline	The pipleline used to render the texture.
-		 *\param[in]	p_matrixUbo	The uniform buffer receiving matrices.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	pipeline	The pipleline used to render the texture.
+		 *\param[in]	matrixUbo	The uniform buffer receiving matrices.
 		 *\~french
 		 *\brief		Dessine la texture 2D donnée.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_pipeline	Le pipeline utilisé pour dessiner la texture.
-		 *\param[in]	p_matrixUbo	Le tampon d'uniformes recevant les matrices.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	pipeline	Le pipeline utilisé pour dessiner la texture.
+		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
-		C3D_API void RenderTexture( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, RenderPipeline & p_pipeline
-			, MatrixUbo & p_matrixUbo );
+		C3D_API void RenderTexture( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture 2D donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void RenderTexture( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture );
+		C3D_API void RenderTexture( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given 2D texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_index		The layer index.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	index		The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue du tableau de textures 2D donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_index		L'index de la couche.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	index		L'index de la couche.
 		 */
-		C3D_API void RenderTexture( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index );
+		C3D_API void RenderTexture( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Renders the given depth cube texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture cube de profondeur donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void RenderDepthCube( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture );
+		C3D_API void RenderDepthCube( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_index		The layer index.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	index		The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_index		L'index de la couche.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	index		L'index de la couche.
 		 */
-		C3D_API void RenderDepthCube( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index );
+		C3D_API void RenderDepthCube( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Renders the given depth 2D texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture 2D de profondeur donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void RenderDepth( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture );
+		C3D_API void RenderDepth( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth 2D texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_position	The render viewport position.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_index		The layer index.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	index		The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue du tableau de textures 2D de profondeur donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_position	La position du viewport de rendu.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_index		L'index de la couche.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	index		L'index de la couche.
 		 */
-		C3D_API void RenderDepth( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index );
+		C3D_API void RenderDepth( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_pipeline	The pipleline used to render the texture.
-		 *\param[in]	p_matrixUbo	The uniform buffer receiving matrices.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\param[in]	pipeline	The pipleline used to render the texture.
+		 *\param[in]	matrixUbo	The uniform buffer receiving matrices.
 		 *\~french
 		 *\brief		Dessine la texture 2D donnée.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_pipeline	Le pipeline utilisé pour dessiner la texture.
-		 *\param[in]	p_matrixUbo	Le tampon d'uniformes recevant les matrices.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 *\param[in]	pipeline	Le pipeline utilisé pour dessiner la texture.
+		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
-		inline void RenderTexture( Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, RenderPipeline & p_pipeline
-			, MatrixUbo & p_matrixUbo )
+		inline void RenderTexture( Castor::Size const & size
+			, TextureLayout const & texture
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo )
 		{
 			static Castor::Position const position;
 			RenderTexture( position
-				, p_size
-				, p_texture
-				, p_pipeline
-				, p_matrixUbo );
+				, size
+				, texture
+				, pipeline
+				, matrixUbo );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture 2D donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
 		 */
-		inline void RenderTexture( Castor::Size const & p_size
-			, TextureLayout const & p_texture )
+		inline void RenderTexture( Castor::Size const & size
+			, TextureLayout const & texture )
 		{
 			static Castor::Position const position;
 			RenderTexture( position
-				, p_size
-				, p_texture );
+				, size
+				, texture );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given 2D texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_index		The layer index.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	index	The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue du tableau de textures 2D donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_index		L'index de la couche.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderTexture( Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index )
+		inline void RenderTexture( Castor::Size const & size
+			, TextureLayout const & texture
+			, uint32_t index )
 		{
 			static Castor::Position const position;
 			RenderTexture( position
-				, p_size
-				, p_texture
-				, p_index );
+				, size
+				, texture
+				, index );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Rend la texture cube donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
 		 */
-		inline void RenderTextureCube( Castor::Size const & p_size
-			, TextureLayout const & p_texture )
+		inline void RenderTextureCube( Castor::Size const & size
+			, TextureLayout const & texture )
 		{
 			static Castor::Position const position;
 			RenderTextureCube( position
-				, p_size
-				, p_texture );
+				, size
+				, texture );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the given depth 2D texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Rend la texture 2D de profondeur donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
 		 */
-		inline void RenderDepth( Castor::Size const & p_size
-			, TextureLayout const & p_texture )
+		inline void RenderDepth( Castor::Size const & size
+			, TextureLayout const & texture )
 		{
 			static Castor::Position const position;
 			RenderDepth( position
-				, p_size
-				, p_texture );
+				, size
+				, texture );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth 2D texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_index		The layer index.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	index	The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue du tableau de textures 2D de profondeur donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_index		L'index de la couche.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderDepth( Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index )
+		inline void RenderDepth( Castor::Size const & size
+			, TextureLayout const & texture
+			, uint32_t index )
 		{
 			static Castor::Position const position;
 			RenderDepth( position
-				, p_size
-				, p_texture
-				, p_index );
+				, size
+				, texture
+				, index );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the given depth cube texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Rend la texture cube de profondeur donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
 		 */
-		inline void RenderDepthCube( Castor::Size const & p_size
-			, TextureLayout const & p_texture )
+		inline void RenderDepthCube( Castor::Size const & size
+			, TextureLayout const & texture )
 		{
 			static Castor::Position const position;
 			RenderDepth( position
-				, p_size
-				, p_texture );
+				, size
+				, texture );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_index		The layer index.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	index	The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_index		L'index de la couche.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderDepthCube( Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, uint32_t p_index )
+		inline void RenderDepthCube( Castor::Size const & size
+			, TextureLayout const & texture
+			, uint32_t index )
 		{
 			static Castor::Position const position;
 			RenderDepth( position
-				, p_size
-				, p_texture
-				, p_index );
+				, size
+				, texture
+				, index );
 		}
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
-		 *\param[in]	p_size		The render viewport size.
-		 *\param[in]	p_texture	The texture.
-		 *\param[in]	p_index		The layer index.
+		 *\param[in]	size	The render viewport size.
+		 *\param[in]	texture	The texture.
+		 *\param[in]	index	The layer index.
 		 *\~french
 		 *\brief		Rend la couche voulue du tableau de textures cube de profondeur donné dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size		La taille du viewport de rendu.
-		 *\param[in]	p_texture	La texture.
-		 *\param[in]	p_index		L'index de la couche.
+		 *\param[in]	size	La taille du viewport de rendu.
+		 *\param[in]	texture	La texture.
+		 *\param[in]	index	L'index de la couche.
 		 */
-		inline void RenderEquiToCube( Castor::Size const & p_size
+		inline void RenderEquiToCube( Castor::Size const & size
 			, TextureLayout const & p_2dTexture
 			, TextureLayoutSPtr p_cubeTexture
 			, FrameBufferSPtr p_fbo
 			, std::array< FrameBufferAttachmentSPtr, 6 > const & p_attachs )
 		{
-			m_cube.Render( p_size
+			m_cube.Render( size
 				, p_2dTexture
 				, p_cubeTexture
 				, p_fbo
@@ -461,28 +461,6 @@ namespace Castor3D
 		inline bool IsInitialised()const
 		{
 			return m_initialised;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells the context is using multisampling
-		 *\~french
-		 *\brief		Dit si le contexte utilise le multisampling
-		 */
-		inline bool IsMultiSampling()const
-		{
-			return m_bMultiSampling;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the multisampling status
-		 *\param[in]	p_value	The status
-		 *\~french
-		 *\brief		Définit le statut du multisampling
-		 *\param[in]	p_value	Le statut
-		 */
-		inline void SetMultiSampling( bool p_value )
-		{
-			m_bMultiSampling = p_value;
 		}
 		/**
 		 *\~english
@@ -509,60 +487,60 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the wanted face of given cube texture.
-		 *\param[in]	p_position			The render viewport position.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_face				The cube face.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	position		The render viewport position.
+		 *\param[in]	size			The render viewport size.
+		 *\param[in]	texture			The texture.
+		 *\param[in]	face			The cube face.
+		 *\param[in]	pipeline		The render pipeline.
+		 *\param[in]	matrixUbo		The uniform buffer receiving matrices.
+		 *\param[in]	geometryBuffers	The geometry buffers used to render the texture.
 		 *\~french
 		 *\brief		Dessine la face voulue de la texture cube donnée.
-		 *\param[in]	p_position			La position du viewport de rendu.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_face				La face du cube.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	position		La position du viewport de rendu.
+		 *\param[in]	size			La taille du viewport de rendu.
+		 *\param[in]	texture			La texture.
+		 *\param[in]	face			La face du cube.
+		 *\param[in]	pipeline		Le pipeline de rendu.
+		 *\param[in]	matrixUbo		Le tampon d'uniformes recevant les matrices.
+		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTextureFace( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, CubeMapFace p_face
-			, RenderPipeline & p_pipeline
-			, MatrixUbo & p_matrixUbo
-			, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTextureFace( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture
+			, CubeMapFace face
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo
+			, GeometryBuffers const & geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted face of wanted layer of given cube texture array.
-		 *\param[in]	p_position			The render viewport position.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_face				The cube face.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_matrixUbo			The uniform buffer receiving matrices.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\param[in]	p_index				The layer index.
+		 *\param[in]	position		The render viewport position.
+		 *\param[in]	size			The render viewport size.
+		 *\param[in]	texture			The texture.
+		 *\param[in]	face			The cube face.
+		 *\param[in]	pipeline		The render pipeline.
+		 *\param[in]	matrixUbo		The uniform buffer receiving matrices.
+		 *\param[in]	geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	index			The layer index.
 		 *\~french
 		 *\brief		Dessine la face voulue de la couche voulue du tableau de textures cube donné.
-		 *\param[in]	p_position			La position du viewport de rendu.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_face				La face du cube.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_matrixUbo			Le tampon d'uniformes recevant les matrices.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 *\param[in]	p_index				L'index de la couche.
+		 *\param[in]	position		La position du viewport de rendu.
+		 *\param[in]	size			La taille du viewport de rendu.
+		 *\param[in]	texture			La texture.
+		 *\param[in]	face			La face du cube.
+		 *\param[in]	pipeline		Le pipeline de rendu.
+		 *\param[in]	matrixUbo		Le tampon d'uniformes recevant les matrices.
+		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	index			L'index de la couche.
 		 */
-		C3D_API void DoRenderTextureFace( Castor::Position const & p_position
-			, Castor::Size const & p_size
-			, TextureLayout const & p_texture
-			, CubeMapFace p_face
-			, RenderPipeline & p_pipeline
-			, MatrixUbo & p_matrixUbo
-			, GeometryBuffers const & p_geometryBuffers
-			, uint32_t p_index );
+		C3D_API void DoRenderTextureFace( Castor::Position const & position
+			, Castor::Size const & size
+			, TextureLayout const & texture
+			, CubeMapFace face
+			, RenderPipeline & pipeline
+			, MatrixUbo & matrixUbo
+			, GeometryBuffers const & geometryBuffers
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\return		\p true if initialised, false if not
@@ -609,12 +587,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Raise a memory barrier.
-		 *\param[in]	p_barriers	The barrier to wait.
+		 *\param[in]	barriers	The barrier to wait.
 		 *\~french
 		 *\brief		Met en place un barrière mémoire.
-		 *\param[in]	p_barriers	La barrière à attendre.
+		 *\param[in]	barriers	La barrière à attendre.
 		 */
-		C3D_API virtual void DoBarrier( MemoryBarriers const & p_barriers ) = 0;
+		C3D_API virtual void DoBarrier( MemoryBarriers const & barriers ) = 0;
 
 	protected:
 		//!\~english	RenderWindow associated to this context.
@@ -623,15 +601,6 @@ namespace Castor3D
 		//!\~english	Tells if the context is initialised.
 		//!\~french		Dit si le contexte est initialisé.
 		bool m_initialised;
-		//!\~english	Tells the context is currently set to use multisampling.
-		//!\~french		Dit si le contexte est actuellement configuré pour utiliser le multisampling.
-		bool m_bMultiSampling;
-		//!\~english	The GPU time elapsed queries.
-		//!\~french		Les requêtes GPU de temps écoulé.
-		std::array< GpuQueryUPtr, 2 > m_timerQuery;
-		//!\~english	The active query index.
-		//!\~french		L'index de la requête active.
-		uint32_t m_queryIndex = 0;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		MatrixUbo m_matrixUbo;

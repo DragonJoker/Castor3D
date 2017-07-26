@@ -48,16 +48,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_wantedFPS		The wanted FPS count.
 		 *\param[in]	p_isAsync		Tells if the render loop is asynchronous.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_wantedFPS		Le nombre voulu du FPS.
 		 *\param[in]	p_isAsync		Dit si la boucle de rendu est asynchrone.
 		 */
-		C3D_API RenderLoop( Engine & p_engine, uint32_t p_wantedFPS, bool p_isAsync );
+		C3D_API RenderLoop( Engine & engine, uint32_t p_wantedFPS, bool p_isAsync );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le temps voulu pour une frame, en millisecondes.
 		 */
-		inline std::chrono::milliseconds GetFrameTime()
+		inline Castor::Milliseconds GetFrameTime()
 		{
 			return m_frameTime;
 		}
@@ -222,7 +222,7 @@ namespace Castor3D
 		uint32_t m_wantedFPS;
 		//!\~english	The wanted time for a frame.
 		//!\~french		Le temps voulu pour une frame.
-		std::chrono::milliseconds m_frameTime;
+		Castor::Milliseconds m_frameTime;
 		//!\~english	The debug overlays.
 		//!\~french		Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;

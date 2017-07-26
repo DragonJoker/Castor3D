@@ -16,9 +16,9 @@ namespace Castor3D
 {
 	namespace
 	{
-		TextureUnit DoCreateRadianceTexture( Engine & p_engine )
+		TextureUnit DoCreateRadianceTexture( Engine & engine )
 		{
-			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eCube
+			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGB32F
@@ -26,31 +26,31 @@ namespace Castor3D
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesRadiance" );
 
-			if ( p_engine.GetSamplerCache().Has( name ) )
+			if ( engine.GetSamplerCache().Has( name ) )
 			{
-				sampler = p_engine.GetSamplerCache().Find( name );
+				sampler = engine.GetSamplerCache().Find( name );
 			}
 			else
 			{
-				sampler = p_engine.GetSamplerCache().Create( name );
+				sampler = engine.GetSamplerCache().Create( name );
 				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 				sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
 				sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 				sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				p_engine.GetSamplerCache().Add( name, sampler );
+				engine.GetSamplerCache().Add( name, sampler );
 			}
 
-			TextureUnit result{ p_engine };
+			TextureUnit result{ engine };
 			result.SetTexture( texture );
 			result.SetSampler( sampler );
 			result.SetIndex( 7u );
 			return result;
 		}
 
-		TextureUnit DoCreatePrefilteredTexture( Engine & p_engine )
+		TextureUnit DoCreatePrefilteredTexture( Engine & engine )
 		{
-			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eCube
+			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eCube
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eRGB32F
@@ -58,32 +58,32 @@ namespace Castor3D
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesPrefiltered" );
 
-			if ( p_engine.GetSamplerCache().Has( name ) )
+			if ( engine.GetSamplerCache().Has( name ) )
 			{
-				sampler = p_engine.GetSamplerCache().Find( name );
+				sampler = engine.GetSamplerCache().Find( name );
 			}
 			else
 			{
-				sampler = p_engine.GetSamplerCache().Create( name );
+				sampler = engine.GetSamplerCache().Create( name );
 				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 				sampler->SetInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eLinear );
 				sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
 				sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 				sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				p_engine.GetSamplerCache().Add( name, sampler );
+				engine.GetSamplerCache().Add( name, sampler );
 			}
 
-			TextureUnit result{ p_engine };
+			TextureUnit result{ engine };
 			result.SetTexture( texture );
 			result.SetSampler( sampler );
 			result.SetIndex( 8u );
 			return result;
 		}
 
-		TextureUnit DoCreatePrefilteredBrdf( Engine & p_engine )
+		TextureUnit DoCreatePrefilteredBrdf( Engine & engine )
 		{
-			auto texture = p_engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
+			auto texture = engine.GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eAL16F32F
@@ -91,22 +91,22 @@ namespace Castor3D
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesBRDF" );
 
-			if ( p_engine.GetSamplerCache().Has( name ) )
+			if ( engine.GetSamplerCache().Has( name ) )
 			{
-				sampler = p_engine.GetSamplerCache().Find( name );
+				sampler = engine.GetSamplerCache().Find( name );
 			}
 			else
 			{
-				sampler = p_engine.GetSamplerCache().Create( name );
+				sampler = engine.GetSamplerCache().Create( name );
 				sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 				sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 				sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
 				sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
 				sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				p_engine.GetSamplerCache().Add( name, sampler );
+				engine.GetSamplerCache().Add( name, sampler );
 			}
 
-			TextureUnit result{ p_engine };
+			TextureUnit result{ engine };
 			result.SetTexture( texture );
 			result.SetSampler( sampler );
 			result.SetIndex( 9u );

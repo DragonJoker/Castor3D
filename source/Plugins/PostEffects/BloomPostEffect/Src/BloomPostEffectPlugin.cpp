@@ -35,14 +35,14 @@ extern "C"
 		*p_name = Bloom::BloomPostEffect::Name.c_str();
 	}
 
-	C3D_Bloom_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	C3D_Bloom_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
 	{
-		p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( Bloom::BloomPostEffect::Type
+		engine->GetRenderTargetCache().GetPostEffectFactory().Register( Bloom::BloomPostEffect::Type
 			, &Bloom::BloomPostEffect::Create );
 	}
 
-	C3D_Bloom_API void OnUnload( Castor3D::Engine * p_engine )
+	C3D_Bloom_API void OnUnload( Castor3D::Engine * engine )
 	{
-		p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( Bloom::BloomPostEffect::Type );
+		engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( Bloom::BloomPostEffect::Type );
 	}
 }

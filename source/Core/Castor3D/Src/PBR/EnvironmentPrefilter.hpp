@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_context	Le Context.
 		 */
-		C3D_API explicit EnvironmentPrefilter( Engine & p_engine
+		C3D_API explicit EnvironmentPrefilter( Engine & engine
 			, Castor::Size const & p_size );
 		/**
 		 *\~english

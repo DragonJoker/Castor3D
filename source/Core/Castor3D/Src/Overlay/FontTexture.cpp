@@ -12,8 +12,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	FontTexture::FontTexture( Engine & p_engine, FontSPtr p_font )
-		: OwnedBy< Engine >( p_engine )
+	FontTexture::FontTexture( Engine & engine, FontSPtr p_font )
+		: OwnedBy< Engine >( engine )
 		, m_font( p_font )
 	{
 		uint32_t const maxWidth = p_font->GetMaxWidth();

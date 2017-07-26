@@ -48,7 +48,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_vbo		The vertex buffer containing the quad.
 		 *\param[in]	p_matrixUbo	The matrix UBO.
 		 *\param[in]	p_sceneUbo	The scene UBO.
@@ -56,14 +56,14 @@ namespace Castor3D
 		 *\param[in]	p_fogType	The fog type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_vbo		Le tampon de sommets contenant le quad.
 		 *\param[in]	p_matrixUbo	L'UBO des matrices.
 		 *\param[in]	p_sceneUbo	L'UBO de la scène.
 		 *\param[in]	p_gpInfoUbo	L'UBO de la geometry pass.
 		 *\param[in]	p_fogType	Le type de brouillard.
 		 */
-		FinalCombineProgram( Engine & p_engine
+		FinalCombineProgram( Engine & engine
 			, VertexBuffer & p_vbo
 			, MatrixUbo & p_matrixUbo
 			, SceneUbo & p_sceneUbo
@@ -113,14 +113,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_size		The render size.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_size		La taille du rendu.
 		 */
-		FinalCombinePass( Engine & p_engine
+		FinalCombinePass( Engine & engine
 			, Castor::Size const & p_size );
 		/**
 		 *\~english

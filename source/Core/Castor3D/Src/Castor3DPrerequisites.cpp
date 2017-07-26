@@ -111,14 +111,14 @@ namespace Castor3D
 		void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
 			, GLSL::Vec3 & p_normal
 			, GLSL::Float & p_shininess
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )
 		{
 			using namespace GLSL;
 			auto texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+			if ( CheckFlag( textureFlags, TextureChannel::eNormal ) )
 			{
 				auto vtx_normal( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
 				auto vtx_tangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
@@ -131,7 +131,7 @@ namespace Castor3D
 				p_normal = normalize( tbn * v3MapNormal );
 			}
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eGloss ) )
+			if ( CheckFlag( textureFlags, TextureChannel::eGloss ) )
 			{
 				auto c3d_mapGloss( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
 
@@ -144,14 +144,14 @@ namespace Castor3D
 			, GLSL::Vec3 & p_specular
 			, GLSL::Vec3 & p_emissive
 			, GLSL::Float const & p_gamma
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )
 		{
 			using namespace GLSL;
 			auto texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) )
+			if ( CheckFlag( textureFlags, TextureChannel::eDiffuse ) )
 			{
 				auto c3d_mapDiffuse( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
 				p_diffuse *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
@@ -159,14 +159,14 @@ namespace Castor3D
 					, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
 			}
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eSpecular ) )
+			if ( CheckFlag( textureFlags, TextureChannel::eSpecular ) )
 			{
 				auto c3d_mapSpecular( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
 
 				p_specular *= texture( c3d_mapSpecular, texCoord.xy() ).xyz();
 			}
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
+			if ( CheckFlag( textureFlags, TextureChannel::eEmissive ) )
 			{
 				auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
 				p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
@@ -231,14 +231,14 @@ namespace Castor3D
 				, GLSL::Vec3 & p_normal
 				, GLSL::Float & p_metallic
 				, GLSL::Float & p_roughness
-				, TextureChannels const & p_textureFlags
-				, ProgramFlags const & p_programFlags
-				, SceneFlags const & p_sceneFlags )
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags )
 			{
 				using namespace GLSL;
 				auto texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eNormal ) )
 				{
 					auto vtx_normal( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
 					auto vtx_tangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
@@ -251,13 +251,13 @@ namespace Castor3D
 					p_normal = normalize( tbn * v3MapNormal );
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eMetallic ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eMetallic ) )
 				{
 					auto c3d_mapMetallic( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapMetallic ) );
 					p_metallic = texture( c3d_mapMetallic, texCoord.xy() ).r();
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eRoughness ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eRoughness ) )
 				{
 					auto c3d_mapRoughness( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapRoughness ) );
 					p_roughness = texture( c3d_mapRoughness, texCoord.xy() ).r();
@@ -268,14 +268,14 @@ namespace Castor3D
 				, GLSL::Vec3 & p_albedo
 				, GLSL::Vec3 & p_emissive
 				, GLSL::Float const & p_gamma
-				, TextureChannels const & p_textureFlags
-				, ProgramFlags const & p_programFlags
-				, SceneFlags const & p_sceneFlags )
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags )
 			{
 				using namespace GLSL;
 				auto texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eAlbedo ) )
 				{
 					auto c3d_mapAlbedo( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapAlbedo ) );
 					p_albedo *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
@@ -283,7 +283,7 @@ namespace Castor3D
 						, texture( c3d_mapAlbedo, texCoord.xy() ).xyz() );
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eEmissive ) )
 				{
 					auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
 					p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
@@ -345,14 +345,14 @@ namespace Castor3D
 				, GLSL::Vec3 & p_normal
 				, GLSL::Vec3 & p_specular
 				, GLSL::Float & p_glossiness
-				, TextureChannels const & p_textureFlags
-				, ProgramFlags const & p_programFlags
-				, SceneFlags const & p_sceneFlags )
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags )
 			{
 				using namespace GLSL;
 				auto texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eNormal ) )
 				{
 					auto vtx_normal( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
 					auto vtx_tangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
@@ -365,13 +365,13 @@ namespace Castor3D
 					p_normal = normalize( tbn * v3MapNormal );
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eSpecular ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eSpecular ) )
 				{
 					auto c3d_mapSpecular( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
 					p_specular = texture( c3d_mapSpecular, texCoord.xy() ).rgb();
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eGloss ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eGloss ) )
 				{
 					auto c3d_mapGloss( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
 					p_glossiness = texture( c3d_mapGloss, texCoord.xy() ).r();
@@ -382,14 +382,14 @@ namespace Castor3D
 				, GLSL::Vec3 & p_diffuse
 				, GLSL::Vec3 & p_emissive
 				, GLSL::Float const & p_gamma
-				, TextureChannels const & p_textureFlags
-				, ProgramFlags const & p_programFlags
-				, SceneFlags const & p_sceneFlags )
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags )
 			{
 				using namespace GLSL;
 				auto texCoord( p_writer.GetBuiltin< Vec3 >( cuT( "texCoord" ) ) );
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eAlbedo ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eAlbedo ) )
 				{
 					auto c3d_mapDiffuse( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
 					p_diffuse *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
@@ -397,7 +397,7 @@ namespace Castor3D
 						, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
 				}
 
-				if ( CheckFlag( p_textureFlags, TextureChannel::eEmissive ) )
+				if ( CheckFlag( textureFlags, TextureChannel::eEmissive ) )
 				{
 					auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
 					p_emissive *= WriteFunctionCall< Vec3 >( &p_writer, cuT( "RemoveGamma" )
@@ -456,13 +456,13 @@ namespace Castor3D
 	}
 
 	ParallaxShadowFunction DeclareParallaxShadowFunc( GLSL::GlslWriter & p_writer
-		, TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags )
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags )
 	{
 		ParallaxShadowFunction result;
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
-			&& CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+		if ( CheckFlag( textureFlags, TextureChannel::eHeight )
+			&& CheckFlag( textureFlags, TextureChannel::eNormal ) )
 		{
 			using namespace GLSL;
 			auto c3d_mapHeight( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
@@ -542,14 +542,14 @@ namespace Castor3D
 	}
 
 	ParallaxFunction DeclareParallaxMappingFunc( GLSL::GlslWriter & p_writer
-		, TextureChannels const & p_textureFlags
-		, ProgramFlags const & p_programFlags )
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags )
 	{
 		using namespace GLSL;
 		ParallaxFunction result;
 
-		if ( CheckFlag( p_textureFlags, TextureChannel::eHeight )
-			&& CheckFlag( p_textureFlags, TextureChannel::eNormal ) )
+		if ( CheckFlag( textureFlags, TextureChannel::eHeight )
+			&& CheckFlag( textureFlags, TextureChannel::eNormal ) )
 		{
 			auto c3d_mapHeight( p_writer.GetBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
 			auto c3d_fheightScale( p_writer.GetBuiltin< Float >( cuT( "c3d_fheightScale" ) ) );

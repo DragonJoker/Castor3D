@@ -30,7 +30,7 @@ namespace Castor3D
 	class GpInfoUbo
 	{
 	public:
-		GpInfoUbo( Engine & p_engine );
+		GpInfoUbo( Engine & engine );
 		~GpInfoUbo();
 		void Update( Castor::Size const & p_size
 			, Camera const & p_camera

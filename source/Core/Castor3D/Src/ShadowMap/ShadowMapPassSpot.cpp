@@ -4,10 +4,10 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ShadowMapPassSpot::ShadowMapPassSpot( Engine & p_engine
+	ShadowMapPassSpot::ShadowMapPassSpot( Engine & engine
 		, Light & p_light
 		, ShadowMap const & p_shadowMap )
-		: ShadowMapPass{ p_engine, p_light, p_shadowMap }
+		: ShadowMapPass{ engine, p_light, p_shadowMap }
 	{
 	}
 

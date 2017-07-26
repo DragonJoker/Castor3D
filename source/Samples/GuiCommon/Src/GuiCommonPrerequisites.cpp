@@ -245,7 +245,7 @@ namespace GuiCommon
 		}
 	}
 
-	RenderWindowSPtr LoadScene( Engine & p_engine, Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
+	RenderWindowSPtr LoadScene( Engine & engine, Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
 	{
 		RenderWindowSPtr result;
 
@@ -257,7 +257,7 @@ namespace GuiCommon
 			{
 				try
 				{
-					SceneFileParser parser( p_engine );
+					SceneFileParser parser( engine );
 
 					if ( parser.ParseFile( p_fileName ) )
 					{
@@ -282,7 +282,7 @@ namespace GuiCommon
 		return result;
 	}
 
-	void LoadPlugins( Castor3D::Engine & p_engine )
+	void LoadPlugins( Castor3D::Engine & engine )
 	{
 		PathArray arrayFiles;
 		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), arrayFiles );
@@ -316,7 +316,7 @@ namespace GuiCommon
 					// Since techniques depend on renderers, we load these first
 					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
+						if ( !engine.GetPluginCache().LoadPlugin( file ) )
 						{
 							arrayFailed.push_back( file );
 						}
@@ -331,7 +331,7 @@ namespace GuiCommon
 			// Then we load other plug-ins
 			for ( auto file : otherPlugins )
 			{
-				if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
+				if ( !engine.GetPluginCache().LoadPlugin( file ) )
 				{
 					arrayFailed.push_back( file );
 				}
@@ -381,10 +381,10 @@ namespace GuiCommon
 #endif
 	}
 
-	FontSPtr make_Font( Engine * p_engine, wxFont const & p_font )
+	FontSPtr make_Font( Engine * engine, wxFont const & p_font )
 	{
 		String name = make_String( p_font.GetFaceName() ) + string::to_string( p_font.GetPointSize() );
-		auto & cache = p_engine->GetFontCache();
+		auto & cache = engine->GetFontCache();
 		FontSPtr font = cache.Find( name );
 
 		if ( !font )

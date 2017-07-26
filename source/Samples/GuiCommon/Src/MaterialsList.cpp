@@ -83,10 +83,10 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::LoadMaterials( Engine * p_engine
+	void MaterialsList::LoadMaterials( Engine * engine
 		, Scene & p_scene )
 	{
-		m_engine = p_engine;
+		m_engine = engine;
 		m_scene = &p_scene;
 		wxTreeItemId root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
 		auto lock = Castor::make_unique_lock( m_engine->GetMaterialCache() );

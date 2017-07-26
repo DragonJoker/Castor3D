@@ -52,14 +52,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_name		The renderer name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	p_name		Le nom du renderer.
 		 */
-		C3D_API RenderSystem( Engine & p_engine, Castor::String const & p_name );
+		C3D_API RenderSystem( Engine & engine, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -208,7 +208,7 @@ namespace Castor3D
 		template< class Rep, class Period >
 		inline void IncGpuTime( std::chrono::duration< Rep, Period > const & p_time )
 		{
-			m_gpuTime += std::chrono::duration_cast< std::chrono::nanoseconds >( p_time );
+			m_gpuTime += std::chrono::duration_cast< Castor::Nanoseconds >( p_time );
 		}
 		/**
 		 *\~english
@@ -218,7 +218,7 @@ namespace Castor3D
 		 */
 		inline void ResetGpuTime()
 		{
-			m_gpuTime = std::chrono::nanoseconds( 0 );
+			m_gpuTime = Castor::Nanoseconds( 0 );
 		}
 		/**
 		 *\~english
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Récupère le temps CPU.
 		 *\return		La valeur.
 		 */
-		inline std::chrono::nanoseconds const & GetGpuTime()const
+		inline Castor::Nanoseconds const & GetGpuTime()const
 		{
 			return m_gpuTime;
 		}
@@ -519,7 +519,7 @@ namespace Castor3D
 		Castor::String m_name;
 		//!\~english	The time spent on GPU for current frame.
 		//!\~french		Le temps passé sur le GPU pour l'image courante.
-		std::chrono::nanoseconds m_gpuTime;
+		Castor::Nanoseconds m_gpuTime;
 
 #if C3D_TRACE_OBJECTS
 

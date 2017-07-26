@@ -20,11 +20,11 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RadianceComputer::RadianceComputer( Engine & p_engine
+	RadianceComputer::RadianceComputer( Engine & engine
 		, Castor::Size const & p_size )
-		: OwnedBy< Engine >{ p_engine }
-		, m_matrixUbo{ p_engine }
-		, m_viewport{ p_engine }
+		: OwnedBy< Engine >{ engine }
+		, m_matrixUbo{ engine }
+		, m_viewport{ engine }
 		, m_bufferVertex
 		{
 			{

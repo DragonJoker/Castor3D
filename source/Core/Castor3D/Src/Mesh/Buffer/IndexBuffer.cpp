@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	IndexBuffer::IndexBuffer( Engine & p_engine )
-		: CpuBuffer< uint32_t >( p_engine )
+	IndexBuffer::IndexBuffer( Engine & engine )
+		: CpuBuffer< uint32_t >( engine )
 	{
 	}
 

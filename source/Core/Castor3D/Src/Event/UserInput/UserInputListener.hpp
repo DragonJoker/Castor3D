@@ -57,14 +57,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\~brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	p_name		The listener's name.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	p_engine	The moteur.
+		 *\param[in]	engine	The moteur.
 		 *\param[in]	p_name		The nom du listener.
 		 */
-		C3D_API UserInputListener( Engine & p_engine, Castor::String const & p_name );
+		C3D_API UserInputListener( Engine & engine, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\~brief		Destructor.

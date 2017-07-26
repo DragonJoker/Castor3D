@@ -2068,7 +2068,7 @@ namespace Castor3D
 
 						if ( submesh->GetPointsCount() == submeshAnim.GetSubmesh().GetPointsCount() )
 						{
-							submeshAnim.AddBuffer( std::chrono::milliseconds{ int64_t( timeIndex * 1000 ) }, Convert( submesh->GetPoints() ) );
+							submeshAnim.AddBuffer( Milliseconds{ int64_t( timeIndex * 1000 ) }, Convert( submesh->GetPoints() ) );
 						}
 
 						++index;

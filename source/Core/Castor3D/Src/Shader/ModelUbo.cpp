@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ModelUbo::ModelUbo( Engine & p_engine )
-		: m_ubo{ ShaderProgram::BufferModel, *p_engine.GetRenderSystem() }
+	ModelUbo::ModelUbo( Engine & engine )
+		: m_ubo{ ShaderProgram::BufferModel, *engine.GetRenderSystem() }
 		, m_shadowReceiver{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::ShadowReceiver ) }
 		, m_materialIndex{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::MaterialIndex ) }
 		, m_environmentIndex{ *m_ubo.CreateUniform< UniformType::eInt >( ShaderProgram::EnvironmentIndex ) }

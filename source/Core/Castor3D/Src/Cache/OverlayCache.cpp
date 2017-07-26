@@ -23,9 +23,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	OverlayCache::OverlayInitialiser::OverlayInitialiser( Cache< Overlay, Castor::String > & p_cache )
-		: m_overlays{ p_cache.m_overlays }
-		, m_overlayCountPerLevel{ p_cache.m_overlayCountPerLevel }
+	OverlayCache::OverlayInitialiser::OverlayInitialiser( Cache< Overlay, Castor::String > & cache )
+		: m_overlays{ cache.m_overlays }
+		, m_overlayCountPerLevel{ cache.m_overlayCountPerLevel }
 	{
 	}
 
@@ -50,9 +50,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	OverlayCache::OverlayCleaner::OverlayCleaner( Cache< Overlay, Castor::String > & p_cache )
-		: m_overlays{ p_cache.m_overlays }
-		, m_overlayCountPerLevel{ p_cache.m_overlayCountPerLevel }
+	OverlayCache::OverlayCleaner::OverlayCleaner( Cache< Overlay, Castor::String > & cache )
+		: m_overlays{ cache.m_overlays }
+		, m_overlayCountPerLevel{ cache.m_overlayCountPerLevel }
 	{
 	}
 
@@ -70,12 +70,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Cache< Overlay, Castor::String >::Cache( Engine & p_engine
+	Cache< Overlay, Castor::String >::Cache( Engine & engine
 		 , Producer && p_produce
 		 , Initialiser && p_initialise
 		 , Cleaner && p_clean
 		 , Merger && p_merge )
-		: MyCacheType( p_engine
+		: MyCacheType( engine
 		   , std::move( p_produce )
 		   , std::bind( OverlayInitialiser{ *this }, std::placeholders::_1 )
 		   , std::bind( OverlayCleaner{ *this }, std::placeholders::_1 )

@@ -46,13 +46,13 @@ namespace GlRender
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_type			The texture type.
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 */
 		GlTexture(
 			OpenGl & p_gl,
-			GlRenderSystem & p_renderSystem,
+			GlRenderSystem & renderSystem,
 			Castor3D::TextureType p_type,
 			Castor3D::AccessTypes const & p_cpuAccess,
 			Castor3D::AccessTypes const & p_gpuAccess );
@@ -60,7 +60,7 @@ namespace GlRender
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_type			The texture type.
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 *\param[in]	p_format		The texture format.
@@ -68,7 +68,7 @@ namespace GlRender
 		 */
 		GlTexture(
 			OpenGl & p_gl,
-			GlRenderSystem & p_renderSystem,
+			GlRenderSystem & renderSystem,
 			Castor3D::TextureType p_type,
 			Castor3D::AccessTypes const & p_cpuAccess,
 			Castor3D::AccessTypes const & p_gpuAccess,
@@ -78,7 +78,7 @@ namespace GlRender
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_type			The texture type.
-		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 *\param[in]	p_format		The texture format.
@@ -86,7 +86,7 @@ namespace GlRender
 		 */
 		GlTexture(
 			OpenGl & p_gl,
-			GlRenderSystem & p_renderSystem,
+			GlRenderSystem & renderSystem,
 			Castor3D::TextureType p_type,
 			Castor3D::AccessTypes const & p_cpuAccess,
 			Castor3D::AccessTypes const & p_gpuAccess,

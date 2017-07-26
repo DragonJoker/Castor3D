@@ -73,20 +73,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine		The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_produce		The element producer.
 		 *\param[in]	p_initialise	The element initialiser.
 		 *\param[in]	p_clean			The element cleaner.
 		 *\param[in]	p_merge			The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	engine		Le moteur.
 		 *\param[in]	p_produce		Le créateur d'objet.
 		 *\param[in]	p_initialise	L'initialiseur d'objet.
 		 *\param[in]	p_clean			Le nettoyeur d'objet.
 		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
 		 */
-		C3D_API Cache( Engine & p_engine
+		C3D_API Cache( Engine & engine
 					   , Producer && p_produce
 					   , Initialiser && p_initialise = Initialiser{}
 					   , Cleaner && p_clean = Cleaner{}

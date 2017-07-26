@@ -47,8 +47,8 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tampon de la texture.
 		 */
-		C3D_API TextureSource( Engine & p_engine )
-			: m_engine{ p_engine }
+		C3D_API TextureSource( Engine & engine )
+			: m_engine{ engine }
 		{
 		}
 		/**

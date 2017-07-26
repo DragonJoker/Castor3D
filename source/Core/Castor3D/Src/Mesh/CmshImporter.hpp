@@ -43,21 +43,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine	The core engine.
+		 *\param[in]	engine	The core engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit CmshImporter( Engine & p_engine );
+		C3D_API explicit CmshImporter( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Creator function.
-		 *\param[in]	p_engine	The core engine.
+		 *\param[in]	engine	The core engine.
 		 *\~french
 		 *\brief		Fonction de création.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	engine	Le moteur.
 		 */
-		static ImporterUPtr Create( Engine & p_engine );
+		static ImporterUPtr Create( Engine & engine );
 
 	protected:
 		/**

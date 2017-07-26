@@ -39,7 +39,7 @@ namespace GuiCommon
 			, wxSize const & p_size = wxDefaultSize );
 		~MaterialsList();
 
-		void LoadMaterials( Castor3D::Engine * p_engine
+		void LoadMaterials( Castor3D::Engine * engine
 			, Castor3D::Scene & p_scene );
 		void UnloadMaterials();
 

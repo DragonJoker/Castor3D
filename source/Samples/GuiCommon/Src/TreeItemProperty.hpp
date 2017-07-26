@@ -107,16 +107,16 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine	The engine, to post events to.
+		 *\param[in]	engine	The engine, to post events to.
 		 *\param[in]	p_editable	Tells if the properties are modifiable
 		 *\param[in]	p_type		The object type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements.
+		 *\param[in]	engine	Le moteur, auquel on va poster les évènements.
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_type		Le type d'objet
 		 */
-		TreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, ePROPERTY_DATA_TYPE p_type );
+		TreeItemProperty( Castor3D::Engine * engine, bool p_editable, ePROPERTY_DATA_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -185,23 +185,23 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Creates a material selector property
 		 *\param[in]	p_name		The property name
-		 *\param[in]	p_engine	The engine, to retrieve the materials
+		 *\param[in]	engine	The engine, to retrieve the materials
 		 *\return		The created property
 		 *\~french
 		 *\brief		Cràe une propriété de sàlection de matàriau
 		 *\param[in]	p_name		Le nom de la propriété
-		 *\param[in]	p_engine	Le moteur, pour ràcupàrer les matériaux
+		 *\param[in]	engine	Le moteur, pour ràcupàrer les matériaux
 		 *\return		La propriété crààe.
 		 */
 		wxEnumProperty * DoCreateMaterialProperty( wxString const & p_name );
 		/**
 		 *\~english
 		 *\brief		Posts an functor event to the engine.
-		 *\param[in]	p_engine	The engine, to retrieve the materials
+		 *\param[in]	engine	The engine, to retrieve the materials
 		 *\param[in]	p_functor	The function to execute
 		 *\~french
 		 *\brief		Poste un évènement functeur au moteur
-		 *\param[in]	p_engine	Le moteur, pour ràcupàrer les matériaux
+		 *\param[in]	engine	Le moteur, pour ràcupàrer les matériaux
 		 *\param[in]	p_functor	La fonction à exàcuter
 		 */
 		void DoApplyChange( std::function< void() > p_functor );
