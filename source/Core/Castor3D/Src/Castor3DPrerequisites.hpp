@@ -457,6 +457,8 @@ namespace Castor3D
 		eShaderStorageBuffer = 0x01 << 5,
 		eTextureFetch = 0x01 << 6,
 		eTextureUpdate = 0x01 << 7,
+		eFrameBuffer = 0x01 << 8,
+		ePixelBuffer = 0x01 << 9,
 		eAll = 0xFFFFFFFF,
 	};
 	IMPLEMENT_FLAGS( MemoryBarrier )

@@ -10,7 +10,9 @@ using namespace Castor;
 namespace Castor3D
 {
 	MatrixUbo::MatrixUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferMatrix, *engine.GetRenderSystem() }
+		: m_ubo{ ShaderProgram::BufferMatrix
+			, *engine.GetRenderSystem()
+			, MatrixUbo ::BindingPoint }
 		, m_view{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxView ) }
 		, m_projection{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxProjection ) }
 		, m_invProjection{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxInvProjection ) }

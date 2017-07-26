@@ -9,58 +9,44 @@ namespace Castor3D
 {
 	namespace
 	{
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+
 		SpecularGlossinessPassBuffer::PassesData DoBindData( CpuBuffer< uint8_t > & buffer
 			, uint32_t count )
 		{
 			auto data = buffer.GetData();
-			auto diffuse = make_array_view( reinterpret_cast< PassBuffer::RgbColour * >( data )
-				, reinterpret_cast< PassBuffer::RgbColour * >( data ) + count );
-			data += sizeof( PassBuffer::RgbColour ) * count;
-			auto specular = make_array_view( reinterpret_cast< PassBuffer::RgbColour * >( data )
-				, reinterpret_cast< PassBuffer::RgbColour * >( data ) + count );
-			data += sizeof( PassBuffer::RgbColour ) * count;
-			auto glossiness = make_array_view( reinterpret_cast< float * >( data )
-				, reinterpret_cast< float * >( data ) + count );
-			data += sizeof( float ) * count;
-			auto opacity = make_array_view( reinterpret_cast< float * >( data )
-				, reinterpret_cast< float * >( data ) + count );
-			data += sizeof( float ) * count;
-			auto emissive = make_array_view( reinterpret_cast< float * >( data )
-				, reinterpret_cast< float * >( data ) + count );
-			data += sizeof( float ) * count;
-			auto gamma = make_array_view( reinterpret_cast< float * >( data )
-				, reinterpret_cast< float * >( data ) + count );
-			data += sizeof( float ) * count;
-			auto exposure = make_array_view( reinterpret_cast< float * >( data )
-				, reinterpret_cast< float * >( data ) + count );
-			data += sizeof( float ) * count;
-			auto alphaRef = make_array_view( reinterpret_cast< float * >( data )
-				, reinterpret_cast< float * >( data ) + count );
-			data += sizeof( float ) * count;
-			auto refractionRatio = make_array_view( reinterpret_cast< float * >( data )
-				, reinterpret_cast< float * >( data ) + count );
-			data += sizeof( float ) * count;
-			auto hasRefraction = make_array_view( reinterpret_cast< int * >( data )
-				, reinterpret_cast< int * >( data ) + count );
-			data += sizeof( int ) * count;
-			auto hasReflection = make_array_view( reinterpret_cast< int * >( data )
-				, reinterpret_cast< int * >( data ) + count );
-			data += sizeof( int ) * count;
+			auto diffDiv = make_array_view( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto specGloss = make_array_view( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto common = make_array_view( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto reflRefr = make_array_view( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
 			return
 			{
-				diffuse,
-				specular,
-				glossiness,
-				opacity,
-				emissive,
-				gamma,
-				exposure,
-				alphaRef,
-				refractionRatio,
-				hasReflection,
-				hasRefraction
+				diffDiv,
+				specGloss,
+				common,
+				reflRefr,
 			};
 		}
+
+#else
+
+		SpecularGlossinessPassBuffer::PassesData DoBindData( CpuBuffer< uint8_t > & buffer
+			, uint32_t count )
+		{
+			auto data = buffer.GetData();
+			return make_array_view( reinterpret_cast< SpecularGlossinessPassBuffer::PassData * >( data )
+				, reinterpret_cast< SpecularGlossinessPassBuffer::PassData * >( data ) + count );
+		}
+
+#endif
 	}
 
 	//*********************************************************************************************
@@ -80,41 +66,87 @@ namespace Castor3D
 	{
 		REQUIRE( pass.GetId() > 0 );
 		auto index = pass.GetId() - 1;
-		m_data.diffuse[index].r = pass.GetDiffuse().red();
-		m_data.diffuse[index].g = pass.GetDiffuse().green();
-		m_data.diffuse[index].b = pass.GetDiffuse().blue();
-		m_data.specular[index].r = pass.GetSpecular().red();
-		m_data.specular[index].g = pass.GetSpecular().green();
-		m_data.specular[index].b = pass.GetSpecular().blue();
-		m_data.glossiness[index] = pass.GetShininess();
-		m_data.opacity[index] = pass.GetOpacity();
-		m_data.emissive[index] = pass.GetEmissive();
-		m_data.gamma[index] = pass.NeedsGammaCorrection() ? 2.2f : 1.0f;
-		m_data.exposure[index] = 1.0f;
-		m_data.alphaRef[index] = pass.GetAlphaValue();
-		m_data.refractionRatio[index] = pass.GetRefractionRatio();
-		m_data.hasRefraction[index] = CheckFlag( pass.GetTextureFlags(), TextureChannel::eRefraction ) ? 1 : 0;
-		m_data.hasReflection[index] = CheckFlag( pass.GetTextureFlags(), TextureChannel::eReflection ) ? 1 : 0;
+
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+
+		m_data.diffDiv[index].r = pass.GetDiffuse().red();
+		m_data.diffDiv[index].g = pass.GetDiffuse().green();
+		m_data.diffDiv[index].b = pass.GetDiffuse().blue();
+		m_data.specGloss[index].r = pass.GetSpecular().red();
+		m_data.specGloss[index].g = pass.GetSpecular().green();
+		m_data.specGloss[index].b = pass.GetSpecular().blue();
+		m_data.specGloss[index].a = pass.GetShininess();
+		m_data.common[index].r = pass.GetOpacity();
+		m_data.common[index].g = pass.GetEmissive();
+		m_data.common[index].b = pass.GetAlphaValue();
+		m_data.common[index].a = pass.NeedsGammaCorrection() ? 2.2f : 1.0f;
+		m_data.reflRefr[index].r = pass.GetRefractionRatio();
+		m_data.reflRefr[index].g = CheckFlag( pass.GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
+		m_data.reflRefr[index].b = CheckFlag( pass.GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
+		m_data.reflRefr[index].a = 1.0f;
+
+#else
+
+		m_data[index].diffDiv.r = pass.GetDiffuse().red();
+		m_data[index].diffDiv.g = pass.GetDiffuse().green();
+		m_data[index].diffDiv.b = pass.GetDiffuse().blue();
+		m_data[index].specGloss.r = pass.GetSpecular().red();
+		m_data[index].specGloss.g = pass.GetSpecular().green();
+		m_data[index].specGloss.b = pass.GetSpecular().blue();
+		m_data[index].specGloss.a = pass.GetShininess();
+		m_data[index].common.r = pass.GetOpacity();
+		m_data[index].common.g = pass.GetEmissive();
+		m_data[index].common.b = pass.GetAlphaValue();
+		m_data[index].common.a = pass.NeedsGammaCorrection() ? 2.2f : 1.0f;
+		m_data[index].reflRefr.r = pass.GetRefractionRatio();
+		m_data[index].reflRefr.g = CheckFlag( pass.GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
+		m_data[index].reflRefr.b = CheckFlag( pass.GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
+		m_data[index].reflRefr.a = 1.0f;
+
+#endif
 	}
 
 	void SpecularGlossinessPassBuffer::Visit( SpecularGlossinessPbrPass const & pass )
 	{
 		REQUIRE( pass.GetId() > 0 );
 		auto index = pass.GetId() - 1;
-		m_data.diffuse[index].r = pass.GetDiffuse().red();
-		m_data.diffuse[index].g = pass.GetDiffuse().green();
-		m_data.diffuse[index].b = pass.GetDiffuse().blue();
-		m_data.specular[index].r = pass.GetSpecular().red();
-		m_data.specular[index].g = pass.GetSpecular().green();
-		m_data.specular[index].b = pass.GetSpecular().blue();
-		m_data.glossiness[index] = pass.GetGlossiness();
-		m_data.opacity[index] = pass.GetOpacity();
-		m_data.emissive[index] = pass.GetEmissive();
-		m_data.gamma[index] = pass.NeedsGammaCorrection() ? 2.2f : 1.0f;
-		m_data.exposure[index] = 1.0f;
-		m_data.alphaRef[index] = pass.GetAlphaValue();
-		m_data.refractionRatio[index] = pass.GetRefractionRatio();
-		m_data.hasRefraction[index] = CheckFlag( pass.GetTextureFlags(), TextureChannel::eRefraction ) ? 1 : 0;
-		m_data.hasReflection[index] = CheckFlag( pass.GetTextureFlags(), TextureChannel::eReflection ) ? 1 : 0;
+
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+
+		m_data.diffDiv[index].r = pass.GetDiffuse().red();
+		m_data.diffDiv[index].g = pass.GetDiffuse().green();
+		m_data.diffDiv[index].b = pass.GetDiffuse().blue();
+		m_data.specGloss[index].r = pass.GetSpecular().red();
+		m_data.specGloss[index].g = pass.GetSpecular().green();
+		m_data.specGloss[index].b = pass.GetSpecular().blue();
+		m_data.specGloss[index].a = pass.GetGlossiness();
+		m_data.common[index].r = pass.GetOpacity();
+		m_data.common[index].g = pass.GetEmissive();
+		m_data.common[index].b = pass.GetAlphaValue();
+		m_data.common[index].a = pass.NeedsGammaCorrection() ? 2.2f : 1.0f;
+		m_data.reflRefr[index].r = pass.GetRefractionRatio();
+		m_data.reflRefr[index].g = CheckFlag( pass.GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
+		m_data.reflRefr[index].b = CheckFlag( pass.GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
+		m_data.reflRefr[index].a = 1.0f;
+
+#else
+
+		m_data[index].diffDiv.r = pass.GetDiffuse().red();
+		m_data[index].diffDiv.g = pass.GetDiffuse().green();
+		m_data[index].diffDiv.b = pass.GetDiffuse().blue();
+		m_data[index].specGloss.r = pass.GetSpecular().red();
+		m_data[index].specGloss.g = pass.GetSpecular().green();
+		m_data[index].specGloss.b = pass.GetSpecular().blue();
+		m_data[index].specGloss.a = pass.GetGlossiness();
+		m_data[index].common.r = pass.GetOpacity();
+		m_data[index].common.g = pass.GetEmissive();
+		m_data[index].common.b = pass.GetAlphaValue();
+		m_data[index].common.a = pass.NeedsGammaCorrection() ? 2.2f : 1.0f;
+		m_data[index].reflRefr.r = pass.GetRefractionRatio();
+		m_data[index].reflRefr.g = CheckFlag( pass.GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
+		m_data[index].reflRefr.b = CheckFlag( pass.GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
+		m_data[index].reflRefr.a = 1.0f;
+
+#endif
 	}
 }

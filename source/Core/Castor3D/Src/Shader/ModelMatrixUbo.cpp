@@ -1,4 +1,4 @@
-﻿#include "ModelMatrixUbo.hpp"
+#include "ModelMatrixUbo.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -10,7 +10,9 @@ using namespace Castor;
 namespace Castor3D
 {
 	ModelMatrixUbo::ModelMatrixUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferModelMatrix, *engine.GetRenderSystem() }
+		: m_ubo{ ShaderProgram::BufferModelMatrix
+			, *engine.GetRenderSystem()
+			, ModelMatrixUbo::BindingPoint }
 		, m_model{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxModel ) }
 		, m_normal{ *m_ubo.CreateUniform< UniformType::eMat4x4r >( RenderPipeline::MtxNormal ) }
 	{

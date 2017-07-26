@@ -26,7 +26,7 @@ namespace Testing
 {
 	namespace
 	{
-		ShaderProgramSPtr DoCreateNoopProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateNoopProgram( Engine & engine )
 		{
 			String vtx = Glsl(
 				void main()\n
@@ -34,13 +34,13 @@ namespace Testing
 					gl_Position = vec4( 0, 0, 0, 1 );\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eVertex );
 			program->SetSource( ShaderType::eVertex, vtx );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateBasicComputeProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateBasicComputeProgram( Engine & engine )
 		{
 			String vtx = Glsl(
 				in float inValue;\n
@@ -50,13 +50,13 @@ namespace Testing
 					outValue = sqrt( inValue );\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eVertex );
 			program->SetSource( ShaderType::eVertex, vtx );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateGeometryShaderProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateGeometryShaderProgram( Engine & engine )
 		{
 			String vtx = Glsl(
 				in float inValue;\n
@@ -81,7 +81,7 @@ namespace Testing
 					EndPrimitive();\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eVertex );
 			program->CreateObject( ShaderType::eGeometry );
 			program->SetSource( ShaderType::eVertex, vtx );
@@ -89,7 +89,7 @@ namespace Testing
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateParticleSystemShaderProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateParticleSystemShaderProgram( Engine & engine )
 		{
 			String vtx = Glsl(
 				layout( location = 0 ) in float Type;\n
@@ -210,7 +210,7 @@ namespace Testing
 					}\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eVertex );
 			program->CreateObject( ShaderType::eGeometry );
 			program->SetSource( ShaderType::eVertex, vtx );
@@ -219,8 +219,8 @@ namespace Testing
 		}
 	}
 
-	GlTransformFeedbackTest::GlTransformFeedbackTest( Engine & p_engine )
-		: GlTestCase{ "GlTransformFeedbackTest", p_engine }
+	GlTransformFeedbackTest::GlTransformFeedbackTest( Engine & engine )
+		: GlTestCase{ "GlTransformFeedbackTest", engine }
 	{
 	}
 

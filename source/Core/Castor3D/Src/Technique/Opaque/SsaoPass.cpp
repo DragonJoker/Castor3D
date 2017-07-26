@@ -424,7 +424,8 @@ namespace Castor3D
 		, m_ssaoResult{ engine }
 		, m_ssaoProgram{ DoGetSsaoProgram( engine ) }
 		, m_ssaoConfig{ cuT( "SsaoConfig" )
-			, *engine.GetRenderSystem() }
+			, *engine.GetRenderSystem()
+			, 8u }
 		, m_blurProgram{ DoGetBlurProgram( engine ) }
 		, m_blurResult{ engine }
 		, m_viewport{ engine }

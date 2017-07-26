@@ -67,21 +67,29 @@ namespace Castor3D
 		C3D_API void Visit( LegacyPass const & data )override;
 
 	public:
+
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+
 		struct PassesData
 		{
-			Castor::ArrayView< RgbColour > diffuse;
-			Castor::ArrayView< RgbColour > specular;
-			Castor::ArrayView< float > shininess;
-			Castor::ArrayView< float > ambient;
-			Castor::ArrayView< float > opacity;
-			Castor::ArrayView< float > emissive;
-			Castor::ArrayView< float > gamma;
-			Castor::ArrayView< float > exposure;
-			Castor::ArrayView< float > alphaRef;
-			Castor::ArrayView< float > refractionRatio;
-			Castor::ArrayView< int > hasRefraction;
-			Castor::ArrayView< int > hasReflection;
+			Castor::ArrayView< RgbaColour > diffAmb;
+			Castor::ArrayView< RgbaColour > specShin;
+			Castor::ArrayView< RgbaColour > common;
+			Castor::ArrayView< RgbaColour > reflRefr;
 		};
+
+#else
+
+		struct PassData
+		{
+			RgbaColour diffAmb;
+			RgbaColour specShin;
+			RgbaColour common;
+			RgbaColour reflRefr;
+		};
+		using PassesData = Castor::ArrayView< PassData >;
+
+#endif
 
 	private:
 		static constexpr uint32_t DataSize = ( sizeof( RgbColour ) * 2 )

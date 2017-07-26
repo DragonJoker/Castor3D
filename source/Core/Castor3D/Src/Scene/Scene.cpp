@@ -1,4 +1,4 @@
-﻿#include "Scene.hpp"
+#include "Scene.hpp"
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -335,7 +335,6 @@ namespace Castor3D
 		, Named{ name }
 		, m_listener{ engine.GetFrameListenerCache().Add( cuT( "Scene_" ) + name + string::to_string( (size_t)this ) ) }
 		, m_animationUpdater{ std::max( 2u, engine.GetCpuInformations().CoreCount() - ( engine.IsThreaded() ? 2u : 1u ) ) }
-		, m_materialType{ MaterialType::eLegacy }
 	{
 		auto mergeObject = [this]( auto const & source
 			, auto & destination
@@ -942,7 +941,7 @@ namespace Castor3D
 			}
 		}
 
-		switch ( m_materialType )
+		switch ( GetMaterialsType() )
 		{
 		case MaterialType::ePbrMetallicRoughness:
 			result |= SceneFlag::ePbrMetallicRoughness;

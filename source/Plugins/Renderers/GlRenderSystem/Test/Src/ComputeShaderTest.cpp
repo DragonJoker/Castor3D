@@ -39,7 +39,7 @@ namespace Testing
 {
 	namespace
 	{
-		ShaderProgramSPtr DoCreateSimpleComputeProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateSimpleComputeProgram( Engine & engine )
 		{
 			String code = Glsl(
 				layout( std430, binding = 0 ) buffer Storage\n
@@ -56,13 +56,13 @@ namespace Testing
 					ids[gid].w = int( gid * 4 );\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eCompute );
 			program->SetSource( ShaderType::eCompute, code );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateTwoStoragesProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateTwoStoragesProgram( Engine & engine )
 		{
 			String code = Glsl(
 				layout( std430, binding = 1 ) buffer Storage1\n
@@ -83,13 +83,13 @@ namespace Testing
 					ids2[gid].w = ids1[gid].w + int( gid * 4 );\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eCompute );
 			program->SetSource( ShaderType::eCompute, code );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateAtomicCounterProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateAtomicCounterProgram( Engine & engine )
 		{
 			String code = Glsl(
 				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;\n
@@ -107,13 +107,13 @@ namespace Testing
 					ids[gid].w = int( gid * 4 );\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eCompute );
 			program->SetSource( ShaderType::eCompute, code );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateTwoStoragesAndAtomicCounterProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateTwoStoragesAndAtomicCounterProgram( Engine & engine )
 		{
 			String code = Glsl(
 				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;\n
@@ -135,15 +135,15 @@ namespace Testing
 					ids2[gid].w = ids1[gid].w + int( gid * 4 );\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eCompute );
 			program->SetSource( ShaderType::eCompute, code );
 			return program;
 		}
 	}
 
-	GlComputeShaderTest::GlComputeShaderTest( Engine & p_engine )
-		: GlTestCase{ "GlComputeShaderTest", p_engine }
+	GlComputeShaderTest::GlComputeShaderTest( Engine & engine )
+		: GlTestCase{ "GlComputeShaderTest", engine }
 	{
 	}
 

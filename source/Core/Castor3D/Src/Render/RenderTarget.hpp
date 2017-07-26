@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -485,9 +485,6 @@ namespace Castor3D
 		//!\~english	The SSAO configuration.
 		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
-		//!\~english	The render pass timer.
-		//!\~french		Le timer de passe de rendu.
-		RenderPassTimerSPtr m_timer;
 	};
 }
 

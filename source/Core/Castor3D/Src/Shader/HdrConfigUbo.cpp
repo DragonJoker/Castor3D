@@ -8,7 +8,9 @@ using namespace Castor;
 namespace Castor3D
 {
 	HdrConfigUbo::HdrConfigUbo( Engine & engine )
-		: m_ubo{ ShaderProgram::BufferHdrConfig, *engine.GetRenderSystem() }
+		: m_ubo{ ShaderProgram::BufferHdrConfig
+			, *engine.GetRenderSystem()
+			, HdrConfigUbo::BindingPoint }
 		, m_exposure{ *m_ubo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure ) }
 		, m_gamma{ *m_ubo.CreateUniform< UniformType::eFloat >( ShaderProgram::Gamma ) }
 	{

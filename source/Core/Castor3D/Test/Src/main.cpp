@@ -1,4 +1,4 @@
-﻿#include "Castor3DTestPrerequisites.hpp"
+#include "Castor3DTestPrerequisites.hpp"
 
 #include <Log/Logger.hpp>
 #include <Data/File.hpp>
@@ -16,7 +16,7 @@ using namespace Castor3D;
 
 namespace
 {
-	void DoLoadPlugins( Engine & p_engine )
+	void DoLoadPlugins( Engine & engine )
 	{
 		PathArray arrayFiles;
 		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), arrayFiles );
@@ -50,7 +50,7 @@ namespace
 					// Since techniques depend on renderers, we load these first
 					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
+						if ( !engine.GetPluginCache().LoadPlugin( file ) )
 						{
 							arrayFailed.push_back( file );
 						}
@@ -65,7 +65,7 @@ namespace
 			// Then we load other plug-ins
 			for ( auto file : otherPlugins )
 			{
-				if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
+				if ( !engine.GetPluginCache().LoadPlugin( file ) )
 				{
 					arrayFailed.push_back( file );
 				}

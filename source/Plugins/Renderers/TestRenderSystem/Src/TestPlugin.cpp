@@ -25,16 +25,16 @@ extern "C"
 		*p_name = TestRenderSystem::Name.c_str();
 	}
 
-	C3D_Test_API void OnLoad( Castor3D::Engine * p_engine, Castor3D::Plugin * p_plugin )
+	C3D_Test_API void OnLoad( Castor3D::Engine * engine, Castor3D::Plugin * p_plugin )
 	{
 		auto plugin = static_cast< Castor3D::RendererPlugin * >( p_plugin );
 		plugin->SetRendererType( TestRenderSystem::Type );
-		p_engine->GetRenderSystemFactory().Register( TestRenderSystem::Type
+		engine->GetRenderSystemFactory().Register( TestRenderSystem::Type
 			, &TestRenderSystem::Create );
 	}
 
-	C3D_Test_API void OnUnload( Castor3D::Engine * p_engine )
+	C3D_Test_API void OnUnload( Castor3D::Engine * engine )
 	{
-		p_engine->GetRenderSystemFactory().Unregister( TestRenderSystem::Type );
+		engine->GetRenderSystemFactory().Unregister( TestRenderSystem::Type );
 	}
 }

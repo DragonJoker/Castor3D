@@ -50,6 +50,8 @@ SOFTWARE.
 #	define GlslWriter_API
 #endif
 
+#define GLSL_MATERIALS_STRUCT_OF_ARRAY 1
+
 #define DECLARE_GLSL_PARAMETER( TypeName )\
 	using In##TypeName = InParam< TypeName >;\
 	using Out##TypeName = OutParam< TypeName >;\
@@ -168,6 +170,7 @@ namespace GLSL
 		eDirectionalLight,
 		ePointLight,
 		eSpotLight,
+		eMaterial,
 		eLegacyMaterial,
 		eMetallicRoughnessMaterial,
 		eSpecularGlossinessMaterial,

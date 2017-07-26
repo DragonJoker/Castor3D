@@ -632,9 +632,6 @@ namespace Castor3D
 		//!\~english	The shadows parameters.
 		//!\~french		Les paramètres des ombres.
 		Shadow m_shadow;
-		//!\~english	The materials type.
-		//!\~french		Le type des matériaux.
-		MaterialType m_materialType;
 		//!\~english	The pipeline used to render the background image, if any.
 		//!\~french		Le pipeline utilisé pour le rendu de l'image de fond, s'il y en a une.
 		std::unique_ptr< TextureProjection > m_colour;

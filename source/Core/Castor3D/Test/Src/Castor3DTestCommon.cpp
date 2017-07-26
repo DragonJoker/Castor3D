@@ -33,9 +33,9 @@ using Castor3D::operator<<;
 
 namespace Testing
 {
-	C3DTestCase::C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
+	C3DTestCase::C3DTestCase( std::string const & p_name, Castor3D::Engine & engine )
 		: TestCase{ p_name }
-		, m_engine{ p_engine }
+		, m_engine{ engine }
 		, m_testDataFolder{ Engine::GetDataDirectory() / cuT( "Castor3DTest" ) / cuT( "data" ) }
 	{
 	}

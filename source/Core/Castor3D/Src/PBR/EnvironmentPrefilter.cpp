@@ -1,4 +1,4 @@
-﻿#include "EnvironmentPrefilter.hpp"
+#include "EnvironmentPrefilter.hpp"
 
 #include "Engine.hpp"
 
@@ -43,7 +43,9 @@ namespace Castor3D
 			}
 		}
 		, m_size{ p_size }
-		, m_configUbo{ cuT( "Config" ), *engine.GetRenderSystem() }
+		, m_configUbo{ cuT( "Config" )
+			, *engine.GetRenderSystem()
+			, 10u }
 		, m_roughnessUniform{ *m_configUbo.CreateUniform< UniformType::eFloat >( cuT( "c3d_roughness" ) ) }
 	{
 		uint32_t i = 0;
@@ -187,7 +189,7 @@ namespace Castor3D
 			m_viewport.Apply();
 			m_roughnessUniform.SetValue( mip / float( GLSL::Utils::MaxIblReflectionLod ) );
 			m_configUbo.Update();
-			m_configUbo.BindTo( 0u );
+			m_configUbo.BindTo( 10u );
 
 			for ( uint32_t i = 0u; i < 6u; ++i )
 			{

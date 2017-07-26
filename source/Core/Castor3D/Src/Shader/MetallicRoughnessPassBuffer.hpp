@@ -71,20 +71,29 @@ namespace Castor3D
 		C3D_API void Visit( MetallicRoughnessPbrPass const & data )override;
 
 	public:
+
+#if GLSL_MATERIALS_STRUCT_OF_ARRAY
+
 		struct PassesData
 		{
-			Castor::ArrayView< RgbColour > albedo;
-			Castor::ArrayView< float > roughness;
-			Castor::ArrayView< float > metallic;
-			Castor::ArrayView< float > opacity;
-			Castor::ArrayView< float > emissive;
-			Castor::ArrayView< float > gamma;
-			Castor::ArrayView< float > exposure;
-			Castor::ArrayView< float > alphaRef;
-			Castor::ArrayView< float > refractionRatio;
-			Castor::ArrayView< int > hasRefraction;
-			Castor::ArrayView< int > hasReflection;
+			Castor::ArrayView< RgbaColour > albRough;
+			Castor::ArrayView< RgbaColour > metDiv;
+			Castor::ArrayView< RgbaColour > common;
+			Castor::ArrayView< RgbaColour > reflRefr;
 		};
+
+#else
+
+		struct PassData
+		{
+			RgbaColour albRough;
+			RgbaColour metDiv;
+			RgbaColour common;
+			RgbaColour reflRefr;
+		};
+		using PassesData = Castor::ArrayView< PassData >;
+
+#endif
 
 	private:
 		static constexpr uint32_t DataSize = ( sizeof( RgbColour ) * 1 )

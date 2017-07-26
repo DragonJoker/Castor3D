@@ -7,9 +7,9 @@ using namespace Castor3D;
 
 namespace Testing
 {
-	GlTestCase::GlTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
+	GlTestCase::GlTestCase( std::string const & p_name, Castor3D::Engine & engine )
 		: TestCase{ p_name }
-		, m_engine{ p_engine }
+		, m_engine{ engine }
 	{
 	}
 

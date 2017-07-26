@@ -276,7 +276,7 @@ namespace Testing
 		: public TestCase
 	{
 	public:
-		C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine );
+		C3DTestCase( std::string const & p_name, Castor3D::Engine & engine );
 
 	protected:
 		void DeCleanupEngine();

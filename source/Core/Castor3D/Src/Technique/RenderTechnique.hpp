@@ -67,8 +67,8 @@ namespace Castor3D
 		struct TechniqueFbo
 		{
 		public:
-			explicit TechniqueFbo( RenderTechnique & p_technique );
-			bool Initialise( Castor::Size p_size );
+			explicit TechniqueFbo( RenderTechnique & technique );
+			bool Initialise( Castor::Size size );
 			void Cleanup();
 
 			//!\~english	The texture receiving the color render.
@@ -95,24 +95,24 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name				The technique name.
-		 *\param[in]	p_renderTarget		The render target for this technique.
-		 *\param[in]	renderSystem		The render system.
-		 *\param[in]	p_params			The technique parameters.
-		 *\param[in]	p_config			The SSAO configuration.
+		 *\param[in]	name			The technique name.
+		 *\param[in]	renderTarget	The render target for this technique.
+		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	parameters		The technique parameters.
+		 *\param[in]	config			The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name				Le nom de la technique.
-		 *\param[in]	p_renderTarget		La render target pour cette technique.
-		 *\param[in]	renderSystem		Le render system.
-		 *\param[in]	p_params			Les paramètres de la technique.
-		 *\param[in]	p_config			La configuration du SSAO.
+		 *\param[in]	name			Le nom de la technique.
+		 *\param[in]	renderTarget	La render target pour cette technique.
+		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	parameters		Les paramètres de la technique.
+		 *\param[in]	config			La configuration du SSAO.
 		 */
-		C3D_API RenderTechnique( Castor::String const & p_name
-			, RenderTarget & p_renderTarget
+		C3D_API RenderTechnique( Castor::String const & name
+			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
-			, Parameters const & p_params
-			, SsaoConfig const & p_config );
+			, Parameters const & parameters
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -123,14 +123,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	p_index		The base texture index.
+		 *\param[in]	index		The base texture index.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	p_index		L'index de texture de base.
+		 *\param[in]	index		L'index de texture de base.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool Initialise( uint32_t & p_index );
+		C3D_API bool Initialise( uint32_t & index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -142,40 +142,40 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Update function.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Fonction de mise à jour.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( RenderQueueArray & p_queues );
+		C3D_API void Update( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[out]	p_info	Receives the render informations.
+		 *\param[out]	info	Receives the render informations.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
+		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void Render( RenderInfo & p_info );
+		C3D_API void Render( RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
-		 *\param[in]	p_file	The file.
+		 *\param[in]	file	The file.
 		 *\~french
 		 *\brief		Ecrit la technique dans un fichier texte.
-		 *\param[in]	p_file	Le fichier.
+		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API bool WriteInto( Castor::TextFile & p_file );
+		C3D_API bool WriteInto( Castor::TextFile & file );
 		/**
 		 *\~english
 		 *\brief		Adds a shadow producing light source.
-		 *\param[in]	p_light	The light source.
+		 *\param[in]	light	The light source.
 		 *\~french
 		 *\brief		Ajoute une source lumineuse produisant des ombres.
-		 *\param[in]	p_light	La source lumineuse.
+		 *\param[in]	light	La source lumineuse.
 		 */
-		C3D_API void AddShadowProducer( Light & p_light );
+		C3D_API void AddShadowProducer( Light & light );
 		/**
 		 *\~english
 		 *\return		The render area dimensions.
@@ -261,6 +261,12 @@ namespace Castor3D
 		//!\~english	The weighted blend rendering used for transparent meshes.
 		//!\~french		Le rendu weighted blend utilisé pour les maillages transparents.
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
+		//!\~english	The particles timer.
+		//!\~french		Le timer de particules.
+		RenderPassTimerSPtr m_particleTimer;
+		//!\~english	The post effect timer.
+		//!\~french		Le timer d'effets post-rendu.
+		RenderPassTimerSPtr m_postFxTimer;
 	};
 }
 

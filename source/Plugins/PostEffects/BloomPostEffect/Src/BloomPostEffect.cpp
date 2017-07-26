@@ -230,8 +230,12 @@ namespace Bloom
 		, m_viewport{ *renderSystem.GetEngine() }
 		, m_size( 5u )
 		, m_matrixUbo{ *renderSystem.GetEngine() }
-		, m_blurXUbo{ BloomPostEffect::FilterConfig, renderSystem }
-		, m_blurYUbo{ BloomPostEffect::FilterConfig, renderSystem }
+		, m_blurXUbo{ BloomPostEffect::FilterConfig
+			, renderSystem
+			, 2u }
+		, m_blurYUbo{ BloomPostEffect::FilterConfig
+			, renderSystem
+			, 2u }
 		, m_declaration(
 		{
 			BufferElementDeclaration( ShaderProgram::Position

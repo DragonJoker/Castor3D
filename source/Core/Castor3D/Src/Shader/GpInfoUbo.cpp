@@ -16,19 +16,21 @@ namespace Castor3D
 	const String GpInfoUbo::RenderSize = cuT( "c3d_renderSize" );
 
 	GpInfoUbo::GpInfoUbo( Engine & engine )
-		: m_gpInfoUbo{ GpInfoUbo::GPInfo, *engine.GetRenderSystem() }
-		, m_invViewProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvViewProj ) }
-		, m_invViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvView ) }
-		, m_invProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvProj ) }
-		, m_gViewUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::View ) }
-		, m_gProjUniform{ m_gpInfoUbo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::Proj ) }
-		, m_renderSize{ m_gpInfoUbo.CreateUniform< UniformType::eVec2f >( GpInfoUbo::RenderSize ) }
+		: m_ubo{ GpInfoUbo::GPInfo
+			, *engine.GetRenderSystem()
+			, GpInfoUbo::BindingPoint }
+		, m_invViewProjUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvViewProj ) }
+		, m_invViewUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvView ) }
+		, m_invProjUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::InvProj ) }
+		, m_gViewUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::View ) }
+		, m_gProjUniform{ m_ubo.CreateUniform< UniformType::eMat4x4f >( GpInfoUbo::Proj ) }
+		, m_renderSize{ m_ubo.CreateUniform< UniformType::eVec2f >( GpInfoUbo::RenderSize ) }
 	{
 	}
 
 	GpInfoUbo::~GpInfoUbo()
 	{
-		m_gpInfoUbo.Cleanup();
+		m_ubo.Cleanup();
 	}
 
 	void GpInfoUbo::Update( Size const & p_size
@@ -43,8 +45,8 @@ namespace Castor3D
 		m_gViewUniform->SetValue( p_camera.GetView() );
 		m_gProjUniform->SetValue( p_camera.GetViewport().GetProjection() );
 		m_renderSize->SetValue( Point2f( p_size.width(), p_size.height() ) );
-		m_gpInfoUbo.Update();
-		m_gpInfoUbo.BindTo( GpInfoUbo::BindingPoint );
+		m_ubo.Update();
+		m_ubo.BindTo( GpInfoUbo::BindingPoint );
 	}
 
 	//************************************************************************************************

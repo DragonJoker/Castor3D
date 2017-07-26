@@ -1,4 +1,4 @@
-#include "DebugOverlays.hpp"
+﻿#include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
 #include "PanelOverlay.hpp"
@@ -63,18 +63,18 @@ namespace Castor3D
 		m_externTime = GetTextOverlay( cache, cuT( "DebugPanel-ExternalTime-Value" ) );
 
 		m_valid = m_debugCpuTime
-				  && m_debugGpuClientTime
-				  && m_debugGpuServerTime
-				  && m_debugTotalTime
-				  && m_debugAverageFps
-				  && m_debugAverageTime
-				  && m_debugVertexCount
-				  && m_debugFaceCount
-				  && m_debugObjectCount
-				  && m_debugVisibleObjectCount
-				  && m_debugParticlesCount
-				  && m_debugTime
-				  && m_externTime;
+			&& m_debugGpuClientTime
+			&& m_debugGpuServerTime
+			&& m_debugTotalTime
+			&& m_debugAverageFps
+			&& m_debugAverageTime
+			&& m_debugVertexCount
+			&& m_debugFaceCount
+			&& m_debugObjectCount
+			&& m_debugVisibleObjectCount
+			&& m_debugParticlesCount
+			&& m_debugTime
+			&& m_externTime;
 
 		if ( panel )
 		{
@@ -158,7 +158,7 @@ namespace Castor3D
 			overlays.m_cpuValue->SetPixelSize( Size{ 130, 20 } );
 			overlays.m_gpuValue->SetPixelSize( Size{ 130, 20 } );
 
-			overlays.m_title->SetFont( cuT( "Arial10" ) );
+			overlays.m_title->SetFont( cuT( "Arial20" ) );
 			overlays.m_cpuName->SetFont( cuT( "Arial10" ) );
 			overlays.m_gpuName->SetFont( cuT( "Arial10" ) );
 			overlays.m_cpuValue->SetFont( cuT( "Arial10" ) );

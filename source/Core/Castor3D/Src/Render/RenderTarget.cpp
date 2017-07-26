@@ -199,7 +199,6 @@ namespace Castor3D
 				effect->Initialise();
 			}
 
-			m_timer = std::make_shared< RenderPassTimer >( *GetEngine(), cuT( "Render target" ) + string::to_string( m_index ) + cuT( " post effects" ) );
 			m_initialised = m_toneMapping->Initialise();
 		}
 	}
@@ -208,7 +207,6 @@ namespace Castor3D
 	{
 		if ( m_initialised )
 		{
-			m_timer.reset();
 			m_toneMapping->Cleanup();
 			m_toneMapping.reset();
 
@@ -308,12 +306,11 @@ namespace Castor3D
 		// Render the scene through the RenderTechnique.
 		m_renderTechnique->Render( info );
 
-		m_timer->Start();
 		// Then draw the render's result to the RenderTarget's frame buffer.
 		fbo.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		fbo.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_toneMapping->SetConfig( scene->GetHdrConfig() );
-		m_toneMapping->Apply( GetSize(), m_renderTechnique->GetResult() );
+		m_toneMapping->Apply( GetSize(), m_renderTechnique->GetResult(), info );
 		// We also render overlays.
 		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		GetEngine()->GetOverlayCache().Render( *scene, m_size );
@@ -327,10 +324,6 @@ namespace Castor3D
 
 #endif
 
-		m_timer->Stop();
-		info.m_times.push_back( { m_timer->GetName()
-			, m_timer->GetGpuTime()
-			, m_timer->GetCpuTime() } );
 		auto time = std::accumulate( info.m_times.begin()
 			, info.m_times.end()
 			, 0_ns

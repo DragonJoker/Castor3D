@@ -720,6 +720,16 @@ namespace GlRender
 			result |= GlBarrierBit::eTextureFetch;
 		}
 
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eFrameBuffer ) )
+		{
+			result |= GlBarrierBit::eFramebuffer;
+		}
+
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::ePixelBuffer ) )
+		{
+			result |= GlBarrierBit::ePixelBuffer;
+		}
+
 		return result;
 	}
 

@@ -1,4 +1,4 @@
-#include "ShadowMapPassPoint.hpp"
+﻿#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -41,7 +41,9 @@ namespace Castor3D
 		, Light & p_light
 		, ShadowMap const & p_shadowMap )
 		: ShadowMapPass{ engine, p_light, p_shadowMap }
-		, m_shadowConfig{ ShadowMapUbo, *engine.GetRenderSystem() }
+		, m_shadowConfig{ ShadowMapUbo
+			, *engine.GetRenderSystem()
+			, 8u }
 		, m_viewport{ engine }
 	{
 		m_shadowConfig.CreateUniform< UniformType::eVec3f >( WorldLightPosition );
