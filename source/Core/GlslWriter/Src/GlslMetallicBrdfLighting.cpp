@@ -214,7 +214,7 @@ namespace GLSL
 						shadowFactor = 1.0_f - min( receivesShadows
 							, m_shadowModel->ComputeDirectionalShadow( light.m_transform()
 								, fragmentIn.m_v3Vertex
-								, lightDirection
+								, -lightDirection
 								, fragmentIn.m_v3Normal ) );
 					}
 					FI;
@@ -330,7 +330,7 @@ namespace GLSL
 							shadowFactor = 1.0_f - min( receivesShadows
 								, m_shadowModel->ComputeSpotShadow( light.m_transform()
 									, fragmentIn.m_v3Vertex
-									, lightToVertex
+									, -lightToVertex
 									, fragmentIn.m_v3Normal
 									, light.m_index() ) );
 						}
@@ -389,7 +389,7 @@ namespace GLSL
 					shadowFactor = 1.0_f - min( receivesShadows
 						, m_shadowModel->ComputeDirectionalShadow( light.m_transform()
 							, fragmentIn.m_v3Vertex
-							, lightDirection
+							, -lightDirection
 							, fragmentIn.m_v3Normal ) );
 				}
 
@@ -498,7 +498,7 @@ namespace GLSL
 						shadowFactor = 1.0_f - min( receivesShadows
 							, m_shadowModel->ComputeSpotShadow( light.m_transform()
 								, fragmentIn.m_v3Vertex
-								, lightToVertex
+								, -lightToVertex
 								, fragmentIn.m_v3Normal ) );
 					}
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -63,7 +63,7 @@ namespace GLSL
 	private:
 		GlslWriter & m_writer;
 		Function< Float, InVec4 > m_getRandom;
-		Function< Float, InVec3, InVec3, InFloat, InFloat > m_getShadowOffset;
+		Function< Float, InVec3, InVec3 > m_getShadowOffset;
 		Function< Vec3, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_getLightSpacePosition;
 		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3 > m_computeDirectional;
 		Function< Float, InParam< Mat4 >, InVec3, InVec3, InVec3, InInt > m_computeSpot;

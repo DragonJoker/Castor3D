@@ -1,4 +1,4 @@
-#include "GlslPhongLighting.hpp"
+﻿#include "GlslPhongLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -186,8 +186,10 @@ namespace GLSL
 					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
 					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 				};
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( light.m_direction().xyz() ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( light.m_direction().xyz() ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
@@ -232,10 +234,14 @@ namespace GLSL
 					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
 					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 				};
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
+				auto distance = m_writer.DeclLocale( cuT( "distance" )
+					, length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( lightToVertex ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
@@ -288,10 +294,14 @@ namespace GLSL
 					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
 					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 				};
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
-				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" ), dot( lightDirection, light.m_direction() ) );
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
+				auto distance = m_writer.DeclLocale( cuT( "distance" )
+					, length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( lightToVertex ) );
+				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" )
+					, dot( lightDirection, light.m_direction() ) );
 
 				IF( m_writer, spotFactor > light.m_cutOff() )
 				{
@@ -352,8 +362,10 @@ namespace GLSL
 					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
 					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 				};
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( light.m_direction().xyz() ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( light.m_direction().xyz() ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
@@ -398,10 +410,14 @@ namespace GLSL
 					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
 					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 				};
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
-				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" ), 1.0_f );
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
+				auto distance = m_writer.DeclLocale( cuT( "distance" )
+					, length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( lightToVertex ) );
+				auto shadowFactor = m_writer.DeclLocale( cuT( "shadowFactor" )
+					, 1.0_f );
 
 				if ( m_shadows != ShadowType::eNone )
 				{
@@ -449,10 +465,14 @@ namespace GLSL
 					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
 					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 				};
-				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" ), fragmentIn.m_v3Vertex - light.m_position().xyz() );
-				auto distance = m_writer.DeclLocale( cuT( "distance" ), length( lightToVertex ) );
-				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" ), normalize( lightToVertex ) );
-				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" ), dot( lightDirection, light.m_direction() ) );
+				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
+					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
+				auto distance = m_writer.DeclLocale( cuT( "distance" )
+					, length( lightToVertex ) );
+				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
+					, normalize( lightToVertex ) );
+				auto spotFactor = m_writer.DeclLocale( cuT( "spotFactor" )
+					, dot( lightDirection, light.m_direction() ) );
 
 				IF( m_writer, spotFactor > light.m_cutOff() )
 				{
@@ -508,9 +528,12 @@ namespace GLSL
 
 				IF( m_writer, diffuseFactor > 0.0_f )
 				{
-					auto vertexToEye = m_writer.DeclLocale( cuT( "vertexToEye" ), normalize( worldEye - fragmentIn.m_v3Vertex ) );
-					auto lightReflect = m_writer.DeclLocale( cuT( "lightReflect" ), normalize( reflect( lightDirection, fragmentIn.m_v3Normal ) ) );
-					auto specularFactor = m_writer.DeclLocale( cuT( "specularFactor" ), max( dot( vertexToEye, lightReflect ), 0.0 ) );
+					auto vertexToEye = m_writer.DeclLocale( cuT( "vertexToEye" )
+						, normalize( worldEye - fragmentIn.m_v3Vertex ) );
+					auto lightReflect = m_writer.DeclLocale( cuT( "lightReflect" )
+						, normalize( reflect( lightDirection, fragmentIn.m_v3Normal ) ) );
+					auto specularFactor = m_writer.DeclLocale( cuT( "specularFactor" )
+						, max( dot( vertexToEye, lightReflect ), 0.0 ) );
 					parentOutput.m_v3Diffuse = p_shadowFactor * light.m_colour() * light.m_intensity().x() * diffuseFactor;
 					parentOutput.m_v3Specular = p_shadowFactor * light.m_colour() * light.m_intensity().y() * pow( specularFactor, max( shininess, 0.1_f ) );
 				}
