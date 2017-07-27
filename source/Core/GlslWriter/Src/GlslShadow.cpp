@@ -1,4 +1,4 @@
-﻿#include "GlslShadow.hpp"
+#include "GlslShadow.hpp"
 
 using namespace Castor;
 
@@ -127,20 +127,16 @@ namespace GLSL
 	{
 		m_getShadowOffset = m_writer.ImplementFunction< Float >( cuT( "GetShadowOffset" )
 			, [this]( Vec3 const & normal
-				, Vec3 const & lightDirection
-				, Float const & minOffset
-				, Float const & maxSlopeOffset )
+				, Vec3 const & lightDirection )
 			{
 				auto cosAlpha = m_writer.DeclLocale( cuT( "cosAlpha" )
-					, clamp( dot( normal, normalize( lightDirection ) ), 0.0_f, 1.0_f ) );
-				auto offset = m_writer.DeclLocale( cuT( "offset" )
-					, 1.0_f - cosAlpha );
-				m_writer.Return( minOffset + maxSlopeOffset * offset );
+					, clamp( dot( normal, lightDirection ), 0.0_f, 1.0_f ) );
+				auto offsetScale = m_writer.DeclLocale( cuT( "offsetScale" )
+					, sqrt( 1.0_f - cosAlpha * cosAlpha ) ); // sin( acos( l_cosAlpha ) )
+				m_writer.Return( offsetScale );
 			}
 			, InVec3( &m_writer, cuT( "normal" ) )
-			, InVec3( &m_writer, cuT( "lightDirection" ) )
-			, InFloat( &m_writer, cuT( "minOffset" ) )
-			, InFloat( &m_writer, cuT( "maxSlopeOffset" ) ) );
+			, InVec3( &m_writer, cuT( "lightDirection" ) ) );
 	}
 
 	void Shadow::DoDeclare_GetLightSpacePosition()
@@ -152,13 +148,13 @@ namespace GLSL
 				, Vec3 const & normal )
 			{
 				// Offset the vertex position along its normal.
-				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" )
-					, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), m_getShadowOffset( normal, lightDirection ) * 2.0_f );
+				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" ), worldSpacePosition + m_writer.Paren( normal * offset ) );
+				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" ), lightMatrix * vec4( worldSpace, 1.0_f ) );
 				// Perspective divide (result in range [-1,1]).
 				lightSpacePosition.xyz() = lightSpacePosition.xyz() / lightSpacePosition.w();
 				// Now put the position in range [0,1].
 				lightSpacePosition.xyz() = m_writer.Paren( lightSpacePosition.xyz() * Float( 0.5 ) ) + Float( 0.5 );
-
 				m_writer.Return( lightSpacePosition.xyz() );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
@@ -175,13 +171,9 @@ namespace GLSL
 				, Vec3 const & lightDirection
 				, Vec3 const & normal )
 			{
-				auto constexpr minOffset = 0.0001f;
-				auto constexpr maxSlopeOffset = 0.008f;
-				auto offset = m_writer.DeclLocale( cuT( "offset" )
-					, m_getShadowOffset( normal, lightDirection, Float( minOffset ), Float( maxSlopeOffset ) ) );
 				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" )
 					, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-				m_writer.Return( m_sampleDirectional( vec3( lightSpacePosition.xy(), lightSpacePosition.z() - offset ) ) );
+				m_writer.Return( m_sampleDirectional( vec3( lightSpacePosition.xy(), lightSpacePosition.z() ) ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -198,13 +190,9 @@ namespace GLSL
 				, Vec3 const & normal
 				, Int const & index )
 			{
-				auto constexpr minOffset = 0.0001f;
-				auto constexpr maxSlopeOffset = 0.001f;
-				auto offset = m_writer.DeclLocale( cuT( "offset" )
-					, m_getShadowOffset( normal, lightDirection, Float( minOffset ), Float( maxSlopeOffset ) ) );
 				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" )
 					, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-				m_writer.Return( m_sampleSpot( vec3( lightSpacePosition.xy(), lightSpacePosition.z() - offset ), index ) );
+				m_writer.Return( m_sampleSpot( vec3( lightSpacePosition.xy(), lightSpacePosition.z() ), index ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -221,13 +209,11 @@ namespace GLSL
 			, Vec3 const & normal
 			, Int const & index )
 			{
-				auto constexpr minOffset = 0.0001f;
-				auto constexpr maxSlopeOffset = 0.002f;
-				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" )
-					, worldSpacePosition - lightPosition );
-				auto offset = m_writer.DeclLocale( cuT( "offset" )
-					, m_getShadowOffset( normal, vertexToLight, Float( minOffset ), Float( maxSlopeOffset ) ) );
-				m_writer.Return( m_samplePoint( vertexToLight, length( vertexToLight ) / 4000.0_f - offset, index ) );
+				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" ), worldSpacePosition - lightPosition );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), m_getShadowOffset( normal, vertexToLight ) );
+				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" ), worldSpacePosition + m_writer.Paren( normal * offset ) );
+				vertexToLight = worldSpace - lightPosition;
+				m_writer.Return( m_samplePoint( vertexToLight, length( vertexToLight ) / 4000.0_f, index ) );
 			}
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 			, InVec3( &m_writer, cuT( "lightPosition" ) )
@@ -243,13 +229,9 @@ namespace GLSL
 				, Vec3 const & lightDirection
 				, Vec3 const & normal )
 			{
-				auto constexpr minOffset = 0.00005f;
-				auto constexpr maxSlopeOffset = 0.0005f;
-				auto offset = m_writer.DeclLocale( cuT( "offset" )
-					, m_getShadowOffset( normal, lightDirection, Float( minOffset ), Float( maxSlopeOffset ) ) );
 				auto lightSpacePosition = m_writer.DeclLocale( cuT( "lightSpacePosition" )
 					, m_getLightSpacePosition( lightMatrix, worldSpacePosition, lightDirection, normal ) );
-				m_writer.Return( m_sampleOneSpot( vec3( lightSpacePosition.xy(), lightSpacePosition.z() - offset ) ) );
+				m_writer.Return( m_sampleOneSpot( vec3( lightSpacePosition.xy(), lightSpacePosition.z() ) ) );
 			}
 			, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -264,13 +246,11 @@ namespace GLSL
 			, Vec3 const & lightPosition
 			, Vec3 const & normal )
 			{
-				auto constexpr minOffset = 0.0001f;
-				auto constexpr maxSlopeOffset = 0.002f;
-				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" )
-					, worldSpacePosition - lightPosition );
-				auto offset = m_writer.DeclLocale( cuT( "offset" )
-					, m_getShadowOffset( normal, vertexToLight, Float( minOffset ), Float( maxSlopeOffset ) ) );
-				m_writer.Return( m_sampleOnePoint( vertexToLight, length( vertexToLight ) / 4000.0_f - offset ) );
+				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" ), worldSpacePosition - lightPosition );
+				auto offset = m_writer.DeclLocale( cuT( "offset" ), m_getShadowOffset( normal, vertexToLight ) );
+				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" ), worldSpacePosition + m_writer.Paren( normal * offset ) );
+				vertexToLight = worldSpace - lightPosition;
+				m_writer.Return( m_sampleOnePoint( vertexToLight, length( vertexToLight ) / 4000.0_f ) );
 			}
 			, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 			, InVec3( &m_writer, cuT( "lightPosition" ) )

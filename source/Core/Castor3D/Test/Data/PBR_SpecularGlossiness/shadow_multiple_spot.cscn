@@ -112,8 +112,8 @@ scene "Scene"
 			type perspective
 			fov_y 45.0
 			aspect_ratio 1.778
-			near 0.1
-			far 20000.0
+			near 1
+			far 10000
 		}
 	}
 }
