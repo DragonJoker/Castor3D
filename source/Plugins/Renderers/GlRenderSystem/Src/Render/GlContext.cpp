@@ -61,7 +61,7 @@ namespace GlRender
 			{
 				GetImpl().SetCurrent();
 				renderSystem->Initialise( std::move( GetImpl().GetGpuInformations() ) );
-				engine->GetMaterialCache().Initialise();
+				engine->GetMaterialCache().Initialise( m_window->GetScene()->GetMaterialsType() );
 
 #if !defined( NDEBUG )
 

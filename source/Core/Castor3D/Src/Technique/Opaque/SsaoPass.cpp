@@ -1,4 +1,4 @@
-﻿#include "SsaoPass.hpp"
+#include "SsaoPass.hpp"
 
 #include "LightPass.hpp"
 
@@ -424,7 +424,8 @@ namespace Castor3D
 		, m_ssaoResult{ engine }
 		, m_ssaoProgram{ DoGetSsaoProgram( engine ) }
 		, m_ssaoConfig{ cuT( "SsaoConfig" )
-			, *engine.GetRenderSystem() }
+			, *engine.GetRenderSystem()
+			, 8u }
 		, m_blurProgram{ DoGetBlurProgram( engine ) }
 		, m_blurResult{ engine }
 		, m_viewport{ engine }
@@ -450,12 +451,6 @@ namespace Castor3D
 	{
 		DoRenderSsao( gp );
 		DoRenderBlur();
-		info.m_times.push_back( { m_ssaoTimer->GetName()
-			, m_ssaoTimer->GetGpuTime()
-			, m_ssaoTimer->GetCpuTime() } );
-		info.m_times.push_back( { m_blurTimer->GetName()
-			, m_blurTimer->GetGpuTime()
-			, m_blurTimer->GetCpuTime() } );
 	}
 
 	void SsaoPass::DoInitialiseQuadRendering()

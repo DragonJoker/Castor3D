@@ -185,7 +185,9 @@ namespace Castor3D
 
 	PickingPass::PickingPass( Engine & engine )
 		: RenderPass{ cuT( "Picking" ), engine, nullptr }
-		, m_pickingUbo{ Picking, *engine.GetRenderSystem() }
+		, m_pickingUbo{ Picking
+			, *engine.GetRenderSystem()
+			, 7u }
 	{
 		m_pickingUbo.CreateUniform( UniformType::eUInt, DrawIndex );
 		m_pickingUbo.CreateUniform( UniformType::eUInt, NodeIndex );

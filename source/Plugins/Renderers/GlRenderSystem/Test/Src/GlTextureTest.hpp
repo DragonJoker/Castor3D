@@ -35,7 +35,7 @@ namespace Testing
 		: public GlTestCase
 	{
 	public:
-		explicit GlTextureTest( Castor3D::Engine & p_engine );
+		explicit GlTextureTest( Castor3D::Engine & engine );
 		virtual ~GlTextureTest();
 
 		void Upload( Castor3D::TextureLayout & p_storage, Castor::ArrayView< uint8_t > const & p_view );

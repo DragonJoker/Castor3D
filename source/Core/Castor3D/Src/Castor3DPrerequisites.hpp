@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -457,6 +457,8 @@ namespace Castor3D
 		eShaderStorageBuffer = 0x01 << 5,
 		eTextureFetch = 0x01 << 6,
 		eTextureUpdate = 0x01 << 7,
+		eFrameBuffer = 0x01 << 8,
+		ePixelBuffer = 0x01 << 9,
 		eAll = 0xFFFFFFFF,
 	};
 	IMPLEMENT_FLAGS( MemoryBarrier )
@@ -491,6 +493,7 @@ namespace Castor3D
 	class ComputePipeline;
 	struct SsaoConfig;
 	class RenderPassTimer;
+	class GaussianBlur;
 
 	DECLARE_SMART_PTR( RenderBuffer );
 	DECLARE_SMART_PTR( ColourRenderBuffer );
@@ -516,6 +519,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TransformFeedback );
 	DECLARE_SMART_PTR( ComputePipeline );
 	DECLARE_SMART_PTR( RenderPassTimer );
+	DECLARE_SMART_PTR( GaussianBlur );
 
 	using ParticleFactory = Castor::Factory< CpuParticleSystem, Castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 

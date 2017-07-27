@@ -14,7 +14,9 @@ namespace fxaa
 	const String FxaaUbo::RenderSize = cuT( "c3d_renderSize" );
 
 	FxaaUbo::FxaaUbo( Engine & engine )
-		: m_ubo{ FxaaUbo::Name, *engine.GetRenderSystem() }
+		: m_ubo{ FxaaUbo::Name
+			, *engine.GetRenderSystem()
+			, FxaaUbo::BindingPoint }
 		, m_subpixShift{ m_ubo.CreateUniform< UniformType::eFloat >( FxaaUbo::SubpixShift ) }
 		, m_spanMax{ m_ubo.CreateUniform< UniformType::eFloat >( FxaaUbo::SpanMax ) }
 		, m_reduceMul{ m_ubo.CreateUniform< UniformType::eFloat >( FxaaUbo::ReduceMul ) }

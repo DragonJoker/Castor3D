@@ -181,9 +181,6 @@ namespace Castor3D
 				, first );
 			first = false;
 			m_timer->Stop();
-			info.m_times.push_back( { m_timer->GetName()
-				, m_timer->GetGpuTime()
-				, m_timer->GetCpuTime() } );
 		}
 
 		return first;

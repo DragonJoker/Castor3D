@@ -1,8 +1,9 @@
-#include "DebugOverlays.hpp"
+﻿#include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
-#include "PanelOverlay.hpp"
-#include "TextOverlay.hpp"
+#include "Overlay/PanelOverlay.hpp"
+#include "Overlay/TextOverlay.hpp"
+#include "Render/RenderPassTimer.hpp"
 
 #include <iomanip>
 
@@ -63,18 +64,18 @@ namespace Castor3D
 		m_externTime = GetTextOverlay( cache, cuT( "DebugPanel-ExternalTime-Value" ) );
 
 		m_valid = m_debugCpuTime
-				  && m_debugGpuClientTime
-				  && m_debugGpuServerTime
-				  && m_debugTotalTime
-				  && m_debugAverageFps
-				  && m_debugAverageTime
-				  && m_debugVertexCount
-				  && m_debugFaceCount
-				  && m_debugObjectCount
-				  && m_debugVisibleObjectCount
-				  && m_debugParticlesCount
-				  && m_debugTime
-				  && m_externTime;
+			&& m_debugGpuClientTime
+			&& m_debugGpuServerTime
+			&& m_debugTotalTime
+			&& m_debugAverageFps
+			&& m_debugAverageTime
+			&& m_debugVertexCount
+			&& m_debugFaceCount
+			&& m_debugObjectCount
+			&& m_debugVisibleObjectCount
+			&& m_debugParticlesCount
+			&& m_debugTime
+			&& m_externTime;
 
 		if ( panel )
 		{
@@ -112,83 +113,98 @@ namespace Castor3D
 		m_externalTime = m_frameTimer.Time();
 	}
 
-	void DebugOverlays::DoUpdateOverlays( OverlayCache & cache
-		, RenderTimes const & times
-		, uint32_t index )
+	void DebugOverlays::RegisterTimer( RenderPassTimer const & timer )
 	{
-		if ( index >= m_renderPasses.size() )
+		auto & cache = GetEngine()->GetOverlayCache();
+		RenderPassOverlays overlays{ timer };
+		auto baseName = cuT( "RenderPassOverlays " ) + string::to_string( int( m_renderPasses.size() ) ) + cuT( " " ) + timer.GetName();
+		overlays.m_panel = cache.Add( baseName
+			, OverlayType::ePanel
+			, nullptr
+			, nullptr )->GetPanelOverlay();
+		overlays.m_title = cache.Add( baseName + cuT( "_Title" )
+			, OverlayType::eText
+			, nullptr
+			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
+		overlays.m_cpuName = cache.Add( baseName + cuT( "_CPUName" )
+			, OverlayType::eText
+			, nullptr
+			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
+		overlays.m_cpuValue = cache.Add( baseName + cuT( "_CPUValue" )
+			, OverlayType::eText
+			, nullptr
+			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
+		overlays.m_gpuName = cache.Add( baseName + cuT( "_GPUName" )
+			, OverlayType::eText
+			, nullptr
+			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
+		overlays.m_gpuValue = cache.Add( baseName + cuT( "_GPUValue" )
+			, OverlayType::eText
+			, nullptr
+			, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
+		overlays.m_panel->SetPixelPosition( Position{ 400, int32_t( 60 * m_renderPasses.size() ) } );
+		overlays.m_title->SetPixelPosition( Position{ 10, 0 } );
+		overlays.m_cpuName->SetPixelPosition( Position{ 10, 20 } );
+		overlays.m_gpuName->SetPixelPosition( Position{ 10, 40 } );
+		overlays.m_cpuValue->SetPixelPosition( Position{ 110, 20 } );
+		overlays.m_gpuValue->SetPixelPosition( Position{ 110, 40 } );
+
+		overlays.m_panel->SetPixelSize( Size{ 250, 60 } );
+		overlays.m_title->SetPixelSize( Size{ 230, 20 } );
+		overlays.m_cpuName->SetPixelSize( Size{ 100, 20 } );
+		overlays.m_gpuName->SetPixelSize( Size{ 100, 20 } );
+		overlays.m_cpuValue->SetPixelSize( Size{ 130, 20 } );
+		overlays.m_gpuValue->SetPixelSize( Size{ 130, 20 } );
+
+		overlays.m_title->SetFont( cuT( "Arial20" ) );
+		overlays.m_cpuName->SetFont( cuT( "Arial10" ) );
+		overlays.m_gpuName->SetFont( cuT( "Arial10" ) );
+		overlays.m_cpuValue->SetFont( cuT( "Arial10" ) );
+		overlays.m_gpuValue->SetFont( cuT( "Arial10" ) );
+
+		overlays.m_title->SetCaption( timer.GetName() );
+		overlays.m_cpuName->SetCaption( cuT( "CPU Time:" ) );
+		overlays.m_gpuName->SetCaption( cuT( "GPU Time:" ) );
+
+		auto & materials = GetEngine()->GetMaterialCache();
+		overlays.m_panel->SetMaterial( materials.Find( cuT( "AlphaDarkBlue" ) ) );
+		overlays.m_title->SetMaterial( materials.Find( cuT( "White" ) ) );
+		overlays.m_cpuName->SetMaterial( materials.Find( cuT( "White" ) ) );
+		overlays.m_gpuName->SetMaterial( materials.Find( cuT( "White" ) ) );
+		overlays.m_cpuValue->SetMaterial( materials.Find( cuT( "White" ) ) );
+		overlays.m_gpuValue->SetMaterial( materials.Find( cuT( "White" ) ) );
+
+		overlays.m_panel->SetVisible( m_visible );
+		overlays.m_title->SetVisible( true );
+		overlays.m_cpuName->SetVisible( true );
+		overlays.m_gpuName->SetVisible( true );
+		overlays.m_cpuValue->SetVisible( true );
+		overlays.m_gpuValue->SetVisible( true );
+
+		m_renderPasses.emplace_back( std::move( overlays ) );
+	}
+
+	void DebugOverlays::UnregisterTimer( RenderPassTimer const & timer )
+	{
+		auto it = std::find_if( m_renderPasses.begin()
+			, m_renderPasses.end()
+			, [&timer]( RenderPassOverlays const & overlays )
+			{
+				return &overlays.m_timer.get() == &timer;
+			} );
+
+		if ( it != m_renderPasses.end() )
 		{
-			RenderPassOverlays overlays;
-			auto baseName = cuT( "RenderPassOverlays" ) + string::to_string( index );
-			overlays.m_panel = cache.Add( baseName
-				, OverlayType::ePanel
-				, nullptr
-				, nullptr )->GetPanelOverlay();
-			overlays.m_title = cache.Add( baseName + cuT( "_Title" )
-				, OverlayType::eText
-				, nullptr
-				, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-			overlays.m_cpuName = cache.Add( baseName + cuT( "_CPUName" )
-				, OverlayType::eText
-				, nullptr
-				, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-			overlays.m_cpuValue = cache.Add( baseName + cuT( "_CPUValue" )
-				, OverlayType::eText
-				, nullptr
-				, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-			overlays.m_gpuName = cache.Add( baseName + cuT( "_GPUName" )
-				, OverlayType::eText
-				, nullptr
-				, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-			overlays.m_gpuValue = cache.Add( baseName + cuT( "_GPUValue" )
-				, OverlayType::eText
-				, nullptr
-				, overlays.m_panel->GetOverlay().shared_from_this() )->GetTextOverlay();
-			overlays.m_panel->SetPixelPosition( Position{ 400, int32_t( 60 * index ) } );
-			overlays.m_title->SetPixelPosition( Position{ 10, 0 } );
-			overlays.m_cpuName->SetPixelPosition( Position{ 10, 20 } );
-			overlays.m_gpuName->SetPixelPosition( Position{ 10, 40 } );
-			overlays.m_cpuValue->SetPixelPosition( Position{ 110, 20 } );
-			overlays.m_gpuValue->SetPixelPosition( Position{ 110, 40 } );
-
-			overlays.m_panel->SetPixelSize( Size{ 250, 60 } );
-			overlays.m_title->SetPixelSize( Size{ 230, 20 } );
-			overlays.m_cpuName->SetPixelSize( Size{ 100, 20 } );
-			overlays.m_gpuName->SetPixelSize( Size{ 100, 20 } );
-			overlays.m_cpuValue->SetPixelSize( Size{ 130, 20 } );
-			overlays.m_gpuValue->SetPixelSize( Size{ 130, 20 } );
-
-			overlays.m_title->SetFont( cuT( "Arial10" ) );
-			overlays.m_cpuName->SetFont( cuT( "Arial10" ) );
-			overlays.m_gpuName->SetFont( cuT( "Arial10" ) );
-			overlays.m_cpuValue->SetFont( cuT( "Arial10" ) );
-			overlays.m_gpuValue->SetFont( cuT( "Arial10" ) );
-
-			overlays.m_cpuName->SetCaption( cuT( "CPU Time:" ) );
-			overlays.m_gpuName->SetCaption( cuT( "GPU Time:" ) );
-
-			auto & materials = GetEngine()->GetMaterialCache();
-			overlays.m_panel->SetMaterial( materials.Find( cuT( "AlphaDarkBlue" ) ) );
-			overlays.m_title->SetMaterial( materials.Find( cuT( "White" ) ) );
-			overlays.m_cpuName->SetMaterial( materials.Find( cuT( "White" ) ) );
-			overlays.m_gpuName->SetMaterial( materials.Find( cuT( "White" ) ) );
-			overlays.m_cpuValue->SetMaterial( materials.Find( cuT( "White" ) ) );
-			overlays.m_gpuValue->SetMaterial( materials.Find( cuT( "White" ) ) );
-
-			overlays.m_panel->SetVisible( true );
-			overlays.m_title->SetVisible( true );
-			overlays.m_cpuName->SetVisible( true );
-			overlays.m_gpuName->SetVisible( true );
-			overlays.m_cpuValue->SetVisible( true );
-			overlays.m_gpuValue->SetVisible( true );
-
-			m_renderPasses.emplace_back( std::move( overlays ) );
+			auto & cache = GetEngine()->GetOverlayCache();
+			auto & overlays = *it;
+			cache.Remove( overlays.m_cpuName->GetOverlayName() );
+			cache.Remove( overlays.m_gpuName->GetOverlayName() );
+			cache.Remove( overlays.m_gpuValue->GetOverlayName() );
+			cache.Remove( overlays.m_cpuValue->GetOverlayName() );
+			cache.Remove( overlays.m_title->GetOverlayName() );
+			cache.Remove( overlays.m_panel->GetOverlayName() );
+			m_renderPasses.erase( it );
 		}
-
-		auto & overlays = m_renderPasses[index];
-		overlays.m_title->SetCaption( times.m_name );
-		overlays.m_cpuValue->SetCaption( StringStream{} << times.m_cpu );
-		overlays.m_gpuValue->SetCaption( StringStream{} << times.m_gpu );
 	}
 
 	void DebugOverlays::EndFrame( RenderInfo const & info )
@@ -208,22 +224,22 @@ namespace Castor3D
 			m_debugVisibleObjectCount->SetCaption( string::to_string( info.m_visibleObjectsCount ) );
 			m_debugParticlesCount->SetCaption( string::to_string( info.m_particlesCount ) );
 
-			auto serverTime = GetEngine()->GetRenderSystem()->GetGpuTime();
-			m_debugGpuClientTime->SetCaption( StringStream() << ( m_gpuTime - serverTime ) );
-			m_debugGpuServerTime->SetCaption( StringStream() << serverTime );
-			GetEngine()->GetRenderSystem()->ResetGpuTime();
-
 			auto time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
 			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 4 ) << 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( time ).count() << cuT( " fps" ) );
 			m_debugAverageTime->SetCaption( StringStream() << time );
 
-			auto & cache = GetEngine()->GetOverlayCache();
-			uint32_t index = 0u;
+			auto gpuTotal = 0_ns;
 
-			for ( auto & pass : info.m_times )
+			for ( auto & pass : m_renderPasses )
 			{
-				DoUpdateOverlays( cache, pass, index++ );
+				pass.m_cpuValue->SetCaption( StringStream{} << pass.m_timer.get().GetCpuTime() );
+				pass.m_gpuValue->SetCaption( StringStream{} << pass.m_timer.get().GetGpuTime() );
+				gpuTotal += pass.m_timer.get().GetGpuTime();
 			}
+
+			m_debugGpuClientTime->SetCaption( StringStream() << ( m_gpuTime - gpuTotal ) );
+			m_debugGpuServerTime->SetCaption( StringStream() << gpuTotal );
+			GetEngine()->GetRenderSystem()->ResetGpuTime();
 
 			m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
 			time = m_debugTimer.Time();
@@ -260,6 +276,11 @@ namespace Castor3D
 		if ( panel )
 		{
 			panel->SetVisible( m_valid && m_visible );
+		}
+
+		for ( auto & pass : m_renderPasses )
+		{
+			pass.m_panel->SetVisible( m_valid && m_visible );
 		}
 	}
 }

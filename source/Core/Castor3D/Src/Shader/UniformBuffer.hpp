@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -75,18 +75,18 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a UniformBuffer into a text file.
-			 *\param[in]		p_object	The UniformBuffer.
-			 *\param[in,out]	p_file		The file.
+			 *\param[in]		object	The UniformBuffer.
+			 *\param[in,out]	file		The file.
 			 *\~french
 			 *\brief			Ecrit UniformBuffer dans un fichier texte.
-			 *\param[in]		p_object	Le UniformBuffer.
-			 *\param[in,out]	p_file		Le fichier.
+			 *\param[in]		object	Le UniformBuffer.
+			 *\param[in,out]	file		Le fichier.
 			 */
-			C3D_API bool operator()( UniformBuffer const & p_object, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( UniformBuffer const & object, Castor::TextFile & file )override;
 		};
 
 	public:
@@ -97,14 +97,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name			The buffer name.
+		 *\param[in]	name			The buffer name.
 		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	bindingPoint	The binding point.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name			Le nom du tampon.
+		 *\param[in]	name			Le nom du tampon.
 		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	bindingPoint	Le point d'attache.
 		 */
-		C3D_API UniformBuffer( Castor::String const & p_name, RenderSystem & renderSystem );
+		C3D_API UniformBuffer( Castor::String const & name
+			, RenderSystem & renderSystem
+			, uint32_t bindingPoint );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -129,12 +133,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the buffer's binding point.
-		 *\param[in]	p_index	The binding point.
+		 *\param[in]	index	The binding point.
 		 *\~french
 		 *\brief		Définit le point d'attache du tampon.
-		 *\param[in]	p_index	Le point d'attache.
+		 *\param[in]	index	Le point d'attache.
 		 */
-		C3D_API void BindTo( uint32_t p_index )const;
+		C3D_API void BindTo( uint32_t index )const;
 		/**
 		 *\~english
 		 *\return		The buffer's binding point.
@@ -146,79 +150,84 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a binding of this unifor buffer to given program.
 		 *\remarks		If this is the first binding created, the GPU storage and variables will be initialised.
-		 *\param[in]	p_program	The program.
+		 *\param[in]	program	The program.
 		 *\return		The created binding.
 		 *\~french
 		 *\brief		Crée un binding entre ce tampon d'uniformes et le porgramme donné.
 		 *\remarks		Si c'est le premier binding créé, le stokage GPU et les variables seront initialisées.
-		 *\param[in]	p_program	Le programme.
+		 *\param[in]	program	Le programme.
 		 *\return		Le binding créé.
 		 */
-		C3D_API UniformBufferBinding & CreateBinding( ShaderProgram & p_program );
+		C3D_API UniformBufferBinding & CreateBinding( ShaderProgram & program );
 		/**
 		 *\~english
 		 *\brief		Retrieves the binding for given program.
-		 *\param[in]	p_program	The program.
+		 *\param[in]	program	The program.
 		 *\return		The retrieved binding.
 		 *\~french
 		 *\brief		Récupère le binding pour le programme donné.
-		 *\param[in]	p_program	Le programme.
+		 *\param[in]	program	Le programme.
 		 *\return		Le binding récupéré.
 		 */
-		C3D_API UniformBufferBinding & GetBinding( ShaderProgram & p_program )const;
+		C3D_API UniformBufferBinding & GetBinding( ShaderProgram & program )const;
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type.
-		 *\param[in]	p_type			The wanted type.
-		 *\param[in]	p_name			The variable name.
-		 *\param[in]	p_occurences	The array dimension.
+		 *\param[in]	type		The wanted type.
+		 *\param[in]	name		The variable name.
+		 *\param[in]	occurences	The array dimension.
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable du type demandé.
-		 *\param[in]	p_type			Le type voulu.
-		 *\param[in]	p_name			Le nom de la variable.
-		 *\param[in]	p_occurences	Les dimensions du tableau.
+		 *\param[in]	type		Le type voulu.
+		 *\param[in]	name		Le nom de la variable.
+		 *\param[in]	occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API UniformSPtr CreateUniform( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
+		C3D_API UniformSPtr CreateUniform( UniformType type
+			, Castor::String const & name
+			, uint32_t occurences = 1 );
 		/**
 		 *\~english
 		 *\brief		Creates a variable.
-		 *\param[in]	p_name			The variable name.
-		 *\param[in]	p_occurences	The array dimension.
+		 *\param[in]	name		The variable name.
+		 *\param[in]	occurences	The array dimension.
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable.
-		 *\param[in]	p_name			Le nom de la variable.
-		 *\param[in]	p_occurences	Les dimensions du tableau.
+		 *\param[in]	name		Le nom de la variable.
+		 *\param[in]	occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
 		template< UniformType Type >
-		inline std::shared_ptr< typename uniform_type< Type >::type > CreateUniform( Castor::String const & p_name, int p_occurences = 1 )
+		inline std::shared_ptr< typename uniform_type< Type >::type > CreateUniform( Castor::String const & name
+			, int occurences = 1 )
 		{
-			return std::static_pointer_cast< typename uniform_type< Type >::type >( CreateUniform( Type, p_name, p_occurences ) );
+			return std::static_pointer_cast< typename uniform_type< Type >::type >( CreateUniform( Type
+				, name
+				, occurences ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Removes a variable from this buffer.
-		 *\param[in]	p_name	The variable name.
+		 *\param[in]	name	The variable name.
 		 *\~french
 		 *\brief		Supprime une variable de ce tampon.
-		 *\param[in]	p_name	Le nom de la variable.
+		 *\param[in]	name	Le nom de la variable.
 		 */
-		C3D_API void RemoveUniform( Castor::String const & p_name );
+		C3D_API void RemoveUniform( Castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name.
-		 *\param[in]	p_name		The variable name.
+		 *\param[in]	name	The variable name.
 		 *\return		The retrieved variable, \p nullptr if not found.
 		 *\~french
 		 *\brief		Récupère une variable par son nom.
-		 *\param[in]	p_name		Le nom de la variable.
+		 *\param[in]	name	Le nom de la variable.
 		 *\return		La variable récupérée, nullptr si non trouvée.
 		 */
 		template< UniformType Type >
-		inline std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;
+		inline std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & name )const;
 		/**
 		 *\~english
 		 *\return		The GPU storage.
@@ -275,27 +284,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated.
-		 *\param[in]	p_binding	The binding from which the layout is retrieved.
+		 *\param[in]	binding	The binding from which the layout is retrieved.
 		 *\~french
 		 *\brief		Initialise toutes les variables et le tampon GPU associé.
-		 *\param[in]	p_binding	Le binding depuis lequel le layout est récupéré.
+		 *\param[in]	binding	Le binding depuis lequel le layout est récupéré.
 		 */
-		void DoInitialise( UniformBufferBinding const & p_binding );
+		void DoInitialise( UniformBufferBinding const & binding );
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type.
-		 *\param[in]	p_type			The wanted type.
-		 *\param[in]	p_name			The variable name.
-		 *\param[in]	p_occurences	The array dimension.
+		 *\param[in]	type		The wanted type.
+		 *\param[in]	name		The variable name.
+		 *\param[in]	occurences	The array dimension.
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable du type demandé.
-		 *\param[in]	p_type			Le type voulu.
-		 *\param[in]	p_name			Le nom de la variable.
-		 *\param[in]	p_occurences	Les dimensions du tableau.
+		 *\param[in]	type		Le type voulu.
+		 *\param[in]	name		Le nom de la variable.
+		 *\param[in]	occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		UniformSPtr DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences );
+		UniformSPtr DoCreateVariable( UniformType type
+			, Castor::String const & name
+			, uint32_t occurences );
 
 	protected:
 		//!\~english	The variables list.
@@ -313,6 +324,9 @@ namespace Castor3D
 		//!\~english	The bindings per program.
 		//!\~french		Les bindings par programme.
 		UniformBufferBindingMap m_bindings;
+		//!\~english	The initial binding point.
+		//!\~french		Le point d'attache initial.
+		uint32_t m_bindingPoint{ 0u };
 	};
 }
 

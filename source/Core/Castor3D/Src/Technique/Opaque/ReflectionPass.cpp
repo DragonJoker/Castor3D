@@ -743,8 +743,5 @@ namespace Castor3D
 		gp[size_t( DsTexture::eDepth )]->GetSampler()->Unbind( 0u );
 		m_frameBuffer->Unbind();
 		m_timer->Stop();
-		info.m_times.push_back( { m_timer->GetName()
-			, m_timer->GetGpuTime()
-			, m_timer->GetCpuTime() } );
 	}
 }

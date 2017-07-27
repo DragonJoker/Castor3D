@@ -25,7 +25,9 @@ namespace Castor3D
 	TransformFeedbackParticleSystem::TransformFeedbackParticleSystem( ParticleSystem & p_parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eTransformFeedback, p_parent }
 		, m_randomTexture{ *p_parent.GetScene()->GetEngine() }
-		, m_ubo{ cuT( "ParticleSystem" ), *p_parent.GetScene()->GetEngine()->GetRenderSystem() }
+		, m_ubo{ cuT( "ParticleSystem" )
+			, *p_parent.GetScene()->GetEngine()->GetRenderSystem()
+			, 1u }
 	{
 		m_deltaTime = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
 		m_time = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );

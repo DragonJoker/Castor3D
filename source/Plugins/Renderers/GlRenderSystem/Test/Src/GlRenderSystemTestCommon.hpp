@@ -46,7 +46,7 @@ namespace Testing
 		: public TestCase
 	{
 	public:
-		GlTestCase( std::string const & p_name, Castor3D::Engine & p_engine );
+		GlTestCase( std::string const & p_name, Castor3D::Engine & engine );
 
 	protected:
 		Castor3D::Engine & m_engine;

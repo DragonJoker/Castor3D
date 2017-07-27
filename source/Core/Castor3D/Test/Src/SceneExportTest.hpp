@@ -33,7 +33,7 @@ namespace Testing
 		: public C3DTestCase
 	{
 	public:
-		explicit SceneExportTest( Castor3D::Engine & p_engine );
+		explicit SceneExportTest( Castor3D::Engine & engine );
 		virtual ~SceneExportTest();
 
 	private:

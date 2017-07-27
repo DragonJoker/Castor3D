@@ -84,39 +84,17 @@ namespace Castor3D
 	{
 	}
 
+	void MetallicRoughnessPbrPass::Accept( PassBuffer & p_buffer )const
+	{
+		p_buffer.Visit( *this );
+	}
+
 	void MetallicRoughnessPbrPass::DoInitialise()
 	{
 	}
 
 	void MetallicRoughnessPbrPass::DoCleanup()
 	{
-	}
-
-	void MetallicRoughnessPbrPass::DoUpdate( PassBuffer & buffer )const
-	{
-		buffer.SetComponents( GetId() - 1
-			, 0u
-			, GetRefractionRatio()
-			, CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f
-			, CheckFlag( GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f
-			, GetOpacity() );
-		buffer.SetComponents( GetId() - 1
-			, 1u
-			, GetAlbedo()
-			, GetRoughness() );
-		buffer.SetComponents( GetId() - 1
-			, 2u
-			, GetMetallic()
-			, GetEmissive()
-			// TODO: store gamma correction and exposure per pass ? or remove from pass
-			, NeedsGammaCorrection() ? 2.2f : 1.0f //gamma correction
-			, 1.0f );//exposure
-		buffer.SetComponents( GetId() - 1
-			, 3u
-			, GetAlphaValue()
-			, 0.0f
-			, 0.0f
-			, 0.0f );
 	}
 
 	void MetallicRoughnessPbrPass::DoSetOpacity( float value )

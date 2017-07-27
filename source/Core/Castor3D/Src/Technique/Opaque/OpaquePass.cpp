@@ -1,4 +1,4 @@
-#include "OpaquePass.hpp"
+﻿#include "OpaquePass.hpp"
 
 #include "LightPass.hpp"
 
@@ -199,17 +199,28 @@ namespace Castor3D
 		auto tangent = writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent );
 		auto bitangent = writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent );
 		auto texture = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.DeclAttribute< Int >( ShaderProgram::Material, CheckFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto bone_ids0 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds0
+			, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.DeclAttribute< IVec4 >( ShaderProgram::BoneIds1
+			, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights0
+			, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.DeclAttribute< Vec4 >( ShaderProgram::Weights1
+			, CheckFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.DeclAttribute< Mat4 >( ShaderProgram::Transform
+			, CheckFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.DeclAttribute< Int >( ShaderProgram::Material
+			, CheckFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.DeclAttribute< Vec4 >( ShaderProgram::Position2
+			, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto normal2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Normal2
+			, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto tangent2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Tangent2
+			, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto bitangent2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Bitangent2
+			, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.DeclAttribute< Vec3 >( ShaderProgram::Texture2
+			, CheckFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.DeclBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( writer );
@@ -233,10 +244,14 @@ namespace Castor3D
 
 		std::function< void() > main = [&]()
 		{
-			auto p = writer.DeclLocale( cuT( "p" ), vec4( position.xyz(), 1.0 ) );
-			auto n = writer.DeclLocale( cuT( "n" ), vec4( normal, 0.0 ) );
-			auto t = writer.DeclLocale( cuT( "t" ), vec4( tangent, 0.0 ) );
-			auto tex = writer.DeclLocale( cuT( "tex" ), texture );
+			auto p = writer.DeclLocale( cuT( "p" )
+				, vec4( position.xyz(), 1.0 ) );
+			auto n = writer.DeclLocale( cuT( "n" )
+				, vec4( normal, 0.0 ) );
+			auto t = writer.DeclLocale( cuT( "t" )
+				, vec4( tangent, 0.0 ) );
+			auto tex = writer.DeclLocale( cuT( "tex" )
+				, texture );
 			auto mtxModel = writer.DeclLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( CheckFlag( programFlags, ProgramFlag::eSkinning ) )
@@ -265,7 +280,8 @@ namespace Castor3D
 
 			if ( CheckFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.DeclLocale( cuT( "time" ), 1.0_f - c3d_fTime );
+				auto time = writer.DeclLocale( cuT( "time" )
+					, 1.0_f - c3d_fTime );
 				p = vec4( p.xyz() * time + position2.xyz() * c3d_fTime, 1.0 );
 				n = vec4( n.xyz() * time + normal2.xyz() * c3d_fTime, 1.0 );
 				t = vec4( t.xyz() * time + tangent2.xyz() * c3d_fTime, 1.0 );
@@ -294,7 +310,8 @@ namespace Castor3D
 			vtx_instance = gl_InstanceID;
 			gl_Position = c3d_mtxProjection * p;
 
-			auto tbn = writer.DeclLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+			auto tbn = writer.DeclLocale( cuT( "tbn" )
+				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_position;
 			vtx_tangentSpaceViewPosition = tbn * c3d_v3CameraPosition;
 		};
@@ -310,6 +327,9 @@ namespace Castor3D
 	{
 		using namespace GLSL;
 		GlslWriter writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+
+		LegacyMaterials materials{ writer };
+		materials.Declare();
 
 		// UBOs
 		UBO_MATRIX( writer );
@@ -327,18 +347,24 @@ namespace Castor3D
 		auto vtx_instance = writer.DeclInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.DeclInput< Int >( cuT( "vtx_material" ) );
 
-		LegacyMaterials materials{ writer };
-		materials.Declare();
-
-		auto c3d_mapDiffuse( writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapNormal( writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapSpecular( writer.DeclUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapEmissive( writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
-		auto c3d_mapHeight( writer.DeclUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapGloss( writer.DeclUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapEnvironment( writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment, CheckFlag( textureFlags, TextureChannel::eReflection ) ) );
-		auto c3d_fheightScale( writer.DeclUniform< Float >( cuT( "c3d_fheightScale" ), CheckFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_mapDiffuse( writer.DeclUniform< Sampler2D >( ShaderProgram::MapDiffuse
+			, CheckFlag( textureFlags, TextureChannel::eDiffuse ) ) );
+		auto c3d_mapNormal( writer.DeclUniform< Sampler2D >( ShaderProgram::MapNormal
+			, CheckFlag( textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapSpecular( writer.DeclUniform< Sampler2D >( ShaderProgram::MapSpecular
+			, CheckFlag( textureFlags, TextureChannel::eSpecular ) ) );
+		auto c3d_mapEmissive( writer.DeclUniform< Sampler2D >( ShaderProgram::MapEmissive
+			, CheckFlag( textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapOpacity( writer.DeclUniform< Sampler2D >( ShaderProgram::MapOpacity
+			, CheckFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
+		auto c3d_mapHeight( writer.DeclUniform< Sampler2D >( ShaderProgram::MapHeight
+			, CheckFlag( textureFlags, TextureChannel::eHeight ) ) );
+		auto c3d_mapGloss( writer.DeclUniform< Sampler2D >( ShaderProgram::MapGloss
+			, CheckFlag( textureFlags, TextureChannel::eGloss ) ) );
+		auto c3d_mapEnvironment( writer.DeclUniform< SamplerCube >( ShaderProgram::MapEnvironment
+			, CheckFlag( textureFlags, TextureChannel::eReflection ) ) );
+		auto c3d_fheightScale( writer.DeclUniform< Float >( cuT( "c3d_fheightScale" )
+			, CheckFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
 		auto gl_FragCoord( writer.DeclBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -356,18 +382,26 @@ namespace Castor3D
 
 		writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto v3Normal = writer.DeclLocale( cuT( "v3Normal" ), normalize( vtx_normal ) );
-			auto v3Diffuse = writer.DeclLocale( cuT( "v3Diffuse" ), materials.GetDiffuse( vtx_material ) );
-			auto v3Specular = writer.DeclLocale( cuT( "v3Specular" ), materials.GetSpecular( vtx_material ) );
-			auto fMatShininess = writer.DeclLocale( cuT( "fMatShininess" ), materials.GetShininess( vtx_material ) );
-			auto v3Emissive = writer.DeclLocale( cuT( "v3Emissive" ), v3Diffuse * materials.GetEmissive( vtx_material ) );
-			auto gamma = writer.DeclLocale( cuT( "gamma" ), materials.GetGamma( vtx_material ) );
-			auto texCoord = writer.DeclLocale( cuT( "texCoord" ), vtx_texture );
+			auto v3Normal = writer.DeclLocale( cuT( "v3Normal" )
+				, normalize( vtx_normal ) );
+			auto v3Diffuse = writer.DeclLocale( cuT( "v3Diffuse" )
+				, materials.GetDiffuse( vtx_material ) );
+			auto v3Specular = writer.DeclLocale( cuT( "v3Specular" )
+				, materials.GetSpecular( vtx_material ) );
+			auto fMatShininess = writer.DeclLocale( cuT( "fMatShininess" )
+				, materials.GetShininess( vtx_material ) );
+			auto v3Emissive = writer.DeclLocale( cuT( "v3Emissive" )
+				, v3Diffuse * materials.GetEmissive( vtx_material ) );
+			auto gamma = writer.DeclLocale( cuT( "gamma" )
+				, materials.GetGamma( vtx_material ) );
+			auto texCoord = writer.DeclLocale( cuT( "texCoord" )
+				, vtx_texture );
 
 			if ( CheckFlag( textureFlags, TextureChannel::eHeight )
 				&& CheckFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.DeclLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = -writer.DeclLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
@@ -418,6 +452,9 @@ namespace Castor3D
 		using namespace GLSL;
 		GlslWriter writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
+		PbrMRMaterials materials{ writer };
+		materials.Declare();
+
 		// UBOs
 		UBO_MATRIX( writer );
 		UBO_SCENE( writer );
@@ -433,9 +470,6 @@ namespace Castor3D
 		auto vtx_texture = writer.DeclInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_instance = writer.DeclInput< Int >( cuT( "vtx_instance" ) );
 		auto vtx_material = writer.DeclInput< Int >( cuT( "vtx_material" ) );
-
-		PbrMRMaterials materials{ writer };
-		materials.Declare();
 
 		auto c3d_mapAlbedo( writer.DeclUniform< Sampler2D >( ShaderProgram::MapAlbedo
 			, CheckFlag( textureFlags, TextureChannel::eAlbedo ) ) );
@@ -480,18 +514,26 @@ namespace Castor3D
 
 		writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto normal = writer.DeclLocale( cuT( "normal" ), normalize( vtx_normal ) );
-			auto matAlbedo = writer.DeclLocale( cuT( "matDiffuse" ), materials.GetAlbedo( vtx_material ) );
-			auto matRoughness = writer.DeclLocale( cuT( "matRoughness" ), materials.GetRoughness( vtx_material ) );
-			auto matMetallic = writer.DeclLocale( cuT( "matMetallic" ), materials.GetMetallic( vtx_material ) );
-			auto matEmissive = writer.DeclLocale( cuT( "matEmissive" ), matAlbedo * materials.GetEmissive( vtx_material ) );
-			auto matGamma = writer.DeclLocale( cuT( "matGamma" ), materials.GetGamma( vtx_material ) );
-			auto texCoord = writer.DeclLocale( cuT( "texCoord" ), vtx_texture );
+			auto normal = writer.DeclLocale( cuT( "normal" )
+				, normalize( vtx_normal ) );
+			auto matAlbedo = writer.DeclLocale( cuT( "matAlbedo" )
+				, materials.GetAlbedo( vtx_material ) );
+			auto matRoughness = writer.DeclLocale( cuT( "matRoughness" )
+				, materials.GetRoughness( vtx_material ) );
+			auto matMetallic = writer.DeclLocale( cuT( "matMetallic" )
+				, materials.GetMetallic( vtx_material ) );
+			auto matEmissive = writer.DeclLocale( cuT( "matEmissive" )
+				, matAlbedo * materials.GetEmissive( vtx_material ) );
+			auto matGamma = writer.DeclLocale( cuT( "matGamma" )
+				, materials.GetGamma( vtx_material ) );
+			auto texCoord = writer.DeclLocale( cuT( "texCoord" )
+				, vtx_texture );
 
 			if ( CheckFlag( textureFlags, TextureChannel::eHeight )
 				&& CheckFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto viewDir = -writer.DeclLocale( cuT( "viewDir" ), normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
+				auto viewDir = -writer.DeclLocale( cuT( "viewDir" )
+					, normalize( vtx_tangentSpaceFragPosition - vtx_tangentSpaceViewPosition ) );
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 

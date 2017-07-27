@@ -26,12 +26,12 @@ namespace Testing
 		constexpr auto Bpp = pixel_definitions< Format >::Size;
 
 		void DoTestStorage( GlTextureTest & p_case
-			, Engine & p_engine
+			, Engine & engine
 			, TextureType p_type
 			, AccessTypes const & p_cpuAccess
 			, AccessTypes const & p_gpuAccess )
 		{
-			auto & renderSystem = static_cast< GlRenderSystem & >( *p_engine.GetRenderSystem() );
+			auto & renderSystem = static_cast< GlRenderSystem & >( *engine.GetRenderSystem() );
 			renderSystem.GetMainContext()->SetCurrent();
 			auto texture = renderSystem.CreateTexture( p_type, p_cpuAccess, p_gpuAccess );
 			texture->SetSource( PxBufferBase::create( Size{ Width, Height }, Format ) );
@@ -65,8 +65,8 @@ namespace Testing
 		}
 	}
 
-	GlTextureTest::GlTextureTest( Engine & p_engine )
-		: GlTestCase{ "GlTextureTest", p_engine }
+	GlTextureTest::GlTextureTest( Engine & engine )
+		: GlTestCase{ "GlTextureTest", engine }
 	{
 	}
 

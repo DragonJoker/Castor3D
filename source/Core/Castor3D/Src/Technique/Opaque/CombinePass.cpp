@@ -548,9 +548,6 @@ namespace Castor3D
 		ENSURE( index == 0u );
 
 		m_timer->Stop();
-		info.m_times.push_back( { m_timer->GetName()
-			, m_timer->GetGpuTime()
-			, m_timer->GetCpuTime() } );
 	}
 
 	void CombinePass::Render( GeometryPassResult const & gp
@@ -662,9 +659,6 @@ namespace Castor3D
 		ENSURE( index == 0u );
 
 		m_timer->Stop();
-		info.m_times.push_back( { m_timer->GetName()
-			, m_timer->GetGpuTime()
-			, m_timer->GetCpuTime() } );
 	}
 
 	//*********************************************************************************************

@@ -25,7 +25,9 @@ namespace Castor3D
 {
 	ComputeParticleSystem::ComputeParticleSystem( ParticleSystem & p_parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eComputeShader, p_parent }
-		, m_ubo{ cuT( "ParticleSystem" ), *p_parent.GetScene()->GetEngine()->GetRenderSystem() }
+		, m_ubo{ cuT( "ParticleSystem" )
+			, *p_parent.GetScene()->GetEngine()->GetRenderSystem()
+			, 1u }
 	{
 		m_deltaTime = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
 		m_time = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );

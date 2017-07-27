@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 
 #include "RenderToTexture/RenderColourToTexture.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/HdrConfigUbo.hpp"
@@ -16,17 +17,20 @@ namespace Castor3D
 {
 	String const ToneMapping::HdrConfigUbo = cuT( "HdrConfig" );
 
-	ToneMapping::ToneMapping( Castor::String const & p_name, Engine & engine, Parameters const & p_parameters )
+	ToneMapping::ToneMapping( Castor::String const & name
+		, Engine & engine, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
-		, Named{ p_name }
+		, Named{ name }
 		, m_matrixUbo{ engine }
-		, m_configUbo{ ToneMapping::HdrConfigUbo, *engine.GetRenderSystem() }
+		, m_configUbo{ ToneMapping::HdrConfigUbo
+			, *engine.GetRenderSystem()
+			, HdrConfigUbo::BindingPoint }
 	{
 		m_exposureVar = m_configUbo.CreateUniform< UniformType::eFloat >( ShaderProgram::Exposure );
 		
 		String param;
 
-		if ( p_parameters.Get( cuT( "Exposure" ), param ) )
+		if ( parameters.Get( cuT( "Exposure" ), param ) )
 		{
 			m_config.SetExposure( string::to_float( param ) );
 		}
@@ -85,6 +89,8 @@ namespace Castor3D
 
 			m_colour = std::make_unique< RenderColourToTexture >( *GetEngine()->GetRenderSystem()->GetMainContext(), m_matrixUbo );
 			m_colour->Initialise();
+
+			m_timer = std::make_shared< RenderPassTimer >( *GetEngine(), cuT( "Tone mapping" ) );
 		}
 
 		return result;
@@ -92,6 +98,7 @@ namespace Castor3D
 
 	void ToneMapping::Cleanup()
 	{
+		m_timer.reset();
 		DoDestroy();
 
 		if ( m_colour )
@@ -111,28 +118,32 @@ namespace Castor3D
 		}
 	}
 
-	void ToneMapping::Apply( Size const & p_size, TextureLayout const & p_texture )
+	void ToneMapping::Apply( Size const & size
+		, TextureLayout const & texture
+		, RenderInfo & info )
 	{
 		static Position const position;
+		m_timer->Start();
 		m_exposureVar->SetValue( m_config.GetExposure() );
 		DoUpdate();
 		m_configUbo.Update();
 		m_configUbo.BindTo( HdrConfigUbo::BindingPoint );
 		m_colour->Render( position
-			, p_size
-			, p_texture
+			, size
+			, texture
 			, m_matrixUbo
 			, *m_pipeline );
+		m_timer->Stop();
 	}
 
-	bool ToneMapping::WriteInto( Castor::TextFile & p_file )
+	bool ToneMapping::WriteInto( Castor::TextFile & file )
 	{
-		return p_file.WriteText( cuT( " -Exposure=" ) + string::to_string( m_config.GetExposure() ) ) > 0
-			   && DoWriteInto( p_file );
+		return file.WriteText( cuT( " -Exposure=" ) + string::to_string( m_config.GetExposure() ) ) > 0
+			   && DoWriteInto( file );
 	}
 
-	void ToneMapping::SetConfig( HdrConfig const & p_config )
+	void ToneMapping::SetConfig( HdrConfig const & config )
 	{
-		m_config = p_config;
+		m_config = config;
 	}
 }

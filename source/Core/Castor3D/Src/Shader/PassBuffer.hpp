@@ -20,11 +20,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_PqssBuffer_H___
-#define ___C3D_PqssBuffer_H___
+#ifndef ___C3D_PassBuffer_H___
+#define ___C3D_PassBuffer_H___
 
 #include "Material/Pass.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Shader/ShaderStorageBuffer.hpp"
 
 namespace Castor3D
 {
@@ -33,9 +33,9 @@ namespace Castor3D
 	\version	0.1
 	\date		09/02/2010
 	\~english
-	\brief		Base class of a material pass.
+	\brief		SSBO holding the Passes data.
 	\~french
-	\brief		Classe de base d'une passe d'un matériau.
+	\brief		SSBO contenant les données des Pass.
 	*/
 	class PassBuffer
 	{
@@ -43,38 +43,45 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_parent	The parent material.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	count	The max passes count.
+		 *\param[in]	size	The size of a pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_parent	Le matériau parent.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	count	Le nombre maximal de passes.
+		 *\param[in]	size	La taille d'une passe.
 		 */
-		C3D_API PassBuffer( Engine & p_engine
-			, uint32_t p_size );
+		C3D_API PassBuffer( Engine & engine
+			, uint32_t count
+			, uint32_t size );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~PassBuffer();
+		C3D_API virtual ~PassBuffer();
 		/**
 		 *\~english
 		 *\brief		Adds a pass to the buffer.
 		 *\remarks		Sets the pass' ID.
-		 *\param[in]	p_pass	The pass.
+		 *\param[in]	pass	The pass.
 		 *\~french
 		 *\brief		Ajoute une passe au tampon.
 		 *\remarks		Définit l'ID de la passe.
-		 *\param[in]	p_pass	La passe.
+		 *\param[in]	pass	La passe.
 		 */
-		C3D_API uint32_t AddPass( Pass & p_pass );
+		C3D_API uint32_t AddPass( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Removes a pass from the buffer.
+		 *\param[in]	pass	The pass.
 		 *\~french
 		 *\brief		Supprime une pass du tampon.
+		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void RemovePass( Pass & p_pass );
+		C3D_API void RemovePass( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Updates the passes buffer.
@@ -91,58 +98,52 @@ namespace Castor3D
 		C3D_API void Bind()const;
 		/**
 		 *\~english
-		 *\brief		Unbinds the texture buffer.
+		 *\brief		Puts the pass data into the buffer.
+		 *\param[in]	pass	The pass.
 		 *\~french
-		 *\brief		Désactive le tampon de texture.
+		 *\brief		Met les données de la passe dans le tampon.
+		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void Unbind()const;
+		C3D_API virtual void Visit( LegacyPass const & pass );
 		/**
 		 *\~english
-		 *\brief		Cleans up the pass and all it's dependencies.
+		 *\brief		Puts the pass data into the buffer.
+		 *\param[in]	pass	The pass.
 		 *\~french
-		 *\brief		Nettoie la passe et toutes ses dépendances.
+		 *\brief		Met les données de la passe dans le tampon.
+		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void SetComponents( uint32_t p_index
-			, uint32_t p_components
-			, float p_r
-			, float p_g
-			, float p_b
-			, float p_a );
+		C3D_API virtual void Visit( MetallicRoughnessPbrPass const & pass );
 		/**
 		 *\~english
-		 *\brief		Cleans up the pass and all it's dependencies.
+		 *\brief		Puts the pass data into the buffer.
+		 *\param[in]	pass	The pass.
 		 *\~french
-		 *\brief		Nettoie la passe et toutes ses dépendances.
+		 *\brief		Met les données de la passe dans le tampon.
+		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void SetComponents( uint32_t p_index
-			, uint32_t p_components
-			, Castor::Colour const & p_rgb
-			, float p_a );
-		/**
-		 *\~english
-		 *\brief		Cleans up the pass and all it's dependencies.
-		 *\~french
-		 *\brief		Nettoie la passe et toutes ses dépendances.
-		 */
-		C3D_API void SetComponents( uint32_t p_index
-			, uint32_t p_components
-			, Castor::HdrColour const & p_rgb
-			, float p_a );
-		/**
-		 *\~english
-		 *\brief		Cleans up the pass and all it's dependencies.
-		 *\~french
-		 *\brief		Nettoie la passe et toutes ses dépendances.
-		 */
-		C3D_API void SetComponents( uint32_t p_index
-			, uint32_t p_components
-			, float p_r
-			, Castor::Colour const & p_gba );
+		C3D_API virtual void Visit( SpecularGlossinessPbrPass const & pass );
 
-	private:
-		//!\~english	The materials texture.
-		//!\~french		La texture contenant les matériaux.
-		TextureUnit m_texture;
+	public:
+		struct RgbColour
+		{
+			float r;
+			float g;
+			float b;
+		};
+
+		struct RgbaColour
+		{
+			float r;
+			float g;
+			float b;
+			float a;
+		};
+
+	protected:
+		//!\~english	The materials buffer.
+		//!\~french		Le tampon contenant les matériaux.
+		ShaderStorageBuffer m_buffer;
 		//!\~english	The current passes.
 		//!\~french		Les passes actuelles.
 		std::vector< Pass * > m_passes;
@@ -152,15 +153,12 @@ namespace Castor3D
 		//!\~english	The connections to change signal for current passes.
 		//!\~french		Les connexions aux signaux de changement des passes actuelles.
 		std::vector< Pass::OnChangedConnection > m_connections;
-		//!\~english	The pass size.
-		//!\~french		La taille d'une passe.
-		uint32_t m_passSize;
+		//!\~english	The maximum pass count.
+		//!\~french		Le nombre maximal de passes.
+		uint32_t m_passCount;
 		//!\~english	The next pass ID.
 		//!\~french		L'ID de la passe suivante.
 		uint32_t m_passID{ 1u };
-		//!\~english	The materials texture buffer.
-		//!\~french		Le tampon de la texture contenant les matériaux.
-		Castor::PxBufferBaseSPtr m_buffer;
 	};
 }
 

@@ -1,4 +1,4 @@
-#include "LegacyPass.hpp"
+﻿#include "LegacyPass.hpp"
 
 #include "Engine.hpp"
 
@@ -79,37 +79,17 @@ namespace Castor3D
 	{
 	}
 
+	void LegacyPass::Accept( PassBuffer & p_buffer )const
+	{
+		p_buffer.Visit( *this );
+	}
+
 	void LegacyPass::DoInitialise()
 	{
 	}
 
 	void LegacyPass::DoCleanup()
 	{
-	}
-
-	void LegacyPass::DoUpdate( PassBuffer & p_buffer )const
-	{
-		p_buffer.SetComponents( GetId() - 1
-			, 0u
-			, GetRefractionRatio()
-			, CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f
-			, CheckFlag( GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f
-			, GetOpacity() );
-		p_buffer.SetComponents( GetId() - 1
-			, 1u
-			, GetDiffuse()
-			, GetAmbient() );
-		p_buffer.SetComponents( GetId() - 1
-			, 2u
-			, GetSpecular()
-			, GetEmissive() );
-		p_buffer.SetComponents( GetId() - 1
-			, 3u
-			, GetShininess()
-			// TODO: store gamma correction and exposure per pass ? or remove from pass
-			, NeedsGammaCorrection() ? 2.2f : 1.0f //gamma correction
-			, 1.0f //exposure
-			, GetAlphaValue() );
 	}
 
 	void LegacyPass::DoSetOpacity( float p_value )

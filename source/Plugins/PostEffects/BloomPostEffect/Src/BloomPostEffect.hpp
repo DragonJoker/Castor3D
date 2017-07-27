@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_BloomPostEffect___
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Miscellaneous/GaussianBlur.hpp>
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
@@ -64,9 +65,6 @@ namespace Bloom
 	public:
 		static Castor::String const Type;
 		static Castor::String const Name;
-		static Castor::String const FilterConfig;
-		static Castor::String const FilterConfigCoefficients;
-		static Castor::String const FilterConfigCoefficientsCount;
 		static Castor::String const CombineMapPass0;
 		static Castor::String const CombineMapPass1;
 		static Castor::String const CombineMapPass2;
@@ -77,16 +75,9 @@ namespace Bloom
 	private:
 		void DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
 		void DoDownSample( Castor3D::TextureLayout const & p_origin );
-		void DoBlur( Castor3D::TextureLayout const & p_origin
-			, SurfaceArray & p_sources
-			, SurfaceArray & p_destinations
-			, Castor3D::RenderPipeline & p_pipeline
-			, Castor3D::UniformBuffer & p_ubo );
 		void DoCombine( Castor3D::TextureLayout const & p_origin );
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
 		bool DoInitialiseHiPassProgram();
-		bool DoInitialiseBlurXProgram();
-		bool DoInitialiseBlurYProgram();
 		bool DoInitialiseCombineProgram();
 
 		Castor3D::SamplerSPtr m_linearSampler;
@@ -95,17 +86,7 @@ namespace Bloom
 		Castor3D::RenderPipelineUPtr m_hiPassPipeline;
 		Castor3D::PushUniform1sSPtr m_hiPassMapDiffuse;
 
-		Castor3D::RenderPipelineUPtr m_blurXPipeline;
-		Castor3D::PushUniform1sSPtr m_blurXMapDiffuse;
-		Castor3D::UniformBuffer m_blurXUbo;
-		Castor3D::Uniform1uiSPtr m_blurXCoeffCount;
-		Castor3D::Uniform1fSPtr m_blurXCoeffs;
-
-		Castor3D::RenderPipelineUPtr m_blurYPipeline;
-		Castor3D::PushUniform1sSPtr m_blurYMapDiffuse;
-		Castor3D::UniformBuffer m_blurYUbo;
-		Castor3D::Uniform1uiSPtr m_blurYCoeffCount;
-		Castor3D::Uniform1fSPtr m_blurYCoeffs;
+		Castor3D::GaussianBlurSPtr m_blur;
 
 		Castor3D::MatrixUbo m_matrixUbo;
 		Castor3D::RenderPipelineUPtr m_combinePipeline;
@@ -118,7 +99,6 @@ namespace Bloom
 		Castor::real m_buffer[12];
 		SurfaceArray m_hiPassSurfaces;
 		SurfaceArray m_blurSurfaces;
-		std::vector< float > m_kernel;
 		uint32_t m_size;
 	};
 }

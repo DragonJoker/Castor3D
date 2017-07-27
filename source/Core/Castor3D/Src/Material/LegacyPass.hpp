@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -61,18 +61,18 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a LegacyPass into a text file.
-			 *\param[in]		p_pass	The LegacyPass to write.
-			 *\param[in,out]	p_file	The file where to write the LegacyPass.
+			 *\param[in]		pass	The LegacyPass to write.
+			 *\param[in,out]	file	The file where to write the LegacyPass.
 			 *\~french
 			 *\brief			Ecrit une LegacyPass dans un fichier texte.
-			 *\param[in]		p_pass	La LegacyPass à écrire.
-			 *\param[in,out]	p_file	Le file où écrire la LegacyPass.
+			 *\param[in]		pass	La LegacyPass à écrire.
+			 *\param[in,out]	file	Le file où écrire la LegacyPass.
 			 */
-			C3D_API bool operator()( LegacyPass const & p_pass, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( LegacyPass const & pass, Castor::TextFile & file )override;
 		};
 
 	public:
@@ -80,13 +80,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\remarks		Used by Material, don't use it.
-		 *\param[in]	p_parent	The parent material.
+		 *\param[in]	parent	The parent material.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
-		 *\param[in]	p_parent	Le matériau parent.
+		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API LegacyPass( Material & p_parent );
+		C3D_API LegacyPass( Material & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -94,6 +94,10 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~LegacyPass();
+		/**
+		 *\copydoc		Castor3D::Pass::Accept
+		 */
+		C3D_API void Accept( PassBuffer & buffer )const override;
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -109,53 +113,53 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the diffuse colour.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur diffuse.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetDiffuse( Castor::Colour const & p_value)
+		inline void SetDiffuse( Castor::Colour const & value )
 		{
-			m_diffuse = p_value;
+			m_diffuse = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the specular colour.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur spéculaire.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetSpecular( Castor::Colour const & p_value)
+		inline void SetSpecular( Castor::Colour const & value )
 		{
-			m_specular = p_value;
+			m_specular = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the ambient factor.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le facteur d'ambiante.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetAmbient( float const & p_value )
+		inline void SetAmbient( float const & value )
 		{
-			m_ambient = p_value;
+			m_ambient = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the shininess.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit l'exposant.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetShininess( float p_value )
+		inline void SetShininess( float value )
 		{
-			m_shininess = p_value;
+			m_shininess = value;
 			onChanged( *this );
 		}
 		/**
@@ -229,13 +233,9 @@ namespace Castor3D
 		 */
 		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoUpdate
-		 */
-		void DoUpdate( PassBuffer & p_buffer )const override;
-		/**
 		 *\copydoc		Castor3D::Pass::DoSetOpacity
 		 */
-		void DoSetOpacity( float p_value )override;
+		void DoSetOpacity( float value )override;
 
 	private:
 		//!\~english	Diffuse material colour.

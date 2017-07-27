@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser_Parsers.hpp"
+#include "SceneFileParser_Parsers.hpp"
 
 #include "Engine.hpp"
 #include "Cache/BillboardCache.hpp"
@@ -3245,7 +3245,9 @@ namespace Castor3D
 
 			if ( value )
 			{
-				parsingContext->pUniformBuffer = std::make_unique< UniformBuffer >( parsingContext->strName, *parsingContext->pShaderProgram->GetRenderSystem() );
+				parsingContext->pUniformBuffer = std::make_unique< UniformBuffer >( parsingContext->strName
+					, *parsingContext->pShaderProgram->GetRenderSystem()
+					, 1u );
 			}
 			else
 			{

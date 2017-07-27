@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -80,13 +80,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\remarks		Used by Material, don't use it.
-		 *\param[in]	p_parent	The parent material.
+		 *\param[in]	parent	The parent material.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
-		 *\param[in]	p_parent	Le matériau parent.
+		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API SpecularGlossinessPbrPass( Material & p_parent );
+		C3D_API SpecularGlossinessPbrPass( Material & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -94,6 +94,10 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~SpecularGlossinessPbrPass();
+		/**
+		 *\copydoc		Castor3D::Pass::Accept
+		 */
+		C3D_API void Accept( PassBuffer & buffer )const override;
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -109,40 +113,40 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the albedo colour.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur d'albédo.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetDiffuse( Castor::Colour const & p_value )
+		inline void SetDiffuse( Castor::Colour const & value )
 		{
-			m_diffuse = p_value;
+			m_diffuse = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the glossiness.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la brillance.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetGlossiness( float p_value )
+		inline void SetGlossiness( float value )
 		{
-			m_glossiness = p_value;
+			m_glossiness = value;
 			onChanged( *this );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the specular.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la spécularité.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetSpecular( Castor::Colour const & p_value )
+		inline void SetSpecular( Castor::Colour const & value )
 		{
-			m_specular = p_value;
+			m_specular = value;
 			onChanged( *this );
 		}
 		/**
@@ -186,13 +190,9 @@ namespace Castor3D
 		 */
 		void DoCleanup()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoUpdateRenderNode
-		 */
-		void DoUpdate( PassBuffer & p_buffer )const override;
-		/**
 		 *\copydoc		Castor3D::Pass::DoSetOpacity
 		 */
-		void DoSetOpacity( float p_value )override;
+		void DoSetOpacity( float value )override;
 
 	private:
 		//!\~english	The diffuse colour.

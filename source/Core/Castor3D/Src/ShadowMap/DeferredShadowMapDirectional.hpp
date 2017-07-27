@@ -140,6 +140,9 @@ namespace Castor3D
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
 		TextureUnit m_shadowMap;
+		//!\~english	The gaussian blur.
+		//!\~french		Le flou gaussien.
+		GaussianBlurSPtr m_blur;
 	};
 }
 

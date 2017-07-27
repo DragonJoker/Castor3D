@@ -92,11 +92,11 @@ namespace Testing
 			p_cache.Add( p_object->GetName(), p_object );
 		}
 
-		RenderWindowSPtr GetWindow( Engine & p_engine
+		RenderWindowSPtr GetWindow( Engine & engine
 			, String const & p_sceneName
 			, bool p_rename )
 		{
-			auto & windows = p_engine.GetRenderWindowCache();
+			auto & windows = engine.GetRenderWindowCache();
 			windows.lock();
 			auto it = std::find_if( windows.begin()
 				, windows.end()
@@ -122,8 +122,8 @@ namespace Testing
 		}
 	}
 
-	SceneExportTest::SceneExportTest( Engine & p_engine )
-		: C3DTestCase{ "SceneExportTest", p_engine }
+	SceneExportTest::SceneExportTest( Engine & engine )
+		: C3DTestCase{ "SceneExportTest", engine }
 	{
 	}
 
@@ -141,7 +141,7 @@ namespace Testing
 
 	void SceneExportTest::SimpleScene()
 	{
-		DoTestScene( cuT( "primitive.cscn" ) );
+		DoTestScene( cuT( "light_directional.cscn" ) );
 	}
 
 	void SceneExportTest::InstancedScene()

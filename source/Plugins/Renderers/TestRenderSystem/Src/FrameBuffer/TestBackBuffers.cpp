@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestBackBuffers::TestBackBuffers( Engine & p_engine )
-		: BackBuffers( p_engine )
+	TestBackBuffers::TestBackBuffers( Engine & engine )
+		: BackBuffers( engine )
 	{
 	}
 

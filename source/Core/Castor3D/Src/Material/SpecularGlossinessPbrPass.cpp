@@ -1,4 +1,4 @@
-#include "SpecularGlossinessPbrPass.hpp"
+﻿#include "SpecularGlossinessPbrPass.hpp"
 
 #include "Engine.hpp"
 #include "Cache/CameraCache.hpp"
@@ -85,37 +85,17 @@ namespace Castor3D
 	{
 	}
 
+	void SpecularGlossinessPbrPass::Accept( PassBuffer & p_buffer )const
+	{
+		p_buffer.Visit( *this );
+	}
+
 	void SpecularGlossinessPbrPass::DoInitialise()
 	{
 	}
 
 	void SpecularGlossinessPbrPass::DoCleanup()
 	{
-	}
-
-	void SpecularGlossinessPbrPass::DoUpdate( PassBuffer & p_buffer )const
-	{
-		p_buffer.SetComponents( GetId() - 1
-			, 0u
-			, GetRefractionRatio()
-			, CheckFlag( GetTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f
-			, CheckFlag( GetTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f
-			, GetOpacity() );
-		p_buffer.SetComponents( GetId() - 1
-			, 1u
-			, GetDiffuse()
-			, 0.0f );
-		p_buffer.SetComponents( GetId() - 1
-			, 2u
-			, GetSpecular()
-			, GetEmissive() );
-		p_buffer.SetComponents( GetId() - 1
-			, 3u
-			, GetGlossiness()
-			// TODO: store gamma correction and exposure per pass ? or remove from pass
-			, NeedsGammaCorrection() ? 2.2f : 1.0f //gamma correction
-			, 1.0f //exposure
-			, GetAlphaValue() );
 	}
 
 	void SpecularGlossinessPbrPass::DoSetOpacity( float p_value )

@@ -185,11 +185,6 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::Update( PassBuffer & passes )const
-	{
-		DoUpdate( passes );
-	}
-
 	void Pass::BindTextures()
 	{
 		for ( auto it : m_textureUnits )

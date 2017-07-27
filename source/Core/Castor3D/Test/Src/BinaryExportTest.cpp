@@ -29,8 +29,8 @@ using namespace Castor3D;
 
 namespace Testing
 {
-	BinaryExportTest::BinaryExportTest( Engine & p_engine )
-		: C3DTestCase{ "BinaryExportTest", p_engine }
+	BinaryExportTest::BinaryExportTest( Engine & engine )
+		: C3DTestCase{ "BinaryExportTest", engine }
 	{
 	}
 
@@ -50,6 +50,9 @@ namespace Testing
 		String name = cuT( "SimpleTestMesh" );
 		Path path{ name + cuT( ".cmsh" ) };
 		Scene scene{ cuT( "TestScene" ), m_engine };
+
+		CT_EQUAL( sizeof( Point3f ), sizeof( float ) * 3 );
+		CT_EQUAL( sizeof( Point2f ), sizeof( float ) * 2 );
 
 		auto src = scene.GetMeshCache().Add( name );
 		Parameters parameters;

@@ -11,8 +11,8 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestFrameBuffer::TestFrameBuffer( Engine & p_engine )
-		: FrameBuffer( p_engine )
+	TestFrameBuffer::TestFrameBuffer( Engine & engine )
+		: FrameBuffer( engine )
 	{
 	}
 

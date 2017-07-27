@@ -40,7 +40,7 @@ namespace Castor3D
 
 		inline UniformBuffer & GetUbo()
 		{
-			return m_gpInfoUbo;
+			return m_ubo;
 		}
 
 	public:
@@ -56,7 +56,7 @@ namespace Castor3D
 	private:
 		//!\~english	The uniform buffer containing Geometry pass informations.
 		//!\~french		Le tampon d'uniformes contenant les informations de la geometry pass.
-		UniformBuffer m_gpInfoUbo;
+		UniformBuffer m_ubo;
 		//!\~english	The uniform variable containing inverted projection-view matrix.
 		//!\~french		La variable uniforme contenant la matrice projection-vue inversée.
 		Uniform4x4fSPtr m_invViewProjUniform;

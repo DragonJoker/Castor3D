@@ -12,7 +12,6 @@ namespace TestRender
 	TestContext::TestContext( TestRenderSystem & p_renderSystem )
 		: Context{ p_renderSystem }
 	{
-		p_renderSystem.GetEngine()->GetMaterialCache().Initialise();
 	}
 
 	TestContext::~TestContext()
@@ -22,6 +21,7 @@ namespace TestRender
 	bool TestContext::DoInitialise()
 	{
 		m_initialised = true;
+		GetRenderSystem()->GetEngine()->GetMaterialCache().Initialise( GetRenderSystem()->GetEngine()->GetMaterialsType() );
 		return m_initialised;
 	}
 

@@ -15,6 +15,7 @@
 
 #include "GlAtomicCounterBufferTest.hpp"
 #include "ComputeShaderTest.hpp"
+#include "GlPassBufferTest.hpp"
 #include "GlTransformFeedbackTest.hpp"
 #include "GlTextureTest.hpp"
 
@@ -30,7 +31,7 @@ using namespace Castor;
 
 namespace
 {
-	void DoLoadPlugins( Castor3D::Engine & p_engine )
+	void DoLoadPlugins( Castor3D::Engine & engine )
 	{
 		PathArray arrayFiles;
 		File::ListDirectoryFiles( Castor3D::Engine::GetPluginsDirectory(), arrayFiles );
@@ -64,7 +65,7 @@ namespace
 					// Since techniques depend on renderers, we load these first
 					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
+						if ( !engine.GetPluginCache().LoadPlugin( file ) )
 						{
 							arrayFailed.push_back( file );
 						}
@@ -79,7 +80,7 @@ namespace
 			// Then we load other plug-ins
 			for ( auto file : otherPlugins )
 			{
-				if ( !p_engine.GetPluginCache().LoadPlugin( file ) )
+				if ( !engine.GetPluginCache().LoadPlugin( file ) )
 				{
 					arrayFailed.push_back( file );
 				}
@@ -125,6 +126,7 @@ namespace
 			auto scene = result->GetSceneCache().Add( cuT( "Test" ) );
 			auto window = result->GetRenderWindowCache().Add( cuT( "Window" ) );
 			auto target = result->GetRenderTargetCache().Add( Castor3D::TargetType::eWindow );
+			result->SetMaterialsType( Castor3D::MaterialType::eLegacy );
 			target->SetPixelFormat( PixelFormat::eA8R8G8B8 );
 			target->SetSize( Size{ 1024, 1024 } );
 			target->SetScene( scene );
@@ -389,6 +391,11 @@ int main( int argc, char const * argv[] )
 				if ( engine )
 				{
 					// Test cases.
+					if ( engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eShaderStorageBuffers ) )
+					{
+						Testing::Register( std::make_unique< Testing::GlPassBufferTest >( *engine ) );
+					}
+
 					Testing::Register( std::make_unique< Testing::GlTextureTest >( *engine ) );
 
 					if ( engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eTransformFeedback ) )

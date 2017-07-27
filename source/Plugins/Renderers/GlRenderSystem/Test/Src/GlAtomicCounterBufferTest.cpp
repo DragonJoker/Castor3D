@@ -22,7 +22,7 @@ namespace Testing
 {
 	namespace
 	{
-		ShaderProgramSPtr DoCreateNoopProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateNoopProgram( Engine & engine )
 		{
 			String vtx = Glsl(
 				layout( binding = 0, offset = 0 ) uniform atomic_uint counter;\n
@@ -31,13 +31,13 @@ namespace Testing
 				{\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eCompute );
 			program->SetSource( ShaderType::eCompute, vtx );
 			return program;
 		}
 
-		ShaderProgramSPtr DoCreateInOutProgram( Engine & p_engine )
+		ShaderProgramSPtr DoCreateInOutProgram( Engine & engine )
 		{
 			String vtx = Glsl(
 				layout( binding=0, offset=0 ) uniform atomic_uint counter;\n
@@ -47,15 +47,15 @@ namespace Testing
 					atomicCounterIncrement( counter );\n
 				}\n
 			);
-			auto program = p_engine.GetRenderSystem()->CreateShaderProgram();
+			auto program = engine.GetRenderSystem()->CreateShaderProgram();
 			program->CreateObject( ShaderType::eCompute );
 			program->SetSource( ShaderType::eCompute, vtx );
 			return program;
 		}
 	}
 
-	GlAtomicCounterBufferTest::GlAtomicCounterBufferTest( Engine & p_engine )
-		: GlTestCase{ "GlAtomicCounterBufferTest", p_engine }
+	GlAtomicCounterBufferTest::GlAtomicCounterBufferTest( Engine & engine )
+		: GlTestCase{ "GlAtomicCounterBufferTest", engine }
 	{
 	}
 

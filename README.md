@@ -3,6 +3,7 @@
 |  Travis CI (Linux) | [![Build Status](https://travis-ci.org/DragonJoker/Castor3D.svg?branch=development)](https://travis-ci.org/DragonJoker/Castor3D) |
 | AppVeyor (Windows) | [![Build Status](https://ci.appveyor.com/api/projects/status/github/DragonJoker/castor3d?branch=development&svg=true)](https://ci.appveyor.com/project/DragonJoker/castor3d) |
 
+
 Castor3D
 ========
 
@@ -14,202 +15,67 @@ Features
 --------
 
 - Deferred rendering.
+- Normal mapping
+- Parallax Occlusion mapping.
+- Screen Space Ambient Occlusion.
+- Shadow Mapping.
+- Reflection Mapping.
 - PBR rendering (Metallic and Specular), and Legacy rendering.
+- HDR rendering with various tone mapping operators.
 - Scene graph.
-- Extendable through plug-ins.
+- Modular architecture through plug-ins.
+- Shaders are generated automatically from material and pass configuration.
+- Shaders are writable directly from C++ code.
 
-Building Castor3D
------------------
+Implemented Plug-ins
+--------------------
 
-Castor3D uses CMake to build project files.
-You just need to launch CMake to build your preferential project file.
+**Renderers**
+- GlRenderSystem.
 
-Tested compilers are:
-- Visual Studio 2017
-- gcc 5.3
-- gcc 6.1
-
-CastorUtils depends on FreeImage and FreeType, Zlib and libzip.
-Castor3D is based on CastorUtils.
-GuiCommon depends on wxWidgets (from 2.9.5, currently 3.0).
-Last (but not least) CastorViewer depends on GuiCommon, Castor3D and wxWidgets.
-
-Some plug-ins are also built :
-Renderers:
-- GlRenderSystem depends on OpenGL (not GLU).
-
-Importers:
-- ASE, 3DS, LWO, OBJ, MD2, MD3.
-- ASSIMP: Depends on Assimp, replaces the previous ones.
+**Importers**
+- ASE: ASCII Scene Export mesh importer.
+- 3DS: 3D Studio mesh importer.
+- LWO: Lightwave Object mesh importer.
+- MD2: Quake II mesh importer.
+- MD3: Quake III mesh importer.
+- ASSIMP: Multiple format mesh importer, replaces the previous ones if Assimp is available.
 - PLY: Stanford Polygon library mesh importer.
 - OBJ: Wavefront OBJ mesh importer.
+- FBX: Autodesk Maya mesh importer.
 
-Dividers:
+**Dividers**
 - Loop subdivision surfaces.
 - Phong tessellation.
 - PN-Triangles surfaces.
 
-PostEffects:
+**PostEffects**
 - Bloom.
 - GrayScale.
 - FXAA.
 
-Generic:
+**Generators**
+- DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
+
+**Generic**
 - CastorGUI: to build GUIs inside Castor3D scenes.
 
-ToneMappings:
+**ToneMappings**
 - LinearToneMapping: Default tone mapping.
 - HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.
 - HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
 - ReinhardToneMapping: Reinhard tone mapping.
 
-Two additional projects are also generated:
-- ImgConverter : Allows you to convert any image file type to XPM or ICO.
-- CastorUtilsTest : Allows you to run unit and performance tests for
-    CastorUtils.
-- Castor3DTest : Allows you to run unit tests for Castor3D.
 
-Documentation for CastorUtils and Castor3D can be generated using Doxygen.
+![Sponza](http://DragonJoker.github.com/Castor3D/doc/Sponza-PBR-Bloom-small.png)
+![Cerberus](http://DragonJoker.github.com/Castor3D/doc/Cerberus-PBR-small.png)
+![Park](http://DragonJoker.github.com/Castor3D/doc/Park-Legacy-small.png)
 
-Options
--------
+Links
+-----
 
-On GNU/Linux the default install directory is in /usr/local.
-You can change this directory by changing the CMAKE_INSTALL_PREFIX value.
-The sample, tool and test applications are installed in <install_dir>/bin/
-The main libraries (CastorUtils and Castor3D) are installed in
-<install_dir>/lib/ on GNU/Linux, and in <install_dir>/bin/ on Windows.
-The plug-ins are installed in <install_dir>/lib/Castor3D/
-
-The build is configurable through CMake using the following options:
-- **PROJECTS_BINARIES_OUTPUT_DIR**
-
-    Used to specify the root directory for compiled binaries.
-    Inside this folder, the bin, lib, and share directories will be created,
-    and binaries will be put in the right folders.
-    Some files will also be copied in share directory, that are used by the
-    projects.
-    On Windows, the external DLLs will be copied in bin folder, if they are
-    found.
-
-- **PROJECTS_USE_PRECOMPILED_HEADERS**
-
-    Used to enable/disable the use of Precompiled Headers for the compilation.
-
-- **PROJECTS_USE_PRETTY_PRINTING**
-
-    If it is enabled, and if A-Style is found, new test projects will be
-    created, allowing the run of A-Style over each project's source file.
-
-- **CASTOR_BUILD_CASTOR3D**
-
-    This special option allows you to disable build of Castor3D, and every
-    other project depending on it, resulting in the build of CastorUtils and
-    CastorUtilsTest only.
-
-- **CASTOR_BUILD_PLUGINS**
-
-    Another special option allowing you to disable the build of plug-ins.
-
-- **CASTOR_BUILDGRP_DIVIDER**
-
-    Enables the build of Divider plug-ins.
-
-- **CASTOR_BUILDGRP_GENERIC**
-
-    Enables the build of Generic plug-ins.
-
-- **CASTOR_BUILDGRP_IMPORTER**
-
-    Enables the build of Importer plug-ins.
-
-- **CASTOR_BUILDGRP_INTEROP**
-
-    Enables the build of Bindings.
-
-- **CASTOR_BUILDGRP_POSTFX**
-
-    Enables the build of PostEffect plug-ins.
-
-- **CASTOR_BUILDGRP_SAMPLE**
-
-    Enables the build of sample applications.
-
-- **CASTOR_BUILDGRP_SETUP**
-
-    Allows you to build setup projects.
-
-- **CASTOR_BUILDGRP_TECHNIQUE**
-
-    Allows you to build Technique plug-ins (note that DirectRenderTechnique is
-    always built).
-
-- **CASTOR_BUILDGRP_TEST**
-
-    Allows you to build test applications.
-
-- **CASTOR_BUILDGRP_TONEMAPS**
-
-    Allows you to build ToneMapping plug-ins (note that LinearToneMapping is
-    always built).
-
-- **CASTOR_BUILDGRP_TOOL**
-
-    Enables the build of tools ()applications and tests).
-
-- **CASTOR_BUILD_DIVIDER_<NAME>**
-
-    Enables the build of <Name> divider plug-in.
-
-- **CASTOR_BUILD_GENERIC_<NAME>**
-
-    Enables the build of <Name> generic plug-in.
-
-- **CASTOR_BUILD_IMPORTER_<NAME>**
-    Enables the build of <Name> importer plug-in.
-
-- **CASTOR_BUILD_INTEROP_<NAME>**
-
-    Enables the build of <Name> binding.
-
-- **CASTOR_BUILD_POSTFX_<NAME>**
-
-    Enables the build of <Name> post-effect plug-in.
-
-- **CASTOR_BUILD_RENDERER_<NAME>**
-
-    Enables the build of <Name> renderer plug-in.
-
-- **CASTOR_BUILD_SAMPLE_<NAME>**
-
-    Enables the build of <Name> sample application.
-
-- **CASTOR_BUILD_TECHNIQUE_<NAME>**
-
-    Enables the build of <Name> technique plug-in.
-
-- **CASTOR_BUILD_TONEMAP_<NAME>**
-
-    Enables the build of <Name> tone mapping plug-in.
-
-- **CASTOR_BUILD_TEST_<NAME>**
-
-    Enables the build of <Name> test application.
-
-- **CASTOR_FORCE_ALL_IMPORTERS**
-
-    Forces the build of every importer plug-in, even though AssimpImporter is
-    built.
-
-- **CASTOR_USE_SSE2**
-
-    Enables use of SSE2 instructions for Point4f and Matrix4x4f operations.
-
-Running Castor3D
-----------------
-
-To run Castor Viewer, just type 'CastorViewer' in your favourite command-line
-tool.
+- [Building Castor3D](http://DragonJoker.github.com/Castor3D/doc/build)
+- [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
 General Questions
 -----------------

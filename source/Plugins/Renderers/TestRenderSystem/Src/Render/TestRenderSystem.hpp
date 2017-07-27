@@ -33,10 +33,10 @@ namespace TestRender
 		: public Castor3D::RenderSystem
 	{
 	public:
-		TestRenderSystem( Castor3D::Engine & p_engine );
+		TestRenderSystem( Castor3D::Engine & engine );
 		virtual ~TestRenderSystem();
 
-		static Castor3D::RenderSystemUPtr Create( Castor3D::Engine & p_engine );
+		static Castor3D::RenderSystemUPtr Create( Castor3D::Engine & engine );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateContext
 		 */

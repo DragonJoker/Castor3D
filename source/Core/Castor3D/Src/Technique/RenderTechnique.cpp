@@ -8,6 +8,7 @@
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
@@ -37,20 +38,20 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	RenderTechnique::TechniqueFbo::TechniqueFbo( RenderTechnique & p_technique )
-		: m_technique{ p_technique }
+	RenderTechnique::TechniqueFbo::TechniqueFbo( RenderTechnique & technique )
+		: m_technique{ technique }
 	{
 	}
 
-	bool RenderTechnique::TechniqueFbo::Initialise( Size p_size )
+	bool RenderTechnique::TechniqueFbo::Initialise( Size size )
 	{
 		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions
 			, AccessType::eNone
 			, AccessType::eRead | AccessType::eWrite
 			, PixelFormat::eRGBA16F32F
-			, p_size );
+			, size );
 		m_colourTexture->GetImage().InitialiseSource();
-		p_size = m_colourTexture->GetDimensions();
+		size = m_colourTexture->GetDimensions();
 
 		bool result = m_colourTexture->Initialise();
 
@@ -61,7 +62,7 @@ namespace Castor3D
 				, AccessType::eNone
 				, AccessType::eRead | AccessType::eWrite
 				, PixelFormat::eD24S8
-				, p_size );
+				, size );
 			m_depthBuffer->GetImage().InitialiseSource();
 			result = m_depthBuffer->Initialise();
 		}
@@ -75,7 +76,7 @@ namespace Castor3D
 
 		if ( result )
 		{
-			result = m_frameBuffer->Initialise( p_size );
+			result = m_frameBuffer->Initialise( size );
 
 			if ( result )
 			{
@@ -118,45 +119,45 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	RenderTechnique::RenderTechnique( String const & p_name
-		, RenderTarget & p_renderTarget
+	RenderTechnique::RenderTechnique( String const & name
+		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
-		, Parameters const & p_params
-		, SsaoConfig const & p_config )
+		, Parameters const & parameters
+		, SsaoConfig const & config )
 
 		: OwnedBy< Engine >{ *renderSystem.GetEngine() }
-		, Named{ p_name }
-		, m_renderTarget{ p_renderTarget }
+		, Named{ name }
+		, m_renderTarget{ renderTarget }
 		, m_renderSystem{ renderSystem }
 #if DEBUG_FORWARD_RENDERING
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
-			, *p_renderTarget.GetScene()
-			, p_renderTarget.GetCamera().get()
+			, *renderTarget.GetScene()
+			, renderTarget.GetCamera().get()
 			, false
 			, nullptr
-			, p_config ) }
+			, config ) }
 #else
-		, m_opaquePass{ std::make_unique< OpaquePass >( *p_renderTarget.GetScene()
-			, p_renderTarget.GetCamera().get()
-			, p_config ) }
+		, m_opaquePass{ std::make_unique< OpaquePass >( *renderTarget.GetScene()
+			, renderTarget.GetCamera().get()
+			, config ) }
 #endif
 #if USE_WEIGHTED_BLEND
-		, m_transparentPass{ std::make_unique< TransparentPass >( *p_renderTarget.GetScene()
-			, p_renderTarget.GetCamera().get()
-			, p_config ) }
+		, m_transparentPass{ std::make_unique< TransparentPass >( *renderTarget.GetScene()
+			, renderTarget.GetCamera().get()
+			, config ) }
 #else
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_transparent" )
-			, *p_renderTarget.GetScene()
-			, p_renderTarget.GetCamera().get()
+			, *renderTarget.GetScene()
+			, renderTarget.GetCamera().get()
 			, false
 			, false
 			, false
 			, nullptr
-			, p_config ) }
+			, config ) }
 #endif
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
-		, m_ssaoConfig{ p_config }
+		, m_ssaoConfig{ config }
 	{
 	}
 
@@ -166,7 +167,7 @@ namespace Castor3D
 		m_opaquePass.reset();
 	}
 
-	bool RenderTechnique::Initialise( uint32_t & p_index )
+	bool RenderTechnique::Initialise( uint32_t & index )
 	{
 		if ( !m_initialised )
 		{
@@ -209,6 +210,8 @@ namespace Castor3D
 #endif
 			}
 
+			m_particleTimer = std::make_shared< RenderPassTimer >( *GetEngine(), cuT( "Particles" ) );
+			m_postFxTimer = std::make_shared< RenderPassTimer >( *GetEngine(), cuT( "Post effects" ) );
 			ENSURE( m_initialised );
 		}
 
@@ -217,6 +220,8 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
+		m_particleTimer.reset();
+		m_postFxTimer.reset();
 		m_weightedBlendRendering.reset();
 		m_deferredRendering.reset();
 		m_transparentPass->CleanupShadowMaps();
@@ -227,26 +232,25 @@ namespace Castor3D
 		m_frameBuffer.Cleanup();
 	}
 
-	void RenderTechnique::Update( RenderQueueArray & p_queues )
+	void RenderTechnique::Update( RenderQueueArray & queues )
 	{
-		m_opaquePass->Update( p_queues );
-		m_transparentPass->Update( p_queues );
-		m_opaquePass->UpdateShadowMaps( p_queues );
-		m_transparentPass->UpdateShadowMaps( p_queues );
+		m_opaquePass->Update( queues );
+		m_transparentPass->Update( queues );
+		m_opaquePass->UpdateShadowMaps( queues );
+		m_transparentPass->UpdateShadowMaps( queues );
 		auto & maps = m_renderTarget.GetScene()->GetEnvironmentMaps();
 
 		for ( auto & map : maps )
 		{
-			map.get().Update( p_queues );
+			map.get().Update( queues );
 		}
 	}
 
-	void RenderTechnique::Render( RenderInfo & p_info )
+	void RenderTechnique::Render( RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.GetScene();
 		scene.GetLightCache().UpdateLights();
 		m_renderSystem.PushScene( &scene );
-		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		auto & maps = scene.GetEnvironmentMaps();
 
 		for ( auto & map : maps )
@@ -266,11 +270,11 @@ namespace Castor3D
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
 		m_frameBuffer.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_opaquePass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
+		m_opaquePass->Render( info, m_renderTarget.GetScene()->HasShadows() );
 
 #else
 
-		m_deferredRendering->Render( p_info
+		m_deferredRendering->Render( info
 			, scene
 			, camera );
 
@@ -278,15 +282,15 @@ namespace Castor3D
 
 		scene.RenderBackground( GetSize(), camera );
 
-		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
-		scene.GetParticleSystemCache().ForEach( [this, &p_info]( ParticleSystem & p_particleSystem )
+		m_particleTimer->Start();
+		scene.GetParticleSystemCache().ForEach( [this, &info]( ParticleSystem & p_particleSystem )
 		{
 			p_particleSystem.Update();
-			p_info.m_particlesCount += p_particleSystem.GetParticlesCount();
+			info.m_particlesCount += p_particleSystem.GetParticlesCount();
 		} );
 
 		m_frameBuffer.m_frameBuffer->Unbind();
-		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
+		m_particleTimer->Stop();
 
 #if USE_WEIGHTED_BLEND
 #	if !DEBUG_FORWARD_RENDERING
@@ -295,7 +299,7 @@ namespace Castor3D
 
 #	endif
 
-		m_weightedBlendRendering->Render( p_info
+		m_weightedBlendRendering->Render( info
 			, scene
 			, camera );
 
@@ -306,7 +310,7 @@ namespace Castor3D
 		m_renderTarget.GetCamera()->Apply();
 		m_frameBuffer.m_frameBuffer->Bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->SetDrawBuffers();
-		m_transparentPass->Render( p_info, m_renderTarget.GetScene()->HasShadows() );
+		m_transparentPass->Render( info, m_renderTarget.GetScene()->HasShadows() );
 		m_frameBuffer.m_frameBuffer->Unbind();
 
 #endif
@@ -325,23 +329,25 @@ namespace Castor3D
 		m_frameBuffer.m_frameBuffer->Unbind();
 #endif
 
-		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
+		m_postFxTimer->Start();
+
 		for ( auto effect : m_renderTarget.GetPostEffects() )
 		{
 			effect->Apply( *m_frameBuffer.m_frameBuffer );
 		}
 
+		m_postFxTimer->Stop();
 		m_renderSystem.PopScene();
 	}
 
-	bool RenderTechnique::WriteInto( Castor::TextFile & p_file )
+	bool RenderTechnique::WriteInto( Castor::TextFile & file )
 	{
 		return true;
 	}
 
-	void RenderTechnique::AddShadowProducer( Light & p_light )
+	void RenderTechnique::AddShadowProducer( Light & light )
 	{
-		m_transparentPass->AddShadowProducer( p_light );
-		m_opaquePass->AddShadowProducer( p_light );
+		m_transparentPass->AddShadowProducer( light );
+		m_opaquePass->AddShadowProducer( light );
 	}
 }

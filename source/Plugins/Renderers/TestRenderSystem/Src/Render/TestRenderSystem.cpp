@@ -29,8 +29,8 @@ namespace TestRender
 	String TestRenderSystem::Type = cuT( "test" );
 	String TestRenderSystem::Name = cuT( "Test Renderer" );
 
-	TestRenderSystem::TestRenderSystem( Engine & p_engine )
-		: RenderSystem{ p_engine, Name }
+	TestRenderSystem::TestRenderSystem( Engine & engine )
+		: RenderSystem{ engine, Name }
 	{
 		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eNonPowerOfTwoTextures );
 		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eTextureBuffers );
@@ -42,9 +42,9 @@ namespace TestRender
 	{
 	}
 
-	RenderSystemUPtr TestRenderSystem::Create( Engine & p_engine )
+	RenderSystemUPtr TestRenderSystem::Create( Engine & engine )
 	{
-		return std::make_unique< TestRenderSystem >( p_engine );
+		return std::make_unique< TestRenderSystem >( engine );
 	}
 
 	ContextSPtr TestRenderSystem::CreateContext()
