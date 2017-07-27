@@ -141,7 +141,7 @@ namespace Testing
 
 	void SceneExportTest::SimpleScene()
 	{
-		DoTestScene( cuT( "primitive.cscn" ) );
+		DoTestScene( cuT( "light_directional.cscn" ) );
 	}
 
 	void SceneExportTest::InstancedScene()
