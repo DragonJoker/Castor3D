@@ -178,6 +178,13 @@ namespace Castor3D
 		C3D_API void AddShadowProducer( Light & light );
 		/**
 		 *\~english
+		 *\brief		Displays debug dumps.
+		 *\~french
+		 *\brief		Affiche les dumps de debug.
+		 */
+		C3D_API void DisplayDebug( Castor::Size const & size )const;
+		/**
+		 *\~english
 		 *\return		The render area dimensions.
 		 *\~french
 		 *\return		Les dimensions de la zone de rendu.

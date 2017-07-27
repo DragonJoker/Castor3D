@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -40,15 +40,8 @@ SOFTWARE.
 
 #include <GlslShadow.hpp>
 
-#define DEBUG_SHADOW_MAPS 0
-
 namespace Castor3D
 {
-#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
-
-	uint32_t g_index = 0u;
-
-#endif
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -123,18 +116,14 @@ namespace Castor3D
 			return *light.GetDirectionalLight();
 		}
 
-#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
-
-		static void DebugDisplay( TextureUnit & shadowMap )
+		static void DebugDisplay( Castor::Position const & position
+			, TextureUnit & shadowMap )
 		{
 			Castor::Size size{ 256u, 256u };
-			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), int32_t( size.height() ) }
+			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( position
 				, size
 				, *shadowMap.GetTexture() );
-			++g_index;
 		}
-
-#endif
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -199,18 +188,14 @@ namespace Castor3D
 			return *light.GetPointLight();
 		}
 
-#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
-
-		static void DebugDisplay( TextureUnit & shadowMap )
+		static void DebugDisplay( Castor::Position const & position
+			, TextureUnit & shadowMap )
 		{
 			Castor::Size size{ 128u, 128u };
-			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( Castor::Position{ 0, int32_t( g_index * 3 * size.height() ) }
+			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepthCube( position
 				, size
 				, *shadowMap.GetTexture() );
-			++g_index;
 		}
-
-#endif
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -275,18 +260,14 @@ namespace Castor3D
 			return *light.GetSpotLight();
 		}
 
-#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
-
-		static void DebugDisplay( TextureUnit & shadowMap )
+		static void DebugDisplay( Castor::Position const & position
+			, TextureUnit & shadowMap )
 		{
 			Castor::Size size{ 256u, 256u };
-			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( Castor::Position{ int32_t( g_index * size.width() ), 0 }
+			shadowMap.GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderDepth( position
 				, size
 				, *shadowMap.GetTexture() );
-			++g_index;
 		}
-
-#endif
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -412,14 +393,16 @@ namespace Castor3D
 				, first );
 
 			m_shadowMapTexture.Unbind();
-
-#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
-
-			LightPass::m_frameBuffer.Bind( FrameBufferTarget::eDraw );
-			my_traits::DebugDisplay( m_shadowMapTexture );
-			LightPass::m_frameBuffer.Unbind();
-
-#endif
+		}
+		/**
+		 *\~english
+		 *\return		Displays the shadow map on the screen.
+		 *\~french
+		 *\return		Affiche la texture d'ombre sur l'écran.
+		 */
+		void Debug( Castor::Position const & position )const override
+		{
+			my_traits::DebugDisplay( position, m_shadowMapTexture );
 		}
 
 	private:

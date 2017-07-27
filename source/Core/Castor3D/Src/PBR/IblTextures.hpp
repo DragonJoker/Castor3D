@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -71,12 +71,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Displays the maps.
-		 *\param[in]	p_camera	The current camera.
+		 *\param[in]	size	The render size.
 		 *\~french
 		 *\brief		Affiche les textures.
-		 *\param[in]	p_camera	La caméra actuelle.
+		 *\param[in]	size	La taille du rendu.
 		 */
-		C3D_API void Debug( Camera const & p_camera )const;
+		C3D_API void Debug( Castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\return		The irradiance texture.

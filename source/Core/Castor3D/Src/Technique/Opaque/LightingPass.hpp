@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -94,6 +94,13 @@ namespace Castor3D
 			, Camera const & camera
 			, GeometryPassResult const & gp
 			, RenderInfo & info );
+		/**
+		 *\~english
+		 *\return		Displays the shadow maps on the screen.
+		 *\~french
+		 *\return		Affiche les textures d'ombre sur l'écran.
+		 */
+		void Debug( Castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\return		The light pass result.

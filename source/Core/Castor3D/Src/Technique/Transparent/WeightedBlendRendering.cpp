@@ -1,4 +1,4 @@
-﻿#include "WeightedBlendRendering.hpp"
+#include "WeightedBlendRendering.hpp"
 
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -127,7 +127,7 @@ namespace Castor3D
 			, p_scene.GetFog() );
 	}
 
-	void WeightedBlendRendering::Debug( Camera const & p_camera )
+	void WeightedBlendRendering::Debug()
 	{
 		auto count = 2;
 		int width = int( m_size.width() ) / 6;
@@ -136,13 +136,9 @@ namespace Castor3D
 		int top = int( m_size.height() ) - height;
 		auto size = Size( width, height );
 		auto & context = *m_engine.GetRenderSystem()->GetCurrentContext();
-		p_camera.Apply();
-
-		m_frameBuffer.Bind();
 		auto index = 0;
 		context.RenderDepth( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eDepth )]->GetTexture() );
 		context.RenderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eRevealage )]->GetTexture() );
 		context.RenderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eAccumulation )]->GetTexture() );
-		m_frameBuffer.Unbind();
 	}
 }

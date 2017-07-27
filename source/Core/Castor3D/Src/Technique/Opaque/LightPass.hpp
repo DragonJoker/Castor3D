@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 Copyright (c) 2016 dragonjoker59@hotmail.com
 
@@ -402,6 +402,15 @@ namespace Castor3D
 			, Light const & light
 			, Camera const & camera
 			, bool first );
+		/**
+		 *\~english
+		 *\return		Displays the shadow map on the screen.
+		 *\~french
+		 *\return		Affiche la texture d'ombre sur l'écran.
+		 */
+		virtual void Debug( Castor::Position const & position )const
+		{
+		}
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.

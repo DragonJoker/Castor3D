@@ -1,4 +1,4 @@
-#include "ShadowMap.hpp"
+﻿#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -111,7 +111,10 @@ namespace Castor3D
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		return DoGetVertexShaderSource( textureFlags, programFlags, sceneFlags, invertNormals );
+		return DoGetVertexShaderSource( textureFlags
+			, programFlags
+			, sceneFlags
+			, invertNormals );
 	}
 
 	GLSL::Shader ShadowMap::GetGeometryShaderSource( TextureChannels const & textureFlags
