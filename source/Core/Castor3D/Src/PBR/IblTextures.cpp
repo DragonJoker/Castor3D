@@ -169,15 +169,14 @@ namespace Castor3D
 		m_environmentPrefilter.Render( p_source, m_prefilteredEnvironment.GetTexture() );
 	}
 
-	void IblTextures::Debug( Camera const & p_camera )const
+	void IblTextures::Debug( Size const & renderSize )const
 	{
 		int width = int( m_prefilteredBrdf.GetTexture()->GetWidth() );
 		int height = int( m_prefilteredBrdf.GetTexture()->GetHeight() );
 		int left = 0u;
-		int top = p_camera.GetHeight() - height;
+		int top = renderSize.height() - height;
 		auto size = Size( width, height );
 		auto & context = *GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext();
-		p_camera.Apply();
 		context.RenderTexture( Position{ left, top }
 			, size
 			, *m_prefilteredBrdf.GetTexture() );

@@ -1,4 +1,4 @@
-#include "RenderTechnique.hpp"
+﻿#include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -27,11 +27,11 @@
 
 using namespace Castor;
 
-#define DEBUG_DEFERRED_BUFFERS 1
-#define DEBUG_WEIGHTED_BLEND_BUFFERS 1
-#define DEBUG_IBL_BUFFERS 0
-#define USE_WEIGHTED_BLEND 1
+#define DISPLAY_DEBUG_DEFERRED_BUFFERS 1
+#define DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS 1
+#define DISPLAY_DEBUG_IBL_BUFFERS 0
 
+#define USE_WEIGHTED_BLEND 1
 #define DEBUG_FORWARD_RENDERING 0
 
 namespace Castor3D
@@ -315,20 +315,6 @@ namespace Castor3D
 
 #endif
 
-#if DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING && !defined( NDEBUG )
-		m_deferredRendering->Debug( camera );
-#endif
-
-#if USE_WEIGHTED_BLEND && DEBUG_WEIGHTED_BLEND_BUFFERS && !defined( NDEBUG )
-		m_weightedBlendRendering->Debug( camera );
-#endif
-
-#if DEBUG_IBL_BUFFERS && !defined( NDEBUG )
-		m_frameBuffer.m_frameBuffer->Bind();
-		scene.GetSkybox().GetIbl().Debug( camera );
-		m_frameBuffer.m_frameBuffer->Unbind();
-#endif
-
 		m_postFxTimer->Start();
 
 		for ( auto effect : m_renderTarget.GetPostEffects() )
@@ -349,5 +335,27 @@ namespace Castor3D
 	{
 		m_transparentPass->AddShadowProducer( light );
 		m_opaquePass->AddShadowProducer( light );
+	}
+
+
+	void RenderTechnique::DisplayDebug( Size const & size )const
+	{
+#if DISPLAY_DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING && !defined( NDEBUG )
+
+		m_deferredRendering->Debug();
+
+#endif
+#if USE_WEIGHTED_BLEND && DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS && !defined( NDEBUG )
+
+		m_weightedBlendRendering->Debug();
+
+#endif
+#if DISPLAY_DEBUG_IBL_BUFFERS && !defined( NDEBUG )
+
+		m_frameBuffer.m_frameBuffer->Bind();
+		scene.GetSkybox().GetIbl().Debug( size );
+		m_frameBuffer.m_frameBuffer->Unbind();
+
+#endif
 	}
 }

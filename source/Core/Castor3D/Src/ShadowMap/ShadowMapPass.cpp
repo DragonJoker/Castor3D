@@ -1,7 +1,8 @@
-#include "ShadowMapPass.hpp"
+﻿#include "ShadowMapPass.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Shader/ShaderProgram.hpp"

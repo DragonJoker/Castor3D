@@ -695,9 +695,13 @@ namespace Castor3D
 		utils.DeclareApplyGamma();
 		utils.DeclareRemoveGamma();
 		utils.DeclareLineariseDepth();
-		utils.DeclareGetMapNormal();
 		utils.DeclareFresnelSchlick();
 		utils.DeclareComputeMetallicIBL();
+
+		if ( CheckFlag( textureFlags, TextureChannel::eNormal ) )
+		{
+			utils.DeclareGetMapNormal();
+		}
 
 		auto parallaxMapping = DeclareParallaxMappingFunc( writer, textureFlags, programFlags );
 
@@ -882,9 +886,13 @@ namespace Castor3D
 		utils.DeclareApplyGamma();
 		utils.DeclareRemoveGamma();
 		utils.DeclareLineariseDepth();
-		utils.DeclareGetMapNormal();
 		utils.DeclareFresnelSchlick();
 		utils.DeclareComputeSpecularIBL();
+
+		if ( CheckFlag( textureFlags, TextureChannel::eNormal ) )
+		{
+			utils.DeclareGetMapNormal();
+		}
 
 		auto parallaxMapping = DeclareParallaxMappingFunc( writer, textureFlags, programFlags );
 

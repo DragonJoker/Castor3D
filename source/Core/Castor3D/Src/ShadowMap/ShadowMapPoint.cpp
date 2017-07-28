@@ -218,7 +218,7 @@ namespace Castor3D
 
 		// Fragment Intputs
 		Ubo shadowMap{ writer, ShadowMapUbo, 8u };
-		auto c3d_v3WordLightPosition( shadowMap.DeclMember< Vec3 >( WorldLightPosition ) );
+		auto c3d_v3WorldLightPosition( shadowMap.DeclMember< Vec3 >( WorldLightPosition ) );
 		auto c3d_fFarPlane( shadowMap.DeclMember< Float >( FarPlane ) );
 		shadowMap.End();
 
@@ -242,7 +242,7 @@ namespace Castor3D
 				FI;
 			}
 
-			auto distance = writer.DeclLocale( cuT( "distance" ), length( vtx_position - c3d_v3WordLightPosition ) );
+			auto distance = writer.DeclLocale( cuT( "distance" ), length( vtx_position - c3d_v3WorldLightPosition ) );
 			pxl_fFragColor = distance / c3d_fFarPlane;
 		};
 

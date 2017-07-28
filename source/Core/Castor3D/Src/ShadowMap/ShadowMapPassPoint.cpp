@@ -1,4 +1,4 @@
-﻿#include "ShadowMapPassPoint.hpp"
+#include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
@@ -18,7 +18,6 @@ namespace Castor3D
 		static String const ShadowMapUbo = cuT( "ShadowMap" );
 		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
 		static String const FarPlane = cuT( "c3d_fFarPlane" );
-		static String const ShadowMatrix = cuT( "c3d_mtxShadowMatrix" );
 
 		void DoUpdateShadowMatrices( Point3r const & p_position
 			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & p_matrices )

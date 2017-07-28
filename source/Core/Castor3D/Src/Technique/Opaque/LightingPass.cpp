@@ -1,4 +1,4 @@
-﻿#include "LightingPass.hpp"
+#include "LightingPass.hpp"
 
 #include "DirectionalLightPass.hpp"
 #include "LightPassShadow.hpp"
@@ -157,12 +157,6 @@ namespace Castor3D
 		if ( !cache.IsEmpty() )
 		{
 			m_timer->Start();
-#if DEBUG_SHADOW_MAPS && !defined( NDEBUG )
-
-			g_index = 0;
-
-#endif
-
 			auto lock = make_unique_lock( cache );
 			DoRenderLights( scene
 				, camera
@@ -184,6 +178,13 @@ namespace Castor3D
 		}
 
 		return first;
+	}
+
+	void LightingPass::Debug( Size const & size )const
+	{
+		m_lightPassShadow[0]->Debug( Position{ 0, 256 } );
+		m_lightPassShadow[2]->Debug( Position{ 256, 256 } );
+		m_lightPassShadow[1]->Debug( Position{ 512, 256 } );
 	}
 
 	void LightingPass::DoRenderLights( Scene const & scene

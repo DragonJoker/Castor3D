@@ -16,6 +16,8 @@
 
 #include <Graphics/Image.hpp>
 
+#define DISPLAY_DEBUG 1
+
 using namespace Castor;
 
 namespace Castor3D
@@ -311,17 +313,18 @@ namespace Castor3D
 		fbo.m_frameBuffer->Clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_toneMapping->SetConfig( scene->GetHdrConfig() );
 		m_toneMapping->Apply( GetSize(), m_renderTechnique->GetResult(), info );
+
 		// We also render overlays.
 		GetEngine()->GetMaterialCache().GetPassBuffer().Bind();
 		GetEngine()->GetOverlayCache().Render( *scene, m_size );
-		fbo.m_frameBuffer->Unbind();
 
-#if DEBUG_BUFFERS
+#if defined( DISPLAY_DEBUG ) && !defined( NDEBUG )
 
-		fbo.m_colourAttach->DownloadBuffer();
-		const Image tmp( cuT( "tmp" ), *fbo.m_colourTexture.GetTexture()->GetImage().GetBuffer() );
-		Image::BinaryWriter()( tmp, Engine::GetEngineDirectory() / String( cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( fbo.m_colourTexture.GetTexture().get() ), 16 ) + cuT( ".png" ) ) );
+		camera->Apply();
+		m_renderTechnique->DisplayDebug( Size{ camera->GetWidth(), camera->GetHeight() } );
 
 #endif
+
+		fbo.m_frameBuffer->Unbind();
 	}
 }

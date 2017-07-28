@@ -26,7 +26,7 @@ namespace Castor3D
 		Viewport viewport{ *GetEngine() };
 		real w = real( p_size.width() );
 		real h = real( p_size.height() );
-		viewport.SetOrtho( -w / 4, w / 4, h / 4, -h / 4, -512.0_r, 512.0_r );
+		viewport.SetOrtho( -w / 2, w / 2, h / 2, -h / 2, -5120.0_r, 5120.0_r );
 		viewport.Update();
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
 			, *m_light.GetScene()

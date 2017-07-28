@@ -1,4 +1,4 @@
-﻿#include "DeferredRendering.hpp"
+#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -9,6 +9,8 @@
 #include "Texture/Sampler.hpp"
 
 using namespace Castor;
+
+#define DISPLAY_SHADOW_MAPS 0
 
 namespace Castor3D
 {
@@ -229,7 +231,7 @@ namespace Castor3D
 		}
 	}
 
-	void DeferredRendering::Debug( Camera const & camera )
+	void DeferredRendering::Debug()const
 	{
 		auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		int width = int( m_size.width() ) / count;
@@ -237,8 +239,6 @@ namespace Castor3D
 		int left = int( m_size.width() ) - width;
 		auto size = Size( width, height );
 		auto & context = *m_engine.GetRenderSystem()->GetCurrentContext();
-		camera.Apply();
-		m_frameBuffer.Bind();
 		auto index = 0;
 		context.RenderDepth( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eDepth )]->GetTexture() );
 		context.RenderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData1 )]->GetTexture() );
@@ -254,6 +254,10 @@ namespace Castor3D
 			context.RenderTexture( Position{ width * ( index++ ), 0 }, size, m_combinePass->GetSsao() );
 		}
 
-		m_frameBuffer.Unbind();
+#if DISPLAY_SHADOW_MAPS
+
+		m_lightingPass->Debug( m_size );
+
+#endif
 	}
 }
