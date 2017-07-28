@@ -1,4 +1,4 @@
-﻿#include "DeferredRendering.hpp"
+#include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
@@ -10,7 +10,7 @@
 
 using namespace Castor;
 
-#define DISPLAY_SHADOW_MAPS 1
+#define DISPLAY_SHADOW_MAPS 0
 
 namespace Castor3D
 {

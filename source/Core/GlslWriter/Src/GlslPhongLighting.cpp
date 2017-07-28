@@ -1,4 +1,4 @@
-﻿#include "GlslPhongLighting.hpp"
+#include "GlslPhongLighting.hpp"
 
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
@@ -183,8 +183,8 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
 				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
 					, normalize( light.m_direction().xyz() ) );
@@ -231,8 +231,8 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
 				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
 					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
@@ -291,8 +291,8 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
 				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
 					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
@@ -359,8 +359,8 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
 				auto lightDirection = m_writer.DeclLocale( cuT( "lightDirection" )
 					, normalize( light.m_direction().xyz() ) );
@@ -407,8 +407,8 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
 				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
 					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
@@ -462,8 +462,8 @@ namespace GLSL
 			{
 				OutputComponents output
 				{
-					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
-					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
+					m_writer.DeclLocale( cuT( "diffuse" ), vec3( 0.0_f ) ),
+					m_writer.DeclLocale( cuT( "specular" ), vec3( 0.0_f ) )
 				};
 				auto lightToVertex = m_writer.DeclLocale( cuT( "lightToVertex" )
 					, fragmentIn.m_v3Vertex - light.m_position().xyz() );
@@ -522,7 +522,7 @@ namespace GLSL
 				, Float const & shininess
 				, Float const & p_shadowFactor
 				, FragmentInput const & fragmentIn
-				, OutputComponents & parentOutput )
+				, OutputComponents & output )
 			{
 				auto diffuseFactor = m_writer.DeclLocale( cuT( "diffuseFactor" ), dot( fragmentIn.m_v3Normal, -lightDirection ) );
 
@@ -534,8 +534,8 @@ namespace GLSL
 						, normalize( reflect( lightDirection, fragmentIn.m_v3Normal ) ) );
 					auto specularFactor = m_writer.DeclLocale( cuT( "specularFactor" )
 						, max( dot( vertexToEye, lightReflect ), 0.0 ) );
-					parentOutput.m_v3Diffuse = p_shadowFactor * light.m_colour() * light.m_intensity().x() * diffuseFactor;
-					parentOutput.m_v3Specular = p_shadowFactor * light.m_colour() * light.m_intensity().y() * pow( specularFactor, max( shininess, 0.1_f ) );
+					output.m_v3Diffuse = p_shadowFactor * light.m_colour() * light.m_intensity().x() * diffuseFactor;
+					output.m_v3Specular = p_shadowFactor * light.m_colour() * light.m_intensity().y() * pow( specularFactor, max( shininess, 0.1_f ) );
 				}
 				FI;
 			}

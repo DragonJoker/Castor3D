@@ -209,9 +209,12 @@ namespace GLSL
 			, Vec3 const & normal
 			, Int const & index )
 			{
-				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" ), worldSpacePosition - lightPosition );
-				auto offset = m_writer.DeclLocale( cuT( "offset" ), m_getShadowOffset( normal, vertexToLight ) );
-				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" ), worldSpacePosition + m_writer.Paren( normal * offset ) );
+				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" )
+					, worldSpacePosition - lightPosition );
+				auto offset = m_writer.DeclLocale( cuT( "offset" )
+					, m_getShadowOffset( normal, vertexToLight ) );
+				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" )
+					, worldSpacePosition + m_writer.Paren( normal * offset ) );
 				vertexToLight = worldSpace - lightPosition;
 				m_writer.Return( m_samplePoint( vertexToLight, length( vertexToLight ) / 4000.0_f, index ) );
 			}
@@ -246,9 +249,12 @@ namespace GLSL
 			, Vec3 const & lightPosition
 			, Vec3 const & normal )
 			{
-				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" ), worldSpacePosition - lightPosition );
-				auto offset = m_writer.DeclLocale( cuT( "offset" ), m_getShadowOffset( normal, vertexToLight ) );
-				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" ), worldSpacePosition + m_writer.Paren( normal * offset ) );
+				auto vertexToLight = m_writer.DeclLocale( cuT( "vertexToLight" )
+					, worldSpacePosition - lightPosition );
+				auto offset = m_writer.DeclLocale( cuT( "offset" )
+					, m_getShadowOffset( normal, vertexToLight ) );
+				auto worldSpace = m_writer.DeclLocale( cuT( "worldSpace" )
+					, worldSpacePosition + m_writer.Paren( normal * offset ) );
 				vertexToLight = worldSpace - lightPosition;
 				m_writer.Return( m_sampleOnePoint( vertexToLight, length( vertexToLight ) / 4000.0_f ) );
 			}
@@ -438,15 +444,17 @@ namespace GLSL
 				auto samples = m_writer.DeclLocale( cuT( "samples" )
 					, 4.0_f );
 				auto offset = m_writer.DeclLocale( cuT( "offset" )
-					, 20.0_f * depth );
+					, max( 0.00001_f, 20.0_f * depth ) );
+				auto step = m_writer.DeclLocale( cuT( "step" )
+					, offset / m_writer.Paren( samples * 0.5 ) );
 				auto numSamplesUsed = m_writer.DeclLocale( cuT( "numSamplesUsed" )
 					, 0.0_f );
 
-				FOR( m_writer, Float, x, -offset, "x < offset", "x += offset / (samples * 0.5)" )
+				FOR( m_writer, Float, x, -offset, "x < offset", "x += step" )
 				{
-					FOR( m_writer, Float, y, -offset, "y < offset", "y += offset / (samples * 0.5)" )
+					FOR( m_writer, Float, y, -offset, "y < offset", "y += step" )
 					{
-						FOR( m_writer, Float, z, -offset, "z < offset", "z += offset / (samples * 0.5)" )
+						FOR( m_writer, Float, z, -offset, "z < offset", "z += step" )
 						{
 							shadowFactor += 1.0_f - texture( c3d_mapShadowPoint, vec4( direction + vec3( x, y, z ), depth ) );
 							numSamplesUsed += 1.0_f;
